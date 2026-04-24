@@ -1,0 +1,2 @@
+mkdir -p .codex
+touch .codex/config.toml
