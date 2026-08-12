@@ -9,11 +9,11 @@
 - Figma file key: `8zka5bHkcrJVK9I9dKjnhC`
 - Marketing Emails root: `538:17236`
 - Service Emails root: `538:17235`
-- Глобальная инструкция: [`email-figma-prompt.md`](email-figma-prompt.md)
-- Реестр descriptions: [`email-component-descriptions-registry.md`](email-component-descriptions-registry.md)
-- Рабочий чек-пойнт: `email-library-workflow-checkpoint.md`
+- Глобальная инструкция: [`email-figma-prompt.md`](../core/email-figma-prompt.md)
+- Реестр descriptions: [`email-component-descriptions-registry.md`](../registry/email-component-descriptions-registry.md)
+- Рабочий чек-пойнт: `library-maintenance-checkpoint.md`
 
-Все три Markdown-файла передаются в новую задачу одним комплектом. Не использовать копии из старых путей или вложений, если в `0_Core/` доступна актуальная версия.
+Все три Markdown-файла передаются в новую задачу одним комплектом. Не использовать копии из старых путей или вложений, если в репозитории доступны актуальные канонические файлы по путям выше.
 
 ## Что является источником истины
 
@@ -57,7 +57,7 @@
 
 ## Основной рабочий цикл
 
-1. Прочитать актуальные файлы из `0_Core/`.
+1. Прочитать актуальные файлы по каноническим путям, указанным в разделе «Активный комплект».
 2. Классифицировать задачу и определить точную область изменений.
 3. Открыть только необходимые Figma-узлы или локальные файлы.
 4. Зафиксировать исходное состояние изменяемых объектов.
