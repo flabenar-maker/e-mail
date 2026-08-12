@@ -292,4 +292,431 @@ Inline-стили являются Mobile-базой.
   div > u + .body .white-text {
     background-image: none;
     background-clip: inherit;
-    color: #f�^�����k�w��\��B�FFFB�BԃB�FB�FFFB�B�FFB�B���!Q50�B�B�B�FB�B�F�B�B�B��FB�B���B�B�FB�FF/B�B�BԃB�FB�B�B�F�Bȁ��͕и(+BkB�B�B�FB�FB�F/B�FB�B�B�B�B�FB�B�B�B�F?B�B�B����͍ɥ�ѥ���B��FFFFB�FFFBԁ�ͭѽ��B�B�FFB�B�FB��(+BcB�F<�FB�B�B�B��B�B�FB�B�B�B�F?B�B�B��B�B�B�B�B�B�F#B�B�F�FB�B�B�B�FB�FB�FB�B�B�F���͕зB�B�B�FB�B�B�B�FF�F�� �ဃB�B�B��� �ဃBȃB�B�B�B�BఃB�B�B�BԃB�FB�B����͍ɥ�ѥ���FFB�B�FB�F�F7B�FB�B�FFB�FB�B�B�FF0�B�B�B�B�B�B�B�F/B�B�B�B�FB�B�F3B�F/B�FB�B�B七BwBԃB�FB�B�B�F3B�FB䁝���ɥ��B�B�F<�B�B�B�B�B�B�B�B�B�B���Y��ѽɀ���MՉ�Ʌ�р���ɽ����B�B�B��B�B�B�B�B�B�B�FB�B�B�B��FB�FB�B�FB�FB�B�B�B��FB�B�F<�B�B�B�B�B�F<�FB�B�B�B��(+BwB�B�FB�B�B�F ��B�FB��F7B�FB�B�FFBԃB�B�FFFB�B�B�B�B�B���Y��ѽɀ�B�B܁�����������䵥���� �ဃFB�B�B�B�B�B�B�B�B�B�B�B�F/B�B�FF3FF<������������䵥��� ��������B��B�Bԁ�Y��ѽ� �������(+B�B�FFB�B�F?B�B�B�F?B�B�FB�B�F3B�F/B�FFFFB�B�F�� �ဃB�B�B��� �ဃBȃB�B�B�B�B��FB�B�B�B���BwBԃFB�B�B�F?B�B�B�B��B��B�BԃB�B�B�B�B�B�F?B䁁5���������ͭѽ����B�FB�B����͍ɥ�ѥ���B�BԃFFB�B�FB�F�B�FB�B�B�F3B�B�B�B��FB�B�B�B��(+BWFB�B��B�B�B�B�B�B�B�FB�B�F3B�F/B䁅�͕ЃB�B�B�FB�FF?B�FFF<�BȃB�B�FB�B�B�F3B�B�F�B�B�B�B�B�B�B�B�FB�F�B�B�FF3B�B���B�BԃF7B�FB�B�FFB�FFB�B�B�B��B�B�B�FB�FB�B��B�FB�B�B�F3B�FB�FFF'B�FFB�FF;F'B�B�FB�B�B�B��FB�F�B�Bԁ��ɍ��(+BB�FB�BЃFB�B�B�B�B�B�B�B��B�FB�B�B�B�B�FB��B�FB�B�B�FF0��FFB��Bȁ!Q50�B�B��B�B�B�B��B�B�B�F3F#BԃB�B�F�FFF/B�B�B�(+BwBԃB�FFB�B�B�F?B�B�FB�B�B�B�B�F/Bԁ�����5@�UI1̃BȃB�B�FB�B�B�B��!Q50�((���B�B�B�B�B�FB�FB�B�B��B��B�B�B�B�B�FFB�F<(+B�FB�FF�I���Ѽ��ɥ����ͅ�̵͕ɥ��()I���Ѽ�B�B�B�B�B�F;FB�B�FB�FB�B܁���������̃B�B�F<�B�B�B�B�B�FB�B�B�B�F;F'B�F�B�B�B�B�B�FB�Bȸ�B�B�FFB�B�B��B�B�FFB�B�FB�F/B�ɥ������������(+BSB�F<��9\�	U%1��B��B�B�B�B�FF?F'B�B�B��B�F�B�B�B�B�B�B�B���=9Q%9U���%a��B�FBԃB�B�B�FB�B�F3B�F/BԃB�B�B�FB�B�B�F<�B�B�FB��B�B܃B�B�B�B�FB�FB�F/F�5�������ͭѽ��B�B�FFB�B�FB�B��(+�P����еͥ��+�P����еݕ�����+�P�������������+�P����ѕȵ��������+�P��������+�P�ѕ�е������+�P�FB�B�B�B�FF,�+�P���������B�������+�P���ɑ�ȵɅ�����+�P���������и(+BwBԃB�B�B�B�B�F?B�FB�FB�F/BԃB�B�B�FB�B�B�F<�B�FB�B�B�B�B�B�FB�B�F3B�F/B�B��B�B�B�B�B�B��FB�B�B�B�B�B�BฃBH���ͥ�������������ЃFB�FB�B�FB�FB�B�B���=9Q%9U���%a��FB�FFB�B�F?B�FFF'B�FFB�FF;F'B�BԃB�B�B�FB�B�F3B�F/BԃB�B�B�FB�B�B�F<�B�B܃B�B�B�B�B�B�B�F?B�B�B�B�B�FFB�B�B�B�B�B�B�FFB�BఃB�FB�B�BԃB�B�B�FB�B�B�B䰃B�B�FB�FF/BԃB�FF?B�B��B�FB�B�F?F�BȃFB�FB�F/B�FB�FB�B�FB�FB�B�B�͍����((���BSB�FFFB�B�B�FFF0(+�P�B�B�B�B�FB�B�FB�B�F3B�F/BԃB�B�B�B�FB�B�B�B�B�F<�B�B�B�B�B�F,�B�B�B�FF0�B�FB�F/FB�B�B�B�F/B䁅�и+�P�BSB�B�B�FB�FB�B�B�F/BԃB�B�B�B�FB�B�B�B�B�F<�B�B�B�B�B�F,�B�B�B�FF0�����􈉀�+�P�BKFBԁ�ɕ��B�B�B�B�B�F,�B�F/FF0�B�B�B�B�B�B�B�B�F,�+�P�BwBԃFB�B�B�B�B�B�B�FFF/B�B�F�B�B�B܁�ɕ��+�P�BSB�B�B�B�F0��ɕ�����Ȱ�B�FB�B��B�B�B�FB�B�FFB�B�FFB�B�B�B�FF3B�B�B��B�B�B��I4�F#B�B�B�B�B�B�B�((���B�FFFB�FFFB��B�FFB�B�B�()���ѕ��)ѕ����ѕ}�����+�Rs�R�R ��������ѵ�+�RS�R�R ������̼)���(+BFFB��B�B�B�B�B�FB�B�B�B�B�F?B��B�FB�B�FB�FB�B�F3B�F/B��()����ѵ�)�Ɍ􉥵���̽���� �๩���)�Ɍ􉥵���̽���� ������)���((���BFB�B�B�FB�B�(+BSB�F<��9\�	U%1��B��B�B�B�B�FF?F'B�B�B��B�F�B�B�B�B�B�B�B���=9Q%9U���%a��B�FFB�B�B�B�FB��!Q50�B�B�B�B�B�FB��B�B��F#B�FB�B�B�F�(+�P�������+�P�������+�P�������+�P��ͭѽ��B�BԃB�B�B�B�BԀ�����(+BH�F7FB�F���ͥ����������B�B�FF#FFFB�F�FB�B�B�B�B�5������B���ͭѽ��͍ɕ��͡��̃B�B�FB�B�B�B�B��!Q50�B��FFB�B�B�B��B�F�F�FB�B�FB�B�FFFB�FF;F'B�B�B��͍ɕ��͡��́�����(+BSB�F<���ͥ�������������ЃFB�FB�B�FB�FB�B�B�B���=9Q%9U���%a��B�FFB�B�B�B�FB��B�FFB�B�B�FF8�B��B�B�B�B�B�FGB�B�FF8�B�B�FFB�B��B�B��B�B�B�B�B�B�B�B�F/F�F#B�FB�B�B�F��B�FB�B�B�B�B�B�F/F�B�B�B�B�B�B�B�B�B�F8�B��B�B�B��ɕ�ɕ�ͥ���ɥͬ��BWFB�B��B�B�B�B�B�B�B�B�BԃB�B�FFB�B�B�B�B�B�F�ɕ����ͥٔ�����٥�ȃB�B�B��B�B�F'FF8�B�B�FGFFB�F��B�B�B�F;FB��B�FBԃFB�FF/FBԃFB�B�B�B�B�B�F/BԃB�F/F#BԃF#B�FB�B�F,��B�FB�B�B�B��B�B�B�B�B�FGB�B�B�BԃB��B�B�B�B�FFB�B�FFB�BԃB�B�B�B�B�B�B�B�BԃF�B�FFB�B�B�B�B�B�B�FFB�B�B�������͍ɕ��͡��̃B��FFB�B�B�B�B�B�BԃF�B�B�B�B��B�BԃFFB�B�FF;FFF<�(+BFB�B�B�FF0�(+�P�B�B�FF?B�B�B�B��B�B�B�B�B�B�FFF0�F7B�B�B�B�B�FB�B��+�P���������ЃFB�B�FFB��B��B�B�B�B�B�B��+�P�FB�B�B�B�FF,���ɽ��B��B�FB�B�B�FFB�B��B�B�B�B�FB�B�B�B�B�B��+�P���������B�������+�P�B�B�B�B�F/B�B�B�FFB�B�FFB�B�B�B�B�F/B�B�B�B�B�B�B�B�B�F�FB�B�B�B��B�B�B�B�B�B�B�F#B�B�B�B�B�FFB�B�B�B�FFFFB�聀���ခ5������������ခ�ͭѽ��+�P�F��=55=8�A%9��B�B�B�B�B�F/Bԁ����ွ����ဃB�BԃB�FB�B�FB�B�B�FB�B�B�B�F,�B�B�FFFB��B�B�B�B�B�B�B�B�FB��+�P�F��M1�%9MQ��B�B�FFB�B�B�B��B�B�B�B�B�F/Bԁ��͕ЃFB�B�B�F,�����ခ5������������ခ�ͭѽ��+�P�F��U10�]%Q!��B�B�F�B�B�F'B�B�B��B�B�B�B�B�B�B�B�������������������B��B�B�FFFB�B�B�B�Bԁ��������FB�B�FB�B�B�BԃB�B�B�B�B�B�B�B�F,�B�B�B�F#B�B�B����͕��+�P�FB�B�B�B�FB�FB�B�F�B��FB�B�FB��+�P���ɑ�ȵɅ�����+�P�B�B�FB�B�B�F;FB�B�B�Bԁ5�������ͭѽ��B�B�FB�B�B�FB�B��+�P�B�FFFFFFB�B�BԃB�B�FB�B�B�B�FB�B�F3B�B�B�B��FB�FB�B�B�B��+�P�����յ��й͍ɽ��]��ѡ��B�BԃB�FB�B�F/F#B�B�F�٥�������+�P�B�FBԃB�B�B�B�B�F3B�F/Bԁ�Ɍ�FFF'B�FFB�FF;F�+�P�B�FB�B�B�B�B�F/Bԁ�����5@�UI1̃B�FFFFFFB�FF;F�+�P�FB�FB�B�FF,��FB�B�B�B�FF,��B�B�FB�FFB�B����ɽ��B��B�FB�B�B�FFB�B��F7B�FB�B�FFB�FB�B�B�B�B�F/F�B�B�B�B�FB�B�B�B�B�B�FB�B�FB�B�FFFB�FF;F�B�FB�B�B�B�B�B��B�������+�P�B�B�B�B�F/B�FB�B�B�B�B�F3B�F/B�B�B�B�FB�B�F3B�F/B䁅�͕ЃB�FB�B�FFB�B�B�B�B�B�B�B�B�B��FB�B�B�B�B�B�FB�B����͍ɥ�ѥ���F?B�B�B��B�BԃFFB�B�FB�F�B�B�B�B�B��+�P�B�B�B�B�B��FB�F�B�Bԁ��͕ЃB�FB�B�B�F3B�FB�F�B�B�B�B�B�B�B�B�F/B䁁�ɍ��B�B��B�FB�F�5�������ͭѽ��B�B�FB�B�B�FB�F�B��B�B�B�FB�FB�F/F�B�FB�B�B�B�B�B�F?F�+�P�B�B�F<�����B�B�B�B�FB�B�B�B�B�B�B�FB�B�B�FB�B�F,�FB�B�B�B�FF,�B�B�B�FB�B�B�B�FB�BȰ��ɽ���B�B�FF#FB�Bİ�B�B�B�B�FB�F<�B��B�FFFFFFB�B�BԃFB�FFF?B�B�B�B�F<�B�B��B�FB�F�B�B�FB�B�B�FB�F�+�P��%10�%5��B�BԃB�FB�B�B�F3B�FB�F����������������������е��р��������е��ͥѥ����B�B�B��B�B�B�B�B�FB�B�B�B�B�B�BԃB�FB�FB�B�B�B�B�B�B�B�Bԁݥ�Ѡ�B�������ЃB�B�B�B�FB�B�B�B�B�F<�B��Ʌ�����+�P�FB�B�FB�B�F#B�B�B�Bԁ!Q50�B�FFB�B�FFB�Bȁ�ݥ�ѡ��B��������р�B�B�B�B�B�B�B���%10�%5��FB�B�B�B�B�B�B�F�F�FB�B�FB�B�F#B�B�B�B�B��FFB�FB�B�B�FFB�B�B�B�B�B��FB�B�B�B��+�P�FB�B�FB�B�F#B�B�B�BԃFB�B�FB�FB�FB�B�F�ML�FB�B�B�B�FB�Bȁݥ�Ѡ������ЃB�B�B�B�B�B�B���%10�%5��FB�B�B�B�B�B�B�F�F�FB�B�FB�B�F#B�B�B�B�B��FFB�FB�B�B�FFB�B�B�B�B�B��FB�B�B�B��BȃB�FB�B�B�B�B�F�B�B�B�FB�F#B�B�FFB��B�B�FFB�B�B�B�B�F<�B�BԃB�B�B�B�BԃB�B�B�B�B�B��B�B�B�FB�B�F<�+�P�B�FB�B�B�FFB�B�B�B�B�F3B�B��FB�FFFB�FB�B�B�F/B䁀񥵜���B�B�B�B�B�FFF3F8�B�B�FB�B�FF/B�B�B�F��ɽ���Ʌ���ȃFB�FF<�B�F,�B�B��B�B�B�B�B�B�FBఃB��B�B�F#B�F?F<�FB�FFF0�B�B�FB�B�B�B�FFF<�FB�B�F3B�B���Ʌ�����+�P�B�FB��B�B�B�B�B�B�B�B�B��5������٥�����ЃB�B�B�B�FB�B�B�F/Bԁݥ�Ѡ�B�������ЃB�B�B�B�B�B�B��� �့B�B�B�B�FB�B�B�B�B�F<�B�B�B�B�B�F?F;FFF<�F�B�B�B�B�B�B�B�B�F/B��B�B�F7FFB�FB�B�B�FB�B��+�P�5�������ɽ���Ʌ���ȃB�BԃB�B�B�B�F�FB�B�FB�FB�B�B�B�B�B�B�B�F/FB�FF,�Bȁ���B��B�BԃB�B�FB�B�B�FB�B�!Q50�B�FFB�B�FFB�B��������р�B�B���Ʌ���Ȱ��ё��B�B�B���х�����+�P�5�������ɽ���Ʌ���ȃB�FB�B�B�FB�B�B�B�B�B�B�FB��B�B��B�B�FF�F#B�FB�B�B�F�B�B�B��B�F/FB�FB��B�B�B�B�B�F?B�FFF<�F�FB�B��B�BԃB�B�F7FFB�FB�B�B�FB�B�FFB��B��F#B�FB�B�B���B��B�FB�B�F#B�B�B�Bԁ����Յ�]��Ѡ������Յ�!����р�FB�B�B�B�B�B�B�F�F�B�B�B�FFB�B�F3B�F/B���\���� ���F�B�B�B�FB�F#B�B�FFF3F8�B�BԃB�B�B�B�BԃB�B�B�B�B�B��B�B�B�FB�B�F<�+�P�B�FFFFFFB�FF;F�B�FB�B�B�F3B�F/Bԁ5�������ͭѽ��B�FB�B�B�B�B�FF,�B�B�B�B�FB�B�B�B�B�B�B�B�B܃B�FF?B�B�B�B��FFB�B�B�B�B�B�B�F<���͍ɥ�ѥ���+�P�B�FBԁ� �ခ��͕�̃F7B�FB�B�FFB�FB�B�B�B�F,�BȁA9�\ЃF�FB�B�FB�B�F/B��B�FB�FB�B�B�B���I�+�P�B�FFB�B�B�B�F<�B�FB�B�FB�FB�B�FFF0�� �ခ��͕�̃FB�FFB�B�B�B�B��B��B�BԃFB�B�B�B�B�B��F����є�FB�B�FB�B��+�P�B�FB�B��F�FB�B�FB�FB�FB�B�B�B�������Ё��չ����B�B�F�B�B�B�B�B�B�B�B�������FB�B�A9�B�FFB�FGFFF<�B�FB�B�FB�FB�F/B��+�P�FB�FF/FF/Bԁ����B�BԃB�FB�B�FB�FB�B�B�FF0�BȃB�B�B�B�B�B�B�F�+�P�FB�B�B�FB�FFFFFB�FB�F�FB�B�F3B�B��FB�B�B�B���B�B�B�B�B��B�B�B�FB�B�B�F�BȃFB�B�FB�FB�FB�B�B䁕����Ё��չ�����+�P��������������B��B�FFFB�BԃB�FB�FFFB�B�FFB�B��FB�B�B�FB�B�F3FB�B�F�����н���ѽ��B�B�B�FB�B�B�B�FB�BȃB�BԃB�B�B�B�B�B��BȁA9�+�P�B�B��B�B�B�B� �ခ��͕ЃB�BԃB�B�B�FFB�B�FB�FB�B܁����}͍ɕ��͡�р��͍ɕ��͡�ЃB�B�B�B�B�B�B�B�FB����ɽ�͕ȁ͍ɕ��͡�ЃB�B�B���ɽ��B�B܃FB�B�B�B�B�B�B�FB�B�B�B�B�B�B�B��FB�B�B�B�FB��+�P�B�B�F<�B�B�B�B�B�B�B��� �ခ��͕ЃB�B�FB�B�FB�FB�B�B�B�F,��MMP�=]9I���FB�FB�F/B䁁aA=IP�	=U9Ie��B���aAQ�1A!��+�P�B�B�F<�B�B�B�B�B�B�B��A9�B�FB�B�FB�B�B�B�B��B�FB�B�B�FB�B�F,�B�B�B�B�B�B�B�B􁅱�����FB�FB�B��B�B�B�FB�B�B�B�F������������Հ�B��I	�FB�B�B�B��+�P�B�B�B�B�F/B�A9�F�B�B�B�B�B�B�B�B�B�B�FB�B�FB�FB�B�FFF3F8�B�FB�B�B�FB�B�B�B��B�B�B�B�B䰃FFGFB�B�B�B��B�B�B�FFB�FFB�B�B�B�B�B�B�B�B�B�B�F�+�P�������B�B�B�B�B�B�BԃB�B�B�B�B�B�B�FF<�B�B�FB�BԃB�B�B�B�B�B�B�B�B�F<��I�B�FB�FB�B�F<�B�B�B��B�FFB�B�B�B�B�FFB�B�FB�B�B�FB�B��+�P�B�B�F<�FB�B�B�B��B�B�F?FB��B�B܁͕���ѥ����͕Ё�ݹ�Ȱ�B��B�BԃB�B܁����ɥ��B�B�B�B�B��B�B�B�B�B�B�B�B�B�B���Y��ѽɀ���MՉ�Ʌ�р�B�B�B���ɽ����+�P�B�FBԁ�񥵜���B�B�B�F;F�ݥ�Ѡ�������ЃB������+�P�B�FBԁ�ɕ��B�B�B�B�B�B�B�B�F,�+�P�FB�B�B�F;B�B�B�F,�B�B�B�B�B�B�F3B�F/BԃB�B�FB�B�B�FB�B�B�F<�+�P�B�BԃB�FB�B�B�F3B�B�B�B�B�F,�����������ȁ��͕���+�P�FB�B�B�B�F �!Q50�B�B�B�FFB�B�B�FFB�FFF<�F�FFFGFB�B��FB�FB�B����������������(+B_B�B�B�FF�B�B�B�FB�F'B�B�B��B�B�B�B�FF#B�FF0�B��B�FFB�B�B�FB�B�B�FF0��B�FB�B��FB�FF<�B�F,�B�B�F<�B�B�B�B�B�B��� �ခ��͕��(+�P�B�BԃB�B�FB�B�FB�FB�B�B�B�����Ё��չ�����+�P�B�BԃB�B�FB�B�B�B�FGB�aAQ�1A!��+�P�B�FB�B�B�F3B�B�B�B�B�͍ɕ��͡�е�ɽ��B�B�B��B�FFB�B�B�FB�B�B�B�B�B�B�FB�B�B�B�B�F/B�FB�B�B�B�F �+�P��aAQ�1A!��B�BԃFB�B�B�B�B�B�B�F�F�FB�B�FB�FB�FB�B�B�FFB�FB�FFB�B�B�B�A9�+�P�A9�F�B�B�B�B�B�B�B�B�B�B�FB�B�FB�FB�B�FFF3F8�B�BԃB�FB�B�B�FB�B�B�B��B�B�B�FFB�FFB�F/F�B�B�B�B�B�B�B�B�F�(+BH��9\�	U%1��B��B�B�B�B�FF?F'B�B��B�F�B�B�B�B�B�B�B���=9Q%9U���%a��B�BԃB�B�B�B�FF#B�B�B�B�B�B�FF�B�FB��B�B�B�B�FB�F/F�B�B�B�FB�B�F3B�F/F�FB�FFB�B�B�B�B�B�F?F�F�������BH���ͥ�������������ЃFB�FB�B�FB�FB�B�B���=9Q%9U���%a��B�BԃB�B�B�B�FF#B�B�B�B�B�B�FF��B�FB�B��B�B�B�B�B�FGB�B�B�BԃB�B�B�B�B�B�B�B�BԃB�BԃFB�B�FB�B�FFFB�FB�F�FB�FB�B�B�F�͍����B�B�B��B�B�B�B�FFB�B�FFB�BԃB�B�B�B�B�B�B�B�BԃFB�B�FB�FFB�FFB�F�B�FB�B�FB�FB�B�F3B�B��B�B�B�B�B�B�B�F?B�B�B�B�B�FFB�B�B�B�B�B�B�FFB�B��B�B��B�FB�B�B�B�B�B�F/F�F#B�FB�B�B�F�((���=�ѱ����B����ɬ�����(+BB�B�B�B�FB�B�B�B�B�B�B�B�B�B�FF8�FB�FB�B�B�B�FFF0�B���ͭѽ��FFFFB�FFFF�Bȁ5M<�=�ѱ�����B�B��B�BԃFFB�B�B�B�F?B�B�B�FF3B�B��B�FB�B�B�F3B�F/B�B��Y50�B�B�B�B�B�B�B�FB�F?B�B��B��B�FB�B�B�FB�B�B�B�B�B�B�FB�B�B�B�FB�B�B�FB�B�B����ᕰ���ə��ЃFB�B�FB�B�FFFB�B�F<��B�FB�B��F7FB��B�FF?B�B��B�BԃFFB�B�FB�FFF<���͍ɥ�ѥ���B�B�B��B�B�B�B�FB�B�()Y50�B�FB�B�B�F3B�FB�FB�B�F3B�B��B�FB��FB�B�B�F3B�B�B��!Q50�FB�B�FFBԃB�B�B�B�FF�FB�B�B�B�B�B�B��B�B�B�B�FB�B�B�B�B�F<�B�B�B�B��B�FB��B�FB�B�B�F3B�B�B��F?B�B�B�B��FFB�B�B�B�B�B�B�B�(+B{FFFFFFB�B�Bԁ��ᕰ���ə��Ё�ɽ����ٕɱ���B�B�B��FB�FFB�B�B�B�B�B�BȃFFB�FB�B��=�ѱ����B�BԃF?B�B�F?B�FFF<�B�B�B�B�B�FB�B��B�B�B�B�FF#B�B�B�F<��BwBԃB�B�B�FFB�B�F;FFF<�B�B�FB�FF<�FB�B�B�FB�B�B�B�B�B���B�B�FB�B�B�FB�F;F'B�BԃFFF/B�B�B��B��B�FB�FB�FB�FB�B��FB�B�FFF#B�B�B�B�F<�FFFFB�FFFB��(+BWFB�B��FB�B�B�F3B�F/B�=�ѱ�����1�ѵ�̃B�B�B��������������B�B�B�B�FFFB�B�B���B�F/B�B�B�B�B��FFB�FB�FB�FB�B�B�B�FB�B�F�FB�B�F3B�B��FB�B�FB�FB�FB�B��B�FB�FFFFFB�FF;F'B�B�5M<�Y50�FB�B�B�B�FB�BఃB�B��B�BԃFFB�B�FB�B�B�B䰃FFB��=�ѱ����ɕ���ȃB�FB�FB�FFB�FB�B�B�B��(+B�FB�FB�FB�FB�B��B�FB�B�B�FF0�(+�P�B�B�B�B�B�F������ѥ��������������+�P�B�B�FFB�B�FB�B�FFF0������ѥ�����х�����+�P��ͭѽ��FFFFB�FFFF�B�B�F<�=�ѱ����+�P�B�FB�B�F;FB�B�B�Bԁ5����������FB�B�B�B�FB�B��+�P�B�B�B�B�FB�Bԁ5M<�Y50�����������FB�B�F3B�B��B�FB�B��B�B�FFB�B�FB�FFF<���͍ɥ�ѥ���B�B�B��B�B�B�B�FB�B��+�P�FB�B�FB�B�FFFB�B�BԃFB�B�B�B�FB�BȃFB�B�FB�FB�FB�B��B�FB�B�B�F3B�FB�B�B�B�B��Y50�B�B�B�B�FB�FB�B�B�F��ͭѽ��B�B�B�B�F�(+BWFB�B��B�B�FFFB�B�F,�=�ѱ���������ѥ����B�B�B����ɬ������ɕ���ɕ�̰�B�FB�B�B�F3B�FB�B�F�B��FB�B�B�F'B��FB�B�FB�F3FB�F�(+BwBԃFFB�B�FB�B�B�B䰃FFB��FB�B�B�F<�B�FB�B�B�FB�B��B�F/B�B�B�B�B�B�B���B�FB�B��FB�B�FB�B�FFFB�FF;F'B�B�ɕ���ɕȃB�BԃB�B�B�FFB�B�B�FF<�((���BcFB�B�B�B�F/B�B�FB�B�F(+BH�B�FB�B�B�B�B�B��B�FB�B�FB��(+�P�B�B�F<��ɥє�ɽ�є�B�B�B�FFF/B�B�B��B�B��FB�B�B�B�B�B�F/BԃFB�B�B�F,�B�B�B��B�FFB�B��+�P�B�B�F<��ɥє�ɽ�є�B�B�B�FB�B�FB�B��B�B�B�FFB�B�B�Bԁ����Ʌ��̃B�FB�F�B�B�B�B�B�B�B�B�FB�BȃBȁ����Ʌ�е�Ց�Ё͍����B�B�F<��9\�	U%1��͍����B�B�B�F;FB�B�F�B�FBԃB�FB�B�B�F3B�B�B�B�B�B�F/BԃFB�F/FB�B�B�F/BԃB�B�B�B�B�B�B�B�FF,�B�B�F<�ɕ�������B�FB�B�FB��FB�B�B�B�B�B�B䁍���Ʌ�Ё�Ց�ЃFB�B�F3B�B��B�FB�B��B�B�B�FB�B�FB�B�FF<�B�B�B�B�FB�FF�+�P�FB�B�B�BఃB�B�B�B�Bԁ����Ʌ��̃B�B�F?FF,�B�B܃FB�B�FFFB���B��B�B�B�B�BԃB�FB�B�B�FF?B�B�FF0�Bȁ������B�FB�B�������B�F/B�B��B�FB�B�B�B�B�B�B��+�P�B�B�FB�FB�FB�B��FB�B�F3B�B��B�FFFFFFB�FF;F'B�Bԁ����Ʌ��̰�B�B�B�FB�B�B�FF,�B��B�FB�B�B�B�B�B�F/BԃB�FB�B�B�B�B�B�B�F<�+�P�FB�B�B�B��B�F/B�B�B�B�B�B�B�F/Bԁ٥�����зB�FB�B�B�FB�BఃB�FB�B��B�B�B��FFB�B�B�B�B�B�B�FF0�B�B�B��FB�B�FB�FB�FB�B��B�F/B�B�B�B�F?B�B�FF0�+�P�FB�B�B�BఃB�F/B�B�B�B�F?B�FF<�B�B��FB�B�B�F3B�F/B�=�ѱ������ɬ������ɕ���ȃB�B�B��FB�B�F3B�B��FFB�FB�FB�FB�B�B�B�FB�B�F��B�FB�B��FB�B�B�F<�B�FB�B�B�FB�B��B�FB�B�FB�B�B�FF0�B�B�B�B�B�FB��+�P�B�BԃB�B�FB�FB�B�B�F/B�B�B䁑�͍ɥ�ѥ��̃B�B�B܃B�B�B�B�FB�B�B�B�B�FFB�((���B�FF/B�B�B��BȃFFFB�FB�()I�Mѽɔ�)�����輽ɕ��ɕ�й������ɥ���兹��ํ���͕�ٔ�������������������()!Յݕ������������)�����輽ɕ��ɕ�й������ɥ���兹��ํ���͕�ٔ��������������������()�Ё����)�����輽ɕ��ɕ�й������ɥ���兹��ํ���͕�ٔ������������������()������A����)�����輽ɕ��ɕ�й������ɥ���兹��ํ���͕�ٔ�������������������(+B�B�FB�B�B��B�B�B�B�B�FB�B�B��)����Ѽ顕������̹��(+B�B�B�F�)�����輼ō���̹�Լ(
+    color: #ffffff;
+  }
+
+  u + .body .btn-txt {
+    background: linear-gradient(#ffffff, #ffffff);
+    background-image: linear-gradient(#ffffff, #ffffff);
+    background-clip: text;
+    color: transparent !important;
+  }
+
+  div > u + .body .btn-txt {
+    background-image: none;
+    background-clip: inherit;
+    color: #ffffff !important;
+  }
+}
+</style>
+```
+
+`white-text` используй для белого текста на тёмном фоне, `btn-txt` — для белого текста кнопок. 480px — отдельный breakpoint Gmail Android.
+
+## Изображения
+
+Figma-export rules этого раздела применяй, когда in-scope asset требуется получить или повторно экспортировать из Figma. В design-independent техническом `CONTINUE / FIX` неизменяемые существующие assets проверяй и переиспользуй из source baseline; не требуй Figma только ради повторного экспорта незатронутого файла.
+
+Каждый уникальный визуальный asset экспортируй один раз из конкретного Desktop-инстанса письма. Используй один файл и один `src` во всех Mobile/Desktop-вариантах и во всех компонентах письма, где повторяется тот же визуальный asset. Не используй placeholder assets исходных компонентов.
+
+Различай два типа растровых изображений:
+
+1. `DIRECT IMAGE` — изображение отображается в собственном соотношении сторон. Размер файла рассчитывается от Desktop display-размера: ×2 для JPEG и ×4 для PNG. Mobile-инстанс определяет display-размер; адаптивное изображение может использовать `width:100%; height:auto`.
+2. `FILL IMAGE` — исходный растр из Fill помещается в отдельные Mobile/Desktop crop-wrapper. Desktop-инстанс определяет фиксированную геометрию Desktop. Размер Mobile image-area `W0×H0` определяет контрольное соотношение сторон и crop, а не фиксированные CSS-размеры. `width:100%; height:auto` допустим только как рассчитанная часть конкретной реализации, а не как универсальная замена Fill-crop.
+
+### @4x
+
+Все логотипы, иконки, бейджи и остальные assets, отмеченные `@4x`, экспортируй только в PNG ×4 с сохранением исходной прозрачности и без фоновой matte-подложки.
+
+Цветовой профиль: sRGB. Формат экспорта должен сохранять alpha-канал там, где asset содержит прозрачные области. Если фактический export boundary полностью закрыт предусмотренным видимым Fill, итоговое изображение может быть непрозрачным — не удаляй этот Fill и не добавляй искусственные прозрачные пиксели.
+
+Различай:
+
+— `ASSET OWNER` — ближайший семантический слой с `@4x` в имени; он определяет базовое имя файла;
+— `EXPORT BOUNDARY` — конкретный внешний или вложенный слой, который description требует экспортировать; только он определяет содержимое PNG.
+
+### Способ экспорта @4x
+
+NODE-ассеты экспортируй через Figma Plugin API непосредственно из фактического `EXPORT BOUNDARY`:
+
+```js
+node.exportAsync({
+  format: "PNG",
+  contentsOnly: true,
+  colorProfile: "SRGB",
+  constraint: { type: "SCALE", value: 4 }
+})
+```
+
+`download_assets`, `get_screenshot`, screenshot всего компонента, crop из screenshot, browser screenshot и любой другой уже скомпозированный рендер запрещено использовать как финальный NODE-asset.
+
+Для исходного IMAGE Fill используй оригинальный source-файл, если именно это требует description компонента.
+
+Нельзя сначала отрендерить родительский компонент, а затем вырезать из него иконку. Такой способ сводит прозрачность с фоном родителя.
+
+### EXPECTED ALPHA
+
+Перед экспортом каждого `@4x` asset определи `EXPECTED ALPHA`:
+
+— `TRANSPARENT` — у export boundary нет собственного видимого Fill, закрывающего всю его область;
+— `OPAQUE` — собственный видимый Fill export boundary действительно закрывает всю область и входит в asset по description;
+— `SOURCE` — прозрачность определяется оригинальным source-файлом IMAGE Fill.
+
+Fill родителя не участвует в определении `EXPECTED ALPHA`.
+
+Если собственный Fill export boundary имеет `visible=false`, asset считается `TRANSPARENT`, даже если на холсте под ним виден белый, серый или цветной фон родителя.
+
+Правила фона:
+
+— учитывай только видимые Fill фактического export boundary;
+— Fill с `visible=false` не является подложкой и не должен попадать в результат;
+— если у export boundary нет видимого фонового Fill, пространство вокруг artwork должно быть прозрачным;
+— не добавляй белую, серую, цветную или иную подложку самостоятельно;
+— не своди прозрачность с фоном письма;
+— не наследуй Fill родительского layout- или button-контейнера;
+— не включай padding и пустое пространство родителя;
+— если у самого export boundary есть видимый Fill и description включает этот слой целиком, сохрани Fill без изменений;
+— видимые круги, градиенты, рамки и фоновые фигуры внутри экспортируемого artwork сохраняй как часть asset.
+
+Существующий export preset родительского слоя не отменяет export boundary, заданный description компонента.
+
+### Проверка alpha-канала
+
+Наличие цветового режима RGBA само по себе не доказывает наличие прозрачности. PNG с `alpha=255` во всех пикселях является полностью непрозрачным.
+
+Для каждого PNG после экспорта программно проверь:
+
+— минимальное и максимальное значение alpha;
+— количество пикселей с `alpha < 255`;
+— RGBA четырёх угловых пикселей.
+
+Для `EXPECTED ALPHA = TRANSPARENT` обязательно:
+
+— количество пикселей с `alpha < 255` должно быть больше нуля;
+— если artwork не касается углов export boundary, alpha углов должен быть равен `0`.
+
+Если эти условия не выполнены, экспорт считается ошибочным и задача не может быть завершена.
+
+Для `EXPECTED ALPHA = SOURCE` сначала проверь alpha оригинального source-файла IMAGE Fill, затем сравни его с итоговым PNG. Не определяй прозрачность source-файла по его виду на фоне компонента.
+
+### Проверка на контрастных подложках
+
+Каждый PNG с `EXPECTED ALPHA = TRANSPARENT` или прозрачным `SOURCE` проверь минимум на трёх подложках:
+
+— белой;
+— чёрной;
+— яркой контрастной, например magenta или checkerboard.
+
+Белая, серая или цветная подложка является ошибкой только тогда, когда она отсутствует в изолированном экспорте фактического `EXPORT BOUNDARY` и попала из родительского layout/button-контейнера.
+
+Собственный видимый Fill `EXPORT BOUNDARY`, предусмотренный description, сохраняется и не считается matte-ошибкой.
+
+Проверка только внутри готового письма на исходном фоне недостаточна.
+
+### Постобработка PNG
+
+При добавлении sRGB-профиля, изменении metadata или оптимизации PNG запрещено:
+
+— конвертировать изображение через RGB;
+— выполнять flatten или composite;
+— подкладывать matte/background;
+— пересобирать PNG через canvas с непрозрачным фоном.
+
+После любой постобработки повтори alpha-аудит. Значения alpha до и после обработки не должны измениться.
+
+Используй один файл и один `src` для Mobile и Desktop. HTML-атрибуты width/height равны Desktop display-размерам конкретного размещения; отображаемый размер Mobile-варианта задаётся вёрсткой компонента. Не добавляй `width:100%`.
+
+```html
+<img src="images/name@4x.png"
+     width="[DESKTOP DISPLAY WIDTH]"
+     height="[DESKTOP DISPLAY HEIGHT]"
+     alt="[ALT]"
+     style="display:block; border:0;">
+```
+
+### @2x
+
+Фотографии, скриншоты, изображения карточек и баннеры экспортируй в JPEG @2x.
+
+Следующий шаблон применяется только к `DIRECT IMAGE`. Для `FILL IMAGE` используй отдельный контракт раздела `@2x Fill`.
+
+```html
+<img src="images/name@2x.jpg"
+     width="[DESKTOP DISPLAY WIDTH]"
+     height="[DESKTOP DISPLAY HEIGHT]"
+     alt="[ALT]"
+     style="display:block; width:100%; height:auto; border:0;">
+```
+
+— цветовой профиль: sRGB;
+— начальное качество: 82%;
+— при заметных артефактах повышай качество до 90%;
+— для `DIRECT IMAGE` на Mobile то же изображение масштабируется по ширине контейнера с `width:100%; height:auto`.
+
+После экспорта сравни JPEG с Figma в фактическом display-размере и проверь читаемость деталей, отсутствие заметных артефактов, правильные цвета, crop и пропорции.
+
+### @2x Fill
+
+Если description требует экспортировать исходный растр из Fill:
+
+— извлеки оригинальное изображение из Fill указанного слоя конкретного Desktop-инстанса;
+— не экспортируй контейнер image-area;
+— не обрезай исходный файл под Desktop-контейнер;
+— сохрани полное исходное изображение, его пиксельные размеры и пропорции;
+— перекодируй его в JPEG по общим правилам качества и sRGB;
+— не создавай отдельный Mobile-файл;
+— используй один и тот же `src` во всех вариантах.
+
+Mobile и Desktop реализуй отдельными внешними wrapper изображения. Crop, масштаб и позицию бери из соответствующего инстанса, но не интерпретируй контрольную высоту Mobile как фиксированную CSS-высоту.
+
+#### Mobile responsive crop
+
+Размер Mobile image-area `W0×H0` является контрольным размером из Figma и задаёт соотношение сторон `W0:H0`. Это не фиксированные CSS `width` и `height`.
+
+Mobile crop-wrapper:
+
+— занимает `100%` доступной ширины;
+— не получает фиксированную высоту в px;
+— не получает HTML-атрибут `height` на wrapper, содержащем `td` или `table`;
+— изменяет высоту пропорционально фактической ширине:
+
+```text
+actualHeight = actualWidth * H0 / W0
+```
+
+Пропорциональное `<img>` оставляй в обычном потоке документа: `display:block`, одна управляющая ось, вторая рассчитывается из исходного соотношения сторон или задаётся `auto`. Именно фактическая высота изображения должна формировать высоту Mobile crop-wrapper. Не используй абсолютное позиционирование, которое исключает изображение из потока.
+
+Для горизонтального Fill-crop, когда исходный растр шире Mobile wrapper:
+
+```text
+Rs = sourceWidth / sourceHeight
+Rc = W0 / H0
+imgWidthPercent = Rs / Rc * 100%
+imgHeight = auto
+```
+
+При таком размере высота пропорционального изображения совпадает с адаптивной высотой wrapper, а лишняя ширина обрезается через `overflow:hidden`. Горизонтальное положение воспроизводи процентным смещением по Fill соответствующего Mobile-инстанса.
+
+Если `Rs < Rc` и требуется вертикальный crop, не заменяй адаптивную высоту фиксированным значением в px и не деформируй изображение. Используй проверенный в целевых клиентах пропорциональный wrapper либо пропорциональный нерастянутый fallback с тем же `src`.
+
+#### Desktop crop
+
+Desktop crop-wrapper может использовать фиксированные пиксельные размеры или высоту строки из Desktop-инстанса. Для Desktop рассчитай пропорциональный размер изображения отдельно:
+
+```text
+Rs = sourceWidth / sourceHeight
+Rc = wrapperWidth / wrapperHeight
+
+если Rs >= Rc:
+  imgHeight = wrapperHeight
+  imgWidth  = wrapperHeight * Rs
+  wrapper обрезает лишнюю ширину
+
+если Rs < Rc:
+  imgWidth  = wrapperWidth
+  imgHeight = wrapperWidth / Rs
+  wrapper обрезает лишнюю высоту
+```
+
+Во всех вариантах фактические CSS-размеры и HTML-атрибуты `width` и `height` самого `<img>` должны сохранять соотношение сторон исходного файла. Округляй рассчитанные display-размеры согласованно до целых пикселей с погрешностью не более одного пикселя. Crop выполняется только wrapper-контейнером вокруг уже пропорционально рассчитанного изображения.
+
+Для `FILL IMAGE` запрещены:
+
+— одновременное приравнивание width и height `<img>` к width и height wrapper;
+— `height:100%` на `<img>`;
+— `object-fit`, `object-position` и `@supports`-правила, которые подгоняют коробку `<img>` под wrapper;
+— фиксированная высота `<img>` при адаптивно изменяющейся ширине;
+— фиксированная высота Mobile crop-wrapper;
+— HTML-атрибут `height` на Mobile wrapper, `td` или `table`, ограничивающий рост image-area;
+— интерпретация контрольного Mobile-размера `W0×H0` как неизменяемых CSS-размеров;
+— абсолютное позиционирование Mobile `<img>`, из-за которого оно перестаёт формировать высоту wrapper;
+— деформация растра ради точного совпадения с crop-wrapper.
+
+Если crop-wrapper или позиционирование не поддерживаются клиентом, используй пропорциональный нерастянутый fallback с тем же `src`. Другой crop или изменение высоты блока в fallback допустимы; деформация изображения недопустима. Pixel-perfect crop в старом Outlook не требуется, если это отдельно не запрошено.
+
+### Выбор слоя
+
+По умолчанию экспортируй визуальный слой с `@2x` или `@4x` в имени. Не экспортируй layout-контейнер, если он добавляет padding, пустое пространство, HTML-контент или фон, который не входит в asset.
+
+Конкретный слой определяй по description и структуре Desktop-инстанса.
+
+Имя файла определяй по ближайшему семантическому asset-контейнеру с `@2x` или `@4x` в имени, даже если description требует экспортировать вложенный визуальный слой. Не используй generic-имя вложенного `Vector`, `Subtract`, `Group` или аналогичного технического слоя как имя файла.
+
+Например, при экспорте внутреннего `Vector` из `google-play-icon @4x` файл должен называться `google-play-icon@4x.png`, а не `Vector@4x.png`.
+
+Сохраняй обязательный суффикс `@2x` или `@4x` в имени файла. Не удаляй его и не добавляй `Mobile`/`Desktop`, если description не требует отдельного файла.
+
+Если один визуальный asset повторяется в нескольких компонентах письма, не экспортируй его повторно: используй существующий файл и тот же `src`.
+
+Перед удалением дубликата проверь, что в HTML на него больше нет ссылок.
+
+Не оставляй временные Figma MCP URLs в готовом HTML.
+
+## Типографика и геометрия
+
+Шрифт: Roboto, Arial, sans-serif.
+
+Roboto подключай через Google Fonts для поддерживающих клиентов. Сохрани корректный Arial fallback.
+
+Для `NEW BUILD` и зависящего от дизайна `CONTINUE / FIX` все визуальные значения бери из конкретных Mobile/Desktop инстансов:
+
+— font-size;
+— font-weight;
+— line-height;
+— letter-spacing;
+— colors;
+— text-align;
+— размеры;
+— padding и gaps;
+— border-radius;
+— alignment.
+
+Не заменяй точные значения приблизительными дизайн-токенами. В design-independent техническом `CONTINUE / FIX` сохраняй существующие визуальные значения из неизменяемой исходной версии, кроме значений, которые прямо входят в точный технический scope.
+
+## Доступность
+
+— Содержательные изображения должны иметь осмысленный alt.
+— Декоративные изображения должны иметь `alt=""`.
+— Все href должны быть заполнены.
+— Не создавай ссылку без href.
+— Добавь preheader, если он предусмотрен письмом или CRM-шаблоном.
+
+## Структура архива
+
+```text
+template_name/
+├── email.html
+└── images/
+```
+
+Пути к изображениям относительные:
+
+```html
+src="images/name@2x.jpg"
+src="images/name@4x.png"
+```
+
+## Проверка
+
+Для `NEW BUILD` и зависящего от дизайна `CONTINUE / FIX` отрендери HTML минимум на ширинах:
+
+— 358px;
+— 659px;
+— 660px;
+— Desktop не менее 700px.
+
+В этих design-backed маршрутах сделай Mobile и Desktop screenshots готового HTML и сравни их с соответствующими screenshots Figma.
+
+Для design-independent технического `CONTINUE / FIX` отрендери исходную и изменённую версии на одинаковых ширинах, применимых к изменению и его regression risk. Если изменение затрагивает responsive behavior или общую обёртку, включи все четыре указанные выше ширины. Сравни изменённое и незатронутое поведение с исходной версией; Figma screenshots и сравнение с ними не требуются.
+
+Проверь:
+
+— порядок и видимость элементов;
+— alignment текста и кнопок;
+— размеры, crop и пропорции изображений;
+— padding и gaps;
+— каждый верхнеуровневый блок имеет ровно один внешний верхний отступ: `16px` Mobile / `24px` Desktop;
+— у `COMMON-PADDING` боковые `16px`/`24px` не продублированы внутри компонента;
+— у `SELF-INSET` верхний и боковые inset равны `16px` Mobile / `24px` Desktop;
+— у `FULL-WIDTH` нет общего бокового `email-padding`, а внутренние padding секций не подменены внешним inset;
+— типографику и цвета;
+— border-radius;
+— переключение Mobile/Desktop вариантов;
+— отсутствие горизонтального скролла;
+— `document.scrollWidth` не превышает viewport;
+— все локальные src существуют;
+— временные Figma MCP URLs отсутствуют;
+— форматы, размеры, качество, crop и пропорции экспортированных изображений соответствуют правилам и Figma;
+— каждый уникальный визуальный asset представлен одним файлом, если description явно не требует иного;
+— один и тот же asset использует одинаковый `src` во всех Mobile/Desktop-вариантах и повторных вхождениях;
+— для Fill-изображений проверены размеры контейнеров, crop, масштаб, позиция и отсутствие растяжения во всех вариантах;
+— `FILL IMAGE` не использует `height:100%`, `object-fit`, `object-position` или одновременное приравнивание width и height изображения к wrapper;
+— соотношение HTML-атрибутов `width` и `height` каждого `FILL IMAGE` совпадает с соотношением сторон исходного файла;
+— соотношение фактических CSS-размеров width/height каждого `FILL IMAGE` совпадает с соотношением сторон исходного файла в пределах погрешности округления не более одного пикселя;
+— пропорционально рассчитанный `<img>` полностью перекрывает crop-wrapper хотя бы по одной оси, а лишняя часть обрезается только wrapper;
+— при изменении Mobile viewport адаптивные width и height каждого `@2x`-изображения изменяются с одинаковым коэффициентом;
+— Mobile crop-wrapper не имеет фиксированной высоты в px и не ограничен HTML-атрибутом `height` на wrapper, `td` или `table`;
+— Mobile crop-wrapper проверен минимум на двух ширинах: его высота изменяется с тем же коэффициентом, что и ширина, а отношение `actualWidth / actualHeight` совпадает с контрольным `W0 / H0` с погрешностью не более одного пикселя;
+— отсутствуют отдельные Mobile/Desktop-дубликаты изображений без прямого требования description;
+— все `@4x` assets экспортированы в PNG ×4 с цветовым профилем sRGB;
+— исходная прозрачность `@4x` assets сохранена и не сведена с matte-цветом;
+— если у фактического export boundary нет видимого Fill, фон PNG остаётся прозрачным;
+— скрытые Fill не превратились в подложку;
+— фон присутствует только тогда, когда он входит в фактический export boundary;
+— Fill, padding и пустое пространство родительских layout/button-контейнеров не попали в PNG;
+— ни один `@4x` asset не получен через `get_screenshot`, screenshot компонента, browser screenshot или crop из скомпозированного рендера;
+— для каждого `@4x` asset зафиксированы `ASSET OWNER`, точный `EXPORT BOUNDARY` и `EXPECTED ALPHA`;
+— для каждого PNG программно проверены диапазон alpha, число пикселей с `alpha < 255` и RGBA углов;
+— каждый PNG с ожидаемой прозрачностью проверен на белой, чёрной и контрастной подложках;
+— alpha-канал не изменился после добавления sRGB-профиля или другой постобработки;
+— имя файла взято из semantic asset owner, а не из generic-имени вложенного `Vector`, `Subtract` или `Group`;
+— все `<img>` имеют width, height и alt;
+— все href заполнены;
+— соблюдены глобальные ограничения;
+— не использованы placeholder assets;
+— размер HTML контролируется с учётом риска Gmail clipping.
+
+Задачу запрещено завершать и архивировать, если хотя бы для одного `@4x` asset:
+
+— не зафиксирован export boundary;
+— не определён `EXPECTED ALPHA`;
+— использован screenshot-crop или другой скомпозированный рендер;
+— `EXPECTED ALPHA` не совпадает с фактической статистикой PNG;
+— PNG с ожидаемой прозрачностью не проверен на контрастных подложках.
+
+В `NEW BUILD` и зависящем от дизайна `CONTINUE / FIX` не завершай задачу при заметных визуальных расхождениях с Figma. В design-independent техническом `CONTINUE / FIX` не завершай задачу, если изменённое поведение не соответствует точному scope или незатронутое поведение регрессирует относительно неизменяемой исходной версии на применимых ширинах.
+
+## Outlook и dark mode
+
+Поддерживай базовую читаемость и Desktop-структуру в MSO Outlook, но не усложняй письмо отдельными VML-композициями и дублированной разметкой ради pixel-perfect соответствия, если это прямо не требуется description или задачей.
+
+VML используй только при реальном HTML-тексте поверх фонового изображения либо при отдельном явном требовании.
+
+Отсутствие pixel-perfect crop, overlap или скруглений в старом Outlook не является блокером завершения. Не допускаются потеря содержимого, неработающие ссылки и критически разрушенная структура.
+
+Если реальный Outlook, Litmus или Email on Acid недоступен, выполни статический аудит только фактически присутствующей MSO/VML-разметки, но не утверждай, что Outlook-render протестирован.
+
+Статически проверь:
+
+— баланс conditional comments;
+— корректность conditional tables;
+— Desktop-структуру для Outlook;
+— исключение Mobile-only разметки;
+— наличие MSO/VML fallback, только если он требуется description или задачей;
+— соответствие размеров фактически используемого VML конкретному Desktop-блоку.
+
+Если доступны Outlook-compatible или dark-mode renderers, используй их и сообщи результат.
+
+Не утверждай, что такая проверка выполнена, если соответствующий renderer не запускался.
+
+## Итоговый ответ
+
+В итоговом ответе:
+
+— для write route дай ссылки на созданные файлы или архив;
+— для write route подтверди получение contracts всех компонентов в contract-audit scope; для `NEW BUILD` scope включает все использованные смысловые компоненты; для read-only ответа упоминай contract audit только если он относился к вопросу;
+— укажи, какие contracts взяты из реестра, а какие проверялись в Figma, если Figma была применима;
+— перечисли только отсутствующие contracts, конфликты и осознанные отклонения;
+— укажи выполненные viewport-проверки, если они требовались или фактически выполнялись;
+— укажи, выполнялся ли реальный Outlook/dark-mode render или только статический аудит, если такая проверка относилась к задаче;
+— не пересказывай descriptions без необходимости.
+
+## Ссылки в футере
+
+RuStore:
+https://redirect.appmetrica.yandex.com/serve/461821467231807192
+
+Huawei App Gallery:
+https://redirect.appmetrica.yandex.com/serve/1038282229081536966
+
+Get Apps:
+https://redirect.appmetrica.yandex.com/serve/29475923791277577
+
+Google Play:
+https://redirect.appmetrica.yandex.com/serve/533879077140969685
+
+Служба поддержки:
+mailto:help@cupis.ru
+
+Сайт:
+https://1cupis.ru/
