@@ -1,7 +1,0 @@
-# Project-scoped Codex MCP configuration.
-# Loaded when this repository is trusted.
-
-[mcp_servers.figma]
-url = "https://mcp.figma.com/mcp"
-# Optional: fail fast if the server cannot initialize.
-required = false
