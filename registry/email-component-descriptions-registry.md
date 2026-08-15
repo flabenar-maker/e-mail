@@ -1,6 +1,6 @@
 # Реестр описаний компонентов email-библиотек
 
-Актуальность слепка: 2026-08-13.
+Актуальность слепка: 2026-08-15.
 
 Источник: Figma-файл `CD_Email_Шаблоны писем` (`8zka5bHkcrJVK9I9dKjnhC`).
 
@@ -11,7 +11,7 @@
 - Marketing Emails: `538:17236`
 - Service Emails: `538:17235`
 
-## Маркетинговые письма (26)
+## Маркетинговые письма (25)
 
 ### `Badge/Step-Number`
 
@@ -72,59 +72,6 @@ ASSET
 Изображение фиксированное, центрированное, не width:100%. Не добавлять отдельный dark-mode asset и не включать в экспорт тёмный презентационный фон вокруг компонента.
 ````
 
-### `Block/Cards-Steps`
-
-- Figma node: `326:5449`
-- Тип: `COMPONENT_SET`
-- Варианты (8):
-
-  - `Type=Mobile, Count=4` — `11:911`
-  - `Type=Desktop, Count=4` — `260:850`
-  - `Type=Desktop, Count=2` — `395:7743`
-  - `Type=Desktop, Count=6` — `395:7779`
-  - `Type=Mobile, Count=2` — `398:2238`
-  - `Type=Mobile, Count=3` — `398:2273`
-  - `Type=Mobile, Count=6` — `398:2308`
-  - `Type=Desktop, Count=3` — `398:2359`
-
-Описание:
-
-````text
-Block/Cards-Steps
-
-SCOPE
-Обычный контентный блок внутри общего email-padding. Не добавлять второй внешний боковой inset.
-Top gap: Mobile 16px, Desktop 24px. Боковые 16px/24px уже обеспечивает общий email-padding.
-
-OUTER CARD
-Белая карточка: Mobile padding 22px, radius 22px, gap после заголовка 22px; Desktop padding 32px, radius 26px, gap после заголовка 24px. Заголовок центрирован.
-
-RESPONSIVE STRUCTURE
-Использовать две полные таблицы сетки: Mobile и Desktop. Классы переключения размещать только на внешних wrapper этих таблиц.
-
-Mobile:
-— одна Card/Step в каждой строке;
-— карточка занимает 100% доступной ширины Mobile-сетки;
-— 252px — контрольная ширина карточки в макете, а не фиксированная CSS-ширина;
-— image-area внутри карточки изменяет высоту пропорционально фактической ширине карточки по description Card/Step;
-— между карточками отдельная spacer-row высотой 22px;
-— не использовать Desktop ghost-cells.
-
-Desktop:
-— внутренняя ширина сетки 488px;
-— две карточки по 239px в строке;
-— горизонтальный и вертикальный gap 10px отдельными spacer-cells/rows;
-— карточки одного ряда находятся в соседних td и получают одинаковую высоту.
-
-COUNT
-2: один ряд из двух карточек.
-3: первый ряд из двух; третья карточка отдельной строкой по центру.
-4: два ряда по две.
-6: три ряда по две.
-
-Не применять d_mobile/d_desktop к внутренним spacer-строкам или ячейкам. Содержимое каждой карточки реализовать по description Card/Step.
-````
-
 ### `Block/Cards-Images`
 
 - Figma node: `326:5806`
@@ -149,35 +96,39 @@ SCOPE
 Обычный контентный блок внутри общего email-padding. Не добавлять второй внешний боковой inset.
 Top gap: Mobile 16px, Desktop 24px. Боковые 16px/24px уже обеспечивает общий email-padding.
 
-OUTER CARD
-Белая карточка: Mobile padding 22px, radius 22px, gap после заголовка 22px; Desktop padding 32px, radius 26px, gap после заголовка 24px. Заголовок центрирован.
+CONTENT AREA
+Белый контейнер с центрированным HTML heading.
+Mobile: padding 22px, radius 22px, основной gap 22px.
+Desktop: padding 32px, radius 26px, основной gap 32px.
 
 RESPONSIVE STRUCTURE
-Использовать две полные таблицы сетки: Mobile и Desktop. Классы переключения размещать только на внешних wrapper этих таблиц.
+Использовать две полные presentation-table сетки: Mobile и Desktop. Классы переключения размещать только на внешних wrapper этих таблиц.
 
 Mobile:
-— одна Card/Image в каждой строке;
-— карточка занимает 100% доступной ширины Mobile-сетки;
-— 252px — контрольная ширина карточки в макете, а не фиксированная CSS-ширина;
-— image-area внутри карточки изменяет высоту пропорционально фактической ширине карточки по description Card/Image;
-— между карточками spacer-row 22px.
+— одна Card в каждой строке;
+— карточка занимает 100% доступной внутренней ширины;
+— 252px — контрольная ширина библиотечного инстанса, а не фиксированный HTML-width;
+— между карточками отдельная spacer-row 22px.
 
 Desktop:
-— внутренняя ширина 488px;
-— две карточки по 239px;
-— горизонтальный и вертикальный gap 10px;
-— одинаковая высота карточек внутри ряда обеспечивается соседними td.
+— внутренняя ширина сетки 488px;
+— две колонки Card по 232px;
+— горизонтальный gap 24px отдельной spacer-cell;
+— вертикальный gap 24px отдельной spacer-row;
+— card-cells выравнивать по верхнему краю;
+— не добавлять общий фон карточки и не растягивать соседние карточки до одинаковой высоты.
 
 COUNT
 2: один ряд из двух.
-3: два в первом ряду, третья по центру во втором.
+3: два в первом ряду, третья слева во втором.
 4: два ряда по две.
 6: три ряда по две.
 
-IMAGE DELEGATION
-Экспорт и отображение изображения каждой вложенной карточки выполнять по description Card/Image и контракту @2x Fill основной инструкции.
+CARD
+Содержимое каждой карточки реализовать по description Card. Изображение каждой карточки является одним DIRECT IMAGE по description Card Image @2x.
 
-Ширина карточки и размеры image-area, указанные в этом компоненте, относятся только к контейнерам сетки. Не использовать их как одновременно принудительные width и height тега HTML-тег img.
+BLOCK CAPTION
+Boolean-свойство Caption, по умолчанию включено. Если оно включено, после сетки вывести отдельный HTML-текст на всю внутреннюю ширину: 12px/140% Regular, #98999C, выравнивание влево. Gap grid→caption: Mobile 22px, Desktop 32px.
 ````
 
 ### `Block/Cards-Icons`
@@ -204,111 +155,39 @@ SCOPE
 Обычный контентный блок внутри общего email-padding. Не добавлять второй внешний боковой inset.
 Top gap: Mobile 16px, Desktop 24px. Боковые 16px/24px уже обеспечивает общий email-padding.
 
-OUTER CARD
-Белая карточка: Mobile padding 22px, radius 22px, gap после заголовка 22px; Desktop padding 32px, radius 26px, gap после заголовка 24px. Заголовок центрирован.
+CONTENT AREA
+Белый контейнер с центрированным HTML heading.
+Mobile: padding 22px, radius 22px, основной gap 22px.
+Desktop: padding 32px, radius 26px, основной gap 32px.
 
 RESPONSIVE STRUCTURE
-Использовать отдельные полные таблицы Mobile и Desktop; классы переключения — только на их внешних wrapper.
+Использовать две полные presentation-table сетки: Mobile и Desktop. Классы переключения размещать только на внешних wrapper этих таблиц.
 
 Mobile:
-— одна Card/Icon в строке;
-— ширина 252px;
-— вертикальный gap 22px.
+— одна Card/Icon в каждой строке;
+— карточка занимает 100% доступной внутренней ширины;
+— 252px — контрольная ширина библиотечного инстанса, а не фиксированный HTML-width;
+— между карточками отдельная spacer-row 22px.
 
 Desktop:
-— сетка 488px;
-— две карточки по 239px;
-— gap 10px по обеим осям;
-— одинаковая высота карточек одного ряда через соседние td.
+— внутренняя ширина сетки 488px;
+— две колонки Card/Icon по 232px;
+— горизонтальный gap 24px отдельной spacer-cell;
+— вертикальный gap 24px отдельной spacer-row;
+— card-cells выравнивать по верхнему краю;
+— не добавлять отдельный фон, radius или equal-height оболочку карточки.
 
-Count=3: третья карточка центрируется отдельной строкой. Остальные Count раскладываются 1×2, 2×2 или 3×2.
+COUNT
+2: один ряд из двух.
+3: два в первом ряду, третья слева во втором.
+4: два ряда по две.
+6: три ряда по две.
 
-Иконка остаётся отдельным фиксированным изображением; её display-размер определяет конкретная Card/Icon.
-````
+CARD
+Содержимое и фиксированный размер иконки каждой карточки реализовать по description Card/Icon. Иконку не растягивать по ширине карточки.
 
-### `Card/Step`
-
-- Figma node: `326:5578`
-- Тип: `COMPONENT_SET`
-- Варианты (2):
-
-  - `Type=Mobile` — `11:1018`
-  - `Type=Desktop` — `260:635`
-
-Описание:
-
-````text
-Card/Step
-
-STRUCTURE
-Карточка внутри родительской сетки: image-area → живой Badge/Step-Number → text-content. Фон и равную высоту ряда задаёт родительский card-td.
-
-IMAGE SOURCE AND PROPORTIONAL CROP @2x
-Экспортировать исходный растр из Fill слоя Image @2x соответствующей карточки конкретного Desktop-инстанса письма. Не экспортировать image-area целиком и не создавать отдельный Mobile-asset. Один файл и один src использовать в Mobile и Desktop.
-
-Реализовать изображение строго по контракту @2x Fill основной инструкции.
-
-MOBILE RESPONSIVE IMAGE
-Mobile image-area 252×160px является контрольным размером и задаёт соотношение сторон 252:160, а не фиксированную высоту.
-
-Карточка занимает 100% доступной ширины внутри Mobile-сетки. Mobile crop-wrapper не получает фиксированную высоту и HTML-атрибут height. При фактической ширине W его высота должна составлять:
-
-H = W × 160 / 252
-
-Пропорциональное img остаётся в обычном потоке, получает height:auto и формирует высоту wrapper. Для горизонтального crop ширина img может превышать 100%; лишняя ширина обрезается wrapper через overflow:hidden. Позицию воспроизводить процентным смещением по Fill Mobile-инстанса.
-
-DESKTOP IMAGE
-Desktop crop-wrapper остаётся фиксированным контейнером 239×160px. Пропорции исходного img сохранять; crop и позицию воспроизводить по Fill Desktop-инстанса.
-
-Не приравнивать img одновременно к width и height wrapper. Не использовать height:100%, object-fit или object-position.
-
-Badge/Step-Number не включать в изображение.
-
-BADGE
-Badge/Step-Number — живой HTML. Он визуально перекрывает границу image/content. Размещать его отдельной строкой вне clipping-контейнера изображения. В non-MSO допустим контролируемый отрицательный верхний offset из геометрии инстанса. Для MSO допускается расположение бейджа сразу под изображением без перекрытия.
-
-TEXT
-Heading и description остаются HTML. Padding, gaps, типографику, фон и радиус брать из конкретного Mobile/Desktop-варианта.
-````
-
-### `Card/Image`
-
-- Figma node: `326:5579`
-- Тип: `COMPONENT_SET`
-- Варианты (2):
-
-  - `Type=Mobile` — `11:1019`
-  - `Type=Desktop` — `260:652`
-
-Описание:
-
-````text
-Card/Image
-
-STRUCTURE
-Карточка внутри родительской сетки: image-area сверху, затем HTML text-content. Фон, радиус и одинаковую высоту карточек ряда задаёт родительский card-td.
-
-TEXT
-Heading и optional description остаются HTML. Внутренние padding, gaps и типографику брать из выбранного Mobile/Desktop-варианта.
-
-IMAGE SOURCE AND PROPORTIONAL CROP @2x
-Экспортировать исходный растр из Fill слоя Image @2x соответствующей карточки конкретного Desktop-инстанса письма. Не экспортировать image-area целиком и не создавать отдельный Mobile-asset. Один файл и один src использовать в Mobile и Desktop.
-
-Реализовать изображение строго по контракту @2x Fill основной инструкции.
-
-MOBILE RESPONSIVE IMAGE
-Mobile image-area 252×160px является контрольным размером и задаёт соотношение сторон 252:160, а не фиксированную высоту.
-
-Карточка занимает 100% доступной ширины внутри Mobile-сетки. Mobile crop-wrapper не получает фиксированную высоту и HTML-атрибут height. При фактической ширине W его высота должна составлять:
-
-H = W × 160 / 252
-
-Пропорциональное img остаётся в обычном потоке, получает height:auto и формирует высоту wrapper. Для горизонтального crop ширина img может превышать 100%; лишняя ширина обрезается wrapper через overflow:hidden. Позицию воспроизводить процентным смещением по Fill Mobile-инстанса.
-
-DESKTOP IMAGE
-Desktop crop-wrapper остаётся фиксированным контейнером 239×160px. Пропорции исходного img сохранять; crop и позицию воспроизводить по Fill Desktop-инстанса.
-
-Не приравнивать img одновременно к width и height wrapper. Не использовать height:100%, object-fit или object-position.
+BLOCK CAPTION
+Boolean-свойство Caption, по умолчанию включено. Если оно включено, после сетки вывести отдельный HTML-текст на всю внутреннюю ширину: 12px/140% Regular, #98999C, выравнивание влево. Gap grid→caption: Mobile 22px, Desktop 32px.
 ````
 
 ### `Card/Icon`
@@ -325,14 +204,28 @@ Desktop crop-wrapper остаётся фиксированным контейн�
 ````text
 Card/Icon
 
+SCOPE
+Вложенная контентная карточка для Block/Cards-Icons. Ширину задаёт родительская сетка; собственный внешний top gap не добавлять.
+
 STRUCTURE
-Карточка внутри родительской сетки: фиксированная иконка → HTML heading → optional HTML description. Фон, радиус и одинаковую высоту карточек ряда задаёт родительский card-td.
+1. Фиксированная иконка.
+2. HTML text-content: optional heading, затем optional description.
 
-ICON
-Экспортировать только визуальный слой иконки из конкретного Desktop-инстанса письма. Не включать в изображение padding, фон карточки или текст. Использовать один src; display-размер задаёт выбранный Mobile/Desktop-вариант карточки. Не применять width:100%.
+У карточки нет собственного фона, padding, border или radius. Высота определяется видимым контентом; соседние карточки не растягивать до одинаковой высоты. Всё содержимое центрировано.
 
-TEXT
-Heading и description остаются HTML. Padding, gaps, alignment и типографику брать из конкретного варианта.
+MOBILE
+Иконка 64×64px. Gap icon→text 8px. Внутри text-content gap 8px.
+Heading 16px/120% Medium, description 14px/140% Regular.
+
+DESKTOP
+Иконка 72×72px. Gap icon→text 12px. Внутри text-content gap 12px.
+Heading 20px/120% Medium, description 16px/140% Regular.
+
+ICON ASSET
+Из конкретного Desktop-инстанса письма экспортировать внешний визуальный слой “Icon @4x” целиком, включая видимый круглый фон и glyph. Не экспортировать glyph отдельно и не добавлять фон в HTML.
+Использовать один PNG и один src: display 64×64px Mobile / 72×72px Desktop. Иконка фиксированная; не применять width:100%.
+
+Видимость heading и description брать из свойств конкретного инстанса.
 ````
 
 ### `Email/Template`
@@ -467,9 +360,17 @@ LAYOUT
 Отступ перед footer: Mobile 16px, Desktop 24px.
 
 DISCLAIMER
-Mobile: padding 0 16px 16px, gap между абзацами 8px.
+Порядок:
+1. Optional block caption.
+2. Первый disclaimer paragraph.
+3. Второй disclaimer paragraph.
+
+Mobile: padding 0 16px 16px, gap между видимыми текстовыми элементами 8px.
 Desktop: padding 0 24px 24px, gap 12px.
 Текст 12px/140%, Regular, #98999C, по центру. Ссылки того же цвета и подчёркнуты. Сохранять только смысловые hard breaks исходного текста.
+
+BLOCK CAPTION
+Boolean-свойство Caption, по умолчанию выключено. Если оно включено, вывести отдельный HTML-текст первым элементом disclaimer-section. Типографика и alignment совпадают с disclaimer; gap до следующего абзаца 8px Mobile / 12px Desktop.
 
 SOCIAL
 Mobile: padding 0 16px 16px; VK 32×32px.
@@ -562,25 +463,30 @@ STRUCTURE
 2. Таблица списка шагов.
 3. Optional Alert/Info.
 4. Optional Button/Secondary.
+5. Optional block caption.
 
-Показывать optional элементы только по свойствам инстанса.
+Показывать optional элементы только по свойствам конкретного инстанса.
 
 STEPS
-Каждый шаг — отдельная таблица: строка живого Badge/Step-Number, spacer, затем HTML heading и optional caption. Бейдж не экспортировать как изображение.
+Каждый шаг — отдельная таблица: живой Badge/Step-Number, spacer, затем HTML heading и optional item caption. Бейдж не экспортировать как изображение.
 
 Mobile:
 — gap между шагами 16px;
 — badge→text 8px;
-— heading/caption gap 4px;
-— heading 14px, caption 12px.
+— heading→item caption 4px;
+— heading 14px, item caption 12px.
 
 Desktop:
 — gap между шагами 24px;
 — badge→text 12px;
-— heading/caption gap 6px;
-— heading 18px, caption 16px.
+— heading→item caption 6px;
+— heading 18px, item caption 16px.
 
-Порядок одинаков, поэтому допускается одна семантическая таблица с responsive размерами; не дублировать содержимое без необходимости.
+Порядок шагов одинаков, поэтому допускается одна семантическая таблица с responsive-размерами; не дублировать содержимое без необходимости.
+
+BLOCK CAPTION
+Boolean-свойство Caption, по умолчанию включено. Это отдельное примечание всего блока после optional Button/Secondary, а не caption отдельного шага.
+HTML-текст на всю внутреннюю ширину: 12px/140% Regular, #98999C, выравнивание влево. Gap от предыдущего видимого элемента: Mobile 16px, Desktop 24px.
 ````
 
 ### `Button/Secondary`
@@ -655,6 +561,8 @@ ORDER
 2. optional Notification.
 3. optional Alert/Info-style notice.
 4. optional Button/Secondary.
+5. optional block caption.
+
 Показывать и располагать элементы строго по свойствам конкретного инстанса.
 
 TEXT
@@ -672,6 +580,9 @@ Mobile: padding 16px, gap 12px, icon 24px.
 Desktop: padding 24px, gap 16px, icon 26px.
 
 Иконки экспортировать без HTML-фона и использовать как фиксированные изображения.
+
+BLOCK CAPTION
+Boolean-свойство Caption, по умолчанию включено. Если оно включено, после optional Button/Secondary вывести отдельный HTML-текст на всю внутреннюю ширину: 12px/140% Regular, #98999C, выравнивание влево. Gap от предыдущего видимого элемента: Mobile 16px, Desktop 24px.
 ````
 
 ### `Banner/Secondary`
@@ -754,13 +665,20 @@ STRUCTURE
 2. Таблица видимых List-Item/Bullet.
 3. Optional Alert/Info.
 4. Optional Button/Secondary.
+5. Optional block caption.
+
 Состав определяется свойствами и содержимым конкретного инстанса.
 
 CARD
 Mobile: top gap 16px, padding 22px, radius 22px, основной gap 16px.
-Desktop: top gap 24px, padding 32px, radius 26px, основной gap 24px.
+Desktop: top gap 24px, padding 32px, radius 26px, основной gap 16px.
 
+BULLETS
 Каждый bullet — отдельная строка с живым индикатором и HTML-текстом. Между пунктами использовать spacer-строки по геометрии выбранного варианта, не margin на td. Не объединять список в одно изображение.
+Локальный caption внутри List-Item/Bullet управляется самим пунктом и не заменяет block caption.
+
+BLOCK CAPTION
+Boolean-свойство Caption, по умолчанию включено. Если оно включено, после optional Button/Secondary вывести отдельный HTML-текст на всю внутреннюю ширину: 12px/140% Regular, #98999C, выравнивание влево. Gap от предыдущего видимого элемента 16px в обоих вариантах.
 ````
 
 ### `List-Item/Bullet`
@@ -1052,6 +970,72 @@ Desktop: padding 0 24px 24px, gap 12px.
 Текст: Roboto/Arial, 12px/140%, Regular, #98999C, по центру. Содержимое брать из конкретного инстанса. Сохранять смысловые hard breaks, но не превращать автоматический перенос Figma в &lt;br&gt;.
 
 Не добавлять social-section, иконки или ссылки, которых нет в выбранном инстансе. Тёмный фон вокруг библиотечного компонента является только презентационным.
+````
+
+### `Card Image @2x`
+
+- Figma node: `911:3992`
+- Тип: `COMPONENT_SET`
+- Варианты (2):
+
+  - `Type=Numbered Image` — `911:3991`
+  - `Type=Image` — `911:3990`
+
+Описание:
+
+````text
+Card Image @2x
+
+SCOPE
+Атомарный составной DIRECT IMAGE внутри Card. HTML-текст карточки в asset не входит.
+
+VARIANTS
+Image: только изображение.
+Numbered Image: изображение вместе с видимым слоем Number. Номер является частью итогового JPEG; не верстать его живым HTML и не экспортировать отдельным файлом.
+
+EXPORT BOUNDARY
+Из конкретного Desktop-инстанса письма экспортировать весь видимый слой “Card Image @2x” после применения варианта и overrides, включая все вложенные графические элементы. Не извлекать только исходный Fill и не отделять Number.
+
+Применять контракт @2x DIRECT IMAGE основной инструкции. Использовать один JPEG и один src для Mobile и Desktop.
+
+PROPORTIONS AND RADIUS
+Asset остаётся прямоугольным в пропорции 232:148. Скругление 14px Mobile / 18px Desktop задаёт clipping-контейнер Card в HTML; не запекать скругление или matte-подложку в JPEG.
+````
+
+### `Card`
+
+- Figma node: `911:4132`
+- Тип: `COMPONENT_SET`
+- Варианты (2):
+
+  - `Type=Desktop` — `911:4131`
+  - `Type=Mobile` — `911:4130`
+
+Описание:
+
+````text
+Card
+
+SCOPE
+Вложенная контентная карточка для Block/Cards-Images. Не добавляет внешний top gap.
+
+STRUCTURE
+1. Card Image @2x как один DIRECT IMAGE.
+2. HTML text-content: heading, затем body.
+
+У карточки нет собственного фона, общего padding, border или radius. Скругляется только clipping-контейнер изображения. Высота определяется контентом; соседние карточки не растягивать до одинаковой высоты.
+
+MOBILE
+Карточка занимает 100% доступной ширины родительской Mobile-сетки; 252px — контрольная ширина библиотечного инстанса, а не фиксированный HTML-width.
+Изображение занимает ширину карточки и сохраняет пропорцию 232:148 через width:100%; height:auto. Radius изображения 14px.
+Gap image→text 8px. Внутри text-content gap 8px. Heading 16px/120% Medium, body 14px/140% Regular, выравнивание влево.
+
+DESKTOP
+Ширина карточки 232px. Изображение 232×148px, radius 18px.
+Gap image→text 12px. Внутри text-content gap 12px. Heading 20px/120% Medium, body 16px/140% Regular, выравнивание влево.
+
+ASSET
+Экспорт и состав изображения выполнять по description Card Image @2x. Один src использовать в обоих вариантах.
 ````
 
 ## Сервисные письма (19)
