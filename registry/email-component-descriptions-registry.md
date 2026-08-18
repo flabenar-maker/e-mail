@@ -1013,7 +1013,7 @@ SECTION 2 — DETAILS
 Mobile: padding 22px, gap 16px.
 Desktop: padding 32px, gap 24px.
 
-Сначала Details/Operation, затем optional limit-attention. Внутри Details/Operation нет divider между строками; единственный divider компонента разделяет две основные секции.
+Сначала Details/Operation, затем optional limit-alert (свойство Limit Alert). Внутри Details/Operation нет divider между строками; единственный divider компонента разделяет две основные секции.
 
 ASSETS
 Badge/Partner экспортировать целиком из соответствующего слоя конкретного Desktop-инстанса. Использовать один src и display 72×72 в обоих вариантах. Status — живой HTML по Badge/Operation-Status.
@@ -1337,10 +1337,10 @@ Desktop: padding 32px, основной gap 24px, text-content gap 12px.
 Порядок:
 1. HTML text-content конкретного инстанса.
 2. Details/Suspicious-Operation.
-3. attention-notice.
-4. warning/legal notice.
+3. alert.
+4. legal disclaimer.
 
-Attention и warning выводить только если они видимы в инстансе. Status icon экспортировать целиком из конкретного Desktop-инстанса и использовать одним src. Не добавлять divider внутри Details или между обычными абзацами.
+Alert и disclaimer выводить только если они видимы в инстансе. Status icon экспортировать целиком из конкретного Desktop-инстанса и использовать одним src. Не добавлять divider внутри Details или между обычными абзацами.
 ````
 
 ### `Details/Operation-Plain`
@@ -1505,8 +1505,8 @@ Desktop: padding 32px, radius 26px, основной gap 24px.
 ORDER
 1. Optional warning heading.
 2. Intro paragraphs и кастомный numbered-list.
-3. Optional attention-notice.
-4. Optional legal/disclaimer notice.
+3. Optional alert.
+4. Optional disclaimer.
 Видимость определяется свойствами конкретного инстанса.
 
 WARNING HEADING
@@ -1524,7 +1524,7 @@ NUMBERED LIST
 Mobile: основной текст 14px/140%, общий text gap 8px, gap внутри list-item 4px.
 Desktop: 18px/140%, общий text gap 12px, gap внутри list-item 6px.
 
-ATTENTION
+ALERT
 Фон #FFF1C9, текст #AA7100.
 Mobile: padding 16px, radius 14px.
 Desktop: padding 24px, radius 18px.
