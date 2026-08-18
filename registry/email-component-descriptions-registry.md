@@ -110,14 +110,14 @@ RESPONSIVE STRUCTURE
 Использовать две полные presentation-table сетки: Mobile и Desktop. Классы переключения размещать только на внешних wrapper этих таблиц.
 
 Mobile:
-— одна Card в каждой строке;
+— одна Card/Image в каждой строке;
 — карточка занимает 100% доступной внутренней ширины;
 — 252px — контрольная ширина библиотечного инстанса, а не фиксированный HTML-width;
 — между карточками отдельная spacer-row 22px.
 
 Desktop:
 — внутренняя ширина сетки 488px;
-— две колонки Card по 232px;
+— две колонки Card/Image по 232px;
 — горизонтальный gap 24px отдельной spacer-cell;
 — вертикальный gap 24px отдельной spacer-row;
 — card-cells выравнивать по верхнему краю;
@@ -130,13 +130,13 @@ COUNT
 6: три ряда по две.
 
 CARD
-Содержимое каждой карточки реализовать по description Card. Изображение каждой карточки является одним DIRECT IMAGE по description Card Image @2x.
+Содержимое каждой карточки реализовать по description Card/Image. Изображение каждой карточки является одним DIRECT IMAGE по description Asset/Card-Image @2x.
 
 BLOCK CAPTION
 Boolean-свойство Caption, по умолчанию включено. Если оно включено, после сетки вывести отдельный HTML-текст на всю внутреннюю ширину: 12px/140% Regular, #98999C, выравнивание влево. Gap grid→caption: Mobile 22px, Desktop 32px.
 ````
 
-### `Block/Cards-Icons`
+### `Block/Icon-Cards`
 
 - Figma node: `326:6342`
 - Тип: `COMPONENT_SET`
@@ -152,7 +152,7 @@ Boolean-свойство Caption, по умолчанию включено. Ес
 Описание:
 
 ````text
-Block/Cards-Icons
+Block/Icon-Cards
 
 SCOPE
 Обычный контентный блок внутри общего email-padding. Не добавлять второй внешний боковой inset.
@@ -208,7 +208,7 @@ Gap grid→caption: Mobile 22px, Desktop 32px.
 Card/Icon
 
 SCOPE
-Вложенная контентная карточка для Block/Cards-Icons. Ширину задаёт родительская сетка; собственный внешний top gap не добавлять.
+Вложенная контентная карточка для Block/Icon-Cards. Ширину задаёт родительская сетка; собственный внешний top gap не добавлять.
 
 STRUCTURE
 1. Фиксированная иконка.
@@ -225,13 +225,13 @@ DESKTOP
 Heading 20px/120% Medium, description 16px/140% Regular.
 
 ICON ASSET
-Из конкретного Desktop-инстанса письма экспортировать внешний визуальный слой “Icon @4x” целиком, включая видимый круглый фон и glyph. Не экспортировать glyph отдельно и не добавлять фон в HTML.
+Из конкретного Desktop-инстанса письма экспортировать внешний визуальный слой “Asset/Feature-Icon @4x” целиком, включая видимый круглый фон и glyph. Не экспортировать glyph отдельно и не добавлять фон в HTML.
 Использовать один PNG и один src: display 64×64px Mobile / 72×72px Desktop. Иконка фиксированная; не применять width:100%.
 
 Видимость heading и description брать из свойств конкретного инстанса.
 ````
 
-### `Icon @4x`
+### `Asset/Feature-Icon @4x`
 
 - Figma node: `946:25769`
 - Тип: `COMPONENT`
@@ -239,13 +239,13 @@ ICON ASSET
 Описание:
 
 ````text
-Icon @4x
+Asset/Feature-Icon @4x
 
 ASSET ROLE
 Атомарный составной visual asset для карточек и строк с иконками.
 
 EXPORT
-Из конкретного Desktop-инстанса письма экспортировать внешний слой Icon @4x целиком, включая собственный круглый фон и glyph.
+Из конкретного Desktop-инстанса письма экспортировать внешний слой Asset/Feature-Icon @4x целиком, включая собственный круглый фон и glyph.
 Формат PNG @4x с прозрачностью за пределами собственного визуала. Не экспортировать glyph отдельно, не добавлять HTML-подложку и не запекать дополнительный фон.
 
 USAGE
@@ -787,8 +787,9 @@ SCOPE
 ASSETS
 Все assets экспортировать из конкретного Desktop-инстанса письма.
 — app-logo @4x: экспортировать внешний визуальный слой без HTML-padding; один PNG/src; display 163×46px Mobile и 219×62px Desktop.
-— store icons @4x: экспортировать только вложенную видимую иконку без фона, radius, padding и текста; PNG с прозрачностью; один src; display 26×26px Mobile и 32×32px Desktop.
-— QR: экспортировать целиком Desktop QR Block со знаком в центре; display 130×130px; только Desktop.
+— store-buttons: общий контейнер четырёх кнопок в каждом варианте.
+— store icons: экспортировать только вложенные слои rustore-icon @4x, google-play-icon @4x, appgallery-icon @4x и getapps-icon @4x без button-фона, radius, padding и текста; PNG с прозрачностью; один src; display 26×26px Mobile и 32×32px Desktop.
+— QR: экспортировать целиком слой QR Block @4x со знаком в центре; display 130×130px; только Desktop.
 Не добавлять asset-подложку в HTML, если её нет внутри экспортируемого слоя.
 
 MOBILE
@@ -841,7 +842,7 @@ Desktop: padding 0 24px 24px, gap 12px.
 Не добавлять social-section, иконки или ссылки, которых нет в выбранном инстансе. Тёмный фон вокруг библиотечного компонента является только презентационным.
 ````
 
-### `Card Image @2x`
+### `Asset/Card-Image @2x`
 
 - Figma node: `911:3992`
 - Тип: `COMPONENT_SET`
@@ -853,25 +854,25 @@ Desktop: padding 0 24px 24px, gap 12px.
 Описание:
 
 ````text
-Card Image @2x
+Asset/Card-Image @2x
 
 SCOPE
-Атомарный составной DIRECT IMAGE внутри Card. HTML-текст карточки в asset не входит.
+Атомарный составной DIRECT IMAGE внутри Card/Image. HTML-текст карточки в asset не входит.
 
 VARIANTS
 Image: только изображение.
 Numbered Image: изображение вместе с видимым слоем Number. Номер является частью итогового JPEG; не верстать его живым HTML и не экспортировать отдельным файлом.
 
 EXPORT BOUNDARY
-Из конкретного Desktop-инстанса письма экспортировать весь видимый слой “Card Image @2x” после применения варианта и overrides, включая все вложенные графические элементы. Не извлекать только исходный Fill и не отделять Number.
+Из конкретного Desktop-инстанса письма экспортировать весь видимый слой “Asset/Card-Image @2x” после применения варианта и overrides, включая все вложенные графические элементы. Не извлекать только исходный Fill и не отделять Number.
 
 Применять контракт @2x DIRECT IMAGE основной инструкции. Использовать один JPEG и один src для Mobile и Desktop.
 
 PROPORTIONS AND RADIUS
-Asset остаётся прямоугольным в пропорции 232:148. Скругление 14px Mobile / 18px Desktop задаёт clipping-контейнер Card в HTML; не запекать скругление или matte-подложку в JPEG.
+Asset остаётся прямоугольным в пропорции 232:148. Скругление 14px Mobile / 18px Desktop задаёт clipping-контейнер Card/Image в HTML; не запекать скругление или matte-подложку в JPEG.
 ````
 
-### `Card`
+### `Card/Image`
 
 - Figma node: `911:4132`
 - Тип: `COMPONENT_SET`
@@ -883,13 +884,13 @@ Asset остаётся прямоугольным в пропорции 232:148.
 Описание:
 
 ````text
-Card
+Card/Image
 
 SCOPE
 Вложенная контентная карточка для Block/Cards-Images. Не добавляет внешний top gap.
 
 STRUCTURE
-1. Card Image @2x как один DIRECT IMAGE.
+1. Asset/Card-Image @2x как один DIRECT IMAGE.
 2. HTML text-content: heading, затем body.
 
 У карточки нет собственного фона, общего padding, border или radius. Скругляется только clipping-контейнер изображения. Высота определяется контентом; соседние карточки не растягивать до одинаковой высоты.
@@ -904,10 +905,10 @@ DESKTOP
 Gap image→text 12px. Внутри text-content gap 12px. Heading 20px/120% Medium, body 16px/140% Regular, выравнивание влево.
 
 ASSET
-Экспорт и состав изображения выполнять по description Card Image @2x. Один src использовать в обоих вариантах.
+Экспорт и состав изображения выполнять по description Asset/Card-Image @2x. Один src использовать в обоих вариантах.
 ````
 
-### `Block/Icons`
+### `Block/Icon-List`
 
 - Figma node: `946:26516`
 - Тип: `COMPONENT_SET`
@@ -919,7 +920,7 @@ ASSET
 Описание:
 
 ````text
-Block/Icons
+Block/Icon-List
 
 SCOPE
 Обычный контентный блок внутри общего email-padding.
@@ -944,7 +945,7 @@ Row/Icon: icon 56×56px → gap 12px → HTML text-content. Локальный t
 Optional Button/Secondary: content-width, контрольный размер 230×46px.
 
 ICON ASSET
-Каждую Icon @4x экспортировать целиком из конкретного Desktop-инстанса письма как PNG @4x с прозрачностью за пределами собственного визуала. Фон и glyph внутри Icon @4x входят в один asset. Не экспортировать glyph отдельно и не добавлять HTML-подложку. Один src использовать в Mobile и Desktop; display-size задаёт выбранный вариант, иконку не растягивать через width:100%.
+Каждую Asset/Feature-Icon @4x экспортировать целиком из конкретного Desktop-инстанса письма как PNG @4x с прозрачностью за пределами собственного визуала. Фон и glyph внутри Asset/Feature-Icon @4x входят в один asset. Не экспортировать glyph отдельно и не добавлять HTML-подложку. Один src использовать в Mobile и Desktop; display-size задаёт выбранный вариант, иконку не растягивать через width:100%.
 
 BLOCK CAPTION
 Boolean-свойство Caption. Если включено, вывести отдельный HTML-текст на всю внутреннюю ширину: 12px/140% Regular, #98999C, слева. Gap от предыдущего видимого элемента: Mobile 16px, Desktop 24px.
