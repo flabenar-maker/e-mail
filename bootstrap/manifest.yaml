@@ -1,0 +1,30 @@
+schema_version: 1
+repository: flabenar-maker/e-mail
+entrypoint: bootstrap/README.md
+
+canonical_sources:
+  - README.md
+  - core/email-figma-prompt.md
+  - registry/email-component-descriptions-registry.md
+  - workflows/library-maintenance-checkpoint.md
+
+skills:
+  required:
+    - path: .agents/skills/maintaining-cupis-email-system
+      name: maintaining-cupis-email-system
+
+plugins:
+  required:
+    - figma@openai-curated-remote
+    - github@openai-curated-remote
+  optional:
+    - superpowers@openai-curated-remote
+
+figma:
+  file_key: 8zka5bHkcrJVK9I9dKjnhC
+  roots:
+    marketing: "538:17236"
+    service: "538:17235"
+
+portable_config: bootstrap/config.portable.toml
+verification: bootstrap/verify.ps1
