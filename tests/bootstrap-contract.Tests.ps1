@@ -120,7 +120,7 @@ try {
     Assert-True ($skill -match '(?m)^name: maintaining-cupis-email-system$') 'Skill name must be preserved.'
 
     $attributes = Get-Content -Raw -LiteralPath (Join-Path $repoRoot '.gitattributes')
-    Assert-True ($attributes.Contains('.agents/skills/maintaining-cupis-email-system/** text eol=lf')) '.gitattributes must normalize the repo-scoped skill.'
+    Assert-True ($attributes.Contains('.agents/skills/** text eol=lf')) '.gitattributes must normalize every repo-scoped skill.'
     Assert-True (-not ($attributes -match '(?m)^skills/maintaining-cupis-email-system/\*\*')) '.gitattributes must not retain the legacy skill path.'
 
     $valid = Invoke-Verify $repoRoot
@@ -142,6 +142,62 @@ try {
     $afterHash = Get-FixtureHash $readOnlyFixture
     Assert-True ($firstRun.ExitCode -eq 0 -and $secondRun.ExitCode -eq 0) 'Verifier must pass repeatedly on a valid fixture.'
     Assert-True ($beforeHash -eq $afterHash) 'Verifier must not modify repository files.'
+
+    $missingManifestSkillFixture = Join-Path $tempRoot 'missing-manifest-skill'
+    Copy-ContractFixture -Source $repoRoot -Destination $missingManifestSkillFixture
+    $missingSkillManifest = Join-Path $missingManifestSkillFixture 'bootstrap/manifest.yaml'
+    $missingSkillManifestContent = Get-Content -Raw -LiteralPath $missingSkillManifest
+    $missingSkillManifestContent = $missingSkillManifestContent.Replace(
+        '      name: maintaining-cupis-email-system',
+        "      name: maintaining-cupis-email-system`n    - path: .agents/skills/future-email-skill`n      name: future-email-skill"
+    )
+    Set-Content -NoNewline -LiteralPath $missingSkillManifest -Value $missingSkillManifestContent
+    $missingManifestSkillResult = Invoke-Verify $missingManifestSkillFixture
+    Assert-True ($missingManifestSkillResult.ExitCode -ne 0) 'Verifier must reject a required manifest skill whose SKILL.md is missing.'
+    Assert-True ($missingManifestSkillResult.Output.Contains('.agents/skills/future-email-skill/SKILL.md')) 'Missing manifest skill error must name the derived SKILL.md path.'
+
+    $presentManifestSkillFixture = Join-Path $tempRoot 'present-manifest-skill'
+    Copy-ContractFixture -Source $repoRoot -Destination $presentManifestSkillFixture
+    $presentSkillManifest = Join-Path $presentManifestSkillFixture 'bootstrap/manifest.yaml'
+    $presentSkillManifestContent = Get-Content -Raw -LiteralPath $presentSkillManifest
+    $presentSkillManifestContent = $presentSkillManifestContent.Replace(
+        '      name: maintaining-cupis-email-system',
+        "      name: maintaining-cupis-email-system`n    - path: .agents/skills/future-email-skill`n      name: future-email-skill"
+    )
+    Set-Content -NoNewline -LiteralPath $presentSkillManifest -Value $presentSkillManifestContent
+    $presentSkillDirectory = Join-Path $presentManifestSkillFixture '.agents/skills/future-email-skill'
+    New-Item -ItemType Directory -Path $presentSkillDirectory -Force | Out-Null
+    Set-Content -LiteralPath (Join-Path $presentSkillDirectory 'SKILL.md') -Value "---`nname: future-email-skill`ndescription: Fixture skill.`n---`n"
+    $presentManifestSkillResult = Invoke-Verify $presentManifestSkillFixture
+    Assert-True ($presentManifestSkillResult.ExitCode -eq 0) "Verifier must accept a valid required manifest skill:`n$($presentManifestSkillResult.Output)"
+
+    $missingOptionalSkillFixture = Join-Path $tempRoot 'missing-optional-skill'
+    Copy-ContractFixture -Source $repoRoot -Destination $missingOptionalSkillFixture
+    $optionalSkillManifest = Join-Path $missingOptionalSkillFixture 'bootstrap/manifest.yaml'
+    $optionalSkillManifestContent = Get-Content -Raw -LiteralPath $optionalSkillManifest
+    $optionalSkillManifestContent = $optionalSkillManifestContent.Replace(
+        "`nplugins:",
+        "`n  optional:`n    - path: .agents/skills/optional-email-skill`n      name: optional-email-skill`n`nplugins:"
+    )
+    Set-Content -NoNewline -LiteralPath $optionalSkillManifest -Value $optionalSkillManifestContent
+    $missingOptionalSkillResult = Invoke-Verify $missingOptionalSkillFixture
+    Assert-True ($missingOptionalSkillResult.ExitCode -eq 0) "Verifier must allow a missing optional manifest skill:`n$($missingOptionalSkillResult.Output)"
+
+    $mismatchedManifestSkillFixture = Join-Path $tempRoot 'mismatched-manifest-skill'
+    Copy-ContractFixture -Source $repoRoot -Destination $mismatchedManifestSkillFixture
+    $mismatchedSkillManifest = Join-Path $mismatchedManifestSkillFixture 'bootstrap/manifest.yaml'
+    $mismatchedSkillManifestContent = Get-Content -Raw -LiteralPath $mismatchedSkillManifest
+    $mismatchedSkillManifestContent = $mismatchedSkillManifestContent.Replace(
+        '      name: maintaining-cupis-email-system',
+        "      name: maintaining-cupis-email-system`n    - path: .agents/skills/future-email-skill`n      name: future-email-skill"
+    )
+    Set-Content -NoNewline -LiteralPath $mismatchedSkillManifest -Value $mismatchedSkillManifestContent
+    $mismatchedSkillDirectory = Join-Path $mismatchedManifestSkillFixture '.agents/skills/future-email-skill'
+    New-Item -ItemType Directory -Path $mismatchedSkillDirectory -Force | Out-Null
+    Set-Content -LiteralPath (Join-Path $mismatchedSkillDirectory 'SKILL.md') -Value "---`nname: wrong-skill-name`n---`n"
+    $mismatchedManifestSkillResult = Invoke-Verify $mismatchedManifestSkillFixture
+    Assert-True ($mismatchedManifestSkillResult.ExitCode -ne 0) 'Verifier must reject a manifest skill whose frontmatter name differs.'
+    Assert-True ($mismatchedManifestSkillResult.Output.Contains('future-email-skill')) 'Skill-name mismatch error must identify the manifest skill without exposing file contents.'
 
     $missingFixture = Join-Path $tempRoot 'missing-canonical'
     Copy-ContractFixture -Source $repoRoot -Destination $missingFixture

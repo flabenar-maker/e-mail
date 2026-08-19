@@ -1,4 +1,4 @@
-.agents/skills/maintaining-cupis-email-system/** text eol=lf
+.agents/skills/** text eol=lf
 bootstrap/** text eol=lf
 tests/*.ps1 text eol=lf
 AGENTS.md text eol=lf
