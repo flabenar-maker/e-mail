@@ -11,7 +11,7 @@
 - Marketing Emails: `538:17236`
 - Service Emails: `538:17235`
 
-## Маркетинговые письма (25)
+## Маркетинговые письма (27)
 
 ### `Badge/Step-Number`
 
@@ -33,13 +33,13 @@ SCOPE
 Атомарный живой HTML-элемент. Не экспортировать как изображение.
 
 IMPLEMENTATION
-Собрать как inline presentation-table или отдельную table-cell с текстом номера шага. Фон, padding и radius задавать на ячейке. Бейдж не растягивать по ширине родителя.
+Собрать как inline presentation-table или отдельную table-cell с текстом номера шага. Фон, горизонтальный padding и radius задавать на ячейке. Бейдж не растягивать по ширине родителя.
 
 MOBILE
-Padding 8px; radius 19px; текст 12px.
+Padding: 0 8px; radius 19px; текст 12px/140%.
 
 DESKTOP
-Padding 8px; radius 19px; текст 16px.
+Padding: 0 8px; radius 19px; текст 16px/140%.
 
 Цвет текста и фона брать из Color конкретного инстанса. Текст остаётся HTML.
 ````
@@ -63,34 +63,26 @@ SCOPE
 
 STRUCTURE
 Одна presentation-table на всю ширину: верхний spacer и центрированная ячейка с логотипом.
-
-SPACING
-Внешний отступ перед логотипом: Mobile 16px, Desktop 24px. Боковой email-padding не добавлять.
+Отступ перед логотипом: Mobile 16px, Desktop 24px. Дополнительный боковой inset не добавлять.
 
 ASSET
-Экспортировать из конкретного Desktop-инстанса внешний слой “logo @4x” целиком. Он уже содержит логотип и защитную подложку #F3F3F5. Вложенный cupis-logo отдельно не экспортировать и подложку в HTML не воспроизводить.
+Экспортировать из конкретного Desktop-инстанса внешний слой “logo_desktop @4x” целиком. Он уже содержит логотип и защитную подложку #F3F3F5. Вложенный cupis-logo отдельно не экспортировать и подложку в HTML не воспроизводить.
 
 Использовать один общий src:
 — Desktop display: 322×50px;
 — Mobile display: 212×33px.
 
-Изображение фиксированное, центрированное, не width:100%. Не добавлять отдельный dark-mode asset и не включать в экспорт тёмный презентационный фон вокруг компонента.
+Изображение фиксированное и центрированное; не применять width:100%. Не добавлять отдельный dark-mode asset и не включать в экспорт презентационный фон вокруг компонента.
 ````
 
 ### `Block/Cards-Images`
 
 - Figma node: `326:5806`
 - Тип: `COMPONENT_SET`
-- Варианты (8):
+- Варианты (2):
 
-  - `Type=Mobile, Count=4` — `326:5807`
-  - `Type=Desktop, Count=4` — `326:5814`
-  - `Type=Desktop, Count=2` — `398:7570`
-  - `Type=Mobile, Count=2` — `398:7598`
-  - `Type=Desktop, Count=3` — `398:7625`
-  - `Type=Mobile, Count=3` — `398:7653`
-  - `Type=Desktop, Count=6` — `398:7680`
-  - `Type=Mobile, Count=6` — `398:7720`
+  - `Type=Desktop` — `398:7570`
+  - `Type=Mobile` — `398:7598`
 
 Описание:
 
@@ -99,55 +91,41 @@ Block/Cards-Images
 
 SCOPE
 Обычный контентный блок внутри общего email-padding. Не добавлять второй внешний боковой inset.
-Top gap: Mobile 16px, Desktop 24px. Боковые 16px/24px уже обеспечивает общий email-padding.
+Top gap: Mobile 16px, Desktop 24px.
 
 CONTENT AREA
-Белый контейнер с центрированным HTML heading.
-Mobile: padding 22px, radius 22px, основной gap 22px.
-Desktop: padding 32px, radius 26px, основной gap 32px.
+Белая карточка с HTML heading, последовательностью Card/Image и optional block caption.
+Mobile: padding 22px, radius 22px, gap между элементами верхнего уровня 22px.
+Desktop: padding 32px, radius 26px, gap между элементами верхнего уровня 32px.
 
-RESPONSIVE STRUCTURE
-Использовать две полные presentation-table сетки: Mobile и Desktop. Классы переключения размещать только на внешних wrapper этих таблиц.
+CARDS
+Свойства Count нет. Рендерить все видимые Card/Image конкретного инстанса в их фактическом порядке; библиотечный пример содержит шесть карточек.
 
 Mobile:
-— одна Card/Image в каждой строке;
-— карточка занимает 100% доступной внутренней ширины;
-— 252px — контрольная ширина библиотечного инстанса, а не фиксированный HTML-width;
-— между карточками отдельная spacer-row 22px.
+— одна Card/Image в строке;
+— ширина карточки 100% внутренней области;
+— 252px — контрольная ширина инстанса, не фиксированный HTML-width;
+— расстояние между карточками 22px.
 
 Desktop:
-— внутренняя ширина сетки 488px;
-— две колонки Card/Image по 232px;
-— горизонтальный gap 24px отдельной spacer-cell;
-— вертикальный gap 24px отдельной spacer-row;
-— card-cells выравнивать по верхнему краю;
-— не добавлять общий фон карточки и не растягивать соседние карточки до одинаковой высоты.
+— одна Card/Image в строке на всю внутреннюю ширину 488px;
+— расстояние между карточками 24px;
+— не создавать двухколоночную сетку и equal-height оболочки.
 
-COUNT
-2: один ряд из двух.
-3: два в первом ряду, третья слева во втором.
-4: два ряда по две.
-6: три ряда по две.
-
-CARD
-Содержимое каждой карточки реализовать по description Card/Image. Изображение каждой карточки является одним DIRECT IMAGE по description Asset/Card-Image @2x.
+Содержимое карточки реализовать по description Card/Image.
 
 BLOCK CAPTION
-Boolean-свойство Caption, по умолчанию включено. Если оно включено, после сетки вывести отдельный HTML-текст на всю внутреннюю ширину: 12px/140% Regular, #98999C, выравнивание влево. Gap grid→caption: Mobile 22px, Desktop 32px.
+Если Caption включён, после списка вывести отдельный HTML-текст на всю внутреннюю ширину: 12px/140% Regular, #98999C, слева. Gap от последней карточки: Mobile 22px, Desktop 32px.
 ````
 
 ### `Block/Icon-Cards`
 
 - Figma node: `326:6342`
 - Тип: `COMPONENT_SET`
-- Варианты (6):
+- Варианты (2):
 
-  - `Type=Mobile, Count=4` — `326:6343`
-  - `Type=Desktop, Count=4` — `326:6349`
-  - `Type=Desktop, Count=2` — `398:7759`
-  - `Type=Mobile, Count=2` — `398:7795`
-  - `Type=Desktop, Count=6` — `398:7901`
-  - `Type=Mobile, Count=6` — `398:7953`
+  - `Type=Desktop` — `398:7759`
+  - `Type=Mobile` — `398:7953`
 
 Описание:
 
@@ -159,38 +137,28 @@ SCOPE
 Top gap: Mobile 16px, Desktop 24px.
 
 CONTENT AREA
-Белый контейнер с центрированным HTML heading.
-Mobile: padding 22px, radius 22px, основной gap 22px.
-Desktop: padding 32px, radius 26px, основной gap 32px.
+Белая карточка с HTML heading, последовательностью Card/Icon и optional block caption.
+Mobile: padding 22px, radius 22px, gap между элементами верхнего уровня 22px.
+Desktop: padding 32px, radius 26px, gap между элементами верхнего уровня 32px.
 
-RESPONSIVE STRUCTURE
-Использовать две полные presentation-table сетки: Mobile и Desktop. Переключение видимости размещать только на внешних wrapper этих таблиц.
+CARDS
+Свойства Count нет. Рендерить все видимые Card/Icon конкретного инстанса в их фактическом порядке; библиотечный пример содержит шесть карточек.
 
 Mobile:
 — одна Card/Icon в строке;
-— карточка занимает 100% внутренней ширины;
+— ширина карточки 100% внутренней области;
 — 252px — контрольная ширина инстанса, не фиксированный HTML-width;
-— между карточками spacer-row 22px.
+— расстояние между карточками 22px.
 
 Desktop:
-— внутренняя ширина сетки 488px;
-— две колонки Card/Icon по 232px;
-— горизонтальный spacer-cell 24px;
-— вертикальный spacer-row 24px;
-— card-cells выровнены по верхнему краю;
-— не добавлять фон, radius или equal-height оболочку карточки.
+— одна Card/Icon в строке на всю внутреннюю ширину 488px;
+— расстояние между карточками 24px;
+— не создавать двухколоночную сетку, фон карточки или equal-height оболочку.
 
-COUNT
-2: один ряд из двух.
-4: два ряда по две.
-6: три ряда по две.
-
-CARD
-Содержимое и фиксированный размер иконки реализовать по description Card/Icon. Иконку не растягивать по ширине карточки.
+Содержимое карточки реализовать по description Card/Icon.
 
 BLOCK CAPTION
-Boolean-свойство Caption. Если включено, после сетки вывести отдельный HTML-текст на всю внутреннюю ширину: 12px/140% Regular, #98999C, слева.
-Gap grid→caption: Mobile 22px, Desktop 32px.
+Если Caption включён, после списка вывести отдельный HTML-текст на всю внутреннюю ширину: 12px/140% Regular, #98999C, слева. Gap от последней карточки: Mobile 22px, Desktop 32px.
 ````
 
 ### `Card/Icon`
@@ -207,28 +175,22 @@ Gap grid→caption: Mobile 22px, Desktop 32px.
 ````text
 Card/Icon
 
-SCOPE
-Вложенная контентная карточка для Block/Icon-Cards. Ширину задаёт родительская сетка; собственный внешний top gap не добавлять.
-
 STRUCTURE
-1. Фиксированная иконка.
-2. HTML text-content: optional heading, затем optional description.
-
-У карточки нет собственного фона, padding, border или radius. Высота определяется видимым контентом; соседние карточки не растягивать до одинаковой высоты. Всё содержимое центрировано.
+Карточка без общего HTML-фона: фиксированная Asset/Feature-Icon @4x и text-content с живыми HTML heading, optional description и link.
+Boolean-свойство Description управляет только description; heading и link сохраняются.
 
 MOBILE
-Иконка 64×64px. Gap icon→text 8px. Внутри text-content gap 8px.
-Heading 16px/120% Medium, description 14px/140% Regular.
+Вертикальная структура на 100% ширины родителя, содержимое центрировано.
+Icon 52×52px. Gap icon→text-content 16px. Внутри text-content gap 8px.
+Heading 16px, description 14px/140%, link 14px/140%.
 
 DESKTOP
-Иконка 72×72px. Gap icon→text 12px. Внутри text-content gap 12px.
-Heading 20px/120% Medium, description 16px/140% Regular.
+Одна presentation-table строка: icon-cell 72×72px, spacer-cell 24px, text-cell шириной 392px; обе ячейки выровнены по верхнему краю.
+Внутри text-content gap 12px.
+Heading 20px, description 16px/140%, link 16px/140%.
 
-ICON ASSET
-Из конкретного Desktop-инстанса письма экспортировать внешний визуальный слой “Asset/Feature-Icon @4x” целиком, включая видимый круглый фон и glyph. Не экспортировать glyph отдельно и не добавлять фон в HTML.
-Использовать один PNG и один src: display 64×64px Mobile / 72×72px Desktop. Иконка фиксированная; не применять width:100%.
-
-Видимость heading и description брать из свойств конкретного инстанса.
+ASSET
+Asset/Feature-Icon @4x экспортировать целиком из конкретного Desktop-инстанса как PNG @4x с прозрачностью за пределами собственного визуала. Один файл/src использовать в Mobile и Desktop. Не добавлять HTML-подложку и не применять width:100% к иконке.
 ````
 
 ### `Asset/Feature-Icon @4x`
@@ -273,17 +235,17 @@ Outer inset: Mobile 16px сверху и по бокам; Desktop 24px.
 CARD
 Mobile: width 100% оставшегося пространства, контрольная ширина 296px, padding 22px, radius 22px, gap heading→buttons 16px.
 Desktop: width 552px, padding 32px, radius 26px, gap heading→buttons 24px.
-Heading — живой HTML, по центру; Mobile 18px, Desktop 22px. Высота карточки определяется контентом.
+Heading остаётся HTML и выровнен по центру: Mobile 18px, Desktop 26px. Высота карточки определяется контентом.
 
 MOBILE BUTTONS
-Три кнопки расположить вертикально. Каждая занимает 100% внутренней ширины, height 44px; между кнопками spacer-row 8px.
-Иконка фиксированная 32×32px и центрируется внутри linked button-cell. Не создавать горизонтальную строку из трёх кнопок.
+Три кнопки вертикально. Каждая занимает 100% внутренней ширины, height 44px; spacer-row между кнопками 8px.
+Иконка 32×32px и центрирована внутри linked button-cell.
 
 DESKTOP BUTTONS
-Три кнопки расположить в одной строке. Button-cells поровну делят пространство, оставшееся после двух обязательных spacer-cells по 12px.
-Каждая кнопка height 54px; иконка 42×42px, центрирована. Не задавать старые фиксированные ширины кнопок.
+Три кнопки в одной строке. Button-cells поровну делят пространство после двух обязательных spacer-cells по 12px.
+Каждая кнопка height 54px; иконка 42×42px и центрирована. Старые фиксированные ширины кнопок не задавать.
 
-Каждая оценка — отдельная ссылка на всю площадь кнопки. Фон и radius задавать на linked button-cell. Использовать один Desktop-source и один src для каждой иконки в обоих вариантах. Href брать из данных письма.
+Каждая оценка — отдельная ссылка на всю площадь кнопки. Фон и radius задавать на linked button-cell. Для каждой иконки использовать один Desktop-source и один src в обоих вариантах. Href брать из данных письма.
 ````
 
 ### `NPS/2-Options`
@@ -307,17 +269,17 @@ Outer inset: Mobile 16px сверху и по бокам; Desktop 24px.
 CARD
 Mobile: width 100% оставшегося пространства, контрольная ширина 296px, padding 22px, radius 22px, gap heading→buttons 16px.
 Desktop: width 552px, padding 32px, radius 26px, gap heading→buttons 24px.
-Heading — живой HTML, по центру; Mobile 18px, Desktop 22px. Высота карточки определяется контентом.
+Heading остаётся HTML и выровнен по центру: Mobile 18px, Desktop 26px. Высота карточки определяется контентом.
 
 MOBILE BUTTONS
-Две кнопки расположить вертикально. Каждая занимает 100% внутренней ширины, height 44px; между кнопками spacer-row 8px.
-Иконка фиксированная 32×32px и центрируется внутри linked button-cell. Не создавать горизонтальную строку из двух кнопок.
+Две кнопки вертикально. Каждая занимает 100% внутренней ширины, height 44px; spacer-row между кнопками 8px.
+Иконка 32×32px и центрирована внутри linked button-cell.
 
 DESKTOP BUTTONS
-Две кнопки расположить в одной строке. Button-cells поровну делят пространство, оставшееся после обязательной spacer-cell 12px.
-Каждая кнопка height 54px; иконка 42×42px, центрирована. Не задавать старые фиксированные ширины кнопок.
+Две кнопки в одной строке. Button-cells поровну делят пространство после обязательной spacer-cell 12px.
+Каждая кнопка height 54px; иконка 42×42px и центрирована. Старые фиксированные ширины кнопок не задавать.
 
-Каждая оценка — отдельная ссылка на всю площадь кнопки. Фон и radius задавать на linked button-cell. Использовать один Desktop-source и один src для каждой иконки в обоих вариантах. Href брать из данных письма.
+Каждая оценка — отдельная ссылка на всю площадь кнопки. Фон и radius задавать на linked button-cell. Для каждой иконки использовать один Desktop-source и один src в обоих вариантах. Href брать из данных письма.
 ````
 
 ### `Email/Footer`
@@ -338,31 +300,33 @@ SCOPE
 Полноширинный footer внутри 600px email-wrapper. Не помещать в общий email-padding.
 
 LAYOUT
-Фон всего footer #F3F3F5, без border, shadow и radius.
+Фон footer всегда #F3F3F5, без border, shadow и radius. Фон воспроизводить в HTML; отдельный фоновый asset не создавать.
 Отступ перед footer: Mobile 16px, Desktop 24px.
 
 DISCLAIMER
-Порядок:
+Порядок видимых элементов:
 1. Optional block caption.
-2. Первый disclaimer paragraph.
-3. Второй disclaimer paragraph.
+2. Основной disclaimer paragraph.
+3. Текст для ошибочного получателя.
+4. Отдельная unsubscribe link.
 
-Mobile: padding 0 16px 16px, gap между видимыми текстовыми элементами 8px.
+Mobile: padding 0 16px 16px, gap 8px.
 Desktop: padding 0 24px 24px, gap 12px.
-Текст 12px/140%, Regular, #98999C, по центру. Ссылки того же цвета и подчёркнуты. Сохранять только смысловые hard breaks исходного текста.
+Текст 12px/140% Regular, #98999C, по центру. Ссылки того же цвета и подчёркнуты. Сохранять только смысловые hard breaks.
 
-BLOCK CAPTION
-Boolean-свойство Caption, по умолчанию выключено. Если оно включено, вывести отдельный HTML-текст первым элементом disclaimer-section. Типографика и alignment совпадают с disclaimer; gap до следующего абзаца 8px Mobile / 12px Desktop.
+CAPTION
+Boolean-свойство Caption, по умолчанию выключено. Если включено, caption становится первым элементом disclaimer-section и использует ту же типографику.
 
-SOCIAL
-Mobile: padding 0 16px 16px; VK 32×32px.
-Desktop: padding 0 24px 24px; VK 42×42px.
-Иконка центрирована.
+SOCIAL ICONS
+Boolean-свойство Social Icons управляет всей social-section. Если выключено, не выводить секцию и не оставлять её padding или пустой spacer.
+Mobile: padding 0 16px 16px; icon 32×32px; gap между видимыми иконками 8px.
+Desktop: padding 0 24px 24px; icon 42×42px; gap 12px.
+Группа иконок центрирована.
 
-ASSET
-Экспортировать из конкретного Desktop-инстанса внешний слой “vk-icon @4x” 42×42 целиком и использовать один src во всех вариантах. Не экспортировать скрытые социальные иконки. Display-размер задавать по варианту, без width:100%.
+ASSETS
+Экспортировать каждый видимый внешний слой вида “*-icon @4x” целиком из конкретного Desktop-инстанса как PNG @4x с прозрачностью. Один src использовать в Mobile и Desktop; display-size задаёт вариант. Скрытые иконки не экспортировать. Не добавлять HTML-подложку.
 
-VK оборачивать в ссылку только при наличии утверждённого VK URL. URL не придумывать.
+Каждую иконку оборачивать в ссылку только при наличии утверждённого URL; URL не придумывать.
 ````
 
 ### `Banner/Hero`
@@ -388,21 +352,21 @@ STRUCTURE
 
 MOBILE
 Image-area занимает 100% доступной ширины; контрольная пропорция 296:190.
-Content-area: padding 22px, основной gap 16px.
+Content-area: padding 22px, gap 16px.
 Text-content: gap 12px; heading 20px Bold; body 16px/140%.
-CTA — full-width, если видима.
+CTA — instance Button/Primary, Type=Mobile, full-width.
 
 DESKTOP
 Image-area: контрольный контейнер 552×353px.
-Content-area: padding 32px, основной gap 22px.
+Content-area: padding 32px, gap 22px.
 Text-content: gap 14px; heading 32px Bold; body 18px/140%.
-CTA — content-width с контрольной минимальной шириной 230px, если видима.
+CTA — instance Button/Primary, Type=Desktop, content-width по содержимому.
 
 IMAGE @2x
-Из конкретного Desktop-инстанса письма экспортировать исходный растр из Fill слоя hero-image @2x. Один JPEG и один src использовать в Mobile и Desktop. Не экспортировать image-area целиком.
+Из конкретного Desktop-инстанса экспортировать исходный растр из Fill слоя hero-image @2x как один JPEG @2x. Один файл и один src использовать в Mobile и Desktop.
 
-На Mobile пропорциональный img остаётся в обычном потоке, получает width:100%; height:auto и формирует высоту image-area. Не задавать фиксированный height или HTML-атрибут height.
-На Desktop воспроизвести crop и позицию по Fill выбранного инстанса внутри контейнера 552×353px без искажения исходного изображения.
+На Mobile img остаётся в обычном потоке, получает width:100%; height:auto и формирует высоту image-area; фиксированный height и HTML-атрибут height запрещены.
+На Desktop воспроизвести crop и позицию по Fill выбранного инстанса внутри контейнера 552×353px без искажения.
 
 Не приравнивать img одновременно к width и height контейнера. Не использовать VML, пока в инстансе нет текста поверх изображения.
 ````
@@ -428,36 +392,32 @@ CARD
 Mobile: top gap 16px, padding 22px, radius 22px, основной gap 16px.
 Desktop: top gap 24px, padding 32px, radius 26px, основной gap 24px.
 
-STRUCTURE
-Вертикальная presentation-table:
+ORDER
 1. HTML heading.
-2. Таблица списка шагов.
-3. Optional Alert/Info.
-4. Optional Button/Secondary.
-5. Optional block caption.
+2. Таблица List-Item/Step.
+3. Optional Block-Item/Notification.
+4. Optional Block-Item/Alert.
+5. Optional Button/Secondary.
+6. Optional block caption.
+Состав определяется Boolean-свойствами конкретного инстанса.
 
-Показывать optional элементы только по свойствам конкретного инстанса.
+HEADING AND STEPS
+Heading: Mobile 18px, Desktop 26px.
+Визуальный gap heading→первый шаг: Mobile 22px, Desktop 30px.
+Gap между шагами: Mobile 16px, Desktop 24px.
 
-STEPS
-Каждый шаг — отдельная таблица: живой Badge/Step-Number, spacer, затем HTML heading и optional item caption. Бейдж не экспортировать как изображение.
+Каждый шаг — отдельная presentation-table строка: живой Badge/Step-Number, spacer, затем HTML heading и optional item caption. Бейдж не экспортировать.
+Mobile: badge→text 8px; heading→item caption 4px; heading 14px; item caption 12px.
+Desktop: badge→text 12px; heading→item caption 6px; heading 18px; item caption 16px.
 
-Mobile:
-— gap между шагами 16px;
-— badge→text 8px;
-— heading→item caption 4px;
-— heading 14px, item caption 12px.
-
-Desktop:
-— gap между шагами 24px;
-— badge→text 12px;
-— heading→item caption 6px;
-— heading 18px, item caption 16px.
-
-Порядок шагов одинаков, поэтому допускается одна семантическая таблица с responsive-размерами; не дублировать содержимое без необходимости.
+NESTED ITEMS
+Notification реализовать строго по description Block-Item/Notification.
+Alert реализовать строго по description Block-Item/Alert, не как standalone Alert/Info.
+Button/Secondary: full-width Mobile, content-width Desktop.
+Gap между последующими видимыми элементами верхнего уровня: Mobile 16px, Desktop 24px.
 
 BLOCK CAPTION
-Boolean-свойство Caption, по умолчанию включено. Это отдельное примечание всего блока после optional Button/Secondary, а не caption отдельного шага.
-HTML-текст на всю внутреннюю ширину: 12px/140% Regular, #98999C, выравнивание влево. Gap от предыдущего видимого элемента: Mobile 16px, Desktop 24px.
+Если Caption включён, вывести последним отдельный HTML-текст: 12px/140% Regular, #98999C, слева.
 ````
 
 ### `Button/Secondary`
@@ -475,11 +435,16 @@ HTML-текст на всю внутреннюю ширину: 12px/140% Regular
 Button/Secondary
 
 IMPLEMENTATION
-Кликабельная email-кнопка из presentation-table → button-cell → &lt;a&gt;. Не использовать фиксированную ширину как свойство компонента: full-width или content-width определяется конкретным инстансом и родительским блоком.
+Кликабельная email-кнопка: presentation-table → button-cell → &lt;a&gt;. Вся видимая площадь кнопки находится внутри ссылки; таблицу внутрь &lt;a&gt; не помещать.
+Full-width или content-width определяется конкретным инстансом и родительским блоком.
 
-Mobile и Desktop: внутренний padding 12px 24px. Фон #48494A, текст белый, radius из варианта. Вся видимая площадь кнопки должна находиться внутри ссылки.
+MOBILE
+Type=Mobile. Padding 12px 24px, radius 26px, HTML-текст 14px/140% Medium.
 
-Текст остаётся HTML. Для белого текста применять предусмотренный общей инструкцией класс защиты. Не помещать таблицу внутрь &lt;a&gt;.
+DESKTOP
+Type=Desktop. Padding 12px 24px, radius 26px, HTML-текст 16px/140% Medium.
+
+Фон #48494A, текст белый. Для белого текста применять предусмотренную основной инструкцией защиту.
 ````
 
 ### `Button/Primary`
@@ -497,14 +462,17 @@ Mobile и Desktop: внутренний padding 12px 24px. Фон #48494A, те�
 Button/Primary
 
 IMPLEMENTATION
-Кликабельная email-кнопка: presentation-table → button-cell → &lt;a&gt;. Вся видимая площадь кнопки находится внутри ссылки. Таблицу внутрь &lt;a&gt; не помещать.
-Full-width или content-width определяется конкретным инстансом и родительским блоком; не фиксировать ширину на уровне компонента.
+Кликабельная email-кнопка: presentation-table → button-cell → &lt;a&gt;. Вся видимая площадь кнопки находится внутри ссылки; таблицу внутрь &lt;a&gt; не помещать.
+Full-width или content-width определяется конкретным инстансом и родительским блоком. Для content-width ширина следует за текстом и padding; минимальную ширину не добавлять, если её не задаёт родитель.
 
-Mobile: padding 16px 32px, radius 32px, HTML-текст 14px.
-Desktop: padding 12px 24px, radius 32px, HTML-текст 16px; контрольная минимальная ширина content-width кнопки 230px.
+MOBILE
+Type=Mobile. Padding 16px 32px, radius 32px, HTML-текст 14px/140% Medium.
+
+DESKTOP
+Type=Desktop. Padding 12px 24px, radius 32px, HTML-текст 16px/140% Medium.
 
 BACKGROUND
-Задать solid fallback green400 (#18B037), затем CSS linear-gradient по Fill выбранного варианта: green400 (#18B037) → green300 (#3DD55C), направление примерно 22° Mobile / 25° Desktop.
+Solid fallback green400 #18B037, затем CSS linear-gradient по Fill варианта: green400 #18B037 → green300 #3DD55C; направление примерно 22° Mobile / 25° Desktop.
 Не заменять градиент сплошным #00991F.
 
 Текст белый и остаётся HTML. Применять предусмотренную основной инструкцией защиту белого текста.
@@ -533,31 +501,88 @@ Desktop: top gap 24px, padding 32px, radius 26px, основной gap 24px.
 
 ORDER
 1. text-content: heading и видимые body paragraphs.
-2. optional Notification.
-3. optional Alert/Info-style notice.
-4. optional Button/Secondary.
-5. optional block caption.
-
-Показывать и располагать элементы строго по свойствам конкретного инстанса.
+2. Optional Block-Item/Notification.
+3. Optional Block-Item/Alert.
+4. Optional Button/Secondary.
+5. Optional block caption.
+Состав определяется Boolean-свойствами конкретного инстанса.
 
 TEXT
-Mobile: heading 18px, body 14px, text gap 8px.
-Desktop: heading 22px, body 18px, text gap 12px.
+Mobile: heading 18px, body 14px/140%, gap внутри text-content 8px.
+Desktop: heading 26px, body 18px/140%, gap внутри text-content 12px.
 
-NOTIFICATION
-Серый вложенный блок: HTML-текст слева и фиксированная иконка справа.
-Mobile: padding 16px, gap 16px, radius 14px, icon 42px.
-Desktop: padding 24px, gap 20px, radius 18px, icon 48px.
-
-ALERT
-Иконка слева, HTML-текст справа.
-Mobile: padding 16px, gap 12px, icon 24px.
-Desktop: padding 24px, gap 16px, icon 26px.
-
-Иконки экспортировать без HTML-фона и использовать как фиксированные изображения.
+NESTED ITEMS
+Notification реализовать строго по description Block-Item/Notification.
+Alert реализовать строго по description Block-Item/Alert, не как standalone Alert/Info.
+Button/Secondary: full-width Mobile, content-width Desktop.
+Gap между видимыми элементами верхнего уровня: Mobile 16px, Desktop 24px.
 
 BLOCK CAPTION
-Boolean-свойство Caption, по умолчанию включено. Если оно включено, после optional Button/Secondary вывести отдельный HTML-текст на всю внутреннюю ширину: 12px/140% Regular, #98999C, выравнивание влево. Gap от предыдущего видимого элемента: Mobile 16px, Desktop 24px.
+Если Caption включён, вывести последним отдельный HTML-текст на всю внутреннюю ширину: 12px/140% Regular, #98999C, слева.
+````
+
+### `Block-Item/Notification`
+
+- Figma node: `1024:19285`
+- Тип: `COMPONENT_SET`
+- Варианты (2):
+
+  - `Type=Mobile` — `1024:19283`
+  - `Type=Desktop` — `1024:19284`
+
+Описание:
+
+````text
+Block-Item/Notification
+
+SCOPE
+Внутренний элемент для Block/Steps и Block/Content. Собственного внешнего top gap не имеет; расстояние задаёт родительский блок.
+
+STRUCTURE
+Одна presentation-table строка: живой HTML text-cell слева и фиксированная icon-cell справа. Фон #F8F8FA. Ячейки выровнены по вертикальному центру.
+
+MOBILE
+Width 100% внутренней области; padding 16px; gap 16px; radius 14px.
+Text 12px/140%; Asset/Feature-Icon @4x 42×42px.
+
+DESKTOP
+Width 100% внутренней области; padding 24px; gap 20px; radius 18px.
+Text 16px/140%; Asset/Feature-Icon @4x 48×48px.
+
+ASSET
+Экспортировать Asset/Feature-Icon @4x целиком из конкретного Desktop-инстанса как PNG @4x с прозрачностью за пределами собственного визуала. Один файл/src использовать в Mobile и Desktop. Не экспортировать текст и фон; не добавлять HTML-подложку; не применять width:100% к иконке.
+````
+
+### `Block-Item/Alert`
+
+- Figma node: `1024:19226`
+- Тип: `COMPONENT_SET`
+- Варианты (2):
+
+  - `Type=Mobile` — `1024:19224`
+  - `Type=Desktop` — `1024:19225`
+
+Описание:
+
+````text
+Block-Item/Alert
+
+SCOPE
+Внутренний элемент для Block/Steps, Block/Content и Block/Bullet-List. Собственного внешнего top gap не имеет; расстояние задаёт родительский блок. Не заменять standalone-компонентом Alert/Info.
+
+STRUCTURE
+Одна presentation-table строка: фиксированная icon-cell слева и живой HTML text-cell справа. Фон #F8F8FA.
+
+MOBILE
+Width 100% внутренней области; padding 16px; gap 12px; radius 14px.
+Icon 24×24px; text 12px/140%.
+
+DESKTOP
+Width 100% внутренней области; padding 24px; gap 16px; radius 18px.
+Icon 26×26px; text 16px/140%.
+
+ASSET
+Из конкретного Desktop-инстанса экспортировать внешний слой “Icon @4x” целиком как PNG @4x с прозрачностью за пределами собственного визуала. Один файл/src использовать в Mobile и Desktop. Не экспортировать текст и фон; не добавлять HTML-подложку. Иконка фиксированная, без width:100%.
 ````
 
 ### `Banner/Secondary`
@@ -576,27 +601,25 @@ Banner/Secondary
 
 SCOPE
 Обычный контентный блок внутри общего email-padding.
-Top gap: Mobile 16px, Desktop 24px. Использовать отдельные внешние Mobile и Desktop варианты.
+Top gap: Mobile 16px, Desktop 24px. Mobile и Desktop имеют разные внешние структуры.
 
 CONTENT
-Heading, body и optional Button/Secondary остаются HTML. Radius и clipping задаёт внешняя карточка. Высота карточки определяется живым контентом; текст не обрезать и не скрывать.
-
-IMAGE ASSET
-Из конкретного Desktop-инстанса письма экспортировать исходный растр из Fill слоя Image @2x. Один JPEG и один src использовать в Mobile и Desktop. Не экспортировать весь image-area и не создавать отдельный Mobile-asset.
+Heading, body и optional Button/Secondary остаются HTML. Высота определяется живым контентом; текст не обрезать. Radius и clipping задаёт внешняя карточка.
 
 MOBILE
-Image-area расположен сверху и занимает 100% доступной ширины. Контрольная пропорция 296:188.
-Пропорциональный img остаётся в обычном потоке, получает width:100%; height:auto и формирует высоту image-area. Не задавать фиксированный height или HTML-атрибут height.
-Content-area расположен снизу: padding 22px, gap 16px; heading/body по центру; кнопка по ширине контента.
+Image @2x сверху: width:100%; height:auto; без HTML-атрибута height; контрольная пропорция 296:188.
+Content-area снизу: padding 22px, gap 16px. Text-content gap 8px; heading 18px, body 14px/140%, по центру. Button/Secondary — full-width.
 
 DESKTOP
-Одна строка: content-area слева и image-area справа.
-Content-area: общая ширина 312px с padding 32px, внутренний gap 24px.
-Image-area: колонка 240px, равная высоте строки.
+Одна строка общей внутренней шириной 552px.
+Content-area слева: фиксированная ширина 300px, padding 32px, внутреннее содержимое 236px, gap 24px.
+Text-content gap 12px; heading 20px SemiBold, body 16px/140%, по левому краю. Button/Secondary — content-width.
+Image-area справа: ширина 252px и высота всей строки.
 
-Desktop image-area реализовать как background ячейки: background-image из того же JPEG, background-size:cover, background-repeat:no-repeat, background-position по Fill Desktop-инстанса. При росте текста строка и image-area растут, изображение пропорционально кропается без растяжения.
+IMAGE ASSET
+Из конкретного Desktop-инстанса экспортировать исходный растр из Fill слоя Image @2x как один JPEG @2x. Один файл и один src использовать в Mobile и Desktop.
 
-Не использовать для Desktop прямой img с width и height, одновременно приравненными к контейнеру. Не преобразовывать блок в Hero.
+На Mobile изображение остаётся обычным пропорциональным img. На Desktop использовать тот же JPEG как background ячейки: background-size:cover; background-repeat:no-repeat; background-position по Fill Desktop-инстанса. При росте текста изображение пропорционально кропается, но не растягивается. Не преобразовывать блок в Hero.
 ````
 
 ### `Block/Bullet-List`
@@ -616,27 +639,31 @@ Block/Bullet-List
 SCOPE
 Обычный контентный блок внутри общего email-padding.
 
-STRUCTURE
-Вертикальная presentation-table:
-1. HTML heading.
-2. Таблица видимых List-Item/Bullet.
-3. Optional Alert/Info.
-4. Optional Button/Secondary.
-5. Optional block caption.
-Состав определяется свойствами и содержимым конкретного инстанса.
-
 CARD
 Mobile: top gap 16px, padding 22px, radius 22px, основной gap 16px.
 Desktop: top gap 24px, padding 32px, radius 26px, основной gap 24px.
 
-BULLETS
-Каждый List-Item/Bullet — отдельная строка. Между пунктами использовать spacer-row 16px в обоих вариантах, не margin на td.
-Отдельного дополнительного padding перед таблицей Bullets нет.
-Внутреннее содержимое пункта реализовать по description List-Item/Bullet. Не объединять список в изображение.
+ORDER
+1. HTML heading.
+2. Таблица видимых List-Item/Bullet.
+3. Optional Block-Item/Alert.
+4. Optional Button/Secondary.
+5. Optional block caption.
+Состав определяется Boolean-свойствами и содержимым конкретного инстанса.
+
+HEADING AND BULLETS
+Heading: Mobile 18px, Desktop 26px.
+Каждый List-Item/Bullet — отдельная строка.
+Gap между пунктами: Mobile 16px, Desktop 24px; использовать spacer-row, не margin на td.
+Дополнительного padding перед таблицей Bullets нет. Пункт реализовать по description List-Item/Bullet; список не растрировать.
+
+NESTED ITEMS
+Alert реализовать строго по description Block-Item/Alert, не как standalone Alert/Info.
+Button/Secondary: full-width Mobile, content-width Desktop.
+Gap от списка и между последующими видимыми элементами верхнего уровня: Mobile 16px, Desktop 24px.
 
 BLOCK CAPTION
-Boolean-свойство Caption. Если включено, после предыдущего видимого элемента вывести отдельный HTML-текст на всю внутреннюю ширину: 12px/140% Regular, #98999C, слева.
-Gap до caption: Mobile 16px, Desktop 24px.
+Если Caption включён, вывести последним отдельный HTML-текст: 12px/140% Regular, #98999C, слева.
 ````
 
 ### `List-Item/Bullet`
@@ -749,22 +776,21 @@ ASSETS
 Alert/Info
 
 SCOPE
-Обычный контентный блок внутри общего email-padding. При вложении в другой компонент внешний top gap задаёт родитель.
+Самостоятельный контентный блок внутри общего email-padding. Не использовать его для вложенных alert-элементов внутри Block/Steps, Block/Content или Block/Bullet-List: там применяется Block-Item/Alert.
 
 STRUCTURE
 Одна presentation-table строка: фиксированная icon-cell слева и живой HTML text-cell справа.
 
 MOBILE
 Standalone top gap 16px; padding 16px; gap 12px; radius 22px.
-Icon 24×24px; text 14px.
+Icon 24×24px; text 14px/140%.
 
 DESKTOP
 Standalone top gap 24px; padding 24px; gap 16px; radius 26px.
-Icon 26×26px; text 18px.
+Icon 26×26px; text 18px/140%.
 
 ASSET
-Из конкретного Desktop-инстанса экспортировать внешний визуальный слой Icon @4x отдельно от HTML-фона и текста. PNG @4x с прозрачностью за пределами собственного визуала; один файл/src для Mobile и Desktop.
-Не добавлять подложку, если её нет внутри Icon @4x. Размер иконки фиксированный; не применять width:100%. Текст не растрировать.
+Из конкретного Desktop-инстанса экспортировать внешний слой “Icon @4x” отдельно от HTML-фона и текста как PNG @4x с прозрачностью за пределами собственного визуала. Один файл/src использовать в Mobile и Desktop. Не добавлять подложку, если её нет внутри Icon @4x; иконка фиксированная, без width:100%.
 ````
 
 ### `Banner/App-Download`
@@ -886,26 +912,24 @@ Asset остаётся прямоугольным в пропорции 232:148.
 ````text
 Card/Image
 
-SCOPE
-Вложенная контентная карточка для Block/Cards-Images. Не добавляет внешний top gap.
-
 STRUCTURE
-1. Asset/Card-Image @2x как один DIRECT IMAGE.
-2. HTML text-content: heading, затем body.
-
-У карточки нет собственного фона, общего padding, border или radius. Скругляется только clipping-контейнер изображения. Высота определяется контентом; соседние карточки не растягивать до одинаковой высоты.
+Самостоятельная карточка без общего HTML-фона: Asset/Card-Image @2x, затем живые HTML heading, description и link. Слои текста: heading, description, link.
 
 MOBILE
-Карточка занимает 100% доступной ширины родительской Mobile-сетки; 252px — контрольная ширина библиотечного инстанса, а не фиксированный HTML-width.
-Изображение занимает ширину карточки и сохраняет пропорцию 232:148 через width:100%; height:auto. Radius изображения 14px.
-Gap image→text 8px. Внутри text-content gap 8px. Heading 16px/120% Medium, body 14px/140% Regular, выравнивание влево.
+Вертикальная структура на 100% ширины родителя.
+Image: width:100%; height:auto; без HTML-атрибута height; контрольная пропорция 232:148; radius 14px.
+Gap image→text-content 16px. Внутри text-content gap 8px.
+Heading 16px, description 14px/140%, link 14px/140%.
 
 DESKTOP
-Ширина карточки 232px. Изображение 232×148px, radius 18px.
-Gap image→text 12px. Внутри text-content gap 12px. Heading 20px/120% Medium, body 16px/140% Regular, выравнивание влево.
+Одна presentation-table строка: image-cell 232×148px, spacer-cell 24px, text-cell 232px; text-cell выровнена по верхнему краю.
+Image radius 18px. Внутри text-content gap 6px.
+Heading 20px, description 16px/140%, link 16px/140%.
 
 ASSET
-Экспорт и состав изображения выполнять по description Asset/Card-Image @2x. Один src использовать в обоих вариантах.
+Из конкретного Desktop-инстанса экспортировать исходный растр из Fill слоя Asset/Card-Image @2x как один JPEG @2x. Один файл и один src использовать в Mobile и Desktop.
+
+На Mobile изменение ширины изображения обязано пропорционально менять его высоту. Не задавать фиксированную высоту, не использовать cover и не растягивать изображение одновременно по двум осям.
 ````
 
 ### `Block/Icon-List`
@@ -927,28 +951,27 @@ SCOPE
 Top gap: Mobile 16px, Desktop 24px.
 
 STRUCTURE
-Белая карточка: HTML heading → таблица Row/Icon → optional Button/Secondary → optional block caption.
-Сейчас компонент содержит шесть строк; не добавлять и не удалять строки относительно конкретного инстанса.
+Белая карточка: HTML heading → таблица видимых Row/Icon → optional Button/Secondary → optional block caption. Рендерить строки конкретного инстанса в их фактическом порядке.
 
 MOBILE
 Card: padding 22px, radius 22px, основной gap 16px.
 Heading 18px.
 Rows: вертикально, gap 16px.
 Row/Icon: icon 42×42px → gap 8px → HTML text-content. Локальный text gap 4px; основной текст 14px/140%; optional supporting text 12px/140%.
-Optional Button/Secondary: full-width, контрольный размер 252×44px.
+Optional Button/Secondary — full-width.
 
 DESKTOP
 Card: padding 32px, radius 26px, основной gap 24px.
-Heading 22px.
+Heading 26px.
 Rows: вертикально, gap 24px.
 Row/Icon: icon 56×56px → gap 12px → HTML text-content. Локальный text gap 6px; основной текст 18px/140%; optional supporting text 16px/140%.
-Optional Button/Secondary: content-width, контрольный размер 230×46px.
+Optional Button/Secondary — content-width.
 
 ICON ASSET
-Каждую Asset/Feature-Icon @4x экспортировать целиком из конкретного Desktop-инстанса письма как PNG @4x с прозрачностью за пределами собственного визуала. Фон и glyph внутри Asset/Feature-Icon @4x входят в один asset. Не экспортировать glyph отдельно и не добавлять HTML-подложку. Один src использовать в Mobile и Desktop; display-size задаёт выбранный вариант, иконку не растягивать через width:100%.
+Каждую Asset/Feature-Icon @4x экспортировать целиком из конкретного Desktop-инстанса как PNG @4x с прозрачностью за пределами собственного визуала. Фон и glyph внутри asset входят в один файл. Один src использовать в Mobile и Desktop; display-size задаёт вариант. Не добавлять HTML-подложку и не применять width:100%.
 
 BLOCK CAPTION
-Boolean-свойство Caption. Если включено, вывести отдельный HTML-текст на всю внутреннюю ширину: 12px/140% Regular, #98999C, слева. Gap от предыдущего видимого элемента: Mobile 16px, Desktop 24px.
+Если Caption включён, вывести отдельный HTML-текст на всю внутреннюю ширину: 12px/140% Regular, #98999C, слева. Gap от предыдущего видимого элемента: Mobile 16px, Desktop 24px.
 ````
 
 ## Шаблоны сборки (1)
