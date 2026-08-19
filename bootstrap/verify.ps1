@@ -52,8 +52,15 @@ if (Test-Path -LiteralPath $legacySkillPath) {
     $errors.Add('Legacy skill directory must be removed: skills/maintaining-cupis-email-system')
 }
 
-Require-Literal 'README.md' 'Ознакомься с проектом' 'the read-only phrase'
-Require-Literal 'README.md' 'Восстанови рабочую среду проекта' 'the restore phrase'
+$readOnlyPhrase = [System.Text.Encoding]::UTF8.GetString(
+    [System.Convert]::FromBase64String('0J7Qt9C90LDQutC+0LzRjNGB0Y8g0YEg0L/RgNC+0LXQutGC0L7QvA==')
+)
+$restorePhrase = [System.Text.Encoding]::UTF8.GetString(
+    [System.Convert]::FromBase64String('0JLQvtGB0YHRgtCw0L3QvtCy0Lgg0YDQsNCx0L7Rh9GD0Y4g0YHRgNC10LTRgyDQv9GA0L7QtdC60YLQsA==')
+)
+
+Require-Literal 'README.md' $readOnlyPhrase 'the read-only phrase'
+Require-Literal 'README.md' $restorePhrase 'the restore phrase'
 Require-Literal 'README.md' 'bootstrap/README.md' 'the bootstrap entrypoint'
 Require-Literal 'AGENTS.md' 'README.md' 'the project map'
 Require-Literal 'AGENTS.md' 'bootstrap/README.md' 'the bootstrap entrypoint'

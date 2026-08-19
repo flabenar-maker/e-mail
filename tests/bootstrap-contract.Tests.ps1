@@ -20,9 +20,18 @@ function Assert-True {
 }
 
 function Invoke-Verify {
-    param([string]$Root)
+    param(
+        [string]$Root,
+        [string]$Engine = $powerShell
+    )
 
-    $output = & $powerShell -NoProfile -File $verifyScript -RepositoryRoot $Root 2>&1 | Out-String
+    $engineArguments = @('-NoProfile')
+    if ([System.IO.Path]::GetFileNameWithoutExtension($Engine) -eq 'powershell') {
+        $engineArguments += @('-ExecutionPolicy', 'Bypass')
+    }
+    $engineArguments += @('-File', $verifyScript, '-RepositoryRoot', $Root)
+
+    $output = & $Engine @engineArguments 2>&1 | Out-String
     [pscustomobject]@{
         ExitCode = $LASTEXITCODE
         Output = $output
@@ -116,6 +125,12 @@ try {
 
     $valid = Invoke-Verify $repoRoot
     Assert-True ($valid.ExitCode -eq 0) "Valid repository failed verification:`n$($valid.Output)"
+
+    $windowsPowerShell = Get-Command powershell -ErrorAction SilentlyContinue
+    if ($windowsPowerShell) {
+        $windowsResult = Invoke-Verify -Root $repoRoot -Engine $windowsPowerShell.Source
+        Assert-True ($windowsResult.ExitCode -eq 0) "Windows PowerShell failed verification:`n$($windowsResult.Output)"
+    }
 
     New-Item -ItemType Directory -Path $tempRoot | Out-Null
 
