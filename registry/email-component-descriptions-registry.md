@@ -2,7 +2,7 @@
 
 Актуальность слепка: 2026-08-20.
 
-Источник: Figma-файл `CD_Email_Шаблоны писем` (`8zka5bHkcrJVK9I9dKjnhC`), страница `30 — Email Components` (`5:6`).
+Источник: Figma-файл `CD_Email_Шаблоны писем` (`8zka5bHkcrJVK9I9dKjnhC`), страница `Email Components` (`5:6`).
 
 Общие правила формирования и проверки имён находятся в [стандарте нейминга Figma-компонентов](../core/figma-component-naming-standard.md). Реестр не дублирует этот стандарт и фиксирует только фактическое состояние библиотеки.
 
@@ -12,9 +12,8 @@
 
 - Marketing Emails: `538:17236`
 - Service Emails: `538:17235`
-- Assets: `1084:34054`
-- Deprecated: `1084:34055`
-- Icons: `539:38025`
+- Shared: `539:38025`
+- Templates: `1084:34055`
 
 ## Маркетинговые письма (26)
 
@@ -865,6 +864,7 @@ BLOCK CAPTION
 - Component properties:
 
   - `Show Description` — `BOOLEAN`, default: true
+  - `Show Link` — `BOOLEAN`, default: true
 
 Описание:
 
@@ -872,8 +872,8 @@ BLOCK CAPTION
 Card/Icon
 
 STRUCTURE
-Карточка без общего HTML-фона: фиксированная Asset/Feature-Icon @4x и text-content с живыми HTML heading, optional description и link.
-Boolean-свойство Show Description управляет только description; heading и link сохраняются.
+Карточка без общего HTML-фона: фиксированная Asset/Feature-Icon @4x и text-content с живыми HTML heading, optional description и optional link.
+Boolean-свойство Show Description управляет description; Show Link управляет link. Heading отображается всегда.
 
 MOBILE
 Вертикальная структура на 100% ширины родителя, содержимое центрировано.
@@ -1014,21 +1014,38 @@ DESKTOP BUTTONS
 Каждая оценка — отдельная ссылка на всю площадь кнопки. Фон и radius задавать на linked button-cell. Для каждой иконки использовать один Desktop-source и один src в обоих Viewport. Href брать из данных письма.
 ````
 
-## Шаблоны сборки (2)
+## Шаблоны сборки (1)
 
-### `Template · Marketing · Mobile`
+### `Email/Template`
 
-- Figma node: `1084:33308`
-- Тип: `FRAME`
+- Figma node: `1102:8`
+- Тип: `COMPONENT_SET`
+- Варианты (2):
 
-Назначение: обычный assembly frame для подстановки компонентов соответствующего Viewport. Не является компонентом и не создаёт собственного HTML-контракта.
+  - `Viewport=Mobile` — `1102:6`
+  - `Viewport=Desktop` — `1102:7`
 
-### `Template · Marketing · Desktop`
+- Component properties:
 
-- Figma node: `1084:33312`
-- Тип: `FRAME`
+  - `Content` — `SLOT`
 
-Назначение: обычный assembly frame для подстановки компонентов соответствующего Viewport. Не является компонентом и не создаёт собственного HTML-контракта.
+Описание:
+
+````text
+Email/Template
+
+ROLE
+Библиотечный assembly template для удобной сборки маркетингового письма. Не является семантическим email-компонентом и не создаёт собственного HTML-контракта.
+
+VARIANTS
+Viewport=Mobile | Desktop. Использовать вариант, соответствующий макету конкретного письма.
+
+SLOT
+Content — контейнер для подстановки библиотечных email-компонентов соответствующего Viewport. Slot не создаёт дополнительную HTML-обёртку, padding или gap.
+
+USAGE
+Не реализовывать и не экспортировать сам Email/Template. При вёрстке использовать только компоненты, помещённые в Content, и их собственные descriptions. Не переносить состав, свойства или видимость между Mobile и Desktop автоматически.
+````
 
 ## Сервисные письма (18)
 
@@ -1617,7 +1634,7 @@ Error: “Отклонено”, background #FFC7C8, text #CC2944.
 Расположение и alignment внутри родительского блока определяет description родительского компонента.
 ````
 
-## Общие assets (3)
+## Shared (16)
 
 ### `Asset/Product-Logo`
 
@@ -1691,8 +1708,6 @@ USAGE
 Использовать только внутри Viewport=Mobile компонента Email/Header.
 ````
 
-## Deprecated (0)
+### Иконки (13)
 
-## Иконки
-
-Компоненты раздела `Icons` используют namespace `Icon` по общему стандарту. Они служат вложенными векторными glyphs и не получают отдельные записи Description, пока у конкретной иконки не появляется самостоятельный email-контракт.
+Компоненты раздела `Shared` используют namespace `Icon` по общему стандарту. Они служат вложенными векторными glyphs и не получают отдельные записи Description, пока у конкретной иконки не появляется самостоятельный email-контракт.
