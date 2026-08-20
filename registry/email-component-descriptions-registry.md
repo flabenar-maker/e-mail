@@ -70,14 +70,17 @@ STRUCTURE
 Одна presentation-table на всю ширину: верхний spacer и центрированная ячейка с логотипом.
 Отступ перед логотипом: Mobile 16px, Desktop 24px. Дополнительный боковой inset не добавлять.
 
-ASSET
-В обоих Viewport использовать один и тот же внешний слой “header-logo @4x”, связанный с Asset/Header-Logo @4x. Экспортировать его целиком из конкретного Desktop-инстанса. Он уже содержит логотип и защитную подложку #F3F3F5. Вложенный Product Logo отдельно не экспортировать и подложку в HTML не воспроизводить.
+FIGMA SOURCES
+Mobile использует вложенный layout-source “header-logo-compact @4x” размером 212×33px. Desktop использует “header-logo @4x” размером 322×50px. Раздельные Figma sources нужны только для точного отображения вариантов и не означают два файла письма.
 
-Использовать один общий src:
+EXPORT
+Экспортировать только внешний слой “header-logo @4x” из конкретного Desktop-инстанса как PNG @4x. Он уже содержит логотип и защитную подложку #F3F3F5. Вложенный Product Logo и Mobile layout-source отдельно не экспортировать.
+
+В HTML использовать один общий файл и один src:
 — Desktop display: 322×50px;
 — Mobile display: 212×33px.
 
-Изображение фиксированное и центрированное; не применять width:100%. Не добавлять отдельный dark-mode asset и не включать в экспорт презентационный фон вокруг компонента.
+Изображение фиксированное и центрированное; не применять width:100%. Не добавлять отдельный dark-mode asset или HTML-подложку.
 ````
 
 ### `Block/Cards-Images`
@@ -1614,7 +1617,7 @@ Error: “Отклонено”, background #FFC7C8, text #CC2944.
 Расположение и alignment внутри родительского блока определяет description родительского компонента.
 ````
 
-## Общие assets (2)
+## Общие assets (3)
 
 ### `Asset/Product-Logo`
 
@@ -1663,8 +1666,6 @@ USAGE
 Один файл и один src для Mobile и Desktop. Display-size определяет Email/Header: 322×50px Desktop и 212×33px Mobile.
 ````
 
-## Deprecated (1)
-
 ### `Asset/Header-Logo-Compact @4x`
 
 - Figma node: `1008:1708`
@@ -1680,12 +1681,17 @@ USAGE
 ````text
 Asset/Header-Logo-Compact @4x
 
-DEPRECATED
-Устаревший отдельный Mobile asset. Не использовать в новых компонентах, письмах или экспорте.
+ROLE
+Вспомогательный Figma layout-source для точного отображения Mobile-варианта Email/Header в размере 212×33px.
 
-CANONICAL REPLACEMENT
-Использовать Asset/Header-Logo @4x и display-size 212×33px для Mobile.
+EXPORT
+Отдельно не экспортировать и не создавать для него Mobile-файл. Канонический файл письма экспортируется из Desktop-слоя header-logo @4x компонента Asset/Header-Logo @4x.
+
+USAGE
+Использовать только внутри Viewport=Mobile компонента Email/Header.
 ````
+
+## Deprecated (0)
 
 ## Иконки
 
