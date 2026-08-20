@@ -1,6 +1,6 @@
 # Реестр описаний компонентов email-библиотек
 
-Актуальность слепка: 2026-08-18.
+Актуальность слепка: 2026-08-20.
 
 Источник: Figma-файл `CD_Email_Шаблоны писем` (`8zka5bHkcrJVK9I9dKjnhC`).
 
@@ -36,7 +36,7 @@ IMPLEMENTATION
 Собрать как inline presentation-table или отдельную table-cell с текстом номера шага. Фон, горизонтальный padding и radius задавать на ячейке. Бейдж не растягивать по ширине родителя.
 
 MOBILE
-Padding: 0 8px; radius 19px; текст 12px/140%.
+Padding: 0 8px; radius 19px; текст 14px/140% Regular.
 
 DESKTOP
 Padding: 0 8px; radius 19px; текст 16px/140%.
@@ -95,8 +95,8 @@ Top gap: Mobile 16px, Desktop 24px.
 
 CONTENT AREA
 Белая карточка с HTML heading, последовательностью Card/Image и optional block caption.
-Mobile: padding 22px, radius 22px, gap между элементами верхнего уровня 22px.
-Desktop: padding 32px, radius 26px, gap между элементами верхнего уровня 32px.
+Mobile: padding 22px, radius 22px, gap между элементами верхнего уровня 22px. Heading 18px/120% SemiBold.
+Desktop: padding 32px, radius 26px, gap между элементами верхнего уровня 32px. Heading 26px/120% SemiBold.
 
 CARDS
 Свойства Count нет. Рендерить все видимые Card/Image конкретного инстанса в их фактическом порядке; библиотечный пример содержит шесть карточек.
@@ -115,7 +115,7 @@ Desktop:
 Содержимое карточки реализовать по description Card/Image.
 
 BLOCK CAPTION
-Если Caption включён, после списка вывести отдельный HTML-текст на всю внутреннюю ширину: 12px/140% Regular, #98999C, слева. Gap от последней карточки: Mobile 22px, Desktop 32px.
+Если Caption включён, после списка вывести отдельный HTML-текст на всю внутреннюю ширину: Mobile 12px/140% Regular, Desktop 14px/140% Regular, #98999C, слева. Gap от последней карточки: Mobile 22px, Desktop 32px.
 ````
 
 ### `Block/Icon-Cards`
@@ -138,8 +138,8 @@ Top gap: Mobile 16px, Desktop 24px.
 
 CONTENT AREA
 Белая карточка с HTML heading, последовательностью Card/Icon и optional block caption.
-Mobile: padding 22px, radius 22px, gap между элементами верхнего уровня 22px.
-Desktop: padding 32px, radius 26px, gap между элементами верхнего уровня 32px.
+Mobile: padding 22px, radius 22px, gap между элементами верхнего уровня 22px. Heading 18px/120% SemiBold.
+Desktop: padding 32px, radius 26px, gap между элементами верхнего уровня 32px. Heading 26px/120% SemiBold.
 
 CARDS
 Свойства Count нет. Рендерить все видимые Card/Icon конкретного инстанса в их фактическом порядке; библиотечный пример содержит шесть карточек.
@@ -158,7 +158,7 @@ Desktop:
 Содержимое карточки реализовать по description Card/Icon.
 
 BLOCK CAPTION
-Если Caption включён, после списка вывести отдельный HTML-текст на всю внутреннюю ширину: 12px/140% Regular, #98999C, слева. Gap от последней карточки: Mobile 22px, Desktop 32px.
+Если Caption включён, после списка вывести отдельный HTML-текст на всю внутреннюю ширину: Mobile 12px/140% Regular, Desktop 14px/140% Regular, #98999C, слева. Gap от последней карточки: Mobile 22px, Desktop 32px.
 ````
 
 ### `Card/Icon`
@@ -312,7 +312,7 @@ DISCLAIMER
 
 Mobile: padding 0 16px 16px, gap 8px.
 Desktop: padding 0 24px 24px, gap 12px.
-Текст 12px/140% Regular, #98999C, по центру. Ссылки того же цвета и подчёркнуты. Сохранять только смысловые hard breaks.
+Текст: Mobile 12px/140% Regular, Desktop 14px/140% Regular; #98999C, по центру. Ссылки того же цвета и подчёркнуты. Сохранять только смысловые hard breaks.
 
 CAPTION
 Boolean-свойство Caption, по умолчанию выключено. Если включено, caption становится первым элементом disclaimer-section и использует ту же типографику.
@@ -353,7 +353,7 @@ STRUCTURE
 MOBILE
 Image-area занимает 100% доступной ширины; контрольная пропорция 296:190.
 Content-area: padding 22px, gap 16px.
-Text-content: gap 12px; heading 20px Bold; body 16px/140%.
+Text-content: gap 12px; heading 20px Bold; body 14px/140%.
 CTA — instance Button/Primary, Type=Mobile, full-width.
 
 DESKTOP
@@ -417,7 +417,7 @@ Button/Secondary: full-width Mobile, content-width Desktop.
 Gap между последующими видимыми элементами верхнего уровня: Mobile 16px, Desktop 24px.
 
 BLOCK CAPTION
-Если Caption включён, вывести последним отдельный HTML-текст: 12px/140% Regular, #98999C, слева.
+Если Caption включён, вывести последним отдельный HTML-текст: Mobile 12px/140% Regular, Desktop 14px/140% Regular, #98999C, слева.
 ````
 
 ### `Button/Secondary`
@@ -453,8 +453,8 @@ Type=Desktop. Padding 12px 24px, radius 26px, HTML-текст 16px/140% Medium.
 - Тип: `COMPONENT_SET`
 - Варианты (2):
 
-  - `Type=Mobile` — `337:4694`
-  - `Type=Desktop` — `337:4691`
+  - `Type=Mobile` — `337:4691`
+  - `Type=Desktop` — `337:4694`
 
 Описание:
 
@@ -466,10 +466,10 @@ IMPLEMENTATION
 Full-width или content-width определяется конкретным инстансом и родительским блоком. Для content-width ширина следует за текстом и padding; минимальную ширину не добавлять, если её не задаёт родитель.
 
 MOBILE
-Type=Mobile. Padding 16px 32px, radius 32px, HTML-текст 14px/140% Medium.
+Type=Mobile. Padding 12px 24px, radius 32px, HTML-текст 14px/140% Medium.
 
 DESKTOP
-Type=Desktop. Padding 12px 24px, radius 32px, HTML-текст 16px/140% Medium.
+Type=Desktop. Padding 16px 32px, radius 32px, HTML-текст 16px/140% Medium.
 
 BACKGROUND
 Solid fallback green400 #18B037, затем CSS linear-gradient по Fill варианта: green400 #18B037 → green300 #3DD55C; направление примерно 22° Mobile / 25° Desktop.
@@ -518,7 +518,7 @@ Button/Secondary: full-width Mobile, content-width Desktop.
 Gap между видимыми элементами верхнего уровня: Mobile 16px, Desktop 24px.
 
 BLOCK CAPTION
-Если Caption включён, вывести последним отдельный HTML-текст на всю внутреннюю ширину: 12px/140% Regular, #98999C, слева.
+Если Caption включён, вывести последним отдельный HTML-текст на всю внутреннюю ширину: Mobile 12px/140% Regular, Desktop 14px/140% Regular, #98999C, слева.
 ````
 
 ### `Block-Item/Notification`
@@ -663,7 +663,7 @@ Button/Secondary: full-width Mobile, content-width Desktop.
 Gap от списка и между последующими видимыми элементами верхнего уровня: Mobile 16px, Desktop 24px.
 
 BLOCK CAPTION
-Если Caption включён, вывести последним отдельный HTML-текст: 12px/140% Regular, #98999C, слева.
+Если Caption включён, вывести последним отдельный HTML-текст: Mobile 12px/140% Regular, Desktop 14px/140% Regular, #98999C, слева.
 ````
 
 ### `List-Item/Bullet`
@@ -826,7 +826,7 @@ Top gap 16px. Белая карточка: padding 22px, radius 22px, основ
 3. четыре store buttons вертикально на всю внутреннюю ширину.
 
 Store buttons: width 100%, height 44px, vertical gap 8px, radius 24px. Каждая кнопка — отдельная ссылка на всю площадь.
-Внутри: icon 26×26px → gap 8px → живой HTML-текст; вся группа центрируется внутри кнопки.
+Внутри: icon 26×26px → gap 8px → живой HTML-текст 14px/140% Medium; вся группа центрируется внутри кнопки.
 RuStore: синий фон и белый текст. GooglePlay, AppGallery и GetApps: #F8F8FA и тёмный текст.
 Не собирать кнопки в сетку 2×2.
 
@@ -863,7 +863,7 @@ CONTENT
 Mobile: внутренний padding 0 16px 16px, gap между текстовыми блоками 8px.
 Desktop: padding 0 24px 24px, gap 12px.
 
-Текст: Roboto/Arial, 12px/140%, Regular, #98999C, по центру. Содержимое брать из конкретного инстанса. Сохранять смысловые hard breaks, но не превращать автоматический перенос Figma в &lt;br&gt;.
+Текст: Roboto/Arial; Mobile 12px/140% Regular, Desktop 14px/140% Regular; #98999C, по центру. Содержимое брать из конкретного инстанса. Сохранять смысловые hard breaks, но не превращать автоматический перенос Figma в &lt;br&gt;.
 
 Не добавлять social-section, иконки или ссылки, которых нет в выбранном инстансе. Тёмный фон вокруг библиотечного компонента является только презентационным.
 ````
@@ -954,24 +954,24 @@ STRUCTURE
 Белая карточка: HTML heading → таблица видимых Row/Icon → optional Button/Secondary → optional block caption. Рендерить строки конкретного инстанса в их фактическом порядке.
 
 MOBILE
-Card: padding 22px, radius 22px, основной gap 16px.
+Card: padding 22px, radius 22px, основной gap 22px.
 Heading 18px.
-Rows: вертикально, gap 16px.
-Row/Icon: icon 42×42px → gap 8px → HTML text-content. Локальный text gap 4px; основной текст 14px/140%; optional supporting text 12px/140%.
+Rows: вертикально, gap 22px.
+Row/Icon: icon 42×42px → gap 16px → HTML text-content. Локальный text gap 4px; основной текст 14px/140%; optional supporting text 12px/140%.
 Optional Button/Secondary — full-width.
 
 DESKTOP
-Card: padding 32px, radius 26px, основной gap 24px.
+Card: padding 32px, radius 26px, основной gap 32px.
 Heading 26px.
 Rows: вертикально, gap 24px.
-Row/Icon: icon 56×56px → gap 12px → HTML text-content. Локальный text gap 6px; основной текст 18px/140%; optional supporting text 16px/140%.
+Row/Icon: icon 56×56px → gap 24px → HTML text-content. Локальный text gap 6px; основной текст 18px/140%; optional supporting text 16px/140%.
 Optional Button/Secondary — content-width.
 
 ICON ASSET
 Каждую Asset/Feature-Icon @4x экспортировать целиком из конкретного Desktop-инстанса как PNG @4x с прозрачностью за пределами собственного визуала. Фон и glyph внутри asset входят в один файл. Один src использовать в Mobile и Desktop; display-size задаёт вариант. Не добавлять HTML-подложку и не применять width:100%.
 
 BLOCK CAPTION
-Если Caption включён, вывести отдельный HTML-текст на всю внутреннюю ширину: 12px/140% Regular, #98999C, слева. Gap от предыдущего видимого элемента: Mobile 16px, Desktop 24px.
+Если Caption включён, вывести отдельный HTML-текст на всю внутреннюю ширину: Mobile 12px/140% Regular, Desktop 14px/140% Regular, #98999C, слева. Gap от предыдущего видимого элемента: Mobile 22px, Desktop 32px.
 ````
 
 ## Шаблоны сборки (1)
