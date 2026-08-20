@@ -29,7 +29,7 @@ Use the README to assign file responsibility and the maintenance checkpoint to c
 
 1. State whether the task is read-only or allows writes. For writes, name the permitted objects, properties, dependent synchronization, and preserved areas before changing anything.
 2. If the request is precise and consistent with the canonical set, proceed without ceremonial clarification. If it is vague, conflicting, or expands scope, perform only the necessary read-only diagnosis and ask for the missing decision.
-3. Open Figma only when the checkpoint makes it relevant. **REQUIRED SUB-SKILL:** Use `figma` for Figma nodes and `figma:figma-use` before any `use_figma` action. A description-only request permits only description writes plus required registry synchronization. A Figma design or naming write requires explicit user authorization.
+3. Open Figma only when the checkpoint makes it relevant. **REQUIRED SUB-SKILL:** Use `figma` for Figma nodes and `figma:figma-use` before any `use_figma` action. A description-only request permits only the explicitly allowlisted description fields plus required registry synchronization. A Figma design or naming write requires explicit user authorization.
 4. Apply the naming standard when creating, renaming or structurally changing a component, property, semantic layer or asset owner, and during an explicit naming audit. New objects must comply before completion. For an existing in-scope mismatch, show an exact old → new mapping and request authorization unless the rename was already requested. Treat out-of-scope legacy mismatches as read-only findings; never expand the task automatically.
 5. Before an authorized rename, identify references in the registry and Figma descriptions. Preserve an asset owner's existing scale suffix unless the user explicitly changes its export contract. After the write, verify scoped names, properties, children and required synchronization.
 6. Make the smallest canonical change. Do not edit local system copies. Do not build or modify a concrete `email.html` or `images/` set with this skill.
@@ -37,8 +37,16 @@ Use the README to assign file responsibility and the maintenance checkpoint to c
 8. Publish only through GitHub: create `codex/<semantic-slug>` from the pinned SHA, commit only the approved paths, and open one draft PR after the required publication authorization. Never update `main` or merge without separate authorization.
 9. Fetch the branch after the final write. Apply exactly the relevant checkpoint checklist plus changed-content, required-synchronization, allowed-path-diff, and preserved-blob checks. Add no generic codebase, build, visual, Figma-publishing, or delivery checks. Verify that no local email outputs, archives, reports, or duplicated system rules were added.
 
+## Figma Mutation Gate
+
+Before any Figma write, use the checkpoint to declare the node's current and intended semantic role, exact writable fields, dependent metadata to inspect, and preserved structural fingerprint. Treat a production component, root shell, assembly template, example, and export asset as different roles. If the role is unclear or would change, stop after read-only diagnosis and request explicit authorization.
+
+A rename authorizes only the approved old → new mappings. It never authorizes Component ↔ Frame conversion, component-property or Slot creation/deletion, reparenting, hierarchy, Auto Layout, geometry, variant, or binding changes unless those operations were separately named and authorized.
+
+After the last write, perform a separate read-only re-fetch and compare the allowlist and fingerprint. Any unexpected diff stops the task: report it and do not expand scope to repair it. Inspect related component-property and Slot descriptions for the same contract, but edit only metadata fields included in the allowlist.
+
 ## Boundary Check
 
-The skill owns routing, cloud-source selection, naming-audit activation, and handoff shape. The canonical files own all email rules, naming constants, workflows, and component facts. Change this skill only when its trigger, repository locator, canonical-set paths, routing boundary, naming-audit activation model, or cloud publication model changes.
+The skill owns routing, cloud-source selection, naming-audit activation, Figma mutation-gate activation, and handoff shape. The canonical files own all email rules, naming constants, workflows, and component facts. Change this skill only when its trigger, repository locator, canonical-set paths, routing boundary, naming-audit activation model, or cloud publication model changes.
 
 Handoff with the pinned base SHA, inspected sources, classification and scope, changed paths, checks actually run, branch/commit/PR when created, and actual limitations. Never claim Figma or GitHub verification that was not performed.
