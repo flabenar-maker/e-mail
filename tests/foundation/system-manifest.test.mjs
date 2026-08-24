@@ -7,7 +7,13 @@ import { fileURLToPath } from "node:url";
 import {
   loadSystemManifest,
   validateManifestShape,
+  validateManifestSemantics,
 } from "../../scripts/lib/system-manifest.mjs";
+import {
+  copyFixtureFile,
+  createSystemFixture,
+  writeFixtureFile,
+} from "../helpers/system-fixture.mjs";
 
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const schema = JSON.parse(
@@ -16,6 +22,43 @@ const schema = JSON.parse(
 
 async function canonicalManifest() {
   return loadSystemManifest({ repoRoot });
+}
+
+const fixtureFiles = [
+  "schemas/manifest.schema.json",
+  "system/manifest.yaml",
+  "README.md",
+  "bootstrap/README.md",
+  "core/email-figma-prompt.md",
+  "core/figma-component-naming-standard.md",
+  "registry/email-component-descriptions-registry.md",
+  "registry/email-typography-registry.md",
+  "workflows/library-maintenance-checkpoint.md",
+  "workflows/email-build-checkpoint.md",
+  "templates/email-project-brief.md",
+  "bootstrap/config.portable.toml",
+  "bootstrap/verify.ps1",
+  ".agents/skills/maintaining-cupis-email-system/SKILL.md",
+];
+
+async function validFixture(t) {
+  const fixture = await createSystemFixture();
+  t.after(fixture.cleanup);
+  for (const relativePath of fixtureFiles) {
+    await copyFixtureFile(repoRoot, fixture.root, relativePath);
+  }
+  return fixture.root;
+}
+
+async function mutateFixtureManifest(root, mutate) {
+  const manifest = await loadSystemManifest({ repoRoot: root });
+  mutate(manifest);
+  await writeFixtureFile(
+    root,
+    "system/manifest.yaml",
+    `${JSON.stringify(manifest, null, 2)}\n`,
+  );
+  return manifest;
 }
 
 test("loads the repository canonical manifest", async () => {
@@ -104,3 +147,190 @@ for (const invalidPath of [
     );
   });
 }
+
+for (const [name, mutate, code] of [
+  [
+    "duplicate source id",
+    (manifest) =>
+      manifest.sources.push({
+        id: manifest.sources[0].id,
+        kind: "core",
+        path: "core/duplicate-id.md",
+      }),
+    "duplicate-source-id",
+  ],
+  [
+    "duplicate source path",
+    (manifest) =>
+      manifest.sources.push({
+        id: "duplicate-source-path",
+        kind: "core",
+        path: manifest.sources[0].path,
+      }),
+    "duplicate-source-path",
+  ],
+  [
+    "duplicate bundle profile id",
+    (manifest) =>
+      manifest.bundle_profiles.push({
+        id: manifest.bundle_profiles[0].id,
+        source_ids: ["repository-readme"],
+      }),
+    "duplicate-bundle-profile-id",
+  ],
+  [
+    "duplicate route id",
+    (manifest) =>
+      manifest.routes.push({
+        id: manifest.routes[0].id,
+        workflow_source_id: "email-build-checkpoint",
+        bundle_profile_id: "email-new-build",
+      }),
+    "duplicate-route-id",
+  ],
+  [
+    "unknown source reference",
+    (manifest) =>
+      manifest.bundle_profiles[0].source_ids.push("unknown-source"),
+    "unknown-source-reference",
+  ],
+  [
+    "invalid workflow reference",
+    (manifest) =>
+      (manifest.routes[0].workflow_source_id = "repository-readme"),
+    "invalid-workflow-reference",
+  ],
+  [
+    "unknown bundle profile reference",
+    (manifest) => (manifest.routes[0].bundle_profile_id = "unknown-profile"),
+    "unknown-bundle-profile-reference",
+  ],
+]) {
+  test(`reports ${name}`, async (t) => {
+    const root = await validFixture(t);
+    const manifest = await mutateFixtureManifest(root, mutate);
+
+    const errors = await validateManifestSemantics(manifest, root);
+
+    assert.ok(errors.some((error) => error.code === code));
+  });
+}
+
+test("reports duplicate skill id and path across required and optional", async (t) => {
+  const root = await validFixture(t);
+  const manifest = await mutateFixtureManifest(root, (value) => {
+    value.skills.optional.push({
+      id: value.skills.required[0].id,
+      path: value.skills.required[0].path,
+    });
+  });
+
+  const errors = await validateManifestSemantics(manifest, root);
+
+  assert.ok(errors.some((error) => error.code === "duplicate-skill-id"));
+  assert.ok(errors.some((error) => error.code === "duplicate-skill-path"));
+});
+
+for (const [name, removePath] of [
+  ["source", "core/email-figma-prompt.md"],
+  ["repository entrypoint", "README.md"],
+  ["portable config", "bootstrap/config.portable.toml"],
+  ["verifier", "bootstrap/verify.ps1"],
+]) {
+  test(`reports missing declared ${name}`, async (t) => {
+    const root = await validFixture(t);
+    const { rm } = await import("node:fs/promises");
+    await rm(join(root, removePath));
+    const manifest = await loadSystemManifest({ repoRoot: root });
+
+    const errors = await validateManifestSemantics(manifest, root);
+
+    assert.ok(
+      errors.some(
+        (error) =>
+          error.code === "missing-declared-path" &&
+          error.path.includes(removePath),
+      ),
+    );
+  });
+}
+
+test("reports a missing required skill", async (t) => {
+  const root = await validFixture(t);
+  const { rm } = await import("node:fs/promises");
+  await rm(join(root, ".agents/skills/maintaining-cupis-email-system"), {
+    recursive: true,
+  });
+  const manifest = await loadSystemManifest({ repoRoot: root });
+
+  const errors = await validateManifestSemantics(manifest, root);
+
+  assert.ok(errors.some((error) => error.code === "missing-required-skill"));
+});
+
+test("allows a missing optional skill", async (t) => {
+  const root = await validFixture(t);
+  const manifest = await mutateFixtureManifest(root, (value) => {
+    value.skills.optional.push({
+      id: "optional-email-skill",
+      path: ".agents/skills/optional-email-skill",
+    });
+  });
+
+  const errors = await validateManifestSemantics(manifest, root);
+
+  assert.ok(
+    !errors.some(
+      (error) =>
+        error.code === "missing-required-skill" ||
+        error.path.includes("optional-email-skill"),
+    ),
+  );
+});
+
+test("reports a present optional skill with mismatched frontmatter", async (t) => {
+  const root = await validFixture(t);
+  const manifest = await mutateFixtureManifest(root, (value) => {
+    value.skills.optional.push({
+      id: "optional-email-skill",
+      path: ".agents/skills/optional-email-skill",
+    });
+  });
+  await writeFixtureFile(
+    root,
+    ".agents/skills/optional-email-skill/SKILL.md",
+    "---\nname: wrong-skill-name\n---\n",
+  );
+
+  const errors = await validateManifestSemantics(manifest, root);
+
+  assert.ok(errors.some((error) => error.code === "skill-name-mismatch"));
+});
+
+test("reports a required skill with mismatched frontmatter", async (t) => {
+  const root = await validFixture(t);
+  await writeFixtureFile(
+    root,
+    ".agents/skills/maintaining-cupis-email-system/SKILL.md",
+    "---\nname: wrong-skill-name\n---\n",
+  );
+  const manifest = await loadSystemManifest({ repoRoot: root });
+
+  const errors = await validateManifestSemantics(manifest, root);
+
+  assert.ok(errors.some((error) => error.code === "skill-name-mismatch"));
+});
+
+test("reports the legacy duplicate skill directory", async (t) => {
+  const root = await validFixture(t);
+  await writeFixtureFile(
+    root,
+    "skills/maintaining-cupis-email-system/SKILL.md",
+    "duplicate\n",
+  );
+  const manifest = await loadSystemManifest({ repoRoot: root });
+
+  const errors = await validateManifestSemantics(manifest, root);
+
+  assert.ok(errors.some((error) => error.code === "legacy-skill-path"));
+});
