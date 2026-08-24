@@ -305,6 +305,16 @@ export async function validateManifestSemantics(manifest, repoRoot) {
     }
   }
 
+  if (await exists(resolve(repoRoot, "bootstrap/manifest.yaml"))) {
+    errors.push(
+      diagnostic(
+        "legacy-manifest-path",
+        "/bootstrap/manifest.yaml",
+        "Legacy bootstrap manifest must be removed.",
+      ),
+    );
+  }
+
   return errors.sort(
     (left, right) =>
       left.path.localeCompare(right.path) ||

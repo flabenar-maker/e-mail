@@ -334,3 +334,19 @@ test("reports the legacy duplicate skill directory", async (t) => {
 
   assert.ok(errors.some((error) => error.code === "legacy-skill-path"));
 });
+
+test("the repository has exactly one manifest", async () => {
+  const { access } = await import("node:fs/promises");
+  await access(join(repoRoot, "system/manifest.yaml"));
+  await assert.rejects(access(join(repoRoot, "bootstrap/manifest.yaml")));
+});
+
+test("reports the legacy bootstrap manifest", async (t) => {
+  const root = await validFixture(t);
+  await writeFixtureFile(root, "bootstrap/manifest.yaml", "legacy: true\n");
+  const manifest = await loadSystemManifest({ repoRoot: root });
+
+  const errors = await validateManifestSemantics(manifest, root);
+
+  assert.ok(errors.some((error) => error.code === "legacy-manifest-path"));
+});

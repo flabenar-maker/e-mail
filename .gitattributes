@@ -2,3 +2,9 @@
 bootstrap/** text eol=lf
 tests/*.ps1 text eol=lf
 AGENTS.md text eol=lf
+system/** text eol=lf
+schemas/** text eol=lf
+scripts/** text eol=lf
+tests/**/*.mjs text eol=lf
+.github/workflows/** text eol=lf
+package*.json text eol=lf
