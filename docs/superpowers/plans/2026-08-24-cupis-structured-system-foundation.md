@@ -598,14 +598,16 @@ Report branch, commits, draft PR, changed paths, evidence and real limitations. 
 
 ## Self-Review Checklist for the Plan Author
 
-- [ ] Master-spec sections 4, 10 and the foundation portion of section 15 map to Tasks 1–7.
-- [ ] No component, typography, spacing, asset or naming data migrates here.
-- [ ] Manifest contains no future missing source path.
-- [ ] Interface names match across all tasks.
-- [ ] No unresolved placeholder or “implement similarly” instruction remains.
-- [ ] Final repository has exactly one manifest.
-- [ ] Final PR uses only the allowlist and never touches Figma.
-- [ ] Publication and merge remain separate user decisions.
+Результат самопроверки: пробелов по объёму foundation-этапа, неразрешённых placeholders и расхождений интерфейсов не найдено.
+
+- [x] Master-spec sections 4, 10 and the foundation portion of section 15 map to Tasks 1–7.
+- [x] No component, typography, spacing, asset or naming data migrates here.
+- [x] Manifest contains no future missing source path.
+- [x] Interface names match across all tasks.
+- [x] No unresolved placeholder or “implement similarly” instruction remains.
+- [x] Final repository has exactly one manifest.
+- [x] Final PR uses only the allowlist and never touches Figma.
+- [x] Publication and merge remain separate user decisions.
 
 ## Reference Versions
 
