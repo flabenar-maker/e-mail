@@ -9,69 +9,66 @@ $powerShell = if (Get-Command pwsh -ErrorAction SilentlyContinue) {
 }
 
 function Assert-True {
-    param(
-        [bool]$Condition,
-        [string]$Message
-    )
-
-    if (-not $Condition) {
-        throw $Message
-    }
+    param([bool]$Condition, [string]$Message)
+    if (-not $Condition) { throw $Message }
 }
 
 function Invoke-Verify {
-    param(
-        [string]$Root,
-        [string]$Engine = $powerShell
-    )
-
+    param([string]$Root, [string]$Engine = $powerShell)
     $engineArguments = @('-NoProfile')
     if ([System.IO.Path]::GetFileNameWithoutExtension($Engine) -eq 'powershell') {
         $engineArguments += @('-ExecutionPolicy', 'Bypass')
     }
     $engineArguments += @('-File', $verifyScript, '-RepositoryRoot', $Root)
-
     $output = & $Engine @engineArguments 2>&1 | Out-String
-    [pscustomobject]@{
-        ExitCode = $LASTEXITCODE
-        Output = $output
-    }
+    [pscustomobject]@{ ExitCode = $LASTEXITCODE; Output = $output }
 }
 
 function Copy-ContractFixture {
-    param(
-        [string]$Source,
-        [string]$Destination
-    )
-
+    param([string]$Source, [string]$Destination)
     New-Item -ItemType Directory -Path $Destination | Out-Null
-
     foreach ($file in @('README.md', 'AGENTS.md', '.gitattributes')) {
         Copy-Item -LiteralPath (Join-Path $Source $file) -Destination (Join-Path $Destination $file)
     }
-
-    foreach ($directory in @('bootstrap', '.agents', 'core', 'registry', 'workflows')) {
+    foreach ($directory in @(
+        'bootstrap', '.agents', 'core', 'registry', 'workflows',
+        'system', 'schemas', 'templates'
+    )) {
         Copy-Item -Recurse -LiteralPath (Join-Path $Source $directory) -Destination (Join-Path $Destination $directory)
     }
 }
 
 function Get-FixtureHash {
     param([string]$Root)
-
+    $resolvedRoot = [System.IO.Path]::GetFullPath($Root).TrimEnd(
+        [System.IO.Path]::DirectorySeparatorChar,
+        [System.IO.Path]::AltDirectorySeparatorChar
+    ) + [System.IO.Path]::DirectorySeparatorChar
     $lines = Get-ChildItem -LiteralPath $Root -File -Recurse |
         Sort-Object FullName |
         ForEach-Object {
-            $relative = [System.IO.Path]::GetRelativePath($Root, $_.FullName)
+            $fullName = [System.IO.Path]::GetFullPath($_.FullName)
+            $relative = $fullName.Substring($resolvedRoot.Length)
             $hash = (Get-FileHash -Algorithm SHA256 -LiteralPath $_.FullName).Hash
             "$relative=$hash"
         }
-
     $bytes = [System.Text.Encoding]::UTF8.GetBytes(($lines -join "`n"))
     $stream = [System.IO.MemoryStream]::new($bytes)
-    try {
-        (Get-FileHash -Algorithm SHA256 -InputStream $stream).Hash
-    } finally {
-        $stream.Dispose()
+    try { (Get-FileHash -Algorithm SHA256 -InputStream $stream).Hash }
+    finally { $stream.Dispose() }
+}
+
+function Add-RequiredSkill {
+    param([string]$Root, [string]$Name, [bool]$CreateFile, [string]$FrontmatterName = $Name)
+    $manifestPath = Join-Path $Root 'system/manifest.yaml'
+    $content = Get-Content -Raw -LiteralPath $manifestPath
+    $needle = '    - { id: maintaining-cupis-email-system, path: .agents/skills/maintaining-cupis-email-system }'
+    $replacement = $needle + "`n    - { id: $Name, path: .agents/skills/$Name }"
+    Set-Content -NoNewline -LiteralPath $manifestPath -Value ($content.Replace($needle, $replacement))
+    if ($CreateFile) {
+        $skillDirectory = Join-Path $Root ".agents/skills/$Name"
+        New-Item -ItemType Directory -Path $skillDirectory -Force | Out-Null
+        Set-Content -LiteralPath (Join-Path $skillDirectory 'SKILL.md') -Value "---`nname: $FrontmatterName`n---`n"
     }
 }
 
@@ -79,52 +76,30 @@ $tempRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("cupis-bootstrap-tests-
 
 try {
     Assert-True (Test-Path -LiteralPath $verifyScript -PathType Leaf) 'Verifier must exist.'
+    Assert-True (Test-Path -LiteralPath (Join-Path $repoRoot 'system/manifest.yaml') -PathType Leaf) 'Canonical system manifest must exist.'
+    Assert-True (-not (Test-Path -LiteralPath (Join-Path $repoRoot 'bootstrap/manifest.yaml'))) 'Legacy bootstrap manifest must not exist.'
 
-    $readme = Get-Content -Raw -LiteralPath (Join-Path $repoRoot 'README.md')
-    Assert-True ($readme.Contains('Ознакомься с проектом')) 'README must declare the read-only phrase.'
-    Assert-True ($readme.Contains('Восстанови рабочую среду проекта')) 'README must declare the restore phrase.'
-    Assert-True ($readme.Contains('bootstrap/README.md')) 'README must link the bootstrap protocol.'
-
-    $agents = Get-Content -Raw -LiteralPath (Join-Path $repoRoot 'AGENTS.md')
-    Assert-True ($agents.Contains('README.md')) 'AGENTS.md must point to README.md.'
-    Assert-True ($agents.Contains('bootstrap/README.md')) 'AGENTS.md must point to bootstrap/README.md.'
-
-    $manifest = Get-Content -Raw -LiteralPath (Join-Path $repoRoot 'bootstrap/manifest.yaml')
-    foreach ($requiredText in @(
-        'repository: flabenar-maker/e-mail',
-        'entrypoint: bootstrap/README.md',
-        'core/email-figma-prompt.md',
-        'core/figma-component-naming-standard.md',
-        'registry/email-component-descriptions-registry.md',
-        'registry/email-typography-registry.md',
-        'workflows/library-maintenance-checkpoint.md',
-        'workflows/email-build-checkpoint.md',
-        'path: .agents/skills/maintaining-cupis-email-system',
-        'name: maintaining-cupis-email-system',
-        'figma@openai-curated-remote',
-        'github@openai-curated-remote',
-        'superpowers@openai-curated-remote',
-        'file_key: 8zka5bHkcrJVK9I9dKjnhC',
-        'marketing: "538:17236"',
-        'service: "538:17235"',
-        'portable_config: bootstrap/config.portable.toml',
-        'verification: bootstrap/verify.ps1'
-    )) {
-        Assert-True ($manifest.Contains($requiredText)) "Manifest is missing: $requiredText"
+    foreach ($consumer in @('README.md', 'bootstrap/README.md', '.agents/skills/maintaining-cupis-email-system/SKILL.md')) {
+        $content = Get-Content -Raw -LiteralPath (Join-Path $repoRoot $consumer)
+        Assert-True ($content.Contains('system/manifest.yaml')) "$consumer must use system/manifest.yaml."
+        Assert-True (-not $content.Contains('bootstrap/manifest.yaml')) "$consumer must not use bootstrap/manifest.yaml."
     }
 
-    $skillPath = Join-Path $repoRoot '.agents/skills/maintaining-cupis-email-system/SKILL.md'
-    $agentMetadataPath = Join-Path $repoRoot '.agents/skills/maintaining-cupis-email-system/agents/openai.yaml'
-    Assert-True (Test-Path -LiteralPath $skillPath -PathType Leaf) 'Repo-scoped SKILL.md must exist.'
-    Assert-True (Test-Path -LiteralPath $agentMetadataPath -PathType Leaf) 'Repo-scoped openai.yaml must exist.'
-    Assert-True (-not (Test-Path -LiteralPath (Join-Path $repoRoot 'skills/maintaining-cupis-email-system'))) 'Legacy skill directory must not exist.'
-
-    $skill = Get-Content -Raw -LiteralPath $skillPath
-    Assert-True ($skill -match '(?m)^name: maintaining-cupis-email-system$') 'Skill name must be preserved.'
+    $readme = [System.Text.Encoding]::UTF8.GetString(
+        [System.IO.File]::ReadAllBytes((Join-Path $repoRoot 'README.md'))
+    )
+    $readOnlyPhrase = [System.Text.Encoding]::UTF8.GetString(
+        [System.Convert]::FromBase64String('0J7Qt9C90LDQutC+0LzRjNGB0Y8g0YEg0L/RgNC+0LXQutGC0L7QvA==')
+    )
+    $restorePhrase = [System.Text.Encoding]::UTF8.GetString(
+        [System.Convert]::FromBase64String('0JLQvtGB0YHRgtCw0L3QvtCy0Lgg0YDQsNCx0L7Rh9GD0Y4g0YHRgNC10LTRgyDQv9GA0L7QtdC60YLQsA==')
+    )
+    Assert-True ($readme.Contains($readOnlyPhrase)) 'README must declare the read-only phrase.'
+    Assert-True ($readme.Contains($restorePhrase)) 'README must declare the restore phrase.'
+    Assert-True ($readme.Contains('bootstrap/README.md')) 'README must link the bootstrap protocol.'
 
     $attributes = Get-Content -Raw -LiteralPath (Join-Path $repoRoot '.gitattributes')
     Assert-True ($attributes.Contains('.agents/skills/** text eol=lf')) '.gitattributes must normalize every repo-scoped skill.'
-    Assert-True (-not ($attributes -match '(?m)^skills/maintaining-cupis-email-system/\*\*')) '.gitattributes must not retain the legacy skill path.'
 
     $valid = Invoke-Verify $repoRoot
     Assert-True ($valid.ExitCode -eq 0) "Valid repository failed verification:`n$($valid.Output)"
@@ -146,84 +121,68 @@ try {
     Assert-True ($firstRun.ExitCode -eq 0 -and $secondRun.ExitCode -eq 0) 'Verifier must pass repeatedly on a valid fixture.'
     Assert-True ($beforeHash -eq $afterHash) 'Verifier must not modify repository files.'
 
-    $missingManifestSkillFixture = Join-Path $tempRoot 'missing-manifest-skill'
-    Copy-ContractFixture -Source $repoRoot -Destination $missingManifestSkillFixture
-    $missingSkillManifest = Join-Path $missingManifestSkillFixture 'bootstrap/manifest.yaml'
-    $missingSkillManifestContent = Get-Content -Raw -LiteralPath $missingSkillManifest
-    $missingSkillManifestContent = $missingSkillManifestContent.Replace(
-        '      name: maintaining-cupis-email-system',
-        "      name: maintaining-cupis-email-system`n    - path: .agents/skills/future-email-skill`n      name: future-email-skill"
+    $missingRequired = Join-Path $tempRoot 'missing-required-skill'
+    Copy-ContractFixture -Source $repoRoot -Destination $missingRequired
+    Add-RequiredSkill -Root $missingRequired -Name 'future-email-skill' -CreateFile $false
+    $missingRequiredResult = Invoke-Verify $missingRequired
+    Assert-True ($missingRequiredResult.ExitCode -ne 0) 'Verifier must reject a missing required skill.'
+    Assert-True ($missingRequiredResult.Output.Contains('missing-required-skill')) 'Missing skill error must expose its diagnostic code.'
+
+    $presentRequired = Join-Path $tempRoot 'present-required-skill'
+    Copy-ContractFixture -Source $repoRoot -Destination $presentRequired
+    Add-RequiredSkill -Root $presentRequired -Name 'future-email-skill' -CreateFile $true
+    $presentRequiredResult = Invoke-Verify $presentRequired
+    Assert-True ($presentRequiredResult.ExitCode -eq 0) "Verifier must accept a valid required skill:`n$($presentRequiredResult.Output)"
+
+    $missingOptional = Join-Path $tempRoot 'missing-optional-skill'
+    Copy-ContractFixture -Source $repoRoot -Destination $missingOptional
+    $optionalManifest = Join-Path $missingOptional 'system/manifest.yaml'
+    $optionalContent = Get-Content -Raw -LiteralPath $optionalManifest
+    Set-Content -NoNewline -LiteralPath $optionalManifest -Value (
+        $optionalContent.Replace(
+            '  optional: []',
+            '  optional: [{ id: optional-email-skill, path: .agents/skills/optional-email-skill }]'
+        )
     )
-    Set-Content -NoNewline -LiteralPath $missingSkillManifest -Value $missingSkillManifestContent
-    $missingManifestSkillResult = Invoke-Verify $missingManifestSkillFixture
-    Assert-True ($missingManifestSkillResult.ExitCode -ne 0) 'Verifier must reject a required manifest skill whose SKILL.md is missing.'
-    Assert-True ($missingManifestSkillResult.Output.Contains('.agents/skills/future-email-skill/SKILL.md')) 'Missing manifest skill error must name the derived SKILL.md path.'
+    $missingOptionalResult = Invoke-Verify $missingOptional
+    Assert-True ($missingOptionalResult.ExitCode -eq 0) "Verifier must allow a missing optional skill:`n$($missingOptionalResult.Output)"
 
-    $presentManifestSkillFixture = Join-Path $tempRoot 'present-manifest-skill'
-    Copy-ContractFixture -Source $repoRoot -Destination $presentManifestSkillFixture
-    $presentSkillManifest = Join-Path $presentManifestSkillFixture 'bootstrap/manifest.yaml'
-    $presentSkillManifestContent = Get-Content -Raw -LiteralPath $presentSkillManifest
-    $presentSkillManifestContent = $presentSkillManifestContent.Replace(
-        '      name: maintaining-cupis-email-system',
-        "      name: maintaining-cupis-email-system`n    - path: .agents/skills/future-email-skill`n      name: future-email-skill"
-    )
-    Set-Content -NoNewline -LiteralPath $presentSkillManifest -Value $presentSkillManifestContent
-    $presentSkillDirectory = Join-Path $presentManifestSkillFixture '.agents/skills/future-email-skill'
-    New-Item -ItemType Directory -Path $presentSkillDirectory -Force | Out-Null
-    Set-Content -LiteralPath (Join-Path $presentSkillDirectory 'SKILL.md') -Value "---`nname: future-email-skill`ndescription: Fixture skill.`n---`n"
-    $presentManifestSkillResult = Invoke-Verify $presentManifestSkillFixture
-    Assert-True ($presentManifestSkillResult.ExitCode -eq 0) "Verifier must accept a valid required manifest skill:`n$($presentManifestSkillResult.Output)"
+    $mismatchedSkill = Join-Path $tempRoot 'mismatched-skill'
+    Copy-ContractFixture -Source $repoRoot -Destination $mismatchedSkill
+    Add-RequiredSkill -Root $mismatchedSkill -Name 'future-email-skill' -CreateFile $true -FrontmatterName 'wrong-skill-name'
+    $mismatchedResult = Invoke-Verify $mismatchedSkill
+    Assert-True ($mismatchedResult.ExitCode -ne 0) 'Verifier must reject a mismatched skill name.'
+    Assert-True ($mismatchedResult.Output.Contains('skill-name-mismatch')) 'Mismatch must expose its diagnostic code.'
 
-    $missingOptionalSkillFixture = Join-Path $tempRoot 'missing-optional-skill'
-    Copy-ContractFixture -Source $repoRoot -Destination $missingOptionalSkillFixture
-    $optionalSkillManifest = Join-Path $missingOptionalSkillFixture 'bootstrap/manifest.yaml'
-    $optionalSkillManifestContent = Get-Content -Raw -LiteralPath $optionalSkillManifest
-    $optionalSkillManifestContent = $optionalSkillManifestContent.Replace(
-        "`nplugins:",
-        "`n  optional:`n    - path: .agents/skills/optional-email-skill`n      name: optional-email-skill`n`nplugins:"
-    )
-    Set-Content -NoNewline -LiteralPath $optionalSkillManifest -Value $optionalSkillManifestContent
-    $missingOptionalSkillResult = Invoke-Verify $missingOptionalSkillFixture
-    Assert-True ($missingOptionalSkillResult.ExitCode -eq 0) "Verifier must allow a missing optional manifest skill:`n$($missingOptionalSkillResult.Output)"
+    $missingSource = Join-Path $tempRoot 'missing-source'
+    Copy-ContractFixture -Source $repoRoot -Destination $missingSource
+    Remove-Item -LiteralPath (Join-Path $missingSource 'core/email-figma-prompt.md')
+    $missingSourceResult = Invoke-Verify $missingSource
+    Assert-True ($missingSourceResult.ExitCode -ne 0) 'Verifier must reject a missing declared source.'
+    Assert-True ($missingSourceResult.Output.Contains('missing-declared-path')) 'Missing source must expose its diagnostic code.'
 
-    $mismatchedManifestSkillFixture = Join-Path $tempRoot 'mismatched-manifest-skill'
-    Copy-ContractFixture -Source $repoRoot -Destination $mismatchedManifestSkillFixture
-    $mismatchedSkillManifest = Join-Path $mismatchedManifestSkillFixture 'bootstrap/manifest.yaml'
-    $mismatchedSkillManifestContent = Get-Content -Raw -LiteralPath $mismatchedSkillManifest
-    $mismatchedSkillManifestContent = $mismatchedSkillManifestContent.Replace(
-        '      name: maintaining-cupis-email-system',
-        "      name: maintaining-cupis-email-system`n    - path: .agents/skills/future-email-skill`n      name: future-email-skill"
-    )
-    Set-Content -NoNewline -LiteralPath $mismatchedSkillManifest -Value $mismatchedSkillManifestContent
-    $mismatchedSkillDirectory = Join-Path $mismatchedManifestSkillFixture '.agents/skills/future-email-skill'
-    New-Item -ItemType Directory -Path $mismatchedSkillDirectory -Force | Out-Null
-    Set-Content -LiteralPath (Join-Path $mismatchedSkillDirectory 'SKILL.md') -Value "---`nname: wrong-skill-name`n---`n"
-    $mismatchedManifestSkillResult = Invoke-Verify $mismatchedManifestSkillFixture
-    Assert-True ($mismatchedManifestSkillResult.ExitCode -ne 0) 'Verifier must reject a manifest skill whose frontmatter name differs.'
-    Assert-True ($mismatchedManifestSkillResult.Output.Contains('future-email-skill')) 'Skill-name mismatch error must identify the manifest skill without exposing file contents.'
+    $legacySkill = Join-Path $tempRoot 'legacy-skill'
+    Copy-ContractFixture -Source $repoRoot -Destination $legacySkill
+    New-Item -ItemType Directory -Path (Join-Path $legacySkill 'skills/maintaining-cupis-email-system') -Force | Out-Null
+    Set-Content -LiteralPath (Join-Path $legacySkill 'skills/maintaining-cupis-email-system/SKILL.md') -Value 'duplicate'
+    $legacySkillResult = Invoke-Verify $legacySkill
+    Assert-True ($legacySkillResult.ExitCode -ne 0) 'Verifier must reject a legacy skill.'
+    Assert-True ($legacySkillResult.Output.Contains('legacy-skill-path')) 'Legacy skill must expose its diagnostic code.'
 
-    $missingFixture = Join-Path $tempRoot 'missing-canonical'
-    Copy-ContractFixture -Source $repoRoot -Destination $missingFixture
-    Remove-Item -LiteralPath (Join-Path $missingFixture 'core/email-figma-prompt.md')
-    $missingResult = Invoke-Verify $missingFixture
-    Assert-True ($missingResult.ExitCode -ne 0) 'Verifier must reject a missing canonical file.'
-    Assert-True ($missingResult.Output.Contains('Missing required file: core/email-figma-prompt.md')) 'Missing-file error must name the canonical path.'
-
-    $duplicateFixture = Join-Path $tempRoot 'duplicate-skill'
-    Copy-ContractFixture -Source $repoRoot -Destination $duplicateFixture
-    $legacySkill = Join-Path $duplicateFixture 'skills/maintaining-cupis-email-system'
-    New-Item -ItemType Directory -Path $legacySkill -Force | Out-Null
-    Set-Content -LiteralPath (Join-Path $legacySkill 'SKILL.md') -Value 'duplicate'
-    $duplicateResult = Invoke-Verify $duplicateFixture
-    Assert-True ($duplicateResult.ExitCode -ne 0) 'Verifier must reject a duplicate legacy skill.'
-    Assert-True ($duplicateResult.Output.Contains('Legacy skill directory must be removed')) 'Duplicate-skill error must explain the conflict.'
+    $legacyManifest = Join-Path $tempRoot 'legacy-manifest'
+    Copy-ContractFixture -Source $repoRoot -Destination $legacyManifest
+    Set-Content -LiteralPath (Join-Path $legacyManifest 'bootstrap/manifest.yaml') -Value 'legacy: true'
+    $legacyManifestResult = Invoke-Verify $legacyManifest
+    Assert-True ($legacyManifestResult.ExitCode -ne 0) 'Verifier must reject the legacy manifest.'
+    Assert-True ($legacyManifestResult.Output.Contains('legacy-manifest-path')) 'Legacy manifest must expose its diagnostic code.'
 
     $secretFixture = Join-Path $tempRoot 'secret-config'
     Copy-ContractFixture -Source $repoRoot -Destination $secretFixture
     Add-Content -LiteralPath (Join-Path $secretFixture 'bootstrap/config.portable.toml') -Value ("`n" + 'api_token = "secret-value"')
     $secretResult = Invoke-Verify $secretFixture
     Assert-True ($secretResult.ExitCode -ne 0) 'Verifier must reject secret-like config values.'
-    Assert-True ($secretResult.Output.Contains('Portable config contains a secret-like assignment')) 'Secret error must identify the unsafe category without printing the value.'
+    Assert-True ($secretResult.Output.Contains('Portable config contains a secret-like assignment')) 'Secret error must identify the unsafe category.'
+    Assert-True (-not $secretResult.Output.Contains('secret-value')) 'Verifier must not print secret values.'
 
     Write-Output '[PASS] Bootstrap contract tests passed.'
     exit 0

@@ -16,16 +16,10 @@
 В этом режиме запрещены установки, изменения файлов, настроек, плагинов, подключений и Figma.
 
 1. Через GitHub определи текущий commit ветки `main` репозитория `flabenar-maker/e-mail`.
-2. На одном и том же зафиксированном SHA полностью прочитай:
-   - `README.md`;
-   - `core/email-figma-prompt.md`;
-   - `core/figma-component-naming-standard.md`;
-   - `registry/email-component-descriptions-registry.md`;
-   - `registry/email-typography-registry.md`;
-   - `workflows/library-maintenance-checkpoint.md`;
-   - `workflows/email-build-checkpoint.md`.
-3. Остановись, если хотя бы один файл недоступен на этом SHA. Не подставляй локальную, кэшированную или старую копию.
-4. Прочитай `bootstrap/manifest.yaml` и repo-scoped навык, относящийся к запросу.
+2. На этом SHA прочитай `system/manifest.yaml`. Это единственная карта системы; второго manifest или fallback-пути нет.
+3. Прочитай объявленные в manifest repository/bootstrap entrypoints, выбери подходящий `route`, разреши его `bundle_profile_id` и полностью прочитай только перечисленные там `source_ids` на том же SHA.
+4. Остановись, если manifest, route, profile, source reference или файл недоступен. Не подставляй локальную, кэшированную, старую или предполагаемую будущую копию.
+5. Прочитай repo-scoped навык, объявленный в manifest и относящийся к запросу.
 5. Кратко сообщи:
    - pinned SHA;
    - назначение проекта и два рабочих режима;
@@ -44,7 +38,7 @@ RESTORE разрешает только безопасные, минимальн
 
 ### 2. Проверить зависимости
 
-Сопоставь текущие доступные плагины и навыки с `bootstrap/manifest.yaml`.
+Сопоставь текущие доступные плагины и навыки с `system/manifest.yaml`.
 
 - GitHub и Figma обязательны.
 - Superpowers рекомендован, но его отсутствие не блокирует email-систему.
@@ -56,7 +50,7 @@ RESTORE разрешает только безопасные, минимальн
 
 ### 3. Проверить repo-scoped навыки
 
-Прочитай секцию `skills` из `bootstrap/manifest.yaml` и для каждой записи:
+Прочитай секцию `skills` из `system/manifest.yaml` и для каждой записи:
 
 - `required` — убедись, что `SKILL.md` существует, его frontmatter `name` совпадает с manifest и Codex обнаруживает навык;
 - `optional` — выполни те же проверки, только если папка навыка присутствует; отсутствие optional-навыка не является блокером.
@@ -94,13 +88,20 @@ RESTORE разрешает только безопасные, минимальн
 
 После возможной установки и OAuth:
 
-1. через GitHub повторно прочитай manifest или один канонический файл на pinned SHA;
+1. через GitHub повторно прочитай `system/manifest.yaml` или один объявленный в нём источник на pinned SHA;
 2. через Figma проверь read-доступ к файлу `8zka5bHkcrJVK9I9dKjnhC` и корням `538:17236`, `538:17235`;
 3. не изменяй Figma и не запускай публикацию библиотеки.
 
 ### 6. Проверить локальный контракт
 
-Из корня checkout запусти:
+Node.js 24 обязателен. Отсутствие Node 24 или несовпадающая major-версия — блокер восстановления. Из корня checkout выполни чистую установку и проверки:
+
+```powershell
+npm ci --ignore-scripts
+npm run validate
+```
+
+Затем запусти:
 
 ```powershell
 pwsh -NoProfile -File bootstrap/verify.ps1

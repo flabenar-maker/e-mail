@@ -9,22 +9,15 @@ description: Use when auditing or changing CUPIS email-system instructions, Figm
 
 Act as a thin router over the canonical CUPIS system. Load current rules from GitHub; never copy HTML rules, naming constants, component contracts, Figma descriptions, or library values into this skill.
 
-## Canonical Set
+## Canonical Manifest
 
 **REQUIRED SUB-SKILL:** Use `github:github` for repository reads and writes.
 
-Treat `flabenar-maker/e-mail` as the only persistent source. Resolve the current `main` commit, then fetch all of these paths at that exact SHA:
+Treat `flabenar-maker/e-mail` as the only persistent source. Resolve and pin the current `main` commit, then fetch `system/manifest.yaml` at that exact SHA.
 
-- `README.md`
-- `core/email-figma-prompt.md`
-- `core/figma-component-naming-standard.md`
-- `registry/email-component-descriptions-registry.md`
-- `registry/email-typography-registry.md`
-- `workflows/library-maintenance-checkpoint.md`
+Select the applicable `routes[].id`, resolve its `bundle_profile_id`, then resolve every listed `source_id` through `sources[]`. Fetch only those paths, always at the pinned SHA. Stop if the manifest, route, profile, source reference or file is missing or invalid. Never fall back to a second manifest, local checkout, attachment, cached copy, older commit or undeclared future path.
 
-Stop if any file is missing or cannot be read at the pinned SHA. Do not substitute a local checkout, attachment, cached copy, or older commit.
-
-Use the README to assign file responsibility and the maintenance checkpoint to classify the task, set scope, select sources, synchronize dependencies, and choose checks. Use the instruction for global email rules, the naming standard for Figma naming decisions, the component registry for factual component content, and the typography registry for current text-style facts and consumers.
+Use the resolved README to assign file responsibility and the resolved maintenance workflow to classify the task, set scope, synchronize dependencies and choose checks. Source roles come from manifest `kind`; this skill does not maintain a second path list.
 
 ## Route
 

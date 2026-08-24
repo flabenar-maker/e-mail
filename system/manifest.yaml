@@ -1,0 +1,55 @@
+schema_version: 1.0.0
+system:
+  id: cupis-email-system
+  repository: flabenar-maker/e-mail
+entrypoints:
+  repository: README.md
+  bootstrap: bootstrap/README.md
+sources:
+  - { id: repository-readme, kind: entrypoint, path: README.md }
+  - { id: bootstrap-readme, kind: entrypoint, path: bootstrap/README.md }
+  - { id: email-figma-prompt, kind: core, path: core/email-figma-prompt.md }
+  - { id: figma-component-naming-standard, kind: core, path: core/figma-component-naming-standard.md }
+  - { id: component-descriptions-registry, kind: registry, path: registry/email-component-descriptions-registry.md }
+  - { id: typography-registry, kind: registry, path: registry/email-typography-registry.md }
+  - { id: library-maintenance-checkpoint, kind: workflow, path: workflows/library-maintenance-checkpoint.md }
+  - { id: email-build-checkpoint, kind: workflow, path: workflows/email-build-checkpoint.md }
+  - { id: email-project-brief, kind: template, path: templates/email-project-brief.md }
+  - { id: manifest-schema, kind: schema, path: schemas/manifest.schema.json }
+bundle_profiles:
+  - id: library-maintenance
+    source_ids: [repository-readme, email-figma-prompt, figma-component-naming-standard, component-descriptions-registry, typography-registry, library-maintenance-checkpoint]
+  - id: component-onboarding
+    source_ids: [repository-readme, email-figma-prompt, figma-component-naming-standard, component-descriptions-registry, typography-registry, library-maintenance-checkpoint]
+  - id: figma-description-sync
+    source_ids: [repository-readme, email-figma-prompt, component-descriptions-registry, typography-registry, library-maintenance-checkpoint]
+  - id: figma-naming-audit
+    source_ids: [repository-readme, figma-component-naming-standard, component-descriptions-registry, library-maintenance-checkpoint]
+  - id: email-new-build
+    source_ids: [repository-readme, email-figma-prompt, figma-component-naming-standard, component-descriptions-registry, typography-registry, email-build-checkpoint, email-project-brief]
+  - id: email-continue-fix
+    source_ids: [repository-readme, email-figma-prompt, figma-component-naming-standard, component-descriptions-registry, typography-registry, email-build-checkpoint]
+routes:
+  - { id: library-maintenance, workflow_source_id: library-maintenance-checkpoint, bundle_profile_id: library-maintenance }
+  - { id: component-onboarding, workflow_source_id: library-maintenance-checkpoint, bundle_profile_id: component-onboarding }
+  - { id: figma-description-sync, workflow_source_id: library-maintenance-checkpoint, bundle_profile_id: figma-description-sync }
+  - { id: figma-naming-audit, workflow_source_id: library-maintenance-checkpoint, bundle_profile_id: figma-naming-audit }
+  - { id: email-new-build, workflow_source_id: email-build-checkpoint, bundle_profile_id: email-new-build }
+  - { id: email-continue-fix, workflow_source_id: email-build-checkpoint, bundle_profile_id: email-continue-fix }
+skills:
+  required:
+    - { id: maintaining-cupis-email-system, path: .agents/skills/maintaining-cupis-email-system }
+  optional: []
+plugins:
+  required: [figma@openai-curated-remote, github@openai-curated-remote]
+  optional: [superpowers@openai-curated-remote]
+figma:
+  file_key: 8zka5bHkcrJVK9I9dKjnhC
+  roots: { marketing: "538:17236", service: "538:17235" }
+bootstrap:
+  portable_config: bootstrap/config.portable.toml
+  verifier: bootstrap/verify.ps1
+commands:
+  validate: npm run validate
+  test: npm test
+  verify: npm run verify
