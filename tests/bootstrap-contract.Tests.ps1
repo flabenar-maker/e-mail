@@ -40,10 +40,15 @@ function Copy-ContractFixture {
 
 function Get-FixtureHash {
     param([string]$Root)
+    $resolvedRoot = [System.IO.Path]::GetFullPath($Root).TrimEnd(
+        [System.IO.Path]::DirectorySeparatorChar,
+        [System.IO.Path]::AltDirectorySeparatorChar
+    ) + [System.IO.Path]::DirectorySeparatorChar
     $lines = Get-ChildItem -LiteralPath $Root -File -Recurse |
         Sort-Object FullName |
         ForEach-Object {
-            $relative = [System.IO.Path]::GetRelativePath($Root, $_.FullName)
+            $fullName = [System.IO.Path]::GetFullPath($_.FullName)
+            $relative = $fullName.Substring($resolvedRoot.Length)
             $hash = (Get-FileHash -Algorithm SHA256 -LiteralPath $_.FullName).Hash
             "$relative=$hash"
         }
@@ -80,9 +85,17 @@ try {
         Assert-True (-not $content.Contains('bootstrap/manifest.yaml')) "$consumer must not use bootstrap/manifest.yaml."
     }
 
-    $readme = Get-Content -Raw -LiteralPath (Join-Path $repoRoot 'README.md')
-    Assert-True ($readme.Contains('Ознакомься с проектом')) 'README must declare the read-only phrase.'
-    Assert-True ($readme.Contains('Восстанови рабочую среду проекта')) 'README must declare the restore phrase.'
+    $readme = [System.Text.Encoding]::UTF8.GetString(
+        [System.IO.File]::ReadAllBytes((Join-Path $repoRoot 'README.md'))
+    )
+    $readOnlyPhrase = [System.Text.Encoding]::UTF8.GetString(
+        [System.Convert]::FromBase64String('0J7Qt9C90LDQutC+0LzRjNGB0Y8g0YEg0L/RgNC+0LXQutGC0L7QvA==')
+    )
+    $restorePhrase = [System.Text.Encoding]::UTF8.GetString(
+        [System.Convert]::FromBase64String('0JLQvtGB0YHRgtCw0L3QvtCy0Lgg0YDQsNCx0L7Rh9GD0Y4g0YHRgNC10LTRgyDQv9GA0L7QtdC60YLQsA==')
+    )
+    Assert-True ($readme.Contains($readOnlyPhrase)) 'README must declare the read-only phrase.'
+    Assert-True ($readme.Contains($restorePhrase)) 'README must declare the restore phrase.'
     Assert-True ($readme.Contains('bootstrap/README.md')) 'README must link the bootstrap protocol.'
 
     $attributes = Get-Content -Raw -LiteralPath (Join-Path $repoRoot '.gitattributes')
