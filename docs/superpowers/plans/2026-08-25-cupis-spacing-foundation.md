@@ -360,7 +360,7 @@ Check for:
 
 **Checkpoint 3:** User reviews and approves the audited spacing design document before any schema or canonical data is created.
 
-**Current status:** design document created and self-reviewed on branch `codex/add-spacing-golden-rule-spec-20260825`; waiting for explicit user approval before Task 4 or any schema/data implementation.
+**Current status:** design document approved by the user and merged through PR #24. Structured implementation proceeds on `codex/add-spacing-foundation-20260825`.
 
 ---
 
@@ -376,7 +376,7 @@ Check for:
 - A complete compatibility matrix embedded in the spacing design document.
 - Zero unexplained current spacing relationships.
 
-- [ ] **Step 1: Resolve every audited relationship**
+- [x] **Step 1: Resolve every audited relationship**
 
 For each audited row, apply:
 
@@ -388,7 +388,7 @@ relationship classification
 → exact current value
 ```
 
-- [ ] **Step 2: Require 100% explainability**
+- [x] **Step 2: Require 100% explainability**
 
 The proof passes only when every current layout-spacing row is one of:
 
@@ -401,7 +401,7 @@ non-spacing geometry
 
 `unknown` is a failure, not a valid final category.
 
-- [ ] **Step 3: Test representative future-component scenarios**
+- [x] **Step 3: Test representative future-component scenarios**
 
 Apply the rule without editing Figma to these synthetic structures:
 
@@ -417,7 +417,7 @@ Apply the rule without editing Figma to these synthetic structures:
 
 Each scenario must resolve exact Mobile and Desktop values or produce a precise “new universal relationship required” blocker.
 
-- [ ] **Step 4: Recheck global invariants**
+- [x] **Step 4: Recheck global invariants**
 
 Confirm that the model preserves:
 
@@ -444,7 +444,7 @@ Confirm that the model preserves:
 - Consumes: approved design document.
 - Produces: strict spacing document shape and canonical data.
 
-- [ ] **Step 1: Write failing schema tests**
+- [x] **Step 1: Write failing schema tests**
 
 Tests must reject:
 
@@ -468,7 +468,7 @@ node --test tests/foundation/spacing-foundation.test.mjs
 
 Expected: failure because the schema and data do not exist.
 
-- [ ] **Step 2: Create the strict JSON Schema**
+- [x] **Step 2: Create the strict JSON Schema**
 
 The schema must require:
 
@@ -485,11 +485,11 @@ provenance
 
 Each role must carry semantic purpose, ownership, applicability, exact viewport resolution and evidence. Do not place component-specific layout contracts in `roles`.
 
-- [ ] **Step 3: Create the canonical YAML foundation**
+- [x] **Step 3: Create the canonical YAML foundation**
 
 Populate only values and roles proven in Tasks 1–4. Keep exact Figma variable names where bindings were inspected; store `literal` provenance where no binding exists.
 
-- [ ] **Step 4: Run shape tests**
+- [x] **Step 4: Run shape tests**
 
 Run:
 
@@ -499,7 +499,7 @@ node --test tests/foundation/spacing-foundation.test.mjs
 
 Expected: shape tests pass; semantic resolver tests remain absent until Task 6.
 
-- [ ] **Step 5: Commit the schema-and-data slice**
+- [x] **Step 5: Commit the schema-and-data slice**
 
 Commit message:
 
@@ -524,7 +524,7 @@ feat: add structured spacing contract
   - `resolveDesignSpacing(document, { roleId, viewport })`
 - Returns one exact integer from `resolveDesignSpacing` or throws a diagnostic with a stable spacing error code.
 
-- [ ] **Step 1: Add failing semantic tests**
+- [x] **Step 1: Add failing semantic tests**
 
 Cover stable diagnostics for:
 
@@ -538,7 +538,7 @@ SPACING_INVALID_EXCEPTION
 SPACING_BUILD_CHOICE_FORBIDDEN
 ```
 
-- [ ] **Step 2: Add exact resolver tests**
+- [x] **Step 2: Add exact resolver tests**
 
 Assert:
 
@@ -554,15 +554,15 @@ assert.equal(
 
 Also assert that missing and ambiguous resolution throws rather than selecting a value.
 
-- [ ] **Step 3: Implement the loader and validator**
+- [x] **Step 3: Implement the loader and validator**
 
 Use the existing strict YAML and schema-validation boundaries. Do not add a second parser or validator stack.
 
-- [ ] **Step 4: Implement exact design-time resolution**
+- [x] **Step 4: Implement exact design-time resolution**
 
 The resolver accepts one role ID and one viewport. It never accepts an array of candidate values, “closest” option, fallback viewport or default pixel value.
 
-- [ ] **Step 5: Run focused and complete tests**
+- [x] **Step 5: Run focused and complete tests**
 
 Run:
 
@@ -573,7 +573,7 @@ npm test
 
 Expected: all tests pass.
 
-- [ ] **Step 6: Commit the semantic slice**
+- [x] **Step 6: Commit the semantic slice**
 
 Commit message:
 
@@ -598,7 +598,7 @@ feat: validate spacing semantics
   - approved compatibility matrix
 - Produces: parity and preservation tests.
 
-- [ ] **Step 1: Characterize the global outer rhythm**
+- [x] **Step 1: Characterize the global outer rhythm**
 
 Parse and assert the currently documented exact outer values:
 
@@ -607,11 +607,11 @@ Mobile: 16px
 Desktop: 24px
 ```
 
-- [ ] **Step 2: Characterize every spacing observation used as evidence**
+- [x] **Step 2: Characterize every spacing observation used as evidence**
 
 For each current component observation represented by the approved matrix, verify that the structured role or approved exception resolves to the same exact value for the same viewport and relationship.
 
-- [ ] **Step 3: Assert separation of concerns**
+- [x] **Step 3: Assert separation of concerns**
 
 Tests must prove that:
 
@@ -620,7 +620,7 @@ Tests must prove that:
 - no build-facing representation contains multiple allowed values;
 - typography and asset foundations are unchanged.
 
-- [ ] **Step 4: Run characterization and full tests**
+- [x] **Step 4: Run characterization and full tests**
 
 Run:
 
@@ -631,7 +631,7 @@ npm test
 
 Expected: all tests pass.
 
-- [ ] **Step 5: Commit the parity slice**
+- [x] **Step 5: Commit the parity slice**
 
 Commit message:
 
@@ -652,7 +652,7 @@ test: prove spacing shadow equivalence
 - Modify: `tests/foundation/system-manifest.test.mjs`
 - Modify: `tests/foundation/validator-cli.test.mjs`
 
-- [ ] **Step 1: Write failing manifest integration tests**
+- [x] **Step 1: Write failing manifest integration tests**
 
 Require exactly these new source IDs:
 
@@ -663,19 +663,19 @@ spacing-schema → schemas/spacing.schema.json
 
 Assert that missing files, wrong kinds and duplicate IDs fail.
 
-- [ ] **Step 2: Write failing CLI diagnostic tests**
+- [x] **Step 2: Write failing CLI diagnostic tests**
 
 Assert that a malformed spacing fixture causes `npm run validate` to fail with a stable spacing diagnostic and source path.
 
-- [ ] **Step 3: Add manifest sources atomically**
+- [x] **Step 3: Add manifest sources atomically**
 
 Add the data and schema entries in the same commit. Do not add the spacing source to email-build bundle profiles in this phase.
 
-- [ ] **Step 4: Integrate the spacing validator**
+- [x] **Step 4: Integrate the spacing validator**
 
 Resolve the source through manifest IDs and run shape plus semantic validation from the public validation command.
 
-- [ ] **Step 5: Run all validation**
+- [x] **Step 5: Run all validation**
 
 Run:
 
@@ -687,7 +687,7 @@ npm run verify
 
 Expected: all commands pass.
 
-- [ ] **Step 6: Commit manifest integration**
+- [x] **Step 6: Commit manifest integration**
 
 Commit message:
 
@@ -704,7 +704,7 @@ feat: register spacing foundation in shadow mode
 **Files:**
 - Modify: `README.md`
 
-- [ ] **Step 1: Add the shadow-source note**
+- [x] **Step 1: Add the shadow-source note**
 
 Document plainly:
 
@@ -714,7 +714,7 @@ Document plainly:
 - build-time requires exact component values;
 - missing exact values are blockers.
 
-- [ ] **Step 2: State what is not yet active**
+- [x] **Step 2: State what is not yet active**
 
 Explicitly state that this phase does not:
 
@@ -724,11 +724,11 @@ Explicitly state that this phase does not:
 - switch context bundles;
 - change HTML output.
 
-- [ ] **Step 3: Run preservation checks**
+- [x] **Step 3: Run preservation checks**
 
 Confirm unchanged blobs for every file listed under “Files explicitly preserved”, except `README.md`, which is intentionally modified.
 
-- [ ] **Step 4: Commit documentation**
+- [x] **Step 4: Commit documentation**
 
 Commit message:
 
