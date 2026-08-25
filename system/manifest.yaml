@@ -16,6 +16,8 @@ sources:
   - { id: email-build-checkpoint, kind: workflow, path: workflows/email-build-checkpoint.md }
   - { id: email-project-brief, kind: template, path: templates/email-project-brief.md }
   - { id: manifest-schema, kind: schema, path: schemas/manifest.schema.json }
+  - { id: typography-foundation, kind: registry, path: data/foundations/typography.yaml }
+  - { id: typography-schema, kind: schema, path: schemas/typography.schema.json }
 bundle_profiles:
   - id: library-maintenance
     source_ids: [repository-readme, email-figma-prompt, figma-component-naming-standard, component-descriptions-registry, typography-registry, library-maintenance-checkpoint]

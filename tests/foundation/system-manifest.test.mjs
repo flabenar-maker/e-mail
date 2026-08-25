@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 
 import {
   loadSystemManifest,
+  validateSystem,
   validateManifestShape,
   validateManifestSemantics,
 } from "../../scripts/lib/system-manifest.mjs";
@@ -26,7 +27,9 @@ async function canonicalManifest() {
 
 const fixtureFiles = [
   "schemas/manifest.schema.json",
+  "schemas/typography.schema.json",
   "system/manifest.yaml",
+  "data/foundations/typography.yaml",
   "README.md",
   "bootstrap/README.md",
   "core/email-figma-prompt.md",
@@ -350,3 +353,75 @@ test("reports the legacy bootstrap manifest", async (t) => {
 
   assert.ok(errors.some((error) => error.code === "legacy-manifest-path"));
 });
+
+for (const [sourceId, code] of [
+  ["typography-foundation", "missing-typography-source"],
+  ["typography-schema", "missing-typography-schema-source"],
+]) {
+  test(`reports missing ${sourceId} declaration`, async (t) => {
+    const root = await validFixture(t);
+    await mutateFixtureManifest(root, (manifest) => {
+      manifest.sources = manifest.sources.filter(
+        (source) => source.id !== sourceId,
+      );
+    });
+
+    const result = await validateSystem({ repoRoot: root });
+
+    assert.ok(result.errors.some((error) => error.code === code));
+  });
+}
+
+for (const [sourceId, kind] of [
+  ["typography-foundation", "core"],
+  ["typography-schema", "registry"],
+]) {
+  test(`reports invalid ${sourceId} kind`, async (t) => {
+    const root = await validFixture(t);
+    await mutateFixtureManifest(root, (manifest) => {
+      let source = manifest.sources.find((item) => item.id === sourceId);
+      if (!source) {
+        source = {
+          id: sourceId,
+          kind: sourceId === "typography-schema" ? "schema" : "registry",
+          path:
+            sourceId === "typography-schema"
+              ? "schemas/typography.schema.json"
+              : "data/foundations/typography.yaml",
+        };
+        manifest.sources.push(source);
+      }
+      source.kind = kind;
+    });
+
+    const result = await validateSystem({ repoRoot: root });
+
+    assert.ok(
+      result.errors.some(
+        (error) => error.code === "invalid-typography-source-kind",
+      ),
+    );
+  });
+}
+
+for (const relativePath of [
+  "data/foundations/typography.yaml",
+  "schemas/typography.schema.json",
+]) {
+  test(`reports missing declared typography path: ${relativePath}`, async (t) => {
+    const root = await validFixture(t);
+    const { rm } = await import("node:fs/promises");
+    await rm(join(root, relativePath));
+    const manifest = await loadSystemManifest({ repoRoot: root });
+
+    const errors = await validateManifestSemantics(manifest, root);
+
+    assert.ok(
+      errors.some(
+        (error) =>
+          error.code === "missing-declared-path" &&
+          error.path.includes(relativePath),
+      ),
+    );
+  });
+}
