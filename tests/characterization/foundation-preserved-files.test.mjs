@@ -16,7 +16,7 @@ const preserved = {
   "registry/email-typography-registry.md":
     "12e5ae0b0aa1c5f18f9132e2e948e6a712c0f1bd",
   "workflows/library-maintenance-checkpoint.md":
-    "c749878e57811b1028664a1438037574b3582575",
+    "81d951189f73a65efb74d70cc390c5213c5f2e9f",
   "workflows/email-build-checkpoint.md":
     "42f8f91ca6e867b514c6d1af3dbef5c292cb8106",
   "docs/superpowers/specs/2026-08-24-cupis-structured-email-system-design.md":
