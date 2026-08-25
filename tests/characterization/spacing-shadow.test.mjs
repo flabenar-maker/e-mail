@@ -9,7 +9,7 @@ import { readStrictYaml } from "../../scripts/lib/strict-yaml.mjs";
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 
 function componentSection(registry, componentName) {
-  const heading = `## \\`${componentName}\\``;
+  const heading = "## `" + componentName + "`";
   const start = registry.indexOf(heading);
   assert.notEqual(start, -1, `Missing registry component: ${componentName}`);
   const next = registry.indexOf("\n## ", start + heading.length);
