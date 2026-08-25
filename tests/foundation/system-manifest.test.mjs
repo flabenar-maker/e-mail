@@ -30,6 +30,8 @@ const fixtureFiles = [
   "schemas/typography.schema.json",
   "system/manifest.yaml",
   "data/foundations/typography.yaml",
+  "schemas/spacing.schema.json",
+  "data/foundations/spacing.yaml",
   "README.md",
   "bootstrap/README.md",
   "core/email-figma-prompt.md",
@@ -425,3 +427,65 @@ for (const relativePath of [
     );
   });
 }
+
+for (const [sourceId, code] of [
+  ["spacing-foundation", "missing-spacing-source"],
+  ["spacing-schema", "missing-spacing-schema-source"],
+]) {
+  test(`reports missing ${sourceId} declaration`, async (t) => {
+    const root = await validFixture(t);
+    await mutateFixtureManifest(root, (manifest) => {
+      manifest.sources = manifest.sources.filter(
+        (source) => source.id !== sourceId,
+      );
+    });
+
+    const result = await validateSystem({ repoRoot: root });
+
+    assert.ok(result.errors.some((error) => error.code === code));
+  });
+}
+
+for (const [sourceId, kind] of [
+  ["spacing-foundation", "core"],
+  ["spacing-schema", "registry"],
+]) {
+  test(`reports invalid ${sourceId} kind`, async (t) => {
+    const root = await validFixture(t);
+    await mutateFixtureManifest(root, (manifest) => {
+      let source = manifest.sources.find((item) => item.id === sourceId);
+      if (!source) {
+        source = {
+          id: sourceId,
+          kind: sourceId === "spacing-schema" ? "schema" : "registry",
+          path:
+            sourceId === "spacing-schema"
+              ? "schemas/spacing.schema.json"
+              : "data/foundations/spacing.yaml",
+        };
+        manifest.sources.push(source);
+      }
+      source.kind = kind;
+    });
+
+    const result = await validateSystem({ repoRoot: root });
+
+    assert.ok(
+      result.errors.some(
+        (error) => error.code === "invalid-spacing-source-kind",
+      ),
+    );
+  });
+}
+
+test("maintenance profiles include spacing while email build profiles do not", async () => {
+  const manifest = await canonicalManifest();
+  const profiles = new Map(
+    manifest.bundle_profiles.map((profile) => [profile.id, profile.source_ids]),
+  );
+
+  assert.ok(profiles.get("library-maintenance").includes("spacing-foundation"));
+  assert.ok(profiles.get("component-onboarding").includes("spacing-foundation"));
+  assert.ok(!profiles.get("email-new-build").includes("spacing-foundation"));
+  assert.ok(!profiles.get("email-continue-fix").includes("spacing-foundation"));
+});
