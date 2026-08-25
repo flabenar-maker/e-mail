@@ -5,6 +5,7 @@ import { SystemValidationError } from "./diagnostics.mjs";
 import { validateDocumentShape } from "./schema-validation.mjs";
 import { readStrictYaml } from "./strict-yaml.mjs";
 import { validateTypographyFoundation } from "./typography-foundation.mjs";
+import { validateSpacingFoundation } from "./spacing-foundation.mjs";
 
 const SUPPORTED_MANIFEST_VERSION = "1.0.0";
 
@@ -325,6 +326,58 @@ function resolveTypographySources(manifest) {
   };
 }
 
+function resolveSpacingSources(manifest) {
+  const errors = [];
+  const spacingSource = manifest.sources.find(
+    (source) => source.id === "spacing-foundation",
+  );
+  const spacingSchemaSource = manifest.sources.find(
+    (source) => source.id === "spacing-schema",
+  );
+
+  if (!spacingSource) {
+    errors.push(
+      diagnostic(
+        "missing-spacing-source",
+        "/sources",
+        "Spacing foundation source must be declared.",
+      ),
+    );
+  } else if (spacingSource.kind !== "registry") {
+    errors.push(
+      diagnostic(
+        "invalid-spacing-source-kind",
+        "/sources/spacing-foundation/kind",
+        "Spacing foundation source kind must be registry.",
+      ),
+    );
+  }
+
+  if (!spacingSchemaSource) {
+    errors.push(
+      diagnostic(
+        "missing-spacing-schema-source",
+        "/sources",
+        "Spacing schema source must be declared.",
+      ),
+    );
+  } else if (spacingSchemaSource.kind !== "schema") {
+    errors.push(
+      diagnostic(
+        "invalid-spacing-source-kind",
+        "/sources/spacing-schema/kind",
+        "Spacing schema source kind must be schema.",
+      ),
+    );
+  }
+
+  return {
+    spacingSource,
+    spacingSchemaSource,
+    errors: sortDiagnostics(errors),
+  };
+}
+
 export async function validateSystem({
   repoRoot,
   manifestPath = "system/manifest.yaml",
@@ -333,20 +386,35 @@ export async function validateSystem({
     const manifest = await loadSystemManifest({ repoRoot, manifestPath });
     const manifestErrors = await validateManifestSemantics(manifest, repoRoot);
     const typographySources = resolveTypographySources(manifest);
+    const spacingSources = resolveSpacingSources(manifest);
     const prerequisiteErrors = sortDiagnostics([
       ...manifestErrors,
       ...typographySources.errors,
+      ...spacingSources.errors,
     ]);
     if (prerequisiteErrors.length > 0) {
       return { manifest, errors: prerequisiteErrors };
     }
 
-    const typographyResult = await validateTypographyFoundation({
-      repoRoot,
-      dataPath: typographySources.typographySource.path,
-      schemaPath: typographySources.typographySchemaSource.path,
-    });
-    return { manifest, errors: sortDiagnostics(typographyResult.errors) };
+    const [typographyResult, spacingResult] = await Promise.all([
+      validateTypographyFoundation({
+        repoRoot,
+        dataPath: typographySources.typographySource.path,
+        schemaPath: typographySources.typographySchemaSource.path,
+      }),
+      validateSpacingFoundation({
+        repoRoot,
+        dataPath: spacingSources.spacingSource.path,
+        schemaPath: spacingSources.spacingSchemaSource.path,
+      }),
+    ]);
+    return {
+      manifest,
+      errors: sortDiagnostics([
+        ...typographyResult.errors,
+        ...spacingResult.errors,
+      ]),
+    };
   } catch (error) {
     if (error instanceof AggregateError) {
       return { manifest: null, errors: error.errors };
