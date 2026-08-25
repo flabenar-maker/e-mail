@@ -742,7 +742,7 @@ docs: document spacing foundation ownership
 
 **Purpose:** Publish only a complete, reviewable spacing foundation.
 
-- [ ] **Step 1: Re-read all changed files from the branch**
+- [x] **Step 1: Re-read all changed files from the branch**
 
 Verify the branch versions of:
 
@@ -761,7 +761,7 @@ tests/foundation/validator-cli.test.mjs
 README.md
 ```
 
-- [ ] **Step 2: Run clean verification**
+- [x] **Step 2: Run clean verification**
 
 Run:
 
@@ -774,11 +774,11 @@ npm run verify
 
 Record actual command output and test counts.
 
-- [ ] **Step 3: Verify the allowed diff**
+- [x] **Step 3: Verify the allowed diff**
 
 The final implementation PR may contain only the files declared in this plan. Confirm there are no Figma writes, local email outputs, generated snapshots, archives or unrelated changes.
 
-- [ ] **Step 4: Verify the exact-only invariant**
+- [x] **Step 4: Verify the exact-only invariant**
 
 Search the spacing schema, data, resolver and tests. Confirm that build-facing output cannot contain:
 
@@ -793,7 +793,7 @@ viewport fallback
 
 Design-time evidence collections may list observed values, but the resolver must still return exactly one integer or a blocker.
 
-- [ ] **Step 5: Open a draft PR**
+- [x] **Step 5: Open a draft PR**
 
 The PR description must include:
 
@@ -817,14 +817,14 @@ Use this compact status list during the long task:
 
 - [x] 1. Baseline pinned and full library inventory complete
 - [x] 2. Relationships classified; deviations reviewed by user
-- [ ] 3. Golden rule and exact-only boundary approved
-- [ ] 4. Rule proves 100% compatibility with current design
-- [ ] 5. Spacing schema and canonical YAML created
-- [ ] 6. Semantic validator and exact resolver pass
-- [ ] 7. Shadow equivalence passes
-- [ ] 8. Manifest integration passes without bundle cutover
-- [ ] 9. Ownership documented; preserved files verified
-- [ ] 10. Draft PR verified and ready for separate merge decision
+- [x] 3. Golden rule and exact-only boundary approved
+- [x] 4. Rule proves 100% compatibility with current design
+- [x] 5. Spacing schema and canonical YAML created
+- [x] 6. Semantic validator and exact resolver pass
+- [x] 7. Shadow equivalence passes
+- [x] 8. Manifest integration passes without bundle cutover
+- [x] 9. Ownership documented; preserved files verified
+- [x] 10. Draft PR verified and ready for separate merge decision
 
 ## Completion Criteria
 
