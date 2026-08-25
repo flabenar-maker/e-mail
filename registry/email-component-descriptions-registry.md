@@ -199,8 +199,12 @@ SCOPE
 Полноширинный footer внутри 600px email-wrapper. Не помещать в общий email-padding.
 
 LAYOUT
-Фон footer всегда #F3F3F5, без border, shadow и radius. Фон воспроизводить в HTML; отдельный фоновый asset не создавать.
-Отступ перед footer: Mobile 16px, Desktop 24px.
+Корневой компонент создаёт только внешний отступ перед footer: Mobile 16px, Desktop 24px.
+Внутри расположен footer-body на всю ширину. Фон footer-body всегда #F3F3F5, без border, shadow и radius. Фон воспроизводить в HTML; отдельный фоновый asset не создавать.
+footer-body:
+— Mobile: padding 0 16px 16px; gap между видимыми секциями 16px;
+— Desktop: padding 0 24px 24px; gap между видимыми секциями 24px.
+Межсекционный gap принадлежит footer-body. Если social-section скрыта, не оставлять этот gap или пустой spacer.
 
 DISCLAIMER
 Порядок видимых элементов:
@@ -209,18 +213,18 @@ DISCLAIMER
 3. Текст для ошибочного получателя.
 4. Отдельная unsubscribe link.
 
-Mobile: padding 0 16px 16px, gap 8px.
-Desktop: padding 0 24px 24px, gap 12px.
+disclaimer-section не добавляет собственного padding.
+Gap между её текстовыми элементами: Mobile 8px, Desktop 12px.
 Текст: Mobile 12px/140% Regular, Desktop 14px/140% Regular; #98999C, по центру. Ссылки того же цвета и подчёркнуты. Сохранять только смысловые hard breaks.
 
 CAPTION
 Boolean-свойство Show Caption, по умолчанию выключено. Если включено, caption становится первым элементом disclaimer-section и использует ту же типографику.
 
 SOCIAL ICONS
-Boolean-свойство Show Social Links управляет всей social-section. Если выключено, не выводить секцию и не оставлять её padding или пустой spacer.
-Mobile: padding 0 16px 16px; icon 32×32px; gap между видимыми иконками 8px.
-Desktop: padding 0 24px 24px; icon 42×42px; gap 12px.
-Группа иконок центрирована.
+Boolean-свойство Show Social Links управляет всей social-section. Если выключено, не выводить секцию и не оставлять межсекционный gap.
+social-section не добавляет собственного padding или item gap. Внутри неё находится центрированная группа social-icons:
+— Mobile: icon 32×32px; gap между видимыми иконками 8px;
+— Desktop: icon 42×42px; gap 12px.
 
 ASSETS
 Экспортировать каждый видимый внешний слой вида “*-icon @4x” целиком из конкретного Desktop-инстанса как PNG @4x с прозрачностью. Один src использовать в Mobile и Desktop; display-size задаёт вариант. Скрытые иконки не экспортировать. Не добавлять HTML-подложку.
@@ -729,14 +733,17 @@ SCOPE
 Полноширинный footer внутри 600px email-wrapper. Не помещать в общий email-padding. Использовать только когда этот компонент выбран в конкретном инстансе письма; тип письма сам по себе не заменяет выбранный footer.
 
 LAYOUT
-Фон #F3F3F5, без border, shadow и radius.
-Отступ перед footer: Mobile 16px, Desktop 24px.
+Корневой компонент создаёт только внешний отступ перед footer: Mobile 16px, Desktop 24px.
+Внутри расположен footer-body на всю ширину с фоном #F3F3F5, без border, shadow и radius.
+footer-body:
+— Mobile: padding 0 16px 16px;
+— Desktop: padding 0 24px 24px.
+В Footer-Legal внутри footer-body находится одна disclaimer-section, поэтому межсекционный gap не добавлять.
 
 CONTENT
-Mobile: внутренний padding 0 16px 16px, gap между текстовыми блоками 8px.
-Desktop: padding 0 24px 24px, gap 12px.
-
-Текст: Roboto/Arial; Mobile 12px/140% Regular, Desktop 14px/140% Regular; #98999C, по центру. Содержимое брать из конкретного инстанса. Сохранять смысловые hard breaks, но не превращать автоматический перенос Figma в &lt;br&gt;.
+disclaimer-section не добавляет собственного padding.
+Gap между текстовыми элементами: Mobile 8px, Desktop 12px.
+Текст: Roboto/Arial; Mobile 12px/140% Regular, Desktop 14px/140% Regular; #98999C, по центру. Содержимое брать из конкретного инстанса. Сохранять смысловые hard breaks, но не превращать автоматический перенос Figma в <br>.
 
 Не добавлять social-section, иконки или ссылки, которых нет в выбранном инстансе. Тёмный фон вокруг библиотечного компонента является только презентационным.
 ````
