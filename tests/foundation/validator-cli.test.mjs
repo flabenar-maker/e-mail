@@ -17,6 +17,8 @@ const fixtureFiles = [
   "schemas/typography.schema.json",
   "system/manifest.yaml",
   "data/foundations/typography.yaml",
+  "schemas/spacing.schema.json",
+  "data/foundations/spacing.yaml",
   "README.md",
   "bootstrap/README.md",
   "core/email-figma-prompt.md",
@@ -115,6 +117,24 @@ test("invalid typography exits one with a sanitized diagnostic", async (t) => {
   assert.doesNotMatch(
     result.stderr + result.stdout,
     /do-not-print-this-typography-value/u,
+  );
+});
+
+test("invalid spacing exits one with a sanitized diagnostic", async (t) => {
+  const root = await validFixture(t);
+  await writeFixtureFile(
+    root,
+    "data/foundations/spacing.yaml",
+    "schema_version: 2.0.0\nsecret: do-not-print-this-spacing-value\n",
+  );
+
+  const result = await runValidator(root);
+
+  assert.equal(result.exitCode, 1);
+  assert.match(result.stderr, /spacing-version-unsupported/u);
+  assert.doesNotMatch(
+    result.stderr + result.stdout,
+    /do-not-print-this-spacing-value/u,
   );
 });
 
