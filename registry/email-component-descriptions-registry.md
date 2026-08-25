@@ -262,8 +262,8 @@ CTA — instance Button/Primary, Viewport=Mobile, full-width.
 
 DESKTOP
 Image-area: контрольный контейнер 552×353px.
-Content-area: padding 32px, gap 22px.
-Text-content: gap 14px; heading 32px Bold; body 18px/140%.
+Content-area: padding 32px, gap 24px.
+Text-content: gap 16px; heading 32px Bold; body 18px/140%.
 CTA — instance Button/Primary, Viewport=Desktop, content-width по содержимому.
 
 IMAGE @2x
@@ -314,7 +314,7 @@ ORDER
 
 HEADING AND STEPS
 Heading: Mobile 18px, Desktop 26px.
-Визуальный gap heading→первый шаг: Mobile 22px, Desktop 30px.
+Gap heading→первый шаг: Mobile 16px, Desktop 24px.
 Gap между шагами: Mobile 16px, Desktop 24px.
 
 Каждый шаг — отдельная presentation-table строка: живой Badge/Step-Number, spacer, затем HTML heading и optional item caption. Бейдж не экспортировать.
