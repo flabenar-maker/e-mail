@@ -1,0 +1,141 @@
+schema_version: 1.0.0
+foundation:
+  id: spacing
+  status: shadow
+viewports: [mobile, desktop]
+roles:
+  - id: outer-flow
+    relationship: email-outer-flow
+    owner: top-level-component-root
+    purpose: Внешний вертикальный ритм верхнеуровневого блока.
+    applicability: [top-level]
+    resolutions:
+      mobile: { value_px: 16, provenance: { kind: registry-literal, source_path: registry/email-component-descriptions-registry.md } }
+      desktop: { value_px: 24, provenance: { kind: registry-literal, source_path: registry/email-component-descriptions-registry.md } }
+  - id: common-horizontal-inset
+    relationship: email-common-inset
+    owner: email-shell
+    purpose: Общий боковой inset обычных контентных блоков.
+    applicability: [top-level, common-padding]
+    resolutions:
+      mobile: { value_px: 16, provenance: { kind: registry-literal, source_path: registry/email-component-descriptions-registry.md } }
+      desktop: { value_px: 24, provenance: { kind: registry-literal, source_path: registry/email-component-descriptions-registry.md } }
+  - id: self-horizontal-inset
+    relationship: component-self-inset
+    owner: top-level-component-root
+    purpose: Боковой inset самостоятельного self-inset-компонента.
+    applicability: [top-level, self-inset]
+    resolutions:
+      mobile: { value_px: 16, provenance: { kind: registry-literal, source_path: registry/email-component-descriptions-registry.md } }
+      desktop: { value_px: 24, provenance: { kind: registry-literal, source_path: registry/email-component-descriptions-registry.md } }
+  - id: surface-padding-primary
+    relationship: component-container-padding
+    owner: component-content-container
+    purpose: Padding основной самостоятельной контентной поверхности.
+    applicability: [top-level, primary-surface]
+    resolutions:
+      mobile: { value_px: 22, provenance: { kind: registry-literal, source_path: registry/email-component-descriptions-registry.md } }
+      desktop: { value_px: 32, provenance: { kind: registry-literal, source_path: registry/email-component-descriptions-registry.md } }
+  - id: surface-padding-compact
+    relationship: component-container-padding
+    owner: nested-component
+    purpose: Padding вложенной или компактной поверхности.
+    applicability: [nested, compact-surface]
+    resolutions:
+      mobile: { value_px: 16, provenance: { kind: registry-literal, source_path: registry/email-component-descriptions-registry.md } }
+      desktop: { value_px: 24, provenance: { kind: registry-literal, source_path: registry/email-component-descriptions-registry.md } }
+  - id: section-stack-standard
+    relationship: component-section-stack
+    owner: component-content-container
+    purpose: Основной интервал между крупными секциями внутри поверхности.
+    applicability: [top-level, nested]
+    resolutions:
+      mobile: { value_px: 16, provenance: { kind: registry-literal, source_path: registry/email-component-descriptions-registry.md } }
+      desktop: { value_px: 24, provenance: { kind: registry-literal, source_path: registry/email-component-descriptions-registry.md } }
+  - id: collection-stack-spacious
+    relationship: collection-section-stack
+    owner: collection-container
+    purpose: Интервал между heading, коллекцией и optional caption.
+    applicability: [collection]
+    resolutions:
+      mobile: { value_px: 22, provenance: { kind: registry-literal, source_path: registry/email-component-descriptions-registry.md } }
+      desktop: { value_px: 32, provenance: { kind: registry-literal, source_path: registry/email-component-descriptions-registry.md } }
+  - id: visual-item-stack
+    relationship: repeated-visual-item-stack
+    owner: repeated-item-parent
+    purpose: Интервал между крупными визуальными карточками.
+    applicability: [collection, repeated-items]
+    resolutions:
+      mobile: { value_px: 22, provenance: { kind: registry-literal, source_path: registry/email-component-descriptions-registry.md } }
+      desktop: { value_px: 24, provenance: { kind: registry-literal, source_path: registry/email-component-descriptions-registry.md } }
+  - id: details-row-stack
+    relationship: details-row-stack
+    owner: details-rows-parent
+    purpose: Интервал между строками компактной таблицы реквизитов.
+    applicability: [nested, details]
+    resolutions:
+      mobile: { value_px: 12, provenance: { kind: registry-literal, source_path: registry/email-component-descriptions-registry.md } }
+      desktop: { value_px: 16, provenance: { kind: registry-literal, source_path: registry/email-component-descriptions-registry.md } }
+  - id: inline-peer-standard
+    relationship: inline-peer-gap
+    owner: inline-parent
+    purpose: Интервал между крупными равноправными элементами композиции.
+    applicability: [top-level, nested, inline]
+    resolutions:
+      mobile: { value_px: 16, provenance: { kind: registry-literal, source_path: registry/email-component-descriptions-registry.md } }
+      desktop: { value_px: 24, provenance: { kind: registry-literal, source_path: registry/email-component-descriptions-registry.md } }
+  - id: inline-peer-compact
+    relationship: inline-peer-gap
+    owner: inline-parent
+    purpose: Интервал между компактными равноправными элементами.
+    applicability: [nested, inline, compact]
+    resolutions:
+      mobile: { value_px: 8, provenance: { kind: registry-literal, source_path: registry/email-component-descriptions-registry.md } }
+      desktop: { value_px: 12, provenance: { kind: registry-literal, source_path: registry/email-component-descriptions-registry.md } }
+  - id: text-stack-standard
+    relationship: text-stack
+    owner: text-group
+    purpose: Обычный интервал между heading, body и caption одной группы.
+    applicability: [text]
+    resolutions:
+      mobile: { value_px: 8, provenance: { kind: registry-literal, source_path: registry/email-component-descriptions-registry.md } }
+      desktop: { value_px: 12, provenance: { kind: registry-literal, source_path: registry/email-component-descriptions-registry.md } }
+  - id: text-stack-tight
+    relationship: text-stack
+    owner: text-group
+    purpose: Интервал между тесно связанными строками одного элемента.
+    applicability: [text, compact]
+    resolutions:
+      mobile: { value_px: 4, provenance: { kind: registry-literal, source_path: registry/email-component-descriptions-registry.md } }
+      desktop: { value_px: 6, provenance: { kind: registry-literal, source_path: registry/email-component-descriptions-registry.md } }
+  - id: asset-to-content-standard
+    relationship: asset-to-content
+    owner: asset-content-parent
+    purpose: Интервал между крупным semantic asset и живым контентом.
+    applicability: [top-level, nested]
+    resolutions:
+      mobile: { value_px: 16, provenance: { kind: registry-literal, source_path: registry/email-component-descriptions-registry.md } }
+      desktop: { value_px: 24, provenance: { kind: registry-literal, source_path: registry/email-component-descriptions-registry.md } }
+  - id: asset-to-content-compact
+    relationship: asset-to-content
+    owner: asset-content-parent
+    purpose: Интервал между компактным asset и живым контентом.
+    applicability: [nested, compact]
+    resolutions:
+      mobile: { value_px: 8, provenance: { kind: registry-literal, source_path: registry/email-component-descriptions-registry.md } }
+      desktop: { value_px: 12, provenance: { kind: registry-literal, source_path: registry/email-component-descriptions-registry.md } }
+global_invariants:
+  - id: one-outer-flow-owner
+    statement: Каждый верхнеуровневый компонент получает внешний top spacing ровно один раз.
+  - id: independent-viewports
+    statement: Mobile и Desktop разрешаются независимо.
+  - id: exact-component-contract
+    statement: Результат design-time фиксируется как одно точное значение в component contract.
+  - id: build-does-not-resolve
+    statement: HTML-вёрстка не применяет spacing foundation и использует только фактические component values.
+exceptions: []
+provenance:
+  base_commit: 41c05a3816a3263eff765fc07ddae9b047a6dfb7
+  registry_path: registry/email-component-descriptions-registry.md
+  design_spec_path: docs/superpowers/specs/2026-08-25-cupis-spacing-foundation-design.md
+  reviewed_at: "2026-08-25"
