@@ -10,6 +10,12 @@
 
 `data/foundations/typography.yaml` — проверяемый структурированный пилот определений текстовых стилей. `registry/email-typography-registry.md` пока остаётся контрольным Markdown-снимком и текущим владельцем списков компонентов-потребителей. Рабочие bundle profiles продолжают использовать Markdown-реестр до отдельного этапа перехода на generated docs и context bundles.
 
+### Structured foundation отступов
+
+`data/foundations/spacing.yaml` — машинно-проверяемый shadow-источник золотого правила отступов для поддержки и разработки библиотеки. Он подключён только к maintenance-маршрутам и не входит в `email-new-build` или `email-continue-fix`.
+
+При проектировании нового или изменении существующего компонента foundation разрешает semantic role в одно точное Mobile- и Desktop-значение. После этого значения фиксируются в Figma, Description и реестре. При вёрстке конкретного письма Codex не применяет золотое правило, не вызывает spacing resolver и использует только фактические значения конкретного инстанса и component contract.
+
 ## Восстановление контекста
 
 После открытия этого репозитория достаточно сказать Codex:
@@ -33,7 +39,7 @@
 4. [реестр типографики](registry/email-typography-registry.md);
 5. [чек-пойнт поддержки библиотеки](workflows/library-maintenance-checkpoint.md).
 
-Чек-пойнт задаёт порядок работы и границы изменений. Общая инструкция содержит общие технические правила вёрстки, naming standard — универсальные правила имён и классификации Figma-объектов, реестр descriptions — актуальный фактический слепок состава и контрактов компонентов, а реестр типографики — текущие текстовые стили, их параметры, семантику и компоненты-потребители.
+Чек-пойнт задаёт порядок работы и границы изменений. Общая инструкция содержит общие технические правила вёрстки, naming standard — универсальные правила имён и классификации Figma-объектов, реестр descriptions — актуальный фактический слепок состава и контрактов компонентов, реестр типографики — текущие текстовые стили, их параметры, семантику и компоненты-потребители, а spacing foundation — правила выбора точных отступов только при поддержке и разработке библиотеки.
 
 ## Режим 2. Вёрстка конкретного письма
 
@@ -77,6 +83,9 @@
 | `registry/email-component-descriptions-registry.md` | Актуальный фактический слепок descriptions и состава компонентов |
 | `data/foundations/typography.yaml` | Валидируемый structured-пилот определений текстовых стилей; ещё не подключён к рабочим bundle profiles |
 | `schemas/typography.schema.json` | Строгая машинная схема structured-пилота типографики |
+| `data/foundations/spacing.yaml` | Машинно-проверяемое золотое правило отступов для maintenance и component onboarding; не является входом HTML-вёрстки |
+| `schemas/spacing.schema.json` | Строгая schema spacing foundation и exact-only разрешений |
+| `scripts/lib/spacing-foundation.mjs` | Design-time validation и resolver, возвращающий одно точное значение либо typed blocker |
 | `registry/email-typography-registry.md` | Контрольный Markdown-снимок типографики и текущий владелец списков компонентов-потребителей до cutover |
 | `workflows/library-maintenance-checkpoint.md` | Процесс поддержки инструкции, реестра и Figma-библиотеки |
 | `workflows/email-build-checkpoint.md` | Процесс вёрстки нового или изменения существующего письма |
