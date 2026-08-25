@@ -14,7 +14,9 @@ import {
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const fixtureFiles = [
   "schemas/manifest.schema.json",
+  "schemas/typography.schema.json",
   "system/manifest.yaml",
+  "data/foundations/typography.yaml",
   "README.md",
   "bootstrap/README.md",
   "core/email-figma-prompt.md",
@@ -96,6 +98,24 @@ test("unknown CLI option exits one", async (t) => {
 
   assert.equal(result.exitCode, 1);
   assert.match(result.stderr, /cli-arguments/u);
+});
+
+test("invalid typography exits one with a sanitized diagnostic", async (t) => {
+  const root = await validFixture(t);
+  await writeFixtureFile(
+    root,
+    "data/foundations/typography.yaml",
+    "schema_version: 2.0.0\nsecret: do-not-print-this-typography-value\n",
+  );
+
+  const result = await runValidator(root);
+
+  assert.equal(result.exitCode, 1);
+  assert.match(result.stderr, /typography-version-unsupported/u);
+  assert.doesNotMatch(
+    result.stderr + result.stdout,
+    /do-not-print-this-typography-value/u,
+  );
 });
 
 test("validator is read-only across repeated runs", async (t) => {

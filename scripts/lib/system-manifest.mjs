@@ -4,6 +4,7 @@ import { join, resolve } from "node:path";
 import { SystemValidationError } from "./diagnostics.mjs";
 import { validateDocumentShape } from "./schema-validation.mjs";
 import { readStrictYaml } from "./strict-yaml.mjs";
+import { validateTypographyFoundation } from "./typography-foundation.mjs";
 
 const SUPPORTED_MANIFEST_VERSION = "1.0.0";
 
@@ -47,6 +48,15 @@ function duplicateValues(items, key) {
 
 function diagnostic(code, path, message) {
   return new SystemValidationError(code, path, message);
+}
+
+function sortDiagnostics(errors) {
+  return errors.sort(
+    (left, right) =>
+      left.path.localeCompare(right.path) ||
+      left.code.localeCompare(right.code) ||
+      left.message.localeCompare(right.message),
+  );
 }
 
 async function exists(path) {
@@ -260,12 +270,59 @@ export async function validateManifestSemantics(manifest, repoRoot) {
     );
   }
 
-  return errors.sort(
-    (left, right) =>
-      left.path.localeCompare(right.path) ||
-      left.code.localeCompare(right.code) ||
-      left.message.localeCompare(right.message),
+  return sortDiagnostics(errors);
+}
+
+function resolveTypographySources(manifest) {
+  const errors = [];
+  const typographySource = manifest.sources.find(
+    (source) => source.id === "typography-foundation",
   );
+  const typographySchemaSource = manifest.sources.find(
+    (source) => source.id === "typography-schema",
+  );
+
+  if (!typographySource) {
+    errors.push(
+      diagnostic(
+        "missing-typography-source",
+        "/sources",
+        "Typography foundation source must be declared.",
+      ),
+    );
+  } else if (typographySource.kind !== "registry") {
+    errors.push(
+      diagnostic(
+        "invalid-typography-source-kind",
+        "/sources/typography-foundation/kind",
+        "Typography foundation source kind must be registry.",
+      ),
+    );
+  }
+
+  if (!typographySchemaSource) {
+    errors.push(
+      diagnostic(
+        "missing-typography-schema-source",
+        "/sources",
+        "Typography schema source must be declared.",
+      ),
+    );
+  } else if (typographySchemaSource.kind !== "schema") {
+    errors.push(
+      diagnostic(
+        "invalid-typography-source-kind",
+        "/sources/typography-schema/kind",
+        "Typography schema source kind must be schema.",
+      ),
+    );
+  }
+
+  return {
+    typographySource,
+    typographySchemaSource,
+    errors: sortDiagnostics(errors),
+  };
 }
 
 export async function validateSystem({
@@ -274,8 +331,22 @@ export async function validateSystem({
 }) {
   try {
     const manifest = await loadSystemManifest({ repoRoot, manifestPath });
-    const errors = await validateManifestSemantics(manifest, repoRoot);
-    return { manifest, errors };
+    const manifestErrors = await validateManifestSemantics(manifest, repoRoot);
+    const typographySources = resolveTypographySources(manifest);
+    const prerequisiteErrors = sortDiagnostics([
+      ...manifestErrors,
+      ...typographySources.errors,
+    ]);
+    if (prerequisiteErrors.length > 0) {
+      return { manifest, errors: prerequisiteErrors };
+    }
+
+    const typographyResult = await validateTypographyFoundation({
+      repoRoot,
+      dataPath: typographySources.typographySource.path,
+      schemaPath: typographySources.typographySchemaSource.path,
+    });
+    return { manifest, errors: sortDiagnostics(typographyResult.errors) };
   } catch (error) {
     if (error instanceof AggregateError) {
       return { manifest: null, errors: error.errors };
