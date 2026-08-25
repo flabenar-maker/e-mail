@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/flabenar-maker/e-mail/schemas/spacing.schema.json",
+  "type": "object",
+  "required": ["schema_version", "foundation", "viewports", "roles", "global_invariants", "exceptions", "provenance"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "foundation": {
+      "type": "object",
+      "required": ["id", "status"],
+      "properties": {
+        "id": { "const": "spacing" },
+        "status": { "const": "shadow" }
+      }
+    },
+    "viewports": {
+      "type": "array",
+      "const": ["mobile", "desktop"]
+    },
+    "roles": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "relationship", "owner", "purpose", "applicability", "resolutions"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "relationship": { "type": "string", "minLength": 1 },
+          "owner": { "type": "string", "minLength": 1 },
+          "purpose": { "type": "string", "minLength": 1 },
+          "applicability": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "resolutions": {
+            "type": "object",
+            "required": ["mobile", "desktop"],
+            "properties": {
+              "mobile": { "$ref": "#/$defs/resolution" },
+              "desktop": { "$ref": "#/$defs/resolution" }
+            }
+          }
+        }
+      }
+    },
+    "global_invariants": { "type": "array", "minItems": 1 },
+    "exceptions": { "type": "array" },
+    "provenance": { "type": "object" }
+  },
+  "$defs": {
+    "resolution": {
+      "type": "object",
+      "required": ["value_px", "provenance"],
+      "properties": {
+        "value_px": { "type": "integer", "minimum": 0 },
+        "provenance": {
+          "type": "object",
+          "required": ["kind", "source_path"],
+          "properties": {
+            "kind": { "const": "registry-literal" },
+            "source_path": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    }
+  }
+}
