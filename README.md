@@ -6,6 +6,10 @@
 
 `system/manifest.yaml` — единственная машинно-читаемая карта системы. Она связывает текущие источники, маршруты, наборы контекста, навыки, плагины и bootstrap-команды. Пути нужно разрешать через manifest; будущие или сгенерированные файлы нельзя считать существующими, пока они явно не добавлены в него.
 
+### Теневой пилот типографики
+
+`data/foundations/typography.yaml` — проверяемый структурированный пилот определений текстовых стилей. `registry/email-typography-registry.md` пока остаётся контрольным Markdown-снимком и текущим владельцем списков компонентов-потребителей. Рабочие bundle profiles продолжают использовать Markdown-реестр до отдельного этапа перехода на generated docs и context bundles.
+
 ## Восстановление контекста
 
 После открытия этого репозитория достаточно сказать Codex:
@@ -71,7 +75,9 @@
 | `core/email-figma-prompt.md` | Единственный источник общих технических правил вёрстки |
 | `core/figma-component-naming-standard.md` | Единственный источник общих правил нейминга и классификации Figma-объектов |
 | `registry/email-component-descriptions-registry.md` | Актуальный фактический слепок descriptions и состава компонентов |
-| `registry/email-typography-registry.md` | Актуальный фактический слепок текстовых стилей, их параметров, семантики и компонентов-потребителей |
+| `data/foundations/typography.yaml` | Валидируемый structured-пилот определений текстовых стилей; ещё не подключён к рабочим bundle profiles |
+| `schemas/typography.schema.json` | Строгая машинная схема structured-пилота типографики |
+| `registry/email-typography-registry.md` | Контрольный Markdown-снимок типографики и текущий владелец списков компонентов-потребителей до cutover |
 | `workflows/library-maintenance-checkpoint.md` | Процесс поддержки инструкции, реестра и Figma-библиотеки |
 | `workflows/email-build-checkpoint.md` | Процесс вёрстки нового или изменения существующего письма |
 | `templates/email-project-brief.md` | Шаблон входных данных, копируемый в локальную папку письма |
