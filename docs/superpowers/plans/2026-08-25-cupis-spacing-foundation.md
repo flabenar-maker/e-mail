@@ -109,7 +109,7 @@ The foundation answers “how may a new component select an exact spacing value?
 - Complete list of in-scope production components, nested items, root shells, templates and export-only assets.
 - Audit worksheet in working memory with one row per spacing relationship and no inferred semantics.
 
-- [ ] **Step 1: Pin and record the baseline**
+- [x] **Step 1: Pin and record the baseline**
 
 Resolve `main`, then fetch at that exact SHA:
 
@@ -125,7 +125,7 @@ docs/superpowers/specs/2026-08-24-cupis-structured-email-system-design.md
 
 Stop if any source is missing. Do not substitute local files.
 
-- [ ] **Step 2: Enumerate every auditable Figma object**
+- [x] **Step 2: Enumerate every auditable Figma object**
 
 Read the four roots and classify every relevant descendant as:
 
@@ -140,7 +140,7 @@ export-asset
 
 Examples and export assets may provide context but must not create layout spacing contracts unless their own geometry participates in HTML.
 
-- [ ] **Step 3: Capture actual spacing facts**
+- [x] **Step 3: Capture actual spacing facts**
 
 For every Mobile and Desktop variant, record:
 
@@ -169,7 +169,7 @@ registry_value
 
 Record values as observed. Do not classify equal numbers as the same role.
 
-- [ ] **Step 4: Separate spacing from non-spacing geometry**
+- [x] **Step 4: Separate spacing from non-spacing geometry**
 
 Mark each fact as one of:
 
@@ -184,7 +184,7 @@ unknown
 
 Export crop, image dimensions, border radius and typography metrics are not spacing tokens.
 
-- [ ] **Step 5: Verify inventory completeness**
+- [x] **Step 5: Verify inventory completeness**
 
 Every active component heading in `registry/email-component-descriptions-registry.md` must map to an audited Figma object or to an explicit non-layout reason. Report missing, renamed and unregistered objects before continuing.
 
@@ -203,7 +203,7 @@ Every active component heading in `registry/email-component-descriptions-registr
 - Candidate semantic relationship map with evidence citations.
 - Explicit list of values that cannot yet be classified.
 
-- [ ] **Step 1: Classify each relationship**
+- [x] **Step 1: Classify each relationship**
 
 Use the smallest vocabulary that explains the evidence:
 
@@ -223,7 +223,7 @@ optical-compensation
 
 A new class may be proposed only when no existing class accurately expresses the relationship across the audited components.
 
-- [ ] **Step 2: Distinguish ownership**
+- [x] **Step 2: Distinguish ownership**
 
 For every relationship, identify exactly one owner:
 
@@ -240,15 +240,15 @@ asset owner
 
 Reject double ownership such as `email-padding` plus a repeated component inset.
 
-- [ ] **Step 3: Compare Mobile and Desktop independently**
+- [x] **Step 3: Compare Mobile and Desktop independently**
 
 Create explicit Mobile and Desktop observations for each semantic relationship. Do not write `base + override`; record two complete outcomes.
 
-- [ ] **Step 4: Group evidence without promoting tokens**
+- [x] **Step 4: Group evidence without promoting tokens**
 
 For each candidate semantic role, list all observed exact values and every supporting component. Equal numbers remain separate observations until their role, ownership and binding also agree.
 
-- [ ] **Step 5: Isolate unexplained deviations**
+- [x] **Step 5: Isolate unexplained deviations**
 
 For each deviation, report:
 
@@ -279,7 +279,7 @@ Do not resolve the deviation automatically.
 **Produces:**
 - `docs/superpowers/specs/2026-08-25-cupis-spacing-foundation-design.md`.
 
-- [ ] **Step 1: Write the decision tree for new components**
+- [x] **Step 1: Write the decision tree for new components**
 
 The design document must require this order:
 
@@ -289,7 +289,7 @@ relationship → owner → viewport → semantic role → exact value → compon
 
 The decision tree must state when a relationship is not represented and therefore requires a foundation extension rather than an improvised value.
 
-- [ ] **Step 2: Define design-time behavior**
+- [x] **Step 2: Define design-time behavior**
 
 Design-time may:
 
@@ -307,7 +307,7 @@ Design-time may not:
 - create a one-component schema exception;
 - silently reuse Desktop spacing on Mobile.
 
-- [ ] **Step 3: Define build-time behavior**
+- [x] **Step 3: Define build-time behavior**
 
 Build-time receives only resolved component fields. It must:
 
@@ -319,7 +319,7 @@ return a typed unresolved-spacing blocker
 
 It must not receive candidate values, allowed sets, selection recommendations, confidence scores or design-time decision branches.
 
-- [ ] **Step 4: Define exception handling**
+- [x] **Step 4: Define exception handling**
 
 An approved exception must contain:
 
@@ -336,7 +336,7 @@ evidence node ID
 
 A missing rationale, generic “visual” reason or numerical mismatch alone is invalid.
 
-- [ ] **Step 5: Define the foundation-to-component interface**
+- [x] **Step 5: Define the foundation-to-component interface**
 
 The spacing foundation exposes:
 
@@ -346,7 +346,7 @@ resolveDesignSpacing(role_id, viewport) -> exact value or typed blocker
 
 The future component registry stores the returned exact value plus the foundation reference. The future HTML bundle exposes only the exact component value.
 
-- [ ] **Step 6: Self-review the audited design document**
+- [x] **Step 6: Self-review the audited design document**
 
 Check for:
 
@@ -359,6 +359,8 @@ Check for:
 - no asset or typography rules added.
 
 **Checkpoint 3:** User reviews and approves the audited spacing design document before any schema or canonical data is created.
+
+**Current status:** design document created and self-reviewed on branch `codex/add-spacing-golden-rule-spec-20260825`; waiting for explicit user approval before Task 4 or any schema/data implementation.
 
 ---
 
@@ -813,8 +815,8 @@ Stop after opening the draft PR. Do not merge without separate authorization.
 
 Use this compact status list during the long task:
 
-- [ ] 1. Baseline pinned and full library inventory complete
-- [ ] 2. Relationships classified; deviations reviewed by user
+- [x] 1. Baseline pinned and full library inventory complete
+- [x] 2. Relationships classified; deviations reviewed by user
 - [ ] 3. Golden rule and exact-only boundary approved
 - [ ] 4. Rule proves 100% compatibility with current design
 - [ ] 5. Spacing schema and canonical YAML created
