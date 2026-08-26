@@ -1,6 +1,6 @@
 # Реестр описаний компонентов email-библиотек
 
-Актуальность слепка: 2026-08-20.
+Актуальность слепка: 2026-08-26.
 
 Источник: Figma-файл `CD_Email_Шаблоны писем` (`8zka5bHkcrJVK9I9dKjnhC`), страница `Email Components` (`5:6`).
 
@@ -763,19 +763,27 @@ Gap между текстовыми элементами: Mobile 8px, Desktop 12
 Asset/Card-Image @2x
 
 SCOPE
-Атомарный составной DIRECT IMAGE внутри Card/Image. HTML-текст карточки в asset не входит.
+Атомарный составной asset внутри Card/Image. HTML-текст карточки в asset не входит.
+
+SOURCE AND DISPLAY MODES
+Source mode: RENDERED NODE.
+Display mode: DIRECT IMAGE.
 
 VARIANTS
-Image: только изображение.
-Numbered Image: изображение вместе с видимым слоем Number. Номер является частью итогового JPEG; не верстать его живым HTML и не экспортировать отдельным файлом.
+Style=Plain: только изображение.
+Style=Numbered: изображение вместе с видимым слоем Number. Номер является частью итогового JPEG; не верстать его живым HTML и не экспортировать отдельным файлом.
 
 EXPORT BOUNDARY
-Из конкретного Desktop-инстанса письма экспортировать весь видимый слой “Asset/Card-Image @2x” после применения варианта и overrides, включая все вложенные графические элементы. Не извлекать только исходный Fill и не отделять Number.
+Из конкретного Desktop-инстанса письма экспортировать точный вложенный инстанс “Asset/Card-Image @2x” после применения Style и всех overrides, включая собственный Fill и все видимые вложенные графические элементы.
 
-Применять контракт @2x DIRECT IMAGE основной инструкции. Использовать один JPEG и один src для Mobile и Desktop.
+Не экспортировать main component, исходный библиотечный вариант или placeholder. Не извлекать только IMAGE Fill и не отделять Number.
+
+Если фактический export boundary содержит presentation-only radius или clipsContent, экспортировать через временную копию того же инстанса с общим и покомпонентными radius 0 и clipsContent=false. Fill, crop, размеры, пропорции, Style, overrides и вложенную графику не изменять. Сначала экспортировать lossless PNG @2x, затем локально перекодировать его в JPEG по общей инструкции. Временную копию удалить и проверить отсутствие изменений исходного инстанса.
 
 PROPORTIONS AND RADIUS
-Asset остаётся прямоугольным в пропорции 232:148. Скругление 14px Mobile / 18px Desktop задаёт clipping-контейнер Card/Image в HTML; не запекать скругление или matte-подложку в JPEG.
+Desktop display: 232×148px; итоговый JPEG @2x: 464×296px. Asset остаётся прямоугольным в пропорции 232:148. Скругление 14px Mobile / 18px Desktop задаёт clipping-контейнер Card/Image в HTML; не запекать скругление или matte-подложку в JPEG.
+
+Использовать один JPEG и один src для Mobile и Desktop.
 ````
 
 ### `Card/Image`
@@ -807,9 +815,18 @@ Image radius 18px. Внутри text-content gap 6px.
 Heading 20px, description 16px/140%, link 16px/140%.
 
 ASSET
-Из конкретного Desktop-инстанса экспортировать исходный растр из Fill слоя Asset/Card-Image @2x как один JPEG @2x. Один файл и один src использовать в Mobile и Desktop.
+Source mode: RENDERED NODE.
+Display mode: DIRECT IMAGE.
 
-На Mobile изменение ширины изображения обязано пропорционально менять его высоту. Не задавать фиксированную высоту, не использовать cover и не растягивать изображение одновременно по двум осям.
+Из конкретного Desktop-инстанса письма экспортировать точный вложенный инстанс Asset/Card-Image @2x после применения Style и всех overrides. Экспортировать весь составной asset: фактическое изображение из Fill этого инстанса, видимый Number для Style=Numbered и остальные вложенные графические элементы, относящиеся к asset.
+
+Не экспортировать main component или библиотечный placeholder. Не извлекать только исходный IMAGE Fill. Number не верстать живым HTML и не экспортировать отдельно.
+
+Итоговый asset должен быть прямоугольным, без запечённого скругления и matte-подложки. Радиус 14px Mobile / 18px Desktop задаёт clipping-контейнер в HTML. Если export boundary в Figma содержит presentation-only radius или clipsContent, применять процедуру временной копии из основной инструкции.
+
+Desktop display: 232×148px; итоговый JPEG @2x: 464×296px. Один файл и один src использовать в Mobile и Desktop.
+
+На Mobile использовать width:100%; height:auto без HTML-атрибута height. Изменение ширины изображения обязано пропорционально менять его высоту. Не задавать фиксированную высоту, не использовать cover и не растягивать изображение одновременно по двум осям.
 ````
 
 ### `Block/Icon-List`
