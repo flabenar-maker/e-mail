@@ -29,6 +29,7 @@ const fixtureFiles = [
   "schemas/manifest.schema.json",
   "schemas/typography.schema.json",
   "system/manifest.yaml",
+  "docs/superpowers/plans/2026-08-25-cupis-migration-roadmap.md",
   "data/foundations/typography.yaml",
   "schemas/spacing.schema.json",
   "data/foundations/spacing.yaml",
@@ -70,6 +71,32 @@ test("loads the repository canonical manifest", async () => {
   const manifest = await canonicalManifest();
   assert.equal(manifest.schema_version, "1.0.0");
   assert.equal(manifest.system.id, "cupis-email-system");
+});
+
+test("migration progress resolves the canonical roadmap bundle", async () => {
+  const manifest = await canonicalManifest();
+  const source = manifest.sources.find(
+    (item) => item.id === "migration-roadmap",
+  );
+  const profile = manifest.bundle_profiles.find(
+    (item) => item.id === "migration-progress",
+  );
+  const route = manifest.routes.find(
+    (item) => item.id === "migration-progress",
+  );
+
+  assert.deepEqual(source, {
+    id: "migration-roadmap",
+    kind: "entrypoint",
+    path: "docs/superpowers/plans/2026-08-25-cupis-migration-roadmap.md",
+  });
+  assert.deepEqual(profile.source_ids, [
+    "repository-readme",
+    "migration-roadmap",
+    "library-maintenance-checkpoint",
+  ]);
+  assert.equal(route.workflow_source_id, "library-maintenance-checkpoint");
+  assert.equal(route.bundle_profile_id, "migration-progress");
 });
 
 test("rejects an unsupported manifest schema version", async () => {
