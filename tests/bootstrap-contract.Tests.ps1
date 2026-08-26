@@ -32,7 +32,7 @@ function Copy-ContractFixture {
     }
     foreach ($directory in @(
         'bootstrap', '.agents', 'core', 'registry', 'workflows',
-        'system', 'schemas', 'templates', 'data'
+        'system', 'schemas', 'templates', 'data', 'docs'
     )) {
         Copy-Item -Recurse -LiteralPath (Join-Path $Source $directory) -Destination (Join-Path $Destination $directory)
     }

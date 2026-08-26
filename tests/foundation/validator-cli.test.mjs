@@ -16,6 +16,7 @@ const fixtureFiles = [
   "schemas/manifest.schema.json",
   "schemas/typography.schema.json",
   "system/manifest.yaml",
+  "docs/superpowers/plans/2026-08-25-cupis-migration-roadmap.md",
   "data/foundations/typography.yaml",
   "schemas/spacing.schema.json",
   "data/foundations/spacing.yaml",

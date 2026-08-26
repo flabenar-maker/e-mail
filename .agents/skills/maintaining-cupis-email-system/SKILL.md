@@ -19,6 +19,8 @@ Select the applicable `routes[].id`, resolve its `bundle_profile_id`, then resol
 
 Use the resolved README to assign file responsibility and the resolved maintenance workflow to classify the task, set scope, synchronize dependencies and choose checks. Source roles come from manifest `kind`; this skill does not maintain a second path list.
 
+For any question about migration status, the next stage, completed stages, or updating the migration sequence, select the `migration-progress` route. At the pinned SHA, list `docs/superpowers/plans/` and re-read the roadmap resolved by that route before answering. Never infer progress from chat memory. Mark a stage complete only after verifying its required artifacts are merged into `main`; record its implementation-plan or PR link when available.
+
 ## Route
 
 1. State whether the task is read-only or allows writes. For writes, name the permitted objects, properties, dependent synchronization, and preserved areas before changing anything.
