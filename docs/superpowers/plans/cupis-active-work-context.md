@@ -295,11 +295,11 @@
 
 ## 16. Ключевые ссылки
 
-- [README](../../README.md)
-- [System manifest](../../system/manifest.yaml)
+- [README](../../../README.md)
+- [System manifest](../../../system/manifest.yaml)
 - [Master-spec](../specs/2026-08-24-cupis-structured-email-system-design.md)
 - [Migration roadmap](2026-08-25-cupis-migration-roadmap.md)
 - [Assets foundation implementation plan](2026-08-26-cupis-assets-foundation.md)
-- [Library maintenance checkpoint](../../workflows/library-maintenance-checkpoint.md)
-- [Core email/Figma prompt](../../core/email-figma-prompt.md)
-- [Component descriptions registry](../../registry/email-component-descriptions-registry.md)
+- [Library maintenance checkpoint](../../../workflows/library-maintenance-checkpoint.md)
+- [Core email/Figma prompt](../../../core/email-figma-prompt.md)
+- [Component descriptions registry](../../../registry/email-component-descriptions-registry.md)
