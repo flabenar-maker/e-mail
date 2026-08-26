@@ -124,14 +124,17 @@ Master-спецификация владеет архитектурными ре
 ### 14. Cutover
 
 - [ ] Переключить рабочие маршруты на структурированные источники и generated bundles.
+- [ ] Перевести foundations, прошедшие shadow comparison, из временного `shadow`-режима в итоговый рабочий статус.
 - [ ] Подтвердить validation, bootstrap, skills и GitHub/Figma workflows.
-- [ ] Зафиксировать rollback point перед удалением старых дублей.
+- [ ] Зафиксировать rollback point и полный список временных migration/shadow-артефактов перед очисткой.
 
-### 15. Удаление старых дублей
+### 15. Удаление старых дублей и временных migration-артефактов
 
 - [ ] Выполнить отдельной задачей после успешного cutover.
-- [ ] Удалить только источники, которые больше не используются manifest, routes, bundles, skills и bootstrap.
-- [ ] Подтвердить отсутствие ссылок на удаляемые пути.
+- [ ] Для каждого migration/shadow-артефакта зафиксировать решение `remove` или `preserve` и его фактических потребителей.
+- [ ] Удалить старые источники, shadow-only bundle/profile wiring, comparison baselines, compatibility paths, временные flags/statuses и проверки, единственной целью которых была миграция.
+- [ ] Сохранить постоянные schemas, semantic validators/resolvers, CI validation и regression-тесты, которые защищают действующие правила после cutover.
+- [ ] Подтвердить, что manifest, routes, bundles, skills и bootstrap не ссылаются на удалённые источники или временные механизмы.
 
 ## Правило обновления roadmap
 
