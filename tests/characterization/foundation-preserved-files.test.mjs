@@ -8,11 +8,11 @@ import { fileURLToPath } from "node:url";
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const preserved = {
   "core/email-figma-prompt.md":
-    "37ff4cdf5910e39b712decd85898be29d2283563",
+    "b4fc6d5c2d4b32f0d6b0ce2cd567ca8078945068",
   "core/figma-component-naming-standard.md":
     "97c922e918244d6142d3e82bc89f9ca09652389d",
   "registry/email-component-descriptions-registry.md":
-    "b30aabd33868155b87484fb9098fd4abadb538af",
+    "52893694e97a8751517f9174a90376e1eb849e0c",
   "registry/email-typography-registry.md":
     "12e5ae0b0aa1c5f18f9132e2e948e6a712c0f1bd",
   "workflows/library-maintenance-checkpoint.md":
