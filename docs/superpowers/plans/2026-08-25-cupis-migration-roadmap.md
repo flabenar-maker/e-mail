@@ -77,6 +77,8 @@ Master-спецификация владеет архитектурными ре
 
 Уточнение export contract, слитое в PR #28, является актуальным baseline для этого подэтапа, а не окончательным местом хранения правил.
 
+Подробный план: [assets foundation](2026-08-26-cupis-assets-foundation.md). Статус реализации не меняется до слияния отдельного implementation PR.
+
 #### 5Б. Figma naming foundation
 
 - [ ] Создать и согласовать отдельный implementation plan figma-naming foundation.
