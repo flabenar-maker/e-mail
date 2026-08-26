@@ -1,6 +1,6 @@
 # CUPIS Structured System Migration Roadmap
 
-Актуальность: 2026-08-25.
+Актуальность: 2026-08-26.
 
 ## Назначение
 
@@ -15,6 +15,18 @@ Master-спецификация владеет архитектурными ре
 - один технический этап выполняется в отдельной branch и PR;
 - следующий этап начинается после проверки и слияния предыдущего;
 - если этап требует нового архитектурного решения, сначала обновляется master-спецификация.
+
+## Обязательная сверка прогресса
+
+Перед любым ответом о текущем этапе, завершённой работе или следующем шаге:
+
+1. закрепить актуальный SHA ветки `main`;
+2. повторно открыть этот roadmap из `docs/superpowers/plans/`;
+3. проверить состав папки `docs/superpowers/plans/` и наличие связанного implementation plan текущего этапа;
+4. сверить отмеченный статус с фактически слитыми в `main` артефактами;
+5. не восстанавливать статус только по памяти чата.
+
+Этап отмечается завершённым только после его слияния в `main`. После слияния в roadmap добавляются фактическая ссылка на implementation plan или PR и новый статус. Если подробный plan ещё не создан, следующим действием является его создание и review, а не начало реализации.
 
 ## Последовательность
 
@@ -51,10 +63,27 @@ Master-спецификация владеет архитектурными ре
 
 ### 5. Остальные foundations
 
-- [ ] Перенести asset/export contracts в структурированный assets foundation.
-- [ ] Перенести универсальные правила Figma naming в структурированный figma-naming foundation.
-- [ ] Добавить schemas, validation, characterization и manifest references каждого foundation.
-- [ ] Сохранить конкретные component contracts вне общих foundations.
+Этап выполняется двумя последовательными подэтапами. Каждый подэтап получает отдельный implementation plan, branch и PR. Подэтап 5Б начинается только после слияния 5А.
+
+#### 5А. Assets foundation — текущий следующий этап
+
+- [ ] Создать и согласовать подробный implementation plan assets foundation.
+- [ ] Зафиксировать действующие asset/export rules из `core/email-figma-prompt.md` и component contracts как comparison baseline; не удалять старый активный источник до общего cutover.
+- [ ] Перенести общую структурированную модель в `data/foundations/assets.yaml`: source mode, export boundary, display mode, scale, format, alpha, Fill/background policy, crop, proportions и presentation-only clipping.
+- [ ] Создать `schemas/assets.schema.json`, semantic validation и characterization-проверки эквивалентности baseline.
+- [ ] Объявить assets foundation и schema в manifest как shadow-источники. Не подключать foundation параллельно к действующим email-build bundles до этапа generated context bundles.
+- [ ] Сохранить конкретные владельцы, границы экспорта, display-размеры и компонентные исключения в component contracts; не переносить их в общий foundation.
+- [ ] Не менять Figma-дизайн, descriptions, конкретные письма или готовые assets в рамках технической миграции foundation.
+
+Уточнение export contract, слитое в PR #28, является актуальным baseline для этого подэтапа, а не окончательным местом хранения правил.
+
+#### 5Б. Figma naming foundation
+
+- [ ] Создать и согласовать отдельный implementation plan figma-naming foundation.
+- [ ] Перенести универсальные naming definitions в `data/foundations/figma-naming.yaml` без миграции существующей библиотеки.
+- [ ] Создать schema, semantic validation, characterization и manifest references.
+- [ ] Сохранить `@2x` и `@4x` обязательной частью имени asset owner; не смешивать naming definitions с конкретными component records.
+- [ ] Завершить общий этап 5 только после слияния обоих подэтапов и проверки отсутствия изменений Figma и component contracts.
 
 ### 6. Структурированный component registry
 
@@ -71,15 +100,20 @@ Master-спецификация владеет архитектурными ре
 
 ### 8. Core и workflows cutover
 
-- [ ] Разделить Core по утверждённой ответственности.
+- [ ] Разделить Core по утверждённой ответственности на `email-rendering-standard.md`, `typography-standard.md`, `asset-export-standard.md` и `figma-library-standard.md`.
+- [ ] Не переносить точные structured definitions обратно в Core: Core объясняет нормативные принципы, foundations владеют проверяемыми определениями.
 - [ ] Перевести maintenance и email-build workflows в структурированный формат.
 - [ ] Сохранить HTML-вёрстку зависимой от фактического инстанса и component contract, а не от design-time золотых правил.
 - [ ] Выполнить characterization comparison со старыми Markdown-источниками.
+- [ ] Сохранить прежний общий prompt только как comparison baseline до общего cutover; не подавать старый и новый набор правил одновременно в рабочий bundle.
 
 ### 9. Maintenance skill cutover
 
-- [ ] Перевести `maintaining-cupis-email-system` на manifest route и context bundle.
+Manifest-driven разрешение source paths было выполнено на этапе 2. Этот этап не повторяет первоначальный переход на manifest: он переключает навык с временных Markdown-oriented profiles на итоговые generated context bundles.
+
+- [ ] Перевести `maintaining-cupis-email-system` на итоговые route-specific context bundles.
 - [ ] Сохранить навык тонким маршрутизатором без копий правил и жёсткого списка путей.
+- [ ] Сохранить отдельный `migration-progress` route, требующий свежей сверки с roadmap перед ответом о статусе или следующих шагах.
 - [ ] Проверить mutation impact gate, cloud-only GitHub flow и Figma mutation gate.
 
 ### 10. Стандарт и workflow разработки новых блоков
@@ -138,4 +172,4 @@ Master-спецификация владеет архитектурными ре
 
 ## Правило обновления roadmap
 
-После слияния этапа обновляется только его статус и ссылка на фактический implementation plan или PR. Новое системное правило сначала фиксируется в master-спецификации; roadmap не используется как скрытый источник технических правил.
+После слияния этапа обновляется только его статус и ссылка на фактический implementation plan или PR. Перед таким обновлением статус повторно проверяется по актуальному `main` и содержимому `docs/superpowers/plans/`. Новое системное правило сначала фиксируется в master-спецификации; roadmap не используется как скрытый источник технических правил.
