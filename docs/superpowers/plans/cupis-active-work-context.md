@@ -2,9 +2,9 @@
 
 Статус документа: ручной checkpoint для восстановления контекста.
 
-Последнее ручное обновление: 2026-08-26.
+Последнее ручное обновление: 2026-08-27.
 
-Снимок `main` на момент обновления: `a7ec297ef52dee539a783220239b4772387cf1dc`.
+Снимок `main` на момент обновления: `57547adc1ae7a184a83019aec40cee28046d8c35`.
 
 ## 1. Зачем нужен этот файл
 
@@ -95,83 +95,75 @@
    - золотое правило для разработки библиотеки;
    - exact-only resolver;
    - запрет использования этого design-time правила для выбора отступов при HTML-вёрстке;
-5. migration-progress route и правило обязательной сверки roadmap;
-6. обновление maintenance skill для manifest-driven работы;
-7. подробный implementation plan Assets foundation.
+5. Assets foundation в shadow-режиме:
+   - `data/foundations/assets.yaml` и строгая schema;
+   - semantic validation и exact-only resolver;
+   - characterization-защита границы между общими definitions и component contracts;
+   - источники объявлены в manifest, но не входят в рабочие bundles;
+6. migration-progress route и правило обязательной сверки roadmap;
+7. maintenance skill для manifest-driven работы.
 
-План Assets foundation был согласован и слит через [PR #30](https://github.com/flabenar-maker/e-mail/pull/30).
+Assets foundation реализован и слит через [PR #33](https://github.com/flabenar-maker/e-mail/pull/33), итоговый commit: `fe1a0e37b4d40533706c88d73f5c293c8860b3ee`. Статус roadmap обновлён отдельным [PR #34](https://github.com/flabenar-maker/e-mail/pull/34).
+
+В рамках подэтапа 5А не менялись Figma, descriptions компонентов, конкретные HTML-письма и готовые изображения. Старые Markdown-источники остаются активной базой до общего cutover.
 
 ## 7. Текущий этап
 
-Текущий этап миграции — **5А. Assets foundation**.
+Текущий следующий этап миграции — **5Б. Figma naming foundation**.
 
-Подробный план уже находится в:
+По актуальному roadmap требуется:
 
-- [2026-08-26-cupis-assets-foundation.md](2026-08-26-cupis-assets-foundation.md).
+- создать и согласовать отдельный implementation plan;
+- перенести универсальные naming definitions в structured shadow-источник;
+- добавить schema, semantic validation, characterization и manifest references;
+- сохранить `@2x` и `@4x` обязательной частью имени asset owner;
+- не смешивать общие naming definitions с конкретными component records.
 
-Важно различать:
-
-- план этапа создан, согласован и находится в `main`;
-- реализация `data/foundations/assets.yaml`, schema, validator и tests ещё не начиналась;
-- наличие implementation plan не означает завершение подэтапа 5А;
-- Figma, descriptions, HTML-письма и изображения в ходе планирования не менялись.
+Отдельного implementation plan для 5Б в `docs/superpowers/plans/` пока нет. Поэтому реализацию, изменение Figma и миграцию существующих имён начинать нельзя: следующим действием является создание и review плана.
 
 ## 8. Следующий точный шаг
 
-Перед началом реализации:
+Перед работой над 5Б:
 
 1. повторно закрепить актуальный SHA `main`;
 2. открыть [migration roadmap](2026-08-25-cupis-migration-roadmap.md);
 3. проверить состав `docs/superpowers/plans/`;
-4. перечитать актуальный Assets implementation plan;
-5. убедиться, что с момента этого checkpoint не появился более новый план или PR;
-6. создать новую implementation branch от свежего `main`;
-7. выполнять Tasks 1–8 плана последовательно, с RED/GREEN через GitHub Actions;
-8. не сливать implementation PR без отдельной команды пользователя.
+4. сверить master-спецификацию, naming standard и действующие manifest boundaries;
+5. подготовить отдельный implementation plan Figma naming foundation с точными файлами, тестами, RED/GREEN и allowed diff;
+6. отдельно согласовать этот план с пользователем;
+7. только после согласования создать implementation branch от свежего `main`.
 
-Первым техническим действием станет characterization-test существующего asset/export baseline. Он должен сначала показать ожидаемый RED, а затем стать GREEN после добавления structured foundation.
+До утверждения плана не создавать `figma-naming.yaml`, не менять manifest и не выполнять Figma mutation.
 
-## 9. Граница подэтапа Assets foundation
+## 9. Предварительная граница Figma naming foundation
 
-Подэтап создаёт структурированный shadow-источник общих правил изображений:
-
-- source mode;
-- display mode;
-- export profile;
-- format и scale;
-- alpha/transparency;
-- background policy;
-- crop и proportions;
-- presentation-only clipping;
-- compatibility и exact-only resolution.
+Подэтап 5Б должен создать структурированный shadow-источник универсальных правил нейминга и его машинные проверки.
 
 Он не должен:
 
-- менять существующий Core prompt;
-- менять component registry;
-- менять Figma или descriptions;
-- экспортировать реальные изображения;
-- менять HTML-письма;
-- переносить component-specific owner, export boundary или display sizes в общий foundation;
-- подключать новый foundation к рабочим email-build bundles до этапа generated context bundles.
+- переименовывать существующие компоненты или слои Figma;
+- менять структуру, свойства, variants, geometry или descriptions компонентов;
+- переносить конкретные component records в общий foundation;
+- удалять или ослаблять суффиксы `@2x` и `@4x` у asset owners;
+- подключать новый shadow-источник к рабочим bundles до предусмотренного roadmap cutover;
+- менять HTML-письма или локальные изображения.
 
-Точные определения находятся в Assets implementation plan. Этот раздел объясняет только границу этапа и не заменяет план.
+Это только навигационная граница из roadmap. Точный data contract, файлы, diagnostics и проверки должен определить отдельный согласованный implementation plan 5Б.
 
-## 10. Следующие этапы после 5А
+## 10. Следующие этапы после 5Б
 
-Текущая последовательность задаётся roadmap. На момент checkpoint после Assets foundation запланированы:
+Текущая последовательность задаётся roadmap. После Figma naming foundation запланированы:
 
-1. 5Б — Figma naming foundation;
-2. структурированный component registry;
-3. generated docs и route-specific context bundles;
-4. разделение Core и workflows;
-5. cutover maintenance skill;
-6. стандарт и workflow разработки новых блоков;
-7. отдельный skill разработки новых блоков;
-8. отдельный skill HTML-вёрстки писем;
-9. shadow comparison;
-10. общий cutover;
-11. удаление старых дублей и временных migration-артефактов.
+1. структурированный component registry;
+2. generated docs и route-specific context bundles;
+3. разделение Core и workflows;
+4. cutover maintenance skill;
+5. стандарт и workflow разработки новых блоков;
+6. отдельный skill разработки новых блоков;
+7. отдельный skill HTML-вёрстки писем;
+8. shadow comparison;
+9. общий cutover;
+10. удаление старых дублей и временных migration-артефактов.
 
 Нельзя перескакивать к следующему этапу только потому, что он описан здесь. Перед ответом о следующей работе всегда проверяется актуальный roadmap.
 
@@ -223,7 +215,7 @@
 
 ### Assets
 
-До structured cutover действующие детали читаются из Core prompt и component contracts. Стабильные решения, которые нельзя потерять при миграции:
+Assets foundation уже существует как валидируемый shadow-источник и объявлен в manifest, но до structured cutover рабочая HTML-вёрстка продолжает читать действующие детали из Core prompt и component contracts. Стабильные решения, которые нельзя потерять:
 
 - `@2x` и `@4x` сохраняются в имени asset owner;
 - один визуальный asset использует общий файл для Mobile и Desktop;
@@ -265,7 +257,7 @@
 7. прочитать README, migration roadmap и maintenance checkpoint на том же SHA;
 8. заново получить список `docs/superpowers/plans/`;
 9. сравнить roadmap с реально присутствующими merged-артефактами;
-10. открыть implementation plan фактически текущего этапа;
+10. открыть implementation plan фактически текущего этапа; если его ещё нет, следующим действием считать создание и review плана, а не реализацию;
 11. проверить открытые или недавно слитые PR, если они влияют на статус;
 12. только после этого предлагать или выполнять следующий шаг.
 
@@ -300,6 +292,8 @@
 - [Master-spec](../specs/2026-08-24-cupis-structured-email-system-design.md)
 - [Migration roadmap](2026-08-25-cupis-migration-roadmap.md)
 - [Assets foundation implementation plan](2026-08-26-cupis-assets-foundation.md)
+- [Assets foundation](../../../data/foundations/assets.yaml)
+- [Assets schema](../../../schemas/assets.schema.json)
 - [Library maintenance checkpoint](../../../workflows/library-maintenance-checkpoint.md)
 - [Core email/Figma prompt](../../../core/email-figma-prompt.md)
 - [Component descriptions registry](../../../registry/email-component-descriptions-registry.md)
