@@ -4,6 +4,8 @@ import { readFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { readStrictYaml } from "../../scripts/lib/strict-yaml.mjs";
+
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 
 function escapeRegExp(value) {
@@ -59,9 +61,54 @@ test("assets shadow source preserves the approved global contracts", async () =>
     assert.match(spec, new RegExp(escapeRegExp(anchor), "u"));
   }
 
-  const assetsText = await readFile(
+  const assets = await readStrictYaml(
     join(repoRoot, "data/foundations/assets.yaml"),
-    "utf8",
   );
-  assert.match(assetsText, /^schema_version:\s+1\.0\.0$/mu);
+
+  assert.equal(assets.schema_version, "1.0.0");
+  assert.equal(assets.foundation.id, "assets");
+  assert.equal(assets.foundation.status, "shadow");
+  assert.deepEqual(
+    assets.source_modes.map((item) => item.id),
+    ["image-fill", "rendered-node"],
+  );
+  assert.deepEqual(
+    assets.display_modes.map((item) => item.id),
+    ["direct-image", "fill-image"],
+  );
+
+  const profiles = new Map(
+    assets.export_profiles.map((profile) => [profile.id, profile]),
+  );
+  assert.deepEqual(profiles.get("jpeg-2x").contract, {
+    format: "JPEG",
+    extension: ".jpg",
+    scale: 2,
+    suffix: "@2x",
+    color_space: "sRGB",
+    alpha_mode: "none",
+    quality: {
+      base_percent: 82,
+      escalation_percent: 90,
+      escalation_condition: "visible-artifacts-only",
+    },
+    rendered_node_intermediate: "lossless-png",
+  });
+  assert.deepEqual(profiles.get("png-4x").contract, {
+    format: "PNG",
+    extension: ".png",
+    scale: 4,
+    suffix: "@4x",
+    color_space: "sRGB",
+    allowed_alpha_modes: ["transparent", "opaque", "source"],
+    node_export_contents_only: true,
+  });
+  assert.equal(assets.identity_policy.shared_mobile_desktop_file, true);
+  assert.equal(assets.identity_policy.shared_mobile_desktop_src, true);
+  assert.equal(assets.background_policy.artificial_matte, "forbid");
+  assert.deepEqual(assets.provenance.comparison_sources, [
+    "core/email-figma-prompt.md",
+    "registry/email-component-descriptions-registry.md",
+    "docs/superpowers/specs/2026-08-24-cupis-structured-email-system-design.md",
+  ]);
 });
