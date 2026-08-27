@@ -26,6 +26,11 @@ async function readSchema() {
   return JSON.parse(await readFile(schemaPath, "utf8"));
 }
 
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/gu, "\\function hasDiagnostic(errors, code, path) {
+");
+}
+
 function hasDiagnostic(errors, code, path) {
   return errors.some((error) => error.code === code && error.path === path);
 }
