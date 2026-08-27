@@ -4,6 +4,7 @@ import { readFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import * as assetsFoundation from "../../scripts/lib/assets-foundation.mjs";
 import {
   loadAssetsFoundation,
   validateAssetsShape,
@@ -189,4 +190,219 @@ test("strict YAML rejects duplicate assets keys", () => {
       ),
     (error) => error.code === "yaml-duplicate-key",
   );
+});
+
+
+function diagnosticCodes(errors) {
+  return errors.map((error) => error.code);
+}
+
+for (const [name, mutate, expectedCodes] of [
+  [
+    "duplicate definition id",
+    (assets) => {
+      assets.source_modes.push(structuredClone(assets.source_modes[0]));
+    },
+    ["ASSETS_DUPLICATE_ID"],
+  ],
+  [
+    "unknown compatibility reference",
+    (assets) => {
+      assets.compatibility[0].source_mode_ids[0] = "unknown-source";
+    },
+    ["ASSETS_UNKNOWN_REFERENCE"],
+  ],
+  [
+    "missing export-profile compatibility",
+    (assets) => {
+      assets.compatibility = assets.compatibility.filter(
+        (item) => item.export_profile_id !== "jpeg-2x",
+      );
+    },
+    ["ASSETS_PROFILE_COMPATIBILITY_MISSING"],
+  ],
+  [
+    "incompatible JPEG alpha",
+    (assets) => {
+      assets.compatibility[0].alpha_mode_ids.push("transparent");
+    },
+    ["ASSETS_INCOMPATIBLE_ALPHA"],
+  ],
+  [
+    "presentation-only clipping allowed for IMAGE FILL",
+    (assets) => {
+      assets.clipping_policies[1].contract.allowed_source_mode_ids.push(
+        "image-fill",
+      );
+    },
+    ["ASSETS_INCOMPATIBLE_CLIPPING"],
+  ],
+  [
+    "scale and suffix mismatch",
+    (assets) => {
+      assets.export_profiles[0].contract.suffix = "@4x";
+    },
+    ["ASSETS_SCALE_SUFFIX_MISMATCH"],
+  ],
+  [
+    "invalid JPEG quality policy",
+    (assets) => {
+      assets.export_profiles[0].contract.quality.base_percent = 80;
+    },
+    ["ASSETS_INVALID_JPEG_QUALITY"],
+  ],
+  [
+    "forbidden component build choice",
+    (assets) => {
+      assets.source_modes[0].contract.owner = "hero-image";
+    },
+    ["ASSETS_BUILD_CHOICE_FORBIDDEN"],
+  ],
+]) {
+  test("semantic validation reports " + name + " deterministically", async () => {
+    const assets = await canonicalAssets();
+    mutate(assets);
+
+    const errors = assetsFoundation.validateAssetsSemantics(assets);
+
+    assert.deepEqual(diagnosticCodes(errors), expectedCodes);
+    assert.deepEqual(
+      errors,
+      [...errors].sort(
+        (left, right) =>
+          left.path.localeCompare(right.path) ||
+          left.code.localeCompare(right.code) ||
+          left.message.localeCompare(right.message),
+      ),
+    );
+  });
+}
+
+test("canonical assets foundation is semantically valid", async () => {
+  const assets = await canonicalAssets();
+
+  assert.deepEqual(assetsFoundation.validateAssetsSemantics(assets), []);
+});
+
+for (const selection of [
+  {
+    sourceModeId: "image-fill",
+    displayModeId: "direct-image",
+    exportProfileId: "jpeg-2x",
+    expectedAlphaId: "none",
+    clippingPolicyId: "preserve-artwork",
+  },
+  {
+    sourceModeId: "rendered-node",
+    displayModeId: "direct-image",
+    exportProfileId: "jpeg-2x",
+    expectedAlphaId: "none",
+    clippingPolicyId: "neutralize-presentation-only",
+  },
+  {
+    sourceModeId: "rendered-node",
+    displayModeId: "direct-image",
+    exportProfileId: "png-4x",
+    expectedAlphaId: "transparent",
+    clippingPolicyId: "preserve-artwork",
+  },
+  {
+    sourceModeId: "rendered-node",
+    displayModeId: "direct-image",
+    exportProfileId: "png-4x",
+    expectedAlphaId: "opaque",
+    clippingPolicyId: "preserve-artwork",
+  },
+  {
+    sourceModeId: "image-fill",
+    displayModeId: "fill-image",
+    exportProfileId: "jpeg-2x",
+    expectedAlphaId: "none",
+    clippingPolicyId: "preserve-artwork",
+  },
+]) {
+  test("resolver returns exact " + selection.exportProfileId + " contract without defaults", async () => {
+    const assets = await canonicalAssets();
+    const resolved = assetsFoundation.resolveAssetContract(
+      assets,
+      selection,
+    );
+
+    assert.equal(resolved.source_mode.id, selection.sourceModeId);
+    assert.equal(resolved.display_mode.id, selection.displayModeId);
+    assert.equal(resolved.export_profile.id, selection.exportProfileId);
+    assert.equal(resolved.expected_alpha.id, selection.expectedAlphaId);
+    assert.equal(resolved.clipping_policy.id, selection.clippingPolicyId);
+    assert.equal(
+      resolved.compatibility.export_profile_id,
+      selection.exportProfileId,
+    );
+
+    resolved.source_mode.id = "mutated";
+    assert.notEqual(assets.source_modes[0].id, "mutated");
+  });
+}
+
+for (const [name, selection, expectedCode] of [
+  [
+    "missing selection field",
+    {
+      sourceModeId: "image-fill",
+      displayModeId: "direct-image",
+      exportProfileId: "jpeg-2x",
+      expectedAlphaId: "none",
+    },
+    "ASSETS_UNKNOWN_CONTRACT_VALUE",
+  ],
+  [
+    "unknown selection id",
+    {
+      sourceModeId: "unknown-source",
+      displayModeId: "direct-image",
+      exportProfileId: "jpeg-2x",
+      expectedAlphaId: "none",
+      clippingPolicyId: "preserve-artwork",
+    },
+    "ASSETS_UNKNOWN_CONTRACT_VALUE",
+  ],
+  [
+    "alpha outside profile compatibility",
+    {
+      sourceModeId: "rendered-node",
+      displayModeId: "direct-image",
+      exportProfileId: "jpeg-2x",
+      expectedAlphaId: "transparent",
+      clippingPolicyId: "preserve-artwork",
+    },
+    "ASSETS_INCOMPATIBLE_ALPHA",
+  ],
+  [
+    "presentation-only clipping with IMAGE FILL",
+    {
+      sourceModeId: "image-fill",
+      displayModeId: "direct-image",
+      exportProfileId: "jpeg-2x",
+      expectedAlphaId: "none",
+      clippingPolicyId: "neutralize-presentation-only",
+    },
+    "ASSETS_INCOMPATIBLE_CLIPPING",
+  ],
+]) {
+  test("resolver rejects " + name, async () => {
+    const assets = await canonicalAssets();
+
+    assert.throws(
+      () => assetsFoundation.resolveAssetContract(assets, selection),
+      (error) => error.code === expectedCode,
+    );
+  });
+}
+
+test("foundation validator combines strict loading with semantic checks", async () => {
+  const result = await assetsFoundation.validateAssetsFoundation({
+    repoRoot,
+  });
+
+  assert.equal(result.assets.foundation.id, "assets");
+  assert.deepEqual(result.errors, []);
 });
