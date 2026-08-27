@@ -104,38 +104,6 @@
       "minLength": 1,
       "pattern": "^(?!/)(?![A-Za-z]:)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\)[^\\u0000]+$"
     },
-    "noBuildChoiceFields": {
-      "type": "object",
-      "not": {
-        "anyOf": [
-          {
-            "required": [
-              "owner"
-            ]
-          },
-          {
-            "required": [
-              "export_boundary"
-            ]
-          },
-          {
-            "required": [
-              "display_width"
-            ]
-          },
-          {
-            "required": [
-              "display_height"
-            ]
-          },
-          {
-            "required": [
-              "component_id"
-            ]
-          }
-        ]
-      }
-    },
     "foundation": {
       "type": "object",
       "additionalProperties": false,
@@ -155,11 +123,6 @@
     "sourceContract": {
       "type": "object",
       "additionalProperties": false,
-      "allOf": [
-        {
-          "$ref": "#/$defs/noBuildChoiceFields"
-        }
-      ],
       "required": [
         "source_content",
         "concrete_desktop_instance_required",
@@ -199,11 +162,6 @@
     "sourceMode": {
       "type": "object",
       "additionalProperties": false,
-      "allOf": [
-        {
-          "$ref": "#/$defs/noBuildChoiceFields"
-        }
-      ],
       "required": [
         "id",
         "label",
@@ -234,11 +192,6 @@
     "displayContract": {
       "type": "object",
       "additionalProperties": false,
-      "allOf": [
-        {
-          "$ref": "#/$defs/noBuildChoiceFields"
-        }
-      ],
       "required": [
         "intrinsic_ratio_required",
         "crop_owner",
@@ -282,11 +235,6 @@
     "displayMode": {
       "type": "object",
       "additionalProperties": false,
-      "allOf": [
-        {
-          "$ref": "#/$defs/noBuildChoiceFields"
-        }
-      ],
       "required": [
         "id",
         "label",
@@ -317,11 +265,6 @@
     "qualityPolicy": {
       "type": "object",
       "additionalProperties": false,
-      "allOf": [
-        {
-          "$ref": "#/$defs/noBuildChoiceFields"
-        }
-      ],
       "required": [
         "base_percent",
         "escalation_percent",
@@ -346,11 +289,6 @@
     "jpegContract": {
       "type": "object",
       "additionalProperties": false,
-      "allOf": [
-        {
-          "$ref": "#/$defs/noBuildChoiceFields"
-        }
-      ],
       "required": [
         "format",
         "extension",
@@ -391,11 +329,6 @@
     "pngContract": {
       "type": "object",
       "additionalProperties": false,
-      "allOf": [
-        {
-          "$ref": "#/$defs/noBuildChoiceFields"
-        }
-      ],
       "required": [
         "format",
         "extension",
@@ -441,11 +374,6 @@
     "jpegProfile": {
       "type": "object",
       "additionalProperties": false,
-      "allOf": [
-        {
-          "$ref": "#/$defs/noBuildChoiceFields"
-        }
-      ],
       "required": [
         "id",
         "label",
@@ -470,11 +398,6 @@
     "pngProfile": {
       "type": "object",
       "additionalProperties": false,
-      "allOf": [
-        {
-          "$ref": "#/$defs/noBuildChoiceFields"
-        }
-      ],
       "required": [
         "id",
         "label",
@@ -509,11 +432,6 @@
     "alphaContract": {
       "type": "object",
       "additionalProperties": false,
-      "allOf": [
-        {
-          "$ref": "#/$defs/noBuildChoiceFields"
-        }
-      ],
       "required": [
         "expectation",
         "permits_alpha"
@@ -535,11 +453,6 @@
     "alphaMode": {
       "type": "object",
       "additionalProperties": false,
-      "allOf": [
-        {
-          "$ref": "#/$defs/noBuildChoiceFields"
-        }
-      ],
       "required": [
         "id",
         "contract",
@@ -565,11 +478,6 @@
     "clippingContract": {
       "type": "object",
       "additionalProperties": false,
-      "allOf": [
-        {
-          "$ref": "#/$defs/noBuildChoiceFields"
-        }
-      ],
       "required": [
         "allowed_source_mode_ids",
         "temporary_copy_required",
@@ -627,11 +535,6 @@
     "clippingPolicy": {
       "type": "object",
       "additionalProperties": false,
-      "allOf": [
-        {
-          "$ref": "#/$defs/noBuildChoiceFields"
-        }
-      ],
       "required": [
         "id",
         "contract",
@@ -663,11 +566,6 @@
     "compatibilityRule": {
       "type": "object",
       "additionalProperties": false,
-      "allOf": [
-        {
-          "$ref": "#/$defs/noBuildChoiceFields"
-        }
-      ],
       "required": [
         "id",
         "export_profile_id",
@@ -700,11 +598,6 @@
     "identityPolicy": {
       "type": "object",
       "additionalProperties": false,
-      "allOf": [
-        {
-          "$ref": "#/$defs/noBuildChoiceFields"
-        }
-      ],
       "required": [
         "base_name_source",
         "scale_suffix_required",
@@ -749,11 +642,6 @@
     "backgroundPolicy": {
       "type": "object",
       "additionalProperties": false,
-      "allOf": [
-        {
-          "$ref": "#/$defs/noBuildChoiceFields"
-        }
-      ],
       "required": [
         "own_visible_boundary_fill",
         "parent_fill",
@@ -778,11 +666,6 @@
     "invariant": {
       "type": "object",
       "additionalProperties": false,
-      "allOf": [
-        {
-          "$ref": "#/$defs/noBuildChoiceFields"
-        }
-      ],
       "required": [
         "id",
         "statement"
