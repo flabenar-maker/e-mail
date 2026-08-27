@@ -112,3 +112,52 @@ test("assets shadow source preserves the approved global contracts", async () =>
     "docs/superpowers/specs/2026-08-24-cupis-structured-email-system-design.md",
   ]);
 });
+
+
+function registrySection(registry, componentName) {
+  const marker = "### \`" + componentName;
+  const start = registry.indexOf(marker);
+  assert.notEqual(start, -1, "Missing registry section: " + componentName);
+  const next = registry.indexOf("\n### \`", start + marker.length);
+  return registry.slice(start, next === -1 ? registry.length : next);
+}
+
+test("representative export boundaries remain component-owned in the registry", async () => {
+  const registry = await readFile(
+    join(repoRoot, "registry/email-component-descriptions-registry.md"),
+    "utf8",
+  );
+  const expectations = new Map([
+    [
+      "Banner/Hero",
+      ["hero-image @2x", "width:100%; height:auto", "552×353px"],
+    ],
+    [
+      "Banner/Secondary",
+      ["296:188", "background ячейки", "background-size:cover"],
+    ],
+    [
+      "Asset/Card-Image @2x",
+      ["Number является частью итогового JPEG", "232×148px", "464×296px"],
+    ],
+    [
+      "Asset/Feature-Icon @4x",
+      ["круглый фон и glyph", "прозрачностью за пределами"],
+    ],
+    [
+      "Email/Header",
+      ["header-logo @4x", "защитную подложку #F3F3F5"],
+    ],
+    [
+      "Banner/App-Download",
+      ["app-logo @4x", "rustore-icon @4x", "qr-code @4x"],
+    ],
+  ]);
+
+  for (const [componentName, anchors] of expectations) {
+    const section = registrySection(registry, componentName);
+    for (const anchor of anchors) {
+      assert.match(section, new RegExp(escapeRegExp(anchor), "u"));
+    }
+  }
+});
