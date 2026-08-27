@@ -1,6 +1,6 @@
 # CUPIS Structured System Migration Roadmap
 
-Актуальность: 2026-08-26.
+Актуальность: 2026-08-27.
 
 ## Назначение
 
@@ -67,21 +67,21 @@ Master-спецификация владеет архитектурными ре
 
 Этап выполняется двумя последовательными подэтапами. Каждый подэтап получает отдельный implementation plan, branch и PR. Подэтап 5Б начинается только после слияния 5А.
 
-#### 5А. Assets foundation — текущий следующий этап
+#### 5А. Assets foundation — завершён
 
-- [ ] Создать и согласовать подробный implementation plan assets foundation.
-- [ ] Зафиксировать действующие asset/export rules из `core/email-figma-prompt.md` и component contracts как comparison baseline; не удалять старый активный источник до общего cutover.
-- [ ] Перенести общую структурированную модель в `data/foundations/assets.yaml`: source mode, export boundary, display mode, scale, format, alpha, Fill/background policy, crop, proportions и presentation-only clipping.
-- [ ] Создать `schemas/assets.schema.json`, semantic validation и characterization-проверки эквивалентности baseline.
-- [ ] Объявить assets foundation и schema в manifest как shadow-источники. Не подключать foundation параллельно к действующим email-build bundles до этапа generated context bundles.
-- [ ] Сохранить конкретные владельцы, границы экспорта, display-размеры и компонентные исключения в component contracts; не переносить их в общий foundation.
-- [ ] Не менять Figma-дизайн, descriptions, конкретные письма или готовые assets в рамках технической миграции foundation.
+- [x] Создать и согласовать подробный implementation plan assets foundation.
+- [x] Зафиксировать действующие asset/export rules из `core/email-figma-prompt.md` и component contracts как comparison baseline; не удалять старый активный источник до общего cutover.
+- [x] Перенести общую структурированную модель в `data/foundations/assets.yaml`: source mode, export boundary, display mode, scale, format, alpha, Fill/background policy, crop, proportions и presentation-only clipping.
+- [x] Создать `schemas/assets.schema.json`, semantic validation и characterization-проверки эквивалентности baseline.
+- [x] Объявить assets foundation и schema в manifest как shadow-источники. Не подключать foundation параллельно к действующим email-build bundles до этапа generated context bundles.
+- [x] Сохранить конкретные владельцы, границы экспорта, display-размеры и компонентные исключения в component contracts; не переносить их в общий foundation.
+- [x] Не менять Figma-дизайн, descriptions, конкретные письма или готовые assets в рамках технической миграции foundation.
 
 Уточнение export contract, слитое в PR #28, является актуальным baseline для этого подэтапа, а не окончательным местом хранения правил.
 
-Подробный план: [assets foundation](2026-08-26-cupis-assets-foundation.md). Статус реализации не меняется до слияния отдельного implementation PR.
+Подробный план: [assets foundation](2026-08-26-cupis-assets-foundation.md). Реализация слита в [PR #33](https://github.com/flabenar-maker/e-mail/pull/33), итоговый commit: `fe1a0e37b4d40533706c88d73f5c293c8860b3ee`.
 
-#### 5Б. Figma naming foundation
+#### 5Б. Figma naming foundation — текущий следующий этап
 
 - [ ] Создать и согласовать отдельный implementation plan figma-naming foundation.
 - [ ] Перенести универсальные naming definitions в `data/foundations/figma-naming.yaml` без миграции существующей библиотеки.
