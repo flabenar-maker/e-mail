@@ -152,6 +152,10 @@ Manifest не содержит component contracts или копии норма�
 │  └─ email-build.yaml
 │
 ├─ scripts/
+│  ├─ lib/
+│  │  ├─ figma-naming-foundation.mjs
+│  │  ├─ figma-name-generator.mjs
+│  │  └─ figma-name-validator.mjs
 │  ├─ validate-system.mjs
 │  ├─ generate-docs.mjs
 │  ├─ build-context-bundle.mjs
@@ -191,6 +195,33 @@ Manifest не содержит component contracts или копии норма�
 - `service.yaml` — только сервисный.
 
 После cutover старый `registry/`, прежние Markdown-checkpoints и разобранный общий prompt удаляются, когда их содержимое подтверждённо представлено новыми владельцами.
+
+### 5.1. Подсистема Figma naming
+
+Подсистема разделяется на независимые части с одним владельцем правил:
+
+- `data/foundations/figma-naming.yaml` хранит машинно-читаемые naming definitions, контролируемые словари, шаблоны, порядок осей и обязательные служебные части имени;
+- `schemas/figma-naming.schema.json` задаёт строгую форму foundation;
+- `scripts/lib/figma-naming-foundation.mjs` загружает foundation и проверяет его внутреннюю согласованность;
+- `scripts/lib/figma-name-validator.mjs` проверяет существующее или предлагаемое имя по foundation и возвращает точные diagnostics;
+- `scripts/lib/figma-name-generator.mjs` детерминированно собирает рекомендуемое имя из явно подтверждённой семантики объекта.
+
+Генератор не читает и не изменяет Figma, не угадывает назначение неоднозначного объекта и не хранит собственные naming rules. Его вход обязан явно задавать классификацию и подтверждённую функцию объекта; для asset owner также передаётся действующий scale suffix. Если этих данных недостаточно, workflow возвращает typed blocker `semantic-role-required` вместо имени.
+
+Maintenance skill не запускает полный naming-аудит при каждой работе с библиотекой. Он применяет проверку только к объектам в явно заданной области, когда объект создаётся или переименовывается, когда внутри исследуемого target обнаружено непонятное имя либо когда пользователь отдельно запросил naming-аудит. Объекты вне области остаются без изменений.
+
+Управляемое переименование выполняется последовательно:
+
+1. read-only чтение target и связанных contract-significant данных;
+2. обнаружение непонятного или не соответствующего foundation имени в текущей области;
+3. уточнение функции объекта у пользователя, если семантика не доказана;
+4. генерация рекомендации и точной карты `old → new`;
+5. impact report по variants, properties, Slots, asset owners, descriptions, registry records и связанным компонентам;
+6. отдельное согласование карты пользователем;
+7. изменение только разрешённых полей имени;
+8. отдельный Figma read-back, validation предложенного результата, fingerprint и dependency checks.
+
+Рекомендация генератора никогда не является разрешением на Figma mutation. Обычный rename сохраняет конечный `@2x` или `@4x`; изменение scale suffix требует отдельного изменения export contract. Генератор, validator и skill не выполняют фоновое или автоматическое переименование библиотеки.
 
 ## 6. Модель component contract
 
@@ -241,7 +272,7 @@ Asset owner сохраняет `@2x` или `@4x` при обычном rename.
 Onboarding выполняет:
 
 1. классификацию роли: component, item, asset, template или example;
-2. проверку naming;
+2. проверку naming и, при подтверждённой семантике, генерацию согласуемой рекомендации без автоматического rename;
 3. аудит Mobile/Desktop variants, properties, layers, Auto Layout, typography, spacing, assets и адаптивности;
 4. сопоставление с существующими patterns и foundations;
 5. формирование component contract;
@@ -374,7 +405,7 @@ Maintenance routes:
 - component onboarding;
 - component contract update;
 - Figma Description sync;
-- Figma naming audit;
+- Figma naming audit и управляемая генерация naming-рекомендаций;
 - foundation update;
 - schema migration.
 
