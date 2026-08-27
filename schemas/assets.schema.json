@@ -1,0 +1,827 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/flabenar-maker/e-mail/schemas/assets.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "foundation",
+    "source_modes",
+    "display_modes",
+    "export_profiles",
+    "alpha_modes",
+    "clipping_policies",
+    "compatibility",
+    "identity_policy",
+    "background_policy",
+    "global_invariants",
+    "provenance"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "foundation": {
+      "$ref": "#/$defs/foundation"
+    },
+    "source_modes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/sourceMode"
+      }
+    },
+    "display_modes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/displayMode"
+      }
+    },
+    "export_profiles": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/exportProfile"
+      }
+    },
+    "alpha_modes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/alphaMode"
+      }
+    },
+    "clipping_policies": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/clippingPolicy"
+      }
+    },
+    "compatibility": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/compatibilityRule"
+      }
+    },
+    "identity_policy": {
+      "$ref": "#/$defs/identityPolicy"
+    },
+    "background_policy": {
+      "$ref": "#/$defs/backgroundPolicy"
+    },
+    "global_invariants": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/invariant"
+      }
+    },
+    "provenance": {
+      "$ref": "#/$defs/provenance"
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+    },
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "repoPath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?![A-Za-z]:)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\)[^\\u0000]+$"
+    },
+    "noBuildChoiceFields": {
+      "type": "object",
+      "not": {
+        "anyOf": [
+          {
+            "required": [
+              "owner"
+            ]
+          },
+          {
+            "required": [
+              "export_boundary"
+            ]
+          },
+          {
+            "required": [
+              "display_width"
+            ]
+          },
+          {
+            "required": [
+              "display_height"
+            ]
+          },
+          {
+            "required": [
+              "component_id"
+            ]
+          }
+        ]
+      }
+    },
+    "foundation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "status"
+      ],
+      "properties": {
+        "id": {
+          "const": "assets"
+        },
+        "status": {
+          "const": "shadow"
+        }
+      }
+    },
+    "sourceContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "$ref": "#/$defs/noBuildChoiceFields"
+        }
+      ],
+      "required": [
+        "source_content",
+        "concrete_desktop_instance_required",
+        "own_visible_fill_included",
+        "visible_nested_graphics_included",
+        "parent_fill_included",
+        "unrelated_layout_included",
+        "live_html_included"
+      ],
+      "properties": {
+        "source_content": {
+          "enum": [
+            "source-raster-only",
+            "exact-node-after-overrides"
+          ]
+        },
+        "concrete_desktop_instance_required": {
+          "type": "boolean"
+        },
+        "own_visible_fill_included": {
+          "type": "boolean"
+        },
+        "visible_nested_graphics_included": {
+          "type": "boolean"
+        },
+        "parent_fill_included": {
+          "type": "boolean"
+        },
+        "unrelated_layout_included": {
+          "type": "boolean"
+        },
+        "live_html_included": {
+          "type": "boolean"
+        }
+      }
+    },
+    "sourceMode": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "$ref": "#/$defs/noBuildChoiceFields"
+        }
+      ],
+      "required": [
+        "id",
+        "label",
+        "contract",
+        "description"
+      ],
+      "properties": {
+        "id": {
+          "enum": [
+            "image-fill",
+            "rendered-node"
+          ]
+        },
+        "label": {
+          "enum": [
+            "IMAGE FILL",
+            "RENDERED NODE"
+          ]
+        },
+        "contract": {
+          "$ref": "#/$defs/sourceContract"
+        },
+        "description": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "displayContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "$ref": "#/$defs/noBuildChoiceFields"
+        }
+      ],
+      "required": [
+        "intrinsic_ratio_required",
+        "crop_owner",
+        "mobile_width_behavior",
+        "mobile_height_behavior",
+        "fixed_mobile_height_forbidden",
+        "html_height_attribute_forbidden",
+        "image_height_100_percent_forbidden",
+        "deformation_forbidden"
+      ],
+      "properties": {
+        "intrinsic_ratio_required": {
+          "type": "boolean"
+        },
+        "crop_owner": {
+          "enum": [
+            "none",
+            "html-wrapper"
+          ]
+        },
+        "mobile_width_behavior": {
+          "const": "fluid-to-container"
+        },
+        "mobile_height_behavior": {
+          "const": "auto"
+        },
+        "fixed_mobile_height_forbidden": {
+          "type": "boolean"
+        },
+        "html_height_attribute_forbidden": {
+          "type": "boolean"
+        },
+        "image_height_100_percent_forbidden": {
+          "type": "boolean"
+        },
+        "deformation_forbidden": {
+          "type": "boolean"
+        }
+      }
+    },
+    "displayMode": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "$ref": "#/$defs/noBuildChoiceFields"
+        }
+      ],
+      "required": [
+        "id",
+        "label",
+        "contract",
+        "description"
+      ],
+      "properties": {
+        "id": {
+          "enum": [
+            "direct-image",
+            "fill-image"
+          ]
+        },
+        "label": {
+          "enum": [
+            "DIRECT IMAGE",
+            "FILL IMAGE"
+          ]
+        },
+        "contract": {
+          "$ref": "#/$defs/displayContract"
+        },
+        "description": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "qualityPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "$ref": "#/$defs/noBuildChoiceFields"
+        }
+      ],
+      "required": [
+        "base_percent",
+        "escalation_percent",
+        "escalation_condition"
+      ],
+      "properties": {
+        "base_percent": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "escalation_percent": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "escalation_condition": {
+          "const": "visible-artifacts-only"
+        }
+      }
+    },
+    "jpegContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "$ref": "#/$defs/noBuildChoiceFields"
+        }
+      ],
+      "required": [
+        "format",
+        "extension",
+        "scale",
+        "suffix",
+        "color_space",
+        "alpha_mode",
+        "quality",
+        "rendered_node_intermediate"
+      ],
+      "properties": {
+        "format": {
+          "const": "JPEG"
+        },
+        "extension": {
+          "const": ".jpg"
+        },
+        "scale": {
+          "const": 2
+        },
+        "suffix": {
+          "const": "@2x"
+        },
+        "color_space": {
+          "const": "sRGB"
+        },
+        "alpha_mode": {
+          "const": "none"
+        },
+        "quality": {
+          "$ref": "#/$defs/qualityPolicy"
+        },
+        "rendered_node_intermediate": {
+          "const": "lossless-png"
+        }
+      }
+    },
+    "pngContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "$ref": "#/$defs/noBuildChoiceFields"
+        }
+      ],
+      "required": [
+        "format",
+        "extension",
+        "scale",
+        "suffix",
+        "color_space",
+        "allowed_alpha_modes",
+        "node_export_contents_only"
+      ],
+      "properties": {
+        "format": {
+          "const": "PNG"
+        },
+        "extension": {
+          "const": ".png"
+        },
+        "scale": {
+          "const": 4
+        },
+        "suffix": {
+          "const": "@4x"
+        },
+        "color_space": {
+          "const": "sRGB"
+        },
+        "allowed_alpha_modes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "transparent",
+              "opaque",
+              "source"
+            ]
+          }
+        },
+        "node_export_contents_only": {
+          "const": true
+        }
+      }
+    },
+    "jpegProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "$ref": "#/$defs/noBuildChoiceFields"
+        }
+      ],
+      "required": [
+        "id",
+        "label",
+        "contract",
+        "description"
+      ],
+      "properties": {
+        "id": {
+          "const": "jpeg-2x"
+        },
+        "label": {
+          "const": "JPEG @2x"
+        },
+        "contract": {
+          "$ref": "#/$defs/jpegContract"
+        },
+        "description": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "pngProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "$ref": "#/$defs/noBuildChoiceFields"
+        }
+      ],
+      "required": [
+        "id",
+        "label",
+        "contract",
+        "description"
+      ],
+      "properties": {
+        "id": {
+          "const": "png-4x"
+        },
+        "label": {
+          "const": "PNG @4x"
+        },
+        "contract": {
+          "$ref": "#/$defs/pngContract"
+        },
+        "description": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "exportProfile": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/jpegProfile"
+        },
+        {
+          "$ref": "#/$defs/pngProfile"
+        }
+      ]
+    },
+    "alphaContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "$ref": "#/$defs/noBuildChoiceFields"
+        }
+      ],
+      "required": [
+        "expectation",
+        "permits_alpha"
+      ],
+      "properties": {
+        "expectation": {
+          "enum": [
+            "no-alpha",
+            "transparent-outside-visual",
+            "fully-opaque",
+            "preserve-source"
+          ]
+        },
+        "permits_alpha": {
+          "type": "boolean"
+        }
+      }
+    },
+    "alphaMode": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "$ref": "#/$defs/noBuildChoiceFields"
+        }
+      ],
+      "required": [
+        "id",
+        "contract",
+        "description"
+      ],
+      "properties": {
+        "id": {
+          "enum": [
+            "none",
+            "transparent",
+            "opaque",
+            "source"
+          ]
+        },
+        "contract": {
+          "$ref": "#/$defs/alphaContract"
+        },
+        "description": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "clippingContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "$ref": "#/$defs/noBuildChoiceFields"
+        }
+      ],
+      "required": [
+        "allowed_source_mode_ids",
+        "temporary_copy_required",
+        "artwork_clipping_preserved",
+        "presentation_clipping_neutralized",
+        "preserve_fields",
+        "temporary_copy_deleted",
+        "readback_required"
+      ],
+      "properties": {
+        "allowed_source_mode_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "image-fill",
+              "rendered-node"
+            ]
+          }
+        },
+        "temporary_copy_required": {
+          "type": "boolean"
+        },
+        "artwork_clipping_preserved": {
+          "type": "boolean"
+        },
+        "presentation_clipping_neutralized": {
+          "type": "boolean"
+        },
+        "preserve_fields": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "fill",
+              "crop",
+              "dimensions",
+              "intrinsic-ratio",
+              "variants",
+              "overrides",
+              "children"
+            ]
+          }
+        },
+        "temporary_copy_deleted": {
+          "type": "boolean"
+        },
+        "readback_required": {
+          "type": "boolean"
+        }
+      }
+    },
+    "clippingPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "$ref": "#/$defs/noBuildChoiceFields"
+        }
+      ],
+      "required": [
+        "id",
+        "contract",
+        "description"
+      ],
+      "properties": {
+        "id": {
+          "enum": [
+            "preserve-artwork",
+            "neutralize-presentation-only"
+          ]
+        },
+        "contract": {
+          "$ref": "#/$defs/clippingContract"
+        },
+        "description": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "idArray": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/id"
+      }
+    },
+    "compatibilityRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "$ref": "#/$defs/noBuildChoiceFields"
+        }
+      ],
+      "required": [
+        "id",
+        "export_profile_id",
+        "source_mode_ids",
+        "display_mode_ids",
+        "alpha_mode_ids",
+        "clipping_policy_ids"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "export_profile_id": {
+          "$ref": "#/$defs/id"
+        },
+        "source_mode_ids": {
+          "$ref": "#/$defs/idArray"
+        },
+        "display_mode_ids": {
+          "$ref": "#/$defs/idArray"
+        },
+        "alpha_mode_ids": {
+          "$ref": "#/$defs/idArray"
+        },
+        "clipping_policy_ids": {
+          "$ref": "#/$defs/idArray"
+        }
+      }
+    },
+    "identityPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "$ref": "#/$defs/noBuildChoiceFields"
+        }
+      ],
+      "required": [
+        "base_name_source",
+        "scale_suffix_required",
+        "viewport_suffixes_forbidden",
+        "shared_mobile_desktop_file",
+        "shared_mobile_desktop_src",
+        "concrete_desktop_instance_required",
+        "placeholder_forbidden",
+        "main_component_export_forbidden"
+      ],
+      "properties": {
+        "base_name_source": {
+          "const": "nearest-semantic-asset-owner"
+        },
+        "scale_suffix_required": {
+          "const": true
+        },
+        "viewport_suffixes_forbidden": {
+          "type": "array",
+          "const": [
+            "Mobile",
+            "Desktop"
+          ]
+        },
+        "shared_mobile_desktop_file": {
+          "const": true
+        },
+        "shared_mobile_desktop_src": {
+          "const": true
+        },
+        "concrete_desktop_instance_required": {
+          "const": true
+        },
+        "placeholder_forbidden": {
+          "const": true
+        },
+        "main_component_export_forbidden": {
+          "const": true
+        }
+      }
+    },
+    "backgroundPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "$ref": "#/$defs/noBuildChoiceFields"
+        }
+      ],
+      "required": [
+        "own_visible_boundary_fill",
+        "parent_fill",
+        "invisible_fill",
+        "artificial_matte"
+      ],
+      "properties": {
+        "own_visible_boundary_fill": {
+          "const": "preserve"
+        },
+        "parent_fill": {
+          "const": "exclude"
+        },
+        "invisible_fill": {
+          "const": "exclude"
+        },
+        "artificial_matte": {
+          "const": "forbid"
+        }
+      }
+    },
+    "invariant": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "$ref": "#/$defs/noBuildChoiceFields"
+        }
+      ],
+      "required": [
+        "id",
+        "statement"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "statement": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "baseline_commit",
+        "reviewed_on",
+        "comparison_sources"
+      ],
+      "properties": {
+        "baseline_commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "reviewed_on": {
+          "type": "string",
+          "pattern": "^20[0-9]{2}-[0-9]{2}-[0-9]{2}$"
+        },
+        "comparison_sources": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/repoPath"
+          }
+        }
+      }
+    }
+  }
+}
