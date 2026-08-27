@@ -11,6 +11,7 @@ import {
   validateManifestSemantics,
 } from "../../scripts/lib/system-manifest.mjs";
 import {
+  canonicalSystemFixtureFiles,
   copyFixtureFile,
   createSystemFixture,
   writeFixtureFile,
@@ -25,27 +26,7 @@ async function canonicalManifest() {
   return loadSystemManifest({ repoRoot });
 }
 
-const fixtureFiles = [
-  "schemas/manifest.schema.json",
-  "schemas/typography.schema.json",
-  "system/manifest.yaml",
-  "docs/superpowers/plans/2026-08-25-cupis-migration-roadmap.md",
-  "data/foundations/typography.yaml",
-  "schemas/spacing.schema.json",
-  "data/foundations/spacing.yaml",
-  "README.md",
-  "bootstrap/README.md",
-  "core/email-figma-prompt.md",
-  "core/figma-component-naming-standard.md",
-  "registry/email-component-descriptions-registry.md",
-  "registry/email-typography-registry.md",
-  "workflows/library-maintenance-checkpoint.md",
-  "workflows/email-build-checkpoint.md",
-  "templates/email-project-brief.md",
-  "bootstrap/config.portable.toml",
-  "bootstrap/verify.ps1",
-  ".agents/skills/maintaining-cupis-email-system/SKILL.md",
-];
+const fixtureFiles = canonicalSystemFixtureFiles;
 
 async function validFixture(t) {
   const fixture = await createSystemFixture();
@@ -516,3 +497,77 @@ test("maintenance profiles include spacing while email build profiles do not", a
   assert.ok(!profiles.get("email-new-build").includes("spacing-foundation"));
   assert.ok(!profiles.get("email-continue-fix").includes("spacing-foundation"));
 });
+
+
+test("declares the shadow assets sources outside every bundle", async () => {
+  const manifest = await canonicalManifest();
+  const sources = new Map(
+    manifest.sources.map((source) => [source.id, source]),
+  );
+
+  assert.deepEqual(sources.get("assets-foundation"), {
+    id: "assets-foundation",
+    kind: "registry",
+    path: "data/foundations/assets.yaml",
+  });
+  assert.deepEqual(sources.get("assets-schema"), {
+    id: "assets-schema",
+    kind: "schema",
+    path: "schemas/assets.schema.json",
+  });
+
+  for (const profile of manifest.bundle_profiles) {
+    assert.equal(profile.source_ids.includes("assets-foundation"), false);
+    assert.equal(profile.source_ids.includes("assets-schema"), false);
+  }
+});
+
+for (const [sourceId, code] of [
+  ["assets-foundation", "missing-assets-source"],
+  ["assets-schema", "missing-assets-schema-source"],
+]) {
+  test("reports missing " + sourceId + " declaration", async (t) => {
+    const root = await validFixture(t);
+    await mutateFixtureManifest(root, (manifest) => {
+      manifest.sources = manifest.sources.filter(
+        (source) => source.id !== sourceId,
+      );
+    });
+
+    const result = await validateSystem({ repoRoot: root });
+
+    assert.ok(result.errors.some((error) => error.code === code));
+  });
+}
+
+for (const [sourceId, kind] of [
+  ["assets-foundation", "core"],
+  ["assets-schema", "registry"],
+]) {
+  test("reports invalid " + sourceId + " kind", async (t) => {
+    const root = await validFixture(t);
+    await mutateFixtureManifest(root, (manifest) => {
+      let source = manifest.sources.find((item) => item.id === sourceId);
+      if (!source) {
+        source = {
+          id: sourceId,
+          kind: sourceId === "assets-schema" ? "schema" : "registry",
+          path:
+            sourceId === "assets-schema"
+              ? "schemas/assets.schema.json"
+              : "data/foundations/assets.yaml",
+        };
+        manifest.sources.push(source);
+      }
+      source.kind = kind;
+    });
+
+    const result = await validateSystem({ repoRoot: root });
+
+    assert.ok(
+      result.errors.some(
+        (error) => error.code === "invalid-assets-source-kind",
+      ),
+    );
+  });
+}
