@@ -138,7 +138,7 @@ test("representative export boundaries remain component-owned in the registry", 
     ],
     [
       "Asset/Card-Image @2x",
-      ["Number является частью итогового JPEG", "232×148px", "464×296px"],
+      ["Номер является частью итогового JPEG", "232×148px", "464×296px"],
     ],
     [
       "Asset/Feature-Icon @4x",
