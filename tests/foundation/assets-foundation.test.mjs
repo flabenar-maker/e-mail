@@ -27,8 +27,7 @@ async function readSchema() {
 }
 
 function escapeRegExp(value) {
-  return value.replace(/[.*+?^${}()|[\]\\]/gu, "\\function hasDiagnostic(errors, code, path) {
-");
+  return value.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
 }
 
 function hasDiagnostic(errors, code, path) {
