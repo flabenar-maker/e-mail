@@ -16,6 +16,13 @@
 
 При проектировании нового или изменении существующего компонента foundation разрешает semantic role в одно точное Mobile- и Desktop-значение. После этого значения фиксируются в Figma, Description и реестре. При вёрстке конкретного письма Codex не применяет золотое правило, не вызывает spacing resolver и использует только фактические значения конкретного инстанса и component contract.
 
+
+### Теневая база правил ассетов
+
+[data/foundations/assets.yaml](data/foundations/assets.yaml) — структурированный shadow-источник общих asset/export definitions; до generated bundles он не является отдельной инструкцией для HTML-сборки. Структура проверяется [машинной схемой](schemas/assets.schema.json), а этап внедрения описан в [implementation plan](docs/superpowers/plans/2026-08-26-cupis-assets-foundation.md).
+
+Foundation владеет общими definitions и совместимостью режимов. [Реестр компонентов](registry/email-component-descriptions-registry.md) владеет конкретным выбором asset, границей экспорта и отображаемыми размерами; [текущий Markdown-промт](core/email-figma-prompt.md) остаётся активной контрольной базой до отдельного cutover.
+
 ## Восстановление контекста
 
 После открытия этого репозитория достаточно сказать Codex:
@@ -84,6 +91,7 @@
 | `data/foundations/typography.yaml` | Валидируемый structured-пилот определений текстовых стилей; ещё не подключён к рабочим bundle profiles |
 | `schemas/typography.schema.json` | Строгая машинная схема structured-пилота типографики |
 | `data/foundations/spacing.yaml` | Машинно-проверяемое золотое правило отступов для maintenance и component onboarding; не является входом HTML-вёрстки |
+| `data/foundations/assets.yaml` | Валидируемый shadow-источник общих asset/export definitions; конкретные component contracts остаются в реестре |
 | `schemas/spacing.schema.json` | Строгая schema spacing foundation и exact-only разрешений |
 | `scripts/lib/spacing-foundation.mjs` | Design-time validation и resolver, возвращающий одно точное значение либо typed blocker |
 | `registry/email-typography-registry.md` | Контрольный Markdown-снимок типографики и текущий владелец списков компонентов-потребителей до cutover |
