@@ -406,3 +406,85 @@ test("foundation validator combines strict loading with semantic checks", async 
   assert.equal(result.assets.foundation.id, "assets");
   assert.deepEqual(result.errors, []);
 });
+
+
+function collectFoundationFacts(value, facts = { keys: [], scalars: [] }) {
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      collectFoundationFacts(item, facts);
+    }
+    return facts;
+  }
+  if (value && typeof value === "object") {
+    for (const [key, child] of Object.entries(value)) {
+      facts.keys.push(key);
+      collectFoundationFacts(child, facts);
+    }
+    return facts;
+  }
+  facts.scalars.push(value);
+  return facts;
+}
+
+test("assets foundation contains definitions but no component build contracts", async () => {
+  const assets = await canonicalAssets();
+  const facts = collectFoundationFacts(assets);
+  const scalarText = facts.scalars.map(String).join("\n");
+
+  for (const forbidden of [
+    "Banner/Hero",
+    "Banner/Secondary",
+    "Asset/Card-Image",
+    "Asset/Feature-Icon",
+    "Email/Header",
+    "Banner/App-Download",
+    "header-logo @4x",
+    "qr-code @4x",
+  ]) {
+    assert.doesNotMatch(
+      scalarText,
+      new RegExp(escapeRegExp(forbidden), "u"),
+    );
+  }
+  for (const forbiddenNumber of [232, 148, 464, 296]) {
+    assert.equal(facts.scalars.includes(forbiddenNumber), false);
+  }
+  assert.equal(
+    facts.scalars.some(
+      (value) =>
+        typeof value === "string" && /^[0-9]+:[0-9]+$/u.test(value),
+    ),
+    false,
+  );
+
+  for (const forbiddenKey of [
+    "owner",
+    "export_boundary",
+    "display_width",
+    "display_height",
+    "component_id",
+  ]) {
+    assert.equal(facts.keys.includes(forbiddenKey), false);
+  }
+
+  assert.deepEqual(
+    assets.source_modes.map((item) => item.id),
+    ["image-fill", "rendered-node"],
+  );
+  assert.deepEqual(
+    assets.display_modes.map((item) => item.id),
+    ["direct-image", "fill-image"],
+  );
+  assert.deepEqual(
+    assets.export_profiles.map((item) => item.id),
+    ["jpeg-2x", "png-4x"],
+  );
+  assert.deepEqual(
+    assets.alpha_modes.map((item) => item.id),
+    ["none", "transparent", "opaque", "source"],
+  );
+  assert.deepEqual(
+    assets.clipping_policies.map((item) => item.id),
+    ["preserve-artwork", "neutralize-presentation-only"],
+  );
+});
