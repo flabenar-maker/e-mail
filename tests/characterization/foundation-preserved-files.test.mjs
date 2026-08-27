@@ -20,7 +20,7 @@ const preserved = {
   "workflows/email-build-checkpoint.md":
     "42f8f91ca6e867b514c6d1af3dbef5c292cb8106",
   "docs/superpowers/specs/2026-08-24-cupis-structured-email-system-design.md":
-    "b3891c0f0a31e14ea8bd9a4e192d1366351ec489",
+    "1e1af9f505d7fce60e05a011f9da072bcbcca0e2",
 };
 
 async function gitBlobSha(relativePath) {
