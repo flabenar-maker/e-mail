@@ -165,10 +165,11 @@ test("assets shadow source preserves the approved global contracts", async () =>
     assert.match(registry, new RegExp(escapeRegExp(anchor), "u"));
   }
 
-  await assert.rejects(
-    () => readFile(join(repoRoot, "data/foundations/assets.yaml"), "utf8"),
-    { code: "ENOENT" },
+  const assetsText = await readFile(
+    join(repoRoot, "data/foundations/assets.yaml"),
+    "utf8",
   );
+  assert.match(assetsText, /^schema_version:\\s+1\\.0\\.0$/mu);
 });
 ~~~
 
@@ -188,28 +189,52 @@ Open one draft PR for the whole implementation. GitHub Actions must fail because
 
 The RED condition must be removed only by adding the structured source in Task 2.
 
-### Task 2: Add the canonical assets data and strict schema
+### Task 2: Add the canonical assets data, strict schema and shape loader
 
 **Files:**
 - Create: `data/foundations/assets.yaml`
 - Create: `schemas/assets.schema.json`
+- Create: `scripts/lib/assets-foundation.mjs`
 - Create: `tests/foundation/assets-foundation.test.mjs`
 - Modify: `tests/characterization/assets-shadow.test.mjs`
 
-- [ ] **Step 1: Write shape tests first**
+**Interfaces:**
+- Produces: `validateAssetsShape(assets, schema)` and `loadAssetsFoundation({ repoRoot, dataPath, schemaPath })`.
+- Leaves semantic validation and contract resolution for Task 3.
 
-Add tests for:
+- [ ] **Step 1: Write the failing shape tests**
 
-1. canonical YAML passes schema;
+Create `tests/foundation/assets-foundation.test.mjs` against the desired module API. Cover:
+
+1. canonical YAML passes schema through `loadAssetsFoundation`;
 2. unknown top-level property fails with `assets-schema`;
 3. duplicate YAML key is rejected by `readStrictYaml`;
 4. unsupported `schema_version` fails with `assets-version-unsupported`;
-5. each definition array requires at least one object and unique-looking string IDs;
-6. build-time fields `owner`, `export_boundary`, `display_width`, `display_height`, `component_id` are forbidden anywhere in the document.
+5. each definition array requires at least one object and ID strings matching `^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$`;
+6. build-time fields `owner`, `export_boundary`, `display_width`, `display_height`, `component_id` are rejected anywhere they can occur in the document.
+
+Import the wished-for API exactly:
+
+~~~js
+import {
+  loadAssetsFoundation,
+  validateAssetsShape,
+} from "../../scripts/lib/assets-foundation.mjs";
+~~~
 
 Use cloned fixtures, never mutate the canonical object shared across tests.
 
-- [ ] **Step 2: Implement the strict JSON Schema**
+- [ ] **Step 2: Commit and verify RED**
+
+Commit message:
+
+~~~text
+test: specify assets foundation shape contract
+~~~
+
+Run the draft PR in GitHub Actions. Expected failure: `ERR_MODULE_NOT_FOUND` for `scripts/lib/assets-foundation.mjs`. This is the intentionally missing production unit, not a typo or unrelated setup error.
+
+- [ ] **Step 3: Implement the strict JSON Schema**
 
 The schema must use Draft 2020-12, `additionalProperties: false` on every object, explicit `required` arrays, and enums for closed vocabularies. Required top-level keys:
 
@@ -230,7 +255,7 @@ The schema must use Draft 2020-12, `additionalProperties: false` on every object
 ]
 ~~~
 
-The schema must forbid component/build choices with a recursive property-name guard:
+Every object schema that can contain contract data must reject these component/build keys:
 
 ~~~json
 {
@@ -246,9 +271,9 @@ The schema must forbid component/build choices with a recursive property-name gu
 }
 ~~~
 
-Apply the guard to every extensible definition object in addition to `additionalProperties: false`.
+Apply the guard together with `additionalProperties: false`; do not describe it as recursive unless it is actually placed on every relevant nested object.
 
-- [ ] **Step 3: Write the canonical YAML**
+- [ ] **Step 4: Write the canonical YAML**
 
 Use `schema_version: 1.0.0`, `foundation.id: assets`, `foundation.status: shadow`, and exactly the IDs and meanings from “Canonical Data Contract”.
 
@@ -258,43 +283,62 @@ Each definition object has:
 - id: image-fill
   label: IMAGE FILL
   contract:
-    # machine-readable booleans/enums only
+    source_content: source-raster-only
+    concrete_desktop_instance_required: true
   description: >-
-    # concise human explanation; no component-specific values
+    Export the original source raster from the Fill of the concrete Desktop
+    email instance without the container, nested graphics or live HTML.
 ~~~
 
 Use booleans/enums for enforceable facts; descriptions explain intent but are never parsed by validators.
 
-`provenance` must contain:
+For `provenance.baseline_commit`, write the exact 40-character implementation-branch merge-base captured in Task 1 Step 1. A placeholder value is forbidden. Set `reviewed_on: 2026-08-27` and use exactly these comparison sources:
 
 ~~~yaml
-baseline_commit: <pinned-main-sha>
-reviewed_on: 2026-08-26
 comparison_sources:
   - core/email-figma-prompt.md
   - registry/email-component-descriptions-registry.md
   - docs/superpowers/specs/2026-08-24-cupis-structured-email-system-design.md
 ~~~
 
-- [ ] **Step 4: Make characterization test compare structured facts**
+- [ ] **Step 5: Implement only shape validation and loading**
 
-Replace the ENOENT assertion with exact checks that the YAML exposes all canonical IDs and baseline values. Keep Markdown anchor checks. This proves coexistence in shadow mode without treating prose as executable data.
+Create `scripts/lib/assets-foundation.mjs` with:
 
-- [ ] **Step 5: Run cloud CI to GREEN and commit**
+~~~js
+export function validateAssetsShape(assets, schema);
+export async function loadAssetsFoundation({
+  repoRoot,
+  dataPath = "data/foundations/assets.yaml",
+  schemaPath = "schemas/assets.schema.json",
+});
+~~~
+
+Reuse `readStrictYaml`, `validateDocumentShape` and existing diagnostic conventions. `loadAssetsFoundation` reads YAML and schema, calls `validateAssetsShape`, and throws `AggregateError` when shape errors exist. Do not add semantic validation or resolver behavior yet.
+
+- [ ] **Step 6: Make characterization test compare structured facts**
+
+Replace the file-existence assertion from Task 1 with exact checks that the parsed YAML exposes all canonical IDs and baseline values. Keep Markdown anchor checks. This proves coexistence in shadow mode without treating prose as executable data.
+
+- [ ] **Step 7: Run cloud CI to GREEN and commit**
 
 Commit message:
 
 ~~~text
-feat: add shadow assets foundation contract
+feat: add shadow assets foundation shape contract
 ~~~
 
-Expected: schema/characterization tests pass; semantic tests are not added yet.
+Expected: schema, shape and characterization tests pass; semantic and resolver tests do not exist yet.
 
 ### Task 3: Implement semantic validation and exact-only resolution
 
 **Files:**
-- Create: `scripts/lib/assets-foundation.mjs`
+- Modify: `scripts/lib/assets-foundation.mjs`
 - Modify: `tests/foundation/assets-foundation.test.mjs`
+
+**Interfaces:**
+- Consumes: `validateAssetsShape` and `loadAssetsFoundation` from Task 2.
+- Produces: `validateAssetsSemantics`, `resolveAssetContract` and `validateAssetsFoundation` with the signatures in “Public Module Contract”.
 
 - [ ] **Step 1: Add failing semantic tests**
 
@@ -330,19 +374,31 @@ Invalid cases:
 
 Every invalid contract must fail; resolver must not substitute defaults.
 
-- [ ] **Step 3: Implement loader and shape validation**
+Import the existing module as a namespace so the RED failure identifies the missing exports instead of failing module resolution:
 
-Reuse `readStrictYaml`, `validateDocumentShape`, `SystemValidationError`, and the repository’s diagnostic sorting conventions. Do not copy schema-validation code.
+~~~js
+import * as assetsFoundation from "../../scripts/lib/assets-foundation.mjs";
+~~~
 
-`loadAssetsFoundation` throws an `AggregateError` for shape errors and reports read failures as `assets-read` through `validateAssetsFoundation`.
+- [ ] **Step 3: Commit and verify RED**
+
+Commit message:
+
+~~~text
+test: specify assets semantic and resolver contracts
+~~~
+
+Run GitHub Actions. Expected failure: calls to the not-yet-exported `validateAssetsSemantics` or `resolveAssetContract` fail. Existing shape tests must remain green.
 
 - [ ] **Step 4: Implement semantic validation**
 
-Build ID maps once, validate duplicates before references, then compatibility and profile invariants. Sort diagnostics by path/code/message exactly like existing foundations.
+Add `validateAssetsSemantics(assets)` and `validateAssetsFoundation({ repoRoot, dataPath, schemaPath })`.
+
+Build ID maps once, validate duplicates before references, then compatibility and profile invariants. Reuse `SystemValidationError` and sort diagnostics by path/code/message exactly like existing foundations. `validateAssetsFoundation` calls the existing loader, returns shape/read errors consistently, and adds semantic errors only after a valid shape load.
 
 - [ ] **Step 5: Implement the resolver**
 
-First call semantic validation for the canonical document. Then require all five explicit IDs, resolve them from maps, locate the export profile compatibility row, and validate the combination. Return deep copies via `structuredClone`.
+Add `resolveAssetContract(assets, selection)`. First reject a semantically invalid foundation. Then require all five explicit IDs, resolve them from maps, locate the export-profile compatibility row, and validate the combination. Return deep copies via `structuredClone`.
 
 Do not infer:
 
@@ -508,22 +564,31 @@ Any other changed path is a blocker until explained and separately approved.
 
 - [ ] **Step 2: Run complete GitHub Actions verification**
 
-Required commands in both supported CI environments:
+Use the repository's existing workflow without changing CI configuration.
+
+Required `node-validation` job steps:
 
 ~~~text
-npm ci
+npm ci --ignore-scripts
 npm run validate
 npm test
-npm run verify
+~~~
+
+Required `windows-bootstrap` job steps:
+
+~~~text
+npm ci --ignore-scripts
+pwsh -NoProfile -File bootstrap/verify.ps1
+pwsh -NoProfile -File tests/bootstrap-contract.Tests.ps1
 ~~~
 
 Expected:
 
-- Linux passes;
-- Windows passes;
-- validator reports `[PASS] CUPIS system validation passed.`;
+- `node-validation` passes and the validator reports `[PASS] CUPIS system validation passed.`;
+- `windows-bootstrap` passes;
 - no test is skipped or marked todo;
-- no working bundle contains `assets-foundation` or `assets-schema`.
+- no working bundle contains `assets-foundation` or `assets-schema`;
+- `npm run verify` is not claimed as a separate CI step: its validation and test behavior is already covered by `npm run validate` plus `npm test`.
 
 - [ ] **Step 3: Review architecture invariants**
 
