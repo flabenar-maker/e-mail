@@ -10,6 +10,31 @@ import {
 import { basename, dirname, isAbsolute, join, relative, resolve } from "node:path";
 import { tmpdir } from "node:os";
 
+
+export const canonicalSystemFixtureFiles = [
+  "schemas/manifest.schema.json",
+  "schemas/typography.schema.json",
+  "system/manifest.yaml",
+  "docs/superpowers/plans/2026-08-25-cupis-migration-roadmap.md",
+  "data/foundations/typography.yaml",
+  "schemas/spacing.schema.json",
+  "data/foundations/spacing.yaml",
+  "schemas/assets.schema.json",
+  "data/foundations/assets.yaml",
+  "README.md",
+  "bootstrap/README.md",
+  "core/email-figma-prompt.md",
+  "core/figma-component-naming-standard.md",
+  "registry/email-component-descriptions-registry.md",
+  "registry/email-typography-registry.md",
+  "workflows/library-maintenance-checkpoint.md",
+  "workflows/email-build-checkpoint.md",
+  "templates/email-project-brief.md",
+  "bootstrap/config.portable.toml",
+  "bootstrap/verify.ps1",
+  ".agents/skills/maintaining-cupis-email-system/SKILL.md",
+];
+
 function fixturePath(root, relativePath) {
   if (isAbsolute(relativePath)) {
     throw new Error(`Fixture path must be relative: ${relativePath}`);

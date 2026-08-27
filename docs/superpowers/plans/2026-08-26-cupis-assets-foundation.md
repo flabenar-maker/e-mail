@@ -150,7 +150,7 @@ test("assets shadow source preserves the approved global contracts", async () =>
     "@2x",
     "@4x",
     "sRGB",
-    "quality 82",
+    "начальное качество: 82%",
     "height:auto",
   ]) {
     assert.match(prompt, new RegExp(escapeRegExp(anchor), "u"));
@@ -548,6 +548,7 @@ Compare implementation branch to pinned `main`. Allowed paths only:
 
 ~~~text
 README.md
+docs/superpowers/plans/2026-08-26-cupis-assets-foundation.md
 data/foundations/assets.yaml
 schemas/assets.schema.json
 scripts/lib/assets-foundation.mjs

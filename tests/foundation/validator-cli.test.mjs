@@ -4,7 +4,9 @@ import { spawn } from "node:child_process";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { readStrictYaml } from "../../scripts/lib/strict-yaml.mjs";
 import {
+  canonicalSystemFixtureFiles,
   copyFixtureFile,
   createSystemFixture,
   fixtureDigest,
@@ -12,27 +14,7 @@ import {
 } from "../helpers/system-fixture.mjs";
 
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
-const fixtureFiles = [
-  "schemas/manifest.schema.json",
-  "schemas/typography.schema.json",
-  "system/manifest.yaml",
-  "docs/superpowers/plans/2026-08-25-cupis-migration-roadmap.md",
-  "data/foundations/typography.yaml",
-  "schemas/spacing.schema.json",
-  "data/foundations/spacing.yaml",
-  "README.md",
-  "bootstrap/README.md",
-  "core/email-figma-prompt.md",
-  "core/figma-component-naming-standard.md",
-  "registry/email-component-descriptions-registry.md",
-  "registry/email-typography-registry.md",
-  "workflows/library-maintenance-checkpoint.md",
-  "workflows/email-build-checkpoint.md",
-  "templates/email-project-brief.md",
-  "bootstrap/config.portable.toml",
-  "bootstrap/verify.ps1",
-  ".agents/skills/maintaining-cupis-email-system/SKILL.md",
-];
+const fixtureFiles = canonicalSystemFixtureFiles;
 
 async function validFixture(t) {
   const fixture = await createSystemFixture();
@@ -150,4 +132,28 @@ test("validator is read-only across repeated runs", async (t) => {
   assert.equal(first.exitCode, 0);
   assert.equal(second.exitCode, 0);
   assert.equal(after, before);
+});
+
+
+test("invalid assets exits one with a stable sanitized diagnostic", async (t) => {
+  const root = await validFixture(t);
+  const assetsPath = join(root, "data/foundations/assets.yaml");
+  const assets = await readStrictYaml(assetsPath);
+  const duplicate = structuredClone(assets.source_modes[0]);
+  duplicate.description = "Distinct record with a duplicate id.";
+  assets.source_modes.push(duplicate);
+  await writeFixtureFile(
+    root,
+    "data/foundations/assets.yaml",
+    JSON.stringify(assets, null, 2) + "\n",
+  );
+
+  const result = await runValidator(root);
+
+  assert.equal(result.exitCode, 1);
+  assert.match(result.stderr, /ASSETS_DUPLICATE_ID/u);
+  assert.doesNotMatch(
+    result.stderr + result.stdout,
+    /source-raster-only/u,
+  );
 });
