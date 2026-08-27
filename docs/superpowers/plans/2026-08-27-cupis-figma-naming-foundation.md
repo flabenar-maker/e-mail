@@ -732,5 +732,5 @@ Before publishing this plan:
 - `semantic-role-required` is used consistently.
 - `@2x` and `@4x` preservation is covered by data, generator and tests.
 - Shadow sources are declared but absent from every working bundle.
-- There are no `TBD`, `TODO`, hidden defaults or component-specific exceptions.
+- There are no unresolved placeholders, hidden defaults or component-specific exceptions.
 - The final implementation can be rejected task-by-task without changing the architecture.
