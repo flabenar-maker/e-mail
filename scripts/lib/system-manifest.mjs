@@ -6,6 +6,7 @@ import { validateDocumentShape } from "./schema-validation.mjs";
 import { readStrictYaml } from "./strict-yaml.mjs";
 import { validateTypographyFoundation } from "./typography-foundation.mjs";
 import { validateSpacingFoundation } from "./spacing-foundation.mjs";
+import { validateAssetsFoundation } from "./assets-foundation.mjs";
 
 const SUPPORTED_MANIFEST_VERSION = "1.0.0";
 
@@ -378,6 +379,59 @@ function resolveSpacingSources(manifest) {
   };
 }
 
+function resolveAssetsSources(manifest) {
+  const errors = [];
+  const assetsSource = manifest.sources.find(
+    (source) => source.id === "assets-foundation",
+  );
+  const assetsSchemaSource = manifest.sources.find(
+    (source) => source.id === "assets-schema",
+  );
+
+  if (!assetsSource) {
+    errors.push(
+      diagnostic(
+        "missing-assets-source",
+        "/sources",
+        "Assets foundation source must be declared.",
+      ),
+    );
+  } else if (assetsSource.kind !== "registry") {
+    errors.push(
+      diagnostic(
+        "invalid-assets-source-kind",
+        "/sources/assets-foundation/kind",
+        "Assets foundation source kind must be registry.",
+      ),
+    );
+  }
+
+  if (!assetsSchemaSource) {
+    errors.push(
+      diagnostic(
+        "missing-assets-schema-source",
+        "/sources",
+        "Assets schema source must be declared.",
+      ),
+    );
+  } else if (assetsSchemaSource.kind !== "schema") {
+    errors.push(
+      diagnostic(
+        "invalid-assets-source-kind",
+        "/sources/assets-schema/kind",
+        "Assets schema source kind must be schema.",
+      ),
+    );
+  }
+
+  return {
+    assetsSource,
+    assetsSchemaSource,
+    errors: sortDiagnostics(errors),
+  };
+}
+
+
 export async function validateSystem({
   repoRoot,
   manifestPath = "system/manifest.yaml",
@@ -387,16 +441,18 @@ export async function validateSystem({
     const manifestErrors = await validateManifestSemantics(manifest, repoRoot);
     const typographySources = resolveTypographySources(manifest);
     const spacingSources = resolveSpacingSources(manifest);
+    const assetsSources = resolveAssetsSources(manifest);
     const prerequisiteErrors = sortDiagnostics([
       ...manifestErrors,
       ...typographySources.errors,
       ...spacingSources.errors,
+      ...assetsSources.errors,
     ]);
     if (prerequisiteErrors.length > 0) {
       return { manifest, errors: prerequisiteErrors };
     }
 
-    const [typographyResult, spacingResult] = await Promise.all([
+    const [typographyResult, spacingResult, assetsResult] = await Promise.all([
       validateTypographyFoundation({
         repoRoot,
         dataPath: typographySources.typographySource.path,
@@ -407,12 +463,18 @@ export async function validateSystem({
         dataPath: spacingSources.spacingSource.path,
         schemaPath: spacingSources.spacingSchemaSource.path,
       }),
+      validateAssetsFoundation({
+        repoRoot,
+        dataPath: assetsSources.assetsSource.path,
+        schemaPath: assetsSources.assetsSchemaSource.path,
+      }),
     ]);
     return {
       manifest,
       errors: sortDiagnostics([
         ...typographyResult.errors,
         ...spacingResult.errors,
+        ...assetsResult.errors,
       ]),
     };
   } catch (error) {
