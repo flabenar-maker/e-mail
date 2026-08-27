@@ -139,7 +139,9 @@ test("invalid assets exits one with a stable sanitized diagnostic", async (t) =>
   const root = await validFixture(t);
   const assetsPath = join(root, "data/foundations/assets.yaml");
   const assets = await readStrictYaml(assetsPath);
-  assets.source_modes.push(structuredClone(assets.source_modes[0]));
+  const duplicate = structuredClone(assets.source_modes[0]);
+  duplicate.description = "Distinct record with a duplicate id.";
+  assets.source_modes.push(duplicate);
   await writeFixtureFile(
     root,
     "data/foundations/assets.yaml",
