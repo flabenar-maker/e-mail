@@ -23,6 +23,8 @@ sources:
   - { id: spacing-schema, kind: schema, path: schemas/spacing.schema.json }
   - { id: assets-foundation, kind: registry, path: data/foundations/assets.yaml }
   - { id: assets-schema, kind: schema, path: schemas/assets.schema.json }
+  - { id: figma-naming-foundation, kind: registry, path: data/foundations/figma-naming.yaml }
+  - { id: figma-naming-schema, kind: schema, path: schemas/figma-naming.schema.json }
 bundle_profiles:
   - id: library-maintenance
     source_ids: [repository-readme, email-figma-prompt, figma-component-naming-standard, component-descriptions-registry, typography-registry, spacing-foundation, library-maintenance-checkpoint]
