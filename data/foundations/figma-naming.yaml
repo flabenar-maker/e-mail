@@ -1,0 +1,122 @@
+schema_version: 1.0.0
+foundation:
+  id: figma-naming
+  status: shadow
+  language: English
+  scope: figma-library-maintenance
+
+object_kinds:
+  - { id: component, label: Component }
+  - { id: layer, label: Layer }
+  - { id: property, label: Property }
+  - { id: asset-owner, label: Asset Owner }
+  - { id: page, label: Page }
+  - { id: section, label: Section }
+  - { id: example, label: Example }
+
+component_names:
+  separator: "/"
+  slash_count: 1
+  segment_case: title-kebab
+  approved_abbreviations: [NPS, QR, VK]
+
+namespaces:
+  - { id: email, label: Email, responsibility: email-shell }
+  - { id: banner, label: Banner, responsibility: large-standalone-module }
+  - { id: block, label: Block, responsibility: standalone-content-block }
+  - { id: card, label: Card, responsibility: repeated-card }
+  - { id: item, label: Item, responsibility: nested-repeated-item }
+  - { id: button, label: Button, responsibility: action }
+  - { id: badge, label: Badge, responsibility: live-compact-ui }
+  - { id: details, label: Details, responsibility: structured-data-set }
+  - { id: nps, label: NPS, responsibility: rating-block }
+  - { id: icon, label: Icon, responsibility: reusable-vector-glyph }
+  - { id: asset, label: Asset, responsibility: published-export-asset }
+
+variant_axes:
+  - { id: viewport, label: Viewport, order: 1, values: [Mobile, Desktop] }
+  - { id: layout, label: Layout, order: 2 }
+  - { id: style, label: Style, order: 3 }
+  - { id: state, label: State, order: 4 }
+  - { id: count, label: Count, order: 5 }
+  - { id: context, label: Context, order: 6 }
+
+property_names:
+  case: title-case
+  boolean:
+    pattern: "Show <Role>"
+    prefix: Show
+    positive_form_required: true
+  text_roles: [Heading, Body, Caption, Supporting Text, Button Label]
+  instance_swap_roles: [Icon, Image, Button]
+  values:
+    word_case: title-case
+    count_format: digits
+
+layer_names:
+  case: lower-kebab
+  controlled_roles:
+    - image-area
+    - content-area
+    - text-content
+    - heading
+    - body
+    - caption
+    - supporting-text
+    - label
+    - link
+    - actions
+    - cards
+    - items
+    - steps
+    - bullets
+    - rows
+    - divider
+    - social-links
+    - background
+    - glyph
+    - artwork
+  extension_forms: [role, role-qualifier, role-two-digit-index]
+  repeater_index:
+    digits: 2
+    starts_at: 1
+  forbidden_patterns:
+    - id: figma-default
+      pattern: "^(?:Frame|Group|Rectangle|Vector|Ellipse|Line|Subtract)(?: [0-9]+)?$"
+    - id: generic-container
+      pattern: "^(?:Wrapper|Container)(?: [0-9]+)?$"
+  forbidden_categories:
+    [color, size, padding, gap, position, state, html-tag, viewport]
+
+asset_owners:
+  internal_pattern: "<semantic-name> @<scale>x"
+  component_pattern: "Asset/<Semantic-Name> @<scale>x"
+  semantic_case: lower-kebab
+  scale_suffixes:
+    - { scale: 2, suffix: "@2x" }
+    - { scale: 4, suffix: "@4x" }
+  suffix_position: end
+  extension_in_name: forbidden
+  viewport_words_in_name: forbidden
+  file_basename:
+    remove_space_before_suffix: true
+
+organizational_names:
+  page:
+    consolidated_default: Email Components
+    numeric_prefix: allowed-only-for-stable-manual-sorting
+  section:
+    avoid_namespace_duplication: true
+    preferred_broad_label: Shared
+  template:
+    component_name: Email/Template
+    viewport_axis_id: viewport
+    content_slot_name: Content
+  example:
+    pattern: "Example · <Family> · <Semantic-Name> · <Viewport>"
+
+provenance:
+  baseline_commit: d2211556368b82d750152c94be0c646945e19b49
+  comparison_sources:
+    - core/figma-component-naming-standard.md
+    - docs/superpowers/specs/2026-08-24-cupis-structured-email-system-design.md
