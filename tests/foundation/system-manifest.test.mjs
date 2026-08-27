@@ -571,3 +571,83 @@ for (const [sourceId, kind] of [
     );
   });
 }
+
+test("declares the shadow Figma naming sources outside every bundle", async () => {
+  const manifest = await canonicalManifest();
+  const sources = new Map(
+    manifest.sources.map((source) => [source.id, source]),
+  );
+
+  assert.deepEqual(sources.get("figma-naming-foundation"), {
+    id: "figma-naming-foundation",
+    kind: "registry",
+    path: "data/foundations/figma-naming.yaml",
+  });
+  assert.deepEqual(sources.get("figma-naming-schema"), {
+    id: "figma-naming-schema",
+    kind: "schema",
+    path: "schemas/figma-naming.schema.json",
+  });
+
+  for (const profile of manifest.bundle_profiles) {
+    assert.equal(
+      profile.source_ids.includes("figma-naming-foundation"),
+      false,
+    );
+    assert.equal(
+      profile.source_ids.includes("figma-naming-schema"),
+      false,
+    );
+  }
+});
+
+for (const [sourceId, code] of [
+  ["figma-naming-foundation", "missing-figma-naming-source"],
+  ["figma-naming-schema", "missing-figma-naming-schema-source"],
+]) {
+  test("reports missing " + sourceId + " declaration", async (t) => {
+    const root = await validFixture(t);
+    await mutateFixtureManifest(root, (manifest) => {
+      manifest.sources = manifest.sources.filter(
+        (source) => source.id !== sourceId,
+      );
+    });
+
+    const result = await validateSystem({ repoRoot: root });
+
+    assert.ok(result.errors.some((error) => error.code === code));
+  });
+}
+
+for (const [sourceId, kind] of [
+  ["figma-naming-foundation", "core"],
+  ["figma-naming-schema", "registry"],
+]) {
+  test("reports invalid " + sourceId + " kind", async (t) => {
+    const root = await validFixture(t);
+    await mutateFixtureManifest(root, (manifest) => {
+      let source = manifest.sources.find((item) => item.id === sourceId);
+      if (!source) {
+        source = {
+          id: sourceId,
+          kind:
+            sourceId === "figma-naming-schema" ? "schema" : "registry",
+          path:
+            sourceId === "figma-naming-schema"
+              ? "schemas/figma-naming.schema.json"
+              : "data/foundations/figma-naming.yaml",
+        };
+        manifest.sources.push(source);
+      }
+      source.kind = kind;
+    });
+
+    const result = await validateSystem({ repoRoot: root });
+
+    assert.ok(
+      result.errors.some(
+        (error) => error.code === "invalid-figma-naming-source-kind",
+      ),
+    );
+  });
+}
