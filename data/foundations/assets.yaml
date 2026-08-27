@@ -1,0 +1,239 @@
+schema_version: 1.0.0
+foundation:
+  id: assets
+  status: shadow
+
+source_modes:
+  - id: image-fill
+    label: IMAGE FILL
+    contract:
+      source_content: source-raster-only
+      concrete_desktop_instance_required: true
+      own_visible_fill_included: true
+      visible_nested_graphics_included: false
+      parent_fill_included: false
+      unrelated_layout_included: false
+      live_html_included: false
+    description: >-
+      Export the original source raster from the Fill of the concrete Desktop
+      email instance without its container, nested graphics or live HTML.
+  - id: rendered-node
+    label: RENDERED NODE
+    contract:
+      source_content: exact-node-after-overrides
+      concrete_desktop_instance_required: true
+      own_visible_fill_included: true
+      visible_nested_graphics_included: true
+      parent_fill_included: false
+      unrelated_layout_included: false
+      live_html_included: false
+    description: >-
+      Export the exact selected node from the concrete Desktop email instance
+      after overrides, including its own visible Fill and visible nested
+      graphics but excluding parent Fill and unrelated layout.
+
+display_modes:
+  - id: direct-image
+    label: DIRECT IMAGE
+    contract:
+      intrinsic_ratio_required: true
+      crop_owner: none
+      mobile_width_behavior: fluid-to-container
+      mobile_height_behavior: auto
+      fixed_mobile_height_forbidden: true
+      html_height_attribute_forbidden: true
+      image_height_100_percent_forbidden: true
+      deformation_forbidden: true
+    description: >-
+      Render the file as a proportional image. Mobile may use width 100% only
+      with automatic height; the image does not inherit a crop container.
+  - id: fill-image
+    label: FILL IMAGE
+    contract:
+      intrinsic_ratio_required: true
+      crop_owner: html-wrapper
+      mobile_width_behavior: fluid-to-container
+      mobile_height_behavior: auto
+      fixed_mobile_height_forbidden: true
+      html_height_attribute_forbidden: true
+      image_height_100_percent_forbidden: true
+      deformation_forbidden: true
+    description: >-
+      Preserve the source-file ratio while a separate HTML wrapper owns the
+      crop. Mobile remains proportional and never stretches the raster.
+
+export_profiles:
+  - id: jpeg-2x
+    label: JPEG @2x
+    contract:
+      format: JPEG
+      extension: .jpg
+      scale: 2
+      suffix: "@2x"
+      color_space: sRGB
+      alpha_mode: none
+      quality:
+        base_percent: 82
+        escalation_percent: 90
+        escalation_condition: visible-artifacts-only
+      rendered_node_intermediate: lossless-png
+    description: >-
+      Export an sRGB JPEG at scale 2. Start at quality 82 and increase to 90
+      only when visible artifacts remain; rendered nodes use a lossless PNG
+      intermediate before JPEG conversion.
+  - id: png-4x
+    label: PNG @4x
+    contract:
+      format: PNG
+      extension: .png
+      scale: 4
+      suffix: "@4x"
+      color_space: sRGB
+      allowed_alpha_modes:
+        - transparent
+        - opaque
+        - source
+      node_export_contents_only: true
+    description: >-
+      Export an sRGB PNG at scale 4 with the declared alpha expectation and
+      node contentsOnly behavior.
+
+alpha_modes:
+  - id: none
+    contract:
+      expectation: no-alpha
+      permits_alpha: false
+    description: JPEG output has no alpha channel.
+  - id: transparent
+    contract:
+      expectation: transparent-outside-visual
+      permits_alpha: true
+    description: Pixels outside the owned visual remain transparent.
+  - id: opaque
+    contract:
+      expectation: fully-opaque
+      permits_alpha: false
+    description: The owned visual intentionally produces a fully opaque PNG.
+  - id: source
+    contract:
+      expectation: preserve-source
+      permits_alpha: true
+    description: Preserve the source node's own alpha behavior without a matte.
+
+clipping_policies:
+  - id: preserve-artwork
+    contract:
+      allowed_source_mode_ids:
+        - image-fill
+        - rendered-node
+      temporary_copy_required: false
+      artwork_clipping_preserved: true
+      presentation_clipping_neutralized: false
+      preserve_fields:
+        - fill
+        - crop
+        - dimensions
+        - intrinsic-ratio
+        - variants
+        - overrides
+        - children
+      temporary_copy_deleted: false
+      readback_required: false
+    description: >-
+      Preserve clipping and radius that belong to the artwork itself; no
+      temporary mutation is required.
+  - id: neutralize-presentation-only
+    contract:
+      allowed_source_mode_ids:
+        - rendered-node
+      temporary_copy_required: true
+      artwork_clipping_preserved: true
+      presentation_clipping_neutralized: true
+      preserve_fields:
+        - fill
+        - crop
+        - dimensions
+        - intrinsic-ratio
+        - variants
+        - overrides
+        - children
+      temporary_copy_deleted: true
+      readback_required: true
+    description: >-
+      On a temporary copy of a rendered node, neutralize only presentation
+      radius or clipsContent, preserve the artwork contract, export, delete the
+      copy and confirm the original by readback.
+
+compatibility:
+  - id: jpeg-2x-compatibility
+    export_profile_id: jpeg-2x
+    source_mode_ids:
+      - image-fill
+      - rendered-node
+    display_mode_ids:
+      - direct-image
+      - fill-image
+    alpha_mode_ids:
+      - none
+    clipping_policy_ids:
+      - preserve-artwork
+      - neutralize-presentation-only
+  - id: png-4x-compatibility
+    export_profile_id: png-4x
+    source_mode_ids:
+      - image-fill
+      - rendered-node
+    display_mode_ids:
+      - direct-image
+      - fill-image
+    alpha_mode_ids:
+      - transparent
+      - opaque
+      - source
+    clipping_policy_ids:
+      - preserve-artwork
+      - neutralize-presentation-only
+
+identity_policy:
+  base_name_source: nearest-semantic-asset-owner
+  scale_suffix_required: true
+  viewport_suffixes_forbidden:
+    - Mobile
+    - Desktop
+  shared_mobile_desktop_file: true
+  shared_mobile_desktop_src: true
+  concrete_desktop_instance_required: true
+  placeholder_forbidden: true
+  main_component_export_forbidden: true
+
+background_policy:
+  own_visible_boundary_fill: preserve
+  parent_fill: exclude
+  invisible_fill: exclude
+  artificial_matte: forbid
+
+global_invariants:
+  - id: source-display-independent
+    statement: Source mode and display mode are independent contract choices.
+  - id: exact-component-boundary
+    statement: The component contract selects the exact export boundary.
+  - id: one-file-one-src
+    statement: One visual asset uses one file and one src across Mobile and Desktop.
+  - id: intrinsic-ratio-preserved
+    statement: Responsive width changes preserve the source raster proportions.
+  - id: raster-deformation-forbidden
+    statement: A raster must not be stretched independently on both axes.
+  - id: component-contract-owns-specifics
+    statement: Component owners, boundaries, display sizes and exceptions remain component-owned.
+  - id: concrete-instance-source
+    statement: Export uses the concrete Desktop email instance after its overrides.
+  - id: artificial-background-forbidden
+    statement: No matte or background absent from the owned export boundary may be added.
+
+provenance:
+  baseline_commit: 8192e6c3262cd24fa13fbbbe248af653c8005231
+  reviewed_on: "2026-08-27"
+  comparison_sources:
+    - core/email-figma-prompt.md
+    - registry/email-component-descriptions-registry.md
+    - docs/superpowers/specs/2026-08-24-cupis-structured-email-system-design.md
