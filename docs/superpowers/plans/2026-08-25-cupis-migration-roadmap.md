@@ -83,10 +83,15 @@ Master-спецификация владеет архитектурными ре
 
 #### 5Б. Figma naming foundation — текущий следующий этап
 
+- [ ] Согласовать архитектурное уточнение master-спецификации: naming definitions, generator и validator являются отдельными модулями, а maintenance skill только оркестрирует безопасный процесс.
 - [ ] Создать и согласовать отдельный implementation plan figma-naming foundation.
 - [ ] Перенести универсальные naming definitions в `data/foundations/figma-naming.yaml` без миграции существующей библиотеки.
 - [ ] Создать schema, semantic validation, characterization и manifest references.
+- [ ] Создать чистый детерминированный generator рекомендаций, который использует только foundation и явно подтверждённую семантику; при неоднозначности возвращает `semantic-role-required`, не угадывает функцию объекта и не пишет в Figma.
+- [ ] Отделить validator существующих и предлагаемых имён от generator: validator проверяет только явно заданную область, а не запускает полный аудит библиотеки при каждой maintenance-задаче.
 - [ ] Сохранить `@2x` и `@4x` обязательной частью имени asset owner; не смешивать naming definitions с конкретными component records.
+- [ ] Зафиксировать будущую оркестрацию maintenance skill: локальное обнаружение непонятного имени → уточнение функции → рекомендация `old → new` → impact report → отдельное разрешение → Figma write → read-back и dependency checks.
+- [ ] Не менять Figma, component contracts, действующий naming standard или рабочие bundle profiles в технической реализации foundation.
 - [ ] Завершить общий этап 5 только после слияния обоих подэтапов и проверки отсутствия изменений Figma и component contracts.
 
 ### 6. Структурированный component registry
