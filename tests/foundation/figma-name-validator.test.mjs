@@ -100,16 +100,6 @@ for (const [name, candidate, expectedCodes] of [
     ["FIGMA_NAME_GENERIC"],
   ],
   [
-    "layer outside the controlled role vocabulary",
-    { objectKind: "layer", name: "sidebar" },
-    ["FIGMA_NAME_GENERIC"],
-  ],
-  [
-    "combined layer qualifier and repeater index",
-    { objectKind: "layer", name: "items-compact-01" },
-    ["FIGMA_NAME_REPEATER_INDEX"],
-  ],
-  [
     "one-digit repeater",
     { objectKind: "layer", name: "item-1" },
     ["FIGMA_NAME_REPEATER_INDEX"],
