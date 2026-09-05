@@ -2,9 +2,9 @@
 
 Статус документа: ручной checkpoint для восстановления контекста.
 
-Последнее ручное обновление: 2026-08-27.
+Последнее ручное обновление: 2026-09-05.
 
-Снимок `main` на момент обновления: `57547adc1ae7a184a83019aec40cee28046d8c35`.
+Снимок `main` на момент обновления: `edacb9376c66fe850a9418e57fe6e311b49bc00c`.
 
 ## 1. Зачем нужен этот файл
 
@@ -83,89 +83,100 @@
 
 На снимке `main`, указанном в начале документа, завершены:
 
-1. master-спецификация целевой системы;
+1. master-спецификация целевой системы и общий migration roadmap;
 2. системный foundation:
    - единый manifest;
    - schema и validation CLI;
-   - CI;
-   - bootstrap;
-   - characterization-защита;
+   - CI, bootstrap и characterization-защита;
 3. typography foundation pilot в shadow-режиме;
 4. spacing foundation:
    - золотое правило для разработки библиотеки;
    - exact-only resolver;
-   - запрет использования этого design-time правила для выбора отступов при HTML-вёрстке;
-5. Assets foundation в shadow-режиме:
-   - `data/foundations/assets.yaml` и строгая schema;
-   - semantic validation и exact-only resolver;
-   - characterization-защита границы между общими definitions и component contracts;
-   - источники объявлены в manifest, но не входят в рабочие bundles;
-6. migration-progress route и правило обязательной сверки roadmap;
-7. maintenance skill для manifest-driven работы.
+   - запрет использовать design-time правило как свободу выбора отступов при HTML-вёрстке;
+5. assets foundation в shadow-режиме;
+6. Figma naming foundation в shadow-режиме:
+   - строгие data и schema;
+   - отдельные foundation loader, generator и candidate validator;
+   - manifest wiring, boundary tests и preserved-source protection;
+7. migration-progress route и обязательная сверка roadmap;
+8. maintenance skill для manifest-driven работы.
 
-Assets foundation реализован и слит через [PR #33](https://github.com/flabenar-maker/e-mail/pull/33), итоговый commit: `fe1a0e37b4d40533706c88d73f5c293c8860b3ee`. Статус roadmap обновлён отдельным [PR #34](https://github.com/flabenar-maker/e-mail/pull/34).
+Assets foundation реализован через [PR #33](https://github.com/flabenar-maker/e-mail/pull/33), итоговый commit: `fe1a0e37b4d40533706c88d73f5c293c8860b3ee`.
 
-В рамках подэтапа 5А не менялись Figma, descriptions компонентов, конкретные HTML-письма и готовые изображения. Старые Markdown-источники остаются активной базой до общего cutover.
+Figma naming foundation реализован через [PR #37](https://github.com/flabenar-maker/e-mail/pull/37), итоговый commit: `edacb9376c66fe850a9418e57fe6e311b49bc00c`.
+
+Оба подэтапа общего этапа 5 находятся в `main`. Их техническая реализация не меняла Figma, descriptions, component contracts, готовые письма или рабочие bundle profiles. Старые Markdown-источники остаются активной базой до предусмотренного cutover.
 
 ## 7. Текущий этап
 
-Текущий следующий этап миграции — **5Б. Figma naming foundation**.
+Техническая реализация этапа 5 завершена. Сейчас выполняется только post-merge фиксация статуса:
 
-По актуальному roadmap требуется:
+- в draft [PR #38](https://github.com/flabenar-maker/e-mail/pull/38) roadmap отмечает подэтап 5Б и общий этап 5 завершёнными;
+- этот checkpoint обновляется в том же PR по прямой команде пользователя;
+- PR основан на `main` commit `edacb9376c66fe850a9418e57fe6e311b49bc00c`;
+- системные проверки PR прошли;
+- до отдельной команды пользователя PR не сливается.
 
-- создать и согласовать отдельный implementation plan;
-- перенести универсальные naming definitions в structured shadow-источник;
-- добавить schema, semantic validation, characterization и manifest references;
-- сохранить `@2x` и `@4x` обязательной частью имени asset owner;
-- не смешивать общие naming definitions с конкретными component records.
-
-Отдельного implementation plan для 5Б в `docs/superpowers/plans/` пока нет. Поэтому реализацию, изменение Figma и миграцию существующих имён начинать нельзя: следующим действием является создание и review плана.
+Следующий технический этап после слияния PR #38 — **6. Структурированный component registry**. Его implementation plan ещё не создан, поэтому реализацию schema или перенос component contracts начинать нельзя.
 
 ## 8. Следующий точный шаг
 
-Перед работой над 5Б:
+1. По отдельной команде пользователя слить PR #38.
+2. Закрепить новый SHA `main` и повторно открыть roadmap и папку plans.
+3. Сверить master-спецификацию, текущие Markdown-реестры, foundations и manifest boundaries для этапа 6.
+4. Подготовить отдельный implementation plan структурированного component registry:
+   - data model и schemas;
+   - разделение общего, маркетингового и сервисного реестров;
+   - provenance, variants, properties и ссылки на foundations;
+   - blocker для незарегистрированного компонента;
+   - characterization, RED/GREEN и allowed diff.
+5. Отдельно согласовать план с пользователем.
+6. Только после согласования создать implementation branch от свежего `main`.
 
-1. повторно закрепить актуальный SHA `main`;
-2. открыть [migration roadmap](2026-08-25-cupis-migration-roadmap.md);
-3. проверить состав `docs/superpowers/plans/`;
-4. сверить master-спецификацию, naming standard и действующие manifest boundaries;
-5. подготовить отдельный implementation plan Figma naming foundation с точными файлами, тестами, RED/GREEN и allowed diff;
-6. отдельно согласовать этот план с пользователем;
-7. только после согласования создать implementation branch от свежего `main`.
+До утверждения плана этапа 6 не переносить component contracts, не менять Figma descriptions и не подключать новые registry sources к рабочим bundles.
 
-До утверждения плана не создавать `figma-naming.yaml`, не менять manifest и не выполнять Figma mutation.
+## 9. Реализованная граница Figma naming foundation
 
-## 9. Предварительная граница Figma naming foundation
+Figma naming foundation уже существует как отдельный shadow-источник универсальных правил нейминга.
 
-Подэтап 5Б должен создать структурированный shadow-источник универсальных правил нейминга и его машинные проверки.
+Стабильная архитектурная граница:
 
-Он не должен:
+- `data/foundations/figma-naming.yaml` владеет машинно-читаемыми универсальными definitions;
+- schema и foundation validator проверяют структуру и семантические границы;
+- generator предлагает одно имя только из явно подтверждённой семантики;
+- candidate validator проверяет только явно переданное имя и не сканирует библиотеку;
+- generator и validator не читают и не изменяют Figma;
+- конкретные component names, node IDs, descriptions, размеры и rename maps не входят в foundation;
+- `@2x` и `@4x` сохраняются как обязательная часть имени asset owner;
+- foundation пока отсутствует в рабочих bundles и не активирован в maintenance skill.
 
-- переименовывать существующие компоненты или слои Figma;
-- менять структуру, свойства, variants, geometry или descriptions компонентов;
-- переносить конкретные component records в общий foundation;
-- удалять или ослаблять суффиксы `@2x` и `@4x` у asset owners;
-- подключать новый shadow-источник к рабочим bundles до предусмотренного roadmap cutover;
-- менять HTML-письма или локальные изображения.
+Подключение maintenance skill, impact report и Figma mutation остаются отдельными будущими этапами. Существующую библиотеку нельзя автоматически переименовывать только потому, что foundation уже создан.
 
-Это только навигационная граница из roadmap. Точный data contract, файлы, diagnostics и проверки должен определить отдельный согласованный implementation plan 5Б.
+## 10. Карта этапов миграции
 
-## 10. Следующие этапы после 5Б
+Эта таблица помогает быстро восстановить маршрут. Канонический статус всегда перепроверяется по [migration roadmap](2026-08-25-cupis-migration-roadmap.md) и фактическому `main`.
 
-Текущая последовательность задаётся roadmap. После Figma naming foundation запланированы:
+| Этап | Содержание | Статус на 2026-09-05 |
+|---:|---|---|
+| 1 | Master-спецификация и первый implementation plan | Завершён |
+| 2 | Системный foundation: manifest, validation, CI и bootstrap | Завершён |
+| 3 | Typography foundation pilot | Завершён |
+| 4 | Spacing foundation | Завершён |
+| 5 | Assets foundation и Figma naming foundation | Реализован в `main`; статус фиксируется PR #38 |
+| 6 | Структурированный component registry | Следующий; implementation plan ещё не создан |
+| 7 | Generated docs и route-specific context bundles | Ожидает этап 6 |
+| 8 | Разделение Core и workflows, переход на новые источники | Ожидает этап 7 |
+| 9 | Переключение maintenance skill на итоговые bundles | Ожидает этап 8 |
+| 10 | Стандарт и workflow разработки новых блоков | Запланирован после системного cutover maintenance |
+| 11 | Навык разработки новых блоков | Ожидает этап 10 |
+| 12 | Навык HTML-вёрстки конкретных писем | Ожидает этапы 10–11 |
+| 13 | Shadow comparison старых и новых источников | Ожидает готовности всех маршрутов |
+| 14 | Общий cutover на structured-систему | Ожидает успешный shadow comparison |
+| 15 | Удаление старых дублей и временных migration-артефактов | Только после стабильного cutover |
 
-1. структурированный component registry;
-2. generated docs и route-specific context bundles;
-3. разделение Core и workflows;
-4. cutover maintenance skill;
-5. стандарт и workflow разработки новых блоков;
-6. отдельный skill разработки новых блоков;
-7. отдельный skill HTML-вёрстки писем;
-8. shadow comparison;
-9. общий cutover;
-10. удаление старых дублей и временных migration-артефактов.
+Коротко: **этапы 1–5 сделаны → сейчас фиксируется статус → далее планируем этап 6 → затем последовательно выполняем этапы 7–15**.
 
-Нельзя перескакивать к следующему этапу только потому, что он описан здесь. Перед ответом о следующей работе всегда проверяется актуальный roadmap.
+Нельзя перескакивать к следующему этапу только потому, что он указан в таблице. Каждый технический этап сначала получает отдельный implementation plan и согласование.
 
 ## 11. Стабильные рабочие решения
 
@@ -229,6 +240,18 @@ Assets foundation уже существует как валидируемый sh
 - placeholder или main component не подменяют конкретный инстанс письма.
 
 Этот список — страховочная карта миграции. Точные исполняемые формулировки всегда берутся из актуальных канонических источников.
+
+### Figma naming
+
+Figma naming foundation является shadow-источником и не заменяет текущий naming standard до общего cutover. Нельзя потерять следующие решения:
+
+- definitions, generator и validator остаются отдельными модулями;
+- непонятная семантика блокирует рекомендацию, а не запускает угадывание;
+- validator работает только с явно заданным candidate;
+- генерация имени не означает разрешение переименовать объект;
+- обычное переименование сохраняет текущий `@2x` или `@4x`;
+- конкретные компоненты и карты миграции не переносятся в общий foundation;
+- Figma write требует impact report, отдельного разрешения и readback.
 
 ## 12. Пользовательские требования к процессу
 
@@ -294,6 +317,11 @@ Assets foundation уже существует как валидируемый sh
 - [Assets foundation implementation plan](2026-08-26-cupis-assets-foundation.md)
 - [Assets foundation](../../../data/foundations/assets.yaml)
 - [Assets schema](../../../schemas/assets.schema.json)
+- [Figma naming implementation plan](2026-08-27-cupis-figma-naming-foundation.md)
+- [Figma naming foundation](../../../data/foundations/figma-naming.yaml)
+- [Figma naming schema](../../../schemas/figma-naming.schema.json)
+- [Figma naming implementation PR #37](https://github.com/flabenar-maker/e-mail/pull/37)
+- [Roadmap status PR #38](https://github.com/flabenar-maker/e-mail/pull/38)
 - [Library maintenance checkpoint](../../../workflows/library-maintenance-checkpoint.md)
 - [Core email/Figma prompt](../../../core/email-figma-prompt.md)
 - [Component descriptions registry](../../../registry/email-component-descriptions-registry.md)

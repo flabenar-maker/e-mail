@@ -1,6 +1,6 @@
 # CUPIS Structured System Migration Roadmap
 
-Актуальность: 2026-08-27.
+Актуальность: 2026-09-05.
 
 ## Назначение
 
@@ -63,7 +63,7 @@ Master-спецификация владеет архитектурными ре
 
 Подробный план: [spacing foundation](2026-08-25-cupis-spacing-foundation.md).
 
-### 5. Остальные foundations
+### 5. Остальные foundations — завершён
 
 Этап выполняется двумя последовательными подэтапами. Каждый подэтап получает отдельный implementation plan, branch и PR. Подэтап 5Б начинается только после слияния 5А.
 
@@ -81,18 +81,23 @@ Master-спецификация владеет архитектурными ре
 
 Подробный план: [assets foundation](2026-08-26-cupis-assets-foundation.md). Реализация слита в [PR #33](https://github.com/flabenar-maker/e-mail/pull/33), итоговый commit: `fe1a0e37b4d40533706c88d73f5c293c8860b3ee`.
 
-#### 5Б. Figma naming foundation — текущий следующий этап
+#### 5Б. Figma naming foundation — завершён
 
-- [ ] Согласовать архитектурное уточнение master-спецификации: naming definitions, generator и validator являются отдельными модулями, а maintenance skill только оркестрирует безопасный процесс.
-- [ ] Создать и согласовать отдельный implementation plan figma-naming foundation.
-- [ ] Перенести универсальные naming definitions в `data/foundations/figma-naming.yaml` без миграции существующей библиотеки.
-- [ ] Создать schema, semantic validation, characterization и manifest references.
-- [ ] Создать чистый детерминированный generator рекомендаций, который использует только foundation и явно подтверждённую семантику; при неоднозначности возвращает `semantic-role-required`, не угадывает функцию объекта и не пишет в Figma.
-- [ ] Отделить validator существующих и предлагаемых имён от generator: validator проверяет только явно заданную область, а не запускает полный аудит библиотеки при каждой maintenance-задаче.
-- [ ] Сохранить `@2x` и `@4x` обязательной частью имени asset owner; не смешивать naming definitions с конкретными component records.
-- [ ] Зафиксировать будущую оркестрацию maintenance skill: локальное обнаружение непонятного имени → уточнение функции → рекомендация `old → new` → impact report → отдельное разрешение → Figma write → read-back и dependency checks.
-- [ ] Не менять Figma, component contracts, действующий naming standard или рабочие bundle profiles в технической реализации foundation.
-- [ ] Завершить общий этап 5 только после слияния обоих подэтапов и проверки отсутствия изменений Figma и component contracts.
+- [x] Согласовать архитектурное уточнение master-спецификации: naming definitions, generator и validator являются отдельными модулями, а maintenance skill только оркестрирует безопасный процесс.
+- [x] Создать и согласовать отдельный implementation plan figma-naming foundation.
+- [x] Перенести универсальные naming definitions в `data/foundations/figma-naming.yaml` без миграции существующей библиотеки.
+- [x] Создать schema, semantic validation, characterization и manifest references.
+- [x] Создать чистый детерминированный generator рекомендаций, который использует только foundation и явно подтверждённую семантику; при неоднозначности возвращает `semantic-role-required`, не угадывает функцию объекта и не пишет в Figma.
+- [x] Отделить validator существующих и предлагаемых имён от generator: validator проверяет только явно заданную область, а не запускает полный аудит библиотеки при каждой maintenance-задаче.
+- [x] Сохранить `@2x` и `@4x` обязательной частью имени asset owner; не смешивать naming definitions с конкретными component records.
+- [x] Зафиксировать будущую оркестрацию maintenance skill: локальное обнаружение непонятного имени → уточнение функции → рекомендация `old → new` → impact report → отдельное разрешение → Figma write → read-back и dependency checks.
+- [x] Не менять Figma, component contracts, действующий naming standard или рабочие bundle profiles в технической реализации foundation.
+- [x] Завершить общий этап 5 только после слияния обоих подэтапов и проверки отсутствия изменений Figma и component contracts.
+
+
+Подробный план: [Figma naming foundation](2026-08-27-cupis-figma-naming-foundation.md). Реализация слита в [PR #37](https://github.com/flabenar-maker/e-mail/pull/37), итоговый commit: `edacb9376c66fe850a9418e57fe6e311b49bc00c`.
+
+Общий этап 5 завершён: assets foundation и Figma naming foundation находятся в `main`; технические реализации не изменяли Figma и component contracts.
 
 ### 6. Структурированный component registry
 
