@@ -32,7 +32,7 @@ function isTitleKebab(value, abbreviations) {
   return value.split("-").every(
     (part) =>
       abbreviations.includes(part) ||
-      /^[A-Z][A-Za-z0-9]*$/u.test(part),
+      /^[A-Z][a-z0-9]*$/u.test(part),
   );
 }
 
@@ -252,12 +252,12 @@ function validateAssetOwner(naming, candidate, errors) {
     return;
   }
 
-  if (!name.endsWith(present.suffix)) {
+  if (!name.endsWith(" " + present.suffix)) {
     errors.push(
       diagnostic(
         "FIGMA_NAME_SUFFIX_POSITION",
         "/candidate/name",
-        "Asset scale suffix must be at the end of the name.",
+        "Asset scale suffix must follow the semantic name after a space and remain at the end.",
       ),
     );
     return;
