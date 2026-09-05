@@ -157,3 +157,27 @@ test("invalid assets exits one with a stable sanitized diagnostic", async (t) =>
     /source-raster-only/u,
   );
 });
+
+test("invalid Figma naming exits one with a stable sanitized diagnostic", async (t) => {
+  const root = await validFixture(t);
+  const secret = "do-not-print-this-figma-naming-value";
+  const naming = await readStrictYaml(
+    join(root, "data/foundations/figma-naming.yaml"),
+  );
+  naming.namespaces[0].responsibility = secret;
+  naming.object_kinds.push(structuredClone(naming.object_kinds[0]));
+  await writeFixtureFile(
+    root,
+    "data/foundations/figma-naming.yaml",
+    JSON.stringify(naming, null, 2) + "\n",
+  );
+
+  const result = await runValidator(root);
+
+  assert.equal(result.exitCode, 1);
+  assert.match(result.stderr, /FIGMA_NAMING_DUPLICATE_ID/u);
+  assert.doesNotMatch(
+    result.stderr + result.stdout,
+    /do-not-print-this-figma-naming-value/u,
+  );
+});

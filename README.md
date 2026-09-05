@@ -23,6 +23,12 @@
 
 Foundation владеет общими definitions и совместимостью режимов. [Реестр компонентов](registry/email-component-descriptions-registry.md) владеет конкретным выбором asset, границей экспорта и отображаемыми размерами; [текущий Markdown-промт](core/email-figma-prompt.md) остаётся активной контрольной базой до отдельного cutover.
 
+### Теневая база нейминга Figma
+
+[data/foundations/figma-naming.yaml](data/foundations/figma-naming.yaml) хранит проверяемые универсальные определения нейминга отдельно от generator и validator. Generator получает уже подтверждённую семантику и предлагает одно имя; validator проверяет только один явно переданный вариант.
+
+Этот foundation пока не входит в рабочие bundle profiles, не активирует maintenance skill и не разрешает переименование в Figma. Подключение навыка и любые Figma-записи выполняются на последующих этапах через отдельное согласование.
+
 ## Восстановление контекста
 
 После открытия этого репозитория достаточно сказать Codex:
@@ -92,6 +98,11 @@ Foundation владеет общими definitions и совместимость
 | `schemas/typography.schema.json` | Строгая машинная схема structured-пилота типографики |
 | `data/foundations/spacing.yaml` | Машинно-проверяемое золотое правило отступов для maintenance и component onboarding; не является входом HTML-вёрстки |
 | `data/foundations/assets.yaml` | Валидируемый shadow-источник общих asset/export definitions; конкретные component contracts остаются в реестре |
+| `data/foundations/figma-naming.yaml` | Валидируемый shadow-источник универсальных определений нейминга Figma; не содержит конкретных компонентов или карт переименований |
+| `schemas/figma-naming.schema.json` | Строгая машинная схема Figma naming foundation |
+| `scripts/lib/figma-naming-foundation.mjs` | Загрузка и проверка shape и семантики Figma naming foundation |
+| `scripts/lib/figma-name-generator.mjs` | Чистая генерация одного имени из явно подтверждённой семантики без записи в Figma |
+| `scripts/lib/figma-name-validator.mjs` | Проверка одного явно переданного имени без сканирования библиотеки |
 | `schemas/spacing.schema.json` | Строгая schema spacing foundation и exact-only разрешений |
 | `scripts/lib/spacing-foundation.mjs` | Design-time validation и resolver, возвращающий одно точное значение либо typed blocker |
 | `registry/email-typography-registry.md` | Контрольный Markdown-снимок типографики и текущий владелец списков компонентов-потребителей до cutover |

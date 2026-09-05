@@ -1,0 +1,493 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "schemas/figma-naming.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "foundation",
+    "object_kinds",
+    "component_names",
+    "namespaces",
+    "variant_axes",
+    "property_names",
+    "layer_names",
+    "asset_owners",
+    "organizational_names",
+    "provenance"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "foundation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "status",
+        "language",
+        "scope"
+      ],
+      "properties": {
+        "id": {
+          "const": "figma-naming"
+        },
+        "status": {
+          "const": "shadow"
+        },
+        "language": {
+          "const": "English"
+        },
+        "scope": {
+          "const": "figma-library-maintenance"
+        }
+      }
+    },
+    "object_kinds": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "label"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "component_names": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "separator",
+        "slash_count",
+        "segment_case",
+        "approved_abbreviations"
+      ],
+      "properties": {
+        "separator": {
+          "const": "/"
+        },
+        "slash_count": {
+          "const": 1
+        },
+        "segment_case": {
+          "const": "title-kebab"
+        },
+        "approved_abbreviations": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9]*$"
+          }
+        }
+      }
+    },
+    "namespaces": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "label",
+          "responsibility"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "responsibility": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+          }
+        }
+      }
+    },
+    "variant_axes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "label",
+          "order"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "order": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "values": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    "property_names": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "case",
+        "boolean",
+        "text_roles",
+        "instance_swap_roles",
+        "values"
+      ],
+      "properties": {
+        "case": {
+          "const": "title-case"
+        },
+        "boolean": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "pattern",
+            "prefix",
+            "positive_form_required"
+          ],
+          "properties": {
+            "pattern": {
+              "const": "Show <Role>"
+            },
+            "prefix": {
+              "const": "Show"
+            },
+            "positive_form_required": {
+              "const": true
+            }
+          }
+        },
+        "text_roles": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "instance_swap_roles": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "values": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "word_case",
+            "count_format"
+          ],
+          "properties": {
+            "word_case": {
+              "const": "title-case"
+            },
+            "count_format": {
+              "const": "digits"
+            }
+          }
+        }
+      }
+    },
+    "layer_names": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "case",
+        "controlled_roles",
+        "extension_forms",
+        "repeater_index",
+        "forbidden_patterns",
+        "forbidden_categories"
+      ],
+      "properties": {
+        "case": {
+          "const": "lower-kebab"
+        },
+        "controlled_roles": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+          }
+        },
+        "extension_forms": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "role",
+              "role-qualifier",
+              "role-two-digit-index"
+            ]
+          }
+        },
+        "repeater_index": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "digits",
+            "starts_at"
+          ],
+          "properties": {
+            "digits": {
+              "const": 2
+            },
+            "starts_at": {
+              "const": 1
+            }
+          }
+        },
+        "forbidden_patterns": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "pattern"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+              },
+              "pattern": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "forbidden_categories": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "color",
+              "size",
+              "padding",
+              "gap",
+              "position",
+              "state",
+              "html-tag",
+              "viewport"
+            ]
+          }
+        }
+      }
+    },
+    "asset_owners": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "internal_pattern",
+        "component_pattern",
+        "semantic_case",
+        "scale_suffixes",
+        "suffix_position",
+        "extension_in_name",
+        "viewport_words_in_name",
+        "file_basename"
+      ],
+      "properties": {
+        "internal_pattern": {
+          "const": "<semantic-name> @<scale>x"
+        },
+        "component_pattern": {
+          "const": "Asset/<Semantic-Name> @<scale>x"
+        },
+        "semantic_case": {
+          "const": "lower-kebab"
+        },
+        "scale_suffixes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "scale",
+              "suffix"
+            ],
+            "properties": {
+              "scale": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "suffix": {
+                "type": "string",
+                "pattern": "^@[0-9]+x$"
+              }
+            }
+          }
+        },
+        "suffix_position": {
+          "const": "end"
+        },
+        "extension_in_name": {
+          "const": "forbidden"
+        },
+        "viewport_words_in_name": {
+          "const": "forbidden"
+        },
+        "file_basename": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "remove_space_before_suffix"
+          ],
+          "properties": {
+            "remove_space_before_suffix": {
+              "const": true
+            }
+          }
+        }
+      }
+    },
+    "organizational_names": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "page",
+        "section",
+        "template",
+        "example"
+      ],
+      "properties": {
+        "page": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "consolidated_default",
+            "numeric_prefix"
+          ],
+          "properties": {
+            "consolidated_default": {
+              "const": "Email Components"
+            },
+            "numeric_prefix": {
+              "const": "allowed-only-for-stable-manual-sorting"
+            }
+          }
+        },
+        "section": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "avoid_namespace_duplication",
+            "preferred_broad_label"
+          ],
+          "properties": {
+            "avoid_namespace_duplication": {
+              "const": true
+            },
+            "preferred_broad_label": {
+              "const": "Shared"
+            }
+          }
+        },
+        "template": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "component_name",
+            "viewport_axis_id",
+            "content_slot_name"
+          ],
+          "properties": {
+            "component_name": {
+              "const": "Email/Template"
+            },
+            "viewport_axis_id": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+            },
+            "content_slot_name": {
+              "const": "Content"
+            }
+          }
+        },
+        "example": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "pattern"
+          ],
+          "properties": {
+            "pattern": {
+              "const": "Example · <Family> · <Semantic-Name> · <Viewport>"
+            }
+          }
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "baseline_commit",
+        "comparison_sources"
+      ],
+      "properties": {
+        "baseline_commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "comparison_sources": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\).+$"
+          }
+        }
+      }
+    }
+  }
+}

@@ -7,6 +7,7 @@ import { readStrictYaml } from "./strict-yaml.mjs";
 import { validateTypographyFoundation } from "./typography-foundation.mjs";
 import { validateSpacingFoundation } from "./spacing-foundation.mjs";
 import { validateAssetsFoundation } from "./assets-foundation.mjs";
+import { validateFigmaNamingFoundation } from "./figma-naming-foundation.mjs";
 
 const SUPPORTED_MANIFEST_VERSION = "1.0.0";
 
@@ -432,6 +433,58 @@ function resolveAssetsSources(manifest) {
 }
 
 
+function resolveFigmaNamingSources(manifest) {
+  const errors = [];
+  const figmaNamingSource = manifest.sources.find(
+    (source) => source.id === "figma-naming-foundation",
+  );
+  const figmaNamingSchemaSource = manifest.sources.find(
+    (source) => source.id === "figma-naming-schema",
+  );
+
+  if (!figmaNamingSource) {
+    errors.push(
+      diagnostic(
+        "missing-figma-naming-source",
+        "/sources",
+        "Figma naming foundation source must be declared.",
+      ),
+    );
+  } else if (figmaNamingSource.kind !== "registry") {
+    errors.push(
+      diagnostic(
+        "invalid-figma-naming-source-kind",
+        "/sources/figma-naming-foundation/kind",
+        "Figma naming foundation source kind must be registry.",
+      ),
+    );
+  }
+
+  if (!figmaNamingSchemaSource) {
+    errors.push(
+      diagnostic(
+        "missing-figma-naming-schema-source",
+        "/sources",
+        "Figma naming schema source must be declared.",
+      ),
+    );
+  } else if (figmaNamingSchemaSource.kind !== "schema") {
+    errors.push(
+      diagnostic(
+        "invalid-figma-naming-source-kind",
+        "/sources/figma-naming-schema/kind",
+        "Figma naming schema source kind must be schema.",
+      ),
+    );
+  }
+
+  return {
+    figmaNamingSource,
+    figmaNamingSchemaSource,
+    errors: sortDiagnostics(errors),
+  };
+}
+
 export async function validateSystem({
   repoRoot,
   manifestPath = "system/manifest.yaml",
@@ -442,17 +495,20 @@ export async function validateSystem({
     const typographySources = resolveTypographySources(manifest);
     const spacingSources = resolveSpacingSources(manifest);
     const assetsSources = resolveAssetsSources(manifest);
+    const figmaNamingSources = resolveFigmaNamingSources(manifest);
     const prerequisiteErrors = sortDiagnostics([
       ...manifestErrors,
       ...typographySources.errors,
       ...spacingSources.errors,
       ...assetsSources.errors,
+      ...figmaNamingSources.errors,
     ]);
     if (prerequisiteErrors.length > 0) {
       return { manifest, errors: prerequisiteErrors };
     }
 
-    const [typographyResult, spacingResult, assetsResult] = await Promise.all([
+    const [typographyResult, spacingResult, assetsResult, figmaNamingResult] =
+      await Promise.all([
       validateTypographyFoundation({
         repoRoot,
         dataPath: typographySources.typographySource.path,
@@ -468,6 +524,11 @@ export async function validateSystem({
         dataPath: assetsSources.assetsSource.path,
         schemaPath: assetsSources.assetsSchemaSource.path,
       }),
+      validateFigmaNamingFoundation({
+        repoRoot,
+        dataPath: figmaNamingSources.figmaNamingSource.path,
+        schemaPath: figmaNamingSources.figmaNamingSchemaSource.path,
+      }),
     ]);
     return {
       manifest,
@@ -475,6 +536,7 @@ export async function validateSystem({
         ...typographyResult.errors,
         ...spacingResult.errors,
         ...assetsResult.errors,
+        ...figmaNamingResult.errors,
       ]),
     };
   } catch (error) {

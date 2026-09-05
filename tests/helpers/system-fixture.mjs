@@ -21,6 +21,8 @@ export const canonicalSystemFixtureFiles = [
   "data/foundations/spacing.yaml",
   "schemas/assets.schema.json",
   "data/foundations/assets.yaml",
+  "schemas/figma-naming.schema.json",
+  "data/foundations/figma-naming.yaml",
   "README.md",
   "bootstrap/README.md",
   "core/email-figma-prompt.md",
