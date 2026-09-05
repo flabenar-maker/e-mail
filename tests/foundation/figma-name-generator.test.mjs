@@ -151,6 +151,20 @@ test("blocks an unknown namespace", async () => {
   assert.equal(result.error.code, "FIGMA_NAME_UNKNOWN_NAMESPACE");
 });
 
+test("blocks a combined qualifier and repeater index", async () => {
+  const naming = await canonicalNaming();
+  const result = generateFigmaName(naming, {
+    objectKind: "layer",
+    roleId: "items",
+    qualifierTokens: ["compact"],
+    repeatIndex: 1,
+  });
+
+  assert.equal(result.status, "blocked");
+  assert.equal(result.error.code, "FIGMA_NAME_REPEATER_INDEX");
+  assert.equal(result.error.path, "/request/repeatIndex");
+});
+
 test("blocks unsupported or attempted asset scale mutation", async () => {
   const naming = await canonicalNaming();
 
