@@ -97,8 +97,8 @@ registry:
     roots:
       - { role: library, node_id: "538:17236" }
     baseline_path: registry/email-component-descriptions-registry.md
-    baseline_commit: <pinned implementation base SHA>
-    verified_at: "YYYY-MM-DD"
+    baseline_commit: c2be95b42b2b995bb7b5a2dc38661fd3a51c10bb
+    verified_at: "2026-09-05"
 components: []
 ~~~
 
@@ -157,8 +157,8 @@ figma:
   file_key: 8zka5bHkcrJVK9I9dKjnhC
   node_id: "337:4460"
   source_root_node_id: "538:17236"
-  verified_at: "YYYY-MM-DD"
-  structure_fingerprint: "sha256:<64 lowercase hex>"
+  verified_at: "2026-09-05"
+  structure_fingerprint: "sha256:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
 ~~~
 
 Fingerprint вычисляется только из нормализованных contract-significant полей: node kind, variants, component properties, semantic children, bindings и contract geometry. Имя и Description сравниваются отдельно и не входят в structure_fingerprint.
@@ -340,7 +340,7 @@ Renderer:
 3. последовательно рендерит blocks;
 4. line не получает prefix;
 5. bullet получает prefix «— »;
-6. ordered получает prefix «<index>. »;
+6. ordered получает prefix «значение index + точка + пробел»;
 7. blank создаёт ровно одну пустую строку;
 8. fact разрешает только существующий path текущей записи;
 9. component-name и property-name разрешаются из index/record;
@@ -362,7 +362,7 @@ mode none запрещает blocks. mode rendered требует непусто
 provenance:
   baseline_path: registry/email-component-descriptions-registry.md
   baseline_heading: "Banner/Hero"
-  baseline_blob_sha: <actual baseline blob SHA>
+  baseline_blob_sha: 52893694e97a8751517f9174a90376e1eb849e0c
 ~~~
 
 baseline_heading обязателен для 48 Description-backed records. Для 13 glyph records используется Figma inventory provenance с node_id и captured_at; baseline_heading отсутствует.
@@ -465,7 +465,7 @@ indexComponentRegistries создаёт immutable maps bySystemId и byFigmaIden
   status: "resolved",
   viewport: "mobile",
   components: [
-    { id: "banner-hero", contract: <complete mobile contract> },
+    { id: "banner-hero", contract: index.bySystemId.get("banner-hero").contracts.mobile },
   ],
 }
 ~~~
@@ -571,8 +571,8 @@ compareFigmaComponentSnapshot возвращает sorted drift records толь
 ### CLI contracts
 
 ~~~text
-node scripts/normalize-figma-snapshot.mjs --input <path> --output <path>
-node scripts/compare-figma-registry.mjs --repo-root <path> --snapshot <path>
+node scripts/normalize-figma-snapshot.mjs --input INPUT_PATH --output OUTPUT_PATH
+node scripts/compare-figma-registry.mjs --repo-root REPO_ROOT --snapshot SNAPSHOT_PATH
 ~~~
 
 Обе CLI принимают только перечисленные arguments, используют local UTF-8 JSON files, не вызывают сеть и не пишут вне явно переданного output. Comparison CLI ничего не изменяет и возвращает exit 0 при отсутствии drift, exit 1 при blocker/drift. Diagnostics не печатают Description, контент письма или произвольные snapshot values.
