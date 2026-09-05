@@ -86,9 +86,28 @@ for (const [name, candidate, expectedCodes] of [
     ["FIGMA_NAME_CASE"],
   ],
   [
+    "unapproved component abbreviation",
+    {
+      objectKind: "component",
+      name: "Block/CARDS",
+      namespaceId: "block",
+    },
+    ["FIGMA_NAME_CASE"],
+  ],
+  [
     "generic Figma layer",
     { objectKind: "layer", name: "Frame 12" },
     ["FIGMA_NAME_GENERIC"],
+  ],
+  [
+    "layer outside the controlled role vocabulary",
+    { objectKind: "layer", name: "sidebar" },
+    ["FIGMA_NAME_GENERIC"],
+  ],
+  [
+    "combined layer qualifier and repeater index",
+    { objectKind: "layer", name: "items-compact-01" },
+    ["FIGMA_NAME_REPEATER_INDEX"],
   ],
   [
     "one-digit repeater",
@@ -132,6 +151,15 @@ for (const [name, candidate, expectedCodes] of [
     {
       objectKind: "asset-owner",
       name: "@4x feature-image",
+      expectedScale: 4,
+    },
+    ["FIGMA_NAME_SUFFIX_POSITION"],
+  ],
+  [
+    "asset suffix without the required separating space",
+    {
+      objectKind: "asset-owner",
+      name: "feature-image@4x",
       expectedScale: 4,
     },
     ["FIGMA_NAME_SUFFIX_POSITION"],
