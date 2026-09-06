@@ -85,7 +85,7 @@ function parseVariants(block) {
     block.match(
       /^- Варианты \(\d+\):\n\n([\s\S]*?)(?=\n- Component properties:|\nОписание:)/mu,
     )?.[1] ?? "";
-  return [...body.matchAll(/^  - \`([^\`]+)\` — \`([^\`]+)\`$/gmu)].map(
+  return [...body.matchAll(/^  - `([^`]+)` — `([^`]+)`$/gmu)].map(
     (match) => ({
       name: match[1],
       nodeId: match[2],
@@ -100,7 +100,7 @@ function parseProperties(block) {
     )?.[1] ?? "";
   return [
     ...body.matchAll(
-      /^  - \`([^\`]+)\` — \`([^\`]+)\`(?:, default: ([^\n]+))?$/gmu,
+      /^  - `([^`]+)` — `([^`]+)`(?:, default: ([^\n]+))?$/gmu,
     ),
   ].map((match) => ({
     figmaName: match[1],
@@ -112,13 +112,13 @@ function parseProperties(block) {
 function parseEntries(markdown, spec) {
   const body = section(markdown, spec) + "\n## END";
   const entries = [];
-  const pattern = /^### \`([^\`]+)\`\n([\s\S]*?)(?=^### \`|^## )/gmu;
+  const pattern = /^### `([^`]+)`\n([\s\S]*?)(?=^### `|^## )/gmu;
   for (const match of body.matchAll(pattern)) {
     const block = match[2];
-    const nodeId = block.match(/^- Figma node: \`([^\`]+)\`$/mu)?.[1];
-    const nodeKind = block.match(/^- Тип: \`([^\`]+)\`$/mu)?.[1];
+    const nodeId = block.match(/^- Figma node: `([^`]+)`$/mu)?.[1];
+    const nodeKind = block.match(/^- Тип: `([^`]+)`$/mu)?.[1];
     const description = block.match(
-      /Описание:\n\n\`\`\`\`text\n([\s\S]*?)\n\`\`\`\`/mu,
+      /Описание:\n\n````text\n([\s\S]*?)\n````/mu,
     )?.[1];
     assert.ok(nodeId, `Missing Figma node for ${match[1]}`);
     assert.ok(nodeKind, `Missing Figma type for ${match[1]}`);
