@@ -10,6 +10,11 @@ import { readStrictYaml } from "./strict-yaml.mjs";
 const SUPPORTED_COMPONENTS_VERSION = "1.0.0";
 const LIBRARIES = ["shared", "marketing", "service"];
 const VIEWPORTS = ["mobile", "desktop"];
+const FOUNDATION_SOURCES = {
+  typography: "data/foundations/typography.yaml",
+  spacing: "data/foundations/spacing.yaml",
+  assets: "data/foundations/assets.yaml",
+};
 const FINGERPRINT = /^sha256:[0-9a-f]{64}$/u;
 const FORBIDDEN_INHERITANCE_KEYS = new Set([
   "base",
@@ -271,6 +276,7 @@ export function collectComponentReferences(record) {
             foundationId: value.foundation_id,
             group: value.definition_group,
             id: value.definition_id,
+            viewport,
             path: factPath,
           });
         }
@@ -334,15 +340,24 @@ function validateInternalIds(errors, record, rootPath) {
 
 function validateFoundationReference(errors, reference, typography, spacing) {
   if (reference.foundationId === "typography") {
-    const known =
-      reference.group === "styles" &&
-      (typography?.styles ?? []).some((item) => item.id === reference.id);
-    if (!known) {
+    const style =
+      reference.group === "styles"
+        ? (typography?.styles ?? []).find((item) => item.id === reference.id)
+        : null;
+    if (!style) {
       errors.push(
         diagnostic(
           "COMPONENT_REGISTRY_UNKNOWN_TYPOGRAPHY_REFERENCE",
           reference.path,
           `Unknown typography reference: ${reference.group}/${reference.id}.`,
+        ),
+      );
+    } else if (style.viewport !== reference.viewport) {
+      errors.push(
+        diagnostic(
+          "COMPONENT_REGISTRY_TYPOGRAPHY_VIEWPORT_MISMATCH",
+          reference.path,
+          `Typography style ${reference.id} belongs to ${style.viewport}, not ${reference.viewport}.`,
         ),
       );
     }
@@ -386,6 +401,63 @@ function validateAssetSelection(errors, asset, path, assets) {
           : "Asset contract selection is incompatible with the Assets foundation.",
       ),
     );
+  }
+}
+
+
+function validateComponentCycles(errors, registries) {
+  const graph = new Map();
+  for (const entry of recordsIn(registries)) {
+    const edges = collectComponentReferences(entry.record).components
+      .map((reference) => ({
+        id: reference.id,
+        path: `${entry.path}${reference.path}`,
+      }))
+      .sort(
+        (left, right) =>
+          left.path.localeCompare(right.path) || left.id.localeCompare(right.id),
+      );
+    graph.set(entry.record.id, edges);
+  }
+
+  const state = new Map();
+  const stack = [];
+  const reported = new Set();
+
+  function visit(id) {
+    state.set(id, 1);
+    stack.push(id);
+    for (const edge of graph.get(id) ?? []) {
+      if (!graph.has(edge.id)) {
+        continue;
+      }
+      const edgeState = state.get(edge.id) ?? 0;
+      if (edgeState === 0) {
+        visit(edge.id);
+      } else if (edgeState === 1) {
+        const start = stack.indexOf(edge.id);
+        const cycle = [...stack.slice(start), edge.id];
+        const key = [...new Set(cycle)].sort().join("|");
+        if (!reported.has(key)) {
+          reported.add(key);
+          errors.push(
+            diagnostic(
+              "COMPONENT_REGISTRY_COMPONENT_CYCLE",
+              edge.path,
+              `Component cycle detected: ${cycle.join(" -> ")}.`,
+            ),
+          );
+        }
+      }
+    }
+    stack.pop();
+    state.set(id, 2);
+  }
+
+  for (const id of [...graph.keys()].sort()) {
+    if ((state.get(id) ?? 0) === 0) {
+      visit(id);
+    }
   }
 }
 
@@ -580,6 +652,7 @@ export function validateComponentRegistrySemantics({
     });
   }
 
+  validateComponentCycles(errors, registries);
   return sortDiagnostics(errors);
 }
 
@@ -619,6 +692,31 @@ export function resolveComponentContracts({ index, candidates, viewport }) {
         ),
       );
       return;
+    }
+
+    if (record && candidate?.figma_identity) {
+      const identity = candidate.figma_identity;
+      const exactIdentity =
+        typeof identity.file_key === "string" &&
+        typeof identity.node_id === "string"
+          ? `${identity.file_key}#${identity.node_id}`
+          : null;
+      const recordIdentity = `${record.figma.file_key}#${record.figma.node_id}`;
+      const nameDrift =
+        typeof identity.figma_name === "string" &&
+        identity.figma_name !== record.identity.figma_name;
+      const keyDrift = exactIdentity && exactIdentity !== recordIdentity;
+      if (nameDrift || keyDrift) {
+        blockers.push(
+          blocker(
+            "COMPONENT_IDENTITY_DRIFT",
+            path,
+            `Resolved component identity does not match ${record.id}.`,
+            candidate,
+          ),
+        );
+        return;
+      }
     }
 
     if (!record) {
@@ -671,14 +769,26 @@ export function resolveComponentContracts({ index, candidates, viewport }) {
 
 export async function validateComponentRegistries(options) {
   try {
-    const registries = await loadComponentRegistries(options);
+    const sources = {
+      ...FOUNDATION_SOURCES,
+      ...(options.foundationSources ?? {}),
+    };
+    const [registries, typography, spacing, assets] = await Promise.all([
+      loadComponentRegistries(options),
+      options.typography ??
+        readStrictYaml(join(options.repoRoot, sources.typography)),
+      options.spacing ??
+        readStrictYaml(join(options.repoRoot, sources.spacing)),
+      options.assets ??
+        readStrictYaml(join(options.repoRoot, sources.assets)),
+    ]);
     return {
       registries,
       errors: validateComponentRegistrySemantics({
         registries,
-        typography: options.typography,
-        spacing: options.spacing,
-        assets: options.assets,
+        typography,
+        spacing,
+        assets,
       }),
     };
   } catch (error) {
