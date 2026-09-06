@@ -557,10 +557,10 @@ function marketingBaselineDescriptions(markdown) {
   assert.notEqual(end, -1);
   const entries = new Map();
   const section = `${markdown.slice(start, end)}\n## END`;
-  const pattern = /^### \`([^\`]+)\`\n([\s\S]*?)(?=^### \`|^## )/gmu;
+  const pattern = /^### `([^`]+)`\n([\s\S]*?)(?=^### `|^## )/gmu;
   for (const match of section.matchAll(pattern)) {
     const description = match[2].match(
-      /Описание:\n\n\`\`\`\`text\n([\s\S]*?)\n\`\`\`\`/mu,
+      /Описание:\n\n````text\n([\s\S]*?)\n````/mu,
     )?.[1];
     assert.notEqual(description, undefined, `Missing baseline Description: ${match[1]}`);
     entries.set(match[1], `${description.replace(/\r\n/gu, "\n")}\n`);
