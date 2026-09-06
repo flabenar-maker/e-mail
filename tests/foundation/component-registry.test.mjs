@@ -552,7 +552,7 @@ const expectedMarketingRecords = [
 
 function baselineDescriptions(markdown, startHeading, endHeading) {
   const start = markdown.indexOf(startHeading);
-  const end = markdown.indexOf(endHeading);
+  const end = endHeading ? markdown.indexOf(endHeading) : markdown.length;
   assert.notEqual(start, -1);
   assert.notEqual(end, -1);
   const entries = new Map();
@@ -867,7 +867,7 @@ test("shared shadow contains the root template, three assets, and 13 glyph sourc
       "## Шаблоны сборки (1)",
       "## Сервисные письма (18)",
     ),
-    ...baselineDescriptions(markdown, "## Shared (16)", "## END"),
+    ...baselineDescriptions(markdown, "## Shared (16)", null),
   ]);
   for (const record of shared.components.filter(
     (candidate) => candidate.description.mode === "rendered",
