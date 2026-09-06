@@ -37,6 +37,35 @@ const sectionSpecs = [
   },
 ];
 
+const expectedMarketingIds = new Map([
+  ["Badge/Step-Number", "badge-step-number"],
+  ["Email/Header", "email-header"],
+  ["Block/Cards-Images", "block-cards-images"],
+  ["Block/Icon-Cards", "block-icon-cards"],
+  ["Email/Footer", "email-footer"],
+  ["Banner/Hero", "banner-hero"],
+  ["Block/Steps", "block-steps"],
+  ["Button/Secondary", "button-secondary"],
+  ["Button/Primary", "button-primary"],
+  ["Block/Content", "block-content"],
+  ["Banner/Secondary", "banner-secondary"],
+  ["Block/Bullet-List", "block-bullet-list"],
+  ["Item/Bullet", "item-bullet"],
+  ["Item/Step", "item-step"],
+  ["Banner/Inline", "banner-inline"],
+  ["Block/Info-Alert", "block-info-alert"],
+  ["Banner/App-Download", "banner-app-download"],
+  ["Email/Footer-Legal", "email-footer-legal"],
+  ["Asset/Card-Image @2x", "asset-card-image-2x"],
+  ["Card/Image", "card-image"],
+  ["Block/Icon-List", "block-icon-list"],
+  ["Card/Icon", "card-icon"],
+  ["Asset/Feature-Icon @4x", "asset-feature-icon-4x"],
+  ["Item/Alert", "item-alert"],
+  ["Item/Notification", "item-notification"],
+  ["NPS/Options", "nps-options"],
+]);
+
 const expectedIconGlyphs = [
   { id: "icon-bank-card-2-line", figmaName: "Icon/Bank-Card-2-Line", nodeId: "1009:2505" },
   { id: "icon-fingerprint-2-line", figmaName: "Icon/Fingerprint-2-Line", nodeId: "491:22370" },
@@ -130,7 +159,7 @@ function parseEntries(markdown, spec) {
       nodeKind: nodeKind.toLowerCase().replace("_", "-"),
       variants: parseVariants(block),
       properties: parseProperties(block),
-      description: normalizeLf(description),
+      description: `${normalizeLf(description)}\n`,
     });
   }
   return entries;
@@ -226,7 +255,7 @@ test("structured component registries preserve the frozen Markdown shadow exactl
   for (const expected of baseline) {
     const record = byFigmaName.get(expected.figmaName);
     assert.ok(record, `Missing structured record: ${expected.figmaName}`);
-    assert.equal(record.figma.node_id, expected.nodeId);
+    if (expected.section === "marketing") {\n      assert.equal(record.id, expectedMarketingIds.get(expected.figmaName));\n    }\n    assert.equal(record.figma.node_id, expected.nodeId);
     assert.equal(record.identity.node_kind, expected.nodeKind);
     assert.deepEqual(normalizeStructuredVariants(record), expected.variants);
     assert.deepEqual(normalizeStructuredProperties(record), expected.properties);
