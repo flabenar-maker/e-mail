@@ -29,6 +29,14 @@ Foundation владеет общими definitions и совместимость
 
 Этот foundation пока не входит в рабочие bundle profiles, не активирует maintenance skill и не разрешает переименование в Figma. Подключение навыка и любые Figma-записи выполняются на последующих этапах через отдельное согласование.
 
+### Теневой реестр компонентов
+
+Три файла — `data/components/shared.yaml`, `data/components/marketing.yaml` и `data/components/service.yaml` — содержат будущий машинно-проверяемый источник контрактов компонентов. Общая проверка уже контролирует их структуру, связи, Mobile/Desktop-контракты и совпадение описаний с текущим слепком.
+
+Пока рабочим источником для поддержки библиотеки и вёрстки остаётся `registry/email-component-descriptions-registry.md`. Новые component-файлы и их схема не входят ни в один bundle profile, поэтому не меняют текущую сборку писем.
+
+На этом этапе Figma не изменялась. Публикация generated docs и переключение рабочих bundle profiles будут отдельным этапом 7 миграции после самостоятельной проверки данных.
+
 ## Восстановление контекста
 
 После открытия этого репозитория достаточно сказать Codex:
@@ -94,6 +102,10 @@ Foundation владеет общими definitions и совместимость
 | `core/email-figma-prompt.md` | Единственный источник общих технических правил вёрстки |
 | `core/figma-component-naming-standard.md` | Единственный источник общих правил нейминга и классификации Figma-объектов |
 | `registry/email-component-descriptions-registry.md` | Актуальный фактический слепок descriptions и состава компонентов |
+| `data/components/shared.yaml` | Теневые машинно-проверяемые контракты общих компонентов, корневого шаблона и внутренних Figma-источников |
+| `data/components/marketing.yaml` | Теневые машинно-проверяемые контракты маркетинговых компонентов |
+| `data/components/service.yaml` | Теневые машинно-проверяемые контракты сервисных компонентов |
+| `schemas/components.schema.json` | Единая строгая схема трёх component-реестров |
 | `data/foundations/typography.yaml` | Валидируемый structured-пилот определений текстовых стилей; ещё не подключён к рабочим bundle profiles |
 | `schemas/typography.schema.json` | Строгая машинная схема structured-пилота типографики |
 | `data/foundations/spacing.yaml` | Машинно-проверяемое золотое правило отступов для maintenance и component onboarding; не является входом HTML-вёрстки |
