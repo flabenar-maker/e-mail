@@ -417,3 +417,31 @@ test("normalizer accepts the actual compact Figma MCP inventory shape", async ()
     template.figma.structure_fingerprint,
   );
 });
+
+
+test("ordered semantic children and geometry arrays remain fingerprint-significant", () => {
+  const first = normalizeFigmaComponentSnapshot(
+    rawSnapshot(
+      rawComponent({
+        semantic_children: [
+          { path: "root/first", semantic_role: "body" },
+          { path: "root/second", semantic_role: "action" },
+        ],
+        contract_geometry: { corner_radii: [8, 16, 24, 32] },
+      }),
+    ),
+  );
+  const reorderedChildren = structuredClone(first);
+  reorderedChildren.roots[0].components[0].semantic_children.reverse();
+  const reorderedGeometry = structuredClone(first);
+  reorderedGeometry.roots[0].components[0].contract_geometry.corner_radii.reverse();
+
+  assert.notEqual(
+    fingerprintFigmaComponent(first.roots[0].components[0]),
+    fingerprintFigmaComponent(reorderedChildren.roots[0].components[0]),
+  );
+  assert.notEqual(
+    fingerprintFigmaComponent(first.roots[0].components[0]),
+    fingerprintFigmaComponent(reorderedGeometry.roots[0].components[0]),
+  );
+});
