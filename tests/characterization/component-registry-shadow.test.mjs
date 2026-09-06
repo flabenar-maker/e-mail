@@ -83,7 +83,9 @@ const expectedIconGlyphs = [
 ];
 
 function normalizeLf(value) {
-  return value.replace(/\r\n/gu, "\n");
+  return value.replace(/\r
+/gu, "
+");
 }
 
 function section(markdown, { heading, nextHeading }) {
@@ -112,7 +114,11 @@ function parseDefault(value) {
 function parseVariants(block) {
   const body =
     block.match(
-      /^- Варианты \(\d+\):\n\n([\s\S]*?)(?=\n- Component properties:|\nОписание:)/mu,
+      /^- Варианты \(\d+\):
+
+([\s\S]*?)(?=
+- Component properties:|
+Описание:)/mu,
     )?.[1] ?? "";
   return [...body.matchAll(/^  - `([^`]+)` — `([^`]+)`$/gmu)].map(
     (match) => ({
@@ -125,11 +131,15 @@ function parseVariants(block) {
 function parseProperties(block) {
   const body =
     block.match(
-      /^- Component properties:\n\n([\s\S]*?)(?=\nОписание:)/mu,
+      /^- Component properties:
+
+([\s\S]*?)(?=
+Описание:)/mu,
     )?.[1] ?? "";
   return [
     ...body.matchAll(
-      /^  - `([^`]+)` — `([^`]+)`(?:, default: ([^\n]+))?$/gmu,
+      /^  - `([^`]+)` — `([^`]+)`(?:, default: ([^
+]+))?$/gmu,
     ),
   ].map((match) => ({
     figmaName: match[1],
@@ -139,15 +149,21 @@ function parseProperties(block) {
 }
 
 function parseEntries(markdown, spec) {
-  const body = section(markdown, spec) + "\n## END";
+  const body = section(markdown, spec) + "
+## END";
   const entries = [];
-  const pattern = /^### `([^`]+)`\n([\s\S]*?)(?=^### `|^## )/gmu;
+  const pattern = /^### `([^`]+)`
+([\s\S]*?)(?=^### `|^## )/gmu;
   for (const match of body.matchAll(pattern)) {
     const block = match[2];
     const nodeId = block.match(/^- Figma node: `([^`]+)`$/mu)?.[1];
     const nodeKind = block.match(/^- Тип: `([^`]+)`$/mu)?.[1];
     const description = block.match(
-      /Описание:\n\n````text\n([\s\S]*?)\n````/mu,
+      /Описание:
+
+````text
+([\s\S]*?)
+````/mu,
     )?.[1];
     assert.ok(nodeId, `Missing Figma node for ${match[1]}`);
     assert.ok(nodeKind, `Missing Figma type for ${match[1]}`);
@@ -159,7 +175,8 @@ function parseEntries(markdown, spec) {
       nodeKind: nodeKind.toLowerCase().replace("_", "-"),
       variants: parseVariants(block),
       properties: parseProperties(block),
-      description: `${normalizeLf(description)}\n`,
+      description: `${normalizeLf(description)}
+`,
     });
   }
   return entries;
@@ -210,7 +227,8 @@ test("Markdown component registry exposes the frozen 26 + 18 + 16 + 1 baseline",
 
   for (const spec of sectionSpecs) {
     assert.match(
-      section(markdown, spec).split("\n", 1)[0],
+      section(markdown, spec).split("
+", 1)[0],
       new RegExp(`\\(${spec.declaredCount}\\)$`, "u"),
     );
   }
@@ -255,7 +273,10 @@ test("structured component registries preserve the frozen Markdown shadow exactl
   for (const expected of baseline) {
     const record = byFigmaName.get(expected.figmaName);
     assert.ok(record, `Missing structured record: ${expected.figmaName}`);
-    if (expected.section === "marketing") {\n      assert.equal(record.id, expectedMarketingIds.get(expected.figmaName));\n    }\n    assert.equal(record.figma.node_id, expected.nodeId);
+    if (expected.section === "marketing") {
+      assert.equal(record.id, expectedMarketingIds.get(expected.figmaName));
+    }
+    assert.equal(record.figma.node_id, expected.nodeId);
     assert.equal(record.identity.node_kind, expected.nodeKind);
     assert.deepEqual(normalizeStructuredVariants(record), expected.variants);
     assert.deepEqual(normalizeStructuredProperties(record), expected.properties);
