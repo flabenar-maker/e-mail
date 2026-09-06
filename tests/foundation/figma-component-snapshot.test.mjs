@@ -364,3 +364,56 @@ test("snapshot modules contain no network or Figma client imports", async () => 
   assert.doesNotMatch(files[0], /writeFile|mkdir|rmSync|unlink/u);
   assert.doesNotMatch(files[2], /writeFile|mkdir|rmSync|unlink/u);
 });
+
+
+test("normalizer accepts the actual compact Figma MCP inventory shape", async () => {
+  const shared = await loadComponentRegistry({
+    repoRoot,
+    dataPath: "data/components/shared.yaml",
+  });
+  const template = shared.components.find((record) => record.id === "email-template");
+  const normalized = normalizeFigmaComponentSnapshot({
+    schema_version: "1.0.0",
+    file_key: fileKey,
+    captured_at: "2026-09-06T12:14:00Z",
+    roots: [{
+      id: "1084:34055",
+      components: [{
+        id: "1102:8",
+        name: "Email/Template",
+        type: "COMPONENT_SET",
+        description: "",
+        variants: [
+          {
+            id: "1102:6",
+            axes: { Viewport: "Mobile" },
+            width: 328,
+            height: 1000,
+          },
+          {
+            id: "1102:7",
+            axes: { Viewport: "Desktop" },
+            width: 600,
+            height: 1000,
+          },
+        ],
+        properties: [{
+          name: "Content#1102:0",
+          type: "SLOT",
+          defaultValue: null,
+        }],
+      }],
+    }],
+  });
+  const component = normalized.roots[0].components[0];
+
+  assert.equal(component.node_id, "1102:8");
+  assert.equal(component.node_kind, "component-set");
+  assert.deepEqual(component.properties, [
+    { name: "Content", type: "slot", default: null },
+  ]);
+  assert.equal(
+    fingerprintFigmaComponent(component),
+    template.figma.structure_fingerprint,
+  );
+});
