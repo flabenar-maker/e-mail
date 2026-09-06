@@ -651,3 +651,92 @@ for (const [sourceId, kind] of [
     );
   });
 }
+
+
+const componentSources = [
+  ["components-shared", "data/components/shared.yaml", "registry"],
+  ["components-marketing", "data/components/marketing.yaml", "registry"],
+  ["components-service", "data/components/service.yaml", "registry"],
+  ["components-schema", "schemas/components.schema.json", "schema"],
+];
+
+test("declares all component registries as shadow sources outside every bundle", async () => {
+  const manifest = await canonicalManifest();
+  const sources = new Map(
+    manifest.sources.map((source) => [source.id, source]),
+  );
+
+  for (const [id, path, kind] of componentSources) {
+    assert.deepEqual(sources.get(id), { id, kind, path });
+    for (const profile of manifest.bundle_profiles) {
+      assert.equal(profile.source_ids.includes(id), false);
+    }
+  }
+});
+
+for (const [sourceId] of componentSources) {
+  test("reports missing " + sourceId + " declaration", async (t) => {
+    const root = await validFixture(t);
+    await mutateFixtureManifest(root, (manifest) => {
+      manifest.sources = manifest.sources.filter(
+        (source) => source.id !== sourceId,
+      );
+    });
+
+    const result = await validateSystem({ repoRoot: root });
+
+    assert.ok(
+      result.errors.some(
+        (error) => error.code === "missing-" + sourceId + "-source",
+      ),
+    );
+  });
+
+  test("reports invalid kind for " + sourceId, async (t) => {
+    const root = await validFixture(t);
+    await mutateFixtureManifest(root, (manifest) => {
+      const source = manifest.sources.find((item) => item.id === sourceId);
+      source.kind = source.kind === "schema" ? "registry" : "core";
+    });
+
+    const result = await validateSystem({ repoRoot: root });
+
+    assert.ok(
+      result.errors.some(
+        (error) => error.code === "invalid-component-registry-source-kind",
+      ),
+    );
+  });
+
+  test("reports invalid canonical path for " + sourceId, async (t) => {
+    const root = await validFixture(t);
+    await mutateFixtureManifest(root, (manifest) => {
+      const source = manifest.sources.find((item) => item.id === sourceId);
+      source.path = "registry/email-component-descriptions-registry.md";
+    });
+
+    const result = await validateSystem({ repoRoot: root });
+
+    assert.ok(
+      result.errors.some(
+        (error) => error.code === "invalid-component-registry-source-path",
+      ),
+    );
+  });
+}
+
+test("reports a missing declared component registry file", async (t) => {
+  const root = await validFixture(t);
+  const { rm } = await import("node:fs/promises");
+  await rm(join(root, "data/components/shared.yaml"));
+
+  const result = await validateSystem({ repoRoot: root });
+
+  assert.ok(
+    result.errors.some(
+      (error) =>
+        error.code === "missing-declared-path" &&
+        error.path.includes("data/components/shared.yaml"),
+    ),
+  );
+});
