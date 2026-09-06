@@ -550,9 +550,9 @@ const expectedMarketingRecords = [
   ["nps-options", "NPS/Options", "1084:16995"],
 ];
 
-function marketingBaselineDescriptions(markdown) {
-  const start = markdown.indexOf("## Маркетинговые письма (26)");
-  const end = markdown.indexOf("## Шаблоны сборки (1)");
+function baselineDescriptions(markdown, startHeading, endHeading) {
+  const start = markdown.indexOf(startHeading);
+  const end = markdown.indexOf(endHeading);
   assert.notEqual(start, -1);
   assert.notEqual(end, -1);
   const entries = new Map();
@@ -597,7 +597,11 @@ test("marketing shadow preserves all 26 records and their baseline descriptions"
     service: emptyService,
     shared: emptyShared,
   });
-  const descriptions = marketingBaselineDescriptions(markdown);
+  const descriptions = baselineDescriptions(
+    markdown,
+    "## Маркетинговые письма (26)",
+    "## Шаблоны сборки (1)",
+  );
   assert.deepEqual(
     registry.components.map((record) => [
       record.id,
@@ -688,5 +692,127 @@ test("marketing image contracts preserve responsive ratios and export boundaries
   assert.equal(
     card.contracts.mobile.root.facts.find((fact) => fact.id === "height-behavior").value.value,
     "auto",
+  );
+});
+
+
+const expectedServiceRecords = [
+  ["block-transaction-success", "Block/Transaction-Success", "459:29177"],
+  ["block-transaction-error", "Block/Transaction-Error", "459:30151"],
+  ["block-contact-support", "Block/Contact-Support", "472:16999"],
+  ["asset-bank-badge-4x", "Asset/Bank-Badge @4x", "481:19664"],
+  ["asset-partner-badge-4x", "Asset/Partner-Badge @4x", "481:19665"],
+  ["asset-icon-badge-4x", "Asset/Icon-Badge @4x", "484:20039"],
+  ["details-transfer", "Details/Transfer", "484:20761"],
+  ["asset-status-badge-positive-4x", "Asset/Status-Badge-Positive @4x", "491:22074"],
+  ["asset-status-badge-negative-4x", "Asset/Status-Badge-Negative @4x", "491:22178"],
+  ["details-suspicious-operation", "Details/Suspicious-Operation", "497:25955"],
+  ["block-personal-data-update", "Block/Personal-Data-Update", "497:26055"],
+  ["details-operation-plain", "Details/Operation-Plain", "497:26103"],
+  ["details-receipt", "Details/Receipt", "502:24640"],
+  ["block-receipt-info", "Block/Receipt-Info", "502:24695"],
+  ["banner-fiscal-check-link", "Banner/Fiscal-Check-Link", "502:25048"],
+  ["block-instruction-steps", "Block/Instruction-Steps", "510:16701"],
+  ["details-operation", "Details/Operation", "477:21327"],
+  ["badge-operation-status", "Badge/Operation-Status", "1084:16996"],
+];
+
+function nestedComponentIds(element, result = []) {
+  if (element.component_id) {
+    result.push(element.component_id);
+  }
+  for (const child of element.children ?? []) {
+    nestedComponentIds(child, result);
+  }
+  return result;
+}
+
+test("service shadow preserves all 18 records and their baseline descriptions", async () => {
+  const [registry, markdown, { renderComponentDescription }] = await Promise.all([
+    loadComponentRegistry({
+      repoRoot,
+      dataPath: "data/components/service.yaml",
+    }),
+    readFile(join(repoRoot, baselinePath), "utf8"),
+    import("../../scripts/lib/component-description.mjs"),
+  ]);
+  const index = indexComponentRegistries({
+    marketing: registryEnvelope("marketing"),
+    service: registry,
+    shared: registryEnvelope("shared"),
+  });
+  const descriptions = baselineDescriptions(
+    markdown,
+    "## Сервисные письма (18)",
+    "## Shared (16)",
+  );
+  assert.deepEqual(
+    registry.components.map((record) => [
+      record.id,
+      record.identity.figma_name,
+      record.figma.node_id,
+    ]),
+    expectedServiceRecords,
+  );
+  for (const record of registry.components) {
+    assert.ok(record.contracts.mobile.root, record.id + " needs a Mobile contract");
+    assert.ok(record.contracts.desktop.root, record.id + " needs a Desktop contract");
+    assert.equal(
+      renderComponentDescription(record, index),
+      descriptions.get(record.identity.figma_name),
+      "Rendered Description drift: " + record.identity.figma_name,
+    );
+  }
+});
+
+test("service records retain nested Details links and exact badge assets", async () => {
+  const registry = await loadComponentRegistry({
+    repoRoot,
+    dataPath: "data/components/service.yaml",
+  });
+  const byId = new Map(registry.components.map((record) => [record.id, record]));
+
+  assert.ok(
+    nestedComponentIds(byId.get("block-transaction-success").contracts.desktop.root)
+      .includes("details-operation"),
+  );
+  assert.ok(
+    nestedComponentIds(byId.get("block-personal-data-update").contracts.desktop.root)
+      .includes("details-suspicious-operation"),
+  );
+  assert.ok(
+    nestedComponentIds(byId.get("block-receipt-info").contracts.desktop.root)
+      .includes("details-receipt"),
+  );
+
+  const partner = byId.get("block-transaction-success").asset_contracts.find(
+    (asset) => asset.id === "partner-badge",
+  );
+  assert.deepEqual(
+    {
+      source: partner.source_mode_id,
+      profile: partner.export_profile_id,
+      pixels: partner.pixel_dimensions,
+      ratio: partner.aspect_ratio,
+    },
+    {
+      source: "rendered-node",
+      profile: "png-4x",
+      pixels: { width: 288, height: 288, unit: "px" },
+      ratio: { width: 72, height: 72 },
+    },
+  );
+
+  const fiscal = byId.get("banner-fiscal-check-link");
+  assert.deepEqual(
+    fiscal.asset_contracts.map((asset) => [
+      asset.id,
+      asset.owner_layer_name,
+      asset.pixel_dimensions,
+    ]),
+    [
+      ["bank-badge", "bank-badge @4x", { width: 192, height: 192, unit: "px" }],
+      ["chevron-icon", "chevron-icon @4x", { width: 96, height: 96, unit: "px" }],
+    ],
   );
 });
