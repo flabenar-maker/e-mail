@@ -1,8 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { access, readFile, readdir } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+
+import { readStrictYaml } from "../../scripts/lib/strict-yaml.mjs";
 
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const registryPath = join(
@@ -290,4 +292,77 @@ test("structured component registries preserve the frozen Markdown shadow exactl
     grouped.shared.filter((record) => record.description.mode === "none").length,
     13,
   );
+});
+
+
+test("component registries stay isolated from foundations, skills and bundles", async () => {
+  assert.deepEqual(
+    (await readdir(join(repoRoot, "data/components"))).sort(),
+    ["marketing.yaml", "service.yaml", "shared.yaml"],
+  );
+
+  for (const relativePath of [
+    "data/foundations/typography.yaml",
+    "data/foundations/spacing.yaml",
+    "data/foundations/assets.yaml",
+    "data/foundations/figma-naming.yaml",
+  ]) {
+    const foundation = await readStrictYaml(join(repoRoot, relativePath));
+    assert.equal(Object.hasOwn(foundation, "components"), false);
+    assert.equal(Object.hasOwn(foundation, "component_registry"), false);
+  }
+
+  const skill = await readFile(
+    join(repoRoot, ".agents/skills/maintaining-cupis-email-system/SKILL.md"),
+    "utf8",
+  );
+  assert.doesNotMatch(skill, /^\s*(?:node_id|figma_file_key|components|styles|roles):/gmu);
+
+  const manifest = await readStrictYaml(join(repoRoot, "system/manifest.yaml"));
+  const componentSourceIds = new Set([
+    "components-shared",
+    "components-marketing",
+    "components-service",
+    "components-schema",
+  ]);
+  for (const profile of manifest.bundle_profiles) {
+    assert.equal(
+      profile.source_ids.some((sourceId) => componentSourceIds.has(sourceId)),
+      false,
+    );
+  }
+});
+
+test("component migration commits no Figma client, snapshots or concrete emails", async () => {
+  const sources = await Promise.all([
+    readFile(join(repoRoot, "scripts/lib/figma-component-snapshot.mjs"), "utf8"),
+    readFile(join(repoRoot, "scripts/normalize-figma-snapshot.mjs"), "utf8"),
+    readFile(join(repoRoot, "scripts/compare-figma-registry.mjs"), "utf8"),
+    readFile(join(repoRoot, "scripts/lib/component-registry.mjs"), "utf8"),
+  ]);
+  for (const source of sources) {
+    assert.doesNotMatch(source, /@figma|use_figma|\bfetch\s*\(/u);
+  }
+
+  const dataFiles = await readdir(join(repoRoot, "data"), { recursive: true });
+  assert.equal(
+    dataFiles.some((path) => /(?:^|[\\/])snapshot[^\\/]*\.json$/u.test(path)),
+    false,
+  );
+  await assert.rejects(access(join(repoRoot, "email.html")));
+  await assert.rejects(access(join(repoRoot, "images")));
+});
+
+test("README explains the component registry shadow boundary", async () => {
+  const readme = await readFile(join(repoRoot, "README.md"), "utf8");
+  for (const expected of [
+    "data/components/shared.yaml",
+    "data/components/marketing.yaml",
+    "data/components/service.yaml",
+    "registry/email-component-descriptions-registry.md",
+    "generated docs",
+    "Figma не изменялась",
+  ]) {
+    assert.ok(readme.includes(expected), "README is missing: " + expected);
+  }
 });
