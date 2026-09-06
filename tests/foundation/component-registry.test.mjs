@@ -7,6 +7,8 @@ import { fileURLToPath } from "node:url";
 import {
   indexComponentRegistries,
   loadComponentRegistry,
+  resolveComponentContracts,
+  validateComponentRegistries,
   validateComponentRegistrySemantics,
   validateComponentRegistryShape,
 } from "../../scripts/lib/component-registry.mjs";
@@ -923,4 +925,157 @@ test("Email Template remains an assembly root and Shared export roles stay expli
     assert.equal(record.contracts.desktop.root.render_mode, "figma-source-only");
     assert.deepEqual(record.asset_contracts, []);
   }
+});
+
+
+test("viewport typography references must match their contract viewport", async () => {
+  const registries = validRegistries();
+  registries.marketing.components[0].contracts.mobile.root.facts.push({
+    id: "wrong-viewport-type",
+    value: {
+      type: "foundation-reference",
+      foundation_id: "typography",
+      definition_group: "styles",
+      definition_id: "desktop-body-large",
+    },
+  });
+
+  const errors = validateComponentRegistrySemantics({
+    registries,
+    ...(await foundations()),
+  });
+  assert.ok(
+    diagnosticCodes(errors).includes(
+      "COMPONENT_REGISTRY_TYPOGRAPHY_VIEWPORT_MISMATCH",
+    ),
+  );
+});
+
+test("nested component cycles are blockers", async () => {
+  const registries = validRegistries();
+  const first = registries.marketing.components[0];
+  const second = structuredClone(first);
+  second.id = "banner-second";
+  second.identity.figma_name = "Banner/Second";
+  second.figma.node_id = "2000:4";
+  second.variants[0].node_id = "2000:5";
+  second.variants[1].node_id = "2000:6";
+  for (const viewport of ["mobile", "desktop"]) {
+    first.contracts[viewport].root.children.push(
+      element("second", "nested-component", {
+        component_id: second.id,
+      }),
+    );
+    second.contracts[viewport].root.children.push(
+      element("first", "nested-component", {
+        component_id: first.id,
+      }),
+    );
+  }
+  registries.marketing.components.push(second);
+
+  const errors = validateComponentRegistrySemantics({
+    registries,
+    ...(await foundations()),
+  });
+  assert.ok(
+    diagnosticCodes(errors).includes("COMPONENT_REGISTRY_COMPONENT_CYCLE"),
+  );
+});
+
+test("component resolver accepts only stable id or exact Figma identity", () => {
+  const registries = validRegistries();
+  const index = indexComponentRegistries(registries);
+
+  assert.deepEqual(
+    resolveComponentContracts({
+      index,
+      candidates: [{ id: "banner-test" }],
+      viewport: "mobile",
+    }),
+    {
+      status: "resolved",
+      viewport: "mobile",
+      components: [
+        {
+          id: "banner-test",
+          contract: registries.marketing.components[0].contracts.mobile,
+        },
+      ],
+    },
+  );
+
+  assert.equal(
+    resolveComponentContracts({
+      index,
+      candidates: [{
+        figma_identity: {
+          file_key: fileKey,
+          node_id: "2000:1",
+          figma_name: "Banner/Test",
+        },
+      }],
+      viewport: "desktop",
+    }).status,
+    "resolved",
+  );
+
+  const fuzzy = resolveComponentContracts({
+    index,
+    candidates: [{ figma_name: "Banner/Tes" }],
+    viewport: "mobile",
+  });
+  assert.equal(fuzzy.status, "blocked");
+  assert.equal(fuzzy.blockers[0].code, "COMPONENT_IDENTITY_REQUIRED");
+});
+
+test("component resolver blocks identity drift, unknown records and inactive records", () => {
+  const registries = validRegistries();
+  const index = indexComponentRegistries(registries);
+
+  const drift = resolveComponentContracts({
+    index,
+    candidates: [{
+      figma_identity: {
+        file_key: fileKey,
+        node_id: "2000:1",
+        figma_name: "Banner/Renamed",
+      },
+    }],
+    viewport: "mobile",
+  });
+  assert.equal(drift.status, "blocked");
+  assert.equal(drift.blockers[0].code, "COMPONENT_IDENTITY_DRIFT");
+
+  const unknownIdentity = {
+    file_key: fileKey,
+    node_id: "9999:1",
+    figma_name: "Banner/New",
+  };
+  const unknown = resolveComponentContracts({
+    index,
+    candidates: [{ figma_identity: unknownIdentity }],
+    viewport: "mobile",
+  });
+  assert.equal(unknown.status, "blocked");
+  assert.equal(unknown.blockers[0].code, "COMPONENT_UNREGISTERED");
+  assert.deepEqual(unknown.blockers[0].handoff, {
+    route_id: "component-onboarding",
+    figma_identity: unknownIdentity,
+  });
+
+  registries.marketing.components[0].status = "deprecated";
+  const inactive = resolveComponentContracts({
+    index: indexComponentRegistries(registries),
+    candidates: [{ id: "banner-test" }],
+    viewport: "mobile",
+  });
+  assert.equal(inactive.status, "blocked");
+  assert.equal(inactive.blockers[0].code, "COMPONENT_NOT_ACTIVE");
+});
+
+test("full component validation loads canonical foundations by default", async () => {
+  const result = await validateComponentRegistries({ repoRoot });
+  assert.ok(result.registries);
+  assert.deepEqual(result.errors, []);
 });
