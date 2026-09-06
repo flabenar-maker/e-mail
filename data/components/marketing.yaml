@@ -108,8 +108,8 @@
               {
                 "id": "description-1",
                 "value": {
-                  "type": "dimensions",
-                  "width": 8,
+                  "type": "measure",
+                  "value": 8,
                   "unit": "px"
                 },
                 "provenance": {
@@ -120,8 +120,8 @@
               {
                 "id": "description-2",
                 "value": {
-                  "type": "dimensions",
-                  "width": 19,
+                  "type": "measure",
+                  "value": 19,
                   "unit": "px"
                 },
                 "provenance": {
@@ -132,8 +132,8 @@
               {
                 "id": "description-3",
                 "value": {
-                  "type": "dimensions",
-                  "width": 14,
+                  "type": "measure",
+                  "value": 14,
                   "unit": "px"
                 },
                 "provenance": {
@@ -144,8 +144,8 @@
               {
                 "id": "description-4",
                 "value": {
-                  "type": "dimensions",
-                  "width": 16,
+                  "type": "measure",
+                  "value": 16,
                   "unit": "px"
                 },
                 "provenance": {
@@ -410,8 +410,8 @@
               {
                 "id": "description-1",
                 "value": {
-                  "type": "dimensions",
-                  "width": 600,
+                  "type": "measure",
+                  "value": 600,
                   "unit": "px"
                 },
                 "provenance": {
@@ -422,8 +422,8 @@
               {
                 "id": "description-2",
                 "value": {
-                  "type": "dimensions",
-                  "width": 16,
+                  "type": "measure",
+                  "value": 16,
                   "unit": "px"
                 },
                 "provenance": {
@@ -434,8 +434,8 @@
               {
                 "id": "description-3",
                 "value": {
-                  "type": "dimensions",
-                  "width": 24,
+                  "type": "measure",
+                  "value": 24,
                   "unit": "px"
                 },
                 "provenance": {
@@ -819,8 +819,8 @@
               {
                 "id": "description-1",
                 "value": {
-                  "type": "dimensions",
-                  "width": 16,
+                  "type": "measure",
+                  "value": 16,
                   "unit": "px"
                 },
                 "provenance": {
@@ -831,8 +831,8 @@
               {
                 "id": "description-2",
                 "value": {
-                  "type": "dimensions",
-                  "width": 24,
+                  "type": "measure",
+                  "value": 24,
                   "unit": "px"
                 },
                 "provenance": {
@@ -843,8 +843,8 @@
               {
                 "id": "description-3",
                 "value": {
-                  "type": "dimensions",
-                  "width": 22,
+                  "type": "measure",
+                  "value": 22,
                   "unit": "px"
                 },
                 "provenance": {
@@ -855,8 +855,8 @@
               {
                 "id": "description-4",
                 "value": {
-                  "type": "dimensions",
-                  "width": 18,
+                  "type": "measure",
+                  "value": 18,
                   "unit": "px"
                 },
                 "provenance": {
@@ -867,8 +867,8 @@
               {
                 "id": "description-5",
                 "value": {
-                  "type": "dimensions",
-                  "width": 32,
+                  "type": "measure",
+                  "value": 32,
                   "unit": "px"
                 },
                 "provenance": {
@@ -879,8 +879,8 @@
               {
                 "id": "description-6",
                 "value": {
-                  "type": "dimensions",
-                  "width": 26,
+                  "type": "measure",
+                  "value": 26,
                   "unit": "px"
                 },
                 "provenance": {
@@ -891,8 +891,8 @@
               {
                 "id": "description-7",
                 "value": {
-                  "type": "dimensions",
-                  "width": 252,
+                  "type": "measure",
+                  "value": 252,
                   "unit": "px"
                 },
                 "provenance": {
@@ -903,8 +903,8 @@
               {
                 "id": "description-8",
                 "value": {
-                  "type": "dimensions",
-                  "width": 488,
+                  "type": "measure",
+                  "value": 488,
                   "unit": "px"
                 },
                 "provenance": {
@@ -915,8 +915,8 @@
               {
                 "id": "description-9",
                 "value": {
-                  "type": "dimensions",
-                  "width": 12,
+                  "type": "measure",
+                  "value": 12,
                   "unit": "px"
                 },
                 "provenance": {
@@ -927,8 +927,8 @@
               {
                 "id": "description-10",
                 "value": {
-                  "type": "dimensions",
-                  "width": 14,
+                  "type": "measure",
+                  "value": 14,
                   "unit": "px"
                 },
                 "provenance": {
@@ -1485,8 +1485,8 @@
               {
                 "id": "description-1",
                 "value": {
-                  "type": "dimensions",
-                  "width": 16,
+                  "type": "measure",
+                  "value": 16,
                   "unit": "px"
                 },
                 "provenance": {
@@ -1497,8 +1497,8 @@
               {
                 "id": "description-2",
                 "value": {
-                  "type": "dimensions",
-                  "width": 24,
+                  "type": "measure",
+                  "value": 24,
                   "unit": "px"
                 },
                 "provenance": {
@@ -1509,8 +1509,8 @@
               {
                 "id": "description-3",
                 "value": {
-                  "type": "dimensions",
-                  "width": 22,
+                  "type": "measure",
+                  "value": 22,
                   "unit": "px"
                 },
                 "provenance": {
@@ -1521,8 +1521,8 @@
               {
                 "id": "description-4",
                 "value": {
-                  "type": "dimensions",
-                  "width": 18,
+                  "type": "measure",
+                  "value": 18,
                   "unit": "px"
                 },
                 "provenance": {
@@ -1533,8 +1533,8 @@
               {
                 "id": "description-5",
                 "value": {
-                  "type": "dimensions",
-                  "width": 32,
+                  "type": "measure",
+                  "value": 32,
                   "unit": "px"
                 },
                 "provenance": {
@@ -1545,8 +1545,8 @@
               {
                 "id": "description-6",
                 "value": {
-                  "type": "dimensions",
-                  "width": 26,
+                  "type": "measure",
+                  "value": 26,
                   "unit": "px"
                 },
                 "provenance": {
@@ -1557,8 +1557,8 @@
               {
                 "id": "description-7",
                 "value": {
-                  "type": "dimensions",
-                  "width": 252,
+                  "type": "measure",
+                  "value": 252,
                   "unit": "px"
                 },
                 "provenance": {
@@ -1569,8 +1569,8 @@
               {
                 "id": "description-8",
                 "value": {
-                  "type": "dimensions",
-                  "width": 488,
+                  "type": "measure",
+                  "value": 488,
                   "unit": "px"
                 },
                 "provenance": {
@@ -1581,8 +1581,8 @@
               {
                 "id": "description-9",
                 "value": {
-                  "type": "dimensions",
-                  "width": 12,
+                  "type": "measure",
+                  "value": 12,
                   "unit": "px"
                 },
                 "provenance": {
@@ -1593,8 +1593,8 @@
               {
                 "id": "description-10",
                 "value": {
-                  "type": "dimensions",
-                  "width": 14,
+                  "type": "measure",
+                  "value": 14,
                   "unit": "px"
                 },
                 "provenance": {
@@ -2189,8 +2189,8 @@
               {
                 "id": "description-1",
                 "value": {
-                  "type": "dimensions",
-                  "width": 600,
+                  "type": "measure",
+                  "value": 600,
                   "unit": "px"
                 },
                 "provenance": {
@@ -2201,8 +2201,8 @@
               {
                 "id": "description-2",
                 "value": {
-                  "type": "dimensions",
-                  "width": 16,
+                  "type": "measure",
+                  "value": 16,
                   "unit": "px"
                 },
                 "provenance": {
@@ -2213,8 +2213,8 @@
               {
                 "id": "description-3",
                 "value": {
-                  "type": "dimensions",
-                  "width": 24,
+                  "type": "measure",
+                  "value": 24,
                   "unit": "px"
                 },
                 "provenance": {
@@ -2236,8 +2236,8 @@
               {
                 "id": "description-5",
                 "value": {
-                  "type": "dimensions",
-                  "width": 8,
+                  "type": "measure",
+                  "value": 8,
                   "unit": "px"
                 },
                 "provenance": {
@@ -2248,8 +2248,8 @@
               {
                 "id": "description-6",
                 "value": {
-                  "type": "dimensions",
-                  "width": 12,
+                  "type": "measure",
+                  "value": 12,
                   "unit": "px"
                 },
                 "provenance": {
@@ -2260,8 +2260,8 @@
               {
                 "id": "description-7",
                 "value": {
-                  "type": "dimensions",
-                  "width": 14,
+                  "type": "measure",
+                  "value": 14,
                   "unit": "px"
                 },
                 "provenance": {
@@ -3020,8 +3020,8 @@
               {
                 "id": "description-1",
                 "value": {
-                  "type": "dimensions",
-                  "width": 16,
+                  "type": "measure",
+                  "value": 16,
                   "unit": "px"
                 },
                 "provenance": {
@@ -3032,8 +3032,8 @@
               {
                 "id": "description-2",
                 "value": {
-                  "type": "dimensions",
-                  "width": 24,
+                  "type": "measure",
+                  "value": 24,
                   "unit": "px"
                 },
                 "provenance": {
@@ -3056,8 +3056,8 @@
               {
                 "id": "description-4",
                 "value": {
-                  "type": "dimensions",
-                  "width": 22,
+                  "type": "measure",
+                  "value": 22,
                   "unit": "px"
                 },
                 "provenance": {
@@ -3068,8 +3068,8 @@
               {
                 "id": "description-5",
                 "value": {
-                  "type": "dimensions",
-                  "width": 12,
+                  "type": "measure",
+                  "value": 12,
                   "unit": "px"
                 },
                 "provenance": {
@@ -3080,8 +3080,8 @@
               {
                 "id": "description-6",
                 "value": {
-                  "type": "dimensions",
-                  "width": 20,
+                  "type": "measure",
+                  "value": 20,
                   "unit": "px"
                 },
                 "provenance": {
@@ -3092,8 +3092,8 @@
               {
                 "id": "description-7",
                 "value": {
-                  "type": "dimensions",
-                  "width": 14,
+                  "type": "measure",
+                  "value": 14,
                   "unit": "px"
                 },
                 "provenance": {
@@ -3117,8 +3117,8 @@
               {
                 "id": "description-9",
                 "value": {
-                  "type": "dimensions",
-                  "width": 32,
+                  "type": "measure",
+                  "value": 32,
                   "unit": "px"
                 },
                 "provenance": {
@@ -3129,8 +3129,8 @@
               {
                 "id": "description-10",
                 "value": {
-                  "type": "dimensions",
-                  "width": 18,
+                  "type": "measure",
+                  "value": 18,
                   "unit": "px"
                 },
                 "provenance": {
@@ -3687,8 +3687,8 @@
               {
                 "id": "description-1",
                 "value": {
-                  "type": "dimensions",
-                  "width": 16,
+                  "type": "measure",
+                  "value": 16,
                   "unit": "px"
                 },
                 "provenance": {
@@ -3699,8 +3699,8 @@
               {
                 "id": "description-2",
                 "value": {
-                  "type": "dimensions",
-                  "width": 22,
+                  "type": "measure",
+                  "value": 22,
                   "unit": "px"
                 },
                 "provenance": {
@@ -3711,8 +3711,8 @@
               {
                 "id": "description-3",
                 "value": {
-                  "type": "dimensions",
-                  "width": 24,
+                  "type": "measure",
+                  "value": 24,
                   "unit": "px"
                 },
                 "provenance": {
@@ -3723,8 +3723,8 @@
               {
                 "id": "description-4",
                 "value": {
-                  "type": "dimensions",
-                  "width": 32,
+                  "type": "measure",
+                  "value": 32,
                   "unit": "px"
                 },
                 "provenance": {
@@ -3735,8 +3735,8 @@
               {
                 "id": "description-5",
                 "value": {
-                  "type": "dimensions",
-                  "width": 26,
+                  "type": "measure",
+                  "value": 26,
                   "unit": "px"
                 },
                 "provenance": {
@@ -3747,8 +3747,8 @@
               {
                 "id": "description-6",
                 "value": {
-                  "type": "dimensions",
-                  "width": 18,
+                  "type": "measure",
+                  "value": 18,
                   "unit": "px"
                 },
                 "provenance": {
@@ -3759,8 +3759,8 @@
               {
                 "id": "description-7",
                 "value": {
-                  "type": "dimensions",
-                  "width": 8,
+                  "type": "measure",
+                  "value": 8,
                   "unit": "px"
                 },
                 "provenance": {
@@ -3771,8 +3771,8 @@
               {
                 "id": "description-8",
                 "value": {
-                  "type": "dimensions",
-                  "width": 4,
+                  "type": "measure",
+                  "value": 4,
                   "unit": "px"
                 },
                 "provenance": {
@@ -3783,8 +3783,8 @@
               {
                 "id": "description-9",
                 "value": {
-                  "type": "dimensions",
-                  "width": 14,
+                  "type": "measure",
+                  "value": 14,
                   "unit": "px"
                 },
                 "provenance": {
@@ -3795,8 +3795,8 @@
               {
                 "id": "description-10",
                 "value": {
-                  "type": "dimensions",
-                  "width": 12,
+                  "type": "measure",
+                  "value": 12,
                   "unit": "px"
                 },
                 "provenance": {
@@ -3807,8 +3807,8 @@
               {
                 "id": "description-11",
                 "value": {
-                  "type": "dimensions",
-                  "width": 6,
+                  "type": "measure",
+                  "value": 6,
                   "unit": "px"
                 },
                 "provenance": {
@@ -4576,8 +4576,8 @@
               {
                 "id": "description-1",
                 "value": {
-                  "type": "dimensions",
-                  "width": 12,
+                  "type": "measure",
+                  "value": 12,
                   "unit": "px"
                 },
                 "provenance": {
@@ -4588,8 +4588,8 @@
               {
                 "id": "description-2",
                 "value": {
-                  "type": "dimensions",
-                  "width": 24,
+                  "type": "measure",
+                  "value": 24,
                   "unit": "px"
                 },
                 "provenance": {
@@ -4600,8 +4600,8 @@
               {
                 "id": "description-3",
                 "value": {
-                  "type": "dimensions",
-                  "width": 26,
+                  "type": "measure",
+                  "value": 26,
                   "unit": "px"
                 },
                 "provenance": {
@@ -4612,8 +4612,8 @@
               {
                 "id": "description-4",
                 "value": {
-                  "type": "dimensions",
-                  "width": 14,
+                  "type": "measure",
+                  "value": 14,
                   "unit": "px"
                 },
                 "provenance": {
@@ -4624,8 +4624,8 @@
               {
                 "id": "description-5",
                 "value": {
-                  "type": "dimensions",
-                  "width": 16,
+                  "type": "measure",
+                  "value": 16,
                   "unit": "px"
                 },
                 "provenance": {
@@ -4886,8 +4886,8 @@
               {
                 "id": "description-1",
                 "value": {
-                  "type": "dimensions",
-                  "width": 12,
+                  "type": "measure",
+                  "value": 12,
                   "unit": "px"
                 },
                 "provenance": {
@@ -4898,8 +4898,8 @@
               {
                 "id": "description-2",
                 "value": {
-                  "type": "dimensions",
-                  "width": 24,
+                  "type": "measure",
+                  "value": 24,
                   "unit": "px"
                 },
                 "provenance": {
@@ -4910,8 +4910,8 @@
               {
                 "id": "description-3",
                 "value": {
-                  "type": "dimensions",
-                  "width": 32,
+                  "type": "measure",
+                  "value": 32,
                   "unit": "px"
                 },
                 "provenance": {
@@ -4922,8 +4922,8 @@
               {
                 "id": "description-4",
                 "value": {
-                  "type": "dimensions",
-                  "width": 14,
+                  "type": "measure",
+                  "value": 14,
                   "unit": "px"
                 },
                 "provenance": {
@@ -4934,8 +4934,8 @@
               {
                 "id": "description-5",
                 "value": {
-                  "type": "dimensions",
-                  "width": 16,
+                  "type": "measure",
+                  "value": 16,
                   "unit": "px"
                 },
                 "provenance": {
@@ -5292,8 +5292,8 @@
               {
                 "id": "description-1",
                 "value": {
-                  "type": "dimensions",
-                  "width": 16,
+                  "type": "measure",
+                  "value": 16,
                   "unit": "px"
                 },
                 "provenance": {
@@ -5304,8 +5304,8 @@
               {
                 "id": "description-2",
                 "value": {
-                  "type": "dimensions",
-                  "width": 22,
+                  "type": "measure",
+                  "value": 22,
                   "unit": "px"
                 },
                 "provenance": {
@@ -5316,8 +5316,8 @@
               {
                 "id": "description-3",
                 "value": {
-                  "type": "dimensions",
-                  "width": 24,
+                  "type": "measure",
+                  "value": 24,
                   "unit": "px"
                 },
                 "provenance": {
@@ -5328,8 +5328,8 @@
               {
                 "id": "description-4",
                 "value": {
-                  "type": "dimensions",
-                  "width": 32,
+                  "type": "measure",
+                  "value": 32,
                   "unit": "px"
                 },
                 "provenance": {
@@ -5340,8 +5340,8 @@
               {
                 "id": "description-5",
                 "value": {
-                  "type": "dimensions",
-                  "width": 26,
+                  "type": "measure",
+                  "value": 26,
                   "unit": "px"
                 },
                 "provenance": {
@@ -5352,8 +5352,8 @@
               {
                 "id": "description-6",
                 "value": {
-                  "type": "dimensions",
-                  "width": 18,
+                  "type": "measure",
+                  "value": 18,
                   "unit": "px"
                 },
                 "provenance": {
@@ -5364,8 +5364,8 @@
               {
                 "id": "description-7",
                 "value": {
-                  "type": "dimensions",
-                  "width": 14,
+                  "type": "measure",
+                  "value": 14,
                   "unit": "px"
                 },
                 "provenance": {
@@ -5376,8 +5376,8 @@
               {
                 "id": "description-8",
                 "value": {
-                  "type": "dimensions",
-                  "width": 8,
+                  "type": "measure",
+                  "value": 8,
                   "unit": "px"
                 },
                 "provenance": {
@@ -5388,8 +5388,8 @@
               {
                 "id": "description-9",
                 "value": {
-                  "type": "dimensions",
-                  "width": 12,
+                  "type": "measure",
+                  "value": 12,
                   "unit": "px"
                 },
                 "provenance": {
@@ -6084,8 +6084,8 @@
               {
                 "id": "description-1",
                 "value": {
-                  "type": "dimensions",
-                  "width": 16,
+                  "type": "measure",
+                  "value": 16,
                   "unit": "px"
                 },
                 "provenance": {
@@ -6096,8 +6096,8 @@
               {
                 "id": "description-2",
                 "value": {
-                  "type": "dimensions",
-                  "width": 24,
+                  "type": "measure",
+                  "value": 24,
                   "unit": "px"
                 },
                 "provenance": {
@@ -6127,8 +6127,8 @@
               {
                 "id": "description-5",
                 "value": {
-                  "type": "dimensions",
-                  "width": 22,
+                  "type": "measure",
+                  "value": 22,
                   "unit": "px"
                 },
                 "provenance": {
@@ -6139,8 +6139,8 @@
               {
                 "id": "description-6",
                 "value": {
-                  "type": "dimensions",
-                  "width": 8,
+                  "type": "measure",
+                  "value": 8,
                   "unit": "px"
                 },
                 "provenance": {
@@ -6151,8 +6151,8 @@
               {
                 "id": "description-7",
                 "value": {
-                  "type": "dimensions",
-                  "width": 18,
+                  "type": "measure",
+                  "value": 18,
                   "unit": "px"
                 },
                 "provenance": {
@@ -6163,8 +6163,8 @@
               {
                 "id": "description-8",
                 "value": {
-                  "type": "dimensions",
-                  "width": 14,
+                  "type": "measure",
+                  "value": 14,
                   "unit": "px"
                 },
                 "provenance": {
@@ -6175,8 +6175,8 @@
               {
                 "id": "description-9",
                 "value": {
-                  "type": "dimensions",
-                  "width": 552,
+                  "type": "measure",
+                  "value": 552,
                   "unit": "px"
                 },
                 "provenance": {
@@ -6187,8 +6187,8 @@
               {
                 "id": "description-10",
                 "value": {
-                  "type": "dimensions",
-                  "width": 300,
+                  "type": "measure",
+                  "value": 300,
                   "unit": "px"
                 },
                 "provenance": {
@@ -6199,8 +6199,8 @@
               {
                 "id": "description-11",
                 "value": {
-                  "type": "dimensions",
-                  "width": 32,
+                  "type": "measure",
+                  "value": 32,
                   "unit": "px"
                 },
                 "provenance": {
@@ -6211,8 +6211,8 @@
               {
                 "id": "description-12",
                 "value": {
-                  "type": "dimensions",
-                  "width": 236,
+                  "type": "measure",
+                  "value": 236,
                   "unit": "px"
                 },
                 "provenance": {
@@ -6223,8 +6223,8 @@
               {
                 "id": "description-13",
                 "value": {
-                  "type": "dimensions",
-                  "width": 12,
+                  "type": "measure",
+                  "value": 12,
                   "unit": "px"
                 },
                 "provenance": {
@@ -6235,8 +6235,8 @@
               {
                 "id": "description-14",
                 "value": {
-                  "type": "dimensions",
-                  "width": 20,
+                  "type": "measure",
+                  "value": 20,
                   "unit": "px"
                 },
                 "provenance": {
@@ -6247,8 +6247,8 @@
               {
                 "id": "description-15",
                 "value": {
-                  "type": "dimensions",
-                  "width": 252,
+                  "type": "measure",
+                  "value": 252,
                   "unit": "px"
                 },
                 "provenance": {
@@ -6772,8 +6772,8 @@
               {
                 "id": "description-1",
                 "value": {
-                  "type": "dimensions",
-                  "width": 16,
+                  "type": "measure",
+                  "value": 16,
                   "unit": "px"
                 },
                 "provenance": {
@@ -6784,8 +6784,8 @@
               {
                 "id": "description-2",
                 "value": {
-                  "type": "dimensions",
-                  "width": 22,
+                  "type": "measure",
+                  "value": 22,
                   "unit": "px"
                 },
                 "provenance": {
@@ -6796,8 +6796,8 @@
               {
                 "id": "description-3",
                 "value": {
-                  "type": "dimensions",
-                  "width": 24,
+                  "type": "measure",
+                  "value": 24,
                   "unit": "px"
                 },
                 "provenance": {
@@ -6808,8 +6808,8 @@
               {
                 "id": "description-4",
                 "value": {
-                  "type": "dimensions",
-                  "width": 32,
+                  "type": "measure",
+                  "value": 32,
                   "unit": "px"
                 },
                 "provenance": {
@@ -6820,8 +6820,8 @@
               {
                 "id": "description-5",
                 "value": {
-                  "type": "dimensions",
-                  "width": 26,
+                  "type": "measure",
+                  "value": 26,
                   "unit": "px"
                 },
                 "provenance": {
@@ -6832,8 +6832,8 @@
               {
                 "id": "description-6",
                 "value": {
-                  "type": "dimensions",
-                  "width": 18,
+                  "type": "measure",
+                  "value": 18,
                   "unit": "px"
                 },
                 "provenance": {
@@ -6844,8 +6844,8 @@
               {
                 "id": "description-7",
                 "value": {
-                  "type": "dimensions",
-                  "width": 12,
+                  "type": "measure",
+                  "value": 12,
                   "unit": "px"
                 },
                 "provenance": {
@@ -6856,8 +6856,8 @@
               {
                 "id": "description-8",
                 "value": {
-                  "type": "dimensions",
-                  "width": 14,
+                  "type": "measure",
+                  "value": 14,
                   "unit": "px"
                 },
                 "provenance": {
@@ -7493,8 +7493,8 @@
               {
                 "id": "description-2",
                 "value": {
-                  "type": "dimensions",
-                  "width": 8,
+                  "type": "measure",
+                  "value": 8,
                   "unit": "px"
                 },
                 "provenance": {
@@ -7505,8 +7505,8 @@
               {
                 "id": "description-3",
                 "value": {
-                  "type": "dimensions",
-                  "width": 4,
+                  "type": "measure",
+                  "value": 4,
                   "unit": "px"
                 },
                 "provenance": {
@@ -7517,8 +7517,8 @@
               {
                 "id": "description-4",
                 "value": {
-                  "type": "dimensions",
-                  "width": 12,
+                  "type": "measure",
+                  "value": 12,
                   "unit": "px"
                 },
                 "provenance": {
@@ -7529,8 +7529,8 @@
               {
                 "id": "description-5",
                 "value": {
-                  "type": "dimensions",
-                  "width": 6,
+                  "type": "measure",
+                  "value": 6,
                   "unit": "px"
                 },
                 "provenance": {
@@ -7541,8 +7541,8 @@
               {
                 "id": "description-6",
                 "value": {
-                  "type": "dimensions",
-                  "width": 14,
+                  "type": "measure",
+                  "value": 14,
                   "unit": "px"
                 },
                 "provenance": {
@@ -7553,8 +7553,8 @@
               {
                 "id": "description-7",
                 "value": {
-                  "type": "dimensions",
-                  "width": 18,
+                  "type": "measure",
+                  "value": 18,
                   "unit": "px"
                 },
                 "provenance": {
@@ -7565,8 +7565,8 @@
               {
                 "id": "description-8",
                 "value": {
-                  "type": "dimensions",
-                  "width": 16,
+                  "type": "measure",
+                  "value": 16,
                   "unit": "px"
                 },
                 "provenance": {
@@ -7980,8 +7980,8 @@
               {
                 "id": "description-1",
                 "value": {
-                  "type": "dimensions",
-                  "width": 8,
+                  "type": "measure",
+                  "value": 8,
                   "unit": "px"
                 },
                 "provenance": {
@@ -7992,8 +7992,8 @@
               {
                 "id": "description-2",
                 "value": {
-                  "type": "dimensions",
-                  "width": 4,
+                  "type": "measure",
+                  "value": 4,
                   "unit": "px"
                 },
                 "provenance": {
@@ -8004,8 +8004,8 @@
               {
                 "id": "description-3",
                 "value": {
-                  "type": "dimensions",
-                  "width": 12,
+                  "type": "measure",
+                  "value": 12,
                   "unit": "px"
                 },
                 "provenance": {
@@ -8016,8 +8016,8 @@
               {
                 "id": "description-4",
                 "value": {
-                  "type": "dimensions",
-                  "width": 6,
+                  "type": "measure",
+                  "value": 6,
                   "unit": "px"
                 },
                 "provenance": {
@@ -8370,8 +8370,8 @@
               {
                 "id": "description-1",
                 "value": {
-                  "type": "dimensions",
-                  "width": 16,
+                  "type": "measure",
+                  "value": 16,
                   "unit": "px"
                 },
                 "provenance": {
@@ -8382,8 +8382,8 @@
               {
                 "id": "description-2",
                 "value": {
-                  "type": "dimensions",
-                  "width": 22,
+                  "type": "measure",
+                  "value": 22,
                   "unit": "px"
                 },
                 "provenance": {
@@ -8420,8 +8420,8 @@
               {
                 "id": "description-5",
                 "value": {
-                  "type": "dimensions",
-                  "width": 14,
+                  "type": "measure",
+                  "value": 14,
                   "unit": "px"
                 },
                 "provenance": {
@@ -8432,8 +8432,8 @@
               {
                 "id": "description-6",
                 "value": {
-                  "type": "dimensions",
-                  "width": 24,
+                  "type": "measure",
+                  "value": 24,
                   "unit": "px"
                 },
                 "provenance": {
@@ -8444,8 +8444,8 @@
               {
                 "id": "description-7",
                 "value": {
-                  "type": "dimensions",
-                  "width": 26,
+                  "type": "measure",
+                  "value": 26,
                   "unit": "px"
                 },
                 "provenance": {
@@ -8469,8 +8469,8 @@
               {
                 "id": "description-9",
                 "value": {
-                  "type": "dimensions",
-                  "width": 18,
+                  "type": "measure",
+                  "value": 18,
                   "unit": "px"
                 },
                 "provenance": {
@@ -8925,8 +8925,8 @@
               {
                 "id": "description-1",
                 "value": {
-                  "type": "dimensions",
-                  "width": 16,
+                  "type": "measure",
+                  "value": 16,
                   "unit": "px"
                 },
                 "provenance": {
@@ -8937,8 +8937,8 @@
               {
                 "id": "description-2",
                 "value": {
-                  "type": "dimensions",
-                  "width": 12,
+                  "type": "measure",
+                  "value": 12,
                   "unit": "px"
                 },
                 "provenance": {
@@ -8949,8 +8949,8 @@
               {
                 "id": "description-3",
                 "value": {
-                  "type": "dimensions",
-                  "width": 22,
+                  "type": "measure",
+                  "value": 22,
                   "unit": "px"
                 },
                 "provenance": {
@@ -8974,8 +8974,8 @@
               {
                 "id": "description-5",
                 "value": {
-                  "type": "dimensions",
-                  "width": 14,
+                  "type": "measure",
+                  "value": 14,
                   "unit": "px"
                 },
                 "provenance": {
@@ -8986,8 +8986,8 @@
               {
                 "id": "description-6",
                 "value": {
-                  "type": "dimensions",
-                  "width": 24,
+                  "type": "measure",
+                  "value": 24,
                   "unit": "px"
                 },
                 "provenance": {
@@ -8998,8 +8998,8 @@
               {
                 "id": "description-7",
                 "value": {
-                  "type": "dimensions",
-                  "width": 26,
+                  "type": "measure",
+                  "value": 26,
                   "unit": "px"
                 },
                 "provenance": {
@@ -9023,8 +9023,8 @@
               {
                 "id": "description-9",
                 "value": {
-                  "type": "dimensions",
-                  "width": 18,
+                  "type": "measure",
+                  "value": 18,
                   "unit": "px"
                 },
                 "provenance": {
@@ -9717,8 +9717,8 @@
               {
                 "id": "description-12",
                 "value": {
-                  "type": "dimensions",
-                  "width": 16,
+                  "type": "measure",
+                  "value": 16,
                   "unit": "px"
                 },
                 "provenance": {
@@ -9729,8 +9729,8 @@
               {
                 "id": "description-13",
                 "value": {
-                  "type": "dimensions",
-                  "width": 22,
+                  "type": "measure",
+                  "value": 22,
                   "unit": "px"
                 },
                 "provenance": {
@@ -9741,8 +9741,8 @@
               {
                 "id": "description-14",
                 "value": {
-                  "type": "dimensions",
-                  "width": 14,
+                  "type": "measure",
+                  "value": 14,
                   "unit": "px"
                 },
                 "provenance": {
@@ -9753,8 +9753,8 @@
               {
                 "id": "description-15",
                 "value": {
-                  "type": "dimensions",
-                  "width": 44,
+                  "type": "measure",
+                  "value": 44,
                   "unit": "px"
                 },
                 "provenance": {
@@ -9765,8 +9765,8 @@
               {
                 "id": "description-16",
                 "value": {
-                  "type": "dimensions",
-                  "width": 8,
+                  "type": "measure",
+                  "value": 8,
                   "unit": "px"
                 },
                 "provenance": {
@@ -9777,8 +9777,8 @@
               {
                 "id": "description-17",
                 "value": {
-                  "type": "dimensions",
-                  "width": 24,
+                  "type": "measure",
+                  "value": 24,
                   "unit": "px"
                 },
                 "provenance": {
@@ -9811,8 +9811,8 @@
               {
                 "id": "description-20",
                 "value": {
-                  "type": "dimensions",
-                  "width": 32,
+                  "type": "measure",
+                  "value": 32,
                   "unit": "px"
                 },
                 "provenance": {
@@ -9823,8 +9823,8 @@
               {
                 "id": "description-21",
                 "value": {
-                  "type": "dimensions",
-                  "width": 26,
+                  "type": "measure",
+                  "value": 26,
                   "unit": "px"
                 },
                 "provenance": {
@@ -9835,8 +9835,8 @@
               {
                 "id": "description-22",
                 "value": {
-                  "type": "dimensions",
-                  "width": 18,
+                  "type": "measure",
+                  "value": 18,
                   "unit": "px"
                 },
                 "provenance": {
@@ -9860,8 +9860,8 @@
               {
                 "id": "description-24",
                 "value": {
-                  "type": "dimensions",
-                  "width": 50,
+                  "type": "measure",
+                  "value": 50,
                   "unit": "px"
                 },
                 "provenance": {
@@ -10784,8 +10784,8 @@
               {
                 "id": "description-1",
                 "value": {
-                  "type": "dimensions",
-                  "width": 600,
+                  "type": "measure",
+                  "value": 600,
                   "unit": "px"
                 },
                 "provenance": {
@@ -10796,8 +10796,8 @@
               {
                 "id": "description-2",
                 "value": {
-                  "type": "dimensions",
-                  "width": 16,
+                  "type": "measure",
+                  "value": 16,
                   "unit": "px"
                 },
                 "provenance": {
@@ -10808,8 +10808,8 @@
               {
                 "id": "description-3",
                 "value": {
-                  "type": "dimensions",
-                  "width": 24,
+                  "type": "measure",
+                  "value": 24,
                   "unit": "px"
                 },
                 "provenance": {
@@ -10831,8 +10831,8 @@
               {
                 "id": "description-5",
                 "value": {
-                  "type": "dimensions",
-                  "width": 8,
+                  "type": "measure",
+                  "value": 8,
                   "unit": "px"
                 },
                 "provenance": {
@@ -10843,8 +10843,8 @@
               {
                 "id": "description-6",
                 "value": {
-                  "type": "dimensions",
-                  "width": 12,
+                  "type": "measure",
+                  "value": 12,
                   "unit": "px"
                 },
                 "provenance": {
@@ -10855,8 +10855,8 @@
               {
                 "id": "description-7",
                 "value": {
-                  "type": "dimensions",
-                  "width": 14,
+                  "type": "measure",
+                  "value": 14,
                   "unit": "px"
                 },
                 "provenance": {
@@ -11284,8 +11284,8 @@
               {
                 "id": "description-5",
                 "value": {
-                  "type": "dimensions",
-                  "width": 14,
+                  "type": "measure",
+                  "value": 14,
                   "unit": "px"
                 },
                 "provenance": {
@@ -11296,8 +11296,8 @@
               {
                 "id": "description-6",
                 "value": {
-                  "type": "dimensions",
-                  "width": 18,
+                  "type": "measure",
+                  "value": 18,
                   "unit": "px"
                 },
                 "provenance": {
@@ -11699,8 +11699,8 @@
               {
                 "id": "description-2",
                 "value": {
-                  "type": "dimensions",
-                  "width": 14,
+                  "type": "measure",
+                  "value": 14,
                   "unit": "px"
                 },
                 "provenance": {
@@ -11711,8 +11711,8 @@
               {
                 "id": "description-3",
                 "value": {
-                  "type": "dimensions",
-                  "width": 16,
+                  "type": "measure",
+                  "value": 16,
                   "unit": "px"
                 },
                 "provenance": {
@@ -11723,8 +11723,8 @@
               {
                 "id": "description-4",
                 "value": {
-                  "type": "dimensions",
-                  "width": 8,
+                  "type": "measure",
+                  "value": 8,
                   "unit": "px"
                 },
                 "provenance": {
@@ -11748,8 +11748,8 @@
               {
                 "id": "description-6",
                 "value": {
-                  "type": "dimensions",
-                  "width": 24,
+                  "type": "measure",
+                  "value": 24,
                   "unit": "px"
                 },
                 "provenance": {
@@ -11760,8 +11760,8 @@
               {
                 "id": "description-7",
                 "value": {
-                  "type": "dimensions",
-                  "width": 232,
+                  "type": "measure",
+                  "value": 232,
                   "unit": "px"
                 },
                 "provenance": {
@@ -11772,8 +11772,8 @@
               {
                 "id": "description-8",
                 "value": {
-                  "type": "dimensions",
-                  "width": 18,
+                  "type": "measure",
+                  "value": 18,
                   "unit": "px"
                 },
                 "provenance": {
@@ -11784,8 +11784,8 @@
               {
                 "id": "description-9",
                 "value": {
-                  "type": "dimensions",
-                  "width": 6,
+                  "type": "measure",
+                  "value": 6,
                   "unit": "px"
                 },
                 "provenance": {
@@ -11796,8 +11796,8 @@
               {
                 "id": "description-10",
                 "value": {
-                  "type": "dimensions",
-                  "width": 20,
+                  "type": "measure",
+                  "value": 20,
                   "unit": "px"
                 },
                 "provenance": {
@@ -12391,8 +12391,8 @@
               {
                 "id": "description-1",
                 "value": {
-                  "type": "dimensions",
-                  "width": 16,
+                  "type": "measure",
+                  "value": 16,
                   "unit": "px"
                 },
                 "provenance": {
@@ -12403,8 +12403,8 @@
               {
                 "id": "description-2",
                 "value": {
-                  "type": "dimensions",
-                  "width": 24,
+                  "type": "measure",
+                  "value": 24,
                   "unit": "px"
                 },
                 "provenance": {
@@ -12415,8 +12415,8 @@
               {
                 "id": "description-3",
                 "value": {
-                  "type": "dimensions",
-                  "width": 22,
+                  "type": "measure",
+                  "value": 22,
                   "unit": "px"
                 },
                 "provenance": {
@@ -12427,8 +12427,8 @@
               {
                 "id": "description-4",
                 "value": {
-                  "type": "dimensions",
-                  "width": 18,
+                  "type": "measure",
+                  "value": 18,
                   "unit": "px"
                 },
                 "provenance": {
@@ -12452,8 +12452,8 @@
               {
                 "id": "description-6",
                 "value": {
-                  "type": "dimensions",
-                  "width": 4,
+                  "type": "measure",
+                  "value": 4,
                   "unit": "px"
                 },
                 "provenance": {
@@ -12464,8 +12464,8 @@
               {
                 "id": "description-7",
                 "value": {
-                  "type": "dimensions",
-                  "width": 14,
+                  "type": "measure",
+                  "value": 14,
                   "unit": "px"
                 },
                 "provenance": {
@@ -12476,8 +12476,8 @@
               {
                 "id": "description-8",
                 "value": {
-                  "type": "dimensions",
-                  "width": 12,
+                  "type": "measure",
+                  "value": 12,
                   "unit": "px"
                 },
                 "provenance": {
@@ -12488,8 +12488,8 @@
               {
                 "id": "description-9",
                 "value": {
-                  "type": "dimensions",
-                  "width": 32,
+                  "type": "measure",
+                  "value": 32,
                   "unit": "px"
                 },
                 "provenance": {
@@ -12500,8 +12500,8 @@
               {
                 "id": "description-10",
                 "value": {
-                  "type": "dimensions",
-                  "width": 26,
+                  "type": "measure",
+                  "value": 26,
                   "unit": "px"
                 },
                 "provenance": {
@@ -12525,8 +12525,8 @@
               {
                 "id": "description-12",
                 "value": {
-                  "type": "dimensions",
-                  "width": 6,
+                  "type": "measure",
+                  "value": 6,
                   "unit": "px"
                 },
                 "provenance": {
@@ -13266,8 +13266,8 @@
               {
                 "id": "description-2",
                 "value": {
-                  "type": "dimensions",
-                  "width": 16,
+                  "type": "measure",
+                  "value": 16,
                   "unit": "px"
                 },
                 "provenance": {
@@ -13278,8 +13278,8 @@
               {
                 "id": "description-3",
                 "value": {
-                  "type": "dimensions",
-                  "width": 8,
+                  "type": "measure",
+                  "value": 8,
                   "unit": "px"
                 },
                 "provenance": {
@@ -13290,8 +13290,8 @@
               {
                 "id": "description-4",
                 "value": {
-                  "type": "dimensions",
-                  "width": 14,
+                  "type": "measure",
+                  "value": 14,
                   "unit": "px"
                 },
                 "provenance": {
@@ -13315,8 +13315,8 @@
               {
                 "id": "description-6",
                 "value": {
-                  "type": "dimensions",
-                  "width": 24,
+                  "type": "measure",
+                  "value": 24,
                   "unit": "px"
                 },
                 "provenance": {
@@ -13327,8 +13327,8 @@
               {
                 "id": "description-7",
                 "value": {
-                  "type": "dimensions",
-                  "width": 392,
+                  "type": "measure",
+                  "value": 392,
                   "unit": "px"
                 },
                 "provenance": {
@@ -13339,8 +13339,8 @@
               {
                 "id": "description-8",
                 "value": {
-                  "type": "dimensions",
-                  "width": 12,
+                  "type": "measure",
+                  "value": 12,
                   "unit": "px"
                 },
                 "provenance": {
@@ -13351,8 +13351,8 @@
               {
                 "id": "description-9",
                 "value": {
-                  "type": "dimensions",
-                  "width": 20,
+                  "type": "measure",
+                  "value": 20,
                   "unit": "px"
                 },
                 "provenance": {
@@ -14025,8 +14025,8 @@
               {
                 "id": "description-2",
                 "value": {
-                  "type": "dimensions",
-                  "width": 16,
+                  "type": "measure",
+                  "value": 16,
                   "unit": "px"
                 },
                 "provenance": {
@@ -14037,8 +14037,8 @@
               {
                 "id": "description-3",
                 "value": {
-                  "type": "dimensions",
-                  "width": 12,
+                  "type": "measure",
+                  "value": 12,
                   "unit": "px"
                 },
                 "provenance": {
@@ -14049,8 +14049,8 @@
               {
                 "id": "description-4",
                 "value": {
-                  "type": "dimensions",
-                  "width": 14,
+                  "type": "measure",
+                  "value": 14,
                   "unit": "px"
                 },
                 "provenance": {
@@ -14074,8 +14074,8 @@
               {
                 "id": "description-6",
                 "value": {
-                  "type": "dimensions",
-                  "width": 24,
+                  "type": "measure",
+                  "value": 24,
                   "unit": "px"
                 },
                 "provenance": {
@@ -14086,8 +14086,8 @@
               {
                 "id": "description-7",
                 "value": {
-                  "type": "dimensions",
-                  "width": 18,
+                  "type": "measure",
+                  "value": 18,
                   "unit": "px"
                 },
                 "provenance": {
@@ -14526,8 +14526,8 @@
               {
                 "id": "description-2",
                 "value": {
-                  "type": "dimensions",
-                  "width": 16,
+                  "type": "measure",
+                  "value": 16,
                   "unit": "px"
                 },
                 "provenance": {
@@ -14538,8 +14538,8 @@
               {
                 "id": "description-3",
                 "value": {
-                  "type": "dimensions",
-                  "width": 14,
+                  "type": "measure",
+                  "value": 14,
                   "unit": "px"
                 },
                 "provenance": {
@@ -14550,8 +14550,8 @@
               {
                 "id": "description-4",
                 "value": {
-                  "type": "dimensions",
-                  "width": 12,
+                  "type": "measure",
+                  "value": 12,
                   "unit": "px"
                 },
                 "provenance": {
@@ -14575,8 +14575,8 @@
               {
                 "id": "description-6",
                 "value": {
-                  "type": "dimensions",
-                  "width": 24,
+                  "type": "measure",
+                  "value": 24,
                   "unit": "px"
                 },
                 "provenance": {
@@ -14587,8 +14587,8 @@
               {
                 "id": "description-7",
                 "value": {
-                  "type": "dimensions",
-                  "width": 20,
+                  "type": "measure",
+                  "value": 20,
                   "unit": "px"
                 },
                 "provenance": {
@@ -14599,8 +14599,8 @@
               {
                 "id": "description-8",
                 "value": {
-                  "type": "dimensions",
-                  "width": 18,
+                  "type": "measure",
+                  "value": 18,
                   "unit": "px"
                 },
                 "provenance": {
@@ -15119,8 +15119,8 @@
               {
                 "id": "description-1",
                 "value": {
-                  "type": "dimensions",
-                  "width": 16,
+                  "type": "measure",
+                  "value": 16,
                   "unit": "px"
                 },
                 "provenance": {
@@ -15131,8 +15131,8 @@
               {
                 "id": "description-2",
                 "value": {
-                  "type": "dimensions",
-                  "width": 24,
+                  "type": "measure",
+                  "value": 24,
                   "unit": "px"
                 },
                 "provenance": {
@@ -15143,8 +15143,8 @@
               {
                 "id": "description-3",
                 "value": {
-                  "type": "dimensions",
-                  "width": 296,
+                  "type": "measure",
+                  "value": 296,
                   "unit": "px"
                 },
                 "provenance": {
@@ -15155,8 +15155,8 @@
               {
                 "id": "description-4",
                 "value": {
-                  "type": "dimensions",
-                  "width": 22,
+                  "type": "measure",
+                  "value": 22,
                   "unit": "px"
                 },
                 "provenance": {
@@ -15167,8 +15167,8 @@
               {
                 "id": "description-5",
                 "value": {
-                  "type": "dimensions",
-                  "width": 552,
+                  "type": "measure",
+                  "value": 552,
                   "unit": "px"
                 },
                 "provenance": {
@@ -15179,8 +15179,8 @@
               {
                 "id": "description-6",
                 "value": {
-                  "type": "dimensions",
-                  "width": 32,
+                  "type": "measure",
+                  "value": 32,
                   "unit": "px"
                 },
                 "provenance": {
@@ -15191,8 +15191,8 @@
               {
                 "id": "description-7",
                 "value": {
-                  "type": "dimensions",
-                  "width": 26,
+                  "type": "measure",
+                  "value": 26,
                   "unit": "px"
                 },
                 "provenance": {
@@ -15203,8 +15203,8 @@
               {
                 "id": "description-8",
                 "value": {
-                  "type": "dimensions",
-                  "width": 18,
+                  "type": "measure",
+                  "value": 18,
                   "unit": "px"
                 },
                 "provenance": {
@@ -15215,8 +15215,8 @@
               {
                 "id": "description-9",
                 "value": {
-                  "type": "dimensions",
-                  "width": 44,
+                  "type": "measure",
+                  "value": 44,
                   "unit": "px"
                 },
                 "provenance": {
@@ -15227,8 +15227,8 @@
               {
                 "id": "description-10",
                 "value": {
-                  "type": "dimensions",
-                  "width": 8,
+                  "type": "measure",
+                  "value": 8,
                   "unit": "px"
                 },
                 "provenance": {
@@ -15252,8 +15252,8 @@
               {
                 "id": "description-12",
                 "value": {
-                  "type": "dimensions",
-                  "width": 12,
+                  "type": "measure",
+                  "value": 12,
                   "unit": "px"
                 },
                 "provenance": {
@@ -15264,8 +15264,8 @@
               {
                 "id": "description-13",
                 "value": {
-                  "type": "dimensions",
-                  "width": 54,
+                  "type": "measure",
+                  "value": 54,
                   "unit": "px"
                 },
                 "provenance": {
