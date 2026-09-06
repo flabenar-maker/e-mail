@@ -1,0 +1,1537 @@
+{
+  "schema_version": "1.0.0",
+  "registry": {
+    "id": "components-shared",
+    "library": "shared",
+    "status": "shadow",
+    "source": {
+      "figma_file_key": "8zka5bHkcrJVK9I9dKjnhC",
+      "roots": [
+        {
+          "role": "library",
+          "node_id": "539:38025"
+        },
+        {
+          "role": "templates",
+          "node_id": "1084:34055"
+        }
+      ],
+      "baseline_path": "registry/email-component-descriptions-registry.md",
+      "baseline_commit": "397e13a916e9af1c2dfd8af663de730bcc2e1874",
+      "verified_at": "2026-09-06"
+    }
+  },
+  "components": [
+    {
+      "id": "email-template",
+      "status": "active",
+      "identity": {
+        "figma_name": "Email/Template",
+        "node_kind": "component-set",
+        "library": "shared",
+        "semantic_role": "template",
+        "category": "template"
+      },
+      "figma": {
+        "file_key": "8zka5bHkcrJVK9I9dKjnhC",
+        "node_id": "1102:8",
+        "source_root_node_id": "1084:34055",
+        "verified_at": "2026-09-06",
+        "structure_fingerprint": "sha256:de390a0c033a26a3e50b35c243e4007e9b3d89fe04cae325726921b848015b7f"
+      },
+      "variants": [
+        {
+          "id": "mobile",
+          "node_id": "1102:6",
+          "axes": [
+            {
+              "name": "Viewport",
+              "value": "Mobile"
+            }
+          ]
+        },
+        {
+          "id": "desktop",
+          "node_id": "1102:7",
+          "axes": [
+            {
+              "name": "Viewport",
+              "value": "Desktop"
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "id": "content",
+          "figma_name": "Content",
+          "type": "slot",
+          "default": null
+        }
+      ],
+      "asset_contracts": [],
+      "contracts": {
+        "mobile": {
+          "root": {
+            "id": "root",
+            "semantic_role": "template",
+            "render_mode": "presentation-table",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": [
+              {
+                "id": "content",
+                "semantic_role": "content",
+                "render_mode": "slot",
+                "visibility": {
+                  "mode": "always"
+                },
+                "facts": [],
+                "children": []
+              }
+            ]
+          }
+        },
+        "desktop": {
+          "root": {
+            "id": "root",
+            "semantic_role": "template",
+            "render_mode": "presentation-table",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": [
+              {
+                "id": "content",
+                "semantic_role": "content",
+                "render_mode": "slot",
+                "visibility": {
+                  "mode": "always"
+                },
+                "facts": [],
+                "children": []
+              }
+            ]
+          }
+        }
+      },
+      "description": {
+        "mode": "rendered",
+        "blocks": [
+          {
+            "type": "heading",
+            "value": "ROLE"
+          },
+          {
+            "type": "line",
+            "tokens": [
+              {
+                "type": "text",
+                "value": "Корневой assembly-компонент письма. Реализовать ровно один раз как основу общей HTML-структуры, внутри которой размещаются верхнеуровневые библиотечные компоненты."
+              }
+            ]
+          },
+          {
+            "type": "blank"
+          },
+          {
+            "type": "heading",
+            "value": "VARIANTS"
+          },
+          {
+            "type": "line",
+            "tokens": [
+              {
+                "type": "text",
+                "value": "Viewport=Mobile | Desktop. Для каждой версии письма использовать соответствующий вариант и фактический состав "
+              },
+              {
+                "type": "property-name",
+                "property_id": "content"
+              },
+              {
+                "type": "text",
+                "value": " в конкретном инстансе. Не переносить состав, свойства или видимость между Mobile и Desktop автоматически."
+              }
+            ]
+          },
+          {
+            "type": "blank"
+          },
+          {
+            "type": "heading",
+            "value": "ROOT CONTRACT"
+          },
+          {
+            "type": "line",
+            "tokens": [
+              {
+                "type": "text",
+                "value": "Корневую email-обёртку и её техническую HTML-структуру реализовать по глобальной инструкции по вёрстке. Сам "
+              },
+              {
+                "type": "component-name",
+                "component_id": "email-template"
+              },
+              {
+                "type": "text",
+                "value": " не экспортировать как изображение или отдельный asset."
+              }
+            ]
+          },
+          {
+            "type": "blank"
+          },
+          {
+            "type": "heading",
+            "value": "CONTENT SLOT"
+          },
+          {
+            "type": "line",
+            "tokens": [
+              {
+                "type": "property-name",
+                "property_id": "content"
+              },
+              {
+                "type": "text",
+                "value": " задаёт порядок и состав верхнеуровневых компонентов письма. Каждый вложенный компонент верстать по его собственному Description. Сам Slot не задаёт самостоятельной визуальной геометрии: не добавлять из-за него отсутствующие в макете padding, gap, background или другие визуальные слои. Не считать Slot запретом на технические table-обёртки, необходимые общей email-структуре."
+              }
+            ]
+          }
+        ]
+      },
+      "provenance": {
+        "baseline_path": "registry/email-component-descriptions-registry.md",
+        "baseline_heading": "Email/Template",
+        "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
+      }
+    },
+    {
+      "id": "asset-product-logo",
+      "status": "active",
+      "identity": {
+        "figma_name": "Asset/Product-Logo",
+        "node_kind": "component-set",
+        "library": "shared",
+        "semantic_role": "asset",
+        "category": "product-logo"
+      },
+      "figma": {
+        "file_key": "8zka5bHkcrJVK9I9dKjnhC",
+        "node_id": "1008:874",
+        "source_root_node_id": "539:38025",
+        "verified_at": "2026-09-06",
+        "structure_fingerprint": "sha256:d3bffb4956bbbde476bfffbb2ac79301bfe67849225829394d26b13d22760fac"
+      },
+      "variants": [
+        {
+          "id": "product-cupis",
+          "node_id": "1008:871",
+          "axes": [
+            {
+              "name": "Product",
+              "value": "CUPIS"
+            }
+          ]
+        },
+        {
+          "id": "product-card",
+          "node_id": "1008:872",
+          "axes": [
+            {
+              "name": "Product",
+              "value": "Card"
+            }
+          ]
+        },
+        {
+          "id": "product-wallet",
+          "node_id": "1008:873",
+          "axes": [
+            {
+              "name": "Product",
+              "value": "Wallet"
+            }
+          ]
+        }
+      ],
+      "properties": [],
+      "asset_contracts": [],
+      "contracts": {
+        "mobile": {
+          "root": {
+            "id": "root",
+            "semantic_role": "asset",
+            "render_mode": "figma-source-only",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": []
+          }
+        },
+        "desktop": {
+          "root": {
+            "id": "root",
+            "semantic_role": "asset",
+            "render_mode": "figma-source-only",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": []
+          }
+        }
+      },
+      "description": {
+        "mode": "rendered",
+        "blocks": [
+          {
+            "type": "heading",
+            "value": "ROLE"
+          },
+          {
+            "type": "line",
+            "tokens": [
+              {
+                "type": "text",
+                "value": "Внутренний набор векторных логотипов Product=CUPIS | Card | Wallet для сборки производных assets. Сам по себе не задаёт export boundary письма."
+              }
+            ]
+          },
+          {
+            "type": "blank"
+          },
+          {
+            "type": "heading",
+            "value": "USAGE"
+          },
+          {
+            "type": "line",
+            "tokens": [
+              {
+                "type": "text",
+                "value": "Использовать как вложенный источник внутри семантического asset owner. Не экспортировать отдельно, если родительский component description требует внешний составной asset."
+              }
+            ]
+          }
+        ]
+      },
+      "provenance": {
+        "baseline_path": "registry/email-component-descriptions-registry.md",
+        "baseline_heading": "Asset/Product-Logo",
+        "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
+      }
+    },
+    {
+      "id": "asset-header-logo-4x",
+      "status": "active",
+      "identity": {
+        "figma_name": "Asset/Header-Logo @4x",
+        "node_kind": "component-set",
+        "library": "shared",
+        "semantic_role": "asset",
+        "category": "header-logo-4x"
+      },
+      "figma": {
+        "file_key": "8zka5bHkcrJVK9I9dKjnhC",
+        "node_id": "1008:1476",
+        "source_root_node_id": "539:38025",
+        "verified_at": "2026-09-06",
+        "structure_fingerprint": "sha256:96f237bf860d36e07d64e302f50c49b553df537485cdbddf4465f3897804ba89"
+      },
+      "variants": [
+        {
+          "id": "product-cupis",
+          "node_id": "1008:1473",
+          "axes": [
+            {
+              "name": "Product",
+              "value": "CUPIS"
+            }
+          ]
+        },
+        {
+          "id": "product-card",
+          "node_id": "1008:1474",
+          "axes": [
+            {
+              "name": "Product",
+              "value": "Card"
+            }
+          ]
+        },
+        {
+          "id": "product-wallet",
+          "node_id": "1008:1475",
+          "axes": [
+            {
+              "name": "Product",
+              "value": "Wallet"
+            }
+          ]
+        }
+      ],
+      "properties": [],
+      "asset_contracts": [
+        {
+          "id": "header-logo",
+          "owner_layer_name": "header-logo @4x",
+          "source_viewport": "desktop",
+          "source_mode_id": "rendered-node",
+          "display_mode_id": "direct-image",
+          "export_profile_id": "png-4x",
+          "alpha_mode_id": "opaque",
+          "clipping_policy_id": "preserve-artwork",
+          "export_boundary": {
+            "kind": "node",
+            "semantic_node_name": "header-logo @4x"
+          },
+          "pixel_dimensions": {
+            "width": 1288,
+            "height": 200,
+            "unit": "px"
+          },
+          "aspect_ratio": {
+            "width": 322,
+            "height": 50
+          },
+          "crop": {
+            "mode": "none",
+            "position_source": "exact-node-after-overrides"
+          },
+          "background": {
+            "own_visible_boundary_fill": "preserve",
+            "artificial_matte": "forbid"
+          }
+        }
+      ],
+      "contracts": {
+        "mobile": {
+          "root": {
+            "id": "root",
+            "semantic_role": "asset",
+            "render_mode": "presentation-table",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [
+              {
+                "id": "description-1",
+                "value": {
+                  "type": "color",
+                  "value": "#F3F3F5"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              },
+              {
+                "id": "description-2",
+                "value": {
+                  "type": "asset-reference",
+                  "asset_contract_id": "header-logo"
+                }
+              },
+              {
+                "id": "description-3",
+                "value": {
+                  "type": "string",
+                  "value": "@4x"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              },
+              {
+                "id": "description-4",
+                "value": {
+                  "type": "dimensions",
+                  "width": 322,
+                  "height": 50,
+                  "unit": "px"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              },
+              {
+                "id": "description-5",
+                "value": {
+                  "type": "dimensions",
+                  "width": 212,
+                  "height": 33,
+                  "unit": "px"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              }
+            ],
+            "children": [
+              {
+                "id": "header-logo",
+                "semantic_role": "image",
+                "render_mode": "direct-image",
+                "visibility": {
+                  "mode": "always"
+                },
+                "facts": [],
+                "children": [],
+                "asset_contract_id": "header-logo"
+              }
+            ]
+          }
+        },
+        "desktop": {
+          "root": {
+            "id": "root",
+            "semantic_role": "asset",
+            "render_mode": "presentation-table",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": [
+              {
+                "id": "header-logo",
+                "semantic_role": "image",
+                "render_mode": "direct-image",
+                "visibility": {
+                  "mode": "always"
+                },
+                "facts": [],
+                "children": [],
+                "asset_contract_id": "header-logo"
+              }
+            ]
+          }
+        }
+      },
+      "description": {
+        "mode": "rendered",
+        "blocks": [
+          {
+            "type": "heading",
+            "value": "ASSET ROLE"
+          },
+          {
+            "type": "line",
+            "tokens": [
+              {
+                "type": "text",
+                "value": "Канонический общий Header asset для Product=CUPIS | Card | Wallet. Внешний компонент содержит логотип и защитную подложку "
+              },
+              {
+                "type": "fact",
+                "path": "mobile/root/description-1"
+              },
+              {
+                "type": "text",
+                "value": "."
+              }
+            ]
+          },
+          {
+            "type": "blank"
+          },
+          {
+            "type": "heading",
+            "value": "EXPORT"
+          },
+          {
+            "type": "line",
+            "tokens": [
+              {
+                "type": "text",
+                "value": "Экспортировать внешний слой "
+              },
+              {
+                "type": "fact",
+                "path": "mobile/root/description-2"
+              },
+              {
+                "type": "text",
+                "value": " целиком из конкретного Desktop-инстанса как PNG "
+              },
+              {
+                "type": "fact",
+                "path": "mobile/root/description-3"
+              },
+              {
+                "type": "text",
+                "value": ". Не экспортировать вложенный Product Logo отдельно и не добавлять HTML-подложку."
+              }
+            ]
+          },
+          {
+            "type": "blank"
+          },
+          {
+            "type": "heading",
+            "value": "USAGE"
+          },
+          {
+            "type": "line",
+            "tokens": [
+              {
+                "type": "text",
+                "value": "Один файл и один src для Mobile и Desktop. Display-size определяет "
+              },
+              {
+                "type": "component-name",
+                "component_id": "email-header"
+              },
+              {
+                "type": "text",
+                "value": ": "
+              },
+              {
+                "type": "fact",
+                "path": "mobile/root/description-4"
+              },
+              {
+                "type": "text",
+                "value": " Desktop и "
+              },
+              {
+                "type": "fact",
+                "path": "mobile/root/description-5"
+              },
+              {
+                "type": "text",
+                "value": " Mobile."
+              }
+            ]
+          }
+        ]
+      },
+      "provenance": {
+        "baseline_path": "registry/email-component-descriptions-registry.md",
+        "baseline_heading": "Asset/Header-Logo @4x",
+        "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
+      }
+    },
+    {
+      "id": "asset-header-logo-compact-4x",
+      "status": "active",
+      "identity": {
+        "figma_name": "Asset/Header-Logo-Compact @4x",
+        "node_kind": "component-set",
+        "library": "shared",
+        "semantic_role": "asset",
+        "category": "header-logo-compact-4x"
+      },
+      "figma": {
+        "file_key": "8zka5bHkcrJVK9I9dKjnhC",
+        "node_id": "1008:1708",
+        "source_root_node_id": "539:38025",
+        "verified_at": "2026-09-06",
+        "structure_fingerprint": "sha256:a9492a57a06ed1a7611a32124fd7d4be971fb16776693db19a121675b75bfe4a"
+      },
+      "variants": [
+        {
+          "id": "product-cupis",
+          "node_id": "1008:1686",
+          "axes": [
+            {
+              "name": "Product",
+              "value": "CUPIS"
+            }
+          ]
+        },
+        {
+          "id": "product-card",
+          "node_id": "1008:1687",
+          "axes": [
+            {
+              "name": "Product",
+              "value": "Card"
+            }
+          ]
+        },
+        {
+          "id": "product-wallet",
+          "node_id": "1008:1688",
+          "axes": [
+            {
+              "name": "Product",
+              "value": "Wallet"
+            }
+          ]
+        }
+      ],
+      "properties": [],
+      "asset_contracts": [],
+      "contracts": {
+        "mobile": {
+          "root": {
+            "id": "root",
+            "semantic_role": "asset",
+            "render_mode": "figma-source-only",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [
+              {
+                "id": "description-1",
+                "value": {
+                  "type": "dimensions",
+                  "width": 212,
+                  "height": 33,
+                  "unit": "px"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              },
+              {
+                "id": "description-2",
+                "value": {
+                  "type": "string",
+                  "value": "@4x"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              }
+            ],
+            "children": []
+          }
+        },
+        "desktop": {
+          "root": {
+            "id": "root",
+            "semantic_role": "asset",
+            "render_mode": "figma-source-only",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": []
+          }
+        }
+      },
+      "description": {
+        "mode": "rendered",
+        "blocks": [
+          {
+            "type": "heading",
+            "value": "ROLE"
+          },
+          {
+            "type": "line",
+            "tokens": [
+              {
+                "type": "text",
+                "value": "Вспомогательный Figma layout-source для точного отображения Mobile-варианта "
+              },
+              {
+                "type": "component-name",
+                "component_id": "email-header"
+              },
+              {
+                "type": "text",
+                "value": " в размере "
+              },
+              {
+                "type": "fact",
+                "path": "mobile/root/description-1"
+              },
+              {
+                "type": "text",
+                "value": "."
+              }
+            ]
+          },
+          {
+            "type": "blank"
+          },
+          {
+            "type": "heading",
+            "value": "EXPORT"
+          },
+          {
+            "type": "line",
+            "tokens": [
+              {
+                "type": "text",
+                "value": "Отдельно не экспортировать и не создавать для него Mobile-файл. Канонический файл письма экспортируется из Desktop-слоя header-logo "
+              },
+              {
+                "type": "fact",
+                "path": "mobile/root/description-2"
+              },
+              {
+                "type": "text",
+                "value": " компонента "
+              },
+              {
+                "type": "component-name",
+                "component_id": "asset-header-logo-4x"
+              },
+              {
+                "type": "text",
+                "value": "."
+              }
+            ]
+          },
+          {
+            "type": "blank"
+          },
+          {
+            "type": "heading",
+            "value": "USAGE"
+          },
+          {
+            "type": "line",
+            "tokens": [
+              {
+                "type": "text",
+                "value": "Использовать только внутри Viewport=Mobile компонента "
+              },
+              {
+                "type": "component-name",
+                "component_id": "email-header"
+              },
+              {
+                "type": "text",
+                "value": "."
+              }
+            ]
+          }
+        ]
+      },
+      "provenance": {
+        "baseline_path": "registry/email-component-descriptions-registry.md",
+        "baseline_heading": "Asset/Header-Logo-Compact @4x",
+        "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
+      }
+    },
+    {
+      "id": "icon-bank-card-2-line",
+      "status": "active",
+      "identity": {
+        "figma_name": "Icon/Bank-Card-2-Line",
+        "node_kind": "component",
+        "library": "shared",
+        "semantic_role": "icon",
+        "category": "bank-card-2-line"
+      },
+      "figma": {
+        "file_key": "8zka5bHkcrJVK9I9dKjnhC",
+        "node_id": "1009:2505",
+        "source_root_node_id": "539:38025",
+        "verified_at": "2026-09-06",
+        "structure_fingerprint": "sha256:d74f4f4244e1e757ab10f97a7523d8884c332ce72e243453399d8a51d7c4bbf2"
+      },
+      "variants": [],
+      "properties": [],
+      "asset_contracts": [],
+      "contracts": {
+        "mobile": {
+          "root": {
+            "id": "root",
+            "semantic_role": "icon",
+            "render_mode": "figma-source-only",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": []
+          }
+        },
+        "desktop": {
+          "root": {
+            "id": "root",
+            "semantic_role": "icon",
+            "render_mode": "figma-source-only",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": []
+          }
+        }
+      },
+      "description": {
+        "mode": "none",
+        "reason": "nested-figma-glyph-without-independent-email-contract"
+      },
+      "provenance": {
+        "node_id": "1009:2505",
+        "captured_at": "2026-09-06T12:14:00Z"
+      }
+    },
+    {
+      "id": "icon-fingerprint-2-line",
+      "status": "active",
+      "identity": {
+        "figma_name": "Icon/Fingerprint-2-Line",
+        "node_kind": "component",
+        "library": "shared",
+        "semantic_role": "icon",
+        "category": "fingerprint-2-line"
+      },
+      "figma": {
+        "file_key": "8zka5bHkcrJVK9I9dKjnhC",
+        "node_id": "491:22370",
+        "source_root_node_id": "539:38025",
+        "verified_at": "2026-09-06",
+        "structure_fingerprint": "sha256:d74f4f4244e1e757ab10f97a7523d8884c332ce72e243453399d8a51d7c4bbf2"
+      },
+      "variants": [],
+      "properties": [],
+      "asset_contracts": [],
+      "contracts": {
+        "mobile": {
+          "root": {
+            "id": "root",
+            "semantic_role": "icon",
+            "render_mode": "figma-source-only",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": []
+          }
+        },
+        "desktop": {
+          "root": {
+            "id": "root",
+            "semantic_role": "icon",
+            "render_mode": "figma-source-only",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": []
+          }
+        }
+      },
+      "description": {
+        "mode": "none",
+        "reason": "nested-figma-glyph-without-independent-email-contract"
+      },
+      "provenance": {
+        "node_id": "491:22370",
+        "captured_at": "2026-09-06T12:14:00Z"
+      }
+    },
+    {
+      "id": "icon-gift-2-line",
+      "status": "active",
+      "identity": {
+        "figma_name": "Icon/Gift-2-Line",
+        "node_kind": "component",
+        "library": "shared",
+        "semantic_role": "icon",
+        "category": "gift-2-line"
+      },
+      "figma": {
+        "file_key": "8zka5bHkcrJVK9I9dKjnhC",
+        "node_id": "946:25576",
+        "source_root_node_id": "539:38025",
+        "verified_at": "2026-09-06",
+        "structure_fingerprint": "sha256:d74f4f4244e1e757ab10f97a7523d8884c332ce72e243453399d8a51d7c4bbf2"
+      },
+      "variants": [],
+      "properties": [],
+      "asset_contracts": [],
+      "contracts": {
+        "mobile": {
+          "root": {
+            "id": "root",
+            "semantic_role": "icon",
+            "render_mode": "figma-source-only",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": []
+          }
+        },
+        "desktop": {
+          "root": {
+            "id": "root",
+            "semantic_role": "icon",
+            "render_mode": "figma-source-only",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": []
+          }
+        }
+      },
+      "description": {
+        "mode": "none",
+        "reason": "nested-figma-glyph-without-independent-email-contract"
+      },
+      "provenance": {
+        "node_id": "946:25576",
+        "captured_at": "2026-09-06T12:14:00Z"
+      }
+    },
+    {
+      "id": "icon-global-line",
+      "status": "active",
+      "identity": {
+        "figma_name": "Icon/Global-Line",
+        "node_kind": "component",
+        "library": "shared",
+        "semantic_role": "icon",
+        "category": "global-line"
+      },
+      "figma": {
+        "file_key": "8zka5bHkcrJVK9I9dKjnhC",
+        "node_id": "1009:2506",
+        "source_root_node_id": "539:38025",
+        "verified_at": "2026-09-06",
+        "structure_fingerprint": "sha256:d74f4f4244e1e757ab10f97a7523d8884c332ce72e243453399d8a51d7c4bbf2"
+      },
+      "variants": [],
+      "properties": [],
+      "asset_contracts": [],
+      "contracts": {
+        "mobile": {
+          "root": {
+            "id": "root",
+            "semantic_role": "icon",
+            "render_mode": "figma-source-only",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": []
+          }
+        },
+        "desktop": {
+          "root": {
+            "id": "root",
+            "semantic_role": "icon",
+            "render_mode": "figma-source-only",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": []
+          }
+        }
+      },
+      "description": {
+        "mode": "none",
+        "reason": "nested-figma-glyph-without-independent-email-contract"
+      },
+      "provenance": {
+        "node_id": "1009:2506",
+        "captured_at": "2026-09-06T12:14:00Z"
+      }
+    },
+    {
+      "id": "icon-lock-password-fill",
+      "status": "active",
+      "identity": {
+        "figma_name": "Icon/Lock-Password-Fill",
+        "node_kind": "component",
+        "library": "shared",
+        "semantic_role": "icon",
+        "category": "lock-password-fill"
+      },
+      "figma": {
+        "file_key": "8zka5bHkcrJVK9I9dKjnhC",
+        "node_id": "491:22369",
+        "source_root_node_id": "539:38025",
+        "verified_at": "2026-09-06",
+        "structure_fingerprint": "sha256:d74f4f4244e1e757ab10f97a7523d8884c332ce72e243453399d8a51d7c4bbf2"
+      },
+      "variants": [],
+      "properties": [],
+      "asset_contracts": [],
+      "contracts": {
+        "mobile": {
+          "root": {
+            "id": "root",
+            "semantic_role": "icon",
+            "render_mode": "figma-source-only",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": []
+          }
+        },
+        "desktop": {
+          "root": {
+            "id": "root",
+            "semantic_role": "icon",
+            "render_mode": "figma-source-only",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": []
+          }
+        }
+      },
+      "description": {
+        "mode": "none",
+        "reason": "nested-figma-glyph-without-independent-email-contract"
+      },
+      "provenance": {
+        "node_id": "491:22369",
+        "captured_at": "2026-09-06T12:14:00Z"
+      }
+    },
+    {
+      "id": "icon-mail-fill",
+      "status": "active",
+      "identity": {
+        "figma_name": "Icon/Mail-Fill",
+        "node_kind": "component",
+        "library": "shared",
+        "semantic_role": "icon",
+        "category": "mail-fill"
+      },
+      "figma": {
+        "file_key": "8zka5bHkcrJVK9I9dKjnhC",
+        "node_id": "491:22372",
+        "source_root_node_id": "539:38025",
+        "verified_at": "2026-09-06",
+        "structure_fingerprint": "sha256:d74f4f4244e1e757ab10f97a7523d8884c332ce72e243453399d8a51d7c4bbf2"
+      },
+      "variants": [],
+      "properties": [],
+      "asset_contracts": [],
+      "contracts": {
+        "mobile": {
+          "root": {
+            "id": "root",
+            "semantic_role": "icon",
+            "render_mode": "figma-source-only",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": []
+          }
+        },
+        "desktop": {
+          "root": {
+            "id": "root",
+            "semantic_role": "icon",
+            "render_mode": "figma-source-only",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": []
+          }
+        }
+      },
+      "description": {
+        "mode": "none",
+        "reason": "nested-figma-glyph-without-independent-email-contract"
+      },
+      "provenance": {
+        "node_id": "491:22372",
+        "captured_at": "2026-09-06T12:14:00Z"
+      }
+    },
+    {
+      "id": "icon-mir-logo",
+      "status": "active",
+      "identity": {
+        "figma_name": "Icon/MIR-Logo",
+        "node_kind": "component",
+        "library": "shared",
+        "semantic_role": "icon",
+        "category": "mir-logo"
+      },
+      "figma": {
+        "file_key": "8zka5bHkcrJVK9I9dKjnhC",
+        "node_id": "946:25485",
+        "source_root_node_id": "539:38025",
+        "verified_at": "2026-09-06",
+        "structure_fingerprint": "sha256:d74f4f4244e1e757ab10f97a7523d8884c332ce72e243453399d8a51d7c4bbf2"
+      },
+      "variants": [],
+      "properties": [],
+      "asset_contracts": [],
+      "contracts": {
+        "mobile": {
+          "root": {
+            "id": "root",
+            "semantic_role": "icon",
+            "render_mode": "figma-source-only",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": []
+          }
+        },
+        "desktop": {
+          "root": {
+            "id": "root",
+            "semantic_role": "icon",
+            "render_mode": "figma-source-only",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": []
+          }
+        }
+      },
+      "description": {
+        "mode": "none",
+        "reason": "nested-figma-glyph-without-independent-email-contract"
+      },
+      "provenance": {
+        "node_id": "946:25485",
+        "captured_at": "2026-09-06T12:14:00Z"
+      }
+    },
+    {
+      "id": "icon-receipt-fill",
+      "status": "active",
+      "identity": {
+        "figma_name": "Icon/Receipt-Fill",
+        "node_kind": "component",
+        "library": "shared",
+        "semantic_role": "icon",
+        "category": "receipt-fill"
+      },
+      "figma": {
+        "file_key": "8zka5bHkcrJVK9I9dKjnhC",
+        "node_id": "491:22374",
+        "source_root_node_id": "539:38025",
+        "verified_at": "2026-09-06",
+        "structure_fingerprint": "sha256:d74f4f4244e1e757ab10f97a7523d8884c332ce72e243453399d8a51d7c4bbf2"
+      },
+      "variants": [],
+      "properties": [],
+      "asset_contracts": [],
+      "contracts": {
+        "mobile": {
+          "root": {
+            "id": "root",
+            "semantic_role": "icon",
+            "render_mode": "figma-source-only",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": []
+          }
+        },
+        "desktop": {
+          "root": {
+            "id": "root",
+            "semantic_role": "icon",
+            "render_mode": "figma-source-only",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": []
+          }
+        }
+      },
+      "description": {
+        "mode": "none",
+        "reason": "nested-figma-glyph-without-independent-email-contract"
+      },
+      "provenance": {
+        "node_id": "491:22374",
+        "captured_at": "2026-09-06T12:14:00Z"
+      }
+    },
+    {
+      "id": "icon-shopping-basket-2-line",
+      "status": "active",
+      "identity": {
+        "figma_name": "Icon/Shopping-Basket-2-Line",
+        "node_kind": "component",
+        "library": "shared",
+        "semantic_role": "icon",
+        "category": "shopping-basket-2-line"
+      },
+      "figma": {
+        "file_key": "8zka5bHkcrJVK9I9dKjnhC",
+        "node_id": "946:25480",
+        "source_root_node_id": "539:38025",
+        "verified_at": "2026-09-06",
+        "structure_fingerprint": "sha256:d74f4f4244e1e757ab10f97a7523d8884c332ce72e243453399d8a51d7c4bbf2"
+      },
+      "variants": [],
+      "properties": [],
+      "asset_contracts": [],
+      "contracts": {
+        "mobile": {
+          "root": {
+            "id": "root",
+            "semantic_role": "icon",
+            "render_mode": "figma-source-only",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": []
+          }
+        },
+        "desktop": {
+          "root": {
+            "id": "root",
+            "semantic_role": "icon",
+            "render_mode": "figma-source-only",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": []
+          }
+        }
+      },
+      "description": {
+        "mode": "none",
+        "reason": "nested-figma-glyph-without-independent-email-contract"
+      },
+      "provenance": {
+        "node_id": "946:25480",
+        "captured_at": "2026-09-06T12:14:00Z"
+      }
+    },
+    {
+      "id": "icon-smartphone-fill",
+      "status": "active",
+      "identity": {
+        "figma_name": "Icon/Smartphone-Fill",
+        "node_kind": "component",
+        "library": "shared",
+        "semantic_role": "icon",
+        "category": "smartphone-fill"
+      },
+      "figma": {
+        "file_key": "8zka5bHkcrJVK9I9dKjnhC",
+        "node_id": "491:22371",
+        "source_root_node_id": "539:38025",
+        "verified_at": "2026-09-06",
+        "structure_fingerprint": "sha256:d74f4f4244e1e757ab10f97a7523d8884c332ce72e243453399d8a51d7c4bbf2"
+      },
+      "variants": [],
+      "properties": [],
+      "asset_contracts": [],
+      "contracts": {
+        "mobile": {
+          "root": {
+            "id": "root",
+            "semantic_role": "icon",
+            "render_mode": "figma-source-only",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": []
+          }
+        },
+        "desktop": {
+          "root": {
+            "id": "root",
+            "semantic_role": "icon",
+            "render_mode": "figma-source-only",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": []
+          }
+        }
+      },
+      "description": {
+        "mode": "none",
+        "reason": "nested-figma-glyph-without-independent-email-contract"
+      },
+      "provenance": {
+        "node_id": "491:22371",
+        "captured_at": "2026-09-06T12:14:00Z"
+      }
+    },
+    {
+      "id": "icon-user-follow-fill",
+      "status": "active",
+      "identity": {
+        "figma_name": "Icon/User-Follow-Fill",
+        "node_kind": "component",
+        "library": "shared",
+        "semantic_role": "icon",
+        "category": "user-follow-fill"
+      },
+      "figma": {
+        "file_key": "8zka5bHkcrJVK9I9dKjnhC",
+        "node_id": "491:22375",
+        "source_root_node_id": "539:38025",
+        "verified_at": "2026-09-06",
+        "structure_fingerprint": "sha256:d74f4f4244e1e757ab10f97a7523d8884c332ce72e243453399d8a51d7c4bbf2"
+      },
+      "variants": [],
+      "properties": [],
+      "asset_contracts": [],
+      "contracts": {
+        "mobile": {
+          "root": {
+            "id": "root",
+            "semantic_role": "icon",
+            "render_mode": "figma-source-only",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": []
+          }
+        },
+        "desktop": {
+          "root": {
+            "id": "root",
+            "semantic_role": "icon",
+            "render_mode": "figma-source-only",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": []
+          }
+        }
+      },
+      "description": {
+        "mode": "none",
+        "reason": "nested-figma-glyph-without-independent-email-contract"
+      },
+      "provenance": {
+        "node_id": "491:22375",
+        "captured_at": "2026-09-06T12:14:00Z"
+      }
+    },
+    {
+      "id": "icon-user-forbid-fill",
+      "status": "active",
+      "identity": {
+        "figma_name": "Icon/User-Forbid-Fill",
+        "node_kind": "component",
+        "library": "shared",
+        "semantic_role": "icon",
+        "category": "user-forbid-fill"
+      },
+      "figma": {
+        "file_key": "8zka5bHkcrJVK9I9dKjnhC",
+        "node_id": "491:22373",
+        "source_root_node_id": "539:38025",
+        "verified_at": "2026-09-06",
+        "structure_fingerprint": "sha256:d74f4f4244e1e757ab10f97a7523d8884c332ce72e243453399d8a51d7c4bbf2"
+      },
+      "variants": [],
+      "properties": [],
+      "asset_contracts": [],
+      "contracts": {
+        "mobile": {
+          "root": {
+            "id": "root",
+            "semantic_role": "icon",
+            "render_mode": "figma-source-only",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": []
+          }
+        },
+        "desktop": {
+          "root": {
+            "id": "root",
+            "semantic_role": "icon",
+            "render_mode": "figma-source-only",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": []
+          }
+        }
+      },
+      "description": {
+        "mode": "none",
+        "reason": "nested-figma-glyph-without-independent-email-contract"
+      },
+      "provenance": {
+        "node_id": "491:22373",
+        "captured_at": "2026-09-06T12:14:00Z"
+      }
+    },
+    {
+      "id": "icon-user-unfollow-fill",
+      "status": "active",
+      "identity": {
+        "figma_name": "Icon/User-Unfollow-Fill",
+        "node_kind": "component",
+        "library": "shared",
+        "semantic_role": "icon",
+        "category": "user-unfollow-fill"
+      },
+      "figma": {
+        "file_key": "8zka5bHkcrJVK9I9dKjnhC",
+        "node_id": "491:22376",
+        "source_root_node_id": "539:38025",
+        "verified_at": "2026-09-06",
+        "structure_fingerprint": "sha256:d74f4f4244e1e757ab10f97a7523d8884c332ce72e243453399d8a51d7c4bbf2"
+      },
+      "variants": [],
+      "properties": [],
+      "asset_contracts": [],
+      "contracts": {
+        "mobile": {
+          "root": {
+            "id": "root",
+            "semantic_role": "icon",
+            "render_mode": "figma-source-only",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": []
+          }
+        },
+        "desktop": {
+          "root": {
+            "id": "root",
+            "semantic_role": "icon",
+            "render_mode": "figma-source-only",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": []
+          }
+        }
+      },
+      "description": {
+        "mode": "none",
+        "reason": "nested-figma-glyph-without-independent-email-contract"
+      },
+      "provenance": {
+        "node_id": "491:22376",
+        "captured_at": "2026-09-06T12:14:00Z"
+      }
+    }
+  ]
+}
