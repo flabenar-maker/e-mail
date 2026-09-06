@@ -1,0 +1,1338 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.local.cupis/components.schema.json",
+  "title": "CUPIS structured component registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "registry",
+    "components"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "registry": {
+      "$ref": "#/$defs/registry"
+    },
+    "components": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/component"
+      }
+    }
+  },
+  "$defs": {
+    "registry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "library",
+        "status",
+        "source"
+      ],
+      "properties": {
+        "id": {
+          "enum": [
+            "components-marketing",
+            "components-service",
+            "components-shared"
+          ]
+        },
+        "library": {
+          "enum": [
+            "marketing",
+            "service",
+            "shared"
+          ]
+        },
+        "status": {
+          "const": "shadow"
+        },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "figma_file_key",
+            "roots",
+            "baseline_path",
+            "baseline_commit",
+            "verified_at"
+          ],
+          "properties": {
+            "figma_file_key": {
+              "type": "string",
+              "minLength": 1
+            },
+            "roots": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "role",
+                  "node_id"
+                ],
+                "properties": {
+                  "role": {
+                    "enum": [
+                      "library",
+                      "templates"
+                    ]
+                  },
+                  "node_id": {
+                    "type": "string",
+                    "pattern": "^[0-9]+:[0-9]+$"
+                  }
+                }
+              }
+            },
+            "baseline_path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "baseline_commit": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            },
+            "verified_at": {
+              "type": "string",
+              "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+            }
+          }
+        }
+      }
+    },
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "status",
+        "identity",
+        "figma",
+        "variants",
+        "properties",
+        "asset_contracts",
+        "contracts",
+        "description",
+        "provenance"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "status": {
+          "enum": [
+            "draft",
+            "active",
+            "deprecated"
+          ]
+        },
+        "identity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "figma_name",
+            "node_kind",
+            "library",
+            "semantic_role",
+            "category"
+          ],
+          "properties": {
+            "figma_name": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9]+(?:/[A-Za-z0-9 @-]+)+$"
+            },
+            "node_kind": {
+              "enum": [
+                "component",
+                "component-set"
+              ]
+            },
+            "library": {
+              "enum": [
+                "marketing",
+                "service",
+                "shared"
+              ]
+            },
+            "semantic_role": {
+              "enum": [
+                "email",
+                "template",
+                "banner",
+                "block",
+                "card",
+                "item",
+                "button",
+                "badge",
+                "details",
+                "nps",
+                "asset",
+                "icon"
+              ]
+            },
+            "category": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            }
+          }
+        },
+        "figma": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "file_key",
+            "node_id",
+            "source_root_node_id",
+            "verified_at",
+            "structure_fingerprint"
+          ],
+          "properties": {
+            "file_key": {
+              "type": "string",
+              "minLength": 1
+            },
+            "node_id": {
+              "type": "string",
+              "pattern": "^[0-9]+:[0-9]+$"
+            },
+            "source_root_node_id": {
+              "type": "string",
+              "pattern": "^[0-9]+:[0-9]+$"
+            },
+            "verified_at": {
+              "type": "string",
+              "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+            },
+            "structure_fingerprint": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            }
+          }
+        },
+        "variants": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/variant"
+          }
+        },
+        "properties": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/componentProperty"
+          }
+        },
+        "asset_contracts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/assetContract"
+          }
+        },
+        "contracts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [],
+          "properties": {
+            "mobile": {
+              "$ref": "#/$defs/viewportContract"
+            },
+            "desktop": {
+              "$ref": "#/$defs/viewportContract"
+            }
+          }
+        },
+        "description": {
+          "$ref": "#/$defs/description"
+        },
+        "provenance": {
+          "$ref": "#/$defs/componentProvenance"
+        }
+      }
+    },
+    "variant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "node_id",
+        "axes"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "node_id": {
+          "type": "string",
+          "pattern": "^[0-9]+:[0-9]+$"
+        },
+        "axes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "value"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "value": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "componentProperty": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "figma_name",
+            "type",
+            "default"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "figma_name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "type": {
+              "const": "boolean"
+            },
+            "default": {
+              "type": "boolean"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "figma_name",
+            "type",
+            "default"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "figma_name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "type": {
+              "const": "text"
+            },
+            "default": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "figma_name",
+            "type",
+            "default"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "figma_name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "type": {
+              "const": "slot"
+            },
+            "default": {
+              "type": "null"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "figma_name",
+            "type",
+            "default"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "figma_name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "type": {
+              "const": "instance-swap"
+            },
+            "default": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "assetContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "owner_layer_name",
+        "source_viewport",
+        "source_mode_id",
+        "display_mode_id",
+        "export_profile_id",
+        "alpha_mode_id",
+        "clipping_policy_id",
+        "export_boundary",
+        "pixel_dimensions",
+        "aspect_ratio",
+        "crop",
+        "background"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "owner_layer_name": {
+          "type": "string",
+          "pattern": " @(?:2x|4x)$"
+        },
+        "source_viewport": {
+          "const": "desktop"
+        },
+        "source_mode_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "display_mode_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "export_profile_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "alpha_mode_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "clipping_policy_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "export_boundary": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "semantic_node_name"
+          ],
+          "properties": {
+            "kind": {
+              "enum": [
+                "fill",
+                "node"
+              ]
+            },
+            "semantic_node_name": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "pixel_dimensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "width",
+            "height",
+            "unit"
+          ],
+          "properties": {
+            "width": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "height": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "unit": {
+              "const": "px"
+            }
+          }
+        },
+        "aspect_ratio": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "width",
+            "height"
+          ],
+          "properties": {
+            "width": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "height": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        "crop": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mode",
+            "position_source"
+          ],
+          "properties": {
+            "mode": {
+              "enum": [
+                "figma-fill",
+                "none"
+              ]
+            },
+            "position_source": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            }
+          }
+        },
+        "background": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "own_visible_boundary_fill",
+            "artificial_matte"
+          ],
+          "properties": {
+            "own_visible_boundary_fill": {
+              "enum": [
+                "preserve",
+                "none"
+              ]
+            },
+            "artificial_matte": {
+              "const": "forbid"
+            }
+          }
+        }
+      }
+    },
+    "viewportContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "root"
+      ],
+      "properties": {
+        "root": {
+          "$ref": "#/$defs/element"
+        }
+      }
+    },
+    "element": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "semantic_role",
+        "render_mode",
+        "visibility",
+        "facts",
+        "children"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "semantic_role": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "render_mode": {
+          "enum": [
+            "presentation-table",
+            "html-text",
+            "html-link",
+            "direct-image",
+            "background-image",
+            "nested-component",
+            "slot",
+            "figma-source-only",
+            "none"
+          ]
+        },
+        "visibility": {
+          "$ref": "#/$defs/visibility"
+        },
+        "component_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "asset_contract_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "facts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/fact"
+          }
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/element"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "render_mode": {
+                "const": "nested-component"
+              }
+            },
+            "required": [
+              "render_mode"
+            ]
+          },
+          "then": {
+            "required": [
+              "component_id"
+            ]
+          },
+          "else": {
+            "not": {
+              "required": [
+                "component_id"
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "render_mode": {
+                "enum": [
+                  "direct-image",
+                  "background-image"
+                ]
+              }
+            },
+            "required": [
+              "render_mode"
+            ]
+          },
+          "then": {
+            "required": [
+              "asset_contract_id"
+            ]
+          },
+          "else": {
+            "not": {
+              "required": [
+                "asset_contract_id"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "visibility": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mode"
+          ],
+          "properties": {
+            "mode": {
+              "const": "always"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mode",
+            "property_id"
+          ],
+          "properties": {
+            "mode": {
+              "const": "property"
+            },
+            "property_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            }
+          }
+        }
+      ]
+    },
+    "fact": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "value",
+            "provenance"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "value": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "type",
+                    "value"
+                  ],
+                  "properties": {
+                    "type": {
+                      "const": "string"
+                    },
+                    "value": {
+                      "type": "string"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "type",
+                    "value"
+                  ],
+                  "properties": {
+                    "type": {
+                      "const": "boolean"
+                    },
+                    "value": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "type",
+                    "value"
+                  ],
+                  "properties": {
+                    "type": {
+                      "const": "integer"
+                    },
+                    "value": {
+                      "type": "integer"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "type",
+                    "value"
+                  ],
+                  "properties": {
+                    "type": {
+                      "const": "number"
+                    },
+                    "value": {
+                      "type": "number"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "type",
+                    "value"
+                  ],
+                  "properties": {
+                    "type": {
+                      "const": "keyword"
+                    },
+                    "value": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "type",
+                    "value",
+                    "unit"
+                  ],
+                  "properties": {
+                    "type": {
+                      "const": "measure"
+                    },
+                    "value": {
+                      "type": "number"
+                    },
+                    "unit": {
+                      "enum": [
+                        "px",
+                        "percent"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "type",
+                    "width",
+                    "height",
+                    "unit"
+                  ],
+                  "properties": {
+                    "type": {
+                      "const": "dimensions"
+                    },
+                    "width": {
+                      "type": "number",
+                      "exclusiveMinimum": 0
+                    },
+                    "height": {
+                      "type": "number",
+                      "exclusiveMinimum": 0
+                    },
+                    "unit": {
+                      "const": "px"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "type",
+                    "width",
+                    "height"
+                  ],
+                  "properties": {
+                    "type": {
+                      "const": "ratio"
+                    },
+                    "width": {
+                      "type": "number",
+                      "exclusiveMinimum": 0
+                    },
+                    "height": {
+                      "type": "number",
+                      "exclusiveMinimum": 0
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "type",
+                    "value"
+                  ],
+                  "properties": {
+                    "type": {
+                      "const": "color"
+                    },
+                    "value": {
+                      "type": "string",
+                      "pattern": "^#[0-9A-F]{6}$"
+                    }
+                  }
+                }
+              ]
+            },
+            "provenance": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "kind",
+                    "node_id",
+                    "binding_name"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "const": "figma-binding"
+                    },
+                    "node_id": {
+                      "type": "string",
+                      "pattern": "^[0-9]+:[0-9]+$"
+                    },
+                    "binding_name": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "style_name": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "kind",
+                    "node_id",
+                    "style_name"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "const": "figma-binding"
+                    },
+                    "node_id": {
+                      "type": "string",
+                      "pattern": "^[0-9]+:[0-9]+$"
+                    },
+                    "binding_name": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "style_name": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "kind",
+                    "node_id"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "const": "figma-literal"
+                    },
+                    "node_id": {
+                      "type": "string",
+                      "pattern": "^[0-9]+:[0-9]+$"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "kind",
+                    "source_path"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "const": "registry-literal"
+                    },
+                    "source_path": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "value"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "value": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "type",
+                    "foundation_id",
+                    "definition_group",
+                    "definition_id"
+                  ],
+                  "properties": {
+                    "type": {
+                      "const": "foundation-reference"
+                    },
+                    "foundation_id": {
+                      "enum": [
+                        "typography",
+                        "spacing"
+                      ]
+                    },
+                    "definition_group": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                    },
+                    "definition_id": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "type",
+                    "component_id"
+                  ],
+                  "properties": {
+                    "type": {
+                      "const": "component-reference"
+                    },
+                    "component_id": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "type",
+                    "property_id"
+                  ],
+                  "properties": {
+                    "type": {
+                      "const": "property-reference"
+                    },
+                    "property_id": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "type",
+                    "asset_contract_id"
+                  ],
+                  "properties": {
+                    "type": {
+                      "const": "asset-reference"
+                    },
+                    "asset_contract_id": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "token": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "const": "text"
+            },
+            "value": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "path"
+          ],
+          "properties": {
+            "type": {
+              "const": "fact"
+            },
+            "path": {
+              "type": "string",
+              "pattern": "^(?:mobile|desktop)/[a-z0-9-]+(?:/[a-z0-9-]+)+$"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "component_id"
+          ],
+          "properties": {
+            "type": {
+              "const": "component-name"
+            },
+            "component_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "property_id"
+          ],
+          "properties": {
+            "type": {
+              "const": "property-name"
+            },
+            "property_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            }
+          }
+        }
+      ]
+    },
+    "descriptionBlock": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "const": "heading"
+            },
+            "value": {
+              "type": "string",
+              "pattern": "^[A-Z][A-Z0-9 -]*$"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "blank"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "tokens"
+          ],
+          "properties": {
+            "type": {
+              "enum": [
+                "line",
+                "bullet"
+              ]
+            },
+            "tokens": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/token"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "index",
+            "tokens"
+          ],
+          "properties": {
+            "type": {
+              "const": "ordered"
+            },
+            "index": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "tokens": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/token"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "description": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mode",
+            "blocks"
+          ],
+          "properties": {
+            "mode": {
+              "const": "rendered"
+            },
+            "blocks": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/descriptionBlock"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mode",
+            "reason"
+          ],
+          "properties": {
+            "mode": {
+              "const": "none"
+            },
+            "reason": {
+              "const": "nested-figma-glyph-without-independent-email-contract"
+            }
+          }
+        }
+      ]
+    },
+    "componentProvenance": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "baseline_path",
+            "baseline_heading",
+            "baseline_blob_sha"
+          ],
+          "properties": {
+            "baseline_path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "baseline_heading": {
+              "type": "string",
+              "minLength": 1
+            },
+            "baseline_blob_sha": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "node_id",
+            "captured_at"
+          ],
+          "properties": {
+            "node_id": {
+              "type": "string",
+              "pattern": "^[0-9]+:[0-9]+$"
+            },
+            "captured_at": {
+              "type": "string",
+              "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
