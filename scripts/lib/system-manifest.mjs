@@ -8,6 +8,7 @@ import { validateTypographyFoundation } from "./typography-foundation.mjs";
 import { validateSpacingFoundation } from "./spacing-foundation.mjs";
 import { validateAssetsFoundation } from "./assets-foundation.mjs";
 import { validateFigmaNamingFoundation } from "./figma-naming-foundation.mjs";
+import { validateComponentRegistries } from "./component-registry.mjs";
 
 const SUPPORTED_MANIFEST_VERSION = "1.0.0";
 
@@ -485,6 +486,77 @@ function resolveFigmaNamingSources(manifest) {
   };
 }
 
+
+const COMPONENT_REGISTRY_SOURCES = [
+  {
+    id: "components-shared",
+    key: "sharedSource",
+    kind: "registry",
+    path: "data/components/shared.yaml",
+  },
+  {
+    id: "components-marketing",
+    key: "marketingSource",
+    kind: "registry",
+    path: "data/components/marketing.yaml",
+  },
+  {
+    id: "components-service",
+    key: "serviceSource",
+    kind: "registry",
+    path: "data/components/service.yaml",
+  },
+  {
+    id: "components-schema",
+    key: "schemaSource",
+    kind: "schema",
+    path: "schemas/components.schema.json",
+  },
+];
+
+export function resolveComponentRegistrySources(manifest) {
+  const errors = [];
+  const result = {};
+
+  for (const expected of COMPONENT_REGISTRY_SOURCES) {
+    const source = manifest.sources.find((item) => item.id === expected.id);
+    result[expected.key] = source ?? null;
+    if (!source) {
+      errors.push(
+        diagnostic(
+          `missing-${expected.id}-source`,
+          "/sources",
+          `Component registry source must be declared: ${expected.id}.`,
+        ),
+      );
+      continue;
+    }
+    if (source.kind !== expected.kind) {
+      errors.push(
+        diagnostic(
+          "invalid-component-registry-source-kind",
+          `/sources/${expected.id}/kind`,
+          `Source ${expected.id} must use kind ${expected.kind}.`,
+        ),
+      );
+    }
+    if (source.path !== expected.path) {
+      errors.push(
+        diagnostic(
+          "invalid-component-registry-source-path",
+          `/sources/${expected.id}/path`,
+          `Source ${expected.id} must use its canonical path.`,
+        ),
+      );
+    }
+  }
+
+  return {
+    ...result,
+    errors: sortDiagnostics(errors),
+  };
+}
+
 export async function validateSystem({
   repoRoot,
   manifestPath = "system/manifest.yaml",
@@ -496,12 +568,14 @@ export async function validateSystem({
     const spacingSources = resolveSpacingSources(manifest);
     const assetsSources = resolveAssetsSources(manifest);
     const figmaNamingSources = resolveFigmaNamingSources(manifest);
+    const componentSources = resolveComponentRegistrySources(manifest);
     const prerequisiteErrors = sortDiagnostics([
       ...manifestErrors,
       ...typographySources.errors,
       ...spacingSources.errors,
       ...assetsSources.errors,
       ...figmaNamingSources.errors,
+      ...componentSources.errors,
     ]);
     if (prerequisiteErrors.length > 0) {
       return { manifest, errors: prerequisiteErrors };
@@ -530,13 +604,34 @@ export async function validateSystem({
         schemaPath: figmaNamingSources.figmaNamingSchemaSource.path,
       }),
     ]);
+    const foundationErrors = sortDiagnostics([
+      ...typographyResult.errors,
+      ...spacingResult.errors,
+      ...assetsResult.errors,
+      ...figmaNamingResult.errors,
+    ]);
+    if (foundationErrors.length > 0) {
+      return { manifest, errors: foundationErrors };
+    }
+
+    const componentResult = await validateComponentRegistries({
+      repoRoot,
+      sources: {
+        shared: componentSources.sharedSource.path,
+        marketing: componentSources.marketingSource.path,
+        service: componentSources.serviceSource.path,
+      },
+      schemaPath: componentSources.schemaSource.path,
+      typography: typographyResult.typography,
+      spacing: spacingResult.spacing,
+      assets: assetsResult.assets,
+    });
+
     return {
       manifest,
       errors: sortDiagnostics([
-        ...typographyResult.errors,
-        ...spacingResult.errors,
-        ...assetsResult.errors,
-        ...figmaNamingResult.errors,
+        ...foundationErrors,
+        ...componentResult.errors,
       ]),
     };
   } catch (error) {
