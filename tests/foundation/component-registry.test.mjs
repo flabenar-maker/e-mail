@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 
 import {
   indexComponentRegistries,
+  loadComponentRegistry,
   validateComponentRegistrySemantics,
   validateComponentRegistryShape,
 } from "../../scripts/lib/component-registry.mjs";
@@ -516,5 +517,176 @@ test("semantic validation rejects an invalid structure fingerprint", async () =>
   });
   assert.ok(
     diagnosticCodes(errors).includes("COMPONENT_REGISTRY_FINGERPRINT_INVALID"),
+  );
+});
+
+
+const expectedMarketingRecords = [
+  ["badge-step-number", "Badge/Step-Number", "18:2948"],
+  ["email-header", "Email/Header", "326:5159"],
+  ["block-cards-images", "Block/Cards-Images", "326:5806"],
+  ["block-icon-cards", "Block/Icon-Cards", "326:6342"],
+  ["email-footer", "Email/Footer", "333:7477"],
+  ["banner-hero", "Banner/Hero", "337:4460"],
+  ["block-steps", "Block/Steps", "337:4491"],
+  ["button-secondary", "Button/Secondary", "337:4710"],
+  ["button-primary", "Button/Primary", "337:4713"],
+  ["block-content", "Block/Content", "337:4766"],
+  ["banner-secondary", "Banner/Secondary", "337:4870"],
+  ["block-bullet-list", "Block/Bullet-List", "337:4898"],
+  ["item-bullet", "Item/Bullet", "337:4958"],
+  ["item-step", "Item/Step", "337:5039"],
+  ["banner-inline", "Banner/Inline", "337:5040"],
+  ["block-info-alert", "Block/Info-Alert", "337:5041"],
+  ["banner-app-download", "Banner/App-Download", "337:6569"],
+  ["email-footer-legal", "Email/Footer-Legal", "499:2431"],
+  ["asset-card-image-2x", "Asset/Card-Image @2x", "911:3992"],
+  ["card-image", "Card/Image", "911:4132"],
+  ["block-icon-list", "Block/Icon-List", "946:26516"],
+  ["card-icon", "Card/Icon", "326:5580"],
+  ["asset-feature-icon-4x", "Asset/Feature-Icon @4x", "946:25769"],
+  ["item-alert", "Item/Alert", "1024:19226"],
+  ["item-notification", "Item/Notification", "1024:19285"],
+  ["nps-options", "NPS/Options", "1084:16995"],
+];
+
+function marketingBaselineDescriptions(markdown) {
+  const start = markdown.indexOf("## Маркетинговые письма (26)");
+  const end = markdown.indexOf("## Шаблоны сборки (1)");
+  assert.notEqual(start, -1);
+  assert.notEqual(end, -1);
+  const entries = new Map();
+  const section = `${markdown.slice(start, end)}\n## END`;
+  const pattern = /^### \`([^\`]+)\`\n([\s\S]*?)(?=^### \`|^## )/gmu;
+  for (const match of section.matchAll(pattern)) {
+    const description = match[2].match(
+      /Описание:\n\n\`\`\`\`text\n([\s\S]*?)\n\`\`\`\`/mu,
+    )?.[1];
+    assert.notEqual(description, undefined, `Missing baseline Description: ${match[1]}`);
+    entries.set(match[1], `${description.replace(/\r\n/gu, "\n")}\n`);
+  }
+  return entries;
+}
+
+function findAssetElement(element, assetContractId) {
+  if (element.asset_contract_id === assetContractId) {
+    return element;
+  }
+  for (const child of element.children ?? []) {
+    const found = findAssetElement(child, assetContractId);
+    if (found) {
+      return found;
+    }
+  }
+  return null;
+}
+
+test("marketing shadow preserves all 26 records and their baseline descriptions", async () => {
+  const [registry, markdown, { renderComponentDescription }] = await Promise.all([
+    loadComponentRegistry({
+      repoRoot,
+      dataPath: "data/components/marketing.yaml",
+    }),
+    readFile(join(repoRoot, baselinePath), "utf8"),
+    import("../../scripts/lib/component-description.mjs"),
+  ]);
+  const emptyService = registryEnvelope("service");
+  const emptyShared = registryEnvelope("shared");
+  const index = indexComponentRegistries({
+    marketing: registry,
+    service: emptyService,
+    shared: emptyShared,
+  });
+  const descriptions = marketingBaselineDescriptions(markdown);
+  assert.deepEqual(
+    registry.components.map((record) => [
+      record.id,
+      record.identity.figma_name,
+      record.figma.node_id,
+    ]),
+    expectedMarketingRecords,
+  );
+  for (const record of registry.components) {
+    assert.ok(record.contracts.mobile.root, `${record.id} needs a Mobile contract`);
+    assert.ok(record.contracts.desktop.root, `${record.id} needs a Desktop contract`);
+    assert.equal(
+      renderComponentDescription(record, index),
+      descriptions.get(record.identity.figma_name),
+      `Rendered Description drift: ${record.identity.figma_name}`,
+    );
+  }
+});
+
+test("marketing image contracts preserve responsive ratios and export boundaries", async () => {
+  const registry = await loadComponentRegistry({
+    repoRoot,
+    dataPath: "data/components/marketing.yaml",
+  });
+  const byId = new Map(registry.components.map((record) => [record.id, record]));
+
+  const hero = byId.get("banner-hero");
+  const heroAsset = hero.asset_contracts.find((asset) => asset.id === "hero-image");
+  assert.deepEqual(
+    {
+      source: heroAsset.source_mode_id,
+      display: heroAsset.display_mode_id,
+      profile: heroAsset.export_profile_id,
+      pixels: heroAsset.pixel_dimensions,
+      ratio: heroAsset.aspect_ratio,
+    },
+    {
+      source: "image-fill",
+      display: "direct-image",
+      profile: "jpeg-2x",
+      pixels: { width: 1104, height: 706, unit: "px" },
+      ratio: { width: 552, height: 353 },
+    },
+  );
+  assert.equal(
+    hero.contracts.mobile.root.facts.find((fact) => fact.id === "height-behavior").value.value,
+    "auto",
+  );
+  assert.equal(
+    hero.contracts.mobile.root.facts.find((fact) => fact.id === "fixed-height-forbidden").value.value,
+    true,
+  );
+
+  const secondary = byId.get("banner-secondary");
+  const secondaryAsset = secondary.asset_contracts.find(
+    (asset) => asset.id === "secondary-image",
+  );
+  assert.equal(secondaryAsset.source_mode_id, "image-fill");
+  assert.equal(secondaryAsset.display_mode_id, "fill-image");
+  assert.deepEqual(secondaryAsset.aspect_ratio, { width: 296, height: 188 });
+  assert.equal(
+    findAssetElement(secondary.contracts.mobile.root, "secondary-image").render_mode,
+    "direct-image",
+  );
+  assert.equal(
+    findAssetElement(secondary.contracts.desktop.root, "secondary-image").render_mode,
+    "background-image",
+  );
+
+  const card = byId.get("card-image");
+  const cardAsset = card.asset_contracts.find((asset) => asset.id === "card-image");
+  assert.deepEqual(
+    {
+      source: cardAsset.source_mode_id,
+      display: cardAsset.display_mode_id,
+      profile: cardAsset.export_profile_id,
+      pixels: cardAsset.pixel_dimensions,
+      ratio: cardAsset.aspect_ratio,
+    },
+    {
+      source: "rendered-node",
+      display: "direct-image",
+      profile: "jpeg-2x",
+      pixels: { width: 464, height: 296, unit: "px" },
+      ratio: { width: 232, height: 148 },
+    },
+  );
+  assert.equal(
+    card.contracts.mobile.root.facts.find((fact) => fact.id === "height-behavior").value.value,
+    "auto",
   );
 });
