@@ -816,3 +816,111 @@ test("service records retain nested Details links and exact badge assets", async
     ],
   );
 });
+
+
+const expectedSharedRecords = [
+  ["email-template", "Email/Template", "1102:8"],
+  ["asset-product-logo", "Asset/Product-Logo", "1008:874"],
+  ["asset-header-logo-4x", "Asset/Header-Logo @4x", "1008:1476"],
+  ["asset-header-logo-compact-4x", "Asset/Header-Logo-Compact @4x", "1008:1708"],
+  ["icon-bank-card-2-line", "Icon/Bank-Card-2-Line", "1009:2505"],
+  ["icon-fingerprint-2-line", "Icon/Fingerprint-2-Line", "491:22370"],
+  ["icon-gift-2-line", "Icon/Gift-2-Line", "946:25576"],
+  ["icon-global-line", "Icon/Global-Line", "1009:2506"],
+  ["icon-lock-password-fill", "Icon/Lock-Password-Fill", "491:22369"],
+  ["icon-mail-fill", "Icon/Mail-Fill", "491:22372"],
+  ["icon-mir-logo", "Icon/MIR-Logo", "946:25485"],
+  ["icon-receipt-fill", "Icon/Receipt-Fill", "491:22374"],
+  ["icon-shopping-basket-2-line", "Icon/Shopping-Basket-2-Line", "946:25480"],
+  ["icon-smartphone-fill", "Icon/Smartphone-Fill", "491:22371"],
+  ["icon-user-follow-fill", "Icon/User-Follow-Fill", "491:22375"],
+  ["icon-user-forbid-fill", "Icon/User-Forbid-Fill", "491:22373"],
+  ["icon-user-unfollow-fill", "Icon/User-Unfollow-Fill", "491:22376"],
+];
+
+test("shared shadow contains the root template, three assets, and 13 glyph sources", async () => {
+  const [marketing, service, shared, markdown, { renderComponentDescription }] =
+    await Promise.all([
+      loadComponentRegistry({ repoRoot, dataPath: "data/components/marketing.yaml" }),
+      loadComponentRegistry({ repoRoot, dataPath: "data/components/service.yaml" }),
+      loadComponentRegistry({ repoRoot, dataPath: "data/components/shared.yaml" }),
+      readFile(join(repoRoot, baselinePath), "utf8"),
+      import("../../scripts/lib/component-description.mjs"),
+    ]);
+  const index = indexComponentRegistries({ marketing, service, shared });
+  assert.deepEqual(
+    shared.components.map((record) => [
+      record.id,
+      record.identity.figma_name,
+      record.figma.node_id,
+    ]),
+    expectedSharedRecords,
+  );
+  assert.equal(
+    shared.components.filter((record) => record.description.mode === "none").length,
+    13,
+  );
+
+  const descriptions = new Map([
+    ...baselineDescriptions(
+      markdown,
+      "## Шаблоны сборки (1)",
+      "## Сервисные письма (18)",
+    ),
+    ...baselineDescriptions(markdown, "## Shared (16)", "## END"),
+  ]);
+  for (const record of shared.components.filter(
+    (candidate) => candidate.description.mode === "rendered",
+  )) {
+    assert.equal(
+      renderComponentDescription(record, index),
+      descriptions.get(record.identity.figma_name),
+      "Rendered Description drift: " + record.identity.figma_name,
+    );
+  }
+});
+
+test("Email Template remains an assembly root and Shared export roles stay explicit", async () => {
+  const shared = await loadComponentRegistry({
+    repoRoot,
+    dataPath: "data/components/shared.yaml",
+  });
+  const byId = new Map(shared.components.map((record) => [record.id, record]));
+  const template = byId.get("email-template");
+  assert.deepEqual(template.properties, [
+    { id: "content", figma_name: "Content", type: "slot", default: null },
+  ]);
+  assert.equal(template.contracts.mobile.root.children[0].render_mode, "slot");
+  assert.equal(template.contracts.mobile.root.children[0].semantic_role, "content");
+  assert.equal(template.contracts.desktop.root.children[0].render_mode, "slot");
+  assert.deepEqual(template.asset_contracts, []);
+
+  const header = byId.get("asset-header-logo-4x");
+  assert.deepEqual(
+    header.asset_contracts.map((asset) => ({
+      owner: asset.owner_layer_name,
+      source: asset.source_mode_id,
+      profile: asset.export_profile_id,
+      pixels: asset.pixel_dimensions,
+      ratio: asset.aspect_ratio,
+    })),
+    [{
+      owner: "header-logo @4x",
+      source: "rendered-node",
+      profile: "png-4x",
+      pixels: { width: 1288, height: 200, unit: "px" },
+      ratio: { width: 322, height: 50 },
+    }],
+  );
+  assert.equal(
+    byId.get("asset-header-logo-compact-4x").contracts.mobile.root.render_mode,
+    "figma-source-only",
+  );
+  for (const record of shared.components.filter(
+    (candidate) => candidate.identity.semantic_role === "icon",
+  )) {
+    assert.equal(record.contracts.mobile.root.render_mode, "figma-source-only");
+    assert.equal(record.contracts.desktop.root.render_mode, "figma-source-only");
+    assert.deepEqual(record.asset_contracts, []);
+  }
+});
