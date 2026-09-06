@@ -642,12 +642,21 @@
             ]
           },
           "then": {
+            "properties": {
+              "component_id": {
+                "type": "string",
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+              }
+            },
             "required": [
               "component_id"
             ]
           },
           "else": {
             "not": {
+              "properties": {
+                "component_id": {}
+              },
               "required": [
                 "component_id"
               ]
@@ -669,12 +678,21 @@
             ]
           },
           "then": {
+            "properties": {
+              "asset_contract_id": {
+                "type": "string",
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+              }
+            },
             "required": [
               "asset_contract_id"
             ]
           },
           "else": {
             "not": {
+              "properties": {
+                "asset_contract_id": {}
+              },
               "required": [
                 "asset_contract_id"
               ]
