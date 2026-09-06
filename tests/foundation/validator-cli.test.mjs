@@ -181,3 +181,20 @@ test("invalid Figma naming exits one with a stable sanitized diagnostic", async 
     /do-not-print-this-figma-naming-value/u,
   );
 });
+
+
+test("invalid component registry exits one with a stable sanitized diagnostic", async (t) => {
+  const root = await validFixture(t);
+  const secret = "do-not-print-this-component-value";
+  await writeFixtureFile(
+    root,
+    "data/components/marketing.yaml",
+    "schema_version: 2.0.0\nsecret: " + secret + "\n",
+  );
+
+  const result = await runValidator(root);
+
+  assert.equal(result.exitCode, 1);
+  assert.match(result.stderr, /components-version-unsupported/u);
+  assert.doesNotMatch(result.stderr + result.stdout, new RegExp(secret, "u"));
+});
