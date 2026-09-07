@@ -25,6 +25,10 @@ sources:
   - { id: assets-schema, kind: schema, path: schemas/assets.schema.json }
   - { id: figma-naming-foundation, kind: registry, path: data/foundations/figma-naming.yaml }
   - { id: figma-naming-schema, kind: schema, path: schemas/figma-naming.schema.json }
+  - { id: components-shared, kind: registry, path: data/components/shared.yaml }
+  - { id: components-marketing, kind: registry, path: data/components/marketing.yaml }
+  - { id: components-service, kind: registry, path: data/components/service.yaml }
+  - { id: components-schema, kind: schema, path: schemas/components.schema.json }
 bundle_profiles:
   - id: library-maintenance
     source_ids: [repository-readme, email-figma-prompt, figma-component-naming-standard, component-descriptions-registry, typography-registry, spacing-foundation, library-maintenance-checkpoint]
