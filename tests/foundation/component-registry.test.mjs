@@ -30,7 +30,7 @@ async function readSchema() {
 
 function registryEnvelope(library, components = []) {
   return {
-    schema_version: "1.0.0",
+    schema_version: "2.0.0",
     registry: {
       id: `components-${library}`,
       library,
@@ -166,16 +166,11 @@ function validRecord(overrides = {}) {
       mobile: viewportContract(),
       desktop: viewportContract(),
     },
-    description: {
-      mode: "rendered",
-      blocks: [
-        { type: "heading", value: "SCOPE" },
-        {
-          type: "line",
-          tokens: [{ type: "text", value: "Контентный блок." }],
-        },
-      ],
+    documentation: {
+      purpose: "Тестовый баннер с текстом и изображением.",
+      critical_constraint_ids: [],
     },
+    constraints: [],
     provenance: {
       baseline_path: baselinePath,
       baseline_heading: "Banner/Test",
@@ -241,7 +236,7 @@ test("schema rejects unknown root and nested fields", async () => {
 test("shape validation rejects an unsupported component registry version", async () => {
   const schema = await readSchema();
   const document = registryEnvelope("marketing", [validRecord()]);
-  document.schema_version = "1.1.0";
+  document.schema_version = "3.0.0";
 
   const errors = validateComponentRegistryShape(document, schema);
   assert.ok(
@@ -583,27 +578,11 @@ function findAssetElement(element, assetContractId) {
   return null;
 }
 
-test("marketing shadow preserves all 26 records and their baseline descriptions", async () => {
-  const [registry, markdown, { renderComponentDescription }] = await Promise.all([
-    loadComponentRegistry({
-      repoRoot,
-      dataPath: "data/components/marketing.yaml",
-    }),
-    readFile(join(repoRoot, baselinePath), "utf8"),
-    import("../../scripts/lib/component-description.mjs"),
-  ]);
-  const emptyService = registryEnvelope("service");
-  const emptyShared = registryEnvelope("shared");
-  const index = indexComponentRegistries({
-    marketing: registry,
-    service: emptyService,
-    shared: emptyShared,
+test("marketing registry preserves all 26 identities and complete viewport contracts", async () => {
+  const registry = await loadComponentRegistry({
+    repoRoot,
+    dataPath: "data/components/marketing.yaml",
   });
-  const descriptions = baselineDescriptions(
-    markdown,
-    "## Маркетинговые письма (26)",
-    "## Шаблоны сборки (1)",
-  );
   assert.deepEqual(
     registry.components.map((record) => [
       record.id,
@@ -615,11 +594,8 @@ test("marketing shadow preserves all 26 records and their baseline descriptions"
   for (const record of registry.components) {
     assert.ok(record.contracts.mobile.root, `${record.id} needs a Mobile contract`);
     assert.ok(record.contracts.desktop.root, `${record.id} needs a Desktop contract`);
-    assert.equal(
-      renderComponentDescription(record, index),
-      descriptions.get(record.identity.figma_name),
-      `Rendered Description drift: ${record.identity.figma_name}`,
-    );
+    assert.ok(record.documentation.purpose.trim().length > 0);
+    assert.equal(Object.hasOwn(record, "description"), false);
   }
 });
 
@@ -729,25 +705,11 @@ function nestedComponentIds(element, result = []) {
   return result;
 }
 
-test("service shadow preserves all 18 records and their baseline descriptions", async () => {
-  const [registry, markdown, { renderComponentDescription }] = await Promise.all([
-    loadComponentRegistry({
-      repoRoot,
-      dataPath: "data/components/service.yaml",
-    }),
-    readFile(join(repoRoot, baselinePath), "utf8"),
-    import("../../scripts/lib/component-description.mjs"),
-  ]);
-  const index = indexComponentRegistries({
-    marketing: registryEnvelope("marketing"),
-    service: registry,
-    shared: registryEnvelope("shared"),
+test("service registry preserves all 18 identities and complete viewport contracts", async () => {
+  const registry = await loadComponentRegistry({
+    repoRoot,
+    dataPath: "data/components/service.yaml",
   });
-  const descriptions = baselineDescriptions(
-    markdown,
-    "## Сервисные письма (18)",
-    "## Shared (16)",
-  );
   assert.deepEqual(
     registry.components.map((record) => [
       record.id,
@@ -757,13 +719,10 @@ test("service shadow preserves all 18 records and their baseline descriptions", 
     expectedServiceRecords,
   );
   for (const record of registry.components) {
-    assert.ok(record.contracts.mobile.root, record.id + " needs a Mobile contract");
-    assert.ok(record.contracts.desktop.root, record.id + " needs a Desktop contract");
-    assert.equal(
-      renderComponentDescription(record, index),
-      descriptions.get(record.identity.figma_name),
-      "Rendered Description drift: " + record.identity.figma_name,
-    );
+    assert.ok(record.contracts.mobile.root, `${record.id} needs a Mobile contract`);
+    assert.ok(record.contracts.desktop.root, `${record.id} needs a Desktop contract`);
+    assert.ok(record.documentation.purpose.trim().length > 0);
+    assert.equal(Object.hasOwn(record, "description"), false);
   }
 });
 
@@ -840,16 +799,11 @@ const expectedSharedRecords = [
   ["icon-user-unfollow-fill", "Icon/User-Unfollow-Fill", "491:22376"],
 ];
 
-test("shared shadow contains the root template, three assets, and 13 glyph sources", async () => {
-  const [marketing, service, shared, markdown, { renderComponentDescription }] =
-    await Promise.all([
-      loadComponentRegistry({ repoRoot, dataPath: "data/components/marketing.yaml" }),
-      loadComponentRegistry({ repoRoot, dataPath: "data/components/service.yaml" }),
-      loadComponentRegistry({ repoRoot, dataPath: "data/components/shared.yaml" }),
-      readFile(join(repoRoot, baselinePath), "utf8"),
-      import("../../scripts/lib/component-description.mjs"),
-    ]);
-  const index = indexComponentRegistries({ marketing, service, shared });
+test("shared registry contains the root template, three assets, and 13 glyph sources", async () => {
+  const shared = await loadComponentRegistry({
+    repoRoot,
+    dataPath: "data/components/shared.yaml",
+  });
   assert.deepEqual(
     shared.components.map((record) => [
       record.id,
@@ -859,26 +813,14 @@ test("shared shadow contains the root template, three assets, and 13 glyph sourc
     expectedSharedRecords,
   );
   assert.equal(
-    shared.components.filter((record) => record.description.mode === "none").length,
+    shared.components.filter(
+      (record) => record.identity.semantic_role === "icon",
+    ).length,
     13,
   );
-
-  const descriptions = new Map([
-    ...baselineDescriptions(
-      markdown,
-      "## Шаблоны сборки (1)",
-      "## Сервисные письма (18)",
-    ),
-    ...baselineDescriptions(markdown, "## Shared (16)", null),
-  ]);
-  for (const record of shared.components.filter(
-    (candidate) => candidate.description.mode === "rendered",
-  )) {
-    assert.equal(
-      renderComponentDescription(record, index),
-      descriptions.get(record.identity.figma_name),
-      "Rendered Description drift: " + record.identity.figma_name,
-    );
+  for (const record of shared.components) {
+    assert.ok(record.documentation.purpose.trim().length > 0);
+    assert.equal(Object.hasOwn(record, "description"), false);
   }
 });
 
