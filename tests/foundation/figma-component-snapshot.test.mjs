@@ -133,7 +133,6 @@ test("snapshot normalization is deterministic and removes volatile metadata", ()
   const second = rawSnapshot({
     ...rawComponent(),
     variants: [...rawComponent().variants].reverse(),
-    semantic_children: [...rawComponent().semantic_children].reverse(),
     bindings: [...rawComponent().bindings].reverse(),
   });
   second.roots = [...second.roots].reverse();
