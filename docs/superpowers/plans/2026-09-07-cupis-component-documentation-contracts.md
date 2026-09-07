@@ -34,10 +34,13 @@
 - core/component-contract-standard.md — нормативные принципы полной component-записи и generated registry.
 - core/figma-component-description-standard.md — правила компактной Figma-проекции.
 - scripts/lib/component-registry-doc.mjs — полный human-readable renderer одного component contract.
+- system/migrations/components-1-to-2.mjs — одноразовый deterministic converter старой component schema.
+- system/migrations/components-1-to-2.yaml — reviewed mapping только для purpose и component-specific constraints, которые нельзя безопасно вывести из старого prose.
 - tests/characterization/component-documentation-boundary.test.mjs
 - tests/components/component-documentation-model.test.mjs
 - tests/components/component-registry-doc.test.mjs
 - tests/components/figma-component-description.test.mjs
+- tests/components/component-documentation-migration.test.mjs
 
 ### Изменить
 
@@ -231,10 +234,14 @@ git commit -m "test: preserve component documentation semantics"
 **Files:**
 - Modify: schemas/components.schema.json
 - Modify: scripts/lib/component-registry.mjs
+- Create: system/migrations/components-1-to-2.mjs
+- Create: system/migrations/components-1-to-2.yaml
 - Create: tests/components/component-documentation-model.test.mjs
+- Create: tests/components/component-documentation-migration.test.mjs
 
 **Interfaces:**
 - Produces:
+  - deterministic migration from component schema 1.0.0 to 2.0.0;
   - documentation.purpose: non-empty string;
   - documentation.critical_constraint_ids: unique stable IDs;
   - constraints[]: typed component-specific rules;
@@ -273,9 +280,32 @@ Expected: FAIL на старой schema.
 
 - [ ] **Step 3: Поднять component schema major version**
 
-Удаление/rename обязательного description field является breaking migration. Поднять schema version согласно master-spec, не поддерживать два runtime-формата параллельно.
+Удаление/rename обязательного description field является breaking migration. Поднять schema version до `2.0.0`, не поддерживать два runtime-формата параллельно.
 
-- [ ] **Step 4: Реализовать semantic validation**
+- [ ] **Step 4: Написать failing migration tests**
+
+Проверить, что converter:
+
+- принимает только schema `1.0.0`;
+- сохраняет identity, Figma, variants, properties, assets, contracts и provenance побайтово после canonical normalization;
+- добавляет purpose и constraints только из reviewed mapping по stable component ID;
+- блокирует отсутствующий или лишний mapping entry;
+- не переносит `description.blocks` в output;
+- выдаёт schema `2.0.0` и одинаковый output при повторном запуске.
+
+Run:
+
+~~~powershell
+node --test tests/components/component-documentation-migration.test.mjs
+~~~
+
+Expected: FAIL, converter отсутствует.
+
+- [ ] **Step 5: Реализовать migration converter и reviewed mapping**
+
+Converter не интерпретирует свободный prose автоматически. Mapping содержит только недостающие `purpose`, `constraints` и `critical_constraint_ids`; он является временным историческим migration input, а не runtime source или foundation.
+
+- [ ] **Step 6: Реализовать semantic validation**
 
 Обязательные diagnostics:
 
@@ -288,7 +318,7 @@ Expected: FAIL на старой schema.
 
 Каждый diagnostic содержит component ID и JSON-pointer path.
 
-- [ ] **Step 5: Реализовать render-type derivation**
+- [ ] **Step 7: Реализовать render-type derivation**
 
 Алгоритм читает все фактически выводимые render modes выбранных contracts:
 
@@ -297,20 +327,20 @@ Expected: FAIL на старой schema.
 - HTML и image output вместе → HYBRID;
 - none или неоднозначный Figma-source-only contract → typed blocker, не догадка.
 
-- [ ] **Step 6: Запустить GREEN и commit**
+- [ ] **Step 8: Запустить GREEN и commit**
 
 Run:
 
 ~~~powershell
-node --test tests/components/component-documentation-model.test.mjs
+node --test tests/components/component-documentation-model.test.mjs tests/components/component-documentation-migration.test.mjs
 ~~~
 
-Expected: PASS на fixture новой модели.
+Expected: PASS на fixture новой модели и deterministic migration.
 
 Commit:
 
 ~~~powershell
-git add schemas/components.schema.json scripts/lib/component-registry.mjs tests/components/component-documentation-model.test.mjs
+git add schemas/components.schema.json scripts/lib/component-registry.mjs system/migrations/components-1-to-2.mjs system/migrations/components-1-to-2.yaml tests/components/component-documentation-model.test.mjs tests/components/component-documentation-migration.test.mjs
 git commit -m "feat: model component documentation contracts"
 ~~~
 
@@ -330,7 +360,11 @@ git commit -m "feat: model component documentation contracts"
 - Consumes: новая schema и characterization baseline.
 - Produces: один текущий format всех component records без description.blocks.
 
-- [ ] **Step 1: Мигрировать shared records**
+- [ ] **Step 1: Сгенерировать и проверить migration output**
+
+Run converter для всех трёх registries во временную папку fixture, проверить schema 2.0.0 и characterization equivalence. При blocker не исправлять mapping догадкой: вернуться к конкретной component-записи и доказать purpose/constraint по baseline.
+
+- [ ] **Step 2: Мигрировать shared records**
 
 Для каждой записи:
 
@@ -342,33 +376,33 @@ git commit -m "feat: model component documentation contracts"
 
 Run tests. Expected: PASS.
 
-- [ ] **Step 2: Commit shared migration**
+- [ ] **Step 3: Commit shared migration**
 
 ~~~powershell
 git add data/components/shared.yaml
 git commit -m "data: migrate shared component documentation"
 ~~~
 
-- [ ] **Step 3: Мигрировать marketing records**
+- [ ] **Step 4: Мигрировать marketing records**
 
 Повторить ту же операцию. Особо проверить cards, Banner/Secondary, Banner/App-Download, adaptive @2x images и composite export boundaries.
 
 Run tests. Expected: PASS.
 
-- [ ] **Step 4: Commit marketing migration**
+- [ ] **Step 5: Commit marketing migration**
 
 ~~~powershell
 git add data/components/marketing.yaml
 git commit -m "data: migrate marketing component documentation"
 ~~~
 
-- [ ] **Step 5: Мигрировать service records**
+- [ ] **Step 6: Мигрировать service records**
 
 Особо проверить root/self inset, NPS gaps, alert/notification nested components и property-controlled visibility.
 
 Run tests. Expected: PASS.
 
-- [ ] **Step 6: Commit service migration**
+- [ ] **Step 7: Commit service migration**
 
 ~~~powershell
 git add data/components/service.yaml tests/helpers/system-fixture.mjs
@@ -505,7 +539,6 @@ git commit -m "feat: render compact Figma component descriptions"
 
 **Files:**
 - Modify: system/manifest.yaml
-- Modify: schemas/manifest.schema.json только если новый source kind/reference требует изменения
 - Modify: scripts/validate-system.mjs
 - Modify: tests/foundation/system-manifest.test.mjs
 - Modify: README.md
@@ -573,70 +606,105 @@ git commit -m "feat: integrate component documentation foundation"
 
 ---
 
-### Task 8: Обновить generated-docs plan и реализовать пакет №2
+### Task 8: Финальная проверка подэтапа и handoff в generated docs
 
 **Files:**
-- Modify: docs/superpowers/plans/2026-09-07-cupis-generated-docs-context-bundles.md
-- Later modify under that plan: scripts/lib/generated-docs.mjs
-- Later create under that plan: docs/generated/component-registry.md
+- Modify only if a test exposes an in-scope defect.
+- Preserve: workflows/**, .agents/skills/**, Figma, legacy registry/** и package №1 PR №43.
 
 **Interfaces:**
-- Consumes: renderComponentRegistrySection и renderFigmaComponentDescription.
-- Produces: full generated component registry without legacy prose ownership.
+- Produces: проверенное основание schema 2.0.0, full registry renderer и compact Figma renderer для продолжения существующего generated-docs plan.
+- Does not produce: generated docs, workflow cutover, skill cutover или Figma mutation.
 
-- [ ] **Step 1: Заменить Task 4 assumptions**
+- [ ] **Step 1: Запустить targeted tests**
 
-Task 4 должен:
+~~~powershell
+node --test tests/characterization/component-documentation-boundary.test.mjs tests/components/component-documentation-model.test.mjs tests/components/component-documentation-migration.test.mjs tests/components/component-registry-doc.test.mjs tests/components/figma-component-description.test.mjs
+~~~
 
-- использовать full registry renderer;
-- показывать compact Figma Description только как auxiliary projection;
-- не читать description.blocks;
-- не считать Figma Description источником implementation semantics.
+Expected: PASS, 0 failed.
 
-- [ ] **Step 2: Обновить context-bundle contract**
+- [ ] **Step 2: Запустить полную system validation**
 
-Email bundles включают selected resolved component contracts. Compact Figma Description допускается только в figma-description-sync bundle; email-new-build и email-continue-fix его не получают как instruction.
+~~~powershell
+npm run validate
+npm test
+npm run verify
+~~~
 
-- [ ] **Step 3: Возобновить PR №43 на обновлённом main**
+Expected: PASS, 0 failed.
 
-Сохранить смысл пакета №1, повторно запустить его tests и только затем выполнять изменённый Task 4. Не переписывать уже проверенный digest/manifest foundation без необходимости.
+- [ ] **Step 3: Запустить Windows contracts**
 
-- [ ] **Step 4: Выполнить Tasks 4–10 плана generated docs**
+~~~powershell
+pwsh -NoProfile -File bootstrap/verify.ps1
+pwsh -NoProfile -File tests/bootstrap-contract.Tests.ps1
+~~~
 
-Следовать обновлённому implementation plan отдельными commits и завершить shadow generated layer.
+Expected: оба exit 0.
+
+- [ ] **Step 4: Проверить migration equivalence**
+
+Подтвердить для всех трёх registries:
+
+- unchanged canonical identity/contracts/properties/assets/provenance;
+- отсутствует runtime description.blocks;
+- каждый active component имеет purpose;
+- все critical references разрешаются;
+- два registry render и два Figma Description render дают одинаковые bytes.
+
+- [ ] **Step 5: Проверить allowed path diff**
+
+Допустимы только файлы из целевой карты подэтапа. Отдельно подтвердить отсутствие изменений:
+
+~~~text
+workflows/**
+.agents/skills/**
+registry/**
+data/foundations/**
+core/email-figma-prompt.md
+bootstrap/**
+email.html
+images/**
+Figma
+~~~
+
+- [ ] **Step 6: Открыть draft implementation PR и остановиться**
+
+PR summary перечисляет schema migration, три data migrations, два standards, два renderer, validation evidence и сохранённые boundaries. Merge только по отдельной команде пользователя.
+
+После merge обновить основание PR №43 и продолжить с изменённого Task 4 плана generated docs.
 
 ---
 
-### Task 9: Интегрировать routes и workflows на этапах 8–9
+## Downstream integration roadmap
 
-**Files:**
-- Later modify: structured workflow sources этапа 8
-- Later modify: system/manifest.yaml
-- Later modify: workflows/library-maintenance-checkpoint.md during cutover
-- Later preserve: workflows/email-build-checkpoint.md semantics
-- Later modify: .agents/skills/maintaining-cupis-email-system/SKILL.md only at skill cutover
+Следующие пункты обязательны для полного внедрения решения, но не выполняются и не коммитятся этим implementation plan. Каждый получает свой актуальный plan и отдельную approval/merge boundary.
 
-**Interfaces:**
-- library-maintenance consumes full selected component contract and contract standard.
-- component-onboarding consumes both standards and applicable foundations.
-- figma-description-sync consumes expected compact projection and Figma sync workflow.
-- email routes consume resolved component contracts, not authoring standards or Figma Description.
+### A. Возобновить этап 7: generated docs и context bundles
 
-- [ ] **Step 1: Зафиксировать route-specific bundle ownership**
+Источник действий: docs/superpowers/plans/2026-09-07-cupis-generated-docs-context-bundles.md.
 
-Expected routing:
+- сохранить смысл уже реализованных Tasks 1–3 PR №43;
+- обновить branch от main после merge подэтапа 7A;
+- Task 4 использует renderComponentRegistrySection;
+- compact Figma Description показывается только как auxiliary projection;
+- email bundles включают selected resolved contracts и исключают Figma Description/component-authoring standards;
+- завершить Tasks 4–10, validation и shadow PR.
+
+### B. Этап 8: Core и workflows cutover
+
+Создать отдельный implementation plan этапа 8. Он обязан распределить контекст:
 
 ~~~text
 library-maintenance → contract standard + selected contract
 component-onboarding → contract standard + Figma Description standard + foundations
-figma-description-sync → Figma Description standard + expected compact descriptions
-email-new-build → selected Mobile/Desktop contracts
+figma-description-sync → Figma Description standard + expected compact projection
+email-new-build → selected resolved Mobile/Desktop contracts
 email-continue-fix → affected selected contracts
 ~~~
 
-- [ ] **Step 2: Обновить maintenance workflow**
-
-Порядок изменения contract/Description:
+Maintenance workflow фиксирует:
 
 ~~~text
 read-only analysis
@@ -649,81 +717,34 @@ read-only analysis
 → readback/fingerprint/dependency checks
 ~~~
 
-- [ ] **Step 3: Сохранить email workflow узким**
+Email workflow не получает design-time authoring standard, Figma Description standard или Figma sync process.
 
-Не загружать design-time authoring standard, Figma Description standard или sync workflow в HTML build. Кодекс использует exact resolved values выбранного instance и component contract.
+### C. Отдельная Figma Description sync
 
-- [ ] **Step 4: Переключить maintenance skill**
+Это не repository implementation task. После merge renderer и generated preview пользователь получает exact old → new Description diff по явно выбранным компонентам.
 
-Skill остаётся тонким router: выбирает route и bundle, не содержит копий section names, constraints или paths. Локальная установка обновляется только из merged GitHub version.
+Запись разрешается только после отдельного impact report и подтверждения. Writable fields: Description и отдельно согласованный Documentation link. Используется только Figma MCP; geometry, hierarchy, properties, Auto Layout, bindings, variants, asset suffixes и design сохраняются. После записи обязателен отдельный MCP readback и fingerprint comparison.
 
-- [ ] **Step 5: Проверить skill boundary**
+### D. Этап 9: maintenance skill cutover
 
-Characterization tests должны доказать, что:
+Создать отдельный implementation plan этапа 9 для .agents/skills/maintaining-cupis-email-system/SKILL.md.
 
-- maintenance skill выполняет impact gate;
-- HTML skill не получает authoring rules;
-- unknown component возвращает onboarding handoff;
-- route paths разрешаются только через manifest.
+Skill остаётся thin router и не копирует section names, constraints, source paths или component contracts. Он выбирает manifest route, требует impact gate, получает generated bundle и выполняет handoff. Локальная установка обновляется только из merged GitHub state.
 
----
+### E. Будущие component-development и HTML-build skills
 
-### Task 10: Выполнить отдельную Figma Description sync
+- developing-cupis-email-components использует design standard; после одобрения production component передаёт его в component-onboarding.
+- будущий HTML-build skill использует только email-new-build/email-continue-fix bundles с selected resolved contracts.
+- ни один из навыков не хранит собственную копию component contract или Figma Description rules.
 
-**Files:**
-- No repository content change unless verified provenance must be updated in the same approved task.
-- Figma writable fields: Description and separately approved Documentation link only.
+### F. Shadow comparison, cutover и cleanup
 
-**Interfaces:**
-- Consumes: expected compact descriptions generated from merged component records.
-- Produces: synchronized Figma descriptions with unchanged design structure.
+На этапах 13–15:
 
-- [ ] **Step 1: Построить read-only preview**
-
-Для каждого явно выбранного компонента показать stable ID, current Description, expected Description и exact diff.
-
-- [ ] **Step 2: Выполнить impact report и остановиться**
-
-Назвать target nodes/variants, writable metadata fields, dependent records и preserved fingerprint. Запросить отдельное разрешение пользователя.
-
-- [ ] **Step 3: После разрешения выполнить MCP-only write**
-
-Не использовать UI automation, локальные scripts или другой способ записи.
-
-- [ ] **Step 4: Выполнить отдельный MCP readback**
-
-Проверить exact Description, component properties, hierarchy, geometry, bindings, asset suffixes и structure fingerprint. Unexpected diff останавливает задачу.
-
-- [ ] **Step 5: Синхронизировать provenance только при необходимости**
-
-Если verification date/fingerprint меняются, обновить только связанные structured records через отдельную GitHub branch/PR и повторить validation.
-
----
-
-### Task 11: Shadow comparison, cutover и cleanup
-
-**Files:**
-- Follow stages 13–15 of migration roadmap.
-- Do not delete legacy registry before successful cutover.
-
-**Interfaces:**
-- Produces: доказательство semantic equivalence и безопасное удаление дублей.
-
-- [ ] **Step 1: Сравнить legacy и generated registry**
-
-Проверить все components и отдельную high-risk выборку: templates, cards, Banner/Secondary, App Download, footer/header, NPS, asset-only icons.
-
-- [ ] **Step 2: Проверить representative context bundles**
-
-Для maintenance, onboarding, Figma sync и двух email routes подтвердить minimality, closure и отсутствие противоречащих источников.
-
-- [ ] **Step 3: Выполнить cutover**
-
-Только после успешного shadow comparison переключить routes и skills на structured/generated sources.
-
-- [ ] **Step 4: Удалить migration-дубли отдельной задачей**
-
-Удалять legacy prose models, старые registries и временные comparison paths только после перечня consumers и решения remove/preserve по каждому файлу.
+- сравнить legacy и generated registry по всем component IDs и high-risk cases;
+- проверить minimality/closure maintenance, onboarding, Figma sync и email bundles;
+- выполнить общий cutover только после semantic equivalence;
+- удалить legacy registry, migration mapping и временные comparison paths отдельной задачей после списка consumers и решения remove/preserve.
 
 ---
 
@@ -731,24 +752,24 @@ Characterization tests должны доказать, что:
 
 1. Любой active component имеет полный проверяемый structured contract и purpose.
 2. Mobile и Desktop описаны независимо; отсутствие обязательного viewport блокирует validation.
-3. Полный generated registry содержит всё необходимое для однозначной реализации компонента.
-4. Общие foundation rules не копируются в component records; generated docs показывают stable reference и resolved exact value.
-5. Figma Description содержит только CUPIS ID, purpose, derived render type и selected critical constraints.
-6. Figma Description не является входом HTML build и может отсутствовать без потери implementation semantics.
-7. Старые description.blocks не остаются вторым владельцем фактов.
-8. Generated registry и Figma Description детерминированы и не редактируются вручную.
-9. Новый неизвестный component проходит onboarding и schema validation без component-specific schema exception.
-10. Generated-docs Task 4 использует full registry renderer и не закрепляет старую prose-модель.
-11. Maintenance, onboarding, Figma sync и email build получают разные минимальные context bundles.
-12. Figma write выполняется только после preview, impact report, отдельного разрешения и MCP readback.
-13. Skills остаются routers и не копируют стандарты или component contracts.
-14. Legacy registry удаляется только после shadow comparison и общего cutover.
-15. Full validation, Node tests, verify и Windows bootstrap contracts проходят.
+3. Общие foundation rules не копируются в component records.
+4. Schema 2.0.0 migration детерминирована, сохраняет contract-significant данные и удаляет legacy description.blocks.
+5. Полный registry renderer содержит всё необходимое для однозначной реализации компонента и показывает resolved foundation references.
+6. Figma Description renderer содержит только CUPIS ID, purpose, derived render type и selected critical constraints.
+7. Figma Description не является входом HTML build и может отсутствовать без потери implementation semantics.
+8. Оба renderer детерминированы и не владеют отдельными facts.
+9. Новый неизвестный component блокируется до onboarding и не получает component-specific schema exception.
+10. Manifest объявляет два standards, но legacy routes и skills не переключаются.
+11. Characterization доказывает отсутствие потери properties, assets, dependencies, provenance и fingerprints.
+12. Full validation, Node tests, verify и Windows bootstrap contracts проходят.
+13. Workflows, skills, Figma, legacy registries, foundations и локальные письма не изменены.
+14. Existing generated-docs plan явно использует этот подэтап как prerequisite Task 4.
+15. Downstream route разделяет generated docs, workflow cutover, Figma sync, skill cutover и cleanup отдельными approval boundaries.
 
 ## Self-Review Record
 
-- **Spec coverage:** ownership, full registry, thin Figma projection, new-component onboarding, generated docs, routes, workflows, skills, sync и cleanup покрыты Tasks 1–11.
-- **Boundary coverage:** Figma mutation, workflow cutover, skill cutover и legacy deletion отделены от технического data migration.
+- **Spec coverage:** ownership, schema migration, full registry, thin Figma projection и new-component onboarding покрыты Tasks 1–8; generated docs, routes, workflows, skills, sync и cleanup имеют явные downstream plans/gates.
+- **Boundary coverage:** Figma mutation, workflow cutover, skill cutover и legacy deletion отделены от implementation scope подэтапа 7A.
 - **No placeholders:** каждый task содержит конкретные inputs, outputs, checks и stop conditions.
-- **Interface consistency:** structured record → full registry renderer / compact Figma renderer → generated docs / route bundles → workflows / skills.
+- **Interface consistency:** schema 1.0.0 + reviewed migration map → schema 2.0.0 record → full registry renderer / compact Figma renderer → downstream generated docs and route bundles.
 - **Risk control:** package №1 PR №43 сохраняется; старый Task 4 блокируется до завершения prerequisite; email build не получает Figma Description или authoring standards.
