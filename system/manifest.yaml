@@ -1,4 +1,4 @@
-schema_version: 1.0.0
+schema_version: 1.1.0
 system:
   id: cupis-email-system
   repository: flabenar-maker/e-mail
@@ -32,18 +32,74 @@ sources:
 bundle_profiles:
   - id: library-maintenance
     source_ids: [repository-readme, email-figma-prompt, figma-component-naming-standard, component-descriptions-registry, typography-registry, spacing-foundation, library-maintenance-checkpoint]
+    generated_bundle:
+      status: shadow
+      static_source_ids: [repository-readme, email-figma-prompt, figma-component-naming-standard, library-maintenance-checkpoint]
+      component_selection: optional
+      viewport_selection: one-or-both
+      foundation_selection: explicit-or-referenced
+      allowed_foundation_ids: [typography, spacing, assets, figma-naming]
+      required_foundation_ids: []
   - id: component-onboarding
     source_ids: [repository-readme, email-figma-prompt, figma-component-naming-standard, component-descriptions-registry, typography-registry, spacing-foundation, library-maintenance-checkpoint]
+    generated_bundle:
+      status: shadow
+      static_source_ids: [repository-readme, email-figma-prompt, figma-component-naming-standard, library-maintenance-checkpoint]
+      component_selection: optional
+      viewport_selection: both
+      foundation_selection: explicit-or-referenced
+      allowed_foundation_ids: [typography, spacing, assets, figma-naming]
+      required_foundation_ids: []
   - id: figma-description-sync
     source_ids: [repository-readme, email-figma-prompt, component-descriptions-registry, typography-registry, library-maintenance-checkpoint]
+    generated_bundle:
+      status: shadow
+      static_source_ids: [repository-readme, email-figma-prompt, library-maintenance-checkpoint]
+      component_selection: required
+      viewport_selection: both
+      foundation_selection: referenced
+      allowed_foundation_ids: [typography, spacing, assets]
+      required_foundation_ids: []
   - id: figma-naming-audit
     source_ids: [repository-readme, figma-component-naming-standard, component-descriptions-registry, library-maintenance-checkpoint]
+    generated_bundle:
+      status: shadow
+      static_source_ids: [repository-readme, figma-component-naming-standard, library-maintenance-checkpoint]
+      component_selection: optional
+      viewport_selection: none
+      foundation_selection: explicit
+      allowed_foundation_ids: [figma-naming]
+      required_foundation_ids: [figma-naming]
   - id: migration-progress
     source_ids: [repository-readme, migration-roadmap, library-maintenance-checkpoint]
+    generated_bundle:
+      status: shadow
+      static_source_ids: [repository-readme, migration-roadmap, library-maintenance-checkpoint]
+      component_selection: none
+      viewport_selection: none
+      foundation_selection: none
+      allowed_foundation_ids: []
+      required_foundation_ids: []
   - id: email-new-build
     source_ids: [repository-readme, email-figma-prompt, figma-component-naming-standard, component-descriptions-registry, typography-registry, email-build-checkpoint, email-project-brief]
+    generated_bundle:
+      status: shadow
+      static_source_ids: [repository-readme, email-figma-prompt, email-build-checkpoint, email-project-brief]
+      component_selection: required
+      viewport_selection: both
+      foundation_selection: referenced
+      allowed_foundation_ids: [typography, spacing, assets]
+      required_foundation_ids: []
   - id: email-continue-fix
     source_ids: [repository-readme, email-figma-prompt, figma-component-naming-standard, component-descriptions-registry, typography-registry, email-build-checkpoint]
+    generated_bundle:
+      status: shadow
+      static_source_ids: [repository-readme, email-figma-prompt, email-build-checkpoint]
+      component_selection: optional
+      viewport_selection: both
+      foundation_selection: referenced
+      allowed_foundation_ids: [typography, spacing, assets]
+      required_foundation_ids: []
 routes:
   - { id: library-maintenance, workflow_source_id: library-maintenance-checkpoint, bundle_profile_id: library-maintenance }
   - { id: component-onboarding, workflow_source_id: library-maintenance-checkpoint, bundle_profile_id: component-onboarding }
