@@ -11,7 +11,7 @@
   ],
   "properties": {
     "schema_version": {
-      "const": "1.0.0"
+      "const": "2.0.0"
     },
     "registry": {
       "$ref": "#/$defs/registry"
@@ -119,7 +119,8 @@
         "properties",
         "asset_contracts",
         "contracts",
-        "description",
+        "documentation",
+        "constraints",
         "provenance"
       ],
       "properties": {
@@ -248,11 +249,17 @@
             }
           }
         },
-        "description": {
-          "$ref": "#/$defs/description"
-        },
         "provenance": {
           "$ref": "#/$defs/componentProvenance"
+        },
+        "documentation": {
+          "$ref": "#/$defs/documentation"
+        },
+        "constraints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/constraint"
+          }
         }
       }
     },
@@ -1114,199 +1121,6 @@
         }
       ]
     },
-    "token": {
-      "oneOf": [
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "type",
-            "value"
-          ],
-          "properties": {
-            "type": {
-              "const": "text"
-            },
-            "value": {
-              "type": "string",
-              "minLength": 1
-            }
-          }
-        },
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "type",
-            "path"
-          ],
-          "properties": {
-            "type": {
-              "const": "fact"
-            },
-            "path": {
-              "type": "string",
-              "pattern": "^(?:mobile|desktop)/[a-z0-9-]+(?:/[a-z0-9-]+)+$"
-            }
-          }
-        },
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "type",
-            "component_id"
-          ],
-          "properties": {
-            "type": {
-              "const": "component-name"
-            },
-            "component_id": {
-              "type": "string",
-              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
-            }
-          }
-        },
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "type",
-            "property_id"
-          ],
-          "properties": {
-            "type": {
-              "const": "property-name"
-            },
-            "property_id": {
-              "type": "string",
-              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
-            }
-          }
-        }
-      ]
-    },
-    "descriptionBlock": {
-      "oneOf": [
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "type",
-            "value"
-          ],
-          "properties": {
-            "type": {
-              "const": "heading"
-            },
-            "value": {
-              "type": "string",
-              "pattern": "^[A-Z][A-Z0-9 -]*$"
-            }
-          }
-        },
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "type"
-          ],
-          "properties": {
-            "type": {
-              "const": "blank"
-            }
-          }
-        },
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "type",
-            "tokens"
-          ],
-          "properties": {
-            "type": {
-              "enum": [
-                "line",
-                "bullet"
-              ]
-            },
-            "tokens": {
-              "type": "array",
-              "minItems": 1,
-              "items": {
-                "$ref": "#/$defs/token"
-              }
-            }
-          }
-        },
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "type",
-            "index",
-            "tokens"
-          ],
-          "properties": {
-            "type": {
-              "const": "ordered"
-            },
-            "index": {
-              "type": "integer",
-              "minimum": 1
-            },
-            "tokens": {
-              "type": "array",
-              "minItems": 1,
-              "items": {
-                "$ref": "#/$defs/token"
-              }
-            }
-          }
-        }
-      ]
-    },
-    "description": {
-      "oneOf": [
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "mode",
-            "blocks"
-          ],
-          "properties": {
-            "mode": {
-              "const": "rendered"
-            },
-            "blocks": {
-              "type": "array",
-              "minItems": 1,
-              "items": {
-                "$ref": "#/$defs/descriptionBlock"
-              }
-            }
-          }
-        },
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "mode",
-            "reason"
-          ],
-          "properties": {
-            "mode": {
-              "const": "none"
-            },
-            "reason": {
-              "const": "nested-figma-glyph-without-independent-email-contract"
-            }
-          }
-        }
-      ]
-    },
     "componentProvenance": {
       "oneOf": [
         {
@@ -1351,6 +1165,76 @@
           }
         }
       ]
+    },
+    "documentation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "purpose",
+        "critical_constraint_ids"
+      ],
+      "properties": {
+        "purpose": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "critical_constraint_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          }
+        }
+      }
+    },
+    "constraint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "scope",
+        "kind",
+        "severity",
+        "statement"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "scope": {
+          "enum": [
+            "all",
+            "mobile",
+            "desktop"
+          ]
+        },
+        "kind": {
+          "enum": [
+            "layout",
+            "responsive-image",
+            "asset-export",
+            "property-behavior",
+            "email-rendering",
+            "content",
+            "interaction",
+            "dependency"
+          ]
+        },
+        "severity": {
+          "enum": [
+            "required",
+            "critical"
+          ]
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        }
+      }
     }
   }
 }
