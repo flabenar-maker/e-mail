@@ -10,7 +10,7 @@ import { validateAssetsFoundation } from "./assets-foundation.mjs";
 import { validateFigmaNamingFoundation } from "./figma-naming-foundation.mjs";
 import { validateComponentRegistries } from "./component-registry.mjs";
 
-const SUPPORTED_MANIFEST_VERSION = "1.0.0";
+const SUPPORTED_MANIFEST_VERSION = "1.1.0";
 
 export function validateManifestShape(manifest, schema) {
   return validateDocumentShape({
@@ -61,6 +61,45 @@ function sortDiagnostics(errors) {
       left.code.localeCompare(right.code) ||
       left.message.localeCompare(right.message),
   );
+}
+export function resolveGeneratedDocDefinitions(manifest) {
+  return Object.freeze(
+    (manifest.generated_docs ?? []).map((definition) =>
+      Object.freeze(structuredClone(definition)),
+    ),
+  );
+}
+
+export function resolveGeneratedBundleProfile(manifest, routeId) {
+  const route = manifest.routes.find((item) => item.id === routeId);
+  if (!route) {
+    return {
+      status: "blocked",
+      blockers: [
+        diagnostic(
+          "CONTEXT_BUNDLE_ROUTE_UNKNOWN",
+          "/route_id",
+          `Unknown route: ${routeId}.`,
+        ),
+      ],
+    };
+  }
+  const profile = manifest.bundle_profiles.find(
+    (item) => item.id === route.bundle_profile_id,
+  );
+  if (!profile?.generated_bundle) {
+    return {
+      status: "blocked",
+      blockers: [
+        diagnostic(
+          "CONTEXT_BUNDLE_PROFILE_MISSING",
+          `/bundle_profiles/${route.bundle_profile_id}`,
+          `Route ${routeId} has no generated bundle profile.`,
+        ),
+      ],
+    };
+  }
+  return { status: "resolved", route, profile };
 }
 
 async function exists(path) {
@@ -188,6 +227,80 @@ export async function validateManifestSemantics(manifest, repoRoot) {
   const profileIds = new Set(
     manifest.bundle_profiles.map((profile) => profile.id),
   );
+  const profileById = new Map(
+    manifest.bundle_profiles.map((profile) => [profile.id, profile]),
+  );
+  const generatedDocs = manifest.generated_docs ?? [];
+  pushDuplicateDiagnostics(
+    errors,
+    generatedDocs,
+    "id",
+    "duplicate-generated-doc-id",
+    "/generated_docs",
+  );
+  pushDuplicateDiagnostics(
+    errors,
+    generatedDocs,
+    "output_source_id",
+    "duplicate-generated-output-source",
+    "/generated_docs",
+  );
+
+  generatedDocs.forEach((definition, definitionIndex) => {
+    const outputSource = sourceById.get(definition.output_source_id);
+    if (!outputSource) {
+      errors.push(
+        diagnostic(
+          "unknown-generated-output-source",
+          `/generated_docs/${definitionIndex}/output_source_id`,
+          `Unknown generated output source: ${definition.output_source_id}.`,
+        ),
+      );
+    } else if (outputSource.kind !== "generated") {
+      errors.push(
+        diagnostic(
+          "invalid-generated-output-kind",
+          `/generated_docs/${definitionIndex}/output_source_id`,
+          `Generated output source must use kind generated: ${definition.output_source_id}.`,
+        ),
+      );
+    }
+
+    definition.input_source_ids.forEach((sourceId, sourceIndex) => {
+      const inputSource = sourceById.get(sourceId);
+      if (!inputSource) {
+        errors.push(
+          diagnostic(
+            "unknown-generated-input-source",
+            `/generated_docs/${definitionIndex}/input_source_ids/${sourceIndex}`,
+            `Unknown generated input source: ${sourceId}.`,
+          ),
+        );
+      } else if (inputSource.kind === "generated") {
+        errors.push(
+          diagnostic(
+            "generated-input-cannot-be-generated",
+            `/generated_docs/${definitionIndex}/input_source_ids/${sourceIndex}`,
+            `Generated document input cannot itself be generated: ${sourceId}.`,
+          ),
+        );
+      }
+    });
+  });
+
+  const foundationIds = new Set([
+    "typography",
+    "spacing",
+    "assets",
+    "figma-naming",
+  ]);
+  const legacyRegistryIds = new Set([
+    "component-descriptions-registry",
+    "typography-registry",
+  ]);
+  const generatedCapabilityEnabled =
+    generatedDocs.length > 0 ||
+    manifest.bundle_profiles.some((profile) => profile.generated_bundle);
 
   manifest.bundle_profiles.forEach((profile, profileIndex) => {
     profile.source_ids.forEach((sourceId, sourceIndex) => {
@@ -201,6 +314,58 @@ export async function validateManifestSemantics(manifest, repoRoot) {
         );
       }
     });
+ 
+    const generatedBundle = profile.generated_bundle;
+    if (!generatedBundle) return;
+
+    generatedBundle.static_source_ids.forEach((sourceId, sourceIndex) => {
+      const source = sourceById.get(sourceId);
+      const path =
+        `/bundle_profiles/${profileIndex}/generated_bundle/static_source_ids/${sourceIndex}`;
+      if (!source) {
+        errors.push(
+          diagnostic(
+            "unknown-generated-bundle-source",
+            path,
+            `Unknown generated bundle source: ${sourceId}.`,
+          ),
+        );
+      } else if (source.kind === "generated") {
+        errors.push(
+          diagnostic(
+            "generated-bundle-source-cannot-be-generated",
+            path,
+            `Generated bundle static source cannot itself be generated: ${sourceId}.`,
+          ),
+        );
+      }
+      if (legacyRegistryIds.has(sourceId)) {
+        errors.push(
+          diagnostic(
+            "generated-bundle-legacy-registry-forbidden",
+            path,
+            `Legacy registry is forbidden in generated bundle: ${sourceId}.`,
+          ),
+        );
+      }
+    });
+
+    for (const field of [
+      "allowed_foundation_ids",
+      "required_foundation_ids",
+    ]) {
+      generatedBundle[field].forEach((foundationId, foundationIndex) => {
+        if (!foundationIds.has(foundationId)) {
+          errors.push(
+            diagnostic(
+              "unknown-foundation-id",
+              `/bundle_profiles/${profileIndex}/generated_bundle/${field}/${foundationIndex}`,
+              `Unknown foundation id: ${foundationId}.`,
+            ),
+          );
+        }
+      });
+    }
   });
 
   manifest.routes.forEach((route, routeIndex) => {
@@ -220,6 +385,16 @@ export async function validateManifestSemantics(manifest, repoRoot) {
           "unknown-bundle-profile-reference",
           `/routes/${routeIndex}/bundle_profile_id`,
           `Unknown bundle profile reference: ${route.bundle_profile_id}.`,
+        ),
+      );
+    }
+    const profile = profileById.get(route.bundle_profile_id);
+    if (generatedCapabilityEnabled && profile && !profile.generated_bundle) {
+      errors.push(
+        diagnostic(
+          "route-generated-profile-missing",
+          `/routes/${routeIndex}/bundle_profile_id`,
+          `Route ${route.id} has no generated bundle profile.`,
         ),
       );
     }
