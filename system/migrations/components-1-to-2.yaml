@@ -1,0 +1,418 @@
+{
+  "schema_version": "1.0.0",
+  "migration": "components-1-to-2",
+  "libraries": {
+    "shared": [
+      {
+        "id": "email-template",
+        "purpose": "Корневая оболочка письма, которая задаёт состав и порядок верхнеуровневых компонентов для выбранного viewport.",
+        "critical_constraint_ids": [
+          "slot-does-not-create-visual-geometry"
+        ],
+        "constraints": [
+          {
+            "id": "slot-does-not-create-visual-geometry",
+            "scope": "all",
+            "kind": "dependency",
+            "severity": "critical",
+            "statement": "Слот задаёт только состав и порядок верхнеуровневых компонентов и не создаёт собственные padding, gap, background или визуальные слои."
+          }
+        ]
+      },
+      {
+        "id": "asset-product-logo",
+        "purpose": "Источник вариантов продуктового логотипа для сборки производных визуальных ассетов.",
+        "critical_constraint_ids": [
+          "nested-source-is-not-export-owner"
+        ],
+        "constraints": [
+          {
+            "id": "nested-source-is-not-export-owner",
+            "scope": "all",
+            "kind": "asset-export",
+            "severity": "critical",
+            "statement": "Этот вложенный источник нельзя экспортировать отдельно, когда родительский компонент задаёт внешний составной asset owner."
+          }
+        ]
+      },
+      {
+        "id": "asset-header-logo-4x",
+        "purpose": "Канонический составной логотип хедера с защитной подложкой для обоих viewport.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "asset-header-logo-compact-4x",
+        "purpose": "Вспомогательный компактный источник раскладки логотипа для мобильного варианта хедера.",
+        "critical_constraint_ids": [
+          "compact-source-is-not-separate-export"
+        ],
+        "constraints": [
+          {
+            "id": "compact-source-is-not-separate-export",
+            "scope": "mobile",
+            "kind": "asset-export",
+            "severity": "critical",
+            "statement": "Компактный мобильный источник используется только для раскладки и не создаёт отдельный файл письма."
+          }
+        ]
+      },
+      {
+        "id": "icon-bank-card-2-line",
+        "purpose": "Исходный векторный знак банковской карты для вложенного использования в визуальных ассетах.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "icon-fingerprint-2-line",
+        "purpose": "Исходный векторный знак отпечатка пальца для вложенного использования в визуальных ассетах.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "icon-gift-2-line",
+        "purpose": "Исходный векторный знак подарка для вложенного использования в визуальных ассетах.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "icon-global-line",
+        "purpose": "Исходный векторный знак глобуса для вложенного использования в визуальных ассетах.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "icon-lock-password-fill",
+        "purpose": "Исходный векторный знак защиты пароля для вложенного использования в визуальных ассетах.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "icon-mail-fill",
+        "purpose": "Исходный векторный знак почты для вложенного использования в визуальных ассетах.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "icon-mir-logo",
+        "purpose": "Исходный векторный логотип платёжной системы «Мир» для вложенного использования в визуальных ассетах.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "icon-receipt-fill",
+        "purpose": "Исходный векторный знак чека для вложенного использования в визуальных ассетах.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "icon-shopping-basket-2-line",
+        "purpose": "Исходный векторный знак корзины покупок для вложенного использования в визуальных ассетах.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "icon-smartphone-fill",
+        "purpose": "Исходный векторный знак смартфона для вложенного использования в визуальных ассетах.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "icon-user-follow-fill",
+        "purpose": "Исходный векторный знак добавления пользователя для вложенного использования в визуальных ассетах.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "icon-user-forbid-fill",
+        "purpose": "Исходный векторный знак блокировки пользователя для вложенного использования в визуальных ассетах.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "icon-user-unfollow-fill",
+        "purpose": "Исходный векторный знак удаления пользователя для вложенного использования в визуальных ассетах.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      }
+    ],
+    "marketing": [
+      {
+        "id": "badge-step-number",
+        "purpose": "Живой HTML-бейдж с номером шага для пошаговых блоков.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "email-header",
+        "purpose": "Полноширинный хедер письма с центрированным составным логотипом.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "block-cards-images",
+        "purpose": "Контентный блок с заголовком, вертикальным списком карточек с изображениями и необязательной подписью.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "block-icon-cards",
+        "purpose": "Контентный блок с заголовком, вертикальным списком карточек с иконками и необязательной подписью.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "email-footer",
+        "purpose": "Основной полноширинный футер с дисклеймером, отпиской и управляемой секцией социальных ссылок.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "banner-hero",
+        "purpose": "Главный промобаннер с изображением, живым текстом и необязательным основным CTA.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "block-steps",
+        "purpose": "Контентный блок с последовательностью шагов и управляемыми дополнительными секциями.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "button-secondary",
+        "purpose": "Вторичная кликабельная HTML-кнопка для действий внутри письма.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "button-primary",
+        "purpose": "Основная градиентная HTML-кнопка для главного действия письма.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "block-content",
+        "purpose": "Универсальный контентный блок с заголовком, текстом и управляемыми дополнительными элементами.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "banner-secondary",
+        "purpose": "Вторичный промобаннер с текстовой и визуальной областями.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "block-bullet-list",
+        "purpose": "Контентный блок с заголовком, маркированным списком и необязательной подписью.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "item-bullet",
+        "purpose": "Отдельный пункт маркированного списка с живым текстом.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "item-step",
+        "purpose": "Отдельный пронумерованный шаг с живым текстом и необязательной подписью.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "banner-inline",
+        "purpose": "Компактный информационный баннер с живым текстом и ссылкой.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "block-info-alert",
+        "purpose": "Контентный информационный блок с выделенным сообщением.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "banner-app-download",
+        "purpose": "Промоблок приложения с логотипом, живым текстом и кнопками магазинов.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "email-footer-legal",
+        "purpose": "Юридический полноширинный футер письма.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "asset-card-image-2x",
+        "purpose": "Составной растровый ассет карточки, включающий изображение и графические наложения.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "card-image",
+        "purpose": "Карточка с составным изображением, живым текстом и необязательной ссылкой.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "block-icon-list",
+        "purpose": "Контентный блок со списком строк, каждая из которых использует графическую иконку и живой текст.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "card-icon",
+        "purpose": "Карточка с графической иконкой, живым текстом и необязательной ссылкой.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "asset-feature-icon-4x",
+        "purpose": "Составной прозрачный графический ассет функциональной иконки.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "item-alert",
+        "purpose": "Вложенный предупреждающий элемент с живым текстом.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "item-notification",
+        "purpose": "Вложенный информационный элемент с живым текстом.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "nps-options",
+        "purpose": "Адаптивная группа кликабельных вариантов оценки NPS.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      }
+    ],
+    "service": [
+      {
+        "id": "block-transaction-success",
+        "purpose": "Сервисный блок успешной операции с партнёром, суммой, статусом и реквизитами.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "block-transaction-error",
+        "purpose": "Сервисный блок неуспешной операции с партнёром, статусом и поясняющим текстом.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "block-contact-support",
+        "purpose": "Контактный блок поддержки с телефонным действием и ссылкой на раздел помощи.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "asset-bank-badge-4x",
+        "purpose": "Составной графический бейдж банка для использования в сервисных блоках.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "asset-partner-badge-4x",
+        "purpose": "Составной графический бейдж партнёра для использования в сервисных блоках.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "asset-icon-badge-4x",
+        "purpose": "Универсальный составной графический бейдж с иконкой.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "details-transfer",
+        "purpose": "Вложенная таблица реквизитов перевода или возврата.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "asset-status-badge-positive-4x",
+        "purpose": "Составная графическая иконка положительного статуса.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "asset-status-badge-negative-4x",
+        "purpose": "Составная графическая иконка отрицательного статуса.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "details-suspicious-operation",
+        "purpose": "Вложенный предупреждающий блок с реквизитами подозрительной операции.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "block-personal-data-update",
+        "purpose": "Сервисный блок обновления персональных данных со статусом и управляемыми пояснениями.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "details-operation-plain",
+        "purpose": "Вложенная таблица реквизитов операции без собственного визуального контейнера.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "details-receipt",
+        "purpose": "Вложенная таблица реквизитов чека.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "block-receipt-info",
+        "purpose": "Сервисный блок со статусом и реквизитами чека.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "banner-fiscal-check-link",
+        "purpose": "Группа кликабельных строк со ссылками на проверку фискального чека.",
+        "critical_constraint_ids": [
+          "linked-cells-cover-entire-row"
+        ],
+        "constraints": [
+          {
+            "id": "linked-cells-cover-entire-row",
+            "scope": "all",
+            "kind": "email-rendering",
+            "severity": "critical",
+            "statement": "Каждая видимая ячейка строки содержит ссылку с одним URL, чтобы кликабельной оставалась вся площадь строки без помещения таблицы внутрь ссылки."
+          }
+        ]
+      },
+      {
+        "id": "block-instruction-steps",
+        "purpose": "Сервисный блок с инструкцией, нумерованными шагами и управляемыми предупреждениями.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "details-operation",
+        "purpose": "Вложенная таблица реквизитов операции.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      },
+      {
+        "id": "badge-operation-status",
+        "purpose": "Живой HTML-бейдж состояния операции.",
+        "critical_constraint_ids": [],
+        "constraints": []
+      }
+    ]
+  }
+}
