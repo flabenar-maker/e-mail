@@ -33,7 +33,7 @@
         "node_id": "459:29177",
         "source_root_node_id": "538:17235",
         "verified_at": "2026-09-06",
-        "structure_fingerprint": "sha256:4e6fb3545c4c376bc419a931c1864e2a004e3fe2739f0930a08b509982be5195"
+        "structure_fingerprint": "sha256:618e456ac9b5a2723c7c5dec1cd02c8fda01aaf35d9efbe07e75664a02668b9c"
       },
       "variants": [
         {
@@ -775,7 +775,7 @@
         "node_id": "459:30151",
         "source_root_node_id": "538:17235",
         "verified_at": "2026-09-06",
-        "structure_fingerprint": "sha256:fec8898c96cfb4d08641e9e72a0b149549e6d167bac5b6d0fec320a191d372e3"
+        "structure_fingerprint": "sha256:75987410fc1c2c86234378a0beaba82438776ded423032b7b5ae179cbd000f82"
       },
       "variants": [
         {
@@ -1435,7 +1435,7 @@
         "node_id": "472:16999",
         "source_root_node_id": "538:17235",
         "verified_at": "2026-09-06",
-        "structure_fingerprint": "sha256:9f88021c0476010e71bbf7b29d53b469d4f9a2df73cb0d235e36af8b182a4100"
+        "structure_fingerprint": "sha256:95a24da336f01d7ab5dc9da2a78d6965eea4e62eb86f296221eedd7a214f0d03"
       },
       "variants": [
         {
@@ -2012,7 +2012,7 @@
         "node_id": "481:19664",
         "source_root_node_id": "538:17235",
         "verified_at": "2026-09-06",
-        "structure_fingerprint": "sha256:65ee0ee781107294b8c24edf04c379a858aed9fa67435b077f70981d328ea82c"
+        "structure_fingerprint": "sha256:422aaa33e22aab19999c7a1292d8a8a1d2ada2a1711a43fe13acdc2aeabd37bd"
       },
       "variants": [],
       "properties": [],
@@ -2180,7 +2180,7 @@
         "node_id": "481:19665",
         "source_root_node_id": "538:17235",
         "verified_at": "2026-09-06",
-        "structure_fingerprint": "sha256:65ee0ee781107294b8c24edf04c379a858aed9fa67435b077f70981d328ea82c"
+        "structure_fingerprint": "sha256:422aaa33e22aab19999c7a1292d8a8a1d2ada2a1711a43fe13acdc2aeabd37bd"
       },
       "variants": [],
       "properties": [],
@@ -2372,7 +2372,7 @@
         "node_id": "484:20039",
         "source_root_node_id": "538:17235",
         "verified_at": "2026-09-06",
-        "structure_fingerprint": "sha256:65ee0ee781107294b8c24edf04c379a858aed9fa67435b077f70981d328ea82c"
+        "structure_fingerprint": "sha256:422aaa33e22aab19999c7a1292d8a8a1d2ada2a1711a43fe13acdc2aeabd37bd"
       },
       "variants": [],
       "properties": [],
@@ -2540,7 +2540,7 @@
         "node_id": "484:20761",
         "source_root_node_id": "538:17235",
         "verified_at": "2026-09-06",
-        "structure_fingerprint": "sha256:2d6f8b6a12e30adf8bcf4c7429bef2efc69026b454eb8d030e4d738dd7a78185"
+        "structure_fingerprint": "sha256:7c4eb3c7a891ee19421002d0e3c173a8d3d8e88d3c63f79eca96ceaa832f3133"
       },
       "variants": [
         {
@@ -2975,7 +2975,7 @@
         "node_id": "491:22074",
         "source_root_node_id": "538:17235",
         "verified_at": "2026-09-06",
-        "structure_fingerprint": "sha256:65ee0ee781107294b8c24edf04c379a858aed9fa67435b077f70981d328ea82c"
+        "structure_fingerprint": "sha256:422aaa33e22aab19999c7a1292d8a8a1d2ada2a1711a43fe13acdc2aeabd37bd"
       },
       "variants": [],
       "properties": [],
@@ -3159,7 +3159,7 @@
         "node_id": "491:22178",
         "source_root_node_id": "538:17235",
         "verified_at": "2026-09-06",
-        "structure_fingerprint": "sha256:65ee0ee781107294b8c24edf04c379a858aed9fa67435b077f70981d328ea82c"
+        "structure_fingerprint": "sha256:422aaa33e22aab19999c7a1292d8a8a1d2ada2a1711a43fe13acdc2aeabd37bd"
       },
       "variants": [],
       "properties": [],
@@ -3327,7 +3327,7 @@
         "node_id": "497:25955",
         "source_root_node_id": "538:17235",
         "verified_at": "2026-09-06",
-        "structure_fingerprint": "sha256:1b8cbfa962e4ac051dca12b8465e2fc426c65d5bbb8b4f95fa62215e74bbf00d"
+        "structure_fingerprint": "sha256:934a451407ca42c240afb643574d709cf7ad0a1d52a1be900a040e879ca2a8cb"
       },
       "variants": [
         {
@@ -3680,7 +3680,7 @@
         "node_id": "497:26055",
         "source_root_node_id": "538:17235",
         "verified_at": "2026-09-06",
-        "structure_fingerprint": "sha256:8cc4d0b2b64294b1ff46b32f7cd9ae31d22d1634ea397c2461adf24ff1ff7332"
+        "structure_fingerprint": "sha256:aaac8d95e15a432bd03a8a15bcf7649d6a5fdf0c663112a094a20cf1ac3d95ee"
       },
       "variants": [
         {
@@ -4440,7 +4440,7 @@
         "node_id": "497:26103",
         "source_root_node_id": "538:17235",
         "verified_at": "2026-09-06",
-        "structure_fingerprint": "sha256:43dfb8ed20f616d688249225fe40b0b300161ed54f96cd9c504053037a3a7f30"
+        "structure_fingerprint": "sha256:fc8ca2877c103ab0c55d68549ddd9ae0c73d6b026b3c8e9acd24d7c127a18ffd"
       },
       "variants": [
         {
@@ -4851,7 +4851,7 @@
         "node_id": "502:24640",
         "source_root_node_id": "538:17235",
         "verified_at": "2026-09-06",
-        "structure_fingerprint": "sha256:d6ab43af949c3f9c4462d3e219b16e0bbb0a76665b4a5b43741479aaf0fc807f"
+        "structure_fingerprint": "sha256:3fea2963f91e1be0835f755e33c52c0f76e5d1621e072c60e8961d4c6b9993f6"
       },
       "variants": [
         {
@@ -5262,7 +5262,7 @@
         "node_id": "502:24695",
         "source_root_node_id": "538:17235",
         "verified_at": "2026-09-06",
-        "structure_fingerprint": "sha256:fed190071a2f0390ec4aa531470f219fd0fa9e431a01d23851c52e3fa55c79f8"
+        "structure_fingerprint": "sha256:30944ab19aba46ba7c110429cda55b57c4facf8431dda88faf8d64f7fc6b90cc"
       },
       "variants": [
         {
@@ -5834,7 +5834,7 @@
         "node_id": "502:25048",
         "source_root_node_id": "538:17235",
         "verified_at": "2026-09-06",
-        "structure_fingerprint": "sha256:7f481db19ed15610b2eef4e8c3fa1326e786d99dd0255a1217251fefd302dc44"
+        "structure_fingerprint": "sha256:ebab5d9ad57aa7c7a286c68e6b707ea7313421dde2452429aa0d7b38e686bd5e"
       },
       "variants": [
         {
@@ -6545,7 +6545,7 @@
         "node_id": "510:16701",
         "source_root_node_id": "538:17235",
         "verified_at": "2026-09-06",
-        "structure_fingerprint": "sha256:68021a34a4bac8d1391aae5a8e15fd67c825a6fa8c3dd042229fc15c8ee8ebee"
+        "structure_fingerprint": "sha256:e4c35712ed239f9c53da103500f69f1ede6fdfd9f8857321bba2a3df2f198bbd"
       },
       "variants": [
         {
@@ -7575,7 +7575,7 @@
         "node_id": "477:21327",
         "source_root_node_id": "538:17235",
         "verified_at": "2026-09-06",
-        "structure_fingerprint": "sha256:59e69eff491dbbe2bf3aa6f88639b9be8143154e6a6d0aa9dfe809f79221273d"
+        "structure_fingerprint": "sha256:704fdedacb635ee26473f02322df3336127dc96125a244f4a356bb132c033e9f"
       },
       "variants": [
         {
@@ -7994,7 +7994,7 @@
         "node_id": "1084:16996",
         "source_root_node_id": "538:17235",
         "verified_at": "2026-09-06",
-        "structure_fingerprint": "sha256:6f160c79ec070d65bfc83301c971db04b636bbbd78b00fad9ba41d05dd3ae27e"
+        "structure_fingerprint": "sha256:1cca4ddcec78df7b41644071d3118e82d7795b4f4a7e4c28ea46ef6afb5666cf"
       },
       "variants": [
         {
