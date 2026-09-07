@@ -103,7 +103,7 @@ function mapping(entries = [
   return {
     schema_version: "1.0.0",
     migration: "components-1-to-2",
-    components: entries,
+    libraries: { marketing: entries },
   };
 }
 
@@ -159,7 +159,7 @@ test("migration accepts only the 1.0.0 source schema", () => {
 });
 
 test("migration blocks a missing reviewed mapping entry", () => {
-  const entries = mapping().components.filter((entry) => entry.id !== "second");
+  const entries = mapping().libraries.marketing.filter((entry) => entry.id !== "second");
   assert.throws(
     () => migrateComponentDocument(legacyDocument(), mapping(entries)),
     (error) => error.code === "COMPONENT_MIGRATION_MAPPING_MISSING",
@@ -168,7 +168,7 @@ test("migration blocks a missing reviewed mapping entry", () => {
 
 test("migration blocks an extra reviewed mapping entry", () => {
   const entries = [
-    ...mapping().components,
+    ...mapping().libraries.marketing,
     {
       id: "extra",
       purpose: "Лишняя запись.",
@@ -183,7 +183,7 @@ test("migration blocks an extra reviewed mapping entry", () => {
 });
 
 test("migration blocks duplicate reviewed mapping IDs", () => {
-  const entries = [...mapping().components, structuredClone(mapping().components[0])];
+  const entries = [...mapping().libraries.marketing, structuredClone(mapping().libraries.marketing[0])];
   assert.throws(
     () => migrateComponentDocument(legacyDocument(), mapping(entries)),
     (error) => error.code === "COMPONENT_MIGRATION_MAPPING_DUPLICATE",
