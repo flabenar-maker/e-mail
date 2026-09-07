@@ -1015,3 +1015,122 @@ test("resolves immutable generated definitions and route policy", async () => {
   assert.equal(blocked.blockers[0].code, "CONTEXT_BUNDLE_ROUTE_UNKNOWN");
   assert.equal(blocked.blockers[0].path, "/route_id");
 });
+
+
+test("canonical routes declare exact shadow bundle policies", async () => {
+  const manifest = await canonicalManifest();
+  const policies = Object.fromEntries(
+    manifest.bundle_profiles.map((profile) => [
+      profile.id,
+      profile.generated_bundle,
+    ]),
+  );
+
+  assert.deepEqual(policies, {
+    "library-maintenance": {
+      status: "shadow",
+      static_source_ids: [
+        "repository-readme",
+        "email-figma-prompt",
+        "figma-component-naming-standard",
+        "library-maintenance-checkpoint",
+      ],
+      component_selection: "optional",
+      viewport_selection: "one-or-both",
+      foundation_selection: "explicit-or-referenced",
+      allowed_foundation_ids: [
+        "typography",
+        "spacing",
+        "assets",
+        "figma-naming",
+      ],
+      required_foundation_ids: [],
+    },
+    "component-onboarding": {
+      status: "shadow",
+      static_source_ids: [
+        "repository-readme",
+        "email-figma-prompt",
+        "figma-component-naming-standard",
+        "library-maintenance-checkpoint",
+      ],
+      component_selection: "optional",
+      viewport_selection: "both",
+      foundation_selection: "explicit-or-referenced",
+      allowed_foundation_ids: [
+        "typography",
+        "spacing",
+        "assets",
+        "figma-naming",
+      ],
+      required_foundation_ids: [],
+    },
+    "figma-description-sync": {
+      status: "shadow",
+      static_source_ids: [
+        "repository-readme",
+        "email-figma-prompt",
+        "library-maintenance-checkpoint",
+      ],
+      component_selection: "required",
+      viewport_selection: "both",
+      foundation_selection: "referenced",
+      allowed_foundation_ids: ["typography", "spacing", "assets"],
+      required_foundation_ids: [],
+    },
+    "figma-naming-audit": {
+      status: "shadow",
+      static_source_ids: [
+        "repository-readme",
+        "figma-component-naming-standard",
+        "library-maintenance-checkpoint",
+      ],
+      component_selection: "optional",
+      viewport_selection: "none",
+      foundation_selection: "explicit",
+      allowed_foundation_ids: ["figma-naming"],
+      required_foundation_ids: ["figma-naming"],
+    },
+    "migration-progress": {
+      status: "shadow",
+      static_source_ids: [
+        "repository-readme",
+        "migration-roadmap",
+        "library-maintenance-checkpoint",
+      ],
+      component_selection: "none",
+      viewport_selection: "none",
+      foundation_selection: "none",
+      allowed_foundation_ids: [],
+      required_foundation_ids: [],
+    },
+    "email-new-build": {
+      status: "shadow",
+      static_source_ids: [
+        "repository-readme",
+        "email-figma-prompt",
+        "email-build-checkpoint",
+        "email-project-brief",
+      ],
+      component_selection: "required",
+      viewport_selection: "both",
+      foundation_selection: "referenced",
+      allowed_foundation_ids: ["typography", "spacing", "assets"],
+      required_foundation_ids: [],
+    },
+    "email-continue-fix": {
+      status: "shadow",
+      static_source_ids: [
+        "repository-readme",
+        "email-figma-prompt",
+        "email-build-checkpoint",
+      ],
+      component_selection: "optional",
+      viewport_selection: "both",
+      foundation_selection: "referenced",
+      allowed_foundation_ids: ["typography", "spacing", "assets"],
+      required_foundation_ids: [],
+    },
+  });
+  assert.equal(Object.hasOwn(manifest, "generated_docs"), false);
+});
