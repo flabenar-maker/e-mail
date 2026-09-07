@@ -83,7 +83,7 @@
 - Produces: определения владельцев данных, обязательных полей полного contract и допустимой компактной Figma-проекции.
 - Preserves: foundations как владельцы общих rules и values; component records как владельцы только component-specific фактов.
 
-- [ ] **Step 1: Написать failing boundary test**
+- [x] **Step 1: Написать failing boundary test**
 
 Проверить наличие двух стандартов и обязательных утверждений:
 
@@ -100,7 +100,7 @@ assert.match(figmaStandard, /не является.*HTML/u);
 
 Проверить, что Figma standard не объявляет полные sections typography, spacing или весь email workflow.
 
-- [ ] **Step 2: Запустить RED**
+- [x] **Step 2: Запустить RED**
 
 Run:
 
@@ -110,7 +110,7 @@ node --test tests/characterization/component-documentation-boundary.test.mjs
 
 Expected: FAIL, потому что стандарты отсутствуют.
 
-- [ ] **Step 3: Написать component contract standard**
+- [x] **Step 3: Написать component contract standard**
 
 Зафиксировать обязательные группы данных:
 
@@ -128,7 +128,7 @@ Expected: FAIL, потому что стандарты отсутствуют.
 
 Уточнить: «полный» означает достаточный для однозначной реализации, а не инвентарь всех безвредных Figma-настроек.
 
-- [ ] **Step 4: Написать Figma Description standard**
+- [x] **Step 4: Написать Figma Description standard**
 
 Задать единственный порядок:
 
@@ -143,11 +143,11 @@ CRITICAL
 
 CRITICAL отсутствует при пустом списке. PURPOSE и CRITICAL берутся только из component record. Documentation link хранится отдельным полем Figma. Description не используется email-build routes.
 
-- [ ] **Step 5: Обновить master-spec**
+- [x] **Step 5: Обновить master-spec**
 
 Добавить новую ответственность источников, два target Core-файла, full registry projection, thin Figma projection и разделение route consumers.
 
-- [ ] **Step 6: Запустить GREEN и commit**
+- [x] **Step 6: Запустить GREEN и commit**
 
 Run:
 
@@ -179,7 +179,7 @@ git commit -m "docs: define component documentation contracts"
 - Produces: baseline обязательных component IDs, viewport trees, properties, assets, references, constraints и provenance, которые должны пережить migration.
 - Does not produce: новый текст Description или Figma mutation.
 
-- [ ] **Step 1: Сформировать characterization snapshot в тесте**
+- [x] **Step 1: Сформировать characterization snapshot в тесте**
 
 Для каждой component-записи вычислить canonical object без старого description.blocks:
 
@@ -199,7 +199,7 @@ git commit -m "docs: define component documentation contracts"
 
 Проверить точное число компонентов по трём библиотекам и уникальность stable IDs/Figma identity.
 
-- [ ] **Step 2: Зафиксировать high-risk assertions**
+- [x] **Step 2: Зафиксировать high-risk assertions**
 
 Проверить representative contracts:
 
@@ -210,7 +210,7 @@ git commit -m "docs: define component documentation contracts"
 - property-controlled visibility сохраняет property reference;
 - root template остаётся assembly shell, а не обычным content component.
 
-- [ ] **Step 3: Запустить baseline**
+- [x] **Step 3: Запустить baseline**
 
 Run:
 
@@ -220,7 +220,7 @@ node --test tests/characterization/component-documentation-boundary.test.mjs
 
 Expected: PASS до и после migration.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ~~~powershell
 git add tests/characterization/component-documentation-boundary.test.mjs
@@ -228,6 +228,12 @@ git commit -m "test: preserve component documentation semantics"
 ~~~
 
 ---
+
+### Исполнение Tasks 3–4 единым пакетом
+
+Tasks 3 и 4 выполняются атомарно: schema 2.0.0, migration converter, reviewed mapping и все три canonical registry должны завершать пакет вместе. Тесты `tests/components/*.test.mjs` входят в общий `npm test`, поэтому промежуточный runtime с новой schema и старыми data-файлами не публикуется.
+
+Компактный Description renderer и его comparison были подключены в этом пакете как обязательная runtime-зависимость существующей Figma snapshot-проверки. Это не закрывает Task 6: отдельные forbidden-content tests и окончательная проверка интерфейса остаются обязательными.
 
 ### Task 3: Заменить prose Description типизированной documentation-моделью
 
@@ -249,7 +255,7 @@ git commit -m "test: preserve component documentation semantics"
   - validateComponentDocumentation(record, index): diagnostics[].
 - Removes after migration: description.mode и description.blocks как canonical model.
 
-- [ ] **Step 1: Написать failing shape tests**
+- [x] **Step 1: Написать failing shape tests**
 
 Проверить accepted shape:
 
@@ -268,7 +274,7 @@ constraints:
 
 Добавить negative cases: duplicate ID, unknown constraint reference, empty purpose, unsupported scope/kind/severity, extra field.
 
-- [ ] **Step 2: Запустить RED**
+- [x] **Step 2: Запустить RED**
 
 Run:
 
@@ -278,11 +284,11 @@ node --test tests/components/component-documentation-model.test.mjs
 
 Expected: FAIL на старой schema.
 
-- [ ] **Step 3: Поднять component schema major version**
+- [x] **Step 3: Поднять component schema major version**
 
 Удаление/rename обязательного description field является breaking migration. Поднять schema version до `2.0.0`, не поддерживать два runtime-формата параллельно.
 
-- [ ] **Step 4: Написать failing migration tests**
+- [x] **Step 4: Написать failing migration tests**
 
 Проверить, что converter:
 
@@ -301,11 +307,11 @@ node --test tests/components/component-documentation-migration.test.mjs
 
 Expected: FAIL, converter отсутствует.
 
-- [ ] **Step 5: Реализовать migration converter и reviewed mapping**
+- [x] **Step 5: Реализовать migration converter и reviewed mapping**
 
 Converter не интерпретирует свободный prose автоматически. Mapping содержит только недостающие `purpose`, `constraints` и `critical_constraint_ids`; он является временным историческим migration input, а не runtime source или foundation.
 
-- [ ] **Step 6: Реализовать semantic validation**
+- [x] **Step 6: Реализовать semantic validation**
 
 Обязательные diagnostics:
 
@@ -318,7 +324,7 @@ Converter не интерпретирует свободный prose автом�
 
 Каждый diagnostic содержит component ID и JSON-pointer path.
 
-- [ ] **Step 7: Реализовать render-type derivation**
+- [x] **Step 7: Реализовать render-type derivation**
 
 Алгоритм читает все фактически выводимые render modes выбранных contracts:
 
@@ -327,7 +333,7 @@ Converter не интерпретирует свободный prose автом�
 - HTML и image output вместе → HYBRID;
 - none или неоднозначный Figma-source-only contract → typed blocker, не догадка.
 
-- [ ] **Step 8: Запустить GREEN и commit**
+- [x] **Step 8: Запустить GREEN и commit**
 
 Run:
 
@@ -360,11 +366,11 @@ git commit -m "feat: model component documentation contracts"
 - Consumes: новая schema и characterization baseline.
 - Produces: один текущий format всех component records без description.blocks.
 
-- [ ] **Step 1: Сгенерировать и проверить migration output**
+- [x] **Step 1: Сгенерировать и проверить migration output**
 
 Run converter для всех трёх registries во временную папку fixture, проверить schema 2.0.0 и characterization equivalence. При blocker не исправлять mapping догадкой: вернуться к конкретной component-записи и доказать purpose/constraint по baseline.
 
-- [ ] **Step 2: Мигрировать shared records**
+- [x] **Step 2: Мигрировать shared records**
 
 Для каждой записи:
 
@@ -376,33 +382,33 @@ Run converter для всех трёх registries во временную пап
 
 Run tests. Expected: PASS.
 
-- [ ] **Step 3: Commit shared migration**
+- [x] **Step 3: Commit shared migration**
 
 ~~~powershell
 git add data/components/shared.yaml
 git commit -m "data: migrate shared component documentation"
 ~~~
 
-- [ ] **Step 4: Мигрировать marketing records**
+- [x] **Step 4: Мигрировать marketing records**
 
 Повторить ту же операцию. Особо проверить cards, Banner/Secondary, Banner/App-Download, adaptive @2x images и composite export boundaries.
 
 Run tests. Expected: PASS.
 
-- [ ] **Step 5: Commit marketing migration**
+- [x] **Step 5: Commit marketing migration**
 
 ~~~powershell
 git add data/components/marketing.yaml
 git commit -m "data: migrate marketing component documentation"
 ~~~
 
-- [ ] **Step 6: Мигрировать service records**
+- [x] **Step 6: Мигрировать service records**
 
 Особо проверить root/self inset, NPS gaps, alert/notification nested components и property-controlled visibility.
 
 Run tests. Expected: PASS.
 
-- [ ] **Step 7: Commit service migration**
+- [x] **Step 7: Commit service migration**
 
 ~~~powershell
 git add data/components/service.yaml tests/helpers/system-fixture.mjs
