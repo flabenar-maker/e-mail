@@ -23,14 +23,9 @@
     "system": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "id",
-        "repository"
-      ],
+      "required": ["id", "repository"],
       "properties": {
-        "id": {
-          "$ref": "#/$defs/id"
-        },
+        "id": { "$ref": "#/$defs/id" },
         "repository": {
           "type": "string",
           "minLength": 1,
@@ -41,118 +36,79 @@
     "entrypoints": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "repository",
-        "bootstrap"
-      ],
+      "required": ["repository", "bootstrap"],
       "properties": {
-        "repository": {
-          "$ref": "#/$defs/repoPath"
-        },
-        "bootstrap": {
-          "$ref": "#/$defs/repoPath"
-        }
+        "repository": { "$ref": "#/$defs/repoPath" },
+        "bootstrap": { "$ref": "#/$defs/repoPath" }
       }
     },
     "sources": {
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
-      "items": {
-        "$ref": "#/$defs/source"
-      }
+      "items": { "$ref": "#/$defs/source" }
     },
     "bundle_profiles": {
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
-      "items": {
-        "$ref": "#/$defs/bundleProfile"
-      }
+      "items": { "$ref": "#/$defs/bundleProfile" }
     },
     "routes": {
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
-      "items": {
-        "$ref": "#/$defs/route"
-      }
+      "items": { "$ref": "#/$defs/route" }
     },
     "skills": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "required",
-        "optional"
-      ],
+      "required": ["required", "optional"],
       "properties": {
         "required": {
           "type": "array",
           "minItems": 1,
           "uniqueItems": true,
-          "items": {
-            "$ref": "#/$defs/skill"
-          }
+          "items": { "$ref": "#/$defs/skill" }
         },
         "optional": {
           "type": "array",
           "uniqueItems": true,
-          "items": {
-            "$ref": "#/$defs/skill"
-          }
+          "items": { "$ref": "#/$defs/skill" }
         }
       }
     },
     "plugins": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "required",
-        "optional"
-      ],
+      "required": ["required", "optional"],
       "properties": {
         "required": {
           "type": "array",
           "minItems": 1,
           "uniqueItems": true,
-          "items": {
-            "$ref": "#/$defs/nonEmptyString"
-          }
+          "items": { "$ref": "#/$defs/nonEmptyString" }
         },
         "optional": {
           "type": "array",
           "uniqueItems": true,
-          "items": {
-            "$ref": "#/$defs/nonEmptyString"
-          }
+          "items": { "$ref": "#/$defs/nonEmptyString" }
         }
       }
     },
     "figma": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "file_key",
-        "roots"
-      ],
+      "required": ["file_key", "roots"],
       "properties": {
-        "file_key": {
-          "$ref": "#/$defs/nonEmptyString"
-        },
+        "file_key": { "$ref": "#/$defs/nonEmptyString" },
         "roots": {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "marketing",
-            "service"
-          ],
+          "required": ["marketing", "service"],
           "properties": {
-            "marketing": {
-              "$ref": "#/$defs/figmaNodeId"
-            },
-            "service": {
-              "$ref": "#/$defs/figmaNodeId"
-            }
+            "marketing": { "$ref": "#/$defs/figmaNodeId" },
+            "service": { "$ref": "#/$defs/figmaNodeId" }
           }
         }
       }
@@ -160,46 +116,27 @@
     "bootstrap": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "portable_config",
-        "verifier"
-      ],
+      "required": ["portable_config", "verifier"],
       "properties": {
-        "portable_config": {
-          "$ref": "#/$defs/repoPath"
-        },
-        "verifier": {
-          "$ref": "#/$defs/repoPath"
-        }
+        "portable_config": { "$ref": "#/$defs/repoPath" },
+        "verifier": { "$ref": "#/$defs/repoPath" }
       }
     },
     "commands": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "validate",
-        "test",
-        "verify"
-      ],
+      "required": ["validate", "test", "verify"],
       "properties": {
-        "validate": {
-          "$ref": "#/$defs/nonEmptyString"
-        },
-        "test": {
-          "$ref": "#/$defs/nonEmptyString"
-        },
-        "verify": {
-          "$ref": "#/$defs/nonEmptyString"
-        }
+        "validate": { "$ref": "#/$defs/nonEmptyString" },
+        "test": { "$ref": "#/$defs/nonEmptyString" },
+        "verify": { "$ref": "#/$defs/nonEmptyString" }
       }
     },
     "generated_docs": {
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
-      "items": {
-        "$ref": "#/$defs/generatedDoc"
-      }
+      "items": { "$ref": "#/$defs/generatedDoc" }
     }
   },
   "$defs": {
@@ -223,15 +160,9 @@
     "source": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "id",
-        "kind",
-        "path"
-      ],
+      "required": ["id", "kind", "path"],
       "properties": {
-        "id": {
-          "$ref": "#/$defs/id"
-        },
+        "id": { "$ref": "#/$defs/id" },
         "kind": {
           "enum": [
             "entrypoint",
@@ -243,87 +174,50 @@
             "generated"
           ]
         },
-        "path": {
-          "$ref": "#/$defs/repoPath"
-        }
+        "path": { "$ref": "#/$defs/repoPath" }
       }
     },
     "bundleProfile": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "id",
-        "source_ids"
-      ],
+      "required": ["id", "source_ids"],
       "properties": {
-        "id": {
-          "$ref": "#/$defs/id"
-        },
+        "id": { "$ref": "#/$defs/id" },
         "source_ids": {
           "type": "array",
           "minItems": 1,
           "uniqueItems": true,
-          "items": {
-            "$ref": "#/$defs/id"
-          }
+          "items": { "$ref": "#/$defs/id" }
         },
-        "generated_bundle": {
-          "$ref": "#/$defs/generatedBundle"
-        }
+        "generated_bundle": { "$ref": "#/$defs/generatedBundle" }
       }
     },
     "route": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "id",
-        "workflow_source_id",
-        "bundle_profile_id"
-      ],
+      "required": ["id", "workflow_source_id", "bundle_profile_id"],
       "properties": {
-        "id": {
-          "$ref": "#/$defs/id"
-        },
-        "workflow_source_id": {
-          "$ref": "#/$defs/id"
-        },
-        "bundle_profile_id": {
-          "$ref": "#/$defs/id"
-        }
+        "id": { "$ref": "#/$defs/id" },
+        "workflow_source_id": { "$ref": "#/$defs/id" },
+        "bundle_profile_id": { "$ref": "#/$defs/id" }
       }
     },
     "skill": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "id",
-        "path"
-      ],
+      "required": ["id", "path"],
       "properties": {
-        "id": {
-          "$ref": "#/$defs/id"
-        },
-        "path": {
-          "$ref": "#/$defs/repoPath"
-        }
+        "id": { "$ref": "#/$defs/id" },
+        "path": { "$ref": "#/$defs/repoPath" }
       }
     },
     "generatedDoc": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "id",
-        "output_source_id",
-        "renderer",
-        "input_source_ids"
-      ],
+      "required": ["id", "output_source_id", "renderer", "input_source_ids"],
       "properties": {
-        "id": {
-          "$ref": "#/$defs/id"
-        },
-        "output_source_id": {
-          "$ref": "#/$defs/id"
-        },
+        "id": { "$ref": "#/$defs/id" },
+        "output_source_id": { "$ref": "#/$defs/id" },
         "renderer": {
           "enum": [
             "component-registry",
@@ -336,9 +230,7 @@
           "type": "array",
           "minItems": 1,
           "uniqueItems": true,
-          "items": {
-            "$ref": "#/$defs/id"
-          }
+          "items": { "$ref": "#/$defs/id" }
         }
       }
     },
@@ -355,30 +247,18 @@
         "required_foundation_ids"
       ],
       "properties": {
-        "status": {
-          "const": "shadow"
-        },
+        "status": { "const": "shadow" },
         "static_source_ids": {
           "type": "array",
           "minItems": 1,
           "uniqueItems": true,
-          "items": {
-            "$ref": "#/$defs/id"
-          }
+          "items": { "$ref": "#/$defs/id" }
         },
         "component_selection": {
-          "enum": [
-            "none",
-            "optional",
-            "required"
-          ]
+          "enum": ["none", "optional", "required"]
         },
         "viewport_selection": {
-          "enum": [
-            "none",
-            "one-or-both",
-            "both"
-          ]
+          "enum": ["none", "one-or-both", "both"]
         },
         "foundation_selection": {
           "enum": [
@@ -391,16 +271,12 @@
         "allowed_foundation_ids": {
           "type": "array",
           "uniqueItems": true,
-          "items": {
-            "$ref": "#/$defs/id"
-          }
+          "items": { "$ref": "#/$defs/id" }
         },
         "required_foundation_ids": {
           "type": "array",
           "uniqueItems": true,
-          "items": {
-            "$ref": "#/$defs/id"
-          }
+          "items": { "$ref": "#/$defs/id" }
         }
       }
     }
