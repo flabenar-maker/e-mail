@@ -2,9 +2,9 @@
 
 Статус документа: ручной checkpoint для восстановления контекста.
 
-Последнее ручное обновление: 2026-09-05.
+Последнее ручное обновление: 2026-09-07.
 
-Снимок `main` на момент обновления: `edacb9376c66fe850a9418e57fe6e311b49bc00c`.
+Снимок `main` на момент обновления: `6977cc262a0b429bf589570a0d429b0e41dffdef`.
 
 ## 1. Зачем нужен этот файл
 
@@ -81,102 +81,88 @@
 
 ## 6. Уже подтверждённое состояние
 
-На снимке `main`, указанном в начале документа, завершены:
+На снимке `main@6977cc262a0b429bf589570a0d429b0e41dffdef` завершены и слиты:
 
-1. master-спецификация целевой системы и общий migration roadmap;
-2. системный foundation:
-   - единый manifest;
-   - schema и validation CLI;
-   - CI, bootstrap и characterization-защита;
-3. typography foundation pilot в shadow-режиме;
-4. spacing foundation:
-   - золотое правило для разработки библиотеки;
-   - exact-only resolver;
-   - запрет использовать design-time правило как свободу выбора отступов при HTML-вёрстке;
-5. assets foundation в shadow-режиме;
-6. Figma naming foundation в shadow-режиме:
-   - строгие data и schema;
-   - отдельные foundation loader, generator и candidate validator;
-   - manifest wiring, boundary tests и preserved-source protection;
-7. migration-progress route и обязательная сверка roadmap;
-8. maintenance skill для manifest-driven работы.
+1. master-спецификация и migration roadmap;
+2. системный foundation: manifest, schema, validation, CI и bootstrap;
+3. typography foundation pilot;
+4. spacing foundation;
+5. assets foundation;
+6. Figma naming foundation;
+7. structured component registry:
+   - три component data-файла;
+   - строгая schema;
+   - exact resolution и unregistered-component blocker;
+   - read-only Figma drift checks;
+8. implementation plan generated docs и route-specific context bundles.
 
-Assets foundation реализован через [PR #33](https://github.com/flabenar-maker/e-mail/pull/33), итоговый commit: `fe1a0e37b4d40533706c88d73f5c293c8860b3ee`.
+Structured component registry реализован через [PR #40](https://github.com/flabenar-maker/e-mail/pull/40), итоговый commit: `90f1e01365c80b7553b520e8d47c2e5bb7f88660`.
 
-Figma naming foundation реализован через [PR #37](https://github.com/flabenar-maker/e-mail/pull/37), итоговый commit: `edacb9376c66fe850a9418e57fe6e311b49bc00c`.
+Пакет №1 этапа 7 реализован только в draft [PR #43](https://github.com/flabenar-maker/e-mail/pull/43), branch `codex/implement-generated-docs-context-bundles`, head на момент checkpoint: `c546f28e6072fd34ba76aeb328fe168682cee846`. Он ещё не находится в `main`.
 
-Оба подэтапа общего этапа 5 находятся в `main`. Их техническая реализация не меняла Figma, descriptions, component contracts, готовые письма или рабочие bundle profiles. Старые Markdown-источники остаются активной базой до предусмотренного cutover.
+Пакет №1 добавляет shadow manifest capability, route policies и deterministic digest. Он не меняет Core, workflows, skills, component data, registry или Figma.
 
 ## 7. Текущий этап
 
-Техническая реализация этапа 5 завершена. Сейчас выполняется только post-merge фиксация статуса:
+Во время подготовки пакета №2 выявлена архитектурная проблема: текущая `description.blocks` модель сохраняет полную prose-копию component facts. Если сразу выполнить Task 4 generated docs, новый реестр закрепит это дублирование.
 
-- в draft [PR #38](https://github.com/flabenar-maker/e-mail/pull/38) roadmap отмечает подэтап 5Б и общий этап 5 завершёнными;
-- этот checkpoint обновляется в том же PR по прямой команде пользователя;
-- PR основан на `main` commit `edacb9376c66fe850a9418e57fe6e311b49bc00c`;
-- системные проверки PR прошли;
-- до отдельной команды пользователя PR не сливается.
+Согласовано новое решение:
 
-Следующий технический этап после слияния PR #38 — **6. Структурированный component registry**. Его implementation plan ещё не создан, поэтому реализацию schema или перенос component contracts начинать нельзя.
+- полный component registry генерируется из structured contract;
+- compact Figma Description является отдельной thin projection;
+- Figma Description не является источником HTML-вёрстки;
+- общие foundations не копируются в component records;
+- новый компонент проходит тот же contract/onboarding process без локальных schema-исключений.
+
+Для этого добавлен prerequisite-подэтап **7A. Component documentation contracts**. Его implementation plan: [component documentation contracts](2026-09-07-cupis-component-documentation-contracts.md).
+
+Draft PR #43 остаётся сохранённым. Tasks 1–3 не выбрасываются, но пакет №2 и Task 4 приостановлены до merge подэтапа 7A.
 
 ## 8. Следующий точный шаг
 
-1. По отдельной команде пользователя слить PR #38.
-2. Закрепить новый SHA `main` и повторно открыть roadmap и папку plans.
-3. Сверить master-спецификацию, текущие Markdown-реестры, foundations и manifest boundaries для этапа 6.
-4. Подготовить отдельный implementation plan структурированного component registry:
-   - data model и schemas;
-   - разделение общего, маркетингового и сервисного реестров;
-   - provenance, variants, properties и ссылки на foundations;
-   - blocker для незарегистрированного компонента;
-   - characterization, RED/GREEN и allowed diff.
-5. Отдельно согласовать план с пользователем.
-6. Только после согласования создать implementation branch от свежего `main`.
+1. Проверить и по отдельной команде слить plan-only PR подэтапа 7A.
+2. Закрепить новый SHA `main` и повторно открыть manifest, roadmap, active context и оба implementation plans.
+3. Создать отдельную implementation branch для component documentation contracts.
+4. Реализовать standards, characterization, schema migration, component data migration, full registry renderer и compact Figma Description renderer.
+5. Не изменять Figma в техническом implementation PR.
+6. После проверки и отдельной команды слить implementation PR 7A.
+7. Обновить основание PR #43, повторно проверить пакет №1 и продолжить изменённый Task 4.
+8. Figma Description sync выполнять позднее отдельной MCP-only задачей после preview, impact report и отдельного разрешения.
 
-До утверждения плана этапа 6 не переносить component contracts, не менять Figma descriptions и не подключать новые registry sources к рабочим bundles.
+## 9. Стабильная граница component documentation
 
-## 9. Реализованная граница Figma naming foundation
-
-Figma naming foundation уже существует как отдельный shadow-источник универсальных правил нейминга.
-
-Стабильная архитектурная граница:
-
-- `data/foundations/figma-naming.yaml` владеет машинно-читаемыми универсальными definitions;
-- schema и foundation validator проверяют структуру и семантические границы;
-- generator предлагает одно имя только из явно подтверждённой семантики;
-- candidate validator проверяет только явно переданное имя и не сканирует библиотеку;
-- generator и validator не читают и не изменяют Figma;
-- конкретные component names, node IDs, descriptions, размеры и rename maps не входят в foundation;
-- `@2x` и `@4x` сохраняются как обязательная часть имени asset owner;
-- foundation пока отсутствует в рабочих bundles и не активирован в maintenance skill.
-
-Подключение maintenance skill, impact report и Figma mutation остаются отдельными будущими этапами. Существующую библиотеку нельзя автоматически переименовывать только потому, что foundation уже создан.
+- `data/components/*.yaml` владеют component-specific implementation facts.
+- Полный Markdown component registry является generated human-readable projection.
+- Figma Description содержит только `CUPIS ID`, `PURPOSE`, derived `RENDER` и optional `CRITICAL`.
+- PURPOSE и critical constraints принадлежат structured record, а не Figma.
+- Полная prose-копия contracts внутри component record запрещена.
+- Mobile и Desktop остаются независимыми законченными contracts.
+- Email-build bundle получает selected resolved contracts и не получает component-authoring standards или Figma Description.
+- Figma Description может быть синхронизирован только после GitHub data validation и отдельного Figma mutation gate.
+- Figma sync изменяет только явно разрешённые metadata fields и заканчивается MCP readback.
+- Legacy Markdown registry сохраняется как comparison baseline до cutover.
 
 ## 10. Карта этапов миграции
 
-Эта таблица помогает быстро восстановить маршрут. Канонический статус всегда перепроверяется по [migration roadmap](2026-08-25-cupis-migration-roadmap.md) и фактическому `main`.
-
-| Этап | Содержание | Статус на 2026-09-05 |
+| Этап | Содержание | Статус на 2026-09-07 |
 |---:|---|---|
 | 1 | Master-спецификация и первый implementation plan | Завершён |
 | 2 | Системный foundation: manifest, validation, CI и bootstrap | Завершён |
 | 3 | Typography foundation pilot | Завершён |
 | 4 | Spacing foundation | Завершён |
-| 5 | Assets foundation и Figma naming foundation | Реализован в `main`; статус фиксируется PR #38 |
-| 6 | Структурированный component registry | Следующий; implementation plan ещё не создан |
-| 7 | Generated docs и route-specific context bundles | Ожидает этап 6 |
+| 5 | Assets foundation и Figma naming foundation | Завершён |
+| 6 | Структурированный component registry | Завершён в PR #40 |
+| 7, пакет №1 | Generated-layer manifest capability и digest | Реализован только в draft PR #43 |
+| 7A | Component documentation contracts | Plan фиксируется; реализация не начата |
+| 7, пакет №2+ | Generated docs и route-specific context bundles | Ожидает 7A |
 | 8 | Разделение Core и workflows, переход на новые источники | Ожидает этап 7 |
 | 9 | Переключение maintenance skill на итоговые bundles | Ожидает этап 8 |
-| 10 | Стандарт и workflow разработки новых блоков | Запланирован после системного cutover maintenance |
+| 10 | Стандарт и workflow разработки новых блоков | Ожидает системный cutover maintenance |
 | 11 | Навык разработки новых блоков | Ожидает этап 10 |
 | 12 | Навык HTML-вёрстки конкретных писем | Ожидает этапы 10–11 |
-| 13 | Shadow comparison старых и новых источников | Ожидает готовности всех маршрутов |
-| 14 | Общий cutover на structured-систему | Ожидает успешный shadow comparison |
-| 15 | Удаление старых дублей и временных migration-артефактов | Только после стабильного cutover |
-
-Коротко: **этапы 1–5 сделаны → сейчас фиксируется статус → далее планируем этап 6 → затем последовательно выполняем этапы 7–15**.
-
-Нельзя перескакивать к следующему этапу только потому, что он указан в таблице. Каждый технический этап сначала получает отдельный implementation plan и согласование.
+| 13 | Shadow comparison | Ожидает готовности маршрутов |
+| 14 | Общий cutover | Ожидает shadow comparison |
+| 15 | Удаление legacy-дублей и migration-артефактов | Только после стабильного cutover |
 
 ## 11. Стабильные рабочие решения
 
@@ -209,11 +195,13 @@ Figma naming foundation уже существует как отдельный sh
 
 ### Component descriptions и registry
 
-- Общие правила всего письма не дублируются в Description компонента.
-- Description объясняет только то, как Codex должен реализовать конкретный блок внутри письма.
-- После изменения Description обновляется соответствующая запись registry в той же задаче.
-- Email template/root shell является корневой оболочкой письма, а не обычным контентным компонентом, но его контракт всё равно должен объяснять, как собирать письмо.
-- Новый незарегистрированный компонент сначала проходит анализ и onboarding; визуальное сходство не делает его автоматически допустимым.
+- Полное точное описание реализации хранится в structured component contract и показывается в generated registry.
+- Figma Description является короткой generated-проекцией, а не вторым источником и не инструкцией HTML-build.
+- Общие правила письма, typography, spacing, assets и naming не копируются в component records.
+- Component record хранит purpose, independent Mobile/Desktop contracts, properties, assets, dependencies и component-specific constraints.
+- Email template/root shell является корневой оболочкой письма, а не обычным content component; его contract всё равно описывает assembly semantics.
+- Новый незарегистрированный component сначала проходит анализ и onboarding; визуальное сходство не делает его автоматически допустимым.
+- Изменение contract сначала проходит GitHub validation/generated preview; Figma Description меняется только отдельной разрешённой MCP-only операцией.
 
 ### HTML-вёрстка
 
@@ -314,14 +302,13 @@ Figma naming foundation является shadow-источником и не з�
 - [System manifest](../../../system/manifest.yaml)
 - [Master-spec](../specs/2026-08-24-cupis-structured-email-system-design.md)
 - [Migration roadmap](2026-08-25-cupis-migration-roadmap.md)
-- [Assets foundation implementation plan](2026-08-26-cupis-assets-foundation.md)
+- [Structured component registry plan](2026-09-05-cupis-structured-component-registry.md)
+- [Structured component registry PR #40](https://github.com/flabenar-maker/e-mail/pull/40)
+- [Component documentation contracts plan](2026-09-07-cupis-component-documentation-contracts.md)
+- [Generated docs and context bundles plan](2026-09-07-cupis-generated-docs-context-bundles.md)
+- [Generated docs draft PR #43](https://github.com/flabenar-maker/e-mail/pull/43)
 - [Assets foundation](../../../data/foundations/assets.yaml)
-- [Assets schema](../../../schemas/assets.schema.json)
-- [Figma naming implementation plan](2026-08-27-cupis-figma-naming-foundation.md)
 - [Figma naming foundation](../../../data/foundations/figma-naming.yaml)
-- [Figma naming schema](../../../schemas/figma-naming.schema.json)
-- [Figma naming implementation PR #37](https://github.com/flabenar-maker/e-mail/pull/37)
-- [Roadmap status PR #38](https://github.com/flabenar-maker/e-mail/pull/38)
 - [Library maintenance checkpoint](../../../workflows/library-maintenance-checkpoint.md)
 - [Core email/Figma prompt](../../../core/email-figma-prompt.md)
-- [Component descriptions registry](../../../registry/email-component-descriptions-registry.md)
+- [Legacy component descriptions registry](../../../registry/email-component-descriptions-registry.md)
