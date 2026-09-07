@@ -571,7 +571,7 @@ git commit -m "feat: add deterministic content digest"
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: component-registry -->
 <!-- source-digest: sha256:... -->
-<!-- schema-versions: components=1.0.0 -->
+<!-- schema-versions: components=2.0.0 -->
 ```
 
 Тест проверяет отсутствие даты/времени и равенство двух последовательных render.
@@ -942,7 +942,7 @@ Diagnostics должны указывать `component-id/contracts/<viewport>/.
   },
   source_versions: {
     manifest: manifest.schema_version,
-    components: "1.0.0",
+    components: "2.0.0",
     typography: "1.0.0",
     spacing: "1.0.0",
     assets: "1.0.0",
