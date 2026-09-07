@@ -10,6 +10,8 @@
 
 **Spec:** `docs/superpowers/specs/2026-08-24-cupis-structured-email-system-design.md`, разделы 2, 3, 4, 6, 9, 10, 13–16.
 
+**Prerequisite:** `docs/superpowers/plans/2026-09-07-cupis-component-documentation-contracts.md` должен быть реализован и слит до Task 4. Tasks 1–3 этого плана сохраняют смысл и могут существовать в draft PR до prerequisite, но generated component documentation по старой `description.blocks` модели запрещена.
+
 ## Global Constraints
 
 - Перед реализацией повторно закрепить актуальный `main`; этот план подготовлен по `main@90f1e01365c80b7553b520e8d47c2e5bb7f88660`.
@@ -18,6 +20,8 @@
 - Не включать старый Markdown-реестр компонентов или типографики в новый bundle одновременно со structured records.
 - Не извлекать отдельные секции из монолитных Markdown-файлов по заголовкам. Сужение Core до отдельных файлов выполняется на этапе 8.
 - Generated docs являются представлением, а не источником истины. В каждом файле должен быть запрет ручного редактирования, версии входных schemas и детерминированный SHA-256 digest.
+- Полный component registry строится из structured contract, а compact Figma Description является отдельной auxiliary projection; сохранённая полная prose-копия запрещена.
+- `email-new-build` и `email-continue-fix` не получают Figma Description или component-authoring standards как instruction.
 - Context bundle не коммитится, не содержит timestamp и не пишет файлы. Одинаковый вход обязан давать побайтово одинаковый stdout.
 - Выбор компонента допускается только по stable ID или полной Figma identity. Fuzzy name matching запрещён.
 - Неактивный, неизвестный, неполный или неразрешимый компонент блокирует bundle с точным diagnostic; автоматическое продолжение запрещено.
@@ -548,7 +552,8 @@ git commit -m "feat: add deterministic content digest"
 - Create: `scripts/lib/generated-docs.mjs`
 - Create: `tests/generation/generated-docs.test.mjs`
 - Modify: `scripts/lib/component-registry.mjs`
-- Use: `scripts/lib/component-description.mjs`
+- Use: `scripts/lib/component-registry-doc.mjs`
+- Use only for auxiliary projection: `scripts/lib/component-description.mjs`
 
 **Interfaces:**
 - Consumes: manifest-generated definitions, validated foundations, three component registries.
@@ -598,9 +603,10 @@ export function listComponentRecords(registries) {
 - variants и component properties;
 - Mobile и Desktop как отдельные секции без inheritance;
 - asset owner, export boundary, dimensions, ratio и profile IDs;
-- rendered Description через `renderComponentDescription`;
+- полный human-readable contract через `renderComponentRegistrySection`;
+- compact Figma Description через `renderFigmaComponentDescription` только как явно помеченную auxiliary projection;
 - Figma provenance и structure fingerprint;
-- для `description.mode: none` — явную отметку `Figma source only; independent Description absent`.
+- для компонента без самостоятельного output contract — явную типизированную отметку причины, не восстановление текста из legacy registry.
 
 Порядок: library `shared → marketing → service`, затем stable ID.
 
@@ -870,7 +876,8 @@ Bundle component entry:
   contracts: Object.fromEntries(
     viewports.map((viewport) => [viewport, record.contracts[viewport]]),
   ),
-  rendered_description: renderComponentDescription(record, index),
+  documentation: structuredClone(record.documentation),
+  constraints: structuredClone(record.constraints),
   provenance: record.provenance,
 }
 ```
@@ -957,7 +964,7 @@ Digest считается без собственного поля `digest`.
 - оба viewport contract присутствуют;
 - не присутствуют unrelated component IDs;
 - присутствуют только транзитивные nested components;
-- не присутствуют `component-descriptions-registry`, `typography-registry`, naming standard и maintenance workflow;
+- не присутствуют `component-descriptions-registry`, `typography-registry`, naming standard, maintenance workflow, compact Figma Description или component-authoring standards;
 - foundation list является точным множеством references выбранного closure;
 - повторный build даёт deepEqual object и тот же digest.
 
@@ -1342,25 +1349,26 @@ PR summary должен перечислить:
 ## Acceptance Criteria
 
 1. Четыре файла `docs/generated/*.md` полностью выводятся из structured data и повторно генерируются без diff.
-2. У каждого generated doc есть renderer ID, schema versions и deterministic source digest.
-3. Ручное изменение или отсутствие generated doc блокирует `npm run validate`.
-4. Все семь текущих routes имеют shadow bundle policy, но legacy `source_ids` и skill behavior не меняются.
-5. Bundle создаётся только в памяти/stdout и не оставляет файлов.
-6. Route получает только перечисленные static sources.
-7. Bundle содержит только выбранные active components и транзитивные component dependencies.
-8. Bundle содержит только запрошенные viewport contracts; `email-new-build` всегда содержит Mobile и Desktop.
-9. Все component/property/asset/foundation references замкнуты внутри bundle.
-10. Неизвестный или неактивный компонент, missing contract и unresolved reference блокируют сборку точным diagnostic.
-11. Старые component/typography Markdown registries не смешиваются со structured records в bundle.
-12. Spacing для email route присутствует только как точная referenced definition, а не как design-time resolver rule.
-13. `npm run generate:check`, `npm run validate`, `npm test`, `npm run verify` и Windows bootstrap checks проходят.
-14. Core, workflows, skills, structured facts, Figma и локальные письма не изменены.
-15. Implementation PR остаётся draft до отдельной команды пользователя на merge.
+2. Component registry использует полный contract renderer; compact Figma Description выводится только как auxiliary projection и не владеет implementation facts.
+3. У каждого generated doc есть renderer ID, schema versions и deterministic source digest.
+4. Ручное изменение или отсутствие generated doc блокирует `npm run validate`.
+5. Все семь текущих routes имеют shadow bundle policy, но legacy `source_ids` и skill behavior не меняются.
+6. Bundle создаётся только в памяти/stdout и не оставляет файлов.
+7. Route получает только перечисленные static sources.
+8. Bundle содержит только выбранные active components и транзитивные component dependencies.
+9. Bundle содержит только запрошенные viewport contracts; `email-new-build` всегда содержит Mobile и Desktop.
+10. Все component/property/asset/foundation references замкнуты внутри bundle.
+11. Неизвестный или неактивный компонент, missing contract и unresolved reference блокируют сборку точным diagnostic.
+12. Старые component/typography Markdown registries не смешиваются со structured records в bundle.
+13. Spacing для email route присутствует только как точная referenced definition, а не как design-time resolver rule.
+14. `npm run generate:check`, `npm run validate`, `npm test`, `npm run verify` и Windows bootstrap checks проходят.
+15. Core, workflows, skills, structured facts, Figma и локальные письма не изменены.
+16. Implementation PR остаётся draft до отдельной команды пользователя на merge.
 
 ## Self-Review Record
 
 - **Spec coverage:** generated docs, digests, deterministic CI comparison, route-specific bundles, selected contracts, used foundations, provenance, blockers и shadow boundary покрыты Tasks 2–10.
-- **Boundary coverage:** workflow generation, Core split и skill cutover явно исключены и остаются этапами 8–9.
+- **Boundary coverage:** component documentation prerequisite завершает модель до Task 4; workflow generation, Core split и skill cutover явно исключены и остаются этапами 8–9.
 - **Completeness scan:** все действия, файлы, интерфейсы и ожидаемые результаты определены явно.
 - **Interface consistency:** manifest → generated docs/bundle resolvers → CLI → validation использует одинаковые IDs и function names.
-- **Risk control:** главный риск — случайный ранний cutover — закрыт неизменяемыми legacy `source_ids`, отдельным `generated_bundle.status: shadow` и characterization test.
+- **Risk control:** ранний cutover закрыт неизменяемыми legacy `source_ids`, `generated_bundle.status: shadow` и characterization test; закрепление дублирующей prose-модели закрыто обязательным component-documentation prerequisite перед Task 4.
