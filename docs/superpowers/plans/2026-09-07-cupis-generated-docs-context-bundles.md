@@ -78,7 +78,6 @@
 
 **Files:**
 - Create: `tests/characterization/generated-layer-shadow.test.mjs`
-- Modify: `tests/helpers/system-fixture.mjs`
 
 **Interfaces:**
 - Consumes: текущие manifest, Core, workflows, skills, structured foundations и component registries.
@@ -148,7 +147,7 @@ const expectedLegacyProfiles = {
 
 Проверить, что добавление shadow-конфигурации не меняет эти массивы, а `routes` продолжают ссылаться на те же profile IDs.
 
-- [ ] **Step 2: Добавить failing boundary assertions**
+- [ ] **Step 2: Добавить boundary assertions, проходящие до и после внедрения**
 
 Проверить, что:
 
@@ -157,11 +156,24 @@ assert.equal(await exists("docs/generated/workflow-checklists"), false);
 assert.equal(await exists("schemas/workflow.schema.json"), false);
 assert.equal(await exists("email.html"), false);
 assert.equal(await exists("images"), false);
+
+for (const profile of manifest.bundle_profiles) {
+  const shadow = profile.generated_bundle;
+  if (!shadow) continue;
+  assert.equal(
+    shadow.static_source_ids.includes("component-descriptions-registry"),
+    false,
+  );
+  assert.equal(
+    shadow.static_source_ids.includes("typography-registry"),
+    false,
+  );
+}
 ```
 
-Также прочитать planned bundle policies и запретить в них `component-descriptions-registry` и `typography-registry`.
+Такой guard проходит на исходном состоянии, а после появления capability проверяет её границы.
 
-- [ ] **Step 3: Запустить тест и подтвердить RED**
+- [ ] **Step 3: Запустить тест и подтвердить GREEN baseline**
 
 Run:
 
@@ -169,28 +181,12 @@ Run:
 node --test tests/characterization/generated-layer-shadow.test.mjs
 ```
 
-Expected: FAIL, потому что `generated_docs` и `generated_bundle` ещё не объявлены.
+Expected: PASS на исходном `main`.
 
-- [ ] **Step 4: Добавить новые пути в fixture только вместе с последующими task-файлами**
-
-В `canonicalSystemFixtureFiles` предусмотреть добавление:
-
-```js
-"scripts/lib/content-digest.mjs",
-"scripts/lib/generated-docs.mjs",
-"scripts/lib/context-bundle.mjs",
-"docs/generated/component-registry.md",
-"docs/generated/typography-registry.md",
-"docs/generated/asset-registry.md",
-"docs/generated/naming-reference.md",
-```
-
-На этом шаге тест остаётся RED; не создавать пустые заглушки.
-
-- [ ] **Step 5: Commit**
+- [ ] **Step 4: Commit**
 
 ```powershell
-git add tests/characterization/generated-layer-shadow.test.mjs tests/helpers/system-fixture.mjs
+git add tests/characterization/generated-layer-shadow.test.mjs
 git commit -m "test: lock generated layer shadow boundary"
 ```
 
@@ -374,20 +370,11 @@ export function resolveGeneratedBundleProfile(manifest, routeId) {
 }
 ```
 
-- [ ] **Step 6: Заполнить четыре generated-doc definitions**
+- [ ] **Step 6: Проверить generated-doc capability на изолированной fixture**
 
-Добавить в `sources` четыре записи с `kind: generated`:
+В semantic tests временно добавить в fixture четыре файла с `kind: generated` и соответствующий `generated_docs`. Это проверяет новую форму и references, не объявляя отсутствующие outputs в canonical manifest раньше Task 5.
 
-```yaml
-- { id: generated-component-registry, kind: generated, path: docs/generated/component-registry.md }
-- { id: generated-typography-registry, kind: generated, path: docs/generated/typography-registry.md }
-- { id: generated-asset-registry, kind: generated, path: docs/generated/asset-registry.md }
-- { id: generated-naming-reference, kind: generated, path: docs/generated/naming-reference.md }
-```
-
-Добавить `generated_docs` с точными input source IDs. Компонентный и потребительские справочники обязаны учитывать `components-shared`, `components-marketing`, `components-service` и `components-schema`.
-
-- [ ] **Step 7: Добавить shadow policy каждому route profile**
+- [ ] **Step 7: Добавить shadow policy каждому canonical route profile**
 
 Использовать следующие `static_source_ids`:
 
@@ -721,7 +708,20 @@ assert.equal(await run(["--check", "--repo-root", fixture.root]), 0);
 
 Unknown argument, отсутствие mode и одновременные `--write --check` возвращают usage error и ничего не пишут.
 
-- [ ] **Step 2: Реализовать безопасный CLI parser**
+- [ ] **Step 2: Атомарно объявить outputs в canonical manifest**
+
+Добавить в `sources` четыре записи с `kind: generated`:
+
+```yaml
+- { id: generated-component-registry, kind: generated, path: docs/generated/component-registry.md }
+- { id: generated-typography-registry, kind: generated, path: docs/generated/typography-registry.md }
+- { id: generated-asset-registry, kind: generated, path: docs/generated/asset-registry.md }
+- { id: generated-naming-reference, kind: generated, path: docs/generated/naming-reference.md }
+```
+
+Добавить `generated_docs` с точными input source IDs. Компонентный и потребительские справочники обязаны учитывать `components-shared`, `components-marketing`, `components-service` и `components-schema`. Эти manifest-изменения, CLI и четыре созданных файла входят в один GREEN commit.
+
+- [ ] **Step 3: Реализовать безопасный CLI parser**
 
 ```js
 export function parseArguments(args) {
@@ -736,7 +736,7 @@ export function parseArguments(args) {
 
 `--write` записывает только paths, объявленные через `generated_docs[].output_source_id`. Перед записью path разрешается относительно repo root и проверяется на выход за root.
 
-- [ ] **Step 3: Добавить npm scripts**
+- [ ] **Step 4: Добавить npm scripts**
 
 ```json
 {
@@ -744,16 +744,15 @@ export function parseArguments(args) {
     "validate": "node scripts/validate-system.mjs",
     "generate": "node scripts/generate-docs.mjs --write",
     "generate:check": "node scripts/generate-docs.mjs --check",
-    "bundle": "node scripts/build-context-bundle.mjs",
     "test": "node --test tests/foundation/*.test.mjs tests/generation/*.test.mjs tests/characterization/*.test.mjs",
     "verify": "npm run validate && npm test"
   }
 }
 ```
 
-`bundle` временно может завершаться module-not-found до Task 7; не коммитить Task 5, пока полный текущий test command не исключает вызов отсутствующего CLI.
+Команду `bundle` добавить только в Task 7 одновременно с существующим CLI-файлом.
 
-- [ ] **Step 4: Сгенерировать файлы только через CLI**
+- [ ] **Step 5: Сгенерировать файлы только через CLI**
 
 Run:
 
@@ -764,13 +763,13 @@ npm run generate:check
 
 Expected: обе команды PASS; четыре файла существуют и совпадают с renderer bytes.
 
-- [ ] **Step 5: Подключить stale check к общей validation**
+- [ ] **Step 6: Подключить stale check к общей validation**
 
 После успешной domain validation вызвать `compareGeneratedDocs`. Diagnostics `GENERATED_DOC_MISSING` и `GENERATED_DOC_STALE` должны войти в общий отсортированный список ошибок.
 
 Не генерировать файлы автоматически из `npm run validate`: validation остаётся read-only.
 
-- [ ] **Step 6: Проверить цикл**
+- [ ] **Step 7: Проверить цикл**
 
 Run:
 
@@ -782,10 +781,10 @@ npm run generate:check
 
 Expected: PASS.
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 8: Commit**
 
 ```powershell
-git add package.json scripts/generate-docs.mjs scripts/lib/system-manifest.mjs tests/generation/generated-docs-cli.test.mjs tests/helpers/system-fixture.mjs docs/generated
+git add package.json system/manifest.yaml scripts/generate-docs.mjs scripts/lib/system-manifest.mjs tests/generation/generated-docs-cli.test.mjs tests/helpers/system-fixture.mjs docs/generated
 git commit -m "feat: add checked generated documentation"
 ```
 
@@ -797,6 +796,7 @@ git commit -m "feat: add checked generated documentation"
 - Create: `scripts/lib/context-bundle.mjs`
 - Create: `tests/generation/context-bundle.test.mjs`
 - Modify: `scripts/lib/component-registry.mjs`
+- Modify: `tests/helpers/system-fixture.mjs`
 
 **Interfaces:**
 - Consumes:
@@ -1074,7 +1074,23 @@ Expected: exit 0, deterministic stdout, нет старых Markdown-реест�
 
 Run без component для `email-new-build` и с одним viewport. Expected: exit 1 и точный blocker; stdout пуст.
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 7: Добавить npm script и проверить команду**
+
+Добавить:
+
+```json
+"bundle": "node scripts/build-context-bundle.mjs"
+```
+
+Run:
+
+```powershell
+npm run bundle -- --route migration-progress
+```
+
+Expected: exit 0.
+
+- [ ] **Step 8: Commit**
 
 ```powershell
 git add scripts/build-context-bundle.mjs tests/generation/context-bundle-cli.test.mjs package.json
