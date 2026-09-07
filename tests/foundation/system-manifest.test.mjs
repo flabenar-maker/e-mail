@@ -50,7 +50,7 @@ async function mutateFixtureManifest(root, mutate) {
 
 test("loads the repository canonical manifest", async () => {
   const manifest = await canonicalManifest();
-  assert.equal(manifest.schema_version, "1.0.0");
+  assert.equal(manifest.schema_version, "1.1.0");
   assert.equal(manifest.system.id, "cupis-email-system");
 });
 
@@ -82,7 +82,7 @@ test("migration progress resolves the canonical roadmap bundle", async () => {
 
 test("rejects an unsupported manifest schema version", async () => {
   const manifest = structuredClone(await canonicalManifest());
-  manifest.schema_version = "1.1.0";
+  manifest.schema_version = "1.2.0";
 
   const errors = validateManifestShape(manifest, schema);
 
@@ -739,4 +739,279 @@ test("reports a missing declared component registry file", async (t) => {
         error.path.includes("data/components/shared.yaml"),
     ),
   );
+});
+
+
+const testGeneratedBundle = {
+  status: "shadow",
+  static_source_ids: ["repository-readme"],
+  component_selection: "none",
+  viewport_selection: "none",
+  foundation_selection: "none",
+  allowed_foundation_ids: [],
+  required_foundation_ids: [],
+};
+
+function addGeneratedCapability(manifest) {
+  manifest.schema_version = "1.1.0";
+  manifest.sources.push({
+    id: "generated-component-registry",
+    kind: "generated",
+    path: "docs/generated/component-registry.md",
+  });
+  manifest.sources.push({
+    id: "generated-typography-registry",
+    kind: "generated",
+    path: "docs/generated/typography-registry.md",
+  });
+  manifest.generated_docs = [
+    {
+      id: "component-registry",
+      output_source_id: "generated-component-registry",
+      renderer: "component-registry",
+      input_source_ids: [
+        "components-shared",
+        "components-marketing",
+        "components-service",
+        "components-schema",
+      ],
+    },
+  ];
+  for (const profile of manifest.bundle_profiles) {
+    profile.generated_bundle = structuredClone(testGeneratedBundle);
+  }
+  return manifest;
+}
+
+async function generatedFixture(t) {
+  const root = await validFixture(t);
+  await writeFixtureFile(
+    root,
+    "docs/generated/component-registry.md",
+    "generated component registry\n",
+  );
+  await writeFixtureFile(
+    root,
+    "docs/generated/typography-registry.md",
+    "generated typography registry\n",
+  );
+  const manifest = await mutateFixtureManifest(root, addGeneratedCapability);
+  return { root, manifest };
+}
+
+test("accepts optional generated docs and shadow bundle capability", async () => {
+  const manifest = addGeneratedCapability(
+    structuredClone(await canonicalManifest()),
+  );
+  manifest.bundle_profiles[0].generated_bundle = {
+    status: "shadow",
+    static_source_ids: [
+      "repository-readme",
+      "email-figma-prompt",
+      "figma-component-naming-standard",
+      "library-maintenance-checkpoint",
+    ],
+    component_selection: "optional",
+    viewport_selection: "one-or-both",
+    foundation_selection: "explicit-or-referenced",
+    allowed_foundation_ids: [
+      "typography",
+      "spacing",
+      "assets",
+      "figma-naming",
+    ],
+    required_foundation_ids: [],
+  };
+
+  assert.deepEqual(validateManifestShape(manifest, schema), []);
+});
+
+test("rejects unknown generated capability fields", async () => {
+  const manifest = addGeneratedCapability(
+    structuredClone(await canonicalManifest()),
+  );
+  manifest.generated_docs[0].unexpected = true;
+  manifest.bundle_profiles[0].generated_bundle.unexpected = true;
+
+  const errors = validateManifestShape(manifest, schema);
+
+  assert.ok(
+    errors.some(
+      (error) =>
+        error.code === "manifest-schema" &&
+        error.path === "/generated_docs/0",
+    ),
+  );
+  assert.ok(
+    errors.some(
+      (error) =>
+        error.code === "manifest-schema" &&
+        error.path === "/bundle_profiles/0/generated_bundle",
+    ),
+  );
+});
+
+test("rejects unsafe generated output paths and unknown policy enums", async () => {
+  const manifest = addGeneratedCapability(
+    structuredClone(await canonicalManifest()),
+  );
+  const outputIndex = manifest.sources.findIndex(
+    (source) => source.id === "generated-component-registry",
+  );
+  manifest.sources[outputIndex].path = "../outside.md";
+  manifest.bundle_profiles[0].generated_bundle.component_selection = "sometimes";
+
+  const errors = validateManifestShape(manifest, schema);
+
+  assert.ok(
+    errors.some(
+      (error) =>
+        error.code === "manifest-schema" &&
+        error.path === `/sources/${outputIndex}/path`,
+    ),
+  );
+  assert.ok(
+    errors.some(
+      (error) =>
+        error.code === "manifest-schema" &&
+        error.path ===
+          "/bundle_profiles/0/generated_bundle/component_selection",
+    ),
+  );
+});
+
+for (const [name, mutate, code] of [
+  [
+    "duplicate generated doc id",
+    (manifest) =>
+      manifest.generated_docs.push({
+        ...structuredClone(manifest.generated_docs[0]),
+        output_source_id: "generated-typography-registry",
+      }),
+    "duplicate-generated-doc-id",
+  ],
+  [
+    "unknown generated output source",
+    (manifest) =>
+      (manifest.generated_docs[0].output_source_id = "missing-generated-output"),
+    "unknown-generated-output-source",
+  ],
+  [
+    "non-generated output source",
+    (manifest) =>
+      (manifest.generated_docs[0].output_source_id = "repository-readme"),
+    "invalid-generated-output-kind",
+  ],
+  [
+    "unknown generated input source",
+    (manifest) =>
+      (manifest.generated_docs[0].input_source_ids = ["missing-generated-input"]),
+    "unknown-generated-input-source",
+  ],
+  [
+    "generated source used as generated input",
+    (manifest) =>
+      (manifest.generated_docs[0].input_source_ids = [
+        "generated-typography-registry",
+      ]),
+    "generated-input-cannot-be-generated",
+  ],
+  [
+    "duplicate generated output source",
+    (manifest) =>
+      manifest.generated_docs.push({
+        ...structuredClone(manifest.generated_docs[0]),
+        id: "typography-registry",
+      }),
+    "duplicate-generated-output-source",
+  ],
+  [
+    "unknown generated bundle source",
+    (manifest) =>
+      manifest.bundle_profiles[0].generated_bundle.static_source_ids.push(
+        "missing-static-source",
+      ),
+    "unknown-generated-bundle-source",
+  ],
+  [
+    "generated source in generated bundle",
+    (manifest) =>
+      manifest.bundle_profiles[0].generated_bundle.static_source_ids.push(
+        "generated-component-registry",
+      ),
+    "generated-bundle-source-cannot-be-generated",
+  ],
+  [
+    "legacy registry in generated bundle",
+    (manifest) =>
+      manifest.bundle_profiles[0].generated_bundle.static_source_ids.push(
+        "component-descriptions-registry",
+      ),
+    "generated-bundle-legacy-registry-forbidden",
+  ],
+  [
+    "unknown foundation id",
+    (manifest) =>
+      manifest.bundle_profiles[0].generated_bundle.allowed_foundation_ids.push(
+        "unknown-foundation",
+      ),
+    "unknown-foundation-id",
+  ],
+  [
+    "route without generated profile",
+    (manifest) => delete manifest.bundle_profiles[0].generated_bundle,
+    "route-generated-profile-missing",
+  ],
+]) {
+  test(`reports ${name}`, async (t) => {
+    const { root, manifest } = await generatedFixture(t);
+    mutate(manifest);
+
+    const errors = await validateManifestSemantics(manifest, root);
+
+    assert.ok(
+      errors.some((error) => error.code === code),
+      `Missing diagnostic ${code}: ${errors.map((error) => error.code).join(", ")}`,
+    );
+    const diagnostic = errors.find((error) => error.code === code);
+    assert.match(diagnostic.path, /^\//u);
+  });
+}
+
+test("resolves immutable generated definitions and route policy", async () => {
+  const manifestModule = await import(
+    "../../scripts/lib/system-manifest.mjs"
+  );
+  assert.equal(
+    typeof manifestModule.resolveGeneratedDocDefinitions,
+    "function",
+  );
+  assert.equal(
+    typeof manifestModule.resolveGeneratedBundleProfile,
+    "function",
+  );
+
+  const manifest = addGeneratedCapability(
+    structuredClone(await canonicalManifest()),
+  );
+  const definitions =
+    manifestModule.resolveGeneratedDocDefinitions(manifest);
+  const resolved = manifestModule.resolveGeneratedBundleProfile(
+    manifest,
+    "library-maintenance",
+  );
+  const blocked = manifestModule.resolveGeneratedBundleProfile(
+    manifest,
+    "missing-route",
+  );
+
+  assert.deepEqual(definitions, manifest.generated_docs);
+  assert.ok(Object.isFrozen(definitions));
+  assert.ok(Object.isFrozen(definitions[0]));
+  assert.equal(resolved.status, "resolved");
+  assert.equal(resolved.route.id, "library-maintenance");
+  assert.equal(resolved.profile.id, "library-maintenance");
+  assert.equal(blocked.status, "blocked");
+  assert.equal(blocked.blockers[0].code, "CONTEXT_BUNDLE_ROUTE_UNKNOWN");
+  assert.equal(blocked.blockers[0].path, "/route_id");
 });
