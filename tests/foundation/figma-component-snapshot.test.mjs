@@ -396,11 +396,17 @@ test("normalizer accepts the actual compact Figma MCP inventory shape", async ()
             height: 1000,
           },
         ],
-        properties: [{
-          name: "Content#1102:0",
-          type: "SLOT",
-          defaultValue: null,
-        }],
+        properties: [
+          {
+            name: "Content#1102:0",
+            type: "SLOT",
+          },
+          {
+            name: "Viewport",
+            type: "VARIANT",
+            defaultValue: "Mobile",
+          },
+        ],
       }],
     }],
   });
