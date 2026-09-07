@@ -189,7 +189,7 @@ test("invalid component registry exits one with a stable sanitized diagnostic", 
   await writeFixtureFile(
     root,
     "data/components/marketing.yaml",
-    "schema_version: 2.0.0\nsecret: " + secret + "\n",
+    "schema_version: 3.0.0\nsecret: " + secret + "\n",
   );
 
   const result = await runValidator(root);
