@@ -2,12 +2,11 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
 import { resolveAssetContract } from "./assets-foundation.mjs";
-import { validateDescriptionModel } from "./component-description.mjs";
 import { SystemValidationError } from "./diagnostics.mjs";
 import { validateDocumentShape } from "./schema-validation.mjs";
 import { readStrictYaml } from "./strict-yaml.mjs";
 
-const SUPPORTED_COMPONENTS_VERSION = "1.0.0";
+const SUPPORTED_COMPONENTS_VERSION = "2.0.0";
 const LIBRARIES = ["shared", "marketing", "service"];
 const VIEWPORTS = ["mobile", "desktop"];
 const FOUNDATION_SOURCES = {
@@ -104,6 +103,134 @@ function walkFacts(record, visit) {
       );
     });
   }
+}
+
+const HTML_RENDER_MODES = new Set([
+  "html-text",
+  "html-link",
+  "nested-component",
+  "slot",
+]);
+const IMAGE_RENDER_MODES = new Set(["direct-image", "background-image"]);
+
+export function deriveComponentRenderType(record) {
+  let hasHtml = false;
+  let hasImage = false;
+  let hasPresentation = false;
+  let hasFigmaSourceOnly = false;
+
+  for (const viewport of VIEWPORTS) {
+    walkElements(record?.contracts?.[viewport]?.root, "", (element) => {
+      const mode = element.render_mode;
+      hasHtml ||= HTML_RENDER_MODES.has(mode);
+      hasImage ||= IMAGE_RENDER_MODES.has(mode);
+      hasPresentation ||= mode === "presentation-table";
+      hasFigmaSourceOnly ||= mode === "figma-source-only";
+    });
+  }
+
+  if (hasHtml && hasImage) {
+    return "HYBRID";
+  }
+  if (hasImage) {
+    return "ASSET";
+  }
+  if (hasHtml) {
+    return "HTML";
+  }
+  if (
+    hasFigmaSourceOnly &&
+    ["asset", "icon"].includes(record?.identity?.semantic_role)
+  ) {
+    return "ASSET";
+  }
+  if (hasPresentation && !hasFigmaSourceOnly) {
+    return "HTML";
+  }
+  return null;
+}
+
+export function validateComponentDocumentation(record) {
+  const errors = [];
+  const componentId =
+    typeof record?.id === "string" ? record.id : "<unknown-component>";
+  const purpose = record?.documentation?.purpose;
+
+  if (typeof purpose !== "string" || purpose.trim().length === 0) {
+    errors.push(
+      diagnostic(
+        "COMPONENT_PURPOSE_MISSING",
+        "/documentation/purpose",
+        `${componentId}: component purpose must be a non-empty string.`,
+      ),
+    );
+  }
+
+  const constraints = Array.isArray(record?.constraints)
+    ? record.constraints
+    : [];
+  const constraintsById = new Map();
+  constraints.forEach((constraint, index) => {
+    if (constraintsById.has(constraint?.id)) {
+      errors.push(
+        diagnostic(
+          "COMPONENT_CONSTRAINT_ID_DUPLICATE",
+          `/constraints/${index}/id`,
+          `${componentId}: duplicate constraint id ${String(constraint?.id)}.`,
+        ),
+      );
+    } else {
+      constraintsById.set(constraint?.id, constraint);
+    }
+  });
+
+  const criticalIds = Array.isArray(
+    record?.documentation?.critical_constraint_ids,
+  )
+    ? record.documentation.critical_constraint_ids
+    : [];
+  criticalIds.forEach((constraintId, index) => {
+    const constraint = constraintsById.get(constraintId);
+    if (!constraint) {
+      errors.push(
+        diagnostic(
+          "COMPONENT_CRITICAL_CONSTRAINT_UNKNOWN",
+          `/documentation/critical_constraint_ids/${index}`,
+          `${componentId}: unknown critical constraint ${String(constraintId)}.`,
+        ),
+      );
+    } else if (constraint.severity !== "critical") {
+      errors.push(
+        diagnostic(
+          "COMPONENT_CRITICAL_CONSTRAINT_NOT_CRITICAL",
+          `/documentation/critical_constraint_ids/${index}`,
+          `${componentId}: referenced constraint ${constraintId} is not critical.`,
+        ),
+      );
+    }
+  });
+
+  if (Object.hasOwn(record ?? {}, "description")) {
+    errors.push(
+      diagnostic(
+        "COMPONENT_DOCUMENTATION_LEGACY_BLOCKS_FORBIDDEN",
+        "/description",
+        `${componentId}: legacy description blocks are forbidden in schema 2.0.0.`,
+      ),
+    );
+  }
+
+  if (deriveComponentRenderType(record) === null) {
+    errors.push(
+      diagnostic(
+        "COMPONENT_RENDER_TYPE_UNRESOLVED",
+        "/contracts",
+        `${componentId}: render type cannot be derived from the viewport contracts.`,
+      ),
+    );
+  }
+
+  return sortDiagnostics(errors);
 }
 
 function findForbiddenInheritance(value, path = "") {
@@ -640,12 +767,12 @@ export function validateComponentRegistrySemantics({
         );
       });
 
-      for (const descriptionError of validateDescriptionModel(record, index)) {
+      for (const documentationError of validateComponentDocumentation(record)) {
         errors.push(
           diagnostic(
-            descriptionError.code,
-            `${rootPath}${descriptionError.path}`,
-            descriptionError.message,
+            documentationError.code,
+            `${rootPath}${documentationError.path}`,
+            documentationError.message,
           ),
         );
       }
