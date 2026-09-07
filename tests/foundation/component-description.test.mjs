@@ -1,353 +1,91 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 import {
+  compareFigmaComponentDescription,
   renderComponentDescription,
-  validateDescriptionModel,
+  renderFigmaComponentDescription,
 } from "../../scripts/lib/component-description.mjs";
-import { indexComponentRegistries } from "../../scripts/lib/component-registry.mjs";
+import { loadComponentRegistries } from "../../scripts/lib/component-registry.mjs";
 
-function element(id, extra = {}) {
-  return {
-    id,
-    semantic_role: id,
-    render_mode: "html-text",
-    visibility: { mode: "always" },
-    facts: [],
-    children: [],
-    ...extra,
-  };
+const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
+
+async function byId(id) {
+  const registries = await loadComponentRegistries({ repoRoot });
+  return Object.values(registries)
+    .flatMap((registry) => registry.components)
+    .find((record) => record.id === id);
 }
 
-function record({
-  id = "block-test",
-  figmaName = "Block/Test",
-  description,
-} = {}) {
-  return {
-    id,
-    status: "active",
-    identity: {
-      figma_name: figmaName,
-      node_kind: "component",
-      library: "marketing",
-      semantic_role: "block",
-      category: "test",
-    },
-    figma: {
-      file_key: "8zka5bHkcrJVK9I9dKjnhC",
-      node_id: id === "block-test" ? "3000:1" : "3000:2",
-      source_root_node_id: "538:17236",
-      verified_at: "2026-09-06",
-      structure_fingerprint:
-        "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-    },
-    variants: [],
-    properties: [
-      {
-        id: "show-body",
-        figma_name: "Show Body",
-        type: "boolean",
-        default: true,
-      },
-    ],
-    asset_contracts: [],
-    contracts: {
-      mobile: {
-        root: element("root", {
-          semantic_role: "block",
-          render_mode: "presentation-table",
-          facts: [
-            {
-              id: "padding",
-              value: { type: "measure", value: 22, unit: "px" },
-              provenance: {
-                kind: "registry-literal",
-                source_path: "registry/email-component-descriptions-registry.md",
-              },
-            },
-            {
-              id: "size",
-              value: {
-                type: "dimensions",
-                width: 252,
-                height: 148,
-                unit: "px",
-              },
-              provenance: {
-                kind: "figma-literal",
-                node_id: "3000:1",
-              },
-            },
-          ],
-          children: [
-            element("body", {
-              visibility: {
-                mode: "property",
-                property_id: "show-body",
-              },
-            }),
-          ],
-        }),
-      },
-      desktop: {
-        root: element("root", {
-          semantic_role: "block",
-          render_mode: "presentation-table",
-          facts: [
-            {
-              id: "padding",
-              value: { type: "measure", value: 32, unit: "px" },
-              provenance: {
-                kind: "registry-literal",
-                source_path: "registry/email-component-descriptions-registry.md",
-              },
-            },
-          ],
-        }),
-      },
-    },
-    description:
-      description ?? {
-        mode: "rendered",
-        blocks: [
-          { type: "heading", value: "IMPLEMENTATION" },
-          {
-            type: "line",
-            tokens: [
-              { type: "text", value: "Mobile padding: " },
-              { type: "fact", path: "mobile/root/padding" },
-              { type: "text", value: "." },
-            ],
-          },
-          { type: "blank" },
-          {
-            type: "bullet",
-            tokens: [
-              {
-                type: "component-name",
-                component_id: "button-secondary",
-              },
-              { type: "text", value: " остаётся HTML." },
-            ],
-          },
-          {
-            type: "ordered",
-            index: 1,
-            tokens: [
-              { type: "property-name", property_id: "show-body" },
-              { type: "text", value: " управляет видимостью." },
-            ],
-          },
-          {
-            type: "line",
-            tokens: [
-              { type: "text", value: "Размер: " },
-              { type: "fact", path: "mobile/root/size" },
-              { type: "text", value: "." },
-            ],
-          },
-        ],
-      },
-    provenance: {
-      baseline_path: "registry/email-component-descriptions-registry.md",
-      baseline_heading: figmaName,
-      baseline_blob_sha: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-    },
-  };
-}
+test("renderer produces one deterministic compact Description", async () => {
+  const record = await byId("banner-fiscal-check-link");
+  const expected = [
+    "CUPIS ID: banner-fiscal-check-link",
+    "PURPOSE: Группа кликабельных строк со ссылками на проверку фискального чека.",
+    "RENDER: HYBRID",
+    "",
+    "CRITICAL",
+    "- Каждая видимая ячейка строки содержит ссылку с одним URL, чтобы кликабельной оставалась вся площадь строки без помещения таблицы внутрь ссылки.",
+    "",
+  ].join("\n");
 
-function registry(records) {
-  return {
-    schema_version: "1.0.0",
-    registry: {
-      id: "components-marketing",
-      library: "marketing",
-      status: "shadow",
-      source: {
-        figma_file_key: "8zka5bHkcrJVK9I9dKjnhC",
-        roots: [{ role: "library", node_id: "538:17236" }],
-        baseline_path: "registry/email-component-descriptions-registry.md",
-        baseline_commit: "397e13a916e9af1c2dfd8af663de730bcc2e1874",
-        verified_at: "2026-09-06",
-      },
-    },
-    components: records,
-  };
-}
+  assert.equal(renderFigmaComponentDescription(record), expected);
+  assert.equal(renderComponentDescription(record), expected);
+  assert.equal(renderFigmaComponentDescription(record).includes("\r"), false);
+});
 
-function descriptionIndex(target = record()) {
-  const secondary = record({
-    id: "button-secondary",
-    figmaName: "Button/Secondary",
-    description: {
-      mode: "rendered",
-      blocks: [
-        { type: "heading", value: "SCOPE" },
-        {
-          type: "line",
-          tokens: [{ type: "text", value: "Вторичная кнопка." }],
-        },
-      ],
-    },
-  });
-  return indexComponentRegistries({
-    marketing: registry([target, secondary]),
-    service: {
-      ...registry([]),
-      registry: {
-        ...registry([]).registry,
-        id: "components-service",
-        library: "service",
-        source: {
-          ...registry([]).registry.source,
-          roots: [{ role: "library", node_id: "538:17235" }],
-        },
-      },
-    },
-    shared: {
-      ...registry([]),
-      registry: {
-        ...registry([]).registry,
-        id: "components-shared",
-        library: "shared",
-        source: {
-          ...registry([]).registry.source,
-          roots: [{ role: "library", node_id: "539:38025" }],
-        },
-      },
-    },
-  });
-}
-
-function codes(errors) {
-  return errors.map((error) => error.code);
-}
-
-test("renderer produces one deterministic LF-normalized Description", () => {
-  const target = record();
-  const index = descriptionIndex(target);
-
+test("renderer omits CRITICAL when no critical constraints are selected", async () => {
+  const record = await byId("banner-secondary");
+  const rendered = renderFigmaComponentDescription(record);
   assert.equal(
-    renderComponentDescription(target, index),
+    rendered,
     [
-      "Block/Test",
-      "",
-      "IMPLEMENTATION",
-      "Mobile padding: 22px.",
-      "",
-      "— Button/Secondary остаётся HTML.",
-      "1. Show Body управляет видимостью.",
-      "Размер: 252×148px.",
+      "CUPIS ID: banner-secondary",
+      "PURPOSE: Вторичный промобаннер с текстовой и визуальной областями.",
+      "RENDER: HYBRID",
       "",
     ].join("\n"),
   );
-  assert.deepEqual(validateDescriptionModel(target, index), []);
+  assert.doesNotMatch(rendered, /CRITICAL/u);
 });
 
-test("description mode none returns null and forbids rendered blocks", () => {
-  const target = record({
-    description: {
-      mode: "none",
-      reason: "nested-figma-glyph-without-independent-email-contract",
-    },
-  });
-  assert.equal(renderComponentDescription(target, descriptionIndex(target)), null);
-
-  target.description.blocks = [{ type: "blank" }];
-  assert.ok(
-    codes(validateDescriptionModel(target, descriptionIndex(target))).includes(
-      "COMPONENT_REGISTRY_DESCRIPTION_REFERENCE",
-    ),
-  );
-});
-
-for (const [name, mutate] of [
-  [
-    "unknown fact path",
-    (target) => {
-      target.description.blocks[1].tokens[1].path = "mobile/root/missing";
-    },
-  ],
-  [
-    "unknown component token",
-    (target) => {
-      target.description.blocks[3].tokens[0].component_id = "button-missing";
-    },
-  ],
-  [
-    "unknown property token",
-    (target) => {
-      target.description.blocks[4].tokens[0].property_id = "show-missing";
-    },
-  ],
-]) {
-  test(`description validation rejects ${name}`, () => {
-    const target = record();
-    mutate(target);
-    const errors = validateDescriptionModel(target, descriptionIndex(target));
-    assert.ok(
-      codes(errors).includes("COMPONENT_REGISTRY_DESCRIPTION_REFERENCE"),
-    );
-  });
-}
-
-for (const duplicatedText of [
-  "Использовать padding 22px.",
-  "Цвет #F3F3F5.",
-  "Экспортировать @2x.",
-  "Размер 252×148px.",
-  "Использовать Button/Secondary.",
-  "Свойство Show Body включено.",
-]) {
-  test(`plain text cannot duplicate exact fact: ${duplicatedText}`, () => {
-    const target = record();
-    target.description.blocks.push({
-      type: "line",
-      tokens: [{ type: "text", value: duplicatedText }],
-    });
-
-    const errors = validateDescriptionModel(target, descriptionIndex(target));
-    assert.ok(
-      codes(errors).includes(
-        "COMPONENT_REGISTRY_DESCRIPTION_LITERAL_DUPLICATE",
-      ),
-    );
-  });
-}
-
-test("renderer refuses an unresolved token instead of guessing", () => {
-  const target = record();
-  target.description.blocks[1].tokens[1].path = "desktop/root/missing";
-  const index = descriptionIndex(target);
-
-  assert.throws(
-    () => renderComponentDescription(target, index),
-    (error) => error.code === "COMPONENT_REGISTRY_DESCRIPTION_REFERENCE",
-  );
-});
-
-test("description diagnostics are sorted deterministically", () => {
-  const target = record();
-  target.description.blocks.push(
-    {
-      type: "line",
-      tokens: [{ type: "text", value: "Цвет #F3F3F5." }],
-    },
-    {
-      type: "line",
-      tokens: [{ type: "component-name", component_id: "missing" }],
-    },
-  );
-
-  const errors = validateDescriptionModel(target, descriptionIndex(target));
+test("comparison is exact after LF normalization", () => {
   assert.deepEqual(
-    errors,
-    [...errors].sort(
-      (left, right) =>
-        left.path.localeCompare(right.path) ||
-        left.code.localeCompare(right.code) ||
-        left.message.localeCompare(right.message),
-    ),
+    compareFigmaComponentDescription("one\r\ntwo\r\n", "one\ntwo\n"),
+    [],
+  );
+  const errors = compareFigmaComponentDescription("expected\n", "actual\n");
+  assert.equal(errors.length, 1);
+  assert.equal(errors[0].code, "FIGMA_COMPONENT_DESCRIPTION_DRIFT");
+  assert.equal(errors[0].path, "/description");
+});
+
+test("renderer refuses incomplete documentation instead of guessing", async () => {
+  const record = structuredClone(await byId("banner-secondary"));
+  record.documentation.purpose = "";
+  assert.throws(
+    () => renderFigmaComponentDescription(record),
+    (error) => error.code === "COMPONENT_PURPOSE_MISSING",
+  );
+
+  const unresolved = structuredClone(record);
+  unresolved.documentation.purpose = "Тест.";
+  unresolved.identity.semantic_role = "block";
+  unresolved.contracts.mobile.root = {
+    id: "root",
+    semantic_role: "source",
+    render_mode: "figma-source-only",
+    visibility: { mode: "always" },
+    facts: [],
+    children: [],
+  };
+  unresolved.contracts.desktop.root = structuredClone(
+    unresolved.contracts.mobile.root,
+  );
+  assert.throws(
+    () => renderFigmaComponentDescription(unresolved),
+    (error) => error.code === "COMPONENT_RENDER_TYPE_UNRESOLVED",
   );
 });
