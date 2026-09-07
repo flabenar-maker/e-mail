@@ -8,21 +8,22 @@ function migrationError(code, path, message) {
   return new SystemValidationError(code, path, message);
 }
 
-function mappingIndex(mappingDocument) {
+function mappingIndex(mappingDocument, library) {
+  const entries = mappingDocument?.libraries?.[library];
   if (
     mappingDocument?.schema_version !== SOURCE_VERSION ||
     mappingDocument?.migration !== MIGRATION_ID ||
-    !Array.isArray(mappingDocument?.components)
+    !Array.isArray(entries)
   ) {
     throw migrationError(
       "COMPONENT_MIGRATION_MAPPING_INVALID",
       "/",
-      "Reviewed component documentation mapping is invalid.",
+      `Reviewed component documentation mapping is invalid for ${String(library)}.`,
     );
   }
 
   const byId = new Map();
-  mappingDocument.components.forEach((entry, index) => {
+  entries.forEach((entry, index) => {
     if (byId.has(entry?.id)) {
       throw migrationError(
         "COMPONENT_MIGRATION_MAPPING_DUPLICATE",
@@ -60,7 +61,8 @@ export function migrateComponentDocument(document, mappingDocument) {
     );
   }
 
-  const byId = mappingIndex(mappingDocument);
+  const library = document?.registry?.library;
+  const byId = mappingIndex(mappingDocument, library);
   const sourceIds = new Set(document.components.map((record) => record?.id));
 
   document.components.forEach((record, index) => {
