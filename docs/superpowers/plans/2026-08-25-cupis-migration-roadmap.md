@@ -99,12 +99,14 @@ Master-спецификация владеет архитектурными ре
 
 Общий этап 5 завершён: assets foundation и Figma naming foundation находятся в `main`; технические реализации не изменяли Figma и component contracts.
 
-### 6. Структурированный component registry
+### 6. Структурированный component registry — завершён
 
-- [ ] Определить schema общего, маркетингового и сервисного реестров компонентов.
-- [ ] Перенести фактические component contracts без изменения их смысла.
-- [ ] Сохранить Figma provenance, variants, properties и ссылки на foundations.
-- [ ] Добавить unregistered-component blocker и проверки синхронизации.
+- [x] Определить schema общего, маркетингового и сервисного реестров компонентов.
+- [x] Перенести фактические component contracts без изменения их смысла.
+- [x] Сохранить Figma provenance, variants, properties и ссылки на foundations.
+- [x] Добавить unregistered-component blocker и проверки синхронизации.
+
+Подробный план: [structured component registry](2026-09-05-cupis-structured-component-registry.md). Реализация слита в [PR #40](https://github.com/flabenar-maker/e-mail/pull/40), итоговый commit: `90f1e01365c80b7553b520e8d47c2e5bb7f88660`.
 
 ### 7. Generated docs и context bundles
 
