@@ -1345,6 +1345,6 @@ PR summary должен перечислить:
 
 - **Spec coverage:** generated docs, digests, deterministic CI comparison, route-specific bundles, selected contracts, used foundations, provenance, blockers и shadow boundary покрыты Tasks 2–10.
 - **Boundary coverage:** workflow generation, Core split и skill cutover явно исключены и остаются этапами 8–9.
-- **Placeholder scan:** план не содержит `TBD`, `TODO`, «реализовать позже» или неопределённых файлов.
+- **Completeness scan:** все действия, файлы, интерфейсы и ожидаемые результаты определены явно.
 - **Interface consistency:** manifest → generated docs/bundle resolvers → CLI → validation использует одинаковые IDs и function names.
 - **Risk control:** главный риск — случайный ранний cutover — закрыт неизменяемыми legacy `source_ids`, отдельным `generated_bundle.status: shadow` и characterization test.
