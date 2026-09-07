@@ -1,6 +1,6 @@
 # CUPIS Structured System Migration Roadmap
 
-Актуальность: 2026-09-05.
+Актуальность: 2026-09-07.
 
 ## Назначение
 
@@ -99,18 +99,44 @@ Master-спецификация владеет архитектурными ре
 
 Общий этап 5 завершён: assets foundation и Figma naming foundation находятся в `main`; технические реализации не изменяли Figma и component contracts.
 
-### 6. Структурированный component registry
+### 6. Структурированный component registry — завершён
 
-- [ ] Определить schema общего, маркетингового и сервисного реестров компонентов.
-- [ ] Перенести фактические component contracts без изменения их смысла.
-- [ ] Сохранить Figma provenance, variants, properties и ссылки на foundations.
-- [ ] Добавить unregistered-component blocker и проверки синхронизации.
+- [x] Определить schema общего, маркетингового и сервисного реестров компонентов.
+- [x] Перенести фактические component contracts без изменения их смысла.
+- [x] Сохранить Figma provenance, variants, properties и ссылки на foundations.
+- [x] Добавить unregistered-component blocker и проверки синхронизации.
 
-### 7. Generated docs и context bundles
+Подробный план: [structured component registry](2026-09-05-cupis-structured-component-registry.md). Реализация слита в [PR #40](https://github.com/flabenar-maker/e-mail/pull/40), итоговый commit: `90f1e01365c80b7553b520e8d47c2e5bb7f88660`.
+
+Structured records остаются shadow-источником до generated bundles и общего cutover. Figma и действующие рабочие bundle profiles этим этапом не изменялись.
+
+### 7. Generated docs и context bundles — выполняется
+
+Подробный план: [generated docs и context bundles](2026-09-07-cupis-generated-docs-context-bundles.md).
+
+Пакет №1 технически реализован в draft [PR #43](https://github.com/flabenar-maker/e-mail/pull/43), но не находится в `main`. Он добавляет shadow manifest capability, route policies и deterministic digest, не переключая рабочие routes, Core, workflows, skills или Figma.
+
+До пакета №2 добавлен обязательный архитектурный prerequisite: [component documentation contracts](2026-09-07-cupis-component-documentation-contracts.md). Причина — полный generated registry не должен закрепить старую модель, где component facts повторяются в сохранённом prose Description.
+
+#### 7A. Component documentation contracts — следующий подэтап
+
+- [ ] Зафиксировать `core/component-contract-standard.md` и `core/figma-component-description-standard.md`.
+- [ ] Заменить полный `description.blocks` типизированными purpose и component-specific constraints.
+- [ ] Сохранить независимые Mobile/Desktop contracts, properties, assets, provenance и fingerprints.
+- [ ] Создать полный registry renderer и отдельный compact Figma Description renderer.
+- [ ] Доказать semantic equivalence со старым registry без Figma mutation.
+- [ ] Объявить standards и validation в shadow-режиме.
+- [ ] После merge обновить основание PR #43 и только затем продолжить package №2.
+
+#### 7B. Generated docs и route-specific context bundles
 
 - [ ] Генерировать читаемые реестры и справочники из структурированных источников.
+- [ ] Полный component registry строить из contract tree, properties, assets, constraints и resolved foundation references.
+- [ ] Compact Figma Description показывать только как auxiliary projection, не как implementation source.
 - [ ] Формировать route-specific bundles без лишнего контекста.
+- [ ] Email routes снабжать selected resolved component contracts, но не authoring standards или Figma Description.
 - [ ] Проверять, что каждый bundle содержит только применимые rules, contracts и workflows.
+- [ ] Сохранить весь этап shadow до отдельного cutover.
 
 ### 8. Core и workflows cutover
 
