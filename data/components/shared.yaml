@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "2.0.0",
   "registry": {
     "id": "components-shared",
     "library": "shared",
@@ -118,97 +118,26 @@
           }
         }
       },
-      "description": {
-        "mode": "rendered",
-        "blocks": [
-          {
-            "type": "heading",
-            "value": "ROLE"
-          },
-          {
-            "type": "line",
-            "tokens": [
-              {
-                "type": "text",
-                "value": "Корневой assembly-компонент письма. Реализовать ровно один раз как основу общей HTML-структуры, внутри которой размещаются верхнеуровневые библиотечные компоненты."
-              }
-            ]
-          },
-          {
-            "type": "blank"
-          },
-          {
-            "type": "heading",
-            "value": "VARIANTS"
-          },
-          {
-            "type": "line",
-            "tokens": [
-              {
-                "type": "text",
-                "value": "Viewport=Mobile | Desktop. Для каждой версии письма использовать соответствующий вариант и фактический состав "
-              },
-              {
-                "type": "property-name",
-                "property_id": "content"
-              },
-              {
-                "type": "text",
-                "value": " в конкретном инстансе. Не переносить состав, свойства или видимость между Mobile и Desktop автоматически."
-              }
-            ]
-          },
-          {
-            "type": "blank"
-          },
-          {
-            "type": "heading",
-            "value": "ROOT CONTRACT"
-          },
-          {
-            "type": "line",
-            "tokens": [
-              {
-                "type": "text",
-                "value": "Корневую email-обёртку и её техническую HTML-структуру реализовать по глобальной инструкции по вёрстке. Сам "
-              },
-              {
-                "type": "component-name",
-                "component_id": "email-template"
-              },
-              {
-                "type": "text",
-                "value": " не экспортировать как изображение или отдельный asset."
-              }
-            ]
-          },
-          {
-            "type": "blank"
-          },
-          {
-            "type": "heading",
-            "value": "CONTENT SLOT"
-          },
-          {
-            "type": "line",
-            "tokens": [
-              {
-                "type": "property-name",
-                "property_id": "content"
-              },
-              {
-                "type": "text",
-                "value": " задаёт порядок и состав верхнеуровневых компонентов письма. Каждый вложенный компонент верстать по его собственному Description. Сам Slot не задаёт самостоятельной визуальной геометрии: не добавлять из-за него отсутствующие в макете padding, gap, background или другие визуальные слои. Не считать Slot запретом на технические table-обёртки, необходимые общей email-структуре."
-              }
-            ]
-          }
-        ]
-      },
       "provenance": {
         "baseline_path": "registry/email-component-descriptions-registry.md",
         "baseline_heading": "Email/Template",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
-      }
+      },
+      "documentation": {
+        "purpose": "Корневая оболочка письма, которая задаёт состав и порядок верхнеуровневых компонентов для выбранного viewport.",
+        "critical_constraint_ids": [
+          "slot-does-not-create-visual-geometry"
+        ]
+      },
+      "constraints": [
+        {
+          "id": "slot-does-not-create-visual-geometry",
+          "scope": "all",
+          "kind": "dependency",
+          "severity": "critical",
+          "statement": "Слот задаёт только состав и порядок верхнеуровневых компонентов и не создаёт собственные padding, gap, background или визуальные слои."
+        }
+      ]
     },
     {
       "id": "asset-product-logo",
@@ -287,45 +216,26 @@
           }
         }
       },
-      "description": {
-        "mode": "rendered",
-        "blocks": [
-          {
-            "type": "heading",
-            "value": "ROLE"
-          },
-          {
-            "type": "line",
-            "tokens": [
-              {
-                "type": "text",
-                "value": "Внутренний набор векторных логотипов Product=CUPIS | Card | Wallet для сборки производных assets. Сам по себе не задаёт export boundary письма."
-              }
-            ]
-          },
-          {
-            "type": "blank"
-          },
-          {
-            "type": "heading",
-            "value": "USAGE"
-          },
-          {
-            "type": "line",
-            "tokens": [
-              {
-                "type": "text",
-                "value": "Использовать как вложенный источник внутри семантического asset owner. Не экспортировать отдельно, если родительский component description требует внешний составной asset."
-              }
-            ]
-          }
-        ]
-      },
       "provenance": {
         "baseline_path": "registry/email-component-descriptions-registry.md",
         "baseline_heading": "Asset/Product-Logo",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
-      }
+      },
+      "documentation": {
+        "purpose": "Источник вариантов продуктового логотипа для сборки производных визуальных ассетов.",
+        "critical_constraint_ids": [
+          "nested-source-is-not-export-owner"
+        ]
+      },
+      "constraints": [
+        {
+          "id": "nested-source-is-not-export-owner",
+          "scope": "all",
+          "kind": "asset-export",
+          "severity": "critical",
+          "statement": "Этот вложенный источник нельзя экспортировать отдельно, когда родительский компонент задаёт внешний составной asset owner."
+        }
+      ]
     },
     {
       "id": "asset-header-logo-4x",
@@ -516,109 +426,16 @@
           }
         }
       },
-      "description": {
-        "mode": "rendered",
-        "blocks": [
-          {
-            "type": "heading",
-            "value": "ASSET ROLE"
-          },
-          {
-            "type": "line",
-            "tokens": [
-              {
-                "type": "text",
-                "value": "Канонический общий Header asset для Product=CUPIS | Card | Wallet. Внешний компонент содержит логотип и защитную подложку "
-              },
-              {
-                "type": "fact",
-                "path": "mobile/root/description-1"
-              },
-              {
-                "type": "text",
-                "value": "."
-              }
-            ]
-          },
-          {
-            "type": "blank"
-          },
-          {
-            "type": "heading",
-            "value": "EXPORT"
-          },
-          {
-            "type": "line",
-            "tokens": [
-              {
-                "type": "text",
-                "value": "Экспортировать внешний слой "
-              },
-              {
-                "type": "fact",
-                "path": "mobile/root/description-2"
-              },
-              {
-                "type": "text",
-                "value": " целиком из конкретного Desktop-инстанса как PNG "
-              },
-              {
-                "type": "fact",
-                "path": "mobile/root/description-3"
-              },
-              {
-                "type": "text",
-                "value": ". Не экспортировать вложенный Product Logo отдельно и не добавлять HTML-подложку."
-              }
-            ]
-          },
-          {
-            "type": "blank"
-          },
-          {
-            "type": "heading",
-            "value": "USAGE"
-          },
-          {
-            "type": "line",
-            "tokens": [
-              {
-                "type": "text",
-                "value": "Один файл и один src для Mobile и Desktop. Display-size определяет "
-              },
-              {
-                "type": "component-name",
-                "component_id": "email-header"
-              },
-              {
-                "type": "text",
-                "value": ": "
-              },
-              {
-                "type": "fact",
-                "path": "mobile/root/description-4"
-              },
-              {
-                "type": "text",
-                "value": " Desktop и "
-              },
-              {
-                "type": "fact",
-                "path": "mobile/root/description-5"
-              },
-              {
-                "type": "text",
-                "value": " Mobile."
-              }
-            ]
-          }
-        ]
-      },
       "provenance": {
         "baseline_path": "registry/email-component-descriptions-registry.md",
         "baseline_heading": "Asset/Header-Logo @4x",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
-      }
+      },
+      "documentation": {
+        "purpose": "Канонический составной логотип хедера с защитной подложкой для обоих viewport.",
+        "critical_constraint_ids": []
+      },
+      "constraints": []
     },
     {
       "id": "asset-header-logo-compact-4x",
@@ -722,101 +539,26 @@
           }
         }
       },
-      "description": {
-        "mode": "rendered",
-        "blocks": [
-          {
-            "type": "heading",
-            "value": "ROLE"
-          },
-          {
-            "type": "line",
-            "tokens": [
-              {
-                "type": "text",
-                "value": "Вспомогательный Figma layout-source для точного отображения Mobile-варианта "
-              },
-              {
-                "type": "component-name",
-                "component_id": "email-header"
-              },
-              {
-                "type": "text",
-                "value": " в размере "
-              },
-              {
-                "type": "fact",
-                "path": "mobile/root/description-1"
-              },
-              {
-                "type": "text",
-                "value": "."
-              }
-            ]
-          },
-          {
-            "type": "blank"
-          },
-          {
-            "type": "heading",
-            "value": "EXPORT"
-          },
-          {
-            "type": "line",
-            "tokens": [
-              {
-                "type": "text",
-                "value": "Отдельно не экспортировать и не создавать для него Mobile-файл. Канонический файл письма экспортируется из Desktop-слоя header-logo "
-              },
-              {
-                "type": "fact",
-                "path": "mobile/root/description-2"
-              },
-              {
-                "type": "text",
-                "value": " компонента "
-              },
-              {
-                "type": "component-name",
-                "component_id": "asset-header-logo-4x"
-              },
-              {
-                "type": "text",
-                "value": "."
-              }
-            ]
-          },
-          {
-            "type": "blank"
-          },
-          {
-            "type": "heading",
-            "value": "USAGE"
-          },
-          {
-            "type": "line",
-            "tokens": [
-              {
-                "type": "text",
-                "value": "Использовать только внутри Viewport=Mobile компонента "
-              },
-              {
-                "type": "component-name",
-                "component_id": "email-header"
-              },
-              {
-                "type": "text",
-                "value": "."
-              }
-            ]
-          }
-        ]
-      },
       "provenance": {
         "baseline_path": "registry/email-component-descriptions-registry.md",
         "baseline_heading": "Asset/Header-Logo-Compact @4x",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
-      }
+      },
+      "documentation": {
+        "purpose": "Вспомогательный компактный источник раскладки логотипа для мобильного варианта хедера.",
+        "critical_constraint_ids": [
+          "compact-source-is-not-separate-export"
+        ]
+      },
+      "constraints": [
+        {
+          "id": "compact-source-is-not-separate-export",
+          "scope": "mobile",
+          "kind": "asset-export",
+          "severity": "critical",
+          "statement": "Компактный мобильный источник используется только для раскладки и не создаёт отдельный файл письма."
+        }
+      ]
     },
     {
       "id": "icon-bank-card-2-line",
@@ -864,14 +606,15 @@
           }
         }
       },
-      "description": {
-        "mode": "none",
-        "reason": "nested-figma-glyph-without-independent-email-contract"
-      },
       "provenance": {
         "node_id": "1009:2505",
         "captured_at": "2026-09-06T12:14:00Z"
-      }
+      },
+      "documentation": {
+        "purpose": "Исходный векторный знак банковской карты для вложенного использования в визуальных ассетах.",
+        "critical_constraint_ids": []
+      },
+      "constraints": []
     },
     {
       "id": "icon-fingerprint-2-line",
@@ -919,14 +662,15 @@
           }
         }
       },
-      "description": {
-        "mode": "none",
-        "reason": "nested-figma-glyph-without-independent-email-contract"
-      },
       "provenance": {
         "node_id": "491:22370",
         "captured_at": "2026-09-06T12:14:00Z"
-      }
+      },
+      "documentation": {
+        "purpose": "Исходный векторный знак отпечатка пальца для вложенного использования в визуальных ассетах.",
+        "critical_constraint_ids": []
+      },
+      "constraints": []
     },
     {
       "id": "icon-gift-2-line",
@@ -974,14 +718,15 @@
           }
         }
       },
-      "description": {
-        "mode": "none",
-        "reason": "nested-figma-glyph-without-independent-email-contract"
-      },
       "provenance": {
         "node_id": "946:25576",
         "captured_at": "2026-09-06T12:14:00Z"
-      }
+      },
+      "documentation": {
+        "purpose": "Исходный векторный знак подарка для вложенного использования в визуальных ассетах.",
+        "critical_constraint_ids": []
+      },
+      "constraints": []
     },
     {
       "id": "icon-global-line",
@@ -1029,14 +774,15 @@
           }
         }
       },
-      "description": {
-        "mode": "none",
-        "reason": "nested-figma-glyph-without-independent-email-contract"
-      },
       "provenance": {
         "node_id": "1009:2506",
         "captured_at": "2026-09-06T12:14:00Z"
-      }
+      },
+      "documentation": {
+        "purpose": "Исходный векторный знак глобуса для вложенного использования в визуальных ассетах.",
+        "critical_constraint_ids": []
+      },
+      "constraints": []
     },
     {
       "id": "icon-lock-password-fill",
@@ -1084,14 +830,15 @@
           }
         }
       },
-      "description": {
-        "mode": "none",
-        "reason": "nested-figma-glyph-without-independent-email-contract"
-      },
       "provenance": {
         "node_id": "491:22369",
         "captured_at": "2026-09-06T12:14:00Z"
-      }
+      },
+      "documentation": {
+        "purpose": "Исходный векторный знак защиты пароля для вложенного использования в визуальных ассетах.",
+        "critical_constraint_ids": []
+      },
+      "constraints": []
     },
     {
       "id": "icon-mail-fill",
@@ -1139,14 +886,15 @@
           }
         }
       },
-      "description": {
-        "mode": "none",
-        "reason": "nested-figma-glyph-without-independent-email-contract"
-      },
       "provenance": {
         "node_id": "491:22372",
         "captured_at": "2026-09-06T12:14:00Z"
-      }
+      },
+      "documentation": {
+        "purpose": "Исходный векторный знак почты для вложенного использования в визуальных ассетах.",
+        "critical_constraint_ids": []
+      },
+      "constraints": []
     },
     {
       "id": "icon-mir-logo",
@@ -1194,14 +942,15 @@
           }
         }
       },
-      "description": {
-        "mode": "none",
-        "reason": "nested-figma-glyph-without-independent-email-contract"
-      },
       "provenance": {
         "node_id": "946:25485",
         "captured_at": "2026-09-06T12:14:00Z"
-      }
+      },
+      "documentation": {
+        "purpose": "Исходный векторный логотип платёжной системы «Мир» для вложенного использования в визуальных ассетах.",
+        "critical_constraint_ids": []
+      },
+      "constraints": []
     },
     {
       "id": "icon-receipt-fill",
@@ -1249,14 +998,15 @@
           }
         }
       },
-      "description": {
-        "mode": "none",
-        "reason": "nested-figma-glyph-without-independent-email-contract"
-      },
       "provenance": {
         "node_id": "491:22374",
         "captured_at": "2026-09-06T12:14:00Z"
-      }
+      },
+      "documentation": {
+        "purpose": "Исходный векторный знак чека для вложенного использования в визуальных ассетах.",
+        "critical_constraint_ids": []
+      },
+      "constraints": []
     },
     {
       "id": "icon-shopping-basket-2-line",
@@ -1304,14 +1054,15 @@
           }
         }
       },
-      "description": {
-        "mode": "none",
-        "reason": "nested-figma-glyph-without-independent-email-contract"
-      },
       "provenance": {
         "node_id": "946:25480",
         "captured_at": "2026-09-06T12:14:00Z"
-      }
+      },
+      "documentation": {
+        "purpose": "Исходный векторный знак корзины покупок для вложенного использования в визуальных ассетах.",
+        "critical_constraint_ids": []
+      },
+      "constraints": []
     },
     {
       "id": "icon-smartphone-fill",
@@ -1359,14 +1110,15 @@
           }
         }
       },
-      "description": {
-        "mode": "none",
-        "reason": "nested-figma-glyph-without-independent-email-contract"
-      },
       "provenance": {
         "node_id": "491:22371",
         "captured_at": "2026-09-06T12:14:00Z"
-      }
+      },
+      "documentation": {
+        "purpose": "Исходный векторный знак смартфона для вложенного использования в визуальных ассетах.",
+        "critical_constraint_ids": []
+      },
+      "constraints": []
     },
     {
       "id": "icon-user-follow-fill",
@@ -1414,14 +1166,15 @@
           }
         }
       },
-      "description": {
-        "mode": "none",
-        "reason": "nested-figma-glyph-without-independent-email-contract"
-      },
       "provenance": {
         "node_id": "491:22375",
         "captured_at": "2026-09-06T12:14:00Z"
-      }
+      },
+      "documentation": {
+        "purpose": "Исходный векторный знак добавления пользователя для вложенного использования в визуальных ассетах.",
+        "critical_constraint_ids": []
+      },
+      "constraints": []
     },
     {
       "id": "icon-user-forbid-fill",
@@ -1469,14 +1222,15 @@
           }
         }
       },
-      "description": {
-        "mode": "none",
-        "reason": "nested-figma-glyph-without-independent-email-contract"
-      },
       "provenance": {
         "node_id": "491:22373",
         "captured_at": "2026-09-06T12:14:00Z"
-      }
+      },
+      "documentation": {
+        "purpose": "Исходный векторный знак блокировки пользователя для вложенного использования в визуальных ассетах.",
+        "critical_constraint_ids": []
+      },
+      "constraints": []
     },
     {
       "id": "icon-user-unfollow-fill",
@@ -1524,14 +1278,15 @@
           }
         }
       },
-      "description": {
-        "mode": "none",
-        "reason": "nested-figma-glyph-without-independent-email-contract"
-      },
       "provenance": {
         "node_id": "491:22376",
         "captured_at": "2026-09-06T12:14:00Z"
-      }
+      },
+      "documentation": {
+        "purpose": "Исходный векторный знак удаления пользователя для вложенного использования в визуальных ассетах.",
+        "critical_constraint_ids": []
+      },
+      "constraints": []
     }
   ]
 }
