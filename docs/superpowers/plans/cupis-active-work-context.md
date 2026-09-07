@@ -120,7 +120,7 @@ Draft PR #43 остаётся сохранённым. Tasks 1–3 не выбр�
 
 ## 8. Следующий точный шаг
 
-1. Проверить и по отдельной команде слить plan-only PR подэтапа 7A.
+1. Проверить и по отдельной команде слить plan-only [PR #44](https://github.com/flabenar-maker/e-mail/pull/44) подэтапа 7A.
 2. Закрепить новый SHA `main` и повторно открыть manifest, roadmap, active context и оба implementation plans.
 3. Создать отдельную implementation branch для component documentation contracts.
 4. Реализовать standards, characterization, schema migration, component data migration, full registry renderer и compact Figma Description renderer.
@@ -153,7 +153,7 @@ Draft PR #43 остаётся сохранённым. Tasks 1–3 не выбр�
 | 5 | Assets foundation и Figma naming foundation | Завершён |
 | 6 | Структурированный component registry | Завершён в PR #40 |
 | 7, пакет №1 | Generated-layer manifest capability и digest | Реализован только в draft PR #43 |
-| 7A | Component documentation contracts | Plan фиксируется; реализация не начата |
+| 7A | Component documentation contracts | Plan зафиксирован в draft PR #44; реализация не начата |
 | 7, пакет №2+ | Generated docs и route-specific context bundles | Ожидает 7A |
 | 8 | Разделение Core и workflows, переход на новые источники | Ожидает этап 7 |
 | 9 | Переключение maintenance skill на итоговые bundles | Ожидает этап 8 |
@@ -305,6 +305,7 @@ Figma naming foundation является shadow-источником и не з�
 - [Structured component registry plan](2026-09-05-cupis-structured-component-registry.md)
 - [Structured component registry PR #40](https://github.com/flabenar-maker/e-mail/pull/40)
 - [Component documentation contracts plan](2026-09-07-cupis-component-documentation-contracts.md)
+- [Component documentation plan PR #44](https://github.com/flabenar-maker/e-mail/pull/44)
 - [Generated docs and context bundles plan](2026-09-07-cupis-generated-docs-context-bundles.md)
 - [Generated docs draft PR #43](https://github.com/flabenar-maker/e-mail/pull/43)
 - [Assets foundation](../../../data/foundations/assets.yaml)
