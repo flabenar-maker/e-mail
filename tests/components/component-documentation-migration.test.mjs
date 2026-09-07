@@ -1,7 +1,13 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+import { readStrictYaml } from "../../scripts/lib/strict-yaml.mjs";
 
 import { migrateComponentDocument } from "../../system/migrations/components-1-to-2.mjs";
+
+const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 
 function legacyRecord(id) {
   return {
@@ -188,4 +194,36 @@ test("migration blocks duplicate reviewed mapping IDs", () => {
     () => migrateComponentDocument(legacyDocument(), mapping(entries)),
     (error) => error.code === "COMPONENT_MIGRATION_MAPPING_DUPLICATE",
   );
+});
+
+test("reviewed mapping reproduces all 61 canonical schema 2 records", async () => {
+  const mappingDocument = await readStrictYaml(
+    join(repoRoot, "system/migrations/components-1-to-2.yaml"),
+  );
+  let total = 0;
+
+  for (const library of ["shared", "marketing", "service"]) {
+    const target = await readStrictYaml(
+      join(repoRoot, `data/components/${library}.yaml`),
+    );
+    const source = structuredClone(target);
+    source.schema_version = "1.0.0";
+    for (const record of source.components) {
+      delete record.documentation;
+      delete record.constraints;
+      record.description = {
+        mode: "rendered",
+        blocks: [{ type: "heading", value: "MIGRATION SOURCE" }],
+      };
+    }
+
+    assert.deepEqual(
+      migrateComponentDocument(source, mappingDocument),
+      target,
+      `Reviewed mapping drift for ${library}.`,
+    );
+    total += target.components.length;
+  }
+
+  assert.equal(total, 61);
 });
