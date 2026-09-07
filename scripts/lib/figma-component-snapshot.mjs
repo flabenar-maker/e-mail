@@ -116,17 +116,22 @@ function normalizePropertyType(value, path) {
 function normalizeProperty(property, path) {
   const name = requireString(property?.name, `${path}/name`)
     .replace(/#\d+:\d+$/u, "");
+  const type = normalizePropertyType(property?.type, `${path}/type`);
   const result = {
     name: requireString(name, `${path}/name`),
-    type: normalizePropertyType(property?.type, `${path}/type`),
+    type,
   };
   const hasDefault = Object.hasOwn(property ?? {}, "default");
   const hasDefaultValue = Object.hasOwn(property ?? {}, "defaultValue");
-  if (!hasDefault && !hasDefaultValue) {
+  if (!hasDefault && !hasDefaultValue && type !== "slot") {
     invalid(`${path}/default`, "Property default is required.");
   }
   result.default = stableValue(
-    hasDefault ? property.default : property.defaultValue,
+    hasDefault
+      ? property.default
+      : hasDefaultValue
+        ? property.defaultValue
+        : null,
   );
   return result;
 }
@@ -181,7 +186,7 @@ function normalizeComponent(component, path) {
       component?.properties ?? [],
       `${path}/properties`,
       normalizeProperty,
-    ),
+    ).filter((property) => property.type !== "variant"),
     semantic_children: normalizeCollection(
       component?.semantic_children ?? [],
       `${path}/semantic_children`,
