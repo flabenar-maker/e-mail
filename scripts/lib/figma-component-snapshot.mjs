@@ -32,11 +32,7 @@ function normalizeLf(value) {
 
 function stableValue(value) {
   if (Array.isArray(value)) {
-    return value
-      .map(stableValue)
-      .sort((left, right) =>
-        JSON.stringify(left).localeCompare(JSON.stringify(right)),
-      );
+    return value.map(stableValue);
   }
   if (!value || typeof value !== "object") {
     return typeof value === "string" ? normalizeLf(value) : value;
@@ -56,25 +52,46 @@ function requireString(value, path) {
   return value;
 }
 
-function normalizeAxes(axes, path) {
-  if (!Array.isArray(axes)) {
-    invalid(path, "Variant axes must be an array.");
+function normalizeNodeKind(value, path) {
+  const normalized = requireString(value, path)
+    .trim()
+    .toLowerCase()
+    .replaceAll("_", "-");
+  if (!["component", "component-set"].includes(normalized)) {
+    invalid(path, "Unsupported component node kind.");
   }
-  return axes
-    .map((axis, index) => ({
+  return normalized;
+}
+
+function normalizeNodeId(value, path) {
+  return requireString(value?.node_id ?? value?.id, path);
+}
+
+function normalizeAxes(axes, path) {
+  let entries;
+  if (Array.isArray(axes)) {
+    entries = axes.map((axis, index) => ({
       name: requireString(axis?.name, `${path}/${index}/name`),
       value: requireString(axis?.value, `${path}/${index}/value`),
-    }))
-    .sort(
-      (left, right) =>
-        left.name.localeCompare(right.name) ||
-        left.value.localeCompare(right.value),
-    );
+    }));
+  } else if (axes && typeof axes === "object") {
+    entries = Object.entries(axes).map(([name, value]) => ({
+      name: requireString(name, `${path}/name`),
+      value: requireString(value, `${path}/${name}`),
+    }));
+  } else {
+    invalid(path, "Variant axes must be an array or object.");
+  }
+  return entries.sort(
+    (left, right) =>
+      left.name.localeCompare(right.name) ||
+      left.value.localeCompare(right.value),
+  );
 }
 
 function normalizeVariant(variant, path) {
   const result = {
-    node_id: requireString(variant?.node_id, `${path}/node_id`),
+    node_id: normalizeNodeId(variant, `${path}/node_id`),
     axes: normalizeAxes(variant?.axes, `${path}/axes`),
   };
   for (const key of ["width", "height"]) {
@@ -88,64 +105,94 @@ function normalizeVariant(variant, path) {
   return result;
 }
 
+function normalizePropertyType(value, path) {
+  return requireString(value, path)
+    .trim()
+    .toLowerCase()
+    .replaceAll("_", "-")
+    .replaceAll(" ", "-");
+}
+
 function normalizeProperty(property, path) {
+  const name = requireString(property?.name, `${path}/name`)
+    .replace(/#\d+:\d+$/u, "");
   const result = {
-    name: requireString(property?.name, `${path}/name`),
-    type: requireString(property?.type, `${path}/type`),
+    name: requireString(name, `${path}/name`),
+    type: normalizePropertyType(property?.type, `${path}/type`),
   };
-  if (!Object.hasOwn(property ?? {}, "default")) {
+  const hasDefault = Object.hasOwn(property ?? {}, "default");
+  const hasDefaultValue = Object.hasOwn(property ?? {}, "defaultValue");
+  if (!hasDefault && !hasDefaultValue) {
     invalid(`${path}/default`, "Property default is required.");
   }
-  result.default = stableValue(property.default);
+  result.default = stableValue(
+    hasDefault ? property.default : property.defaultValue,
+  );
   return result;
 }
 
-function normalizeCollection(value, path, normalizeItem = stableValue) {
+function normalizeCollection(
+  value,
+  path,
+  normalizeItem = stableValue,
+  { sort = true } = {},
+) {
   if (!Array.isArray(value)) {
     invalid(path, "Snapshot collection must be an array.");
   }
-  return value
-    .map((item, index) => normalizeItem(item, `${path}/${index}`))
-    .sort((left, right) =>
-      JSON.stringify(left).localeCompare(JSON.stringify(right)),
-    );
+  const normalized = value.map(
+    (item, index) => normalizeItem(item, `${path}/${index}`),
+  );
+  return sort
+    ? normalized.sort((left, right) =>
+        JSON.stringify(left).localeCompare(JSON.stringify(right)),
+      )
+    : normalized;
 }
 
 function normalizeComponent(component, path) {
-  const nodeKind = requireString(component?.node_kind, `${path}/node_kind`);
-  if (!["component", "component-set"].includes(nodeKind)) {
-    invalid(`${path}/node_kind`, "Unsupported component node kind.");
-  }
-  if (typeof component?.description !== "string") {
+  const nodeKind = normalizeNodeKind(
+    component?.node_kind ?? component?.type,
+    `${path}/node_kind`,
+  );
+  const description = component?.description ?? "";
+  if (typeof description !== "string") {
     invalid(`${path}/description`, "Component Description must be a string.");
   }
-  if (!component?.contract_geometry || typeof component.contract_geometry !== "object") {
+  const contractGeometry = component?.contract_geometry ?? {};
+  if (
+    !contractGeometry ||
+    typeof contractGeometry !== "object" ||
+    Array.isArray(contractGeometry)
+  ) {
     invalid(`${path}/contract_geometry`, "Contract geometry must be an object.");
   }
   return {
-    node_id: requireString(component?.node_id, `${path}/node_id`),
+    node_id: normalizeNodeId(component, `${path}/node_id`),
     name: requireString(component?.name, `${path}/name`),
     node_kind: nodeKind,
-    description: normalizeLf(component.description),
+    description: normalizeLf(description),
     variants: normalizeCollection(
-      component.variants,
+      component?.variants ?? [],
       `${path}/variants`,
       normalizeVariant,
     ),
     properties: normalizeCollection(
-      component.properties,
+      component?.properties ?? [],
       `${path}/properties`,
       normalizeProperty,
     ),
     semantic_children: normalizeCollection(
-      component.semantic_children,
+      component?.semantic_children ?? [],
       `${path}/semantic_children`,
+      stableValue,
+      { sort: false },
     ),
     bindings: normalizeCollection(
-      component.bindings,
+      component?.bindings ?? [],
       `${path}/bindings`,
     ),
-    contract_geometry: stableValue(component.contract_geometry),
+    contract_geometry: stableValue(contractGeometry),
   };
 }
 
@@ -165,7 +212,7 @@ export function normalizeFigmaComponentSnapshot(input) {
     input.roots,
     "/roots",
     (root, path) => ({
-      node_id: requireString(root?.node_id, `${path}/node_id`),
+      node_id: normalizeNodeId(root, `${path}/node_id`),
       components: normalizeCollection(
         root?.components,
         `${path}/components`,
