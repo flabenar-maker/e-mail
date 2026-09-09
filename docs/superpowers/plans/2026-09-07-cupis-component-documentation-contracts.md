@@ -494,7 +494,7 @@ git commit -m "feat: render full component registry sections"
   - compareFigmaComponentDescription(expected, actual): diagnostics[].
 - Consumes: stable ID, purpose, derived render type и referenced critical constraints.
 
-- [ ] **Step 1: Написать failing exact-output tests**
+- [x] **Step 1: Написать failing exact-output tests**
 
 Expected:
 
@@ -509,7 +509,7 @@ CRITICAL
 
 Проверить вариант без CRITICAL, LF normalization и deterministic output.
 
-- [ ] **Step 2: Добавить forbidden-content tests**
+- [x] **Step 2: Добавить forbidden-content tests**
 
 Description не должен выводить:
 
@@ -520,11 +520,11 @@ Description не должен выводить:
 - правила сборки всего письма;
 - факты, не выбранные critical_constraint_ids.
 
-- [ ] **Step 3: Реализовать renderer и comparison**
+- [x] **Step 3: Реализовать renderer и comparison**
 
 Comparison возвращает exact description drift. Никакой Figma client и write в модуле не добавляется.
 
-- [ ] **Step 4: Запустить GREEN и commit**
+- [x] **Step 4: Запустить GREEN и commit**
 
 ~~~powershell
 node --test tests/components/figma-component-description.test.mjs
