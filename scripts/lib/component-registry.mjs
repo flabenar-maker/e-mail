@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
 import { resolveAssetContract } from "./assets-foundation.mjs";
+import { resolveDesignSpacing } from "./spacing-foundation.mjs";
 import { SystemValidationError } from "./diagnostics.mjs";
 import { validateDocumentShape } from "./schema-validation.mjs";
 import { readStrictYaml } from "./strict-yaml.mjs";
@@ -84,25 +85,36 @@ function pushDuplicate(errors, seen, value, code, path, label) {
   }
 }
 
-function walkElements(element, path, visit) {
+function walkElementTree(element, path, visit) {
   if (!element || typeof element !== "object") {
     return;
   }
   visit(element, path);
   (element.children ?? []).forEach((child, index) => {
-    walkElements(child, `${path}/children/${index}`, visit);
+    walkElementTree(child, `${path}/children/${index}`, visit);
   });
 }
 
-function walkFacts(record, visit) {
+export function walkComponentElements(record, visit) {
   for (const viewport of VIEWPORTS) {
     const root = record?.contracts?.[viewport]?.root;
-    walkElements(root, `/contracts/${viewport}/root`, (element, path) => {
-      (element.facts ?? []).forEach((fact, index) =>
-        visit(fact, `${path}/facts/${index}`),
-      );
+    walkElementTree(root, `/contracts/${viewport}/root`, (element, path) => {
+      visit({ viewport, element, path });
     });
   }
+}
+
+export function walkComponentFacts(record, visit) {
+  walkComponentElements(record, ({ viewport, element, path }) => {
+    (element.facts ?? []).forEach((fact, index) => {
+      visit({
+        viewport,
+        element,
+        fact,
+        path: `${path}/facts/${index}`,
+      });
+    });
+  });
 }
 
 const HTML_RENDER_MODES = new Set([
@@ -120,7 +132,7 @@ export function deriveComponentRenderType(record) {
   let hasFigmaSourceOnly = false;
 
   for (const viewport of VIEWPORTS) {
-    walkElements(record?.contracts?.[viewport]?.root, "", (element) => {
+    walkElementTree(record?.contracts?.[viewport]?.root, "", (element) => {
       const mode = element.render_mode;
       hasHtml ||= HTML_RENDER_MODES.has(mode);
       hasImage ||= IMAGE_RENDER_MODES.has(mode);
@@ -312,7 +324,7 @@ export async function loadComponentRegistries({
   return Object.freeze(Object.fromEntries(entries));
 }
 
-export function indexComponentRegistries(registries) {
+export function indexComponentRegistries(registries, foundations = null) {
   const systemEntries = [];
   const identityEntries = [];
   const nameEntries = [];
@@ -336,11 +348,19 @@ export function indexComponentRegistries(registries) {
     }
   }
 
-  return Object.freeze({
+  const index = {
     bySystemId: readonlyMap(systemEntries),
     byFigmaIdentity: readonlyMap(identityEntries),
     byFigmaName: readonlyMap(nameEntries),
-  });
+  };
+  if (foundations !== null) {
+    index.foundations = Object.freeze({
+      typography: foundations?.typography,
+      spacing: foundations?.spacing,
+      assets: foundations?.assets,
+    });
+  }
+  return Object.freeze(index);
 }
 
 export function collectComponentReferences(record) {
@@ -353,7 +373,7 @@ export function collectComponentReferences(record) {
 
   for (const viewport of VIEWPORTS) {
     const root = record?.contracts?.[viewport]?.root;
-    walkElements(root, `/contracts/${viewport}/root`, (element, path) => {
+    walkElementTree(root, `/contracts/${viewport}/root`, (element, path) => {
       if (element.render_mode === "nested-component") {
         addReference(
           references.components,
@@ -438,7 +458,7 @@ function validateInternalIds(errors, record, rootPath) {
   for (const viewport of VIEWPORTS) {
     const seenElements = new Set();
     const seenFacts = new Set();
-    walkElements(
+    walkElementTree(
       record?.contracts?.[viewport]?.root,
       `${rootPath}/contracts/${viewport}/root`,
       (element, path) => {
@@ -465,42 +485,89 @@ function validateInternalIds(errors, record, rootPath) {
   }
 }
 
-function validateFoundationReference(errors, reference, typography, spacing) {
+export function resolveComponentFoundationReference(
+  reference,
+  { typography, spacing } = {},
+) {
   if (reference.foundationId === "typography") {
     const style =
       reference.group === "styles"
         ? (typography?.styles ?? []).find((item) => item.id === reference.id)
         : null;
     if (!style) {
-      errors.push(
-        diagnostic(
-          "COMPONENT_REGISTRY_UNKNOWN_TYPOGRAPHY_REFERENCE",
-          reference.path,
-          `Unknown typography reference: ${reference.group}/${reference.id}.`,
-        ),
-      );
-    } else if (style.viewport !== reference.viewport) {
-      errors.push(
-        diagnostic(
-          "COMPONENT_REGISTRY_TYPOGRAPHY_VIEWPORT_MISMATCH",
-          reference.path,
-          `Typography style ${reference.id} belongs to ${style.viewport}, not ${reference.viewport}.`,
-        ),
+      throw diagnostic(
+        "COMPONENT_REGISTRY_UNKNOWN_TYPOGRAPHY_REFERENCE",
+        reference.path,
+        `Unknown typography reference: ${reference.group}/${reference.id}.`,
       );
     }
-  } else if (reference.foundationId === "spacing") {
-    const known =
-      reference.group === "roles" &&
-      (spacing?.roles ?? []).some((item) => item.id === reference.id);
-    if (!known) {
-      errors.push(
-        diagnostic(
-          "COMPONENT_REGISTRY_UNKNOWN_SPACING_REFERENCE",
-          reference.path,
-          `Unknown spacing reference: ${reference.group}/${reference.id}.`,
-        ),
+    if (style.viewport !== reference.viewport) {
+      throw diagnostic(
+        "COMPONENT_REGISTRY_TYPOGRAPHY_VIEWPORT_MISMATCH",
+        reference.path,
+        `Typography style ${reference.id} belongs to ${style.viewport}, not ${reference.viewport}.`,
       );
     }
+    return Object.freeze({
+      foundationId: reference.foundationId,
+      group: reference.group,
+      id: reference.id,
+      viewport: reference.viewport,
+      definition: structuredClone(style),
+    });
+  }
+
+  if (reference.foundationId === "spacing") {
+    const role =
+      reference.group === "roles"
+        ? (spacing?.roles ?? []).find((item) => item.id === reference.id)
+        : null;
+    if (!role) {
+      throw diagnostic(
+        "COMPONENT_REGISTRY_UNKNOWN_SPACING_REFERENCE",
+        reference.path,
+        `Unknown spacing reference: ${reference.group}/${reference.id}.`,
+      );
+    }
+    let valuePx;
+    try {
+      valuePx = resolveDesignSpacing(spacing, {
+        roleId: reference.id,
+        viewport: reference.viewport,
+      });
+    } catch {
+      throw diagnostic(
+        "COMPONENT_REGISTRY_UNKNOWN_SPACING_REFERENCE",
+        reference.path,
+        `Spacing reference ${reference.id} has no exact ${reference.viewport} value.`,
+      );
+    }
+    return Object.freeze({
+      foundationId: reference.foundationId,
+      group: reference.group,
+      id: reference.id,
+      viewport: reference.viewport,
+      definition: structuredClone(role),
+      valuePx,
+    });
+  }
+
+  throw diagnostic(
+    "COMPONENT_REGISTRY_UNKNOWN_FOUNDATION_REFERENCE",
+    reference.path,
+    `Unknown foundation reference: ${String(reference.foundationId)}.`,
+  );
+}
+
+function validateFoundationReference(errors, reference, typography, spacing) {
+  try {
+    resolveComponentFoundationReference(reference, { typography, spacing });
+  } catch (error) {
+    if (error instanceof SystemValidationError) {
+      errors.push(error);
+      return;
+    }
+    throw error;
   }
 }
 
