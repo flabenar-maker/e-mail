@@ -59,6 +59,16 @@ function recordsIn(registries) {
   );
 }
 
+export function listComponentRecords(registries) {
+  return recordsIn(registries)
+    .map(({ library, record }) => ({ library, record }))
+    .sort(
+      (left, right) =>
+        LIBRARIES.indexOf(left.library) - LIBRARIES.indexOf(right.library) ||
+        left.record.id.localeCompare(right.record.id),
+    );
+}
+
 function readonlyMap(entries) {
   const target = new Map(entries);
   const proxy = new Proxy(target, {
