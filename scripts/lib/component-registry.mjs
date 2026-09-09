@@ -373,7 +373,10 @@ export function indexComponentRegistries(registries, foundations = null) {
   return Object.freeze(index);
 }
 
-export function collectComponentReferences(record) {
+export function collectComponentReferences(
+  record,
+  { viewports = VIEWPORTS } = {},
+) {
   const references = {
     components: [],
     properties: [],
@@ -381,7 +384,7 @@ export function collectComponentReferences(record) {
     foundations: [],
   };
 
-  for (const viewport of VIEWPORTS) {
+  for (const viewport of viewports) {
     const root = record?.contracts?.[viewport]?.root;
     walkElementTree(root, `/contracts/${viewport}/root`, (element, path) => {
       if (element.render_mode === "nested-component") {
@@ -1014,3 +1017,4 @@ export async function validateComponentRegistries(options) {
     };
   }
 }
+
