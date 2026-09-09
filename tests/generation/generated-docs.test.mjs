@@ -180,6 +180,10 @@ test("generated references expose complete facts without mixing responsibilities
   assert.match(assetDoc, /png-4x/u);
   assert.match(assetDoc, /Export boundary/u);
   assert.match(assetDoc, /banner-secondary/u);
+  assert.match(assetDoc, /Identity policy/u);
+  assert.match(assetDoc, /Background policy/u);
+  assert.match(assetDoc, /shared_mobile_desktop_file/u);
+  assert.match(assetDoc, /artificial_matte/u);
 
   assert.match(namingDoc, /@2x/u);
   assert.match(namingDoc, /@4x/u);
