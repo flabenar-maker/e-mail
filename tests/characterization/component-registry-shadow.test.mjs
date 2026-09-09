@@ -222,16 +222,12 @@ test("Markdown component registry exposes the frozen 26 + 18 + 16 + 1 baseline",
   );
 });
 
-test("structured component registries preserve the frozen Markdown shadow exactly", async () => {
-  const [
-    markdown,
-    { loadComponentRegistries, indexComponentRegistries },
-    { renderComponentDescription },
-  ] = await Promise.all([
-    readFile(registryPath, "utf8"),
-    import("../../scripts/lib/component-registry.mjs"),
-    import("../../scripts/lib/component-description.mjs"),
-  ]);
+test("structured registries preserve the frozen Markdown identity shadow", async () => {
+  const [markdown, { loadComponentRegistries, indexComponentRegistries, deriveComponentRenderType }] =
+    await Promise.all([
+      readFile(registryPath, "utf8"),
+      import("../../scripts/lib/component-registry.mjs"),
+    ]);
 
   const baseline = sectionSpecs.flatMap((spec) =>
     parseEntries(normalizeLf(markdown), spec),
@@ -264,18 +260,10 @@ test("structured component registries preserve the frozen Markdown shadow exactl
     assert.equal(record.identity.node_kind, expected.nodeKind);
     assert.deepEqual(normalizeStructuredVariants(record), expected.variants);
     assert.deepEqual(normalizeStructuredProperties(record), expected.properties);
-    assert.equal(record.description.mode, "rendered");
-    assert.equal(
-      normalizeLf(renderComponentDescription(record, index)),
-      expected.description,
-      `Rendered Description drift: ${expected.figmaName}`,
-    );
+    assert.ok(record.documentation.purpose.trim().length > 0);
+    assert.equal(Object.hasOwn(record, "description"), false);
+    assert.ok(["HTML", "ASSET", "HYBRID"].includes(deriveComponentRenderType(record)));
   }
-
-  const renderedRecords = allRecords.filter(
-    (record) => record.description.mode === "rendered",
-  );
-  assert.equal(renderedRecords.length, 48);
 
   for (const expected of expectedIconGlyphs) {
     const record = index.bySystemId.get(expected.id);
@@ -283,17 +271,11 @@ test("structured component registries preserve the frozen Markdown shadow exactl
     assert.equal(record.identity.figma_name, expected.figmaName);
     assert.equal(record.identity.node_kind, "component");
     assert.equal(record.figma.node_id, expected.nodeId);
-    assert.equal(record.description.mode, "none");
     assert.equal(record.contracts.mobile.root.render_mode, "figma-source-only");
     assert.equal(record.contracts.desktop.root.render_mode, "figma-source-only");
+    assert.equal(deriveComponentRenderType(record), "ASSET");
   }
-
-  assert.equal(
-    grouped.shared.filter((record) => record.description.mode === "none").length,
-    13,
-  );
 });
-
 
 test("component registries stay isolated from foundations, skills and bundles", async () => {
   assert.deepEqual(

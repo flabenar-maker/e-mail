@@ -29,11 +29,20 @@ Foundation владеет общими definitions и совместимость
 
 Этот foundation пока не входит в рабочие bundle profiles, не активирует maintenance skill и не разрешает переименование в Figma. Подключение навыка и любые Figma-записи выполняются на последующих этапах через отдельное согласование.
 
-### Теневой реестр компонентов
+### Теневой реестр и документация компонентов
 
-Три файла — `data/components/shared.yaml`, `data/components/marketing.yaml` и `data/components/service.yaml` — содержат будущий машинно-проверяемый источник контрактов компонентов. Общая проверка уже контролирует их структуру, связи, Mobile/Desktop-контракты и совпадение описаний с текущим слепком.
+Три файла — `data/components/shared.yaml`, `data/components/marketing.yaml` и `data/components/service.yaml` — являются структурированным источником component-specific данных. Общая проверка контролирует их схему, связи, независимые Mobile/Desktop-контракты и документационную семантику.
 
-Пока рабочим источником для поддержки библиотеки и вёрстки остаётся `registry/email-component-descriptions-registry.md`. Новые component-файлы и их схема не входят ни в один bundle profile, поэтому не меняют текущую сборку писем.
+Из одной записи строятся два разных представления:
+
+- `scripts/lib/component-registry-doc.mjs` формирует полную документацию компонента для будущего generated registry;
+- `scripts/lib/component-description.mjs` формирует компактный Figma Description: идентификатор, назначение, тип рендера и только выбранные критические ограничения.
+
+Generated registry является читаемым представлением данных, а не новым источником. После появления файлов в `docs/generated/` их нельзя будет править вручную: изменения вносятся в structured data, после чего документация пересобирается.
+
+Figma Description также не является входом для вёрстки письма. Email build должен получать выбранные фактические Mobile/Desktop-контракты из component data; отсутствие или устаревание Description не должно менять HTML-результат.
+
+Пока рабочим источником для поддержки библиотеки и вёрстки остаётся `registry/email-component-descriptions-registry.md`. Новые component-файлы, оба стандарта и их renderers не входят ни в один bundle profile, поэтому текущие маршруты и сборка писем не меняются.
 
 На этом этапе Figma не изменялась. Публикация generated docs и переключение рабочих bundle profiles будут отдельным этапом 7 миграции после самостоятельной проверки данных.
 
@@ -101,6 +110,8 @@ Foundation владеет общими definitions и совместимость
 | `system/manifest.yaml` | Единственная машинно-читаемая карта источников, маршрутов и зависимостей системы |
 | `core/email-figma-prompt.md` | Единственный источник общих технических правил вёрстки |
 | `core/figma-component-naming-standard.md` | Единственный источник общих правил нейминга и классификации Figma-объектов |
+| `core/component-contract-standard.md` | Нормативные правила полного structured component contract и его полной registry-проекции |
+| `core/figma-component-description-standard.md` | Нормативные правила компактной Figma Description-проекции; не является входом HTML-вёрстки |
 | `registry/email-component-descriptions-registry.md` | Актуальный фактический слепок descriptions и состава компонентов |
 | `data/components/shared.yaml` | Теневые машинно-проверяемые контракты общих компонентов, корневого шаблона и внутренних Figma-источников |
 | `data/components/marketing.yaml` | Теневые машинно-проверяемые контракты маркетинговых компонентов |

@@ -2,6 +2,7 @@
 
 Статус: дизайн согласован в рабочем чате; документ ожидает финального review пользователя.
 Дата: 24 августа 2026 года.
+Последнее архитектурное уточнение: 7 сентября 2026 года — component documentation contracts.
 Репозиторий: `flabenar-maker/e-mail`.
 Baseline: `main@48e4d6c5f51e1ccd2311b52f5805616f183150a8`.
 Резервная точка: `backup/pre-structured-migration-2026-08-24`.
@@ -36,6 +37,9 @@ Baseline: `main@48e4d6c5f51e1ccd2311b52f5805616f183150a8`.
 8. Точный результат важнее автоматического продолжения при расхождении.
 9. Миграция выполняется по доменам с shadow-сравнением.
 10. Старые дубли удаляются только после подтверждённого cutover.
+11. Полный component registry и компактный Figma Description генерируются из одной structured component-записи.
+12. Figma Description не является источником implementation semantics и не входит в HTML-build context.
+13. Полный component contract содержит только факты, влияющие на реализацию; безвредный внутренний инвентарь Figma в него не переносится.
 
 ## 3. Владение данными
 
@@ -65,11 +69,11 @@ Figma владеет фактическим визуальным устройс�
 - точными foundation definitions;
 - Mobile/Desktop implementation semantics;
 - asset export contracts;
-- каноническими данными для Figma Description;
+- каноническими purpose и component-specific constraints для generated registry и Figma Description;
 - Figma identity и последним проверенным fingerprint;
 - связями между компонентами, foundations и workflows.
 
-Figma Description является синхронизированной публикацией component contract, а не независимым источником текста.
+Полный Markdown-реестр является generated-представлением component contract для человека. Figma Description является отдельной компактной generated-проекцией: stable ID, purpose, вычисленный render type и выбранные critical constraints. Ни один из этих outputs не редактируется как самостоятельный источник.
 
 ### 3.3. Core
 
@@ -145,6 +149,8 @@ Manifest не содержит component contracts или копии норма�
 │  ├─ email-rendering-standard.md
 │  ├─ typography-standard.md
 │  ├─ asset-export-standard.md
+│  ├─ component-contract-standard.md
+│  ├─ figma-component-description-standard.md
 │  └─ figma-library-standard.md
 │
 ├─ workflows/
@@ -233,18 +239,20 @@ Maintenance skill не запускает полный naming-аудит при 
 - status: `draft`, `active` или `deprecated`;
 - Figma identity;
 - semantic role и category;
+- краткий implementation-purpose;
 - независимый `desktop` contract;
 - независимый `mobile` contract;
+- variants и properties с явным эффектом;
 - ссылки на typography, spacing, assets и вложенные components;
-- component-specific implementation notes;
-- данные для итогового Description;
+- типизированные component-specific constraints;
+- список critical constraint IDs для компактного Figma Description;
 - provenance и fingerprint.
 
 Mobile и Desktop не наследуются друг от друга и не используют `base → override → exception`. Context builder выдаёт полностью разрешённый контракт выбранной версии.
 
-Общее значение записывается ссылкой на foundation ID. Если Figma variable или style binding отсутствует, компонент хранит фактическое literal value. Токен нельзя выводить только по совпадению числа.
+Общее значение записывается ссылкой на foundation ID. Если Figma variable или style binding отсутствует, компонент хранит фактическое literal value. Токен нельзя выводить только по совпадению числа. Generated registry показывает stable reference и разрешённое точное значение, но не создаёт второго владельца foundation.
 
-Итоговый Figma Description детерминированно собирается из структурированных полей и component-specific notes той же записи. Точные факты не поддерживаются вручную одновременно в contract и prose.
+Полная prose-копия контракта внутри component record запрещена. Registry renderer обходит identity, contracts, properties, assets, constraints и dependencies; Figma Description renderer использует только stable ID, purpose, вычисленный render type и явно выбранные critical constraints.
 
 ### 6.1. Изображения и assets
 
@@ -265,6 +273,17 @@ Image contract явно задаёт:
 
 Asset owner сохраняет `@2x` или `@4x` при обычном rename.
 
+### 6.2. Документация компонента
+
+`core/component-contract-standard.md` определяет, какие implementation-significant данные обязан иметь любой текущий или новый component contract и в каком порядке они показываются в полном generated registry.
+
+`core/figma-component-description-standard.md` определяет компактную Figma-проекцию. Её фиксированный порядок: `CUPIS ID`, `PURPOSE`, `RENDER`, затем optional `CRITICAL`. `RENDER` вычисляется из contract tree; `CRITICAL` выводит только выбранные critical constraints и отсутствует при пустом списке.
+
+Полный generated registry должен включать идентификацию и назначение, structure/rendering, независимые Desktop и Mobile contracts, properties/variants, assets/interaction, constraints/dependencies и resolved foundation references. Это человекочитаемый output, а не редактируемый источник.
+
+HTML routes получают selected resolved component contracts. Они не получают стандарт авторинга component contract или компактный Figma Description как instruction. Figma Description может отсутствовать или быть stale без потери implementation semantics; такое состояние блокирует только explicit description-sync или maintenance verification.
+
+
 ## 7. Onboarding нового компонента
 
 Незарегистрированный Figma-компонент не используется как `active`-контракт по визуальному сходству.
@@ -278,9 +297,10 @@ Onboarding выполняет:
 5. формирование component contract;
 6. создание записи со статусом `draft`;
 7. schema и cross-reference validation;
-8. формирование и публикацию Description;
-9. отдельную Figma read-back проверку;
-10. перевод в `active` после успешных проверок.
+8. генерацию полного registry-представления и compact Figma Description preview;
+9. отдельное разрешение на публикацию Description через Figma MCP;
+10. отдельную Figma read-back проверку;
+11. перевод в `active` после успешных проверок.
 
 Обычный новый компонент добавляется новой записью и не требует изменения manifest, Core, workflows или skills.
 
@@ -293,8 +313,9 @@ Onboarding выполняет:
 Направление синхронизации зависит от типа данных:
 
 - визуальные факты: Figma → structured data;
-- component contract и Description: structured data → Figma Description;
-- structured data → generated docs и bundles.
+- component contract: structured data → полный generated registry и resolved context bundles;
+- compact Description: structured data → Figma Description;
+- structured data → остальные generated docs.
 
 Запись хранит Figma file key, node/component-set ID, имя, дату последней проверки и `structure_fingerprint`.
 
@@ -306,13 +327,14 @@ Fingerprint рассчитывается по нормализованным к�
 2. read-only чтение Figma target;
 3. классификация роли и mutation scope;
 4. нормализация Figma snapshot;
-5. сравнение со structured record;
+5. сравнение со structured record и генерация expected full registry/compact Description preview;
 6. предварительный impact report;
 7. отдельное разрешение пользователя;
-8. выполнение только разрешённых записей;
-9. отдельный Figma read-back;
-10. синхронизация structured record и generated docs;
-11. fingerprint, cross-reference и allowed-diff проверки.
+8. сначала изменение и validation structured record в GitHub;
+9. отдельное разрешение на Figma metadata write;
+10. выполнение только разрешённых Description/Documentation-link записей через Figma MCP;
+11. отдельный Figma read-back;
+12. fingerprint, cross-reference, generated-equivalence и allowed-diff проверки.
 
 Типы расхождений:
 
@@ -337,7 +359,7 @@ CI не заявляет live-проверку Figma. Codex получает Fig
 - не редактируются вручную;
 - проверяются повторной детерминированной генерацией в CI.
 
-Generated docs являются представлением, а не источником истины.
+Generated docs являются представлением, а не источником истины. Полный component registry строится напрямую из structured contracts и не вставляет сохранённую prose-копию Figma Description. Compact Figma Description может показываться только как вспомогательная generated-проекция.
 
 ### 9.2. Context bundles
 
@@ -352,7 +374,7 @@ Bundle создаётся на лету под конкретную route и н�
 - `email-new-build`;
 - `email-continue-fix`.
 
-Bundle содержит только применимый workflow, нужные Core sections, выбранные resolved component contracts, используемые foundations, Figma provenance и schema/source versions.
+Bundle содержит только применимый workflow, нужные Core sections, выбранные resolved component contracts, используемые foundations, Figma provenance и schema/source versions. Email-build bundles не включают component-authoring standards или compact Figma Description; figma-description-sync получает только данные, необходимые для expected Description и drift comparison.
 
 Если ссылка не разрешается, schema несовместима или обязательный компонент не `active`, bundle не создаётся. Ошибка называет record и field.
 
@@ -492,13 +514,15 @@ Validation и generation детерминированы и не требуют �
 - valid и failing fixtures;
 - characterization tests текущей системы;
 - cross-reference tests;
-- golden tests generated docs;
+- golden tests full generated registry и compact Figma Description;
 - context-bundle tests;
 - regression tests выявленных ошибок;
 - allowed-path и preserved-content checks.
 
 Проверяемые сценарии включают:
 
+- full component registry generation;
+- compact Figma Description preview и drift;
 - description-only;
 - naming audit;
 - component onboarding;
@@ -520,13 +544,15 @@ Validation и generation детерминированы и не требуют �
 3. typography pilot;
 4. остальные foundations;
 5. component registry;
-6. generated docs и bundles;
-7. Core и workflows;
-8. maintenance skill;
-9. email-build skill;
-10. shadow comparison;
-11. cutover;
-12. отдельное удаление старых дублей.
+6. component documentation contracts как prerequisite generated registry;
+7. generated docs и bundles;
+8. Core и workflows;
+9. maintenance skill;
+10. стандарт и навык разработки компонентов;
+11. email-build skill;
+12. shadow comparison;
+13. cutover;
+14. отдельное удаление старых дублей.
 
 На каждом этапе создаются отдельные branch и PR. Следующий этап начинается после проверки предыдущего.
 

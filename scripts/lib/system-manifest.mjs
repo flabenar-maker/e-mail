@@ -732,6 +732,58 @@ export function resolveComponentRegistrySources(manifest) {
   };
 }
 
+
+const COMPONENT_DOCUMENTATION_STANDARD_SOURCES = [
+  {
+    id: "component-contract-standard",
+    kind: "core",
+    path: "core/component-contract-standard.md",
+  },
+  {
+    id: "figma-component-description-standard",
+    kind: "core",
+    path: "core/figma-component-description-standard.md",
+  },
+];
+
+function resolveComponentDocumentationStandardSources(manifest) {
+  const errors = [];
+
+  for (const expected of COMPONENT_DOCUMENTATION_STANDARD_SOURCES) {
+    const source = manifest.sources.find((item) => item.id === expected.id);
+    if (!source) {
+      errors.push(
+        diagnostic(
+          `missing-${expected.id}-source`,
+          "/sources",
+          `Component documentation standard source must be declared: ${expected.id}.`,
+        ),
+      );
+      continue;
+    }
+    if (source.kind !== expected.kind) {
+      errors.push(
+        diagnostic(
+          "invalid-component-documentation-standard-source-kind",
+          `/sources/${expected.id}/kind`,
+          `Source ${expected.id} must use kind ${expected.kind}.`,
+        ),
+      );
+    }
+    if (source.path !== expected.path) {
+      errors.push(
+        diagnostic(
+          "invalid-component-documentation-standard-source-path",
+          `/sources/${expected.id}/path`,
+          `Source ${expected.id} must use its canonical path.`,
+        ),
+      );
+    }
+  }
+
+  return { errors: sortDiagnostics(errors) };
+}
+
 export async function validateSystem({
   repoRoot,
   manifestPath = "system/manifest.yaml",
@@ -744,6 +796,8 @@ export async function validateSystem({
     const assetsSources = resolveAssetsSources(manifest);
     const figmaNamingSources = resolveFigmaNamingSources(manifest);
     const componentSources = resolveComponentRegistrySources(manifest);
+    const componentDocumentationSources =
+      resolveComponentDocumentationStandardSources(manifest);
     const prerequisiteErrors = sortDiagnostics([
       ...manifestErrors,
       ...typographySources.errors,
@@ -751,6 +805,7 @@ export async function validateSystem({
       ...assetsSources.errors,
       ...figmaNamingSources.errors,
       ...componentSources.errors,
+      ...componentDocumentationSources.errors,
     ]);
     if (prerequisiteErrors.length > 0) {
       return { manifest, errors: prerequisiteErrors };

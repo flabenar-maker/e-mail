@@ -1134,3 +1134,92 @@ test("canonical routes declare exact shadow bundle policies", async () => {
   });
   assert.equal(Object.hasOwn(manifest, "generated_docs"), false);
 });
+
+
+const componentDocumentationStandardSources = [
+  [
+    "component-contract-standard",
+    "core/component-contract-standard.md",
+  ],
+  [
+    "figma-component-description-standard",
+    "core/figma-component-description-standard.md",
+  ],
+];
+
+test("declares component documentation standards as shadow sources outside every bundle", async () => {
+  const manifest = await canonicalManifest();
+  const sources = new Map(
+    manifest.sources.map((source) => [source.id, source]),
+  );
+
+  for (const [id, path] of componentDocumentationStandardSources) {
+    assert.deepEqual(sources.get(id), { id, kind: "core", path });
+    for (const profile of manifest.bundle_profiles) {
+      assert.equal(profile.source_ids.includes(id), false);
+    }
+  }
+});
+
+for (const [sourceId, canonicalPath] of componentDocumentationStandardSources) {
+  test("reports missing " + sourceId + " declaration", async (t) => {
+    const root = await validFixture(t);
+    await mutateFixtureManifest(root, (manifest) => {
+      manifest.sources = manifest.sources.filter(
+        (source) => source.id !== sourceId,
+      );
+    });
+
+    const result = await validateSystem({ repoRoot: root });
+
+    assert.ok(
+      result.errors.some(
+        (error) => error.code === "missing-" + sourceId + "-source",
+      ),
+    );
+  });
+
+  test("reports invalid kind for " + sourceId, async (t) => {
+    const root = await validFixture(t);
+    await mutateFixtureManifest(root, (manifest) => {
+      let source = manifest.sources.find((item) => item.id === sourceId);
+      if (!source) {
+        source = { id: sourceId, kind: "core", path: canonicalPath };
+        manifest.sources.push(source);
+      }
+      source.kind = "registry";
+    });
+
+    const result = await validateSystem({ repoRoot: root });
+
+    assert.ok(
+      result.errors.some(
+        (error) =>
+          error.code ===
+          "invalid-component-documentation-standard-source-kind",
+      ),
+    );
+  });
+
+  test("reports invalid canonical path for " + sourceId, async (t) => {
+    const root = await validFixture(t);
+    await mutateFixtureManifest(root, (manifest) => {
+      let source = manifest.sources.find((item) => item.id === sourceId);
+      if (!source) {
+        source = { id: sourceId, kind: "core", path: canonicalPath };
+        manifest.sources.push(source);
+      }
+      source.path = "core/email-figma-prompt.md";
+    });
+
+    const result = await validateSystem({ repoRoot: root });
+
+    assert.ok(
+      result.errors.some(
+        (error) =>
+          error.code ===
+          "invalid-component-documentation-standard-source-path",
+      ),
+    );
+  });
+}

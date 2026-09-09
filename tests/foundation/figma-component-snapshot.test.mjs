@@ -75,7 +75,7 @@ function rawSnapshot(component = rawComponent()) {
 
 function emptyRegistry(library, root) {
   return {
-    schema_version: "1.0.0",
+    schema_version: "2.0.0",
     registry: {
       id: `components-${library}`,
       library,
@@ -214,13 +214,13 @@ test("snapshot comparison reports unregistered and missing records", async () =>
   );
 });
 
-test("description mode none never creates description drift", async () => {
+test("every documented component participates in description drift detection", async () => {
   const shared = await loadComponentRegistry({
     repoRoot,
     dataPath: "data/components/shared.yaml",
   });
   const icon = structuredClone(
-    shared.components.find((item) => item.description.mode === "none"),
+    shared.components.find((item) => item.identity.semantic_role === "icon"),
   );
   const registries = {
     marketing: emptyRegistry("marketing", "538:17236"),
@@ -254,7 +254,7 @@ test("description mode none never creates description drift", async () => {
     registries,
     componentIndex: indexComponentRegistries(registries),
   });
-  assert.equal(drifts.some((drift) => drift.type === "description-drift"), false);
+  assert.equal(drifts.some((drift) => drift.type === "description-drift"), true);
 });
 
 test("normalizer CLI writes deterministic JSON only to the explicit output", async () => {

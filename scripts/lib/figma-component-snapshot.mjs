@@ -1,6 +1,9 @@
 import { createHash } from "node:crypto";
 
-import { renderComponentDescription } from "./component-description.mjs";
+import {
+  compareFigmaComponentDescription,
+  renderFigmaComponentDescription,
+} from "./component-description.mjs";
 import { SystemValidationError } from "./diagnostics.mjs";
 
 const SNAPSHOT_VERSION = "1.0.0";
@@ -327,9 +330,10 @@ export function compareFigmaComponentSnapshot({
         drifts.push(drift("visual-drift", path, record, identity));
       }
       if (
-        record.description.mode === "rendered" &&
-        component.description !==
-          renderComponentDescription(record, componentIndex)
+        compareFigmaComponentDescription(
+          renderFigmaComponentDescription(record, componentIndex),
+          component.description,
+        ).length > 0
       ) {
         drifts.push(drift("description-drift", path, record, identity));
       }
