@@ -2,7 +2,7 @@ import { deriveComponentRenderType } from "./component-registry.mjs";
 import { SystemValidationError } from "./diagnostics.mjs";
 
 function normalizeLf(value) {
-  return value.replace(/\r\n?/gu, "\n");
+  return value.replace(/\r\n?|\u2028|\u2029/gu, "\n");
 }
 
 function descriptionError(code, path, message) {
