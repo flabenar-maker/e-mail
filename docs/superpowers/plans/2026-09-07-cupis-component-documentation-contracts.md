@@ -431,7 +431,7 @@ git commit -m "data: migrate service component documentation"
   - listComponentDocumentationSections(record): fixed ordered model.
 - Consumes: validated component record и foundation index.
 
-- [ ] **Step 1: Написать failing renderer tests**
+- [x] **Step 1: Написать failing renderer tests**
 
 Проверить fixed order:
 
@@ -447,7 +447,7 @@ Constraints and dependencies
 
 Проверить отсутствие «как Desktop», отсутствие ручного prose template и наличие resolved foundation ID + exact value.
 
-- [ ] **Step 2: Запустить RED**
+- [x] **Step 2: Запустить RED**
 
 Run:
 
@@ -457,15 +457,15 @@ node --test tests/components/component-registry-doc.test.mjs
 
 Expected: FAIL, module отсутствует.
 
-- [ ] **Step 3: Реализовать deterministic renderer**
+- [x] **Step 3: Реализовать deterministic renderer**
 
 Renderer обходит существующую contract tree через exported traversal helpers, не создаёт второй reference resolver и не меняет record. Optional sections пропускаются, но порядок остальных стабилен.
 
-- [ ] **Step 4: Проверить representative records**
+- [x] **Step 4: Проверить representative records**
 
 Проверить HTML-only, asset-only, hybrid, nested component, property-controlled и template shell cases. Два render одного input должны быть побайтово равны.
 
-- [ ] **Step 5: Запустить GREEN и commit**
+- [x] **Step 5: Запустить GREEN и commit**
 
 ~~~powershell
 node --test tests/components/component-registry-doc.test.mjs
