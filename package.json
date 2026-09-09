@@ -8,7 +8,7 @@
   },
   "scripts": {
     "validate": "node scripts/validate-system.mjs",
-    "test": "node --test tests/foundation/*.test.mjs tests/characterization/*.test.mjs",
+    "test": "node --test tests/foundation/*.test.mjs tests/characterization/*.test.mjs tests/components/*.test.mjs",
     "verify": "npm run validate && npm test"
   },
   "dependencies": {

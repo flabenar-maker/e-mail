@@ -31,6 +31,8 @@ export const canonicalSystemFixtureFiles = [
   "bootstrap/README.md",
   "core/email-figma-prompt.md",
   "core/figma-component-naming-standard.md",
+  "core/component-contract-standard.md",
+  "core/figma-component-description-standard.md",
   "registry/email-component-descriptions-registry.md",
   "registry/email-typography-registry.md",
   "workflows/library-maintenance-checkpoint.md",

@@ -29,6 +29,14 @@
 
 ## Целевая карта файлов подэтапа
 
+Карта ниже описывает фактический diff implementation branch относительно закреплённого base. Документы общего направления уже были подготовлены в base до открытия этой ветки и поэтому не должны ошибочно считаться пропущенными файлами PR.
+
+### Уже подготовлено в base
+
+- docs/superpowers/specs/2026-08-24-cupis-structured-email-system-design.md — архитектурная граница component documentation.
+- docs/superpowers/plans/2026-08-25-cupis-migration-roadmap.md — место подэтапа 7A в общем маршруте.
+- docs/superpowers/plans/2026-09-07-cupis-generated-docs-context-bundles.md — зависимость следующего подэтапа от нового renderer.
+
 ### Создать
 
 - core/component-contract-standard.md — нормативные принципы полной component-записи и generated registry.
@@ -44,22 +52,33 @@
 
 ### Изменить
 
-- docs/superpowers/specs/2026-08-24-cupis-structured-email-system-design.md
-- docs/superpowers/plans/2026-08-25-cupis-migration-roadmap.md
-- docs/superpowers/plans/2026-09-07-cupis-generated-docs-context-bundles.md
+- README.md — объяснить границы structured contract, full registry projection и compact Figma projection.
+- package.json — включить tests/components/*.test.mjs в общий npm test.
 - schemas/components.schema.json
 - data/components/shared.yaml
 - data/components/marketing.yaml
 - data/components/service.yaml
 - scripts/lib/component-description.mjs
 - scripts/lib/component-registry.mjs
-- scripts/validate-system.mjs
+- scripts/lib/figma-component-snapshot.mjs — сравнивать snapshot с новым compact renderer.
+- scripts/lib/system-manifest.mjs
+- system/manifest.yaml только для shadow source declarations после появления файлов стандартов.
+- tests/characterization/component-registry-shadow.test.mjs — оставить legacy Markdown только identity baseline, а не владельцем prose.
+- tests/foundation/component-registry.test.mjs
+- tests/foundation/figma-component-snapshot.test.mjs
+- tests/foundation/system-manifest.test.mjs
+- tests/foundation/validator-cli.test.mjs
 - tests/helpers/system-fixture.mjs
-- system/manifest.yaml только для shadow source declarations после появления файлов стандартов
-- README.md только для объяснения новой ответственности файлов
+- этот implementation plan — отмечать фактические проверки и handoff.
+
+### Перенести ответственность теста
+
+- удалить tests/foundation/component-description.test.mjs;
+- заменить его tests/components/figma-component-description.test.mjs, потому что Description теперь является проекцией component contract, а не foundation.
 
 ### Сохранить без изменений
 
+- scripts/validate-system.mjs как единый CLI entrypoint;
 - визуальный дизайн и структура Figma-компонентов;
 - descriptions Figma до отдельного sync;
 - data/foundations/**;
@@ -67,7 +86,8 @@
 - workflows/** и .agents/skills/** до этапов 8–9;
 - legacy registry/** до общего cutover;
 - пакет №1 PR №43 и его manifest/digest foundation по смыслу;
-- локальные проекты писем.
+- bootstrap/**;
+- локальные проекты писем, email.html и images/**.
 
 ---
 
@@ -83,7 +103,7 @@
 - Produces: определения владельцев данных, обязательных полей полного contract и допустимой компактной Figma-проекции.
 - Preserves: foundations как владельцы общих rules и values; component records как владельцы только component-specific фактов.
 
-- [ ] **Step 1: Написать failing boundary test**
+- [x] **Step 1: Написать failing boundary test**
 
 Проверить наличие двух стандартов и обязательных утверждений:
 
@@ -100,7 +120,7 @@ assert.match(figmaStandard, /не является.*HTML/u);
 
 Проверить, что Figma standard не объявляет полные sections typography, spacing или весь email workflow.
 
-- [ ] **Step 2: Запустить RED**
+- [x] **Step 2: Запустить RED**
 
 Run:
 
@@ -110,7 +130,7 @@ node --test tests/characterization/component-documentation-boundary.test.mjs
 
 Expected: FAIL, потому что стандарты отсутствуют.
 
-- [ ] **Step 3: Написать component contract standard**
+- [x] **Step 3: Написать component contract standard**
 
 Зафиксировать обязательные группы данных:
 
@@ -128,7 +148,7 @@ Expected: FAIL, потому что стандарты отсутствуют.
 
 Уточнить: «полный» означает достаточный для однозначной реализации, а не инвентарь всех безвредных Figma-настроек.
 
-- [ ] **Step 4: Написать Figma Description standard**
+- [x] **Step 4: Написать Figma Description standard**
 
 Задать единственный порядок:
 
@@ -143,11 +163,11 @@ CRITICAL
 
 CRITICAL отсутствует при пустом списке. PURPOSE и CRITICAL берутся только из component record. Documentation link хранится отдельным полем Figma. Description не используется email-build routes.
 
-- [ ] **Step 5: Обновить master-spec**
+- [x] **Step 5: Обновить master-spec**
 
 Добавить новую ответственность источников, два target Core-файла, full registry projection, thin Figma projection и разделение route consumers.
 
-- [ ] **Step 6: Запустить GREEN и commit**
+- [x] **Step 6: Запустить GREEN и commit**
 
 Run:
 
@@ -179,7 +199,7 @@ git commit -m "docs: define component documentation contracts"
 - Produces: baseline обязательных component IDs, viewport trees, properties, assets, references, constraints и provenance, которые должны пережить migration.
 - Does not produce: новый текст Description или Figma mutation.
 
-- [ ] **Step 1: Сформировать characterization snapshot в тесте**
+- [x] **Step 1: Сформировать characterization snapshot в тесте**
 
 Для каждой component-записи вычислить canonical object без старого description.blocks:
 
@@ -199,7 +219,7 @@ git commit -m "docs: define component documentation contracts"
 
 Проверить точное число компонентов по трём библиотекам и уникальность stable IDs/Figma identity.
 
-- [ ] **Step 2: Зафиксировать high-risk assertions**
+- [x] **Step 2: Зафиксировать high-risk assertions**
 
 Проверить representative contracts:
 
@@ -210,7 +230,7 @@ git commit -m "docs: define component documentation contracts"
 - property-controlled visibility сохраняет property reference;
 - root template остаётся assembly shell, а не обычным content component.
 
-- [ ] **Step 3: Запустить baseline**
+- [x] **Step 3: Запустить baseline**
 
 Run:
 
@@ -220,7 +240,7 @@ node --test tests/characterization/component-documentation-boundary.test.mjs
 
 Expected: PASS до и после migration.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ~~~powershell
 git add tests/characterization/component-documentation-boundary.test.mjs
@@ -228,6 +248,12 @@ git commit -m "test: preserve component documentation semantics"
 ~~~
 
 ---
+
+### Исполнение Tasks 3–4 единым пакетом
+
+Tasks 3 и 4 выполняются атомарно: schema 2.0.0, migration converter, reviewed mapping и все три canonical registry должны завершать пакет вместе. Тесты `tests/components/*.test.mjs` входят в общий `npm test`, поэтому промежуточный runtime с новой schema и старыми data-файлами не публикуется.
+
+Компактный Description renderer и его comparison были подключены в этом пакете как обязательная runtime-зависимость существующей Figma snapshot-проверки. Это не закрывает Task 6: отдельные forbidden-content tests и окончательная проверка интерфейса остаются обязательными.
 
 ### Task 3: Заменить prose Description типизированной documentation-моделью
 
@@ -249,7 +275,7 @@ git commit -m "test: preserve component documentation semantics"
   - validateComponentDocumentation(record, index): diagnostics[].
 - Removes after migration: description.mode и description.blocks как canonical model.
 
-- [ ] **Step 1: Написать failing shape tests**
+- [x] **Step 1: Написать failing shape tests**
 
 Проверить accepted shape:
 
@@ -268,7 +294,7 @@ constraints:
 
 Добавить negative cases: duplicate ID, unknown constraint reference, empty purpose, unsupported scope/kind/severity, extra field.
 
-- [ ] **Step 2: Запустить RED**
+- [x] **Step 2: Запустить RED**
 
 Run:
 
@@ -278,11 +304,11 @@ node --test tests/components/component-documentation-model.test.mjs
 
 Expected: FAIL на старой schema.
 
-- [ ] **Step 3: Поднять component schema major version**
+- [x] **Step 3: Поднять component schema major version**
 
 Удаление/rename обязательного description field является breaking migration. Поднять schema version до `2.0.0`, не поддерживать два runtime-формата параллельно.
 
-- [ ] **Step 4: Написать failing migration tests**
+- [x] **Step 4: Написать failing migration tests**
 
 Проверить, что converter:
 
@@ -301,11 +327,11 @@ node --test tests/components/component-documentation-migration.test.mjs
 
 Expected: FAIL, converter отсутствует.
 
-- [ ] **Step 5: Реализовать migration converter и reviewed mapping**
+- [x] **Step 5: Реализовать migration converter и reviewed mapping**
 
 Converter не интерпретирует свободный prose автоматически. Mapping содержит только недостающие `purpose`, `constraints` и `critical_constraint_ids`; он является временным историческим migration input, а не runtime source или foundation.
 
-- [ ] **Step 6: Реализовать semantic validation**
+- [x] **Step 6: Реализовать semantic validation**
 
 Обязательные diagnostics:
 
@@ -318,7 +344,7 @@ Converter не интерпретирует свободный prose автом�
 
 Каждый diagnostic содержит component ID и JSON-pointer path.
 
-- [ ] **Step 7: Реализовать render-type derivation**
+- [x] **Step 7: Реализовать render-type derivation**
 
 Алгоритм читает все фактически выводимые render modes выбранных contracts:
 
@@ -327,7 +353,7 @@ Converter не интерпретирует свободный prose автом�
 - HTML и image output вместе → HYBRID;
 - none или неоднозначный Figma-source-only contract → typed blocker, не догадка.
 
-- [ ] **Step 8: Запустить GREEN и commit**
+- [x] **Step 8: Запустить GREEN и commit**
 
 Run:
 
@@ -360,11 +386,11 @@ git commit -m "feat: model component documentation contracts"
 - Consumes: новая schema и characterization baseline.
 - Produces: один текущий format всех component records без description.blocks.
 
-- [ ] **Step 1: Сгенерировать и проверить migration output**
+- [x] **Step 1: Сгенерировать и проверить migration output**
 
 Run converter для всех трёх registries во временную папку fixture, проверить schema 2.0.0 и characterization equivalence. При blocker не исправлять mapping догадкой: вернуться к конкретной component-записи и доказать purpose/constraint по baseline.
 
-- [ ] **Step 2: Мигрировать shared records**
+- [x] **Step 2: Мигрировать shared records**
 
 Для каждой записи:
 
@@ -376,33 +402,33 @@ Run converter для всех трёх registries во временную пап
 
 Run tests. Expected: PASS.
 
-- [ ] **Step 3: Commit shared migration**
+- [x] **Step 3: Commit shared migration**
 
 ~~~powershell
 git add data/components/shared.yaml
 git commit -m "data: migrate shared component documentation"
 ~~~
 
-- [ ] **Step 4: Мигрировать marketing records**
+- [x] **Step 4: Мигрировать marketing records**
 
 Повторить ту же операцию. Особо проверить cards, Banner/Secondary, Banner/App-Download, adaptive @2x images и composite export boundaries.
 
 Run tests. Expected: PASS.
 
-- [ ] **Step 5: Commit marketing migration**
+- [x] **Step 5: Commit marketing migration**
 
 ~~~powershell
 git add data/components/marketing.yaml
 git commit -m "data: migrate marketing component documentation"
 ~~~
 
-- [ ] **Step 6: Мигрировать service records**
+- [x] **Step 6: Мигрировать service records**
 
 Особо проверить root/self inset, NPS gaps, alert/notification nested components и property-controlled visibility.
 
 Run tests. Expected: PASS.
 
-- [ ] **Step 7: Commit service migration**
+- [x] **Step 7: Commit service migration**
 
 ~~~powershell
 git add data/components/service.yaml tests/helpers/system-fixture.mjs
@@ -425,7 +451,7 @@ git commit -m "data: migrate service component documentation"
   - listComponentDocumentationSections(record): fixed ordered model.
 - Consumes: validated component record и foundation index.
 
-- [ ] **Step 1: Написать failing renderer tests**
+- [x] **Step 1: Написать failing renderer tests**
 
 Проверить fixed order:
 
@@ -441,7 +467,7 @@ Constraints and dependencies
 
 Проверить отсутствие «как Desktop», отсутствие ручного prose template и наличие resolved foundation ID + exact value.
 
-- [ ] **Step 2: Запустить RED**
+- [x] **Step 2: Запустить RED**
 
 Run:
 
@@ -451,15 +477,15 @@ node --test tests/components/component-registry-doc.test.mjs
 
 Expected: FAIL, module отсутствует.
 
-- [ ] **Step 3: Реализовать deterministic renderer**
+- [x] **Step 3: Реализовать deterministic renderer**
 
 Renderer обходит существующую contract tree через exported traversal helpers, не создаёт второй reference resolver и не меняет record. Optional sections пропускаются, но порядок остальных стабилен.
 
-- [ ] **Step 4: Проверить representative records**
+- [x] **Step 4: Проверить representative records**
 
 Проверить HTML-only, asset-only, hybrid, nested component, property-controlled и template shell cases. Два render одного input должны быть побайтово равны.
 
-- [ ] **Step 5: Запустить GREEN и commit**
+- [x] **Step 5: Запустить GREEN и commit**
 
 ~~~powershell
 node --test tests/components/component-registry-doc.test.mjs
@@ -488,7 +514,7 @@ git commit -m "feat: render full component registry sections"
   - compareFigmaComponentDescription(expected, actual): diagnostics[].
 - Consumes: stable ID, purpose, derived render type и referenced critical constraints.
 
-- [ ] **Step 1: Написать failing exact-output tests**
+- [x] **Step 1: Написать failing exact-output tests**
 
 Expected:
 
@@ -503,7 +529,7 @@ CRITICAL
 
 Проверить вариант без CRITICAL, LF normalization и deterministic output.
 
-- [ ] **Step 2: Добавить forbidden-content tests**
+- [x] **Step 2: Добавить forbidden-content tests**
 
 Description не должен выводить:
 
@@ -514,11 +540,11 @@ Description не должен выводить:
 - правила сборки всего письма;
 - факты, не выбранные critical_constraint_ids.
 
-- [ ] **Step 3: Реализовать renderer и comparison**
+- [x] **Step 3: Реализовать renderer и comparison**
 
 Comparison возвращает exact description drift. Никакой Figma client и write в модуле не добавляется.
 
-- [ ] **Step 4: Запустить GREEN и commit**
+- [x] **Step 4: Запустить GREEN и commit**
 
 ~~~powershell
 node --test tests/components/figma-component-description.test.mjs
@@ -539,69 +565,78 @@ git commit -m "feat: render compact Figma component descriptions"
 
 **Files:**
 - Modify: system/manifest.yaml
-- Modify: scripts/validate-system.mjs
+- Modify: scripts/lib/system-manifest.mjs
 - Modify: tests/foundation/system-manifest.test.mjs
+- Modify: tests/helpers/system-fixture.mjs
 - Modify: README.md
+- Preserve: scripts/validate-system.mjs как единый CLI entrypoint
 - Test: tests/characterization/component-documentation-boundary.test.mjs
 
 **Interfaces:**
-- Produces: manifest source IDs для двух стандартов и validation новой component model.
-- Preserves: legacy bundle_profiles[].source_ids и skill behavior.
+- Produces: manifest source IDs для двух стандартов и обязательную проверку их canonical kind/path.
+- Preserves: legacy bundle_profiles[].source_ids, routes, skill behavior и границу будущего generated layer.
 
-- [ ] **Step 1: Написать failing manifest assertions**
+- [x] **Step 1: Написать failing manifest assertions**
 
-Проверить существование source IDs:
+Проверено существование source IDs:
 
 ~~~text
 component-contract-standard
 figma-component-description-standard
 ~~~
 
-На shadow-этапе не добавлять их одновременно в legacy source_ids и generated bundle для одного route.
+Дополнительно зафиксированы canonical kind/path и отсутствие обоих sources во всех действующих bundle profiles.
 
-- [ ] **Step 2: Объявить новые sources**
+RED evidence: System validation run #207 — прежние 305 тестов прошли; 7 новых assertions ожидаемо упали только из-за отсутствующих declarations и их semantic guards.
 
-Добавить оба core paths в manifest. Подключение к итоговым generated bundles выполняется только в Task 9 после обновления плана этапа 7.
+- [x] **Step 2: Объявить новые sources**
 
-- [ ] **Step 3: Подключить system validation**
+Оба Core-файла объявлены в manifest с `kind: core`. Ни один legacy `bundle_profiles[].source_ids` не изменён. Подключение к итоговым generated bundles остаётся отдельной задачей downstream-плана.
 
-Порядок:
+- [x] **Step 3: Подключить system validation без дублирования**
+
+`validateSystem` теперь требует оба source ID, их canonical paths и `kind: core` до перехода к foundation/component validation.
+
+Фактический порядок остаётся:
 
 ~~~text
-manifest
+manifest и обязательные source declarations
 → foundations
 → component schema/cross-references
 → documentation semantics
-→ generated layer
 ~~~
 
-Validation остаётся read-only.
+Documentation semantics уже вызывается внутри `validateComponentRegistries` после schema и cross-reference checks; второй вызов не добавлялся. Полный registry renderer и компактный Figma renderer проверяются общим `npm test`. Проверка будущих файлов `docs/generated/**` не имитируется до их появления и остаётся Task 5 generated-docs plan.
 
-- [ ] **Step 4: Обновить README**
+`scripts/validate-system.mjs` не менялся: он уже является единым read-only CLI entrypoint поверх `validateSystem`.
 
-Объяснить простым языком:
+- [x] **Step 4: Обновить README**
 
-- component data — источник;
-- generated registry — полная документация;
-- Figma Description — компактная проекция;
-- generated outputs не редактируются;
-- email build не зависит от Figma Description.
+README простым языком фиксирует:
 
-- [ ] **Step 5: Запустить проверки и commit**
+- component data — владелец component-specific contract;
+- registry renderer — полная документационная проекция;
+- Figma Description — компактная вспомогательная проекция;
+- будущие generated outputs пересобираются и не редактируются вручную;
+- email build не зависит от Figma Description;
+- до cutover legacy Markdown registry остаётся активным route input.
 
-~~~powershell
-npm run validate
-npm test
-npm run verify
-~~~
+- [x] **Step 5: Запустить проверки и commit**
 
-Expected: PASS, 0 failed.
+GREEN evidence: System validation run #208:
 
-Commit:
+- `npm run validate` — success;
+- `npm test` — 312/312 success;
+- `bootstrap/verify.ps1` — success;
+- `tests/bootstrap-contract.Tests.ps1` — success.
 
-~~~powershell
-git add system/manifest.yaml schemas/manifest.schema.json scripts/validate-system.mjs tests/foundation/system-manifest.test.mjs README.md
-git commit -m "feat: integrate component documentation foundation"
+`npm run verify` является последовательностью тех же `npm run validate && npm test`; обе составляющие выполнены в одном fresh CI run.
+
+Commits:
+
+~~~text
+60c3875 test: require component documentation shadow sources
+c2eb80b feat: integrate component documentation foundation
 ~~~
 
 ---
@@ -616,15 +651,15 @@ git commit -m "feat: integrate component documentation foundation"
 - Produces: проверенное основание schema 2.0.0, full registry renderer и compact Figma renderer для продолжения существующего generated-docs plan.
 - Does not produce: generated docs, workflow cutover, skill cutover или Figma mutation.
 
-- [ ] **Step 1: Запустить targeted tests**
+- [x] **Step 1: Запустить targeted tests**
 
 ~~~powershell
 node --test tests/characterization/component-documentation-boundary.test.mjs tests/components/component-documentation-model.test.mjs tests/components/component-documentation-migration.test.mjs tests/components/component-registry-doc.test.mjs tests/components/figma-component-description.test.mjs
 ~~~
 
-Expected: PASS, 0 failed.
+Cloud-only evidence: System validation run #209 выполнил эти пять файлов внутри общего `npm test`; package.json явно включает `tests/characterization/*.test.mjs` и `tests/components/*.test.mjs`. Targeted assertions по standards boundary, migration equivalence, schema 2.0, full registry renderer и compact Figma renderer прошли. Общий результат: 312/312, 0 failed.
 
-- [ ] **Step 2: Запустить полную system validation**
+- [x] **Step 2: Запустить полную system validation**
 
 ~~~powershell
 npm run validate
@@ -632,30 +667,37 @@ npm test
 npm run verify
 ~~~
 
-Expected: PASS, 0 failed.
+Evidence run #209:
 
-- [ ] **Step 3: Запустить Windows contracts**
+- `npm run validate` — `[PASS] CUPIS system validation passed.`;
+- `npm test` — 312 tests, 312 pass, 0 fail;
+- `npm run verify` является точной последовательностью `npm run validate && npm test`; обе составляющие выполнены в одном fresh CI run. Отдельный повтор этой же последовательности не создавался.
+
+- [x] **Step 3: Запустить Windows contracts**
 
 ~~~powershell
 pwsh -NoProfile -File bootstrap/verify.ps1
 pwsh -NoProfile -File tests/bootstrap-contract.Tests.ps1
 ~~~
 
-Expected: оба exit 0.
+Evidence run #209, job `windows-bootstrap`: оба скрипта завершились `[PASS]` и exit 0.
 
-- [ ] **Step 4: Проверить migration equivalence**
+- [x] **Step 4: Проверить migration equivalence**
 
-Подтвердить для всех трёх registries:
+Подтверждено для всех трёх registries:
 
-- unchanged canonical identity/contracts/properties/assets/provenance;
-- отсутствует runtime description.blocks;
-- каждый active component имеет purpose;
-- все critical references разрешаются;
-- два registry render и два Figma Description render дают одинаковые bytes.
+- characterization фиксирует 61 component и canonical digests полей identity/contracts/properties/assets/provenance;
+- reviewed mapping воспроизводит все 61 canonical schema 2.0 records;
+- runtime records не содержат `description` или `description.blocks`;
+- каждый component имеет непустой purpose, а semantic validation блокирует broken critical references;
+- full registry renderer и compact Figma Description renderer проверены на два побайтово одинаковых render одного input и отсутствие мутации input;
+- high-risk contracts для adaptive @2x ratio, PNG @4x transparency, composite card export, property visibility и template slot сохранены.
 
-- [ ] **Step 5: Проверить allowed path diff**
+- [x] **Step 5: Проверить allowed path diff**
 
-Допустимы только файлы из целевой карты подэтапа. Отдельно подтвердить отсутствие изменений:
+Сравнение `main@55101dd32691e18b767bee182a24c018d52c3087` → `3c24846be50806abb2d003763f2fea4729f4221d` показало 29 изменённых путей. Каждый путь входит в уточнённую целевую карту выше; дополнительные относительно раннего черновика файлы являются прямой интеграцией Tasks 3–7.
+
+Отсутствуют изменения:
 
 ~~~text
 workflows/**
@@ -669,11 +711,13 @@ images/**
 Figma
 ~~~
 
-- [ ] **Step 6: Открыть draft implementation PR и остановиться**
+PR №43 остался отдельным draft: head `c546f28e6072fd34ba76aeb328fe168682cee846`, base `6977cc262a0b429bf589570a0d429b0e41dffdef`.
 
-PR summary перечисляет schema migration, три data migrations, два standards, два renderer, validation evidence и сохранённые boundaries. Merge только по отдельной команде пользователя.
+- [x] **Step 6: Открыть draft implementation PR и остановиться**
 
-После merge обновить основание PR №43 и продолжить с изменённого Task 4 плана generated docs.
+Draft PR №45 открыт, mergeable и сохраняет отдельную merge boundary. Он содержит schema migration, три data migrations, два standards, два renderer, validation evidence и сохранённые boundaries. Merge выполняется только по отдельной команде пользователя.
+
+После merge первым post-merge действием обновить `docs/superpowers/plans/2026-08-25-cupis-migration-roadmap.md`: отметить 7A завершённым и добавить ссылку на PR №45 с фактическим merge commit. Затем закрепить новый `main`, обновить основание PR №43 и продолжить с изменённого Task 4 плана generated docs.
 
 ---
 
