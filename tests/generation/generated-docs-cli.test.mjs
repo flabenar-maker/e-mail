@@ -202,7 +202,7 @@ test("generated docs CLI reports one stale output by exact path", async (t) => {
   const checked = await runCli(["--check", "--repo-root", fixture.root]);
   assert.equal(checked.code, 1);
   assert.match(checked.stderr, /GENERATED_DOC_STALE/u);
-  assert.match(checked.stderr, new RegExp(`/${stalePath.replace(/[.*+?^${()}|[\\]\\]/gu, "\\$&")}`, "u"));
+  assert.equal(checked.stderr.includes(`/${stalePath}`), true);
   assert.doesNotMatch(checked.stderr, /GENERATED_DOC_MISSING/u);
 });
 
