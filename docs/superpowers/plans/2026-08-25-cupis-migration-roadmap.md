@@ -116,19 +116,25 @@ Structured records остаются shadow-источником до generated b
 
 Пакет №1 технически реализован в draft [PR #43](https://github.com/flabenar-maker/e-mail/pull/43), но не находится в `main`. Он добавляет shadow manifest capability, route policies и deterministic digest, не переключая рабочие routes, Core, workflows, skills или Figma.
 
-До пакета №2 добавлен обязательный архитектурный prerequisite: [component documentation contracts](2026-09-07-cupis-component-documentation-contracts.md). Причина — полный generated registry не должен закрепить старую модель, где component facts повторяются в сохранённом prose Description.
+До пакета №2 был добавлен обязательный архитектурный prerequisite: [component documentation contracts](2026-09-07-cupis-component-documentation-contracts.md). Он завершён до продолжения generated registry, чтобы не закреплять старую модель с повторением component facts в сохранённом prose Description.
 
-#### 7A. Component documentation contracts — следующий подэтап
+#### 7A. Component documentation contracts — завершён
 
-- [ ] Зафиксировать `core/component-contract-standard.md` и `core/figma-component-description-standard.md`.
-- [ ] Заменить полный `description.blocks` типизированными purpose и component-specific constraints.
-- [ ] Сохранить независимые Mobile/Desktop contracts, properties, assets, provenance и fingerprints.
-- [ ] Создать полный registry renderer и отдельный compact Figma Description renderer.
-- [ ] Доказать semantic equivalence со старым registry без Figma mutation.
-- [ ] Объявить standards и validation в shadow-режиме.
-- [ ] После merge обновить основание PR #43 и только затем продолжить package №2.
+- [x] Зафиксировать `core/component-contract-standard.md` и `core/figma-component-description-standard.md`.
+- [x] Заменить полный `description.blocks` типизированными purpose и component-specific constraints.
+- [x] Сохранить независимые Mobile/Desktop contracts, properties, assets, provenance и fingerprints.
+- [x] Создать полный registry renderer и отдельный compact Figma Description renderer.
+- [x] Доказать semantic equivalence со старым registry без Figma mutation.
+- [x] Объявить standards и validation в shadow-режиме.
+
+Подробный план: [component documentation contracts](2026-09-07-cupis-component-documentation-contracts.md). Реализация слита в [PR #45](https://github.com/flabenar-maker/e-mail/pull/45), итоговый commit: `0eb8cfd4d2ff3401a6a7e91a80e8740435f7ab0e`. Figma, рабочие routes, workflows, skills и legacy registry этим подэтапом не изменялись.
 
 #### 7B. Generated docs и route-specific context bundles
+
+Переход к пакету №2:
+
+- [ ] Обновить основание draft PR #43 от `main` после merge 7A и повторно проверить уже реализованные Tasks 1–3.
+- [ ] Только после этого продолжить с Task 4 плана generated docs/context bundles.
 
 - [ ] Генерировать читаемые реестры и справочники из структурированных источников.
 - [ ] Полный component registry строить из contract tree, properties, assets, constraints и resolved foundation references.
