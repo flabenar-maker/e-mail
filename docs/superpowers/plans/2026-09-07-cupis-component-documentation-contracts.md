@@ -29,6 +29,14 @@
 
 ## Целевая карта файлов подэтапа
 
+Карта ниже описывает фактический diff implementation branch относительно закреплённого base. Документы общего направления уже были подготовлены в base до открытия этой ветки и поэтому не должны ошибочно считаться пропущенными файлами PR.
+
+### Уже подготовлено в base
+
+- docs/superpowers/specs/2026-08-24-cupis-structured-email-system-design.md — архитектурная граница component documentation.
+- docs/superpowers/plans/2026-08-25-cupis-migration-roadmap.md — место подэтапа 7A в общем маршруте.
+- docs/superpowers/plans/2026-09-07-cupis-generated-docs-context-bundles.md — зависимость следующего подэтапа от нового renderer.
+
 ### Создать
 
 - core/component-contract-standard.md — нормативные принципы полной component-записи и generated registry.
@@ -44,22 +52,33 @@
 
 ### Изменить
 
-- docs/superpowers/specs/2026-08-24-cupis-structured-email-system-design.md
-- docs/superpowers/plans/2026-08-25-cupis-migration-roadmap.md
-- docs/superpowers/plans/2026-09-07-cupis-generated-docs-context-bundles.md
+- README.md — объяснить границы structured contract, full registry projection и compact Figma projection.
+- package.json — включить tests/components/*.test.mjs в общий npm test.
 - schemas/components.schema.json
 - data/components/shared.yaml
 - data/components/marketing.yaml
 - data/components/service.yaml
 - scripts/lib/component-description.mjs
 - scripts/lib/component-registry.mjs
-- scripts/validate-system.mjs
+- scripts/lib/figma-component-snapshot.mjs — сравнивать snapshot с новым compact renderer.
+- scripts/lib/system-manifest.mjs
+- system/manifest.yaml только для shadow source declarations после появления файлов стандартов.
+- tests/characterization/component-registry-shadow.test.mjs — оставить legacy Markdown только identity baseline, а не владельцем prose.
+- tests/foundation/component-registry.test.mjs
+- tests/foundation/figma-component-snapshot.test.mjs
+- tests/foundation/system-manifest.test.mjs
+- tests/foundation/validator-cli.test.mjs
 - tests/helpers/system-fixture.mjs
-- system/manifest.yaml только для shadow source declarations после появления файлов стандартов
-- README.md только для объяснения новой ответственности файлов
+- этот implementation plan — отмечать фактические проверки и handoff.
+
+### Перенести ответственность теста
+
+- удалить tests/foundation/component-description.test.mjs;
+- заменить его tests/components/figma-component-description.test.mjs, потому что Description теперь является проекцией component contract, а не foundation.
 
 ### Сохранить без изменений
 
+- scripts/validate-system.mjs как единый CLI entrypoint;
 - визуальный дизайн и структура Figma-компонентов;
 - descriptions Figma до отдельного sync;
 - data/foundations/**;
@@ -67,7 +86,8 @@
 - workflows/** и .agents/skills/** до этапов 8–9;
 - legacy registry/** до общего cutover;
 - пакет №1 PR №43 и его manifest/digest foundation по смыслу;
-- локальные проекты писем.
+- bootstrap/**;
+- локальные проекты писем, email.html и images/**.
 
 ---
 
@@ -631,15 +651,15 @@ c2eb80b feat: integrate component documentation foundation
 - Produces: проверенное основание schema 2.0.0, full registry renderer и compact Figma renderer для продолжения существующего generated-docs plan.
 - Does not produce: generated docs, workflow cutover, skill cutover или Figma mutation.
 
-- [ ] **Step 1: Запустить targeted tests**
+- [x] **Step 1: Запустить targeted tests**
 
 ~~~powershell
 node --test tests/characterization/component-documentation-boundary.test.mjs tests/components/component-documentation-model.test.mjs tests/components/component-documentation-migration.test.mjs tests/components/component-registry-doc.test.mjs tests/components/figma-component-description.test.mjs
 ~~~
 
-Expected: PASS, 0 failed.
+Cloud-only evidence: System validation run #209 выполнил эти пять файлов внутри общего `npm test`; package.json явно включает `tests/characterization/*.test.mjs` и `tests/components/*.test.mjs`. Targeted assertions по standards boundary, migration equivalence, schema 2.0, full registry renderer и compact Figma renderer прошли. Общий результат: 312/312, 0 failed.
 
-- [ ] **Step 2: Запустить полную system validation**
+- [x] **Step 2: Запустить полную system validation**
 
 ~~~powershell
 npm run validate
@@ -647,30 +667,37 @@ npm test
 npm run verify
 ~~~
 
-Expected: PASS, 0 failed.
+Evidence run #209:
 
-- [ ] **Step 3: Запустить Windows contracts**
+- `npm run validate` — `[PASS] CUPIS system validation passed.`;
+- `npm test` — 312 tests, 312 pass, 0 fail;
+- `npm run verify` является точной последовательностью `npm run validate && npm test`; обе составляющие выполнены в одном fresh CI run. Отдельный повтор этой же последовательности не создавался.
+
+- [x] **Step 3: Запустить Windows contracts**
 
 ~~~powershell
 pwsh -NoProfile -File bootstrap/verify.ps1
 pwsh -NoProfile -File tests/bootstrap-contract.Tests.ps1
 ~~~
 
-Expected: оба exit 0.
+Evidence run #209, job `windows-bootstrap`: оба скрипта завершились `[PASS]` и exit 0.
 
-- [ ] **Step 4: Проверить migration equivalence**
+- [x] **Step 4: Проверить migration equivalence**
 
-Подтвердить для всех трёх registries:
+Подтверждено для всех трёх registries:
 
-- unchanged canonical identity/contracts/properties/assets/provenance;
-- отсутствует runtime description.blocks;
-- каждый active component имеет purpose;
-- все critical references разрешаются;
-- два registry render и два Figma Description render дают одинаковые bytes.
+- characterization фиксирует 61 component и canonical digests полей identity/contracts/properties/assets/provenance;
+- reviewed mapping воспроизводит все 61 canonical schema 2.0 records;
+- runtime records не содержат `description` или `description.blocks`;
+- каждый component имеет непустой purpose, а semantic validation блокирует broken critical references;
+- full registry renderer и compact Figma Description renderer проверены на два побайтово одинаковых render одного input и отсутствие мутации input;
+- high-risk contracts для adaptive @2x ratio, PNG @4x transparency, composite card export, property visibility и template slot сохранены.
 
-- [ ] **Step 5: Проверить allowed path diff**
+- [x] **Step 5: Проверить allowed path diff**
 
-Допустимы только файлы из целевой карты подэтапа. Отдельно подтвердить отсутствие изменений:
+Сравнение `main@55101dd32691e18b767bee182a24c018d52c3087` → `3c24846be50806abb2d003763f2fea4729f4221d` показало 29 изменённых путей. Каждый путь входит в уточнённую целевую карту выше; дополнительные относительно раннего черновика файлы являются прямой интеграцией Tasks 3–7.
+
+Отсутствуют изменения:
 
 ~~~text
 workflows/**
@@ -684,9 +711,11 @@ images/**
 Figma
 ~~~
 
-- [ ] **Step 6: Открыть draft implementation PR и остановиться**
+PR №43 остался отдельным draft: head `c546f28e6072fd34ba76aeb328fe168682cee846`, base `6977cc262a0b429bf589570a0d429b0e41dffdef`.
 
-PR summary перечисляет schema migration, три data migrations, два standards, два renderer, validation evidence и сохранённые boundaries. Merge только по отдельной команде пользователя.
+- [x] **Step 6: Открыть draft implementation PR и остановиться**
+
+Draft PR №45 открыт, mergeable и сохраняет отдельную merge boundary. Он содержит schema migration, три data migrations, два standards, два renderer, validation evidence и сохранённые boundaries. Merge выполняется только по отдельной команде пользователя.
 
 После merge обновить основание PR №43 и продолжить с изменённого Task 4 плана generated docs.
 
