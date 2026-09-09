@@ -124,13 +124,6 @@ function formatMeasure(measure) {
   return `${measure.value}${measure.unit === "percent" ? "%" : measure.unit}`;
 }
 
-function titleCase(value) {
-  return String(value)
-    .split(/[-_]/gu)
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(" ");
-}
-
 function renderHeader(definition, model) {
   const entries = definition.input_source_ids.map((id) => {
     const source = requireSource(model.sources, id);
@@ -347,6 +340,8 @@ function renderAssetRegistry(model) {
   ]) {
     renderFoundationDefinitions(lines, title, assets[key]);
   }
+  renderNamedJsonSection(lines, "Identity policy", assets.identity_policy);
+  renderNamedJsonSection(lines, "Background policy", assets.background_policy);
 
   lines.push("## Component-specific asset contracts", "");
   for (const { record } of listComponentRecords(model.registries)) {
