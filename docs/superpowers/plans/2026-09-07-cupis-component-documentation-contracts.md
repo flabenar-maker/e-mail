@@ -717,7 +717,7 @@ PR №43 остался отдельным draft: head `c546f28e6072fd34ba76aeb3
 
 Draft PR №45 открыт, mergeable и сохраняет отдельную merge boundary. Он содержит schema migration, три data migrations, два standards, два renderer, validation evidence и сохранённые boundaries. Merge выполняется только по отдельной команде пользователя.
 
-После merge обновить основание PR №43 и продолжить с изменённого Task 4 плана generated docs.
+После merge первым post-merge действием обновить `docs/superpowers/plans/2026-08-25-cupis-migration-roadmap.md`: отметить 7A завершённым и добавить ссылку на PR №45 с фактическим merge commit. Затем закрепить новый `main`, обновить основание PR №43 и продолжить с изменённого Task 4 плана generated docs.
 
 ---
 
