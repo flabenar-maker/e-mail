@@ -11,7 +11,12 @@ Act as a thin router over the canonical CUPIS system. Load current rules from Gi
 
 ## Canonical Manifest
 
-**REQUIRED SUB-SKILL:** Use `github:github` for repository reads and writes.
+Use cloud GitHub access in this order:
+
+1. Prefer the authenticated `gh` CLI for repository reads, writes, branch and PR operations. Before using it, check that `gh` is installed and that `gh auth status` succeeds.
+2. If `gh` is unavailable, unauthenticated, or cannot perform the required operation, use the GitHub MCP tool through `github:github` as the fallback.
+
+Both channels are equivalent cloud sources. Never use a local checkout, attachment, cached copy or manually pasted token as a fallback, and never expose an authentication token in chat.
 
 Treat `flabenar-maker/e-mail` as the only persistent source. Resolve and pin the current `main` commit, then fetch `system/manifest.yaml` at that exact SHA.
 
@@ -30,7 +35,7 @@ For any question about migration status, the next stage, completed stages, or up
 5. Before an authorized rename, identify references in the registry and Figma descriptions. Preserve an asset owner's existing scale suffix unless the user explicitly changes its export contract. After the write, verify scoped names, properties, children and required synchronization.
 6. Make the smallest canonical change. Do not edit local system copies. Do not build or modify a concrete `email.html` or `images/` set with this skill.
 7. For a no-op, report the existing canonical rule with its commit and create no branch. For a write, re-read and validate the changed source before publication.
-8. Publish only through GitHub: create `codex/<semantic-slug>` from the pinned SHA, commit only the approved paths, and open one draft PR after the required publication authorization. Never update `main` or merge without separate authorization.
+8. Publish only through GitHub. Prefer authenticated `gh` CLI operations; use GitHub MCP only when the CLI is unavailable or insufficient. Create `codex/<semantic-slug>` from the pinned SHA, commit only the approved paths, and open one draft PR after the required publication authorization. Never update `main` or merge without separate authorization.
 9. Fetch the branch after the final write. Apply exactly the relevant checkpoint checklist plus changed-content, required-synchronization, allowed-path-diff, and preserved-blob checks. Add no generic codebase, build, visual, Figma-publishing, or delivery checks. Verify that no local email outputs, archives, reports, or duplicated system rules were added.
 
 ## Figma Mutation Gate
@@ -45,4 +50,4 @@ After the last write, perform a separate read-only re-fetch and compare the allo
 
 The skill owns routing, cloud-source selection, naming-audit activation, Figma mutation-gate activation, and handoff shape. The canonical files own all email rules, naming constants, workflows, and component facts. Change this skill only when its trigger, repository locator, canonical-set paths, routing boundary, naming-audit activation model, or cloud publication model changes.
 
-Handoff with the pinned base SHA, inspected sources, classification and scope, changed paths, checks actually run, branch/commit/PR when created, and actual limitations. Never claim Figma or GitHub verification that was not performed.
+Handoff with the pinned base SHA, inspected sources, classification and scope, changed paths, checks actually run, cloud channel used (`gh` CLI or GitHub MCP), branch/commit/PR when created, and actual limitations. Never claim Figma or GitHub verification that was not performed.
