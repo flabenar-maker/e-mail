@@ -4,6 +4,7 @@ import {
   appendFile,
   readFile,
   readdir,
+  rm,
   stat,
 } from "node:fs/promises";
 import { dirname, join, relative } from "node:path";
@@ -105,6 +106,11 @@ async function prepareFixture(t) {
   await Promise.all(
     canonicalSystemFixtureFiles.map((path) =>
       copyFixtureFile(repoRoot, fixture.root, path),
+    ),
+  );
+  await Promise.all(
+    generatedSources.map(({ path }) =>
+      rm(join(fixture.root, path), { force: true }),
     ),
   );
 

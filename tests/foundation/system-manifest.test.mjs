@@ -754,6 +754,9 @@ const testGeneratedBundle = {
 
 function addGeneratedCapability(manifest) {
   manifest.schema_version = "1.1.0";
+  manifest.sources = manifest.sources.filter(
+    (source) => source.kind !== "generated",
+  );
   manifest.sources.push({
     id: "generated-component-registry",
     kind: "generated",
@@ -1132,7 +1135,30 @@ test("canonical routes declare exact shadow bundle policies", async () => {
       required_foundation_ids: [],
     },
   });
-  assert.equal(Object.hasOwn(manifest, "generated_docs"), false);
+  assert.deepEqual(
+    manifest.generated_docs.map(({ id, output_source_id }) => ({
+      id,
+      output_source_id,
+    })),
+    [
+      {
+        id: "component-registry",
+        output_source_id: "generated-component-registry",
+      },
+      {
+        id: "typography-registry",
+        output_source_id: "generated-typography-registry",
+      },
+      {
+        id: "asset-registry",
+        output_source_id: "generated-asset-registry",
+      },
+      {
+        id: "naming-reference",
+        output_source_id: "generated-naming-reference",
+      },
+    ],
+  );
 });
 
 

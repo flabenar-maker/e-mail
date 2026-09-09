@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
+import { appendFile, rm } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -74,6 +75,31 @@ test("invalid fixture exits one with a sanitized diagnostic", async (t) => {
   assert.equal(result.exitCode, 1);
   assert.match(result.stderr, /missing-declared-path/u);
   assert.doesNotMatch(result.stderr + result.stdout, new RegExp(secret, "u"));
+});
+
+test("missing generated documentation uses the generated-doc diagnostic", async (t) => {
+  const root = await validFixture(t);
+  const path = "docs/generated/component-registry.md";
+  await rm(join(root, path));
+
+  const result = await runValidator(root);
+
+  assert.equal(result.exitCode, 1);
+  assert.equal(result.stderr.includes("GENERATED_DOC_MISSING"), true);
+  assert.equal(result.stderr.includes(`/${path}`), true);
+  assert.doesNotMatch(result.stderr, /missing-declared-path/u);
+});
+
+test("stale generated documentation uses the generated-doc diagnostic", async (t) => {
+  const root = await validFixture(t);
+  const path = "docs/generated/component-registry.md";
+  await appendFile(join(root, path), "manual edit\n", "utf8");
+
+  const result = await runValidator(root);
+
+  assert.equal(result.exitCode, 1);
+  assert.equal(result.stderr.includes("GENERATED_DOC_STALE"), true);
+  assert.equal(result.stderr.includes(`/${path}`), true);
 });
 
 test("unknown CLI option exits one", async (t) => {

@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { appendFile } from "node:fs/promises";
+import { appendFile, rm } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -103,8 +103,10 @@ const generatedDefinitions = [
 
 async function manifestWithGeneratedDocs(root = repoRoot) {
   const manifest = await readStrictYaml(join(root, "system/manifest.yaml"));
-  manifest.sources.push(...structuredClone(generatedSources));
-  manifest.generated_docs = structuredClone(generatedDefinitions);
+  if (!manifest.generated_docs) {
+    manifest.sources.push(...structuredClone(generatedSources));
+    manifest.generated_docs = structuredClone(generatedDefinitions);
+  }
   return manifest;
 }
 
@@ -223,6 +225,11 @@ test("generated comparison reports missing and stale files by exact path", async
   await Promise.all(
     canonicalSystemFixtureFiles.map((path) =>
       copyFixtureFile(repoRoot, fixture.root, path),
+    ),
+  );
+  await Promise.all(
+    generatedSources.map(({ path }) =>
+      rm(join(fixture.root, path), { force: true }),
     ),
   );
 

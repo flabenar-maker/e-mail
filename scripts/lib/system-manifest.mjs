@@ -9,6 +9,10 @@ import { validateSpacingFoundation } from "./spacing-foundation.mjs";
 import { validateAssetsFoundation } from "./assets-foundation.mjs";
 import { validateFigmaNamingFoundation } from "./figma-naming-foundation.mjs";
 import { validateComponentRegistries } from "./component-registry.mjs";
+import {
+  compareGeneratedDocs,
+  renderAllGeneratedDocs,
+} from "./generated-docs.mjs";
 
 const SUPPORTED_MANIFEST_VERSION = "1.1.0";
 
@@ -403,7 +407,9 @@ export async function validateManifestSemantics(manifest, repoRoot) {
   const declaredPaths = new Set([
     manifest.entrypoints.repository,
     manifest.entrypoints.bootstrap,
-    ...manifest.sources.map((source) => source.path),
+    ...manifest.sources
+      .filter((source) => source.kind !== "generated")
+      .map((source) => source.path),
     manifest.bootstrap.portable_config,
     manifest.bootstrap.verifier,
   ]);
@@ -857,12 +863,22 @@ export async function validateSystem({
       assets: assetsResult.assets,
     });
 
+    if (componentResult.errors.length > 0) {
+      return {
+        manifest,
+        errors: sortDiagnostics(componentResult.errors),
+      };
+    }
+
+    const renderedDocs = await renderAllGeneratedDocs({ repoRoot, manifest });
+    const generatedDocErrors = await compareGeneratedDocs({
+      repoRoot,
+      rendered: renderedDocs,
+    });
+
     return {
       manifest,
-      errors: sortDiagnostics([
-        ...foundationErrors,
-        ...componentResult.errors,
-      ]),
+      errors: sortDiagnostics(generatedDocErrors),
     };
   } catch (error) {
     if (error instanceof AggregateError) {

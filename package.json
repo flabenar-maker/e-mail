@@ -8,6 +8,8 @@
   },
   "scripts": {
     "validate": "node scripts/validate-system.mjs",
+    "generate": "node scripts/generate-docs.mjs --write",
+    "generate:check": "node scripts/generate-docs.mjs --check",
     "test": "node --test tests/foundation/*.test.mjs tests/characterization/*.test.mjs tests/components/*.test.mjs tests/generation/*.test.mjs",
     "verify": "npm run validate && npm test"
   },
