@@ -545,69 +545,78 @@ git commit -m "feat: render compact Figma component descriptions"
 
 **Files:**
 - Modify: system/manifest.yaml
-- Modify: scripts/validate-system.mjs
+- Modify: scripts/lib/system-manifest.mjs
 - Modify: tests/foundation/system-manifest.test.mjs
+- Modify: tests/helpers/system-fixture.mjs
 - Modify: README.md
+- Preserve: scripts/validate-system.mjs как единый CLI entrypoint
 - Test: tests/characterization/component-documentation-boundary.test.mjs
 
 **Interfaces:**
-- Produces: manifest source IDs для двух стандартов и validation новой component model.
-- Preserves: legacy bundle_profiles[].source_ids и skill behavior.
+- Produces: manifest source IDs для двух стандартов и обязательную проверку их canonical kind/path.
+- Preserves: legacy bundle_profiles[].source_ids, routes, skill behavior и границу будущего generated layer.
 
-- [ ] **Step 1: Написать failing manifest assertions**
+- [x] **Step 1: Написать failing manifest assertions**
 
-Проверить существование source IDs:
+Проверено существование source IDs:
 
 ~~~text
 component-contract-standard
 figma-component-description-standard
 ~~~
 
-На shadow-этапе не добавлять их одновременно в legacy source_ids и generated bundle для одного route.
+Дополнительно зафиксированы canonical kind/path и отсутствие обоих sources во всех действующих bundle profiles.
 
-- [ ] **Step 2: Объявить новые sources**
+RED evidence: System validation run #207 — прежние 305 тестов прошли; 7 новых assertions ожидаемо упали только из-за отсутствующих declarations и их semantic guards.
 
-Добавить оба core paths в manifest. Подключение к итоговым generated bundles выполняется только в Task 9 после обновления плана этапа 7.
+- [x] **Step 2: Объявить новые sources**
 
-- [ ] **Step 3: Подключить system validation**
+Оба Core-файла объявлены в manifest с `kind: core`. Ни один legacy `bundle_profiles[].source_ids` не изменён. Подключение к итоговым generated bundles остаётся отдельной задачей downstream-плана.
 
-Порядок:
+- [x] **Step 3: Подключить system validation без дублирования**
+
+`validateSystem` теперь требует оба source ID, их canonical paths и `kind: core` до перехода к foundation/component validation.
+
+Фактический порядок остаётся:
 
 ~~~text
-manifest
+manifest и обязательные source declarations
 → foundations
 → component schema/cross-references
 → documentation semantics
-→ generated layer
 ~~~
 
-Validation остаётся read-only.
+Documentation semantics уже вызывается внутри `validateComponentRegistries` после schema и cross-reference checks; второй вызов не добавлялся. Полный registry renderer и компактный Figma renderer проверяются общим `npm test`. Проверка будущих файлов `docs/generated/**` не имитируется до их появления и остаётся Task 5 generated-docs plan.
 
-- [ ] **Step 4: Обновить README**
+`scripts/validate-system.mjs` не менялся: он уже является единым read-only CLI entrypoint поверх `validateSystem`.
 
-Объяснить простым языком:
+- [x] **Step 4: Обновить README**
 
-- component data — источник;
-- generated registry — полная документация;
-- Figma Description — компактная проекция;
-- generated outputs не редактируются;
-- email build не зависит от Figma Description.
+README простым языком фиксирует:
 
-- [ ] **Step 5: Запустить проверки и commit**
+- component data — владелец component-specific contract;
+- registry renderer — полная документационная проекция;
+- Figma Description — компактная вспомогательная проекция;
+- будущие generated outputs пересобираются и не редактируются вручную;
+- email build не зависит от Figma Description;
+- до cutover legacy Markdown registry остаётся активным route input.
 
-~~~powershell
-npm run validate
-npm test
-npm run verify
-~~~
+- [x] **Step 5: Запустить проверки и commit**
 
-Expected: PASS, 0 failed.
+GREEN evidence: System validation run #208:
 
-Commit:
+- `npm run validate` — success;
+- `npm test` — 312/312 success;
+- `bootstrap/verify.ps1` — success;
+- `tests/bootstrap-contract.Tests.ps1` — success.
 
-~~~powershell
-git add system/manifest.yaml schemas/manifest.schema.json scripts/validate-system.mjs tests/foundation/system-manifest.test.mjs README.md
-git commit -m "feat: integrate component documentation foundation"
+`npm run verify` является последовательностью тех же `npm run validate && npm test`; обе составляющие выполнены в одном fresh CI run.
+
+Commits:
+
+~~~text
+60c3875 test: require component documentation shadow sources
+c2eb80b feat: integrate component documentation foundation
 ~~~
 
 ---
