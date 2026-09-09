@@ -164,6 +164,34 @@ test("renderer rejects missing or non-critical selected constraints", async () =
   );
 });
 
+test("renderer blocks missing purpose and unresolved render type", async () => {
+  const missingPurpose = structuredClone(await byId("banner-secondary"));
+  missingPurpose.documentation.purpose = "";
+  assert.throws(
+    () => renderFigmaComponentDescription(missingPurpose),
+    (error) => error?.code === "COMPONENT_PURPOSE_MISSING",
+  );
+
+  const unresolved = structuredClone(await byId("banner-secondary"));
+  unresolved.documentation.purpose = "Тест.";
+  unresolved.identity.semantic_role = "block";
+  unresolved.contracts.mobile.root = {
+    id: "root",
+    semantic_role: "source",
+    render_mode: "figma-source-only",
+    visibility: { mode: "always" },
+    facts: [],
+    children: [],
+  };
+  unresolved.contracts.desktop.root = structuredClone(
+    unresolved.contracts.mobile.root,
+  );
+  assert.throws(
+    () => renderFigmaComponentDescription(unresolved),
+    (error) => error?.code === "COMPONENT_RENDER_TYPE_UNRESOLVED",
+  );
+});
+
 test("renderer is deterministic and does not mutate the component record", async () => {
   const record = structuredClone(await byId("banner-fiscal-check-link"));
   const before = structuredClone(record);
