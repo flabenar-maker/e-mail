@@ -62,6 +62,23 @@ export function validateRendererRegistrySemantics(registry) {
   return sortDiagnostics(errors);
 }
 
+export function validateRendererCoverageReferences(registry, componentIds) {
+  const knownIds = new Set(componentIds);
+  const errors = [];
+  (registry?.coverage ?? []).forEach((entry, index) => {
+    if (!knownIds.has(entry.component_id)) {
+      errors.push(
+        diagnostic(
+          "RENDERER_COVERAGE_COMPONENT_UNKNOWN",
+          `/coverage/${index}/component_id`,
+          `Renderer coverage references unknown component ${entry.component_id}.`,
+        ),
+      );
+    }
+  });
+  return sortDiagnostics(errors);
+}
+
 export async function loadRendererRegistry({
   repoRoot,
   dataPath = "data/renderers/registry.yaml",

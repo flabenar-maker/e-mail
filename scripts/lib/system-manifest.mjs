@@ -9,7 +9,14 @@ import { validateSpacingFoundation } from "./spacing-foundation.mjs";
 import { validateAssetsFoundation } from "./assets-foundation.mjs";
 import { validateFigmaNamingFoundation } from "./figma-naming-foundation.mjs";
 import { validateRenderingFoundation } from "./rendering-foundation.mjs";
-import { validateComponentRegistries } from "./component-registry.mjs";
+import {
+  listComponentRecords,
+  validateComponentRegistries,
+} from "./component-registry.mjs";
+import {
+  loadRendererRegistry,
+  validateRendererCoverageReferences,
+} from "./renderer-registry.mjs";
 import {
   compareGeneratedDocs,
   renderAllGeneratedDocs,
@@ -801,6 +808,74 @@ function resolveRenderingSources(manifest) {
   };
 }
 
+function resolveRendererRegistrySources(manifest) {
+  const errors = [];
+  const registrySource = manifest.sources.find(
+    (source) => source.id === "renderer-registry",
+  );
+  const schemaSource = manifest.sources.find(
+    (source) => source.id === "renderer-registry-schema",
+  );
+
+  if (!registrySource) {
+    errors.push(
+      diagnostic(
+        "missing-renderer-registry-source",
+        "/sources",
+        "Renderer registry source must be declared.",
+      ),
+    );
+  } else if (registrySource.kind !== "registry") {
+    errors.push(
+      diagnostic(
+        "invalid-renderer-registry-source-kind",
+        "/sources/renderer-registry/kind",
+        "Renderer registry source kind must be registry.",
+      ),
+    );
+  } else if (registrySource.path !== "data/renderers/registry.yaml") {
+    errors.push(
+      diagnostic(
+        "invalid-renderer-registry-source-path",
+        "/sources/renderer-registry/path",
+        "Renderer registry source must use its canonical path.",
+      ),
+    );
+  }
+
+  if (!schemaSource) {
+    errors.push(
+      diagnostic(
+        "missing-renderer-registry-schema-source",
+        "/sources",
+        "Renderer registry schema source must be declared.",
+      ),
+    );
+  } else if (schemaSource.kind !== "schema") {
+    errors.push(
+      diagnostic(
+        "invalid-renderer-registry-source-kind",
+        "/sources/renderer-registry-schema/kind",
+        "Renderer registry schema source kind must be schema.",
+      ),
+    );
+  } else if (schemaSource.path !== "schemas/renderer-registry.schema.json") {
+    errors.push(
+      diagnostic(
+        "invalid-renderer-registry-source-path",
+        "/sources/renderer-registry-schema/path",
+        "Renderer registry schema source must use its canonical path.",
+      ),
+    );
+  }
+
+  return {
+    registrySource,
+    schemaSource,
+    errors: sortDiagnostics(errors),
+  };
+}
+
 const COMPONENT_REGISTRY_SOURCES = [
   {
     id: "components-shared",
@@ -935,6 +1010,7 @@ export async function validateSystem({
     const assetsSources = resolveAssetsSources(manifest);
     const figmaNamingSources = resolveFigmaNamingSources(manifest);
     const renderingSources = resolveRenderingSources(manifest);
+    const rendererRegistrySources = resolveRendererRegistrySources(manifest);
     const componentSources = resolveComponentRegistrySources(manifest);
     const componentDocumentationSources =
       resolveComponentDocumentationStandardSources(manifest);
@@ -945,6 +1021,7 @@ export async function validateSystem({
       ...assetsSources.errors,
       ...figmaNamingSources.errors,
       ...renderingSources.errors,
+      ...rendererRegistrySources.errors,
       ...componentSources.errors,
       ...componentDocumentationSources.errors,
     ]);
@@ -996,7 +1073,8 @@ export async function validateSystem({
       return { manifest, errors: foundationErrors };
     }
 
-    const componentResult = await validateComponentRegistries({
+    const [componentResult, rendererRegistry] = await Promise.all([
+      validateComponentRegistries({
       repoRoot,
       sources: {
         shared: componentSources.sharedSource.path,
@@ -1007,12 +1085,31 @@ export async function validateSystem({
       typography: typographyResult.typography,
       spacing: spacingResult.spacing,
       assets: assetsResult.assets,
-    });
+      }),
+      loadRendererRegistry({
+        repoRoot,
+        dataPath: rendererRegistrySources.registrySource.path,
+        schemaPath: rendererRegistrySources.schemaSource.path,
+      }),
+    ]);
 
     if (componentResult.errors.length > 0) {
       return {
         manifest,
         errors: sortDiagnostics(componentResult.errors),
+      };
+    }
+
+    const rendererReferenceErrors = validateRendererCoverageReferences(
+      rendererRegistry,
+      listComponentRecords(componentResult.registries).map(
+        ({ record }) => record.id,
+      ),
+    );
+    if (rendererReferenceErrors.length > 0) {
+      return {
+        manifest,
+        errors: rendererReferenceErrors,
       };
     }
 
