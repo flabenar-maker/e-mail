@@ -11,7 +11,8 @@
     "generate": "node scripts/generate-docs.mjs --write",
     "generate:check": "node scripts/generate-docs.mjs --check",
     "bundle": "node scripts/build-context-bundle.mjs",
-    "test": "node --test tests/foundation/*.test.mjs tests/characterization/*.test.mjs tests/components/*.test.mjs tests/generation/*.test.mjs",
+    "audit:rendering": "node scripts/audit-renderer-readiness.mjs",
+    "test": "node --test tests/foundation/*.test.mjs tests/characterization/*.test.mjs tests/components/*.test.mjs tests/generation/*.test.mjs tests/rendering/*.test.mjs",
     "verify": "npm run validate && npm test"
   },
   "dependencies": {
