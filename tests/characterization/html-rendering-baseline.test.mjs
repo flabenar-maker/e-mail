@@ -1,14 +1,17 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { execFile } from "node:child_process";
 import { createHash } from "node:crypto";
 import { access, readFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
+import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
 
 import { loadComponentRegistries } from "../../scripts/lib/component-registry.mjs";
 import { auditRendererReadiness } from "../../scripts/lib/renderer-readiness.mjs";
 import { readStrictYaml } from "../../scripts/lib/strict-yaml.mjs";
 
+const execFileAsync = promisify(execFile);
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const baseline = JSON.parse(
   await readFile(
@@ -76,6 +79,28 @@ test("keeps active bundles on their exact legacy sources", async () => {
       false,
     );
   }
+});
+
+test("renderer readiness CLI prints JSON and creates no email output", async () => {
+  const { stdout, stderr } = await execFileAsync(
+    process.execPath,
+    [
+      join(repoRoot, "scripts/audit-renderer-readiness.mjs"),
+      "--repo-root",
+      repoRoot,
+    ],
+    { cwd: repoRoot, encoding: "utf8" },
+  );
+
+  assert.equal(stderr, "");
+  const report = JSON.parse(stdout);
+  assert.equal(report.summary.components, baseline.components);
+  assert.equal(
+    report.summary.generic_description_facts,
+    baseline.generic_description_facts,
+  );
+  assert.equal(await exists("email.html"), false);
+  assert.equal(await exists("images"), false);
 });
 
 test("does not place concrete email output in the system repository", async () => {
