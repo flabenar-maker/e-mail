@@ -8,11 +8,11 @@
   "components_with_properties": 16,
   "components_with_assets": 27,
   "legacy_digests": {
-    "core/email-figma-prompt.md": "sha256:fafffe2812b045e93f53909d917773aa996fbf78fcb13bc57789f172ba95ee8b",
-    "registry/email-component-descriptions-registry.md": "sha256:bed16dcc633b5a064790e56a5f0e34ec1b88a045fa9ed3b25c789f8d542f5ba6",
-    "registry/email-typography-registry.md": "sha256:f99fc795f34e751c2adaa878befd81ee84bb909fa9af895fcc4a7cd9f039c3b1",
-    "workflows/library-maintenance-checkpoint.md": "sha256:abb48805b8cbd510391097dadba10cbb4ade40392c65d1402012e51d1e3be22e",
-    "workflows/email-build-checkpoint.md": "sha256:19435af2a4542651a60ebfeffc02c5136348195d053e549306d159c43b573cbb"
+    "core/email-figma-prompt.md": "sha256:f25d073e5ecd5d135b28a040afeda4fc594fcb7f2f0dab220442c57488392665",
+    "registry/email-component-descriptions-registry.md": "sha256:a7fe2dfadea52600c45daeb5c72fed426f9a5373ebd37589c00aa2a14c0d481a",
+    "registry/email-typography-registry.md": "sha256:b8303adeedae66a1423677a05c866e09d6cafef1627190df969c0de583e87cea",
+    "workflows/library-maintenance-checkpoint.md": "sha256:50df7698dc579221811f948c166ea6ad42282b4357cecbb6479a6019a1728e50",
+    "workflows/email-build-checkpoint.md": "sha256:31558913bf66d0530c5111f68b306c1e379f48af19a022168de61da9d92476a7"
   },
   "active_bundle_source_ids": {
     "library-maintenance": [
