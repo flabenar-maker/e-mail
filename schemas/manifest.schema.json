@@ -258,7 +258,7 @@
           "enum": ["none", "optional", "required"]
         },
         "viewport_selection": {
-          "enum": ["none", "one-or-both", "both"]
+          "enum": ["none", "one-or-both", "both", "both-when-components"]
         },
         "foundation_selection": {
           "enum": [

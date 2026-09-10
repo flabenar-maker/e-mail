@@ -1139,7 +1139,7 @@ test("canonical routes declare exact shadow bundle policies", async () => {
         "email-build-checkpoint",
       ],
       component_selection: "optional",
-      viewport_selection: "both",
+      viewport_selection: "both-when-components",
       foundation_selection: "referenced",
       allowed_foundation_ids: ["typography", "spacing", "assets"],
       required_foundation_ids: [],

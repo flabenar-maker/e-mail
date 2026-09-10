@@ -385,7 +385,7 @@ export async function validateManifestSemantics(manifest, repoRoot) {
         );
       }
     });
- 
+
     const generatedBundle = profile.generated_bundle;
     if (!generatedBundle) return;
 

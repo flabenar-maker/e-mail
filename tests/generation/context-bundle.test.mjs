@@ -86,6 +86,36 @@ test("route policies block missing, forbidden, and incomplete selections", async
   ]);
 });
 
+test("email continue fix requires both viewports only when components are selected", async () => {
+  const withoutComponents = await build({ routeId: "email-continue-fix" });
+  assert.equal(withoutComponents.status, "resolved");
+  assert.deepEqual(withoutComponents.bundle.components, []);
+  assert.deepEqual(withoutComponents.bundle.foundation_definitions, []);
+
+  const incompleteViewport = await build({
+    routeId: "email-continue-fix",
+    candidates: [{ id: "banner-hero" }],
+    viewports: ["mobile"],
+  });
+  assert.deepEqual(blockerCodes(incompleteViewport), [
+    "CONTEXT_BUNDLE_BOTH_VIEWPORTS_REQUIRED",
+  ]);
+
+  const bothViewports = await build({
+    routeId: "email-continue-fix",
+    candidates: [{ id: "banner-hero" }],
+    viewports: ["mobile", "desktop"],
+  });
+  assert.equal(bothViewports.status, "resolved");
+  assert.deepEqual(
+    Object.keys(
+      bothViewports.bundle.components.find(({ id }) => id === "banner-hero")
+        .contracts,
+    ),
+    ["mobile", "desktop"],
+  );
+});
+
 test("component selection stays exact and preserves onboarding handoff", async () => {
   const unknown = await build({
     routeId: "email-new-build",
@@ -336,4 +366,3 @@ test("routes without component context stay minimal", async () => {
     ["figma-naming"],
   );
 });
-

@@ -1017,4 +1017,3 @@ export async function validateComponentRegistries(options) {
     };
   }
 }
-

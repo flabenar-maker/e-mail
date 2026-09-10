@@ -233,7 +233,9 @@ function validateSelections(profile, candidates, viewports, foundationIds) {
       ),
     );
   } else if (
-    policy.viewport_selection === "both" &&
+    (policy.viewport_selection === "both" ||
+      (policy.viewport_selection === "both-when-components" &&
+        candidates.length > 0)) &&
     !VIEWPORTS.every((viewport) => viewports.includes(viewport))
   ) {
     blockers.push(
@@ -877,4 +879,3 @@ export function renderContextBundle(bundle) {
     "",
   ].join("\n");
 }
-
