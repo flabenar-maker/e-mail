@@ -3,12 +3,36 @@ import assert from "node:assert/strict";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { loadComponentRegistries } from "../../scripts/lib/component-registry.mjs";
+import {
+  loadComponentRegistries,
+  walkComponentElements,
+} from "../../scripts/lib/component-registry.mjs";
 import { auditRendererReadiness } from "../../scripts/lib/renderer-readiness.mjs";
+import {
+  loadRendererRegistry,
+  resolveRendererCoverage,
+  validateRendererReadyComponent,
+} from "../../scripts/lib/renderer-registry.mjs";
 
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 
-test("reports the measured renderer-readiness gaps without mutating contracts", async () => {
+function componentById(registries, componentId) {
+  for (const document of Object.values(registries)) {
+    const record = document.components.find(({ id }) => id === componentId);
+    if (record) return record;
+  }
+  throw new Error(`Unknown test component: ${componentId}`);
+}
+
+function elementById(record, viewport, elementId) {
+  let result = null;
+  walkComponentElements(record, ({ viewport: current, element }) => {
+    if (current === viewport && element.id === elementId) result = element;
+  });
+  return result;
+}
+
+test("uncovered components report coverage only without speculative interpretation", async () => {
   const registries = await loadComponentRegistries({ repoRoot });
   const before = structuredClone(registries);
 
@@ -16,9 +40,6 @@ test("reports the measured renderer-readiness gaps without mutating contracts", 
 
   assert.equal(report.summary.components, 61);
   assert.equal(report.summary.active_components, 61);
-  assert.equal(report.summary.facts, 395);
-  assert.equal(report.summary.generic_description_facts, 386);
-  assert.equal(report.summary.components_with_generic_facts, 46);
   assert.equal(report.summary.components_with_properties, 16);
   assert.equal(report.summary.components_with_assets, 27);
   assert.equal(report.summary.missing_coverage, 61);
@@ -26,14 +47,110 @@ test("reports the measured renderer-readiness gaps without mutating contracts", 
 
   const cardImage = report.components.find(({ id }) => id === "card-image");
   assert.equal(cardImage.ready, false);
-  assert.ok(
-    cardImage.issues.some(({ code }) => code === "RENDER_FACT_ID_GENERIC"),
+  assert.deepEqual(cardImage.issues.map(({ code }) => code), [
+    "RENDER_COVERAGE_MISSING",
+  ]);
+});
+
+test("all six pilot interpreter contracts are renderer-ready", async () => {
+  const registries = await loadComponentRegistries({ repoRoot });
+  const rendererRegistry = await loadRendererRegistry({ repoRoot });
+
+  for (const entry of rendererRegistry.coverage) {
+    const record = componentById(registries, entry.component_id);
+    assert.equal(entry.mode, "interpreter");
+    assert.deepEqual(validateRendererReadyComponent(record, entry), []);
+  }
+
+  const report = auditRendererReadiness(registries, rendererRegistry);
+  assert.equal(report.summary.covered_active_components, 6);
+  assert.equal(report.summary.ready_components, 6);
+  assert.equal(report.summary.missing_coverage, 55);
+});
+
+test("pilot contracts retain their critical rendering structures", async () => {
+  const registries = await loadComponentRegistries({ repoRoot });
+
+  const secondary = componentById(registries, "banner-secondary");
+  assert.equal(
+    elementById(secondary, "mobile", "secondary-image").render_mode,
+    "direct-image",
   );
+  assert.equal(
+    elementById(secondary, "desktop", "secondary-image").render_mode,
+    "background-image",
+  );
+
+  const card = componentById(registries, "card-image");
+  const cardImage = elementById(card, "mobile", "card-image");
+  const cardFacts = new Map(cardImage.facts.map((fact) => [fact.id, fact.value]));
+  assert.equal(cardFacts.get("width-behavior").value, "fluid-to-container");
+  assert.equal(cardFacts.get("height-behavior").value, "auto");
+  assert.equal(cardFacts.get("fixed-height-forbidden").value, true);
+
+  const template = componentById(registries, "email-template");
+  for (const viewport of ["mobile", "desktop"]) {
+    assert.deepEqual(
+      elementById(template, viewport, "content").content_slots,
+      [{ id: "content", type: "placeholder", required: true }],
+    );
+  }
+
+  const appDownload = componentById(registries, "banner-app-download");
+  for (const viewport of ["mobile", "desktop"]) {
+    const storeLink = elementById(appDownload, viewport, "rustore-link");
+    assert.deepEqual(
+      storeLink.children.map(({ render_mode }) => render_mode),
+      ["direct-image", "html-text"],
+    );
+  }
+});
+
+test("renderer-ready validation rejects missing, duplicate, and misplaced semantics", async () => {
+  const registries = await loadComponentRegistries({ repoRoot });
+  const rendererRegistry = await loadRendererRegistry({ repoRoot });
+  const card = structuredClone(componentById(registries, "card-image"));
+  const coverage = resolveRendererCoverage(rendererRegistry, card.id);
+
+  elementById(card, "mobile", "card-image").content_slots = [];
+  elementById(card, "desktop", "heading").content_slots.push({
+    id: "text",
+    type: "plain-text",
+    required: true,
+  });
+  card.contracts.mobile.root.facts.push({
+    id: "description-999",
+    value: { type: "measure", value: 1, unit: "px" },
+  });
+
+  const errors = validateRendererReadyComponent(card, coverage);
+  assert.ok(errors.some(({ code }) => code === "RENDER_CONTENT_SLOT_MISSING"));
+  assert.ok(errors.some(({ code }) => code === "RENDER_CONTENT_SLOT_DUPLICATE"));
+  assert.ok(errors.some(({ code }) => code === "RENDER_FACT_ID_GENERIC"));
+});
+
+test("background images reject HTML alt while direct images require it", async () => {
+  const registries = await loadComponentRegistries({ repoRoot });
+  const rendererRegistry = await loadRendererRegistry({ repoRoot });
+  const secondary = structuredClone(
+    componentById(registries, "banner-secondary"),
+  );
+  const coverage = resolveRendererCoverage(rendererRegistry, secondary.id);
+
+  elementById(secondary, "mobile", "secondary-image").content_slots = [];
+  elementById(secondary, "desktop", "secondary-image").content_slots = [
+    { id: "alt", type: "alt-text", required: true },
+  ];
+
+  const errors = validateRendererReadyComponent(secondary, coverage);
+  assert.ok(errors.some(({ code }) => code === "RENDER_IMAGE_ALT_MISSING"));
+  assert.ok(errors.some(({ code }) => code === "RENDER_BACKGROUND_ALT_FORBIDDEN"));
 });
 
 test("returns stable issue shapes and deterministic ordering", async () => {
   const registries = await loadComponentRegistries({ repoRoot });
-  const report = auditRendererReadiness(registries);
+  const rendererRegistry = await loadRendererRegistry({ repoRoot });
+  const report = auditRendererReadiness(registries, rendererRegistry);
 
   for (const component of report.components) {
     assert.deepEqual(
@@ -60,19 +177,10 @@ test("returns stable issue shapes and deterministic ordering", async () => {
     report.components.map(({ id }) => id),
     report.components.map(({ id }) => id).toSorted(),
   );
-  assert.ok(
-    report.components.some(({ issues }) =>
-      issues.some(({ code }) => code === "RENDER_FACT_OWNER_ROOT"),
-    ),
-  );
-  assert.ok(
-    report.components.some(({ issues }) =>
-      issues.some(({ code }) => code === "RENDER_CONTENT_SLOT_MISSING"),
-    ),
-  );
-  assert.ok(
-    report.components.every(({ issues }) =>
+  assert.equal(
+    report.components.filter(({ issues }) =>
       issues.some(({ code }) => code === "RENDER_COVERAGE_MISSING"),
-    ),
+    ).length,
+    55,
   );
 });
