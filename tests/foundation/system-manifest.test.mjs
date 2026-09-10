@@ -1259,3 +1259,119 @@ for (const [sourceId, canonicalPath] of componentDocumentationStandardSources) {
     );
   });
 }
+test("declares the shadow rendering sources outside every active bundle", async () => {
+  const manifest = await canonicalManifest();
+  const sources = new Map(
+    manifest.sources.map((source) => [source.id, source]),
+  );
+
+  assert.deepEqual(sources.get("rendering-foundation"), {
+    id: "rendering-foundation",
+    kind: "registry",
+    path: "data/foundations/rendering.yaml",
+  });
+  assert.deepEqual(sources.get("rendering-schema"), {
+    id: "rendering-schema",
+    kind: "schema",
+    path: "schemas/rendering.schema.json",
+  });
+
+  for (const profile of manifest.bundle_profiles) {
+    assert.equal(profile.source_ids.includes("rendering-foundation"), false);
+    assert.equal(profile.source_ids.includes("rendering-schema"), false);
+  }
+});
+
+for (const [sourceId, code] of [
+  ["rendering-foundation", "missing-rendering-source"],
+  ["rendering-schema", "missing-rendering-schema-source"],
+]) {
+  test("reports missing " + sourceId + " declaration", async (t) => {
+    const root = await validFixture(t);
+    await mutateFixtureManifest(root, (manifest) => {
+      manifest.sources = manifest.sources.filter(
+        (source) => source.id !== sourceId,
+      );
+    });
+
+    const result = await validateSystem({ repoRoot: root });
+
+    assert.ok(result.errors.some((error) => error.code === code));
+  });
+}
+
+for (const [sourceId, kind] of [
+  ["rendering-foundation", "core"],
+  ["rendering-schema", "registry"],
+]) {
+  test("reports invalid " + sourceId + " kind", async (t) => {
+    const root = await validFixture(t);
+    await mutateFixtureManifest(root, (manifest) => {
+      let source = manifest.sources.find((item) => item.id === sourceId);
+      if (!source) {
+        source = {
+          id: sourceId,
+          kind: sourceId === "rendering-schema" ? "schema" : "registry",
+          path:
+            sourceId === "rendering-schema"
+              ? "schemas/rendering.schema.json"
+              : "data/foundations/rendering.yaml",
+        };
+        manifest.sources.push(source);
+      }
+      source.kind = kind;
+    });
+
+    const result = await validateSystem({ repoRoot: root });
+
+    assert.ok(
+      result.errors.some(
+        (error) => error.code === "invalid-rendering-source-kind",
+      ),
+    );
+  });
+}
+
+test("invalid rendering data blocks system validation", async (t) => {
+  const root = await validFixture(t);
+  await copyFixtureFile(
+    repoRoot,
+    root,
+    "schemas/rendering.schema.json",
+  );
+  await copyFixtureFile(
+    repoRoot,
+    root,
+    "data/foundations/rendering.yaml",
+  );
+  await mutateFixtureManifest(root, (manifest) => {
+    if (!manifest.sources.some((item) => item.id === "rendering-foundation")) {
+      manifest.sources.push({
+        id: "rendering-foundation",
+        kind: "registry",
+        path: "data/foundations/rendering.yaml",
+      });
+    }
+    if (!manifest.sources.some((item) => item.id === "rendering-schema")) {
+      manifest.sources.push({
+        id: "rendering-schema",
+        kind: "schema",
+        path: "schemas/rendering.schema.json",
+      });
+    }
+  });
+  const invalidData = (
+    await readFile(join(root, "data/foundations/rendering.yaml"), "utf8")
+  ).replace("value: 660", "value: 660.5");
+  await writeFixtureFile(
+    root,
+    "data/foundations/rendering.yaml",
+    invalidData,
+  );
+
+  const result = await validateSystem({ repoRoot: root });
+
+  assert.ok(
+    result.errors.some((error) => error.code === "rendering-schema"),
+  );
+});
