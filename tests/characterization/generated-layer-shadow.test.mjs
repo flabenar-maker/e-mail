@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { access } from "node:fs/promises";
+import { access, readFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -119,4 +119,27 @@ test("generated layer does not pre-empt workflow migration or ship email output"
   assert.equal(await exists("schemas/workflow.schema.json"), false);
   assert.equal(await exists("email.html"), false);
   assert.equal(await exists("images"), false);
+});
+
+test("README explains the generated layer without switching working routes", async () => {
+  const readme = await readFile(join(repoRoot, "README.md"), "utf8");
+  const requiredStatements = [
+    "docs/generated/",
+    "npm run generate",
+    "npm run generate:check",
+    "npm run bundle -- --route",
+    "shadow",
+    "не редактируются вручную",
+    "не переключает рабочие навыки",
+    "## Режим 1. Поддержка библиотеки",
+    "## Режим 2. Вёрстка конкретного письма",
+  ];
+
+  for (const statement of requiredStatements) {
+    assert.equal(
+      readme.includes(statement),
+      true,
+      `README is missing the generated-layer statement: ${statement}`,
+    );
+  }
 });
