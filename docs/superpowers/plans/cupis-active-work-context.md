@@ -105,17 +105,18 @@ Component documentation contracts реализованы через [PR #45](htt
 
 ## 7. Текущий этап
 
-Этап 7 завершён. Generated docs и route-specific context bundles доказаны и подключены к общей validation в shadow-режиме. Рабочие routes пока продолжают использовать прежние static source profiles, поэтому дублирующие старый и новый контекст правила не подаются одновременно.
+Этап 7 завершён. Generated docs и route-specific context bundles находятся в `main` и остаются shadow-слоем.
 
-Следующий этап roadmap — **8. Core и workflows cutover**. Его реализация ещё не начата, а отдельного implementation plan в папке plans пока нет. До технических изменений нужно спланировать этап с помощью Superpowers и отдельно согласовать принципы HTML-рендеринга и риски их применения.
+Направление этапа 8 согласовано и зафиксировано в [CUPIS HTML Rendering Design](../specs/2026-09-10-cupis-html-rendering-design.md). Техническая реализация ещё не начата. Следующий обязательный артефакт — отдельный reviewed implementation plan этапа 8.
+
+Целевая архитектура строит новое письмо из фактических Mobile/Desktop-инстансов и resolved component contracts через временную модель, общий contract-tree interpreter и email-примитивы. Отдельный код разрешён только доказанным исключениям. Публикация атомарна и оставляет локально только `email.html` и `images/`.
 
 ## 8. Следующий точный шаг
 
-1. Закрепить актуальный SHA `main` и повторно открыть manifest, roadmap, active context и master-спецификацию.
-2. Через Superpowers сформировать подробный implementation plan этапа 8; не начинать реализацию до его review.
-3. В рамках планирования отдельно обсудить с пользователем принципы HTML-рендеринга, границы ответственности и риски перехода.
-4. Зафиксировать, как Core и workflows разделяются без копирования structured definitions и без одновременной подачи legacy/new правил.
-5. После согласования плана выполнять этап 8 в отдельной branch и PR. Figma и локальные письма в технический cutover не включать.
+1. Проверить письменную спецификацию на противоречия, лишних владельцев данных и скрытые Figma/production-email изменения.
+2. После подтверждения пользователя применить Superpowers writing-plans и создать подробный implementation plan этапа 8.
+3. Разбить реализацию на пакеты: baseline → foundation/schema → pilot contracts → Core split → primitives/interpreter/registry → pilot → model/CLI → digest/diagnostics → checks → remaining components → shadow comparison/workflows.
+4. Не начинать реализацию, не изменять Figma и не переключать maintenance skill до review плана.
 
 ## 9. Стабильная граница component documentation
 
