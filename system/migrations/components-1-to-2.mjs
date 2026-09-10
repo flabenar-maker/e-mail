@@ -1,7 +1,7 @@
 import { SystemValidationError } from "../../scripts/lib/diagnostics.mjs";
 
 const SOURCE_VERSION = "1.0.0";
-const TARGET_VERSION = "2.0.0";
+const TARGET_VERSION = "2.1.0";
 const MIGRATION_ID = "components-1-to-2";
 
 function migrationError(code, path, message) {
