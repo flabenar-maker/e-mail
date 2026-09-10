@@ -8,6 +8,7 @@ import { validateTypographyFoundation } from "./typography-foundation.mjs";
 import { validateSpacingFoundation } from "./spacing-foundation.mjs";
 import { validateAssetsFoundation } from "./assets-foundation.mjs";
 import { validateFigmaNamingFoundation } from "./figma-naming-foundation.mjs";
+import { validateRenderingFoundation } from "./rendering-foundation.mjs";
 import { validateComponentRegistries } from "./component-registry.mjs";
 import {
   compareGeneratedDocs,
@@ -748,6 +749,58 @@ function resolveFigmaNamingSources(manifest) {
 }
 
 
+function resolveRenderingSources(manifest) {
+  const errors = [];
+  const renderingSource = manifest.sources.find(
+    (source) => source.id === "rendering-foundation",
+  );
+  const renderingSchemaSource = manifest.sources.find(
+    (source) => source.id === "rendering-schema",
+  );
+
+  if (!renderingSource) {
+    errors.push(
+      diagnostic(
+        "missing-rendering-source",
+        "/sources",
+        "Rendering foundation source must be declared.",
+      ),
+    );
+  } else if (renderingSource.kind !== "registry") {
+    errors.push(
+      diagnostic(
+        "invalid-rendering-source-kind",
+        "/sources/rendering-foundation/kind",
+        "Rendering foundation source kind must be registry.",
+      ),
+    );
+  }
+
+  if (!renderingSchemaSource) {
+    errors.push(
+      diagnostic(
+        "missing-rendering-schema-source",
+        "/sources",
+        "Rendering schema source must be declared.",
+      ),
+    );
+  } else if (renderingSchemaSource.kind !== "schema") {
+    errors.push(
+      diagnostic(
+        "invalid-rendering-source-kind",
+        "/sources/rendering-schema/kind",
+        "Rendering schema source kind must be schema.",
+      ),
+    );
+  }
+
+  return {
+    renderingSource,
+    renderingSchemaSource,
+    errors: sortDiagnostics(errors),
+  };
+}
+
 const COMPONENT_REGISTRY_SOURCES = [
   {
     id: "components-shared",
@@ -881,6 +934,7 @@ export async function validateSystem({
     const spacingSources = resolveSpacingSources(manifest);
     const assetsSources = resolveAssetsSources(manifest);
     const figmaNamingSources = resolveFigmaNamingSources(manifest);
+    const renderingSources = resolveRenderingSources(manifest);
     const componentSources = resolveComponentRegistrySources(manifest);
     const componentDocumentationSources =
       resolveComponentDocumentationStandardSources(manifest);
@@ -890,6 +944,7 @@ export async function validateSystem({
       ...spacingSources.errors,
       ...assetsSources.errors,
       ...figmaNamingSources.errors,
+      ...renderingSources.errors,
       ...componentSources.errors,
       ...componentDocumentationSources.errors,
     ]);
@@ -897,8 +952,13 @@ export async function validateSystem({
       return { manifest, errors: prerequisiteErrors };
     }
 
-    const [typographyResult, spacingResult, assetsResult, figmaNamingResult] =
-      await Promise.all([
+    const [
+      typographyResult,
+      spacingResult,
+      assetsResult,
+      figmaNamingResult,
+      renderingResult,
+    ] = await Promise.all([
       validateTypographyFoundation({
         repoRoot,
         dataPath: typographySources.typographySource.path,
@@ -919,12 +979,18 @@ export async function validateSystem({
         dataPath: figmaNamingSources.figmaNamingSource.path,
         schemaPath: figmaNamingSources.figmaNamingSchemaSource.path,
       }),
+      validateRenderingFoundation({
+        repoRoot,
+        dataPath: renderingSources.renderingSource.path,
+        schemaPath: renderingSources.renderingSchemaSource.path,
+      }),
     ]);
     const foundationErrors = sortDiagnostics([
       ...typographyResult.errors,
       ...spacingResult.errors,
       ...assetsResult.errors,
       ...figmaNamingResult.errors,
+      ...renderingResult.errors,
     ]);
     if (foundationErrors.length > 0) {
       return { manifest, errors: foundationErrors };

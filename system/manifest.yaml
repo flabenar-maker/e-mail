@@ -27,6 +27,8 @@ sources:
   - { id: assets-schema, kind: schema, path: schemas/assets.schema.json }
   - { id: figma-naming-foundation, kind: registry, path: data/foundations/figma-naming.yaml }
   - { id: figma-naming-schema, kind: schema, path: schemas/figma-naming.schema.json }
+  - { id: rendering-foundation, kind: registry, path: data/foundations/rendering.yaml }
+  - { id: rendering-schema, kind: schema, path: schemas/rendering.schema.json }
   - { id: components-shared, kind: registry, path: data/components/shared.yaml }
   - { id: components-marketing, kind: registry, path: data/components/marketing.yaml }
   - { id: components-service, kind: registry, path: data/components/service.yaml }
