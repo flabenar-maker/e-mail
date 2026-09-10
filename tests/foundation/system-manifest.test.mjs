@@ -16,6 +16,7 @@ import {
   createSystemFixture,
   writeFixtureFile,
 } from "../helpers/system-fixture.mjs";
+import { readStrictYaml } from "../../scripts/lib/strict-yaml.mjs";
 
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const schema = JSON.parse(
@@ -1373,5 +1374,88 @@ test("invalid rendering data blocks system validation", async (t) => {
 
   assert.ok(
     result.errors.some((error) => error.code === "rendering-schema"),
+  );
+});
+
+test("declares the shadow renderer registry outside every active bundle", async () => {
+  const manifest = await canonicalManifest();
+  const sources = new Map(
+    manifest.sources.map((source) => [source.id, source]),
+  );
+
+  assert.deepEqual(sources.get("renderer-registry"), {
+    id: "renderer-registry",
+    kind: "registry",
+    path: "data/renderers/registry.yaml",
+  });
+  assert.deepEqual(sources.get("renderer-registry-schema"), {
+    id: "renderer-registry-schema",
+    kind: "schema",
+    path: "schemas/renderer-registry.schema.json",
+  });
+
+  for (const profile of manifest.bundle_profiles) {
+    assert.equal(profile.source_ids.includes("renderer-registry"), false);
+    assert.equal(profile.source_ids.includes("renderer-registry-schema"), false);
+  }
+});
+
+for (const [sourceId, code] of [
+  ["renderer-registry", "missing-renderer-registry-source"],
+  ["renderer-registry-schema", "missing-renderer-registry-schema-source"],
+]) {
+  test("reports missing " + sourceId + " declaration", async (t) => {
+    const root = await validFixture(t);
+    await mutateFixtureManifest(root, (manifest) => {
+      manifest.sources = manifest.sources.filter(
+        (source) => source.id !== sourceId,
+      );
+    });
+
+    const result = await validateSystem({ repoRoot: root });
+
+    assert.ok(result.errors.some((error) => error.code === code));
+  });
+}
+
+for (const [sourceId, kind] of [
+  ["renderer-registry", "core"],
+  ["renderer-registry-schema", "registry"],
+]) {
+  test("reports invalid " + sourceId + " kind", async (t) => {
+    const root = await validFixture(t);
+    await mutateFixtureManifest(root, (manifest) => {
+      const source = manifest.sources.find((item) => item.id === sourceId);
+      source.kind = kind;
+    });
+
+    const result = await validateSystem({ repoRoot: root });
+
+    assert.ok(
+      result.errors.some(
+        (error) => error.code === "invalid-renderer-registry-source-kind",
+      ),
+    );
+  });
+}
+
+test("renderer coverage cannot reference an unknown component", async (t) => {
+  const root = await validFixture(t);
+  const registry = await readStrictYaml(
+    join(root, "data/renderers/registry.yaml"),
+  );
+  registry.coverage[0].component_id = "missing-component";
+  await writeFixtureFile(
+    root,
+    "data/renderers/registry.yaml",
+    `${JSON.stringify(registry, null, 2)}\n`,
+  );
+
+  const result = await validateSystem({ repoRoot: root });
+
+  assert.ok(
+    result.errors.some(
+      (error) => error.code === "RENDERER_COVERAGE_COMPONENT_UNKNOWN",
+    ),
   );
 });

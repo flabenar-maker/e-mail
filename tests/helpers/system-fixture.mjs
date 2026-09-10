@@ -25,6 +25,8 @@ export const canonicalSystemFixtureFiles = [
   "data/foundations/figma-naming.yaml",
   "schemas/rendering.schema.json",
   "data/foundations/rendering.yaml",
+  "schemas/renderer-registry.schema.json",
+  "data/renderers/registry.yaml",
   "schemas/components.schema.json",
   "data/components/shared.yaml",
   "data/components/marketing.yaml",
