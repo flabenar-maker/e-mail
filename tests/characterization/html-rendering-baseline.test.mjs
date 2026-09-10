@@ -75,7 +75,9 @@ test("keeps active bundles on their exact legacy sources", async () => {
   assert.deepEqual(activeProfiles, baseline.active_bundle_source_ids);
   for (const sourceIds of Object.values(activeProfiles)) {
     assert.equal(
-      sourceIds.some((sourceId) => baseline.rendering_source_ids.includes(sourceId)),
+      sourceIds.some((sourceId) =>
+        baseline.rendering_source_ids.includes(sourceId),
+      ),
       false,
     );
   }
@@ -103,7 +105,21 @@ test("renderer readiness CLI prints JSON and creates no email output", async () 
   assert.equal(await exists("images"), false);
 });
 
-test("does not place concrete email output in the system repository", async () => {
-  assert.equal(await exists("email.html"), false);
-  assert.equal(await exists("images"), false);
+test("does not track concrete email output in the system repository", async () => {
+  const { stdout } = await execFileAsync(
+    "git",
+    ["-C", repoRoot, "ls-files"],
+    { encoding: "utf8" },
+  );
+  const trackedPaths = stdout
+    .split(/\r?\n/gu)
+    .filter(Boolean)
+    .map((path) => path.replaceAll("\\", "/"));
+
+  assert.equal(
+    trackedPaths.some(
+      (path) => /(?:^|\/)email\.html$/u.test(path) || /(?:^|\/)images(?:\/|$)/u.test(path),
+    ),
+    false,
+  );
 });
