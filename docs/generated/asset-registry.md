@@ -1,7 +1,7 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: asset-registry -->
-<!-- source-digest: sha256:1b1dd1a5d5d79f00e16a034a599dd365e9773de6ac529d2875dd803c19b61ac9 -->
-<!-- schema-versions: components=2.0.0, assets=1.0.0 -->
+<!-- source-digest: sha256:8bc4057c6b2b6bcb78d80a413f18b9f6145c7876e2116834994039256b9dc110 -->
+<!-- schema-versions: components=2.1.0, assets=1.0.0 -->
 # CUPIS asset registry
 
 General export definitions are listed first. Component-specific choices remain owned by component contracts.

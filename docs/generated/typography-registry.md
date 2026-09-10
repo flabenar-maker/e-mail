@@ -1,7 +1,7 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: typography-registry -->
-<!-- source-digest: sha256:17db53ad91dacc9fa19da953ccb71db67572000da8d3871cded5fb93c5126344 -->
-<!-- schema-versions: components=2.0.0, typography=1.0.0 -->
+<!-- source-digest: sha256:2d29be28f5936750d947a41b0f3e78b32d74d1c93d4d6ec804159a4c4bb760bd -->
+<!-- schema-versions: components=2.1.0, typography=1.0.0 -->
 # CUPIS typography registry
 
 Typography definitions come from the structured foundation. Consumers are computed from component contracts.
