@@ -18,7 +18,7 @@
   ],
   "properties": {
     "schema_version": {
-      "const": "1.0.0"
+      "const": "1.1.0"
     },
     "system": {
       "type": "object",
@@ -131,6 +131,12 @@
         "test": { "$ref": "#/$defs/nonEmptyString" },
         "verify": { "$ref": "#/$defs/nonEmptyString" }
       }
+    },
+    "generated_docs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/generatedDoc" }
     }
   },
   "$defs": {
@@ -182,7 +188,8 @@
           "minItems": 1,
           "uniqueItems": true,
           "items": { "$ref": "#/$defs/id" }
-        }
+        },
+        "generated_bundle": { "$ref": "#/$defs/generatedBundle" }
       }
     },
     "route": {
@@ -202,6 +209,75 @@
       "properties": {
         "id": { "$ref": "#/$defs/id" },
         "path": { "$ref": "#/$defs/repoPath" }
+      }
+    },
+    "generatedDoc": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "output_source_id", "renderer", "input_source_ids"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "output_source_id": { "$ref": "#/$defs/id" },
+        "renderer": {
+          "enum": [
+            "component-registry",
+            "typography-registry",
+            "asset-registry",
+            "naming-reference"
+          ]
+        },
+        "input_source_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        }
+      }
+    },
+    "generatedBundle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "static_source_ids",
+        "component_selection",
+        "viewport_selection",
+        "foundation_selection",
+        "allowed_foundation_ids",
+        "required_foundation_ids"
+      ],
+      "properties": {
+        "status": { "const": "shadow" },
+        "static_source_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "component_selection": {
+          "enum": ["none", "optional", "required"]
+        },
+        "viewport_selection": {
+          "enum": ["none", "one-or-both", "both", "both-when-components"]
+        },
+        "foundation_selection": {
+          "enum": [
+            "none",
+            "referenced",
+            "explicit",
+            "explicit-or-referenced"
+          ]
+        },
+        "allowed_foundation_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "required_foundation_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/id" }
+        }
       }
     }
   }

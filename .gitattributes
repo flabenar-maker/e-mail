@@ -6,5 +6,6 @@ system/** text eol=lf
 schemas/** text eol=lf
 scripts/** text eol=lf
 tests/**/*.mjs text eol=lf
+docs/generated/** text eol=lf
 .github/workflows/** text eol=lf
 package*.json text eol=lf

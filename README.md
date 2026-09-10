@@ -19,7 +19,7 @@
 
 ### Теневая база правил ассетов
 
-[data/foundations/assets.yaml](data/foundations/assets.yaml) — структурированный shadow-источник общих asset/export definitions; до generated bundles он не является отдельной инструкцией для HTML-сборки. Структура проверяется [машинной схемой](schemas/assets.schema.json), а этап внедрения описан в [implementation plan](docs/superpowers/plans/2026-08-26-cupis-assets-foundation.md).
+[data/foundations/assets.yaml](data/foundations/assets.yaml) — структурированный shadow-источник общих asset/export definitions; пока generated bundles работают в shadow-режиме, он не является отдельной инструкцией для HTML-сборки. Структура проверяется [машинной схемой](schemas/assets.schema.json), а этап внедрения описан в [implementation plan](docs/superpowers/plans/2026-08-26-cupis-assets-foundation.md).
 
 Foundation владеет общими definitions и совместимостью режимов. [Реестр компонентов](registry/email-component-descriptions-registry.md) владеет конкретным выбором asset, границей экспорта и отображаемыми размерами; [текущий Markdown-промт](core/email-figma-prompt.md) остаётся активной контрольной базой до отдельного cutover.
 
@@ -35,16 +35,31 @@ Foundation владеет общими definitions и совместимость
 
 Из одной записи строятся два разных представления:
 
-- `scripts/lib/component-registry-doc.mjs` формирует полную документацию компонента для будущего generated registry;
+- `scripts/lib/component-registry-doc.mjs` формирует полную документацию компонента в generated registry;
 - `scripts/lib/component-description.mjs` формирует компактный Figma Description: идентификатор, назначение, тип рендера и только выбранные критические ограничения.
 
-Generated registry является читаемым представлением данных, а не новым источником. После появления файлов в `docs/generated/` их нельзя будет править вручную: изменения вносятся в structured data, после чего документация пересобирается.
+Generated registry является читаемым представлением данных, а не новым источником. Файлы в `docs/generated/` не редактируются вручную: изменения вносятся в structured data, после чего документация пересобирается.
 
 Figma Description также не является входом для вёрстки письма. Email build должен получать выбранные фактические Mobile/Desktop-контракты из component data; отсутствие или устаревание Description не должно менять HTML-результат.
 
-Пока рабочим источником для поддержки библиотеки и вёрстки остаётся `registry/email-component-descriptions-registry.md`. Новые component-файлы, оба стандарта и их renderers не входят ни в один bundle profile, поэтому текущие маршруты и сборка писем не меняются.
+Пока рабочим источником для поддержки библиотеки и вёрстки остаётся `registry/email-component-descriptions-registry.md`. Structured component-файлы и generated-представления работают в shadow-режиме, поэтому текущие маршруты и сборка писем не меняются.
 
-На этом этапе Figma не изменялась. Публикация generated docs и переключение рабочих bundle profiles будут отдельным этапом 7 миграции после самостоятельной проверки данных.
+На этом этапе Figma не изменялась. Фактическое переключение рабочих маршрутов на structured sources выполняется отдельно на этапах 8–9 после проверки shadow-слоя.
+
+### Generated docs и shadow context bundles
+
+`docs/generated/` содержит удобные для чтения справочники компонентов, типографики, ассетов и нейминга. Они автоматически строятся из структурированных данных в `data/` и связанных schemas, поэтому не являются самостоятельным источником правил.
+
+Ручное изменение generated-файла будет отклонено общей проверкой. Используются следующие команды:
+
+- `npm run generate` — пересобрать все generated docs после подтверждённого изменения structured data;
+- `npm run generate:check` — ничего не менять и проверить, что сохранённые файлы совпадают с текущими данными;
+- `npm run bundle -- --route <route>` — временно собрать минимальный контекст для конкретного маршрута и вывести его в stdout;
+- `npm run validate` — проверить foundations, component contracts, generated docs и собираемость route bundles одной командой.
+
+Context bundle не сохраняется в репозитории: он собирается под конкретную задачу из выбранных active-компонентов, нужных viewport-контрактов, связанных foundations и статических источников маршрута.
+
+На этапе 7 этот механизм остаётся `shadow`: он проверяет новую архитектуру, но не переключает рабочие навыки и не заменяет источники, перечисленные ниже в режимах 1 и 2. Фактическое переключение выполняется только на этапах 8–9 отдельными изменениями.
 
 ## Восстановление контекста
 
@@ -117,6 +132,12 @@ Figma Description также не является входом для вёрс�
 | `data/components/marketing.yaml` | Теневые машинно-проверяемые контракты маркетинговых компонентов |
 | `data/components/service.yaml` | Теневые машинно-проверяемые контракты сервисных компонентов |
 | `schemas/components.schema.json` | Единая строгая схема трёх component-реестров |
+| `docs/generated/` | Автоматически собранные читаемые представления structured data; не является каноническим источником |
+| `scripts/lib/content-digest.mjs` | Детерминированная сериализация и digest для generated outputs и context bundles |
+| `scripts/lib/generated-docs.mjs` | Сборка generated-справочников и проверка их точного соответствия structured data |
+| `scripts/generate-docs.mjs` | CLI для пересборки или read-only проверки `docs/generated/` |
+| `scripts/lib/context-bundle.mjs` | Read-only сборка route-specific контекста, exact component selection и проверка dependency closure |
+| `scripts/build-context-bundle.mjs` | CLI, выводящий временный context bundle в stdout без записи в репозиторий |
 | `data/foundations/typography.yaml` | Валидируемый structured-пилот определений текстовых стилей; ещё не подключён к рабочим bundle profiles |
 | `schemas/typography.schema.json` | Строгая машинная схема structured-пилота типографики |
 | `data/foundations/spacing.yaml` | Машинно-проверяемое золотое правило отступов для maintenance и component onboarding; не является входом HTML-вёрстки |

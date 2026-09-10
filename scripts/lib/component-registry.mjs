@@ -59,6 +59,16 @@ function recordsIn(registries) {
   );
 }
 
+export function listComponentRecords(registries) {
+  return recordsIn(registries)
+    .map(({ library, record }) => ({ library, record }))
+    .sort(
+      (left, right) =>
+        LIBRARIES.indexOf(left.library) - LIBRARIES.indexOf(right.library) ||
+        left.record.id.localeCompare(right.record.id),
+    );
+}
+
 function readonlyMap(entries) {
   const target = new Map(entries);
   const proxy = new Proxy(target, {
@@ -363,7 +373,10 @@ export function indexComponentRegistries(registries, foundations = null) {
   return Object.freeze(index);
 }
 
-export function collectComponentReferences(record) {
+export function collectComponentReferences(
+  record,
+  { viewports = VIEWPORTS } = {},
+) {
   const references = {
     components: [],
     properties: [],
@@ -371,7 +384,7 @@ export function collectComponentReferences(record) {
     foundations: [],
   };
 
-  for (const viewport of VIEWPORTS) {
+  for (const viewport of viewports) {
     const root = record?.contracts?.[viewport]?.root;
     walkElementTree(root, `/contracts/${viewport}/root`, (element, path) => {
       if (element.render_mode === "nested-component") {
