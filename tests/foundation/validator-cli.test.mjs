@@ -102,6 +102,88 @@ test("stale generated documentation uses the generated-doc diagnostic", async (t
   assert.equal(result.stderr.includes(`/${path}`), true);
 });
 
+test("invalid generated bundle closure blocks the system validator", async (t) => {
+  const root = await validFixture(t);
+  const manifestPath = join(root, "system/manifest.yaml");
+  const manifest = await readStrictYaml(manifestPath);
+  const profile = manifest.bundle_profiles.find(
+    ({ id }) => id === "library-maintenance",
+  );
+  profile.generated_bundle.allowed_foundation_ids = [];
+  await writeFixtureFile(
+    root,
+    "system/manifest.yaml",
+    `${JSON.stringify(manifest, null, 2)}\n`,
+  );
+
+  const result = await runValidator(root);
+
+  assert.equal(result.exitCode, 1);
+  assert.equal(
+    result.stderr.includes("CONTEXT_BUNDLE_FOUNDATION_NOT_ALLOWED"),
+    true,
+  );
+  assert.equal(result.stderr.includes("/routes/0/generated_bundle/"), true);
+});
+
+test("generated document drift blocks generated bundle validation", async (t) => {
+  const root = await validFixture(t);
+  const manifestPath = join(root, "system/manifest.yaml");
+  const manifest = await readStrictYaml(manifestPath);
+  const profile = manifest.bundle_profiles.find(
+    ({ id }) => id === "library-maintenance",
+  );
+  profile.generated_bundle.allowed_foundation_ids = [];
+  await writeFixtureFile(
+    root,
+    "system/manifest.yaml",
+    `${JSON.stringify(manifest, null, 2)}\n`,
+  );
+  await appendFile(
+    join(root, "docs/generated/component-registry.md"),
+    "manual edit\n",
+    "utf8",
+  );
+
+  const result = await runValidator(root);
+
+  assert.equal(result.exitCode, 1);
+  assert.equal(result.stderr.includes("GENERATED_DOC_STALE"), true);
+  assert.equal(
+    result.stderr.includes("CONTEXT_BUNDLE_FOUNDATION_NOT_ALLOWED"),
+    false,
+  );
+});
+
+test("component errors block generated document comparison", async (t) => {
+  const root = await validFixture(t);
+  const componentPath = "data/components/marketing.yaml";
+  const registry = await readStrictYaml(join(root, componentPath));
+  const component = registry.components.find(
+    ({ asset_contracts: contracts }) => contracts.length > 0,
+  );
+  component.asset_contracts[0].export_profile_id = "missing-export-profile";
+  await writeFixtureFile(
+    root,
+    componentPath,
+    `${JSON.stringify(registry, null, 2)}\n`,
+  );
+  await appendFile(
+    join(root, "docs/generated/component-registry.md"),
+    "manual edit\n",
+    "utf8",
+  );
+
+  const result = await runValidator(root);
+
+  assert.equal(result.exitCode, 1);
+  assert.equal(
+    result.stderr.includes("COMPONENT_REGISTRY_UNKNOWN_ASSET_REFERENCE"),
+    true,
+  );
+  assert.equal(result.stderr.includes("GENERATED_DOC_STALE"), false);
+});
+
 test("unknown CLI option exits one", async (t) => {
   const root = await validFixture(t);
 

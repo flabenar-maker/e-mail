@@ -66,6 +66,73 @@ function sortDiagnostics(errors) {
       left.message.localeCompare(right.message),
   );
 }
+
+function generatedBundleInputs(profile, activeCandidates) {
+  const policy = profile.generated_bundle;
+  const candidates =
+    policy.component_selection === "none" ? [] : activeCandidates;
+  const viewports =
+    policy.viewport_selection === "none"
+      ? []
+      : policy.viewport_selection === "one-or-both"
+        ? ["mobile"]
+        : ["mobile", "desktop"];
+  return { candidates, viewports, foundationIds: [] };
+}
+
+function routeBundleDiagnostic(route, routeIndex, error) {
+  const suffix = error.path.startsWith("/") ? error.path : `/${error.path}`;
+  return diagnostic(
+    error.code,
+    `/routes/${routeIndex}/generated_bundle${suffix}`,
+    `Route ${route.id}: ${error.message}`,
+  );
+}
+
+async function validateGeneratedRouteBundles({
+  repoRoot,
+  manifest,
+  registries,
+}) {
+  // The bundle builder resolves route profiles through this module, so keep
+  // this dependency dynamic and avoid a static ESM cycle.
+  const { buildContextBundle, validateBundleClosure } = await import(
+    "./context-bundle.mjs"
+  );
+  const activeCandidates = Object.values(registries)
+    .flatMap(({ components }) => components)
+    .filter(({ status }) => status === "active")
+    .map(({ id }) => ({ id }))
+    .sort((left, right) => left.id.localeCompare(right.id));
+  const errors = [];
+
+  for (const [routeIndex, route] of manifest.routes.entries()) {
+    const profile = manifest.bundle_profiles.find(
+      ({ id }) => id === route.bundle_profile_id,
+    );
+    const result = await buildContextBundle({
+      repoRoot,
+      routeId: route.id,
+      ...generatedBundleInputs(profile, activeCandidates),
+    });
+    if (result.status === "blocked") {
+      errors.push(
+        ...result.blockers.map((error) =>
+          routeBundleDiagnostic(route, routeIndex, error),
+        ),
+      );
+      continue;
+    }
+    errors.push(
+      ...validateBundleClosure(result.bundle).map((error) =>
+        routeBundleDiagnostic(route, routeIndex, error),
+      ),
+    );
+  }
+
+  return sortDiagnostics(errors);
+}
+
 export function resolveGeneratedDocDefinitions(manifest) {
   return Object.freeze(
     (manifest.generated_docs ?? []).map((definition) =>
@@ -370,6 +437,19 @@ export async function validateManifestSemantics(manifest, repoRoot) {
         }
       });
     }
+    generatedBundle.required_foundation_ids.forEach(
+      (foundationId, foundationIndex) => {
+        if (!generatedBundle.allowed_foundation_ids.includes(foundationId)) {
+          errors.push(
+            diagnostic(
+              "required-foundation-not-allowed",
+              `/bundle_profiles/${profileIndex}/generated_bundle/required_foundation_ids/${foundationIndex}`,
+              `Required foundation must also be allowed: ${foundationId}.`,
+            ),
+          );
+        }
+      },
+    );
   });
 
   manifest.routes.forEach((route, routeIndex) => {
@@ -875,10 +955,22 @@ export async function validateSystem({
       repoRoot,
       rendered: renderedDocs,
     });
+    if (generatedDocErrors.length > 0) {
+      return {
+        manifest,
+        errors: sortDiagnostics(generatedDocErrors),
+      };
+    }
+
+    const generatedBundleErrors = await validateGeneratedRouteBundles({
+      repoRoot,
+      manifest,
+      registries: componentResult.registries,
+    });
 
     return {
       manifest,
-      errors: sortDiagnostics(generatedDocErrors),
+      errors: generatedBundleErrors,
     };
   } catch (error) {
     if (error instanceof AggregateError) {

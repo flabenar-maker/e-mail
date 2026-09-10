@@ -961,6 +961,16 @@ for (const [name, mutate, code] of [
     "unknown-foundation-id",
   ],
   [
+    "required foundation outside the allowed set",
+    (manifest) => {
+      manifest.bundle_profiles[0].generated_bundle.allowed_foundation_ids = [];
+      manifest.bundle_profiles[0].generated_bundle.required_foundation_ids = [
+        "spacing",
+      ];
+    },
+    "required-foundation-not-allowed",
+  ],
+  [
     "route without generated profile",
     (manifest) => delete manifest.bundle_profiles[0].generated_bundle,
     "route-generated-profile-missing",
