@@ -107,16 +107,16 @@ Component documentation contracts реализованы через [PR #45](htt
 
 Этап 7 завершён. Generated docs и route-specific context bundles находятся в `main` и остаются shadow-слоем.
 
-Направление этапа 8 согласовано и зафиксировано в [CUPIS HTML Rendering Design](../specs/2026-09-10-cupis-html-rendering-design.md). Техническая реализация ещё не начата. Следующий обязательный артефакт — отдельный reviewed implementation plan этапа 8.
+Направление этапа 8 согласовано и зафиксировано в [CUPIS HTML Rendering Design](../specs/2026-09-10-cupis-html-rendering-design.md). Техническая реализация ещё не начата. Подробный [implementation plan этапа 8](2026-09-10-cupis-html-rendering-stage-8.md) подготовлен в draft PR и ожидает review пользователя.
 
 Целевая архитектура строит новое письмо из фактических Mobile/Desktop-инстансов и resolved component contracts через временную модель, общий contract-tree interpreter и email-примитивы. Отдельный код разрешён только доказанным исключениям. Публикация атомарна и оставляет локально только `email.html` и `images/`.
 
 ## 8. Следующий точный шаг
 
-1. Проверить письменную спецификацию на противоречия, лишних владельцев данных и скрытые Figma/production-email изменения.
-2. После подтверждения пользователя применить Superpowers writing-plans и создать подробный implementation plan этапа 8.
-3. Разбить реализацию на пакеты: baseline → foundation/schema → pilot contracts → Core split → primitives/interpreter/registry → pilot → model/CLI → digest/diagnostics → checks → remaining components → shadow comparison/workflows.
-4. Не начинать реализацию, не изменять Figma и не переключать maintenance skill до review плана.
+1. Проверить спецификацию и подробный implementation plan этапа 8.
+2. После одобрения и merge документационного PR начать Package 1 в новой implementation branch от свежего `main`.
+3. Выполнять packages 1–12 строго последовательно с review и merge каждого пакета.
+4. Не изменять Figma и не переключать maintenance skill внутри Stage 8.
 
 ## 9. Стабильная граница component documentation
 

@@ -144,6 +144,8 @@ Structured records остаются shadow-источником до generated b
 
 Архитектурное основание: [CUPIS HTML Rendering Design](../specs/2026-09-10-cupis-html-rendering-design.md).
 
+Подробный implementation plan: [CUPIS HTML Rendering Stage 8](2026-09-10-cupis-html-rendering-stage-8.md).
+
 - [x] Согласовать направление contract-driven HTML-рендеринга и зафиксировать архитектурную спецификацию.
 - [ ] Зафиксировать characterization baseline и владельцев renderer-impacting данных.
 - [ ] Создать rendering foundation и renderer-ready schema без дублирования существующих foundations и contracts.
