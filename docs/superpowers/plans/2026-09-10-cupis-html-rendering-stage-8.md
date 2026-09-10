@@ -89,7 +89,7 @@
 - `data/components/service.yaml`
 - `schemas/components.schema.json`
 - `system/manifest.yaml`
-- `schemas/manifest.schema.json` только при реальном изменении shape/version.
+- `schemas/manifest.schema.json` — изменить только в Package 12 одновременно с добавлением structured-workflow capability и повышением manifest до `1.2.0`.
 - `scripts/lib/component-registry.mjs`
 - `scripts/lib/context-bundle.mjs`
 - `scripts/lib/system-manifest.mjs`
@@ -236,7 +236,7 @@ support_profiles:
 
 - [ ] **Step 3: Объявить manifest sources**
 
-Добавить `rendering-foundation` и `rendering-schema`; active `source_ids` не менять. Manifest version повышать до `1.2.0` только если меняется schema capability, а не ради новых generic source entries.
+Добавить `rendering-foundation` и `rendering-schema`; active `source_ids` не менять. Текущая generic source schema уже допускает эти записи, поэтому manifest остаётся `1.1.0`, а `schemas/manifest.schema.json` в этом пакете не изменяется.
 
 - [ ] **Step 4: Подключить validation и проверить**
 
@@ -517,7 +517,7 @@ git commit -m "test: add representative viewport rendering scenarios"
 **Files:** modify three component files, renderer registry, generated docs; create `all-components.test.mjs`.
 
 - [ ] **Step 1: Shared** — semantic facts/slots/coverage; internal glyphs → `source-only`.
-- [ ] **Step 2: Marketing** — preserve exact contracts/properties/assets/numbers. App Download Large получает reviewed `unsupported` reason, если остаётся непроизводственным экспериментом.
+- [ ] **Step 2: Marketing** — preserve exact contracts/properties/assets/numbers. `Banner/App-Download-Large` получает coverage mode `unsupported` и reason `visual-experiment-not-for-production`; его Figma status и дизайн не меняются.
 - [ ] **Step 3: Service** — та же schema без service-specific foundation; ambiguity blocks exact record.
 - [ ] **Step 4: Full coverage assertions**.
 
@@ -525,10 +525,10 @@ git commit -m "test: add representative viewport rendering scenarios"
 const report = auditRendererReadiness(registries, rendererRegistry);
 assert.equal(report.summary.generic_description_facts, 0);
 assert.equal(report.summary.missing_coverage, 0);
-assert.equal(report.summary.ready_active_components, 61);
+assert.equal(report.summary.covered_active_components, 61);
 ```
 
-`source-only` и `unsupported` зарегистрированы, но standalone render возвращает blocker.
+Каждый active record имеет coverage. `source-only` и `unsupported` входят в covered count, но не в renderable count и при standalone render возвращают понятный blocker.
 
 - [ ] **Step 5:** `npm run generate`, `generate:check`, all-components test, verify.
 - [ ] **Step 6:** три reviewable commits: shared, marketing, service; generated docs в последнем.
@@ -539,14 +539,14 @@ Gate: no generic facts/unregistered active records/unexplained value changes; Fi
 
 ### Package 12: Structured workflows и shadow comparison
 
-**Files:** create two workflow data files, schema, loader, workflow and characterization tests; modify context bundle and manifest wiring; preserve Markdown workflows and skill.
+**Files:** create two workflow data files, schema, loader, workflow and characterization tests; modify context bundle, `system/manifest.yaml`, `schemas/manifest.schema.json` and manifest tests; preserve Markdown workflows and skill.
 
 **Interfaces:**
 - `loadWorkflowRegistry({ repoRoot, workflowId })`.
 - `resolveWorkflowSteps(workflow, mode) -> ordered steps`.
 - Bundle option `workflow_mode: legacy|structured-shadow`; один bundle содержит один mode.
 
-- [ ] **Step 1: Workflow schema** — ID, status shadow, modes, ordered steps, required inputs, blockers, allowed outputs, handoff; ссылки на manifest source IDs без копии technical rules.
+- [ ] **Step 1: Workflow schema** — ID, status shadow, modes, ordered steps, required inputs, blockers, allowed outputs, handoff; ссылки на manifest source IDs без копии technical rules. Добавить structured-workflow capability в manifest schema и поднять manifest/schema loader с `1.1.0` до `1.2.0` в одном commit.
 - [ ] **Step 2: Maintenance workflow** — impact report, cloud GitHub, Figma gate/readback и stop conditions.
 - [ ] **Step 3: Email workflow** — NEW BUILD/CONTINUE/FIX, link validation, local versions, MCP asset export, temp model, CLI, final `email.html` + `images/`.
 - [ ] **Step 4: Structured shadow bundle** — mixed legacy/structured returns `CONTEXT_BUNDLE_SOURCE_MODE_MIXED`.
