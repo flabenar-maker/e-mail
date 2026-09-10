@@ -1,6 +1,6 @@
 # CUPIS Structured System Migration Roadmap
 
-Актуальность: 2026-09-07.
+Актуальность: 2026-09-10.
 
 ## Назначение
 
@@ -110,13 +110,11 @@ Master-спецификация владеет архитектурными ре
 
 Structured records остаются shadow-источником до generated bundles и общего cutover. Figma и действующие рабочие bundle profiles этим этапом не изменялись.
 
-### 7. Generated docs и context bundles — выполняется
+### 7. Generated docs и context bundles — завершён
 
 Подробный план: [generated docs и context bundles](2026-09-07-cupis-generated-docs-context-bundles.md).
 
-Пакет №1 технически реализован в draft [PR #43](https://github.com/flabenar-maker/e-mail/pull/43), но не находится в `main`. Он добавляет shadow manifest capability, route policies и deterministic digest, не переключая рабочие routes, Core, workflows, skills или Figma.
-
-До пакета №2 был добавлен обязательный архитектурный prerequisite: [component documentation contracts](2026-09-07-cupis-component-documentation-contracts.md). Он завершён до продолжения generated registry, чтобы не закреплять старую модель с повторением component facts в сохранённом prose Description.
+До завершения generated layer был выполнен обязательный архитектурный prerequisite: [component documentation contracts](2026-09-07-cupis-component-documentation-contracts.md). Он не дал закрепить старую модель с повторением component facts в сохранённом prose Description.
 
 #### 7A. Component documentation contracts — завершён
 
@@ -129,20 +127,18 @@ Structured records остаются shadow-источником до generated b
 
 Подробный план: [component documentation contracts](2026-09-07-cupis-component-documentation-contracts.md). Реализация слита в [PR #45](https://github.com/flabenar-maker/e-mail/pull/45), итоговый commit: `0eb8cfd4d2ff3401a6a7e91a80e8740435f7ab0e`. Figma, рабочие routes, workflows, skills и legacy registry этим подэтапом не изменялись.
 
-#### 7B. Generated docs и route-specific context bundles
+#### 7B. Generated docs и route-specific context bundles — завершён
 
-Переход к пакету №2:
+- [x] Обновить основание реализации после merge 7A и повторно проверить ранее выполненную часть.
+- [x] Генерировать читаемые реестры и справочники из структурированных источников.
+- [x] Полный component registry строить из contract tree, properties, assets, constraints и resolved foundation references.
+- [x] Compact Figma Description показывать только как auxiliary projection, не как implementation source.
+- [x] Формировать route-specific bundles без лишнего контекста.
+- [x] Email routes снабжать selected resolved component contracts, но не authoring standards или Figma Description.
+- [x] Проверять, что каждый bundle содержит только применимые rules, contracts и workflows.
+- [x] Сохранить весь этап shadow до отдельного cutover.
 
-- [ ] Обновить основание draft PR #43 от `main` после merge 7A и повторно проверить уже реализованные Tasks 1–3.
-- [ ] Только после этого продолжить с Task 4 плана generated docs/context bundles.
-
-- [ ] Генерировать читаемые реестры и справочники из структурированных источников.
-- [ ] Полный component registry строить из contract tree, properties, assets, constraints и resolved foundation references.
-- [ ] Compact Figma Description показывать только как auxiliary projection, не как implementation source.
-- [ ] Формировать route-specific bundles без лишнего контекста.
-- [ ] Email routes снабжать selected resolved component contracts, но не authoring standards или Figma Description.
-- [ ] Проверять, что каждый bundle содержит только применимые rules, contracts и workflows.
-- [ ] Сохранить весь этап shadow до отдельного cutover.
+Реализация этапа 7B слита в [PR #43](https://github.com/flabenar-maker/e-mail/pull/43), итоговый commit: `15a1c3ce09fec33d5aee82a87ffee4667e911702`. Generated docs и route-specific context bundles находятся в `main`, но остаются shadow-слоем: рабочие Core, workflows, skills и Figma этим этапом не переключались.
 
 ### 8. Core и workflows cutover
 

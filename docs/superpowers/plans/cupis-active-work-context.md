@@ -2,9 +2,9 @@
 
 Статус документа: ручной checkpoint для восстановления контекста.
 
-Последнее ручное обновление: 2026-09-07.
+Последнее ручное обновление: 2026-09-10.
 
-Снимок `main` на момент обновления: `6977cc262a0b429bf589570a0d429b0e41dffdef`.
+Снимок `main` на момент обновления: `15a1c3ce09fec33d5aee82a87ffee4667e911702`.
 
 ## 1. Зачем нужен этот файл
 
@@ -81,7 +81,7 @@
 
 ## 6. Уже подтверждённое состояние
 
-На снимке `main@6977cc262a0b429bf589570a0d429b0e41dffdef` завершены и слиты:
+На снимке `main@15a1c3ce09fec33d5aee82a87ffee4667e911702` завершены и слиты:
 
 1. master-спецификация и migration roadmap;
 2. системный foundation: manifest, schema, validation, CI и bootstrap;
@@ -94,40 +94,28 @@
    - строгая schema;
    - exact resolution и unregistered-component blocker;
    - read-only Figma drift checks;
-8. implementation plan generated docs и route-specific context bundles.
+8. component documentation contracts;
+9. generated docs и route-specific context bundles в shadow-режиме.
 
 Structured component registry реализован через [PR #40](https://github.com/flabenar-maker/e-mail/pull/40), итоговый commit: `90f1e01365c80b7553b520e8d47c2e5bb7f88660`.
 
-Пакет №1 этапа 7 реализован только в draft [PR #43](https://github.com/flabenar-maker/e-mail/pull/43), branch `codex/implement-generated-docs-context-bundles`, head на момент checkpoint: `c546f28e6072fd34ba76aeb328fe168682cee846`. Он ещё не находится в `main`.
+Component documentation contracts реализованы через [PR #45](https://github.com/flabenar-maker/e-mail/pull/45), итоговый commit: `0eb8cfd4d2ff3401a6a7e91a80e8740435f7ab0e`.
 
-Пакет №1 добавляет shadow manifest capability, route policies и deterministic digest. Он не меняет Core, workflows, skills, component data, registry или Figma.
+Этап 7 завершён через [PR #43](https://github.com/flabenar-maker/e-mail/pull/43), итоговый commit: `15a1c3ce09fec33d5aee82a87ffee4667e911702`. В `main` находятся четыре generated-справочника, deterministic digest, read-only route-specific context bundles, exact component selection, dependency/foundation closure и общая validation generated layer. Слой остаётся shadow: Core, workflows, skills и Figma на него ещё не переключены.
 
 ## 7. Текущий этап
 
-Во время подготовки пакета №2 выявлена архитектурная проблема: текущая `description.blocks` модель сохраняет полную prose-копию component facts. Если сразу выполнить Task 4 generated docs, новый реестр закрепит это дублирование.
+Этап 7 завершён. Generated docs и route-specific context bundles доказаны и подключены к общей validation в shadow-режиме. Рабочие routes пока продолжают использовать прежние static source profiles, поэтому дублирующие старый и новый контекст правила не подаются одновременно.
 
-Согласовано новое решение:
-
-- полный component registry генерируется из structured contract;
-- compact Figma Description является отдельной thin projection;
-- Figma Description не является источником HTML-вёрстки;
-- общие foundations не копируются в component records;
-- новый компонент проходит тот же contract/onboarding process без локальных schema-исключений.
-
-Для этого добавлен prerequisite-подэтап **7A. Component documentation contracts**. Его implementation plan: [component documentation contracts](2026-09-07-cupis-component-documentation-contracts.md).
-
-Draft PR #43 остаётся сохранённым. Tasks 1–3 не выбрасываются, но пакет №2 и Task 4 приостановлены до merge подэтапа 7A.
+Следующий этап roadmap — **8. Core и workflows cutover**. Его реализация ещё не начата, а отдельного implementation plan в папке plans пока нет. До технических изменений нужно спланировать этап с помощью Superpowers и отдельно согласовать принципы HTML-рендеринга и риски их применения.
 
 ## 8. Следующий точный шаг
 
-1. Проверить и по отдельной команде слить plan-only [PR #44](https://github.com/flabenar-maker/e-mail/pull/44) подэтапа 7A.
-2. Закрепить новый SHA `main` и повторно открыть manifest, roadmap, active context и оба implementation plans.
-3. Создать отдельную implementation branch для component documentation contracts.
-4. Реализовать standards, characterization, schema migration, component data migration, full registry renderer и compact Figma Description renderer.
-5. Не изменять Figma в техническом implementation PR.
-6. После проверки и отдельной команды слить implementation PR 7A.
-7. Обновить основание PR #43, повторно проверить пакет №1 и продолжить изменённый Task 4.
-8. Figma Description sync выполнять позднее отдельной MCP-only задачей после preview, impact report и отдельного разрешения.
+1. Закрепить актуальный SHA `main` и повторно открыть manifest, roadmap, active context и master-спецификацию.
+2. Через Superpowers сформировать подробный implementation plan этапа 8; не начинать реализацию до его review.
+3. В рамках планирования отдельно обсудить с пользователем принципы HTML-рендеринга, границы ответственности и риски перехода.
+4. Зафиксировать, как Core и workflows разделяются без копирования structured definitions и без одновременной подачи legacy/new правил.
+5. После согласования плана выполнять этап 8 в отдельной branch и PR. Figma и локальные письма в технический cutover не включать.
 
 ## 9. Стабильная граница component documentation
 
@@ -144,7 +132,7 @@ Draft PR #43 остаётся сохранённым. Tasks 1–3 не выбр�
 
 ## 10. Карта этапов миграции
 
-| Этап | Содержание | Статус на 2026-09-07 |
+| Этап | Содержание | Статус на 2026-09-10 |
 |---:|---|---|
 | 1 | Master-спецификация и первый implementation plan | Завершён |
 | 2 | Системный foundation: manifest, validation, CI и bootstrap | Завершён |
@@ -152,10 +140,9 @@ Draft PR #43 остаётся сохранённым. Tasks 1–3 не выбр�
 | 4 | Spacing foundation | Завершён |
 | 5 | Assets foundation и Figma naming foundation | Завершён |
 | 6 | Структурированный component registry | Завершён в PR #40 |
-| 7, пакет №1 | Generated-layer manifest capability и digest | Реализован только в draft PR #43 |
-| 7A | Component documentation contracts | Plan зафиксирован в draft PR #44; реализация не начата |
-| 7, пакет №2+ | Generated docs и route-specific context bundles | Ожидает 7A |
-| 8 | Разделение Core и workflows, переход на новые источники | Ожидает этап 7 |
+| 7A | Component documentation contracts | Завершён в PR #45 |
+| 7B | Generated docs и route-specific context bundles | Завершён в PR #43; shadow-слой сохранён |
+| 8 | Разделение Core и workflows, переход на новые источники | Следующий этап; требуется отдельный implementation plan |
 | 9 | Переключение maintenance skill на итоговые bundles | Ожидает этап 8 |
 | 10 | Стандарт и workflow разработки новых блоков | Ожидает системный cutover maintenance |
 | 11 | Навык разработки новых блоков | Ожидает этап 10 |
@@ -306,8 +293,9 @@ Figma naming foundation является shadow-источником и не з�
 - [Structured component registry PR #40](https://github.com/flabenar-maker/e-mail/pull/40)
 - [Component documentation contracts plan](2026-09-07-cupis-component-documentation-contracts.md)
 - [Component documentation plan PR #44](https://github.com/flabenar-maker/e-mail/pull/44)
+- [Component documentation implementation PR #45](https://github.com/flabenar-maker/e-mail/pull/45)
 - [Generated docs and context bundles plan](2026-09-07-cupis-generated-docs-context-bundles.md)
-- [Generated docs draft PR #43](https://github.com/flabenar-maker/e-mail/pull/43)
+- [Generated docs and context bundles PR #43](https://github.com/flabenar-maker/e-mail/pull/43)
 - [Assets foundation](../../../data/foundations/assets.yaml)
 - [Figma naming foundation](../../../data/foundations/figma-naming.yaml)
 - [Library maintenance checkpoint](../../../workflows/library-maintenance-checkpoint.md)
