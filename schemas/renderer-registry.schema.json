@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cupis.example/schemas/renderer-registry.schema.json",
+  "title": "CUPIS email renderer registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "registry", "coverage"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "registry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "status"],
+      "properties": {
+        "id": { "const": "email-renderers" },
+        "status": { "const": "shadow" }
+      }
+    },
+    "coverage": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/coverage" }
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+    },
+    "baseCoverage": {
+      "type": "object",
+      "properties": {
+        "component_id": { "$ref": "#/$defs/id" }
+      },
+      "required": ["component_id"]
+    },
+    "coverage": {
+      "oneOf": [
+        {
+          "allOf": [
+            { "$ref": "#/$defs/baseCoverage" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["component_id", "mode"],
+              "properties": {
+                "component_id": { "$ref": "#/$defs/id" },
+                "mode": { "const": "interpreter" }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            { "$ref": "#/$defs/baseCoverage" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["component_id", "mode", "recipe_id"],
+              "properties": {
+                "component_id": { "$ref": "#/$defs/id" },
+                "mode": { "const": "recipe" },
+                "recipe_id": { "$ref": "#/$defs/id" }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            { "$ref": "#/$defs/baseCoverage" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["component_id", "mode", "handler_id"],
+              "properties": {
+                "component_id": { "$ref": "#/$defs/id" },
+                "mode": { "const": "custom" },
+                "handler_id": { "$ref": "#/$defs/id" }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            { "$ref": "#/$defs/baseCoverage" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["component_id", "mode", "reason"],
+              "properties": {
+                "component_id": { "$ref": "#/$defs/id" },
+                "mode": { "enum": ["source-only", "unsupported"] },
+                "reason": { "type": "string", "minLength": 1 }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
