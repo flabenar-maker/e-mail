@@ -220,11 +220,11 @@ primitives:
   - { id: background-image, contract: background-image }
   - { id: responsive-visibility, contract: media-query }
 postprocessing:
-  allowed: [inline-css, normalize-attributes, strip-technical-markers, validate-local-src]
+  allowed: [normalize-attributes, strip-technical-markers, validate-local-src]
   forbidden: [infer-contract, change-layout, change-dimensions, suppress-diagnostic]
 support_profiles:
   - id: cupis-default
-    required: [table-layout, inline-css, media-query-responsive]
+    required: [table-layout, inline-style-output, media-query-responsive]
     optional: [legacy-outlook-vml, external-client-matrix]
 ```
 
@@ -278,7 +278,7 @@ Types: `plain-text`, `rich-text`, `url`, `placeholder`, `alt-text`, `number`. П
 
 - [ ] **Step 2: Добавить readiness semantics**
 
-`html-text` требует `text`; `html-link` требует `href`, а собственный `text` — только без видимых children; image требует `alt`; generic `description-N` запрещён covered-компоненту; layout fact принадлежит управляющему узлу.
+`html-text` требует `text`; `html-link` требует `href`, а собственный `text` — только без видимых children; `direct-image` требует явный `alt` slot, где пустая строка допустима только как осознанная decorative value; `background-image` не получает HTML `alt`, а при смысловом изображении требует доступный live-text equivalent в том же компоненте; generic `description-N` запрещён covered-компоненту; layout fact принадлежит управляющему узлу.
 
 - [ ] **Step 3: Создать registry**
 
@@ -353,7 +353,7 @@ git commit -m "docs: split CUPIS core responsibilities"
 - `renderContractTree({ component, coverage, content, assets, properties, foundations }) -> { html, css, diagnostics }`.
 
 - [ ] **Step 1: Snapshot tests** для table/cell, text, link, direct/background image и visibility; текст HTML-экранируется.
-- [ ] **Step 2: Чистые primitives** без filesystem, registry, Figma и component IDs.
+- [ ] **Step 2: Чистые primitives** без filesystem, registry, Figma и component IDs. Критические email-стили сразу выводятся inline; media-query rules используются только для responsive overrides.
 - [ ] **Step 3: Viewport pairing tests** — объединение только при точном совпадении ID/role/mode/visibility/refs/order; иначе минимальный split subtree.
 - [ ] **Step 4: Interpreter dispatch**.
 
@@ -439,7 +439,7 @@ Gate: пилот проходит без ручной правки HTML.
 Scopes: `all`, `mobile`, `desktop`; conflicting bindings forbidden.
 
 - [ ] **Step 2: Semantic tests** — unknown IDs, missing slot, duplicate binding, absolute/escaping path, type mismatch.
-- [ ] **Step 3: Allowlisted postprocess** — unknown/forbidden transformer returns diagnostic.
+- [ ] **Step 3: Allowlisted postprocess** — выполняет только normalize attributes, strip technical markers и local-src validation; unknown/forbidden transformer возвращает diagnostic. Общий CSS parser/inliner не добавляется, потому что критические стили уже создают primitives.
 - [ ] **Step 4: Atomic output** — sibling staging, validation, rename; existing non-empty output never overwritten; safe cleanup only within staging.
 - [ ] **Step 5: CLI** has no MCP/network and не копирует temp model в output.
 - [ ] **Step 6: Failure test** подтверждает неизменный digest existing output.
