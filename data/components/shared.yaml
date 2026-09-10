@@ -89,7 +89,14 @@
                   "mode": "always"
                 },
                 "facts": [],
-                "children": []
+                "children": [],
+                "content_slots": [
+                  {
+                    "id": "content",
+                    "type": "placeholder",
+                    "required": true
+                  }
+                ]
               }
             ]
           }
@@ -112,7 +119,14 @@
                   "mode": "always"
                 },
                 "facts": [],
-                "children": []
+                "children": [],
+                "content_slots": [
+                  {
+                    "id": "content",
+                    "type": "placeholder",
+                    "required": true
+                  }
+                ]
               }
             ]
           }

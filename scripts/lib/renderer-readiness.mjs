@@ -3,9 +3,9 @@ import {
   walkComponentElements,
   walkComponentFacts,
 } from "./component-registry.mjs";
+import { validateRendererReadyComponent } from "./renderer-registry.mjs";
 
 const GENERIC_FACT_ID = /^description-[0-9]+$/u;
-const NON_VISIBLE_RENDER_MODES = new Set(["figma-source-only", "none"]);
 
 function issue(code, path, componentId, viewport) {
   return {
@@ -26,76 +26,23 @@ function sortIssues(issues) {
   );
 }
 
-function requiredContentSlots(element) {
-  if (element.render_mode === "html-text") {
-    return ["text"];
-  }
-  if (element.render_mode === "html-link") {
-    const hasVisibleChildren = (element.children ?? []).some(
-      (child) => !NON_VISIBLE_RENDER_MODES.has(child.render_mode),
-    );
-    return hasVisibleChildren ? ["href"] : ["href", "text"];
-  }
-  if (element.render_mode === "direct-image") {
-    return ["alt"];
-  }
-  return [];
-}
-
-function coverageIds(rendererRegistry) {
-  return new Set(
-    (rendererRegistry?.coverage ?? [])
-      .map((entry) => entry?.component_id)
-      .filter((id) => typeof id === "string"),
-  );
-}
-
-function auditComponent(record, library, coveredIds) {
+function auditComponent(record, library, coverageById) {
   const issues = [];
   let facts = 0;
   let genericFacts = 0;
 
-  if (record.status === "active" && !coveredIds.has(record.id)) {
+  const coverage = coverageById.get(record.id);
+  if (record.status === "active" && !coverage) {
     issues.push(
       issue("RENDER_COVERAGE_MISSING", "/coverage", record.id, "all"),
     );
+  } else if (record.status === "active") {
+    issues.push(...validateRendererReadyComponent(record, coverage));
   }
 
-  walkComponentElements(record, ({ viewport, element, path }) => {
-    const declaredSlots = new Set(
-      (element.content_slots ?? [])
-        .map((slot) => slot?.id)
-        .filter((id) => typeof id === "string"),
-    );
-    for (const slotId of requiredContentSlots(element)) {
-      if (!declaredSlots.has(slotId)) {
-        issues.push(
-          issue(
-            "RENDER_CONTENT_SLOT_MISSING",
-            `${path}/content_slots/${slotId}`,
-            record.id,
-            viewport,
-          ),
-        );
-      }
-    }
-  });
-
-  walkComponentFacts(record, ({ viewport, fact, path }) => {
+  walkComponentFacts(record, ({ fact }) => {
     facts += 1;
-    if (!GENERIC_FACT_ID.test(fact?.id ?? "")) {
-      return;
-    }
-
-    genericFacts += 1;
-    issues.push(
-      issue("RENDER_FACT_ID_GENERIC", `${path}/id`, record.id, viewport),
-    );
-    if (path.startsWith(`/contracts/${viewport}/root/facts/`)) {
-      issues.push(
-        issue("RENDER_FACT_OWNER_ROOT", path, record.id, viewport),
-      );
-    }
+    if (GENERIC_FACT_ID.test(fact?.id ?? "")) genericFacts += 1;
   });
 
   sortIssues(issues);
@@ -104,7 +51,7 @@ function auditComponent(record, library, coveredIds) {
       id: record.id,
       library,
       status: record.status,
-      ready: record.status === "active" && issues.length === 0,
+      ready: record.status === "active" && Boolean(coverage) && issues.length === 0,
       issues,
     },
     facts,
@@ -113,9 +60,12 @@ function auditComponent(record, library, coveredIds) {
 }
 
 export function auditRendererReadiness(registries, rendererRegistry = null) {
-  const coveredIds = coverageIds(rendererRegistry);
+  const coverageById = new Map(
+    (rendererRegistry?.coverage ?? []).map((entry) => [entry.component_id, entry]),
+  );
+  const coveredIds = new Set(coverageById.keys());
   const audited = listComponentRecords(registries)
-    .map(({ library, record }) => auditComponent(record, library, coveredIds))
+    .map(({ library, record }) => auditComponent(record, library, coverageById))
     .sort((left, right) =>
       left.component.id.localeCompare(right.component.id),
     );

@@ -668,7 +668,9 @@ test("marketing image contracts preserve responsive ratios and export boundaries
     },
   );
   assert.equal(
-    card.contracts.mobile.root.facts.find((fact) => fact.id === "height-behavior").value.value,
+    findAssetElement(card.contracts.mobile.root, "card-image").facts.find(
+      (fact) => fact.id === "height-behavior",
+    ).value.value,
     "auto",
   );
 });

@@ -112,7 +112,7 @@ test("renderer-ready validation rejects missing, duplicate, and misplaced semant
   const card = structuredClone(componentById(registries, "card-image"));
   const coverage = resolveRendererCoverage(rendererRegistry, card.id);
 
-  elementById(card, "mobile", "card-image").content_slots = [];
+  elementById(card, "mobile", "heading").content_slots = [];
   elementById(card, "desktop", "heading").content_slots.push({
     id: "text",
     type: "plain-text",

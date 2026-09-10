@@ -1092,7 +1092,7 @@
             },
             "facts": [
               {
-                "id": "description-1",
+                "id": "email-wrapper-width",
                 "value": {
                   "type": "measure",
                   "value": 600,
@@ -1104,7 +1104,7 @@
                 }
               },
               {
-                "id": "description-2",
+                "id": "footer-top-gap",
                 "value": {
                   "type": "measure",
                   "value": 16,
@@ -1116,10 +1116,10 @@
                 }
               },
               {
-                "id": "description-3",
+                "id": "footer-body-padding-inline",
                 "value": {
                   "type": "measure",
-                  "value": 24,
+                  "value": 16,
                   "unit": "px"
                 },
                 "provenance": {
@@ -1128,94 +1128,34 @@
                 }
               },
               {
-                "id": "description-4",
+                "id": "footer-body-padding-bottom",
+                "value": {
+                  "type": "measure",
+                  "value": 16,
+                  "unit": "px"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              },
+              {
+                "id": "footer-section-gap",
+                "value": {
+                  "type": "measure",
+                  "value": 16,
+                  "unit": "px"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              },
+              {
+                "id": "footer-background",
                 "value": {
                   "type": "color",
                   "value": "#F3F3F5"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-5",
-                "value": {
-                  "type": "measure",
-                  "value": 8,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-6",
-                "value": {
-                  "type": "measure",
-                  "value": 12,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-7",
-                "value": {
-                  "type": "measure",
-                  "value": 14,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-8",
-                "value": {
-                  "type": "color",
-                  "value": "#98999C"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-9",
-                "value": {
-                  "type": "dimensions",
-                  "width": 32,
-                  "height": 32,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-10",
-                "value": {
-                  "type": "dimensions",
-                  "width": 42,
-                  "height": 42,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-11",
-                "value": {
-                  "type": "string",
-                  "value": "@4x"
                 },
                 "provenance": {
                   "kind": "registry-literal",
@@ -1232,8 +1172,39 @@
                   "mode": "property",
                   "property_id": "show-caption"
                 },
-                "facts": [],
-                "children": []
+                "facts": [
+                  {
+                    "id": "caption-font-size",
+                    "value": {
+                      "type": "measure",
+                      "value": 12,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "caption-text-color",
+                    "value": {
+                      "type": "color",
+                      "value": "#98999C"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
+                "children": [],
+                "content_slots": [
+                  {
+                    "id": "text",
+                    "type": "rich-text",
+                    "required": true
+                  }
+                ]
               },
               {
                 "id": "disclaimer",
@@ -1242,8 +1213,51 @@
                 "visibility": {
                   "mode": "always"
                 },
-                "facts": [],
-                "children": []
+                "facts": [
+                  {
+                    "id": "disclaimer-text-gap",
+                    "value": {
+                      "type": "measure",
+                      "value": 8,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "disclaimer-font-size",
+                    "value": {
+                      "type": "measure",
+                      "value": 12,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "disclaimer-text-color",
+                    "value": {
+                      "type": "color",
+                      "value": "#98999C"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
+                "children": [],
+                "content_slots": [
+                  {
+                    "id": "text",
+                    "type": "rich-text",
+                    "required": true
+                  }
+                ]
               },
               {
                 "id": "social-links",
@@ -1253,7 +1267,20 @@
                   "mode": "property",
                   "property_id": "show-social-links"
                 },
-                "facts": [],
+                "facts": [
+                  {
+                    "id": "social-icon-gap",
+                    "value": {
+                      "type": "measure",
+                      "value": 8,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
                 "children": [
                   {
                     "id": "vk-link",
@@ -1271,9 +1298,37 @@
                         "visibility": {
                           "mode": "always"
                         },
-                        "facts": [],
+                        "facts": [
+                          {
+                            "id": "social-icon-display-dimensions",
+                            "value": {
+                              "type": "dimensions",
+                              "width": 32,
+                              "height": 32,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          }
+                        ],
                         "children": [],
-                        "asset_contract_id": "vk-icon"
+                        "asset_contract_id": "vk-icon",
+                        "content_slots": [
+                          {
+                            "id": "alt",
+                            "type": "alt-text",
+                            "required": true
+                          }
+                        ]
+                      }
+                    ],
+                    "content_slots": [
+                      {
+                        "id": "href",
+                        "type": "url",
+                        "required": true
                       }
                     ]
                   }
@@ -1290,7 +1345,79 @@
             "visibility": {
               "mode": "always"
             },
-            "facts": [],
+            "facts": [
+              {
+                "id": "email-wrapper-width",
+                "value": {
+                  "type": "measure",
+                  "value": 600,
+                  "unit": "px"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              },
+              {
+                "id": "footer-top-gap",
+                "value": {
+                  "type": "measure",
+                  "value": 24,
+                  "unit": "px"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              },
+              {
+                "id": "footer-body-padding-inline",
+                "value": {
+                  "type": "measure",
+                  "value": 24,
+                  "unit": "px"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              },
+              {
+                "id": "footer-body-padding-bottom",
+                "value": {
+                  "type": "measure",
+                  "value": 24,
+                  "unit": "px"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              },
+              {
+                "id": "footer-section-gap",
+                "value": {
+                  "type": "measure",
+                  "value": 24,
+                  "unit": "px"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              },
+              {
+                "id": "footer-background",
+                "value": {
+                  "type": "color",
+                  "value": "#F3F3F5"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              }
+            ],
             "children": [
               {
                 "id": "caption",
@@ -1300,8 +1427,39 @@
                   "mode": "property",
                   "property_id": "show-caption"
                 },
-                "facts": [],
-                "children": []
+                "facts": [
+                  {
+                    "id": "caption-font-size",
+                    "value": {
+                      "type": "measure",
+                      "value": 14,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "caption-text-color",
+                    "value": {
+                      "type": "color",
+                      "value": "#98999C"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
+                "children": [],
+                "content_slots": [
+                  {
+                    "id": "text",
+                    "type": "rich-text",
+                    "required": true
+                  }
+                ]
               },
               {
                 "id": "disclaimer",
@@ -1310,8 +1468,51 @@
                 "visibility": {
                   "mode": "always"
                 },
-                "facts": [],
-                "children": []
+                "facts": [
+                  {
+                    "id": "disclaimer-text-gap",
+                    "value": {
+                      "type": "measure",
+                      "value": 12,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "disclaimer-font-size",
+                    "value": {
+                      "type": "measure",
+                      "value": 14,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "disclaimer-text-color",
+                    "value": {
+                      "type": "color",
+                      "value": "#98999C"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
+                "children": [],
+                "content_slots": [
+                  {
+                    "id": "text",
+                    "type": "rich-text",
+                    "required": true
+                  }
+                ]
               },
               {
                 "id": "social-links",
@@ -1321,7 +1522,20 @@
                   "mode": "property",
                   "property_id": "show-social-links"
                 },
-                "facts": [],
+                "facts": [
+                  {
+                    "id": "social-icon-gap",
+                    "value": {
+                      "type": "measure",
+                      "value": 12,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
                 "children": [
                   {
                     "id": "vk-link",
@@ -1339,9 +1553,37 @@
                         "visibility": {
                           "mode": "always"
                         },
-                        "facts": [],
+                        "facts": [
+                          {
+                            "id": "social-icon-display-dimensions",
+                            "value": {
+                              "type": "dimensions",
+                              "width": 42,
+                              "height": 42,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          }
+                        ],
                         "children": [],
-                        "asset_contract_id": "vk-icon"
+                        "asset_contract_id": "vk-icon",
+                        "content_slots": [
+                          {
+                            "id": "alt",
+                            "type": "alt-text",
+                            "required": true
+                          }
+                        ]
+                      }
+                    ],
+                    "content_slots": [
+                      {
+                        "id": "href",
+                        "type": "url",
+                        "required": true
                       }
                     ]
                   }
@@ -2357,7 +2599,7 @@
             },
             "facts": [
               {
-                "id": "description-1",
+                "id": "button-padding-block",
                 "value": {
                   "type": "measure",
                   "value": 12,
@@ -2369,7 +2611,7 @@
                 }
               },
               {
-                "id": "description-2",
+                "id": "button-padding-inline",
                 "value": {
                   "type": "measure",
                   "value": 24,
@@ -2381,7 +2623,7 @@
                 }
               },
               {
-                "id": "description-3",
+                "id": "button-border-radius",
                 "value": {
                   "type": "measure",
                   "value": 32,
@@ -2393,31 +2635,7 @@
                 }
               },
               {
-                "id": "description-4",
-                "value": {
-                  "type": "measure",
-                  "value": 14,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-5",
-                "value": {
-                  "type": "measure",
-                  "value": 16,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-6",
+                "id": "background-fallback",
                 "value": {
                   "type": "color",
                   "value": "#18B037"
@@ -2428,7 +2646,18 @@
                 }
               },
               {
-                "id": "description-7",
+                "id": "background-gradient-start",
+                "value": {
+                  "type": "color",
+                  "value": "#18B037"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              },
+              {
+                "id": "background-gradient-end",
                 "value": {
                   "type": "color",
                   "value": "#3DD55C"
@@ -2439,7 +2668,7 @@
                 }
               },
               {
-                "id": "description-8",
+                "id": "background-replacement-forbidden",
                 "value": {
                   "type": "color",
                   "value": "#00991F"
@@ -2458,8 +2687,33 @@
                 "visibility": {
                   "mode": "always"
                 },
-                "facts": [],
-                "children": []
+                "facts": [
+                  {
+                    "id": "button-text-size",
+                    "value": {
+                      "type": "measure",
+                      "value": 14,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
+                "children": [],
+                "content_slots": [
+                  {
+                    "id": "href",
+                    "type": "url",
+                    "required": true
+                  },
+                  {
+                    "id": "text",
+                    "type": "rich-text",
+                    "required": true
+                  }
+                ]
               }
             ]
           }
@@ -2472,7 +2726,88 @@
             "visibility": {
               "mode": "always"
             },
-            "facts": [],
+            "facts": [
+              {
+                "id": "button-padding-block",
+                "value": {
+                  "type": "measure",
+                  "value": 16,
+                  "unit": "px"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              },
+              {
+                "id": "button-padding-inline",
+                "value": {
+                  "type": "measure",
+                  "value": 32,
+                  "unit": "px"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              },
+              {
+                "id": "button-border-radius",
+                "value": {
+                  "type": "measure",
+                  "value": 32,
+                  "unit": "px"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              },
+              {
+                "id": "background-fallback",
+                "value": {
+                  "type": "color",
+                  "value": "#18B037"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              },
+              {
+                "id": "background-gradient-start",
+                "value": {
+                  "type": "color",
+                  "value": "#18B037"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              },
+              {
+                "id": "background-gradient-end",
+                "value": {
+                  "type": "color",
+                  "value": "#3DD55C"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              },
+              {
+                "id": "background-replacement-forbidden",
+                "value": {
+                  "type": "color",
+                  "value": "#00991F"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              }
+            ],
             "children": [
               {
                 "id": "link",
@@ -2481,8 +2816,33 @@
                 "visibility": {
                   "mode": "always"
                 },
-                "facts": [],
-                "children": []
+                "facts": [
+                  {
+                    "id": "button-text-size",
+                    "value": {
+                      "type": "measure",
+                      "value": 16,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
+                "children": [],
+                "content_slots": [
+                  {
+                    "id": "href",
+                    "type": "url",
+                    "required": true
+                  },
+                  {
+                    "id": "text",
+                    "type": "rich-text",
+                    "required": true
+                  }
+                ]
               }
             ]
           }
@@ -2935,40 +3295,7 @@
             },
             "facts": [
               {
-                "id": "width-behavior",
-                "value": {
-                  "type": "keyword",
-                  "value": "fluid-to-container"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "height-behavior",
-                "value": {
-                  "type": "keyword",
-                  "value": "auto"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "fixed-height-forbidden",
-                "value": {
-                  "type": "boolean",
-                  "value": true
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-1",
+                "id": "banner-top-gap",
                 "value": {
                   "type": "measure",
                   "value": 16,
@@ -2980,38 +3307,7 @@
                 }
               },
               {
-                "id": "description-2",
-                "value": {
-                  "type": "measure",
-                  "value": 24,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-3",
-                "value": {
-                  "type": "asset-reference",
-                  "asset_contract_id": "secondary-image"
-                }
-              },
-              {
-                "id": "description-4",
-                "value": {
-                  "type": "ratio",
-                  "width": 296,
-                  "height": 188
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-5",
+                "id": "content-padding",
                 "value": {
                   "type": "measure",
                   "value": 22,
@@ -3023,130 +3319,23 @@
                 }
               },
               {
-                "id": "description-6",
+                "id": "content-item-gap",
+                "value": {
+                  "type": "measure",
+                  "value": 16,
+                  "unit": "px"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              },
+              {
+                "id": "text-item-gap",
                 "value": {
                   "type": "measure",
                   "value": 8,
                   "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-7",
-                "value": {
-                  "type": "measure",
-                  "value": 18,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-8",
-                "value": {
-                  "type": "measure",
-                  "value": 14,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-9",
-                "value": {
-                  "type": "measure",
-                  "value": 552,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-10",
-                "value": {
-                  "type": "measure",
-                  "value": 300,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-11",
-                "value": {
-                  "type": "measure",
-                  "value": 32,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-12",
-                "value": {
-                  "type": "measure",
-                  "value": 236,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-13",
-                "value": {
-                  "type": "measure",
-                  "value": 12,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-14",
-                "value": {
-                  "type": "measure",
-                  "value": 20,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-15",
-                "value": {
-                  "type": "measure",
-                  "value": 252,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-16",
-                "value": {
-                  "type": "string",
-                  "value": "@2x"
                 },
                 "provenance": {
                   "kind": "registry-literal",
@@ -3162,9 +3351,50 @@
                 "visibility": {
                   "mode": "always"
                 },
-                "facts": [],
+                "facts": [
+                  {
+                    "id": "width-behavior",
+                    "value": {
+                      "type": "keyword",
+                      "value": "fluid-to-container"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "height-behavior",
+                    "value": {
+                      "type": "keyword",
+                      "value": "auto"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "fixed-height-forbidden",
+                    "value": {
+                      "type": "boolean",
+                      "value": true
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
                 "children": [],
-                "asset_contract_id": "secondary-image"
+                "asset_contract_id": "secondary-image",
+                "content_slots": [
+                  {
+                    "id": "alt",
+                    "type": "alt-text",
+                    "required": true
+                  }
+                ]
               },
               {
                 "id": "heading",
@@ -3173,8 +3403,28 @@
                 "visibility": {
                   "mode": "always"
                 },
-                "facts": [],
-                "children": []
+                "facts": [
+                  {
+                    "id": "heading-font-size",
+                    "value": {
+                      "type": "measure",
+                      "value": 18,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
+                "children": [],
+                "content_slots": [
+                  {
+                    "id": "text",
+                    "type": "rich-text",
+                    "required": true
+                  }
+                ]
               },
               {
                 "id": "body",
@@ -3184,8 +3434,28 @@
                   "mode": "property",
                   "property_id": "show-body"
                 },
-                "facts": [],
-                "children": []
+                "facts": [
+                  {
+                    "id": "body-font-size",
+                    "value": {
+                      "type": "measure",
+                      "value": 14,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
+                "children": [],
+                "content_slots": [
+                  {
+                    "id": "text",
+                    "type": "rich-text",
+                    "required": true
+                  }
+                ]
               },
               {
                 "id": "button",
@@ -3210,7 +3480,92 @@
             "visibility": {
               "mode": "always"
             },
-            "facts": [],
+            "facts": [
+              {
+                "id": "banner-top-gap",
+                "value": {
+                  "type": "measure",
+                  "value": 24,
+                  "unit": "px"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              },
+              {
+                "id": "banner-inner-width",
+                "value": {
+                  "type": "measure",
+                  "value": 552,
+                  "unit": "px"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              },
+              {
+                "id": "content-area-width",
+                "value": {
+                  "type": "measure",
+                  "value": 300,
+                  "unit": "px"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              },
+              {
+                "id": "content-padding",
+                "value": {
+                  "type": "measure",
+                  "value": 32,
+                  "unit": "px"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              },
+              {
+                "id": "content-inner-width",
+                "value": {
+                  "type": "measure",
+                  "value": 236,
+                  "unit": "px"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              },
+              {
+                "id": "content-item-gap",
+                "value": {
+                  "type": "measure",
+                  "value": 24,
+                  "unit": "px"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              },
+              {
+                "id": "text-item-gap",
+                "value": {
+                  "type": "measure",
+                  "value": 12,
+                  "unit": "px"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              }
+            ],
             "children": [
               {
                 "id": "secondary-image",
@@ -3219,7 +3574,20 @@
                 "visibility": {
                   "mode": "always"
                 },
-                "facts": [],
+                "facts": [
+                  {
+                    "id": "image-area-width",
+                    "value": {
+                      "type": "measure",
+                      "value": 252,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
                 "children": [],
                 "asset_contract_id": "secondary-image"
               },
@@ -3230,8 +3598,28 @@
                 "visibility": {
                   "mode": "always"
                 },
-                "facts": [],
-                "children": []
+                "facts": [
+                  {
+                    "id": "heading-font-size",
+                    "value": {
+                      "type": "measure",
+                      "value": 20,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
+                "children": [],
+                "content_slots": [
+                  {
+                    "id": "text",
+                    "type": "rich-text",
+                    "required": true
+                  }
+                ]
               },
               {
                 "id": "body",
@@ -3241,8 +3629,28 @@
                   "mode": "property",
                   "property_id": "show-body"
                 },
-                "facts": [],
-                "children": []
+                "facts": [
+                  {
+                    "id": "body-font-size",
+                    "value": {
+                      "type": "measure",
+                      "value": 16,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
+                "children": [],
+                "content_slots": [
+                  {
+                    "id": "text",
+                    "type": "rich-text",
+                    "required": true
+                  }
+                ]
               },
               {
                 "id": "button",
@@ -4896,114 +5304,7 @@
             },
             "facts": [
               {
-                "id": "description-1",
-                "value": {
-                  "type": "asset-reference",
-                  "asset_contract_id": "app-logo"
-                }
-              },
-              {
-                "id": "description-2",
-                "value": {
-                  "type": "dimensions",
-                  "width": 163,
-                  "height": 46,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-3",
-                "value": {
-                  "type": "dimensions",
-                  "width": 219,
-                  "height": 62,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-4",
-                "value": {
-                  "type": "asset-reference",
-                  "asset_contract_id": "rustore-icon"
-                }
-              },
-              {
-                "id": "description-5",
-                "value": {
-                  "type": "asset-reference",
-                  "asset_contract_id": "google-play-icon"
-                }
-              },
-              {
-                "id": "description-6",
-                "value": {
-                  "type": "asset-reference",
-                  "asset_contract_id": "appgallery-icon"
-                }
-              },
-              {
-                "id": "description-7",
-                "value": {
-                  "type": "asset-reference",
-                  "asset_contract_id": "getapps-icon"
-                }
-              },
-              {
-                "id": "description-8",
-                "value": {
-                  "type": "dimensions",
-                  "width": 26,
-                  "height": 26,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-9",
-                "value": {
-                  "type": "dimensions",
-                  "width": 32,
-                  "height": 32,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-10",
-                "value": {
-                  "type": "asset-reference",
-                  "asset_contract_id": "qr-code"
-                }
-              },
-              {
-                "id": "description-11",
-                "value": {
-                  "type": "dimensions",
-                  "width": 130,
-                  "height": 130,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-12",
+                "id": "banner-top-gap",
                 "value": {
                   "type": "measure",
                   "value": 16,
@@ -5015,7 +5316,7 @@
                 }
               },
               {
-                "id": "description-13",
+                "id": "card-padding",
                 "value": {
                   "type": "measure",
                   "value": 22,
@@ -5027,10 +5328,10 @@
                 }
               },
               {
-                "id": "description-14",
+                "id": "card-border-radius",
                 "value": {
                   "type": "measure",
-                  "value": 14,
+                  "value": 22,
                   "unit": "px"
                 },
                 "provenance": {
@@ -5039,10 +5340,10 @@
                 }
               },
               {
-                "id": "description-15",
+                "id": "content-item-gap",
                 "value": {
                   "type": "measure",
-                  "value": 44,
+                  "value": 16,
                   "unit": "px"
                 },
                 "provenance": {
@@ -5051,7 +5352,7 @@
                 }
               },
               {
-                "id": "description-16",
+                "id": "store-link-gap",
                 "value": {
                   "type": "measure",
                   "value": 8,
@@ -5063,7 +5364,595 @@
                 }
               },
               {
-                "id": "description-17",
+                "id": "store-grid-layout-forbidden",
+                "value": {
+                  "type": "string",
+                  "value": "2×2"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              }
+            ],
+            "children": [
+              {
+                "id": "app-logo",
+                "semantic_role": "logo",
+                "render_mode": "direct-image",
+                "visibility": {
+                  "mode": "always"
+                },
+                "facts": [
+                  {
+                    "id": "logo-display-dimensions",
+                    "value": {
+                      "type": "dimensions",
+                      "width": 163,
+                      "height": 46,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
+                "children": [],
+                "asset_contract_id": "app-logo",
+                "content_slots": [
+                  {
+                    "id": "alt",
+                    "type": "alt-text",
+                    "required": true
+                  }
+                ]
+              },
+              {
+                "id": "description",
+                "semantic_role": "description",
+                "render_mode": "html-text",
+                "visibility": {
+                  "mode": "always"
+                },
+                "facts": [
+                  {
+                    "id": "description-font-size",
+                    "value": {
+                      "type": "measure",
+                      "value": 14,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
+                "children": [],
+                "content_slots": [
+                  {
+                    "id": "text",
+                    "type": "rich-text",
+                    "required": true
+                  }
+                ]
+              },
+              {
+                "id": "rustore-link",
+                "semantic_role": "store-link",
+                "render_mode": "html-link",
+                "visibility": {
+                  "mode": "always"
+                },
+                "facts": [
+                  {
+                    "id": "rustore-link-height",
+                    "value": {
+                      "type": "measure",
+                      "value": 44,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "rustore-link-border-radius",
+                    "value": {
+                      "type": "measure",
+                      "value": 24,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "rustore-icon-text-gap",
+                    "value": {
+                      "type": "measure",
+                      "value": 8,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "id": "rustore-icon",
+                    "semantic_role": "store-icon",
+                    "render_mode": "direct-image",
+                    "visibility": {
+                      "mode": "always"
+                    },
+                    "facts": [
+                      {
+                        "id": "rustore-icon-display-dimensions",
+                        "value": {
+                          "type": "dimensions",
+                          "width": 26,
+                          "height": 26,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "registry-literal",
+                          "source_path": "registry/email-component-descriptions-registry.md"
+                        }
+                      }
+                    ],
+                    "children": [],
+                    "asset_contract_id": "rustore-icon",
+                    "content_slots": [
+                      {
+                        "id": "alt",
+                        "type": "alt-text",
+                        "required": true
+                      }
+                    ]
+                  },
+                  {
+                    "id": "rustore-text",
+                    "semantic_role": "store-text",
+                    "render_mode": "html-text",
+                    "visibility": {
+                      "mode": "always"
+                    },
+                    "facts": [
+                      {
+                        "id": "rustore-text-font-size",
+                        "value": {
+                          "type": "measure",
+                          "value": 14,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "registry-literal",
+                          "source_path": "registry/email-component-descriptions-registry.md"
+                        }
+                      }
+                    ],
+                    "children": [],
+                    "content_slots": [
+                      {
+                        "id": "text",
+                        "type": "rich-text",
+                        "required": true
+                      }
+                    ]
+                  }
+                ],
+                "content_slots": [
+                  {
+                    "id": "href",
+                    "type": "url",
+                    "required": true
+                  }
+                ]
+              },
+              {
+                "id": "google-play-link",
+                "semantic_role": "store-link",
+                "render_mode": "html-link",
+                "visibility": {
+                  "mode": "always"
+                },
+                "facts": [
+                  {
+                    "id": "google-play-link-height",
+                    "value": {
+                      "type": "measure",
+                      "value": 44,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "google-play-link-border-radius",
+                    "value": {
+                      "type": "measure",
+                      "value": 24,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "google-play-icon-text-gap",
+                    "value": {
+                      "type": "measure",
+                      "value": 8,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "google-play-link-background",
+                    "value": {
+                      "type": "color",
+                      "value": "#F8F8FA"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "id": "google-play-icon",
+                    "semantic_role": "store-icon",
+                    "render_mode": "direct-image",
+                    "visibility": {
+                      "mode": "always"
+                    },
+                    "facts": [
+                      {
+                        "id": "google-play-icon-display-dimensions",
+                        "value": {
+                          "type": "dimensions",
+                          "width": 26,
+                          "height": 26,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "registry-literal",
+                          "source_path": "registry/email-component-descriptions-registry.md"
+                        }
+                      }
+                    ],
+                    "children": [],
+                    "asset_contract_id": "google-play-icon",
+                    "content_slots": [
+                      {
+                        "id": "alt",
+                        "type": "alt-text",
+                        "required": true
+                      }
+                    ]
+                  },
+                  {
+                    "id": "google-play-text",
+                    "semantic_role": "store-text",
+                    "render_mode": "html-text",
+                    "visibility": {
+                      "mode": "always"
+                    },
+                    "facts": [
+                      {
+                        "id": "google-play-text-font-size",
+                        "value": {
+                          "type": "measure",
+                          "value": 14,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "registry-literal",
+                          "source_path": "registry/email-component-descriptions-registry.md"
+                        }
+                      }
+                    ],
+                    "children": [],
+                    "content_slots": [
+                      {
+                        "id": "text",
+                        "type": "rich-text",
+                        "required": true
+                      }
+                    ]
+                  }
+                ],
+                "content_slots": [
+                  {
+                    "id": "href",
+                    "type": "url",
+                    "required": true
+                  }
+                ]
+              },
+              {
+                "id": "appgallery-link",
+                "semantic_role": "store-link",
+                "render_mode": "html-link",
+                "visibility": {
+                  "mode": "always"
+                },
+                "facts": [
+                  {
+                    "id": "appgallery-link-height",
+                    "value": {
+                      "type": "measure",
+                      "value": 44,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "appgallery-link-border-radius",
+                    "value": {
+                      "type": "measure",
+                      "value": 24,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "appgallery-icon-text-gap",
+                    "value": {
+                      "type": "measure",
+                      "value": 8,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "appgallery-link-background",
+                    "value": {
+                      "type": "color",
+                      "value": "#F8F8FA"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "id": "appgallery-icon",
+                    "semantic_role": "store-icon",
+                    "render_mode": "direct-image",
+                    "visibility": {
+                      "mode": "always"
+                    },
+                    "facts": [
+                      {
+                        "id": "appgallery-icon-display-dimensions",
+                        "value": {
+                          "type": "dimensions",
+                          "width": 26,
+                          "height": 26,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "registry-literal",
+                          "source_path": "registry/email-component-descriptions-registry.md"
+                        }
+                      }
+                    ],
+                    "children": [],
+                    "asset_contract_id": "appgallery-icon",
+                    "content_slots": [
+                      {
+                        "id": "alt",
+                        "type": "alt-text",
+                        "required": true
+                      }
+                    ]
+                  },
+                  {
+                    "id": "appgallery-text",
+                    "semantic_role": "store-text",
+                    "render_mode": "html-text",
+                    "visibility": {
+                      "mode": "always"
+                    },
+                    "facts": [
+                      {
+                        "id": "appgallery-text-font-size",
+                        "value": {
+                          "type": "measure",
+                          "value": 14,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "registry-literal",
+                          "source_path": "registry/email-component-descriptions-registry.md"
+                        }
+                      }
+                    ],
+                    "children": [],
+                    "content_slots": [
+                      {
+                        "id": "text",
+                        "type": "rich-text",
+                        "required": true
+                      }
+                    ]
+                  }
+                ],
+                "content_slots": [
+                  {
+                    "id": "href",
+                    "type": "url",
+                    "required": true
+                  }
+                ]
+              },
+              {
+                "id": "getapps-link",
+                "semantic_role": "store-link",
+                "render_mode": "html-link",
+                "visibility": {
+                  "mode": "always"
+                },
+                "facts": [
+                  {
+                    "id": "getapps-link-height",
+                    "value": {
+                      "type": "measure",
+                      "value": 44,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "getapps-link-border-radius",
+                    "value": {
+                      "type": "measure",
+                      "value": 24,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "getapps-icon-text-gap",
+                    "value": {
+                      "type": "measure",
+                      "value": 8,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "getapps-link-background",
+                    "value": {
+                      "type": "color",
+                      "value": "#F8F8FA"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "id": "getapps-icon",
+                    "semantic_role": "store-icon",
+                    "render_mode": "direct-image",
+                    "visibility": {
+                      "mode": "always"
+                    },
+                    "facts": [
+                      {
+                        "id": "getapps-icon-display-dimensions",
+                        "value": {
+                          "type": "dimensions",
+                          "width": 26,
+                          "height": 26,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "registry-literal",
+                          "source_path": "registry/email-component-descriptions-registry.md"
+                        }
+                      }
+                    ],
+                    "children": [],
+                    "asset_contract_id": "getapps-icon",
+                    "content_slots": [
+                      {
+                        "id": "alt",
+                        "type": "alt-text",
+                        "required": true
+                      }
+                    ]
+                  },
+                  {
+                    "id": "getapps-text",
+                    "semantic_role": "store-text",
+                    "render_mode": "html-text",
+                    "visibility": {
+                      "mode": "always"
+                    },
+                    "facts": [
+                      {
+                        "id": "getapps-text-font-size",
+                        "value": {
+                          "type": "measure",
+                          "value": 14,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "registry-literal",
+                          "source_path": "registry/email-component-descriptions-registry.md"
+                        }
+                      }
+                    ],
+                    "children": [],
+                    "content_slots": [
+                      {
+                        "id": "text",
+                        "type": "rich-text",
+                        "required": true
+                      }
+                    ]
+                  }
+                ],
+                "content_slots": [
+                  {
+                    "id": "href",
+                    "type": "url",
+                    "required": true
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "desktop": {
+          "root": {
+            "id": "root",
+            "semantic_role": "banner",
+            "render_mode": "presentation-table",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [
+              {
+                "id": "banner-top-gap",
                 "value": {
                   "type": "measure",
                   "value": 24,
@@ -5075,29 +5964,7 @@
                 }
               },
               {
-                "id": "description-18",
-                "value": {
-                  "type": "color",
-                  "value": "#F8F8FA"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-19",
-                "value": {
-                  "type": "string",
-                  "value": "2×2"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-20",
+                "id": "card-padding",
                 "value": {
                   "type": "measure",
                   "value": 32,
@@ -5109,7 +5976,7 @@
                 }
               },
               {
-                "id": "description-21",
+                "id": "card-border-radius",
                 "value": {
                   "type": "measure",
                   "value": 26,
@@ -5121,10 +5988,10 @@
                 }
               },
               {
-                "id": "description-22",
+                "id": "content-item-gap",
                 "value": {
                   "type": "measure",
-                  "value": 18,
+                  "value": 24,
                   "unit": "px"
                 },
                 "provenance": {
@@ -5133,11 +6000,10 @@
                 }
               },
               {
-                "id": "description-23",
+                "id": "logo-description-gap",
                 "value": {
-                  "type": "dimensions",
-                  "width": 116,
-                  "height": 56,
+                  "type": "measure",
+                  "value": 16,
                   "unit": "px"
                 },
                 "provenance": {
@@ -5146,10 +6012,22 @@
                 }
               },
               {
-                "id": "description-24",
+                "id": "header-column-gap",
                 "value": {
                   "type": "measure",
-                  "value": 50,
+                  "value": 24,
+                  "unit": "px"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              },
+              {
+                "id": "store-link-gap",
+                "value": {
+                  "type": "measure",
+                  "value": 8,
                   "unit": "px"
                 },
                 "provenance": {
@@ -5166,9 +6044,30 @@
                 "visibility": {
                   "mode": "always"
                 },
-                "facts": [],
+                "facts": [
+                  {
+                    "id": "logo-display-dimensions",
+                    "value": {
+                      "type": "dimensions",
+                      "width": 219,
+                      "height": 62,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
                 "children": [],
-                "asset_contract_id": "app-logo"
+                "asset_contract_id": "app-logo",
+                "content_slots": [
+                  {
+                    "id": "alt",
+                    "type": "alt-text",
+                    "required": true
+                  }
+                ]
               },
               {
                 "id": "description",
@@ -5177,170 +6076,28 @@
                 "visibility": {
                   "mode": "always"
                 },
-                "facts": [],
-                "children": []
-              },
-              {
-                "id": "rustore-link",
-                "semantic_role": "store-link",
-                "render_mode": "html-link",
-                "visibility": {
-                  "mode": "always"
-                },
-                "facts": [],
-                "children": [
+                "facts": [
                   {
-                    "id": "rustore-icon",
-                    "semantic_role": "store-icon",
-                    "render_mode": "direct-image",
-                    "visibility": {
-                      "mode": "always"
+                    "id": "description-font-size",
+                    "value": {
+                      "type": "measure",
+                      "value": 18,
+                      "unit": "px"
                     },
-                    "facts": [],
-                    "children": [],
-                    "asset_contract_id": "rustore-icon"
-                  },
-                  {
-                    "id": "rustore-text",
-                    "semantic_role": "store-text",
-                    "render_mode": "html-text",
-                    "visibility": {
-                      "mode": "always"
-                    },
-                    "facts": [],
-                    "children": []
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
                   }
-                ]
-              },
-              {
-                "id": "google-play-link",
-                "semantic_role": "store-link",
-                "render_mode": "html-link",
-                "visibility": {
-                  "mode": "always"
-                },
-                "facts": [],
-                "children": [
-                  {
-                    "id": "google-play-icon",
-                    "semantic_role": "store-icon",
-                    "render_mode": "direct-image",
-                    "visibility": {
-                      "mode": "always"
-                    },
-                    "facts": [],
-                    "children": [],
-                    "asset_contract_id": "google-play-icon"
-                  },
-                  {
-                    "id": "google-play-text",
-                    "semantic_role": "store-text",
-                    "render_mode": "html-text",
-                    "visibility": {
-                      "mode": "always"
-                    },
-                    "facts": [],
-                    "children": []
-                  }
-                ]
-              },
-              {
-                "id": "appgallery-link",
-                "semantic_role": "store-link",
-                "render_mode": "html-link",
-                "visibility": {
-                  "mode": "always"
-                },
-                "facts": [],
-                "children": [
-                  {
-                    "id": "appgallery-icon",
-                    "semantic_role": "store-icon",
-                    "render_mode": "direct-image",
-                    "visibility": {
-                      "mode": "always"
-                    },
-                    "facts": [],
-                    "children": [],
-                    "asset_contract_id": "appgallery-icon"
-                  },
-                  {
-                    "id": "appgallery-text",
-                    "semantic_role": "store-text",
-                    "render_mode": "html-text",
-                    "visibility": {
-                      "mode": "always"
-                    },
-                    "facts": [],
-                    "children": []
-                  }
-                ]
-              },
-              {
-                "id": "getapps-link",
-                "semantic_role": "store-link",
-                "render_mode": "html-link",
-                "visibility": {
-                  "mode": "always"
-                },
-                "facts": [],
-                "children": [
-                  {
-                    "id": "getapps-icon",
-                    "semantic_role": "store-icon",
-                    "render_mode": "direct-image",
-                    "visibility": {
-                      "mode": "always"
-                    },
-                    "facts": [],
-                    "children": [],
-                    "asset_contract_id": "getapps-icon"
-                  },
-                  {
-                    "id": "getapps-text",
-                    "semantic_role": "store-text",
-                    "render_mode": "html-text",
-                    "visibility": {
-                      "mode": "always"
-                    },
-                    "facts": [],
-                    "children": []
-                  }
-                ]
-              }
-            ]
-          }
-        },
-        "desktop": {
-          "root": {
-            "id": "root",
-            "semantic_role": "banner",
-            "render_mode": "presentation-table",
-            "visibility": {
-              "mode": "always"
-            },
-            "facts": [],
-            "children": [
-              {
-                "id": "app-logo",
-                "semantic_role": "logo",
-                "render_mode": "direct-image",
-                "visibility": {
-                  "mode": "always"
-                },
-                "facts": [],
+                ],
                 "children": [],
-                "asset_contract_id": "app-logo"
-              },
-              {
-                "id": "description",
-                "semantic_role": "description",
-                "render_mode": "html-text",
-                "visibility": {
-                  "mode": "always"
-                },
-                "facts": [],
-                "children": []
+                "content_slots": [
+                  {
+                    "id": "text",
+                    "type": "rich-text",
+                    "required": true
+                  }
+                ]
               },
               {
                 "id": "qr-code",
@@ -5349,9 +6106,30 @@
                 "visibility": {
                   "mode": "always"
                 },
-                "facts": [],
+                "facts": [
+                  {
+                    "id": "qr-display-dimensions",
+                    "value": {
+                      "type": "dimensions",
+                      "width": 130,
+                      "height": 130,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
                 "children": [],
-                "asset_contract_id": "qr-code"
+                "asset_contract_id": "qr-code",
+                "content_slots": [
+                  {
+                    "id": "alt",
+                    "type": "alt-text",
+                    "required": true
+                  }
+                ]
               },
               {
                 "id": "rustore-link",
@@ -5360,7 +6138,33 @@
                 "visibility": {
                   "mode": "always"
                 },
-                "facts": [],
+                "facts": [
+                  {
+                    "id": "rustore-link-dimensions",
+                    "value": {
+                      "type": "dimensions",
+                      "width": 116,
+                      "height": 56,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "rustore-link-border-radius",
+                    "value": {
+                      "type": "measure",
+                      "value": 50,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
                 "children": [
                   {
                     "id": "rustore-icon",
@@ -5369,9 +6173,30 @@
                     "visibility": {
                       "mode": "always"
                     },
-                    "facts": [],
+                    "facts": [
+                      {
+                        "id": "rustore-icon-display-dimensions",
+                        "value": {
+                          "type": "dimensions",
+                          "width": 32,
+                          "height": 32,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "registry-literal",
+                          "source_path": "registry/email-component-descriptions-registry.md"
+                        }
+                      }
+                    ],
                     "children": [],
-                    "asset_contract_id": "rustore-icon"
+                    "asset_contract_id": "rustore-icon",
+                    "content_slots": [
+                      {
+                        "id": "alt",
+                        "type": "alt-text",
+                        "required": true
+                      }
+                    ]
                   },
                   {
                     "id": "rustore-text",
@@ -5381,7 +6206,21 @@
                       "mode": "always"
                     },
                     "facts": [],
-                    "children": []
+                    "children": [],
+                    "content_slots": [
+                      {
+                        "id": "text",
+                        "type": "rich-text",
+                        "required": true
+                      }
+                    ]
+                  }
+                ],
+                "content_slots": [
+                  {
+                    "id": "href",
+                    "type": "url",
+                    "required": true
                   }
                 ]
               },
@@ -5392,7 +6231,44 @@
                 "visibility": {
                   "mode": "always"
                 },
-                "facts": [],
+                "facts": [
+                  {
+                    "id": "google-play-link-dimensions",
+                    "value": {
+                      "type": "dimensions",
+                      "width": 116,
+                      "height": 56,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "google-play-link-border-radius",
+                    "value": {
+                      "type": "measure",
+                      "value": 50,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "google-play-link-background",
+                    "value": {
+                      "type": "color",
+                      "value": "#F8F8FA"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
                 "children": [
                   {
                     "id": "google-play-icon",
@@ -5401,9 +6277,30 @@
                     "visibility": {
                       "mode": "always"
                     },
-                    "facts": [],
+                    "facts": [
+                      {
+                        "id": "google-play-icon-display-dimensions",
+                        "value": {
+                          "type": "dimensions",
+                          "width": 32,
+                          "height": 32,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "registry-literal",
+                          "source_path": "registry/email-component-descriptions-registry.md"
+                        }
+                      }
+                    ],
                     "children": [],
-                    "asset_contract_id": "google-play-icon"
+                    "asset_contract_id": "google-play-icon",
+                    "content_slots": [
+                      {
+                        "id": "alt",
+                        "type": "alt-text",
+                        "required": true
+                      }
+                    ]
                   },
                   {
                     "id": "google-play-text",
@@ -5413,7 +6310,21 @@
                       "mode": "always"
                     },
                     "facts": [],
-                    "children": []
+                    "children": [],
+                    "content_slots": [
+                      {
+                        "id": "text",
+                        "type": "rich-text",
+                        "required": true
+                      }
+                    ]
+                  }
+                ],
+                "content_slots": [
+                  {
+                    "id": "href",
+                    "type": "url",
+                    "required": true
                   }
                 ]
               },
@@ -5424,7 +6335,44 @@
                 "visibility": {
                   "mode": "always"
                 },
-                "facts": [],
+                "facts": [
+                  {
+                    "id": "appgallery-link-dimensions",
+                    "value": {
+                      "type": "dimensions",
+                      "width": 116,
+                      "height": 56,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "appgallery-link-border-radius",
+                    "value": {
+                      "type": "measure",
+                      "value": 50,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "appgallery-link-background",
+                    "value": {
+                      "type": "color",
+                      "value": "#F8F8FA"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
                 "children": [
                   {
                     "id": "appgallery-icon",
@@ -5433,9 +6381,30 @@
                     "visibility": {
                       "mode": "always"
                     },
-                    "facts": [],
+                    "facts": [
+                      {
+                        "id": "appgallery-icon-display-dimensions",
+                        "value": {
+                          "type": "dimensions",
+                          "width": 32,
+                          "height": 32,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "registry-literal",
+                          "source_path": "registry/email-component-descriptions-registry.md"
+                        }
+                      }
+                    ],
                     "children": [],
-                    "asset_contract_id": "appgallery-icon"
+                    "asset_contract_id": "appgallery-icon",
+                    "content_slots": [
+                      {
+                        "id": "alt",
+                        "type": "alt-text",
+                        "required": true
+                      }
+                    ]
                   },
                   {
                     "id": "appgallery-text",
@@ -5445,7 +6414,21 @@
                       "mode": "always"
                     },
                     "facts": [],
-                    "children": []
+                    "children": [],
+                    "content_slots": [
+                      {
+                        "id": "text",
+                        "type": "rich-text",
+                        "required": true
+                      }
+                    ]
+                  }
+                ],
+                "content_slots": [
+                  {
+                    "id": "href",
+                    "type": "url",
+                    "required": true
                   }
                 ]
               },
@@ -5456,7 +6439,44 @@
                 "visibility": {
                   "mode": "always"
                 },
-                "facts": [],
+                "facts": [
+                  {
+                    "id": "getapps-link-dimensions",
+                    "value": {
+                      "type": "dimensions",
+                      "width": 116,
+                      "height": 56,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "getapps-link-border-radius",
+                    "value": {
+                      "type": "measure",
+                      "value": 50,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "getapps-link-background",
+                    "value": {
+                      "type": "color",
+                      "value": "#F8F8FA"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
                 "children": [
                   {
                     "id": "getapps-icon",
@@ -5465,9 +6485,30 @@
                     "visibility": {
                       "mode": "always"
                     },
-                    "facts": [],
+                    "facts": [
+                      {
+                        "id": "getapps-icon-display-dimensions",
+                        "value": {
+                          "type": "dimensions",
+                          "width": 32,
+                          "height": 32,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "registry-literal",
+                          "source_path": "registry/email-component-descriptions-registry.md"
+                        }
+                      }
+                    ],
                     "children": [],
-                    "asset_contract_id": "getapps-icon"
+                    "asset_contract_id": "getapps-icon",
+                    "content_slots": [
+                      {
+                        "id": "alt",
+                        "type": "alt-text",
+                        "required": true
+                      }
+                    ]
                   },
                   {
                     "id": "getapps-text",
@@ -5477,7 +6518,21 @@
                       "mode": "always"
                     },
                     "facts": [],
-                    "children": []
+                    "children": [],
+                    "content_slots": [
+                      {
+                        "id": "text",
+                        "type": "rich-text",
+                        "required": true
+                      }
+                    ]
+                  }
+                ],
+                "content_slots": [
+                  {
+                    "id": "href",
+                    "type": "url",
+                    "required": true
                   }
                 ]
               }
@@ -5983,64 +7038,7 @@
             },
             "facts": [
               {
-                "id": "width-behavior",
-                "value": {
-                  "type": "keyword",
-                  "value": "fluid-to-container"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "height-behavior",
-                "value": {
-                  "type": "keyword",
-                  "value": "auto"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "fixed-height-forbidden",
-                "value": {
-                  "type": "boolean",
-                  "value": true
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-1",
-                "value": {
-                  "type": "ratio",
-                  "width": 232,
-                  "height": 148
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-2",
-                "value": {
-                  "type": "measure",
-                  "value": 14,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-3",
+                "id": "image-to-text-gap",
                 "value": {
                   "type": "measure",
                   "value": 16,
@@ -6052,107 +7050,10 @@
                 }
               },
               {
-                "id": "description-4",
+                "id": "text-item-gap",
                 "value": {
                   "type": "measure",
                   "value": 8,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-5",
-                "value": {
-                  "type": "dimensions",
-                  "width": 232,
-                  "height": 148,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-6",
-                "value": {
-                  "type": "measure",
-                  "value": 24,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-7",
-                "value": {
-                  "type": "measure",
-                  "value": 232,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-8",
-                "value": {
-                  "type": "measure",
-                  "value": 18,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-9",
-                "value": {
-                  "type": "measure",
-                  "value": 6,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-10",
-                "value": {
-                  "type": "measure",
-                  "value": 20,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-11",
-                "value": {
-                  "type": "string",
-                  "value": "@2x"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "description-12",
-                "value": {
-                  "type": "dimensions",
-                  "width": 464,
-                  "height": 296,
                   "unit": "px"
                 },
                 "provenance": {
@@ -6169,9 +7070,62 @@
                 "visibility": {
                   "mode": "always"
                 },
-                "facts": [],
+                "facts": [
+                  {
+                    "id": "width-behavior",
+                    "value": {
+                      "type": "keyword",
+                      "value": "fluid-to-container"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "height-behavior",
+                    "value": {
+                      "type": "keyword",
+                      "value": "auto"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "fixed-height-forbidden",
+                    "value": {
+                      "type": "boolean",
+                      "value": true
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "image-border-radius",
+                    "value": {
+                      "type": "measure",
+                      "value": 14,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
                 "children": [],
-                "asset_contract_id": "card-image"
+                "asset_contract_id": "card-image",
+                "content_slots": [
+                  {
+                    "id": "alt",
+                    "type": "alt-text",
+                    "required": true
+                  }
+                ]
               },
               {
                 "id": "heading",
@@ -6180,8 +7134,28 @@
                 "visibility": {
                   "mode": "always"
                 },
-                "facts": [],
-                "children": []
+                "facts": [
+                  {
+                    "id": "heading-font-size",
+                    "value": {
+                      "type": "measure",
+                      "value": 16,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
+                "children": [],
+                "content_slots": [
+                  {
+                    "id": "text",
+                    "type": "rich-text",
+                    "required": true
+                  }
+                ]
               },
               {
                 "id": "description",
@@ -6190,8 +7164,28 @@
                 "visibility": {
                   "mode": "always"
                 },
-                "facts": [],
-                "children": []
+                "facts": [
+                  {
+                    "id": "description-font-size",
+                    "value": {
+                      "type": "measure",
+                      "value": 14,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
+                "children": [],
+                "content_slots": [
+                  {
+                    "id": "text",
+                    "type": "rich-text",
+                    "required": true
+                  }
+                ]
               },
               {
                 "id": "link",
@@ -6200,8 +7194,33 @@
                 "visibility": {
                   "mode": "always"
                 },
-                "facts": [],
-                "children": []
+                "facts": [
+                  {
+                    "id": "link-font-size",
+                    "value": {
+                      "type": "measure",
+                      "value": 14,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
+                "children": [],
+                "content_slots": [
+                  {
+                    "id": "href",
+                    "type": "url",
+                    "required": true
+                  },
+                  {
+                    "id": "text",
+                    "type": "rich-text",
+                    "required": true
+                  }
+                ]
               }
             ]
           }
@@ -6214,7 +7233,44 @@
             "visibility": {
               "mode": "always"
             },
-            "facts": [],
+            "facts": [
+              {
+                "id": "image-to-text-column-gap",
+                "value": {
+                  "type": "measure",
+                  "value": 24,
+                  "unit": "px"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              },
+              {
+                "id": "text-column-width",
+                "value": {
+                  "type": "measure",
+                  "value": 232,
+                  "unit": "px"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              },
+              {
+                "id": "text-item-gap",
+                "value": {
+                  "type": "measure",
+                  "value": 6,
+                  "unit": "px"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              }
+            ],
             "children": [
               {
                 "id": "card-image",
@@ -6223,9 +7279,42 @@
                 "visibility": {
                   "mode": "always"
                 },
-                "facts": [],
+                "facts": [
+                  {
+                    "id": "image-display-dimensions",
+                    "value": {
+                      "type": "dimensions",
+                      "width": 232,
+                      "height": 148,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "image-border-radius",
+                    "value": {
+                      "type": "measure",
+                      "value": 18,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
                 "children": [],
-                "asset_contract_id": "card-image"
+                "asset_contract_id": "card-image",
+                "content_slots": [
+                  {
+                    "id": "alt",
+                    "type": "alt-text",
+                    "required": true
+                  }
+                ]
               },
               {
                 "id": "heading",
@@ -6234,8 +7323,28 @@
                 "visibility": {
                   "mode": "always"
                 },
-                "facts": [],
-                "children": []
+                "facts": [
+                  {
+                    "id": "heading-font-size",
+                    "value": {
+                      "type": "measure",
+                      "value": 20,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
+                "children": [],
+                "content_slots": [
+                  {
+                    "id": "text",
+                    "type": "rich-text",
+                    "required": true
+                  }
+                ]
               },
               {
                 "id": "description",
@@ -6244,8 +7353,28 @@
                 "visibility": {
                   "mode": "always"
                 },
-                "facts": [],
-                "children": []
+                "facts": [
+                  {
+                    "id": "description-font-size",
+                    "value": {
+                      "type": "measure",
+                      "value": 16,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
+                "children": [],
+                "content_slots": [
+                  {
+                    "id": "text",
+                    "type": "rich-text",
+                    "required": true
+                  }
+                ]
               },
               {
                 "id": "link",
@@ -6254,8 +7383,33 @@
                 "visibility": {
                   "mode": "always"
                 },
-                "facts": [],
-                "children": []
+                "facts": [
+                  {
+                    "id": "link-font-size",
+                    "value": {
+                      "type": "measure",
+                      "value": 16,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
+                "children": [],
+                "content_slots": [
+                  {
+                    "id": "href",
+                    "type": "url",
+                    "required": true
+                  },
+                  {
+                    "id": "text",
+                    "type": "rich-text",
+                    "required": true
+                  }
+                ]
               }
             ]
           }
