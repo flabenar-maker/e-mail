@@ -105,17 +105,18 @@ Component documentation contracts реализованы через [PR #45](htt
 
 ## 7. Текущий этап
 
-Этап 7 завершён. Generated docs и route-specific context bundles доказаны и подключены к общей validation в shadow-режиме. Рабочие routes пока продолжают использовать прежние static source profiles, поэтому дублирующие старый и новый контекст правила не подаются одновременно.
+Этап 7 завершён. Generated docs и route-specific context bundles находятся в `main` и остаются shadow-слоем.
 
-Следующий этап roadmap — **8. Core и workflows cutover**. Его реализация ещё не начата, а отдельного implementation plan в папке plans пока нет. До технических изменений нужно спланировать этап с помощью Superpowers и отдельно согласовать принципы HTML-рендеринга и риски их применения.
+Направление этапа 8 согласовано и зафиксировано в [CUPIS HTML Rendering Design](../specs/2026-09-10-cupis-html-rendering-design.md). Техническая реализация ещё не начата. Подробный [implementation plan этапа 8](2026-09-10-cupis-html-rendering-stage-8.md) подготовлен в draft PR и ожидает review пользователя.
+
+Целевая архитектура строит новое письмо из фактических Mobile/Desktop-инстансов и resolved component contracts через временную модель, общий contract-tree interpreter и email-примитивы. Отдельный код разрешён только доказанным исключениям. Публикация атомарна и оставляет локально только `email.html` и `images/`.
 
 ## 8. Следующий точный шаг
 
-1. Закрепить актуальный SHA `main` и повторно открыть manifest, roadmap, active context и master-спецификацию.
-2. Через Superpowers сформировать подробный implementation plan этапа 8; не начинать реализацию до его review.
-3. В рамках планирования отдельно обсудить с пользователем принципы HTML-рендеринга, границы ответственности и риски перехода.
-4. Зафиксировать, как Core и workflows разделяются без копирования structured definitions и без одновременной подачи legacy/new правил.
-5. После согласования плана выполнять этап 8 в отдельной branch и PR. Figma и локальные письма в технический cutover не включать.
+1. Проверить спецификацию и подробный implementation plan этапа 8.
+2. После одобрения и merge документационного PR начать Package 1 в новой implementation branch от свежего `main`.
+3. Выполнять packages 1–12 строго последовательно с review и merge каждого пакета.
+4. Не изменять Figma и не переключать maintenance skill внутри Stage 8.
 
 ## 9. Стабильная граница component documentation
 

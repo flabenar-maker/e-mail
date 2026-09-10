@@ -140,15 +140,28 @@ Structured records остаются shadow-источником до generated b
 
 Реализация этапа 7B слита в [PR #43](https://github.com/flabenar-maker/e-mail/pull/43), итоговый commit: `15a1c3ce09fec33d5aee82a87ffee4667e911702`. Generated docs и route-specific context bundles находятся в `main`, но остаются shadow-слоем: рабочие Core, workflows, skills и Figma этим этапом не переключались.
 
-### 8. Core и workflows cutover
+### 8. Core, workflows и HTML rendering cutover
 
-- [ ] Разделить Core по утверждённой ответственности на `email-rendering-standard.md`, `typography-standard.md`, `asset-export-standard.md` и `figma-library-standard.md`.
-- [ ] Не переносить точные structured definitions обратно в Core: Core объясняет нормативные принципы, foundations владеют проверяемыми определениями.
+Архитектурное основание: [CUPIS HTML Rendering Design](../specs/2026-09-10-cupis-html-rendering-design.md).
+
+Подробный implementation plan: [CUPIS HTML Rendering Stage 8](2026-09-10-cupis-html-rendering-stage-8.md).
+
+- [x] Согласовать направление contract-driven HTML-рендеринга и зафиксировать архитектурную спецификацию.
+- [ ] Зафиксировать characterization baseline и владельцев renderer-impacting данных.
+- [ ] Создать rendering foundation и renderer-ready schema без дублирования существующих foundations и contracts.
+- [ ] Нормализовать пилотные component contracts: facts должны принадлежать управляющим узлам, а не корневым `description-N`.
+- [ ] Разделить Core на `email-rendering-standard.md`, `typography-standard.md`, `asset-export-standard.md` и `figma-library-standard.md` без копирования structured definitions.
+- [ ] Реализовать email-примитивы, общий contract-tree interpreter и единый renderer registry; специальные обработчики допускать только для доказанных исключений.
+- [ ] Добавить временную модель, CLI, типизированную диагностику и атомарную публикацию `email.html` + `images/`.
+- [ ] Вычислять render-impact digest автоматически только из данных, влияющих на HTML.
+- [ ] Доказать архитектуру на representative Mobile/Desktop-пилоте до миграции всех активных компонентов.
+- [ ] Мигрировать остальные компоненты после успешного пилота и проверки coverage.
 - [ ] Перевести maintenance и email-build workflows в структурированный формат.
-- [ ] Сохранить HTML-вёрстку зависимой от фактического инстанса и component contract, а не от design-time золотых правил.
-- [ ] Выполнить characterization comparison со старыми Markdown-источниками.
-- [ ] Сохранить прежний общий prompt только как comparison baseline до общего cutover; не подавать старый и новый набор правил одновременно в рабочий bundle.
+- [ ] Сохранить HTML зависимым от фактического инстанса и component contract, а не design-time золотых правил.
+- [ ] Выполнить characterization и shadow comparison со старыми Markdown-источниками.
+- [ ] Не подавать legacy и structured наборы правил одновременно в рабочий bundle.
 
+До технической реализации требуется отдельный reviewed implementation plan. Figma, production-письма и maintenance skill не входят в скрытую область этапа.
 ### 9. Maintenance skill cutover
 
 Manifest-driven разрешение source paths было выполнено на этапе 2. Этот этап не повторяет первоначальный переход на manifest: он переключает навык с временных Markdown-oriented profiles на итоговые generated context bundles.
