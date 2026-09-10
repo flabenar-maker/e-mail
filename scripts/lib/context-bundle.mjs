@@ -798,6 +798,83 @@ export async function buildContextBundle({
 }
 
 export function renderContextBundle(bundle) {
-  return `${canonicalize(bundle)}\n`;
+  const renderCodeBlock = (value, language = "json") => {
+    const content =
+      typeof value === "string" ? value : `${canonicalize(value)}\n`;
+    const longestFence = Math.max(
+      0,
+      ...[...content.matchAll(/`+/gu)].map(([run]) => run.length),
+    );
+    const fence = "`".repeat(Math.max(3, longestFence + 1));
+    const body = content.endsWith("\n") ? content : `${content}\n`;
+    return `${fence}${language}\n${body}${fence}`;
+  };
+
+  const staticSources = bundle.static_sources.length
+    ? bundle.static_sources
+        .map(
+          (source) =>
+            [
+              `### ${source.id}`,
+              "",
+              `Source: \`${source.path}\``,
+              "",
+              `Kind: \`${source.kind}\``,
+              "",
+              `Digest: \`${source.digest}\``,
+              "",
+              renderCodeBlock(source.content, "markdown"),
+            ].join("\n"),
+        )
+        .join("\n\n")
+    : "_None._";
+  const components = bundle.components.length
+    ? bundle.components
+        .map(
+          (component) =>
+            `### ${component.id}\n\n${renderCodeBlock(component)}`,
+        )
+        .join("\n\n")
+    : "_None._";
+  const foundations = bundle.foundation_definitions.length
+    ? bundle.foundation_definitions
+        .map((definition) => {
+          const id = [
+            definition.foundation_id,
+            definition.definition_group,
+            definition.definition_id,
+            definition.viewport,
+          ]
+            .filter(Boolean)
+            .join("/");
+          return `### ${id}\n\n${renderCodeBlock(definition)}`;
+        })
+        .join("\n\n")
+    : "_None._";
+
+  return [
+    "---",
+    `bundle_schema_version: ${bundle.schema_version}`,
+    `mode: ${bundle.mode}`,
+    `route_id: ${bundle.route.id}`,
+    `bundle_profile_id: ${bundle.route.bundle_profile_id}`,
+    `digest: ${bundle.digest}`,
+    "---",
+    "",
+    "# CUPIS resolved context bundle",
+    "",
+    "## Static sources",
+    "",
+    staticSources,
+    "",
+    "## Components",
+    "",
+    components,
+    "",
+    "## Foundation definitions",
+    "",
+    foundations,
+    "",
+  ].join("\n");
 }
 
