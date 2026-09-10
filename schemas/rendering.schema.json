@@ -1,0 +1,161 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cupis.example/schemas/rendering.schema.json",
+  "title": "CUPIS rendering foundation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "foundation",
+    "breakpoints",
+    "responsive_strategies",
+    "primitives",
+    "postprocessing",
+    "support_profiles"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "foundation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "status"],
+      "properties": {
+        "id": { "const": "rendering" },
+        "status": { "const": "shadow" }
+      }
+    },
+    "breakpoints": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/breakpoint" }
+    },
+    "responsive_strategies": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/responsiveStrategy" }
+    },
+    "primitives": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/primitive" }
+    },
+    "postprocessing": { "$ref": "#/$defs/postprocessing" },
+    "support_profiles": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/supportProfile" }
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+    },
+    "breakpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "query", "value", "unit"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "query": { "const": "max-width" },
+        "value": { "type": "integer", "minimum": 1 },
+        "unit": { "const": "px" }
+      }
+    },
+    "responsiveStrategy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "contract"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "contract": {
+          "enum": [
+            "exact-structural-pairing",
+            "explicit-viewport-subtree",
+            "independent-viewport-contracts"
+          ]
+        }
+      }
+    },
+    "primitive": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "contract"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "contract": {
+          "enum": [
+            "presentation-table",
+            "html-text",
+            "html-link",
+            "direct-image",
+            "background-image",
+            "media-query"
+          ]
+        }
+      }
+    },
+    "postprocessing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowed", "forbidden"],
+      "properties": {
+        "allowed": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "normalize-attributes",
+              "strip-technical-markers",
+              "validate-local-src"
+            ]
+          }
+        },
+        "forbidden": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "infer-contract",
+              "change-layout",
+              "change-dimensions",
+              "suppress-diagnostic"
+            ]
+          }
+        }
+      }
+    },
+    "supportProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "required", "optional"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "required": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "table-layout",
+              "inline-style-output",
+              "media-query-responsive"
+            ]
+          }
+        },
+        "optional": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "legacy-outlook-vml",
+              "external-client-matrix"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

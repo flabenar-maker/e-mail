@@ -1,0 +1,24 @@
+schema_version: 1.0.0
+foundation: { id: rendering, status: shadow }
+breakpoints:
+  - { id: cupis-mobile, query: max-width, value: 660, unit: px }
+responsive_strategies:
+  - { id: shared-tree, contract: exact-structural-pairing }
+  - { id: split-subtree, contract: explicit-viewport-subtree }
+  - { id: split-component, contract: independent-viewport-contracts }
+primitives:
+  - { id: email-shell, contract: presentation-table }
+  - { id: section, contract: presentation-table }
+  - { id: table, contract: presentation-table }
+  - { id: text, contract: html-text }
+  - { id: link, contract: html-link }
+  - { id: direct-image, contract: direct-image }
+  - { id: background-image, contract: background-image }
+  - { id: responsive-visibility, contract: media-query }
+postprocessing:
+  allowed: [normalize-attributes, strip-technical-markers, validate-local-src]
+  forbidden: [infer-contract, change-layout, change-dimensions, suppress-diagnostic]
+support_profiles:
+  - id: cupis-default
+    required: [table-layout, inline-style-output, media-query-responsive]
+    optional: [legacy-outlook-vml, external-client-matrix]
