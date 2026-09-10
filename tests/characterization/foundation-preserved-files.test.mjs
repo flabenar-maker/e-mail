@@ -8,7 +8,7 @@ import { fileURLToPath } from "node:url";
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const preserved = {
   ".agents/skills/maintaining-cupis-email-system/SKILL.md":
-    "56addbd67f395990ffdfc8ce79675f997f807cd4",
+    "79f76cc61cb1c5c6a147f2c164ed248fb935ad82",
   ".agents/skills/maintaining-cupis-email-system/agents/openai.yaml":
     "5bc8931c02b653295005bb955172c2c62f6bdf41",
   "core/email-figma-prompt.md":
