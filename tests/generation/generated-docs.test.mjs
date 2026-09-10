@@ -235,7 +235,7 @@ test("generated comparison reports missing and stale files by exact path", async
 
   const manifest = await manifestWithGeneratedDocs(fixture.root);
   const model = await loadGeneratedDocModel({ repoRoot: fixture.root, manifest });
-  assert.equal(model.schemaVersions.components, "2.0.0");
+  assert.equal(model.schemaVersions.components, "2.1.0");
 
   const rendered = await renderAllGeneratedDocs({
     repoRoot: fixture.root,

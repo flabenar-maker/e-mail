@@ -30,7 +30,7 @@ async function readSchema() {
 
 function registryEnvelope(library, components = []) {
   return {
-    schema_version: "2.0.0",
+    schema_version: "2.1.0",
     registry: {
       id: `components-${library}`,
       library,
@@ -1020,4 +1020,38 @@ test("full component validation loads canonical foundations by default", async (
   const result = await validateComponentRegistries({ repoRoot });
   assert.ok(result.registries);
   assert.deepEqual(result.errors, []);
+});
+test("component schema accepts the six typed content slot kinds", async () => {
+  const schema = await readSchema();
+  const document = registryEnvelope("marketing", [validRecord()]);
+  document.components[0].contracts.mobile.root.content_slots = [
+    { id: "plain", type: "plain-text", required: true },
+    { id: "rich", type: "rich-text", required: true },
+    { id: "href", type: "url", required: true },
+    { id: "content", type: "placeholder", required: true },
+    { id: "alt", type: "alt-text", required: true },
+    { id: "count", type: "number", required: false },
+  ];
+
+  assert.deepEqual(validateComponentRegistryShape(document, schema), []);
+});
+
+test("component schema rejects unknown content slot data", async () => {
+  const schema = await readSchema();
+  const document = registryEnvelope("marketing", [validRecord()]);
+  document.components[0].contracts.mobile.root.content_slots = [
+    { id: "text", type: "html", required: true, fallback: "guess" },
+  ];
+
+  const errors = validateComponentRegistryShape(document, schema);
+
+  assert.ok(
+    errors.some(
+      (error) =>
+        error.code === "components-schema" &&
+        error.path.startsWith(
+          "/components/0/contracts/mobile/root/content_slots/0",
+        ),
+    ),
+  );
 });
