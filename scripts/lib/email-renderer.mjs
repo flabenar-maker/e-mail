@@ -123,7 +123,7 @@ function prepareElement({
     }
   }
 
-  for (const slot of prepared.content_slots ?? []) {
+  for (const slot of visible ? (prepared.content_slots ?? []) : []) {
     let value = contentValue(instance, originalId, slot.id, viewport);
     if (prepared.render_mode === "slot" && slot.id === "content") {
       const children = slotValue(instance, originalId)?.instances ?? [];
@@ -137,7 +137,7 @@ function prepareElement({
     }
   }
 
-  if (prepared.asset_contract_id) {
+  if (visible && prepared.asset_contract_id) {
     const originalAssetId = prepared.asset_contract_id;
     const asset = assetValue(instance, originalAssetId);
     if (typeof asset?.path === "string" && asset.path.length > 0) {
@@ -148,22 +148,24 @@ function prepareElement({
     }
   }
 
-  prepared.children = (element.children ?? []).map((child, index) =>
-    prepareElement({
-      element: child,
-      instance,
-      instancePath,
-      viewport,
-      record,
-      path: `${path}/children/${index}`,
-      stack,
-      accumulator,
-      rendererRegistry,
-      componentIndex,
-    }),
-  ).filter(Boolean);
+  prepared.children = visible
+    ? (element.children ?? []).map((child, index) =>
+        prepareElement({
+          element: child,
+          instance,
+          instancePath,
+          viewport,
+          record,
+          path: `${path}/children/${index}`,
+          stack,
+          accumulator,
+          rendererRegistry,
+          componentIndex,
+        }),
+      ).filter(Boolean)
+    : [];
 
-  if (prepared.render_mode === "slot") {
+  if (prepared.render_mode === "slot" && visible) {
     const slot = slotValue(instance, originalId);
     (slot?.instances ?? []).forEach((childInstance, index) => {
       const child = prepareInstance({
