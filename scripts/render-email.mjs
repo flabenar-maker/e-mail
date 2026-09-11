@@ -1,6 +1,8 @@
+import { execFileSync } from "node:child_process";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { formatRendererDiagnostics } from "./lib/diagnostics.mjs";
 import {
   indexComponentRegistries,
   loadComponentRegistries,
@@ -33,11 +35,19 @@ function parseArguments(argv) {
   return values;
 }
 
-function printDiagnostic(error) {
-  const path = error?.path ?? "/";
-  const code = error?.code ?? "EMAIL_RENDER_FAILED";
-  const message = error?.message ?? String(error);
-  return path + ": [" + code + "] " + message;
+function resolveSystemCommit() {
+  const explicit = process.env.CUPIS_SYSTEM_COMMIT;
+  if (/^[0-9a-f]{40}$/u.test(explicit ?? "")) return explicit;
+  try {
+    const value = execFileSync("git", ["rev-parse", "HEAD"], {
+      cwd: repoRoot,
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+    }).trim();
+    return /^[0-9a-f]{40}$/u.test(value) ? value : "unknown";
+  } catch {
+    return "unknown";
+  }
 }
 
 async function main() {
@@ -57,6 +67,7 @@ async function main() {
     rendererRegistry,
     componentIndex: indexComponentRegistries(registries),
     foundations: { rendering },
+    systemCommit: resolveSystemCommit(),
   };
   const semanticErrors = validateEmailModelSemantics(model, dependencies);
   if (semanticErrors.length > 0) {
@@ -88,8 +99,7 @@ async function main() {
 
 main().catch((error) => {
   const errors = error instanceof AggregateError ? error.errors : [error];
-  for (const item of errors) {
-    process.stderr.write(printDiagnostic(item) + "\n");
-  }
+  const output = formatRendererDiagnostics(errors);
+  if (output) process.stderr.write(output + "\n");
   process.exitCode = error?.message?.startsWith("Usage:") ? 2 : 1;
 });
