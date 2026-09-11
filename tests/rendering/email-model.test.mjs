@@ -1,0 +1,137 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { loadEmailModel, validateEmailModelSemantics } from "../../scripts/lib/email-model.mjs";
+
+const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
+const schemaPath = join(repoRoot, "schemas/email-model.schema.json");
+
+function record() {
+  const root = {
+    id: "root", semantic_role: "card", render_mode: "presentation-table",
+    visibility: { mode: "always" }, facts: [], children: [
+      {
+        id: "heading", semantic_role: "heading", render_mode: "html-text",
+        visibility: { mode: "always" }, facts: [],
+        content_slots: [{ id: "text", type: "rich-text", required: true }],
+        children: [],
+      },
+      {
+        id: "image", semantic_role: "image", render_mode: "direct-image",
+        visibility: { mode: "always" }, facts: [],
+        content_slots: [{ id: "alt", type: "alt-text", required: true }],
+        asset_contract_id: "image", children: [],
+      },
+    ],
+  };
+  return {
+    id: "test-card",
+    properties: [{ id: "show-body", type: "boolean", default: true }],
+    asset_contracts: [{ id: "image" }],
+    contracts: { mobile: { root: structuredClone(root) }, desktop: { root: structuredClone(root) } },
+  };
+}
+
+function model() {
+  return {
+    schema_version: "1.0.0", id: "test-email",
+    root: {
+      instance_id: "root-instance", component_id: "test-card",
+      variants: { mobile: "mobile", desktop: "desktop" },
+      property_values: [{ property_id: "show-body", scope: "all", value: true }],
+      content_values: [
+        {
+          element_id: "heading", slot_id: "text", scope: "all",
+          value: { type: "rich-text", segments: [{ type: "text", value: "Hello <team>" }] },
+        },
+        {
+          element_id: "image", slot_id: "alt", scope: "all",
+          value: { type: "alt-text", value: "Team" },
+        },
+      ],
+      asset_files: [{ asset_contract_id: "image", path: "images/card.jpg" }],
+      slots: [],
+    },
+  };
+}
+
+function dependencies() {
+  const component = record();
+  return {
+    componentIndex: { bySystemId: new Map([[component.id, component]]) },
+    rendererRegistry: { coverage: [{ component_id: component.id, mode: "interpreter" }] },
+  };
+}
+
+function has(errors, code) {
+  return errors.some((error) => error.code === code);
+}
+
+test("loader validates the model and normalizes restricted rich text", async () => {
+  const folder = await mkdtemp(join(tmpdir(), "cupis-email-model-"));
+  const modelPath = join(folder, "email-model.json");
+  const source = model();
+  await writeFile(modelPath, JSON.stringify(source), "utf8");
+  try {
+    const loaded = await loadEmailModel({ modelPath, schemaPath });
+    assert.deepEqual(loaded.root.content_values[0].value, { type: "rich-text", value: "Hello <team>" });
+    assert.deepEqual(JSON.parse(await readFile(modelPath, "utf8")), source);
+  } finally {
+    await rm(folder, { recursive: true, force: true });
+  }
+});
+
+test("loader rejects unknown fields through the strict schema", async () => {
+  const folder = await mkdtemp(join(tmpdir(), "cupis-email-model-"));
+  const modelPath = join(folder, "email-model.json");
+  const value = model();
+  value.unexpected = true;
+  await writeFile(modelPath, JSON.stringify(value), "utf8");
+  try {
+    await assert.rejects(
+      loadEmailModel({ modelPath, schemaPath }),
+      (error) => error instanceof AggregateError && error.errors.some((item) => item.code === "email-model-schema"),
+    );
+  } finally {
+    await rm(folder, { recursive: true, force: true });
+  }
+});
+
+test("semantic validation accepts exact component, slot, property and asset IDs", () => {
+  assert.deepEqual(validateEmailModelSemantics(model(), dependencies()), []);
+});
+
+test("semantic validation rejects unknown IDs and missing required content", () => {
+  const unknown = model();
+  unknown.root.component_id = "unknown-component";
+  assert.ok(has(validateEmailModelSemantics(unknown, dependencies()), "EMAIL_MODEL_COMPONENT_UNKNOWN"));
+  const missing = model();
+  missing.root.content_values = missing.root.content_values.filter((item) => item.element_id !== "heading");
+  assert.ok(has(validateEmailModelSemantics(missing, dependencies()), "EMAIL_MODEL_REQUIRED_CONTENT_MISSING"));
+});
+
+test("semantic validation rejects conflicting bindings", () => {
+  const value = model();
+  value.root.property_values.push({ property_id: "show-body", scope: "mobile", value: false });
+  assert.ok(has(validateEmailModelSemantics(value, dependencies()), "EMAIL_MODEL_BINDING_CONFLICT"));
+});
+
+test("semantic validation rejects unsafe asset paths", () => {
+  for (const path of ["../card.jpg", "C:\\temp\\card.jpg", "/tmp/card.jpg", "https://example.test/card.jpg"]) {
+    const value = model();
+    value.root.asset_files[0].path = path;
+    assert.ok(has(validateEmailModelSemantics(value, dependencies()), "EMAIL_MODEL_ASSET_PATH_UNSAFE"), path);
+  }
+});
+
+test("semantic validation rejects content and property type mismatches", () => {
+  const value = model();
+  value.root.content_values[0].value = { type: "number", value: 42 };
+  value.root.property_values[0].value = "yes";
+  const errors = validateEmailModelSemantics(value, dependencies());
+  assert.ok(has(errors, "EMAIL_MODEL_CONTENT_TYPE_MISMATCH"));
+  assert.ok(has(errors, "EMAIL_MODEL_PROPERTY_TYPE_MISMATCH"));
+});
