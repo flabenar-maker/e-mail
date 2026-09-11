@@ -69,7 +69,14 @@
       "properties": {
         "property_id": { "$ref": "#/$defs/id" },
         "scope": { "$ref": "#/$defs/scope" },
-        "value": { "type": ["boolean", "string", "number", "null"] }
+        "value": {
+          "oneOf": [
+            { "type": "boolean" },
+            { "type": "string" },
+            { "type": "number" },
+            { "type": "null" }
+          ]
+        }
       }
     },
     "contentValue": {
