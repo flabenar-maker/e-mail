@@ -265,3 +265,23 @@ test("recursive component references stop with a stable cycle diagnostic", async
   assert.ok(result.diagnostics.length > 0);
   assert.ok(result.diagnostics.every(({ code }) => code === "RENDER_COMPONENT_CYCLE"));
 });
+test("disabled footer social section does not require hidden content or assets", async () => {
+  const [source, deps] = await Promise.all([
+    readFile(fixturePath, "utf8"),
+    dependencies(),
+  ]);
+  const model = JSON.parse(source);
+  const instances = model.root.slots[0].instances;
+  const footer = instances.find(({ component_id }) => component_id === "email-footer");
+  footer.property_values.find(({ property_id }) => property_id === "show-social-links").value = false;
+  footer.content_values = footer.content_values.filter(
+    ({ element_id }) => !["vk-link", "vk-icon"].includes(element_id),
+  );
+  footer.asset_files = [];
+
+  const result = renderEmailDocument(model, deps);
+
+  assert.deepEqual(result.diagnostics, []);
+  assert.doesNotMatch(result.html, /example\.test\/vk|images\/vk-icon\.png/u);
+  assert.equal(result.assets.some(({ path }) => path === "images/vk-icon.png"), false);
+});
