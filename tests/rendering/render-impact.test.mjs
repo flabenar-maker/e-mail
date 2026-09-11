@@ -236,6 +236,14 @@ test("documentation and unrelated source metadata do not change render impact", 
   );
 });
 
+test("viewport-only provenance drift does not activate responsive impact", () => {
+  const record = component();
+  record.contracts.desktop.root.facts[0].provenance.source_path =
+    "registry/other-source.md";
+
+  assert.equal(digestOf(record), digestOf());
+});
+
 test("projection is detached and digest uses the shared sha256 contract", () => {
   const record = component();
   const projection = buildRenderImpactProjection({
