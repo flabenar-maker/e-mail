@@ -11,7 +11,7 @@
   ],
   "properties": {
     "schema_version": {
-      "const": "2.0.0"
+      "const": "2.1.0"
     },
     "registry": {
       "$ref": "#/$defs/registry"
@@ -579,7 +579,34 @@
         }
       }
     },
-    "element": {
+    "contentSlot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "required"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "type": {
+          "enum": [
+            "plain-text",
+            "rich-text",
+            "url",
+            "placeholder",
+            "alt-text",
+            "number"
+          ]
+        },
+        "required": {
+          "type": "boolean"
+        }
+      }
+    },    "element": {
       "type": "object",
       "additionalProperties": false,
       "required": [
@@ -622,6 +649,13 @@
         "asset_contract_id": {
           "type": "string",
           "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "content_slots": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/contentSlot"
+          }
         },
         "facts": {
           "type": "array",

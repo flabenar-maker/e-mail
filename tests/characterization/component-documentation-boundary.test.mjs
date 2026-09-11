@@ -99,7 +99,7 @@ test("component documentation standards keep the full contract and Figma project
   assert.doesNotMatch(figmaStandard, /весь email workflow/u);
 });
 
-test("migration preserves every component field outside legacy description prose", async () => {
+test("migration preserves every component field outside approved pilot contract normalization", async () => {
   const registries = await loadComponentRegistries({ repoRoot });
   const projected = Object.fromEntries(
     Object.entries(registries).map(([library, document]) => [
@@ -135,16 +135,16 @@ test("migration preserves every component field outside legacy description prose
     ),
     {
       shared:
-        "sha256:ad76c53ff410a3f9c358a12b5065ef326c732d898b15ee3405aecb41218d8afd",
+        "sha256:6d2edbadc53b3e759b4485a6b6238be8b04cdbf4e1e0f7e292d9a67c12c7f782",
       marketing:
-        "sha256:816d740177e5840ee59fe488da46c20c35151810395a6f8a68f3121e9dd98c58",
+        "sha256:ee04edb92cae039c70c889765c0bd13de5b664de4c48ade2e23bbd1e9e2cf2b7",
       service:
         "sha256:77fb7974624c0bdf40f924011a9f4287ee09571085066881c8d920d01571a691",
     },
   );
   assert.equal(
     digest(projected),
-    "sha256:529915a492ca39bf9396695374095295ecfa63c85fe53d4c6aaf3ae2860d7e4a",
+    "sha256:17e5f7069b8e10339408a82b0e41e4c80b6fe0f282d6fcb15c7b8fe07bec8caf",
   );
 
   for (const record of allRecords) {
@@ -175,8 +175,7 @@ test("migration preserves high-risk responsive, asset, property and template con
     type: "boolean",
     value: true,
   });
-  assert.deepEqual(findFact(cardImage, "mobile", "description-1"), {
-    type: "ratio",
+  assert.deepEqual(cardImage.asset_contracts[0].aspect_ratio, {
     width: 232,
     height: 148,
   });
@@ -255,6 +254,10 @@ test("migration preserves high-risk responsive, asset, property and template con
     assert.equal(
       template.contracts[viewport].root.children[0].render_mode,
       "slot",
+    );
+    assert.deepEqual(
+      template.contracts[viewport].root.children[0].content_slots,
+      [{ id: "content", type: "placeholder", required: true }],
     );
   }
 });

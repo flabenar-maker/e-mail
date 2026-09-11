@@ -125,7 +125,7 @@ test("migration is deterministic and preserves every non-documentation field", (
   const source = legacyDocument();
   const migrated = migrateComponentDocument(source, mapping());
 
-  assert.equal(migrated.schema_version, "2.0.0");
+  assert.equal(migrated.schema_version, "2.1.0");
   assert.deepEqual(
     migrated.components.map((record) => record.id),
     source.components.map((record) => record.id),

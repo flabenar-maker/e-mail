@@ -1,5 +1,5 @@
 {
-  "schema_version": "2.0.0",
+  "schema_version": "2.1.0",
   "registry": {
     "id": "components-shared",
     "library": "shared",
@@ -89,7 +89,14 @@
                   "mode": "always"
                 },
                 "facts": [],
-                "children": []
+                "children": [],
+                "content_slots": [
+                  {
+                    "id": "content",
+                    "type": "placeholder",
+                    "required": true
+                  }
+                ]
               }
             ]
           }
@@ -112,7 +119,14 @@
                   "mode": "always"
                 },
                 "facts": [],
-                "children": []
+                "children": [],
+                "content_slots": [
+                  {
+                    "id": "content",
+                    "type": "placeholder",
+                    "required": true
+                  }
+                ]
               }
             ]
           }

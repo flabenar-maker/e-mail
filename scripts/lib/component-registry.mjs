@@ -7,7 +7,7 @@ import { SystemValidationError } from "./diagnostics.mjs";
 import { validateDocumentShape } from "./schema-validation.mjs";
 import { readStrictYaml } from "./strict-yaml.mjs";
 
-const SUPPORTED_COMPONENTS_VERSION = "2.0.0";
+const SUPPORTED_COMPONENTS_VERSION = "2.1.0";
 const LIBRARIES = ["shared", "marketing", "service"];
 const VIEWPORTS = ["mobile", "desktop"];
 const FOUNDATION_SOURCES = {

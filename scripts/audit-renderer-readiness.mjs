@@ -2,6 +2,7 @@ import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
 import { loadComponentRegistries } from "./lib/component-registry.mjs";
+import { loadRendererRegistry } from "./lib/renderer-registry.mjs";
 import {
   SystemValidationError,
   formatDiagnostic,
@@ -41,10 +42,17 @@ export async function main(args = process.argv.slice(2)) {
   }
 
   try {
-    const registries = await loadComponentRegistries({
-      repoRoot: parsed.repoRoot,
-    });
-    console.log(JSON.stringify(auditRendererReadiness(registries), null, 2));
+    const [registries, rendererRegistry] = await Promise.all([
+      loadComponentRegistries({ repoRoot: parsed.repoRoot }),
+      loadRendererRegistry({ repoRoot: parsed.repoRoot }),
+    ]);
+    console.log(
+      JSON.stringify(
+        auditRendererReadiness(registries, rendererRegistry),
+        null,
+        2,
+      ),
+    );
     return 0;
   } catch (error) {
     if (error instanceof AggregateError) {

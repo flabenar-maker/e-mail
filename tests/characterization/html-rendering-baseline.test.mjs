@@ -9,6 +9,7 @@ import { fileURLToPath } from "node:url";
 
 import { loadComponentRegistries } from "../../scripts/lib/component-registry.mjs";
 import { auditRendererReadiness } from "../../scripts/lib/renderer-readiness.mjs";
+import { loadRendererRegistry } from "../../scripts/lib/renderer-registry.mjs";
 import { readStrictYaml } from "../../scripts/lib/strict-yaml.mjs";
 
 const execFileAsync = promisify(execFile);
@@ -35,25 +36,46 @@ async function exists(relativePath) {
   }
 }
 
-test("preserves the measured legacy renderer baseline", async () => {
+test("preserves the measured legacy baseline outside the approved pilot delta", async () => {
   assert.equal(
     baseline.source_commit,
     "ba5cd1f4bc7af1ecb1987dc31bdf25725b5bef84",
   );
 
-  const registries = await loadComponentRegistries({ repoRoot });
-  const report = auditRendererReadiness(registries);
+  const [registries, rendererRegistry] = await Promise.all([
+    loadComponentRegistries({ repoRoot }),
+    loadRendererRegistry({ repoRoot }),
+  ]);
+  const report = auditRendererReadiness(registries, rendererRegistry);
   for (const key of [
     "components",
     "active_components",
-    "facts",
-    "generic_description_facts",
-    "components_with_generic_facts",
     "components_with_properties",
     "components_with_assets",
   ]) {
     assert.equal(report.summary[key], baseline[key], key);
   }
+  assert.equal(report.summary.facts, baseline.renderer_ready_pilot.facts);
+  assert.equal(
+    report.summary.generic_description_facts,
+    baseline.renderer_ready_pilot.generic_description_facts,
+  );
+  assert.equal(
+    report.summary.components_with_generic_facts,
+    baseline.renderer_ready_pilot.components_with_generic_facts,
+  );
+  assert.equal(
+    report.summary.covered_active_components,
+    baseline.renderer_ready_pilot.covered_components,
+  );
+  assert.equal(
+    report.summary.ready_components,
+    baseline.renderer_ready_pilot.ready_components,
+  );
+  assert.equal(
+    report.summary.missing_coverage,
+    baseline.renderer_ready_pilot.missing_coverage,
+  );
 
   for (const [relativePath, expected] of Object.entries(
     baseline.legacy_digests,
@@ -99,7 +121,11 @@ test("renderer readiness CLI prints JSON and creates no email output", async () 
   assert.equal(report.summary.components, baseline.components);
   assert.equal(
     report.summary.generic_description_facts,
-    baseline.generic_description_facts,
+    baseline.renderer_ready_pilot.generic_description_facts,
+  );
+  assert.equal(
+    report.summary.ready_components,
+    baseline.renderer_ready_pilot.ready_components,
   );
   assert.equal(await exists("email.html"), false);
   assert.equal(await exists("images"), false);

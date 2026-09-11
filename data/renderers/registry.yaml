@@ -1,0 +1,9 @@
+schema_version: 1.0.0
+registry: { id: email-renderers, status: shadow }
+coverage:
+  - { component_id: email-template, mode: interpreter }
+  - { component_id: button-primary, mode: interpreter }
+  - { component_id: card-image, mode: interpreter }
+  - { component_id: banner-secondary, mode: interpreter }
+  - { component_id: banner-app-download, mode: interpreter }
+  - { component_id: email-footer, mode: interpreter }
