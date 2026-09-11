@@ -1,0 +1,116 @@
+{
+  "id": "stage-8-representative-pilot",
+  "root": {
+    "instance_id": "pilot-template",
+    "component_id": "email-template",
+    "variants": { "mobile": "mobile", "desktop": "desktop" },
+    "property_values": [],
+    "content_values": [],
+    "asset_files": [],
+    "slots": [
+      {
+        "element_id": "content",
+        "instances": [
+          {
+            "instance_id": "pilot-primary-button",
+            "component_id": "button-primary",
+            "variants": { "mobile": "mobile", "desktop": "desktop" },
+            "property_values": [],
+            "content_values": [
+              { "element_id": "link", "slot_id": "href", "scope": "all", "value": { "type": "url", "value": "https://example.test/jobs" } },
+              { "element_id": "link", "slot_id": "text", "scope": "all", "value": { "type": "rich-text", "value": "Откликнуться" } }
+            ],
+            "asset_files": [],
+            "slots": []
+          },
+          {
+            "instance_id": "pilot-card",
+            "component_id": "card-image",
+            "variants": { "mobile": "mobile", "desktop": "desktop" },
+            "property_values": [],
+            "content_values": [
+              { "element_id": "card-image", "slot_id": "alt", "scope": "all", "value": { "type": "alt-text", "value": "Команда CUPIS" } },
+              { "element_id": "heading", "slot_id": "text", "scope": "all", "value": { "type": "rich-text", "value": "Работайте с нами" } },
+              { "element_id": "description", "slot_id": "text", "scope": "all", "value": { "type": "rich-text", "value": "Создавайте полезные продукты вместе с командой." } },
+              { "element_id": "link", "slot_id": "href", "scope": "all", "value": { "type": "url", "value": "https://example.test/team" } },
+              { "element_id": "link", "slot_id": "text", "scope": "all", "value": { "type": "rich-text", "value": "Подробнее" } }
+            ],
+            "asset_files": [
+              { "asset_contract_id": "card-image", "path": "images/card-image.jpg" }
+            ],
+            "slots": []
+          },
+          {
+            "instance_id": "pilot-secondary",
+            "component_id": "banner-secondary",
+            "variants": { "mobile": "mobile", "desktop": "desktop" },
+            "property_values": [
+              { "property_id": "show-body", "scope": "all", "value": true },
+              { "property_id": "show-button", "scope": "all", "value": false }
+            ],
+            "content_values": [
+              { "element_id": "secondary-image", "slot_id": "alt", "scope": "mobile", "value": { "type": "alt-text", "value": "Преимущества CUPIS" } },
+              { "element_id": "heading", "slot_id": "text", "scope": "all", "value": { "type": "rich-text", "value": "Всё важное рядом" } },
+              { "element_id": "body", "slot_id": "text", "scope": "all", "value": { "type": "rich-text", "value": "Управляйте сервисами в одном месте." } }
+            ],
+            "asset_files": [
+              { "asset_contract_id": "secondary-image", "path": "images/secondary.jpg" }
+            ],
+            "slots": []
+          },
+          {
+            "instance_id": "pilot-app-download",
+            "component_id": "banner-app-download",
+            "variants": { "mobile": "mobile", "desktop": "desktop" },
+            "property_values": [],
+            "content_values": [
+              { "element_id": "app-logo", "slot_id": "alt", "scope": "all", "value": { "type": "alt-text", "value": "Приложение CUPIS" } },
+              { "element_id": "description", "slot_id": "text", "scope": "all", "value": { "type": "rich-text", "value": "Скачайте приложение" } },
+              { "element_id": "qr-code", "slot_id": "alt", "scope": "desktop", "value": { "type": "alt-text", "value": "QR-код для скачивания" } },
+              { "element_id": "rustore-link", "slot_id": "href", "scope": "all", "value": { "type": "url", "value": "https://example.test/rustore" } },
+              { "element_id": "rustore-icon", "slot_id": "alt", "scope": "all", "value": { "type": "alt-text", "value": "RuStore" } },
+              { "element_id": "rustore-text", "slot_id": "text", "scope": "all", "value": { "type": "rich-text", "value": "RuStore" } },
+              { "element_id": "google-play-link", "slot_id": "href", "scope": "all", "value": { "type": "url", "value": "https://example.test/google-play" } },
+              { "element_id": "google-play-icon", "slot_id": "alt", "scope": "all", "value": { "type": "alt-text", "value": "Google Play" } },
+              { "element_id": "google-play-text", "slot_id": "text", "scope": "all", "value": { "type": "rich-text", "value": "Google Play" } },
+              { "element_id": "appgallery-link", "slot_id": "href", "scope": "all", "value": { "type": "url", "value": "https://example.test/appgallery" } },
+              { "element_id": "appgallery-icon", "slot_id": "alt", "scope": "all", "value": { "type": "alt-text", "value": "AppGallery" } },
+              { "element_id": "appgallery-text", "slot_id": "text", "scope": "all", "value": { "type": "rich-text", "value": "AppGallery" } },
+              { "element_id": "getapps-link", "slot_id": "href", "scope": "all", "value": { "type": "url", "value": "https://example.test/getapps" } },
+              { "element_id": "getapps-icon", "slot_id": "alt", "scope": "all", "value": { "type": "alt-text", "value": "GetApps" } },
+              { "element_id": "getapps-text", "slot_id": "text", "scope": "all", "value": { "type": "rich-text", "value": "GetApps" } }
+            ],
+            "asset_files": [
+              { "asset_contract_id": "app-logo", "path": "images/app-logo.png" },
+              { "asset_contract_id": "qr-code", "path": "images/qr-code.png" },
+              { "asset_contract_id": "rustore-icon", "path": "images/rustore-icon.png" },
+              { "asset_contract_id": "google-play-icon", "path": "images/google-play-icon.png" },
+              { "asset_contract_id": "appgallery-icon", "path": "images/appgallery-icon.png" },
+              { "asset_contract_id": "getapps-icon", "path": "images/getapps-icon.png" }
+            ],
+            "slots": []
+          },
+          {
+            "instance_id": "pilot-footer",
+            "component_id": "email-footer",
+            "variants": { "mobile": "mobile", "desktop": "desktop" },
+            "property_values": [
+              { "property_id": "show-caption", "scope": "all", "value": false },
+              { "property_id": "show-social-links", "scope": "all", "value": true }
+            ],
+            "content_values": [
+              { "element_id": "caption", "slot_id": "text", "scope": "all", "value": { "type": "rich-text", "value": "Скрытая подпись" } },
+              { "element_id": "disclaimer", "slot_id": "text", "scope": "all", "value": { "type": "rich-text", "value": "Вы получили это письмо от CUPIS." } },
+              { "element_id": "vk-link", "slot_id": "href", "scope": "all", "value": { "type": "url", "value": "https://example.test/vk" } },
+              { "element_id": "vk-icon", "slot_id": "alt", "scope": "all", "value": { "type": "alt-text", "value": "VK" } }
+            ],
+            "asset_files": [
+              { "asset_contract_id": "vk-icon", "path": "images/vk-icon.png" }
+            ],
+            "slots": []
+          }
+        ]
+      }
+    ]
+  }
+}
