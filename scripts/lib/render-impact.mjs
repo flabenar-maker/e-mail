@@ -164,7 +164,9 @@ function renderingFoundationProjection(component, foundations) {
   if (!rendering) return null;
   const mobile = component?.contracts?.mobile?.root;
   const desktop = component?.contracts?.desktop?.root;
-  const usesResponsiveSplit = canonicalize(mobile) !== canonicalize(desktop);
+  const usesResponsiveSplit =
+    canonicalize(withoutProvenance(mobile)) !==
+    canonicalize(withoutProvenance(desktop));
   const breakpoint = usesResponsiveSplit
     ? (rendering.breakpoints ?? []).find((item) => item.id === "cupis-mobile")
     : null;
