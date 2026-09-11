@@ -82,7 +82,7 @@ test("background image renders as a presentation cell without alt", async () => 
 
   assert.equal(
     html,
-    '<td background="images/banner?a=1&amp;b=2" width="252" height="188" valign="top" style="background-image:url(\'images/banner?a=1&amp;b=2\');background-position:center;background-repeat:no-repeat;background-size:cover;height:188px;width:252px">Live text</td>',
+    '<td background="images/banner?a=1&amp;b=2" width="252" height="188" valign="top" style="background-image:url(&#39;images/banner?a=1&amp;b=2&#39;);background-position:center;background-repeat:no-repeat;background-size:cover;height:188px;width:252px">Live text</td>',
   );
   assert.doesNotMatch(html, /\salt=/u);
 });
