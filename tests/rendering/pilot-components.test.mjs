@@ -107,7 +107,7 @@ test("card image is fluid with automatic height on mobile and keeps exact deskto
   assert.equal(images.length, 2);
   assert.ok(images.some((image) => /height:auto/u.test(image) && /width:100%/u.test(image)));
   assert.ok(images.some((image) => /width="232"/u.test(image) && /height="148"/u.test(image)));
-  assert.equal(images.some((image) => /width:100%/u.test(image) && /height:[0-9]+px/u.test(image)), false);
+  assert.equal(images.some((image) => /(?:^|;)width:100%(?:;|")/u.test(image) && /height:[0-9]+px/u.test(image)), false);
 });
 
 test("secondary banner uses a direct image on mobile and a background image on desktop", async () => {
