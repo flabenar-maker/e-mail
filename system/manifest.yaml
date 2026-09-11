@@ -13,6 +13,10 @@ sources:
   - { id: figma-component-naming-standard, kind: core, path: core/figma-component-naming-standard.md }
   - { id: component-contract-standard, kind: core, path: core/component-contract-standard.md }
   - { id: figma-component-description-standard, kind: core, path: core/figma-component-description-standard.md }
+  - { id: email-rendering-standard, kind: core, path: core/email-rendering-standard.md }
+  - { id: typography-standard, kind: core, path: core/typography-standard.md }
+  - { id: asset-export-standard, kind: core, path: core/asset-export-standard.md }
+  - { id: figma-library-standard, kind: core, path: core/figma-library-standard.md }
   - { id: component-descriptions-registry, kind: registry, path: registry/email-component-descriptions-registry.md }
   - { id: typography-registry, kind: registry, path: registry/email-typography-registry.md }
   - { id: library-maintenance-checkpoint, kind: workflow, path: workflows/library-maintenance-checkpoint.md }
