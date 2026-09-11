@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.local.cupis/email-model.schema.json",
+  "title": "CUPIS temporary normalized email model",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "id", "root"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "id": { "$ref": "#/$defs/id" },
+    "root": { "$ref": "#/$defs/instance" }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "scope": {
+      "enum": ["all", "mobile", "desktop"]
+    },
+    "scalarContent": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "value"],
+          "properties": {
+            "type": { "enum": ["plain-text", "url", "placeholder", "alt-text"] },
+            "value": { "type": "string" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "value"],
+          "properties": {
+            "type": { "const": "number" },
+            "value": { "type": "number" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "segments"],
+          "properties": {
+            "type": { "const": "rich-text" },
+            "segments": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["type", "value"],
+                "properties": {
+                  "type": { "const": "text" },
+                  "value": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "propertyValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["property_id", "scope", "value"],
+      "properties": {
+        "property_id": { "$ref": "#/$defs/id" },
+        "scope": { "$ref": "#/$defs/scope" },
+        "value": {
+          "oneOf": [
+            { "type": "boolean" },
+            { "type": "string" },
+            { "type": "number" },
+            { "type": "null" }
+          ]
+        }
+      }
+    },
+    "contentValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["element_id", "slot_id", "scope", "value"],
+      "properties": {
+        "element_id": { "$ref": "#/$defs/id" },
+        "slot_id": { "$ref": "#/$defs/id" },
+        "scope": { "$ref": "#/$defs/scope" },
+        "value": { "$ref": "#/$defs/scalarContent" }
+      }
+    },
+    "assetFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["asset_contract_id", "path"],
+      "properties": {
+        "asset_contract_id": { "$ref": "#/$defs/id" },
+        "path": { "type": "string", "minLength": 1 }
+      }
+    },
+    "slotValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["element_id", "instances"],
+      "properties": {
+        "element_id": { "$ref": "#/$defs/id" },
+        "instances": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/instance" }
+        }
+      }
+    },
+    "nestedValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["element_id", "instance"],
+      "properties": {
+        "element_id": { "$ref": "#/$defs/id" },
+        "instance": { "$ref": "#/$defs/instance" }
+      }
+    },
+    "instance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "instance_id",
+        "component_id",
+        "variants",
+        "property_values",
+        "content_values",
+        "asset_files",
+        "slots"
+      ],
+      "properties": {
+        "instance_id": { "$ref": "#/$defs/id" },
+        "component_id": { "$ref": "#/$defs/id" },
+        "variants": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mobile", "desktop"],
+          "properties": {
+            "mobile": { "const": "mobile" },
+            "desktop": { "const": "desktop" }
+          }
+        },
+        "property_values": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/propertyValue" }
+        },
+        "content_values": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/contentValue" }
+        },
+        "asset_files": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/assetFile" }
+        },
+        "slots": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/slotValue" }
+        },
+        "nested_components": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/nestedValue" }
+        }
+      }
+    }
+  }
+}
