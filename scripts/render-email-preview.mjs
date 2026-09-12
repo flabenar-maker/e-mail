@@ -57,10 +57,10 @@ frame.addEventListener("load", () => {
 
 function localImageRefs(html) {
   const references = new Set();
-  for (const match of html.matchAll(/\\b(?:src|background)="([^"]+)"/gu)) {
+  for (const match of html.matchAll(/\b(?:src|background)="([^"]+)"/gu)) {
     if (match[1].startsWith("images/")) references.add(match[1]);
   }
-  for (const match of html.matchAll(/url\\(\\s*["']?(images\\/[^"'\\)]+)["']?\\s*\\)/gu)) {
+  for (const match of html.matchAll(/url\(\s*["']?(images\/[^"'\)]+)["']?\s*\)/gu)) {
     references.add(match[1]);
   }
   return [...references].sort();
@@ -86,16 +86,16 @@ async function main() {
   ], { cwd: repoRoot, encoding: "utf8" });
   if (result.error) throw result.error;
   if (result.status !== 0) {
-    process.stderr.write(result.stderr || "Email rendering failed.\\n");
+    process.stderr.write(result.stderr || "Email rendering failed.\n");
     process.exitCode = result.status ?? 1;
     return;
   }
   await assertPreviewImages(outputDir);
   await writeFile(join(outputDir, "preview.html"), previewPage(viewport), "utf8");
-  process.stdout.write(join(outputDir, "preview.html") + "\\n");
+  process.stdout.write(join(outputDir, "preview.html") + "\n");
 }
 
 main().catch((error) => {
-  process.stderr.write(error.message + "\\n");
+  process.stderr.write(error.message + "\n");
   process.exitCode = error.message === usage ? 2 : 1;
 });
