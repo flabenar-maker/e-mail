@@ -4,7 +4,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const repoRoot = dirname(dirname(fileURLToPath(import.meta.url)));
-const widths = { mobile: 360, desktop: 600 };
+const widths = { mobile: 360, desktop: 800 };
 const usage = "Usage: node scripts/render-email-preview.mjs --model <temp-json> --viewport mobile|desktop --output <temp-folder>";
 
 function parseArguments(argv) {
