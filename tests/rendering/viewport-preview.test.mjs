@@ -80,7 +80,7 @@ test("missing local image blocks preview publication", async () => {
     const outputDir = join(temp, "missing-output");
     const result = runPreview(modelPath, "mobile", outputDir);
     assert.equal(result.status, 1);
-    assert.match(result.stderr, /email-output-asset-source-missing/u);
+    assert.match(result.stderr, /EMAIL_OUTPUT_ASSET_SOURCE_MISSING/u);
     await assert.rejects(readdir(outputDir), { code: "ENOENT" });
   }, { missingAsset: true });
 });
