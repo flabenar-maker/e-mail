@@ -170,6 +170,19 @@ function renderShell(element, viewport, path, childHtml, context) {
     case "presentation-table": {
       const axes = (element.facts ?? []).filter(({ id }) => id.endsWith("-layout-axis"));
       const gaps = (element.facts ?? []).filter(({ id }) => id.endsWith("-layout-gap"));
+      // Components without an explicit layout contract retain their legacy HTML.
+      if (axes.length === 0 && gaps.length === 0) {
+        const rows = childHtml
+          .map((child, index) => {
+            if (!child) return "";
+            const cell = element.children?.[index]?.render_mode === "background-image"
+              ? child
+              : renderPrimitive("cell", {}, child);
+            return "<tr>" + cell + "</tr>";
+          })
+          .join("");
+        return { html: renderPrimitive("table", factProps, rows), diagnostics: [] };
+      }
       const axis = axes[0]?.value?.value ?? "vertical";
       const gap = gaps[0]?.value?.value ?? 0;
       if (
