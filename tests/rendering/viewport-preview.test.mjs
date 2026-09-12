@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { execFileSync, spawnSync } from "node:child_process";
-import { copyFile, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -16,7 +16,7 @@ async function withPilot(run, { missingAsset = false } = {}) {
   try {
     const model = JSON.parse(await readFile(fixturePath, "utf8"));
     const modelPath = join(temp, "pilot.json");
-    await copyFile(fixturePath, modelPath);
+    await writeFile(modelPath, JSON.stringify({ schema_version: "1.0.0", ...model }), "utf8");
     const assets = model.root.slots[0].instances.flatMap((instance) => instance.asset_files);
     for (const asset of assets) {
       if (missingAsset && asset.path === "images/card-image.jpg") continue;
@@ -69,7 +69,7 @@ test("missing local image blocks preview publication", async () => {
     const outputDir = join(temp, "missing-output");
     const result = runPreview(modelPath, "mobile", outputDir);
     assert.equal(result.status, 1);
-    assert.match(result.stderr, /EMAIL_OUTPUT_ASSET_SOURCE_MISSING/u);
+    assert.match(result.stderr, /email-output-asset-source-missing/u);
     await assert.rejects(readdir(outputDir), { code: "ENOENT" });
   }, { missingAsset: true });
 });
