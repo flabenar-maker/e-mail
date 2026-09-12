@@ -52,7 +52,7 @@ test("preview uses the final email renderer and frames both viewports without al
     ], { cwd: repoRoot });
     const productionHtml = await readFile(join(productionDir, "email.html"), "utf8");
 
-    for (const [viewport, width] of [["mobile", 360], ["desktop", 600]]) {
+    for (const [viewport, width] of [["mobile", 360], ["desktop", 800]]) {
       const outputDir = join(temp, viewport);
       const result = runPreview(modelPath, viewport, outputDir);
       assert.equal(result.status, 0, result.stderr);
