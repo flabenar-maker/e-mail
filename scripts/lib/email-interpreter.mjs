@@ -97,12 +97,16 @@ function propsFromFacts(facts = []) {
       props.height = value.height;
       continue;
     }
-    const resolved = valueWithUnit(value);
-    if (resolved === undefined) {
-      if (id.endsWith("width-behavior") && value?.value === "fluid-to-container") props.fluid = true;
-      if (id.endsWith("height-behavior") && value?.value === "auto") props.fluid = true;
+    if (
+      value?.type === "keyword" &&
+      ((id.endsWith("width-behavior") && value.value === "fluid-to-container") ||
+        (id.endsWith("height-behavior") && value.value === "auto"))
+    ) {
+      props.fluid = true;
       continue;
     }
+    const resolved = valueWithUnit(value);
+    if (resolved === undefined) continue;
     if (id.endsWith("-font-size") || id.endsWith("-text-size")) props.style["font-size"] = resolved;
     else if (id.endsWith("-text-color")) props.style.color = resolved;
     else if (id.endsWith("-background") || id === "background-fallback") props.style["background-color"] = resolved;
