@@ -70,9 +70,15 @@ function renderCell(props, children) {
     padding: "0",
     "text-align": "left",
     "vertical-align": valign,
+    ...(props.width === undefined ? {} : { width: pixels(props.width) }),
+    ...(props.height === undefined ? {} : { height: pixels(props.height) }),
     ...(props.style ?? {}),
   };
-  return `<td${withStyle([["valign", valign]], style)}>${children}</td>`;
+  const attrs = withStyle(
+    [["width", props.width], ["height", props.height], ["valign", valign]],
+    style,
+  );
+  return `<td${attrs}>${children}</td>`;
 }
 
 function renderText(props, children) {
