@@ -1,6 +1,12 @@
 import { renderContractTree } from "./email-interpreter.mjs";
+import {
+  buildRenderImpactProjection,
+  digestRenderImpact,
+} from "./render-impact.mjs";
 
 const VIEWPORTS = ["mobile", "desktop"];
+
+export const EMAIL_RENDERER_VERSION = "1.0.0";
 
 function diagnostic(code, path, message) {
   return { code, path, message };
@@ -16,6 +22,15 @@ function sortDiagnostics(items) {
       left.path.localeCompare(right.path) ||
       left.code.localeCompare(right.code) ||
       left.message.localeCompare(right.message),
+  );
+}
+
+function withComponentContext(items, componentId) {
+  return sortDiagnostics(
+    items.map((item) => ({
+      ...item,
+      component_id: item.component_id ?? componentId,
+    })),
   );
 }
 
@@ -387,7 +402,7 @@ export function renderComponent({
       html: "",
       css: "",
       assets: assetList(accumulator),
-      diagnostics: preparationDiagnostics,
+      diagnostics: withComponentContext(preparationDiagnostics, componentId),
     };
   }
 
@@ -409,8 +424,47 @@ export function renderComponent({
   return {
     ...rendered,
     assets: assetList(accumulator),
-    diagnostics: sortDiagnostics(rendered.diagnostics),
+    diagnostics: withComponentContext(rendered.diagnostics, componentId),
   };
+}
+
+function collectModelComponentIds(instance, output = new Set()) {
+  if (!instance) return output;
+  output.add(instance.component_id);
+  for (const slot of instance.slots ?? []) {
+    for (const child of slot.instances ?? []) {
+      collectModelComponentIds(child, output);
+    }
+  }
+  for (const nested of instance.nested_components ?? []) {
+    collectModelComponentIds(nested.instance, output);
+  }
+  return output;
+}
+
+function buildMetadataComment(model, dependencies) {
+  const projections = [...collectModelComponentIds(model?.root)]
+    .sort()
+    .map((componentId) =>
+      buildRenderImpactProjection({
+        component: componentRecord(dependencies.componentIndex, componentId),
+        coverage: rendererCoverage(dependencies.rendererRegistry, componentId),
+        foundations: dependencies.foundations,
+      }),
+    );
+  const impact = digestRenderImpact(projections);
+  const commit = /^[0-9a-f]{40}$/u.test(dependencies.systemCommit ?? "")
+    ? dependencies.systemCommit
+    : "unknown";
+  return (
+    "<!-- cupis:build renderer=" +
+    EMAIL_RENDERER_VERSION +
+    " system-commit=" +
+    commit +
+    " render-impact=" +
+    impact +
+    " -->"
+  );
 }
 
 export function renderEmailDocument(model, dependencies) {
@@ -429,8 +483,9 @@ export function renderEmailDocument(model, dependencies) {
   }
 
   const style = rendered.css ? `<style>${rendered.css}</style>` : "";
+  const metadata = buildMetadataComment(model, dependencies);
   return {
-    html: `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${style}</head><body>${rendered.html}</body></html>`,
+    html: `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${metadata}${style}</head><body>${rendered.html}</body></html>`,
     assets: rendered.assets,
     diagnostics: [],
   };
