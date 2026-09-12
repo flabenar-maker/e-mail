@@ -79,7 +79,7 @@ test("preview rejects an unknown viewport before rendering", async () => {
     const outputDir = join(temp, "unknown-output");
     const result = runPreview(modelPath, "tablet", outputDir);
     assert.equal(result.status, 2);
-    assert.match(result.stderr, /--viewport mobile\\|desktop/u);
+    assert.match(result.stderr, /--viewport mobile\|desktop/u);
     await assert.rejects(readdir(outputDir), { code: "ENOENT" });
   });
 });
