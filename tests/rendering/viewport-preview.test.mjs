@@ -11,12 +11,20 @@ const fixturePath = join(repoRoot, "tests/fixtures/rendering/pilot-email.json");
 const previewScript = join(repoRoot, "scripts/render-email-preview.mjs");
 const rendererScript = join(repoRoot, "scripts/render-email.mjs");
 
+function richTextSegments(value) {
+  if (Array.isArray(value)) return value.map(richTextSegments);
+  if (!value || typeof value !== "object") return value;
+  if (value.type === "rich-text" && typeof value.value === "string") {
+    return { type: "rich-text", segments: [{ type: "text", value: value.value }] };
+  }
+  return Object.fromEntries(Object.entries(value).map(([key, child]) => [key, richTextSegments(child)]));
+}
 async function withPilot(run, { missingAsset = false } = {}) {
   const temp = await mkdtemp(join(tmpdir(), "cupis-preview-test-"));
   try {
     const model = JSON.parse(await readFile(fixturePath, "utf8"));
     const modelPath = join(temp, "pilot.json");
-    await writeFile(modelPath, JSON.stringify({ schema_version: "1.0.0", ...model }), "utf8");
+    await writeFile(modelPath, JSON.stringify(richTextSegments({ schema_version: "1.0.0", ...model })), "utf8");
     const assets = model.root.slots[0].instances.flatMap((instance) => instance.asset_files);
     for (const asset of assets) {
       if (missingAsset && asset.path === "images/card-image.jpg") continue;
