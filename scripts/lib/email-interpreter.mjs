@@ -168,16 +168,45 @@ function renderShell(element, viewport, path, childHtml, context) {
 
   switch (element.render_mode) {
     case "presentation-table": {
-      const rows = childHtml
-        .map((child, index) => {
-          if (!child) return "";
-          const cell = element.children?.[index]?.render_mode === "background-image"
-            ? child
-            : renderPrimitive("cell", {}, child);
-          return `<tr>${cell}</tr>`;
-        })
-        .join("");
-      return { html: renderPrimitive("table", factProps, rows), diagnostics: [] };
+      const axes = (element.facts ?? []).filter(({ id }) => id.endsWith("-layout-axis"));
+      const gaps = (element.facts ?? []).filter(({ id }) => id.endsWith("-layout-gap"));
+      const axis = axes[0]?.value?.value ?? "vertical";
+      const gap = gaps[0]?.value?.value ?? 0;
+      if (
+        axes.length > 1 || gaps.length > 1 ||
+        !["vertical", "horizontal"].includes(axis) ||
+        !Number.isInteger(gap) || gap < 0
+      ) {
+        return {
+          html: "",
+          diagnostics: [diagnostic(
+            "RENDER_LAYOUT_INVALID",
+            `/contracts/${viewport}/${path}/facts`,
+            "Presentation-table layout requires one valid axis and nonnegative integer gap.",
+          )],
+        };
+      }
+      const visible = childHtml
+        .map((html, index) => ({ html, node: element.children?.[index] }))
+        .filter(({ html }) => Boolean(html));
+      const cellFor = ({ html, node }) => node?.render_mode === "background-image"
+        ? html
+        : renderPrimitive("cell", { width: propsFromFacts(node?.facts).width }, html);
+      const rows = axis === "horizontal"
+        ? `<tr>${visible.map(cellFor).join(gap > 0
+          ? renderPrimitive("cell", { width: gap }, "&nbsp;")
+          : "")}</tr>`
+        : visible.map((entry, index) => `${index > 0 && gap > 0
+          ? `<tr>${renderPrimitive("cell", { height: gap }, "&nbsp;")}</tr>`
+          : ""}<tr>${cellFor(entry)}</tr>`).join("");
+      const padding = factProps.style.padding;
+      if (!padding) return { html: renderPrimitive("table", factProps, rows), diagnostics: [] };
+      const style = { ...factProps.style };
+      delete style.padding;
+      const inner = renderPrimitive("table", { width: "100%" }, rows);
+      const outer = renderPrimitive("table", { ...factProps, style },
+        `<tr>${renderPrimitive("cell", { style: { padding } }, inner)}</tr>`);
+      return { html: outer, diagnostics: [] };
     }
     case "html-text":
       return {
