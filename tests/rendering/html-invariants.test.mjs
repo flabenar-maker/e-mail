@@ -133,6 +133,7 @@ test("direct image dimensions are positive integers and fluid @2x images keep au
   assert.ok(card.some((image) => attribute(image, "width") === "232" && attribute(image, "height") === "148"));
   const secondary = images.filter((image) => attribute(image, "src") === "images/secondary.jpg");
   assert.equal(secondary.length, 1);
+  assert.equal(cssValue(attribute(secondary[0], "style") ?? "", "width"), "100%");
   assert.match(attribute(secondary[0], "style") ?? "", /(?:^|;)height:auto(?:;|$)/u);
 });
 
