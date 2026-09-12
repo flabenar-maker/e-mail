@@ -18,6 +18,11 @@ jobs:
           node-version: "24"
           cache: npm
       - run: npm ci --ignore-scripts
+      - run: npm run generate
+      - uses: actions/upload-artifact@v4
+        with:
+          name: generated-docs
+          path: docs/generated/
       - run: npm run validate
       - run: npm test
 
