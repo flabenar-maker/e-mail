@@ -194,10 +194,10 @@ function renderShell(element, viewport, path, childHtml, context) {
         : renderPrimitive("cell", { width: propsFromFacts(node?.facts).width }, html);
       const rows = axis === "horizontal"
         ? `<tr>${visible.map(cellFor).join(gap > 0
-          ? renderPrimitive("cell", { width: gap }, "&nbsp;")
+          ? renderPrimitive("cell", { width: gap, style: { "font-size": "0", "line-height": "0" } }, "&nbsp;")
           : "")}</tr>`
         : visible.map((entry, index) => `${index > 0 && gap > 0
-          ? `<tr>${renderPrimitive("cell", { height: gap }, "&nbsp;")}</tr>`
+          ? `<tr>${renderPrimitive("cell", { height: gap, style: { "font-size": "0", "line-height": "0" } }, "&nbsp;")}</tr>`
           : ""}<tr>${cellFor(entry)}</tr>`).join("");
       const padding = factProps.style.padding;
       if (!padding) return { html: renderPrimitive("table", factProps, rows), diagnostics: [] };
