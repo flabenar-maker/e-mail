@@ -69,14 +69,14 @@ test("Banner/App-Download Desktop puts all stores in one row and Mobile stacks t
   const result = await renderPilot("banner-app-download");
   const stores = ["rustore", "google-play", "appgallery", "getapps"];
   const desktopRows = stores.map((store) =>
-    rowPathAt(result.html, 'href="https://example.test/' + store + '"', true)[0]
+    rowPathAt(result.html, 'href="https://example.test/' + store + '"', true).at(-1)
   );
   assert.equal(new Set(desktopRows).size, 1, "Desktop store buttons must share one row");
   const mobileRows = stores.map((store) =>
-    rowPathAt(result.html, 'href="https://example.test/' + store + '"')[0]
+    rowPathAt(result.html, 'href="https://example.test/' + store + '"').at(-1)
   );
   assert.equal(new Set(mobileRows).size, 4, "Mobile store buttons must remain stacked");
   const logo = rowPathAt(result.html, 'src="images/app-logo.png"', true);
   const qr = rowPathAt(result.html, 'src="images/qr-code.png"', true);
-  assert.equal(logo[0], qr[0], "Desktop logo and QR must share the header row");
+  assert.ok(logo.includes(qr.at(-1)), "Desktop logo and QR must share the header row");
 });
