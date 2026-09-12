@@ -38,7 +38,7 @@ function rowPathAt(html, marker, last = false) {
   assert.ok(position >= 0, "Missing marker: " + marker);
   const stack = [];
   let nextId = 0;
-  for (const match of html.slice(0, position).matchAll(/<\\/?tr\\b[^>]*>/gu)) {
+  for (const match of html.slice(0, position).matchAll(/<\/?tr\b[^>]*>/gu)) {
     if (match[0].startsWith("</")) stack.pop();
     else stack.push(++nextId);
   }
@@ -52,8 +52,8 @@ test("Card/Image Desktop places image and text in one outer row, unlike Mobile",
   const heading = rowPathAt(result.html, "Работайте с нами", true);
   assert.equal(image[0], heading[0], "Desktop Card image and text must share the outer row");
   assert.ok(result.html.includes('width="488"'), "Desktop Card width is 488px in Figma node 911:4131");
-  assert.match(result.html, /<img[^>]+src="images\\/card-image\\.jpg"[^>]+width="232"[^>]+height="148"/u);
-  assert.match(result.html, /<img[^>]+src="images\\/card-image\\.jpg"[^>]+height:auto[^>]+width:100%/u);
+  assert.match(result.html, /<img[^>]+src="images\/card-image\.jpg"[^>]+width="232"[^>]+height="148"/u);
+  assert.match(result.html, /<img[^>]+src="images\/card-image\.jpg"[^>]+height:auto[^>]+width:100%/u);
 });
 
 test("Banner/Secondary Desktop places 300px content beside 252px background image", async () => {
@@ -62,7 +62,7 @@ test("Banner/Secondary Desktop places 300px content beside 252px background imag
   const heading = rowPathAt(result.html, "Всё важное рядом", true);
   assert.equal(image[0], heading[0], "Desktop Secondary content and image must share a row");
   assert.match(result.html, /<table[^>]+width="552"/u);
-  assert.match(result.html, /<td[^>]+background="images\\/secondary\\.jpg"[^>]+width="252"/u);
+  assert.match(result.html, /<td[^>]+background="images\/secondary\.jpg"[^>]+width="252"/u);
 });
 
 test("Banner/App-Download Desktop puts all stores in one row and Mobile stacks them", async () => {
