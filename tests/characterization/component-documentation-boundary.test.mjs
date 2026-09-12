@@ -126,9 +126,23 @@ test("migration preserves every component field outside approved pilot contract 
   assert.equal(new Set(systemIds).size, 61);
   assert.equal(new Set(figmaIdentities).size, 61);
 
+  // Only these three contracts may change; identity, assets, properties and
+  // every other component remain pinned to the pre-layout baseline.
+  const pilotIds = new Set(["card-image", "banner-secondary", "banner-app-download"]);
+  const stableProjection = Object.fromEntries(
+    Object.entries(projected).map(([library, records]) => [
+      library,
+      records.map((record) =>
+        library === "marketing" && pilotIds.has(record.id)
+          ? { ...record, contracts: null }
+          : record,
+      ),
+    ]),
+  );
+
   assert.deepEqual(
     Object.fromEntries(
-      Object.entries(projected).map(([library, records]) => [
+      Object.entries(stableProjection).map(([library, records]) => [
         library,
         digest(records),
       ]),
@@ -137,14 +151,14 @@ test("migration preserves every component field outside approved pilot contract 
       shared:
         "sha256:6d2edbadc53b3e759b4485a6b6238be8b04cdbf4e1e0f7e292d9a67c12c7f782",
       marketing:
-        "sha256:ee04edb92cae039c70c889765c0bd13de5b664de4c48ade2e23bbd1e9e2cf2b7",
+        "sha256:f03df06ef08fcd2d013ddd9a5a790dcc46ef86ceb75ba59c18ecd79e861d3308",
       service:
         "sha256:77fb7974624c0bdf40f924011a9f4287ee09571085066881c8d920d01571a691",
     },
   );
   assert.equal(
-    digest(projected),
-    "sha256:17e5f7069b8e10339408a82b0e41e4c80b6fe0f282d6fcb15c7b8fe07bec8caf",
+    digest(stableProjection),
+    "sha256:317485437839774b5346fd4948631b808ff2cce02af9382218c4be680e2915a4",
   );
 
   for (const record of allRecords) {
