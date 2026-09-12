@@ -76,6 +76,7 @@ test("Banner/App-Download Desktop puts all stores in one row and Mobile stacks t
     rowPathAt(result.html, 'href="https://example.test/' + store + '"').at(-1)
   );
   assert.equal(new Set(mobileRows).size, 4, "Mobile store buttons must remain stacked");
+  assert.match(result.html, /<td[^>]+height="8"[^>]+font-size:0;[^"]*line-height:0[^>]*>&nbsp;<\/td>/u, "8px Mobile gaps must not expand to text line-height");
   const logo = rowPathAt(result.html, 'src="images/app-logo.png"', true);
   const qr = rowPathAt(result.html, 'src="images/qr-code.png"', true);
   assert.ok(logo.includes(qr.at(-1)), "Desktop logo and QR must share the header row");
