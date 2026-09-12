@@ -51,6 +51,9 @@ test("preview uses the final email renderer and frames both viewports without al
       rendererScript, "--model", modelPath, "--output", productionDir,
     ], { cwd: repoRoot });
     const productionHtml = await readFile(join(productionDir, "email.html"), "utf8");
+    const breakpoint = Number(/@media only screen and \(max-width:(\d+)px\)/u.exec(productionHtml)?.[1]);
+    assert.ok(Number.isInteger(breakpoint), "Pilot HTML must declare a mobile breakpoint");
+    assert.ok(360 <= breakpoint && 800 > breakpoint, "Preview widths must exercise opposite sides of the breakpoint");
 
     for (const [viewport, width] of [["mobile", 360], ["desktop", 800]]) {
       const outputDir = join(temp, viewport);
