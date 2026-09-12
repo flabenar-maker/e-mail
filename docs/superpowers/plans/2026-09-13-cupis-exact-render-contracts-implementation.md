@@ -30,6 +30,37 @@
 - [ ] По матрице предложить только нужные изменения в `core/email-rendering-standard.md`, `data/foundations/rendering.yaml`, `scripts/lib/email-primitives.mjs`, `scripts/lib/email-interpreter.mjs`, связанных schemas/tests и, лишь при глобальной необходимости, в `core/email-figma-prompt.md`. Не копировать чужой HTML как готовое письмо и не дублировать component-specific факты в общих правилах.
 - [ ] Сверить предложения с согласованной спецификацией, фактическими Figma-контрактами и текущим планом. Сначала показать пользователю перечень «берём / не берём / почему» и impact по файлам; до отдельного согласования не менять правила и реализацию.
 
+- [ ] Проанализировать репозиторий [HTeuMeuLeu/caniemail](https://github.com/HTeuMeuLeu/caniemail) как upstream-датасет совместимости HTML/CSS, а не как готовый HTML-renderer. Зафиксировать дату просмотра и commit SHA. Разобрать структуру `_features/*.md` и `_features`, frontmatter, стабильные поля `slug`, `title`, `description`, `category`, `tags`, `keywords`, `last_test_date`, `test_url`, `stats`, `notes`, `notes_by_num`; связь статусов `y`/ `a`/ `n`/ `u` и ссылок вида `a #1` с `notes_by_num`; идентификаторы, семейства, платформы и версии почтовых клиентов; выбор последнего актуального состояния для target.
+- [ ] Сопоставить `test_url` с исходными тестами в `tests/` и изучить fixtures: минимальную HTML-структуру, совместно проверяемые свойства, inline CSS или `<style>`, таблицы, MSO conditional comments, Outlook XML/VML, media queries, HTML-атрибуты и `<head>`. Считать эти файлы доказательством тестируемой конструкции, не готовыми fallback-рецептами.
+- [ ] Сравнить варианты получения данных: A — чтение `_features/*.md`; B — использование `api/data.json`; C — импорт в собственный `compatibility.json`. Предложить нормальную внутреннюю модель и парсер/нормализатор: `y → supported`, `a → partial`, `n → unsupported`, `u → unknown`, с сохранением notes и ограничений partial. Runtime интерпретатора не должен зависеть от Jekyll-структуры.
+- [ ] Предложить typed target profile для конкретных клиентов (например, Gmail web/iOS, Outlook Windows, Outlook web, Apple Mail, Mail.ru) и API для будущего Compatibility/Policy Engine. Can I Email отвечает только «поддерживается ли feature X в target Y»; fallback-рецепты остаются нашим отдельным слоем. Не переносить процентный score автоматически — решение должно быть детерминированным по каждому target.
+
+## Пакеты выполнения в пределах одного 5-часового окна
+
+Пакет — это один самостоятельный заход в текущей ветке/PR. Каждый пакет рассчитан максимум на 3–4 часа активной работы с резервом на тесты, read-back, CI и публикацию. Оценка не обещает точное время ответа: при приближении к лимиту остановиться после последнего зелёного шага, оставить PR draft и продолжить со следующего пакета. Не начинать следующий пакет, пока текущий не прошёл свою проверку.
+
+Каждый пакет завершается одним remote commit в `codex/email-viewport-preview`, проверкой изменённых путей, чтением опубликованных файлов и `gh pr checks 60 --repo flabenar-maker/e-mail`. Красный CI допустим только внутри TDD-пакета до реализации; перед переходом дальше он должен стать зелёным. Merge не выполняется без отдельной команды пользователя.
+
+| Пакет | Связанные задачи плана | Результат одного захода | Ориентир |
+|---|---|---|---|
+| R0 — исследование | «Сделать завтра» | Матрица решений по Good Email Code, Email Guidelines, Cerberus и Can I Email; список «берём / не берём» и impact по файлам. Код не меняется. | 1.5–3 ч |
+| R1 — композиция | Task 1 | Slot allowlists, проверка semantic role/component ID и тесты принятия/отклонения. Production-пилот пока не мигрируется. | 2–3.5 ч |
+| R2a — typed facts | Task 2, Steps 1–3 | Схема и `resolveElementFacts` для точных literals, foundation refs, paint-none и linear-gradient; красно-зелёные resolver-тесты. | 3–4 ч |
+| R2b — общие defaults | Task 2, Steps 4–5 | Точные исполняемые defaults rendering foundation и их render-impact digest; без component IDs. | 2–3 ч |
+| R3a — interpreter contract | Task 3, Steps 1–2 | Interpreter использует единый resolver; убран suffix-`-width` mapper; добавлены диагностики unconsumed/unrepresentable facts. | 3–4 ч |
+| R3b — email primitives | Task 3, Steps 3–5 | Inline typography/color/link policy, градиенты, padding на совместимом `td`, typography foundation loading и fail-closed render. | 3–4 ч |
+| R4 — края письма | Task 4 | Template владеет шириной; Header и Footer имеют полные Mobile/Desktop-контракты, не вызывают Mobile overflow; тесты ширин и веток свойств. | 2.5–3.5 ч |
+| R5 — Hero и Primary | Task 5 | Точные Hero/Button contracts, вложенный CTA, Show Button без пустого места, тесты градиента и display geometry. | 2.5–3.5 ч |
+| R6 — Cards | Task 6 | Cards slot принимает несколько Card/Image; Mobile image fluid/auto, Desktop 232×148, порядок и gap доказаны тестами. | 3–4 ч |
+| R7a — Secondary/App | Task 7, Steps 1–3 | Точные контракты Banner/Secondary и Banner/App-Download, включая Mobile/Desktop composition, Fill, asset mode и цвета. | 3–4 ч |
+| R7b — pilot model | Task 7, Steps 4–6 | Валидная fixture с Header первым, Footer последним, Hero.cta и Cards-Images.cards; рекурсивный asset collection; активирован containment и pilot coverage. | 3–4 ч |
+| R8a — readiness | Task 8, Steps 1–2 | Универсальный readiness gate на том же resolver; missing/unknown/approximate/unused facts блокируют рендер с точным path. | 3–4 ч |
+| R8b — digest | Task 8, Steps 3–4 | Полный render-impact projection и audit: изменённый visual fact меняет digest, Description/purpose — нет; uncovered components остаются blocked. | 2.5–3.5 ч |
+| R9a — visual gate | Task 9, Steps 1–4 | Browser preview Mobile 320/360 и Desktop 800, проверка overflow, ratio, порядка, локальных src и сравнение с Figma variants. | 3–4 ч |
+| R9b — handoff | Task 9, Steps 5–6 | Generated docs, CI/read-back, отчёт metadata drift; PR остаётся draft. | 2–3 ч |
+
+Порядок: R0 → R1 → R2a → R2b → R3a → R3b → R4 → R5 → R6 → R7a → R7b → R8a → R8b → R9a → R9b. R0 обязателен до решений, зависящих от внешних email-практик; остальные зависимости следуют из таблицы. Если пакет прерван лимитом, новый заход сначала перечитывает этот план, head PR и последний зелёный commit, затем продолжает только незавершённые пункты текущего пакета.
+
 ## Source checkpoints for this plan
 
 | Компонент | Mobile node | Desktop node | Проверяемое различие |
