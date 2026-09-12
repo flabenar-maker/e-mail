@@ -3307,35 +3307,10 @@
                 }
               },
               {
-                "id": "content-padding",
+                "id": "root-layout-axis",
                 "value": {
-                  "type": "measure",
-                  "value": 22,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "content-item-gap",
-                "value": {
-                  "type": "measure",
-                  "value": 16,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "text-item-gap",
-                "value": {
-                  "type": "measure",
-                  "value": 8,
-                  "unit": "px"
+                  "type": "keyword",
+                  "value": "vertical"
                 },
                 "provenance": {
                   "kind": "registry-literal",
@@ -3397,19 +3372,42 @@
                 ]
               },
               {
-                "id": "heading",
-                "semantic_role": "heading",
-                "render_mode": "html-text",
+                "id": "content-area",
+                "semantic_role": "content-area",
+                "render_mode": "presentation-table",
                 "visibility": {
                   "mode": "always"
                 },
                 "facts": [
                   {
-                    "id": "heading-font-size",
+                    "id": "content-area-padding",
                     "value": {
                       "type": "measure",
-                      "value": 18,
+                      "value": 22,
                       "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "content-area-layout-gap",
+                    "value": {
+                      "type": "measure",
+                      "value": 16,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "content-area-layout-axis",
+                    "value": {
+                      "type": "keyword",
+                      "value": "vertical"
                     },
                     "provenance": {
                       "kind": "registry-literal",
@@ -3417,57 +3415,116 @@
                     }
                   }
                 ],
-                "children": [],
-                "content_slots": [
+                "children": [
                   {
-                    "id": "text",
-                    "type": "rich-text",
-                    "required": true
-                  }
-                ]
-              },
-              {
-                "id": "body",
-                "semantic_role": "body",
-                "render_mode": "html-text",
-                "visibility": {
-                  "mode": "property",
-                  "property_id": "show-body"
-                },
-                "facts": [
-                  {
-                    "id": "body-font-size",
-                    "value": {
-                      "type": "measure",
-                      "value": 14,
-                      "unit": "px"
+                    "id": "text-content",
+                    "semantic_role": "text-content",
+                    "render_mode": "presentation-table",
+                    "visibility": {
+                      "mode": "always"
                     },
-                    "provenance": {
-                      "kind": "registry-literal",
-                      "source_path": "registry/email-component-descriptions-registry.md"
-                    }
-                  }
-                ],
-                "children": [],
-                "content_slots": [
+                    "facts": [
+                      {
+                        "id": "text-content-layout-gap",
+                        "value": {
+                          "type": "measure",
+                          "value": 8,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "registry-literal",
+                          "source_path": "registry/email-component-descriptions-registry.md"
+                        }
+                      },
+                      {
+                        "id": "text-content-layout-axis",
+                        "value": {
+                          "type": "keyword",
+                          "value": "vertical"
+                        },
+                        "provenance": {
+                          "kind": "registry-literal",
+                          "source_path": "registry/email-component-descriptions-registry.md"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "id": "heading",
+                        "semantic_role": "heading",
+                        "render_mode": "html-text",
+                        "visibility": {
+                          "mode": "always"
+                        },
+                        "facts": [
+                          {
+                            "id": "heading-font-size",
+                            "value": {
+                              "type": "measure",
+                              "value": 18,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          }
+                        ],
+                        "children": [],
+                        "content_slots": [
+                          {
+                            "id": "text",
+                            "type": "rich-text",
+                            "required": true
+                          }
+                        ]
+                      },
+                      {
+                        "id": "body",
+                        "semantic_role": "body",
+                        "render_mode": "html-text",
+                        "visibility": {
+                          "mode": "property",
+                          "property_id": "show-body"
+                        },
+                        "facts": [
+                          {
+                            "id": "body-font-size",
+                            "value": {
+                              "type": "measure",
+                              "value": 14,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          }
+                        ],
+                        "children": [],
+                        "content_slots": [
+                          {
+                            "id": "text",
+                            "type": "rich-text",
+                            "required": true
+                          }
+                        ]
+                      }
+                    ]
+                  },
                   {
-                    "id": "text",
-                    "type": "rich-text",
-                    "required": true
+                    "id": "button",
+                    "semantic_role": "button",
+                    "render_mode": "nested-component",
+                    "visibility": {
+                      "mode": "property",
+                      "property_id": "show-button"
+                    },
+                    "facts": [],
+                    "children": [],
+                    "component_id": "button-secondary"
                   }
                 ]
-              },
-              {
-                "id": "button",
-                "semantic_role": "button",
-                "render_mode": "nested-component",
-                "visibility": {
-                  "mode": "property",
-                  "property_id": "show-button"
-                },
-                "facts": [],
-                "children": [],
-                "component_id": "button-secondary"
               }
             ]
           }
@@ -3506,59 +3563,10 @@
                 }
               },
               {
-                "id": "content-area-width",
+                "id": "root-layout-axis",
                 "value": {
-                  "type": "measure",
-                  "value": 300,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "content-padding",
-                "value": {
-                  "type": "measure",
-                  "value": 32,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "content-inner-width",
-                "value": {
-                  "type": "measure",
-                  "value": 236,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "content-item-gap",
-                "value": {
-                  "type": "measure",
-                  "value": 24,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "text-item-gap",
-                "value": {
-                  "type": "measure",
-                  "value": 12,
-                  "unit": "px"
+                  "type": "keyword",
+                  "value": "horizontal"
                 },
                 "provenance": {
                   "kind": "registry-literal",
@@ -3567,6 +3575,185 @@
               }
             ],
             "children": [
+              {
+                "id": "content-area",
+                "semantic_role": "content-area",
+                "render_mode": "presentation-table",
+                "visibility": {
+                  "mode": "always"
+                },
+                "facts": [
+                  {
+                    "id": "content-area-padding",
+                    "value": {
+                      "type": "measure",
+                      "value": 32,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "content-area-layout-gap",
+                    "value": {
+                      "type": "measure",
+                      "value": 24,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "content-area-layout-axis",
+                    "value": {
+                      "type": "keyword",
+                      "value": "vertical"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "content-area-width",
+                    "value": {
+                      "type": "measure",
+                      "value": 300,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "id": "text-content",
+                    "semantic_role": "text-content",
+                    "render_mode": "presentation-table",
+                    "visibility": {
+                      "mode": "always"
+                    },
+                    "facts": [
+                      {
+                        "id": "text-content-layout-gap",
+                        "value": {
+                          "type": "measure",
+                          "value": 12,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "registry-literal",
+                          "source_path": "registry/email-component-descriptions-registry.md"
+                        }
+                      },
+                      {
+                        "id": "text-content-layout-axis",
+                        "value": {
+                          "type": "keyword",
+                          "value": "vertical"
+                        },
+                        "provenance": {
+                          "kind": "registry-literal",
+                          "source_path": "registry/email-component-descriptions-registry.md"
+                        }
+                      },
+                      {
+                        "id": "content-inner-width",
+                        "value": {
+                          "type": "measure",
+                          "value": 236,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "registry-literal",
+                          "source_path": "registry/email-component-descriptions-registry.md"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "id": "heading",
+                        "semantic_role": "heading",
+                        "render_mode": "html-text",
+                        "visibility": {
+                          "mode": "always"
+                        },
+                        "facts": [
+                          {
+                            "id": "heading-font-size",
+                            "value": {
+                              "type": "measure",
+                              "value": 20,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          }
+                        ],
+                        "children": [],
+                        "content_slots": [
+                          {
+                            "id": "text",
+                            "type": "rich-text",
+                            "required": true
+                          }
+                        ]
+                      },
+                      {
+                        "id": "body",
+                        "semantic_role": "body",
+                        "render_mode": "html-text",
+                        "visibility": {
+                          "mode": "property",
+                          "property_id": "show-body"
+                        },
+                        "facts": [
+                          {
+                            "id": "body-font-size",
+                            "value": {
+                              "type": "measure",
+                              "value": 16,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          }
+                        ],
+                        "children": [],
+                        "content_slots": [
+                          {
+                            "id": "text",
+                            "type": "rich-text",
+                            "required": true
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "button",
+                    "semantic_role": "button",
+                    "render_mode": "nested-component",
+                    "visibility": {
+                      "mode": "property",
+                      "property_id": "show-button"
+                    },
+                    "facts": [],
+                    "children": [],
+                    "component_id": "button-secondary"
+                  }
+                ]
+              },
               {
                 "id": "secondary-image",
                 "semantic_role": "image",
@@ -3590,79 +3777,6 @@
                 ],
                 "children": [],
                 "asset_contract_id": "secondary-image"
-              },
-              {
-                "id": "heading",
-                "semantic_role": "heading",
-                "render_mode": "html-text",
-                "visibility": {
-                  "mode": "always"
-                },
-                "facts": [
-                  {
-                    "id": "heading-font-size",
-                    "value": {
-                      "type": "measure",
-                      "value": 20,
-                      "unit": "px"
-                    },
-                    "provenance": {
-                      "kind": "registry-literal",
-                      "source_path": "registry/email-component-descriptions-registry.md"
-                    }
-                  }
-                ],
-                "children": [],
-                "content_slots": [
-                  {
-                    "id": "text",
-                    "type": "rich-text",
-                    "required": true
-                  }
-                ]
-              },
-              {
-                "id": "body",
-                "semantic_role": "body",
-                "render_mode": "html-text",
-                "visibility": {
-                  "mode": "property",
-                  "property_id": "show-body"
-                },
-                "facts": [
-                  {
-                    "id": "body-font-size",
-                    "value": {
-                      "type": "measure",
-                      "value": 16,
-                      "unit": "px"
-                    },
-                    "provenance": {
-                      "kind": "registry-literal",
-                      "source_path": "registry/email-component-descriptions-registry.md"
-                    }
-                  }
-                ],
-                "children": [],
-                "content_slots": [
-                  {
-                    "id": "text",
-                    "type": "rich-text",
-                    "required": true
-                  }
-                ]
-              },
-              {
-                "id": "button",
-                "semantic_role": "button",
-                "render_mode": "nested-component",
-                "visibility": {
-                  "mode": "property",
-                  "property_id": "show-button"
-                },
-                "facts": [],
-                "children": [],
-                "component_id": "button-secondary"
               }
             ]
           }
@@ -5316,46 +5430,10 @@
                 }
               },
               {
-                "id": "card-padding",
-                "value": {
-                  "type": "measure",
-                  "value": 22,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
                 "id": "card-border-radius",
                 "value": {
                   "type": "measure",
                   "value": 22,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "content-item-gap",
-                "value": {
-                  "type": "measure",
-                  "value": 16,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "store-link-gap",
-                "value": {
-                  "type": "measure",
-                  "value": 8,
                   "unit": "px"
                 },
                 "provenance": {
@@ -5373,84 +5451,33 @@
                   "kind": "registry-literal",
                   "source_path": "registry/email-component-descriptions-registry.md"
                 }
+              },
+              {
+                "id": "root-layout-axis",
+                "value": {
+                  "type": "keyword",
+                  "value": "vertical"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
               }
             ],
             "children": [
               {
-                "id": "app-logo",
-                "semantic_role": "logo",
-                "render_mode": "direct-image",
+                "id": "content-area",
+                "semantic_role": "content-area",
+                "render_mode": "presentation-table",
                 "visibility": {
                   "mode": "always"
                 },
                 "facts": [
                   {
-                    "id": "logo-display-dimensions",
-                    "value": {
-                      "type": "dimensions",
-                      "width": 163,
-                      "height": 46,
-                      "unit": "px"
-                    },
-                    "provenance": {
-                      "kind": "registry-literal",
-                      "source_path": "registry/email-component-descriptions-registry.md"
-                    }
-                  }
-                ],
-                "children": [],
-                "asset_contract_id": "app-logo",
-                "content_slots": [
-                  {
-                    "id": "alt",
-                    "type": "alt-text",
-                    "required": true
-                  }
-                ]
-              },
-              {
-                "id": "description",
-                "semantic_role": "description",
-                "render_mode": "html-text",
-                "visibility": {
-                  "mode": "always"
-                },
-                "facts": [
-                  {
-                    "id": "description-font-size",
+                    "id": "content-area-padding",
                     "value": {
                       "type": "measure",
-                      "value": 14,
-                      "unit": "px"
-                    },
-                    "provenance": {
-                      "kind": "registry-literal",
-                      "source_path": "registry/email-component-descriptions-registry.md"
-                    }
-                  }
-                ],
-                "children": [],
-                "content_slots": [
-                  {
-                    "id": "text",
-                    "type": "rich-text",
-                    "required": true
-                  }
-                ]
-              },
-              {
-                "id": "rustore-link",
-                "semantic_role": "store-link",
-                "render_mode": "html-link",
-                "visibility": {
-                  "mode": "always"
-                },
-                "facts": [
-                  {
-                    "id": "rustore-link-height",
-                    "value": {
-                      "type": "measure",
-                      "value": 44,
+                      "value": 22,
                       "unit": "px"
                     },
                     "provenance": {
@@ -5459,10 +5486,10 @@
                     }
                   },
                   {
-                    "id": "rustore-link-border-radius",
+                    "id": "content-area-layout-gap",
                     "value": {
                       "type": "measure",
-                      "value": 24,
+                      "value": 16,
                       "unit": "px"
                     },
                     "provenance": {
@@ -5471,11 +5498,10 @@
                     }
                   },
                   {
-                    "id": "rustore-icon-text-gap",
+                    "id": "content-area-layout-axis",
                     "value": {
-                      "type": "measure",
-                      "value": 8,
-                      "unit": "px"
+                      "type": "keyword",
+                      "value": "vertical"
                     },
                     "provenance": {
                       "kind": "registry-literal",
@@ -5485,19 +5511,19 @@
                 ],
                 "children": [
                   {
-                    "id": "rustore-icon",
-                    "semantic_role": "store-icon",
+                    "id": "app-logo",
+                    "semantic_role": "logo",
                     "render_mode": "direct-image",
                     "visibility": {
                       "mode": "always"
                     },
                     "facts": [
                       {
-                        "id": "rustore-icon-display-dimensions",
+                        "id": "logo-display-dimensions",
                         "value": {
                           "type": "dimensions",
-                          "width": 26,
-                          "height": 26,
+                          "width": 163,
+                          "height": 46,
                           "unit": "px"
                         },
                         "provenance": {
@@ -5507,7 +5533,7 @@
                       }
                     ],
                     "children": [],
-                    "asset_contract_id": "rustore-icon",
+                    "asset_contract_id": "app-logo",
                     "content_slots": [
                       {
                         "id": "alt",
@@ -5517,15 +5543,15 @@
                     ]
                   },
                   {
-                    "id": "rustore-text",
-                    "semantic_role": "store-text",
+                    "id": "description",
+                    "semantic_role": "description",
                     "render_mode": "html-text",
                     "visibility": {
                       "mode": "always"
                     },
                     "facts": [
                       {
-                        "id": "rustore-text-font-size",
+                        "id": "description-font-size",
                         "value": {
                           "type": "measure",
                           "value": 14,
@@ -5545,216 +5571,32 @@
                         "required": true
                       }
                     ]
-                  }
-                ],
-                "content_slots": [
-                  {
-                    "id": "href",
-                    "type": "url",
-                    "required": true
-                  }
-                ]
-              },
-              {
-                "id": "google-play-link",
-                "semantic_role": "store-link",
-                "render_mode": "html-link",
-                "visibility": {
-                  "mode": "always"
-                },
-                "facts": [
-                  {
-                    "id": "google-play-link-height",
-                    "value": {
-                      "type": "measure",
-                      "value": 44,
-                      "unit": "px"
-                    },
-                    "provenance": {
-                      "kind": "registry-literal",
-                      "source_path": "registry/email-component-descriptions-registry.md"
-                    }
                   },
                   {
-                    "id": "google-play-link-border-radius",
-                    "value": {
-                      "type": "measure",
-                      "value": 24,
-                      "unit": "px"
-                    },
-                    "provenance": {
-                      "kind": "registry-literal",
-                      "source_path": "registry/email-component-descriptions-registry.md"
-                    }
-                  },
-                  {
-                    "id": "google-play-icon-text-gap",
-                    "value": {
-                      "type": "measure",
-                      "value": 8,
-                      "unit": "px"
-                    },
-                    "provenance": {
-                      "kind": "registry-literal",
-                      "source_path": "registry/email-component-descriptions-registry.md"
-                    }
-                  },
-                  {
-                    "id": "google-play-link-background",
-                    "value": {
-                      "type": "color",
-                      "value": "#F8F8FA"
-                    },
-                    "provenance": {
-                      "kind": "registry-literal",
-                      "source_path": "registry/email-component-descriptions-registry.md"
-                    }
-                  }
-                ],
-                "children": [
-                  {
-                    "id": "google-play-icon",
-                    "semantic_role": "store-icon",
-                    "render_mode": "direct-image",
+                    "id": "store-buttons",
+                    "semantic_role": "store-buttons",
+                    "render_mode": "presentation-table",
                     "visibility": {
                       "mode": "always"
                     },
                     "facts": [
                       {
-                        "id": "google-play-icon-display-dimensions",
-                        "value": {
-                          "type": "dimensions",
-                          "width": 26,
-                          "height": 26,
-                          "unit": "px"
-                        },
-                        "provenance": {
-                          "kind": "registry-literal",
-                          "source_path": "registry/email-component-descriptions-registry.md"
-                        }
-                      }
-                    ],
-                    "children": [],
-                    "asset_contract_id": "google-play-icon",
-                    "content_slots": [
-                      {
-                        "id": "alt",
-                        "type": "alt-text",
-                        "required": true
-                      }
-                    ]
-                  },
-                  {
-                    "id": "google-play-text",
-                    "semantic_role": "store-text",
-                    "render_mode": "html-text",
-                    "visibility": {
-                      "mode": "always"
-                    },
-                    "facts": [
-                      {
-                        "id": "google-play-text-font-size",
+                        "id": "store-buttons-layout-gap",
                         "value": {
                           "type": "measure",
-                          "value": 14,
+                          "value": 8,
                           "unit": "px"
                         },
                         "provenance": {
                           "kind": "registry-literal",
                           "source_path": "registry/email-component-descriptions-registry.md"
                         }
-                      }
-                    ],
-                    "children": [],
-                    "content_slots": [
+                      },
                       {
-                        "id": "text",
-                        "type": "rich-text",
-                        "required": true
-                      }
-                    ]
-                  }
-                ],
-                "content_slots": [
-                  {
-                    "id": "href",
-                    "type": "url",
-                    "required": true
-                  }
-                ]
-              },
-              {
-                "id": "appgallery-link",
-                "semantic_role": "store-link",
-                "render_mode": "html-link",
-                "visibility": {
-                  "mode": "always"
-                },
-                "facts": [
-                  {
-                    "id": "appgallery-link-height",
-                    "value": {
-                      "type": "measure",
-                      "value": 44,
-                      "unit": "px"
-                    },
-                    "provenance": {
-                      "kind": "registry-literal",
-                      "source_path": "registry/email-component-descriptions-registry.md"
-                    }
-                  },
-                  {
-                    "id": "appgallery-link-border-radius",
-                    "value": {
-                      "type": "measure",
-                      "value": 24,
-                      "unit": "px"
-                    },
-                    "provenance": {
-                      "kind": "registry-literal",
-                      "source_path": "registry/email-component-descriptions-registry.md"
-                    }
-                  },
-                  {
-                    "id": "appgallery-icon-text-gap",
-                    "value": {
-                      "type": "measure",
-                      "value": 8,
-                      "unit": "px"
-                    },
-                    "provenance": {
-                      "kind": "registry-literal",
-                      "source_path": "registry/email-component-descriptions-registry.md"
-                    }
-                  },
-                  {
-                    "id": "appgallery-link-background",
-                    "value": {
-                      "type": "color",
-                      "value": "#F8F8FA"
-                    },
-                    "provenance": {
-                      "kind": "registry-literal",
-                      "source_path": "registry/email-component-descriptions-registry.md"
-                    }
-                  }
-                ],
-                "children": [
-                  {
-                    "id": "appgallery-icon",
-                    "semantic_role": "store-icon",
-                    "render_mode": "direct-image",
-                    "visibility": {
-                      "mode": "always"
-                    },
-                    "facts": [
-                      {
-                        "id": "appgallery-icon-display-dimensions",
+                        "id": "store-buttons-layout-axis",
                         "value": {
-                          "type": "dimensions",
-                          "width": 26,
-                          "height": 26,
-                          "unit": "px"
+                          "type": "keyword",
+                          "value": "vertical"
                         },
                         "provenance": {
                           "kind": "registry-literal",
@@ -5762,180 +5604,509 @@
                         }
                       }
                     ],
-                    "children": [],
-                    "asset_contract_id": "appgallery-icon",
-                    "content_slots": [
+                    "children": [
                       {
-                        "id": "alt",
-                        "type": "alt-text",
-                        "required": true
-                      }
-                    ]
-                  },
-                  {
-                    "id": "appgallery-text",
-                    "semantic_role": "store-text",
-                    "render_mode": "html-text",
-                    "visibility": {
-                      "mode": "always"
-                    },
-                    "facts": [
-                      {
-                        "id": "appgallery-text-font-size",
-                        "value": {
-                          "type": "measure",
-                          "value": 14,
-                          "unit": "px"
+                        "id": "rustore-link",
+                        "semantic_role": "store-link",
+                        "render_mode": "html-link",
+                        "visibility": {
+                          "mode": "always"
                         },
-                        "provenance": {
-                          "kind": "registry-literal",
-                          "source_path": "registry/email-component-descriptions-registry.md"
-                        }
-                      }
-                    ],
-                    "children": [],
-                    "content_slots": [
+                        "facts": [
+                          {
+                            "id": "rustore-link-height",
+                            "value": {
+                              "type": "measure",
+                              "value": 44,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          },
+                          {
+                            "id": "rustore-link-border-radius",
+                            "value": {
+                              "type": "measure",
+                              "value": 24,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          },
+                          {
+                            "id": "rustore-icon-text-gap",
+                            "value": {
+                              "type": "measure",
+                              "value": 8,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "id": "rustore-icon",
+                            "semantic_role": "store-icon",
+                            "render_mode": "direct-image",
+                            "visibility": {
+                              "mode": "always"
+                            },
+                            "facts": [
+                              {
+                                "id": "rustore-icon-display-dimensions",
+                                "value": {
+                                  "type": "dimensions",
+                                  "width": 26,
+                                  "height": 26,
+                                  "unit": "px"
+                                },
+                                "provenance": {
+                                  "kind": "registry-literal",
+                                  "source_path": "registry/email-component-descriptions-registry.md"
+                                }
+                              }
+                            ],
+                            "children": [],
+                            "asset_contract_id": "rustore-icon",
+                            "content_slots": [
+                              {
+                                "id": "alt",
+                                "type": "alt-text",
+                                "required": true
+                              }
+                            ]
+                          },
+                          {
+                            "id": "rustore-text",
+                            "semantic_role": "store-text",
+                            "render_mode": "html-text",
+                            "visibility": {
+                              "mode": "always"
+                            },
+                            "facts": [
+                              {
+                                "id": "rustore-text-font-size",
+                                "value": {
+                                  "type": "measure",
+                                  "value": 14,
+                                  "unit": "px"
+                                },
+                                "provenance": {
+                                  "kind": "registry-literal",
+                                  "source_path": "registry/email-component-descriptions-registry.md"
+                                }
+                              }
+                            ],
+                            "children": [],
+                            "content_slots": [
+                              {
+                                "id": "text",
+                                "type": "rich-text",
+                                "required": true
+                              }
+                            ]
+                          }
+                        ],
+                        "content_slots": [
+                          {
+                            "id": "href",
+                            "type": "url",
+                            "required": true
+                          }
+                        ]
+                      },
                       {
-                        "id": "text",
-                        "type": "rich-text",
-                        "required": true
-                      }
-                    ]
-                  }
-                ],
-                "content_slots": [
-                  {
-                    "id": "href",
-                    "type": "url",
-                    "required": true
-                  }
-                ]
-              },
-              {
-                "id": "getapps-link",
-                "semantic_role": "store-link",
-                "render_mode": "html-link",
-                "visibility": {
-                  "mode": "always"
-                },
-                "facts": [
-                  {
-                    "id": "getapps-link-height",
-                    "value": {
-                      "type": "measure",
-                      "value": 44,
-                      "unit": "px"
-                    },
-                    "provenance": {
-                      "kind": "registry-literal",
-                      "source_path": "registry/email-component-descriptions-registry.md"
-                    }
-                  },
-                  {
-                    "id": "getapps-link-border-radius",
-                    "value": {
-                      "type": "measure",
-                      "value": 24,
-                      "unit": "px"
-                    },
-                    "provenance": {
-                      "kind": "registry-literal",
-                      "source_path": "registry/email-component-descriptions-registry.md"
-                    }
-                  },
-                  {
-                    "id": "getapps-icon-text-gap",
-                    "value": {
-                      "type": "measure",
-                      "value": 8,
-                      "unit": "px"
-                    },
-                    "provenance": {
-                      "kind": "registry-literal",
-                      "source_path": "registry/email-component-descriptions-registry.md"
-                    }
-                  },
-                  {
-                    "id": "getapps-link-background",
-                    "value": {
-                      "type": "color",
-                      "value": "#F8F8FA"
-                    },
-                    "provenance": {
-                      "kind": "registry-literal",
-                      "source_path": "registry/email-component-descriptions-registry.md"
-                    }
-                  }
-                ],
-                "children": [
-                  {
-                    "id": "getapps-icon",
-                    "semantic_role": "store-icon",
-                    "render_mode": "direct-image",
-                    "visibility": {
-                      "mode": "always"
-                    },
-                    "facts": [
-                      {
-                        "id": "getapps-icon-display-dimensions",
-                        "value": {
-                          "type": "dimensions",
-                          "width": 26,
-                          "height": 26,
-                          "unit": "px"
+                        "id": "google-play-link",
+                        "semantic_role": "store-link",
+                        "render_mode": "html-link",
+                        "visibility": {
+                          "mode": "always"
                         },
-                        "provenance": {
-                          "kind": "registry-literal",
-                          "source_path": "registry/email-component-descriptions-registry.md"
-                        }
-                      }
-                    ],
-                    "children": [],
-                    "asset_contract_id": "getapps-icon",
-                    "content_slots": [
+                        "facts": [
+                          {
+                            "id": "google-play-link-height",
+                            "value": {
+                              "type": "measure",
+                              "value": 44,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          },
+                          {
+                            "id": "google-play-link-border-radius",
+                            "value": {
+                              "type": "measure",
+                              "value": 24,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          },
+                          {
+                            "id": "google-play-icon-text-gap",
+                            "value": {
+                              "type": "measure",
+                              "value": 8,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          },
+                          {
+                            "id": "google-play-link-background",
+                            "value": {
+                              "type": "color",
+                              "value": "#F8F8FA"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "id": "google-play-icon",
+                            "semantic_role": "store-icon",
+                            "render_mode": "direct-image",
+                            "visibility": {
+                              "mode": "always"
+                            },
+                            "facts": [
+                              {
+                                "id": "google-play-icon-display-dimensions",
+                                "value": {
+                                  "type": "dimensions",
+                                  "width": 26,
+                                  "height": 26,
+                                  "unit": "px"
+                                },
+                                "provenance": {
+                                  "kind": "registry-literal",
+                                  "source_path": "registry/email-component-descriptions-registry.md"
+                                }
+                              }
+                            ],
+                            "children": [],
+                            "asset_contract_id": "google-play-icon",
+                            "content_slots": [
+                              {
+                                "id": "alt",
+                                "type": "alt-text",
+                                "required": true
+                              }
+                            ]
+                          },
+                          {
+                            "id": "google-play-text",
+                            "semantic_role": "store-text",
+                            "render_mode": "html-text",
+                            "visibility": {
+                              "mode": "always"
+                            },
+                            "facts": [
+                              {
+                                "id": "google-play-text-font-size",
+                                "value": {
+                                  "type": "measure",
+                                  "value": 14,
+                                  "unit": "px"
+                                },
+                                "provenance": {
+                                  "kind": "registry-literal",
+                                  "source_path": "registry/email-component-descriptions-registry.md"
+                                }
+                              }
+                            ],
+                            "children": [],
+                            "content_slots": [
+                              {
+                                "id": "text",
+                                "type": "rich-text",
+                                "required": true
+                              }
+                            ]
+                          }
+                        ],
+                        "content_slots": [
+                          {
+                            "id": "href",
+                            "type": "url",
+                            "required": true
+                          }
+                        ]
+                      },
                       {
-                        "id": "alt",
-                        "type": "alt-text",
-                        "required": true
-                      }
-                    ]
-                  },
-                  {
-                    "id": "getapps-text",
-                    "semantic_role": "store-text",
-                    "render_mode": "html-text",
-                    "visibility": {
-                      "mode": "always"
-                    },
-                    "facts": [
-                      {
-                        "id": "getapps-text-font-size",
-                        "value": {
-                          "type": "measure",
-                          "value": 14,
-                          "unit": "px"
+                        "id": "appgallery-link",
+                        "semantic_role": "store-link",
+                        "render_mode": "html-link",
+                        "visibility": {
+                          "mode": "always"
                         },
-                        "provenance": {
-                          "kind": "registry-literal",
-                          "source_path": "registry/email-component-descriptions-registry.md"
-                        }
-                      }
-                    ],
-                    "children": [],
-                    "content_slots": [
+                        "facts": [
+                          {
+                            "id": "appgallery-link-height",
+                            "value": {
+                              "type": "measure",
+                              "value": 44,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          },
+                          {
+                            "id": "appgallery-link-border-radius",
+                            "value": {
+                              "type": "measure",
+                              "value": 24,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          },
+                          {
+                            "id": "appgallery-icon-text-gap",
+                            "value": {
+                              "type": "measure",
+                              "value": 8,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          },
+                          {
+                            "id": "appgallery-link-background",
+                            "value": {
+                              "type": "color",
+                              "value": "#F8F8FA"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "id": "appgallery-icon",
+                            "semantic_role": "store-icon",
+                            "render_mode": "direct-image",
+                            "visibility": {
+                              "mode": "always"
+                            },
+                            "facts": [
+                              {
+                                "id": "appgallery-icon-display-dimensions",
+                                "value": {
+                                  "type": "dimensions",
+                                  "width": 26,
+                                  "height": 26,
+                                  "unit": "px"
+                                },
+                                "provenance": {
+                                  "kind": "registry-literal",
+                                  "source_path": "registry/email-component-descriptions-registry.md"
+                                }
+                              }
+                            ],
+                            "children": [],
+                            "asset_contract_id": "appgallery-icon",
+                            "content_slots": [
+                              {
+                                "id": "alt",
+                                "type": "alt-text",
+                                "required": true
+                              }
+                            ]
+                          },
+                          {
+                            "id": "appgallery-text",
+                            "semantic_role": "store-text",
+                            "render_mode": "html-text",
+                            "visibility": {
+                              "mode": "always"
+                            },
+                            "facts": [
+                              {
+                                "id": "appgallery-text-font-size",
+                                "value": {
+                                  "type": "measure",
+                                  "value": 14,
+                                  "unit": "px"
+                                },
+                                "provenance": {
+                                  "kind": "registry-literal",
+                                  "source_path": "registry/email-component-descriptions-registry.md"
+                                }
+                              }
+                            ],
+                            "children": [],
+                            "content_slots": [
+                              {
+                                "id": "text",
+                                "type": "rich-text",
+                                "required": true
+                              }
+                            ]
+                          }
+                        ],
+                        "content_slots": [
+                          {
+                            "id": "href",
+                            "type": "url",
+                            "required": true
+                          }
+                        ]
+                      },
                       {
-                        "id": "text",
-                        "type": "rich-text",
-                        "required": true
+                        "id": "getapps-link",
+                        "semantic_role": "store-link",
+                        "render_mode": "html-link",
+                        "visibility": {
+                          "mode": "always"
+                        },
+                        "facts": [
+                          {
+                            "id": "getapps-link-height",
+                            "value": {
+                              "type": "measure",
+                              "value": 44,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          },
+                          {
+                            "id": "getapps-link-border-radius",
+                            "value": {
+                              "type": "measure",
+                              "value": 24,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          },
+                          {
+                            "id": "getapps-icon-text-gap",
+                            "value": {
+                              "type": "measure",
+                              "value": 8,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          },
+                          {
+                            "id": "getapps-link-background",
+                            "value": {
+                              "type": "color",
+                              "value": "#F8F8FA"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "id": "getapps-icon",
+                            "semantic_role": "store-icon",
+                            "render_mode": "direct-image",
+                            "visibility": {
+                              "mode": "always"
+                            },
+                            "facts": [
+                              {
+                                "id": "getapps-icon-display-dimensions",
+                                "value": {
+                                  "type": "dimensions",
+                                  "width": 26,
+                                  "height": 26,
+                                  "unit": "px"
+                                },
+                                "provenance": {
+                                  "kind": "registry-literal",
+                                  "source_path": "registry/email-component-descriptions-registry.md"
+                                }
+                              }
+                            ],
+                            "children": [],
+                            "asset_contract_id": "getapps-icon",
+                            "content_slots": [
+                              {
+                                "id": "alt",
+                                "type": "alt-text",
+                                "required": true
+                              }
+                            ]
+                          },
+                          {
+                            "id": "getapps-text",
+                            "semantic_role": "store-text",
+                            "render_mode": "html-text",
+                            "visibility": {
+                              "mode": "always"
+                            },
+                            "facts": [
+                              {
+                                "id": "getapps-text-font-size",
+                                "value": {
+                                  "type": "measure",
+                                  "value": 14,
+                                  "unit": "px"
+                                },
+                                "provenance": {
+                                  "kind": "registry-literal",
+                                  "source_path": "registry/email-component-descriptions-registry.md"
+                                }
+                              }
+                            ],
+                            "children": [],
+                            "content_slots": [
+                              {
+                                "id": "text",
+                                "type": "rich-text",
+                                "required": true
+                              }
+                            ]
+                          }
+                        ],
+                        "content_slots": [
+                          {
+                            "id": "href",
+                            "type": "url",
+                            "required": true
+                          }
+                        ]
                       }
                     ]
-                  }
-                ],
-                "content_slots": [
-                  {
-                    "id": "href",
-                    "type": "url",
-                    "required": true
                   }
                 ]
               }
@@ -5964,18 +6135,6 @@
                 }
               },
               {
-                "id": "card-padding",
-                "value": {
-                  "type": "measure",
-                  "value": 32,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
                 "id": "card-border-radius",
                 "value": {
                   "type": "measure",
@@ -5988,10 +6147,10 @@
                 }
               },
               {
-                "id": "content-item-gap",
+                "id": "app-card-width",
                 "value": {
                   "type": "measure",
-                  "value": 24,
+                  "value": 552,
                   "unit": "px"
                 },
                 "provenance": {
@@ -6000,35 +6159,10 @@
                 }
               },
               {
-                "id": "logo-description-gap",
+                "id": "root-layout-axis",
                 "value": {
-                  "type": "measure",
-                  "value": 16,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "header-column-gap",
-                "value": {
-                  "type": "measure",
-                  "value": 24,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "store-link-gap",
-                "value": {
-                  "type": "measure",
-                  "value": 8,
-                  "unit": "px"
+                  "type": "keyword",
+                  "value": "vertical"
                 },
                 "provenance": {
                   "kind": "registry-literal",
@@ -6038,113 +6172,18 @@
             ],
             "children": [
               {
-                "id": "app-logo",
-                "semantic_role": "logo",
-                "render_mode": "direct-image",
+                "id": "content-area",
+                "semantic_role": "content-area",
+                "render_mode": "presentation-table",
                 "visibility": {
                   "mode": "always"
                 },
                 "facts": [
                   {
-                    "id": "logo-display-dimensions",
-                    "value": {
-                      "type": "dimensions",
-                      "width": 219,
-                      "height": 62,
-                      "unit": "px"
-                    },
-                    "provenance": {
-                      "kind": "registry-literal",
-                      "source_path": "registry/email-component-descriptions-registry.md"
-                    }
-                  }
-                ],
-                "children": [],
-                "asset_contract_id": "app-logo",
-                "content_slots": [
-                  {
-                    "id": "alt",
-                    "type": "alt-text",
-                    "required": true
-                  }
-                ]
-              },
-              {
-                "id": "description",
-                "semantic_role": "description",
-                "render_mode": "html-text",
-                "visibility": {
-                  "mode": "always"
-                },
-                "facts": [
-                  {
-                    "id": "description-font-size",
+                    "id": "content-area-padding",
                     "value": {
                       "type": "measure",
-                      "value": 18,
-                      "unit": "px"
-                    },
-                    "provenance": {
-                      "kind": "registry-literal",
-                      "source_path": "registry/email-component-descriptions-registry.md"
-                    }
-                  }
-                ],
-                "children": [],
-                "content_slots": [
-                  {
-                    "id": "text",
-                    "type": "rich-text",
-                    "required": true
-                  }
-                ]
-              },
-              {
-                "id": "qr-code",
-                "semantic_role": "qr-code",
-                "render_mode": "direct-image",
-                "visibility": {
-                  "mode": "always"
-                },
-                "facts": [
-                  {
-                    "id": "qr-display-dimensions",
-                    "value": {
-                      "type": "dimensions",
-                      "width": 130,
-                      "height": 130,
-                      "unit": "px"
-                    },
-                    "provenance": {
-                      "kind": "registry-literal",
-                      "source_path": "registry/email-component-descriptions-registry.md"
-                    }
-                  }
-                ],
-                "children": [],
-                "asset_contract_id": "qr-code",
-                "content_slots": [
-                  {
-                    "id": "alt",
-                    "type": "alt-text",
-                    "required": true
-                  }
-                ]
-              },
-              {
-                "id": "rustore-link",
-                "semantic_role": "store-link",
-                "render_mode": "html-link",
-                "visibility": {
-                  "mode": "always"
-                },
-                "facts": [
-                  {
-                    "id": "rustore-link-dimensions",
-                    "value": {
-                      "type": "dimensions",
-                      "width": 116,
-                      "height": 56,
+                      "value": 32,
                       "unit": "px"
                     },
                     "provenance": {
@@ -6153,11 +6192,22 @@
                     }
                   },
                   {
-                    "id": "rustore-link-border-radius",
+                    "id": "content-area-layout-gap",
                     "value": {
                       "type": "measure",
-                      "value": 50,
+                      "value": 24,
                       "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "content-area-layout-axis",
+                    "value": {
+                      "type": "keyword",
+                      "value": "vertical"
                     },
                     "provenance": {
                       "kind": "registry-literal",
@@ -6167,20 +6217,30 @@
                 ],
                 "children": [
                   {
-                    "id": "rustore-icon",
-                    "semantic_role": "store-icon",
-                    "render_mode": "direct-image",
+                    "id": "text-qr",
+                    "semantic_role": "text-qr",
+                    "render_mode": "presentation-table",
                     "visibility": {
                       "mode": "always"
                     },
                     "facts": [
                       {
-                        "id": "rustore-icon-display-dimensions",
+                        "id": "text-qr-layout-gap",
                         "value": {
-                          "type": "dimensions",
-                          "width": 32,
-                          "height": 32,
+                          "type": "measure",
+                          "value": 24,
                           "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "registry-literal",
+                          "source_path": "registry/email-component-descriptions-registry.md"
+                        }
+                      },
+                      {
+                        "id": "text-qr-layout-axis",
+                        "value": {
+                          "type": "keyword",
+                          "value": "horizontal"
                         },
                         "provenance": {
                           "kind": "registry-literal",
@@ -6188,103 +6248,175 @@
                         }
                       }
                     ],
-                    "children": [],
-                    "asset_contract_id": "rustore-icon",
-                    "content_slots": [
+                    "children": [
                       {
-                        "id": "alt",
-                        "type": "alt-text",
-                        "required": true
+                        "id": "header-row",
+                        "semantic_role": "header-row",
+                        "render_mode": "presentation-table",
+                        "visibility": {
+                          "mode": "always"
+                        },
+                        "facts": [
+                          {
+                            "id": "header-row-layout-gap",
+                            "value": {
+                              "type": "measure",
+                              "value": 16,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          },
+                          {
+                            "id": "header-row-width",
+                            "value": {
+                              "type": "measure",
+                              "value": 334,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          },
+                          {
+                            "id": "header-row-layout-axis",
+                            "value": {
+                              "type": "keyword",
+                              "value": "vertical"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "id": "app-logo",
+                            "semantic_role": "logo",
+                            "render_mode": "direct-image",
+                            "visibility": {
+                              "mode": "always"
+                            },
+                            "facts": [
+                              {
+                                "id": "logo-display-dimensions",
+                                "value": {
+                                  "type": "dimensions",
+                                  "width": 219,
+                                  "height": 62,
+                                  "unit": "px"
+                                },
+                                "provenance": {
+                                  "kind": "registry-literal",
+                                  "source_path": "registry/email-component-descriptions-registry.md"
+                                }
+                              }
+                            ],
+                            "children": [],
+                            "asset_contract_id": "app-logo",
+                            "content_slots": [
+                              {
+                                "id": "alt",
+                                "type": "alt-text",
+                                "required": true
+                              }
+                            ]
+                          },
+                          {
+                            "id": "description",
+                            "semantic_role": "description",
+                            "render_mode": "html-text",
+                            "visibility": {
+                              "mode": "always"
+                            },
+                            "facts": [
+                              {
+                                "id": "description-font-size",
+                                "value": {
+                                  "type": "measure",
+                                  "value": 18,
+                                  "unit": "px"
+                                },
+                                "provenance": {
+                                  "kind": "registry-literal",
+                                  "source_path": "registry/email-component-descriptions-registry.md"
+                                }
+                              }
+                            ],
+                            "children": [],
+                            "content_slots": [
+                              {
+                                "id": "text",
+                                "type": "rich-text",
+                                "required": true
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "id": "qr-code",
+                        "semantic_role": "qr-code",
+                        "render_mode": "direct-image",
+                        "visibility": {
+                          "mode": "always"
+                        },
+                        "facts": [
+                          {
+                            "id": "qr-display-dimensions",
+                            "value": {
+                              "type": "dimensions",
+                              "width": 130,
+                              "height": 130,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          }
+                        ],
+                        "children": [],
+                        "asset_contract_id": "qr-code",
+                        "content_slots": [
+                          {
+                            "id": "alt",
+                            "type": "alt-text",
+                            "required": true
+                          }
+                        ]
                       }
                     ]
                   },
                   {
-                    "id": "rustore-text",
-                    "semantic_role": "store-text",
-                    "render_mode": "html-text",
-                    "visibility": {
-                      "mode": "always"
-                    },
-                    "facts": [],
-                    "children": [],
-                    "content_slots": [
-                      {
-                        "id": "text",
-                        "type": "rich-text",
-                        "required": true
-                      }
-                    ]
-                  }
-                ],
-                "content_slots": [
-                  {
-                    "id": "href",
-                    "type": "url",
-                    "required": true
-                  }
-                ]
-              },
-              {
-                "id": "google-play-link",
-                "semantic_role": "store-link",
-                "render_mode": "html-link",
-                "visibility": {
-                  "mode": "always"
-                },
-                "facts": [
-                  {
-                    "id": "google-play-link-dimensions",
-                    "value": {
-                      "type": "dimensions",
-                      "width": 116,
-                      "height": 56,
-                      "unit": "px"
-                    },
-                    "provenance": {
-                      "kind": "registry-literal",
-                      "source_path": "registry/email-component-descriptions-registry.md"
-                    }
-                  },
-                  {
-                    "id": "google-play-link-border-radius",
-                    "value": {
-                      "type": "measure",
-                      "value": 50,
-                      "unit": "px"
-                    },
-                    "provenance": {
-                      "kind": "registry-literal",
-                      "source_path": "registry/email-component-descriptions-registry.md"
-                    }
-                  },
-                  {
-                    "id": "google-play-link-background",
-                    "value": {
-                      "type": "color",
-                      "value": "#F8F8FA"
-                    },
-                    "provenance": {
-                      "kind": "registry-literal",
-                      "source_path": "registry/email-component-descriptions-registry.md"
-                    }
-                  }
-                ],
-                "children": [
-                  {
-                    "id": "google-play-icon",
-                    "semantic_role": "store-icon",
-                    "render_mode": "direct-image",
+                    "id": "store-buttons",
+                    "semantic_role": "store-buttons",
+                    "render_mode": "presentation-table",
                     "visibility": {
                       "mode": "always"
                     },
                     "facts": [
                       {
-                        "id": "google-play-icon-display-dimensions",
+                        "id": "store-buttons-layout-gap",
                         "value": {
-                          "type": "dimensions",
-                          "width": 32,
-                          "height": 32,
+                          "type": "measure",
+                          "value": 8,
                           "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "registry-literal",
+                          "source_path": "registry/email-component-descriptions-registry.md"
+                        }
+                      },
+                      {
+                        "id": "store-buttons-layout-axis",
+                        "value": {
+                          "type": "keyword",
+                          "value": "horizontal"
                         },
                         "provenance": {
                           "kind": "registry-literal",
@@ -6292,247 +6424,413 @@
                         }
                       }
                     ],
-                    "children": [],
-                    "asset_contract_id": "google-play-icon",
-                    "content_slots": [
+                    "children": [
                       {
-                        "id": "alt",
-                        "type": "alt-text",
-                        "required": true
-                      }
-                    ]
-                  },
-                  {
-                    "id": "google-play-text",
-                    "semantic_role": "store-text",
-                    "render_mode": "html-text",
-                    "visibility": {
-                      "mode": "always"
-                    },
-                    "facts": [],
-                    "children": [],
-                    "content_slots": [
-                      {
-                        "id": "text",
-                        "type": "rich-text",
-                        "required": true
-                      }
-                    ]
-                  }
-                ],
-                "content_slots": [
-                  {
-                    "id": "href",
-                    "type": "url",
-                    "required": true
-                  }
-                ]
-              },
-              {
-                "id": "appgallery-link",
-                "semantic_role": "store-link",
-                "render_mode": "html-link",
-                "visibility": {
-                  "mode": "always"
-                },
-                "facts": [
-                  {
-                    "id": "appgallery-link-dimensions",
-                    "value": {
-                      "type": "dimensions",
-                      "width": 116,
-                      "height": 56,
-                      "unit": "px"
-                    },
-                    "provenance": {
-                      "kind": "registry-literal",
-                      "source_path": "registry/email-component-descriptions-registry.md"
-                    }
-                  },
-                  {
-                    "id": "appgallery-link-border-radius",
-                    "value": {
-                      "type": "measure",
-                      "value": 50,
-                      "unit": "px"
-                    },
-                    "provenance": {
-                      "kind": "registry-literal",
-                      "source_path": "registry/email-component-descriptions-registry.md"
-                    }
-                  },
-                  {
-                    "id": "appgallery-link-background",
-                    "value": {
-                      "type": "color",
-                      "value": "#F8F8FA"
-                    },
-                    "provenance": {
-                      "kind": "registry-literal",
-                      "source_path": "registry/email-component-descriptions-registry.md"
-                    }
-                  }
-                ],
-                "children": [
-                  {
-                    "id": "appgallery-icon",
-                    "semantic_role": "store-icon",
-                    "render_mode": "direct-image",
-                    "visibility": {
-                      "mode": "always"
-                    },
-                    "facts": [
-                      {
-                        "id": "appgallery-icon-display-dimensions",
-                        "value": {
-                          "type": "dimensions",
-                          "width": 32,
-                          "height": 32,
-                          "unit": "px"
+                        "id": "rustore-link",
+                        "semantic_role": "store-link",
+                        "render_mode": "html-link",
+                        "visibility": {
+                          "mode": "always"
                         },
-                        "provenance": {
-                          "kind": "registry-literal",
-                          "source_path": "registry/email-component-descriptions-registry.md"
-                        }
-                      }
-                    ],
-                    "children": [],
-                    "asset_contract_id": "appgallery-icon",
-                    "content_slots": [
+                        "facts": [
+                          {
+                            "id": "rustore-link-dimensions",
+                            "value": {
+                              "type": "dimensions",
+                              "width": 116,
+                              "height": 56,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          },
+                          {
+                            "id": "rustore-link-border-radius",
+                            "value": {
+                              "type": "measure",
+                              "value": 50,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "id": "rustore-icon",
+                            "semantic_role": "store-icon",
+                            "render_mode": "direct-image",
+                            "visibility": {
+                              "mode": "always"
+                            },
+                            "facts": [
+                              {
+                                "id": "rustore-icon-display-dimensions",
+                                "value": {
+                                  "type": "dimensions",
+                                  "width": 32,
+                                  "height": 32,
+                                  "unit": "px"
+                                },
+                                "provenance": {
+                                  "kind": "registry-literal",
+                                  "source_path": "registry/email-component-descriptions-registry.md"
+                                }
+                              }
+                            ],
+                            "children": [],
+                            "asset_contract_id": "rustore-icon",
+                            "content_slots": [
+                              {
+                                "id": "alt",
+                                "type": "alt-text",
+                                "required": true
+                              }
+                            ]
+                          },
+                          {
+                            "id": "rustore-text",
+                            "semantic_role": "store-text",
+                            "render_mode": "html-text",
+                            "visibility": {
+                              "mode": "always"
+                            },
+                            "facts": [],
+                            "children": [],
+                            "content_slots": [
+                              {
+                                "id": "text",
+                                "type": "rich-text",
+                                "required": true
+                              }
+                            ]
+                          }
+                        ],
+                        "content_slots": [
+                          {
+                            "id": "href",
+                            "type": "url",
+                            "required": true
+                          }
+                        ]
+                      },
                       {
-                        "id": "alt",
-                        "type": "alt-text",
-                        "required": true
-                      }
-                    ]
-                  },
-                  {
-                    "id": "appgallery-text",
-                    "semantic_role": "store-text",
-                    "render_mode": "html-text",
-                    "visibility": {
-                      "mode": "always"
-                    },
-                    "facts": [],
-                    "children": [],
-                    "content_slots": [
-                      {
-                        "id": "text",
-                        "type": "rich-text",
-                        "required": true
-                      }
-                    ]
-                  }
-                ],
-                "content_slots": [
-                  {
-                    "id": "href",
-                    "type": "url",
-                    "required": true
-                  }
-                ]
-              },
-              {
-                "id": "getapps-link",
-                "semantic_role": "store-link",
-                "render_mode": "html-link",
-                "visibility": {
-                  "mode": "always"
-                },
-                "facts": [
-                  {
-                    "id": "getapps-link-dimensions",
-                    "value": {
-                      "type": "dimensions",
-                      "width": 116,
-                      "height": 56,
-                      "unit": "px"
-                    },
-                    "provenance": {
-                      "kind": "registry-literal",
-                      "source_path": "registry/email-component-descriptions-registry.md"
-                    }
-                  },
-                  {
-                    "id": "getapps-link-border-radius",
-                    "value": {
-                      "type": "measure",
-                      "value": 50,
-                      "unit": "px"
-                    },
-                    "provenance": {
-                      "kind": "registry-literal",
-                      "source_path": "registry/email-component-descriptions-registry.md"
-                    }
-                  },
-                  {
-                    "id": "getapps-link-background",
-                    "value": {
-                      "type": "color",
-                      "value": "#F8F8FA"
-                    },
-                    "provenance": {
-                      "kind": "registry-literal",
-                      "source_path": "registry/email-component-descriptions-registry.md"
-                    }
-                  }
-                ],
-                "children": [
-                  {
-                    "id": "getapps-icon",
-                    "semantic_role": "store-icon",
-                    "render_mode": "direct-image",
-                    "visibility": {
-                      "mode": "always"
-                    },
-                    "facts": [
-                      {
-                        "id": "getapps-icon-display-dimensions",
-                        "value": {
-                          "type": "dimensions",
-                          "width": 32,
-                          "height": 32,
-                          "unit": "px"
+                        "id": "google-play-link",
+                        "semantic_role": "store-link",
+                        "render_mode": "html-link",
+                        "visibility": {
+                          "mode": "always"
                         },
-                        "provenance": {
-                          "kind": "registry-literal",
-                          "source_path": "registry/email-component-descriptions-registry.md"
-                        }
-                      }
-                    ],
-                    "children": [],
-                    "asset_contract_id": "getapps-icon",
-                    "content_slots": [
+                        "facts": [
+                          {
+                            "id": "google-play-link-dimensions",
+                            "value": {
+                              "type": "dimensions",
+                              "width": 116,
+                              "height": 56,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          },
+                          {
+                            "id": "google-play-link-border-radius",
+                            "value": {
+                              "type": "measure",
+                              "value": 50,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          },
+                          {
+                            "id": "google-play-link-background",
+                            "value": {
+                              "type": "color",
+                              "value": "#F8F8FA"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "id": "google-play-icon",
+                            "semantic_role": "store-icon",
+                            "render_mode": "direct-image",
+                            "visibility": {
+                              "mode": "always"
+                            },
+                            "facts": [
+                              {
+                                "id": "google-play-icon-display-dimensions",
+                                "value": {
+                                  "type": "dimensions",
+                                  "width": 32,
+                                  "height": 32,
+                                  "unit": "px"
+                                },
+                                "provenance": {
+                                  "kind": "registry-literal",
+                                  "source_path": "registry/email-component-descriptions-registry.md"
+                                }
+                              }
+                            ],
+                            "children": [],
+                            "asset_contract_id": "google-play-icon",
+                            "content_slots": [
+                              {
+                                "id": "alt",
+                                "type": "alt-text",
+                                "required": true
+                              }
+                            ]
+                          },
+                          {
+                            "id": "google-play-text",
+                            "semantic_role": "store-text",
+                            "render_mode": "html-text",
+                            "visibility": {
+                              "mode": "always"
+                            },
+                            "facts": [],
+                            "children": [],
+                            "content_slots": [
+                              {
+                                "id": "text",
+                                "type": "rich-text",
+                                "required": true
+                              }
+                            ]
+                          }
+                        ],
+                        "content_slots": [
+                          {
+                            "id": "href",
+                            "type": "url",
+                            "required": true
+                          }
+                        ]
+                      },
                       {
-                        "id": "alt",
-                        "type": "alt-text",
-                        "required": true
+                        "id": "appgallery-link",
+                        "semantic_role": "store-link",
+                        "render_mode": "html-link",
+                        "visibility": {
+                          "mode": "always"
+                        },
+                        "facts": [
+                          {
+                            "id": "appgallery-link-dimensions",
+                            "value": {
+                              "type": "dimensions",
+                              "width": 116,
+                              "height": 56,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          },
+                          {
+                            "id": "appgallery-link-border-radius",
+                            "value": {
+                              "type": "measure",
+                              "value": 50,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          },
+                          {
+                            "id": "appgallery-link-background",
+                            "value": {
+                              "type": "color",
+                              "value": "#F8F8FA"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "id": "appgallery-icon",
+                            "semantic_role": "store-icon",
+                            "render_mode": "direct-image",
+                            "visibility": {
+                              "mode": "always"
+                            },
+                            "facts": [
+                              {
+                                "id": "appgallery-icon-display-dimensions",
+                                "value": {
+                                  "type": "dimensions",
+                                  "width": 32,
+                                  "height": 32,
+                                  "unit": "px"
+                                },
+                                "provenance": {
+                                  "kind": "registry-literal",
+                                  "source_path": "registry/email-component-descriptions-registry.md"
+                                }
+                              }
+                            ],
+                            "children": [],
+                            "asset_contract_id": "appgallery-icon",
+                            "content_slots": [
+                              {
+                                "id": "alt",
+                                "type": "alt-text",
+                                "required": true
+                              }
+                            ]
+                          },
+                          {
+                            "id": "appgallery-text",
+                            "semantic_role": "store-text",
+                            "render_mode": "html-text",
+                            "visibility": {
+                              "mode": "always"
+                            },
+                            "facts": [],
+                            "children": [],
+                            "content_slots": [
+                              {
+                                "id": "text",
+                                "type": "rich-text",
+                                "required": true
+                              }
+                            ]
+                          }
+                        ],
+                        "content_slots": [
+                          {
+                            "id": "href",
+                            "type": "url",
+                            "required": true
+                          }
+                        ]
+                      },
+                      {
+                        "id": "getapps-link",
+                        "semantic_role": "store-link",
+                        "render_mode": "html-link",
+                        "visibility": {
+                          "mode": "always"
+                        },
+                        "facts": [
+                          {
+                            "id": "getapps-link-dimensions",
+                            "value": {
+                              "type": "dimensions",
+                              "width": 116,
+                              "height": 56,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          },
+                          {
+                            "id": "getapps-link-border-radius",
+                            "value": {
+                              "type": "measure",
+                              "value": 50,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          },
+                          {
+                            "id": "getapps-link-background",
+                            "value": {
+                              "type": "color",
+                              "value": "#F8F8FA"
+                            },
+                            "provenance": {
+                              "kind": "registry-literal",
+                              "source_path": "registry/email-component-descriptions-registry.md"
+                            }
+                          }
+                        ],
+                        "children": [
+                          {
+                            "id": "getapps-icon",
+                            "semantic_role": "store-icon",
+                            "render_mode": "direct-image",
+                            "visibility": {
+                              "mode": "always"
+                            },
+                            "facts": [
+                              {
+                                "id": "getapps-icon-display-dimensions",
+                                "value": {
+                                  "type": "dimensions",
+                                  "width": 32,
+                                  "height": 32,
+                                  "unit": "px"
+                                },
+                                "provenance": {
+                                  "kind": "registry-literal",
+                                  "source_path": "registry/email-component-descriptions-registry.md"
+                                }
+                              }
+                            ],
+                            "children": [],
+                            "asset_contract_id": "getapps-icon",
+                            "content_slots": [
+                              {
+                                "id": "alt",
+                                "type": "alt-text",
+                                "required": true
+                              }
+                            ]
+                          },
+                          {
+                            "id": "getapps-text",
+                            "semantic_role": "store-text",
+                            "render_mode": "html-text",
+                            "visibility": {
+                              "mode": "always"
+                            },
+                            "facts": [],
+                            "children": [],
+                            "content_slots": [
+                              {
+                                "id": "text",
+                                "type": "rich-text",
+                                "required": true
+                              }
+                            ]
+                          }
+                        ],
+                        "content_slots": [
+                          {
+                            "id": "href",
+                            "type": "url",
+                            "required": true
+                          }
+                        ]
                       }
                     ]
-                  },
-                  {
-                    "id": "getapps-text",
-                    "semantic_role": "store-text",
-                    "render_mode": "html-text",
-                    "visibility": {
-                      "mode": "always"
-                    },
-                    "facts": [],
-                    "children": [],
-                    "content_slots": [
-                      {
-                        "id": "text",
-                        "type": "rich-text",
-                        "required": true
-                      }
-                    ]
-                  }
-                ],
-                "content_slots": [
-                  {
-                    "id": "href",
-                    "type": "url",
-                    "required": true
                   }
                 ]
               }
@@ -7038,11 +7336,10 @@
             },
             "facts": [
               {
-                "id": "image-to-text-gap",
+                "id": "root-layout-axis",
                 "value": {
-                  "type": "measure",
-                  "value": 16,
-                  "unit": "px"
+                  "type": "keyword",
+                  "value": "vertical"
                 },
                 "provenance": {
                   "kind": "registry-literal",
@@ -7050,10 +7347,10 @@
                 }
               },
               {
-                "id": "text-item-gap",
+                "id": "root-layout-gap",
                 "value": {
                   "type": "measure",
-                  "value": 8,
+                  "value": 16,
                   "unit": "px"
                 },
                 "provenance": {
@@ -7128,97 +7425,132 @@
                 ]
               },
               {
-                "id": "heading",
-                "semantic_role": "heading",
-                "render_mode": "html-text",
+                "id": "text-content",
+                "semantic_role": "text-content",
+                "render_mode": "presentation-table",
                 "visibility": {
                   "mode": "always"
                 },
                 "facts": [
                   {
-                    "id": "heading-font-size",
+                    "id": "text-content-layout-gap",
                     "value": {
                       "type": "measure",
-                      "value": 16,
+                      "value": 8,
                       "unit": "px"
                     },
                     "provenance": {
                       "kind": "registry-literal",
                       "source_path": "registry/email-component-descriptions-registry.md"
                     }
-                  }
-                ],
-                "children": [],
-                "content_slots": [
-                  {
-                    "id": "text",
-                    "type": "rich-text",
-                    "required": true
-                  }
-                ]
-              },
-              {
-                "id": "description",
-                "semantic_role": "description",
-                "render_mode": "html-text",
-                "visibility": {
-                  "mode": "always"
-                },
-                "facts": [
-                  {
-                    "id": "description-font-size",
-                    "value": {
-                      "type": "measure",
-                      "value": 14,
-                      "unit": "px"
-                    },
-                    "provenance": {
-                      "kind": "registry-literal",
-                      "source_path": "registry/email-component-descriptions-registry.md"
-                    }
-                  }
-                ],
-                "children": [],
-                "content_slots": [
-                  {
-                    "id": "text",
-                    "type": "rich-text",
-                    "required": true
-                  }
-                ]
-              },
-              {
-                "id": "link",
-                "semantic_role": "link",
-                "render_mode": "html-link",
-                "visibility": {
-                  "mode": "always"
-                },
-                "facts": [
-                  {
-                    "id": "link-font-size",
-                    "value": {
-                      "type": "measure",
-                      "value": 14,
-                      "unit": "px"
-                    },
-                    "provenance": {
-                      "kind": "registry-literal",
-                      "source_path": "registry/email-component-descriptions-registry.md"
-                    }
-                  }
-                ],
-                "children": [],
-                "content_slots": [
-                  {
-                    "id": "href",
-                    "type": "url",
-                    "required": true
                   },
                   {
-                    "id": "text",
-                    "type": "rich-text",
-                    "required": true
+                    "id": "text-content-layout-axis",
+                    "value": {
+                      "type": "keyword",
+                      "value": "vertical"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "id": "heading",
+                    "semantic_role": "heading",
+                    "render_mode": "html-text",
+                    "visibility": {
+                      "mode": "always"
+                    },
+                    "facts": [
+                      {
+                        "id": "heading-font-size",
+                        "value": {
+                          "type": "measure",
+                          "value": 16,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "registry-literal",
+                          "source_path": "registry/email-component-descriptions-registry.md"
+                        }
+                      }
+                    ],
+                    "children": [],
+                    "content_slots": [
+                      {
+                        "id": "text",
+                        "type": "rich-text",
+                        "required": true
+                      }
+                    ]
+                  },
+                  {
+                    "id": "description",
+                    "semantic_role": "description",
+                    "render_mode": "html-text",
+                    "visibility": {
+                      "mode": "always"
+                    },
+                    "facts": [
+                      {
+                        "id": "description-font-size",
+                        "value": {
+                          "type": "measure",
+                          "value": 14,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "registry-literal",
+                          "source_path": "registry/email-component-descriptions-registry.md"
+                        }
+                      }
+                    ],
+                    "children": [],
+                    "content_slots": [
+                      {
+                        "id": "text",
+                        "type": "rich-text",
+                        "required": true
+                      }
+                    ]
+                  },
+                  {
+                    "id": "link",
+                    "semantic_role": "link",
+                    "render_mode": "html-link",
+                    "visibility": {
+                      "mode": "always"
+                    },
+                    "facts": [
+                      {
+                        "id": "link-font-size",
+                        "value": {
+                          "type": "measure",
+                          "value": 14,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "registry-literal",
+                          "source_path": "registry/email-component-descriptions-registry.md"
+                        }
+                      }
+                    ],
+                    "children": [],
+                    "content_slots": [
+                      {
+                        "id": "href",
+                        "type": "url",
+                        "required": true
+                      },
+                      {
+                        "id": "text",
+                        "type": "rich-text",
+                        "required": true
+                      }
+                    ]
                   }
                 ]
               }
@@ -7235,7 +7567,18 @@
             },
             "facts": [
               {
-                "id": "image-to-text-column-gap",
+                "id": "root-layout-axis",
+                "value": {
+                  "type": "keyword",
+                  "value": "horizontal"
+                },
+                "provenance": {
+                  "kind": "registry-literal",
+                  "source_path": "registry/email-component-descriptions-registry.md"
+                }
+              },
+              {
+                "id": "root-layout-gap",
                 "value": {
                   "type": "measure",
                   "value": 24,
@@ -7247,22 +7590,10 @@
                 }
               },
               {
-                "id": "text-column-width",
+                "id": "card-width",
                 "value": {
                   "type": "measure",
-                  "value": 232,
-                  "unit": "px"
-                },
-                "provenance": {
-                  "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
-                }
-              },
-              {
-                "id": "text-item-gap",
-                "value": {
-                  "type": "measure",
-                  "value": 6,
+                  "value": 488,
                   "unit": "px"
                 },
                 "provenance": {
@@ -7317,97 +7648,144 @@
                 ]
               },
               {
-                "id": "heading",
-                "semantic_role": "heading",
-                "render_mode": "html-text",
+                "id": "text-content",
+                "semantic_role": "text-content",
+                "render_mode": "presentation-table",
                 "visibility": {
                   "mode": "always"
                 },
                 "facts": [
                   {
-                    "id": "heading-font-size",
+                    "id": "text-content-layout-gap",
                     "value": {
                       "type": "measure",
-                      "value": 20,
+                      "value": 6,
                       "unit": "px"
                     },
                     "provenance": {
                       "kind": "registry-literal",
                       "source_path": "registry/email-component-descriptions-registry.md"
                     }
-                  }
-                ],
-                "children": [],
-                "content_slots": [
-                  {
-                    "id": "text",
-                    "type": "rich-text",
-                    "required": true
-                  }
-                ]
-              },
-              {
-                "id": "description",
-                "semantic_role": "description",
-                "render_mode": "html-text",
-                "visibility": {
-                  "mode": "always"
-                },
-                "facts": [
-                  {
-                    "id": "description-font-size",
-                    "value": {
-                      "type": "measure",
-                      "value": 16,
-                      "unit": "px"
-                    },
-                    "provenance": {
-                      "kind": "registry-literal",
-                      "source_path": "registry/email-component-descriptions-registry.md"
-                    }
-                  }
-                ],
-                "children": [],
-                "content_slots": [
-                  {
-                    "id": "text",
-                    "type": "rich-text",
-                    "required": true
-                  }
-                ]
-              },
-              {
-                "id": "link",
-                "semantic_role": "link",
-                "render_mode": "html-link",
-                "visibility": {
-                  "mode": "always"
-                },
-                "facts": [
-                  {
-                    "id": "link-font-size",
-                    "value": {
-                      "type": "measure",
-                      "value": 16,
-                      "unit": "px"
-                    },
-                    "provenance": {
-                      "kind": "registry-literal",
-                      "source_path": "registry/email-component-descriptions-registry.md"
-                    }
-                  }
-                ],
-                "children": [],
-                "content_slots": [
-                  {
-                    "id": "href",
-                    "type": "url",
-                    "required": true
                   },
                   {
-                    "id": "text",
-                    "type": "rich-text",
-                    "required": true
+                    "id": "text-content-width",
+                    "value": {
+                      "type": "measure",
+                      "value": 232,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  },
+                  {
+                    "id": "text-content-layout-axis",
+                    "value": {
+                      "type": "keyword",
+                      "value": "vertical"
+                    },
+                    "provenance": {
+                      "kind": "registry-literal",
+                      "source_path": "registry/email-component-descriptions-registry.md"
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "id": "heading",
+                    "semantic_role": "heading",
+                    "render_mode": "html-text",
+                    "visibility": {
+                      "mode": "always"
+                    },
+                    "facts": [
+                      {
+                        "id": "heading-font-size",
+                        "value": {
+                          "type": "measure",
+                          "value": 20,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "registry-literal",
+                          "source_path": "registry/email-component-descriptions-registry.md"
+                        }
+                      }
+                    ],
+                    "children": [],
+                    "content_slots": [
+                      {
+                        "id": "text",
+                        "type": "rich-text",
+                        "required": true
+                      }
+                    ]
+                  },
+                  {
+                    "id": "description",
+                    "semantic_role": "description",
+                    "render_mode": "html-text",
+                    "visibility": {
+                      "mode": "always"
+                    },
+                    "facts": [
+                      {
+                        "id": "description-font-size",
+                        "value": {
+                          "type": "measure",
+                          "value": 16,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "registry-literal",
+                          "source_path": "registry/email-component-descriptions-registry.md"
+                        }
+                      }
+                    ],
+                    "children": [],
+                    "content_slots": [
+                      {
+                        "id": "text",
+                        "type": "rich-text",
+                        "required": true
+                      }
+                    ]
+                  },
+                  {
+                    "id": "link",
+                    "semantic_role": "link",
+                    "render_mode": "html-link",
+                    "visibility": {
+                      "mode": "always"
+                    },
+                    "facts": [
+                      {
+                        "id": "link-font-size",
+                        "value": {
+                          "type": "measure",
+                          "value": 16,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "registry-literal",
+                          "source_path": "registry/email-component-descriptions-registry.md"
+                        }
+                      }
+                    ],
+                    "children": [],
+                    "content_slots": [
+                      {
+                        "id": "href",
+                        "type": "url",
+                        "required": true
+                      },
+                      {
+                        "id": "text",
+                        "type": "rich-text",
+                        "required": true
+                      }
+                    ]
                   }
                 ]
               }

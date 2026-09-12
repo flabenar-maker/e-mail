@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: component-registry -->
-<!-- source-digest: sha256:cf5abf69fe4768d8c5349a50d9f72dd5f3b191d9af5307b3057c31eff46527ed -->
+<!-- source-digest: sha256:0bd70aafe5f52d65f397aa2c40bfe06a1ce57eafe0886b8e1311d208cd91ba82 -->
 <!-- schema-versions: components=2.1.0, typography=1.0.0, spacing=1.0.0, assets=1.0.0 -->
 # CUPIS component registry
 
@@ -1078,94 +1078,110 @@ RENDER: HTML
 
 - `root` — role `banner`; render `presentation-table`; visibility `always`
   - Fact `banner-top-gap`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `card-padding`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - Fact `card-border-radius`: `26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `content-item-gap`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `logo-description-gap`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `header-column-gap`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `store-link-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `app-logo` — role `logo`; render `direct-image`; visibility `always`; asset `app-logo`
-    - Fact `logo-display-dimensions`: `219×62px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `description` — role `description`; render `html-text`; visibility `always`
-    - Fact `description-font-size`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `qr-code` — role `qr-code`; render `direct-image`; visibility `always`; asset `qr-code`
-    - Fact `qr-display-dimensions`: `130×130px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `rustore-link` — role `store-link`; render `html-link`; visibility `always`
-    - Fact `rustore-link-dimensions`: `116×56px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `rustore-link-border-radius`: `50px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - `rustore-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `rustore-icon`
-      - Fact `rustore-icon-display-dimensions`: `32×32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - `rustore-text` — role `store-text`; render `html-text`; visibility `always`
-  - `google-play-link` — role `store-link`; render `html-link`; visibility `always`
-    - Fact `google-play-link-dimensions`: `116×56px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `google-play-link-border-radius`: `50px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `google-play-link-background`: `#F8F8FA`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - `google-play-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `google-play-icon`
-      - Fact `google-play-icon-display-dimensions`: `32×32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - `google-play-text` — role `store-text`; render `html-text`; visibility `always`
-  - `appgallery-link` — role `store-link`; render `html-link`; visibility `always`
-    - Fact `appgallery-link-dimensions`: `116×56px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `appgallery-link-border-radius`: `50px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `appgallery-link-background`: `#F8F8FA`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - `appgallery-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `appgallery-icon`
-      - Fact `appgallery-icon-display-dimensions`: `32×32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - `appgallery-text` — role `store-text`; render `html-text`; visibility `always`
-  - `getapps-link` — role `store-link`; render `html-link`; visibility `always`
-    - Fact `getapps-link-dimensions`: `116×56px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `getapps-link-border-radius`: `50px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `getapps-link-background`: `#F8F8FA`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - `getapps-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `getapps-icon`
-      - Fact `getapps-icon-display-dimensions`: `32×32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - `getapps-text` — role `store-text`; render `html-text`; visibility `always`
+  - Fact `app-card-width`: `552px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `root-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - `content-area` — role `content-area`; render `presentation-table`; visibility `always`
+    - Fact `content-area-padding`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `content-area-layout-gap`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `content-area-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - `text-qr` — role `text-qr`; render `presentation-table`; visibility `always`
+      - Fact `text-qr-layout-gap`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+      - Fact `text-qr-layout-axis`: `horizontal`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+      - `header-row` — role `header-row`; render `presentation-table`; visibility `always`
+        - Fact `header-row-layout-gap`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `header-row-width`: `334px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `header-row-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - `app-logo` — role `logo`; render `direct-image`; visibility `always`; asset `app-logo`
+          - Fact `logo-display-dimensions`: `219×62px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - `description` — role `description`; render `html-text`; visibility `always`
+          - Fact `description-font-size`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+      - `qr-code` — role `qr-code`; render `direct-image`; visibility `always`; asset `qr-code`
+        - Fact `qr-display-dimensions`: `130×130px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - `store-buttons` — role `store-buttons`; render `presentation-table`; visibility `always`
+      - Fact `store-buttons-layout-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+      - Fact `store-buttons-layout-axis`: `horizontal`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+      - `rustore-link` — role `store-link`; render `html-link`; visibility `always`
+        - Fact `rustore-link-dimensions`: `116×56px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `rustore-link-border-radius`: `50px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - `rustore-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `rustore-icon`
+          - Fact `rustore-icon-display-dimensions`: `32×32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - `rustore-text` — role `store-text`; render `html-text`; visibility `always`
+      - `google-play-link` — role `store-link`; render `html-link`; visibility `always`
+        - Fact `google-play-link-dimensions`: `116×56px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `google-play-link-border-radius`: `50px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `google-play-link-background`: `#F8F8FA`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - `google-play-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `google-play-icon`
+          - Fact `google-play-icon-display-dimensions`: `32×32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - `google-play-text` — role `store-text`; render `html-text`; visibility `always`
+      - `appgallery-link` — role `store-link`; render `html-link`; visibility `always`
+        - Fact `appgallery-link-dimensions`: `116×56px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `appgallery-link-border-radius`: `50px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `appgallery-link-background`: `#F8F8FA`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - `appgallery-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `appgallery-icon`
+          - Fact `appgallery-icon-display-dimensions`: `32×32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - `appgallery-text` — role `store-text`; render `html-text`; visibility `always`
+      - `getapps-link` — role `store-link`; render `html-link`; visibility `always`
+        - Fact `getapps-link-dimensions`: `116×56px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `getapps-link-border-radius`: `50px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `getapps-link-background`: `#F8F8FA`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - `getapps-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `getapps-icon`
+          - Fact `getapps-icon-display-dimensions`: `32×32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - `getapps-text` — role `store-text`; render `html-text`; visibility `always`
 
 ### Mobile
 
 - `root` — role `banner`; render `presentation-table`; visibility `always`
   - Fact `banner-top-gap`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `card-padding`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - Fact `card-border-radius`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `content-item-gap`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `store-link-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - Fact `store-grid-layout-forbidden`: `2×2`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `app-logo` — role `logo`; render `direct-image`; visibility `always`; asset `app-logo`
-    - Fact `logo-display-dimensions`: `163×46px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `description` — role `description`; render `html-text`; visibility `always`
-    - Fact `description-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `rustore-link` — role `store-link`; render `html-link`; visibility `always`
-    - Fact `rustore-link-height`: `44px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `rustore-link-border-radius`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `rustore-icon-text-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - `rustore-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `rustore-icon`
-      - Fact `rustore-icon-display-dimensions`: `26×26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - `rustore-text` — role `store-text`; render `html-text`; visibility `always`
-      - Fact `rustore-text-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `google-play-link` — role `store-link`; render `html-link`; visibility `always`
-    - Fact `google-play-link-height`: `44px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `google-play-link-border-radius`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `google-play-icon-text-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `google-play-link-background`: `#F8F8FA`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - `google-play-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `google-play-icon`
-      - Fact `google-play-icon-display-dimensions`: `26×26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - `google-play-text` — role `store-text`; render `html-text`; visibility `always`
-      - Fact `google-play-text-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `appgallery-link` — role `store-link`; render `html-link`; visibility `always`
-    - Fact `appgallery-link-height`: `44px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `appgallery-link-border-radius`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `appgallery-icon-text-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `appgallery-link-background`: `#F8F8FA`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - `appgallery-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `appgallery-icon`
-      - Fact `appgallery-icon-display-dimensions`: `26×26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - `appgallery-text` — role `store-text`; render `html-text`; visibility `always`
-      - Fact `appgallery-text-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `getapps-link` — role `store-link`; render `html-link`; visibility `always`
-    - Fact `getapps-link-height`: `44px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `getapps-link-border-radius`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `getapps-icon-text-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `getapps-link-background`: `#F8F8FA`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - `getapps-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `getapps-icon`
-      - Fact `getapps-icon-display-dimensions`: `26×26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - `getapps-text` — role `store-text`; render `html-text`; visibility `always`
-      - Fact `getapps-text-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `root-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - `content-area` — role `content-area`; render `presentation-table`; visibility `always`
+    - Fact `content-area-padding`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `content-area-layout-gap`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `content-area-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - `app-logo` — role `logo`; render `direct-image`; visibility `always`; asset `app-logo`
+      - Fact `logo-display-dimensions`: `163×46px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - `description` — role `description`; render `html-text`; visibility `always`
+      - Fact `description-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - `store-buttons` — role `store-buttons`; render `presentation-table`; visibility `always`
+      - Fact `store-buttons-layout-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+      - Fact `store-buttons-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+      - `rustore-link` — role `store-link`; render `html-link`; visibility `always`
+        - Fact `rustore-link-height`: `44px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `rustore-link-border-radius`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `rustore-icon-text-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - `rustore-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `rustore-icon`
+          - Fact `rustore-icon-display-dimensions`: `26×26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - `rustore-text` — role `store-text`; render `html-text`; visibility `always`
+          - Fact `rustore-text-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+      - `google-play-link` — role `store-link`; render `html-link`; visibility `always`
+        - Fact `google-play-link-height`: `44px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `google-play-link-border-radius`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `google-play-icon-text-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `google-play-link-background`: `#F8F8FA`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - `google-play-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `google-play-icon`
+          - Fact `google-play-icon-display-dimensions`: `26×26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - `google-play-text` — role `store-text`; render `html-text`; visibility `always`
+          - Fact `google-play-text-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+      - `appgallery-link` — role `store-link`; render `html-link`; visibility `always`
+        - Fact `appgallery-link-height`: `44px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `appgallery-link-border-radius`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `appgallery-icon-text-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `appgallery-link-background`: `#F8F8FA`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - `appgallery-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `appgallery-icon`
+          - Fact `appgallery-icon-display-dimensions`: `26×26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - `appgallery-text` — role `store-text`; render `html-text`; visibility `always`
+          - Fact `appgallery-text-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+      - `getapps-link` — role `store-link`; render `html-link`; visibility `always`
+        - Fact `getapps-link-height`: `44px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `getapps-link-border-radius`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `getapps-icon-text-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `getapps-link-background`: `#F8F8FA`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - `getapps-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `getapps-icon`
+          - Fact `getapps-icon-display-dimensions`: `26×26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - `getapps-text` — role `store-text`; render `html-text`; visibility `always`
+          - Fact `getapps-text-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
 
 ### Properties and variants
 
@@ -1252,25 +1268,25 @@ RENDER: HTML
   - Aspect ratio: 32:32
   - Crop: `none`; position `exact-node-after-overrides`
   - Background: own fill `preserve`; artificial matte `forbid`
-- Asset usage: `mobile` `/contracts/mobile/root/children/0` → `app-logo` as `direct-image`
-- Link: `mobile` `/contracts/mobile/root/children/2`
-- Asset usage: `mobile` `/contracts/mobile/root/children/2/children/0` → `rustore-icon` as `direct-image`
-- Link: `mobile` `/contracts/mobile/root/children/3`
-- Asset usage: `mobile` `/contracts/mobile/root/children/3/children/0` → `google-play-icon` as `direct-image`
-- Link: `mobile` `/contracts/mobile/root/children/4`
-- Asset usage: `mobile` `/contracts/mobile/root/children/4/children/0` → `appgallery-icon` as `direct-image`
-- Link: `mobile` `/contracts/mobile/root/children/5`
-- Asset usage: `mobile` `/contracts/mobile/root/children/5/children/0` → `getapps-icon` as `direct-image`
-- Asset usage: `desktop` `/contracts/desktop/root/children/0` → `app-logo` as `direct-image`
-- Asset usage: `desktop` `/contracts/desktop/root/children/2` → `qr-code` as `direct-image`
-- Link: `desktop` `/contracts/desktop/root/children/3`
-- Asset usage: `desktop` `/contracts/desktop/root/children/3/children/0` → `rustore-icon` as `direct-image`
-- Link: `desktop` `/contracts/desktop/root/children/4`
-- Asset usage: `desktop` `/contracts/desktop/root/children/4/children/0` → `google-play-icon` as `direct-image`
-- Link: `desktop` `/contracts/desktop/root/children/5`
-- Asset usage: `desktop` `/contracts/desktop/root/children/5/children/0` → `appgallery-icon` as `direct-image`
-- Link: `desktop` `/contracts/desktop/root/children/6`
-- Asset usage: `desktop` `/contracts/desktop/root/children/6/children/0` → `getapps-icon` as `direct-image`
+- Asset usage: `mobile` `/contracts/mobile/root/children/0/children/0` → `app-logo` as `direct-image`
+- Link: `mobile` `/contracts/mobile/root/children/0/children/2/children/0`
+- Asset usage: `mobile` `/contracts/mobile/root/children/0/children/2/children/0/children/0` → `rustore-icon` as `direct-image`
+- Link: `mobile` `/contracts/mobile/root/children/0/children/2/children/1`
+- Asset usage: `mobile` `/contracts/mobile/root/children/0/children/2/children/1/children/0` → `google-play-icon` as `direct-image`
+- Link: `mobile` `/contracts/mobile/root/children/0/children/2/children/2`
+- Asset usage: `mobile` `/contracts/mobile/root/children/0/children/2/children/2/children/0` → `appgallery-icon` as `direct-image`
+- Link: `mobile` `/contracts/mobile/root/children/0/children/2/children/3`
+- Asset usage: `mobile` `/contracts/mobile/root/children/0/children/2/children/3/children/0` → `getapps-icon` as `direct-image`
+- Asset usage: `desktop` `/contracts/desktop/root/children/0/children/0/children/0/children/0` → `app-logo` as `direct-image`
+- Asset usage: `desktop` `/contracts/desktop/root/children/0/children/0/children/1` → `qr-code` as `direct-image`
+- Link: `desktop` `/contracts/desktop/root/children/0/children/1/children/0`
+- Asset usage: `desktop` `/contracts/desktop/root/children/0/children/1/children/0/children/0` → `rustore-icon` as `direct-image`
+- Link: `desktop` `/contracts/desktop/root/children/0/children/1/children/1`
+- Asset usage: `desktop` `/contracts/desktop/root/children/0/children/1/children/1/children/0` → `google-play-icon` as `direct-image`
+- Link: `desktop` `/contracts/desktop/root/children/0/children/1/children/2`
+- Asset usage: `desktop` `/contracts/desktop/root/children/0/children/1/children/2/children/0` → `appgallery-icon` as `direct-image`
+- Link: `desktop` `/contracts/desktop/root/children/0/children/1/children/3`
+- Asset usage: `desktop` `/contracts/desktop/root/children/0/children/1/children/3/children/0` → `getapps-icon` as `direct-image`
 
 ### Output contract classification
 
@@ -1512,35 +1528,45 @@ RENDER: HYBRID
 - `root` — role `banner`; render `presentation-table`; visibility `always`
   - Fact `banner-top-gap`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - Fact `banner-inner-width`: `552px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `content-area-width`: `300px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `content-padding`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `content-inner-width`: `236px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `content-item-gap`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `text-item-gap`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `root-layout-axis`: `horizontal`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - `content-area` — role `content-area`; render `presentation-table`; visibility `always`
+    - Fact `content-area-padding`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `content-area-layout-gap`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `content-area-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `content-area-width`: `300px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - `text-content` — role `text-content`; render `presentation-table`; visibility `always`
+      - Fact `text-content-layout-gap`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+      - Fact `text-content-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+      - Fact `content-inner-width`: `236px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+      - `heading` — role `heading`; render `html-text`; visibility `always`
+        - Fact `heading-font-size`: `20px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+      - `body` — role `body`; render `html-text`; visibility property `show-body` (`Show Body`)
+        - Fact `body-font-size`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - `button` — role `button`; render `nested-component`; visibility property `show-button` (`Show Button`); component `button-secondary` (`Button/Secondary`)
   - `secondary-image` — role `image`; render `background-image`; visibility `always`; asset `secondary-image`
     - Fact `image-area-width`: `252px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `heading` — role `heading`; render `html-text`; visibility `always`
-    - Fact `heading-font-size`: `20px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `body` — role `body`; render `html-text`; visibility property `show-body` (`Show Body`)
-    - Fact `body-font-size`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `button` — role `button`; render `nested-component`; visibility property `show-button` (`Show Button`); component `button-secondary` (`Button/Secondary`)
 
 ### Mobile
 
 - `root` — role `banner`; render `presentation-table`; visibility `always`
   - Fact `banner-top-gap`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `content-padding`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `content-item-gap`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `text-item-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `root-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `secondary-image` — role `image`; render `direct-image`; visibility `always`; asset `secondary-image`
     - Fact `width-behavior`: `fluid-to-container`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - Fact `height-behavior`: `auto`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - Fact `fixed-height-forbidden`: `true`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `heading` — role `heading`; render `html-text`; visibility `always`
-    - Fact `heading-font-size`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `body` — role `body`; render `html-text`; visibility property `show-body` (`Show Body`)
-    - Fact `body-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `button` — role `button`; render `nested-component`; visibility property `show-button` (`Show Button`); component `button-secondary` (`Button/Secondary`)
+  - `content-area` — role `content-area`; render `presentation-table`; visibility `always`
+    - Fact `content-area-padding`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `content-area-layout-gap`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `content-area-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - `text-content` — role `text-content`; render `presentation-table`; visibility `always`
+      - Fact `text-content-layout-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+      - Fact `text-content-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+      - `heading` — role `heading`; render `html-text`; visibility `always`
+        - Fact `heading-font-size`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+      - `body` — role `body`; render `html-text`; visibility property `show-body` (`Show Body`)
+        - Fact `body-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - `button` — role `button`; render `nested-component`; visibility property `show-button` (`Show Button`); component `button-secondary` (`Button/Secondary`)
 
 ### Properties and variants
 
@@ -1565,12 +1591,12 @@ RENDER: HYBRID
   - Crop: `figma-fill`; position `concrete-desktop-instance`
   - Background: own fill `preserve`; artificial matte `forbid`
 - Asset usage: `mobile` `/contracts/mobile/root/children/0` → `secondary-image` as `direct-image`
-- Asset usage: `desktop` `/contracts/desktop/root/children/0` → `secondary-image` as `background-image`
+- Asset usage: `desktop` `/contracts/desktop/root/children/1` → `secondary-image` as `background-image`
 
 ### Constraints and dependencies
 
-- Dependency: `/contracts/mobile/root/children/3/component_id` → component `button-secondary` (`Button/Secondary`)
-- Dependency: `/contracts/desktop/root/children/3/component_id` → component `button-secondary` (`Button/Secondary`)
+- Dependency: `/contracts/mobile/root/children/1/children/1/component_id` → component `button-secondary` (`Button/Secondary`)
+- Dependency: `/contracts/desktop/root/children/0/children/1/component_id` → component `button-secondary` (`Button/Secondary`)
 
 ### Output contract classification
 
@@ -2421,35 +2447,42 @@ RENDER: HYBRID
 ### Desktop
 
 - `root` — role `card`; render `presentation-table`; visibility `always`
-  - Fact `image-to-text-column-gap`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `text-column-width`: `232px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `text-item-gap`: `6px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `root-layout-axis`: `horizontal`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `root-layout-gap`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `card-width`: `488px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `card-image` — role `image`; render `direct-image`; visibility `always`; asset `card-image`
     - Fact `image-display-dimensions`: `232×148px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - Fact `image-border-radius`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `heading` — role `heading`; render `html-text`; visibility `always`
-    - Fact `heading-font-size`: `20px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `description` — role `description`; render `html-text`; visibility `always`
-    - Fact `description-font-size`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `link` — role `link`; render `html-link`; visibility `always`
-    - Fact `link-font-size`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - `text-content` — role `text-content`; render `presentation-table`; visibility `always`
+    - Fact `text-content-layout-gap`: `6px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `text-content-width`: `232px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `text-content-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - `heading` — role `heading`; render `html-text`; visibility `always`
+      - Fact `heading-font-size`: `20px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - `description` — role `description`; render `html-text`; visibility `always`
+      - Fact `description-font-size`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - `link` — role `link`; render `html-link`; visibility `always`
+      - Fact `link-font-size`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
 
 ### Mobile
 
 - `root` — role `card`; render `presentation-table`; visibility `always`
-  - Fact `image-to-text-gap`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `text-item-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `root-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `root-layout-gap`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `card-image` — role `image`; render `direct-image`; visibility `always`; asset `card-image`
     - Fact `width-behavior`: `fluid-to-container`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - Fact `height-behavior`: `auto`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - Fact `fixed-height-forbidden`: `true`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - Fact `image-border-radius`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `heading` — role `heading`; render `html-text`; visibility `always`
-    - Fact `heading-font-size`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `description` — role `description`; render `html-text`; visibility `always`
-    - Fact `description-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `link` — role `link`; render `html-link`; visibility `always`
-    - Fact `link-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - `text-content` — role `text-content`; render `presentation-table`; visibility `always`
+    - Fact `text-content-layout-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `text-content-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - `heading` — role `heading`; render `html-text`; visibility `always`
+      - Fact `heading-font-size`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - `description` — role `description`; render `html-text`; visibility `always`
+      - Fact `description-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - `link` — role `link`; render `html-link`; visibility `always`
+      - Fact `link-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
 
 ### Properties and variants
 
@@ -2472,9 +2505,9 @@ RENDER: HYBRID
   - Crop: `none`; position `exact-node-after-overrides`
   - Background: own fill `preserve`; artificial matte `forbid`
 - Asset usage: `mobile` `/contracts/mobile/root/children/0` → `card-image` as `direct-image`
-- Link: `mobile` `/contracts/mobile/root/children/3`
+- Link: `mobile` `/contracts/mobile/root/children/1/children/2`
 - Asset usage: `desktop` `/contracts/desktop/root/children/0` → `card-image` as `direct-image`
-- Link: `desktop` `/contracts/desktop/root/children/3`
+- Link: `desktop` `/contracts/desktop/root/children/1/children/2`
 
 ### Output contract classification
 
