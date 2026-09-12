@@ -345,3 +345,35 @@ test("interpreter source contains no pilot-specific rendering logic", async () =
     assert.equal(source.includes(id), false, `unexpected component id ${id}`);
   }
 });
+
+test("a shared table splits around viewport-specific background cells", async () => {
+  const { renderContractTree } = await interpreter();
+  const mobile = element({
+    id: "root",
+    children: [
+      element({
+        id: "media",
+        mode: "direct-image",
+        assetContractId: "media-asset",
+        contentSlots: [{ id: "alt", type: "alt-text", required: true }],
+      }),
+    ],
+  });
+  const desktop = structuredClone(mobile);
+  desktop.children[0].render_mode = "background-image";
+  desktop.children[0].content_slots = [];
+
+  const result = renderContractTree({
+    component: component(mobile, desktop),
+    coverage,
+    content: { media: { alt: { type: "alt-text", value: "Media" } } },
+    assets: { "media-asset": { src: "images/media.jpg", width: 252, height: 188 } },
+    properties: {},
+    foundations: { rendering },
+  });
+
+  assert.deepEqual(result.diagnostics, []);
+  assert.match(result.html, /<tr><td background="images\/media\.jpg"/u);
+  assert.doesNotMatch(result.html, /<td[^>]*><td background=/u);
+  assert.doesNotMatch(result.html, /<tr><td[^>]*><div[^>]*><td background=/u);
+});

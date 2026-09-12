@@ -97,12 +97,16 @@ function propsFromFacts(facts = []) {
       props.height = value.height;
       continue;
     }
-    const resolved = valueWithUnit(value);
-    if (resolved === undefined) {
-      if (id.endsWith("width-behavior") && value?.value === "fluid-to-container") props.fluid = true;
-      if (id.endsWith("height-behavior") && value?.value === "auto") props.fluid = true;
+    if (
+      value?.type === "keyword" &&
+      ((id.endsWith("width-behavior") && value.value === "fluid-to-container") ||
+        (id.endsWith("height-behavior") && value.value === "auto"))
+    ) {
+      props.fluid = true;
       continue;
     }
+    const resolved = valueWithUnit(value);
+    if (resolved === undefined) continue;
     if (id.endsWith("-font-size") || id.endsWith("-text-size")) props.style["font-size"] = resolved;
     else if (id.endsWith("-text-color")) props.style.color = resolved;
     else if (id.endsWith("-background") || id === "background-fallback") props.style["background-color"] = resolved;
@@ -164,8 +168,14 @@ function renderShell(element, viewport, path, childHtml, context) {
 
   switch (element.render_mode) {
     case "presentation-table": {
-      const rows = children
-        .map((child) => `<tr>${renderPrimitive("cell", {}, child)}</tr>`)
+      const rows = childHtml
+        .map((child, index) => {
+          if (!child) return "";
+          const cell = element.children?.[index]?.render_mode === "background-image"
+            ? child
+            : renderPrimitive("cell", {}, child);
+          return `<tr>${cell}</tr>`;
+        })
         .join("");
       return { html: renderPrimitive("table", factProps, rows), diagnostics: [] };
     }
@@ -307,6 +317,16 @@ function renderSplit(pair, path, context) {
 
 function renderPaired(pair, path, context) {
   if (pair.kind === "split") return renderSplit(pair, path, context);
+  if (
+    pair.mobile.render_mode === "presentation-table" &&
+    pair.children.some(
+      ({ mobile, desktop }) =>
+        mobile?.render_mode === "background-image" ||
+        desktop?.render_mode === "background-image",
+    )
+  ) {
+    return renderSplit(pair, path, context);
+  }
 
   const children = pair.children.map((child, index) =>
     renderPaired(child, `${path}-${index}`, context),
