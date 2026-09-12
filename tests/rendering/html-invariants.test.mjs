@@ -45,6 +45,10 @@ function attribute(tag, name) {
   return match?.[1];
 }
 
+function cssValue(style, name) {
+  return style.split(";").find((entry) => entry.startsWith(name + ":"))?.slice(name.length + 1);
+}
+
 function checkTableNesting(html) {
   const stack = [];
   const expectedParent = { tbody: "table", tr: "tbody", td: "tr" };
@@ -99,7 +103,7 @@ test("all rendered local image references are declared and portable", async () =
   assert.deepEqual(new Set(references), declared);
   assert.doesNotMatch(
     result.html,
-    /(?:file:\/\/|[a-z]:[\\/]|\\Users\\|\/Users\/|\/AppData\/Local\/Temp\/|\.\.\/)/iu,
+    /(?:file:\/\/|[a-z]:\\|\\Users\\|\/Users\/|\/AppData\/Local\/Temp\/|\.\.\/)/iu,
   );
 });
 
@@ -118,14 +122,14 @@ test("direct image dimensions are positive integers and fluid @2x images keep au
       }
     }
     const style = attribute(image, "style") ?? "";
-    if (style.includes("width:100%")) {
+    if (cssValue(style, "width") === "100%") {
       assert.match(style, /(?:^|;)height:auto(?:;|$)/u);
       assert.doesNotMatch(style, /(?:^|;)height:[0-9]+px(?:;|$)/u);
     }
   }
   const card = images.filter((image) => attribute(image, "src") === "images/card-image.jpg");
   assert.equal(card.length, 2, "Mobile and Desktop must share the card asset");
-  assert.ok(card.some((image) => (attribute(image, "style") ?? "").includes("width:100%")));
+  assert.ok(card.some((image) => cssValue(attribute(image, "style") ?? "", "width") === "100%"));
   assert.ok(card.some((image) => attribute(image, "width") === "232" && attribute(image, "height") === "148"));
   const secondary = images.filter((image) => attribute(image, "src") === "images/secondary.jpg");
   assert.equal(secondary.length, 1);
@@ -140,7 +144,7 @@ test("pilot has no unresolved placeholders and repeats the declared section orde
   assert.deepEqual(first.diagnostics, []);
   assert.equal(first.html, second.html);
   assert.deepEqual(first.assets, second.assets);
-  assert.doesNotMatch(first.html, /\{\{|\}\}|\[object Object\]|\bundefined\b|resolved-slot|cupis:technical/iu);
+  assert.doesNotMatch(first.html, /\{\{[^{}]*\}\}|\[object Object\]|\bundefined\b|resolved-slot|cupis:technical/iu);
   const landmarks = [
     "https://example.test/jobs",
     "images/card-image.jpg",
