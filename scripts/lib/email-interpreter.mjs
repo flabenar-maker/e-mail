@@ -164,8 +164,14 @@ function renderShell(element, viewport, path, childHtml, context) {
 
   switch (element.render_mode) {
     case "presentation-table": {
-      const rows = children
-        .map((child) => `<tr>${renderPrimitive("cell", {}, child)}</tr>`)
+      const rows = childHtml
+        .map((child, index) => {
+          if (!child) return "";
+          const cell = element.children?.[index]?.render_mode === "background-image"
+            ? child
+            : renderPrimitive("cell", {}, child);
+          return `<tr>${cell}</tr>`;
+        })
         .join("");
       return { html: renderPrimitive("table", factProps, rows), diagnostics: [] };
     }
@@ -307,6 +313,16 @@ function renderSplit(pair, path, context) {
 
 function renderPaired(pair, path, context) {
   if (pair.kind === "split") return renderSplit(pair, path, context);
+  if (
+    pair.mobile.render_mode === "presentation-table" &&
+    pair.children.some(
+      ({ mobile, desktop }) =>
+        mobile?.render_mode === "background-image" ||
+        desktop?.render_mode === "background-image",
+    )
+  ) {
+    return renderSplit(pair, path, context);
+  }
 
   const children = pair.children.map((child, index) =>
     renderPaired(child, `${path}-${index}`, context),
