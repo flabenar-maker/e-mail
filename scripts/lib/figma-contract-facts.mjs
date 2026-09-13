@@ -30,7 +30,31 @@ function leafValues(value, path, emit) {
   emit(path, value);
 }
 
-function sourceFacts(variant, issues) {
+function isExportBoundary(node, variant, record) {
+  return (record?.identity?.semantic_role === "asset" &&
+      node.node_id === variant.variant_node_id) ||
+    (record?.asset_contracts ?? []).some((asset) =>
+      asset.owner_layer_name === node.name);
+}
+
+function exportedArtworkIds(variant, record) {
+  const ids = new Set();
+  function collect(node) {
+    ids.add(node.node_id);
+    for (const child of node.children ?? []) collect(child);
+  }
+  function walk(node) {
+    if (isExportBoundary(node, variant, record)) {
+      collect(node);
+      return;
+    }
+    for (const child of node.children ?? []) walk(child);
+  }
+  walk(variant.source_node);
+  return ids;
+}
+
+function sourceFacts(variant, issues, record) {
   const result = new Map();
   const visited = new Set();
   function walk(node) {
@@ -50,7 +74,8 @@ function sourceFacts(variant, issues) {
         });
       });
     }
-    if (Array.isArray(node.children) && node.children.length > 0) {
+    if (Array.isArray(node.children) && node.children.length > 0 &&
+        !isExportBoundary(node, variant, record) && node.node_type !== "INSTANCE") {
       const source_path = "/children_order";
       result.set(`${variant.variant_node_id}|^@${node.node_id}|^@${source_path}`, {
         variant_node_id: variant.variant_node_id,
@@ -118,13 +143,21 @@ export function auditFigmaContractFacts({ record, live, mappings } = {}) {
   if (live.capture_version !== "1.0.0" || !Array.isArray(live.capture_errors) || !Array.isArray(live.component_properties)) {
     issues.push(issue("FIGMA_CAPTURE_VERSION_UNSUPPORTED", { capture_version: live.capture_version ?? null }));
   }
-  if (Array.isArray(live.capture_errors) && live.capture_errors.length > 0) {
-    issues.push(issue("FIGMA_CAPTURE_UNSUPPORTED", { details: live.capture_errors }));
+  const artworkIds = new Set((live.variants ?? []).flatMap((variant) =>
+    [...exportedArtworkIds(variant, record)]));
+  const unsupportedCapture = (live.capture_errors ?? []).filter((error) =>
+    !artworkIds.has(error.node_id));
+  if (unsupportedCapture.length > 0) {
+    issues.push(issue("FIGMA_CAPTURE_UNSUPPORTED", { details: unsupportedCapture }));
   }
   if (live.file_key !== record?.figma?.file_key || live.component_node_id !== record?.figma?.node_id) {
     issues.push(issue("FIGMA_IDENTITY_MISMATCH", { component_id: record?.id ?? null }));
   }
 
+  const sharedAsset = record?.identity?.semantic_role === "asset" &&
+    live.variants.length === 1 &&
+    live.variants[0]?.variant_node_id === live.component_node_id &&
+    !live.variants[0]?.axes?.some((axis) => axis.name === "Viewport");
   const byViewport = new Map(VIEWPORTS.map((viewport) => [viewport, []]));
   const liveVariantIds = new Set();
   const variantViewport = new Map();
@@ -138,12 +171,14 @@ export function auditFigmaContractFacts({ record, live, mappings } = {}) {
     const viewportAxis = variant.axes?.find((axis) => axis.name === "Viewport");
     const viewport = viewportAxis?.value?.toLowerCase();
     variantViewport.set(variant.variant_node_id, viewport);
-    if (!byViewport.has(viewport)) {
+    if (sharedAsset) {
+      // One exported artwork source is shared by both viewport presentations.
+    } else if (!byViewport.has(viewport)) {
       issues.push(issue("FIGMA_VIEWPORT_UNKNOWN", { variant_node_id: variant.variant_node_id }));
     } else {
       byViewport.get(viewport).push(variant);
     }
-    for (const [key, fact] of sourceFacts(variant, issues)) source.set(key, fact);
+    for (const [key, fact] of sourceFacts(variant, issues, record)) source.set(key, fact);
   }
 
   if (Array.isArray(live.component_properties) && live.component_properties.length > 0) {
@@ -160,14 +195,14 @@ export function auditFigmaContractFacts({ record, live, mappings } = {}) {
     if (!record?.contracts?.[viewport]?.root) {
       issues.push(issue("CONTRACT_VIEWPORT_MISSING", { viewport }));
     }
-    if (byViewport.get(viewport).length === 0) {
+    if (!sharedAsset && byViewport.get(viewport).length === 0) {
       issues.push(issue("FIGMA_VARIANT_MISSING", { viewport }));
     }
   }
   if (Array.isArray(record?.variants)) {
     const declared = new Set(record.variants.map((variant) => variant.node_id));
     for (const id of liveVariantIds) {
-      if (!declared.has(id)) issues.push(issue("FIGMA_VARIANT_UNDECLARED", { variant_node_id: id }));
+      if (!declared.has(id) && !(sharedAsset && id === live.component_node_id)) issues.push(issue("FIGMA_VARIANT_UNDECLARED", { variant_node_id: id }));
     }
     for (const id of declared) {
       if (!liveVariantIds.has(id)) issues.push(issue("CONTRACT_VARIANT_NOT_IN_FIGMA", { variant_node_id: id }));
@@ -191,7 +226,7 @@ export function auditFigmaContractFacts({ record, live, mappings } = {}) {
       continue;
     }
     const targetViewport = contract_path.match(/^\/contracts\/(mobile|desktop)\//u)?.[1];
-    if (targetViewport && targetViewport !== variantViewport.get(variant_node_id)) {
+    if (targetViewport && !sharedAsset && targetViewport !== variantViewport.get(variant_node_id)) {
       issues.push(issue("CONTRACT_VIEWPORT_MISMATCH", { variant_node_id, node_id, source_path, contract_path }));
       continue;
     }
