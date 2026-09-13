@@ -1,15 +1,16 @@
 name: Temporary refresh generated docs
 
-on:
+"on":
   push:
     branches: [codex/verify-render-contracts]
+  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
   refresh:
-    if: github.event.head_commit.message == 'chore(ci): temporarily refresh generated docs'
+    if: "${{ github.event_name == 'workflow_dispatch' || github.event.head_commit.message == 'chore(ci): temporarily refresh generated docs' }}"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
