@@ -1761,6 +1761,34 @@
             },
             "horizontal_alignment": {
               "type": "string"
+            },
+            "font_weight": {
+              "type": "number"
+            },
+            "font_width": {
+              "type": "number"
+            },
+            "letter_spacing": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "unit",
+                "value"
+              ],
+              "properties": {
+                "unit": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "number"
+                }
+              }
+            },
+            "text_case": {
+              "type": "string"
+            },
+            "text_decoration": {
+              "type": "string"
             }
           }
         },
