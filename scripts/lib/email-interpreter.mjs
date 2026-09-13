@@ -172,7 +172,8 @@ function richTextFromFacts(element, entry, style) {
     const color = segment.fills?.find(({ type, visible }) => type === "solid" && visible !== false)?.color;
     const decoration = segment.text_decoration === "UNDERLINE" ? "underline" : "none";
     const text = escapeInline(runs[index]).replaceAll("\u2028", "<br>").replaceAll("\n", "<br>");
-    const inlineStyle = `color:${color};text-decoration:${decoration}`;
+    const weight = { Regular: 400, Medium: 500, SemiBold: 600, Bold: 700 }[segment.font_style];
+    const inlineStyle = `color:${color};font-family:${segment.font_family},Arial,sans-serif;font-size:${segment.font_size_px}px;font-weight:${weight};line-height:${segment.line_height.value}${segment.line_height.unit === "PERCENT" ? "%" : "px"};text-decoration:${decoration}`;
     if (decoration !== "underline") return `<span style="${inlineStyle}">${text}</span>`;
     const href = slotValue(entry, "help-url") ?? slotValue(entry, `link-${index + 1}-url`);
     if (!href) return null;
