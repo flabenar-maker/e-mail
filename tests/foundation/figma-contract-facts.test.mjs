@@ -119,3 +119,39 @@ test("a new Figma layer is not silently omitted", () => {
   const report = auditFigmaContractFacts({ record, live: packet, mappings });
   assert.ok(report.issues.some((issue) => issue.code === "FIGMA_FACT_UNCOVERED" && issue.node_id === "3:2"));
 });
+
+test("an exact fully mapped Mobile/Desktop example passes", () => {
+  const record = {
+    id: "exact-sample",
+    figma: { file_key: "file-key", node_id: "1:1" },
+    variants: [{ node_id: "2:1" }, { node_id: "2:2" }],
+    contracts: {
+      mobile: { root: { facts: [{ id: "gap", value: { type: "integer", value: 12 } }], children: [] } },
+      desktop: { root: { facts: [{ id: "gap", value: { type: "integer", value: 16 } }], children: [] } },
+    },
+  };
+  const live = {
+    file_key: "file-key",
+    component_node_id: "1:1",
+    variants: [
+      { variant_node_id: "2:1", axes: [{ name: "Viewport", value: "Mobile" }], source_node: { node_id: "2:1", layout: { item_spacing: 12 } } },
+      { variant_node_id: "2:2", axes: [{ name: "Viewport", value: "Desktop" }], source_node: { node_id: "2:2", layout: { item_spacing: 16 } } },
+    ],
+  };
+  const mappings = [
+    { variant_node_id: "2:1", node_id: "2:1", source_path: "/layout/item_spacing", contract_path: "/contracts/mobile/root/facts/0/value/value", transform: "identity" },
+    { variant_node_id: "2:2", node_id: "2:2", source_path: "/layout/item_spacing", contract_path: "/contracts/desktop/root/facts/0/value/value", transform: "identity" },
+  ];
+  const report = auditFigmaContractFacts({ record, live, mappings });
+  assert.equal(report.ok, true, JSON.stringify(report.issues));
+  assert.equal(report.source_fact_count, 2);
+  assert.equal(report.mapped_contract_fact_count, 2);
+});
+
+test("a Mobile source fact cannot certify a Desktop contract fact", () => {
+  const { record, packet, mappings } = fixture();
+  mappings.find((item) => item.source_path === "/layout/item_spacing").contract_path =
+    "/contracts/desktop/root/facts/0/value/value";
+  const report = auditFigmaContractFacts({ record, live: packet, mappings });
+  assert.ok(report.issues.some((issue) => issue.code === "CONTRACT_VIEWPORT_MISMATCH"));
+});
