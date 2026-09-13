@@ -99,7 +99,6 @@ function propsFromFacts(facts = [], { viewport, mode, isRoot = false } = {}) {
       props.height = size.height;
       if (sizing === "fill" && mode === "direct-image") {
         props.fluid = true;
-        delete props.height;
       }
     } else if (isRoot && viewport === "desktop") {
       props.width = size.width;
@@ -140,6 +139,10 @@ function propsFromFacts(facts = [], { viewport, mode, isRoot = false } = {}) {
     else if (id === "text-color" || id.endsWith("-text-color")) props.style.color = resolved;
     else if (id === "background" || id.endsWith("-background") || id === "background-fallback") props.style["background-color"] = resolved;
     else if (id === "border-radius" || id.endsWith("-border-radius")) props.style["border-radius"] = resolved;
+    else if (/^border-radius-(?:top|bottom)-(?:left|right)$/u.test(id)) {
+      const [, , side, corner] = id.split("-");
+      props.style[`border-${side}-${corner}-radius`] = resolved;
+    }
     else if (["padding-top", "padding-right", "padding-bottom", "padding-left"].includes(id)) props.style[id] = resolved;
     else if (id.endsWith("-padding-inline")) {
       props.style["padding-left"] = resolved;
@@ -282,30 +285,42 @@ function renderShell(element, viewport, path, childHtml, context) {
       if (
         axes.length > 1 || gaps.length > 1 ||
         !["vertical", "horizontal"].includes(axis) ||
-        !Number.isInteger(gap) || gap < 0
+        !Number.isInteger(gap) || (gap < 0 && children.length > 1)
       ) {
         return {
           html: "",
           diagnostics: [diagnostic(
             "RENDER_LAYOUT_INVALID",
             `/contracts/${viewport}/${path}/facts`,
-            "Presentation-table layout requires one valid axis and nonnegative integer gap.",
+            "Presentation-table layout requires one valid axis and an integer gap; negative gap is only valid without an inter-item boundary.",
           )],
         };
       }
       const visible = childHtml
         .map((html, index) => ({ html, node: element.children?.[index] }))
         .filter(({ html }) => Boolean(html));
+      const primaryAlignment = element.facts?.find(({ id }) => id === "primary-alignment")?.value?.value;
+      const centerGroup = axis === "horizontal" && primaryAlignment === "center";
+      const spaceBetween = axis === "horizontal" && primaryAlignment === "space_between";
+      const groupedAction = centerGroup && element.action?.kind === "whole-element" && visible.length > 1;
       const cellFor = ({ html, node }) => node?.render_mode === "background-image"
         ? html
-        : renderPrimitive("cell", { width: propsFromFacts(node?.facts, { viewport, mode: node?.render_mode }).width, valign: element.facts?.some(({ id, value }) => id === "counter-alignment" && value.value === "center") ? "middle" : "top" }, wrapAction(element, entry, html));
-      const rows = axis === "horizontal"
+        : renderPrimitive("cell", {
+          width: spaceBetween ? node?.facts?.find(({ id }) => id === "reference-size")?.value?.width : propsFromFacts(node?.facts, { viewport, mode: node?.render_mode }).width,
+          valign: element.facts?.some(({ id, value }) => id === "counter-alignment" && value.value === "center") ? "middle" : "top",
+        }, groupedAction ? html : wrapAction(element, entry, html));
+      const rawRows = axis === "horizontal"
         ? `<tr>${visible.map(cellFor).join(gap > 0
           ? renderPrimitive("cell", { width: gap, style: { "font-size": "0", "line-height": "0" } }, "&nbsp;")
           : "")}</tr>`
         : visible.map((entry, index) => `${index > 0 && gap > 0
           ? `<tr>${renderPrimitive("cell", { height: gap, style: { "font-size": "0", "line-height": "0" } }, "&nbsp;")}</tr>`
           : ""}<tr>${cellFor(entry)}</tr>`).join("");
+      const rows = centerGroup
+        ? `<tr>${renderPrimitive("cell", { style: { "text-align": "center" } },
+            wrapAction(groupedAction ? element : {}, entry,
+              renderPrimitive("table", { width: "auto", align: "center" }, rawRows)))}</tr>`
+        : rawRows;
       const padding = Object.fromEntries(
         Object.entries(factProps.style).filter(([key]) => key === "padding" || key.startsWith("padding-")),
       );
@@ -365,7 +380,7 @@ function renderShell(element, viewport, path, childHtml, context) {
         html: wrapAction(element, entry, renderPrimitive("direct-image", {
           ...asset,
           ...factProps,
-          height: element.facts?.some(({ id, value }) => id === "height-behavior" && value.value?.value === "auto") ? undefined : (factProps.height ?? asset.height),
+          height: factProps.height ?? asset.height,
           style: { ...(asset.style ?? {}), ...factProps.style },
           alt: slotValue(entry, "alt"),
         })),
