@@ -121,8 +121,11 @@ function propsFromFacts(facts = [], { viewport, mode, isRoot = false } = {}) {
       props.fluid = true;
       continue;
     }
+    if (id === "font-weight" && value?.type === "number") { props.style["font-weight"] = value.value; continue; }
+    if (id === "clip-content" && value?.type === "boolean") { if (value.value) props.style.overflow = "hidden"; continue; }
     const resolved = valueWithUnit(value);
     if (resolved === undefined) continue;
+    if (id === "minimum-width") { props.style["min-width"] = resolved; continue; }
     if (id === "font-size" || id.endsWith("-font-size") || id.endsWith("-text-size")) props.style["font-size"] = resolved;
     else if (id === "font-family") props.style["font-family"] = `${resolved},Arial,sans-serif`;
     else if (id === "font-style") {
