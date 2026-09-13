@@ -139,30 +139,24 @@ test("direct Figma source capture preserves shared and service registries and ma
     .filter((record) => record.figma.verification.status === "blocked-ambiguous-description")
     .map((record) => record.id)
     .sort();
-  assert.deepEqual(blocked, [
-    "banner-app-download",
-    "block-cards-images",
-    "block-icon-cards",
-    "block-icon-list",
-    "button-primary",
-    "button-secondary",
-    "item-bullet",
-  ]);
+  assert.deepEqual(blocked, []);
   const recorded = projected.marketing.filter(
     (record) => record.figma.verification.status === "figma-source-recorded",
   );
-  assert.equal(recorded.length, 19);
-  assert.equal(recorded.reduce((total, record) => total + record.contracts.source_variants.length, 0), 41);
+  assert.equal(recorded.length, 26);
+  assert.equal(recorded.reduce((total, record) => total + record.contracts.source_variants.length, 0), 55);
   for (const record of recorded) {
     assert.deepEqual(
       record.contracts.source_variants.map(({ variant_node_id }) => variant_node_id).sort(),
       (record.variants.length > 0 ? record.variants.map(({ node_id }) => node_id) : [record.figma.node_id]).sort(),
     );
   }
-  for (const record of projected.marketing.filter(
-    (item) => item.figma.verification.status === "blocked-ambiguous-description",
-  )) {
-    assert.equal(record.contracts.source_variants, undefined);
+  const primary = projected.marketing.find((record) => record.id === "button-primary");
+  for (const viewport of ["mobile", "desktop"]) {
+    assert.deepEqual(findFact(primary, viewport, "background-gradient-css-angle-degrees"), {
+      type: "number",
+      value: 25,
+    });
   }
 
   for (const record of allRecords) {
