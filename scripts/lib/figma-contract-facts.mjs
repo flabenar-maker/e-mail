@@ -1,7 +1,7 @@
 // Compare an independently supplied Figma MCP source packet with the semantic
 // component contract. Stored source_variants and verification status are never inputs.
 const VIEWPORTS = ["mobile", "desktop"];
-const TARGET_PREFIX = /^\/(?:contracts\/(?:mobile|desktop)\/|asset_contracts\/|variants\/|properties\/|identity\/)/u;
+const TARGET_PREFIX = /^\/(?:contracts\/(?:mobile|desktop|variant_contracts\/\d+)\/|asset_contracts\/|variants\/|properties\/|identity\/)/u;
 
 function issue(code, fields = {}) {
   return { code, ...fields };
@@ -111,6 +111,8 @@ function contractFactPaths(record) {
   for (const viewport of VIEWPORTS) {
     walk(record?.contracts?.[viewport]?.root, `/contracts/${viewport}/root`);
   }
+  (record?.contracts?.variant_contracts ?? []).forEach((variant, index) =>
+    walk(variant.root, `/contracts/variant_contracts/${index}/root`));
   return result;
 }
 
@@ -240,7 +242,11 @@ export function auditFigmaContractFacts({ record, live, mappings } = {}) {
       issues.push(issue("CONTRACT_TARGET_INVALID", { variant_node_id, node_id, source_path, contract_path }));
       continue;
     }
-    const targetViewport = contract_path.match(/^\/contracts\/(mobile|desktop)\//u)?.[1];
+    const variantIndex = contract_path.match(/^\/contracts\/variant_contracts\/(\d+)\//u)?.[1];
+    const targetViewport = variantIndex === undefined
+      ? contract_path.match(/^\/contracts\/(mobile|desktop)\//u)?.[1]
+      : record?.contracts?.variant_contracts?.[Number(variantIndex)]?.axes
+        ?.find(({ name }) => name === "Viewport")?.value?.toLowerCase();
     if (targetViewport && !sharedAsset && targetViewport !== variantViewport.get(variant_node_id)) {
       issues.push(issue("CONTRACT_VIEWPORT_MISMATCH", { variant_node_id, node_id, source_path, contract_path }));
       continue;
