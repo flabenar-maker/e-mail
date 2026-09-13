@@ -2,7 +2,7 @@
 
 Дата чтения: 2026-09-13. Figma: file key `8zka5bHkcrJVK9I9dKjnhC`, Marketing Emails `538:17236`. Проверяемый черновик: [`data/components/marketing.yaml`](https://github.com/flabenar-maker/e-mail/blob/7347406001e5a5403d2bb2abd8dbac85aab518cc/data/components/marketing.yaml), blob `fbe0f4c8f7572674dfc557a921a6f269e7de75e6`.
 
-Проверены непосредственно через Figma MCP все 26 component/component-set и 55 вариантов на этой Section: структура, размеры, Auto Layout, padding/gap/radius, видимые Fill, текстовые стили, component property definitions и ссылки видимости. Отдельно разрешены 33 наблюдаемые variable bindings, 15 текстовых стилей и размеры пяти уникальных IMAGE Fill-источников. Вложенные в export-owner векторные контуры не трактовались как HTML-элементы. Figma MCP не выдаёт в этих чтениях неизменяемый revision id; дата и node ID фиксируют область повторной проверки.
+Проверены непосредственно через Figma MCP все 26 component/component-set: 54 варианта в component sets и один самостоятельный компонент на этой Section: структура, размеры, Auto Layout, padding/gap/radius, видимые Fill, текстовые стили, component property definitions и ссылки видимости. Отдельно разрешены 33 уникальные переменные, встречающиеся в привязках, 15 текстовых стилей и размеры пяти уникальных IMAGE Fill-источников. Вложенные в export-owner векторные контуры не трактовались как HTML-элементы. Figma MCP не выдаёт в этих чтениях неизменяемый revision id; дата и node ID фиксируют область повторной проверки.
 
 ## Итог
 
