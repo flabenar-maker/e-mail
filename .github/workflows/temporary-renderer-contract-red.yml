@@ -1,0 +1,19 @@
+name: Temporary renderer contract RED
+on:
+  push:
+    branches: [codex/verify-render-contracts]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  target:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: node --test tests/rendering/renderer-contract-semantics.test.mjs
