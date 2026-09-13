@@ -150,6 +150,8 @@ test("an exact fully mapped Mobile/Desktop example passes", () => {
     { variant_node_id: "2:2", node_id: "2:2", source_path: "/layout/item_spacing", contract_path: "/contracts/desktop/root/facts/0/value/value", transform: "identity" },
   ];
   record.contracts.figma_fact_links = mappings;
+  record.contracts.mobile.root.facts[0].provenance = { kind: "figma-literal", node_id: "2:1" };
+  record.contracts.desktop.root.facts[0].provenance = { kind: "figma-literal", node_id: "2:2" };
   const report = auditFigmaContractFacts({ record, live, mappings });
   assert.equal(report.ok, true, JSON.stringify(report.issues));
   assert.equal(report.source_fact_count, 2);
@@ -220,4 +222,21 @@ test("caller-supplied mappings cannot certify facts absent from the component co
   record.contracts.figma_fact_links = [];
   const report = auditFigmaContractFacts({ record, live: packet, mappings });
   assert.ok(report.issues.some((issue) => issue.code === "EVIDENCE_LINKS_NOT_IN_CONTRACT"));
+});
+
+
+test("a migrated registry literal is not direct Figma evidence even if its value matches", () => {
+  const { record, packet, mappings } = fixture();
+  record.contracts.mobile.root.facts[0].provenance = { kind: "registry-literal", source_path: "legacy.md" };
+  const report = auditFigmaContractFacts({ record, live: packet, mappings });
+  assert.ok(report.issues.some((issue) => issue.code === "CONTRACT_FACT_NOT_FIGMA_VERIFIED" &&
+    issue.contract_path === "/contracts/mobile/root/facts/0/value/value"));
+});
+
+test("a provenance node different from the mapped Figma layer does not certify a fact", () => {
+  const { record, packet, mappings } = fixture();
+  record.contracts.mobile.root.children[0].facts[0].provenance = { kind: "figma-literal", node_id: "2:1" };
+  const report = auditFigmaContractFacts({ record, live: packet, mappings });
+  assert.ok(report.issues.some((issue) => issue.code === "CONTRACT_FACT_NOT_FIGMA_VERIFIED" &&
+    issue.contract_path === "/contracts/mobile/root/children/0/facts/0/value/value"));
 });
