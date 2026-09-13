@@ -44,6 +44,8 @@ Figma Description также не является входом для вёрс�
 
 Пока рабочим источником для поддержки библиотеки и вёрстки остаётся `registry/email-component-descriptions-registry.md`. Structured component-файлы и generated-представления работают в shadow-режиме, поэтому текущие маршруты и сборка писем не меняются.
 
+Для доказательной сверки конкретной structured-записи используется свежий read-only пакет Figma MCP и `scripts/audit-figma-contract-facts.mjs`. Проверка сравнивает фактические Mobile/Desktop-данные (включая тексты, типографику, отступы, цвета и свойства) с точными contract-полями в обе стороны. Связи полей принадлежат самой записи в `contracts.figma_fact_links`; миграционный статус и Markdown-снимок не заменяют эту проверку. Пока запись не прошла её, её нельзя считать подтверждённой Figma.
+
 На этом этапе Figma не изменялась. Фактическое переключение рабочих маршрутов на structured sources выполняется отдельно на этапах 8–9 после проверки shadow-слоя.
 
 ### Generated docs и shadow context bundles
@@ -136,6 +138,9 @@ Context bundle не сохраняется в репозитории: он со�
 | `scripts/lib/content-digest.mjs` | Детерминированная сериализация и digest для generated outputs и context bundles |
 | `scripts/lib/generated-docs.mjs` | Сборка generated-справочников и проверка их точного соответствия structured data |
 | `scripts/generate-docs.mjs` | CLI для пересборки или read-only проверки `docs/generated/` |
+| `scripts/figma/capture-contract-source.js` | Read-only профиль снятия фактических значений узла через Figma MCP |
+| `scripts/lib/figma-contract-facts.mjs` | Двусторонняя проверка фактов Figma против точных component contract-полей |
+| `scripts/audit-figma-contract-facts.mjs` | CLI запуска проверки по component ID и свежему Figma MCP-пакету |
 | `scripts/lib/context-bundle.mjs` | Read-only сборка route-specific контекста, exact component selection и проверка dependency closure |
 | `scripts/build-context-bundle.mjs` | CLI, выводящий временный context bundle в stdout без записи в репозиторий |
 | `data/foundations/typography.yaml` | Валидируемый structured-пилот определений текстовых стилей; ещё не подключён к рабочим bundle profiles |
