@@ -18,9 +18,6 @@ jobs:
           node-version: "24"
           cache: npm
       - run: npm ci --ignore-scripts
-      - run: npm run generate
-      - run: >-
-          node --input-type=module -e 'import{readFile}from "node:fs/promises";import{gzipSync}from "node:zlib";const files=["docs/generated/asset-registry.md","docs/generated/component-registry.md","docs/generated/typography-registry.md"];for(const file of files){const e=gzipSync(await readFile(file)).toString("base64"),c=e.match(/.{1,1000}/g)??[];console.log("BEGIN_GENERATED_DOC "+file+" "+c.length);c.forEach((x,i)=>console.log("GENERATED_DOC_CHUNK "+file+" "+i+" "+x));console.log("END_GENERATED_DOC "+file)}'
       - run: npm run validate
       - run: npm test
 
