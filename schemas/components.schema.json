@@ -2070,6 +2070,26 @@
             "null"
           ],
           "pattern": "^[0-9]+:[0-9]+$"
+        },
+        "text_geometry": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "auto_resize",
+            "vertical_alignment",
+            "horizontal_alignment"
+          ],
+          "properties": {
+            "auto_resize": {
+              "type": "string"
+            },
+            "vertical_alignment": {
+              "type": "string"
+            },
+            "horizontal_alignment": {
+              "type": "string"
+            }
+          }
         }
       }
     }

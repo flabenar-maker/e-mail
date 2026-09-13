@@ -299,7 +299,12 @@
                       }
                     ]
                   },
-                  "characters": "1  шаг"
+                  "characters": "1  шаг",
+                  "text_geometry": {
+                    "auto_resize": "WIDTH_AND_HEIGHT",
+                    "vertical_alignment": "TOP",
+                    "horizontal_alignment": "LEFT"
+                  }
                 }
               ]
             }
@@ -406,7 +411,12 @@
                       }
                     ]
                   },
-                  "characters": "1  шаг"
+                  "characters": "1  шаг",
+                  "text_geometry": {
+                    "auto_resize": "WIDTH_AND_HEIGHT",
+                    "vertical_alignment": "TOP",
+                    "horizontal_alignment": "LEFT"
+                  }
                 }
               ]
             }
@@ -513,7 +523,12 @@
                       }
                     ]
                   },
-                  "characters": "1  шаг"
+                  "characters": "1  шаг",
+                  "text_geometry": {
+                    "auto_resize": "WIDTH_AND_HEIGHT",
+                    "vertical_alignment": "TOP",
+                    "horizontal_alignment": "LEFT"
+                  }
                 }
               ]
             }
@@ -620,7 +635,12 @@
                       }
                     ]
                   },
-                  "characters": "1  шаг"
+                  "characters": "1  шаг",
+                  "text_geometry": {
+                    "auto_resize": "WIDTH_AND_HEIGHT",
+                    "vertical_alignment": "TOP",
+                    "horizontal_alignment": "LEFT"
+                  }
                 }
               ]
             }
@@ -1640,7 +1660,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Небольшой заголовок на пару строк"
+                      "characters": "Небольшой заголовок на пару строк",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "CENTER",
+                        "horizontal_alignment": "CENTER"
+                      }
                     },
                     {
                       "node_id": "398:7573",
@@ -3491,7 +3516,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "*очень маленькое примечание"
+                      "characters": "*очень маленькое примечание",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     }
                   ]
                 }
@@ -3706,7 +3736,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Небольшой заголовок на пару строк"
+                      "characters": "Небольшой заголовок на пару строк",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "CENTER",
+                        "horizontal_alignment": "CENTER"
+                      }
                     },
                     {
                       "node_id": "911:4178",
@@ -5517,7 +5552,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "*очень маленькое примечание"
+                      "characters": "*очень маленькое примечание",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     }
                   ]
                 }
@@ -6023,7 +6063,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Небольшой заголовок на пару строк"
+                      "characters": "Небольшой заголовок на пару строк",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "CENTER",
+                        "horizontal_alignment": "CENTER"
+                      }
                     },
                     {
                       "node_id": "398:7762",
@@ -7580,7 +7625,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "*очень маленькое примечание"
+                      "characters": "*очень маленькое примечание",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     }
                   ]
                 }
@@ -7795,7 +7845,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Небольшой заголовок на пару строк"
+                      "characters": "Небольшой заголовок на пару строк",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "CENTER",
+                        "horizontal_alignment": "CENTER"
+                      }
                     },
                     {
                       "node_id": "398:7956",
@@ -9312,7 +9367,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "*очень маленькое примечание"
+                      "characters": "*очень маленькое примечание",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     }
                   ]
                 }
@@ -10238,7 +10298,12 @@
                             ]
                           },
                           "layout_align": "STRETCH",
-                          "characters": "*очень маленькое примечание"
+                          "characters": "*очень маленькое примечание",
+                          "text_geometry": {
+                            "auto_resize": "HEIGHT",
+                            "vertical_alignment": "TOP",
+                            "horizontal_alignment": "CENTER"
+                          }
                         },
                         {
                           "node_id": "17:2762",
@@ -10286,7 +10351,12 @@
                             ]
                           },
                           "layout_align": "STRETCH",
-                          "characters": "ООО НКО «Мобильная карта», Лицензия банка России № 3522-К195112. Юридический адрес: Россия, Санкт-Петербург, проспект Малоохтинский, дом. 64, литера. В, этаж 1, помещение 19–20Н."
+                          "characters": "ООО НКО «Мобильная карта», Лицензия банка России № 3522-К195112. Юридический адрес: Россия, Санкт-Петербург, проспект Малоохтинский, дом. 64, литера. В, этаж 1, помещение 19–20Н.",
+                          "text_geometry": {
+                            "auto_resize": "HEIGHT",
+                            "vertical_alignment": "TOP",
+                            "horizontal_alignment": "CENTER"
+                          }
                         },
                         {
                           "node_id": "17:2761",
@@ -10332,7 +10402,119 @@
                             ]
                           },
                           "layout_align": "STRETCH",
-                          "characters": "Если вы не регистрировались на сайте 1cupis.ru, напишите службе поддержки. Мы удалим почту из базы и больше не будем вам писать."
+                          "characters": "Если вы не регистрировались на сайте 1cupis.ru, напишите службе поддержки. Мы удалим почту из базы и больше не будем вам писать.",
+                          "styled_text_segments": [
+                            {
+                              "start": 0,
+                              "end": 37,
+                              "characters": "Если вы не регистрировались на сайте ",
+                              "font_family": "Roboto",
+                              "font_style": "Regular",
+                              "font_size_px": 12,
+                              "line_height": {
+                                "unit": "PERCENT",
+                                "value": 139.9999976158142
+                              },
+                              "text_decoration": "NONE",
+                              "fills": [
+                                {
+                                  "type": "solid",
+                                  "visible": true,
+                                  "opacity": 1,
+                                  "color": "#98999C"
+                                }
+                              ]
+                            },
+                            {
+                              "start": 37,
+                              "end": 46,
+                              "characters": "1cupis.ru",
+                              "font_family": "Roboto",
+                              "font_style": "Regular",
+                              "font_size_px": 12,
+                              "line_height": {
+                                "unit": "PERCENT",
+                                "value": 139.9999976158142
+                              },
+                              "text_decoration": "UNDERLINE",
+                              "fills": [
+                                {
+                                  "type": "solid",
+                                  "visible": true,
+                                  "opacity": 1,
+                                  "color": "#98999C"
+                                }
+                              ]
+                            },
+                            {
+                              "start": 46,
+                              "end": 57,
+                              "characters": ", напишите ",
+                              "font_family": "Roboto",
+                              "font_style": "Regular",
+                              "font_size_px": 12,
+                              "line_height": {
+                                "unit": "PERCENT",
+                                "value": 139.9999976158142
+                              },
+                              "text_decoration": "NONE",
+                              "fills": [
+                                {
+                                  "type": "solid",
+                                  "visible": true,
+                                  "opacity": 1,
+                                  "color": "#98999C"
+                                }
+                              ]
+                            },
+                            {
+                              "start": 57,
+                              "end": 73,
+                              "characters": "службе поддержки",
+                              "font_family": "Roboto",
+                              "font_style": "Regular",
+                              "font_size_px": 12,
+                              "line_height": {
+                                "unit": "PERCENT",
+                                "value": 139.9999976158142
+                              },
+                              "text_decoration": "UNDERLINE",
+                              "fills": [
+                                {
+                                  "type": "solid",
+                                  "visible": true,
+                                  "opacity": 1,
+                                  "color": "#98999C"
+                                }
+                              ]
+                            },
+                            {
+                              "start": 73,
+                              "end": 128,
+                              "characters": ". Мы удалим почту из базы и больше не будем вам писать.",
+                              "font_family": "Roboto",
+                              "font_style": "Regular",
+                              "font_size_px": 12,
+                              "line_height": {
+                                "unit": "PERCENT",
+                                "value": 139.9999976158142
+                              },
+                              "text_decoration": "NONE",
+                              "fills": [
+                                {
+                                  "type": "solid",
+                                  "visible": true,
+                                  "opacity": 1,
+                                  "color": "#98999C"
+                                }
+                              ]
+                            }
+                          ],
+                          "text_geometry": {
+                            "auto_resize": "HEIGHT",
+                            "vertical_alignment": "TOP",
+                            "horizontal_alignment": "CENTER"
+                          }
                         },
                         {
                           "node_id": "1010:2541",
@@ -10380,7 +10562,12 @@
                             ]
                           },
                           "layout_align": "STRETCH",
-                          "characters": "Отписаться от рассылки"
+                          "characters": "Отписаться от рассылки",
+                          "text_geometry": {
+                            "auto_resize": "HEIGHT",
+                            "vertical_alignment": "TOP",
+                            "horizontal_alignment": "CENTER"
+                          }
                         }
                       ],
                       "clips_content": true,
@@ -10796,7 +10983,12 @@
                             ]
                           },
                           "layout_align": "STRETCH",
-                          "characters": "*очень маленькое примечание"
+                          "characters": "*очень маленькое примечание",
+                          "text_geometry": {
+                            "auto_resize": "HEIGHT",
+                            "vertical_alignment": "TOP",
+                            "horizontal_alignment": "CENTER"
+                          }
                         },
                         {
                           "node_id": "261:4019",
@@ -10844,7 +11036,12 @@
                             ]
                           },
                           "layout_align": "STRETCH",
-                          "characters": "ООО НКО «Мобильная карта», Лицензия банка России № 3522-К195112. Юридический адрес: Россия, Санкт-Петербург, проспект Малоохтинский, дом. 64, литера. В, этаж 1, помещение 19–20Н."
+                          "characters": "ООО НКО «Мобильная карта», Лицензия банка России № 3522-К195112. Юридический адрес: Россия, Санкт-Петербург, проспект Малоохтинский, дом. 64, литера. В, этаж 1, помещение 19–20Н.",
+                          "text_geometry": {
+                            "auto_resize": "HEIGHT",
+                            "vertical_alignment": "TOP",
+                            "horizontal_alignment": "CENTER"
+                          }
                         },
                         {
                           "node_id": "911:20891",
@@ -10890,7 +11087,119 @@
                             ]
                           },
                           "layout_align": "STRETCH",
-                          "characters": "Если вы не регистрировались на сайте 1cupis.ru, напишите службе поддержки. Мы удалим почту из базы и больше не будем вам писать."
+                          "characters": "Если вы не регистрировались на сайте 1cupis.ru, напишите службе поддержки. Мы удалим почту из базы и больше не будем вам писать.",
+                          "styled_text_segments": [
+                            {
+                              "start": 0,
+                              "end": 37,
+                              "characters": "Если вы не регистрировались на сайте ",
+                              "font_family": "Roboto",
+                              "font_style": "Regular",
+                              "font_size_px": 14,
+                              "line_height": {
+                                "unit": "PERCENT",
+                                "value": 139.9999976158142
+                              },
+                              "text_decoration": "NONE",
+                              "fills": [
+                                {
+                                  "type": "solid",
+                                  "visible": true,
+                                  "opacity": 1,
+                                  "color": "#98999C"
+                                }
+                              ]
+                            },
+                            {
+                              "start": 37,
+                              "end": 46,
+                              "characters": "1cupis.ru",
+                              "font_family": "Roboto",
+                              "font_style": "Regular",
+                              "font_size_px": 14,
+                              "line_height": {
+                                "unit": "PERCENT",
+                                "value": 139.9999976158142
+                              },
+                              "text_decoration": "UNDERLINE",
+                              "fills": [
+                                {
+                                  "type": "solid",
+                                  "visible": true,
+                                  "opacity": 1,
+                                  "color": "#98999C"
+                                }
+                              ]
+                            },
+                            {
+                              "start": 46,
+                              "end": 57,
+                              "characters": ", напишите ",
+                              "font_family": "Roboto",
+                              "font_style": "Regular",
+                              "font_size_px": 14,
+                              "line_height": {
+                                "unit": "PERCENT",
+                                "value": 139.9999976158142
+                              },
+                              "text_decoration": "NONE",
+                              "fills": [
+                                {
+                                  "type": "solid",
+                                  "visible": true,
+                                  "opacity": 1,
+                                  "color": "#98999C"
+                                }
+                              ]
+                            },
+                            {
+                              "start": 57,
+                              "end": 73,
+                              "characters": "службе поддержки",
+                              "font_family": "Roboto",
+                              "font_style": "Regular",
+                              "font_size_px": 14,
+                              "line_height": {
+                                "unit": "PERCENT",
+                                "value": 139.9999976158142
+                              },
+                              "text_decoration": "UNDERLINE",
+                              "fills": [
+                                {
+                                  "type": "solid",
+                                  "visible": true,
+                                  "opacity": 1,
+                                  "color": "#98999C"
+                                }
+                              ]
+                            },
+                            {
+                              "start": 73,
+                              "end": 128,
+                              "characters": ". Мы удалим почту из базы и больше не будем вам писать.",
+                              "font_family": "Roboto",
+                              "font_style": "Regular",
+                              "font_size_px": 14,
+                              "line_height": {
+                                "unit": "PERCENT",
+                                "value": 139.9999976158142
+                              },
+                              "text_decoration": "NONE",
+                              "fills": [
+                                {
+                                  "type": "solid",
+                                  "visible": true,
+                                  "opacity": 1,
+                                  "color": "#98999C"
+                                }
+                              ]
+                            }
+                          ],
+                          "text_geometry": {
+                            "auto_resize": "HEIGHT",
+                            "vertical_alignment": "TOP",
+                            "horizontal_alignment": "CENTER"
+                          }
                         },
                         {
                           "node_id": "1010:2535",
@@ -10938,7 +11247,12 @@
                             ]
                           },
                           "layout_align": "STRETCH",
-                          "characters": "Отписаться от рассылки"
+                          "characters": "Отписаться от рассылки",
+                          "text_geometry": {
+                            "auto_resize": "HEIGHT",
+                            "vertical_alignment": "TOP",
+                            "horizontal_alignment": "CENTER"
+                          }
                         }
                       ],
                       "layout_align": "STRETCH"
@@ -11878,7 +12192,12 @@
                                 ]
                               },
                               "layout_align": "STRETCH",
-                              "characters": "Небольшой заголовок на пару строк"
+                              "characters": "Небольшой заголовок на пару строк",
+                              "text_geometry": {
+                                "auto_resize": "HEIGHT",
+                                "vertical_alignment": "CENTER",
+                                "horizontal_alignment": "CENTER"
+                              }
                             },
                             {
                               "node_id": "337:4352",
@@ -11926,7 +12245,12 @@
                                 ]
                               },
                               "layout_align": "STRETCH",
-                              "characters": "Поясняющая подпись на несколько красивых строк"
+                              "characters": "Поясняющая подпись на несколько красивых строк",
+                              "text_geometry": {
+                                "auto_resize": "HEIGHT",
+                                "vertical_alignment": "TOP",
+                                "horizontal_alignment": "CENTER"
+                              }
                             }
                           ],
                           "layout_align": "STRETCH"
@@ -12386,7 +12710,12 @@
                                 ]
                               },
                               "layout_align": "STRETCH",
-                              "characters": "Небольшой заголовок на пару строк"
+                              "characters": "Небольшой заголовок на пару строк",
+                              "text_geometry": {
+                                "auto_resize": "HEIGHT",
+                                "vertical_alignment": "CENTER",
+                                "horizontal_alignment": "CENTER"
+                              }
                             },
                             {
                               "node_id": "230:3638",
@@ -12434,7 +12763,12 @@
                                 ]
                               },
                               "layout_align": "STRETCH",
-                              "characters": "Поясняющая подпись на несколько красивых строк"
+                              "characters": "Поясняющая подпись на несколько красивых строк",
+                              "text_geometry": {
+                                "auto_resize": "HEIGHT",
+                                "vertical_alignment": "TOP",
+                                "horizontal_alignment": "CENTER"
+                              }
                             }
                           ],
                           "layout_align": "STRETCH"
@@ -13163,7 +13497,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Небольшой заголовок на пару строк"
+                      "characters": "Небольшой заголовок на пару строк",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "CENTER",
+                        "horizontal_alignment": "LEFT"
+                      }
                     },
                     {
                       "node_id": "12:1279",
@@ -13752,7 +14091,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "*очень маленькое примечание"
+                      "characters": "*очень маленькое примечание",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -13962,7 +14306,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Небольшой заголовок на пару строк"
+                      "characters": "Небольшой заголовок на пару строк",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "CENTER",
+                        "horizontal_alignment": "LEFT"
+                      }
                     },
                     {
                       "node_id": "230:3809",
@@ -14557,7 +14906,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "*очень маленькое примечание"
+                      "characters": "*очень маленькое примечание",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -14844,7 +15198,12 @@
                       }
                     ]
                   },
-                  "characters": "Какая-то кнопка"
+                  "characters": "Какая-то кнопка",
+                  "text_geometry": {
+                    "auto_resize": "WIDTH_AND_HEIGHT",
+                    "vertical_alignment": "TOP",
+                    "horizontal_alignment": "CENTER"
+                  }
                 }
               ]
             }
@@ -14955,7 +15314,12 @@
                     ]
                   },
                   "layout_grow": 1,
-                  "characters": "Какая-то кнопка"
+                  "characters": "Какая-то кнопка",
+                  "text_geometry": {
+                    "auto_resize": "HEIGHT",
+                    "vertical_alignment": "TOP",
+                    "horizontal_alignment": "CENTER"
+                  }
                 }
               ]
             }
@@ -15426,7 +15790,12 @@
                     ]
                   },
                   "layout_grow": 1,
-                  "characters": "Какая-то кнопка"
+                  "characters": "Какая-то кнопка",
+                  "text_geometry": {
+                    "auto_resize": "HEIGHT",
+                    "vertical_alignment": "TOP",
+                    "horizontal_alignment": "CENTER"
+                  }
                 }
               ]
             }
@@ -15555,7 +15924,12 @@
                       }
                     ]
                   },
-                  "characters": "Какая-то кнопка"
+                  "characters": "Какая-то кнопка",
+                  "text_geometry": {
+                    "auto_resize": "WIDTH_AND_HEIGHT",
+                    "vertical_alignment": "TOP",
+                    "horizontal_alignment": "CENTER"
+                  }
                 }
               ]
             }
@@ -16145,7 +16519,12 @@
                             ]
                           },
                           "layout_align": "STRETCH",
-                          "characters": "Небольшой заголовок на пару строк"
+                          "characters": "Небольшой заголовок на пару строк",
+                          "text_geometry": {
+                            "auto_resize": "HEIGHT",
+                            "vertical_alignment": "CENTER",
+                            "horizontal_alignment": "LEFT"
+                          }
                         },
                         {
                           "node_id": "11:776",
@@ -16193,7 +16572,12 @@
                             ]
                           },
                           "layout_align": "STRETCH",
-                          "characters": "Поясняющая подпись на несколько красивых строк"
+                          "characters": "Поясняющая подпись на несколько красивых строк",
+                          "text_geometry": {
+                            "auto_resize": "HEIGHT",
+                            "vertical_alignment": "TOP",
+                            "horizontal_alignment": "LEFT"
+                          }
                         },
                         {
                           "node_id": "394:9112",
@@ -16241,7 +16625,12 @@
                             ]
                           },
                           "layout_align": "STRETCH",
-                          "characters": "Поясняющая подпись на несколько красивых строк"
+                          "characters": "Поясняющая подпись на несколько красивых строк",
+                          "text_geometry": {
+                            "auto_resize": "HEIGHT",
+                            "vertical_alignment": "TOP",
+                            "horizontal_alignment": "LEFT"
+                          }
                         },
                         {
                           "node_id": "394:9119",
@@ -16289,7 +16678,12 @@
                             ]
                           },
                           "layout_align": "STRETCH",
-                          "characters": "Поясняющая подпись на несколько красивых строк"
+                          "characters": "Поясняющая подпись на несколько красивых строк",
+                          "text_geometry": {
+                            "auto_resize": "HEIGHT",
+                            "vertical_alignment": "TOP",
+                            "horizontal_alignment": "LEFT"
+                          }
                         },
                         {
                           "node_id": "394:9126",
@@ -16337,7 +16731,12 @@
                             ]
                           },
                           "layout_align": "STRETCH",
-                          "characters": "Поясняющая подпись на несколько красивых строк"
+                          "characters": "Поясняющая подпись на несколько красивых строк",
+                          "text_geometry": {
+                            "auto_resize": "HEIGHT",
+                            "vertical_alignment": "TOP",
+                            "horizontal_alignment": "LEFT"
+                          }
                         },
                         {
                           "node_id": "394:9133",
@@ -16385,7 +16784,12 @@
                             ]
                           },
                           "layout_align": "STRETCH",
-                          "characters": "Поясняющая подпись на несколько красивых строк"
+                          "characters": "Поясняющая подпись на несколько красивых строк",
+                          "text_geometry": {
+                            "auto_resize": "HEIGHT",
+                            "vertical_alignment": "TOP",
+                            "horizontal_alignment": "LEFT"
+                          }
                         }
                       ],
                       "layout_align": "STRETCH"
@@ -16692,7 +17096,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "*очень маленькое примечание"
+                      "characters": "*очень маленькое примечание",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -16939,7 +17348,12 @@
                             ]
                           },
                           "layout_align": "STRETCH",
-                          "characters": "Небольшой заголовок на пару строк"
+                          "characters": "Небольшой заголовок на пару строк",
+                          "text_geometry": {
+                            "auto_resize": "HEIGHT",
+                            "vertical_alignment": "CENTER",
+                            "horizontal_alignment": "LEFT"
+                          }
                         },
                         {
                           "node_id": "230:3759",
@@ -16987,7 +17401,12 @@
                             ]
                           },
                           "layout_align": "STRETCH",
-                          "characters": "Поясняющая подпись на несколько красивых строк"
+                          "characters": "Поясняющая подпись на несколько красивых строк",
+                          "text_geometry": {
+                            "auto_resize": "HEIGHT",
+                            "vertical_alignment": "TOP",
+                            "horizontal_alignment": "LEFT"
+                          }
                         },
                         {
                           "node_id": "394:9140",
@@ -17035,7 +17454,12 @@
                             ]
                           },
                           "layout_align": "STRETCH",
-                          "characters": "Поясняющая подпись на несколько красивых строк"
+                          "characters": "Поясняющая подпись на несколько красивых строк",
+                          "text_geometry": {
+                            "auto_resize": "HEIGHT",
+                            "vertical_alignment": "TOP",
+                            "horizontal_alignment": "LEFT"
+                          }
                         },
                         {
                           "node_id": "394:9148",
@@ -17083,7 +17507,12 @@
                             ]
                           },
                           "layout_align": "STRETCH",
-                          "characters": "Поясняющая подпись на несколько красивых строк"
+                          "characters": "Поясняющая подпись на несколько красивых строк",
+                          "text_geometry": {
+                            "auto_resize": "HEIGHT",
+                            "vertical_alignment": "TOP",
+                            "horizontal_alignment": "LEFT"
+                          }
                         },
                         {
                           "node_id": "394:9156",
@@ -17131,7 +17560,12 @@
                             ]
                           },
                           "layout_align": "STRETCH",
-                          "characters": "Поясняющая подпись на несколько красивых строк"
+                          "characters": "Поясняющая подпись на несколько красивых строк",
+                          "text_geometry": {
+                            "auto_resize": "HEIGHT",
+                            "vertical_alignment": "TOP",
+                            "horizontal_alignment": "LEFT"
+                          }
                         },
                         {
                           "node_id": "394:9164",
@@ -17179,7 +17613,12 @@
                             ]
                           },
                           "layout_align": "STRETCH",
-                          "characters": "Поясняющая подпись на несколько красивых строк"
+                          "characters": "Поясняющая подпись на несколько красивых строк",
+                          "text_geometry": {
+                            "auto_resize": "HEIGHT",
+                            "vertical_alignment": "TOP",
+                            "horizontal_alignment": "LEFT"
+                          }
                         }
                       ],
                       "layout_align": "STRETCH"
@@ -17492,7 +17931,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "*очень маленькое примечание"
+                      "characters": "*очень маленькое примечание",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -18426,7 +18870,12 @@
                                 ]
                               },
                               "layout_align": "STRETCH",
-                              "characters": "Небольшой заголовок на пару строк"
+                              "characters": "Небольшой заголовок на пару строк",
+                              "text_geometry": {
+                                "auto_resize": "HEIGHT",
+                                "vertical_alignment": "CENTER",
+                                "horizontal_alignment": "CENTER"
+                              }
                             },
                             {
                               "node_id": "11:1193",
@@ -18474,7 +18923,12 @@
                                 ]
                               },
                               "layout_align": "STRETCH",
-                              "characters": "Поясняющая подпись на несколько красивых строк"
+                              "characters": "Поясняющая подпись на несколько красивых строк",
+                              "text_geometry": {
+                                "auto_resize": "HEIGHT",
+                                "vertical_alignment": "TOP",
+                                "horizontal_alignment": "CENTER"
+                              }
                             }
                           ],
                           "layout_align": "STRETCH"
@@ -18813,7 +19267,12 @@
                                 ]
                               },
                               "layout_align": "STRETCH",
-                              "characters": "Небольшой заголовок на пару строк"
+                              "characters": "Небольшой заголовок на пару строк",
+                              "text_geometry": {
+                                "auto_resize": "HEIGHT",
+                                "vertical_alignment": "CENTER",
+                                "horizontal_alignment": "LEFT"
+                              }
                             },
                             {
                               "node_id": "326:6615",
@@ -18861,7 +19320,12 @@
                                 ]
                               },
                               "layout_align": "STRETCH",
-                              "characters": "Поясняющая подпись на несколько красивых строк"
+                              "characters": "Поясняющая подпись на несколько красивых строк",
+                              "text_geometry": {
+                                "auto_resize": "HEIGHT",
+                                "vertical_alignment": "TOP",
+                                "horizontal_alignment": "LEFT"
+                              }
                             }
                           ],
                           "layout_align": "STRETCH"
@@ -19520,7 +19984,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Небольшой заголовок на пару строк"
+                      "characters": "Небольшой заголовок на пару строк",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "CENTER",
+                        "horizontal_alignment": "LEFT"
+                      }
                     },
                     {
                       "node_id": "222:752",
@@ -19910,7 +20379,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "*очень маленькое примечание"
+                      "characters": "*очень маленькое примечание",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -20120,7 +20594,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Небольшой заголовок на пару строк"
+                      "characters": "Небольшой заголовок на пару строк",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "CENTER",
+                        "horizontal_alignment": "LEFT"
+                      }
                     },
                     {
                       "node_id": "234:545",
@@ -20515,7 +20994,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "*очень маленькое примечание"
+                      "characters": "*очень маленькое примечание",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -20964,7 +21448,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Поясняющая подпись на несколько красивых строк"
+                      "characters": "Поясняющая подпись на несколько красивых строк",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     },
                     {
                       "node_id": "222:701",
@@ -21011,7 +21500,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Очень маленькое примечание"
+                      "characters": "Очень маленькое примечание",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     },
                     {
                       "node_id": "946:26202",
@@ -21058,7 +21552,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Очень маленькое примечание"
+                      "characters": "Очень маленькое примечание",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     },
                     {
                       "node_id": "946:26525",
@@ -21105,7 +21604,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Ссылка >"
+                      "characters": "Ссылка >",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     }
                   ]
                 }
@@ -21299,7 +21803,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Поясняющая подпись на несколько красивых строк"
+                      "characters": "Поясняющая подпись на несколько красивых строк",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     },
                     {
                       "node_id": "234:579",
@@ -21346,7 +21855,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Очень маленькое примечание"
+                      "characters": "Очень маленькое примечание",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     },
                     {
                       "node_id": "946:26194",
@@ -21393,7 +21907,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Очень маленькое примечание"
+                      "characters": "Очень маленькое примечание",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     },
                     {
                       "node_id": "946:26517",
@@ -21440,7 +21959,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Ссылка >"
+                      "characters": "Ссылка >",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     }
                   ]
                 }
@@ -21838,7 +22362,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Поясняющая подпись на несколько красивых строк"
+                      "characters": "Поясняющая подпись на несколько красивых строк",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     },
                     {
                       "node_id": "18:2938",
@@ -21886,7 +22415,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Очень маленькое примечание"
+                      "characters": "Очень маленькое примечание",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -22078,7 +22612,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Поясняющая подпись на несколько красивых строк"
+                      "characters": "Поясняющая подпись на несколько красивых строк",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     },
                     {
                       "node_id": "230:3838",
@@ -22126,7 +22665,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Очень маленькое примечание"
+                      "characters": "Очень маленькое примечание",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -22713,7 +23257,12 @@
                         ]
                       },
                       "layout_grow": 1,
-                      "characters": "Небольшой текст мини-баннера на несколько строк"
+                      "characters": "Небольшой текст мини-баннера на несколько строк",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     },
                     {
                       "node_id": "13:343",
@@ -22986,7 +23535,12 @@
                         ]
                       },
                       "layout_grow": 1,
-                      "characters": "Небольшой текст мини-баннера на несколько строк"
+                      "characters": "Небольшой текст мини-баннера на несколько строк",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     },
                     {
                       "node_id": "260:589",
@@ -23549,7 +24103,12 @@
                         ]
                       },
                       "layout_grow": 1,
-                      "characters": "Небольшой текст с пояснением чего-либо"
+                      "characters": "Небольшой текст с пояснением чего-либо",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -23791,7 +24350,12 @@
                         ]
                       },
                       "layout_grow": 1,
-                      "characters": "Небольшой текст с пояснением чего-либо"
+                      "characters": "Небольшой текст с пояснением чего-либо",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -25716,7 +26280,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Единственный финансовый сервис для тех, кто делает ставки на спорт"
+                      "characters": "Единственный финансовый сервис для тех, кто делает ставки на спорт",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     },
                     {
                       "node_id": "961:36486",
@@ -25870,7 +26439,12 @@
                                     "text_case": "ORIGINAL",
                                     "text_decoration": "NONE"
                                   },
-                                  "characters": "RuStore"
+                                  "characters": "RuStore",
+                                  "text_geometry": {
+                                    "auto_resize": "WIDTH_AND_HEIGHT",
+                                    "vertical_alignment": "TOP",
+                                    "horizontal_alignment": "LEFT"
+                                  }
                                 }
                               ]
                             }
@@ -26006,7 +26580,12 @@
                                       }
                                     ]
                                   },
-                                  "characters": "GooglePlay"
+                                  "characters": "GooglePlay",
+                                  "text_geometry": {
+                                    "auto_resize": "WIDTH_AND_HEIGHT",
+                                    "vertical_alignment": "TOP",
+                                    "horizontal_alignment": "LEFT"
+                                  }
                                 }
                               ]
                             }
@@ -26142,7 +26721,12 @@
                                       }
                                     ]
                                   },
-                                  "characters": "AppGallery"
+                                  "characters": "AppGallery",
+                                  "text_geometry": {
+                                    "auto_resize": "WIDTH_AND_HEIGHT",
+                                    "vertical_alignment": "TOP",
+                                    "horizontal_alignment": "LEFT"
+                                  }
                                 }
                               ]
                             }
@@ -26278,7 +26862,12 @@
                                       }
                                     ]
                                   },
-                                  "characters": "GetApps"
+                                  "characters": "GetApps",
+                                  "text_geometry": {
+                                    "auto_resize": "HEIGHT",
+                                    "vertical_alignment": "TOP",
+                                    "horizontal_alignment": "LEFT"
+                                  }
                                 }
                               ]
                             }
@@ -26599,7 +27188,12 @@
                                 ]
                               },
                               "layout_align": "STRETCH",
-                              "characters": "Единственный финансовый сервис для тех, кто делает ставки на спорт"
+                              "characters": "Единственный финансовый сервис для тех, кто делает ставки на спорт",
+                              "text_geometry": {
+                                "auto_resize": "HEIGHT",
+                                "vertical_alignment": "TOP",
+                                "horizontal_alignment": "LEFT"
+                              }
                             }
                           ]
                         },
@@ -27310,7 +27904,12 @@
                             ]
                           },
                           "layout_align": "STRETCH",
-                          "characters": "Оператор по переводу денежных средств: \nООО НКО «Мобильная карта»"
+                          "characters": "Оператор по переводу денежных средств: \nООО НКО «Мобильная карта»",
+                          "text_geometry": {
+                            "auto_resize": "HEIGHT",
+                            "vertical_alignment": "TOP",
+                            "horizontal_alignment": "CENTER"
+                          }
                         },
                         {
                           "node_id": "497:22436",
@@ -27358,7 +27957,12 @@
                             ]
                           },
                           "layout_align": "STRETCH",
-                          "characters": "Лицензия ЦБ РФ № 3522-К от 31 марта 2014 года \nМесто нахождения: 195112, Санкт-Петербург, Малоохтинский пр-кт, д. 64, литера В, помещение 19-20Н; \nтел. +7 (812) 309-34-59; ИНН 7835905228; БИК 044030303"
+                          "characters": "Лицензия ЦБ РФ № 3522-К от 31 марта 2014 года \nМесто нахождения: 195112, Санкт-Петербург, Малоохтинский пр-кт, д. 64, литера В, помещение 19-20Н; \nтел. +7 (812) 309-34-59; ИНН 7835905228; БИК 044030303",
+                          "text_geometry": {
+                            "auto_resize": "HEIGHT",
+                            "vertical_alignment": "TOP",
+                            "horizontal_alignment": "CENTER"
+                          }
                         }
                       ],
                       "layout_align": "STRETCH"
@@ -27564,7 +28168,12 @@
                             ]
                           },
                           "layout_align": "STRETCH",
-                          "characters": "Оператор по переводу денежных средств: \nООО НКО «Мобильная карта»"
+                          "characters": "Оператор по переводу денежных средств: \nООО НКО «Мобильная карта»",
+                          "text_geometry": {
+                            "auto_resize": "HEIGHT",
+                            "vertical_alignment": "TOP",
+                            "horizontal_alignment": "CENTER"
+                          }
                         },
                         {
                           "node_id": "497:22401",
@@ -27612,7 +28221,12 @@
                             ]
                           },
                           "layout_align": "STRETCH",
-                          "characters": "Лицензия ЦБ РФ № 3522-К от 31 марта 2014 года \nМесто нахождения: 195112, Санкт-Петербург, Малоохтинский пр-кт, д. 64, литера В, помещение 19-20Н; \nтел. +7 (812) 309-34-59; ИНН 7835905228; БИК 044030303"
+                          "characters": "Лицензия ЦБ РФ № 3522-К от 31 марта 2014 года \nМесто нахождения: 195112, Санкт-Петербург, Малоохтинский пр-кт, д. 64, литера В, помещение 19-20Н; \nтел. +7 (812) 309-34-59; ИНН 7835905228; БИК 044030303",
+                          "text_geometry": {
+                            "auto_resize": "HEIGHT",
+                            "vertical_alignment": "TOP",
+                            "horizontal_alignment": "CENTER"
+                          }
                         }
                       ],
                       "layout_align": "STRETCH"
@@ -27980,7 +28594,12 @@
                         "text_case": "ORIGINAL",
                         "text_decoration": "NONE"
                       },
-                      "characters": "01"
+                      "characters": "01",
+                      "text_geometry": {
+                        "auto_resize": "WIDTH_AND_HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     }
                   ]
                 }
@@ -28833,7 +29452,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Небольшой заголовок на пару строк"
+                      "characters": "Небольшой заголовок на пару строк",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "CENTER",
+                        "horizontal_alignment": "LEFT"
+                      }
                     },
                     {
                       "node_id": "911:4004",
@@ -28881,7 +29505,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Поясняющая подпись на несколько красивых строк"
+                      "characters": "Поясняющая подпись на несколько красивых строк",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     },
                     {
                       "node_id": "1015:18276",
@@ -28928,7 +29557,12 @@
                           }
                         ]
                       },
-                      "characters": "Ссылка >"
+                      "characters": "Ссылка >",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     }
                   ],
                   "layout_grow": 1
@@ -29154,7 +29788,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Небольшой заголовок на пару строк"
+                      "characters": "Небольшой заголовок на пару строк",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "CENTER",
+                        "horizontal_alignment": "LEFT"
+                      }
                     },
                     {
                       "node_id": "911:4123",
@@ -29202,7 +29841,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Поясняющая подпись на несколько красивых строк"
+                      "characters": "Поясняющая подпись на несколько красивых строк",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     },
                     {
                       "node_id": "1015:18459",
@@ -29249,7 +29893,12 @@
                           }
                         ]
                       },
-                      "characters": "Ссылка >"
+                      "characters": "Ссылка >",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -29897,7 +30546,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Небольшой заголовок на пару строк"
+                      "characters": "Небольшой заголовок на пару строк",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "CENTER",
+                        "horizontal_alignment": "LEFT"
+                      }
                     },
                     {
                       "node_id": "946:26217",
@@ -30071,7 +30725,12 @@
                                     ]
                                   },
                                   "layout_align": "STRETCH",
-                                  "characters": "Поясняющая подпись на одну или две строки"
+                                  "characters": "Поясняющая подпись на одну или две строки",
+                                  "text_geometry": {
+                                    "auto_resize": "HEIGHT",
+                                    "vertical_alignment": "TOP",
+                                    "horizontal_alignment": "LEFT"
+                                  }
                                 }
                               ]
                             }
@@ -30211,7 +30870,12 @@
                                     ]
                                   },
                                   "layout_align": "STRETCH",
-                                  "characters": "Поясняющая подпись на одну или две строки"
+                                  "characters": "Поясняющая подпись на одну или две строки",
+                                  "text_geometry": {
+                                    "auto_resize": "HEIGHT",
+                                    "vertical_alignment": "TOP",
+                                    "horizontal_alignment": "LEFT"
+                                  }
                                 }
                               ]
                             }
@@ -30351,7 +31015,12 @@
                                     ]
                                   },
                                   "layout_align": "STRETCH",
-                                  "characters": "Поясняющая подпись на одну или две строки"
+                                  "characters": "Поясняющая подпись на одну или две строки",
+                                  "text_geometry": {
+                                    "auto_resize": "HEIGHT",
+                                    "vertical_alignment": "TOP",
+                                    "horizontal_alignment": "LEFT"
+                                  }
                                 }
                               ]
                             }
@@ -30491,7 +31160,12 @@
                                     ]
                                   },
                                   "layout_align": "STRETCH",
-                                  "characters": "Поясняющая подпись на одну или две строки"
+                                  "characters": "Поясняющая подпись на одну или две строки",
+                                  "text_geometry": {
+                                    "auto_resize": "HEIGHT",
+                                    "vertical_alignment": "TOP",
+                                    "horizontal_alignment": "LEFT"
+                                  }
                                 }
                               ]
                             }
@@ -30631,7 +31305,12 @@
                                     ]
                                   },
                                   "layout_align": "STRETCH",
-                                  "characters": "Поясняющая подпись на одну или две строки"
+                                  "characters": "Поясняющая подпись на одну или две строки",
+                                  "text_geometry": {
+                                    "auto_resize": "HEIGHT",
+                                    "vertical_alignment": "TOP",
+                                    "horizontal_alignment": "LEFT"
+                                  }
                                 }
                               ]
                             }
@@ -30771,7 +31450,12 @@
                                     ]
                                   },
                                   "layout_align": "STRETCH",
-                                  "characters": "Поясняющая подпись на одну или две строки"
+                                  "characters": "Поясняющая подпись на одну или две строки",
+                                  "text_geometry": {
+                                    "auto_resize": "HEIGHT",
+                                    "vertical_alignment": "TOP",
+                                    "horizontal_alignment": "LEFT"
+                                  }
                                 }
                               ]
                             }
@@ -30932,7 +31616,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "*очень маленькое примечание"
+                      "characters": "*очень маленькое примечание",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     }
                   ]
                 }
@@ -31147,7 +31836,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Небольшой заголовок на пару строк"
+                      "characters": "Небольшой заголовок на пару строк",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "CENTER",
+                        "horizontal_alignment": "LEFT"
+                      }
                     },
                     {
                       "node_id": "946:26090",
@@ -31283,7 +31977,12 @@
                                 ]
                               },
                               "layout_align": "STRETCH",
-                              "characters": "Поясняющая подпись на одну или две строки"
+                              "characters": "Поясняющая подпись на одну или две строки",
+                              "text_geometry": {
+                                "auto_resize": "HEIGHT",
+                                "vertical_alignment": "TOP",
+                                "horizontal_alignment": "LEFT"
+                              }
                             }
                           ]
                         }
@@ -31423,7 +32122,12 @@
                                 ]
                               },
                               "layout_align": "STRETCH",
-                              "characters": "Поясняющая подпись на одну или две строки"
+                              "characters": "Поясняющая подпись на одну или две строки",
+                              "text_geometry": {
+                                "auto_resize": "HEIGHT",
+                                "vertical_alignment": "TOP",
+                                "horizontal_alignment": "LEFT"
+                              }
                             }
                           ]
                         }
@@ -31563,7 +32267,12 @@
                                 ]
                               },
                               "layout_align": "STRETCH",
-                              "characters": "Поясняющая подпись на одну или две строки"
+                              "characters": "Поясняющая подпись на одну или две строки",
+                              "text_geometry": {
+                                "auto_resize": "HEIGHT",
+                                "vertical_alignment": "TOP",
+                                "horizontal_alignment": "LEFT"
+                              }
                             }
                           ]
                         }
@@ -31703,7 +32412,12 @@
                                 ]
                               },
                               "layout_align": "STRETCH",
-                              "characters": "Поясняющая подпись на одну или две строки"
+                              "characters": "Поясняющая подпись на одну или две строки",
+                              "text_geometry": {
+                                "auto_resize": "HEIGHT",
+                                "vertical_alignment": "TOP",
+                                "horizontal_alignment": "LEFT"
+                              }
                             }
                           ]
                         }
@@ -31843,7 +32557,12 @@
                                 ]
                               },
                               "layout_align": "STRETCH",
-                              "characters": "Поясняющая подпись на одну или две строки"
+                              "characters": "Поясняющая подпись на одну или две строки",
+                              "text_geometry": {
+                                "auto_resize": "HEIGHT",
+                                "vertical_alignment": "TOP",
+                                "horizontal_alignment": "LEFT"
+                              }
                             }
                           ]
                         }
@@ -31983,7 +32702,12 @@
                                 ]
                               },
                               "layout_align": "STRETCH",
-                              "characters": "Поясняющая подпись на одну или две строки"
+                              "characters": "Поясняющая подпись на одну или две строки",
+                              "text_geometry": {
+                                "auto_resize": "HEIGHT",
+                                "vertical_alignment": "TOP",
+                                "horizontal_alignment": "LEFT"
+                              }
                             }
                           ]
                         }
@@ -32135,7 +32859,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "*очень маленькое примечание"
+                      "characters": "*очень маленькое примечание",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     }
                   ]
                 }
@@ -32642,7 +33371,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Небольшой заголовок на пару строк"
+                      "characters": "Небольшой заголовок на пару строк",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "CENTER",
+                        "horizontal_alignment": "CENTER"
+                      }
                     },
                     {
                       "node_id": "11:1016",
@@ -32690,7 +33424,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Поясняющая подпись на несколько красивых строк"
+                      "characters": "Поясняющая подпись на несколько красивых строк",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "CENTER"
+                      }
                     },
                     {
                       "node_id": "1015:18749",
@@ -32738,7 +33477,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Ссылка >"
+                      "characters": "Ссылка >",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "CENTER"
+                      }
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -32907,7 +33651,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Небольшой заголовок на пару строк"
+                      "characters": "Небольшой заголовок на пару строк",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "CENTER",
+                        "horizontal_alignment": "LEFT"
+                      }
                     },
                     {
                       "node_id": "260:660",
@@ -32955,7 +33704,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Поясняющая подпись на несколько красивых строк"
+                      "characters": "Поясняющая подпись на несколько красивых строк",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     },
                     {
                       "node_id": "1015:18846",
@@ -33003,7 +33757,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Ссылка >"
+                      "characters": "Ссылка >",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "TOP",
+                        "horizontal_alignment": "LEFT"
+                      }
                     }
                   ],
                   "layout_grow": 1
@@ -33724,7 +34483,12 @@
                     ]
                   },
                   "layout_grow": 1,
-                  "characters": "Небольшой текст со смыслом «Обрати внимание!»"
+                  "characters": "Небольшой текст со смыслом «Обрати внимание!»",
+                  "text_geometry": {
+                    "auto_resize": "HEIGHT",
+                    "vertical_alignment": "TOP",
+                    "horizontal_alignment": "LEFT"
+                  }
                 }
               ],
               "layout_align": "STRETCH"
@@ -33915,7 +34679,12 @@
                     ]
                   },
                   "layout_grow": 1,
-                  "characters": "Небольшой текст со смыслом «Обрати внимание!»"
+                  "characters": "Небольшой текст со смыслом «Обрати внимание!»",
+                  "text_geometry": {
+                    "auto_resize": "HEIGHT",
+                    "vertical_alignment": "TOP",
+                    "horizontal_alignment": "LEFT"
+                  }
                 }
               ],
               "layout_align": "STRETCH"
@@ -34350,7 +35119,12 @@
                     ]
                   },
                   "layout_grow": 1,
-                  "characters": "Пожалуйста, напишите здесь текст, на который клиенту нужно обратить внимание!"
+                  "characters": "Пожалуйста, напишите здесь текст, на который клиенту нужно обратить внимание!",
+                  "text_geometry": {
+                    "auto_resize": "HEIGHT",
+                    "vertical_alignment": "TOP",
+                    "horizontal_alignment": "LEFT"
+                  }
                 },
                 {
                   "node_id": "1024:19279",
@@ -34535,7 +35309,12 @@
                     ]
                   },
                   "layout_grow": 1,
-                  "characters": "Пожалуйста, напишите здесь текст, на который клиенту нужно обратить внимание!"
+                  "characters": "Пожалуйста, напишите здесь текст, на который клиенту нужно обратить внимание!",
+                  "text_geometry": {
+                    "auto_resize": "HEIGHT",
+                    "vertical_alignment": "TOP",
+                    "horizontal_alignment": "LEFT"
+                  }
                 },
                 {
                   "node_id": "1024:19273",
@@ -35360,7 +36139,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Понравилось это письмо?"
+                      "characters": "Понравилось это письмо?",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "CENTER",
+                        "horizontal_alignment": "CENTER"
+                      }
                     },
                     {
                       "node_id": "15:589",
@@ -35869,7 +36653,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Понравилось это письмо?"
+                      "characters": "Понравилось это письмо?",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "CENTER",
+                        "horizontal_alignment": "CENTER"
+                      }
                     },
                     {
                       "node_id": "260:3967",
@@ -36378,7 +37167,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Понравилось это письмо?"
+                      "characters": "Понравилось это письмо?",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "CENTER",
+                        "horizontal_alignment": "CENTER"
+                      }
                     },
                     {
                       "node_id": "260:1349",
@@ -36802,7 +37596,12 @@
                         ]
                       },
                       "layout_align": "STRETCH",
-                      "characters": "Понравилось это письмо?"
+                      "characters": "Понравилось это письмо?",
+                      "text_geometry": {
+                        "auto_resize": "HEIGHT",
+                        "vertical_alignment": "CENTER",
+                        "horizontal_alignment": "CENTER"
+                      }
                     },
                     {
                       "node_id": "260:3979",
