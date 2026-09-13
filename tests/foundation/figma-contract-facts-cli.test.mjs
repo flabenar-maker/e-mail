@@ -13,13 +13,11 @@ test("CLI loads canonical component and rejects an incomplete live Figma packet"
   const dir = await mkdtemp(join(tmpdir(), "cupis-figma-gate-"));
   try {
     const livePath = join(dir, "live.json");
-    const mappingsPath = join(dir, "mappings.json");
     await writeFile(livePath, JSON.stringify({
       file_key: "8zka5bHkcrJVK9I9dKjnhC",
       component_node_id: "497:26103",
       variants: [],
     }));
-    await writeFile(mappingsPath, "[]");
     const lines = [];
     const oldLog = console.log;
     console.log = (value) => lines.push(value);
@@ -29,7 +27,6 @@ test("CLI loads canonical component and rejects an incomplete live Figma packet"
         "--repo-root", repoRoot,
         "--component-id", "details-operation-plain",
         "--live", livePath,
-        "--mappings", mappingsPath,
       ]);
     } finally {
       console.log = oldLog;
@@ -47,7 +44,17 @@ test("CLI cannot run without separately supplied live Figma data", async () => {
   const result = await cli.main([
     "--repo-root", repoRoot,
     "--component-id", "details-operation-plain",
-    "--mappings", "unused.json",
+  ]);
+  assert.equal(result, 1);
+});
+
+
+test("CLI refuses an externally supplied fact map", async () => {
+  const result = await cli.main([
+    "--repo-root", repoRoot,
+    "--component-id", "details-operation-plain",
+    "--live", "unused.json",
+    "--mappings", "outside-contract.json",
   ]);
   assert.equal(result, 1);
 });
