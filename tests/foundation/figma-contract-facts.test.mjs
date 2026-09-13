@@ -69,6 +69,7 @@ function fixture() {
   ].map(([variant_node_id, node_id, source_path, contract_path, transform]) => ({
     variant_node_id, node_id, source_path, contract_path, transform,
   }));
+  record.contracts.figma_fact_links = mappings;
   return { record, packet, mappings };
 }
 
@@ -148,6 +149,7 @@ test("an exact fully mapped Mobile/Desktop example passes", () => {
     { variant_node_id: "2:1", node_id: "2:1", source_path: "/layout/item_spacing", contract_path: "/contracts/mobile/root/facts/0/value/value", transform: "identity" },
     { variant_node_id: "2:2", node_id: "2:2", source_path: "/layout/item_spacing", contract_path: "/contracts/desktop/root/facts/0/value/value", transform: "identity" },
   ];
+  record.contracts.figma_fact_links = mappings;
   const report = auditFigmaContractFacts({ record, live, mappings });
   assert.equal(report.ok, true, JSON.stringify(report.issues));
   assert.equal(report.source_fact_count, 2);
@@ -211,4 +213,11 @@ test("Figma component property defaults are checked, not silently ignored", () =
   assert.ok(report.issues.some((issue) =>
     issue.code === "FIGMA_FACT_UNCOVERED" &&
     issue.source_path === "/component_properties/0/default"));
+});
+
+test("caller-supplied mappings cannot certify facts absent from the component contract", () => {
+  const { record, packet, mappings } = fixture();
+  record.contracts.figma_fact_links = [];
+  const report = auditFigmaContractFacts({ record, live: packet, mappings });
+  assert.ok(report.issues.some((issue) => issue.code === "EVIDENCE_LINKS_NOT_IN_CONTRACT"));
 });
