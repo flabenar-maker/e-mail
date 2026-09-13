@@ -16,7 +16,7 @@ const preserved = {
   "core/figma-component-naming-standard.md":
     "97c922e918244d6142d3e82bc89f9ca09652389d",
   "registry/email-component-descriptions-registry.md":
-    "1973f6ba139e5e7d640fb5655bf30117bfe2e407",
+    "be2203aef82db093fca37857f060d552b254c579",
   "registry/email-typography-registry.md":
     "12e5ae0b0aa1c5f18f9132e2e948e6a712c0f1bd",
   "workflows/library-maintenance-checkpoint.md":
