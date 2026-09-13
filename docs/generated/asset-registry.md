@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: asset-registry -->
-<!-- source-digest: sha256:a2ab1fd4c606bdb76bdff46f31f27d197231850c9e89ba0b1717ab41308927a2 -->
+<!-- source-digest: sha256:57dbc2ed99943f1a9119e7dc1e786b900c255f292f1e9bfe0fe8c89f24b977b4 -->
 <!-- schema-versions: components=2.1.0, assets=1.0.0 -->
 # CUPIS asset registry
 
@@ -726,19 +726,27 @@ General export definitions are listed first. Component-specific choices remain o
 
 ### banner-fiscal-check-link
 
-- `banner-fiscal-check-link` → `bank-badge @4x` → `rendered-node` → `direct-image` → `png-4x` → `transparent`
-  - Asset contract ID: `bank-badge`
-  - Export boundary: `node` / `bank-badge @4x`
-  - Pixel dimensions: 192×192px
-  - Aspect ratio: 48:48
-  - Crop: `none`; position `exact-node-after-overrides`
-  - Background: own visible boundary fill `preserve`; artificial matte `forbid`
-  - Clipping policy: `preserve-artwork`
 - `banner-fiscal-check-link` → `chevron-icon @4x` → `rendered-node` → `direct-image` → `png-4x` → `transparent`
   - Asset contract ID: `chevron-icon`
   - Export boundary: `node` / `chevron-icon @4x`
   - Pixel dimensions: 96×96px
   - Aspect ratio: 24:24
+  - Crop: `none`; position `exact-node-after-overrides`
+  - Background: own visible boundary fill `preserve`; artificial matte `forbid`
+  - Clipping policy: `preserve-artwork`
+- `banner-fiscal-check-link` → `fns-badge @4x` → `rendered-node` → `direct-image` → `png-4x` → `transparent`
+  - Asset contract ID: `fns-badge`
+  - Export boundary: `node` / `fns-badge @4x`
+  - Pixel dimensions: 192×192px
+  - Aspect ratio: 48:48
+  - Crop: `none`; position `exact-node-after-overrides`
+  - Background: own visible boundary fill `preserve`; artificial matte `forbid`
+  - Clipping policy: `preserve-artwork`
+- `banner-fiscal-check-link` → `ofd-badge @4x` → `rendered-node` → `direct-image` → `png-4x` → `transparent`
+  - Asset contract ID: `ofd-badge`
+  - Export boundary: `node` / `ofd-badge @4x`
+  - Pixel dimensions: 192×192px
+  - Aspect ratio: 48:48
   - Crop: `none`; position `exact-node-after-overrides`
   - Background: own visible boundary fill `preserve`; artificial matte `forbid`
   - Clipping policy: `preserve-artwork`

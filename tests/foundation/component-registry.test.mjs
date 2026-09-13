@@ -774,7 +774,8 @@ test("service records retain nested Details links and exact badge assets", async
       asset.pixel_dimensions,
     ]),
     [
-      ["bank-badge", "bank-badge @4x", { width: 192, height: 192, unit: "px" }],
+      ["ofd-badge", "ofd-badge @4x", { width: 192, height: 192, unit: "px" }],
+      ["fns-badge", "fns-badge @4x", { width: 192, height: 192, unit: "px" }],
       ["chevron-icon", "chevron-icon @4x", { width: 96, height: 96, unit: "px" }],
     ],
   );

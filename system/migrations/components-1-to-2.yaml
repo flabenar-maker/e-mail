@@ -299,19 +299,45 @@
         "id": "block-transaction-success",
         "purpose": "Сервисный блок успешной операции с партнёром, суммой, статусом и реквизитами.",
         "critical_constraint_ids": [],
-        "constraints": []
+        "constraints": [
+          {
+            "id": "composite-white-card",
+            "scope": "all",
+            "kind": "layout",
+            "severity": "required",
+            "statement": "Корневой card прозрачен и обрезает по radius 22px Mobile / 26px Desktop; белый Fill #FFFFFF принадлежит двум вложенным секциям, разделённым divider 1px #DFDFE0."
+          }
+        ]
       },
       {
         "id": "block-transaction-error",
         "purpose": "Сервисный блок неуспешной операции с партнёром, статусом и поясняющим текстом.",
         "critical_constraint_ids": [],
-        "constraints": []
+        "constraints": [
+          {
+            "id": "composite-white-card",
+            "scope": "all",
+            "kind": "layout",
+            "severity": "required",
+            "statement": "Корневой card прозрачен и обрезает по radius 22px Mobile / 26px Desktop; белый Fill #FFFFFF принадлежит summary-area и body-area, разделённым divider 1px #DFDFE0."
+          }
+        ]
       },
       {
         "id": "block-contact-support",
         "purpose": "Контактный блок поддержки с телефонным действием и ссылкой на раздел помощи.",
-        "critical_constraint_ids": [],
-        "constraints": []
+        "critical_constraint_ids": [
+          "inline-help-link"
+        ],
+        "constraints": [
+          {
+            "id": "inline-help-link",
+            "scope": "all",
+            "kind": "interaction",
+            "severity": "critical",
+            "statement": "Ссылка «Помощь» находится внутри одного help-text: базовый цвет #757678, встроенная ссылка #00991F с underline; URL поступает из данных письма."
+          }
+        ]
       },
       {
         "id": "asset-bank-badge-4x",
@@ -353,13 +379,31 @@
         "id": "details-suspicious-operation",
         "purpose": "Вложенный предупреждающий блок с реквизитами подозрительной операции.",
         "critical_constraint_ids": [],
-        "constraints": []
+        "constraints": [
+          {
+            "id": "fixed-red-heading",
+            "scope": "all",
+            "kind": "layout",
+            "severity": "required",
+            "statement": "Заголовок имеет цвет #DE2141; контейнер #F8F8FA со скруглением 14px Mobile / 18px Desktop."
+          }
+        ]
       },
       {
         "id": "block-personal-data-update",
         "purpose": "Сервисный блок обновления персональных данных со статусом и управляемыми пояснениями.",
-        "critical_constraint_ids": [],
-        "constraints": []
+        "critical_constraint_ids": [
+          "operation-description-toggles-entire-details"
+        ],
+        "constraints": [
+          {
+            "id": "operation-description-toggles-entire-details",
+            "scope": "all",
+            "kind": "property-behavior",
+            "severity": "critical",
+            "statement": "Show Operation Description управляет видимостью всего вложенного инстанса Details/Suspicious-Operation, а не отдельной строки его текста."
+          }
+        ]
       },
       {
         "id": "details-operation-plain",
@@ -376,14 +420,25 @@
       {
         "id": "block-receipt-info",
         "purpose": "Сервисный блок со статусом и реквизитами чека.",
-        "critical_constraint_ids": [],
-        "constraints": []
+        "critical_constraint_ids": [
+          "split-corner-radii"
+        ],
+        "constraints": [
+          {
+            "id": "split-corner-radii",
+            "scope": "all",
+            "kind": "layout",
+            "severity": "critical",
+            "statement": "Нет внешнего белого card: status-area скруглена только сверху, receipt-area только снизу; величина видимых углов 22px Mobile / 26px Desktop, промежуточные углы 0px."
+          }
+        ]
       },
       {
         "id": "banner-fiscal-check-link",
         "purpose": "Группа кликабельных строк со ссылками на проверку фискального чека.",
         "critical_constraint_ids": [
-          "linked-cells-cover-entire-row"
+          "linked-cells-cover-entire-row",
+          "two-distinct-logos"
         ],
         "constraints": [
           {
@@ -392,14 +447,38 @@
             "kind": "email-rendering",
             "severity": "critical",
             "statement": "Каждая видимая ячейка строки содержит ссылку с одним URL, чтобы кликабельной оставалась вся площадь строки без помещения таблицы внутрь ссылки."
+          },
+          {
+            "id": "two-distinct-logos",
+            "scope": "all",
+            "kind": "asset-export",
+            "severity": "critical",
+            "statement": "item-01 использует отдельный ofd-badge @4x, item-02 отдельный fns-badge @4x; эти изображения не заменяются общим bank-badge."
+          },
+          {
+            "id": "row-gap-is-auto-layout",
+            "scope": "all",
+            "kind": "layout",
+            "severity": "required",
+            "statement": "Зазор между строками равен itemSpacing корня 8px Mobile / 12px Desktop; отдельного spacer-слоя нет."
           }
         ]
       },
       {
         "id": "block-instruction-steps",
         "purpose": "Сервисный блок с инструкцией, нумерованными шагами и управляемыми предупреждениями.",
-        "critical_constraint_ids": [],
-        "constraints": []
+        "critical_constraint_ids": [
+          "fixed-list-marker-columns"
+        ],
+        "constraints": [
+          {
+            "id": "fixed-list-marker-columns",
+            "scope": "all",
+            "kind": "email-rendering",
+            "severity": "critical",
+            "statement": "Number и dash занимают фиксированные колонки 22px и 42px Mobile / 32px и 64px Desktop; промежуток до HTML-текста 12px в обеих версиях."
+          }
+        ]
       },
       {
         "id": "details-operation",
