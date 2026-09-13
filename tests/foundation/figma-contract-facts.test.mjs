@@ -305,3 +305,31 @@ test("exported asset artwork is an image boundary, not individually mapped vecto
   assert.equal(report.issues.some((issue) => issue.code === "FIGMA_CAPTURE_UNSUPPORTED"), false);
   assert.equal(report.issues.some((issue) => issue.node_id === "4:1"), false);
 });
+
+test("mixed text is supported when every styled segment is captured exactly", () => {
+  const record = {
+    id: "mixed-text", figma: { file_key: "file-key", node_id: "1:1" },
+    variants: [{ node_id: "2:1" }, { node_id: "2:2" }],
+    contracts: {
+      mobile: { root: { facts: [], children: [] } },
+      desktop: { root: { facts: [], children: [] } },
+      figma_fact_links: [],
+    },
+  };
+  const live = {
+    capture_version: "1.0.0", component_properties: [],
+    file_key: "file-key", component_node_id: "1:1",
+    capture_errors: [{ node_id: "3:1", code: "MIXED_VALUE", field: "fontName" }],
+    variants: [
+      { variant_node_id: "2:1", axes: [{ name: "Viewport", value: "Mobile" }],
+        source_node: { node_id: "2:1", children: [{
+          node_id: "3:1", node_type: "TEXT",
+          styled_text_segments: [{ start: 0, end: 1 }, { start: 1, end: 2 }],
+        }] } },
+      { variant_node_id: "2:2", axes: [{ name: "Viewport", value: "Desktop" }],
+        source_node: { node_id: "2:2" } },
+    ],
+  };
+  const report = auditFigmaContractFacts({ record, live });
+  assert.equal(report.issues.some((issue) => issue.code === "FIGMA_CAPTURE_UNSUPPORTED"), false);
+});
