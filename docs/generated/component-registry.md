@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: component-registry -->
-<!-- source-digest: sha256:15a98698bf068de8eeb65cca39e9217fa21ae16aa40a31fbeb5c53b39e39d058 -->
+<!-- source-digest: sha256:7869b5377a4f65a6ddb3f8af59a0dace6c4d3ae4c4d4ac7ef68e91fa2b2a50ab -->
 <!-- schema-versions: components=2.1.0, typography=1.0.0, spacing=1.0.0, assets=1.0.0 -->
 # CUPIS component registry
 
@@ -3354,7 +3354,6 @@ RENDER: HYBRID
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#481:19664` (`component`)
 - Source root: `538:17235`
 - Verified: `2026-09-06`
-- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной миграционной проекцией.
 - Structure fingerprint: `sha256:422aaa33e22aab19999c7a1292d8a8a1d2ada2a1711a43fe13acdc2aeabd37bd`
 - Purpose: Составной графический бейдж банка для использования в сервисных блоках.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Asset/Bank-Badge @4x` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -3364,7 +3363,6 @@ RENDER: HYBRID
 - Render type: `ASSET`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -3422,7 +3420,6 @@ RENDER: ASSET
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#484:20039` (`component`)
 - Source root: `538:17235`
 - Verified: `2026-09-06`
-- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной миграционной проекцией.
 - Structure fingerprint: `sha256:422aaa33e22aab19999c7a1292d8a8a1d2ada2a1711a43fe13acdc2aeabd37bd`
 - Purpose: Универсальный составной графический бейдж с иконкой.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Asset/Icon-Badge @4x` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -3432,7 +3429,6 @@ RENDER: ASSET
 - Render type: `ASSET`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -3490,7 +3486,6 @@ RENDER: ASSET
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#481:19665` (`component`)
 - Source root: `538:17235`
 - Verified: `2026-09-06`
-- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной миграционной проекцией.
 - Structure fingerprint: `sha256:422aaa33e22aab19999c7a1292d8a8a1d2ada2a1711a43fe13acdc2aeabd37bd`
 - Purpose: Составной графический бейдж партнёра для использования в сервисных блоках.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Asset/Partner-Badge @4x` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -3500,7 +3495,6 @@ RENDER: ASSET
 - Render type: `ASSET`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -3558,7 +3552,6 @@ RENDER: ASSET
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#491:22178` (`component`)
 - Source root: `538:17235`
 - Verified: `2026-09-06`
-- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной миграционной проекцией.
 - Structure fingerprint: `sha256:422aaa33e22aab19999c7a1292d8a8a1d2ada2a1711a43fe13acdc2aeabd37bd`
 - Purpose: Составная графическая иконка отрицательного статуса.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Asset/Status-Badge-Negative @4x` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -3568,7 +3561,6 @@ RENDER: ASSET
 - Render type: `ASSET`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -3626,7 +3618,6 @@ RENDER: ASSET
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#491:22074` (`component`)
 - Source root: `538:17235`
 - Verified: `2026-09-06`
-- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной миграционной проекцией.
 - Structure fingerprint: `sha256:422aaa33e22aab19999c7a1292d8a8a1d2ada2a1711a43fe13acdc2aeabd37bd`
 - Purpose: Составная графическая иконка положительного статуса.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Asset/Status-Badge-Positive @4x` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -3636,7 +3627,6 @@ RENDER: ASSET
 - Render type: `ASSET`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -3694,7 +3684,6 @@ RENDER: ASSET
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#1084:16996` (`component-set`)
 - Source root: `538:17235`
 - Verified: `2026-09-06`
-- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной миграционной проекцией.
 - Structure fingerprint: `sha256:1cca4ddcec78df7b41644071d3118e82d7795b4f4a7e4c28ea46ef6afb5666cf`
 - Purpose: Живой HTML-бейдж состояния операции.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Badge/Operation-Status` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -3704,7 +3693,6 @@ RENDER: ASSET
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -3734,12 +3722,6 @@ RENDER: ASSET
 - Variant `desktop-pending` — Figma node `466:13290`; axes: `Viewport=Desktop`, `State=Pending`
 - Variant `desktop-success` — Figma node `466:13292`; axes: `Viewport=Desktop`, `State=Success`
 - Variant `desktop-error` — Figma node `466:13294`; axes: `Viewport=Desktop`, `State=Error`
-- Direct Figma source: `459:29367`; `Viewport=Mobile, State=Pending`; reference frame 94×25px
-- Direct Figma source: `459:29369`; `Viewport=Mobile, State=Success`; reference frame 75×25px
-- Direct Figma source: `459:29371`; `Viewport=Mobile, State=Error`; reference frame 86×25px
-- Direct Figma source: `466:13290`; `Viewport=Desktop, State=Pending`; reference frame 117×30px
-- Direct Figma source: `466:13292`; `Viewport=Desktop, State=Success`; reference frame 91×30px
-- Direct Figma source: `466:13294`; `Viewport=Desktop, State=Error`; reference frame 106×30px
 
 ### Output contract classification
 
@@ -3768,7 +3750,6 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#502:25048` (`component-set`)
 - Source root: `538:17235`
 - Verified: `2026-09-06`
-- Figma source check: `blocked-ambiguous-description` on `2026-09-13`; В Description цвет кликабельных HTML-строк назван словом «белые» без кода. Новые Figma-source facts не заносились; прежняя HTML-проекция не подтверждена.
 - Structure fingerprint: `sha256:ebab5d9ad57aa7c7a286c68e6b707ea7313421dde2452429aa0d7b38e686bd5e`
 - Purpose: Группа кликабельных строк со ссылками на проверку фискального чека.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Banner/Fiscal-Check-Link` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -3778,7 +3759,6 @@ RENDER: HTML
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -3894,7 +3874,6 @@ CRITICAL
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#472:16999` (`component-set`)
 - Source root: `538:17235`
 - Verified: `2026-09-06`
-- Figma source check: `blocked-ambiguous-description` on `2026-09-13`; В Description HTML-фоны и цвет ссылки названы словами «белая», «серый», «зелёная»; radius help-notice также отослан к инстансу без значения. Новые Figma-source facts не заносились; прежняя HTML-проекция не подтверждена.
 - Structure fingerprint: `sha256:95a24da336f01d7ab5dc9da2a78d6965eea4e62eb86f296221eedd7a214f0d03`
 - Purpose: Контактный блок поддержки с телефонным действием и ссылкой на раздел помощи.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Block/Contact-Support` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -3904,7 +3883,6 @@ CRITICAL
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -3972,7 +3950,6 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#510:16701` (`component-set`)
 - Source root: `538:17235`
 - Verified: `2026-09-06`
-- Figma source check: `blocked-ambiguous-description` on `2026-09-13`; В Description цвет HTML warning text назван «red» без кода. Новые Figma-source facts не заносились; прежняя HTML-проекция не подтверждена.
 - Structure fingerprint: `sha256:e4c35712ed239f9c53da103500f69f1ede6fdfd9f8857321bba2a3df2f198bbd`
 - Purpose: Сервисный блок с инструкцией, нумерованными шагами и управляемыми предупреждениями.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Block/Instruction-Steps` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -3982,7 +3959,6 @@ RENDER: HTML
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -4079,7 +4055,6 @@ RENDER: HYBRID
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#497:26055` (`component-set`)
 - Source root: `538:17235`
 - Verified: `2026-09-06`
-- Figma source check: `blocked-ambiguous-description` on `2026-09-13`; В Description цвет HTML-карточки назван словом «белая» без кода. Новые Figma-source facts не заносились; прежняя HTML-проекция не подтверждена.
 - Structure fingerprint: `sha256:aaac8d95e15a432bd03a8a15bcf7649d6a5fdf0c663112a094a20cf1ac3d95ee`
 - Purpose: Сервисный блок обновления персональных данных со статусом и управляемыми пояснениями.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Block/Personal-Data-Update` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -4089,7 +4064,6 @@ RENDER: HYBRID
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -4185,7 +4159,6 @@ RENDER: HYBRID
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#502:24695` (`component-set`)
 - Source root: `538:17235`
 - Verified: `2026-09-06`
-- Figma source check: `blocked-ambiguous-description` on `2026-09-13`; В Description цвета HTML-секций названы словом «белые» без кодов. Новые Figma-source facts не заносились; прежняя HTML-проекция не подтверждена.
 - Structure fingerprint: `sha256:30944ab19aba46ba7c110429cda55b57c4facf8431dda88faf8d64f7fc6b90cc`
 - Purpose: Сервисный блок со статусом и реквизитами чека.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Block/Receipt-Info` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -4195,7 +4168,6 @@ RENDER: HYBRID
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -4278,7 +4250,6 @@ RENDER: HYBRID
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#459:30151` (`component-set`)
 - Source root: `538:17235`
 - Verified: `2026-09-06`
-- Figma source check: `blocked-ambiguous-description` on `2026-09-13`; В Description цвет HTML-карточки назван словом «белая» без кода; сначала требуется точное уточнение Description. Новые Figma-source facts не заносились; прежняя HTML-проекция не подтверждена.
 - Structure fingerprint: `sha256:75987410fc1c2c86234378a0beaba82438776ded423032b7b5ae179cbd000f82`
 - Purpose: Сервисный блок неуспешной операции с партнёром, статусом и поясняющим текстом.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Block/Transaction-Error` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -4288,7 +4259,6 @@ RENDER: HYBRID
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -4373,7 +4343,6 @@ RENDER: HYBRID
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#459:29177` (`component-set`)
 - Source root: `538:17235`
 - Verified: `2026-09-06`
-- Figma source check: `blocked-ambiguous-description` on `2026-09-13`; В Description цвет HTML-карточки назван словом «белая» без кода; сначала требуется точное уточнение Description. Новые Figma-source facts не заносились; прежняя HTML-проекция не подтверждена.
 - Structure fingerprint: `sha256:618e456ac9b5a2723c7c5dec1cd02c8fda01aaf35d9efbe07e75664a02668b9c`
 - Purpose: Сервисный блок успешной операции с партнёром, суммой, статусом и реквизитами.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Block/Transaction-Success` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -4383,7 +4352,6 @@ RENDER: HYBRID
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -4475,7 +4443,6 @@ RENDER: HYBRID
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#477:21327` (`component-set`)
 - Source root: `538:17235`
 - Verified: `2026-09-06`
-- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной миграционной проекцией.
 - Structure fingerprint: `sha256:704fdedacb635ee26473f02322df3336127dc96125a244f4a356bb132c033e9f`
 - Purpose: Вложенная таблица реквизитов операции.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Details/Operation` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -4485,7 +4452,6 @@ RENDER: HYBRID
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -4512,8 +4478,6 @@ RENDER: HYBRID
 
 - Variant `desktop` — Figma node `477:21325`; axes: `Viewport=Desktop`
 - Variant `mobile` — Figma node `484:20068`; axes: `Viewport=Mobile`
-- Direct Figma source: `477:21325`; `Viewport=Desktop`; reference frame 488×250px
-- Direct Figma source: `484:20068`; `Viewport=Mobile`; reference frame 252×380px
 
 ### Output contract classification
 
@@ -4542,7 +4506,6 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#497:26103` (`component-set`)
 - Source root: `538:17235`
 - Verified: `2026-09-06`
-- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной миграционной проекцией.
 - Structure fingerprint: `sha256:fc8ca2877c103ab0c55d68549ddd9ae0c73d6b026b3c8e9acd24d7c127a18ffd`
 - Purpose: Вложенная таблица реквизитов операции без собственного визуального контейнера.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Details/Operation-Plain` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -4552,7 +4515,6 @@ RENDER: HTML
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -4579,8 +4541,6 @@ RENDER: HTML
 
 - Variant `mobile` — Figma node `497:26102`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `497:26101`; axes: `Viewport=Desktop`
-- Direct Figma source: `497:26102`; `Viewport=Mobile`; reference frame 252×156px
-- Direct Figma source: `497:26101`; `Viewport=Desktop`; reference frame 488×98px
 
 ### Output contract classification
 
@@ -4609,7 +4569,6 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#502:24640` (`component-set`)
 - Source root: `538:17235`
 - Verified: `2026-09-06`
-- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной миграционной проекцией.
 - Structure fingerprint: `sha256:3fea2963f91e1be0835f755e33c52c0f76e5d1621e072c60e8961d4c6b9993f6`
 - Purpose: Вложенная таблица реквизитов чека.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Details/Receipt` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -4619,7 +4578,6 @@ RENDER: HTML
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -4646,8 +4604,6 @@ RENDER: HTML
 
 - Variant `desktop` — Figma node `502:24638`; axes: `Viewport=Desktop`
 - Variant `mobile` — Figma node `502:24639`; axes: `Viewport=Mobile`
-- Direct Figma source: `502:24638`; `Viewport=Desktop`; reference frame 488×288px
-- Direct Figma source: `502:24639`; `Viewport=Mobile`; reference frame 252×436px
 
 ### Output contract classification
 
@@ -4676,7 +4632,6 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#497:25955` (`component-set`)
 - Source root: `538:17235`
 - Verified: `2026-09-06`
-- Figma source check: `blocked-ambiguous-description` on `2026-09-13`; В Description цвет HTML-заголовка назван «красным» без кода; radius отослан к инстансу без значения. Новые Figma-source facts не заносились; прежняя HTML-проекция не подтверждена.
 - Structure fingerprint: `sha256:934a451407ca42c240afb643574d709cf7ad0a1d52a1be900a040e879ca2a8cb`
 - Purpose: Вложенный предупреждающий блок с реквизитами подозрительной операции.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Details/Suspicious-Operation` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -4686,7 +4641,6 @@ RENDER: HTML
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -4742,7 +4696,6 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#484:20761` (`component-set`)
 - Source root: `538:17235`
 - Verified: `2026-09-06`
-- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной миграционной проекцией.
 - Structure fingerprint: `sha256:7c4eb3c7a891ee19421002d0e3c173a8d3d8e88d3c63f79eca96ceaa832f3133`
 - Purpose: Вложенная таблица реквизитов перевода или возврата.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Details/Transfer` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -4752,7 +4705,6 @@ RENDER: HTML
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -4779,8 +4731,6 @@ RENDER: HTML
 
 - Variant `mobile` — Figma node `484:20760`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `477:21326`; axes: `Viewport=Desktop`
-- Direct Figma source: `484:20760`; `Viewport=Mobile`; reference frame 252×492px
-- Direct Figma source: `477:21326`; `Viewport=Desktop`; reference frame 488×364px
 
 ### Output contract classification
 
