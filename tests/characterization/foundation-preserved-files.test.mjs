@@ -29,9 +29,7 @@ const preserved = {
 
 async function gitBlobSha(relativePath) {
   const diskContent = await readFile(join(repoRoot, relativePath), "utf8");
-  const content = Buffer.from(diskContent.replace(/
-/gu, "
-"), "utf8");
+  const content = Buffer.from(diskContent.replace(/\r\n/gu, "\n"), "utf8");
   return createHash("sha1")
     .update(`blob ${content.length}\0`)
     .update(content)
