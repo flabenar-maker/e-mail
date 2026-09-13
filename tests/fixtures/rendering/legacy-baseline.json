@@ -17,7 +17,6 @@
   },
   "legacy_digests": {
     "core/email-figma-prompt.md": "sha256:f25d073e5ecd5d135b28a040afeda4fc594fcb7f2f0dab220442c57488392665",
-    "registry/email-component-descriptions-registry.md": "sha256:a7fe2dfadea52600c45daeb5c72fed426f9a5373ebd37589c00aa2a14c0d481a",
     "registry/email-typography-registry.md": "sha256:b8303adeedae66a1423677a05c866e09d6cafef1627190df969c0de583e87cea",
     "workflows/library-maintenance-checkpoint.md": "sha256:50df7698dc579221811f948c166ea6ad42282b4357cecbb6479a6019a1728e50",
     "workflows/email-build-checkpoint.md": "sha256:31558913bf66d0530c5111f68b306c1e379f48af19a022168de61da9d92476a7"
