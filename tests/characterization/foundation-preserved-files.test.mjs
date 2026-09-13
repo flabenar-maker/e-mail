@@ -20,7 +20,7 @@ const preserved = {
   "registry/email-typography-registry.md":
     "12e5ae0b0aa1c5f18f9132e2e948e6a712c0f1bd",
   "workflows/library-maintenance-checkpoint.md":
-    "81d951189f73a65efb74d70cc390c5213c5f2e9f",
+    "144ee10edbbee985e6b1c8602d0130f1225a2f6d",
   "workflows/email-build-checkpoint.md":
     "42f8f91ca6e867b514c6d1af3dbef5c292cb8106",
   "docs/superpowers/specs/2026-08-24-cupis-structured-email-system-design.md":
@@ -29,7 +29,9 @@ const preserved = {
 
 async function gitBlobSha(relativePath) {
   const diskContent = await readFile(join(repoRoot, relativePath), "utf8");
-  const content = Buffer.from(diskContent.replace(/\r\n/gu, "\n"), "utf8");
+  const content = Buffer.from(diskContent.replace(/
+/gu, "
+"), "utf8");
   return createHash("sha1")
     .update(`blob ${content.length}\0`)
     .update(content)
