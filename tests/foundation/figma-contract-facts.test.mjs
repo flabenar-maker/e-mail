@@ -46,6 +46,9 @@ function fixture() {
     },
   };
   const packet = {
+    capture_version: "1.0.0",
+    capture_errors: [],
+    component_properties: [],
     file_key: "file-key",
     component_node_id: "1:1",
     variants: [
@@ -131,6 +134,9 @@ test("an exact fully mapped Mobile/Desktop example passes", () => {
     },
   };
   const live = {
+    capture_version: "1.0.0",
+    capture_errors: [],
+    component_properties: [],
     file_key: "file-key",
     component_node_id: "1:1",
     variants: [
@@ -187,4 +193,22 @@ test("Figma float serialization noise is canonicalized, not a real 0.1 differenc
   assert.ok(changed.issues.some((issue) =>
     issue.code === "FIGMA_CONTRACT_MISMATCH" &&
     issue.source_path === "/text_style/line_height/value"));
+});
+
+test("a packet without the approved capture profile cannot certify a component", () => {
+  const { record, packet, mappings } = fixture();
+  delete packet.capture_version;
+  const report = auditFigmaContractFacts({ record, live: packet, mappings });
+  assert.ok(report.issues.some((issue) => issue.code === "FIGMA_CAPTURE_VERSION_UNSUPPORTED"));
+});
+
+test("Figma component property defaults are checked, not silently ignored", () => {
+  const { record, packet, mappings } = fixture();
+  packet.component_properties = [{
+    name: "Show Alert", type: "BOOLEAN", default: true, variant_options: null,
+  }];
+  const report = auditFigmaContractFacts({ record, live: packet, mappings });
+  assert.ok(report.issues.some((issue) =>
+    issue.code === "FIGMA_FACT_UNCOVERED" &&
+    issue.source_path === "/component_properties/0/default"));
 });
