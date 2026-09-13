@@ -61,7 +61,7 @@ test("Figma-verified Block/Info-Alert fully renders Mobile and Desktop from cont
   assert.match(output.html, /<img[^>]*width="24"[^>]*height="24"/u);
   assert.match(output.html, /<img[^>]*width="26"[^>]*height="26"/u);
   assert.equal((output.html.match(/Небольшой текст с пояснением чего-либо/gu) ?? []).length, 2);
-  assert.ok(!/<table[^>]*height="(?:d+)"/u.test(output.html), "Block height must grow with reflow");
+  assert.ok(!/<table[^>]*height="(?:\\d+)"/u.test(output.html), "Block height must grow with reflow");
   for (const viewport of ["mobile", "desktop"]) {
     assert.ok(allFacts(component.contracts[viewport].root).every((fact) =>
       fact.provenance?.kind === "figma-literal"), "No legacy Markdown values in pilot");
@@ -86,4 +86,23 @@ test("Figma-verified Block/Contact-Support preserves both inline links and rich 
   const missing = contentFor(component);
   delete missing.mobile["root-content-area-help-notice-help-text"]["help-url"];
   assert.ok(render(component, missing).diagnostics.some((d) => d.code === "RENDER_CONTENT_MISSING"));
+});
+
+test("Figma-verified Card/Image @2x keeps mobile fluid ratio and desktop exact dimensions", async () => {
+  const component = await record("marketing", "card-image");
+  const content = contentFor(component);
+  for (const viewport of ["mobile", "desktop"]) {
+    content[viewport]["root-text-content-link"].href = "https://example.invalid/card";
+  }
+  const output = renderContractTree({
+    component,
+    coverage: { component_id: component.id, mode: "interpreter" },
+    content,
+    assets: { "card-image": { src: svg } },
+    foundations,
+  });
+  assert.deepEqual(output.diagnostics, []);
+  assert.match(output.html, /<img[^>]*width="252"[^>]*height="161"[^>]*style="[^"]*height:auto[^"]*width:100%/u);
+  assert.match(output.html, /<img[^>]*width="232"[^>]*height="148"[^>]*style="[^"]*height:148px[^"]*width:232px/u);
+  assert.doesNotMatch(output.html, /width="252"[^>]*style="[^"]*height:161px/u);
 });
