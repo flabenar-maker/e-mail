@@ -1011,7 +1011,7 @@ export async function validateComponentRegistries(options) {
         diagnostic(
           "components-read",
           "/data/components",
-          "Component registries could not be read.",
+          `Component registries could not be read: ${String(error?.stack ?? error)}`,
         ),
       ],
     };
