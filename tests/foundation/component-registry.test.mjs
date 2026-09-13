@@ -1057,3 +1057,85 @@ test("component schema rejects unknown content slot data", async () => {
     ),
   );
 });
+
+function findSourceNode(node, name) {
+  if (node.name === name) return node;
+  for (const child of node.children ?? []) {
+    const found = findSourceNode(child, name);
+    if (found) return found;
+  }
+  return null;
+}
+
+test("marketing Figma-source variants keep exact high-risk visual and composition facts", async () => {
+  const registry = await loadComponentRegistry({
+    repoRoot,
+    dataPath: "data/components/marketing.yaml",
+  });
+  const byId = new Map(registry.components.map((record) => [record.id, record]));
+
+  const badge = byId.get("badge-step-number");
+  const accent = badge.contracts.source_variants.find((variant) =>
+    variant.axes.some((axis) => axis.name === "Style" && axis.value === "Accent")
+  );
+  const neutral = badge.contracts.source_variants.find((variant) =>
+    variant.axes.some((axis) => axis.name === "Style" && axis.value === "Neutral")
+  );
+  assert.equal(accent.source_node.fills[0].color, "#B0FCC0");
+  assert.equal(neutral.source_node.fills[0].color, "#F8F8FA");
+
+  const footer = byId.get("email-footer");
+  assert.deepEqual(
+    footer.asset_contracts.map((asset) => asset.id).sort(),
+    ["telegram-icon", "vk-icon"],
+  );
+  const footerDesktop = footer.contracts.source_variants.find((variant) =>
+    variant.axes.some((axis) => axis.value === "Desktop")
+  );
+  assert.ok(findSourceNode(footerDesktop.source_node, "telegram-icon @4x"));
+
+  const hero = byId.get("banner-hero");
+  const heroDesktop = hero.contracts.source_variants.find((variant) =>
+    variant.axes.some((axis) => axis.value === "Desktop")
+  );
+  const heroImage = findSourceNode(heroDesktop.source_node, "hero-image @2x");
+  assert.deepEqual(heroImage.reference_dimensions, { width: 552, height: 353, unit: "px" });
+  assert.deepEqual(heroImage.fills[0].source_dimensions, { width: 984, height: 696, unit: "px" });
+
+  const secondary = byId.get("banner-secondary");
+  const secondaryDesktop = secondary.contracts.source_variants.find((variant) =>
+    variant.axes.some((axis) => axis.value === "Desktop")
+  );
+  assert.deepEqual(
+    findSourceNode(secondaryDesktop.source_node, "secondary-image @2x").reference_dimensions,
+    { width: 252, height: 238, unit: "px" },
+  );
+
+  const cardAsset = byId.get("asset-card-image-2x");
+  const numbered = cardAsset.contracts.source_variants.find((variant) =>
+    variant.axes.some((axis) => axis.value === "Numbered")
+  );
+  const plain = cardAsset.contracts.source_variants.find((variant) =>
+    variant.axes.some((axis) => axis.value === "Plain")
+  );
+  assert.deepEqual(findSourceNode(numbered.source_node, "Number").reference_dimensions, {
+    width: 32, height: 22, unit: "px",
+  });
+  assert.equal(findSourceNode(plain.source_node, "Number"), null);
+
+  const nps = byId.get("nps-options");
+  for (const variant of nps.contracts.source_variants) {
+    const count = variant.axes.find((axis) => axis.name === "Count")?.value;
+    assert.equal(Boolean(findSourceNode(variant.source_node, "Neutral")), count === "3");
+  }
+  assert.deepEqual(
+    nps.contracts.mobile.root.children.find((child) => child.id === "options")
+      .children.find((child) => child.id === "neutral-face-link").visibility,
+    { mode: "variant-axis", axis: "Count", value: "3" },
+  );
+
+  const feature = byId.get("asset-feature-icon-4x").contracts.source_variants[0];
+  const radial = findSourceNode(feature.source_node, "background").fills[0];
+  assert.equal(radial.type, "radial-gradient");
+  assert.deepEqual(radial.stops.map((stop) => stop.color), ["#3DD55C", "#18B037"]);
+});
