@@ -155,9 +155,9 @@ export function auditFigmaContractFacts({ record, live, mappings } = {}) {
   }
 
   const sharedAsset = record?.identity?.semantic_role === "asset" &&
-    live.variants.length === 1 &&
-    live.variants[0]?.variant_node_id === live.component_node_id &&
-    !live.variants[0]?.axes?.some((axis) => axis.name === "Viewport");
+    live.variants.length > 0 &&
+    live.variants.every((variant) =>
+      !variant.axes?.some((axis) => axis.name === "Viewport"));
   const byViewport = new Map(VIEWPORTS.map((viewport) => [viewport, []]));
   const liveVariantIds = new Set();
   const variantViewport = new Map();
