@@ -145,7 +145,7 @@ export function auditFigmaContractFacts({ record, live, mappings = [] }) {
     leafValues(live.component_properties, "/component_properties", (source_path, actual) => {
       const variant_node_id = live.component_node_id;
       const node_id = live.component_node_id;
-      source.set(`${variant_node_id}|\\u0000${node_id}|\\u0000${source_path}`, {
+      source.set(`${variant_node_id}|^@${node_id}|^@${source_path}`, {
         variant_node_id, node_id, source_path, actual,
       });
     });
