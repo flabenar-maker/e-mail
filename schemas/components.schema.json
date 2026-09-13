@@ -1896,6 +1896,132 @@
             "CENTER",
             "OUTSIDE"
           ]
+        },
+        "corner_radii": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "top_left",
+            "top_right",
+            "bottom_right",
+            "bottom_left"
+          ],
+          "properties": {
+            "top_left": {
+              "type": "number",
+              "minimum": 0
+            },
+            "top_right": {
+              "type": "number",
+              "minimum": 0
+            },
+            "bottom_right": {
+              "type": "number",
+              "minimum": 0
+            },
+            "bottom_left": {
+              "type": "number",
+              "minimum": 0
+            }
+          }
+        },
+        "styled_text_segments": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "start",
+              "end",
+              "characters",
+              "font_family",
+              "font_style",
+              "font_size_px",
+              "line_height",
+              "text_decoration",
+              "fills"
+            ],
+            "properties": {
+              "start": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "end": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "characters": {
+                "type": "string"
+              },
+              "font_family": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "font_style": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "font_size_px": {
+                "type": "number"
+              },
+              "line_height": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "unit",
+                  "value"
+                ],
+                "properties": {
+                  "unit": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "number"
+                  }
+                }
+              },
+              "text_decoration": {
+                "type": "string"
+              },
+              "fills": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/figmaSourceFill"
+                }
+              }
+            }
+          }
+        },
+        "text_style_ref": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "figma_style_id",
+            "figma_style_name"
+          ],
+          "properties": {
+            "figma_style_id": {
+              "type": "string"
+            },
+            "figma_style_name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "component_property_references": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1
+          }
         }
       }
     }
