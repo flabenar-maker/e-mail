@@ -16,4 +16,4 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci --ignore-scripts
-      - run: node --test tests/rendering/renderer-contract-semantics.test.mjs tests/rendering/nested-composition-contract.test.mjs tests/foundation/figma-contract-facts.test.mjs
+      - run: node --test tests/rendering/renderer-contract-semantics.test.mjs tests/rendering/nested-composition-contract.test.mjs tests/foundation/figma-contract-facts.test.mjs tests/rendering/verified-block-mini.test.mjs
