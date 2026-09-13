@@ -2734,7 +2734,8 @@
                               ],
                               "instance_properties": {},
                               "layout_align": "INHERIT",
-                              "layout_grow": 0
+                              "layout_grow": 0,
+                              "main_component_id": "481:19665"
                             },
                             {
                               "node_id": "459:27425",
@@ -2815,7 +2816,8 @@
                                         "name": "Grey/Black"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "1xbet"
                                 },
                                 {
                                   "node_id": "459:27427",
@@ -2863,7 +2865,8 @@
                                         "name": "Grey/Black"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "100,00 ₽"
                                 }
                               ],
                               "variable_bindings": {
@@ -2957,7 +2960,8 @@
                                     }
                                   },
                                   "layout_align": "INHERIT",
-                                  "layout_grow": 0
+                                  "layout_grow": 0,
+                                  "main_component_id": "466:13290"
                                 }
                               ]
                             }
@@ -3020,7 +3024,8 @@
                                 "name": "Grey/500"
                               }
                             ]
-                          }
+                          },
+                          "characters": "Скорее всего, перевод прошел успешно, но у нас нет подтверждения от «Лига Ставок». Пожалуйста, подождите полчаса. Если деньги не придут, обратитесь к «Лига ставок»."
                         }
                       ],
                       "variable_bindings": {
@@ -3198,7 +3203,8 @@
                                 "name": "desktop/text-gap-lg"
                               }
                             ]
-                          }
+                          },
+                          "main_component_id": "477:21325"
                         },
                         {
                           "node_id": "459:38174",
@@ -3279,7 +3285,8 @@
                                 "text_decoration": "NONE"
                               },
                               "layout_align": "STRETCH",
-                              "layout_grow": 0
+                              "layout_grow": 0,
+                              "characters": "Скоро Вы достигнете лимита на проведение платежей."
                             },
                             {
                               "node_id": "459:38532",
@@ -3348,7 +3355,8 @@
                               "text_style_ref": {
                                 "figma_style_id": "S:3d171f9763dcbcd3a181c50411d876e67e072e75,",
                                 "figma_style_name": "Desktop/Caption"
-                              }
+                              },
+                              "characters": "Чтобы узнать как увеличить лимиты до 550 000 ₽ на операцию без ограничений в месяц перейдите по ссылке"
                             }
                           ],
                           "component_property_references": {
@@ -3723,7 +3731,8 @@
                                   ],
                                   "instance_properties": {},
                                   "layout_align": "INHERIT",
-                                  "layout_grow": 0
+                                  "layout_grow": 0,
+                                  "main_component_id": "481:19665"
                                 },
                                 {
                                   "node_id": "459:28006",
@@ -3804,7 +3813,8 @@
                                             "name": "Grey/Black"
                                           }
                                         ]
-                                      }
+                                      },
+                                      "characters": "1xbet"
                                     },
                                     {
                                       "node_id": "459:28008",
@@ -3852,7 +3862,8 @@
                                             "name": "Grey/Black"
                                           }
                                         ]
-                                      }
+                                      },
+                                      "characters": "100,00 ₽"
                                     }
                                   ],
                                   "variable_bindings": {
@@ -3923,7 +3934,8 @@
                                 }
                               },
                               "layout_align": "INHERIT",
-                              "layout_grow": 0
+                              "layout_grow": 0,
+                              "main_component_id": "459:29367"
                             }
                           ],
                           "variable_bindings": {
@@ -3984,7 +3996,8 @@
                                 "name": "Grey/500"
                               }
                             ]
-                          }
+                          },
+                          "characters": "Скорее всего, перевод прошел успешно, но у нас нет подтверждения от «Лига Ставок». Пожалуйста, подождите полчаса. Если деньги не придут, обратитесь к «Лига ставок»."
                         }
                       ],
                       "variable_bindings": {
@@ -4162,7 +4175,8 @@
                                 "name": "mobile/text-gap-lg"
                               }
                             ]
-                          }
+                          },
+                          "main_component_id": "484:20068"
                         },
                         {
                           "node_id": "459:38357",
@@ -4243,7 +4257,8 @@
                                 "text_decoration": "NONE"
                               },
                               "layout_align": "STRETCH",
-                              "layout_grow": 0
+                              "layout_grow": 0,
+                              "characters": "Скоро Вы достигнете лимита на проведение платежей."
                             },
                             {
                               "node_id": "459:38537",
@@ -4312,7 +4327,8 @@
                               "text_style_ref": {
                                 "figma_style_id": "S:8ad84dd262e81c148a758758a15bb9b15e8f30fe,",
                                 "figma_style_name": "Mobile/Body/Medium"
-                              }
+                              },
+                              "characters": "Чтобы узнать как увеличить лимиты до 550 000 ₽ на операцию без ограничений в месяц перейдите по ссылке"
                             }
                           ],
                           "component_property_references": {
@@ -7429,7 +7445,8 @@
                               ],
                               "instance_properties": {},
                               "layout_align": "INHERIT",
-                              "layout_grow": 0
+                              "layout_grow": 0,
+                              "main_component_id": "481:19665"
                             },
                             {
                               "node_id": "459:29388",
@@ -7510,7 +7527,8 @@
                                         "name": "Grey/Black"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "1xbet"
                                 },
                                 {
                                   "node_id": "459:29390",
@@ -7558,7 +7576,8 @@
                                         "name": "Grey/Black"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "100,00 ₽"
                                 }
                               ],
                               "variable_bindings": {
@@ -7652,7 +7671,8 @@
                                     }
                                   },
                                   "layout_align": "INHERIT",
-                                  "layout_grow": 0
+                                  "layout_grow": 0,
+                                  "main_component_id": "466:13294"
                                 }
                               ]
                             }
@@ -7876,7 +7896,8 @@
                                     "name": "Grey/500"
                                   }
                                 ]
-                              }
+                              },
+                              "characters": "Здравствуйте, $user$!"
                             },
                             {
                               "node_id": "477:20043",
@@ -7924,7 +7945,8 @@
                                     "name": "Grey/500"
                                   }
                                 ]
-                              }
+                              },
+                              "characters": "Операция %RID% от %DD:MM:YY HH:MM:SS% на сумму %SUM% руб. была отклонена, а использование электронного средства платежа приостановлено, ввиду наличия признаков осуществления перевода денежных средств без согласия клиента в соответствии с ч. 9.1 статьи 9 Федерального закона от 27.06.2011 N 161-ФЗ «О национальной платежной системе»."
                             }
                           ],
                           "variable_bindings": {
@@ -8044,7 +8066,8 @@
                               "text_style_ref": {
                                 "figma_style_id": "S:3d171f9763dcbcd3a181c50411d876e67e072e75,",
                                 "figma_style_name": "Desktop/Caption"
-                              }
+                              },
+                              "characters": "Для подтверждения операции, а также, в случае, если вы не совершали данную операцию, пожалуйста, обратитесь в службу поддержки ЕДИНЫЙ ЦУПИС по телефону +7 (495) 122-20-88 или напишите на help@1cupis.ru"
                             }
                           ],
                           "variable_bindings": {
@@ -8183,7 +8206,8 @@
                                     "name": "Grey/300"
                                   }
                                 ]
-                              }
+                              },
+                              "characters": "В случае неподтверждения операции по прошествии двух рабочих дней вы сможете повторить операцию, а использование вами электронного средства платежа будет автоматически возобновлено."
                             },
                             {
                               "node_id": "477:20078",
@@ -8231,7 +8255,8 @@
                                     "name": "Grey/300"
                                   }
                                 ]
-                              }
+                              },
+                              "characters": "Обратите внимание, что для снижения рисков повторного отклонения платежа и приостановления электронного средства платежа вам необходимо использовать другую банковскую карту."
                             }
                           ],
                           "variable_bindings": {
@@ -8555,7 +8580,8 @@
                                   ],
                                   "instance_properties": {},
                                   "layout_align": "INHERIT",
-                                  "layout_grow": 0
+                                  "layout_grow": 0,
+                                  "main_component_id": "481:19665"
                                 },
                                 {
                                   "node_id": "532:14310",
@@ -8636,7 +8662,8 @@
                                             "name": "Grey/Black"
                                           }
                                         ]
-                                      }
+                                      },
+                                      "characters": "1xbet"
                                     },
                                     {
                                       "node_id": "532:14312",
@@ -8684,7 +8711,8 @@
                                             "name": "Grey/Black"
                                           }
                                         ]
-                                      }
+                                      },
+                                      "characters": "100,00 ₽"
                                     }
                                   ],
                                   "variable_bindings": {
@@ -8755,7 +8783,8 @@
                                 }
                               },
                               "layout_align": "INHERIT",
-                              "layout_grow": 0
+                              "layout_grow": 0,
+                              "main_component_id": "459:29371"
                             }
                           ],
                           "variable_bindings": {
@@ -8977,7 +9006,8 @@
                                     "name": "Grey/500"
                                   }
                                 ]
-                              }
+                              },
+                              "characters": "Здравствуйте, $user$!"
                             },
                             {
                               "node_id": "477:20249",
@@ -9025,7 +9055,8 @@
                                     "name": "Grey/500"
                                   }
                                 ]
-                              }
+                              },
+                              "characters": "Операция %RID% от %DD:MM:YY HH:MM:SS% на сумму %SUM% руб. была отклонена, а использование электронного средства платежа приостановлено, ввиду наличия признаков осуществления перевода денежных средств без согласия клиента в соответствии с ч. 9.1 статьи 9 Федерального закона от 27.06.2011 N 161-ФЗ «О национальной платежной системе»."
                             }
                           ],
                           "variable_bindings": {
@@ -9145,7 +9176,8 @@
                               "text_style_ref": {
                                 "figma_style_id": "S:8ad84dd262e81c148a758758a15bb9b15e8f30fe,",
                                 "figma_style_name": "Mobile/Body/Medium"
-                              }
+                              },
+                              "characters": "Для подтверждения операции, а также, в случае, если вы не совершали данную операцию, пожалуйста, обратитесь в службу поддержки ЕДИНЫЙ ЦУПИС по телефону +7 (495) 122-20-88 или напишите на help@1cupis.ru"
                             }
                           ],
                           "variable_bindings": {
@@ -9284,7 +9316,8 @@
                                     "name": "Grey/300"
                                   }
                                 ]
-                              }
+                              },
+                              "characters": "В случае неподтверждения операции по прошествии двух рабочих дней вы сможете повторить операцию, а использование вами электронного средства платежа будет автоматически возобновлено."
                             },
                             {
                               "node_id": "477:20254",
@@ -9332,7 +9365,8 @@
                                     "name": "Grey/300"
                                   }
                                 ]
-                              }
+                              },
+                              "characters": "Обратите внимание, что для снижения рисков повторного отклонения платежа и приостановления электронного средства платежа вам необходимо использовать другую банковскую карту."
                             }
                           ],
                           "variable_bindings": {
@@ -10839,7 +10873,8 @@
                                 "name": "Grey/500"
                               }
                             ]
-                          }
+                          },
+                          "characters": "Возникли вопросы? Позвоните нам:"
                         },
                         {
                           "node_id": "459:27584",
@@ -10887,7 +10922,8 @@
                                 "name": "Green/500"
                               }
                             ]
-                          }
+                          },
+                          "characters": "+7 (495) 122-20-88"
                         }
                       ],
                       "variable_bindings": {
@@ -11017,7 +11053,8 @@
                                 "name": "Grey/400"
                               }
                             ]
-                          }
+                          },
+                          "characters": "Как снизить риски операций без согласия, читайте на нашем сайте в разделе «Помощь»"
                         }
                       ],
                       "variable_bindings": {
@@ -11319,7 +11356,8 @@
                                 "name": "Grey/500"
                               }
                             ]
-                          }
+                          },
+                          "characters": "Возникли вопросы? Позвоните нам:"
                         },
                         {
                           "node_id": "459:27605",
@@ -11367,7 +11405,8 @@
                                 "name": "Green/500"
                               }
                             ]
-                          }
+                          },
+                          "characters": "+7 (495) 122-20-88"
                         }
                       ],
                       "variable_bindings": {
@@ -11497,7 +11536,8 @@
                                 "name": "Grey/400"
                               }
                             ]
-                          }
+                          },
+                          "characters": "Как снизить риски операций без согласия, читайте на нашем сайте в разделе «Помощь»"
                         }
                       ],
                       "variable_bindings": {
@@ -13323,7 +13363,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "Вид операции"
                     },
                     {
                       "node_id": "484:20724",
@@ -13369,7 +13410,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "Возврат остатка ЭДС (его части)"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -13456,7 +13498,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "Способ оплаты"
                     },
                     {
                       "node_id": "484:20728",
@@ -13502,7 +13545,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "Кошелек ЦУПИС"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -13589,7 +13633,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "Получатель"
                     },
                     {
                       "node_id": "484:20732",
@@ -13635,7 +13680,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "Банковская карта 415481******0071"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -13722,7 +13768,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "Дата и время"
                     },
                     {
                       "node_id": "484:20736",
@@ -13768,7 +13815,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "26.03.2021, 12:45 МСК"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -13855,7 +13903,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "Сумма перевода"
                     },
                     {
                       "node_id": "484:20740",
@@ -13901,7 +13950,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "100,00 ₽"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -13988,7 +14038,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "Комиссия"
                     },
                     {
                       "node_id": "484:20751",
@@ -14034,7 +14085,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "32,90 ₽"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -14121,7 +14173,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "Общая сумма"
                     },
                     {
                       "node_id": "484:20757",
@@ -14167,7 +14220,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "132,90 ₽"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -14254,7 +14308,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "Номер операции"
                     },
                     {
                       "node_id": "484:20744",
@@ -14300,7 +14355,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "0185305415324"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -14387,7 +14443,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "ЭСП"
                     },
                     {
                       "node_id": "484:20748",
@@ -14433,7 +14490,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "184-9006247773"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -14561,7 +14619,8 @@
                             "name": "Grey/300"
                           }
                         ]
-                      }
+                      },
+                      "characters": "Вид операции"
                     },
                     {
                       "node_id": "477:21243",
@@ -14607,7 +14666,8 @@
                           }
                         ]
                       },
-                      "layout_grow": 1
+                      "layout_grow": 1,
+                      "characters": "Возврат остатка ЭДС (его части)"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -14685,7 +14745,8 @@
                             "name": "Grey/300"
                           }
                         ]
-                      }
+                      },
+                      "characters": "Способ перевода"
                     },
                     {
                       "node_id": "477:21247",
@@ -14731,7 +14792,8 @@
                           }
                         ]
                       },
-                      "layout_grow": 1
+                      "layout_grow": 1,
+                      "characters": "Кошелек ЦУПИС"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -14809,7 +14871,8 @@
                             "name": "Grey/300"
                           }
                         ]
-                      }
+                      },
+                      "characters": "Получатель"
                     },
                     {
                       "node_id": "477:21251",
@@ -14855,7 +14918,8 @@
                           }
                         ]
                       },
-                      "layout_grow": 1
+                      "layout_grow": 1,
+                      "characters": "Банковская карта 415481******0071"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -14933,7 +14997,8 @@
                             "name": "Grey/300"
                           }
                         ]
-                      }
+                      },
+                      "characters": "ИНН получателя"
                     },
                     {
                       "node_id": "477:21317",
@@ -14979,7 +15044,8 @@
                           }
                         ]
                       },
-                      "layout_grow": 1
+                      "layout_grow": 1,
+                      "characters": "480800951007"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -15057,7 +15123,8 @@
                             "name": "Grey/300"
                           }
                         ]
-                      }
+                      },
+                      "characters": "Дата и время"
                     },
                     {
                       "node_id": "477:21255",
@@ -15103,7 +15170,8 @@
                           }
                         ]
                       },
-                      "layout_grow": 1
+                      "layout_grow": 1,
+                      "characters": "26.03.2021, 12:45 МСК"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -15181,7 +15249,8 @@
                             "name": "Grey/300"
                           }
                         ]
-                      }
+                      },
+                      "characters": "Сумма перевода"
                     },
                     {
                       "node_id": "477:21259",
@@ -15227,7 +15296,8 @@
                           }
                         ]
                       },
-                      "layout_grow": 1
+                      "layout_grow": 1,
+                      "characters": "100,00 ₽"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -15305,7 +15375,8 @@
                             "name": "Grey/300"
                           }
                         ]
-                      }
+                      },
+                      "characters": "Комиссия"
                     },
                     {
                       "node_id": "477:21311",
@@ -15351,7 +15422,8 @@
                           }
                         ]
                       },
-                      "layout_grow": 1
+                      "layout_grow": 1,
+                      "characters": "32,90 ₽"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -15429,7 +15501,8 @@
                             "name": "Grey/300"
                           }
                         ]
-                      }
+                      },
+                      "characters": "Общая сумма"
                     },
                     {
                       "node_id": "477:21322",
@@ -15475,7 +15548,8 @@
                           }
                         ]
                       },
-                      "layout_grow": 1
+                      "layout_grow": 1,
+                      "characters": "132,90 ₽"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -15553,7 +15627,8 @@
                             "name": "Grey/300"
                           }
                         ]
-                      }
+                      },
+                      "characters": "Номер операции"
                     },
                     {
                       "node_id": "477:21263",
@@ -15599,7 +15674,8 @@
                           }
                         ]
                       },
-                      "layout_grow": 1
+                      "layout_grow": 1,
+                      "characters": "0185305415324"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -15677,7 +15753,8 @@
                             "name": "Grey/300"
                           }
                         ]
-                      }
+                      },
+                      "characters": "ЭСП"
                     },
                     {
                       "node_id": "477:21267",
@@ -15723,7 +15800,8 @@
                           }
                         ]
                       },
-                      "layout_grow": 1
+                      "layout_grow": 1,
+                      "characters": "184-9006247773"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -16882,7 +16960,8 @@
                         "name": "Red_500"
                       }
                     ]
-                  }
+                  },
+                  "characters": "Детали подозрительной операции"
                 },
                 {
                   "node_id": "559:19331",
@@ -16929,7 +17008,8 @@
                         "name": "desktop/text-gap-lg"
                       }
                     ]
-                  }
+                  },
+                  "main_component_id": "497:26101"
                 }
               ],
               "variable_bindings": {
@@ -17091,7 +17171,8 @@
                         "name": "Red_500"
                       }
                     ]
-                  }
+                  },
+                  "characters": "Детали подозрительной операции"
                 },
                 {
                   "node_id": "559:19361",
@@ -17138,7 +17219,8 @@
                         "name": "mobile/text-gap-lg"
                       }
                     ]
-                  }
+                  },
+                  "main_component_id": "497:26102"
                 }
               ],
               "variable_bindings": {
@@ -20398,7 +20480,8 @@
                                     "name": "Green/500"
                                   }
                                 ]
-                              }
+                              },
+                              "main_component_id": "491:22074"
                             },
                             {
                               "node_id": "491:22407",
@@ -20446,7 +20529,8 @@
                                     "name": "Grey/Black"
                                   }
                                 ]
-                              }
+                              },
+                              "characters": "Обновление персональных данных"
                             }
                           ],
                           "variable_bindings": {
@@ -20668,7 +20752,8 @@
                                     "name": "Grey/500"
                                   }
                                 ]
-                              }
+                              },
+                              "characters": "Уважаемый, $user$!"
                             },
                             {
                               "node_id": "491:22412",
@@ -20716,7 +20801,8 @@
                                     "name": "Grey/500"
                                   }
                                 ]
-                              }
+                              },
+                              "characters": "Вы являетесь клиентом ЕДИНОГО ЦУПИС более года. Мы благодарны Вам за это."
                             },
                             {
                               "node_id": "491:22413",
@@ -20764,7 +20850,8 @@
                                     "name": "Grey/500"
                                   }
                                 ]
-                              }
+                              },
+                              "characters": "В соответствии с законодательством Российской Федерации* мы, как кредитная организация, должны обновить Ваши данные. Если Вы получили новый паспорт или поменяли адрес регистрации, просим Вас предоставить новые сведения до конца текущего месяца через форму обратной связи Первого ЦУПИС."
                             },
                             {
                               "node_id": "491:22414",
@@ -20812,7 +20899,8 @@
                                     "name": "Grey/500"
                                   }
                                 ]
-                              }
+                              },
+                              "characters": "Если информация не будет предоставлена, мы учтем, что Ваши персональные данные не изменились."
                             },
                             {
                               "node_id": "491:22415",
@@ -20860,7 +20948,8 @@
                                     "name": "Grey/500"
                                   }
                                 ]
-                              }
+                              },
+                              "characters": "С уважением,\nкоманда Первого ЦУПИС"
                             },
                             {
                               "node_id": "494:19991",
@@ -20908,7 +20997,8 @@
                                     "name": "Green/400"
                                   }
                                 ]
-                              }
+                              },
+                              "characters": "https://1cupis.ru/verifyemail/Kepsx6ETs9w+ZoCW4ZKAuYoqpsJ3Fim1Xo2aL2o2LTE=z"
                             },
                             {
                               "node_id": "494:19985",
@@ -20956,7 +21046,8 @@
                                     "name": "Grey/300"
                                   }
                                 ]
-                              }
+                              },
+                              "characters": "Ссылка действует до дд.мм.гггг."
                             }
                           ],
                           "variable_bindings": {
@@ -21078,7 +21169,8 @@
                                 "name": "Grey/50"
                               }
                             ]
-                          }
+                          },
+                          "main_component_id": "497:25953"
                         },
                         {
                           "node_id": "491:22450",
@@ -21188,7 +21280,8 @@
                               "text_style_ref": {
                                 "figma_style_id": "S:3d171f9763dcbcd3a181c50411d876e67e072e75,",
                                 "figma_style_name": "Desktop/Caption"
-                              }
+                              },
+                              "characters": "Если вы ничего не меняли, прямо сейчас позвоните +7 (495) 122-20-88 или напишите на help@1cupis.ru"
                             }
                           ],
                           "component_property_references": {
@@ -21374,7 +21467,8 @@
                                     "name": "Grey/300"
                                   }
                                 ]
-                              }
+                              },
+                              "characters": "* В соответствии с требованиями подпункта 3 пункта 1 статьи 7 Федерального закона № 115-ФЗ от 07.08.2001 «О противодействии легализации (отмыванию) доходов, полученных преступным путем, и финансированию терроризма» (далее — Закон № 115-ФЗ) ООО НКО «Мобильная карта», являющееся центром учета переводов интерактивных ставок букмекерских контор или тотализаторов (далее — Первый ЦУПИС), обязано не реже одного раза в год обновлять идентификационные сведения о клиентах."
                             }
                           ],
                           "component_property_references": {
@@ -21672,7 +21766,8 @@
                                     "name": "Green/500"
                                   }
                                 ]
-                              }
+                              },
+                              "main_component_id": "491:22074"
                             },
                             {
                               "node_id": "497:25770",
@@ -21720,7 +21815,8 @@
                                     "name": "Grey/Black"
                                   }
                                 ]
-                              }
+                              },
+                              "characters": "Обновление персональных данных"
                             }
                           ],
                           "variable_bindings": {
@@ -21942,7 +22038,8 @@
                                     "name": "Grey/500"
                                   }
                                 ]
-                              }
+                              },
+                              "characters": "Уважаемый, $user$!"
                             },
                             {
                               "node_id": "497:25823",
@@ -21990,7 +22087,8 @@
                                     "name": "Grey/500"
                                   }
                                 ]
-                              }
+                              },
+                              "characters": "Вы являетесь клиентом ЕДИНОГО ЦУПИС более года. Мы благодарны Вам за это."
                             },
                             {
                               "node_id": "497:25824",
@@ -22038,7 +22136,8 @@
                                     "name": "Grey/500"
                                   }
                                 ]
-                              }
+                              },
+                              "characters": "В соответствии с законодательством Российской Федерации* мы, как кредитная организация, должны обновить Ваши данные. Если Вы получили новый паспорт или поменяли адрес регистрации, просим Вас предоставить новые сведения до конца текущего месяца через форму обратной связи Первого ЦУПИС."
                             },
                             {
                               "node_id": "497:25826",
@@ -22086,7 +22185,8 @@
                                     "name": "Grey/500"
                                   }
                                 ]
-                              }
+                              },
+                              "characters": "Если информация не будет предоставлена, мы учтем, что Ваши персональные данные не изменились."
                             },
                             {
                               "node_id": "497:25828",
@@ -22134,7 +22234,8 @@
                                     "name": "Grey/500"
                                   }
                                 ]
-                              }
+                              },
+                              "characters": "С уважением,\nкоманда Первого ЦУПИС"
                             },
                             {
                               "node_id": "497:25830",
@@ -22182,7 +22283,8 @@
                                     "name": "Green/400"
                                   }
                                 ]
-                              }
+                              },
+                              "characters": "https://1cupis.ru/verifyemail/Kepsx6ETs9w+ZoCW4ZKAuYoqpsJ3Fim1Xo2aL2o2LTE=z"
                             },
                             {
                               "node_id": "497:25832",
@@ -22230,7 +22332,8 @@
                                     "name": "Grey/300"
                                   }
                                 ]
-                              }
+                              },
+                              "characters": "Ссылка действует до дд.мм.гггг."
                             }
                           ],
                           "variable_bindings": {
@@ -22352,7 +22455,8 @@
                                 "name": "Grey/50"
                               }
                             ]
-                          }
+                          },
+                          "main_component_id": "497:25954"
                         },
                         {
                           "node_id": "497:25776",
@@ -22462,7 +22566,8 @@
                               "text_style_ref": {
                                 "figma_style_id": "S:8ad84dd262e81c148a758758a15bb9b15e8f30fe,",
                                 "figma_style_name": "Mobile/Body/Medium"
-                              }
+                              },
+                              "characters": "Если вы ничего не меняли, прямо сейчас позвоните +7 (495) 122-20-88 или напишите на help@1cupis.ru"
                             }
                           ],
                           "component_property_references": {
@@ -22654,7 +22759,8 @@
                                     "name": "Grey/300"
                                   }
                                 ]
-                              }
+                              },
+                              "characters": "* В соответствии с требованиями подпункта 3 пункта 1 статьи 7 Федерального закона № 115-ФЗ от 07.08.2001 «О противодействии легализации (отмыванию) доходов, полученных преступным путем, и финансированию терроризма» (далее — Закон № 115-ФЗ) ООО НКО «Мобильная карта», являющееся центром учета переводов интерактивных ставок букмекерских контор или тотализаторов (далее — Первый ЦУПИС), обязано не реже одного раза в год обновлять идентификационные сведения о клиентах."
                             }
                           ],
                           "component_property_references": {
@@ -23130,7 +23236,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "Номер операции"
                     },
                     {
                       "node_id": "497:25854",
@@ -23176,7 +23283,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "0185305415324"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -23263,7 +23371,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "Сумма"
                     },
                     {
                       "node_id": "497:25858",
@@ -23309,7 +23418,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "100,00 ₽"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -23396,7 +23506,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "Дата и время"
                     },
                     {
                       "node_id": "497:25862",
@@ -23442,7 +23553,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "26.03.2021, 12:45 МСК"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -23570,7 +23682,8 @@
                             "name": "Grey/300"
                           }
                         ]
-                      }
+                      },
+                      "characters": "Номер операции"
                     },
                     {
                       "node_id": "494:20891",
@@ -23616,7 +23729,8 @@
                           }
                         ]
                       },
-                      "layout_grow": 1
+                      "layout_grow": 1,
+                      "characters": "0185305415324"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -23694,7 +23808,8 @@
                             "name": "Grey/300"
                           }
                         ]
-                      }
+                      },
+                      "characters": "Сумма"
                     },
                     {
                       "node_id": "494:20907",
@@ -23740,7 +23855,8 @@
                           }
                         ]
                       },
-                      "layout_grow": 1
+                      "layout_grow": 1,
+                      "characters": "100,00 ₽"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -23818,7 +23934,8 @@
                             "name": "Grey/300"
                           }
                         ]
-                      }
+                      },
+                      "characters": "Дата и время"
                     },
                     {
                       "node_id": "494:20911",
@@ -23864,7 +23981,8 @@
                           }
                         ]
                       },
-                      "layout_grow": 1
+                      "layout_grow": 1,
+                      "characters": "26.03.2021, 12:45 МСК"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -24224,7 +24342,8 @@
                             "name": "Grey/300"
                           }
                         ]
-                      }
+                      },
+                      "characters": "Результат"
                     },
                     {
                       "node_id": "502:24391",
@@ -24270,7 +24389,8 @@
                           }
                         ]
                       },
-                      "layout_grow": 1
+                      "layout_grow": 1,
+                      "characters": "Прием ИС"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -24348,7 +24468,8 @@
                             "name": "Grey/300"
                           }
                         ]
-                      }
+                      },
+                      "characters": "Сумма"
                     },
                     {
                       "node_id": "502:24395",
@@ -24394,7 +24515,8 @@
                           }
                         ]
                       },
-                      "layout_grow": 1
+                      "layout_grow": 1,
+                      "characters": "100,00 руб."
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -24472,7 +24594,8 @@
                             "name": "Grey/300"
                           }
                         ]
-                      }
+                      },
+                      "characters": "Дата и время"
                     },
                     {
                       "node_id": "502:24399",
@@ -24518,7 +24641,8 @@
                           }
                         ]
                       },
-                      "layout_grow": 1
+                      "layout_grow": 1,
+                      "characters": "26.03.2021, 12:45 МСК"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -24596,7 +24720,8 @@
                             "name": "Grey/300"
                           }
                         ]
-                      }
+                      },
+                      "characters": "ККТ"
                     },
                     {
                       "node_id": "502:24403",
@@ -24642,7 +24767,8 @@
                           }
                         ]
                       },
-                      "layout_grow": 1
+                      "layout_grow": 1,
+                      "characters": "0002291467032296"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -24720,7 +24846,8 @@
                             "name": "Grey/300"
                           }
                         ]
-                      }
+                      },
+                      "characters": "ФПД"
                     },
                     {
                       "node_id": "502:24407",
@@ -24766,7 +24893,8 @@
                           }
                         ]
                       },
-                      "layout_grow": 1
+                      "layout_grow": 1,
+                      "characters": "3198732007"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -24844,7 +24972,8 @@
                             "name": "Grey/300"
                           }
                         ]
-                      }
+                      },
+                      "characters": "ФН"
                     },
                     {
                       "node_id": "502:24411",
@@ -24890,7 +25019,8 @@
                           }
                         ]
                       },
-                      "layout_grow": 1
+                      "layout_grow": 1,
+                      "characters": "9289440300626365"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -24968,7 +25098,8 @@
                             "name": "Grey/300"
                           }
                         ]
-                      }
+                      },
+                      "characters": "ИНН организации"
                     },
                     {
                       "node_id": "502:24415",
@@ -25014,7 +25145,8 @@
                           }
                         ]
                       },
-                      "layout_grow": 1
+                      "layout_grow": 1,
+                      "characters": "7729607406"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -25092,7 +25224,8 @@
                             "name": "Grey/300"
                           }
                         ]
-                      }
+                      },
+                      "characters": "ФД"
                     },
                     {
                       "node_id": "502:24419",
@@ -25138,7 +25271,8 @@
                           }
                         ]
                       },
-                      "layout_grow": 1
+                      "layout_grow": 1,
+                      "characters": "26029"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -25274,7 +25408,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "Результат"
                     },
                     {
                       "node_id": "502:24435",
@@ -25320,7 +25455,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "Прием ИС"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -25407,7 +25543,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "Сумма"
                     },
                     {
                       "node_id": "502:24439",
@@ -25453,7 +25590,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "100,00 ₽"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -25540,7 +25678,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "Дата и время"
                     },
                     {
                       "node_id": "502:24443",
@@ -25586,7 +25725,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "26.03.2021, 12:45 МСК"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -25673,7 +25813,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "ККТ"
                     },
                     {
                       "node_id": "502:24447",
@@ -25719,7 +25860,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "0002291467032296"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -25806,7 +25948,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "ФПД"
                     },
                     {
                       "node_id": "502:24453",
@@ -25852,7 +25995,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "3198732007"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -25939,7 +26083,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "ФН"
                     },
                     {
                       "node_id": "502:24471",
@@ -25985,7 +26130,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "9289440300626365"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -26072,7 +26218,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "ИНН организации"
                     },
                     {
                       "node_id": "502:24482",
@@ -26118,7 +26265,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "7729607406"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -26205,7 +26353,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "ФД"
                     },
                     {
                       "node_id": "502:24488",
@@ -26251,7 +26400,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "26029"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -27856,7 +28006,8 @@
                                 "name": "Green/500"
                               }
                             ]
-                          }
+                          },
+                          "main_component_id": "491:22074"
                         },
                         {
                           "node_id": "502:24256",
@@ -27904,7 +28055,8 @@
                                 "name": "Grey/Black"
                               }
                             ]
-                          }
+                          },
+                          "characters": "Результат платежа (информация о чеке) "
                         }
                       ],
                       "variable_bindings": {
@@ -28109,7 +28261,8 @@
                             "name": "desktop/text-gap-lg"
                           }
                         ]
-                      }
+                      },
+                      "main_component_id": "502:24638"
                     }
                   ],
                   "variable_bindings": {
@@ -28350,7 +28503,8 @@
                                 "name": "Green/500"
                               }
                             ]
-                          }
+                          },
+                          "main_component_id": "491:22074"
                         },
                         {
                           "node_id": "502:24534",
@@ -28398,7 +28552,8 @@
                                 "name": "Grey/Black"
                               }
                             ]
-                          }
+                          },
+                          "characters": "Результат платежа (информация о чеке) "
                         }
                       ],
                       "variable_bindings": {
@@ -28603,7 +28758,8 @@
                             "name": "mobile/text-gap-lg"
                           }
                         ]
-                      }
+                      },
+                      "main_component_id": "502:24639"
                     }
                   ],
                   "variable_bindings": {
@@ -30389,7 +30545,8 @@
                             "name": "Grey/100"
                           }
                         ]
-                      }
+                      },
+                      "main_component_id": "481:19664"
                     },
                     {
                       "node_id": "497:19960",
@@ -30443,7 +30600,8 @@
                             "name": "Grey/Black"
                           }
                         ]
-                      }
+                      },
+                      "characters": "Фискальный чек на сайте Платформы ОФД"
                     },
                     {
                       "node_id": "497:19961",
@@ -30681,7 +30839,8 @@
                             "name": "Grey/100"
                           }
                         ]
-                      }
+                      },
+                      "main_component_id": "481:19664"
                     },
                     {
                       "node_id": "497:19965",
@@ -30729,7 +30888,8 @@
                             "name": "Grey/Black"
                           }
                         ]
-                      }
+                      },
+                      "characters": "Фискальный чек на сайте ФНС"
                     },
                     {
                       "node_id": "497:19966",
@@ -31037,7 +31197,8 @@
                             "name": "Grey/100"
                           }
                         ]
-                      }
+                      },
+                      "main_component_id": "481:19664"
                     },
                     {
                       "node_id": "502:25002",
@@ -31091,7 +31252,8 @@
                             "name": "Grey/Black"
                           }
                         ]
-                      }
+                      },
+                      "characters": "Фискальный чек на сайте Платформы ОФД"
                     },
                     {
                       "node_id": "502:25003",
@@ -31329,7 +31491,8 @@
                             "name": "Grey/100"
                           }
                         ]
-                      }
+                      },
+                      "main_component_id": "481:19664"
                     },
                     {
                       "node_id": "502:25007",
@@ -31377,7 +31540,8 @@
                             "name": "Grey/Black"
                           }
                         ]
-                      }
+                      },
+                      "characters": "Фискальный чек на сайте ФНС"
                     },
                     {
                       "node_id": "502:25008",
@@ -36759,7 +36923,8 @@
                                 "name": "Red_500"
                               }
                             ]
-                          }
+                          },
+                          "characters": "Что нужно сделать"
                         }
                       ],
                       "component_property_references": {
@@ -36853,7 +37018,8 @@
                                 "name": "Grey/500"
                               }
                             ]
-                          }
+                          },
+                          "characters": "Вы являетесь клиентом ЕДИНОГО ЦУПИС более года. Мы благодарны Вам за это."
                         },
                         {
                           "node_id": "510:16517",
@@ -36901,7 +37067,8 @@
                                 "name": "Grey/500"
                               }
                             ]
-                          }
+                          },
+                          "characters": "Чтобы начать его использовать, авторизуйтесь в нем повторно:"
                         },
                         {
                           "node_id": "510:16444",
@@ -37015,7 +37182,8 @@
                                         "name": "Green/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "1."
                                 },
                                 {
                                   "node_id": "510:16447",
@@ -37063,7 +37231,8 @@
                                         "name": "Grey/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "В правом верхнем углу нажать на свое имя / номер телефона"
                                 }
                               ],
                               "variable_bindings": {
@@ -37154,7 +37323,8 @@
                                         "name": "Green/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "—"
                                 },
                                 {
                                   "node_id": "510:16450",
@@ -37202,7 +37372,8 @@
                                         "name": "Grey/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "В правом верхнем углу нажать на свое имя / номер телефона"
                                 }
                               ],
                               "variable_bindings": {
@@ -37293,7 +37464,8 @@
                                         "name": "Green/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "—"
                                 },
                                 {
                                   "node_id": "510:16453",
@@ -37341,7 +37513,8 @@
                                         "name": "Grey/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "В правом верхнем углу нажать на свое имя / номер телефона"
                                 }
                               ],
                               "variable_bindings": {
@@ -37432,7 +37605,8 @@
                                         "name": "Green/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "—"
                                 },
                                 {
                                   "node_id": "510:16456",
@@ -37480,7 +37654,8 @@
                                         "name": "Grey/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "В правом верхнем углу нажать на свое имя / номер телефона"
                                 }
                               ],
                               "variable_bindings": {
@@ -37614,7 +37789,8 @@
                                         "name": "Green/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "2."
                                 },
                                 {
                                   "node_id": "510:16460",
@@ -37662,7 +37838,8 @@
                                         "name": "Grey/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "Нажать кнопку «Выход»"
                                 }
                               ],
                               "variable_bindings": {
@@ -37753,7 +37930,8 @@
                                         "name": "Green/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "—"
                                 },
                                 {
                                   "node_id": "510:16463",
@@ -37801,7 +37979,8 @@
                                         "name": "Grey/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "В правом верхнем углу нажать на свое имя / номер телефона"
                                 }
                               ],
                               "variable_bindings": {
@@ -37892,7 +38071,8 @@
                                         "name": "Green/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "—"
                                 },
                                 {
                                   "node_id": "510:16466",
@@ -37940,7 +38120,8 @@
                                         "name": "Grey/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "В правом верхнем углу нажать на свое имя / номер телефона"
                                 }
                               ],
                               "variable_bindings": {
@@ -38031,7 +38212,8 @@
                                         "name": "Green/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "—"
                                 },
                                 {
                                   "node_id": "510:16469",
@@ -38079,7 +38261,8 @@
                                         "name": "Grey/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "В правом верхнем углу нажать на свое имя / номер телефона"
                                 }
                               ],
                               "variable_bindings": {
@@ -38213,7 +38396,8 @@
                                         "name": "Green/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "3."
                                 },
                                 {
                                   "node_id": "510:16473",
@@ -38261,7 +38445,8 @@
                                         "name": "Grey/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "На странице входа в аккаунт указать номер телефона и пароль"
                                 }
                               ],
                               "variable_bindings": {
@@ -38352,7 +38537,8 @@
                                         "name": "Green/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "—"
                                 },
                                 {
                                   "node_id": "510:16476",
@@ -38400,7 +38586,8 @@
                                         "name": "Grey/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "В правом верхнем углу нажать на свое имя / номер телефона"
                                 }
                               ],
                               "variable_bindings": {
@@ -38491,7 +38678,8 @@
                                         "name": "Green/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "—"
                                 },
                                 {
                                   "node_id": "510:16479",
@@ -38539,7 +38727,8 @@
                                         "name": "Grey/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "В правом верхнем углу нажать на свое имя / номер телефона"
                                 }
                               ],
                               "variable_bindings": {
@@ -38630,7 +38819,8 @@
                                         "name": "Green/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "—"
                                 },
                                 {
                                   "node_id": "510:16482",
@@ -38678,7 +38868,8 @@
                                         "name": "Grey/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "В правом верхнем углу нажать на свое имя / номер телефона"
                                 }
                               ],
                               "variable_bindings": {
@@ -38812,7 +39003,8 @@
                                         "name": "Green/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "4."
                                 },
                                 {
                                   "node_id": "510:16486",
@@ -38860,7 +39052,8 @@
                                         "name": "Grey/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "На странице входа в аккаунт указать номер телефона и пароль"
                                 }
                               ],
                               "variable_bindings": {
@@ -38951,7 +39144,8 @@
                                         "name": "Green/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "—"
                                 },
                                 {
                                   "node_id": "510:16489",
@@ -38999,7 +39193,8 @@
                                         "name": "Grey/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "В правом верхнем углу нажать на свое имя / номер телефона"
                                 }
                               ],
                               "variable_bindings": {
@@ -39090,7 +39285,8 @@
                                         "name": "Green/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "—"
                                 },
                                 {
                                   "node_id": "510:16492",
@@ -39138,7 +39334,8 @@
                                         "name": "Grey/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "В правом верхнем углу нажать на свое имя / номер телефона"
                                 }
                               ],
                               "variable_bindings": {
@@ -39229,7 +39426,8 @@
                                         "name": "Green/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "—"
                                 },
                                 {
                                   "node_id": "510:16495",
@@ -39277,7 +39475,8 @@
                                         "name": "Grey/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "В правом верхнем углу нажать на свое имя / номер телефона"
                                 }
                               ],
                               "variable_bindings": {
@@ -39417,7 +39616,8 @@
                           "text_style_ref": {
                             "figma_style_id": "S:3d171f9763dcbcd3a181c50411d876e67e072e75,",
                             "figma_style_name": "Desktop/Caption"
-                          }
+                          },
+                          "characters": "Если вы ничего не меняли, прямо сейчас позвоните +7 (495) 122-20-88 или напишите на help@1cupis.ru"
                         }
                       ],
                       "component_property_references": {
@@ -39603,7 +39803,8 @@
                                 "name": "Grey/300"
                               }
                             ]
-                          }
+                          },
+                          "characters": "* В соответствии с требованиями подпункта 3 пункта 1 статьи 7 Федерального закона № 115-ФЗ от 07.08.2001 «О противодействии легализации (отмыванию) доходов, полученных преступным путем, и финансированию терроризма» (далее — Закон № 115-ФЗ)"
                         }
                       ],
                       "component_property_references": {
@@ -39939,7 +40140,8 @@
                                 "name": "Red_500"
                               }
                             ]
-                          }
+                          },
+                          "characters": "Что нужно сделать"
                         }
                       ],
                       "component_property_references": {
@@ -40033,7 +40235,8 @@
                                 "name": "Grey/500"
                               }
                             ]
-                          }
+                          },
+                          "characters": "Вы являетесь клиентом ЕДИНОГО ЦУПИС более года. Мы благодарны Вам за это."
                         },
                         {
                           "node_id": "510:16959",
@@ -40081,7 +40284,8 @@
                                 "name": "Grey/500"
                               }
                             ]
-                          }
+                          },
+                          "characters": "Чтобы начать его использовать, авторизуйтесь в нем повторно:"
                         },
                         {
                           "node_id": "510:16626",
@@ -40195,7 +40399,8 @@
                                         "name": "Green/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "1."
                                 },
                                 {
                                   "node_id": "510:16629",
@@ -40243,7 +40448,8 @@
                                         "name": "Grey/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "В правом верхнем углу нажать на свое имя / номер телефона"
                                 }
                               ],
                               "variable_bindings": {
@@ -40334,7 +40540,8 @@
                                         "name": "Green/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "—"
                                 },
                                 {
                                   "node_id": "510:16632",
@@ -40382,7 +40589,8 @@
                                         "name": "Grey/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "В правом верхнем углу нажать на свое имя / номер телефона"
                                 }
                               ],
                               "variable_bindings": {
@@ -40473,7 +40681,8 @@
                                         "name": "Green/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "—"
                                 },
                                 {
                                   "node_id": "510:16635",
@@ -40521,7 +40730,8 @@
                                         "name": "Grey/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "В правом верхнем углу нажать на свое имя / номер телефона"
                                 }
                               ],
                               "variable_bindings": {
@@ -40612,7 +40822,8 @@
                                         "name": "Green/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "—"
                                 },
                                 {
                                   "node_id": "510:16638",
@@ -40660,7 +40871,8 @@
                                         "name": "Grey/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "В правом верхнем углу нажать на свое имя / номер телефона"
                                 }
                               ],
                               "variable_bindings": {
@@ -40794,7 +41006,8 @@
                                         "name": "Green/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "2."
                                 },
                                 {
                                   "node_id": "510:16642",
@@ -40842,7 +41055,8 @@
                                         "name": "Grey/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "Нажать кнопку «Выход»"
                                 }
                               ],
                               "variable_bindings": {
@@ -40933,7 +41147,8 @@
                                         "name": "Green/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "—"
                                 },
                                 {
                                   "node_id": "510:16645",
@@ -40981,7 +41196,8 @@
                                         "name": "Grey/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "В правом верхнем углу нажать на свое имя / номер телефона"
                                 }
                               ],
                               "variable_bindings": {
@@ -41072,7 +41288,8 @@
                                         "name": "Green/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "—"
                                 },
                                 {
                                   "node_id": "510:16648",
@@ -41120,7 +41337,8 @@
                                         "name": "Grey/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "В правом верхнем углу нажать на свое имя / номер телефона"
                                 }
                               ],
                               "variable_bindings": {
@@ -41211,7 +41429,8 @@
                                         "name": "Green/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "—"
                                 },
                                 {
                                   "node_id": "510:16651",
@@ -41259,7 +41478,8 @@
                                         "name": "Grey/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "В правом верхнем углу нажать на свое имя / номер телефона"
                                 }
                               ],
                               "variable_bindings": {
@@ -41393,7 +41613,8 @@
                                         "name": "Green/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "3."
                                 },
                                 {
                                   "node_id": "510:16655",
@@ -41441,7 +41662,8 @@
                                         "name": "Grey/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "На странице входа в аккаунт указать номер телефона и пароль"
                                 }
                               ],
                               "variable_bindings": {
@@ -41532,7 +41754,8 @@
                                         "name": "Green/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "—"
                                 },
                                 {
                                   "node_id": "510:16658",
@@ -41580,7 +41803,8 @@
                                         "name": "Grey/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "В правом верхнем углу нажать на свое имя / номер телефона"
                                 }
                               ],
                               "variable_bindings": {
@@ -41671,7 +41895,8 @@
                                         "name": "Green/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "—"
                                 },
                                 {
                                   "node_id": "510:16661",
@@ -41719,7 +41944,8 @@
                                         "name": "Grey/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "В правом верхнем углу нажать на свое имя / номер телефона"
                                 }
                               ],
                               "variable_bindings": {
@@ -41810,7 +42036,8 @@
                                         "name": "Green/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "—"
                                 },
                                 {
                                   "node_id": "510:16664",
@@ -41858,7 +42085,8 @@
                                         "name": "Grey/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "В правом верхнем углу нажать на свое имя / номер телефона"
                                 }
                               ],
                               "variable_bindings": {
@@ -41992,7 +42220,8 @@
                                         "name": "Green/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "4."
                                 },
                                 {
                                   "node_id": "510:16668",
@@ -42040,7 +42269,8 @@
                                         "name": "Grey/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "На странице входа в аккаунт указать номер телефона и пароль"
                                 }
                               ],
                               "variable_bindings": {
@@ -42131,7 +42361,8 @@
                                         "name": "Green/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "—"
                                 },
                                 {
                                   "node_id": "510:16671",
@@ -42179,7 +42410,8 @@
                                         "name": "Grey/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "В правом верхнем углу нажать на свое имя / номер телефона"
                                 }
                               ],
                               "variable_bindings": {
@@ -42270,7 +42502,8 @@
                                         "name": "Green/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "—"
                                 },
                                 {
                                   "node_id": "510:16674",
@@ -42318,7 +42551,8 @@
                                         "name": "Grey/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "В правом верхнем углу нажать на свое имя / номер телефона"
                                 }
                               ],
                               "variable_bindings": {
@@ -42409,7 +42643,8 @@
                                         "name": "Green/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "—"
                                 },
                                 {
                                   "node_id": "510:16677",
@@ -42457,7 +42692,8 @@
                                         "name": "Grey/500"
                                       }
                                     ]
-                                  }
+                                  },
+                                  "characters": "В правом верхнем углу нажать на свое имя / номер телефона"
                                 }
                               ],
                               "variable_bindings": {
@@ -42597,7 +42833,8 @@
                           "text_style_ref": {
                             "figma_style_id": "S:8ad84dd262e81c148a758758a15bb9b15e8f30fe,",
                             "figma_style_name": "Mobile/Body/Medium"
-                          }
+                          },
+                          "characters": "Если вы ничего не меняли, прямо сейчас позвоните +7 (495) 122-20-88 или напишите на help@1cupis.ru"
                         }
                       ],
                       "component_property_references": {
@@ -42789,7 +43026,8 @@
                                 "name": "Grey/300"
                               }
                             ]
-                          }
+                          },
+                          "characters": "* В соответствии с требованиями подпункта 3 пункта 1 статьи 7 Федерального закона № 115-ФЗ от 07.08.2001 «О противодействии легализации (отмыванию) доходов, полученных преступным путем, и финансированию терроризма» (далее — Закон № 115-ФЗ)"
                         }
                       ],
                       "component_property_references": {
@@ -43252,7 +43490,8 @@
                             "name": "Grey/300"
                           }
                         ]
-                      }
+                      },
+                      "characters": "Вид операции"
                     },
                     {
                       "node_id": "477:21215",
@@ -43298,7 +43537,8 @@
                           }
                         ]
                       },
-                      "layout_grow": 1
+                      "layout_grow": 1,
+                      "characters": "Пополнение баланса"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -43376,7 +43616,8 @@
                             "name": "Grey/300"
                           }
                         ]
-                      }
+                      },
+                      "characters": "Способ оплаты"
                     },
                     {
                       "node_id": "477:21219",
@@ -43422,7 +43663,8 @@
                           }
                         ]
                       },
-                      "layout_grow": 1
+                      "layout_grow": 1,
+                      "characters": "Кошелек ЦУПИС"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -43500,7 +43742,8 @@
                             "name": "Grey/300"
                           }
                         ]
-                      }
+                      },
+                      "characters": "Получатель"
                     },
                     {
                       "node_id": "477:21223",
@@ -43546,7 +43789,8 @@
                           }
                         ]
                       },
-                      "layout_grow": 1
+                      "layout_grow": 1,
+                      "characters": "1xbet"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -43624,7 +43868,8 @@
                             "name": "Grey/300"
                           }
                         ]
-                      }
+                      },
+                      "characters": "Дата и время"
                     },
                     {
                       "node_id": "477:21227",
@@ -43670,7 +43915,8 @@
                           }
                         ]
                       },
-                      "layout_grow": 1
+                      "layout_grow": 1,
+                      "characters": "26.03.2021, 12:45 МСК"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -43748,7 +43994,8 @@
                             "name": "Grey/300"
                           }
                         ]
-                      }
+                      },
+                      "characters": "Комиссия"
                     },
                     {
                       "node_id": "477:21231",
@@ -43794,7 +44041,8 @@
                           }
                         ]
                       },
-                      "layout_grow": 1
+                      "layout_grow": 1,
+                      "characters": "0,00 ₽"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -43872,7 +44120,8 @@
                             "name": "Grey/300"
                           }
                         ]
-                      }
+                      },
+                      "characters": "Номер операции"
                     },
                     {
                       "node_id": "477:21235",
@@ -43918,7 +44167,8 @@
                           }
                         ]
                       },
-                      "layout_grow": 1
+                      "layout_grow": 1,
+                      "characters": "0185305415324"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -43996,7 +44246,8 @@
                             "name": "Grey/300"
                           }
                         ]
-                      }
+                      },
+                      "characters": "ЭСП"
                     },
                     {
                       "node_id": "477:21239",
@@ -44042,7 +44293,8 @@
                           }
                         ]
                       },
-                      "layout_grow": 1
+                      "layout_grow": 1,
+                      "characters": "184-9006247773"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -44179,7 +44431,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "Вид операции"
                     },
                     {
                       "node_id": "484:20047",
@@ -44225,7 +44478,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "Пополнение баланса"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -44312,7 +44566,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "Способ оплаты"
                     },
                     {
                       "node_id": "484:20051",
@@ -44358,7 +44613,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "Кошелек ЦУПИС"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -44445,7 +44701,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "Получатель"
                     },
                     {
                       "node_id": "484:20043",
@@ -44491,7 +44748,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "1xbet"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -44578,7 +44836,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "Дата и время"
                     },
                     {
                       "node_id": "484:20055",
@@ -44624,7 +44883,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "26.03.2021, 12:45 МСК"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -44711,7 +44971,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "Комиссия"
                     },
                     {
                       "node_id": "484:20059",
@@ -44757,7 +45018,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "0,00 ₽"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -44844,7 +45106,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "Номер операции"
                     },
                     {
                       "node_id": "484:20063",
@@ -44890,7 +45153,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "0185305415324"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -44977,7 +45241,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "ЭСП"
                     },
                     {
                       "node_id": "484:20067",
@@ -45023,7 +45288,8 @@
                           }
                         ]
                       },
-                      "layout_align": "STRETCH"
+                      "layout_align": "STRETCH",
+                      "characters": "184-9006247773"
                     }
                   ],
                   "layout_align": "STRETCH"
@@ -45403,7 +45669,8 @@
                     },
                     "text_case": "ORIGINAL",
                     "text_decoration": "NONE"
-                  }
+                  },
+                  "characters": "В обработке"
                 }
               ]
             }
@@ -45509,7 +45776,8 @@
                         "name": "Green/500"
                       }
                     ]
-                  }
+                  },
+                  "characters": "Успешно"
                 }
               ]
             }
@@ -45599,7 +45867,8 @@
                     },
                     "text_case": "ORIGINAL",
                     "text_decoration": "NONE"
-                  }
+                  },
+                  "characters": "Отклонено"
                 }
               ]
             }
@@ -45689,7 +45958,8 @@
                     },
                     "text_case": "ORIGINAL",
                     "text_decoration": "NONE"
-                  }
+                  },
+                  "characters": "В обработке"
                 }
               ]
             }
@@ -45795,7 +46065,8 @@
                         "name": "Green/500"
                       }
                     ]
-                  }
+                  },
+                  "characters": "Успешно"
                 }
               ]
             }
@@ -45885,7 +46156,8 @@
                     },
                     "text_case": "ORIGINAL",
                     "text_decoration": "NONE"
-                  }
+                  },
+                  "characters": "Отклонено"
                 }
               ]
             }
