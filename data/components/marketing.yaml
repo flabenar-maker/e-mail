@@ -281,7 +281,15 @@
                     },
                     "figma_style_id": "S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,",
                     "figma_style_name": "Mobile/Body/Large",
-                    "horizontal_alignment": "LEFT"
+                    "horizontal_alignment": "LEFT",
+                    "font_weight": 400,
+                    "font_width": 100,
+                    "letter_spacing": {
+                      "unit": "PERCENT",
+                      "value": 0
+                    },
+                    "text_case": "ORIGINAL",
+                    "text_decoration": "NONE"
                   },
                   "variable_bindings": {
                     "fills": [
@@ -379,7 +387,15 @@
                     },
                     "figma_style_id": "S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,",
                     "figma_style_name": "Mobile/Body/Large",
-                    "horizontal_alignment": "LEFT"
+                    "horizontal_alignment": "LEFT",
+                    "font_weight": 400,
+                    "font_width": 100,
+                    "letter_spacing": {
+                      "unit": "PERCENT",
+                      "value": 0
+                    },
+                    "text_case": "ORIGINAL",
+                    "text_decoration": "NONE"
                   },
                   "variable_bindings": {
                     "fills": [
@@ -477,7 +493,15 @@
                     },
                     "figma_style_id": "S:0eb6b02f56ee5f02f09611af5a13a41b6121e78d,",
                     "figma_style_name": "Desktop/Body/Medium",
-                    "horizontal_alignment": "LEFT"
+                    "horizontal_alignment": "LEFT",
+                    "font_weight": 400,
+                    "font_width": 100,
+                    "letter_spacing": {
+                      "unit": "PERCENT",
+                      "value": 0
+                    },
+                    "text_case": "ORIGINAL",
+                    "text_decoration": "NONE"
                   },
                   "variable_bindings": {
                     "fills": [
@@ -575,7 +599,15 @@
                     },
                     "figma_style_id": "S:0eb6b02f56ee5f02f09611af5a13a41b6121e78d,",
                     "figma_style_name": "Desktop/Body/Medium",
-                    "horizontal_alignment": "LEFT"
+                    "horizontal_alignment": "LEFT",
+                    "font_weight": 400,
+                    "font_width": 100,
+                    "letter_spacing": {
+                      "unit": "PERCENT",
+                      "value": 0
+                    },
+                    "text_case": "ORIGINAL",
+                    "text_decoration": "NONE"
                   },
                   "variable_bindings": {
                     "fills": [
@@ -2579,7 +2611,15 @@
                             },
                             "figma_style_id": "S:374419cb8d39f8db69f1e4fa2fd20dcdc72abcce,",
                             "figma_style_name": "Mobile/Caption",
-                            "horizontal_alignment": "CENTER"
+                            "horizontal_alignment": "CENTER",
+                            "font_weight": 400,
+                            "font_width": 100,
+                            "letter_spacing": {
+                              "unit": "PERCENT",
+                              "value": 0
+                            },
+                            "text_case": "ORIGINAL",
+                            "text_decoration": "NONE"
                           },
                           "variable_bindings": {
                             "fills": [
@@ -2618,7 +2658,15 @@
                             },
                             "figma_style_id": "S:374419cb8d39f8db69f1e4fa2fd20dcdc72abcce,",
                             "figma_style_name": "Mobile/Caption",
-                            "horizontal_alignment": "CENTER"
+                            "horizontal_alignment": "CENTER",
+                            "font_weight": 400,
+                            "font_width": 100,
+                            "letter_spacing": {
+                              "unit": "PERCENT",
+                              "value": 0
+                            },
+                            "text_case": "ORIGINAL",
+                            "text_decoration": "NONE"
                           },
                           "variable_bindings": {
                             "fills": [
@@ -2657,7 +2705,13 @@
                             },
                             "figma_style_id": "S:374419cb8d39f8db69f1e4fa2fd20dcdc72abcce,",
                             "figma_style_name": "Mobile/Caption",
-                            "horizontal_alignment": "CENTER"
+                            "horizontal_alignment": "CENTER",
+                            "letter_spacing": {
+                              "unit": "PERCENT",
+                              "value": 0
+                            },
+                            "text_case": "ORIGINAL",
+                            "text_decoration": "MIXED"
                           },
                           "variable_bindings": {
                             "fills": [
@@ -2696,7 +2750,15 @@
                             },
                             "figma_style_id": "S:374419cb8d39f8db69f1e4fa2fd20dcdc72abcce,",
                             "figma_style_name": "Mobile/Caption",
-                            "horizontal_alignment": "CENTER"
+                            "horizontal_alignment": "CENTER",
+                            "font_weight": 400,
+                            "font_width": 100,
+                            "letter_spacing": {
+                              "unit": "PERCENT",
+                              "value": 0
+                            },
+                            "text_case": "ORIGINAL",
+                            "text_decoration": "UNDERLINE"
                           },
                           "variable_bindings": {
                             "fills": [
@@ -3103,7 +3165,15 @@
                             },
                             "figma_style_id": "S:3d171f9763dcbcd3a181c50411d876e67e072e75,",
                             "figma_style_name": "Desktop/Caption",
-                            "horizontal_alignment": "CENTER"
+                            "horizontal_alignment": "CENTER",
+                            "font_weight": 400,
+                            "font_width": 100,
+                            "letter_spacing": {
+                              "unit": "PERCENT",
+                              "value": 0
+                            },
+                            "text_case": "ORIGINAL",
+                            "text_decoration": "NONE"
                           },
                           "variable_bindings": {
                             "fills": [
@@ -3142,7 +3212,15 @@
                             },
                             "figma_style_id": "S:3d171f9763dcbcd3a181c50411d876e67e072e75,",
                             "figma_style_name": "Desktop/Caption",
-                            "horizontal_alignment": "CENTER"
+                            "horizontal_alignment": "CENTER",
+                            "font_weight": 400,
+                            "font_width": 100,
+                            "letter_spacing": {
+                              "unit": "PERCENT",
+                              "value": 0
+                            },
+                            "text_case": "ORIGINAL",
+                            "text_decoration": "NONE"
                           },
                           "variable_bindings": {
                             "fills": [
@@ -3181,7 +3259,13 @@
                             },
                             "figma_style_id": "S:3d171f9763dcbcd3a181c50411d876e67e072e75,",
                             "figma_style_name": "Desktop/Caption",
-                            "horizontal_alignment": "CENTER"
+                            "horizontal_alignment": "CENTER",
+                            "letter_spacing": {
+                              "unit": "PERCENT",
+                              "value": 0
+                            },
+                            "text_case": "ORIGINAL",
+                            "text_decoration": "MIXED"
                           },
                           "variable_bindings": {
                             "fills": [
@@ -3220,7 +3304,15 @@
                             },
                             "figma_style_id": "S:3d171f9763dcbcd3a181c50411d876e67e072e75,",
                             "figma_style_name": "Desktop/Caption",
-                            "horizontal_alignment": "CENTER"
+                            "horizontal_alignment": "CENTER",
+                            "font_weight": 400,
+                            "font_width": 100,
+                            "letter_spacing": {
+                              "unit": "PERCENT",
+                              "value": 0
+                            },
+                            "text_case": "ORIGINAL",
+                            "text_decoration": "UNDERLINE"
                           },
                           "variable_bindings": {
                             "fills": [
@@ -4151,7 +4243,15 @@
                                 },
                                 "figma_style_id": "S:ca236b65a83eef2e55e95564b051765d4fbe7c60,",
                                 "figma_style_name": "Mobile/Display",
-                                "horizontal_alignment": "CENTER"
+                                "horizontal_alignment": "CENTER",
+                                "font_weight": 700,
+                                "font_width": 100,
+                                "letter_spacing": {
+                                  "unit": "PERCENT",
+                                  "value": 0
+                                },
+                                "text_case": "ORIGINAL",
+                                "text_decoration": "NONE"
                               },
                               "variable_bindings": {
                                 "fills": [
@@ -4190,7 +4290,15 @@
                                 },
                                 "figma_style_id": "S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,",
                                 "figma_style_name": "Mobile/Body/Large",
-                                "horizontal_alignment": "CENTER"
+                                "horizontal_alignment": "CENTER",
+                                "font_weight": 400,
+                                "font_width": 100,
+                                "letter_spacing": {
+                                  "unit": "PERCENT",
+                                  "value": 0
+                                },
+                                "text_case": "ORIGINAL",
+                                "text_decoration": "NONE"
                               },
                               "variable_bindings": {
                                 "fills": [
@@ -4308,7 +4416,15 @@
                                 },
                                 "figma_style_id": "S:780f997658bfc56dc4db512b20c92d16c415c3f3,",
                                 "figma_style_name": "Mobile/Action",
-                                "horizontal_alignment": "CENTER"
+                                "horizontal_alignment": "CENTER",
+                                "font_weight": 500,
+                                "font_width": 100,
+                                "letter_spacing": {
+                                  "unit": "PERCENT",
+                                  "value": 0
+                                },
+                                "text_case": "ORIGINAL",
+                                "text_decoration": "NONE"
                               }
                             }
                           ],
@@ -4632,7 +4748,15 @@
                                 },
                                 "figma_style_id": "S:4d43ca77a0bc52ca7e43f97a078a4d69cee87651,",
                                 "figma_style_name": "Desktop/Display",
-                                "horizontal_alignment": "CENTER"
+                                "horizontal_alignment": "CENTER",
+                                "font_weight": 700,
+                                "font_width": 100,
+                                "letter_spacing": {
+                                  "unit": "PERCENT",
+                                  "value": 0
+                                },
+                                "text_case": "ORIGINAL",
+                                "text_decoration": "NONE"
                               },
                               "variable_bindings": {
                                 "fills": [
@@ -4671,7 +4795,15 @@
                                 },
                                 "figma_style_id": "S:2dbbae937ad03f37307425810b92a1abedcfb705,",
                                 "figma_style_name": "Desktop/Body/Large",
-                                "horizontal_alignment": "CENTER"
+                                "horizontal_alignment": "CENTER",
+                                "font_weight": 400,
+                                "font_width": 100,
+                                "letter_spacing": {
+                                  "unit": "PERCENT",
+                                  "value": 0
+                                },
+                                "text_case": "ORIGINAL",
+                                "text_decoration": "NONE"
                               },
                               "variable_bindings": {
                                 "fills": [
@@ -4789,7 +4921,15 @@
                                 },
                                 "figma_style_id": "S:80178ed95ee94439436fb7ea36e3eb926f986be2,",
                                 "figma_style_name": "Desktop/Action",
-                                "horizontal_alignment": "CENTER"
+                                "horizontal_alignment": "CENTER",
+                                "font_weight": 500,
+                                "font_width": 100,
+                                "letter_spacing": {
+                                  "unit": "PERCENT",
+                                  "value": 0
+                                },
+                                "text_case": "ORIGINAL",
+                                "text_decoration": "NONE"
                               },
                               "layout_grow": 1
                             }
@@ -5382,7 +5522,15 @@
                         },
                         "figma_style_id": "S:31421a8c479c960e9e5fcdf32b0717960340b772,",
                         "figma_style_name": "Mobile/Heading",
-                        "horizontal_alignment": "LEFT"
+                        "horizontal_alignment": "LEFT",
+                        "font_weight": 600,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       },
                       "variable_bindings": {
                         "fills": [
@@ -5954,7 +6102,15 @@
                         },
                         "figma_style_id": "S:374419cb8d39f8db69f1e4fa2fd20dcdc72abcce,",
                         "figma_style_name": "Mobile/Caption",
-                        "horizontal_alignment": "LEFT"
+                        "horizontal_alignment": "LEFT",
+                        "font_weight": 400,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       },
                       "variable_bindings": {
                         "fills": [
@@ -6155,7 +6311,15 @@
                         },
                         "figma_style_id": "S:2d908d3c1b5ff810b297f4a37aac1ab4161bbdb5,",
                         "figma_style_name": "Desktop/Heading",
-                        "horizontal_alignment": "LEFT"
+                        "horizontal_alignment": "LEFT",
+                        "font_weight": 600,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       },
                       "variable_bindings": {
                         "fills": [
@@ -6733,7 +6897,15 @@
                         },
                         "figma_style_id": "S:3d171f9763dcbcd3a181c50411d876e67e072e75,",
                         "figma_style_name": "Desktop/Caption",
-                        "horizontal_alignment": "LEFT"
+                        "horizontal_alignment": "LEFT",
+                        "font_weight": 400,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       },
                       "variable_bindings": {
                         "fills": [
@@ -7812,7 +7984,15 @@
                             },
                             "figma_style_id": "S:31421a8c479c960e9e5fcdf32b0717960340b772,",
                             "figma_style_name": "Mobile/Heading",
-                            "horizontal_alignment": "LEFT"
+                            "horizontal_alignment": "LEFT",
+                            "font_weight": 600,
+                            "font_width": 100,
+                            "letter_spacing": {
+                              "unit": "PERCENT",
+                              "value": 0
+                            },
+                            "text_case": "ORIGINAL",
+                            "text_decoration": "NONE"
                           },
                           "variable_bindings": {
                             "fills": [
@@ -7851,7 +8031,15 @@
                             },
                             "figma_style_id": "S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,",
                             "figma_style_name": "Mobile/Body/Large",
-                            "horizontal_alignment": "LEFT"
+                            "horizontal_alignment": "LEFT",
+                            "font_weight": 400,
+                            "font_width": 100,
+                            "letter_spacing": {
+                              "unit": "PERCENT",
+                              "value": 0
+                            },
+                            "text_case": "ORIGINAL",
+                            "text_decoration": "NONE"
                           },
                           "variable_bindings": {
                             "fills": [
@@ -7890,7 +8078,15 @@
                             },
                             "figma_style_id": "S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,",
                             "figma_style_name": "Mobile/Body/Large",
-                            "horizontal_alignment": "LEFT"
+                            "horizontal_alignment": "LEFT",
+                            "font_weight": 400,
+                            "font_width": 100,
+                            "letter_spacing": {
+                              "unit": "PERCENT",
+                              "value": 0
+                            },
+                            "text_case": "ORIGINAL",
+                            "text_decoration": "NONE"
                           },
                           "variable_bindings": {
                             "fills": [
@@ -7929,7 +8125,15 @@
                             },
                             "figma_style_id": "S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,",
                             "figma_style_name": "Mobile/Body/Large",
-                            "horizontal_alignment": "LEFT"
+                            "horizontal_alignment": "LEFT",
+                            "font_weight": 400,
+                            "font_width": 100,
+                            "letter_spacing": {
+                              "unit": "PERCENT",
+                              "value": 0
+                            },
+                            "text_case": "ORIGINAL",
+                            "text_decoration": "NONE"
                           },
                           "variable_bindings": {
                             "fills": [
@@ -7968,7 +8172,15 @@
                             },
                             "figma_style_id": "S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,",
                             "figma_style_name": "Mobile/Body/Large",
-                            "horizontal_alignment": "LEFT"
+                            "horizontal_alignment": "LEFT",
+                            "font_weight": 400,
+                            "font_width": 100,
+                            "letter_spacing": {
+                              "unit": "PERCENT",
+                              "value": 0
+                            },
+                            "text_case": "ORIGINAL",
+                            "text_decoration": "NONE"
                           },
                           "variable_bindings": {
                             "fills": [
@@ -8007,7 +8219,15 @@
                             },
                             "figma_style_id": "S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,",
                             "figma_style_name": "Mobile/Body/Large",
-                            "horizontal_alignment": "LEFT"
+                            "horizontal_alignment": "LEFT",
+                            "font_weight": 400,
+                            "font_width": 100,
+                            "letter_spacing": {
+                              "unit": "PERCENT",
+                              "value": 0
+                            },
+                            "text_case": "ORIGINAL",
+                            "text_decoration": "NONE"
                           },
                           "variable_bindings": {
                             "fills": [
@@ -8302,7 +8522,15 @@
                         },
                         "figma_style_id": "S:374419cb8d39f8db69f1e4fa2fd20dcdc72abcce,",
                         "figma_style_name": "Mobile/Caption",
-                        "horizontal_alignment": "LEFT"
+                        "horizontal_alignment": "LEFT",
+                        "font_weight": 400,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       },
                       "variable_bindings": {
                         "fills": [
@@ -8540,7 +8768,15 @@
                             },
                             "figma_style_id": "S:2d908d3c1b5ff810b297f4a37aac1ab4161bbdb5,",
                             "figma_style_name": "Desktop/Heading",
-                            "horizontal_alignment": "LEFT"
+                            "horizontal_alignment": "LEFT",
+                            "font_weight": 600,
+                            "font_width": 100,
+                            "letter_spacing": {
+                              "unit": "PERCENT",
+                              "value": 0
+                            },
+                            "text_case": "ORIGINAL",
+                            "text_decoration": "NONE"
                           },
                           "variable_bindings": {
                             "fills": [
@@ -8579,7 +8815,15 @@
                             },
                             "figma_style_id": "S:2dbbae937ad03f37307425810b92a1abedcfb705,",
                             "figma_style_name": "Desktop/Body/Large",
-                            "horizontal_alignment": "LEFT"
+                            "horizontal_alignment": "LEFT",
+                            "font_weight": 400,
+                            "font_width": 100,
+                            "letter_spacing": {
+                              "unit": "PERCENT",
+                              "value": 0
+                            },
+                            "text_case": "ORIGINAL",
+                            "text_decoration": "NONE"
                           },
                           "variable_bindings": {
                             "fills": [
@@ -8618,7 +8862,15 @@
                             },
                             "figma_style_id": "S:2dbbae937ad03f37307425810b92a1abedcfb705,",
                             "figma_style_name": "Desktop/Body/Large",
-                            "horizontal_alignment": "LEFT"
+                            "horizontal_alignment": "LEFT",
+                            "font_weight": 400,
+                            "font_width": 100,
+                            "letter_spacing": {
+                              "unit": "PERCENT",
+                              "value": 0
+                            },
+                            "text_case": "ORIGINAL",
+                            "text_decoration": "NONE"
                           },
                           "variable_bindings": {
                             "fills": [
@@ -8657,7 +8909,15 @@
                             },
                             "figma_style_id": "S:2dbbae937ad03f37307425810b92a1abedcfb705,",
                             "figma_style_name": "Desktop/Body/Large",
-                            "horizontal_alignment": "LEFT"
+                            "horizontal_alignment": "LEFT",
+                            "font_weight": 400,
+                            "font_width": 100,
+                            "letter_spacing": {
+                              "unit": "PERCENT",
+                              "value": 0
+                            },
+                            "text_case": "ORIGINAL",
+                            "text_decoration": "NONE"
                           },
                           "variable_bindings": {
                             "fills": [
@@ -8696,7 +8956,15 @@
                             },
                             "figma_style_id": "S:2dbbae937ad03f37307425810b92a1abedcfb705,",
                             "figma_style_name": "Desktop/Body/Large",
-                            "horizontal_alignment": "LEFT"
+                            "horizontal_alignment": "LEFT",
+                            "font_weight": 400,
+                            "font_width": 100,
+                            "letter_spacing": {
+                              "unit": "PERCENT",
+                              "value": 0
+                            },
+                            "text_case": "ORIGINAL",
+                            "text_decoration": "NONE"
                           },
                           "variable_bindings": {
                             "fills": [
@@ -8735,7 +9003,15 @@
                             },
                             "figma_style_id": "S:2dbbae937ad03f37307425810b92a1abedcfb705,",
                             "figma_style_name": "Desktop/Body/Large",
-                            "horizontal_alignment": "LEFT"
+                            "horizontal_alignment": "LEFT",
+                            "font_weight": 400,
+                            "font_width": 100,
+                            "letter_spacing": {
+                              "unit": "PERCENT",
+                              "value": 0
+                            },
+                            "text_case": "ORIGINAL",
+                            "text_decoration": "NONE"
                           },
                           "variable_bindings": {
                             "fills": [
@@ -9036,7 +9312,15 @@
                         },
                         "figma_style_id": "S:3d171f9763dcbcd3a181c50411d876e67e072e75,",
                         "figma_style_name": "Desktop/Caption",
-                        "horizontal_alignment": "LEFT"
+                        "horizontal_alignment": "LEFT",
+                        "font_weight": 400,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       },
                       "variable_bindings": {
                         "fills": [
@@ -9961,7 +10245,15 @@
                                 },
                                 "figma_style_id": "S:31421a8c479c960e9e5fcdf32b0717960340b772,",
                                 "figma_style_name": "Mobile/Heading",
-                                "horizontal_alignment": "CENTER"
+                                "horizontal_alignment": "CENTER",
+                                "font_weight": 600,
+                                "font_width": 100,
+                                "letter_spacing": {
+                                  "unit": "PERCENT",
+                                  "value": 0
+                                },
+                                "text_case": "ORIGINAL",
+                                "text_decoration": "NONE"
                               },
                               "variable_bindings": {
                                 "fills": [
@@ -10000,7 +10292,15 @@
                                 },
                                 "figma_style_id": "S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,",
                                 "figma_style_name": "Mobile/Body/Large",
-                                "horizontal_alignment": "CENTER"
+                                "horizontal_alignment": "CENTER",
+                                "font_weight": 400,
+                                "font_width": 100,
+                                "letter_spacing": {
+                                  "unit": "PERCENT",
+                                  "value": 0
+                                },
+                                "text_case": "ORIGINAL",
+                                "text_decoration": "NONE"
                               },
                               "variable_bindings": {
                                 "fills": [
@@ -10329,7 +10629,15 @@
                                 },
                                 "figma_style_id": "S:19f62229647b1872179c0b08e87bc09081f758ec,",
                                 "figma_style_name": "Desktop/Heading/Compact",
-                                "horizontal_alignment": "LEFT"
+                                "horizontal_alignment": "LEFT",
+                                "font_weight": 600,
+                                "font_width": 100,
+                                "letter_spacing": {
+                                  "unit": "PIXELS",
+                                  "value": 0
+                                },
+                                "text_case": "ORIGINAL",
+                                "text_decoration": "NONE"
                               },
                               "variable_bindings": {
                                 "fills": [
@@ -10368,7 +10676,15 @@
                                 },
                                 "figma_style_id": "S:0eb6b02f56ee5f02f09611af5a13a41b6121e78d,",
                                 "figma_style_name": "Desktop/Body/Medium",
-                                "horizontal_alignment": "LEFT"
+                                "horizontal_alignment": "LEFT",
+                                "font_weight": 400,
+                                "font_width": 100,
+                                "letter_spacing": {
+                                  "unit": "PERCENT",
+                                  "value": 0
+                                },
+                                "text_case": "ORIGINAL",
+                                "text_decoration": "NONE"
                               },
                               "variable_bindings": {
                                 "fills": [
@@ -11017,7 +11333,15 @@
                         },
                         "figma_style_id": "S:31421a8c479c960e9e5fcdf32b0717960340b772,",
                         "figma_style_name": "Mobile/Heading",
-                        "horizontal_alignment": "LEFT"
+                        "horizontal_alignment": "LEFT",
+                        "font_weight": 600,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       },
                       "variable_bindings": {
                         "fills": [
@@ -11393,7 +11717,15 @@
                         },
                         "figma_style_id": "S:374419cb8d39f8db69f1e4fa2fd20dcdc72abcce,",
                         "figma_style_name": "Mobile/Caption",
-                        "horizontal_alignment": "LEFT"
+                        "horizontal_alignment": "LEFT",
+                        "font_weight": 400,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       },
                       "variable_bindings": {
                         "fills": [
@@ -11594,7 +11926,15 @@
                         },
                         "figma_style_id": "S:2d908d3c1b5ff810b297f4a37aac1ab4161bbdb5,",
                         "figma_style_name": "Desktop/Heading",
-                        "horizontal_alignment": "LEFT"
+                        "horizontal_alignment": "LEFT",
+                        "font_weight": 600,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       },
                       "variable_bindings": {
                         "fills": [
@@ -11975,7 +12315,15 @@
                         },
                         "figma_style_id": "S:3d171f9763dcbcd3a181c50411d876e67e072e75,",
                         "figma_style_name": "Desktop/Caption",
-                        "horizontal_alignment": "LEFT"
+                        "horizontal_alignment": "LEFT",
+                        "font_weight": 400,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       },
                       "variable_bindings": {
                         "fills": [
@@ -12617,7 +12965,15 @@
                         },
                         "figma_style_id": "S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,",
                         "figma_style_name": "Mobile/Body/Large",
-                        "horizontal_alignment": "LEFT"
+                        "horizontal_alignment": "LEFT",
+                        "font_weight": 400,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       },
                       "variable_bindings": {
                         "fills": [
@@ -12656,7 +13012,15 @@
                         },
                         "figma_style_id": "S:8ad84dd262e81c148a758758a15bb9b15e8f30fe,",
                         "figma_style_name": "Mobile/Body/Medium",
-                        "horizontal_alignment": "LEFT"
+                        "horizontal_alignment": "LEFT",
+                        "font_weight": 400,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       },
                       "variable_bindings": {
                         "fills": [
@@ -12838,7 +13202,15 @@
                         },
                         "figma_style_id": "S:2dbbae937ad03f37307425810b92a1abedcfb705,",
                         "figma_style_name": "Desktop/Body/Large",
-                        "horizontal_alignment": "LEFT"
+                        "horizontal_alignment": "LEFT",
+                        "font_weight": 400,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       },
                       "variable_bindings": {
                         "fills": [
@@ -12877,7 +13249,15 @@
                         },
                         "figma_style_id": "S:0eb6b02f56ee5f02f09611af5a13a41b6121e78d,",
                         "figma_style_name": "Desktop/Body/Medium",
-                        "horizontal_alignment": "LEFT"
+                        "horizontal_alignment": "LEFT",
+                        "font_weight": 400,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       },
                       "variable_bindings": {
                         "fills": [
@@ -13454,7 +13834,15 @@
                         },
                         "figma_style_id": "S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,",
                         "figma_style_name": "Mobile/Body/Large",
-                        "horizontal_alignment": "LEFT"
+                        "horizontal_alignment": "LEFT",
+                        "font_weight": 400,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       },
                       "variable_bindings": {
                         "fills": [
@@ -13717,7 +14105,15 @@
                         },
                         "figma_style_id": "S:2dbbae937ad03f37307425810b92a1abedcfb705,",
                         "figma_style_name": "Desktop/Body/Large",
-                        "horizontal_alignment": "LEFT"
+                        "horizontal_alignment": "LEFT",
+                        "font_weight": 400,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       },
                       "variable_bindings": {
                         "fills": [
@@ -14271,7 +14667,15 @@
                         },
                         "figma_style_id": "S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,",
                         "figma_style_name": "Mobile/Body/Large",
-                        "horizontal_alignment": "LEFT"
+                        "horizontal_alignment": "LEFT",
+                        "font_weight": 400,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       },
                       "variable_bindings": {
                         "fills": [
@@ -14504,7 +14908,15 @@
                         },
                         "figma_style_id": "S:2dbbae937ad03f37307425810b92a1abedcfb705,",
                         "figma_style_name": "Desktop/Body/Large",
-                        "horizontal_alignment": "LEFT"
+                        "horizontal_alignment": "LEFT",
+                        "font_weight": 400,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       },
                       "variable_bindings": {
                         "fills": [
@@ -16574,7 +16986,15 @@
                             },
                             "figma_style_id": "S:374419cb8d39f8db69f1e4fa2fd20dcdc72abcce,",
                             "figma_style_name": "Mobile/Caption",
-                            "horizontal_alignment": "CENTER"
+                            "horizontal_alignment": "CENTER",
+                            "font_weight": 400,
+                            "font_width": 100,
+                            "letter_spacing": {
+                              "unit": "PERCENT",
+                              "value": 0
+                            },
+                            "text_case": "ORIGINAL",
+                            "text_decoration": "NONE"
                           },
                           "variable_bindings": {
                             "fills": [
@@ -16613,7 +17033,15 @@
                             },
                             "figma_style_id": "S:374419cb8d39f8db69f1e4fa2fd20dcdc72abcce,",
                             "figma_style_name": "Mobile/Caption",
-                            "horizontal_alignment": "CENTER"
+                            "horizontal_alignment": "CENTER",
+                            "font_weight": 400,
+                            "font_width": 100,
+                            "letter_spacing": {
+                              "unit": "PERCENT",
+                              "value": 0
+                            },
+                            "text_case": "ORIGINAL",
+                            "text_decoration": "NONE"
                           },
                           "variable_bindings": {
                             "fills": [
@@ -16810,7 +17238,15 @@
                             },
                             "figma_style_id": "S:3d171f9763dcbcd3a181c50411d876e67e072e75,",
                             "figma_style_name": "Desktop/Caption",
-                            "horizontal_alignment": "CENTER"
+                            "horizontal_alignment": "CENTER",
+                            "font_weight": 400,
+                            "font_width": 100,
+                            "letter_spacing": {
+                              "unit": "PERCENT",
+                              "value": 0
+                            },
+                            "text_case": "ORIGINAL",
+                            "text_decoration": "NONE"
                           },
                           "variable_bindings": {
                             "fills": [
@@ -16849,7 +17285,15 @@
                             },
                             "figma_style_id": "S:3d171f9763dcbcd3a181c50411d876e67e072e75,",
                             "figma_style_name": "Desktop/Caption",
-                            "horizontal_alignment": "CENTER"
+                            "horizontal_alignment": "CENTER",
+                            "font_weight": 400,
+                            "font_width": 100,
+                            "letter_spacing": {
+                              "unit": "PERCENT",
+                              "value": 0
+                            },
+                            "text_case": "ORIGINAL",
+                            "text_decoration": "NONE"
                           },
                           "variable_bindings": {
                             "fills": [
@@ -17217,7 +17661,15 @@
                         },
                         "figma_style_id": "",
                         "figma_style_name": null,
-                        "horizontal_alignment": "LEFT"
+                        "horizontal_alignment": "LEFT",
+                        "font_weight": 500,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       }
                     }
                   ]
@@ -18051,7 +18503,15 @@
                         },
                         "figma_style_id": "S:105e0e8a189848d91c13bf0f2887665713de21ca,",
                         "figma_style_name": "Desktop/Title",
-                        "horizontal_alignment": "LEFT"
+                        "horizontal_alignment": "LEFT",
+                        "font_weight": 500,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       },
                       "variable_bindings": {
                         "fills": [
@@ -18090,7 +18550,15 @@
                         },
                         "figma_style_id": "S:0eb6b02f56ee5f02f09611af5a13a41b6121e78d,",
                         "figma_style_name": "Desktop/Body/Medium",
-                        "horizontal_alignment": "LEFT"
+                        "horizontal_alignment": "LEFT",
+                        "font_weight": 400,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       },
                       "variable_bindings": {
                         "fills": [
@@ -18129,7 +18597,15 @@
                         },
                         "figma_style_id": "S:80178ed95ee94439436fb7ea36e3eb926f986be2,",
                         "figma_style_name": "Desktop/Action",
-                        "horizontal_alignment": "LEFT"
+                        "horizontal_alignment": "LEFT",
+                        "font_weight": 500,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       },
                       "variable_bindings": {
                         "fills": [
@@ -18344,7 +18820,15 @@
                         },
                         "figma_style_id": "S:348cad38e7e2918d2bc09859e1c0ac3f9b5afbb0,",
                         "figma_style_name": "Mobile/Title",
-                        "horizontal_alignment": "LEFT"
+                        "horizontal_alignment": "LEFT",
+                        "font_weight": 500,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       },
                       "variable_bindings": {
                         "fills": [
@@ -18383,7 +18867,15 @@
                         },
                         "figma_style_id": "S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,",
                         "figma_style_name": "Mobile/Body/Large",
-                        "horizontal_alignment": "LEFT"
+                        "horizontal_alignment": "LEFT",
+                        "font_weight": 400,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       },
                       "variable_bindings": {
                         "fills": [
@@ -18422,7 +18914,15 @@
                         },
                         "figma_style_id": "S:780f997658bfc56dc4db512b20c92d16c415c3f3,",
                         "figma_style_name": "Mobile/Action",
-                        "horizontal_alignment": "LEFT"
+                        "horizontal_alignment": "LEFT",
+                        "font_weight": 500,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       },
                       "variable_bindings": {
                         "fills": [
@@ -19349,7 +19849,15 @@
                         },
                         "figma_style_id": "S:348cad38e7e2918d2bc09859e1c0ac3f9b5afbb0,",
                         "figma_style_name": "Mobile/Title",
-                        "horizontal_alignment": "CENTER"
+                        "horizontal_alignment": "CENTER",
+                        "font_weight": 500,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       },
                       "variable_bindings": {
                         "fills": [
@@ -19388,7 +19896,15 @@
                         },
                         "figma_style_id": "S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,",
                         "figma_style_name": "Mobile/Body/Large",
-                        "horizontal_alignment": "CENTER"
+                        "horizontal_alignment": "CENTER",
+                        "font_weight": 400,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       },
                       "variable_bindings": {
                         "fills": [
@@ -19427,7 +19943,15 @@
                         },
                         "figma_style_id": "S:780f997658bfc56dc4db512b20c92d16c415c3f3,",
                         "figma_style_name": "Mobile/Action",
-                        "horizontal_alignment": "CENTER"
+                        "horizontal_alignment": "CENTER",
+                        "font_weight": 500,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       },
                       "variable_bindings": {
                         "fills": [
@@ -19586,7 +20110,15 @@
                         },
                         "figma_style_id": "S:105e0e8a189848d91c13bf0f2887665713de21ca,",
                         "figma_style_name": "Desktop/Title",
-                        "horizontal_alignment": "LEFT"
+                        "horizontal_alignment": "LEFT",
+                        "font_weight": 500,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       },
                       "variable_bindings": {
                         "fills": [
@@ -19625,7 +20157,15 @@
                         },
                         "figma_style_id": "S:0eb6b02f56ee5f02f09611af5a13a41b6121e78d,",
                         "figma_style_name": "Desktop/Body/Medium",
-                        "horizontal_alignment": "LEFT"
+                        "horizontal_alignment": "LEFT",
+                        "font_weight": 400,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       },
                       "variable_bindings": {
                         "fills": [
@@ -19664,7 +20204,15 @@
                         },
                         "figma_style_id": "S:80178ed95ee94439436fb7ea36e3eb926f986be2,",
                         "figma_style_name": "Desktop/Action",
-                        "horizontal_alignment": "LEFT"
+                        "horizontal_alignment": "LEFT",
+                        "font_weight": 500,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       },
                       "variable_bindings": {
                         "fills": [
@@ -20376,7 +20924,15 @@
                     },
                     "figma_style_id": "S:8ad84dd262e81c148a758758a15bb9b15e8f30fe,",
                     "figma_style_name": "Mobile/Body/Medium",
-                    "horizontal_alignment": "LEFT"
+                    "horizontal_alignment": "LEFT",
+                    "font_weight": 400,
+                    "font_width": 100,
+                    "letter_spacing": {
+                      "unit": "PERCENT",
+                      "value": 0
+                    },
+                    "text_case": "ORIGINAL",
+                    "text_decoration": "NONE"
                   },
                   "variable_bindings": {
                     "fills": [
@@ -20558,7 +21114,15 @@
                     },
                     "figma_style_id": "S:0eb6b02f56ee5f02f09611af5a13a41b6121e78d,",
                     "figma_style_name": "Desktop/Body/Medium",
-                    "horizontal_alignment": "LEFT"
+                    "horizontal_alignment": "LEFT",
+                    "font_weight": 400,
+                    "font_width": 100,
+                    "letter_spacing": {
+                      "unit": "PERCENT",
+                      "value": 0
+                    },
+                    "text_case": "ORIGINAL",
+                    "text_decoration": "NONE"
                   },
                   "variable_bindings": {
                     "fills": [
@@ -20984,7 +21548,15 @@
                     },
                     "figma_style_id": "S:8ad84dd262e81c148a758758a15bb9b15e8f30fe,",
                     "figma_style_name": "Mobile/Body/Medium",
-                    "horizontal_alignment": "LEFT"
+                    "horizontal_alignment": "LEFT",
+                    "font_weight": 400,
+                    "font_width": 100,
+                    "letter_spacing": {
+                      "unit": "PERCENT",
+                      "value": 0
+                    },
+                    "text_case": "ORIGINAL",
+                    "text_decoration": "NONE"
                   },
                   "variable_bindings": {
                     "fills": [
@@ -21159,7 +21731,15 @@
                     },
                     "figma_style_id": "S:0eb6b02f56ee5f02f09611af5a13a41b6121e78d,",
                     "figma_style_name": "Desktop/Body/Medium",
-                    "horizontal_alignment": "LEFT"
+                    "horizontal_alignment": "LEFT",
+                    "font_weight": 400,
+                    "font_width": 100,
+                    "letter_spacing": {
+                      "unit": "PERCENT",
+                      "value": 0
+                    },
+                    "text_case": "ORIGINAL",
+                    "text_decoration": "NONE"
                   },
                   "variable_bindings": {
                     "fills": [
@@ -21974,7 +22554,15 @@
                         },
                         "figma_style_id": "S:31421a8c479c960e9e5fcdf32b0717960340b772,",
                         "figma_style_name": "Mobile/Heading",
-                        "horizontal_alignment": "CENTER"
+                        "horizontal_alignment": "CENTER",
+                        "font_weight": 600,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       },
                       "variable_bindings": {
                         "fills": [
@@ -22474,7 +23062,15 @@
                         },
                         "figma_style_id": "S:2d908d3c1b5ff810b297f4a37aac1ab4161bbdb5,",
                         "figma_style_name": "Desktop/Heading",
-                        "horizontal_alignment": "CENTER"
+                        "horizontal_alignment": "CENTER",
+                        "font_weight": 600,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       },
                       "variable_bindings": {
                         "fills": [
@@ -22974,7 +23570,15 @@
                         },
                         "figma_style_id": "S:31421a8c479c960e9e5fcdf32b0717960340b772,",
                         "figma_style_name": "Mobile/Heading",
-                        "horizontal_alignment": "CENTER"
+                        "horizontal_alignment": "CENTER",
+                        "font_weight": 600,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       },
                       "variable_bindings": {
                         "fills": [
@@ -23389,7 +23993,15 @@
                         },
                         "figma_style_id": "S:2d908d3c1b5ff810b297f4a37aac1ab4161bbdb5,",
                         "figma_style_name": "Desktop/Heading",
-                        "horizontal_alignment": "CENTER"
+                        "horizontal_alignment": "CENTER",
+                        "font_weight": 600,
+                        "font_width": 100,
+                        "letter_spacing": {
+                          "unit": "PERCENT",
+                          "value": 0
+                        },
+                        "text_case": "ORIGINAL",
+                        "text_decoration": "NONE"
                       },
                       "variable_bindings": {
                         "fills": [
