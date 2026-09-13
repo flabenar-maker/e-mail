@@ -9667,7 +9667,20 @@
             },
             "facts": [
               {
-                "id": "root-layout-direction",
+                "id": "reference-size",
+                "value": {
+                  "type": "dimensions",
+                  "width": 328,
+                  "height": 233,
+                  "unit": "px"
+                },
+                "provenance": {
+                  "kind": "figma-literal",
+                  "node_id": "472:16998"
+                }
+              },
+              {
+                "id": "layout-axis",
                 "value": {
                   "type": "keyword",
                   "value": "vertical"
@@ -9678,7 +9691,19 @@
                 }
               },
               {
-                "id": "root-padding-top",
+                "id": "layout-gap",
+                "value": {
+                  "type": "measure",
+                  "value": 0,
+                  "unit": "px"
+                },
+                "provenance": {
+                  "kind": "figma-literal",
+                  "node_id": "472:16998"
+                }
+              },
+              {
+                "id": "padding-top",
                 "value": {
                   "type": "measure",
                   "value": 16,
@@ -9690,7 +9715,7 @@
                 }
               },
               {
-                "id": "root-padding-right",
+                "id": "padding-right",
                 "value": {
                   "type": "measure",
                   "value": 16,
@@ -9702,10 +9727,89 @@
                 }
               },
               {
-                "id": "root-padding-left",
+                "id": "padding-bottom",
+                "value": {
+                  "type": "measure",
+                  "value": 0,
+                  "unit": "px"
+                },
+                "provenance": {
+                  "kind": "figma-literal",
+                  "node_id": "472:16998"
+                }
+              },
+              {
+                "id": "padding-left",
                 "value": {
                   "type": "measure",
                   "value": 16,
+                  "unit": "px"
+                },
+                "provenance": {
+                  "kind": "figma-literal",
+                  "node_id": "472:16998"
+                }
+              },
+              {
+                "id": "horizontal-sizing",
+                "value": {
+                  "type": "keyword",
+                  "value": "fixed"
+                },
+                "provenance": {
+                  "kind": "figma-literal",
+                  "node_id": "472:16998"
+                }
+              },
+              {
+                "id": "vertical-sizing",
+                "value": {
+                  "type": "keyword",
+                  "value": "hug"
+                },
+                "provenance": {
+                  "kind": "figma-literal",
+                  "node_id": "472:16998"
+                }
+              },
+              {
+                "id": "layout-wrap",
+                "value": {
+                  "type": "keyword",
+                  "value": "no_wrap"
+                },
+                "provenance": {
+                  "kind": "figma-literal",
+                  "node_id": "472:16998"
+                }
+              },
+              {
+                "id": "primary-alignment",
+                "value": {
+                  "type": "keyword",
+                  "value": "min"
+                },
+                "provenance": {
+                  "kind": "figma-literal",
+                  "node_id": "472:16998"
+                }
+              },
+              {
+                "id": "counter-alignment",
+                "value": {
+                  "type": "keyword",
+                  "value": "min"
+                },
+                "provenance": {
+                  "kind": "figma-literal",
+                  "node_id": "472:16998"
+                }
+              },
+              {
+                "id": "border-radius",
+                "value": {
+                  "type": "measure",
+                  "value": 0,
                   "unit": "px"
                 },
                 "provenance": {
@@ -9724,7 +9828,20 @@
                 },
                 "facts": [
                   {
-                    "id": "root-content-area-layout-direction",
+                    "id": "reference-size",
+                    "value": {
+                      "type": "dimensions",
+                      "width": 296,
+                      "height": 217,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "figma-literal",
+                      "node_id": "459:27602"
+                    }
+                  },
+                  {
+                    "id": "layout-axis",
                     "value": {
                       "type": "keyword",
                       "value": "vertical"
@@ -9735,7 +9852,7 @@
                     }
                   },
                   {
-                    "id": "root-content-area-item-gap",
+                    "id": "layout-gap",
                     "value": {
                       "type": "measure",
                       "value": 16,
@@ -9747,7 +9864,7 @@
                     }
                   },
                   {
-                    "id": "root-content-area-padding-top",
+                    "id": "padding-top",
                     "value": {
                       "type": "measure",
                       "value": 22,
@@ -9759,7 +9876,7 @@
                     }
                   },
                   {
-                    "id": "root-content-area-padding-right",
+                    "id": "padding-right",
                     "value": {
                       "type": "measure",
                       "value": 22,
@@ -9771,7 +9888,7 @@
                     }
                   },
                   {
-                    "id": "root-content-area-padding-bottom",
+                    "id": "padding-bottom",
                     "value": {
                       "type": "measure",
                       "value": 22,
@@ -9783,7 +9900,7 @@
                     }
                   },
                   {
-                    "id": "root-content-area-padding-left",
+                    "id": "padding-left",
                     "value": {
                       "type": "measure",
                       "value": 22,
@@ -9795,10 +9912,10 @@
                     }
                   },
                   {
-                    "id": "root-content-area-horizontal-sizing",
+                    "id": "horizontal-sizing",
                     "value": {
                       "type": "keyword",
-                      "value": "fill-parent"
+                      "value": "fill"
                     },
                     "provenance": {
                       "kind": "figma-literal",
@@ -9806,7 +9923,51 @@
                     }
                   },
                   {
-                    "id": "root-content-area-corner-radius",
+                    "id": "vertical-sizing",
+                    "value": {
+                      "type": "keyword",
+                      "value": "hug"
+                    },
+                    "provenance": {
+                      "kind": "figma-literal",
+                      "node_id": "459:27602"
+                    }
+                  },
+                  {
+                    "id": "layout-wrap",
+                    "value": {
+                      "type": "keyword",
+                      "value": "no_wrap"
+                    },
+                    "provenance": {
+                      "kind": "figma-literal",
+                      "node_id": "459:27602"
+                    }
+                  },
+                  {
+                    "id": "primary-alignment",
+                    "value": {
+                      "type": "keyword",
+                      "value": "min"
+                    },
+                    "provenance": {
+                      "kind": "figma-literal",
+                      "node_id": "459:27602"
+                    }
+                  },
+                  {
+                    "id": "counter-alignment",
+                    "value": {
+                      "type": "keyword",
+                      "value": "center"
+                    },
+                    "provenance": {
+                      "kind": "figma-literal",
+                      "node_id": "459:27602"
+                    }
+                  },
+                  {
+                    "id": "border-radius",
                     "value": {
                       "type": "measure",
                       "value": 22,
@@ -9818,18 +9979,7 @@
                     }
                   },
                   {
-                    "id": "root-content-area-clips-content",
-                    "value": {
-                      "type": "boolean",
-                      "value": true
-                    },
-                    "provenance": {
-                      "kind": "figma-literal",
-                      "node_id": "459:27602"
-                    }
-                  },
-                  {
-                    "id": "root-content-area-fill-color",
+                    "id": "background",
                     "value": {
                       "type": "color",
                       "value": "#FFFFFF"
@@ -9850,7 +10000,20 @@
                     },
                     "facts": [
                       {
-                        "id": "root-content-area-phone-cta-layout-direction",
+                        "id": "reference-size",
+                        "value": {
+                          "type": "dimensions",
+                          "width": 252,
+                          "height": 74,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "figma-literal",
+                          "node_id": "459:27603"
+                        }
+                      },
+                      {
+                        "id": "layout-axis",
                         "value": {
                           "type": "keyword",
                           "value": "vertical"
@@ -9861,7 +10024,7 @@
                         }
                       },
                       {
-                        "id": "root-content-area-phone-cta-item-gap",
+                        "id": "layout-gap",
                         "value": {
                           "type": "measure",
                           "value": 12,
@@ -9873,10 +10036,114 @@
                         }
                       },
                       {
-                        "id": "root-content-area-phone-cta-horizontal-sizing",
+                        "id": "padding-top",
+                        "value": {
+                          "type": "measure",
+                          "value": 0,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "figma-literal",
+                          "node_id": "459:27603"
+                        }
+                      },
+                      {
+                        "id": "padding-right",
+                        "value": {
+                          "type": "measure",
+                          "value": 0,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "figma-literal",
+                          "node_id": "459:27603"
+                        }
+                      },
+                      {
+                        "id": "padding-bottom",
+                        "value": {
+                          "type": "measure",
+                          "value": 0,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "figma-literal",
+                          "node_id": "459:27603"
+                        }
+                      },
+                      {
+                        "id": "padding-left",
+                        "value": {
+                          "type": "measure",
+                          "value": 0,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "figma-literal",
+                          "node_id": "459:27603"
+                        }
+                      },
+                      {
+                        "id": "horizontal-sizing",
                         "value": {
                           "type": "keyword",
-                          "value": "fill-parent"
+                          "value": "fill"
+                        },
+                        "provenance": {
+                          "kind": "figma-literal",
+                          "node_id": "459:27603"
+                        }
+                      },
+                      {
+                        "id": "vertical-sizing",
+                        "value": {
+                          "type": "keyword",
+                          "value": "hug"
+                        },
+                        "provenance": {
+                          "kind": "figma-literal",
+                          "node_id": "459:27603"
+                        }
+                      },
+                      {
+                        "id": "layout-wrap",
+                        "value": {
+                          "type": "keyword",
+                          "value": "no_wrap"
+                        },
+                        "provenance": {
+                          "kind": "figma-literal",
+                          "node_id": "459:27603"
+                        }
+                      },
+                      {
+                        "id": "primary-alignment",
+                        "value": {
+                          "type": "keyword",
+                          "value": "min"
+                        },
+                        "provenance": {
+                          "kind": "figma-literal",
+                          "node_id": "459:27603"
+                        }
+                      },
+                      {
+                        "id": "counter-alignment",
+                        "value": {
+                          "type": "keyword",
+                          "value": "min"
+                        },
+                        "provenance": {
+                          "kind": "figma-literal",
+                          "node_id": "459:27603"
+                        }
+                      },
+                      {
+                        "id": "border-radius",
+                        "value": {
+                          "type": "measure",
+                          "value": 0,
+                          "unit": "px"
                         },
                         "provenance": {
                           "kind": "figma-literal",
@@ -9894,7 +10161,20 @@
                         },
                         "facts": [
                           {
-                            "id": "root-content-area-phone-cta-heading-fill-color",
+                            "id": "reference-size",
+                            "value": {
+                              "type": "dimensions",
+                              "width": 252,
+                              "height": 40,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27604"
+                            }
+                          },
+                          {
+                            "id": "text-color",
                             "value": {
                               "type": "color",
                               "value": "#48494A"
@@ -9905,7 +10185,40 @@
                             }
                           },
                           {
-                            "id": "root-content-area-phone-cta-heading-font-size",
+                            "id": "source-text",
+                            "value": {
+                              "type": "string",
+                              "value": "Возникли вопросы? Позвоните нам:"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27604"
+                            }
+                          },
+                          {
+                            "id": "font-family",
+                            "value": {
+                              "type": "string",
+                              "value": "Roboto"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27604"
+                            }
+                          },
+                          {
+                            "id": "font-style",
+                            "value": {
+                              "type": "string",
+                              "value": "Regular"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27604"
+                            }
+                          },
+                          {
+                            "id": "font-size",
                             "value": {
                               "type": "measure",
                               "value": 14,
@@ -9917,7 +10230,40 @@
                             }
                           },
                           {
-                            "id": "root-content-area-phone-cta-heading-line-height",
+                            "id": "text-align",
+                            "value": {
+                              "type": "keyword",
+                              "value": "center"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27604"
+                            }
+                          },
+                          {
+                            "id": "text-decoration",
+                            "value": {
+                              "type": "keyword",
+                              "value": "none"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27604"
+                            }
+                          },
+                          {
+                            "id": "figma-style-id",
+                            "value": {
+                              "type": "string",
+                              "value": "S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27604"
+                            }
+                          },
+                          {
+                            "id": "line-height",
                             "value": {
                               "type": "measure",
                               "value": 140,
@@ -9929,10 +10275,11 @@
                             }
                           },
                           {
-                            "id": "root-content-area-phone-cta-heading-text-style",
+                            "id": "letter-spacing",
                             "value": {
-                              "type": "string",
-                              "value": "Mobile/Body/Large"
+                              "type": "measure",
+                              "value": 0,
+                              "unit": "percent"
                             },
                             "provenance": {
                               "kind": "figma-literal",
@@ -9940,10 +10287,21 @@
                             }
                           },
                           {
-                            "id": "root-content-area-phone-cta-heading-text-align",
+                            "id": "text-auto-resize",
                             "value": {
                               "type": "keyword",
-                              "value": "center"
+                              "value": "height"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27604"
+                            }
+                          },
+                          {
+                            "id": "vertical-text-align",
+                            "value": {
+                              "type": "keyword",
+                              "value": "top"
                             },
                             "provenance": {
                               "kind": "figma-literal",
@@ -9951,7 +10309,14 @@
                             }
                           }
                         ],
-                        "children": []
+                        "children": [],
+                        "content_slots": [
+                          {
+                            "id": "text",
+                            "type": "plain-text",
+                            "required": true
+                          }
+                        ]
                       },
                       {
                         "id": "root-content-area-phone-cta-phone-number",
@@ -9962,7 +10327,20 @@
                         },
                         "facts": [
                           {
-                            "id": "root-content-area-phone-cta-phone-number-fill-color",
+                            "id": "reference-size",
+                            "value": {
+                              "type": "dimensions",
+                              "width": 252,
+                              "height": 22,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27605"
+                            }
+                          },
+                          {
+                            "id": "text-color",
                             "value": {
                               "type": "color",
                               "value": "#00991F"
@@ -9973,7 +10351,40 @@
                             }
                           },
                           {
-                            "id": "root-content-area-phone-cta-phone-number-font-size",
+                            "id": "source-text",
+                            "value": {
+                              "type": "string",
+                              "value": "+7 (495) 122-20-88"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27605"
+                            }
+                          },
+                          {
+                            "id": "font-family",
+                            "value": {
+                              "type": "string",
+                              "value": "Roboto"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27605"
+                            }
+                          },
+                          {
+                            "id": "font-style",
+                            "value": {
+                              "type": "string",
+                              "value": "SemiBold"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27605"
+                            }
+                          },
+                          {
+                            "id": "font-size",
                             "value": {
                               "type": "measure",
                               "value": 18,
@@ -9985,7 +10396,40 @@
                             }
                           },
                           {
-                            "id": "root-content-area-phone-cta-phone-number-line-height",
+                            "id": "text-align",
+                            "value": {
+                              "type": "keyword",
+                              "value": "center"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27605"
+                            }
+                          },
+                          {
+                            "id": "text-decoration",
+                            "value": {
+                              "type": "keyword",
+                              "value": "none"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27605"
+                            }
+                          },
+                          {
+                            "id": "figma-style-id",
+                            "value": {
+                              "type": "string",
+                              "value": "S:31421a8c479c960e9e5fcdf32b0717960340b772,"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27605"
+                            }
+                          },
+                          {
+                            "id": "line-height",
                             "value": {
                               "type": "measure",
                               "value": 120,
@@ -9997,10 +10441,11 @@
                             }
                           },
                           {
-                            "id": "root-content-area-phone-cta-phone-number-text-style",
+                            "id": "letter-spacing",
                             "value": {
-                              "type": "string",
-                              "value": "Mobile/Heading"
+                              "type": "measure",
+                              "value": 0,
+                              "unit": "percent"
                             },
                             "provenance": {
                               "kind": "figma-literal",
@@ -10008,10 +10453,21 @@
                             }
                           },
                           {
-                            "id": "root-content-area-phone-cta-phone-number-text-align",
+                            "id": "text-auto-resize",
                             "value": {
                               "type": "keyword",
-                              "value": "center"
+                              "value": "height"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27605"
+                            }
+                          },
+                          {
+                            "id": "vertical-text-align",
+                            "value": {
+                              "type": "keyword",
+                              "value": "top"
                             },
                             "provenance": {
                               "kind": "figma-literal",
@@ -10019,7 +10475,19 @@
                             }
                           }
                         ],
-                        "children": []
+                        "children": [],
+                        "content_slots": [
+                          {
+                            "id": "text",
+                            "type": "plain-text",
+                            "required": true
+                          },
+                          {
+                            "id": "href",
+                            "type": "url",
+                            "required": true
+                          }
+                        ]
                       }
                     ]
                   },
@@ -10032,7 +10500,20 @@
                     },
                     "facts": [
                       {
-                        "id": "root-content-area-help-notice-layout-direction",
+                        "id": "reference-size",
+                        "value": {
+                          "type": "dimensions",
+                          "width": 252,
+                          "height": 83,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "figma-literal",
+                          "node_id": "459:27606"
+                        }
+                      },
+                      {
+                        "id": "layout-axis",
                         "value": {
                           "type": "keyword",
                           "value": "vertical"
@@ -10043,7 +10524,19 @@
                         }
                       },
                       {
-                        "id": "root-content-area-help-notice-padding-top",
+                        "id": "layout-gap",
+                        "value": {
+                          "type": "measure",
+                          "value": 0,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "figma-literal",
+                          "node_id": "459:27606"
+                        }
+                      },
+                      {
+                        "id": "padding-top",
                         "value": {
                           "type": "measure",
                           "value": 16,
@@ -10055,7 +10548,7 @@
                         }
                       },
                       {
-                        "id": "root-content-area-help-notice-padding-right",
+                        "id": "padding-right",
                         "value": {
                           "type": "measure",
                           "value": 16,
@@ -10067,7 +10560,7 @@
                         }
                       },
                       {
-                        "id": "root-content-area-help-notice-padding-bottom",
+                        "id": "padding-bottom",
                         "value": {
                           "type": "measure",
                           "value": 16,
@@ -10079,7 +10572,7 @@
                         }
                       },
                       {
-                        "id": "root-content-area-help-notice-padding-left",
+                        "id": "padding-left",
                         "value": {
                           "type": "measure",
                           "value": 16,
@@ -10091,10 +10584,10 @@
                         }
                       },
                       {
-                        "id": "root-content-area-help-notice-horizontal-sizing",
+                        "id": "horizontal-sizing",
                         "value": {
                           "type": "keyword",
-                          "value": "fill-parent"
+                          "value": "fill"
                         },
                         "provenance": {
                           "kind": "figma-literal",
@@ -10102,7 +10595,51 @@
                         }
                       },
                       {
-                        "id": "root-content-area-help-notice-corner-radius",
+                        "id": "vertical-sizing",
+                        "value": {
+                          "type": "keyword",
+                          "value": "hug"
+                        },
+                        "provenance": {
+                          "kind": "figma-literal",
+                          "node_id": "459:27606"
+                        }
+                      },
+                      {
+                        "id": "layout-wrap",
+                        "value": {
+                          "type": "keyword",
+                          "value": "no_wrap"
+                        },
+                        "provenance": {
+                          "kind": "figma-literal",
+                          "node_id": "459:27606"
+                        }
+                      },
+                      {
+                        "id": "primary-alignment",
+                        "value": {
+                          "type": "keyword",
+                          "value": "min"
+                        },
+                        "provenance": {
+                          "kind": "figma-literal",
+                          "node_id": "459:27606"
+                        }
+                      },
+                      {
+                        "id": "counter-alignment",
+                        "value": {
+                          "type": "keyword",
+                          "value": "center"
+                        },
+                        "provenance": {
+                          "kind": "figma-literal",
+                          "node_id": "459:27606"
+                        }
+                      },
+                      {
+                        "id": "border-radius",
                         "value": {
                           "type": "measure",
                           "value": 14,
@@ -10114,18 +10651,7 @@
                         }
                       },
                       {
-                        "id": "root-content-area-help-notice-clips-content",
-                        "value": {
-                          "type": "boolean",
-                          "value": true
-                        },
-                        "provenance": {
-                          "kind": "figma-literal",
-                          "node_id": "459:27606"
-                        }
-                      },
-                      {
-                        "id": "root-content-area-help-notice-fill-color",
+                        "id": "background",
                         "value": {
                           "type": "color",
                           "value": "#F8F8FA"
@@ -10146,10 +10672,23 @@
                         },
                         "facts": [
                           {
-                            "id": "root-content-area-help-notice-help-text-text-style",
+                            "id": "reference-size",
+                            "value": {
+                              "type": "dimensions",
+                              "width": 220,
+                              "height": 51,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27607"
+                            }
+                          },
+                          {
+                            "id": "source-text",
                             "value": {
                               "type": "string",
-                              "value": "Mobile/Body/Medium"
+                              "value": "Как снизить риски операций без согласия, читайте на нашем сайте в разделе «Помощь»"
                             },
                             "provenance": {
                               "kind": "figma-literal",
@@ -10157,10 +10696,11 @@
                             }
                           },
                           {
-                            "id": "root-content-area-help-notice-help-text-segment-1-color",
+                            "id": "font-size",
                             "value": {
-                              "type": "color",
-                              "value": "#757678"
+                              "type": "measure",
+                              "value": 12,
+                              "unit": "px"
                             },
                             "provenance": {
                               "kind": "figma-literal",
@@ -10168,21 +10708,10 @@
                             }
                           },
                           {
-                            "id": "root-content-area-help-notice-help-text-segment-2-color",
-                            "value": {
-                              "type": "color",
-                              "value": "#00991F"
-                            },
-                            "provenance": {
-                              "kind": "figma-literal",
-                              "node_id": "459:27607"
-                            }
-                          },
-                          {
-                            "id": "root-content-area-help-notice-help-text-segment-2-decoration",
+                            "id": "text-align",
                             "value": {
                               "type": "keyword",
-                              "value": "underline"
+                              "value": "center"
                             },
                             "provenance": {
                               "kind": "figma-literal",
@@ -10190,10 +10719,110 @@
                             }
                           },
                           {
-                            "id": "root-content-area-help-notice-help-text-segment-2-label",
+                            "id": "figma-style-id",
                             "value": {
                               "type": "string",
-                              "value": "«Помощь»"
+                              "value": "S:8ad84dd262e81c148a758758a15bb9b15e8f30fe,"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27607"
+                            }
+                          },
+                          {
+                            "id": "line-height",
+                            "value": {
+                              "type": "measure",
+                              "value": 140,
+                              "unit": "percent"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27607"
+                            }
+                          },
+                          {
+                            "id": "letter-spacing",
+                            "value": {
+                              "type": "measure",
+                              "value": 0,
+                              "unit": "percent"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27607"
+                            }
+                          },
+                          {
+                            "id": "styled-text-segments",
+                            "value": {
+                              "type": "segments",
+                              "items": [
+                                {
+                                  "start": 0,
+                                  "end": 74,
+                                  "characters": "Как снизить риски операций без согласия, читайте на нашем сайте в разделе ",
+                                  "font_family": "Roboto",
+                                  "font_style": "Regular",
+                                  "font_size_px": 12,
+                                  "line_height": {
+                                    "unit": "PERCENT",
+                                    "value": 140
+                                  },
+                                  "text_decoration": "NONE",
+                                  "fills": [
+                                    {
+                                      "type": "solid",
+                                      "visible": true,
+                                      "opacity": 1,
+                                      "color": "#757678"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "start": 74,
+                                  "end": 82,
+                                  "characters": "«Помощь»",
+                                  "font_family": "Roboto",
+                                  "font_style": "Regular",
+                                  "font_size_px": 12,
+                                  "line_height": {
+                                    "unit": "PERCENT",
+                                    "value": 140
+                                  },
+                                  "text_decoration": "UNDERLINE",
+                                  "fills": [
+                                    {
+                                      "type": "solid",
+                                      "visible": true,
+                                      "opacity": 1,
+                                      "color": "#00991F"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27607"
+                            }
+                          },
+                          {
+                            "id": "text-auto-resize",
+                            "value": {
+                              "type": "keyword",
+                              "value": "height"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27607"
+                            }
+                          },
+                          {
+                            "id": "vertical-text-align",
+                            "value": {
+                              "type": "keyword",
+                              "value": "top"
                             },
                             "provenance": {
                               "kind": "figma-literal",
@@ -10201,39 +10830,17 @@
                             }
                           }
                         ],
-                        "children": [
+                        "children": [],
+                        "content_slots": [
                           {
-                            "id": "root-content-area-help-notice-help-text-inline-help-link",
-                            "semantic_role": "help-link",
-                            "render_mode": "html-link",
-                            "visibility": {
-                              "mode": "always"
-                            },
-                            "facts": [
-                              {
-                                "id": "root-content-area-help-notice-help-text-inline-help-link-color",
-                                "value": {
-                                  "type": "color",
-                                  "value": "#00991F"
-                                },
-                                "provenance": {
-                                  "kind": "figma-literal",
-                                  "node_id": "459:27607"
-                                }
-                              },
-                              {
-                                "id": "root-content-area-help-notice-help-text-inline-help-link-decoration",
-                                "value": {
-                                  "type": "keyword",
-                                  "value": "underline"
-                                },
-                                "provenance": {
-                                  "kind": "figma-literal",
-                                  "node_id": "459:27607"
-                                }
-                              }
-                            ],
-                            "children": []
+                            "id": "text",
+                            "type": "rich-text",
+                            "required": true
+                          },
+                          {
+                            "id": "help-url",
+                            "type": "url",
+                            "required": true
                           }
                         ]
                       }
@@ -10254,7 +10861,20 @@
             },
             "facts": [
               {
-                "id": "root-layout-direction",
+                "id": "reference-size",
+                "value": {
+                  "type": "dimensions",
+                  "width": 600,
+                  "height": 272,
+                  "unit": "px"
+                },
+                "provenance": {
+                  "kind": "figma-literal",
+                  "node_id": "472:16997"
+                }
+              },
+              {
+                "id": "layout-axis",
                 "value": {
                   "type": "keyword",
                   "value": "vertical"
@@ -10265,7 +10885,19 @@
                 }
               },
               {
-                "id": "root-padding-top",
+                "id": "layout-gap",
+                "value": {
+                  "type": "measure",
+                  "value": 0,
+                  "unit": "px"
+                },
+                "provenance": {
+                  "kind": "figma-literal",
+                  "node_id": "472:16997"
+                }
+              },
+              {
+                "id": "padding-top",
                 "value": {
                   "type": "measure",
                   "value": 24,
@@ -10277,7 +10909,7 @@
                 }
               },
               {
-                "id": "root-padding-right",
+                "id": "padding-right",
                 "value": {
                   "type": "measure",
                   "value": 24,
@@ -10289,10 +10921,89 @@
                 }
               },
               {
-                "id": "root-padding-left",
+                "id": "padding-bottom",
+                "value": {
+                  "type": "measure",
+                  "value": 0,
+                  "unit": "px"
+                },
+                "provenance": {
+                  "kind": "figma-literal",
+                  "node_id": "472:16997"
+                }
+              },
+              {
+                "id": "padding-left",
                 "value": {
                   "type": "measure",
                   "value": 24,
+                  "unit": "px"
+                },
+                "provenance": {
+                  "kind": "figma-literal",
+                  "node_id": "472:16997"
+                }
+              },
+              {
+                "id": "horizontal-sizing",
+                "value": {
+                  "type": "keyword",
+                  "value": "fixed"
+                },
+                "provenance": {
+                  "kind": "figma-literal",
+                  "node_id": "472:16997"
+                }
+              },
+              {
+                "id": "vertical-sizing",
+                "value": {
+                  "type": "keyword",
+                  "value": "hug"
+                },
+                "provenance": {
+                  "kind": "figma-literal",
+                  "node_id": "472:16997"
+                }
+              },
+              {
+                "id": "layout-wrap",
+                "value": {
+                  "type": "keyword",
+                  "value": "no_wrap"
+                },
+                "provenance": {
+                  "kind": "figma-literal",
+                  "node_id": "472:16997"
+                }
+              },
+              {
+                "id": "primary-alignment",
+                "value": {
+                  "type": "keyword",
+                  "value": "min"
+                },
+                "provenance": {
+                  "kind": "figma-literal",
+                  "node_id": "472:16997"
+                }
+              },
+              {
+                "id": "counter-alignment",
+                "value": {
+                  "type": "keyword",
+                  "value": "min"
+                },
+                "provenance": {
+                  "kind": "figma-literal",
+                  "node_id": "472:16997"
+                }
+              },
+              {
+                "id": "border-radius",
+                "value": {
+                  "type": "measure",
+                  "value": 0,
                   "unit": "px"
                 },
                 "provenance": {
@@ -10311,7 +11022,20 @@
                 },
                 "facts": [
                   {
-                    "id": "root-content-area-layout-direction",
+                    "id": "reference-size",
+                    "value": {
+                      "type": "dimensions",
+                      "width": 552,
+                      "height": 248,
+                      "unit": "px"
+                    },
+                    "provenance": {
+                      "kind": "figma-literal",
+                      "node_id": "459:27581"
+                    }
+                  },
+                  {
+                    "id": "layout-axis",
                     "value": {
                       "type": "keyword",
                       "value": "vertical"
@@ -10322,7 +11046,7 @@
                     }
                   },
                   {
-                    "id": "root-content-area-item-gap",
+                    "id": "layout-gap",
                     "value": {
                       "type": "measure",
                       "value": 24,
@@ -10334,7 +11058,7 @@
                     }
                   },
                   {
-                    "id": "root-content-area-padding-top",
+                    "id": "padding-top",
                     "value": {
                       "type": "measure",
                       "value": 32,
@@ -10346,7 +11070,7 @@
                     }
                   },
                   {
-                    "id": "root-content-area-padding-right",
+                    "id": "padding-right",
                     "value": {
                       "type": "measure",
                       "value": 32,
@@ -10358,7 +11082,7 @@
                     }
                   },
                   {
-                    "id": "root-content-area-padding-bottom",
+                    "id": "padding-bottom",
                     "value": {
                       "type": "measure",
                       "value": 32,
@@ -10370,7 +11094,7 @@
                     }
                   },
                   {
-                    "id": "root-content-area-padding-left",
+                    "id": "padding-left",
                     "value": {
                       "type": "measure",
                       "value": 32,
@@ -10382,10 +11106,10 @@
                     }
                   },
                   {
-                    "id": "root-content-area-horizontal-sizing",
+                    "id": "horizontal-sizing",
                     "value": {
                       "type": "keyword",
-                      "value": "fill-parent"
+                      "value": "fill"
                     },
                     "provenance": {
                       "kind": "figma-literal",
@@ -10393,7 +11117,51 @@
                     }
                   },
                   {
-                    "id": "root-content-area-corner-radius",
+                    "id": "vertical-sizing",
+                    "value": {
+                      "type": "keyword",
+                      "value": "hug"
+                    },
+                    "provenance": {
+                      "kind": "figma-literal",
+                      "node_id": "459:27581"
+                    }
+                  },
+                  {
+                    "id": "layout-wrap",
+                    "value": {
+                      "type": "keyword",
+                      "value": "no_wrap"
+                    },
+                    "provenance": {
+                      "kind": "figma-literal",
+                      "node_id": "459:27581"
+                    }
+                  },
+                  {
+                    "id": "primary-alignment",
+                    "value": {
+                      "type": "keyword",
+                      "value": "min"
+                    },
+                    "provenance": {
+                      "kind": "figma-literal",
+                      "node_id": "459:27581"
+                    }
+                  },
+                  {
+                    "id": "counter-alignment",
+                    "value": {
+                      "type": "keyword",
+                      "value": "center"
+                    },
+                    "provenance": {
+                      "kind": "figma-literal",
+                      "node_id": "459:27581"
+                    }
+                  },
+                  {
+                    "id": "border-radius",
                     "value": {
                       "type": "measure",
                       "value": 26,
@@ -10405,18 +11173,7 @@
                     }
                   },
                   {
-                    "id": "root-content-area-clips-content",
-                    "value": {
-                      "type": "boolean",
-                      "value": true
-                    },
-                    "provenance": {
-                      "kind": "figma-literal",
-                      "node_id": "459:27581"
-                    }
-                  },
-                  {
-                    "id": "root-content-area-fill-color",
+                    "id": "background",
                     "value": {
                       "type": "color",
                       "value": "#FFFFFF"
@@ -10437,7 +11194,20 @@
                     },
                     "facts": [
                       {
-                        "id": "root-content-area-phone-cta-layout-direction",
+                        "id": "reference-size",
+                        "value": {
+                          "type": "dimensions",
+                          "width": 488,
+                          "height": 68,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "figma-literal",
+                          "node_id": "459:27582"
+                        }
+                      },
+                      {
+                        "id": "layout-axis",
                         "value": {
                           "type": "keyword",
                           "value": "vertical"
@@ -10448,7 +11218,7 @@
                         }
                       },
                       {
-                        "id": "root-content-area-phone-cta-item-gap",
+                        "id": "layout-gap",
                         "value": {
                           "type": "measure",
                           "value": 12,
@@ -10460,10 +11230,114 @@
                         }
                       },
                       {
-                        "id": "root-content-area-phone-cta-horizontal-sizing",
+                        "id": "padding-top",
+                        "value": {
+                          "type": "measure",
+                          "value": 0,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "figma-literal",
+                          "node_id": "459:27582"
+                        }
+                      },
+                      {
+                        "id": "padding-right",
+                        "value": {
+                          "type": "measure",
+                          "value": 0,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "figma-literal",
+                          "node_id": "459:27582"
+                        }
+                      },
+                      {
+                        "id": "padding-bottom",
+                        "value": {
+                          "type": "measure",
+                          "value": 0,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "figma-literal",
+                          "node_id": "459:27582"
+                        }
+                      },
+                      {
+                        "id": "padding-left",
+                        "value": {
+                          "type": "measure",
+                          "value": 0,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "figma-literal",
+                          "node_id": "459:27582"
+                        }
+                      },
+                      {
+                        "id": "horizontal-sizing",
                         "value": {
                           "type": "keyword",
-                          "value": "fill-parent"
+                          "value": "fill"
+                        },
+                        "provenance": {
+                          "kind": "figma-literal",
+                          "node_id": "459:27582"
+                        }
+                      },
+                      {
+                        "id": "vertical-sizing",
+                        "value": {
+                          "type": "keyword",
+                          "value": "hug"
+                        },
+                        "provenance": {
+                          "kind": "figma-literal",
+                          "node_id": "459:27582"
+                        }
+                      },
+                      {
+                        "id": "layout-wrap",
+                        "value": {
+                          "type": "keyword",
+                          "value": "no_wrap"
+                        },
+                        "provenance": {
+                          "kind": "figma-literal",
+                          "node_id": "459:27582"
+                        }
+                      },
+                      {
+                        "id": "primary-alignment",
+                        "value": {
+                          "type": "keyword",
+                          "value": "min"
+                        },
+                        "provenance": {
+                          "kind": "figma-literal",
+                          "node_id": "459:27582"
+                        }
+                      },
+                      {
+                        "id": "counter-alignment",
+                        "value": {
+                          "type": "keyword",
+                          "value": "min"
+                        },
+                        "provenance": {
+                          "kind": "figma-literal",
+                          "node_id": "459:27582"
+                        }
+                      },
+                      {
+                        "id": "border-radius",
+                        "value": {
+                          "type": "measure",
+                          "value": 0,
+                          "unit": "px"
                         },
                         "provenance": {
                           "kind": "figma-literal",
@@ -10481,7 +11355,20 @@
                         },
                         "facts": [
                           {
-                            "id": "root-content-area-phone-cta-heading-fill-color",
+                            "id": "reference-size",
+                            "value": {
+                              "type": "dimensions",
+                              "width": 488,
+                              "height": 25,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27583"
+                            }
+                          },
+                          {
+                            "id": "text-color",
                             "value": {
                               "type": "color",
                               "value": "#48494A"
@@ -10492,7 +11379,40 @@
                             }
                           },
                           {
-                            "id": "root-content-area-phone-cta-heading-font-size",
+                            "id": "source-text",
+                            "value": {
+                              "type": "string",
+                              "value": "Возникли вопросы? Позвоните нам:"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27583"
+                            }
+                          },
+                          {
+                            "id": "font-family",
+                            "value": {
+                              "type": "string",
+                              "value": "Roboto"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27583"
+                            }
+                          },
+                          {
+                            "id": "font-style",
+                            "value": {
+                              "type": "string",
+                              "value": "Regular"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27583"
+                            }
+                          },
+                          {
+                            "id": "font-size",
                             "value": {
                               "type": "measure",
                               "value": 18,
@@ -10504,7 +11424,40 @@
                             }
                           },
                           {
-                            "id": "root-content-area-phone-cta-heading-line-height",
+                            "id": "text-align",
+                            "value": {
+                              "type": "keyword",
+                              "value": "center"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27583"
+                            }
+                          },
+                          {
+                            "id": "text-decoration",
+                            "value": {
+                              "type": "keyword",
+                              "value": "none"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27583"
+                            }
+                          },
+                          {
+                            "id": "figma-style-id",
+                            "value": {
+                              "type": "string",
+                              "value": "S:2dbbae937ad03f37307425810b92a1abedcfb705,"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27583"
+                            }
+                          },
+                          {
+                            "id": "line-height",
                             "value": {
                               "type": "measure",
                               "value": 140,
@@ -10516,10 +11469,11 @@
                             }
                           },
                           {
-                            "id": "root-content-area-phone-cta-heading-text-style",
+                            "id": "letter-spacing",
                             "value": {
-                              "type": "string",
-                              "value": "Desktop/Body/Large"
+                              "type": "measure",
+                              "value": 0,
+                              "unit": "percent"
                             },
                             "provenance": {
                               "kind": "figma-literal",
@@ -10527,10 +11481,21 @@
                             }
                           },
                           {
-                            "id": "root-content-area-phone-cta-heading-text-align",
+                            "id": "text-auto-resize",
                             "value": {
                               "type": "keyword",
-                              "value": "center"
+                              "value": "height"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27583"
+                            }
+                          },
+                          {
+                            "id": "vertical-text-align",
+                            "value": {
+                              "type": "keyword",
+                              "value": "top"
                             },
                             "provenance": {
                               "kind": "figma-literal",
@@ -10538,7 +11503,14 @@
                             }
                           }
                         ],
-                        "children": []
+                        "children": [],
+                        "content_slots": [
+                          {
+                            "id": "text",
+                            "type": "plain-text",
+                            "required": true
+                          }
+                        ]
                       },
                       {
                         "id": "root-content-area-phone-cta-phone-number",
@@ -10549,7 +11521,20 @@
                         },
                         "facts": [
                           {
-                            "id": "root-content-area-phone-cta-phone-number-fill-color",
+                            "id": "reference-size",
+                            "value": {
+                              "type": "dimensions",
+                              "width": 488,
+                              "height": 31,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27584"
+                            }
+                          },
+                          {
+                            "id": "text-color",
                             "value": {
                               "type": "color",
                               "value": "#00991F"
@@ -10560,7 +11545,40 @@
                             }
                           },
                           {
-                            "id": "root-content-area-phone-cta-phone-number-font-size",
+                            "id": "source-text",
+                            "value": {
+                              "type": "string",
+                              "value": "+7 (495) 122-20-88"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27584"
+                            }
+                          },
+                          {
+                            "id": "font-family",
+                            "value": {
+                              "type": "string",
+                              "value": "Roboto"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27584"
+                            }
+                          },
+                          {
+                            "id": "font-style",
+                            "value": {
+                              "type": "string",
+                              "value": "SemiBold"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27584"
+                            }
+                          },
+                          {
+                            "id": "font-size",
                             "value": {
                               "type": "measure",
                               "value": 26,
@@ -10572,7 +11590,40 @@
                             }
                           },
                           {
-                            "id": "root-content-area-phone-cta-phone-number-line-height",
+                            "id": "text-align",
+                            "value": {
+                              "type": "keyword",
+                              "value": "center"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27584"
+                            }
+                          },
+                          {
+                            "id": "text-decoration",
+                            "value": {
+                              "type": "keyword",
+                              "value": "none"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27584"
+                            }
+                          },
+                          {
+                            "id": "figma-style-id",
+                            "value": {
+                              "type": "string",
+                              "value": "S:2d908d3c1b5ff810b297f4a37aac1ab4161bbdb5,"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27584"
+                            }
+                          },
+                          {
+                            "id": "line-height",
                             "value": {
                               "type": "measure",
                               "value": 120,
@@ -10584,10 +11635,11 @@
                             }
                           },
                           {
-                            "id": "root-content-area-phone-cta-phone-number-text-style",
+                            "id": "letter-spacing",
                             "value": {
-                              "type": "string",
-                              "value": "Desktop/Heading"
+                              "type": "measure",
+                              "value": 0,
+                              "unit": "percent"
                             },
                             "provenance": {
                               "kind": "figma-literal",
@@ -10595,10 +11647,21 @@
                             }
                           },
                           {
-                            "id": "root-content-area-phone-cta-phone-number-text-align",
+                            "id": "text-auto-resize",
                             "value": {
                               "type": "keyword",
-                              "value": "center"
+                              "value": "height"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27584"
+                            }
+                          },
+                          {
+                            "id": "vertical-text-align",
+                            "value": {
+                              "type": "keyword",
+                              "value": "top"
                             },
                             "provenance": {
                               "kind": "figma-literal",
@@ -10606,7 +11669,19 @@
                             }
                           }
                         ],
-                        "children": []
+                        "children": [],
+                        "content_slots": [
+                          {
+                            "id": "text",
+                            "type": "plain-text",
+                            "required": true
+                          },
+                          {
+                            "id": "href",
+                            "type": "url",
+                            "required": true
+                          }
+                        ]
                       }
                     ]
                   },
@@ -10619,7 +11694,20 @@
                     },
                     "facts": [
                       {
-                        "id": "root-content-area-help-notice-layout-direction",
+                        "id": "reference-size",
+                        "value": {
+                          "type": "dimensions",
+                          "width": 488,
+                          "height": 92,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "figma-literal",
+                          "node_id": "459:27585"
+                        }
+                      },
+                      {
+                        "id": "layout-axis",
                         "value": {
                           "type": "keyword",
                           "value": "vertical"
@@ -10630,7 +11718,19 @@
                         }
                       },
                       {
-                        "id": "root-content-area-help-notice-padding-top",
+                        "id": "layout-gap",
+                        "value": {
+                          "type": "measure",
+                          "value": 0,
+                          "unit": "px"
+                        },
+                        "provenance": {
+                          "kind": "figma-literal",
+                          "node_id": "459:27585"
+                        }
+                      },
+                      {
+                        "id": "padding-top",
                         "value": {
                           "type": "measure",
                           "value": 24,
@@ -10642,7 +11742,7 @@
                         }
                       },
                       {
-                        "id": "root-content-area-help-notice-padding-right",
+                        "id": "padding-right",
                         "value": {
                           "type": "measure",
                           "value": 24,
@@ -10654,7 +11754,7 @@
                         }
                       },
                       {
-                        "id": "root-content-area-help-notice-padding-bottom",
+                        "id": "padding-bottom",
                         "value": {
                           "type": "measure",
                           "value": 24,
@@ -10666,7 +11766,7 @@
                         }
                       },
                       {
-                        "id": "root-content-area-help-notice-padding-left",
+                        "id": "padding-left",
                         "value": {
                           "type": "measure",
                           "value": 24,
@@ -10678,10 +11778,10 @@
                         }
                       },
                       {
-                        "id": "root-content-area-help-notice-horizontal-sizing",
+                        "id": "horizontal-sizing",
                         "value": {
                           "type": "keyword",
-                          "value": "fill-parent"
+                          "value": "fill"
                         },
                         "provenance": {
                           "kind": "figma-literal",
@@ -10689,7 +11789,51 @@
                         }
                       },
                       {
-                        "id": "root-content-area-help-notice-corner-radius",
+                        "id": "vertical-sizing",
+                        "value": {
+                          "type": "keyword",
+                          "value": "hug"
+                        },
+                        "provenance": {
+                          "kind": "figma-literal",
+                          "node_id": "459:27585"
+                        }
+                      },
+                      {
+                        "id": "layout-wrap",
+                        "value": {
+                          "type": "keyword",
+                          "value": "no_wrap"
+                        },
+                        "provenance": {
+                          "kind": "figma-literal",
+                          "node_id": "459:27585"
+                        }
+                      },
+                      {
+                        "id": "primary-alignment",
+                        "value": {
+                          "type": "keyword",
+                          "value": "min"
+                        },
+                        "provenance": {
+                          "kind": "figma-literal",
+                          "node_id": "459:27585"
+                        }
+                      },
+                      {
+                        "id": "counter-alignment",
+                        "value": {
+                          "type": "keyword",
+                          "value": "center"
+                        },
+                        "provenance": {
+                          "kind": "figma-literal",
+                          "node_id": "459:27585"
+                        }
+                      },
+                      {
+                        "id": "border-radius",
                         "value": {
                           "type": "measure",
                           "value": 18,
@@ -10701,18 +11845,7 @@
                         }
                       },
                       {
-                        "id": "root-content-area-help-notice-clips-content",
-                        "value": {
-                          "type": "boolean",
-                          "value": true
-                        },
-                        "provenance": {
-                          "kind": "figma-literal",
-                          "node_id": "459:27585"
-                        }
-                      },
-                      {
-                        "id": "root-content-area-help-notice-fill-color",
+                        "id": "background",
                         "value": {
                           "type": "color",
                           "value": "#F8F8FA"
@@ -10733,10 +11866,23 @@
                         },
                         "facts": [
                           {
-                            "id": "root-content-area-help-notice-help-text-text-style",
+                            "id": "reference-size",
+                            "value": {
+                              "type": "dimensions",
+                              "width": 440,
+                              "height": 44,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27586"
+                            }
+                          },
+                          {
+                            "id": "source-text",
                             "value": {
                               "type": "string",
-                              "value": "Desktop/Body/Medium"
+                              "value": "Как снизить риски операций без согласия, читайте на нашем сайте в разделе «Помощь»"
                             },
                             "provenance": {
                               "kind": "figma-literal",
@@ -10744,10 +11890,11 @@
                             }
                           },
                           {
-                            "id": "root-content-area-help-notice-help-text-segment-1-color",
+                            "id": "font-size",
                             "value": {
-                              "type": "color",
-                              "value": "#757678"
+                              "type": "measure",
+                              "value": 16,
+                              "unit": "px"
                             },
                             "provenance": {
                               "kind": "figma-literal",
@@ -10755,21 +11902,10 @@
                             }
                           },
                           {
-                            "id": "root-content-area-help-notice-help-text-segment-2-color",
-                            "value": {
-                              "type": "color",
-                              "value": "#00991F"
-                            },
-                            "provenance": {
-                              "kind": "figma-literal",
-                              "node_id": "459:27586"
-                            }
-                          },
-                          {
-                            "id": "root-content-area-help-notice-help-text-segment-2-decoration",
+                            "id": "text-align",
                             "value": {
                               "type": "keyword",
-                              "value": "underline"
+                              "value": "center"
                             },
                             "provenance": {
                               "kind": "figma-literal",
@@ -10777,10 +11913,110 @@
                             }
                           },
                           {
-                            "id": "root-content-area-help-notice-help-text-segment-2-label",
+                            "id": "figma-style-id",
                             "value": {
                               "type": "string",
-                              "value": "«Помощь»"
+                              "value": "S:0eb6b02f56ee5f02f09611af5a13a41b6121e78d,"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27586"
+                            }
+                          },
+                          {
+                            "id": "line-height",
+                            "value": {
+                              "type": "measure",
+                              "value": 140,
+                              "unit": "percent"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27586"
+                            }
+                          },
+                          {
+                            "id": "letter-spacing",
+                            "value": {
+                              "type": "measure",
+                              "value": 0,
+                              "unit": "percent"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27586"
+                            }
+                          },
+                          {
+                            "id": "styled-text-segments",
+                            "value": {
+                              "type": "segments",
+                              "items": [
+                                {
+                                  "start": 0,
+                                  "end": 74,
+                                  "characters": "Как снизить риски операций без согласия, читайте на нашем сайте в разделе ",
+                                  "font_family": "Roboto",
+                                  "font_style": "Regular",
+                                  "font_size_px": 16,
+                                  "line_height": {
+                                    "unit": "PERCENT",
+                                    "value": 140
+                                  },
+                                  "text_decoration": "NONE",
+                                  "fills": [
+                                    {
+                                      "type": "solid",
+                                      "visible": true,
+                                      "opacity": 1,
+                                      "color": "#757678"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "start": 74,
+                                  "end": 82,
+                                  "characters": "«Помощь»",
+                                  "font_family": "Roboto",
+                                  "font_style": "Regular",
+                                  "font_size_px": 16,
+                                  "line_height": {
+                                    "unit": "PERCENT",
+                                    "value": 140
+                                  },
+                                  "text_decoration": "UNDERLINE",
+                                  "fills": [
+                                    {
+                                      "type": "solid",
+                                      "visible": true,
+                                      "opacity": 1,
+                                      "color": "#00991F"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27586"
+                            }
+                          },
+                          {
+                            "id": "text-auto-resize",
+                            "value": {
+                              "type": "keyword",
+                              "value": "height"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27586"
+                            }
+                          },
+                          {
+                            "id": "vertical-text-align",
+                            "value": {
+                              "type": "keyword",
+                              "value": "top"
                             },
                             "provenance": {
                               "kind": "figma-literal",
@@ -10788,39 +12024,17 @@
                             }
                           }
                         ],
-                        "children": [
+                        "children": [],
+                        "content_slots": [
                           {
-                            "id": "root-content-area-help-notice-help-text-inline-help-link",
-                            "semantic_role": "help-link",
-                            "render_mode": "html-link",
-                            "visibility": {
-                              "mode": "always"
-                            },
-                            "facts": [
-                              {
-                                "id": "root-content-area-help-notice-help-text-inline-help-link-color",
-                                "value": {
-                                  "type": "color",
-                                  "value": "#00991F"
-                                },
-                                "provenance": {
-                                  "kind": "figma-literal",
-                                  "node_id": "459:27586"
-                                }
-                              },
-                              {
-                                "id": "root-content-area-help-notice-help-text-inline-help-link-decoration",
-                                "value": {
-                                  "type": "keyword",
-                                  "value": "underline"
-                                },
-                                "provenance": {
-                                  "kind": "figma-literal",
-                                  "node_id": "459:27586"
-                                }
-                              }
-                            ],
-                            "children": []
+                            "id": "text",
+                            "type": "rich-text",
+                            "required": true
+                          },
+                          {
+                            "id": "help-url",
+                            "type": "url",
+                            "required": true
                           }
                         ]
                       }
@@ -11828,6 +13042,1716 @@
               }
             }
           }
+        ],
+        "figma_fact_links": [
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "472:16998",
+            "source_path": "/reference_dimensions/width",
+            "contract_path": "/contracts/mobile/root/facts/0/value/width",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "472:16998",
+            "source_path": "/reference_dimensions/height",
+            "contract_path": "/contracts/mobile/root/facts/0/value/height",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "472:16998",
+            "source_path": "/layout/mode",
+            "contract_path": "/contracts/mobile/root/facts/1/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "472:16998",
+            "source_path": "/layout/item_spacing",
+            "contract_path": "/contracts/mobile/root/facts/2/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "472:16998",
+            "source_path": "/layout/padding/top",
+            "contract_path": "/contracts/mobile/root/facts/3/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "472:16998",
+            "source_path": "/layout/padding/right",
+            "contract_path": "/contracts/mobile/root/facts/4/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "472:16998",
+            "source_path": "/layout/padding/bottom",
+            "contract_path": "/contracts/mobile/root/facts/5/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "472:16998",
+            "source_path": "/layout/padding/left",
+            "contract_path": "/contracts/mobile/root/facts/6/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "472:16998",
+            "source_path": "/layout/horizontal_sizing",
+            "contract_path": "/contracts/mobile/root/facts/7/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "472:16998",
+            "source_path": "/layout/vertical_sizing",
+            "contract_path": "/contracts/mobile/root/facts/8/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "472:16998",
+            "source_path": "/layout/wrap",
+            "contract_path": "/contracts/mobile/root/facts/9/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "472:16998",
+            "source_path": "/layout/primary_axis_alignment",
+            "contract_path": "/contracts/mobile/root/facts/10/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "472:16998",
+            "source_path": "/layout/counter_axis_alignment",
+            "contract_path": "/contracts/mobile/root/facts/11/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "472:16998",
+            "source_path": "/corner_radius",
+            "contract_path": "/contracts/mobile/root/facts/12/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27602",
+            "source_path": "/reference_dimensions/width",
+            "contract_path": "/contracts/mobile/root/children/0/facts/0/value/width",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27602",
+            "source_path": "/reference_dimensions/height",
+            "contract_path": "/contracts/mobile/root/children/0/facts/0/value/height",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27602",
+            "source_path": "/layout/mode",
+            "contract_path": "/contracts/mobile/root/children/0/facts/1/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27602",
+            "source_path": "/layout/item_spacing",
+            "contract_path": "/contracts/mobile/root/children/0/facts/2/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27602",
+            "source_path": "/layout/padding/top",
+            "contract_path": "/contracts/mobile/root/children/0/facts/3/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27602",
+            "source_path": "/layout/padding/right",
+            "contract_path": "/contracts/mobile/root/children/0/facts/4/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27602",
+            "source_path": "/layout/padding/bottom",
+            "contract_path": "/contracts/mobile/root/children/0/facts/5/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27602",
+            "source_path": "/layout/padding/left",
+            "contract_path": "/contracts/mobile/root/children/0/facts/6/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27602",
+            "source_path": "/layout/horizontal_sizing",
+            "contract_path": "/contracts/mobile/root/children/0/facts/7/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27602",
+            "source_path": "/layout/vertical_sizing",
+            "contract_path": "/contracts/mobile/root/children/0/facts/8/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27602",
+            "source_path": "/layout/wrap",
+            "contract_path": "/contracts/mobile/root/children/0/facts/9/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27602",
+            "source_path": "/layout/primary_axis_alignment",
+            "contract_path": "/contracts/mobile/root/children/0/facts/10/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27602",
+            "source_path": "/layout/counter_axis_alignment",
+            "contract_path": "/contracts/mobile/root/children/0/facts/11/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27602",
+            "source_path": "/corner_radius",
+            "contract_path": "/contracts/mobile/root/children/0/facts/12/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27602",
+            "source_path": "/fills/0/color",
+            "contract_path": "/contracts/mobile/root/children/0/facts/13/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27603",
+            "source_path": "/reference_dimensions/width",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/0/value/width",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27603",
+            "source_path": "/reference_dimensions/height",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/0/value/height",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27603",
+            "source_path": "/layout/mode",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/1/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27603",
+            "source_path": "/layout/item_spacing",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/2/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27603",
+            "source_path": "/layout/padding/top",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/3/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27603",
+            "source_path": "/layout/padding/right",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/4/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27603",
+            "source_path": "/layout/padding/bottom",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/5/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27603",
+            "source_path": "/layout/padding/left",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/6/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27603",
+            "source_path": "/layout/horizontal_sizing",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/7/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27603",
+            "source_path": "/layout/vertical_sizing",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/8/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27603",
+            "source_path": "/layout/wrap",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/9/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27603",
+            "source_path": "/layout/primary_axis_alignment",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/10/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27603",
+            "source_path": "/layout/counter_axis_alignment",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/11/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27603",
+            "source_path": "/corner_radius",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/12/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27604",
+            "source_path": "/reference_dimensions/width",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/facts/0/value/width",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27604",
+            "source_path": "/reference_dimensions/height",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/facts/0/value/height",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27604",
+            "source_path": "/fills/0/color",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/facts/1/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27604",
+            "source_path": "/characters",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/facts/2/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27604",
+            "source_path": "/text_style/font_family",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/facts/3/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27604",
+            "source_path": "/text_style/font_style",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/facts/4/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27604",
+            "source_path": "/text_style/font_size_px",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/facts/5/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27604",
+            "source_path": "/text_style/horizontal_alignment",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/facts/6/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27604",
+            "source_path": "/text_style/text_decoration",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/facts/7/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27604",
+            "source_path": "/text_style/figma_style_id",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/facts/8/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27604",
+            "source_path": "/text_style/line_height/value",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/facts/9/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27604",
+            "source_path": "/text_style/letter_spacing/value",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/facts/10/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27605",
+            "source_path": "/reference_dimensions/width",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/1/facts/0/value/width",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27605",
+            "source_path": "/reference_dimensions/height",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/1/facts/0/value/height",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27605",
+            "source_path": "/fills/0/color",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/1/facts/1/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27605",
+            "source_path": "/characters",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/1/facts/2/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27605",
+            "source_path": "/text_style/font_family",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/1/facts/3/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27605",
+            "source_path": "/text_style/font_style",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/1/facts/4/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27605",
+            "source_path": "/text_style/font_size_px",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/1/facts/5/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27605",
+            "source_path": "/text_style/horizontal_alignment",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/1/facts/6/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27605",
+            "source_path": "/text_style/text_decoration",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/1/facts/7/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27605",
+            "source_path": "/text_style/figma_style_id",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/1/facts/8/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27605",
+            "source_path": "/text_style/line_height/value",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/1/facts/9/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27605",
+            "source_path": "/text_style/letter_spacing/value",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/1/facts/10/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27606",
+            "source_path": "/reference_dimensions/width",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/0/value/width",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27606",
+            "source_path": "/reference_dimensions/height",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/0/value/height",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27606",
+            "source_path": "/layout/mode",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/1/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27606",
+            "source_path": "/layout/item_spacing",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/2/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27606",
+            "source_path": "/layout/padding/top",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/3/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27606",
+            "source_path": "/layout/padding/right",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/4/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27606",
+            "source_path": "/layout/padding/bottom",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/5/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27606",
+            "source_path": "/layout/padding/left",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/6/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27606",
+            "source_path": "/layout/horizontal_sizing",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/7/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27606",
+            "source_path": "/layout/vertical_sizing",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/8/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27606",
+            "source_path": "/layout/wrap",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/9/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27606",
+            "source_path": "/layout/primary_axis_alignment",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/10/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27606",
+            "source_path": "/layout/counter_axis_alignment",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/11/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27606",
+            "source_path": "/corner_radius",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/12/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27606",
+            "source_path": "/fills/0/color",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/13/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/reference_dimensions/width",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/0/value/width",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/reference_dimensions/height",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/0/value/height",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/characters",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/1/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/text_style/font_size_px",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/2/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/text_style/horizontal_alignment",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/3/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/text_style/figma_style_id",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/4/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/text_style/line_height/value",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/5/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/text_style/letter_spacing/value",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/6/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "472:16997",
+            "source_path": "/reference_dimensions/width",
+            "contract_path": "/contracts/desktop/root/facts/0/value/width",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "472:16997",
+            "source_path": "/reference_dimensions/height",
+            "contract_path": "/contracts/desktop/root/facts/0/value/height",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "472:16997",
+            "source_path": "/layout/mode",
+            "contract_path": "/contracts/desktop/root/facts/1/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "472:16997",
+            "source_path": "/layout/item_spacing",
+            "contract_path": "/contracts/desktop/root/facts/2/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "472:16997",
+            "source_path": "/layout/padding/top",
+            "contract_path": "/contracts/desktop/root/facts/3/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "472:16997",
+            "source_path": "/layout/padding/right",
+            "contract_path": "/contracts/desktop/root/facts/4/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "472:16997",
+            "source_path": "/layout/padding/bottom",
+            "contract_path": "/contracts/desktop/root/facts/5/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "472:16997",
+            "source_path": "/layout/padding/left",
+            "contract_path": "/contracts/desktop/root/facts/6/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "472:16997",
+            "source_path": "/layout/horizontal_sizing",
+            "contract_path": "/contracts/desktop/root/facts/7/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "472:16997",
+            "source_path": "/layout/vertical_sizing",
+            "contract_path": "/contracts/desktop/root/facts/8/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "472:16997",
+            "source_path": "/layout/wrap",
+            "contract_path": "/contracts/desktop/root/facts/9/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "472:16997",
+            "source_path": "/layout/primary_axis_alignment",
+            "contract_path": "/contracts/desktop/root/facts/10/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "472:16997",
+            "source_path": "/layout/counter_axis_alignment",
+            "contract_path": "/contracts/desktop/root/facts/11/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "472:16997",
+            "source_path": "/corner_radius",
+            "contract_path": "/contracts/desktop/root/facts/12/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27581",
+            "source_path": "/reference_dimensions/width",
+            "contract_path": "/contracts/desktop/root/children/0/facts/0/value/width",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27581",
+            "source_path": "/reference_dimensions/height",
+            "contract_path": "/contracts/desktop/root/children/0/facts/0/value/height",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27581",
+            "source_path": "/layout/mode",
+            "contract_path": "/contracts/desktop/root/children/0/facts/1/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27581",
+            "source_path": "/layout/item_spacing",
+            "contract_path": "/contracts/desktop/root/children/0/facts/2/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27581",
+            "source_path": "/layout/padding/top",
+            "contract_path": "/contracts/desktop/root/children/0/facts/3/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27581",
+            "source_path": "/layout/padding/right",
+            "contract_path": "/contracts/desktop/root/children/0/facts/4/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27581",
+            "source_path": "/layout/padding/bottom",
+            "contract_path": "/contracts/desktop/root/children/0/facts/5/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27581",
+            "source_path": "/layout/padding/left",
+            "contract_path": "/contracts/desktop/root/children/0/facts/6/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27581",
+            "source_path": "/layout/horizontal_sizing",
+            "contract_path": "/contracts/desktop/root/children/0/facts/7/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27581",
+            "source_path": "/layout/vertical_sizing",
+            "contract_path": "/contracts/desktop/root/children/0/facts/8/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27581",
+            "source_path": "/layout/wrap",
+            "contract_path": "/contracts/desktop/root/children/0/facts/9/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27581",
+            "source_path": "/layout/primary_axis_alignment",
+            "contract_path": "/contracts/desktop/root/children/0/facts/10/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27581",
+            "source_path": "/layout/counter_axis_alignment",
+            "contract_path": "/contracts/desktop/root/children/0/facts/11/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27581",
+            "source_path": "/corner_radius",
+            "contract_path": "/contracts/desktop/root/children/0/facts/12/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27581",
+            "source_path": "/fills/0/color",
+            "contract_path": "/contracts/desktop/root/children/0/facts/13/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27582",
+            "source_path": "/reference_dimensions/width",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/0/value/width",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27582",
+            "source_path": "/reference_dimensions/height",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/0/value/height",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27582",
+            "source_path": "/layout/mode",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/1/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27582",
+            "source_path": "/layout/item_spacing",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/2/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27582",
+            "source_path": "/layout/padding/top",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/3/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27582",
+            "source_path": "/layout/padding/right",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/4/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27582",
+            "source_path": "/layout/padding/bottom",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/5/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27582",
+            "source_path": "/layout/padding/left",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/6/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27582",
+            "source_path": "/layout/horizontal_sizing",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/7/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27582",
+            "source_path": "/layout/vertical_sizing",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/8/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27582",
+            "source_path": "/layout/wrap",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/9/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27582",
+            "source_path": "/layout/primary_axis_alignment",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/10/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27582",
+            "source_path": "/layout/counter_axis_alignment",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/11/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27582",
+            "source_path": "/corner_radius",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/12/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27583",
+            "source_path": "/reference_dimensions/width",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/facts/0/value/width",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27583",
+            "source_path": "/reference_dimensions/height",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/facts/0/value/height",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27583",
+            "source_path": "/fills/0/color",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/facts/1/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27583",
+            "source_path": "/characters",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/facts/2/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27583",
+            "source_path": "/text_style/font_family",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/facts/3/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27583",
+            "source_path": "/text_style/font_style",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/facts/4/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27583",
+            "source_path": "/text_style/font_size_px",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/facts/5/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27583",
+            "source_path": "/text_style/horizontal_alignment",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/facts/6/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27583",
+            "source_path": "/text_style/text_decoration",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/facts/7/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27583",
+            "source_path": "/text_style/figma_style_id",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/facts/8/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27583",
+            "source_path": "/text_style/line_height/value",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/facts/9/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27583",
+            "source_path": "/text_style/letter_spacing/value",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/facts/10/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27584",
+            "source_path": "/reference_dimensions/width",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/1/facts/0/value/width",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27584",
+            "source_path": "/reference_dimensions/height",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/1/facts/0/value/height",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27584",
+            "source_path": "/fills/0/color",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/1/facts/1/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27584",
+            "source_path": "/characters",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/1/facts/2/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27584",
+            "source_path": "/text_style/font_family",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/1/facts/3/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27584",
+            "source_path": "/text_style/font_style",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/1/facts/4/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27584",
+            "source_path": "/text_style/font_size_px",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/1/facts/5/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27584",
+            "source_path": "/text_style/horizontal_alignment",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/1/facts/6/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27584",
+            "source_path": "/text_style/text_decoration",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/1/facts/7/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27584",
+            "source_path": "/text_style/figma_style_id",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/1/facts/8/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27584",
+            "source_path": "/text_style/line_height/value",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/1/facts/9/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27584",
+            "source_path": "/text_style/letter_spacing/value",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/1/facts/10/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27585",
+            "source_path": "/reference_dimensions/width",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/0/value/width",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27585",
+            "source_path": "/reference_dimensions/height",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/0/value/height",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27585",
+            "source_path": "/layout/mode",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/1/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27585",
+            "source_path": "/layout/item_spacing",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/2/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27585",
+            "source_path": "/layout/padding/top",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/3/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27585",
+            "source_path": "/layout/padding/right",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/4/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27585",
+            "source_path": "/layout/padding/bottom",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/5/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27585",
+            "source_path": "/layout/padding/left",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/6/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27585",
+            "source_path": "/layout/horizontal_sizing",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/7/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27585",
+            "source_path": "/layout/vertical_sizing",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/8/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27585",
+            "source_path": "/layout/wrap",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/9/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27585",
+            "source_path": "/layout/primary_axis_alignment",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/10/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27585",
+            "source_path": "/layout/counter_axis_alignment",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/11/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27585",
+            "source_path": "/corner_radius",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/12/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27585",
+            "source_path": "/fills/0/color",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/13/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/reference_dimensions/width",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/0/value/width",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/reference_dimensions/height",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/0/value/height",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/characters",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/1/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/text_style/font_size_px",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/2/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/text_style/horizontal_alignment",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/3/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/text_style/figma_style_id",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/4/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/text_style/line_height/value",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/5/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/text_style/letter_spacing/value",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/6/value/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/styled_text_segments/0/start",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/7/value/items/0/start",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/styled_text_segments/0/end",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/7/value/items/0/end",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/styled_text_segments/0/characters",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/7/value/items/0/characters",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/styled_text_segments/0/font_family",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/7/value/items/0/font_family",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/styled_text_segments/0/font_style",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/7/value/items/0/font_style",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/styled_text_segments/0/font_size_px",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/7/value/items/0/font_size_px",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/styled_text_segments/0/line_height/unit",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/7/value/items/0/line_height/unit",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/styled_text_segments/0/line_height/value",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/7/value/items/0/line_height/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/styled_text_segments/0/text_decoration",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/7/value/items/0/text_decoration",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/styled_text_segments/0/fills/0/type",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/7/value/items/0/fills/0/type",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/styled_text_segments/0/fills/0/visible",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/7/value/items/0/fills/0/visible",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/styled_text_segments/0/fills/0/opacity",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/7/value/items/0/fills/0/opacity",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/styled_text_segments/0/fills/0/color",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/7/value/items/0/fills/0/color",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/styled_text_segments/1/start",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/7/value/items/1/start",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/styled_text_segments/1/end",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/7/value/items/1/end",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/styled_text_segments/1/characters",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/7/value/items/1/characters",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/styled_text_segments/1/font_family",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/7/value/items/1/font_family",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/styled_text_segments/1/font_style",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/7/value/items/1/font_style",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/styled_text_segments/1/font_size_px",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/7/value/items/1/font_size_px",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/styled_text_segments/1/line_height/unit",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/7/value/items/1/line_height/unit",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/styled_text_segments/1/line_height/value",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/7/value/items/1/line_height/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/styled_text_segments/1/text_decoration",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/7/value/items/1/text_decoration",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/styled_text_segments/1/fills/0/type",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/7/value/items/1/fills/0/type",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/styled_text_segments/1/fills/0/visible",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/7/value/items/1/fills/0/visible",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/styled_text_segments/1/fills/0/opacity",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/7/value/items/1/fills/0/opacity",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/styled_text_segments/1/fills/0/color",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/7/value/items/1/fills/0/color",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/styled_text_segments/0/start",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/7/value/items/0/start",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/styled_text_segments/0/end",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/7/value/items/0/end",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/styled_text_segments/0/characters",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/7/value/items/0/characters",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/styled_text_segments/0/font_family",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/7/value/items/0/font_family",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/styled_text_segments/0/font_style",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/7/value/items/0/font_style",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/styled_text_segments/0/font_size_px",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/7/value/items/0/font_size_px",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/styled_text_segments/0/line_height/unit",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/7/value/items/0/line_height/unit",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/styled_text_segments/0/line_height/value",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/7/value/items/0/line_height/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/styled_text_segments/0/text_decoration",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/7/value/items/0/text_decoration",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/styled_text_segments/0/fills/0/type",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/7/value/items/0/fills/0/type",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/styled_text_segments/0/fills/0/visible",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/7/value/items/0/fills/0/visible",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/styled_text_segments/0/fills/0/opacity",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/7/value/items/0/fills/0/opacity",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/styled_text_segments/0/fills/0/color",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/7/value/items/0/fills/0/color",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/styled_text_segments/1/start",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/7/value/items/1/start",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/styled_text_segments/1/end",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/7/value/items/1/end",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/styled_text_segments/1/characters",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/7/value/items/1/characters",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/styled_text_segments/1/font_family",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/7/value/items/1/font_family",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/styled_text_segments/1/font_style",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/7/value/items/1/font_style",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/styled_text_segments/1/font_size_px",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/7/value/items/1/font_size_px",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/styled_text_segments/1/line_height/unit",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/7/value/items/1/line_height/unit",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/styled_text_segments/1/line_height/value",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/7/value/items/1/line_height/value",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/styled_text_segments/1/text_decoration",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/7/value/items/1/text_decoration",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/styled_text_segments/1/fills/0/type",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/7/value/items/1/fills/0/type",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/styled_text_segments/1/fills/0/visible",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/7/value/items/1/fills/0/visible",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/styled_text_segments/1/fills/0/opacity",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/7/value/items/1/fills/0/opacity",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/styled_text_segments/1/fills/0/color",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/7/value/items/1/fills/0/color",
+            "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27604",
+            "source_path": "/text_style/text_auto_resize",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/facts/11/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27604",
+            "source_path": "/text_style/vertical_alignment",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/facts/12/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27605",
+            "source_path": "/text_style/text_auto_resize",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/1/facts/11/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27605",
+            "source_path": "/text_style/vertical_alignment",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/1/facts/12/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/text_style/text_auto_resize",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/8/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/text_style/vertical_alignment",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/9/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27583",
+            "source_path": "/text_style/text_auto_resize",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/facts/11/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27583",
+            "source_path": "/text_style/vertical_alignment",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/facts/12/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27584",
+            "source_path": "/text_style/text_auto_resize",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/1/facts/11/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27584",
+            "source_path": "/text_style/vertical_alignment",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/1/facts/12/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/text_style/text_auto_resize",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/8/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/text_style/vertical_alignment",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/9/value/value",
+            "transform": "lowercase"
+          }
         ]
       },
       "provenance": {
@@ -11848,6 +14772,13 @@
           "kind": "interaction",
           "severity": "critical",
           "statement": "Ссылка «Помощь» находится внутри одного help-text: базовый цвет #757678, встроенная ссылка #00991F с underline; URL поступает из данных письма."
+        },
+        {
+          "id": "phone-link",
+          "scope": "all",
+          "kind": "interaction",
+          "severity": "critical",
+          "statement": "Номер +7 (495) 122-20-88 — HTML-ссылка tel:+74951222088 в обеих версиях; href не придумывать и не заменять URL сайта."
         }
       ]
     },

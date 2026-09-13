@@ -82,7 +82,7 @@ function renderCell(props, children) {
 }
 
 function renderText(props, children) {
-  const body = `${props.text === undefined ? "" : escapeHtml(props.text)}${children}`;
+  const body = `${props.text === undefined ? "" : escapeHtml(props.text).replaceAll("\u2028", "<br>").replaceAll("\n", "<br>")}${children}`;
   return `<p${withStyle([], { margin: "0", ...(props.style ?? {}) })}>${body}</p>`;
 }
 

@@ -87,11 +87,26 @@ function valueWithUnit(value) {
   return undefined;
 }
 
-function propsFromFacts(facts = []) {
+function propsFromFacts(facts = [], { viewport, mode, isRoot = false } = {}) {
   const props = { style: {} };
-  for (const fact of facts) {
-    const id = fact.id;
-    const value = fact.value;
+  const fact = (id) => facts.find((item) => item.id === id)?.value;
+  const size = fact("reference-size");
+  const sizing = fact("horizontal-sizing")?.value;
+  if (size?.type === "dimensions") {
+    if (["direct-image", "background-image"].includes(mode)) {
+      props.width = size.width;
+      props.height = size.height;
+      if (sizing === "fill" && mode === "direct-image") {
+        props.fluid = true;
+        delete props.height;
+      }
+    } else if (isRoot && viewport === "desktop") {
+      props.width = size.width;
+    }
+  }
+  for (const item of facts) {
+    const id = item.id;
+    const value = item.value;
     if (value?.type === "dimensions" && id.endsWith("-dimensions")) {
       props.width = value.width;
       props.height = value.height;
@@ -107,10 +122,21 @@ function propsFromFacts(facts = []) {
     }
     const resolved = valueWithUnit(value);
     if (resolved === undefined) continue;
-    if (id.endsWith("-font-size") || id.endsWith("-text-size")) props.style["font-size"] = resolved;
-    else if (id.endsWith("-text-color")) props.style.color = resolved;
-    else if (id.endsWith("-background") || id === "background-fallback") props.style["background-color"] = resolved;
-    else if (id.endsWith("-border-radius")) props.style["border-radius"] = resolved;
+    if (id === "font-size" || id.endsWith("-font-size") || id.endsWith("-text-size")) props.style["font-size"] = resolved;
+    else if (id === "font-family") props.style["font-family"] = `${resolved},Arial,sans-serif`;
+    else if (id === "font-style") {
+      const weights = { Thin: 100, ExtraLight: 200, Light: 300, Regular: 400,
+        Medium: 500, SemiBold: 600, Bold: 700, ExtraBold: 800, Black: 900 };
+      if (weights[resolved]) props.style["font-weight"] = weights[resolved];
+    }
+    else if (id === "line-height") props.style["line-height"] = resolved;
+    else if (id === "letter-spacing") props.style["letter-spacing"] = value.value === 0 ? "0px" : resolved;
+    else if (id === "text-align") props.style["text-align"] = resolved;
+    else if (id === "text-decoration") props.style["text-decoration"] = resolved;
+    else if (id === "text-color" || id.endsWith("-text-color")) props.style.color = resolved;
+    else if (id === "background" || id.endsWith("-background") || id === "background-fallback") props.style["background-color"] = resolved;
+    else if (id === "border-radius" || id.endsWith("-border-radius")) props.style["border-radius"] = resolved;
+    else if (["padding-top", "padding-right", "padding-bottom", "padding-left"].includes(id)) props.style[id] = resolved;
     else if (id.endsWith("-padding-inline")) {
       props.style["padding-left"] = resolved;
       props.style["padding-right"] = resolved;
@@ -122,6 +148,38 @@ function propsFromFacts(facts = []) {
     else if (id.endsWith("-height")) props.height = value.value;
   }
   return props;
+}
+
+function escapeInline(value) {
+  return String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
+}
+
+function richTextFromFacts(element, entry, style) {
+  const fact = element.facts?.find(({ id }) => id === "styled-text-segments");
+  if (!fact) return null;
+  const segments = fact.value?.items ?? [];
+  const supplied = slotValue(entry, "text");
+  const source = element.facts?.find(({ id }) => id === "source-text")?.value?.value;
+  if (!Array.isArray(supplied) && supplied !== source) {
+    return { html: "", error: "Rich text requires source text or one text run per styled segment." };
+  }
+  const runs = Array.isArray(supplied) ? supplied : segments.map(({ characters }) => characters);
+  if (runs.length !== segments.length || runs.some((run) => typeof run !== "string")) {
+    return { html: "", error: "Rich text run count does not match the exact Figma segments." };
+  }
+  const body = segments.map((segment, index) => {
+    const color = segment.fills?.find(({ type, visible }) => type === "solid" && visible !== false)?.color;
+    const decoration = segment.text_decoration === "UNDERLINE" ? "underline" : "none";
+    const text = escapeInline(runs[index]).replaceAll("\u2028", "<br>").replaceAll("\n", "<br>");
+    const inlineStyle = `color:${color};text-decoration:${decoration}`;
+    if (decoration !== "underline") return `<span style="${inlineStyle}">${text}</span>`;
+    const href = slotValue(entry, "help-url") ?? slotValue(entry, `link-${index + 1}-url`);
+    if (!href) return null;
+    return `<a href="${escapeInline(href)}" style="${inlineStyle}">${text}</a>`;
+  });
+  if (body.some((run) => run === null)) return { html: "", error: "Underlined link segment has no URL." };
+  return { html: renderPrimitive("text", { style }, body.join("")), error: null };
 }
 
 function contentFor(context, viewport, element) {
@@ -162,14 +220,14 @@ function renderShell(element, viewport, path, childHtml, context) {
 
   const { entry, diagnostics } = contentFor({ ...context, path }, viewport, element);
   if (diagnostics.length > 0) return { html: "", diagnostics };
-  const factProps = propsFromFacts(element.facts);
+  const factProps = propsFromFacts(element.facts, { viewport, mode: element.render_mode, isRoot: path === "root" });
   const children = childHtml.filter(Boolean);
   const joined = children.join("");
 
   switch (element.render_mode) {
     case "presentation-table": {
-      const axes = (element.facts ?? []).filter(({ id }) => id.endsWith("-layout-axis"));
-      const gaps = (element.facts ?? []).filter(({ id }) => id.endsWith("-layout-gap"));
+      const axes = (element.facts ?? []).filter(({ id }) => id === "layout-axis" || id.endsWith("-layout-axis"));
+      const gaps = (element.facts ?? []).filter(({ id }) => id === "layout-gap" || id.endsWith("-layout-gap"));
       // Components without an explicit layout contract retain their legacy HTML.
       if (axes.length === 0 && gaps.length === 0) {
         const rows = childHtml
@@ -204,7 +262,7 @@ function renderShell(element, viewport, path, childHtml, context) {
         .filter(({ html }) => Boolean(html));
       const cellFor = ({ html, node }) => node?.render_mode === "background-image"
         ? html
-        : renderPrimitive("cell", { width: propsFromFacts(node?.facts).width }, html);
+        : renderPrimitive("cell", { width: propsFromFacts(node?.facts, { viewport, mode: node?.render_mode }).width, valign: element.facts?.some(({ id, value }) => id === "counter-alignment" && value.value === "center") ? "middle" : "top" }, html);
       const rows = axis === "horizontal"
         ? `<tr>${visible.map(cellFor).join(gap > 0
           ? renderPrimitive("cell", { width: gap, style: { "font-size": "0", "line-height": "0" } }, "&nbsp;")
@@ -212,16 +270,26 @@ function renderShell(element, viewport, path, childHtml, context) {
         : visible.map((entry, index) => `${index > 0 && gap > 0
           ? `<tr>${renderPrimitive("cell", { height: gap, style: { "font-size": "0", "line-height": "0" } }, "&nbsp;")}</tr>`
           : ""}<tr>${cellFor(entry)}</tr>`).join("");
-      const padding = factProps.style.padding;
-      if (!padding) return { html: renderPrimitive("table", factProps, rows), diagnostics: [] };
+      const padding = Object.fromEntries(
+        Object.entries(factProps.style).filter(([key]) => key === "padding" || key.startsWith("padding-")),
+      );
+      if (Object.keys(padding).length === 0) {
+        return { html: renderPrimitive("table", factProps, rows), diagnostics: [] };
+      }
       const style = { ...factProps.style };
-      delete style.padding;
+      for (const key of Object.keys(padding)) delete style[key];
       const inner = renderPrimitive("table", { width: "100%" }, rows);
       const outer = renderPrimitive("table", { ...factProps, style },
-        `<tr>${renderPrimitive("cell", { style: { padding } }, inner)}</tr>`);
+        `<tr>${renderPrimitive("cell", { style: padding }, inner)}</tr>`);
       return { html: outer, diagnostics: [] };
     }
-    case "html-text":
+    case "html-text": {
+      const rich = richTextFromFacts(element, entry, factProps.style);
+      if (rich) {
+        return rich.error
+          ? { html: "", diagnostics: [diagnostic("RENDER_RICH_TEXT_INVALID", `/contracts/${viewport}/${path}`, rich.error)] }
+          : { html: rich.html, diagnostics: [] };
+      }
       return {
         html: renderPrimitive("text", {
           text: slotValue(entry, "text"),
@@ -229,6 +297,7 @@ function renderShell(element, viewport, path, childHtml, context) {
         }),
         diagnostics: [],
       };
+    }
     case "html-link":
       return {
         html: renderPrimitive(

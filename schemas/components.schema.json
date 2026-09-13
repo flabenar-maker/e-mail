@@ -1075,6 +1075,22 @@
                       "pattern": "^#[0-9A-F]{6}$"
                     }
                   }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "type",
+                    "items"
+                  ],
+                  "properties": {
+                    "type": {
+                      "const": "segments"
+                    },
+                    "items": {
+                      "$ref": "#/$defs/figmaSourceNode/properties/styled_text_segments"
+                    }
+                  }
                 }
               ]
             },
