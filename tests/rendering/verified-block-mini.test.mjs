@@ -142,9 +142,16 @@ test("Figma-verified Details/Transfer Desktop retains 200px label and 288px righ
 
 test("Figma-verified Banner/App-Download mobile action is full-width with one centered anchor group", async () => {
   const component = await record("marketing", "banner-app-download");
-  const output = render(component, withHref(component));
+  const content = withHref(component);
+  for (const viewport of ["mobile", "desktop"]) {
+    for (const element of [component.contracts[viewport].root, ...component.contracts[viewport].root.children]) {
+      if (element.action?.href_slot) (content[viewport][element.id] ??= {})[element.action.href_slot] = "https://example.invalid/action";
+    }
+  }
+  const assets = Object.fromEntries((component.asset_contracts ?? []).map(({ id }) => [id, { src: svg }]));
+  const output = renderContractTree({ component, coverage: { component_id: component.id, mode: "interpreter" }, content, assets, foundations });
   assert.deepEqual(output.diagnostics, []);
   assert.match(output.html, /width="296"/u);
   assert.match(output.html, /text-align:center/u);
-  assert.equal((output.html.match(/<a href="https:\/\/example\.invalid\/action"/gu) ?? []).length, 2);
+  assert.equal((output.html.match(/<a href="https:\/\/example\.invalid\/action"/gu) ?? []).length, 8);
 });
