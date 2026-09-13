@@ -42,7 +42,7 @@ function sourceFacts(variant, issues) {
     for (const [key, value] of Object.entries(node)) {
       if (key === "node_id" || key === "children") continue;
       leafValues(value, `/${key}`, (source_path, actual) => {
-        result.set(`${variant.variant_node_id}|\u0000${node.node_id}|\u0000${source_path}`, {
+        result.set(`${variant.variant_node_id}|^@${node.node_id}|^@${source_path}`, {
           variant_node_id: variant.variant_node_id,
           node_id: node.node_id,
           source_path,
@@ -52,7 +52,7 @@ function sourceFacts(variant, issues) {
     }
     if (Array.isArray(node.children) && node.children.length > 0) {
       const source_path = "/children_order";
-      result.set(`${variant.variant_node_id}|\u0000${node.node_id}|\u0000${source_path}`, {
+      result.set(`${variant.variant_node_id}|^@${node.node_id}|^@${source_path}`, {
         variant_node_id: variant.variant_node_id,
         node_id: node.node_id,
         source_path,
@@ -110,6 +110,7 @@ export function auditFigmaContractFacts({ record, live, mappings = [] }) {
 
   const byViewport = new Map(VIEWPORTS.map((viewport) => [viewport, []]));
   const liveVariantIds = new Set();
+  const variantViewport = new Map();
   const source = new Map();
   for (const variant of live.variants) {
     if (!variant || typeof variant.variant_node_id !== "string" || liveVariantIds.has(variant.variant_node_id)) {
@@ -119,6 +120,7 @@ export function auditFigmaContractFacts({ record, live, mappings = [] }) {
     liveVariantIds.add(variant.variant_node_id);
     const viewportAxis = variant.axes?.find((axis) => axis.name === "Viewport");
     const viewport = viewportAxis?.value?.toLowerCase();
+    variantViewport.set(variant.variant_node_id, viewport);
     if (!byViewport.has(viewport)) {
       issues.push(issue("FIGMA_VIEWPORT_UNKNOWN", { variant_node_id: variant.variant_node_id }));
     } else {
@@ -150,8 +152,8 @@ export function auditFigmaContractFacts({ record, live, mappings = [] }) {
   const seenMappings = new Set();
   for (const mapping of mappings) {
     const { variant_node_id, node_id, source_path, contract_path, transform = "identity" } = mapping ?? {};
-    const key = `${variant_node_id}|\u0000${node_id}|\u0000${source_path}`;
-    const mapKey = `${key}|\u0000${contract_path}`;
+    const key = `${variant_node_id}|^@${node_id}|^@${source_path}`;
+    const mapKey = `${key}|^@${contract_path}`;
     if (seenMappings.has(mapKey)) {
       issues.push(issue("FIGMA_MAPPING_DUPLICATE", { variant_node_id, node_id, source_path, contract_path }));
       continue;
@@ -159,6 +161,11 @@ export function auditFigmaContractFacts({ record, live, mappings = [] }) {
     seenMappings.add(mapKey);
     if (!TARGET_PREFIX.test(contract_path ?? "")) {
       issues.push(issue("CONTRACT_TARGET_INVALID", { variant_node_id, node_id, source_path, contract_path }));
+      continue;
+    }
+    const targetViewport = contract_path.match(/^\\/contracts\\/(mobile|desktop)\\//u)?.[1];
+    if (targetViewport && targetViewport !== variantViewport.get(variant_node_id)) {
+      issues.push(issue("CONTRACT_VIEWPORT_MISMATCH", { variant_node_id, node_id, source_path, contract_path }));
       continue;
     }
     const sourceFact = source.get(key);
