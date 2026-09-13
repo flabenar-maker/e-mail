@@ -520,7 +520,7 @@ function breakpointCss(rules, foundations, diagnostics) {
 }
 
 
-function selectVariant(component, viewport, variantAxes) {
+export function selectVariantRoot(component, viewport, variantAxes = {}) {
   const base = component?.contracts?.[viewport]?.root;
   const extras = component?.contracts?.variant_contracts ?? [];
   if (Object.keys(variantAxes).length === 0 || extras.length === 0) return { root: base, diagnostics: [] };
@@ -534,7 +534,7 @@ function selectVariant(component, viewport, variantAxes) {
   const expected = Object.entries(variantAxes).sort(([a], [b]) => a.localeCompare(b));
   const selected = candidates.find(({ axes }) =>
     axes.some(({ name, value }) => name === "Viewport" && value.toLowerCase() === viewport) &&
-    expected.every(([name, value]) => axes.some((axis) => axis.name === name && axis.value === value)) &&
+    expected.every(([name, value]) => axes.some((axis) => axis.name === name && axis.value.toLowerCase() === String(value).toLowerCase())) &&
     axes.filter(({ name }) => name !== "Viewport").length === expected.length);
   return selected
     ? { root: selected.root, diagnostics: [] }
@@ -565,8 +565,8 @@ export function renderContractTree({
       ],
     };
   }
-  const selectedMobile = selectVariant(component, "mobile", variantAxes);
-  const selectedDesktop = selectVariant(component, "desktop", variantAxes);
+  const selectedMobile = selectVariantRoot(component, "mobile", variantAxes);
+  const selectedDesktop = selectVariantRoot(component, "desktop", variantAxes);
   const mobile = selectedMobile.root;
   const desktop = selectedDesktop.root;
   if (selectedMobile.diagnostics.length || selectedDesktop.diagnostics.length) {
