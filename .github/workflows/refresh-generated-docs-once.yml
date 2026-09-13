@@ -1,0 +1,50 @@
+name: Refresh generated docs once
+
+on:
+  push:
+    branches:
+      - codex/figma-fact-gate
+    paths:
+      - .github/workflows/refresh-generated-docs-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: codex/figma-fact-gate
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - run: npm ci --ignore-scripts
+      - run: npm run generate
+      - name: Commit only generated registries
+        shell: bash
+        run: |
+          set -euo pipefail
+          allowed=(
+            docs/generated/asset-registry.md
+            docs/generated/component-registry.md
+            docs/generated/typography-registry.md
+          )
+          mapfile -t changed < <(git status --porcelain | awk '{print $2}')
+          for path in "${changed[@]}"; do
+            case "$path" in
+              docs/generated/asset-registry.md|docs/generated/component-registry.md|docs/generated/typography-registry.md) ;;
+              *) echo "Unexpected workspace change: $path" >&2; exit 1 ;;
+            esac
+          done
+          if (("${#changed[@]}" == 0)); then
+            echo "Generated docs already current."
+            exit 0
+          fi
+          git add -- "${allowed[@]}"
+          git diff --cached --quiet && { echo "No staged generated-doc changes."; exit 0; }
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: refresh generated registries"
+          git push origin HEAD:codex/figma-fact-gate
