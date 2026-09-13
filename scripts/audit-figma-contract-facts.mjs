@@ -9,21 +9,20 @@ import {
 import { auditFigmaContractFacts } from "./lib/figma-contract-facts.mjs";
 
 function parseArguments(args) {
-  if (args.length !== 8) return null;
+  if (args.length !== 6) return null;
   const values = new Map();
   for (let index = 0; index < args.length; index += 2) {
     const name = args[index];
     const value = args[index + 1];
-    if (!["--repo-root", "--component-id", "--live", "--mappings"].includes(name) ||
+    if (!["--repo-root", "--component-id", "--live"].includes(name) ||
         typeof value !== "string" || !value || values.has(name)) return null;
     values.set(name, value);
   }
-  if (values.size !== 4) return null;
+  if (values.size !== 3) return null;
   return {
     repoRoot: resolve(values.get("--repo-root")),
     componentId: values.get("--component-id"),
     livePath: resolve(values.get("--live")),
-    mappingsPath: resolve(values.get("--mappings")),
   };
 }
 
@@ -32,15 +31,14 @@ export async function main(args = process.argv.slice(2)) {
   if (!parsed) {
     console.error(JSON.stringify({
       ok: false,
-      issues: [{ code: "LIVE_FIGMA_REQUIRED", message: "Usage: node scripts/audit-figma-contract-facts.mjs --repo-root <path> --component-id <id> --live <fresh-Figma-MCP-packet.json> --mappings <fact-mappings.json>" }],
+      issues: [{ code: "LIVE_FIGMA_REQUIRED", message: "Usage: node scripts/audit-figma-contract-facts.mjs --repo-root <path> --component-id <id> --live <fresh-Figma-MCP-packet.json>" }],
     }));
     return 1;
   }
   try {
-    const [registries, live, mappings] = await Promise.all([
+    const [registries, live] = await Promise.all([
       loadComponentRegistries({ repoRoot: parsed.repoRoot }),
       readFile(parsed.livePath, "utf8").then(JSON.parse),
-      readFile(parsed.mappingsPath, "utf8").then(JSON.parse),
     ]);
     const entry = listComponentRecords(registries).find(({ record }) => record.id === parsed.componentId);
     if (!entry) {
@@ -50,17 +48,9 @@ export async function main(args = process.argv.slice(2)) {
       }));
       return 1;
     }
-    if (!Array.isArray(mappings)) {
-      console.error(JSON.stringify({
-        ok: false,
-        issues: [{ code: "FIGMA_MAPPINGS_INVALID", component_id: parsed.componentId }],
-      }));
-      return 1;
-    }
     const report = auditFigmaContractFacts({
       record: entry.record,
       live,
-      mappings,
     });
     console.log(JSON.stringify(report, null, 2));
     return report.ok ? 0 : 1;
