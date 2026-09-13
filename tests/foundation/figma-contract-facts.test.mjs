@@ -240,3 +240,16 @@ test("a provenance node different from the mapped Figma layer does not certify a
   assert.ok(report.issues.some((issue) => issue.code === "CONTRACT_FACT_NOT_FIGMA_VERIFIED" &&
     issue.contract_path === "/contracts/mobile/root/children/0/facts/0/value/value"));
 });
+
+
+test("mapped text, font size and color must match the live Figma values exactly", () => {
+  const { record, packet, mappings } = fixture();
+  const heading = packet.variants[0].source_node.children[0];
+  heading.characters = "Помощь!";
+  heading.text_style.font_size_px = 15;
+  heading.fills[0].color = "#48494B";
+  const report = auditFigmaContractFacts({ record, live: packet, mappings });
+  for (const path of ["/characters", "/text_style/font_size_px", "/fills/0/color"]) {
+    assert.ok(report.issues.some((issue) => issue.code === "FIGMA_CONTRACT_MISMATCH" && issue.source_path === path), path);
+  }
+});
