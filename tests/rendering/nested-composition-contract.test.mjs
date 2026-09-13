@@ -67,3 +67,27 @@ test("unknown nested component reference returns a diagnostic instead of blank s
   assert.equal(result.html, "");
   assert.deepEqual(result.diagnostics.map(({ code }) => code), ["RENDER_COMPONENT_UNKNOWN", "RENDER_COMPONENT_UNKNOWN"]);
 });
+test("nested-component block reference resolves its Card/Image instance rather than a blank base tree", () => {
+  const block = record("block-cards-images", root("block-root", [{
+    id: "featured-card", semantic_role: "card", render_mode: "nested-component", visibility: { mode: "always" }, facts: [], children: [], component_id: "card-image",
+  }]));
+  const base = root("card-base", [text("title"), image("hero")]);
+  const card = record("card-image", base, structuredClone(base), [
+    { variant_node_id: "2:1", axes: [{ name: "Viewport", value: "Mobile" }, { name: "Style", value: "Image" }, { name: "State", value: "Default" }], root: root("card-mobile-image", [text("mobile-title"), image("mobile-hero")]) },
+    { variant_node_id: "2:2", axes: [{ name: "Viewport", value: "Desktop" }, { name: "Style", value: "Image" }, { name: "State", value: "Default" }], root: root("card-desktop-image", [text("desktop-title"), image("desktop-hero")]) },
+  ]);
+  const child = instance("featured", "card-image", {
+    variant_axes: { mobile: { Style: "Image", State: "Default" }, desktop: { Style: "Image", State: "Default" } },
+    content_values: [
+      { element_id: "mobile-title", slot_id: "text", scope: "mobile", value: { type: "plain-text", value: "Nested mobile" } },
+      { element_id: "desktop-title", slot_id: "text", scope: "desktop", value: { type: "plain-text", value: "Nested desktop" } },
+      { element_id: "mobile-hero", slot_id: "alt", scope: "mobile", value: { type: "alt-text", value: "Nested image" } },
+      { element_id: "desktop-hero", slot_id: "alt", scope: "desktop", value: { type: "alt-text", value: "Nested image" } },
+    ], asset_files: [{ asset_contract_id: "image", path: "nested.png" }],
+  });
+  const result = renderComponent({ componentId: "block-cards-images", viewportData: instance("block", "block-cards-images", { nested_components: [{ element_id: "featured-card", instance: child }] }), ...deps([block, card]) });
+  assert.deepEqual(result.diagnostics, []);
+  assert.match(result.html, />Nested mobile</u);
+  assert.match(result.html, />Nested desktop</u);
+  assert.match(result.html, /src="nested\.png"/u);
+});
