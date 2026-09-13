@@ -207,6 +207,10 @@ function renderComponentRegistry(model) {
       lines.push(
         "- No standalone output contract: `figma-source-only` component used inside a parent rendered asset.",
       );
+    } else if (record.figma.verification) {
+      lines.push(
+        "- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.",
+      );
     } else {
       lines.push(
         "- Standalone output is defined by the Mobile and Desktop contracts above.",

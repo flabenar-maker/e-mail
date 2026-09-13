@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: asset-registry -->
-<!-- source-digest: sha256:fe762e6baff69c4ddbbaaa4c3026d5c779c557c6ca79acde7e5177e76065d5f6 -->
+<!-- source-digest: sha256:a2ab1fd4c606bdb76bdff46f31f27d197231850c9e89ba0b1717ab41308927a2 -->
 <!-- schema-versions: components=2.1.0, assets=1.0.0 -->
 # CUPIS asset registry
 
@@ -592,6 +592,14 @@ General export definitions are listed first. Component-specific choices remain o
 
 ### email-footer
 
+- `email-footer` → `telegram-icon @4x` → `rendered-node` → `direct-image` → `png-4x` → `transparent`
+  - Asset contract ID: `telegram-icon`
+  - Export boundary: `node` / `telegram-icon @4x`
+  - Pixel dimensions: 168×168px
+  - Aspect ratio: 42:42
+  - Crop: `none`; position `exact-node-after-overrides`
+  - Background: own visible boundary fill `preserve`; artificial matte `forbid`
+  - Clipping policy: `preserve-artwork`
 - `email-footer` → `vk-icon @4x` → `rendered-node` → `direct-image` → `png-4x` → `transparent`
   - Asset contract ID: `vk-icon`
   - Export boundary: `node` / `vk-icon @4x`

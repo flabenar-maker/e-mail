@@ -55,8 +55,8 @@ test("preserves the measured legacy baseline outside the approved pilot delta", 
   ]) {
     assert.equal(report.summary[key], baseline[key], key);
   }
-  // The three approved pilot layouts add 21 explicit axis, gap and width facts.
-  assert.equal(report.summary.facts, baseline.renderer_ready_pilot.facts + 21);
+  // Three approved pilot layouts add 21 facts; Button/Primary adds two exact CSS angles.
+  assert.equal(report.summary.facts, baseline.renderer_ready_pilot.facts + 23);
   assert.equal(
     report.summary.generic_description_facts,
     baseline.renderer_ready_pilot.generic_description_facts,

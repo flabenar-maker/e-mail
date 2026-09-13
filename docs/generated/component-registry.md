@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: component-registry -->
-<!-- source-digest: sha256:0bd70aafe5f52d65f397aa2c40bfe06a1ce57eafe0886b8e1311d208cd91ba82 -->
+<!-- source-digest: sha256:7869b5377a4f65a6ddb3f8af59a0dace6c4d3ae4c4d4ac7ef68e91fa2b2a50ab -->
 <!-- schema-versions: components=2.1.0, typography=1.0.0, spacing=1.0.0, assets=1.0.0 -->
 # CUPIS component registry
 
@@ -864,6 +864,7 @@ RENDER: ASSET
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#911:3992` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:4ea96e98980233ade86e540914b44ef5069f6895c8061619545b6237c18aa854`
 - Purpose: Составной растровый ассет карточки, включающий изображение и графические наложения.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Asset/Card-Image @2x` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -873,6 +874,7 @@ RENDER: ASSET
 - Render type: `ASSET`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -894,6 +896,8 @@ RENDER: ASSET
 
 - Variant `numbered` — Figma node `911:3991`; axes: `Style=Numbered`
 - Variant `plain` — Figma node `911:3990`; axes: `Style=Plain`
+- Direct Figma source: `911:3991`; `Style=Numbered`; reference frame 232×148px
+- Direct Figma source: `911:3990`; `Style=Plain`; reference frame 232×148px
 
 ### Assets and interaction
 
@@ -907,6 +911,7 @@ RENDER: ASSET
   - Clipping: `neutralize-presentation-only`
   - Export boundary: `node` `Asset/Card-Image @2x`
   - Pixel dimensions: 464×296px
+  - Raw Figma Fill dimensions: 888×480px
   - Aspect ratio: 232:148
   - Crop: `none`; position `exact-node-after-overrides`
   - Background: own fill `preserve`; artificial matte `forbid`
@@ -915,7 +920,7 @@ RENDER: ASSET
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -940,6 +945,7 @@ RENDER: ASSET
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#946:25769` (`component`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:422aaa33e22aab19999c7a1292d8a8a1d2ada2a1711a43fe13acdc2aeabd37bd`
 - Purpose: Составной прозрачный графический ассет функциональной иконки.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Asset/Feature-Icon @4x` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -949,6 +955,7 @@ RENDER: ASSET
 - Render type: `ASSET`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -981,7 +988,7 @@ RENDER: ASSET
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -1006,6 +1013,7 @@ RENDER: ASSET
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#18:2948` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:53d9db07d895b91700fb17155a254cdadf7aa9a0d02e9cf572db422f2df93647`
 - Purpose: Живой HTML-бейдж с номером шага для пошаговых блоков.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Badge/Step-Number` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -1015,6 +1023,7 @@ RENDER: ASSET
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -1036,10 +1045,14 @@ RENDER: ASSET
 - Variant `mobile-accent` — Figma node `18:2947`; axes: `Viewport=Mobile`, `Style=Accent`
 - Variant `desktop-accent` — Figma node `230:3849`; axes: `Viewport=Desktop`, `Style=Accent`
 - Variant `desktop-neutral` — Figma node `230:3850`; axes: `Viewport=Desktop`, `Style=Neutral`
+- Direct Figma source: `18:2942`; `Viewport=Mobile, Style=Neutral`; reference frame 56×20px
+- Direct Figma source: `18:2947`; `Viewport=Mobile, Style=Accent`; reference frame 56×20px
+- Direct Figma source: `230:3849`; `Viewport=Desktop, Style=Accent`; reference frame 62×22px
+- Direct Figma source: `230:3850`; `Viewport=Desktop, Style=Neutral`; reference frame 62×22px
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -1064,6 +1077,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#337:6569` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно из Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:aeb50018c4411ea2752ab4c99aab86f095b51454b33a38ff659b58d65637b978`
 - Purpose: Промоблок приложения с логотипом, живым текстом и кнопками магазинов.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Banner/App-Download` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -1073,6 +1087,7 @@ RENDER: HTML
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -1187,6 +1202,8 @@ RENDER: HTML
 
 - Variant `mobile` — Figma node `15:2586`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `260:1494`; axes: `Viewport=Desktop`
+- Direct Figma source: `15:2586`; `Viewport=Mobile`; reference frame 328×378px
+- Direct Figma source: `260:1494`; `Viewport=Desktop`; reference frame 600×298px
 
 ### Assets and interaction
 
@@ -1290,7 +1307,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -1315,6 +1332,7 @@ RENDER: HYBRID
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#337:4460` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:adf95c6eaaf49c1b030ebe1a2a6cb3d3f043443b9ee158b40268bc1257182e48`
 - Purpose: Главный промобаннер с изображением, живым текстом и необязательным основным CTA.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Banner/Hero` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -1324,6 +1342,7 @@ RENDER: HYBRID
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -1360,6 +1379,8 @@ RENDER: HYBRID
 
 - Variant `mobile` — Figma node `337:4359`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `230:3680`; axes: `Viewport=Desktop`
+- Direct Figma source: `337:4359`; `Viewport=Mobile`; reference frame 328×410px
+- Direct Figma source: `230:3680`; `Viewport=Desktop`; reference frame 600×636px
 - Property `show-body` (`Show Body`) — `boolean`; default `true`
 - Property `show-button` (`Show Button`) — `boolean`; default `true`
 
@@ -1375,6 +1396,7 @@ RENDER: HYBRID
   - Clipping: `preserve-artwork`
   - Export boundary: `fill` `hero-image @2x`
   - Pixel dimensions: 1104×706px
+  - Raw Figma Fill dimensions: 984×696px
   - Aspect ratio: 552:353
   - Crop: `figma-fill`; position `concrete-desktop-instance`
   - Background: own fill `preserve`; artificial matte `forbid`
@@ -1388,7 +1410,7 @@ RENDER: HYBRID
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -1413,6 +1435,7 @@ RENDER: HYBRID
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#337:5040` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:6b60ab0bafd0817f0afb5223b652c20100f23a0eb388d4a2ffcf2f74a03a1248`
 - Purpose: Компактный информационный баннер с живым текстом и ссылкой.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Banner/Inline` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -1422,6 +1445,7 @@ RENDER: HYBRID
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -1452,6 +1476,8 @@ RENDER: HYBRID
 
 - Variant `mobile` — Figma node `13:353`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `260:591`; axes: `Viewport=Desktop`
+- Direct Figma source: `13:353`; `Viewport=Mobile`; reference frame 328×108px
+- Direct Figma source: `260:591`; `Viewport=Desktop`; reference frame 600×122px
 
 ### Assets and interaction
 
@@ -1488,7 +1514,7 @@ RENDER: HYBRID
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -1513,6 +1539,7 @@ RENDER: HYBRID
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#337:4870` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:48d9b7a570ffefeeeac38e01469297b1d356d364e5b36b06a713a2a47f4edbed`
 - Purpose: Вторичный промобаннер с текстовой и визуальной областями.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Banner/Secondary` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -1522,6 +1549,7 @@ RENDER: HYBRID
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -1572,6 +1600,8 @@ RENDER: HYBRID
 
 - Variant `mobile` — Figma node `11:1218`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `337:4844`; axes: `Viewport=Desktop`
+- Direct Figma source: `11:1218`; `Viewport=Mobile`; reference frame 328×400px
+- Direct Figma source: `337:4844`; `Viewport=Desktop`; reference frame 600×262px
 - Property `show-body` (`Show Body`) — `boolean`; default `true`
 - Property `show-button` (`Show Button`) — `boolean`; default `true`
 
@@ -1587,6 +1617,7 @@ RENDER: HYBRID
   - Clipping: `preserve-artwork`
   - Export boundary: `fill` `secondary-image @2x`
   - Pixel dimensions: 592×376px
+  - Raw Figma Fill dimensions: 984×696px
   - Aspect ratio: 296:188
   - Crop: `figma-fill`; position `concrete-desktop-instance`
   - Background: own fill `preserve`; artificial matte `forbid`
@@ -1600,7 +1631,7 @@ RENDER: HYBRID
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -1625,6 +1656,7 @@ RENDER: HYBRID
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#337:4898` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:bf0c0c00cf94fdfb6a41a869fe60701489dafb252f2cd01515ef5e5b5aa39635`
 - Purpose: Контентный блок с заголовком, маркированным списком и необязательной подписью.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Block/Bullet-List` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -1634,6 +1666,7 @@ RENDER: HYBRID
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -1666,6 +1699,8 @@ RENDER: HYBRID
 
 - Variant `mobile` — Figma node `222:786`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `234:607`; axes: `Viewport=Desktop`
+- Direct Figma source: `222:786`; `Viewport=Mobile`; reference frame 328×645px
+- Direct Figma source: `234:607`; `Viewport=Desktop`; reference frame 600×761px
 - Property `show-alert` (`Show Alert`) — `boolean`; default `true`
 - Property `show-button` (`Show Button`) — `boolean`; default `true`
 - Property `show-caption` (`Show Caption`) — `boolean`; default `true`
@@ -1681,7 +1716,7 @@ RENDER: HYBRID
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -1706,6 +1741,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#326:5806` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно из Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:1e99c3cea4bfd175c368c3a843dc694a1c945a2c9848af1666811119e49da1bc`
 - Purpose: Контентный блок с заголовком, вертикальным списком карточек с изображениями и необязательной подписью.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Block/Cards-Images` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -1715,6 +1751,7 @@ RENDER: HTML
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -1745,6 +1782,8 @@ RENDER: HTML
 
 - Variant `desktop` — Figma node `398:7570`; axes: `Viewport=Desktop`
 - Variant `mobile` — Figma node `398:7598`; axes: `Viewport=Mobile`
+- Direct Figma source: `398:7570`; `Viewport=Desktop`; reference frame 600×1242px
+- Direct Figma source: `398:7598`; `Viewport=Mobile`; reference frame 328×2021px
 - Property `show-caption` (`Show Caption`) — `boolean`; default `true`
 
 ### Constraints and dependencies
@@ -1754,7 +1793,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -1779,6 +1818,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#337:4766` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:8df9797f5fe6579a653ed86f9d4e28a35dbf0be89861ae0f1bd683eb8ae86c19`
 - Purpose: Универсальный контентный блок с заголовком, текстом и управляемыми дополнительными элементами.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Block/Content` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -1788,6 +1828,7 @@ RENDER: HTML
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -1821,6 +1862,8 @@ RENDER: HTML
 
 - Variant `mobile` — Figma node `11:861`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `230:3770`; axes: `Viewport=Desktop`
+- Direct Figma source: `11:861`; `Viewport=Mobile`; reference frame 328×635px
+- Direct Figma source: `230:3770`; `Viewport=Desktop`; reference frame 600×667px
 - Property `show-button` (`Show Button`) — `boolean`; default `true`
 - Property `show-notification` (`Show Notification`) — `boolean`; default `true`
 - Property `show-alert` (`Show Alert`) — `boolean`; default `true`
@@ -1837,7 +1880,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -1862,6 +1905,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#326:6342` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно из Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:c63c3dc20a045beeaba79ba062390ade2ee8608a623dc74a12efde6266651e92`
 - Purpose: Контентный блок с заголовком, вертикальным списком карточек с иконками и необязательной подписью.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Block/Icon-Cards` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -1871,6 +1915,7 @@ RENDER: HTML
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -1901,6 +1946,8 @@ RENDER: HTML
 
 - Variant `desktop` — Figma node `398:7759`; axes: `Viewport=Desktop`
 - Variant `mobile` — Figma node `398:7953`; axes: `Viewport=Mobile`
+- Direct Figma source: `398:7759`; `Viewport=Desktop`; reference frame 600×1182px
+- Direct Figma source: `398:7953`; `Viewport=Mobile`; reference frame 328×1367px
 - Property `show-caption` (`Show Caption`) — `boolean`; default `true`
 
 ### Constraints and dependencies
@@ -1910,7 +1957,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -1935,6 +1982,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#946:26516` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно из Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:758ae01e42519336077861f93e6c60cd8cfaec0784c8b97bc0d2017ea295f547`
 - Purpose: Контентный блок со списком строк, каждая из которых использует графическую иконку и живой текст.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Block/Icon-List` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -1944,6 +1992,7 @@ RENDER: HTML
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -1983,6 +2032,8 @@ RENDER: HTML
 
 - Variant `desktop` — Figma node `946:26515`; axes: `Viewport=Desktop`
 - Variant `mobile` — Figma node `946:26514`; axes: `Viewport=Mobile`
+- Direct Figma source: `946:26515`; `Viewport=Desktop`; reference frame 600×768px
+- Direct Figma source: `946:26514`; `Viewport=Mobile`; reference frame 328×593px
 - Property `show-button` (`Show Button`) — `boolean`; default `true`
 - Property `show-caption` (`Show Caption`) — `boolean`; default `true`
 
@@ -2011,7 +2062,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -2036,6 +2087,7 @@ RENDER: HYBRID
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#337:5041` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:43e70af5f806c9820271f1726193d14bd61010f1fbe7ca4240cb7efe7a662012`
 - Purpose: Контентный информационный блок с выделенным сообщением.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Block/Info-Alert` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -2045,6 +2097,7 @@ RENDER: HYBRID
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -2073,6 +2126,8 @@ RENDER: HYBRID
 
 - Variant `mobile` — Figma node `16:2738`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `260:571`; axes: `Viewport=Desktop`
+- Direct Figma source: `16:2738`; `Viewport=Mobile`; reference frame 328×88px
+- Direct Figma source: `260:571`; `Viewport=Desktop`; reference frame 600×98px
 
 ### Assets and interaction
 
@@ -2094,7 +2149,7 @@ RENDER: HYBRID
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -2119,6 +2174,7 @@ RENDER: HYBRID
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#337:4491` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:b3063c5e60fb157eb3997b2764a39b27662f58de1223efb1c46ec069dc3e18b4`
 - Purpose: Контентный блок с последовательностью шагов и управляемыми дополнительными секциями.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Block/Steps` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -2128,6 +2184,7 @@ RENDER: HYBRID
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -2165,6 +2222,8 @@ RENDER: HYBRID
 
 - Variant `mobile` — Figma node `12:1347`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `230:3832`; axes: `Viewport=Desktop`
+- Direct Figma source: `12:1347`; `Viewport=Mobile`; reference frame 328×920px
+- Direct Figma source: `230:3832`; `Viewport=Desktop`; reference frame 600×1037px
 - Property `show-alert` (`Show Alert`) — `boolean`; default `true`
 - Property `show-button` (`Show Button`) — `boolean`; default `true`
 - Property `show-caption` (`Show Caption`) — `boolean`; default `true`
@@ -2183,7 +2242,7 @@ RENDER: HYBRID
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -2208,6 +2267,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#337:4713` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры обоих вариантов записаны непосредственно из Figma; CSS-угол 25° отдельно утверждён для HTML и не выдаётся за угол Fill. HTML-проекция проверяется отдельно.
 - Structure fingerprint: `sha256:f72b837d30fd626373d960ba021ccc7d184765092d8a14d19052aa445533d4b3`
 - Purpose: Основная градиентная HTML-кнопка для главного действия письма.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Button/Primary` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -2217,6 +2277,7 @@ RENDER: HTML
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -2227,6 +2288,7 @@ RENDER: HTML
   - Fact `background-fallback`: `#18B037`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - Fact `background-gradient-start`: `#18B037`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - Fact `background-gradient-end`: `#3DD55C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `background-gradient-css-angle-degrees`: `25`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - Fact `background-replacement-forbidden`: `#00991F`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `link` — role `button-link`; render `html-link`; visibility `always`
     - Fact `button-text-size`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
@@ -2240,6 +2302,7 @@ RENDER: HTML
   - Fact `background-fallback`: `#18B037`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - Fact `background-gradient-start`: `#18B037`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - Fact `background-gradient-end`: `#3DD55C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `background-gradient-css-angle-degrees`: `25`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - Fact `background-replacement-forbidden`: `#00991F`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `link` — role `button-link`; render `html-link`; visibility `always`
     - Fact `button-text-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
@@ -2248,6 +2311,8 @@ RENDER: HTML
 
 - Variant `desktop` — Figma node `337:4694`; axes: `Viewport=Desktop`
 - Variant `mobile` — Figma node `337:4691`; axes: `Viewport=Mobile`
+- Direct Figma source: `337:4694`; `Viewport=Desktop`; reference frame 230×54px
+- Direct Figma source: `337:4691`; `Viewport=Mobile`; reference frame 158×44px
 
 ### Assets and interaction
 
@@ -2256,7 +2321,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -2281,6 +2346,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#337:4710` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно из Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:d2451da399ffb1e0a67a979bae64ad7442aac2617ee5ee95a2e94fe767283e81`
 - Purpose: Вторичная кликабельная HTML-кнопка для действий внутри письма.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Button/Secondary` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -2290,6 +2356,7 @@ RENDER: HTML
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -2311,6 +2378,8 @@ RENDER: HTML
 
 - Variant `mobile` — Figma node `337:4576`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `337:4699`; axes: `Viewport=Desktop`
+- Direct Figma source: `337:4576`; `Viewport=Mobile`; reference frame 158×44px
+- Direct Figma source: `337:4699`; `Viewport=Desktop`; reference frame 230×46px
 
 ### Assets and interaction
 
@@ -2319,7 +2388,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -2344,6 +2413,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#326:5580` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:a36c2a891344e693c283d021aca44c4eea77cc087823eec968327605d84f7a6c`
 - Purpose: Карточка с графической иконкой, живым текстом и необязательной ссылкой.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Card/Icon` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -2353,6 +2423,7 @@ RENDER: HTML
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -2384,6 +2455,8 @@ RENDER: HTML
 
 - Variant `mobile` — Figma node `11:1020`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `260:662`; axes: `Viewport=Desktop`
+- Direct Figma source: `11:1020`; `Viewport=Mobile`; reference frame 271×182px
+- Direct Figma source: `260:662`; `Viewport=Desktop`; reference frame 488×138px
 - Property `show-description` (`Show Description`) — `boolean`; default `true`
 - Property `show-link` (`Show Link`) — `boolean`; default `true`
 
@@ -2409,7 +2482,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -2434,6 +2507,7 @@ RENDER: HYBRID
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#911:4132` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:e45ebbe8c07207092e26b3712d88d65bbc5d7d560f4b8daee20e1f4dfc6a2ab6`
 - Purpose: Карточка с составным изображением, живым текстом и необязательной ссылкой.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Card/Image` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -2443,6 +2517,7 @@ RENDER: HYBRID
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -2488,6 +2563,8 @@ RENDER: HYBRID
 
 - Variant `desktop` — Figma node `911:4131`; axes: `Viewport=Desktop`
 - Variant `mobile` — Figma node `911:4130`; axes: `Viewport=Mobile`
+- Direct Figma source: `911:4131`; `Viewport=Desktop`; reference frame 488×148px
+- Direct Figma source: `911:4130`; `Viewport=Mobile`; reference frame 252×291px
 
 ### Assets and interaction
 
@@ -2501,6 +2578,7 @@ RENDER: HYBRID
   - Clipping: `neutralize-presentation-only`
   - Export boundary: `node` `card-image @2x`
   - Pixel dimensions: 464×296px
+  - Raw Figma Fill dimensions: 888×480px
   - Aspect ratio: 232:148
   - Crop: `none`; position `exact-node-after-overrides`
   - Background: own fill `preserve`; artificial matte `forbid`
@@ -2511,7 +2589,7 @@ RENDER: HYBRID
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -2536,6 +2614,7 @@ RENDER: HYBRID
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#333:7477` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:f08c19aedc8e2a9da2c0bf8a0a130e89f725143ac215b53bb5db4fe53842f536`
 - Purpose: Основной полноширинный футер с дисклеймером, отпиской и управляемой секцией социальных ссылок.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Email/Footer` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -2545,6 +2624,7 @@ RENDER: HYBRID
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -2567,6 +2647,8 @@ RENDER: HYBRID
     - `vk-link` — role `social-link`; render `html-link`; visibility `always`
       - `vk-icon` — role `social-icon`; render `direct-image`; visibility `always`; asset `vk-icon`
         - Fact `social-icon-display-dimensions`: `42×42px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - `telegram-link` — role `social-link`; render `html-link`; visibility `always`
+      - `telegram-icon` — role `social-icon`; render `direct-image`; visibility `always`; asset `telegram-icon`
 
 ### Mobile
 
@@ -2589,11 +2671,15 @@ RENDER: HYBRID
     - `vk-link` — role `social-link`; render `html-link`; visibility `always`
       - `vk-icon` — role `social-icon`; render `direct-image`; visibility `always`; asset `vk-icon`
         - Fact `social-icon-display-dimensions`: `32×32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - `telegram-link` — role `social-link`; render `html-link`; visibility `always`
+      - `telegram-icon` — role `social-icon`; render `direct-image`; visibility `always`; asset `telegram-icon`
 
 ### Properties and variants
 
 - Variant `mobile` — Figma node `17:2763`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `261:4020`; axes: `Viewport=Desktop`
+- Direct Figma source: `17:2763`; `Viewport=Mobile`; reference frame 328×249px
+- Direct Figma source: `261:4020`; `Viewport=Desktop`; reference frame 600×258px
 - Property `show-caption` (`Show Caption`) — `boolean`; default `false`
 - Property `show-social-links` (`Show Social Links`) — `boolean`; default `true`
 
@@ -2612,14 +2698,31 @@ RENDER: HYBRID
   - Aspect ratio: 42:42
   - Crop: `none`; position `exact-node-after-overrides`
   - Background: own fill `preserve`; artificial matte `forbid`
+- Asset contract: `telegram-icon`
+  - Owner layer: `telegram-icon @4x`
+  - Source viewport: `desktop`
+  - Source mode: `rendered-node`
+  - Display mode: `direct-image`
+  - Export profile: `png-4x` — PNG, `.png`, scale 4, suffix `@4x`, sRGB
+  - Alpha: `transparent` — `transparent-outside-visual`
+  - Clipping: `preserve-artwork`
+  - Export boundary: `node` `telegram-icon @4x`
+  - Pixel dimensions: 168×168px
+  - Aspect ratio: 42:42
+  - Crop: `none`; position `exact-node-after-overrides`
+  - Background: own fill `preserve`; artificial matte `forbid`
 - Link: `mobile` `/contracts/mobile/root/children/2/children/0`
 - Asset usage: `mobile` `/contracts/mobile/root/children/2/children/0/children/0` → `vk-icon` as `direct-image`
+- Link: `mobile` `/contracts/mobile/root/children/2/children/1`
+- Asset usage: `mobile` `/contracts/mobile/root/children/2/children/1/children/0` → `telegram-icon` as `direct-image`
 - Link: `desktop` `/contracts/desktop/root/children/2/children/0`
 - Asset usage: `desktop` `/contracts/desktop/root/children/2/children/0/children/0` → `vk-icon` as `direct-image`
+- Link: `desktop` `/contracts/desktop/root/children/2/children/1`
+- Asset usage: `desktop` `/contracts/desktop/root/children/2/children/1/children/0` → `telegram-icon` as `direct-image`
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -2644,6 +2747,7 @@ RENDER: HYBRID
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#499:2431` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:4d2316dd74a0fe278cb20d3278ac6d89a09ae087c9208792c4b01c9800a0b651`
 - Purpose: Юридический полноширинный футер письма.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Email/Footer-Legal` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -2653,6 +2757,7 @@ RENDER: HYBRID
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -2676,10 +2781,12 @@ RENDER: HYBRID
 
 - Variant `mobile` — Figma node `499:2430`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `499:2429`; axes: `Viewport=Desktop`
+- Direct Figma source: `499:2430`; `Viewport=Mobile`; reference frame 328×176px
+- Direct Figma source: `499:2429`; `Viewport=Desktop`; reference frame 600×180px
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -2704,6 +2811,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#326:5159` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:2f6357a800cc5fd2cedc0181ce7c28f1cf0ce3b131044b9754809b0e83936ff0`
 - Purpose: Полноширинный хедер письма с центрированным составным логотипом.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Email/Header` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -2713,6 +2821,7 @@ RENDER: HTML
 - Render type: `ASSET`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -2736,6 +2845,8 @@ RENDER: HTML
 
 - Variant `mobile` — Figma node `15:2037`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `230:3679`; axes: `Viewport=Desktop`
+- Direct Figma source: `15:2037`; `Viewport=Mobile`; reference frame 328×49px
+- Direct Figma source: `230:3679`; `Viewport=Desktop`; reference frame 600×74px
 
 ### Assets and interaction
 
@@ -2757,7 +2868,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -2782,6 +2893,7 @@ RENDER: ASSET
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#1024:19226` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:e94cc1564d7af39565a7707ef19f6fa71f8605016d888f8cb528072288a3c139`
 - Purpose: Вложенный предупреждающий элемент с живым текстом.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Item/Alert` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -2791,6 +2903,7 @@ RENDER: ASSET
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -2818,6 +2931,8 @@ RENDER: ASSET
 
 - Variant `mobile` — Figma node `1024:19224`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `1024:19225`; axes: `Viewport=Desktop`
+- Direct Figma source: `1024:19224`; `Viewport=Mobile`; reference frame 252×66px
+- Direct Figma source: `1024:19225`; `Viewport=Desktop`; reference frame 488×74px
 
 ### Assets and interaction
 
@@ -2839,7 +2954,7 @@ RENDER: ASSET
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -2864,6 +2979,7 @@ RENDER: HYBRID
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#337:4958` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно из Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:00506a80bff7fc52a80ed872823de640d3932e0045e416de034f2d38ab0c0899`
 - Purpose: Отдельный пункт маркированного списка с живым текстом.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Item/Bullet` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -2873,6 +2989,7 @@ RENDER: HYBRID
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -2900,6 +3017,8 @@ RENDER: HYBRID
 
 - Variant `mobile` — Figma node `222:702`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `234:580`; axes: `Viewport=Desktop`
+- Direct Figma source: `222:702`; `Viewport=Mobile`; reference frame 252×106px
+- Direct Figma source: `234:580`; `Viewport=Desktop`; reference frame 488×109px
 - Property `show-link` (`Show Link`) — `boolean`; default `true`
 
 ### Assets and interaction
@@ -2909,7 +3028,7 @@ RENDER: HYBRID
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -2934,6 +3053,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#1024:19285` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:46c60d5dc21992117cf67f770fea05d1b295bf932ee8763ab3a30f66044dd6e9`
 - Purpose: Вложенный информационный элемент с живым текстом.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Item/Notification` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -2943,6 +3063,7 @@ RENDER: HTML
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -2970,6 +3091,8 @@ RENDER: HTML
 
 - Variant `mobile` — Figma node `1024:19283`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `1024:19284`; axes: `Viewport=Desktop`
+- Direct Figma source: `1024:19283`; `Viewport=Mobile`; reference frame 252×100px
+- Direct Figma source: `1024:19284`; `Viewport=Desktop`; reference frame 488×96px
 
 ### Assets and interaction
 
@@ -2991,7 +3114,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -3016,6 +3139,7 @@ RENDER: HYBRID
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#337:5039` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:5cb7ff9481e6dc20d956a64dd93afc3d39fe966a952cfb51f4159905a9543c04`
 - Purpose: Отдельный пронумерованный шаг с живым текстом и необязательной подписью.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Item/Step` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -3025,6 +3149,7 @@ RENDER: HYBRID
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -3048,6 +3173,8 @@ RENDER: HYBRID
 
 - Variant `mobile` — Figma node `18:2939`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `230:3839`; axes: `Viewport=Desktop`
+- Direct Figma source: `18:2939`; `Viewport=Mobile`; reference frame 252×89px
+- Direct Figma source: `230:3839`; `Viewport=Desktop`; reference frame 488×87px
 - Property `show-caption` (`Show Caption`) — `boolean`; default `true`
 
 ### Constraints and dependencies
@@ -3057,7 +3184,7 @@ RENDER: HYBRID
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -3082,6 +3209,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#1084:16995` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:359fbab0689fef703cd244bffd17d3623916ac46e053fe0c45091fa03a1a4234`
 - Purpose: Адаптивная группа кликабельных вариантов оценки NPS.
 - Baseline: `registry/email-component-descriptions-registry.md` → `NPS/Options` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -3091,6 +3219,7 @@ RENDER: HTML
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -3099,7 +3228,7 @@ RENDER: HTML
   - `options` — role `options`; render `presentation-table`; visibility `always`
     - `happy-face-link` — role `rating-link`; render `html-link`; visibility `always`
       - `happy-face-icon` — role `rating-icon`; render `direct-image`; visibility `always`; asset `happy-face-icon`
-    - `neutral-face-link` — role `rating-link`; render `html-link`; visibility `always`
+    - `neutral-face-link` — role `rating-link`; render `html-link`; visibility variant `Count=3`
       - `neutral-face-icon` — role `rating-icon`; render `direct-image`; visibility `always`; asset `neutral-face-icon`
     - `sad-face-link` — role `rating-link`; render `html-link`; visibility `always`
       - `sad-face-icon` — role `rating-icon`; render `direct-image`; visibility `always`; asset `sad-face-icon`
@@ -3125,7 +3254,7 @@ RENDER: HTML
   - `options` — role `options`; render `presentation-table`; visibility `always`
     - `happy-face-link` — role `rating-link`; render `html-link`; visibility `always`
       - `happy-face-icon` — role `rating-icon`; render `direct-image`; visibility `always`; asset `happy-face-icon`
-    - `neutral-face-link` — role `rating-link`; render `html-link`; visibility `always`
+    - `neutral-face-link` — role `rating-link`; render `html-link`; visibility variant `Count=3`
       - `neutral-face-icon` — role `rating-icon`; render `direct-image`; visibility `always`; asset `neutral-face-icon`
     - `sad-face-link` — role `rating-link`; render `html-link`; visibility `always`
       - `sad-face-icon` — role `rating-icon`; render `direct-image`; visibility `always`; asset `sad-face-icon`
@@ -3136,6 +3265,10 @@ RENDER: HTML
 - Variant `desktop-3` — Figma node `260:3974`; axes: `Viewport=Desktop`, `Count=3`
 - Variant `mobile-2` — Figma node `260:1346`; axes: `Viewport=Mobile`, `Count=2`
 - Variant `desktop-2` — Figma node `260:3976`; axes: `Viewport=Desktop`, `Count=2`
+- Direct Figma source: `15:599`; `Viewport=Mobile, Count=3`; reference frame 328×246px
+- Direct Figma source: `260:3974`; `Viewport=Desktop, Count=3`; reference frame 600×197px
+- Direct Figma source: `260:1346`; `Viewport=Mobile, Count=2`; reference frame 328×194px
+- Direct Figma source: `260:3976`; `Viewport=Desktop, Count=2`; reference frame 600×197px
 
 ### Assets and interaction
 
@@ -3149,6 +3282,7 @@ RENDER: HTML
   - Clipping: `preserve-artwork`
   - Export boundary: `fill` `happy-face-icon @4x`
   - Pixel dimensions: 168×168px
+  - Raw Figma Fill dimensions: 1024×1024px
   - Aspect ratio: 42:42
   - Crop: `figma-fill`; position `concrete-desktop-instance`
   - Background: own fill `preserve`; artificial matte `forbid`
@@ -3162,6 +3296,7 @@ RENDER: HTML
   - Clipping: `preserve-artwork`
   - Export boundary: `fill` `neutral-face-icon @4x`
   - Pixel dimensions: 168×168px
+  - Raw Figma Fill dimensions: 1024×1024px
   - Aspect ratio: 42:42
   - Crop: `figma-fill`; position `concrete-desktop-instance`
   - Background: own fill `preserve`; artificial matte `forbid`
@@ -3175,6 +3310,7 @@ RENDER: HTML
   - Clipping: `preserve-artwork`
   - Export boundary: `fill` `sad-face-icon @4x`
   - Pixel dimensions: 168×168px
+  - Raw Figma Fill dimensions: 1024×1024px
   - Aspect ratio: 42:42
   - Crop: `figma-fill`; position `concrete-desktop-instance`
   - Background: own fill `preserve`; artificial matte `forbid`
@@ -3193,7 +3329,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 

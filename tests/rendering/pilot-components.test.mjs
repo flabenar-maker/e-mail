@@ -134,6 +134,7 @@ test("footer resolves boolean properties without losing the enabled social link"
   assert.doesNotMatch(result.html, /Скрытая подпись/u);
   assert.match(result.html, /Вы получили это письмо от CUPIS\./u);
   assert.match(result.html, /href="https:\/\/example\.test\/vk"/u);
+  assert.match(result.html, /href="https:\/\/example\.test\/telegram"/u);
 });
 
 test("document returns every referenced local asset once in deterministic order", async () => {
@@ -150,6 +151,7 @@ test("document returns every referenced local asset once in deterministic order"
       "images/qr-code.png",
       "images/rustore-icon.png",
       "images/secondary.jpg",
+      "images/telegram-icon.png",
       "images/vk-icon.png",
     ],
   );
@@ -275,13 +277,14 @@ test("disabled footer social section does not require hidden content or assets",
   const footer = instances.find(({ component_id }) => component_id === "email-footer");
   footer.property_values.find(({ property_id }) => property_id === "show-social-links").value = false;
   footer.content_values = footer.content_values.filter(
-    ({ element_id }) => !["vk-link", "vk-icon"].includes(element_id),
+    ({ element_id }) => !["vk-link", "vk-icon", "telegram-link", "telegram-icon"].includes(element_id),
   );
   footer.asset_files = [];
 
   const result = renderEmailDocument(model, deps);
 
   assert.deepEqual(result.diagnostics, []);
-  assert.doesNotMatch(result.html, /example\.test\/vk|images\/vk-icon\.png/u);
+  assert.doesNotMatch(result.html, /example\.test\/(?:vk|telegram)|images\/(?:vk|telegram)-icon\.png/u);
   assert.equal(result.assets.some(({ path }) => path === "images/vk-icon.png"), false);
+  assert.equal(result.assets.some(({ path }) => path === "images/telegram-icon.png"), false);
 });

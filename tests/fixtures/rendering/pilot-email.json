@@ -102,10 +102,13 @@
               { "element_id": "caption", "slot_id": "text", "scope": "all", "value": { "type": "rich-text", "value": "Скрытая подпись" } },
               { "element_id": "disclaimer", "slot_id": "text", "scope": "all", "value": { "type": "rich-text", "value": "Вы получили это письмо от CUPIS." } },
               { "element_id": "vk-link", "slot_id": "href", "scope": "all", "value": { "type": "url", "value": "https://example.test/vk" } },
-              { "element_id": "vk-icon", "slot_id": "alt", "scope": "all", "value": { "type": "alt-text", "value": "VK" } }
+              { "element_id": "vk-icon", "slot_id": "alt", "scope": "all", "value": { "type": "alt-text", "value": "VK" } },
+              { "element_id": "telegram-link", "slot_id": "href", "scope": "all", "value": { "type": "url", "value": "https://example.test/telegram" } },
+              { "element_id": "telegram-icon", "slot_id": "alt", "scope": "all", "value": { "type": "alt-text", "value": "Telegram" } }
             ],
             "asset_files": [
-              { "asset_contract_id": "vk-icon", "path": "images/vk-icon.png" }
+              { "asset_contract_id": "vk-icon", "path": "images/vk-icon.png" },
+              { "asset_contract_id": "telegram-icon", "path": "images/telegram-icon.png" }
             ],
             "slots": []
           }

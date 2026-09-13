@@ -105,7 +105,7 @@ SCOPE
 Top gap: Mobile 16px, Desktop 24px.
 
 CONTENT AREA
-Белая карточка с HTML heading, последовательностью Card/Image и optional block caption.
+Белая оболочка блока (#FFFFFF) с HTML heading, последовательностью Card/Image и optional block caption.
 Mobile: padding 22px, radius 22px, gap между элементами верхнего уровня 22px. Heading 18px/120% SemiBold.
 Desktop: padding 32px, radius 26px, gap между элементами верхнего уровня 32px. Heading 26px/120% SemiBold.
 
@@ -152,7 +152,7 @@ SCOPE
 Top gap: Mobile 16px, Desktop 24px.
 
 CONTENT AREA
-Белая карточка с HTML heading, последовательностью Card/Icon и optional block caption.
+Белая оболочка блока (#FFFFFF) с HTML heading, последовательностью Card/Icon и optional block caption.
 Mobile: padding 22px, radius 22px, gap между элементами верхнего уровня 22px. Heading 18px/120% SemiBold.
 Desktop: padding 32px, radius 26px, gap между элементами верхнего уровня 32px. Heading 26px/120% SemiBold.
 
@@ -350,7 +350,7 @@ BLOCK CAPTION
 Button/Secondary
 
 IMPLEMENTATION
-Кликабельная email-кнопка: presentation-table → button-cell → &amp;lt;a&amp;gt;. Вся видимая площадь кнопки находится внутри ссылки; таблицу внутрь &amp;lt;a&amp;gt; не помещать.
+Кликабельная email-кнопка: presentation-table → button-cell → &lt;a&gt;. Вся видимая площадь кнопки находится внутри ссылки; таблицу внутрь &lt;a&gt; не помещать.
 Full-width или content-width определяется конкретным инстансом и родительским блоком.
 
 MOBILE
@@ -359,7 +359,7 @@ Viewport=Mobile. Padding 12px 24px, radius 26px, HTML-текст 14px/140% Mediu
 DESKTOP
 Viewport=Desktop. Padding 12px 24px, radius 26px, HTML-текст 16px/140% Medium.
 
-Фон #48494A, текст белый. Для белого текста применять предусмотренную основной инструкцией защиту.
+Фон #48494A, текст #FFFFFF. Для белого текста применять предусмотренную основной инструкцией защиту.
 ````
 
 ### `Button/Primary`
@@ -377,7 +377,7 @@ Viewport=Desktop. Padding 12px 24px, radius 26px, HTML-текст 16px/140% Medi
 Button/Primary
 
 IMPLEMENTATION
-Кликабельная email-кнопка: presentation-table → button-cell → &amp;lt;a&amp;gt;. Вся видимая площадь кнопки находится внутри ссылки; таблицу внутрь &amp;lt;a&amp;gt; не помещать.
+Кликабельная email-кнопка: presentation-table → button-cell → &lt;a&gt;. Вся видимая площадь кнопки находится внутри ссылки; таблицу внутрь &lt;a&gt; не помещать.
 Full-width или content-width определяется конкретным инстансом и родительским блоком. Для content-width ширина следует за текстом и padding; минимальную ширину не добавлять, если её не задаёт родитель.
 
 MOBILE
@@ -387,10 +387,10 @@ DESKTOP
 Viewport=Desktop. Padding 16px 32px, radius 32px, HTML-текст 16px/140% Medium.
 
 BACKGROUND
-Solid fallback green400 #18B037, затем CSS linear-gradient по Fill варианта: green400 #18B037 → green300 #3DD55C; направление примерно 22° Mobile / 25° Desktop.
+В обоих вариантах: solid fallback #18B037; CSS linear-gradient(25deg, #18B037 0%, #3DD55C 100%). 25° — утверждённый точный параметр HTML-интерпретации, а не новое значение Fill в Figma.
 Не заменять градиент сплошным #00991F.
 
-Текст белый и остаётся HTML. Применять предусмотренную основной инструкцией защиту белого текста.
+Текст #FFFFFF и остаётся HTML. Применять предусмотренную основной инструкцией защиту белого текста.
 ````
 
 ### `Block/Content`
@@ -555,7 +555,7 @@ Item/Bullet
 
 IMPLEMENTATION
 Одна вложенная presentation-table с двумя колонками:
-— фиксированная колонка живого зелёного bullet-indicator;
+— фиксированная колонка живого bullet-indicator #18B037;
 — колонка живого HTML text-content.
 Индикатор не экспортировать как изображение и выровнять по первой строке primary text.
 
@@ -568,7 +568,7 @@ TEXT CONTENT
 1. primary text — 14px/140% Mobile, 18px/140% Desktop;
 2. supporting-text-01 — 12px/140% Mobile, 16px/140% Desktop;
 3. supporting-text-02 — 12px/140% Mobile, 16px/140% Desktop;
-4. optional link — живой &amp;amp;lt;a&amp;amp;gt;, 14px/140% Medium Mobile, 16px/140% Medium Desktop, green500.
+4. optional link — живой &lt;a&gt;, 14px/140% Medium Mobile, 16px/140% Medium Desktop, #00991F (Green/500).
 
 Не объединять строки и ссылку в изображение. Внешний вертикальный интервал между пунктами задаёт Block/Bullet-List.
 ````
@@ -689,28 +689,28 @@ SCOPE
 
 ASSETS
 Все assets экспортировать из конкретного Desktop-инстанса письма.
-— app-logo @4x: экспортировать внешний визуальный слой без HTML-padding; один PNG/src; display 163×46px Mobile и 219×62px Desktop.
+— app-logo @4x: экспортировать внешний визуальный слой вместе с его собственным Fill #FFFFFF, без HTML-padding; один PNG/src; display 163×46px Mobile и 219×62px Desktop.
 — store-buttons: общий контейнер четырёх кнопок в каждом варианте.
 — store icons: экспортировать только вложенные слои rustore-icon @4x, google-play-icon @4x, appgallery-icon @4x и getapps-icon @4x без button-фона, radius, padding и текста; PNG с прозрачностью; один src; display 26×26px Mobile и 32×32px Desktop.
 — QR: экспортировать целиком слой qr-code @4x со знаком в центре; display 130×130px; только Desktop.
 Не добавлять asset-подложку в HTML, если её нет внутри экспортируемого слоя.
 
 MOBILE
-Top gap 16px. Белая карточка: padding 22px, radius 22px, основной gap 16px.
+Top gap 16px. Карточка #FFFFFF: padding 22px, radius 22px, основной gap 16px.
 Порядок:
 1. app logo 163×46px;
-2. HTML description 14px/140%;
+2. HTML description 14px/140%, #48494A;
 3. четыре store buttons вертикально на всю внутреннюю ширину.
 
 Store buttons: width 100%, height 44px, vertical gap 8px, radius 24px. Каждая кнопка — отдельная ссылка на всю площадь.
 Внутри: icon 26×26px → gap 8px → живой HTML-текст 14px/140% Medium; вся группа центрируется внутри кнопки.
-RuStore: синий фон и белый текст. GooglePlay, AppGallery и GetApps: #F8F8FA и тёмный текст.
+RuStore: фон #1E60DD, текст #FFFFFF. GooglePlay, AppGallery и GetApps: фон #F8F8FA, текст #2B2C2E.
 Не собирать кнопки в сетку 2×2.
 
 DESKTOP
-Top gap 24px. Белая карточка: padding 32px, radius 26px, основной gap 24px.
-Верхняя строка: слева вертикальная группа app logo 219×62px и HTML description 18px/140% с gap 16px; справа QR 130×130px; gap между колонками 24px.
-Нижняя строка: четыре icon-only ссылки 116×56px, gap 8px, radius 50px. Иконки 32×32px центрированы. RuStore — синий фон, остальные — #F8F8FA. Видимого текста нет; alt содержит название магазина.
+Top gap 24px. Карточка #FFFFFF: padding 32px, radius 26px, основной gap 24px.
+Верхняя строка: слева вертикальная группа app logo 219×62px и HTML description 18px/140%, #48494A с gap 16px; справа QR 130×130px; gap между колонками 24px.
+Нижняя строка: четыре icon-only ссылки 116×56px, gap 8px, radius 50px. Иконки 32×32px центрированы. RuStore — фон #1E60DD, остальные — фон #F8F8FA. Видимого текста нет; alt содержит название магазина.
 
 Href каждой кнопки брать из данных конкретного письма.
 ````
@@ -853,7 +853,7 @@ SCOPE
 Top gap: Mobile 16px, Desktop 24px.
 
 STRUCTURE
-Белая карточка: HTML heading → таблица видимых Row/Icon → optional Button/Secondary → optional block caption. Рендерить строки конкретного инстанса в их фактическом порядке.
+Оболочка блока #FFFFFF: HTML heading → таблица видимых Row/Icon → optional Button/Secondary → optional block caption. Рендерить строки конкретного инстанса в их фактическом порядке.
 
 MOBILE
 Card: padding 22px, radius 22px, основной gap 22px.
