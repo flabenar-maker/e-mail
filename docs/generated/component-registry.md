@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: component-registry -->
-<!-- source-digest: sha256:412c6da870db7a25c31d1e88a6dc8013b702883e97a9dc88d918f02ae340b558 -->
+<!-- source-digest: sha256:91019a29d1823af38f72d55b4aac8333bbc252c2044e724b4bbe0166cc27e5f4 -->
 <!-- schema-versions: components=2.1.0, typography=1.0.0, spacing=1.0.0, assets=1.0.0 -->
 # CUPIS component registry
 
@@ -884,6 +884,12 @@ RENDER: ASSET
 ### Mobile
 
 - `root` — role `asset`; render `presentation-table`; visibility `always`
+  - Fact `description-1`: `@2x`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-2`: `232×148px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-3`: `464×296px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-4`: `232:148`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-5`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-6`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `card-image` — role `image`; render `direct-image`; visibility `always`; asset `card-image`
 
 ### Properties and variants
@@ -959,6 +965,7 @@ RENDER: ASSET
 ### Mobile
 
 - `root` — role `asset`; render `presentation-table`; visibility `always`
+  - Fact `description-1`: `@4x`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `feature-icon` — role `icon`; render `direct-image`; visibility `always`; asset `feature-icon`
 
 ### Assets and interaction
@@ -1026,6 +1033,10 @@ RENDER: ASSET
 ### Mobile
 
 - `root` — role `badge`; render `presentation-table`; visibility `always`
+  - Fact `description-1`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-2`: `19px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-3`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-4`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `number` — role `step-number`; render `html-text`; visibility `always`
 
 ### Properties and variants
@@ -1081,45 +1092,111 @@ RENDER: HTML
 ### Desktop
 
 - `root` — role `banner`; render `presentation-table`; visibility `always`
+  - Fact `banner-top-gap`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `card-border-radius`: `26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `app-card-width`: `552px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `root-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `content-area` — role `content-area`; render `presentation-table`; visibility `always`
+    - Fact `content-area-padding`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `content-area-layout-gap`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `content-area-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `text-qr` — role `text-qr`; render `presentation-table`; visibility `always`
+      - Fact `text-qr-layout-gap`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+      - Fact `text-qr-layout-axis`: `horizontal`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
       - `header-row` — role `header-row`; render `presentation-table`; visibility `always`
+        - Fact `header-row-layout-gap`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `header-row-width`: `334px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `header-row-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `app-logo` — role `logo`; render `direct-image`; visibility `always`; asset `app-logo`
+          - Fact `logo-display-dimensions`: `219×62px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `description` — role `description`; render `html-text`; visibility `always`
+          - Fact `description-font-size`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
       - `qr-code` — role `qr-code`; render `direct-image`; visibility `always`; asset `qr-code`
+        - Fact `qr-display-dimensions`: `130×130px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `store-buttons` — role `store-buttons`; render `presentation-table`; visibility `always`
+      - Fact `store-buttons-layout-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+      - Fact `store-buttons-layout-axis`: `horizontal`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
       - `rustore-link` — role `store-link`; render `html-link`; visibility `always`
+        - Fact `rustore-link-dimensions`: `116×56px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `rustore-link-border-radius`: `50px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `rustore-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `rustore-icon`
+          - Fact `rustore-icon-display-dimensions`: `32×32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `rustore-text` — role `store-text`; render `html-text`; visibility `always`
       - `google-play-link` — role `store-link`; render `html-link`; visibility `always`
+        - Fact `google-play-link-dimensions`: `116×56px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `google-play-link-border-radius`: `50px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `google-play-link-background`: `#F8F8FA`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `google-play-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `google-play-icon`
+          - Fact `google-play-icon-display-dimensions`: `32×32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `google-play-text` — role `store-text`; render `html-text`; visibility `always`
       - `appgallery-link` — role `store-link`; render `html-link`; visibility `always`
+        - Fact `appgallery-link-dimensions`: `116×56px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `appgallery-link-border-radius`: `50px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `appgallery-link-background`: `#F8F8FA`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `appgallery-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `appgallery-icon`
+          - Fact `appgallery-icon-display-dimensions`: `32×32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `appgallery-text` — role `store-text`; render `html-text`; visibility `always`
       - `getapps-link` — role `store-link`; render `html-link`; visibility `always`
+        - Fact `getapps-link-dimensions`: `116×56px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `getapps-link-border-radius`: `50px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `getapps-link-background`: `#F8F8FA`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `getapps-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `getapps-icon`
+          - Fact `getapps-icon-display-dimensions`: `32×32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `getapps-text` — role `store-text`; render `html-text`; visibility `always`
 
 ### Mobile
 
 - `root` — role `banner`; render `presentation-table`; visibility `always`
+  - Fact `banner-top-gap`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `card-border-radius`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `store-grid-layout-forbidden`: `2×2`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `root-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `content-area` — role `content-area`; render `presentation-table`; visibility `always`
+    - Fact `content-area-padding`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `content-area-layout-gap`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `content-area-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `app-logo` — role `logo`; render `direct-image`; visibility `always`; asset `app-logo`
+      - Fact `logo-display-dimensions`: `163×46px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `description` — role `description`; render `html-text`; visibility `always`
+      - Fact `description-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `store-buttons` — role `store-buttons`; render `presentation-table`; visibility `always`
+      - Fact `store-buttons-layout-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+      - Fact `store-buttons-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
       - `rustore-link` — role `store-link`; render `html-link`; visibility `always`
+        - Fact `rustore-link-height`: `44px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `rustore-link-border-radius`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `rustore-icon-text-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `rustore-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `rustore-icon`
+          - Fact `rustore-icon-display-dimensions`: `26×26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `rustore-text` — role `store-text`; render `html-text`; visibility `always`
+          - Fact `rustore-text-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
       - `google-play-link` — role `store-link`; render `html-link`; visibility `always`
+        - Fact `google-play-link-height`: `44px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `google-play-link-border-radius`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `google-play-icon-text-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `google-play-link-background`: `#F8F8FA`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `google-play-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `google-play-icon`
+          - Fact `google-play-icon-display-dimensions`: `26×26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `google-play-text` — role `store-text`; render `html-text`; visibility `always`
+          - Fact `google-play-text-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
       - `appgallery-link` — role `store-link`; render `html-link`; visibility `always`
+        - Fact `appgallery-link-height`: `44px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `appgallery-link-border-radius`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `appgallery-icon-text-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `appgallery-link-background`: `#F8F8FA`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `appgallery-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `appgallery-icon`
+          - Fact `appgallery-icon-display-dimensions`: `26×26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `appgallery-text` — role `store-text`; render `html-text`; visibility `always`
+          - Fact `appgallery-text-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
       - `getapps-link` — role `store-link`; render `html-link`; visibility `always`
+        - Fact `getapps-link-height`: `44px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `getapps-link-border-radius`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `getapps-icon-text-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+        - Fact `getapps-link-background`: `#F8F8FA`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `getapps-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `getapps-icon`
+          - Fact `getapps-icon-display-dimensions`: `26×26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `getapps-text` — role `store-text`; render `html-text`; visibility `always`
+          - Fact `getapps-text-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
 
 ### Properties and variants
 
@@ -1276,6 +1353,20 @@ RENDER: HYBRID
 ### Mobile
 
 - `root` — role `banner`; render `presentation-table`; visibility `always`
+  - Fact `width-behavior`: `fluid-to-container`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `height-behavior`: `auto`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `fixed-height-forbidden`: `true`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-1`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-2`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-3`: `296:190`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-4`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-5`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-6`: `20px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-7`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-8`: `552×353px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-9`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-10`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-11`: `@2x`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - Fact `description-12`: asset `hero-image`
   - `hero-image` — role `image`; render `direct-image`; visibility `always`; asset `hero-image`
   - `heading` — role `heading`; render `html-text`; visibility `always`
@@ -1364,6 +1455,16 @@ RENDER: HYBRID
 ### Mobile
 
 - `root` — role `banner`; render `presentation-table`; visibility `always`
+  - Fact `description-1`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-2`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-3`: `42×42px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-4`: `24×24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-5`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-6`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-7`: `26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-8`: `48×48px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-9`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-10`: `@4x`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - Fact `description-11`: asset `chevron-icon`
   - `feature-icon` — role `icon`; render `direct-image`; visibility `always`; asset `feature-icon`
   - `text` — role `text`; render `html-text`; visibility `always`
@@ -1451,21 +1552,46 @@ RENDER: HYBRID
 ### Desktop
 
 - `root` — role `banner`; render `presentation-table`; visibility `always`
+  - Fact `banner-top-gap`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `banner-inner-width`: `552px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `root-layout-axis`: `horizontal`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `content-area` — role `content-area`; render `presentation-table`; visibility `always`
+    - Fact `content-area-padding`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `content-area-layout-gap`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `content-area-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `content-area-width`: `300px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `text-content` — role `text-content`; render `presentation-table`; visibility `always`
+      - Fact `text-content-layout-gap`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+      - Fact `text-content-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+      - Fact `content-inner-width`: `236px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
       - `heading` — role `heading`; render `html-text`; visibility `always`
+        - Fact `heading-font-size`: `20px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
       - `body` — role `body`; render `html-text`; visibility property `show-body` (`Show Body`)
+        - Fact `body-font-size`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `button` — role `button`; render `nested-component`; visibility property `show-button` (`Show Button`); component `button-secondary` (`Button/Secondary`)
   - `secondary-image` — role `image`; render `background-image`; visibility `always`; asset `secondary-image`
+    - Fact `image-area-width`: `252px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
 
 ### Mobile
 
 - `root` — role `banner`; render `presentation-table`; visibility `always`
+  - Fact `banner-top-gap`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `root-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `secondary-image` — role `image`; render `direct-image`; visibility `always`; asset `secondary-image`
+    - Fact `width-behavior`: `fluid-to-container`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `height-behavior`: `auto`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `fixed-height-forbidden`: `true`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `content-area` — role `content-area`; render `presentation-table`; visibility `always`
+    - Fact `content-area-padding`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `content-area-layout-gap`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `content-area-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `text-content` — role `text-content`; render `presentation-table`; visibility `always`
+      - Fact `text-content-layout-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+      - Fact `text-content-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
       - `heading` — role `heading`; render `html-text`; visibility `always`
+        - Fact `heading-font-size`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
       - `body` — role `body`; render `html-text`; visibility property `show-body` (`Show Body`)
+        - Fact `body-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `button` — role `button`; render `nested-component`; visibility property `show-button` (`Show Button`); component `button-secondary` (`Button/Secondary`)
 
 ### Properties and variants
@@ -1552,6 +1678,15 @@ RENDER: HYBRID
 ### Mobile
 
 - `root` — role `block`; render `presentation-table`; visibility `always`
+  - Fact `description-1`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-2`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-3`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-4`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-5`: `26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-6`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-7`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-8`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-9`: `#98999C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `heading` — role `heading`; render `html-text`; visibility `always`
   - `bullets` — role `bullets`; render `nested-component`; visibility `always`; component `item-bullet` (`Item/Bullet`)
   - `alert` — role `alert`; render `nested-component`; visibility property `show-alert` (`Show Alert`); component `item-alert` (`Item/Alert`)
@@ -1626,6 +1761,17 @@ RENDER: HTML
 ### Mobile
 
 - `root` — role `block`; render `presentation-table`; visibility `always`
+  - Fact `description-1`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-2`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-3`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-4`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-5`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-6`: `26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-7`: `252px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-8`: `488px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-9`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-10`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-11`: `#98999C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `heading` — role `heading`; render `html-text`; visibility `always`
   - `cards` — role `cards`; render `nested-component`; visibility `always`; component `card-image` (`Card/Image`)
   - `caption` — role `caption`; render `html-text`; visibility property `show-caption` (`Show Caption`)
@@ -1692,6 +1838,16 @@ RENDER: HTML
 ### Mobile
 
 - `root` — role `block`; render `presentation-table`; visibility `always`
+  - Fact `description-1`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-2`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-3`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-4`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-5`: `26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-6`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-7`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-8`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-9`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-10`: `#98999C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `text-content` — role `text-content`; render `html-text`; visibility `always`
   - `notification` — role `notification`; render `nested-component`; visibility property `show-notification` (`Show Notification`); component `item-notification` (`Item/Notification`)
   - `alert` — role `alert`; render `nested-component`; visibility property `show-alert` (`Show Alert`); component `item-alert` (`Item/Alert`)
@@ -1767,6 +1923,17 @@ RENDER: HTML
 ### Mobile
 
 - `root` — role `block`; render `presentation-table`; visibility `always`
+  - Fact `description-1`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-2`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-3`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-4`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-5`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-6`: `26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-7`: `252px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-8`: `488px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-9`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-10`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-11`: `#98999C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `heading` — role `heading`; render `html-text`; visibility `always`
   - `cards` — role `cards`; render `nested-component`; visibility `always`; component `card-icon` (`Card/Icon`)
   - `caption` — role `caption`; render `html-text`; visibility property `show-caption` (`Show Caption`)
@@ -1834,6 +2001,20 @@ RENDER: HTML
 ### Mobile
 
 - `root` — role `block`; render `presentation-table`; visibility `always`
+  - Fact `description-1`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-2`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-3`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-4`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-5`: `42×42px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-6`: `4px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-7`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-8`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-9`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-10`: `26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-11`: `56×56px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-12`: `6px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-13`: `@4x`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-14`: `#98999C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `heading` — role `heading`; render `html-text`; visibility `always`
   - `rows` — role `rows`; render `presentation-table`; visibility `always`
     - `feature-icon` — role `icon`; render `direct-image`; visibility `always`; asset `feature-icon`
@@ -1919,7 +2100,17 @@ RENDER: HYBRID
 ### Mobile
 
 - `root` — role `block`; render `presentation-table`; visibility `always`
+  - Fact `description-1`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-2`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-3`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-4`: `24×24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-5`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-6`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-7`: `26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-8`: `26×26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-9`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - Fact `description-10`: asset `alert-icon`
+  - Fact `description-11`: `@4x`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `alert-icon` — role `icon`; render `direct-image`; visibility `always`; asset `alert-icon`
   - `text` — role `text`; render `html-text`; visibility `always`
 
@@ -2000,6 +2191,18 @@ RENDER: HYBRID
 ### Mobile
 
 - `root` — role `block`; render `presentation-table`; visibility `always`
+  - Fact `description-1`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-2`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-3`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-4`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-5`: `26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-6`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-7`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-8`: `4px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-9`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-10`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-11`: `6px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-12`: `#98999C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `heading` — role `heading`; render `html-text`; visibility `always`
   - `steps` — role `steps`; render `nested-component`; visibility `always`; component `item-step` (`Item/Step`)
   - `notification` — role `notification`; render `nested-component`; visibility property `show-notification` (`Show Notification`); component `item-notification` (`Item/Notification`)
@@ -2071,12 +2274,28 @@ RENDER: HTML
 ### Desktop
 
 - `root` — role `button`; render `presentation-table`; visibility `always`
+  - Fact `button-padding-block`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `button-padding-inline`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `button-border-radius`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `background-fallback`: `#18B037`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `background-gradient-start`: `#18B037`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `background-gradient-end`: `#3DD55C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `background-replacement-forbidden`: `#00991F`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `link` — role `button-link`; render `html-link`; visibility `always`
+    - Fact `button-text-size`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
 
 ### Mobile
 
 - `root` — role `button`; render `presentation-table`; visibility `always`
+  - Fact `button-padding-block`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `button-padding-inline`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `button-border-radius`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `background-fallback`: `#18B037`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `background-gradient-start`: `#18B037`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `background-gradient-end`: `#3DD55C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `background-replacement-forbidden`: `#00991F`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `link` — role `button-link`; render `html-link`; visibility `always`
+    - Fact `button-text-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
 
 ### Properties and variants
 
@@ -2135,6 +2354,12 @@ RENDER: HTML
 ### Mobile
 
 - `root` — role `button`; render `presentation-table`; visibility `always`
+  - Fact `description-1`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-2`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-3`: `26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-4`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-5`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-6`: `#48494A`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `link` — role `button-link`; render `html-link`; visibility `always`
 
 ### Properties and variants
@@ -2197,6 +2422,16 @@ RENDER: HTML
 ### Mobile
 
 - `root` — role `card`; render `presentation-table`; visibility `always`
+  - Fact `description-1`: `52×52px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-2`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-3`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-4`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-5`: `72×72px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-6`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-7`: `392px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-8`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-9`: `20px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-10`: `@4x`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `feature-icon` — role `icon`; render `direct-image`; visibility `always`; asset `feature-icon`
   - `heading` — role `heading`; render `html-text`; visibility `always`
   - `description` — role `description`; render `html-text`; visibility property `show-description` (`Show Description`)
@@ -2273,20 +2508,42 @@ RENDER: HYBRID
 ### Desktop
 
 - `root` — role `card`; render `presentation-table`; visibility `always`
+  - Fact `root-layout-axis`: `horizontal`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `root-layout-gap`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `card-width`: `488px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `card-image` — role `image`; render `direct-image`; visibility `always`; asset `card-image`
+    - Fact `image-display-dimensions`: `232×148px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `image-border-radius`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `text-content` — role `text-content`; render `presentation-table`; visibility `always`
+    - Fact `text-content-layout-gap`: `6px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `text-content-width`: `232px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `text-content-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `heading` — role `heading`; render `html-text`; visibility `always`
+      - Fact `heading-font-size`: `20px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `description` — role `description`; render `html-text`; visibility `always`
+      - Fact `description-font-size`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `link` — role `link`; render `html-link`; visibility `always`
+      - Fact `link-font-size`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
 
 ### Mobile
 
 - `root` — role `card`; render `presentation-table`; visibility `always`
+  - Fact `root-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `root-layout-gap`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `card-image` — role `image`; render `direct-image`; visibility `always`; asset `card-image`
+    - Fact `width-behavior`: `fluid-to-container`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `height-behavior`: `auto`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `fixed-height-forbidden`: `true`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `image-border-radius`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `text-content` — role `text-content`; render `presentation-table`; visibility `always`
+    - Fact `text-content-layout-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `text-content-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `heading` — role `heading`; render `html-text`; visibility `always`
+      - Fact `heading-font-size`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `description` — role `description`; render `html-text`; visibility `always`
+      - Fact `description-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `link` — role `link`; render `html-link`; visibility `always`
+      - Fact `link-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
 
 ### Properties and variants
 
@@ -2358,22 +2615,48 @@ RENDER: HYBRID
 ### Desktop
 
 - `root` — role `email`; render `presentation-table`; visibility `always`
+  - Fact `email-wrapper-width`: `600px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `footer-top-gap`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `footer-body-padding-inline`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `footer-body-padding-bottom`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `footer-section-gap`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `footer-background`: `#F3F3F5`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `caption` — role `caption`; render `html-text`; visibility property `show-caption` (`Show Caption`)
+    - Fact `caption-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `caption-text-color`: `#98999C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `disclaimer` — role `disclaimer`; render `html-text`; visibility `always`
+    - Fact `disclaimer-text-gap`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `disclaimer-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `disclaimer-text-color`: `#98999C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `social-links` — role `social-links`; render `presentation-table`; visibility property `show-social-links` (`Show Social Links`)
+    - Fact `social-icon-gap`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `vk-link` — role `social-link`; render `html-link`; visibility `always`
       - `vk-icon` — role `social-icon`; render `direct-image`; visibility `always`; asset `vk-icon`
+        - Fact `social-icon-display-dimensions`: `42×42px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `telegram-link` — role `social-link`; render `html-link`; visibility `always`
       - `telegram-icon` — role `social-icon`; render `direct-image`; visibility `always`; asset `telegram-icon`
 
 ### Mobile
 
 - `root` — role `email`; render `presentation-table`; visibility `always`
+  - Fact `email-wrapper-width`: `600px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `footer-top-gap`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `footer-body-padding-inline`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `footer-body-padding-bottom`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `footer-section-gap`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `footer-background`: `#F3F3F5`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `caption` — role `caption`; render `html-text`; visibility property `show-caption` (`Show Caption`)
+    - Fact `caption-font-size`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `caption-text-color`: `#98999C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `disclaimer` — role `disclaimer`; render `html-text`; visibility `always`
+    - Fact `disclaimer-text-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `disclaimer-font-size`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - Fact `disclaimer-text-color`: `#98999C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `social-links` — role `social-links`; render `presentation-table`; visibility property `show-social-links` (`Show Social Links`)
+    - Fact `social-icon-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `vk-link` — role `social-link`; render `html-link`; visibility `always`
       - `vk-icon` — role `social-icon`; render `direct-image`; visibility `always`; asset `vk-icon`
+        - Fact `social-icon-display-dimensions`: `32×32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `telegram-link` — role `social-link`; render `html-link`; visibility `always`
       - `telegram-icon` — role `social-icon`; render `direct-image`; visibility `always`; asset `telegram-icon`
 
@@ -2470,6 +2753,14 @@ RENDER: HYBRID
 ### Mobile
 
 - `root` — role `email`; render `presentation-table`; visibility `always`
+  - Fact `description-1`: `600px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-2`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-3`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-4`: `#F3F3F5`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-5`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-6`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-7`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-8`: `#98999C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `disclaimer` — role `disclaimer`; render `html-text`; visibility `always`
 
 ### Properties and variants
@@ -2526,7 +2817,14 @@ RENDER: HTML
 ### Mobile
 
 - `root` — role `email`; render `presentation-table`; visibility `always`
+  - Fact `description-1`: `600px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-2`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-3`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-4`: `@4x`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-5`: `212×33px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - Fact `description-6`: asset `header-logo`
+  - Fact `description-7`: `322×50px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-8`: `#F3F3F5`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `logo` — role `logo`; render `direct-image`; visibility `always`; asset `header-logo`
 
 ### Properties and variants
@@ -2602,7 +2900,16 @@ RENDER: ASSET
 ### Mobile
 
 - `root` — role `item`; render `presentation-table`; visibility `always`
+  - Fact `description-1`: `#F8F8FA`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-2`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-3`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-4`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-5`: `24×24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-6`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-7`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-8`: `26×26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - Fact `description-9`: asset `alert-icon`
+  - Fact `description-10`: `@4x`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `alert-icon` — role `icon`; render `direct-image`; visibility `always`; asset `alert-icon`
   - `text` — role `text`; render `html-text`; visibility `always`
 
@@ -2680,6 +2987,14 @@ RENDER: HYBRID
 ### Mobile
 
 - `root` — role `item`; render `presentation-table`; visibility `always`
+  - Fact `description-1`: `8×8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-2`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-3`: `4px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-4`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-5`: `6px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-6`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-7`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-8`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `indicator` — role `bullet-indicator`; render `html-text`; visibility `always`
   - `text` — role `text`; render `html-text`; visibility `always`
   - `link` — role `link`; render `html-link`; visibility property `show-link` (`Show Link`)
@@ -2743,6 +3058,16 @@ RENDER: HTML
 ### Mobile
 
 - `root` — role `item`; render `presentation-table`; visibility `always`
+  - Fact `description-1`: `#F8F8FA`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-2`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-3`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-4`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-5`: `42×42px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-6`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-7`: `20px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-8`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-9`: `48×48px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-10`: `@4x`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `text` — role `text`; render `html-text`; visibility `always`
   - `feature-icon` — role `icon`; render `direct-image`; visibility `always`; asset `feature-icon`
 
@@ -2820,6 +3145,10 @@ RENDER: HYBRID
 ### Mobile
 
 - `root` — role `item`; render `presentation-table`; visibility `always`
+  - Fact `description-1`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-2`: `4px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-3`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-4`: `6px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `badge` — role `badge`; render `nested-component`; visibility `always`; component `badge-step-number` (`Badge/Step-Number`)
   - `heading` — role `heading`; render `html-text`; visibility `always`
   - `caption` — role `caption`; render `html-text`; visibility property `show-caption` (`Show Caption`)
@@ -2891,6 +3220,20 @@ RENDER: HTML
 ### Mobile
 
 - `root` — role `nps`; render `presentation-table`; visibility `always`
+  - Fact `description-1`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-2`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-3`: `296px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-4`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-5`: `552px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-6`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-7`: `26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-8`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-9`: `44px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-10`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-11`: `32×32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-12`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-13`: `54px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `description-14`: `42×42px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `heading` — role `heading`; render `html-text`; visibility `always`
   - `options` — role `options`; render `presentation-table`; visibility `always`
     - `happy-face-link` — role `rating-link`; render `html-link`; visibility `always`
