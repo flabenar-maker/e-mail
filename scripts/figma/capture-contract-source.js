@@ -145,7 +145,7 @@ async function captureFigmaContractFacts(componentNodeId) {
     }
     if ("effects" in node && node.effects.length > 0) {
       const active = node.effects.filter((effect) => effect.visible !== false);
-      result.effects = active.map((effect, index) => {
+      if (active.length > 0) result.effects = active.map((effect, index) => {
         const captured = { type: effect.type, visible: true };
         if (["DROP_SHADOW", "INNER_SHADOW"].includes(effect.type)) {
           captured.color = rgba(effect.color);
