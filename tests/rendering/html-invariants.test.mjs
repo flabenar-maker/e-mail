@@ -178,6 +178,9 @@ test("all four Footer boolean combinations control caption and social assets ind
       assert.equal(result.html.includes("https://example.test/vk"), social);
       assert.equal(result.html.includes("images/vk-icon.png"), social);
       assert.equal(result.assets.some(({ path }) => path === "images/vk-icon.png"), social);
+      assert.equal(result.html.includes("https://example.test/telegram"), social);
+      assert.equal(result.html.includes("images/telegram-icon.png"), social);
+      assert.equal(result.assets.some(({ path }) => path === "images/telegram-icon.png"), social);
     }
   }
 });
