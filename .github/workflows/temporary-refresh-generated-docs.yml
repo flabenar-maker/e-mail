@@ -1,0 +1,36 @@
+name: Temporary refresh generated docs
+on:
+  push:
+    branches: [codex/verify-render-contracts]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  refresh:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run generate
+      - name: Commit only generated registries
+        env:
+          BRANCH: codex/verify-render-contracts
+        run: |
+          git fetch origin "$BRANCH"
+          test "$(git rev-parse "origin/$BRANCH")" = "$GITHUB_SHA"
+          allowed='docs/generated/asset-registry.md docs/generated/component-registry.md docs/generated/typography-registry.md'
+          changed="$(git diff --name-only)"
+          for file in $changed; do
+            case " $allowed " in *" $file "*) ;; *) echo "Unexpected generated change: $file"; exit 1;; esac
+          done
+          test -n "$changed" || exit 0
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- $allowed
+          git commit -m 'chore: refresh generated registries'
+          git push origin "HEAD:$BRANCH"
