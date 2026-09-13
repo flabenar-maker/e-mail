@@ -1775,9 +1775,13 @@
             ],
             "properties": {
               "value": {
-                "type": [
-                  "string",
-                  "boolean"
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "boolean"
+                  }
                 ]
               },
               "type": {
