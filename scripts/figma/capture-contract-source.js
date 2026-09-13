@@ -100,8 +100,8 @@ async function captureFigmaContractFacts(componentNodeId) {
     };
     if ("fills" in node) result.fills = paints(mixed(node.fills, node.id, "fills") ?? [], node.id);
     if ("strokes" in node) result.strokes = paints(mixed(node.strokes, node.id, "strokes") ?? [], node.id);
-    if ("strokeWeight" in node) result.stroke_weight = mixed(node.strokeWeight, node.id, "strokeWeight");
-    if ("strokeAlign" in node) result.stroke_align = node.strokeAlign;
+    if (result.strokes?.length > 0 && "strokeWeight" in node) result.stroke_weight = mixed(node.strokeWeight, node.id, "strokeWeight");
+    if (result.strokes?.length > 0 && "strokeAlign" in node) result.stroke_align = node.strokeAlign;
     if ("opacity" in node) result.opacity = node.opacity;
     if ("rotation" in node) result.rotation = node.rotation;
     if ("boundVariables" in node && node.boundVariables) {
