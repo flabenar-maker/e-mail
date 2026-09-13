@@ -98,7 +98,7 @@ test("Figma-verified Card/Image @2x keeps mobile fluid ratio and desktop exact d
     component,
     coverage: { component_id: component.id, mode: "interpreter" },
     content,
-    assets: { "card-image": { src: svg } },
+    assets: { "card-image": { src: svg, width: 504, height: 322 } },
     foundations,
   });
   assert.deepEqual(output.diagnostics, []);
