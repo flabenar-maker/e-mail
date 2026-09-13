@@ -145,8 +145,23 @@ export function auditFigmaContractFacts({ record, live, mappings } = {}) {
   }
   const artworkIds = new Set((live.variants ?? []).flatMap((variant) =>
     [...exportedArtworkIds(variant, record)]));
-  const unsupportedCapture = (live.capture_errors ?? []).filter((error) =>
-    !artworkIds.has(error.node_id));
+  const capturedNodes = new Map();
+  function indexNode(node) {
+    capturedNodes.set(node.node_id, node);
+    for (const child of node.children ?? []) indexNode(child);
+  }
+  for (const variant of live.variants) indexNode(variant.source_node);
+  const unsupportedCapture = (live.capture_errors ?? []).filter((error) => {
+    if (artworkIds.has(error.node_id)) return false;
+    const node = capturedNodes.get(error.node_id);
+    if (error.code === "MIXED_VALUE" && node?.node_type === "TEXT" &&
+        ["fontName", "fontSize", "lineHeight", "fills", "textDecoration"].includes(error.field) &&
+        node.styled_text_segments?.length >= 2) return false;
+    if (error.code === "MIXED_VALUE" && error.field === "cornerRadius" &&
+        node?.corner_radii &&
+        Object.values(node.corner_radii).every(Number.isFinite)) return false;
+    return true;
+  });
   if (unsupportedCapture.length > 0) {
     issues.push(issue("FIGMA_CAPTURE_UNSUPPORTED", { details: unsupportedCapture }));
   }
