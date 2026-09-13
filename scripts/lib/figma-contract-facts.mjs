@@ -163,7 +163,7 @@ export function auditFigmaContractFacts({ record, live, mappings = [] }) {
       issues.push(issue("CONTRACT_TARGET_INVALID", { variant_node_id, node_id, source_path, contract_path }));
       continue;
     }
-    const targetViewport = contract_path.match(/^\\/contracts\\/(mobile|desktop)\\//u)?.[1];
+    const targetViewport = contract_path.match(/^\/contracts\/(mobile|desktop)\//u)?.[1];
     if (targetViewport && targetViewport !== variantViewport.get(variant_node_id)) {
       issues.push(issue("CONTRACT_VIEWPORT_MISMATCH", { variant_node_id, node_id, source_path, contract_path }));
       continue;
