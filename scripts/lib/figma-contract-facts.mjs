@@ -207,6 +207,17 @@ export function auditFigmaContractFacts({ record, live, mappings } = {}) {
       continue;
     }
     coveredContract.add(contract_path);
+    const atomicFactPath = contract_path.match(/^(.*\/facts\/\d+)\/value(?:\/.*)?$/u)?.[1];
+    if (atomicFactPath) {
+      const provenance = pointerValue(record, `${atomicFactPath}/provenance`);
+      if (!["figma-literal", "figma-binding"].includes(provenance?.kind) ||
+          provenance?.node_id !== node_id) {
+        issues.push(issue("CONTRACT_FACT_NOT_FIGMA_VERIFIED", {
+          variant_node_id, node_id, source_path, contract_path,
+          provenance: provenance ?? null,
+        }));
+      }
+    }
     const actual = transformed(sourceFact.actual, transform);
     if (actual === undefined) {
       issues.push(issue("FIGMA_TRANSFORM_UNSUPPORTED", { variant_node_id, node_id, source_path, contract_path, transform }));
