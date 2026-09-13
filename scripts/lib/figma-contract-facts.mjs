@@ -110,6 +110,9 @@ export function auditFigmaContractFacts({ record, live, mappings = [] }) {
   if (!live || !Array.isArray(live.variants)) {
     return { ok: false, issues: [issue("LIVE_FIGMA_REQUIRED", { component_id: record?.id ?? null })] };
   }
+  if (live.capture_version !== "1.0.0" || !Array.isArray(live.capture_errors) || !Array.isArray(live.component_properties)) {
+    issues.push(issue("FIGMA_CAPTURE_VERSION_UNSUPPORTED", { capture_version: live.capture_version ?? null }));
+  }
   if (Array.isArray(live.capture_errors) && live.capture_errors.length > 0) {
     issues.push(issue("FIGMA_CAPTURE_UNSUPPORTED", { details: live.capture_errors }));
   }
@@ -136,6 +139,16 @@ export function auditFigmaContractFacts({ record, live, mappings = [] }) {
       byViewport.get(viewport).push(variant);
     }
     for (const [key, fact] of sourceFacts(variant, issues)) source.set(key, fact);
+  }
+
+  if (Array.isArray(live.component_properties) && live.component_properties.length > 0) {
+    leafValues(live.component_properties, "/component_properties", (source_path, actual) => {
+      const variant_node_id = live.component_node_id;
+      const node_id = live.component_node_id;
+      source.set(`${variant_node_id}|\\u0000${node_id}|\\u0000${source_path}`, {
+        variant_node_id, node_id, source_path, actual,
+      });
+    });
   }
 
   for (const viewport of VIEWPORTS) {
