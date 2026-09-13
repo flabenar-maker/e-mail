@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: component-registry -->
-<!-- source-digest: sha256:7fb97e8709bfbed5d71604588a76657a2fd2314450885333991ebb82650739d5 -->
+<!-- source-digest: sha256:74168b3d06c482c50489cc157e5d3e149e6c199fd84a86efc85cb6788765a1e1 -->
 <!-- schema-versions: components=2.1.0, typography=1.0.0, spacing=1.0.0, assets=1.0.0 -->
 # CUPIS component registry
 
@@ -872,25 +872,31 @@ RENDER: ASSET
 ### Structure and rendering
 
 - Render type: `ASSET`
-- Desktop root: `root` — `presentation-table`
-- Mobile root: `root` — `presentation-table`
+- Desktop root: `root` — `direct-image`
+- Mobile root: `root` — `direct-image`
 - The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
-- `root` — role `asset`; render `presentation-table`; visibility `always`
-  - `card-image` — role `image`; render `direct-image`; visibility `always`; asset `card-image`
+- `root` — role `asset`; render `direct-image`; visibility `always`; asset `card-image`
+  - Fact `reference-size`: `232×148px`; provenance: `figma-literal` at `911:3991`
+  - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `911:3991`
+  - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `911:3991`
+  - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `911:3991`
+  - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `911:3991`
+  - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `911:3991`
+  - Fact `border-radius`: `0px`; provenance: `figma-literal` at `911:3991`
 
 ### Mobile
 
-- `root` — role `asset`; render `presentation-table`; visibility `always`
-  - Fact `description-1`: `@2x`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-2`: `232×148px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-3`: `464×296px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-4`: `232:148`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-5`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-6`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `card-image` — role `image`; render `direct-image`; visibility `always`; asset `card-image`
+- `root` — role `asset`; render `direct-image`; visibility `always`; asset `card-image`
+  - Fact `reference-size`: `232×148px`; provenance: `figma-literal` at `911:3991`
+  - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `911:3991`
+  - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `911:3991`
+  - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `911:3991`
+  - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `911:3991`
+  - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `911:3991`
+  - Fact `border-radius`: `0px`; provenance: `figma-literal` at `911:3991`
 
 ### Properties and variants
 
@@ -915,8 +921,8 @@ RENDER: ASSET
   - Aspect ratio: 232:148
   - Crop: `none`; position `exact-node-after-overrides`
   - Background: own fill `preserve`; artificial matte `forbid`
-- Asset usage: `mobile` `/contracts/mobile/root/children/0` → `card-image` as `direct-image`
-- Asset usage: `desktop` `/contracts/desktop/root/children/0` → `card-image` as `direct-image`
+- Asset usage: `mobile` `/contracts/mobile/root` → `card-image` as `direct-image`
+- Asset usage: `desktop` `/contracts/desktop/root` → `card-image` as `direct-image`
 
 ### Output contract classification
 
@@ -1039,16 +1045,70 @@ RENDER: ASSET
 ### Desktop
 
 - `root` — role `badge`; render `presentation-table`; visibility `always`
-  - `number` — role `step-number`; render `html-text`; visibility `always`
+  - Fact `reference-size`: `62×22px`; provenance: `figma-literal` at `230:3849`
+  - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `230:3849`
+  - Fact `layout-gap`: `10px`; provenance: `figma-literal` at `230:3849`
+  - Fact `padding-top`: `0px`; provenance: `figma-literal` at `230:3849`
+  - Fact `padding-right`: `8px`; provenance: `figma-literal` at `230:3849`
+  - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `230:3849`
+  - Fact `padding-left`: `8px`; provenance: `figma-literal` at `230:3849`
+  - Fact `horizontal-sizing`: `hug`; provenance: `figma-literal` at `230:3849`
+  - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `230:3849`
+  - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `230:3849`
+  - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `230:3849`
+  - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `230:3849`
+  - Fact `border-radius`: `19px`; provenance: `figma-literal` at `230:3849`
+  - Fact `background`: `#B0FCC0`; provenance: `figma-literal` at `230:3849`
+  - `root-label` — role `label`; render `html-text`; visibility `always`
+    - Fact `reference-size`: `46×22px`; provenance: `figma-literal` at `230:3841`
+    - Fact `text-color`: `#000000`; provenance: `figma-literal` at `230:3841`
+    - Fact `source-text`: `1  шаг`; provenance: `figma-literal` at `230:3841`
+    - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `230:3841`
+    - Fact `font-style`: `Regular`; provenance: `figma-literal` at `230:3841`
+    - Fact `font-size`: `16px`; provenance: `figma-literal` at `230:3841`
+    - Fact `text-align`: `left`; provenance: `figma-literal` at `230:3841`
+    - Fact `text-decoration`: `none`; provenance: `figma-literal` at `230:3841`
+    - Fact `figma-style-id`: `S:0eb6b02f56ee5f02f09611af5a13a41b6121e78d,`; provenance: `figma-literal` at `230:3841`
+    - Fact `line-height`: `140%`; provenance: `figma-literal` at `230:3841`
+    - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `230:3841`
+    - Fact `text-auto-resize`: `width_and_height`; provenance: `figma-literal` at `230:3841`
+    - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `230:3841`
+    - Fact `text-case`: `original`; provenance: `figma-literal` at `230:3841`
+    - Fact `figma-style-name`: `Desktop/Body/Medium`; provenance: `figma-literal` at `230:3841`
 
 ### Mobile
 
 - `root` — role `badge`; render `presentation-table`; visibility `always`
-  - Fact `description-1`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-2`: `19px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-3`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-4`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `number` — role `step-number`; render `html-text`; visibility `always`
+  - Fact `reference-size`: `56×20px`; provenance: `figma-literal` at `18:2942`
+  - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `18:2942`
+  - Fact `layout-gap`: `10px`; provenance: `figma-literal` at `18:2942`
+  - Fact `padding-top`: `0px`; provenance: `figma-literal` at `18:2942`
+  - Fact `padding-right`: `8px`; provenance: `figma-literal` at `18:2942`
+  - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `18:2942`
+  - Fact `padding-left`: `8px`; provenance: `figma-literal` at `18:2942`
+  - Fact `horizontal-sizing`: `hug`; provenance: `figma-literal` at `18:2942`
+  - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `18:2942`
+  - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `18:2942`
+  - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `18:2942`
+  - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `18:2942`
+  - Fact `border-radius`: `19px`; provenance: `figma-literal` at `18:2942`
+  - Fact `background`: `#F8F8FA`; provenance: `figma-literal` at `18:2942`
+  - `root-label` — role `label`; render `html-text`; visibility `always`
+    - Fact `reference-size`: `40×20px`; provenance: `figma-literal` at `18:2941`
+    - Fact `text-color`: `#000000`; provenance: `figma-literal` at `18:2941`
+    - Fact `source-text`: `1  шаг`; provenance: `figma-literal` at `18:2941`
+    - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `18:2941`
+    - Fact `font-style`: `Regular`; provenance: `figma-literal` at `18:2941`
+    - Fact `font-size`: `14px`; provenance: `figma-literal` at `18:2941`
+    - Fact `text-align`: `left`; provenance: `figma-literal` at `18:2941`
+    - Fact `text-decoration`: `none`; provenance: `figma-literal` at `18:2941`
+    - Fact `figma-style-id`: `S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,`; provenance: `figma-literal` at `18:2941`
+    - Fact `line-height`: `140%`; provenance: `figma-literal` at `18:2941`
+    - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `18:2941`
+    - Fact `text-auto-resize`: `width_and_height`; provenance: `figma-literal` at `18:2941`
+    - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `18:2941`
+    - Fact `text-case`: `original`; provenance: `figma-literal` at `18:2941`
+    - Fact `figma-style-name`: `Mobile/Body/Large`; provenance: `figma-literal` at `18:2941`
 
 ### Properties and variants
 
@@ -1103,111 +1163,461 @@ RENDER: HTML
 ### Desktop
 
 - `root` — role `banner`; render `presentation-table`; visibility `always`
-  - Fact `banner-top-gap`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `card-border-radius`: `26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `app-card-width`: `552px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `root-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `content-area` — role `content-area`; render `presentation-table`; visibility `always`
-    - Fact `content-area-padding`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `content-area-layout-gap`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `content-area-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - `text-qr` — role `text-qr`; render `presentation-table`; visibility `always`
-      - Fact `text-qr-layout-gap`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-      - Fact `text-qr-layout-axis`: `horizontal`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-      - `header-row` — role `header-row`; render `presentation-table`; visibility `always`
-        - Fact `header-row-layout-gap`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `header-row-width`: `334px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `header-row-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - `app-logo` — role `logo`; render `direct-image`; visibility `always`; asset `app-logo`
-          - Fact `logo-display-dimensions`: `219×62px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - `description` — role `description`; render `html-text`; visibility `always`
-          - Fact `description-font-size`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-      - `qr-code` — role `qr-code`; render `direct-image`; visibility `always`; asset `qr-code`
-        - Fact `qr-display-dimensions`: `130×130px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - `store-buttons` — role `store-buttons`; render `presentation-table`; visibility `always`
-      - Fact `store-buttons-layout-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-      - Fact `store-buttons-layout-axis`: `horizontal`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-      - `rustore-link` — role `store-link`; render `html-link`; visibility `always`
-        - Fact `rustore-link-dimensions`: `116×56px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `rustore-link-border-radius`: `50px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - `rustore-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `rustore-icon`
-          - Fact `rustore-icon-display-dimensions`: `32×32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - `rustore-text` — role `store-text`; render `html-text`; visibility `always`
-      - `google-play-link` — role `store-link`; render `html-link`; visibility `always`
-        - Fact `google-play-link-dimensions`: `116×56px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `google-play-link-border-radius`: `50px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `google-play-link-background`: `#F8F8FA`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - `google-play-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `google-play-icon`
-          - Fact `google-play-icon-display-dimensions`: `32×32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - `google-play-text` — role `store-text`; render `html-text`; visibility `always`
-      - `appgallery-link` — role `store-link`; render `html-link`; visibility `always`
-        - Fact `appgallery-link-dimensions`: `116×56px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `appgallery-link-border-radius`: `50px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `appgallery-link-background`: `#F8F8FA`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - `appgallery-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `appgallery-icon`
-          - Fact `appgallery-icon-display-dimensions`: `32×32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - `appgallery-text` — role `store-text`; render `html-text`; visibility `always`
-      - `getapps-link` — role `store-link`; render `html-link`; visibility `always`
-        - Fact `getapps-link-dimensions`: `116×56px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `getapps-link-border-radius`: `50px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `getapps-link-background`: `#F8F8FA`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - `getapps-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `getapps-icon`
-          - Fact `getapps-icon-display-dimensions`: `32×32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - `getapps-text` — role `store-text`; render `html-text`; visibility `always`
+  - Fact `reference-size`: `600×298px`; provenance: `figma-literal` at `260:1494`
+  - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `260:1494`
+  - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `260:1494`
+  - Fact `padding-top`: `24px`; provenance: `figma-literal` at `260:1494`
+  - Fact `padding-right`: `24px`; provenance: `figma-literal` at `260:1494`
+  - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `260:1494`
+  - Fact `padding-left`: `24px`; provenance: `figma-literal` at `260:1494`
+  - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `260:1494`
+  - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `260:1494`
+  - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `260:1494`
+  - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `260:1494`
+  - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `260:1494`
+  - Fact `border-radius`: `0px`; provenance: `figma-literal` at `260:1494`
+  - `root-content-area` — role `content-area`; render `presentation-table`; visibility `always`
+    - Fact `reference-size`: `552×274px`; provenance: `figma-literal` at `230:1639`
+    - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `230:1639`
+    - Fact `layout-gap`: `24px`; provenance: `figma-literal` at `230:1639`
+    - Fact `padding-top`: `32px`; provenance: `figma-literal` at `230:1639`
+    - Fact `padding-right`: `32px`; provenance: `figma-literal` at `230:1639`
+    - Fact `padding-bottom`: `32px`; provenance: `figma-literal` at `230:1639`
+    - Fact `padding-left`: `32px`; provenance: `figma-literal` at `230:1639`
+    - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `230:1639`
+    - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `230:1639`
+    - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `230:1639`
+    - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `230:1639`
+    - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `230:1639`
+    - Fact `border-radius`: `26px`; provenance: `figma-literal` at `230:1639`
+    - Fact `background`: `#FFFFFF`; provenance: `figma-literal` at `230:1639`
+    - `root-content-area-text-qr` — role `text-qr`; render `presentation-table`; visibility `always`
+      - Fact `reference-size`: `488×130px`; provenance: `figma-literal` at `961:37493`
+      - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `961:37493`
+      - Fact `layout-gap`: `24px`; provenance: `figma-literal` at `961:37493`
+      - Fact `padding-top`: `0px`; provenance: `figma-literal` at `961:37493`
+      - Fact `padding-right`: `0px`; provenance: `figma-literal` at `961:37493`
+      - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `961:37493`
+      - Fact `padding-left`: `0px`; provenance: `figma-literal` at `961:37493`
+      - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `961:37493`
+      - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `961:37493`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `961:37493`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `961:37493`
+      - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `961:37493`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `961:37493`
+      - `root-content-area-text-qr-header-row` — role `header-row`; render `presentation-table`; visibility `always`
+        - Fact `reference-size`: `334×128px`; provenance: `figma-literal` at `961:37494`
+        - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `961:37494`
+        - Fact `layout-gap`: `16px`; provenance: `figma-literal` at `961:37494`
+        - Fact `padding-top`: `0px`; provenance: `figma-literal` at `961:37494`
+        - Fact `padding-right`: `0px`; provenance: `figma-literal` at `961:37494`
+        - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `961:37494`
+        - Fact `padding-left`: `0px`; provenance: `figma-literal` at `961:37494`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `961:37494`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `961:37494`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `961:37494`
+        - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `961:37494`
+        - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `961:37494`
+        - Fact `border-radius`: `0px`; provenance: `figma-literal` at `961:37494`
+        - `root-content-area-text-qr-header-row-app-logo` — role `app-logo`; render `direct-image`; visibility `always`; asset `app-logo`
+          - Fact `reference-size`: `219×62px`; provenance: `figma-literal` at `961:37495`
+          - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `961:37495`
+          - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `961:37495`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `961:37495`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `961:37495`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `961:37495`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `961:37495`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `961:37495`
+          - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `961:37495`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `961:37495`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `961:37495`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `961:37495`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `961:37495`
+        - `root-content-area-text-qr-header-row-body` — role `body`; render `html-text`; visibility `always`
+          - Fact `reference-size`: `334×50px`; provenance: `figma-literal` at `961:37514`
+          - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `961:37514`
+          - Fact `source-text`: `Единственный финансовый сервис для тех, кто делает ставки на спорт`; provenance: `figma-literal` at `961:37514`
+          - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `961:37514`
+          - Fact `font-style`: `Regular`; provenance: `figma-literal` at `961:37514`
+          - Fact `font-size`: `18px`; provenance: `figma-literal` at `961:37514`
+          - Fact `text-align`: `left`; provenance: `figma-literal` at `961:37514`
+          - Fact `text-decoration`: `none`; provenance: `figma-literal` at `961:37514`
+          - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `961:37514`
+          - Fact `line-height`: `140%`; provenance: `figma-literal` at `961:37514`
+          - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `961:37514`
+          - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `961:37514`
+          - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `961:37514`
+          - Fact `text-case`: `original`; provenance: `figma-literal` at `961:37514`
+          - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `961:37514`
+      - `root-content-area-text-qr-qr-code` — role `qr-code`; render `direct-image`; visibility `always`; asset `qr-code`
+        - Fact `reference-size`: `130×130px`; provenance: `figma-literal` at `961:37515`
+        - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `961:37515`
+        - Fact `layout-gap`: `8.676355361938477px`; provenance: `figma-literal` at `961:37515`
+        - Fact `padding-top`: `0px`; provenance: `figma-literal` at `961:37515`
+        - Fact `padding-right`: `0px`; provenance: `figma-literal` at `961:37515`
+        - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `961:37515`
+        - Fact `padding-left`: `0px`; provenance: `figma-literal` at `961:37515`
+        - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `961:37515`
+        - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `961:37515`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `961:37515`
+        - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `961:37515`
+        - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `961:37515`
+        - Fact `border-radius`: `0px`; provenance: `figma-literal` at `961:37515`
+    - `root-content-area-store-buttons` — role `store-buttons`; render `presentation-table`; visibility `always`
+      - Fact `reference-size`: `488×56px`; provenance: `figma-literal` at `961:50810`
+      - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `961:50810`
+      - Fact `layout-gap`: `8px`; provenance: `figma-literal` at `961:50810`
+      - Fact `padding-top`: `0px`; provenance: `figma-literal` at `961:50810`
+      - Fact `padding-right`: `0px`; provenance: `figma-literal` at `961:50810`
+      - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `961:50810`
+      - Fact `padding-left`: `0px`; provenance: `figma-literal` at `961:50810`
+      - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `961:50810`
+      - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `961:50810`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `961:50810`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `961:50810`
+      - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `961:50810`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `961:50810`
+      - `root-content-area-store-buttons-rustore-button` — role `rustore-button`; render `presentation-table`; visibility `always`
+        - Fact `reference-size`: `116×56px`; provenance: `figma-literal` at `961:50811`
+        - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `961:50811`
+        - Fact `layout-gap`: `8px`; provenance: `figma-literal` at `961:50811`
+        - Fact `padding-top`: `12px`; provenance: `figma-literal` at `961:50811`
+        - Fact `padding-right`: `12px`; provenance: `figma-literal` at `961:50811`
+        - Fact `padding-bottom`: `12px`; provenance: `figma-literal` at `961:50811`
+        - Fact `padding-left`: `12px`; provenance: `figma-literal` at `961:50811`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `961:50811`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `961:50811`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `961:50811`
+        - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `961:50811`
+        - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `961:50811`
+        - Fact `border-radius`: `50px`; provenance: `figma-literal` at `961:50811`
+        - Fact `background`: `#1E60DD`; provenance: `figma-literal` at `961:50811`
+        - `root-content-area-store-buttons-rustore-button-rustore-icon` — role `rustore-icon`; render `direct-image`; visibility `always`; asset `rustore-icon`
+          - Fact `reference-size`: `32×32px`; provenance: `figma-literal` at `961:50812`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `961:50812`
+          - Fact `background`: `#FFFFFF`; provenance: `figma-literal` at `961:50812`
+      - `root-content-area-store-buttons-google-play-button` — role `google-play-button`; render `presentation-table`; visibility `always`
+        - Fact `reference-size`: `116×56px`; provenance: `figma-literal` at `961:50822`
+        - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `961:50822`
+        - Fact `layout-gap`: `8px`; provenance: `figma-literal` at `961:50822`
+        - Fact `padding-top`: `12px`; provenance: `figma-literal` at `961:50822`
+        - Fact `padding-right`: `12px`; provenance: `figma-literal` at `961:50822`
+        - Fact `padding-bottom`: `12px`; provenance: `figma-literal` at `961:50822`
+        - Fact `padding-left`: `12px`; provenance: `figma-literal` at `961:50822`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `961:50822`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `961:50822`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `961:50822`
+        - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `961:50822`
+        - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `961:50822`
+        - Fact `border-radius`: `50px`; provenance: `figma-literal` at `961:50822`
+        - Fact `background`: `#F8F8FA`; provenance: `figma-literal` at `961:50822`
+        - `root-content-area-store-buttons-google-play-button-google-play-icon` — role `google-play-icon`; render `direct-image`; visibility `always`; asset `google-play-icon`
+          - Fact `reference-size`: `32×32px`; provenance: `figma-literal` at `961:50823`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `961:50823`
+      - `root-content-area-store-buttons-appgallery-button` — role `appgallery-button`; render `presentation-table`; visibility `always`
+        - Fact `reference-size`: `116×56px`; provenance: `figma-literal` at `961:50828`
+        - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `961:50828`
+        - Fact `layout-gap`: `8px`; provenance: `figma-literal` at `961:50828`
+        - Fact `padding-top`: `12px`; provenance: `figma-literal` at `961:50828`
+        - Fact `padding-right`: `12px`; provenance: `figma-literal` at `961:50828`
+        - Fact `padding-bottom`: `12px`; provenance: `figma-literal` at `961:50828`
+        - Fact `padding-left`: `12px`; provenance: `figma-literal` at `961:50828`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `961:50828`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `961:50828`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `961:50828`
+        - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `961:50828`
+        - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `961:50828`
+        - Fact `border-radius`: `50px`; provenance: `figma-literal` at `961:50828`
+        - Fact `background`: `#F8F8FA`; provenance: `figma-literal` at `961:50828`
+        - `root-content-area-store-buttons-appgallery-button-appgallery-icon` — role `appgallery-icon`; render `direct-image`; visibility `always`; asset `appgallery-icon`
+          - Fact `reference-size`: `32×32px`; provenance: `figma-literal` at `961:50829`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `961:50829`
+      - `root-content-area-store-buttons-getapps-button` — role `getapps-button`; render `presentation-table`; visibility `always`
+        - Fact `reference-size`: `116×56px`; provenance: `figma-literal` at `961:50830`
+        - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `961:50830`
+        - Fact `layout-gap`: `8px`; provenance: `figma-literal` at `961:50830`
+        - Fact `padding-top`: `12px`; provenance: `figma-literal` at `961:50830`
+        - Fact `padding-right`: `12px`; provenance: `figma-literal` at `961:50830`
+        - Fact `padding-bottom`: `12px`; provenance: `figma-literal` at `961:50830`
+        - Fact `padding-left`: `12px`; provenance: `figma-literal` at `961:50830`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `961:50830`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `961:50830`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `961:50830`
+        - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `961:50830`
+        - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `961:50830`
+        - Fact `border-radius`: `50px`; provenance: `figma-literal` at `961:50830`
+        - Fact `background`: `#F8F8FA`; provenance: `figma-literal` at `961:50830`
+        - `root-content-area-store-buttons-getapps-button-getapps-icon` — role `getapps-icon`; render `direct-image`; visibility `always`; asset `getapps-icon`
+          - Fact `reference-size`: `32×32px`; provenance: `figma-literal` at `961:50831`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `961:50831`
 
 ### Mobile
 
 - `root` — role `banner`; render `presentation-table`; visibility `always`
-  - Fact `banner-top-gap`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `card-border-radius`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `store-grid-layout-forbidden`: `2×2`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `root-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `content-area` — role `content-area`; render `presentation-table`; visibility `always`
-    - Fact `content-area-padding`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `content-area-layout-gap`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `content-area-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - `app-logo` — role `logo`; render `direct-image`; visibility `always`; asset `app-logo`
-      - Fact `logo-display-dimensions`: `163×46px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - `description` — role `description`; render `html-text`; visibility `always`
-      - Fact `description-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - `store-buttons` — role `store-buttons`; render `presentation-table`; visibility `always`
-      - Fact `store-buttons-layout-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-      - Fact `store-buttons-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-      - `rustore-link` — role `store-link`; render `html-link`; visibility `always`
-        - Fact `rustore-link-height`: `44px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `rustore-link-border-radius`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `rustore-icon-text-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - `rustore-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `rustore-icon`
-          - Fact `rustore-icon-display-dimensions`: `26×26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - `rustore-text` — role `store-text`; render `html-text`; visibility `always`
-          - Fact `rustore-text-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-      - `google-play-link` — role `store-link`; render `html-link`; visibility `always`
-        - Fact `google-play-link-height`: `44px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `google-play-link-border-radius`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `google-play-icon-text-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `google-play-link-background`: `#F8F8FA`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - `google-play-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `google-play-icon`
-          - Fact `google-play-icon-display-dimensions`: `26×26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - `google-play-text` — role `store-text`; render `html-text`; visibility `always`
-          - Fact `google-play-text-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-      - `appgallery-link` — role `store-link`; render `html-link`; visibility `always`
-        - Fact `appgallery-link-height`: `44px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `appgallery-link-border-radius`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `appgallery-icon-text-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `appgallery-link-background`: `#F8F8FA`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - `appgallery-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `appgallery-icon`
-          - Fact `appgallery-icon-display-dimensions`: `26×26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - `appgallery-text` — role `store-text`; render `html-text`; visibility `always`
-          - Fact `appgallery-text-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-      - `getapps-link` — role `store-link`; render `html-link`; visibility `always`
-        - Fact `getapps-link-height`: `44px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `getapps-link-border-radius`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `getapps-icon-text-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `getapps-link-background`: `#F8F8FA`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - `getapps-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `getapps-icon`
-          - Fact `getapps-icon-display-dimensions`: `26×26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - `getapps-text` — role `store-text`; render `html-text`; visibility `always`
-          - Fact `getapps-text-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `reference-size`: `328×378px`; provenance: `figma-literal` at `15:2586`
+  - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `15:2586`
+  - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `15:2586`
+  - Fact `padding-top`: `16px`; provenance: `figma-literal` at `15:2586`
+  - Fact `padding-right`: `16px`; provenance: `figma-literal` at `15:2586`
+  - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `15:2586`
+  - Fact `padding-left`: `16px`; provenance: `figma-literal` at `15:2586`
+  - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `15:2586`
+  - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `15:2586`
+  - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `15:2586`
+  - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `15:2586`
+  - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `15:2586`
+  - Fact `border-radius`: `0px`; provenance: `figma-literal` at `15:2586`
+  - `root-content-area` — role `content-area`; render `presentation-table`; visibility `always`
+    - Fact `reference-size`: `296×362px`; provenance: `figma-literal` at `15:2519`
+    - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `15:2519`
+    - Fact `layout-gap`: `16px`; provenance: `figma-literal` at `15:2519`
+    - Fact `padding-top`: `22px`; provenance: `figma-literal` at `15:2519`
+    - Fact `padding-right`: `22px`; provenance: `figma-literal` at `15:2519`
+    - Fact `padding-bottom`: `22px`; provenance: `figma-literal` at `15:2519`
+    - Fact `padding-left`: `22px`; provenance: `figma-literal` at `15:2519`
+    - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `15:2519`
+    - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `15:2519`
+    - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `15:2519`
+    - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `15:2519`
+    - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `15:2519`
+    - Fact `border-radius`: `22px`; provenance: `figma-literal` at `15:2519`
+    - Fact `background`: `#FFFFFF`; provenance: `figma-literal` at `15:2519`
+    - `root-content-area-app-logo` — role `app-logo`; render `direct-image`; visibility `always`; asset `app-logo`
+      - Fact `reference-size`: `163×46px`; provenance: `figma-literal` at `264:3642`
+      - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `264:3642`
+      - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `264:3642`
+      - Fact `padding-top`: `0px`; provenance: `figma-literal` at `264:3642`
+      - Fact `padding-right`: `0px`; provenance: `figma-literal` at `264:3642`
+      - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `264:3642`
+      - Fact `padding-left`: `0px`; provenance: `figma-literal` at `264:3642`
+      - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `264:3642`
+      - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `264:3642`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `264:3642`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `264:3642`
+      - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `264:3642`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `264:3642`
+    - `root-content-area-body` — role `body`; render `html-text`; visibility `always`
+      - Fact `reference-size`: `252×40px`; provenance: `figma-literal` at `15:2538`
+      - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `15:2538`
+      - Fact `source-text`: `Единственный финансовый сервис для тех, кто делает ставки на спорт`; provenance: `figma-literal` at `15:2538`
+      - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `15:2538`
+      - Fact `font-style`: `Regular`; provenance: `figma-literal` at `15:2538`
+      - Fact `font-size`: `14px`; provenance: `figma-literal` at `15:2538`
+      - Fact `text-align`: `left`; provenance: `figma-literal` at `15:2538`
+      - Fact `text-decoration`: `none`; provenance: `figma-literal` at `15:2538`
+      - Fact `figma-style-id`: `S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,`; provenance: `figma-literal` at `15:2538`
+      - Fact `line-height`: `140%`; provenance: `figma-literal` at `15:2538`
+      - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `15:2538`
+      - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `15:2538`
+      - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `15:2538`
+      - Fact `text-case`: `original`; provenance: `figma-literal` at `15:2538`
+      - Fact `figma-style-name`: `Mobile/Body/Large`; provenance: `figma-literal` at `15:2538`
+    - `root-content-area-store-buttons` — role `store-buttons`; render `presentation-table`; visibility `always`
+      - Fact `reference-size`: `252×200px`; provenance: `figma-literal` at `961:36486`
+      - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `961:36486`
+      - Fact `layout-gap`: `8px`; provenance: `figma-literal` at `961:36486`
+      - Fact `padding-top`: `0px`; provenance: `figma-literal` at `961:36486`
+      - Fact `padding-right`: `0px`; provenance: `figma-literal` at `961:36486`
+      - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `961:36486`
+      - Fact `padding-left`: `0px`; provenance: `figma-literal` at `961:36486`
+      - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `961:36486`
+      - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `961:36486`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `961:36486`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `961:36486`
+      - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `961:36486`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `961:36486`
+      - `root-content-area-store-buttons-rustore-button` — role `rustore-button`; render `presentation-table`; visibility `always`
+        - Fact `reference-size`: `252×44px`; provenance: `figma-literal` at `961:36487`
+        - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `961:36487`
+        - Fact `layout-gap`: `8px`; provenance: `figma-literal` at `961:36487`
+        - Fact `padding-top`: `9px`; provenance: `figma-literal` at `961:36487`
+        - Fact `padding-right`: `12px`; provenance: `figma-literal` at `961:36487`
+        - Fact `padding-bottom`: `9px`; provenance: `figma-literal` at `961:36487`
+        - Fact `padding-left`: `12px`; provenance: `figma-literal` at `961:36487`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `961:36487`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `961:36487`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `961:36487`
+        - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `961:36487`
+        - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `961:36487`
+        - Fact `border-radius`: `24px`; provenance: `figma-literal` at `961:36487`
+        - Fact `background`: `#1E60DD`; provenance: `figma-literal` at `961:36487`
+        - `root-content-area-store-buttons-rustore-button-rustore-icon` — role `rustore-icon`; render `direct-image`; visibility `always`; asset `rustore-icon`
+          - Fact `reference-size`: `26×26px`; provenance: `figma-literal` at `961:36488`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `961:36488`
+        - `root-content-area-store-buttons-rustore-button-button-text` — role `button-text`; render `presentation-table`; visibility `always`
+          - Fact `reference-size`: `76×20px`; provenance: `figma-literal` at `961:36499`
+          - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `961:36499`
+          - Fact `layout-gap`: `-2px`; provenance: `figma-literal` at `961:36499`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `961:36499`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `961:36499`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `961:36499`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `961:36499`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `961:36499`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `961:36499`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `961:36499`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `961:36499`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `961:36499`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `961:36499`
+          - `root-content-area-store-buttons-rustore-button-button-text-title` — role `title`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `50×20px`; provenance: `figma-literal` at `961:36500`
+            - Fact `text-color`: `#FFFFFF`; provenance: `figma-literal` at `961:36500`
+            - Fact `source-text`: `RuStore`; provenance: `figma-literal` at `961:36500`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `961:36500`
+            - Fact `font-style`: `Medium`; provenance: `figma-literal` at `961:36500`
+            - Fact `font-size`: `14px`; provenance: `figma-literal` at `961:36500`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `961:36500`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `961:36500`
+            - Fact `figma-style-id`: `S:780f997658bfc56dc4db512b20c92d16c415c3f3,`; provenance: `figma-literal` at `961:36500`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `961:36500`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `961:36500`
+            - Fact `text-auto-resize`: `width_and_height`; provenance: `figma-literal` at `961:36500`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `961:36500`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `961:36500`
+            - Fact `figma-style-name`: `Mobile/Action`; provenance: `figma-literal` at `961:36500`
+      - `root-content-area-store-buttons-google-play-button` — role `google-play-button`; render `presentation-table`; visibility `always`
+        - Fact `reference-size`: `252×44px`; provenance: `figma-literal` at `961:36502`
+        - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `961:36502`
+        - Fact `layout-gap`: `8px`; provenance: `figma-literal` at `961:36502`
+        - Fact `padding-top`: `9px`; provenance: `figma-literal` at `961:36502`
+        - Fact `padding-right`: `12px`; provenance: `figma-literal` at `961:36502`
+        - Fact `padding-bottom`: `9px`; provenance: `figma-literal` at `961:36502`
+        - Fact `padding-left`: `12px`; provenance: `figma-literal` at `961:36502`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `961:36502`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `961:36502`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `961:36502`
+        - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `961:36502`
+        - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `961:36502`
+        - Fact `border-radius`: `24px`; provenance: `figma-literal` at `961:36502`
+        - Fact `background`: `#F8F8FA`; provenance: `figma-literal` at `961:36502`
+        - `root-content-area-store-buttons-google-play-button-google-play-icon` — role `google-play-icon`; render `direct-image`; visibility `always`; asset `google-play-icon`
+          - Fact `reference-size`: `26×26px`; provenance: `figma-literal` at `961:36503`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `961:36503`
+        - `root-content-area-store-buttons-google-play-button-button-text` — role `button-text`; render `presentation-table`; visibility `always`
+          - Fact `reference-size`: `76×20px`; provenance: `figma-literal` at `961:36508`
+          - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `961:36508`
+          - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `961:36508`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `961:36508`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `961:36508`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `961:36508`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `961:36508`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `961:36508`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `961:36508`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `961:36508`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `961:36508`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `961:36508`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `961:36508`
+          - `root-content-area-store-buttons-google-play-button-button-text-title` — role `title`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `72×20px`; provenance: `figma-literal` at `961:36509`
+            - Fact `text-color`: `#2B2C2E`; provenance: `figma-literal` at `961:36509`
+            - Fact `source-text`: `GooglePlay`; provenance: `figma-literal` at `961:36509`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `961:36509`
+            - Fact `font-style`: `Medium`; provenance: `figma-literal` at `961:36509`
+            - Fact `font-size`: `14px`; provenance: `figma-literal` at `961:36509`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `961:36509`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `961:36509`
+            - Fact `figma-style-id`: `S:780f997658bfc56dc4db512b20c92d16c415c3f3,`; provenance: `figma-literal` at `961:36509`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `961:36509`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `961:36509`
+            - Fact `text-auto-resize`: `width_and_height`; provenance: `figma-literal` at `961:36509`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `961:36509`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `961:36509`
+            - Fact `figma-style-name`: `Mobile/Action`; provenance: `figma-literal` at `961:36509`
+      - `root-content-area-store-buttons-appgallery-button` — role `appgallery-button`; render `presentation-table`; visibility `always`
+        - Fact `reference-size`: `252×44px`; provenance: `figma-literal` at `961:36510`
+        - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `961:36510`
+        - Fact `layout-gap`: `8px`; provenance: `figma-literal` at `961:36510`
+        - Fact `padding-top`: `9px`; provenance: `figma-literal` at `961:36510`
+        - Fact `padding-right`: `12px`; provenance: `figma-literal` at `961:36510`
+        - Fact `padding-bottom`: `9px`; provenance: `figma-literal` at `961:36510`
+        - Fact `padding-left`: `12px`; provenance: `figma-literal` at `961:36510`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `961:36510`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `961:36510`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `961:36510`
+        - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `961:36510`
+        - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `961:36510`
+        - Fact `border-radius`: `24px`; provenance: `figma-literal` at `961:36510`
+        - Fact `background`: `#F8F8FA`; provenance: `figma-literal` at `961:36510`
+        - `root-content-area-store-buttons-appgallery-button-appgallery-icon` — role `appgallery-icon`; render `direct-image`; visibility `always`; asset `appgallery-icon`
+          - Fact `reference-size`: `26×26px`; provenance: `figma-literal` at `961:36511`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `961:36511`
+        - `root-content-area-store-buttons-appgallery-button-button-text` — role `button-text`; render `presentation-table`; visibility `always`
+          - Fact `reference-size`: `76×20px`; provenance: `figma-literal` at `961:36513`
+          - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `961:36513`
+          - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `961:36513`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `961:36513`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `961:36513`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `961:36513`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `961:36513`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `961:36513`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `961:36513`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `961:36513`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `961:36513`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `961:36513`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `961:36513`
+          - `root-content-area-store-buttons-appgallery-button-button-text-title` — role `title`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `69×20px`; provenance: `figma-literal` at `961:36514`
+            - Fact `text-color`: `#2B2C2E`; provenance: `figma-literal` at `961:36514`
+            - Fact `source-text`: `AppGallery`; provenance: `figma-literal` at `961:36514`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `961:36514`
+            - Fact `font-style`: `Medium`; provenance: `figma-literal` at `961:36514`
+            - Fact `font-size`: `14px`; provenance: `figma-literal` at `961:36514`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `961:36514`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `961:36514`
+            - Fact `figma-style-id`: `S:780f997658bfc56dc4db512b20c92d16c415c3f3,`; provenance: `figma-literal` at `961:36514`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `961:36514`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `961:36514`
+            - Fact `text-auto-resize`: `width_and_height`; provenance: `figma-literal` at `961:36514`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `961:36514`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `961:36514`
+            - Fact `figma-style-name`: `Mobile/Action`; provenance: `figma-literal` at `961:36514`
+      - `root-content-area-store-buttons-getapps-button` — role `getapps-button`; render `presentation-table`; visibility `always`
+        - Fact `reference-size`: `252×44px`; provenance: `figma-literal` at `961:36515`
+        - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `961:36515`
+        - Fact `layout-gap`: `8px`; provenance: `figma-literal` at `961:36515`
+        - Fact `padding-top`: `9px`; provenance: `figma-literal` at `961:36515`
+        - Fact `padding-right`: `12px`; provenance: `figma-literal` at `961:36515`
+        - Fact `padding-bottom`: `9px`; provenance: `figma-literal` at `961:36515`
+        - Fact `padding-left`: `12px`; provenance: `figma-literal` at `961:36515`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `961:36515`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `961:36515`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `961:36515`
+        - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `961:36515`
+        - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `961:36515`
+        - Fact `border-radius`: `24px`; provenance: `figma-literal` at `961:36515`
+        - Fact `background`: `#F8F8FA`; provenance: `figma-literal` at `961:36515`
+        - `root-content-area-store-buttons-getapps-button-getapps-icon` — role `getapps-icon`; render `direct-image`; visibility `always`; asset `getapps-icon`
+          - Fact `reference-size`: `26×26px`; provenance: `figma-literal` at `961:36516`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `961:36516`
+        - `root-content-area-store-buttons-getapps-button-button-text` — role `button-text`; render `presentation-table`; visibility `always`
+          - Fact `reference-size`: `76×20px`; provenance: `figma-literal` at `961:36531`
+          - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `961:36531`
+          - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `961:36531`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `961:36531`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `961:36531`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `961:36531`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `961:36531`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `961:36531`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `961:36531`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `961:36531`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `961:36531`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `961:36531`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `961:36531`
+          - `root-content-area-store-buttons-getapps-button-button-text-title` — role `title`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `82×20px`; provenance: `figma-literal` at `961:36532`
+            - Fact `text-color`: `#2B2C2E`; provenance: `figma-literal` at `961:36532`
+            - Fact `source-text`: `GetApps`; provenance: `figma-literal` at `961:36532`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `961:36532`
+            - Fact `font-style`: `Medium`; provenance: `figma-literal` at `961:36532`
+            - Fact `font-size`: `14px`; provenance: `figma-literal` at `961:36532`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `961:36532`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `961:36532`
+            - Fact `figma-style-id`: `S:780f997658bfc56dc4db512b20c92d16c415c3f3,`; provenance: `figma-literal` at `961:36532`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `961:36532`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `961:36532`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `961:36532`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `961:36532`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `961:36532`
+            - Fact `figma-style-name`: `Mobile/Action`; provenance: `figma-literal` at `961:36532`
 
 ### Properties and variants
 
@@ -1297,23 +1707,15 @@ RENDER: HTML
   - Crop: `none`; position `exact-node-after-overrides`
   - Background: own fill `preserve`; artificial matte `forbid`
 - Asset usage: `mobile` `/contracts/mobile/root/children/0/children/0` → `app-logo` as `direct-image`
-- Link: `mobile` `/contracts/mobile/root/children/0/children/2/children/0`
 - Asset usage: `mobile` `/contracts/mobile/root/children/0/children/2/children/0/children/0` → `rustore-icon` as `direct-image`
-- Link: `mobile` `/contracts/mobile/root/children/0/children/2/children/1`
 - Asset usage: `mobile` `/contracts/mobile/root/children/0/children/2/children/1/children/0` → `google-play-icon` as `direct-image`
-- Link: `mobile` `/contracts/mobile/root/children/0/children/2/children/2`
 - Asset usage: `mobile` `/contracts/mobile/root/children/0/children/2/children/2/children/0` → `appgallery-icon` as `direct-image`
-- Link: `mobile` `/contracts/mobile/root/children/0/children/2/children/3`
 - Asset usage: `mobile` `/contracts/mobile/root/children/0/children/2/children/3/children/0` → `getapps-icon` as `direct-image`
 - Asset usage: `desktop` `/contracts/desktop/root/children/0/children/0/children/0/children/0` → `app-logo` as `direct-image`
 - Asset usage: `desktop` `/contracts/desktop/root/children/0/children/0/children/1` → `qr-code` as `direct-image`
-- Link: `desktop` `/contracts/desktop/root/children/0/children/1/children/0`
 - Asset usage: `desktop` `/contracts/desktop/root/children/0/children/1/children/0/children/0` → `rustore-icon` as `direct-image`
-- Link: `desktop` `/contracts/desktop/root/children/0/children/1/children/1`
 - Asset usage: `desktop` `/contracts/desktop/root/children/0/children/1/children/1/children/0` → `google-play-icon` as `direct-image`
-- Link: `desktop` `/contracts/desktop/root/children/0/children/1/children/2`
 - Asset usage: `desktop` `/contracts/desktop/root/children/0/children/1/children/2/children/0` → `appgallery-icon` as `direct-image`
-- Link: `desktop` `/contracts/desktop/root/children/0/children/1/children/3`
 - Asset usage: `desktop` `/contracts/desktop/root/children/0/children/1/children/3/children/0` → `getapps-icon` as `direct-image`
 
 ### Output contract classification
@@ -1358,33 +1760,233 @@ RENDER: HYBRID
 ### Desktop
 
 - `root` — role `banner`; render `presentation-table`; visibility `always`
-  - `hero-image` — role `image`; render `direct-image`; visibility `always`; asset `hero-image`
-  - `heading` — role `heading`; render `html-text`; visibility `always`
-  - `body` — role `body`; render `html-text`; visibility property `show-body` (`Show Body`)
-  - `cta` — role `cta`; render `nested-component`; visibility property `show-button` (`Show Button`); component `button-primary` (`Button/Primary`)
+  - Fact `reference-size`: `600×636px`; provenance: `figma-literal` at `230:3680`
+  - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `230:3680`
+  - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `230:3680`
+  - Fact `padding-top`: `24px`; provenance: `figma-literal` at `230:3680`
+  - Fact `padding-right`: `24px`; provenance: `figma-literal` at `230:3680`
+  - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `230:3680`
+  - Fact `padding-left`: `24px`; provenance: `figma-literal` at `230:3680`
+  - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `230:3680`
+  - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `230:3680`
+  - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `230:3680`
+  - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `230:3680`
+  - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `230:3680`
+  - Fact `border-radius`: `0px`; provenance: `figma-literal` at `230:3680`
+  - `root-card` — role `card`; render `presentation-table`; visibility `always`
+    - Fact `reference-size`: `552×612px`; provenance: `figma-literal` at `619:20206`
+    - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `619:20206`
+    - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `619:20206`
+    - Fact `padding-top`: `0px`; provenance: `figma-literal` at `619:20206`
+    - Fact `padding-right`: `0px`; provenance: `figma-literal` at `619:20206`
+    - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `619:20206`
+    - Fact `padding-left`: `0px`; provenance: `figma-literal` at `619:20206`
+    - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `619:20206`
+    - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `619:20206`
+    - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `619:20206`
+    - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `619:20206`
+    - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `619:20206`
+    - Fact `border-radius`: `26px`; provenance: `figma-literal` at `619:20206`
+    - `root-card-hero-image` — role `hero-image`; render `direct-image`; visibility `always`; asset `hero-image`
+      - Fact `reference-size`: `552×353px`; provenance: `figma-literal` at `230:3689`
+      - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `230:3689`
+      - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `230:3689`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `230:3689`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `230:3689`
+      - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `230:3689`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `230:3689`
+    - `root-card-content-area` — role `content-area`; render `presentation-table`; visibility `always`
+      - Fact `reference-size`: `552×259px`; provenance: `figma-literal` at `230:3635`
+      - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `230:3635`
+      - Fact `layout-gap`: `24px`; provenance: `figma-literal` at `230:3635`
+      - Fact `padding-top`: `32px`; provenance: `figma-literal` at `230:3635`
+      - Fact `padding-right`: `32px`; provenance: `figma-literal` at `230:3635`
+      - Fact `padding-bottom`: `32px`; provenance: `figma-literal` at `230:3635`
+      - Fact `padding-left`: `32px`; provenance: `figma-literal` at `230:3635`
+      - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `230:3635`
+      - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `230:3635`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `230:3635`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `230:3635`
+      - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `230:3635`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `230:3635`
+      - Fact `background`: `#FFFFFF`; provenance: `figma-literal` at `230:3635`
+      - `root-card-content-area-text-content` — role `text-content`; render `presentation-table`; visibility `always`
+        - Fact `reference-size`: `488×117px`; provenance: `figma-literal` at `230:3636`
+        - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `230:3636`
+        - Fact `layout-gap`: `16px`; provenance: `figma-literal` at `230:3636`
+        - Fact `padding-top`: `0px`; provenance: `figma-literal` at `230:3636`
+        - Fact `padding-right`: `0px`; provenance: `figma-literal` at `230:3636`
+        - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `230:3636`
+        - Fact `padding-left`: `0px`; provenance: `figma-literal` at `230:3636`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `230:3636`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `230:3636`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `230:3636`
+        - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `230:3636`
+        - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `230:3636`
+        - Fact `border-radius`: `0px`; provenance: `figma-literal` at `230:3636`
+        - `root-card-content-area-text-content-heading` — role `heading`; render `html-text`; visibility `always`
+          - Fact `reference-size`: `488×76px`; provenance: `figma-literal` at `230:3637`
+          - Fact `text-color`: `#000000`; provenance: `figma-literal` at `230:3637`
+          - Fact `source-text`: `Небольшой заголовок на пару строк`; provenance: `figma-literal` at `230:3637`
+          - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `230:3637`
+          - Fact `font-style`: `Bold`; provenance: `figma-literal` at `230:3637`
+          - Fact `font-size`: `32px`; provenance: `figma-literal` at `230:3637`
+          - Fact `text-align`: `center`; provenance: `figma-literal` at `230:3637`
+          - Fact `text-decoration`: `none`; provenance: `figma-literal` at `230:3637`
+          - Fact `figma-style-id`: `S:4d43ca77a0bc52ca7e43f97a078a4d69cee87651,`; provenance: `figma-literal` at `230:3637`
+          - Fact `line-height`: `120%`; provenance: `figma-literal` at `230:3637`
+          - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `230:3637`
+          - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `230:3637`
+          - Fact `vertical-text-align`: `center`; provenance: `figma-literal` at `230:3637`
+          - Fact `text-case`: `original`; provenance: `figma-literal` at `230:3637`
+          - Fact `figma-style-name`: `Desktop/Display`; provenance: `figma-literal` at `230:3637`
+        - `root-card-content-area-text-content-body` — role `body`; render `html-text`; visibility property `show-body` (`Show Body`)
+          - Fact `reference-size`: `488×25px`; provenance: `figma-literal` at `230:3638`
+          - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `230:3638`
+          - Fact `source-text`: `Поясняющая подпись на несколько красивых строк`; provenance: `figma-literal` at `230:3638`
+          - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `230:3638`
+          - Fact `font-style`: `Regular`; provenance: `figma-literal` at `230:3638`
+          - Fact `font-size`: `18px`; provenance: `figma-literal` at `230:3638`
+          - Fact `text-align`: `center`; provenance: `figma-literal` at `230:3638`
+          - Fact `text-decoration`: `none`; provenance: `figma-literal` at `230:3638`
+          - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `230:3638`
+          - Fact `line-height`: `140%`; provenance: `figma-literal` at `230:3638`
+          - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `230:3638`
+          - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `230:3638`
+          - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `230:3638`
+          - Fact `text-case`: `original`; provenance: `figma-literal` at `230:3638`
+          - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `230:3638`
+      - `root-card-content-area-button` — role `button`; render `nested-component`; visibility property `show-button` (`Show Button`); component `button-primary` (`Button/Primary`)
+        - Fact `reference-size`: `230×54px`; provenance: `figma-literal` at `1045:18176`
+        - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `1045:18176`
+        - Fact `layout-gap`: `8px`; provenance: `figma-literal` at `1045:18176`
+        - Fact `padding-top`: `16px`; provenance: `figma-literal` at `1045:18176`
+        - Fact `padding-right`: `32px`; provenance: `figma-literal` at `1045:18176`
+        - Fact `padding-bottom`: `16px`; provenance: `figma-literal` at `1045:18176`
+        - Fact `padding-left`: `32px`; provenance: `figma-literal` at `1045:18176`
+        - Fact `horizontal-sizing`: `hug`; provenance: `figma-literal` at `1045:18176`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `1045:18176`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `1045:18176`
+        - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `1045:18176`
+        - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `1045:18176`
+        - Fact `border-radius`: `32px`; provenance: `figma-literal` at `1045:18176`
+        - Fact `instance-viewport`: `desktop`; provenance: `figma-literal` at `1045:18176`
 
 ### Mobile
 
 - `root` — role `banner`; render `presentation-table`; visibility `always`
-  - Fact `width-behavior`: `fluid-to-container`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `height-behavior`: `auto`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `fixed-height-forbidden`: `true`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-1`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-2`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-3`: `296:190`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-4`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-5`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-6`: `20px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-7`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-8`: `552×353px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-9`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-10`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-11`: `@2x`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-12`: asset `hero-image`
-  - `hero-image` — role `image`; render `direct-image`; visibility `always`; asset `hero-image`
-  - `heading` — role `heading`; render `html-text`; visibility `always`
-  - `body` — role `body`; render `html-text`; visibility property `show-body` (`Show Body`)
-  - `cta` — role `cta`; render `nested-component`; visibility property `show-button` (`Show Button`); component `button-primary` (`Button/Primary`)
+  - Fact `reference-size`: `328×410px`; provenance: `figma-literal` at `337:4359`
+  - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `337:4359`
+  - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `337:4359`
+  - Fact `padding-top`: `16px`; provenance: `figma-literal` at `337:4359`
+  - Fact `padding-right`: `16px`; provenance: `figma-literal` at `337:4359`
+  - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `337:4359`
+  - Fact `padding-left`: `16px`; provenance: `figma-literal` at `337:4359`
+  - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `337:4359`
+  - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `337:4359`
+  - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `337:4359`
+  - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `337:4359`
+  - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `337:4359`
+  - Fact `border-radius`: `0px`; provenance: `figma-literal` at `337:4359`
+  - `root-card` — role `card`; render `presentation-table`; visibility `always`
+    - Fact `reference-size`: `296×394px`; provenance: `figma-literal` at `619:20205`
+    - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `619:20205`
+    - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `619:20205`
+    - Fact `padding-top`: `0px`; provenance: `figma-literal` at `619:20205`
+    - Fact `padding-right`: `0px`; provenance: `figma-literal` at `619:20205`
+    - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `619:20205`
+    - Fact `padding-left`: `0px`; provenance: `figma-literal` at `619:20205`
+    - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `619:20205`
+    - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `619:20205`
+    - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `619:20205`
+    - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `619:20205`
+    - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `619:20205`
+    - Fact `border-radius`: `22px`; provenance: `figma-literal` at `619:20205`
+    - `root-card-hero-image` — role `hero-image`; render `direct-image`; visibility `always`; asset `hero-image`
+      - Fact `reference-size`: `296×190px`; provenance: `figma-literal` at `337:4348`
+      - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `337:4348`
+      - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `337:4348`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `337:4348`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `337:4348`
+      - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `337:4348`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `337:4348`
+      - Fact `height-behavior`: `auto`; provenance: `figma-description` at `337:4460`
+    - `root-card-content-area` — role `content-area`; render `presentation-table`; visibility `always`
+      - Fact `reference-size`: `296×204px`; provenance: `figma-literal` at `337:4349`
+      - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `337:4349`
+      - Fact `layout-gap`: `16px`; provenance: `figma-literal` at `337:4349`
+      - Fact `padding-top`: `22px`; provenance: `figma-literal` at `337:4349`
+      - Fact `padding-right`: `22px`; provenance: `figma-literal` at `337:4349`
+      - Fact `padding-bottom`: `22px`; provenance: `figma-literal` at `337:4349`
+      - Fact `padding-left`: `22px`; provenance: `figma-literal` at `337:4349`
+      - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `337:4349`
+      - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `337:4349`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `337:4349`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `337:4349`
+      - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `337:4349`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `337:4349`
+      - Fact `background`: `#FFFFFF`; provenance: `figma-literal` at `337:4349`
+      - `root-card-content-area-text-content` — role `text-content`; render `presentation-table`; visibility `always`
+        - Fact `reference-size`: `252×100px`; provenance: `figma-literal` at `337:4350`
+        - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `337:4350`
+        - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `337:4350`
+        - Fact `padding-top`: `0px`; provenance: `figma-literal` at `337:4350`
+        - Fact `padding-right`: `0px`; provenance: `figma-literal` at `337:4350`
+        - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `337:4350`
+        - Fact `padding-left`: `0px`; provenance: `figma-literal` at `337:4350`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `337:4350`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `337:4350`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `337:4350`
+        - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `337:4350`
+        - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `337:4350`
+        - Fact `border-radius`: `0px`; provenance: `figma-literal` at `337:4350`
+        - `root-card-content-area-text-content-heading` — role `heading`; render `html-text`; visibility `always`
+          - Fact `reference-size`: `252×48px`; provenance: `figma-literal` at `337:4351`
+          - Fact `text-color`: `#000000`; provenance: `figma-literal` at `337:4351`
+          - Fact `source-text`: `Небольшой заголовок на пару строк`; provenance: `figma-literal` at `337:4351`
+          - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `337:4351`
+          - Fact `font-style`: `Bold`; provenance: `figma-literal` at `337:4351`
+          - Fact `font-size`: `20px`; provenance: `figma-literal` at `337:4351`
+          - Fact `text-align`: `center`; provenance: `figma-literal` at `337:4351`
+          - Fact `text-decoration`: `none`; provenance: `figma-literal` at `337:4351`
+          - Fact `figma-style-id`: `S:ca236b65a83eef2e55e95564b051765d4fbe7c60,`; provenance: `figma-literal` at `337:4351`
+          - Fact `line-height`: `120%`; provenance: `figma-literal` at `337:4351`
+          - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `337:4351`
+          - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `337:4351`
+          - Fact `vertical-text-align`: `center`; provenance: `figma-literal` at `337:4351`
+          - Fact `text-case`: `original`; provenance: `figma-literal` at `337:4351`
+          - Fact `figma-style-name`: `Mobile/Display`; provenance: `figma-literal` at `337:4351`
+        - `root-card-content-area-text-content-body` — role `body`; render `html-text`; visibility property `show-body` (`Show Body`)
+          - Fact `reference-size`: `252×40px`; provenance: `figma-literal` at `337:4352`
+          - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `337:4352`
+          - Fact `source-text`: `Поясняющая подпись на несколько красивых строк`; provenance: `figma-literal` at `337:4352`
+          - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `337:4352`
+          - Fact `font-style`: `Regular`; provenance: `figma-literal` at `337:4352`
+          - Fact `font-size`: `14px`; provenance: `figma-literal` at `337:4352`
+          - Fact `text-align`: `center`; provenance: `figma-literal` at `337:4352`
+          - Fact `text-decoration`: `none`; provenance: `figma-literal` at `337:4352`
+          - Fact `figma-style-id`: `S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,`; provenance: `figma-literal` at `337:4352`
+          - Fact `line-height`: `140%`; provenance: `figma-literal` at `337:4352`
+          - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `337:4352`
+          - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `337:4352`
+          - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `337:4352`
+          - Fact `text-case`: `original`; provenance: `figma-literal` at `337:4352`
+          - Fact `figma-style-name`: `Mobile/Body/Large`; provenance: `figma-literal` at `337:4352`
+      - `root-card-content-area-button` — role `button`; render `nested-component`; visibility property `show-button` (`Show Button`); component `button-primary` (`Button/Primary`)
+        - Fact `reference-size`: `252×44px`; provenance: `figma-literal` at `1045:18180`
+        - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `1045:18180`
+        - Fact `layout-gap`: `8px`; provenance: `figma-literal` at `1045:18180`
+        - Fact `padding-top`: `12px`; provenance: `figma-literal` at `1045:18180`
+        - Fact `padding-right`: `24px`; provenance: `figma-literal` at `1045:18180`
+        - Fact `padding-bottom`: `12px`; provenance: `figma-literal` at `1045:18180`
+        - Fact `padding-left`: `24px`; provenance: `figma-literal` at `1045:18180`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `1045:18180`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `1045:18180`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `1045:18180`
+        - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `1045:18180`
+        - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `1045:18180`
+        - Fact `border-radius`: `32px`; provenance: `figma-literal` at `1045:18180`
+        - Fact `instance-viewport`: `mobile`; provenance: `figma-literal` at `1045:18180`
 
 ### Properties and variants
 
@@ -1411,13 +2013,13 @@ RENDER: HYBRID
   - Aspect ratio: 552:353
   - Crop: `figma-fill`; position `concrete-desktop-instance`
   - Background: own fill `preserve`; artificial matte `forbid`
-- Asset usage: `mobile` `/contracts/mobile/root/children/0` → `hero-image` as `direct-image`
-- Asset usage: `desktop` `/contracts/desktop/root/children/0` → `hero-image` as `direct-image`
+- Asset usage: `mobile` `/contracts/mobile/root/children/0/children/0` → `hero-image` as `direct-image`
+- Asset usage: `desktop` `/contracts/desktop/root/children/0/children/0` → `hero-image` as `direct-image`
 
 ### Constraints and dependencies
 
-- Dependency: `/contracts/mobile/root/children/3/component_id` → component `button-primary` (`Button/Primary`)
-- Dependency: `/contracts/desktop/root/children/3/component_id` → component `button-primary` (`Button/Primary`)
+- Dependency: `/contracts/mobile/root/children/0/children/1/children/1/component_id` → component `button-primary` (`Button/Primary`)
+- Dependency: `/contracts/desktop/root/children/0/children/1/children/1/component_id` → component `button-primary` (`Button/Primary`)
 
 ### Output contract classification
 
@@ -1461,27 +2063,130 @@ RENDER: HYBRID
 ### Desktop
 
 - `root` — role `banner`; render `presentation-table`; visibility `always`
-  - `feature-icon` — role `icon`; render `direct-image`; visibility `always`; asset `feature-icon`
-  - `text` — role `text`; render `html-text`; visibility `always`
-  - `chevron-icon` — role `icon`; render `direct-image`; visibility `always`; asset `chevron-icon`
+  - Fact `reference-size`: `600×122px`; provenance: `figma-literal` at `260:591`
+  - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `260:591`
+  - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `260:591`
+  - Fact `padding-top`: `24px`; provenance: `figma-literal` at `260:591`
+  - Fact `padding-right`: `24px`; provenance: `figma-literal` at `260:591`
+  - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `260:591`
+  - Fact `padding-left`: `24px`; provenance: `figma-literal` at `260:591`
+  - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `260:591`
+  - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `260:591`
+  - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `260:591`
+  - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `260:591`
+  - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `260:591`
+  - Fact `border-radius`: `0px`; provenance: `figma-literal` at `260:591`
+  - `root-content-area` — role `content-area`; render `presentation-table`; visibility `always`
+    - Fact `reference-size`: `552×98px`; provenance: `figma-literal` at `260:585`
+    - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `260:585`
+    - Fact `layout-gap`: `24px`; provenance: `figma-literal` at `260:585`
+    - Fact `padding-top`: `24px`; provenance: `figma-literal` at `260:585`
+    - Fact `padding-right`: `24px`; provenance: `figma-literal` at `260:585`
+    - Fact `padding-bottom`: `24px`; provenance: `figma-literal` at `260:585`
+    - Fact `padding-left`: `24px`; provenance: `figma-literal` at `260:585`
+    - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `260:585`
+    - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `260:585`
+    - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `260:585`
+    - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `260:585`
+    - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `260:585`
+    - Fact `border-radius`: `26px`; provenance: `figma-literal` at `260:585`
+    - Fact `background`: `#FFFFFF`; provenance: `figma-literal` at `260:585`
+    - `root-content-area-feature-icon` — role `feature-icon`; render `direct-image`; visibility `always`; asset `feature-icon`
+      - Fact `reference-size`: `48×48px`; provenance: `figma-literal` at `1015:18503`
+      - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `1015:18503`
+      - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `1015:18503`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `1015:18503`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `1015:18503`
+      - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `1015:18503`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `1015:18503`
+    - `root-content-area-body` — role `body`; render `html-text`; visibility `always`
+      - Fact `reference-size`: `384×50px`; provenance: `figma-literal` at `260:588`
+      - Fact `text-color`: `#000000`; provenance: `figma-literal` at `260:588`
+      - Fact `source-text`: `Небольшой текст мини-баннера на несколько строк`; provenance: `figma-literal` at `260:588`
+      - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `260:588`
+      - Fact `font-style`: `Regular`; provenance: `figma-literal` at `260:588`
+      - Fact `font-size`: `18px`; provenance: `figma-literal` at `260:588`
+      - Fact `text-align`: `left`; provenance: `figma-literal` at `260:588`
+      - Fact `text-decoration`: `none`; provenance: `figma-literal` at `260:588`
+      - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `260:588`
+      - Fact `line-height`: `140%`; provenance: `figma-literal` at `260:588`
+      - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `260:588`
+      - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `260:588`
+      - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `260:588`
+      - Fact `text-case`: `original`; provenance: `figma-literal` at `260:588`
+      - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `260:588`
+    - `root-content-area-chevron-icon` — role `chevron-icon`; render `direct-image`; visibility `always`; asset `chevron-icon`
+      - Fact `reference-size`: `24×24px`; provenance: `figma-literal` at `260:589`
+      - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `260:589`
+      - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `260:589`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `260:589`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `260:589`
+      - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `260:589`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `260:589`
 
 ### Mobile
 
 - `root` — role `banner`; render `presentation-table`; visibility `always`
-  - Fact `description-1`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-2`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-3`: `42×42px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-4`: `24×24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-5`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-6`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-7`: `26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-8`: `48×48px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-9`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-10`: `@4x`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-11`: asset `chevron-icon`
-  - `feature-icon` — role `icon`; render `direct-image`; visibility `always`; asset `feature-icon`
-  - `text` — role `text`; render `html-text`; visibility `always`
-  - `chevron-icon` — role `icon`; render `direct-image`; visibility `always`; asset `chevron-icon`
+  - Fact `reference-size`: `328×108px`; provenance: `figma-literal` at `13:353`
+  - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `13:353`
+  - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `13:353`
+  - Fact `padding-top`: `16px`; provenance: `figma-literal` at `13:353`
+  - Fact `padding-right`: `16px`; provenance: `figma-literal` at `13:353`
+  - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `13:353`
+  - Fact `padding-left`: `16px`; provenance: `figma-literal` at `13:353`
+  - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `13:353`
+  - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `13:353`
+  - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `13:353`
+  - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `13:353`
+  - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `13:353`
+  - Fact `border-radius`: `0px`; provenance: `figma-literal` at `13:353`
+  - `root-content-area` — role `content-area`; render `presentation-table`; visibility `always`
+    - Fact `reference-size`: `296×92px`; provenance: `figma-literal` at `13:339`
+    - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `13:339`
+    - Fact `layout-gap`: `16px`; provenance: `figma-literal` at `13:339`
+    - Fact `padding-top`: `16px`; provenance: `figma-literal` at `13:339`
+    - Fact `padding-right`: `16px`; provenance: `figma-literal` at `13:339`
+    - Fact `padding-bottom`: `16px`; provenance: `figma-literal` at `13:339`
+    - Fact `padding-left`: `16px`; provenance: `figma-literal` at `13:339`
+    - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `13:339`
+    - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `13:339`
+    - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `13:339`
+    - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `13:339`
+    - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `13:339`
+    - Fact `border-radius`: `22px`; provenance: `figma-literal` at `13:339`
+    - Fact `background`: `#FFFFFF`; provenance: `figma-literal` at `13:339`
+    - `root-content-area-feature-icon` — role `feature-icon`; render `direct-image`; visibility `always`; asset `feature-icon`
+      - Fact `reference-size`: `42×42px`; provenance: `figma-literal` at `1015:18511`
+      - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `1015:18511`
+      - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `1015:18511`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `1015:18511`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `1015:18511`
+      - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `1015:18511`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `1015:18511`
+    - `root-content-area-body` — role `body`; render `html-text`; visibility `always`
+      - Fact `reference-size`: `166×60px`; provenance: `figma-literal` at `13:342`
+      - Fact `text-color`: `#000000`; provenance: `figma-literal` at `13:342`
+      - Fact `source-text`: `Небольшой текст мини-баннера на несколько строк`; provenance: `figma-literal` at `13:342`
+      - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `13:342`
+      - Fact `font-style`: `Regular`; provenance: `figma-literal` at `13:342`
+      - Fact `font-size`: `14px`; provenance: `figma-literal` at `13:342`
+      - Fact `text-align`: `left`; provenance: `figma-literal` at `13:342`
+      - Fact `text-decoration`: `none`; provenance: `figma-literal` at `13:342`
+      - Fact `figma-style-id`: `S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,`; provenance: `figma-literal` at `13:342`
+      - Fact `line-height`: `140%`; provenance: `figma-literal` at `13:342`
+      - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `13:342`
+      - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `13:342`
+      - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `13:342`
+      - Fact `text-case`: `original`; provenance: `figma-literal` at `13:342`
+      - Fact `figma-style-name`: `Mobile/Body/Large`; provenance: `figma-literal` at `13:342`
+    - `root-content-area-chevron-icon` — role `chevron-icon`; render `direct-image`; visibility `always`; asset `chevron-icon`
+      - Fact `reference-size`: `24×24px`; provenance: `figma-literal` at `13:343`
+      - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `13:343`
+      - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `13:343`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `13:343`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `13:343`
+      - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `13:343`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `13:343`
 
 ### Properties and variants
 
@@ -1518,10 +2223,10 @@ RENDER: HYBRID
   - Aspect ratio: 24:24
   - Crop: `none`; position `exact-node-after-overrides`
   - Background: own fill `preserve`; artificial matte `forbid`
-- Asset usage: `mobile` `/contracts/mobile/root/children/0` → `feature-icon` as `direct-image`
-- Asset usage: `mobile` `/contracts/mobile/root/children/2` → `chevron-icon` as `direct-image`
-- Asset usage: `desktop` `/contracts/desktop/root/children/0` → `feature-icon` as `direct-image`
-- Asset usage: `desktop` `/contracts/desktop/root/children/2` → `chevron-icon` as `direct-image`
+- Asset usage: `mobile` `/contracts/mobile/root/children/0/children/0` → `feature-icon` as `direct-image`
+- Asset usage: `mobile` `/contracts/mobile/root/children/0/children/2` → `chevron-icon` as `direct-image`
+- Asset usage: `desktop` `/contracts/desktop/root/children/0/children/0` → `feature-icon` as `direct-image`
+- Asset usage: `desktop` `/contracts/desktop/root/children/0/children/2` → `chevron-icon` as `direct-image`
 
 ### Output contract classification
 
@@ -1565,47 +2270,236 @@ RENDER: HYBRID
 ### Desktop
 
 - `root` — role `banner`; render `presentation-table`; visibility `always`
-  - Fact `banner-top-gap`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `banner-inner-width`: `552px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `root-layout-axis`: `horizontal`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `content-area` — role `content-area`; render `presentation-table`; visibility `always`
-    - Fact `content-area-padding`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `content-area-layout-gap`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `content-area-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `content-area-width`: `300px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - `text-content` — role `text-content`; render `presentation-table`; visibility `always`
-      - Fact `text-content-layout-gap`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-      - Fact `text-content-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-      - Fact `content-inner-width`: `236px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-      - `heading` — role `heading`; render `html-text`; visibility `always`
-        - Fact `heading-font-size`: `20px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-      - `body` — role `body`; render `html-text`; visibility property `show-body` (`Show Body`)
-        - Fact `body-font-size`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - `button` — role `button`; render `nested-component`; visibility property `show-button` (`Show Button`); component `button-secondary` (`Button/Secondary`)
-  - `secondary-image` — role `image`; render `background-image`; visibility `always`; asset `secondary-image`
-    - Fact `image-area-width`: `252px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `reference-size`: `600×262px`; provenance: `figma-literal` at `337:4844`
+  - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `337:4844`
+  - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `337:4844`
+  - Fact `padding-top`: `24px`; provenance: `figma-literal` at `337:4844`
+  - Fact `padding-right`: `24px`; provenance: `figma-literal` at `337:4844`
+  - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `337:4844`
+  - Fact `padding-left`: `24px`; provenance: `figma-literal` at `337:4844`
+  - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `337:4844`
+  - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `337:4844`
+  - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `337:4844`
+  - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `337:4844`
+  - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `337:4844`
+  - Fact `border-radius`: `0px`; provenance: `figma-literal` at `337:4844`
+  - `root-card` — role `card`; render `presentation-table`; visibility `always`
+    - Fact `reference-size`: `552×238px`; provenance: `figma-literal` at `619:19662`
+    - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `619:19662`
+    - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `619:19662`
+    - Fact `padding-top`: `0px`; provenance: `figma-literal` at `619:19662`
+    - Fact `padding-right`: `0px`; provenance: `figma-literal` at `619:19662`
+    - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `619:19662`
+    - Fact `padding-left`: `0px`; provenance: `figma-literal` at `619:19662`
+    - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `619:19662`
+    - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `619:19662`
+    - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `619:19662`
+    - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `619:19662`
+    - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `619:19662`
+    - Fact `border-radius`: `26px`; provenance: `figma-literal` at `619:19662`
+    - `root-card-content-area` — role `content-area`; render `presentation-table`; visibility `always`
+      - Fact `reference-size`: `300×238px`; provenance: `figma-literal` at `326:6612`
+      - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `326:6612`
+      - Fact `layout-gap`: `24px`; provenance: `figma-literal` at `326:6612`
+      - Fact `padding-top`: `32px`; provenance: `figma-literal` at `326:6612`
+      - Fact `padding-right`: `32px`; provenance: `figma-literal` at `326:6612`
+      - Fact `padding-bottom`: `32px`; provenance: `figma-literal` at `326:6612`
+      - Fact `padding-left`: `32px`; provenance: `figma-literal` at `326:6612`
+      - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `326:6612`
+      - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `326:6612`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `326:6612`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `326:6612`
+      - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `326:6612`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `326:6612`
+      - Fact `background`: `#FFFFFF`; provenance: `figma-literal` at `326:6612`
+      - `root-card-content-area-text-content` — role `text-content`; render `presentation-table`; visibility `always`
+        - Fact `reference-size`: `236×104px`; provenance: `figma-literal` at `326:6613`
+        - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `326:6613`
+        - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `326:6613`
+        - Fact `padding-top`: `0px`; provenance: `figma-literal` at `326:6613`
+        - Fact `padding-right`: `0px`; provenance: `figma-literal` at `326:6613`
+        - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `326:6613`
+        - Fact `padding-left`: `0px`; provenance: `figma-literal` at `326:6613`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `326:6613`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `326:6613`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `326:6613`
+        - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `326:6613`
+        - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `326:6613`
+        - Fact `border-radius`: `0px`; provenance: `figma-literal` at `326:6613`
+        - `root-card-content-area-text-content-heading` — role `heading`; render `html-text`; visibility `always`
+          - Fact `reference-size`: `236×48px`; provenance: `figma-literal` at `326:6614`
+          - Fact `text-color`: `#000000`; provenance: `figma-literal` at `326:6614`
+          - Fact `source-text`: `Небольшой заголовок на пару строк`; provenance: `figma-literal` at `326:6614`
+          - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `326:6614`
+          - Fact `font-style`: `SemiBold`; provenance: `figma-literal` at `326:6614`
+          - Fact `font-size`: `20px`; provenance: `figma-literal` at `326:6614`
+          - Fact `text-align`: `left`; provenance: `figma-literal` at `326:6614`
+          - Fact `text-decoration`: `none`; provenance: `figma-literal` at `326:6614`
+          - Fact `figma-style-id`: `S:19f62229647b1872179c0b08e87bc09081f758ec,`; provenance: `figma-literal` at `326:6614`
+          - Fact `line-height`: `120%`; provenance: `figma-literal` at `326:6614`
+          - Fact `letter-spacing`: `0px`; provenance: `figma-literal` at `326:6614`
+          - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `326:6614`
+          - Fact `vertical-text-align`: `center`; provenance: `figma-literal` at `326:6614`
+          - Fact `text-case`: `original`; provenance: `figma-literal` at `326:6614`
+          - Fact `figma-style-name`: `Desktop/Heading/Compact`; provenance: `figma-literal` at `326:6614`
+        - `root-card-content-area-text-content-body` — role `body`; render `html-text`; visibility property `show-body` (`Show Body`)
+          - Fact `reference-size`: `236×44px`; provenance: `figma-literal` at `326:6615`
+          - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `326:6615`
+          - Fact `source-text`: `Поясняющая подпись на несколько красивых строк`; provenance: `figma-literal` at `326:6615`
+          - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `326:6615`
+          - Fact `font-style`: `Regular`; provenance: `figma-literal` at `326:6615`
+          - Fact `font-size`: `16px`; provenance: `figma-literal` at `326:6615`
+          - Fact `text-align`: `left`; provenance: `figma-literal` at `326:6615`
+          - Fact `text-decoration`: `none`; provenance: `figma-literal` at `326:6615`
+          - Fact `figma-style-id`: `S:0eb6b02f56ee5f02f09611af5a13a41b6121e78d,`; provenance: `figma-literal` at `326:6615`
+          - Fact `line-height`: `140%`; provenance: `figma-literal` at `326:6615`
+          - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `326:6615`
+          - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `326:6615`
+          - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `326:6615`
+          - Fact `text-case`: `original`; provenance: `figma-literal` at `326:6615`
+          - Fact `figma-style-name`: `Desktop/Body/Medium`; provenance: `figma-literal` at `326:6615`
+      - `root-card-content-area-button` — role `button`; render `nested-component`; visibility property `show-button` (`Show Button`); component `button-secondary` (`Button/Secondary`)
+        - Fact `reference-size`: `230×46px`; provenance: `figma-literal` at `337:4842`
+        - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `337:4842`
+        - Fact `layout-gap`: `8px`; provenance: `figma-literal` at `337:4842`
+        - Fact `padding-top`: `12px`; provenance: `figma-literal` at `337:4842`
+        - Fact `padding-right`: `24px`; provenance: `figma-literal` at `337:4842`
+        - Fact `padding-bottom`: `12px`; provenance: `figma-literal` at `337:4842`
+        - Fact `padding-left`: `24px`; provenance: `figma-literal` at `337:4842`
+        - Fact `horizontal-sizing`: `hug`; provenance: `figma-literal` at `337:4842`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `337:4842`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `337:4842`
+        - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `337:4842`
+        - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `337:4842`
+        - Fact `border-radius`: `26px`; provenance: `figma-literal` at `337:4842`
+        - Fact `background`: `#48494A`; provenance: `figma-literal` at `337:4842`
+        - Fact `instance-viewport`: `desktop`; provenance: `figma-literal` at `337:4842`
+    - `root-card-secondary-image` — role `secondary-image`; render `background-image`; visibility `always`; asset `secondary-image`
+      - Fact `reference-size`: `252×238px`; provenance: `figma-literal` at `326:6618`
+      - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `326:6618`
+      - Fact `vertical-sizing`: `fill`; provenance: `figma-literal` at `326:6618`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `326:6618`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `326:6618`
+      - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `326:6618`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `326:6618`
+      - Fact `height-behavior`: `content-driven-cover`; provenance: `figma-description` at `337:4870`
 
 ### Mobile
 
 - `root` — role `banner`; render `presentation-table`; visibility `always`
-  - Fact `banner-top-gap`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `root-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `secondary-image` — role `image`; render `direct-image`; visibility `always`; asset `secondary-image`
-    - Fact `width-behavior`: `fluid-to-container`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `height-behavior`: `auto`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `fixed-height-forbidden`: `true`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `content-area` — role `content-area`; render `presentation-table`; visibility `always`
-    - Fact `content-area-padding`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `content-area-layout-gap`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `content-area-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - `text-content` — role `text-content`; render `presentation-table`; visibility `always`
-      - Fact `text-content-layout-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-      - Fact `text-content-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-      - `heading` — role `heading`; render `html-text`; visibility `always`
-        - Fact `heading-font-size`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-      - `body` — role `body`; render `html-text`; visibility property `show-body` (`Show Body`)
-        - Fact `body-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - `button` — role `button`; render `nested-component`; visibility property `show-button` (`Show Button`); component `button-secondary` (`Button/Secondary`)
+  - Fact `reference-size`: `328×400px`; provenance: `figma-literal` at `11:1218`
+  - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `11:1218`
+  - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `11:1218`
+  - Fact `padding-top`: `16px`; provenance: `figma-literal` at `11:1218`
+  - Fact `padding-right`: `16px`; provenance: `figma-literal` at `11:1218`
+  - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `11:1218`
+  - Fact `padding-left`: `16px`; provenance: `figma-literal` at `11:1218`
+  - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `11:1218`
+  - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `11:1218`
+  - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `11:1218`
+  - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `11:1218`
+  - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `11:1218`
+  - Fact `border-radius`: `0px`; provenance: `figma-literal` at `11:1218`
+  - `root-card` — role `card`; render `presentation-table`; visibility `always`
+    - Fact `reference-size`: `296×384px`; provenance: `figma-literal` at `619:1843`
+    - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `619:1843`
+    - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `619:1843`
+    - Fact `padding-top`: `0px`; provenance: `figma-literal` at `619:1843`
+    - Fact `padding-right`: `0px`; provenance: `figma-literal` at `619:1843`
+    - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `619:1843`
+    - Fact `padding-left`: `0px`; provenance: `figma-literal` at `619:1843`
+    - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `619:1843`
+    - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `619:1843`
+    - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `619:1843`
+    - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `619:1843`
+    - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `619:1843`
+    - Fact `border-radius`: `22px`; provenance: `figma-literal` at `619:1843`
+    - `root-card-secondary-image` — role `secondary-image`; render `direct-image`; visibility `always`; asset `secondary-image`
+      - Fact `reference-size`: `296×188px`; provenance: `figma-literal` at `11:1184`
+      - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `11:1184`
+      - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `11:1184`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `11:1184`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `11:1184`
+      - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `11:1184`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `11:1184`
+      - Fact `height-behavior`: `auto`; provenance: `figma-description` at `337:4870`
+    - `root-card-content-area` — role `content-area`; render `presentation-table`; visibility `always`
+      - Fact `reference-size`: `296×196px`; provenance: `figma-literal` at `11:1190`
+      - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `11:1190`
+      - Fact `layout-gap`: `16px`; provenance: `figma-literal` at `11:1190`
+      - Fact `padding-top`: `22px`; provenance: `figma-literal` at `11:1190`
+      - Fact `padding-right`: `22px`; provenance: `figma-literal` at `11:1190`
+      - Fact `padding-bottom`: `22px`; provenance: `figma-literal` at `11:1190`
+      - Fact `padding-left`: `22px`; provenance: `figma-literal` at `11:1190`
+      - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `11:1190`
+      - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `11:1190`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `11:1190`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `11:1190`
+      - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `11:1190`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `11:1190`
+      - Fact `background`: `#FFFFFF`; provenance: `figma-literal` at `11:1190`
+      - `root-card-content-area-text-content` — role `text-content`; render `presentation-table`; visibility `always`
+        - Fact `reference-size`: `252×92px`; provenance: `figma-literal` at `11:1191`
+        - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `11:1191`
+        - Fact `layout-gap`: `8px`; provenance: `figma-literal` at `11:1191`
+        - Fact `padding-top`: `0px`; provenance: `figma-literal` at `11:1191`
+        - Fact `padding-right`: `0px`; provenance: `figma-literal` at `11:1191`
+        - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `11:1191`
+        - Fact `padding-left`: `0px`; provenance: `figma-literal` at `11:1191`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `11:1191`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `11:1191`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `11:1191`
+        - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `11:1191`
+        - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `11:1191`
+        - Fact `border-radius`: `0px`; provenance: `figma-literal` at `11:1191`
+        - `root-card-content-area-text-content-heading` — role `heading`; render `html-text`; visibility `always`
+          - Fact `reference-size`: `252×44px`; provenance: `figma-literal` at `11:1192`
+          - Fact `text-color`: `#000000`; provenance: `figma-literal` at `11:1192`
+          - Fact `source-text`: `Небольшой заголовок на пару строк`; provenance: `figma-literal` at `11:1192`
+          - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `11:1192`
+          - Fact `font-style`: `SemiBold`; provenance: `figma-literal` at `11:1192`
+          - Fact `font-size`: `18px`; provenance: `figma-literal` at `11:1192`
+          - Fact `text-align`: `center`; provenance: `figma-literal` at `11:1192`
+          - Fact `text-decoration`: `none`; provenance: `figma-literal` at `11:1192`
+          - Fact `figma-style-id`: `S:31421a8c479c960e9e5fcdf32b0717960340b772,`; provenance: `figma-literal` at `11:1192`
+          - Fact `line-height`: `120%`; provenance: `figma-literal` at `11:1192`
+          - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `11:1192`
+          - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `11:1192`
+          - Fact `vertical-text-align`: `center`; provenance: `figma-literal` at `11:1192`
+          - Fact `text-case`: `original`; provenance: `figma-literal` at `11:1192`
+          - Fact `figma-style-name`: `Mobile/Heading`; provenance: `figma-literal` at `11:1192`
+        - `root-card-content-area-text-content-body` — role `body`; render `html-text`; visibility property `show-body` (`Show Body`)
+          - Fact `reference-size`: `252×40px`; provenance: `figma-literal` at `11:1193`
+          - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `11:1193`
+          - Fact `source-text`: `Поясняющая подпись на несколько красивых строк`; provenance: `figma-literal` at `11:1193`
+          - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `11:1193`
+          - Fact `font-style`: `Regular`; provenance: `figma-literal` at `11:1193`
+          - Fact `font-size`: `14px`; provenance: `figma-literal` at `11:1193`
+          - Fact `text-align`: `center`; provenance: `figma-literal` at `11:1193`
+          - Fact `text-decoration`: `none`; provenance: `figma-literal` at `11:1193`
+          - Fact `figma-style-id`: `S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,`; provenance: `figma-literal` at `11:1193`
+          - Fact `line-height`: `140%`; provenance: `figma-literal` at `11:1193`
+          - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `11:1193`
+          - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `11:1193`
+          - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `11:1193`
+          - Fact `text-case`: `original`; provenance: `figma-literal` at `11:1193`
+          - Fact `figma-style-name`: `Mobile/Body/Large`; provenance: `figma-literal` at `11:1193`
+      - `root-card-content-area-button` — role `button`; render `nested-component`; visibility property `show-button` (`Show Button`); component `button-secondary` (`Button/Secondary`)
+        - Fact `reference-size`: `252×44px`; provenance: `figma-literal` at `337:4834`
+        - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `337:4834`
+        - Fact `layout-gap`: `8px`; provenance: `figma-literal` at `337:4834`
+        - Fact `padding-top`: `12px`; provenance: `figma-literal` at `337:4834`
+        - Fact `padding-right`: `24px`; provenance: `figma-literal` at `337:4834`
+        - Fact `padding-bottom`: `12px`; provenance: `figma-literal` at `337:4834`
+        - Fact `padding-left`: `24px`; provenance: `figma-literal` at `337:4834`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `337:4834`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `337:4834`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `337:4834`
+        - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `337:4834`
+        - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `337:4834`
+        - Fact `border-radius`: `26px`; provenance: `figma-literal` at `337:4834`
+        - Fact `background`: `#48494A`; provenance: `figma-literal` at `337:4834`
+        - Fact `instance-viewport`: `mobile`; provenance: `figma-literal` at `337:4834`
 
 ### Properties and variants
 
@@ -1632,13 +2526,13 @@ RENDER: HYBRID
   - Aspect ratio: 296:188
   - Crop: `figma-fill`; position `concrete-desktop-instance`
   - Background: own fill `preserve`; artificial matte `forbid`
-- Asset usage: `mobile` `/contracts/mobile/root/children/0` → `secondary-image` as `direct-image`
-- Asset usage: `desktop` `/contracts/desktop/root/children/1` → `secondary-image` as `background-image`
+- Asset usage: `mobile` `/contracts/mobile/root/children/0/children/0` → `secondary-image` as `direct-image`
+- Asset usage: `desktop` `/contracts/desktop/root/children/0/children/1` → `secondary-image` as `background-image`
 
 ### Constraints and dependencies
 
-- Dependency: `/contracts/mobile/root/children/1/children/1/component_id` → component `button-secondary` (`Button/Secondary`)
-- Dependency: `/contracts/desktop/root/children/0/children/1/component_id` → component `button-secondary` (`Button/Secondary`)
+- Dependency: `/contracts/mobile/root/children/0/children/1/children/1/component_id` → component `button-secondary` (`Button/Secondary`)
+- Dependency: `/contracts/desktop/root/children/0/children/0/children/1/component_id` → component `button-secondary` (`Button/Secondary`)
 
 ### Output contract classification
 
@@ -4795,30 +5689,76 @@ RENDER: HTML
 ### Desktop
 
 - `root` — role `button`; render `presentation-table`; visibility `always`
-  - Fact `button-padding-block`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `button-padding-inline`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `button-border-radius`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `background-fallback`: `#18B037`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `background-gradient-start`: `#18B037`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `background-gradient-end`: `#3DD55C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `background-gradient-css-angle-degrees`: `25`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `background-replacement-forbidden`: `#00991F`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `link` — role `button-link`; render `html-link`; visibility `always`
-    - Fact `button-text-size`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `reference-size`: `230×54px`; provenance: `figma-literal` at `337:4694`
+  - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `337:4694`
+  - Fact `layout-gap`: `8px`; provenance: `figma-literal` at `337:4694`
+  - Fact `padding-top`: `16px`; provenance: `figma-literal` at `337:4694`
+  - Fact `padding-right`: `32px`; provenance: `figma-literal` at `337:4694`
+  - Fact `padding-bottom`: `16px`; provenance: `figma-literal` at `337:4694`
+  - Fact `padding-left`: `32px`; provenance: `figma-literal` at `337:4694`
+  - Fact `horizontal-sizing`: `hug`; provenance: `figma-literal` at `337:4694`
+  - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `337:4694`
+  - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `337:4694`
+  - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `337:4694`
+  - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `337:4694`
+  - Fact `border-radius`: `32px`; provenance: `figma-literal` at `337:4694`
+  - Fact `background-fallback`: `#18B037`; provenance: `figma-literal` at `337:4694`
+  - Fact `background-gradient-start`: `#18B037`; provenance: `figma-literal` at `337:4694`
+  - Fact `background-gradient-end`: `#3DD55C`; provenance: `figma-literal` at `337:4694`
+  - Fact `background-gradient-css-angle-degrees`: `25`; provenance: `figma-description` at `337:4713`
+  - `root-label` — role `label`; render `html-text`; visibility `always`
+    - Fact `reference-size`: `166×22px`; provenance: `figma-literal` at `337:4693`
+    - Fact `text-color`: `#FFFFFF`; provenance: `figma-literal` at `337:4693`
+    - Fact `source-text`: `Какая-то кнопка`; provenance: `figma-literal` at `337:4693`
+    - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `337:4693`
+    - Fact `font-style`: `Medium`; provenance: `figma-literal` at `337:4693`
+    - Fact `font-size`: `16px`; provenance: `figma-literal` at `337:4693`
+    - Fact `text-align`: `center`; provenance: `figma-literal` at `337:4693`
+    - Fact `text-decoration`: `none`; provenance: `figma-literal` at `337:4693`
+    - Fact `figma-style-id`: `S:80178ed95ee94439436fb7ea36e3eb926f986be2,`; provenance: `figma-literal` at `337:4693`
+    - Fact `line-height`: `140%`; provenance: `figma-literal` at `337:4693`
+    - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `337:4693`
+    - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `337:4693`
+    - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `337:4693`
+    - Fact `text-case`: `original`; provenance: `figma-literal` at `337:4693`
+    - Fact `figma-style-name`: `Desktop/Action`; provenance: `figma-literal` at `337:4693`
 
 ### Mobile
 
 - `root` — role `button`; render `presentation-table`; visibility `always`
-  - Fact `button-padding-block`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `button-padding-inline`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `button-border-radius`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `background-fallback`: `#18B037`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `background-gradient-start`: `#18B037`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `background-gradient-end`: `#3DD55C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `background-gradient-css-angle-degrees`: `25`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `background-replacement-forbidden`: `#00991F`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `link` — role `button-link`; render `html-link`; visibility `always`
-    - Fact `button-text-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `reference-size`: `158×44px`; provenance: `figma-literal` at `337:4691`
+  - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `337:4691`
+  - Fact `layout-gap`: `8px`; provenance: `figma-literal` at `337:4691`
+  - Fact `padding-top`: `12px`; provenance: `figma-literal` at `337:4691`
+  - Fact `padding-right`: `24px`; provenance: `figma-literal` at `337:4691`
+  - Fact `padding-bottom`: `12px`; provenance: `figma-literal` at `337:4691`
+  - Fact `padding-left`: `24px`; provenance: `figma-literal` at `337:4691`
+  - Fact `horizontal-sizing`: `hug`; provenance: `figma-literal` at `337:4691`
+  - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `337:4691`
+  - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `337:4691`
+  - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `337:4691`
+  - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `337:4691`
+  - Fact `border-radius`: `32px`; provenance: `figma-literal` at `337:4691`
+  - Fact `background-fallback`: `#18B037`; provenance: `figma-literal` at `337:4691`
+  - Fact `background-gradient-start`: `#18B037`; provenance: `figma-literal` at `337:4691`
+  - Fact `background-gradient-end`: `#3DD55C`; provenance: `figma-literal` at `337:4691`
+  - Fact `background-gradient-css-angle-degrees`: `25`; provenance: `figma-description` at `337:4713`
+  - `root-label` — role `label`; render `html-text`; visibility `always`
+    - Fact `reference-size`: `110×20px`; provenance: `figma-literal` at `337:4690`
+    - Fact `text-color`: `#FFFFFF`; provenance: `figma-literal` at `337:4690`
+    - Fact `source-text`: `Какая-то кнопка`; provenance: `figma-literal` at `337:4690`
+    - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `337:4690`
+    - Fact `font-style`: `Medium`; provenance: `figma-literal` at `337:4690`
+    - Fact `font-size`: `14px`; provenance: `figma-literal` at `337:4690`
+    - Fact `text-align`: `center`; provenance: `figma-literal` at `337:4690`
+    - Fact `text-decoration`: `none`; provenance: `figma-literal` at `337:4690`
+    - Fact `figma-style-id`: `S:780f997658bfc56dc4db512b20c92d16c415c3f3,`; provenance: `figma-literal` at `337:4690`
+    - Fact `line-height`: `140%`; provenance: `figma-literal` at `337:4690`
+    - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `337:4690`
+    - Fact `text-auto-resize`: `width_and_height`; provenance: `figma-literal` at `337:4690`
+    - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `337:4690`
+    - Fact `text-case`: `original`; provenance: `figma-literal` at `337:4690`
+    - Fact `figma-style-name`: `Mobile/Action`; provenance: `figma-literal` at `337:4690`
 
 ### Properties and variants
 
@@ -4826,11 +5766,6 @@ RENDER: HTML
 - Variant `mobile` — Figma node `337:4691`; axes: `Viewport=Mobile`
 - Direct Figma source: `337:4694`; `Viewport=Desktop`; reference frame 230×54px
 - Direct Figma source: `337:4691`; `Viewport=Mobile`; reference frame 158×44px
-
-### Assets and interaction
-
-- Link: `mobile` `/contracts/mobile/root/children/0`
-- Link: `desktop` `/contracts/desktop/root/children/0`
 
 ### Output contract classification
 
@@ -4874,18 +5809,70 @@ RENDER: HTML
 ### Desktop
 
 - `root` — role `button`; render `presentation-table`; visibility `always`
-  - `link` — role `button-link`; render `html-link`; visibility `always`
+  - Fact `reference-size`: `230×46px`; provenance: `figma-literal` at `337:4699`
+  - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `337:4699`
+  - Fact `layout-gap`: `8px`; provenance: `figma-literal` at `337:4699`
+  - Fact `padding-top`: `12px`; provenance: `figma-literal` at `337:4699`
+  - Fact `padding-right`: `24px`; provenance: `figma-literal` at `337:4699`
+  - Fact `padding-bottom`: `12px`; provenance: `figma-literal` at `337:4699`
+  - Fact `padding-left`: `24px`; provenance: `figma-literal` at `337:4699`
+  - Fact `horizontal-sizing`: `hug`; provenance: `figma-literal` at `337:4699`
+  - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `337:4699`
+  - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `337:4699`
+  - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `337:4699`
+  - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `337:4699`
+  - Fact `border-radius`: `26px`; provenance: `figma-literal` at `337:4699`
+  - Fact `background`: `#48494A`; provenance: `figma-literal` at `337:4699`
+  - `root-label` — role `label`; render `html-text`; visibility `always`
+    - Fact `reference-size`: `182×22px`; provenance: `figma-literal` at `337:4698`
+    - Fact `text-color`: `#FFFFFF`; provenance: `figma-literal` at `337:4698`
+    - Fact `source-text`: `Какая-то кнопка`; provenance: `figma-literal` at `337:4698`
+    - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `337:4698`
+    - Fact `font-style`: `Medium`; provenance: `figma-literal` at `337:4698`
+    - Fact `font-size`: `16px`; provenance: `figma-literal` at `337:4698`
+    - Fact `text-align`: `center`; provenance: `figma-literal` at `337:4698`
+    - Fact `text-decoration`: `none`; provenance: `figma-literal` at `337:4698`
+    - Fact `figma-style-id`: `S:80178ed95ee94439436fb7ea36e3eb926f986be2,`; provenance: `figma-literal` at `337:4698`
+    - Fact `line-height`: `140%`; provenance: `figma-literal` at `337:4698`
+    - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `337:4698`
+    - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `337:4698`
+    - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `337:4698`
+    - Fact `text-case`: `original`; provenance: `figma-literal` at `337:4698`
+    - Fact `figma-style-name`: `Desktop/Action`; provenance: `figma-literal` at `337:4698`
 
 ### Mobile
 
 - `root` — role `button`; render `presentation-table`; visibility `always`
-  - Fact `description-1`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-2`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-3`: `26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-4`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-5`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-6`: `#48494A`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `link` — role `button-link`; render `html-link`; visibility `always`
+  - Fact `reference-size`: `158×44px`; provenance: `figma-literal` at `337:4576`
+  - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `337:4576`
+  - Fact `layout-gap`: `8px`; provenance: `figma-literal` at `337:4576`
+  - Fact `padding-top`: `12px`; provenance: `figma-literal` at `337:4576`
+  - Fact `padding-right`: `24px`; provenance: `figma-literal` at `337:4576`
+  - Fact `padding-bottom`: `12px`; provenance: `figma-literal` at `337:4576`
+  - Fact `padding-left`: `24px`; provenance: `figma-literal` at `337:4576`
+  - Fact `horizontal-sizing`: `hug`; provenance: `figma-literal` at `337:4576`
+  - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `337:4576`
+  - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `337:4576`
+  - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `337:4576`
+  - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `337:4576`
+  - Fact `border-radius`: `26px`; provenance: `figma-literal` at `337:4576`
+  - Fact `background`: `#48494A`; provenance: `figma-literal` at `337:4576`
+  - `root-label` — role `label`; render `html-text`; visibility `always`
+    - Fact `reference-size`: `110×20px`; provenance: `figma-literal` at `337:4553`
+    - Fact `text-color`: `#FFFFFF`; provenance: `figma-literal` at `337:4553`
+    - Fact `source-text`: `Какая-то кнопка`; provenance: `figma-literal` at `337:4553`
+    - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `337:4553`
+    - Fact `font-style`: `Medium`; provenance: `figma-literal` at `337:4553`
+    - Fact `font-size`: `14px`; provenance: `figma-literal` at `337:4553`
+    - Fact `text-align`: `center`; provenance: `figma-literal` at `337:4553`
+    - Fact `text-decoration`: `none`; provenance: `figma-literal` at `337:4553`
+    - Fact `figma-style-id`: `S:780f997658bfc56dc4db512b20c92d16c415c3f3,`; provenance: `figma-literal` at `337:4553`
+    - Fact `line-height`: `140%`; provenance: `figma-literal` at `337:4553`
+    - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `337:4553`
+    - Fact `text-auto-resize`: `width_and_height`; provenance: `figma-literal` at `337:4553`
+    - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `337:4553`
+    - Fact `text-case`: `original`; provenance: `figma-literal` at `337:4553`
+    - Fact `figma-style-name`: `Mobile/Action`; provenance: `figma-literal` at `337:4553`
 
 ### Properties and variants
 
@@ -4893,11 +5880,6 @@ RENDER: HTML
 - Variant `desktop` — Figma node `337:4699`; axes: `Viewport=Desktop`
 - Direct Figma source: `337:4576`; `Viewport=Mobile`; reference frame 158×44px
 - Direct Figma source: `337:4699`; `Viewport=Desktop`; reference frame 230×46px
-
-### Assets and interaction
-
-- Link: `mobile` `/contracts/mobile/root/children/0`
-- Link: `desktop` `/contracts/desktop/root/children/0`
 
 ### Output contract classification
 
@@ -5432,50 +6414,310 @@ RENDER: HYBRID
 ### Desktop
 
 - `root` — role `email`; render `presentation-table`; visibility `always`
-  - Fact `email-wrapper-width`: `600px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `footer-top-gap`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `footer-body-padding-inline`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `footer-body-padding-bottom`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `footer-section-gap`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `footer-background`: `#F3F3F5`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `caption` — role `caption`; render `html-text`; visibility property `show-caption` (`Show Caption`)
-    - Fact `caption-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `caption-text-color`: `#98999C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `disclaimer` — role `disclaimer`; render `html-text`; visibility `always`
-    - Fact `disclaimer-text-gap`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `disclaimer-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `disclaimer-text-color`: `#98999C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `social-links` — role `social-links`; render `presentation-table`; visibility property `show-social-links` (`Show Social Links`)
-    - Fact `social-icon-gap`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - `vk-link` — role `social-link`; render `html-link`; visibility `always`
-      - `vk-icon` — role `social-icon`; render `direct-image`; visibility `always`; asset `vk-icon`
-        - Fact `social-icon-display-dimensions`: `42×42px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - `telegram-link` — role `social-link`; render `html-link`; visibility `always`
-      - `telegram-icon` — role `social-icon`; render `direct-image`; visibility `always`; asset `telegram-icon`
+  - Fact `reference-size`: `600×258px`; provenance: `figma-literal` at `261:4020`
+  - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `261:4020`
+  - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `261:4020`
+  - Fact `padding-top`: `24px`; provenance: `figma-literal` at `261:4020`
+  - Fact `padding-right`: `0px`; provenance: `figma-literal` at `261:4020`
+  - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `261:4020`
+  - Fact `padding-left`: `0px`; provenance: `figma-literal` at `261:4020`
+  - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `261:4020`
+  - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `261:4020`
+  - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `261:4020`
+  - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `261:4020`
+  - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `261:4020`
+  - Fact `border-radius`: `0px`; provenance: `figma-literal` at `261:4020`
+  - `root-footer-body` — role `footer-body`; render `presentation-table`; visibility `always`
+    - Fact `reference-size`: `600×234px`; provenance: `figma-literal` at `1188:17143`
+    - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `1188:17143`
+    - Fact `layout-gap`: `24px`; provenance: `figma-literal` at `1188:17143`
+    - Fact `padding-top`: `0px`; provenance: `figma-literal` at `1188:17143`
+    - Fact `padding-right`: `24px`; provenance: `figma-literal` at `1188:17143`
+    - Fact `padding-bottom`: `24px`; provenance: `figma-literal` at `1188:17143`
+    - Fact `padding-left`: `24px`; provenance: `figma-literal` at `1188:17143`
+    - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `1188:17143`
+    - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `1188:17143`
+    - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `1188:17143`
+    - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `1188:17143`
+    - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `1188:17143`
+    - Fact `border-radius`: `0px`; provenance: `figma-literal` at `1188:17143`
+    - Fact `background`: `#F3F3F5`; provenance: `figma-literal` at `1188:17143`
+    - `root-footer-body-disclaimer-section` — role `disclaimer-section`; render `presentation-table`; visibility `always`
+      - Fact `reference-size`: `552×144px`; provenance: `figma-literal` at `261:4017`
+      - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `261:4017`
+      - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `261:4017`
+      - Fact `padding-top`: `0px`; provenance: `figma-literal` at `261:4017`
+      - Fact `padding-right`: `0px`; provenance: `figma-literal` at `261:4017`
+      - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `261:4017`
+      - Fact `padding-left`: `0px`; provenance: `figma-literal` at `261:4017`
+      - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `261:4017`
+      - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `261:4017`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `261:4017`
+      - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `261:4017`
+      - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `261:4017`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `261:4017`
+      - Fact `background`: `#F3F3F5`; provenance: `figma-literal` at `261:4017`
+      - `root-footer-body-disclaimer-section-caption` — role `caption`; render `html-text`; visibility property `show-caption` (`Show Caption`)
+        - Fact `reference-size`: `552×20px`; provenance: `figma-literal` at `261:4018`
+        - Fact `text-color`: `#98999C`; provenance: `figma-literal` at `261:4018`
+        - Fact `source-text`: `*очень маленькое примечание`; provenance: `figma-literal` at `261:4018`
+        - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `261:4018`
+        - Fact `font-style`: `Regular`; provenance: `figma-literal` at `261:4018`
+        - Fact `font-size`: `14px`; provenance: `figma-literal` at `261:4018`
+        - Fact `text-align`: `center`; provenance: `figma-literal` at `261:4018`
+        - Fact `text-decoration`: `none`; provenance: `figma-literal` at `261:4018`
+        - Fact `figma-style-id`: `S:3d171f9763dcbcd3a181c50411d876e67e072e75,`; provenance: `figma-literal` at `261:4018`
+        - Fact `line-height`: `140%`; provenance: `figma-literal` at `261:4018`
+        - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `261:4018`
+        - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `261:4018`
+        - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `261:4018`
+        - Fact `text-case`: `original`; provenance: `figma-literal` at `261:4018`
+        - Fact `figma-style-name`: `Desktop/Caption`; provenance: `figma-literal` at `261:4018`
+      - `root-footer-body-disclaimer-section-disclaimer-text-01` — role `disclaimer-text-01`; render `html-text`; visibility `always`
+        - Fact `reference-size`: `552×60px`; provenance: `figma-literal` at `261:4019`
+        - Fact `text-color`: `#98999C`; provenance: `figma-literal` at `261:4019`
+        - Fact `source-text`: `ООО НКО «Мобильная карта», Лицензия банка России № 3522-К195112. Юридический адрес: Россия, Санкт-Петербург, проспект Малоохтинский, дом. 64, литера. В, этаж 1, помещение 19–20Н.`; provenance: `figma-literal` at `261:4019`
+        - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `261:4019`
+        - Fact `font-style`: `Regular`; provenance: `figma-literal` at `261:4019`
+        - Fact `font-size`: `14px`; provenance: `figma-literal` at `261:4019`
+        - Fact `text-align`: `center`; provenance: `figma-literal` at `261:4019`
+        - Fact `text-decoration`: `none`; provenance: `figma-literal` at `261:4019`
+        - Fact `figma-style-id`: `S:3d171f9763dcbcd3a181c50411d876e67e072e75,`; provenance: `figma-literal` at `261:4019`
+        - Fact `line-height`: `140%`; provenance: `figma-literal` at `261:4019`
+        - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `261:4019`
+        - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `261:4019`
+        - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `261:4019`
+        - Fact `text-case`: `original`; provenance: `figma-literal` at `261:4019`
+        - Fact `figma-style-name`: `Desktop/Caption`; provenance: `figma-literal` at `261:4019`
+      - `root-footer-body-disclaimer-section-disclaimer-text-02` — role `disclaimer-text-02`; render `html-text`; visibility `always`
+        - Fact `reference-size`: `552×40px`; provenance: `figma-literal` at `911:20891`
+        - Fact `text-color`: `#98999C`; provenance: `figma-literal` at `911:20891`
+        - Fact `source-text`: `Если вы не регистрировались на сайте 1cupis.ru, напишите службе поддержки. Мы удалим почту из базы и больше не будем вам писать.`; provenance: `figma-literal` at `911:20891`
+        - Fact `font-size`: `14px`; provenance: `figma-literal` at `911:20891`
+        - Fact `text-align`: `center`; provenance: `figma-literal` at `911:20891`
+        - Fact `figma-style-id`: `S:3d171f9763dcbcd3a181c50411d876e67e072e75,`; provenance: `figma-literal` at `911:20891`
+        - Fact `line-height`: `140%`; provenance: `figma-literal` at `911:20891`
+        - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `911:20891`
+        - Fact `styled-text-segments`: `[{"start":0,"end":37,"characters":"Если вы не регистрировались на сайте ","font_family":"Roboto","font_style":"Regular","font_size_px":14,"line_height":{"unit":"PERCENT","value":140},"text_decoration":"NONE","fills":[{"type":"solid","visible":true,"opacity":1,"color":"#98999C"}]},{"start":37,"end":46,"characters":"1cupis.ru","font_family":"Roboto","font_style":"Regular","font_size_px":14,"line_height":{"unit":"PERCENT","value":140},"text_decoration":"UNDERLINE","fills":[{"type":"solid","visible":true,"opacity":1,"color":"#98999C"}]},{"start":46,"end":57,"characters":", напишите ","font_family":"Roboto","font_style":"Regular","font_size_px":14,"line_height":{"unit":"PERCENT","value":140},"text_decoration":"NONE","fills":[{"type":"solid","visible":true,"opacity":1,"color":"#98999C"}]},{"start":57,"end":73,"characters":"службе поддержки","font_family":"Roboto","font_style":"Regular","font_size_px":14,"line_height":{"unit":"PERCENT","value":140},"text_decoration":"UNDERLINE","fills":[{"type":"solid","visible":true,"opacity":1,"color":"#98999C"}]},{"start":73,"end":128,"characters":". Мы удалим почту из базы и больше не будем вам писать.","font_family":"Roboto","font_style":"Regular","font_size_px":14,"line_height":{"unit":"PERCENT","value":140},"text_decoration":"NONE","fills":[{"type":"solid","visible":true,"opacity":1,"color":"#98999C"}]}]`; provenance: `figma-literal` at `911:20891`
+        - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `911:20891`
+        - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `911:20891`
+        - Fact `text-case`: `original`; provenance: `figma-literal` at `911:20891`
+        - Fact `figma-style-name`: `Desktop/Caption`; provenance: `figma-literal` at `911:20891`
+      - `root-footer-body-disclaimer-section-disclaimer-text-03` — role `disclaimer-text-03`; render `html-link`; visibility `always`
+        - Fact `reference-size`: `552×20px`; provenance: `figma-literal` at `1010:2535`
+        - Fact `text-color`: `#98999C`; provenance: `figma-literal` at `1010:2535`
+        - Fact `source-text`: `Отписаться от рассылки`; provenance: `figma-literal` at `1010:2535`
+        - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `1010:2535`
+        - Fact `font-style`: `Regular`; provenance: `figma-literal` at `1010:2535`
+        - Fact `font-size`: `14px`; provenance: `figma-literal` at `1010:2535`
+        - Fact `text-align`: `center`; provenance: `figma-literal` at `1010:2535`
+        - Fact `text-decoration`: `underline`; provenance: `figma-literal` at `1010:2535`
+        - Fact `figma-style-id`: `S:3d171f9763dcbcd3a181c50411d876e67e072e75,`; provenance: `figma-literal` at `1010:2535`
+        - Fact `line-height`: `140%`; provenance: `figma-literal` at `1010:2535`
+        - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `1010:2535`
+        - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `1010:2535`
+        - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `1010:2535`
+        - Fact `text-case`: `original`; provenance: `figma-literal` at `1010:2535`
+        - Fact `figma-style-name`: `Desktop/Caption`; provenance: `figma-literal` at `1010:2535`
+    - `root-footer-body-social-section` — role `social-section`; render `presentation-table`; visibility property `show-social-links` (`Show Social Links`)
+      - Fact `reference-size`: `552×42px`; provenance: `figma-literal` at `261:4004`
+      - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `261:4004`
+      - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `261:4004`
+      - Fact `padding-top`: `0px`; provenance: `figma-literal` at `261:4004`
+      - Fact `padding-right`: `0px`; provenance: `figma-literal` at `261:4004`
+      - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `261:4004`
+      - Fact `padding-left`: `0px`; provenance: `figma-literal` at `261:4004`
+      - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `261:4004`
+      - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `261:4004`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `261:4004`
+      - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `261:4004`
+      - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `261:4004`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `261:4004`
+      - Fact `background`: `#F3F3F5`; provenance: `figma-literal` at `261:4004`
+      - `root-footer-body-social-section-social-icons` — role `social-icons`; render `presentation-table`; visibility `always`
+        - Fact `reference-size`: `42×42px`; provenance: `figma-literal` at `261:4006`
+        - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `261:4006`
+        - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `261:4006`
+        - Fact `padding-top`: `0px`; provenance: `figma-literal` at `261:4006`
+        - Fact `padding-right`: `0px`; provenance: `figma-literal` at `261:4006`
+        - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `261:4006`
+        - Fact `padding-left`: `0px`; provenance: `figma-literal` at `261:4006`
+        - Fact `horizontal-sizing`: `hug`; provenance: `figma-literal` at `261:4006`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `261:4006`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `261:4006`
+        - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `261:4006`
+        - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `261:4006`
+        - Fact `border-radius`: `0px`; provenance: `figma-literal` at `261:4006`
+        - `root-footer-body-social-section-social-icons-vk-icon` — role `vk-icon`; render `direct-image`; visibility `always`; asset `vk-icon`
+          - Fact `reference-size`: `42×42px`; provenance: `figma-literal` at `261:4007`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `261:4007`
+          - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `261:4007`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `261:4007`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `261:4007`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `261:4007`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `261:4007`
+        - `root-footer-body-social-section-social-icons-telegram-icon` — role `telegram-icon`; render `direct-image`; visibility `always`; asset `telegram-icon`
+          - Fact `reference-size`: `42×42px`; provenance: `figma-literal` at `261:4013`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `261:4013`
+          - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `261:4013`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `261:4013`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `261:4013`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `261:4013`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `261:4013`
 
 ### Mobile
 
 - `root` — role `email`; render `presentation-table`; visibility `always`
-  - Fact `email-wrapper-width`: `600px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `footer-top-gap`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `footer-body-padding-inline`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `footer-body-padding-bottom`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `footer-section-gap`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `footer-background`: `#F3F3F5`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `caption` — role `caption`; render `html-text`; visibility property `show-caption` (`Show Caption`)
-    - Fact `caption-font-size`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `caption-text-color`: `#98999C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `disclaimer` — role `disclaimer`; render `html-text`; visibility `always`
-    - Fact `disclaimer-text-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `disclaimer-font-size`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `disclaimer-text-color`: `#98999C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `social-links` — role `social-links`; render `presentation-table`; visibility property `show-social-links` (`Show Social Links`)
-    - Fact `social-icon-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - `vk-link` — role `social-link`; render `html-link`; visibility `always`
-      - `vk-icon` — role `social-icon`; render `direct-image`; visibility `always`; asset `vk-icon`
-        - Fact `social-icon-display-dimensions`: `32×32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - `telegram-link` — role `social-link`; render `html-link`; visibility `always`
-      - `telegram-icon` — role `social-icon`; render `direct-image`; visibility `always`; asset `telegram-icon`
+  - Fact `reference-size`: `328×249px`; provenance: `figma-literal` at `17:2763`
+  - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `17:2763`
+  - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `17:2763`
+  - Fact `padding-top`: `16px`; provenance: `figma-literal` at `17:2763`
+  - Fact `padding-right`: `0px`; provenance: `figma-literal` at `17:2763`
+  - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `17:2763`
+  - Fact `padding-left`: `0px`; provenance: `figma-literal` at `17:2763`
+  - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `17:2763`
+  - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `17:2763`
+  - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `17:2763`
+  - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `17:2763`
+  - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `17:2763`
+  - Fact `border-radius`: `0px`; provenance: `figma-literal` at `17:2763`
+  - `root-footer-body` — role `footer-body`; render `presentation-table`; visibility `always`
+    - Fact `reference-size`: `328×233px`; provenance: `figma-literal` at `1188:837`
+    - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `1188:837`
+    - Fact `layout-gap`: `16px`; provenance: `figma-literal` at `1188:837`
+    - Fact `padding-top`: `0px`; provenance: `figma-literal` at `1188:837`
+    - Fact `padding-right`: `16px`; provenance: `figma-literal` at `1188:837`
+    - Fact `padding-bottom`: `16px`; provenance: `figma-literal` at `1188:837`
+    - Fact `padding-left`: `16px`; provenance: `figma-literal` at `1188:837`
+    - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `1188:837`
+    - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `1188:837`
+    - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `1188:837`
+    - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `1188:837`
+    - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `1188:837`
+    - Fact `border-radius`: `0px`; provenance: `figma-literal` at `1188:837`
+    - Fact `background`: `#F3F3F5`; provenance: `figma-literal` at `1188:837`
+    - `root-footer-body-disclaimer-section` — role `disclaimer-section`; render `presentation-table`; visibility `always`
+      - Fact `reference-size`: `296×169px`; provenance: `figma-literal` at `17:2760`
+      - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `17:2760`
+      - Fact `layout-gap`: `8px`; provenance: `figma-literal` at `17:2760`
+      - Fact `padding-top`: `0px`; provenance: `figma-literal` at `17:2760`
+      - Fact `padding-right`: `0px`; provenance: `figma-literal` at `17:2760`
+      - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `17:2760`
+      - Fact `padding-left`: `0px`; provenance: `figma-literal` at `17:2760`
+      - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `17:2760`
+      - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `17:2760`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `17:2760`
+      - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `17:2760`
+      - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `17:2760`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `17:2760`
+      - Fact `background`: `#F3F3F5`; provenance: `figma-literal` at `17:2760`
+      - `root-footer-body-disclaimer-section-caption` — role `caption`; render `html-text`; visibility property `show-caption` (`Show Caption`)
+        - Fact `reference-size`: `296×17px`; provenance: `figma-literal` at `911:20914`
+        - Fact `text-color`: `#98999C`; provenance: `figma-literal` at `911:20914`
+        - Fact `source-text`: `*очень маленькое примечание`; provenance: `figma-literal` at `911:20914`
+        - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `911:20914`
+        - Fact `font-style`: `Regular`; provenance: `figma-literal` at `911:20914`
+        - Fact `font-size`: `12px`; provenance: `figma-literal` at `911:20914`
+        - Fact `text-align`: `center`; provenance: `figma-literal` at `911:20914`
+        - Fact `text-decoration`: `none`; provenance: `figma-literal` at `911:20914`
+        - Fact `figma-style-id`: `S:374419cb8d39f8db69f1e4fa2fd20dcdc72abcce,`; provenance: `figma-literal` at `911:20914`
+        - Fact `line-height`: `140%`; provenance: `figma-literal` at `911:20914`
+        - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `911:20914`
+        - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `911:20914`
+        - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `911:20914`
+        - Fact `text-case`: `original`; provenance: `figma-literal` at `911:20914`
+        - Fact `figma-style-name`: `Mobile/Caption`; provenance: `figma-literal` at `911:20914`
+      - `root-footer-body-disclaimer-section-disclaimer-text-01` — role `disclaimer-text-01`; render `html-text`; visibility `always`
+        - Fact `reference-size`: `296×85px`; provenance: `figma-literal` at `17:2762`
+        - Fact `text-color`: `#98999C`; provenance: `figma-literal` at `17:2762`
+        - Fact `source-text`: `ООО НКО «Мобильная карта», Лицензия банка России № 3522-К195112. Юридический адрес: Россия, Санкт-Петербург, проспект Малоохтинский, дом. 64, литера. В, этаж 1, помещение 19–20Н.`; provenance: `figma-literal` at `17:2762`
+        - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `17:2762`
+        - Fact `font-style`: `Regular`; provenance: `figma-literal` at `17:2762`
+        - Fact `font-size`: `12px`; provenance: `figma-literal` at `17:2762`
+        - Fact `text-align`: `center`; provenance: `figma-literal` at `17:2762`
+        - Fact `text-decoration`: `none`; provenance: `figma-literal` at `17:2762`
+        - Fact `figma-style-id`: `S:374419cb8d39f8db69f1e4fa2fd20dcdc72abcce,`; provenance: `figma-literal` at `17:2762`
+        - Fact `line-height`: `140%`; provenance: `figma-literal` at `17:2762`
+        - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `17:2762`
+        - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `17:2762`
+        - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `17:2762`
+        - Fact `text-case`: `original`; provenance: `figma-literal` at `17:2762`
+        - Fact `figma-style-name`: `Mobile/Caption`; provenance: `figma-literal` at `17:2762`
+      - `root-footer-body-disclaimer-section-disclaimer-text-02` — role `disclaimer-text-02`; render `html-text`; visibility `always`
+        - Fact `reference-size`: `296×51px`; provenance: `figma-literal` at `17:2761`
+        - Fact `text-color`: `#98999C`; provenance: `figma-literal` at `17:2761`
+        - Fact `source-text`: `Если вы не регистрировались на сайте 1cupis.ru, напишите службе поддержки. Мы удалим почту из базы и больше не будем вам писать.`; provenance: `figma-literal` at `17:2761`
+        - Fact `font-size`: `12px`; provenance: `figma-literal` at `17:2761`
+        - Fact `text-align`: `center`; provenance: `figma-literal` at `17:2761`
+        - Fact `figma-style-id`: `S:374419cb8d39f8db69f1e4fa2fd20dcdc72abcce,`; provenance: `figma-literal` at `17:2761`
+        - Fact `line-height`: `140%`; provenance: `figma-literal` at `17:2761`
+        - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `17:2761`
+        - Fact `styled-text-segments`: `[{"start":0,"end":37,"characters":"Если вы не регистрировались на сайте ","font_family":"Roboto","font_style":"Regular","font_size_px":12,"line_height":{"unit":"PERCENT","value":140},"text_decoration":"NONE","fills":[{"type":"solid","visible":true,"opacity":1,"color":"#98999C"}]},{"start":37,"end":46,"characters":"1cupis.ru","font_family":"Roboto","font_style":"Regular","font_size_px":12,"line_height":{"unit":"PERCENT","value":140},"text_decoration":"UNDERLINE","fills":[{"type":"solid","visible":true,"opacity":1,"color":"#98999C"}]},{"start":46,"end":57,"characters":", напишите ","font_family":"Roboto","font_style":"Regular","font_size_px":12,"line_height":{"unit":"PERCENT","value":140},"text_decoration":"NONE","fills":[{"type":"solid","visible":true,"opacity":1,"color":"#98999C"}]},{"start":57,"end":73,"characters":"службе поддержки","font_family":"Roboto","font_style":"Regular","font_size_px":12,"line_height":{"unit":"PERCENT","value":140},"text_decoration":"UNDERLINE","fills":[{"type":"solid","visible":true,"opacity":1,"color":"#98999C"}]},{"start":73,"end":128,"characters":". Мы удалим почту из базы и больше не будем вам писать.","font_family":"Roboto","font_style":"Regular","font_size_px":12,"line_height":{"unit":"PERCENT","value":140},"text_decoration":"NONE","fills":[{"type":"solid","visible":true,"opacity":1,"color":"#98999C"}]}]`; provenance: `figma-literal` at `17:2761`
+        - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `17:2761`
+        - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `17:2761`
+        - Fact `text-case`: `original`; provenance: `figma-literal` at `17:2761`
+        - Fact `figma-style-name`: `Mobile/Caption`; provenance: `figma-literal` at `17:2761`
+      - `root-footer-body-disclaimer-section-disclaimer-text-03` — role `disclaimer-text-03`; render `html-link`; visibility `always`
+        - Fact `reference-size`: `296×17px`; provenance: `figma-literal` at `1010:2541`
+        - Fact `text-color`: `#98999C`; provenance: `figma-literal` at `1010:2541`
+        - Fact `source-text`: `Отписаться от рассылки`; provenance: `figma-literal` at `1010:2541`
+        - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `1010:2541`
+        - Fact `font-style`: `Regular`; provenance: `figma-literal` at `1010:2541`
+        - Fact `font-size`: `12px`; provenance: `figma-literal` at `1010:2541`
+        - Fact `text-align`: `center`; provenance: `figma-literal` at `1010:2541`
+        - Fact `text-decoration`: `underline`; provenance: `figma-literal` at `1010:2541`
+        - Fact `figma-style-id`: `S:374419cb8d39f8db69f1e4fa2fd20dcdc72abcce,`; provenance: `figma-literal` at `1010:2541`
+        - Fact `line-height`: `140%`; provenance: `figma-literal` at `1010:2541`
+        - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `1010:2541`
+        - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `1010:2541`
+        - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `1010:2541`
+        - Fact `text-case`: `original`; provenance: `figma-literal` at `1010:2541`
+        - Fact `figma-style-name`: `Mobile/Caption`; provenance: `figma-literal` at `1010:2541`
+    - `root-footer-body-social-section` — role `social-section`; render `presentation-table`; visibility property `show-social-links` (`Show Social Links`)
+      - Fact `reference-size`: `296×32px`; provenance: `figma-literal` at `17:2747`
+      - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `17:2747`
+      - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `17:2747`
+      - Fact `padding-top`: `0px`; provenance: `figma-literal` at `17:2747`
+      - Fact `padding-right`: `0px`; provenance: `figma-literal` at `17:2747`
+      - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `17:2747`
+      - Fact `padding-left`: `0px`; provenance: `figma-literal` at `17:2747`
+      - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `17:2747`
+      - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `17:2747`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `17:2747`
+      - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `17:2747`
+      - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `17:2747`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `17:2747`
+      - Fact `background`: `#F3F3F5`; provenance: `figma-literal` at `17:2747`
+      - `root-footer-body-social-section-social-icons` — role `social-icons`; render `presentation-table`; visibility `always`
+        - Fact `reference-size`: `32×32px`; provenance: `figma-literal` at `17:2749`
+        - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `17:2749`
+        - Fact `layout-gap`: `8px`; provenance: `figma-literal` at `17:2749`
+        - Fact `padding-top`: `0px`; provenance: `figma-literal` at `17:2749`
+        - Fact `padding-right`: `0px`; provenance: `figma-literal` at `17:2749`
+        - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `17:2749`
+        - Fact `padding-left`: `0px`; provenance: `figma-literal` at `17:2749`
+        - Fact `horizontal-sizing`: `hug`; provenance: `figma-literal` at `17:2749`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `17:2749`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `17:2749`
+        - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `17:2749`
+        - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `17:2749`
+        - Fact `border-radius`: `0px`; provenance: `figma-literal` at `17:2749`
+        - `root-footer-body-social-section-social-icons-vk-icon` — role `vk-icon`; render `direct-image`; visibility `always`; asset `vk-icon`
+          - Fact `reference-size`: `32×32px`; provenance: `figma-literal` at `17:2750`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `17:2750`
+          - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `17:2750`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `17:2750`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `17:2750`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `17:2750`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `17:2750`
+        - `root-footer-body-social-section-social-icons-telegram-icon` — role `telegram-icon`; render `direct-image`; visibility `always`; asset `telegram-icon`
+          - Fact `reference-size`: `32×32px`; provenance: `figma-literal` at `17:2756`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `17:2756`
+          - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `17:2756`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `17:2756`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `17:2756`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `17:2756`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `17:2756`
 
 ### Properties and variants
 
@@ -5514,14 +6756,12 @@ RENDER: HYBRID
   - Aspect ratio: 42:42
   - Crop: `none`; position `exact-node-after-overrides`
   - Background: own fill `preserve`; artificial matte `forbid`
-- Link: `mobile` `/contracts/mobile/root/children/2/children/0`
-- Asset usage: `mobile` `/contracts/mobile/root/children/2/children/0/children/0` → `vk-icon` as `direct-image`
-- Link: `mobile` `/contracts/mobile/root/children/2/children/1`
-- Asset usage: `mobile` `/contracts/mobile/root/children/2/children/1/children/0` → `telegram-icon` as `direct-image`
-- Link: `desktop` `/contracts/desktop/root/children/2/children/0`
-- Asset usage: `desktop` `/contracts/desktop/root/children/2/children/0/children/0` → `vk-icon` as `direct-image`
-- Link: `desktop` `/contracts/desktop/root/children/2/children/1`
-- Asset usage: `desktop` `/contracts/desktop/root/children/2/children/1/children/0` → `telegram-icon` as `direct-image`
+- Link: `mobile` `/contracts/mobile/root/children/0/children/0/children/3`
+- Asset usage: `mobile` `/contracts/mobile/root/children/0/children/1/children/0/children/0` → `vk-icon` as `direct-image`
+- Asset usage: `mobile` `/contracts/mobile/root/children/0/children/1/children/0/children/1` → `telegram-icon` as `direct-image`
+- Link: `desktop` `/contracts/desktop/root/children/0/children/0/children/3`
+- Asset usage: `desktop` `/contracts/desktop/root/children/0/children/1/children/0/children/0` → `vk-icon` as `direct-image`
+- Asset usage: `desktop` `/contracts/desktop/root/children/0/children/1/children/0/children/1` → `telegram-icon` as `direct-image`
 
 ### Output contract classification
 
@@ -5565,20 +6805,166 @@ RENDER: HYBRID
 ### Desktop
 
 - `root` — role `email`; render `presentation-table`; visibility `always`
-  - `disclaimer` — role `disclaimer`; render `html-text`; visibility `always`
+  - Fact `reference-size`: `600×180px`; provenance: `figma-literal` at `499:2429`
+  - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `499:2429`
+  - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `499:2429`
+  - Fact `padding-top`: `24px`; provenance: `figma-literal` at `499:2429`
+  - Fact `padding-right`: `0px`; provenance: `figma-literal` at `499:2429`
+  - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `499:2429`
+  - Fact `padding-left`: `0px`; provenance: `figma-literal` at `499:2429`
+  - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `499:2429`
+  - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `499:2429`
+  - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `499:2429`
+  - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `499:2429`
+  - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `499:2429`
+  - Fact `border-radius`: `0px`; provenance: `figma-literal` at `499:2429`
+  - `root-footer-body` — role `footer-body`; render `presentation-table`; visibility `always`
+    - Fact `reference-size`: `600×156px`; provenance: `figma-literal` at `1188:17275`
+    - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `1188:17275`
+    - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `1188:17275`
+    - Fact `padding-top`: `0px`; provenance: `figma-literal` at `1188:17275`
+    - Fact `padding-right`: `24px`; provenance: `figma-literal` at `1188:17275`
+    - Fact `padding-bottom`: `24px`; provenance: `figma-literal` at `1188:17275`
+    - Fact `padding-left`: `24px`; provenance: `figma-literal` at `1188:17275`
+    - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `1188:17275`
+    - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `1188:17275`
+    - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `1188:17275`
+    - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `1188:17275`
+    - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `1188:17275`
+    - Fact `border-radius`: `0px`; provenance: `figma-literal` at `1188:17275`
+    - Fact `background`: `#F3F3F5`; provenance: `figma-literal` at `1188:17275`
+    - `root-footer-body-disclaimer-section` — role `disclaimer-section`; render `presentation-table`; visibility `always`
+      - Fact `reference-size`: `552×132px`; provenance: `figma-literal` at `497:22399`
+      - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `497:22399`
+      - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `497:22399`
+      - Fact `padding-top`: `0px`; provenance: `figma-literal` at `497:22399`
+      - Fact `padding-right`: `0px`; provenance: `figma-literal` at `497:22399`
+      - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `497:22399`
+      - Fact `padding-left`: `0px`; provenance: `figma-literal` at `497:22399`
+      - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `497:22399`
+      - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `497:22399`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `497:22399`
+      - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `497:22399`
+      - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `497:22399`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `497:22399`
+      - Fact `background`: `#F3F3F5`; provenance: `figma-literal` at `497:22399`
+      - `root-footer-body-disclaimer-section-disclaimer-text-01` — role `disclaimer-text-01`; render `html-text`; visibility `always`
+        - Fact `reference-size`: `552×40px`; provenance: `figma-literal` at `497:22400`
+        - Fact `text-color`: `#98999C`; provenance: `figma-literal` at `497:22400`
+        - Fact `source-text`: `Оператор по переводу денежных средств: 
+ООО НКО «Мобильная карта»`; provenance: `figma-literal` at `497:22400`
+        - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `497:22400`
+        - Fact `font-style`: `Regular`; provenance: `figma-literal` at `497:22400`
+        - Fact `font-size`: `14px`; provenance: `figma-literal` at `497:22400`
+        - Fact `text-align`: `center`; provenance: `figma-literal` at `497:22400`
+        - Fact `text-decoration`: `none`; provenance: `figma-literal` at `497:22400`
+        - Fact `figma-style-id`: `S:3d171f9763dcbcd3a181c50411d876e67e072e75,`; provenance: `figma-literal` at `497:22400`
+        - Fact `line-height`: `140%`; provenance: `figma-literal` at `497:22400`
+        - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `497:22400`
+        - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `497:22400`
+        - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `497:22400`
+        - Fact `text-case`: `original`; provenance: `figma-literal` at `497:22400`
+        - Fact `figma-style-name`: `Desktop/Caption`; provenance: `figma-literal` at `497:22400`
+      - `root-footer-body-disclaimer-section-disclaimer-text-02` — role `disclaimer-text-02`; render `html-text`; visibility `always`
+        - Fact `reference-size`: `552×80px`; provenance: `figma-literal` at `497:22401`
+        - Fact `text-color`: `#98999C`; provenance: `figma-literal` at `497:22401`
+        - Fact `source-text`: `Лицензия ЦБ РФ № 3522-К от 31 марта 2014 года 
+Место нахождения: 195112, Санкт-Петербург, Малоохтинский пр-кт, д. 64, литера В, помещение 19-20Н; 
+тел. +7 (812) 309-34-59; ИНН 7835905228; БИК 044030303`; provenance: `figma-literal` at `497:22401`
+        - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `497:22401`
+        - Fact `font-style`: `Regular`; provenance: `figma-literal` at `497:22401`
+        - Fact `font-size`: `14px`; provenance: `figma-literal` at `497:22401`
+        - Fact `text-align`: `center`; provenance: `figma-literal` at `497:22401`
+        - Fact `text-decoration`: `none`; provenance: `figma-literal` at `497:22401`
+        - Fact `figma-style-id`: `S:3d171f9763dcbcd3a181c50411d876e67e072e75,`; provenance: `figma-literal` at `497:22401`
+        - Fact `line-height`: `140%`; provenance: `figma-literal` at `497:22401`
+        - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `497:22401`
+        - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `497:22401`
+        - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `497:22401`
+        - Fact `text-case`: `original`; provenance: `figma-literal` at `497:22401`
+        - Fact `figma-style-name`: `Desktop/Caption`; provenance: `figma-literal` at `497:22401`
 
 ### Mobile
 
 - `root` — role `email`; render `presentation-table`; visibility `always`
-  - Fact `description-1`: `600px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-2`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-3`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-4`: `#F3F3F5`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-5`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-6`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-7`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-8`: `#98999C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `disclaimer` — role `disclaimer`; render `html-text`; visibility `always`
+  - Fact `reference-size`: `328×176px`; provenance: `figma-literal` at `499:2430`
+  - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `499:2430`
+  - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `499:2430`
+  - Fact `padding-top`: `16px`; provenance: `figma-literal` at `499:2430`
+  - Fact `padding-right`: `0px`; provenance: `figma-literal` at `499:2430`
+  - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `499:2430`
+  - Fact `padding-left`: `0px`; provenance: `figma-literal` at `499:2430`
+  - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `499:2430`
+  - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `499:2430`
+  - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `499:2430`
+  - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `499:2430`
+  - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `499:2430`
+  - Fact `border-radius`: `0px`; provenance: `figma-literal` at `499:2430`
+  - `root-footer-body` — role `footer-body`; render `presentation-table`; visibility `always`
+    - Fact `reference-size`: `328×160px`; provenance: `figma-literal` at `1188:17270`
+    - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `1188:17270`
+    - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `1188:17270`
+    - Fact `padding-top`: `0px`; provenance: `figma-literal` at `1188:17270`
+    - Fact `padding-right`: `16px`; provenance: `figma-literal` at `1188:17270`
+    - Fact `padding-bottom`: `16px`; provenance: `figma-literal` at `1188:17270`
+    - Fact `padding-left`: `16px`; provenance: `figma-literal` at `1188:17270`
+    - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `1188:17270`
+    - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `1188:17270`
+    - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `1188:17270`
+    - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `1188:17270`
+    - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `1188:17270`
+    - Fact `border-radius`: `0px`; provenance: `figma-literal` at `1188:17270`
+    - Fact `background`: `#F3F3F5`; provenance: `figma-literal` at `1188:17270`
+    - `root-footer-body-disclaimer-section` — role `disclaimer-section`; render `presentation-table`; visibility `always`
+      - Fact `reference-size`: `296×144px`; provenance: `figma-literal` at `497:22434`
+      - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `497:22434`
+      - Fact `layout-gap`: `8px`; provenance: `figma-literal` at `497:22434`
+      - Fact `padding-top`: `0px`; provenance: `figma-literal` at `497:22434`
+      - Fact `padding-right`: `0px`; provenance: `figma-literal` at `497:22434`
+      - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `497:22434`
+      - Fact `padding-left`: `0px`; provenance: `figma-literal` at `497:22434`
+      - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `497:22434`
+      - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `497:22434`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `497:22434`
+      - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `497:22434`
+      - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `497:22434`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `497:22434`
+      - Fact `background`: `#F3F3F5`; provenance: `figma-literal` at `497:22434`
+      - `root-footer-body-disclaimer-section-disclaimer-text-01` — role `disclaimer-text-01`; render `html-text`; visibility `always`
+        - Fact `reference-size`: `296×34px`; provenance: `figma-literal` at `497:22435`
+        - Fact `text-color`: `#98999C`; provenance: `figma-literal` at `497:22435`
+        - Fact `source-text`: `Оператор по переводу денежных средств: 
+ООО НКО «Мобильная карта»`; provenance: `figma-literal` at `497:22435`
+        - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `497:22435`
+        - Fact `font-style`: `Regular`; provenance: `figma-literal` at `497:22435`
+        - Fact `font-size`: `12px`; provenance: `figma-literal` at `497:22435`
+        - Fact `text-align`: `center`; provenance: `figma-literal` at `497:22435`
+        - Fact `text-decoration`: `none`; provenance: `figma-literal` at `497:22435`
+        - Fact `figma-style-id`: `S:374419cb8d39f8db69f1e4fa2fd20dcdc72abcce,`; provenance: `figma-literal` at `497:22435`
+        - Fact `line-height`: `140%`; provenance: `figma-literal` at `497:22435`
+        - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `497:22435`
+        - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `497:22435`
+        - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `497:22435`
+        - Fact `text-case`: `original`; provenance: `figma-literal` at `497:22435`
+        - Fact `figma-style-name`: `Mobile/Caption`; provenance: `figma-literal` at `497:22435`
+      - `root-footer-body-disclaimer-section-disclaimer-text-02` — role `disclaimer-text-02`; render `html-text`; visibility `always`
+        - Fact `reference-size`: `296×102px`; provenance: `figma-literal` at `497:22436`
+        - Fact `text-color`: `#98999C`; provenance: `figma-literal` at `497:22436`
+        - Fact `source-text`: `Лицензия ЦБ РФ № 3522-К от 31 марта 2014 года 
+Место нахождения: 195112, Санкт-Петербург, Малоохтинский пр-кт, д. 64, литера В, помещение 19-20Н; 
+тел. +7 (812) 309-34-59; ИНН 7835905228; БИК 044030303`; provenance: `figma-literal` at `497:22436`
+        - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `497:22436`
+        - Fact `font-style`: `Regular`; provenance: `figma-literal` at `497:22436`
+        - Fact `font-size`: `12px`; provenance: `figma-literal` at `497:22436`
+        - Fact `text-align`: `center`; provenance: `figma-literal` at `497:22436`
+        - Fact `text-decoration`: `none`; provenance: `figma-literal` at `497:22436`
+        - Fact `figma-style-id`: `S:374419cb8d39f8db69f1e4fa2fd20dcdc72abcce,`; provenance: `figma-literal` at `497:22436`
+        - Fact `line-height`: `140%`; provenance: `figma-literal` at `497:22436`
+        - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `497:22436`
+        - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `497:22436`
+        - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `497:22436`
+        - Fact `text-case`: `original`; provenance: `figma-literal` at `497:22436`
+        - Fact `figma-style-name`: `Mobile/Caption`; provenance: `figma-literal` at `497:22436`
 
 ### Properties and variants
 
@@ -6547,40 +7933,234 @@ RENDER: HTML
 ### Desktop
 
 - `root` — role `nps`; render `presentation-table`; visibility `always`
-  - `heading` — role `heading`; render `html-text`; visibility `always`
-  - `options` — role `options`; render `presentation-table`; visibility `always`
-    - `happy-face-link` — role `rating-link`; render `html-link`; visibility `always`
-      - `happy-face-icon` — role `rating-icon`; render `direct-image`; visibility `always`; asset `happy-face-icon`
-    - `neutral-face-link` — role `rating-link`; render `html-link`; visibility variant `Count=3`
-      - `neutral-face-icon` — role `rating-icon`; render `direct-image`; visibility `always`; asset `neutral-face-icon`
-    - `sad-face-link` — role `rating-link`; render `html-link`; visibility `always`
-      - `sad-face-icon` — role `rating-icon`; render `direct-image`; visibility `always`; asset `sad-face-icon`
+  - Fact `reference-size`: `600×197px`; provenance: `figma-literal` at `260:3974`
+  - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `260:3974`
+  - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `260:3974`
+  - Fact `padding-top`: `24px`; provenance: `figma-literal` at `260:3974`
+  - Fact `padding-right`: `24px`; provenance: `figma-literal` at `260:3974`
+  - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `260:3974`
+  - Fact `padding-left`: `24px`; provenance: `figma-literal` at `260:3974`
+  - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `260:3974`
+  - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `260:3974`
+  - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `260:3974`
+  - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `260:3974`
+  - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `260:3974`
+  - Fact `border-radius`: `0px`; provenance: `figma-literal` at `260:3974`
+  - `root-content-area` — role `content-area`; render `presentation-table`; visibility `always`
+    - Fact `reference-size`: `552×173px`; provenance: `figma-literal` at `260:3965`
+    - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `260:3965`
+    - Fact `layout-gap`: `24px`; provenance: `figma-literal` at `260:3965`
+    - Fact `padding-top`: `32px`; provenance: `figma-literal` at `260:3965`
+    - Fact `padding-right`: `32px`; provenance: `figma-literal` at `260:3965`
+    - Fact `padding-bottom`: `32px`; provenance: `figma-literal` at `260:3965`
+    - Fact `padding-left`: `32px`; provenance: `figma-literal` at `260:3965`
+    - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `260:3965`
+    - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `260:3965`
+    - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `260:3965`
+    - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `260:3965`
+    - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `260:3965`
+    - Fact `border-radius`: `26px`; provenance: `figma-literal` at `260:3965`
+    - Fact `background`: `#FFFFFF`; provenance: `figma-literal` at `260:3965`
+    - `root-content-area-heading` — role `heading`; render `html-text`; visibility `always`
+      - Fact `reference-size`: `488×31px`; provenance: `figma-literal` at `260:3966`
+      - Fact `text-color`: `#000000`; provenance: `figma-literal` at `260:3966`
+      - Fact `source-text`: `Понравилось это письмо?`; provenance: `figma-literal` at `260:3966`
+      - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `260:3966`
+      - Fact `font-style`: `SemiBold`; provenance: `figma-literal` at `260:3966`
+      - Fact `font-size`: `26px`; provenance: `figma-literal` at `260:3966`
+      - Fact `text-align`: `center`; provenance: `figma-literal` at `260:3966`
+      - Fact `text-decoration`: `none`; provenance: `figma-literal` at `260:3966`
+      - Fact `figma-style-id`: `S:2d908d3c1b5ff810b297f4a37aac1ab4161bbdb5,`; provenance: `figma-literal` at `260:3966`
+      - Fact `line-height`: `120%`; provenance: `figma-literal` at `260:3966`
+      - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `260:3966`
+      - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `260:3966`
+      - Fact `vertical-text-align`: `center`; provenance: `figma-literal` at `260:3966`
+      - Fact `text-case`: `original`; provenance: `figma-literal` at `260:3966`
+      - Fact `figma-style-name`: `Desktop/Heading`; provenance: `figma-literal` at `260:3966`
+    - `root-content-area-emoji-buttons` — role `emoji-buttons`; render `presentation-table`; visibility `always`
+      - Fact `reference-size`: `488×54px`; provenance: `figma-literal` at `260:3967`
+      - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `260:3967`
+      - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `260:3967`
+      - Fact `padding-top`: `0px`; provenance: `figma-literal` at `260:3967`
+      - Fact `padding-right`: `0px`; provenance: `figma-literal` at `260:3967`
+      - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `260:3967`
+      - Fact `padding-left`: `0px`; provenance: `figma-literal` at `260:3967`
+      - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `260:3967`
+      - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `260:3967`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `260:3967`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `260:3967`
+      - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `260:3967`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `260:3967`
+      - `root-content-area-emoji-buttons-good` — role `good`; render `presentation-table`; visibility `always`
+        - Fact `reference-size`: `154.6666717529297×54px`; provenance: `figma-literal` at `260:3968`
+        - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `260:3968`
+        - Fact `layout-gap`: `10px`; provenance: `figma-literal` at `260:3968`
+        - Fact `padding-top`: `6px`; provenance: `figma-literal` at `260:3968`
+        - Fact `padding-right`: `24px`; provenance: `figma-literal` at `260:3968`
+        - Fact `padding-bottom`: `6px`; provenance: `figma-literal` at `260:3968`
+        - Fact `padding-left`: `24px`; provenance: `figma-literal` at `260:3968`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `260:3968`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `260:3968`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `260:3968`
+        - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `260:3968`
+        - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `260:3968`
+        - Fact `border-radius`: `32px`; provenance: `figma-literal` at `260:3968`
+        - Fact `background`: `#F8F8FA`; provenance: `figma-literal` at `260:3968`
+        - `root-content-area-emoji-buttons-good-happy-face-icon` — role `happy-face-icon`; render `direct-image`; visibility `always`; asset `happy-face-icon`
+          - Fact `reference-size`: `42×42px`; provenance: `figma-literal` at `260:3969`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `260:3969`
+      - `root-content-area-emoji-buttons-neutral` — role `neutral`; render `presentation-table`; visibility `always`
+        - Fact `reference-size`: `154.66665649414062×54px`; provenance: `figma-literal` at `260:3970`
+        - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `260:3970`
+        - Fact `layout-gap`: `10px`; provenance: `figma-literal` at `260:3970`
+        - Fact `padding-top`: `6px`; provenance: `figma-literal` at `260:3970`
+        - Fact `padding-right`: `23px`; provenance: `figma-literal` at `260:3970`
+        - Fact `padding-bottom`: `6px`; provenance: `figma-literal` at `260:3970`
+        - Fact `padding-left`: `23px`; provenance: `figma-literal` at `260:3970`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `260:3970`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `260:3970`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `260:3970`
+        - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `260:3970`
+        - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `260:3970`
+        - Fact `border-radius`: `32px`; provenance: `figma-literal` at `260:3970`
+        - Fact `background`: `#F8F8FA`; provenance: `figma-literal` at `260:3970`
+        - `root-content-area-emoji-buttons-neutral-neutral-face-icon` — role `neutral-face-icon`; render `direct-image`; visibility `always`; asset `neutral-face-icon`
+          - Fact `reference-size`: `42×42px`; provenance: `figma-literal` at `260:3971`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `260:3971`
+      - `root-content-area-emoji-buttons-bad` — role `bad`; render `presentation-table`; visibility `always`
+        - Fact `reference-size`: `154.66665649414062×54px`; provenance: `figma-literal` at `260:3972`
+        - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `260:3972`
+        - Fact `layout-gap`: `10px`; provenance: `figma-literal` at `260:3972`
+        - Fact `padding-top`: `6px`; provenance: `figma-literal` at `260:3972`
+        - Fact `padding-right`: `23px`; provenance: `figma-literal` at `260:3972`
+        - Fact `padding-bottom`: `6px`; provenance: `figma-literal` at `260:3972`
+        - Fact `padding-left`: `23px`; provenance: `figma-literal` at `260:3972`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `260:3972`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `260:3972`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `260:3972`
+        - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `260:3972`
+        - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `260:3972`
+        - Fact `border-radius`: `32px`; provenance: `figma-literal` at `260:3972`
+        - Fact `background`: `#F8F8FA`; provenance: `figma-literal` at `260:3972`
+        - `root-content-area-emoji-buttons-bad-sad-face-icon` — role `sad-face-icon`; render `direct-image`; visibility `always`; asset `sad-face-icon`
+          - Fact `reference-size`: `42×42px`; provenance: `figma-literal` at `260:3973`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `260:3973`
 
 ### Mobile
 
 - `root` — role `nps`; render `presentation-table`; visibility `always`
-  - Fact `description-1`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-2`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-3`: `296px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-4`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-5`: `552px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-6`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-7`: `26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-8`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-9`: `44px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-10`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-11`: `32×32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-12`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-13`: `54px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-14`: `42×42px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `heading` — role `heading`; render `html-text`; visibility `always`
-  - `options` — role `options`; render `presentation-table`; visibility `always`
-    - `happy-face-link` — role `rating-link`; render `html-link`; visibility `always`
-      - `happy-face-icon` — role `rating-icon`; render `direct-image`; visibility `always`; asset `happy-face-icon`
-    - `neutral-face-link` — role `rating-link`; render `html-link`; visibility variant `Count=3`
-      - `neutral-face-icon` — role `rating-icon`; render `direct-image`; visibility `always`; asset `neutral-face-icon`
-    - `sad-face-link` — role `rating-link`; render `html-link`; visibility `always`
-      - `sad-face-icon` — role `rating-icon`; render `direct-image`; visibility `always`; asset `sad-face-icon`
+  - Fact `reference-size`: `328×246px`; provenance: `figma-literal` at `15:599`
+  - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `15:599`
+  - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `15:599`
+  - Fact `padding-top`: `16px`; provenance: `figma-literal` at `15:599`
+  - Fact `padding-right`: `16px`; provenance: `figma-literal` at `15:599`
+  - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `15:599`
+  - Fact `padding-left`: `16px`; provenance: `figma-literal` at `15:599`
+  - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `15:599`
+  - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `15:599`
+  - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `15:599`
+  - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `15:599`
+  - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `15:599`
+  - Fact `border-radius`: `0px`; provenance: `figma-literal` at `15:599`
+  - `root-content-area` — role `content-area`; render `presentation-table`; visibility `always`
+    - Fact `reference-size`: `296×230px`; provenance: `figma-literal` at `15:587`
+    - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `15:587`
+    - Fact `layout-gap`: `16px`; provenance: `figma-literal` at `15:587`
+    - Fact `padding-top`: `22px`; provenance: `figma-literal` at `15:587`
+    - Fact `padding-right`: `22px`; provenance: `figma-literal` at `15:587`
+    - Fact `padding-bottom`: `22px`; provenance: `figma-literal` at `15:587`
+    - Fact `padding-left`: `22px`; provenance: `figma-literal` at `15:587`
+    - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `15:587`
+    - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `15:587`
+    - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `15:587`
+    - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `15:587`
+    - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `15:587`
+    - Fact `border-radius`: `22px`; provenance: `figma-literal` at `15:587`
+    - Fact `background`: `#FFFFFF`; provenance: `figma-literal` at `15:587`
+    - `root-content-area-heading` — role `heading`; render `html-text`; visibility `always`
+      - Fact `reference-size`: `252×22px`; provenance: `figma-literal` at `15:588`
+      - Fact `text-color`: `#000000`; provenance: `figma-literal` at `15:588`
+      - Fact `source-text`: `Понравилось это письмо?`; provenance: `figma-literal` at `15:588`
+      - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `15:588`
+      - Fact `font-style`: `SemiBold`; provenance: `figma-literal` at `15:588`
+      - Fact `font-size`: `18px`; provenance: `figma-literal` at `15:588`
+      - Fact `text-align`: `center`; provenance: `figma-literal` at `15:588`
+      - Fact `text-decoration`: `none`; provenance: `figma-literal` at `15:588`
+      - Fact `figma-style-id`: `S:31421a8c479c960e9e5fcdf32b0717960340b772,`; provenance: `figma-literal` at `15:588`
+      - Fact `line-height`: `120%`; provenance: `figma-literal` at `15:588`
+      - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `15:588`
+      - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `15:588`
+      - Fact `vertical-text-align`: `center`; provenance: `figma-literal` at `15:588`
+      - Fact `text-case`: `original`; provenance: `figma-literal` at `15:588`
+      - Fact `figma-style-name`: `Mobile/Heading`; provenance: `figma-literal` at `15:588`
+    - `root-content-area-emoji-buttons` — role `emoji-buttons`; render `presentation-table`; visibility `always`
+      - Fact `reference-size`: `252×148px`; provenance: `figma-literal` at `15:589`
+      - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `15:589`
+      - Fact `layout-gap`: `8px`; provenance: `figma-literal` at `15:589`
+      - Fact `padding-top`: `0px`; provenance: `figma-literal` at `15:589`
+      - Fact `padding-right`: `0px`; provenance: `figma-literal` at `15:589`
+      - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `15:589`
+      - Fact `padding-left`: `0px`; provenance: `figma-literal` at `15:589`
+      - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `15:589`
+      - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `15:589`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `15:589`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `15:589`
+      - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `15:589`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `15:589`
+      - `root-content-area-emoji-buttons-good` — role `good`; render `presentation-table`; visibility `always`
+        - Fact `reference-size`: `252×44px`; provenance: `figma-literal` at `15:590`
+        - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `15:590`
+        - Fact `layout-gap`: `10px`; provenance: `figma-literal` at `15:590`
+        - Fact `padding-top`: `6px`; provenance: `figma-literal` at `15:590`
+        - Fact `padding-right`: `24px`; provenance: `figma-literal` at `15:590`
+        - Fact `padding-bottom`: `6px`; provenance: `figma-literal` at `15:590`
+        - Fact `padding-left`: `24px`; provenance: `figma-literal` at `15:590`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `15:590`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `15:590`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `15:590`
+        - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `15:590`
+        - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `15:590`
+        - Fact `border-radius`: `32px`; provenance: `figma-literal` at `15:590`
+        - Fact `background`: `#F8F8FA`; provenance: `figma-literal` at `15:590`
+        - `root-content-area-emoji-buttons-good-happy-face-icon` — role `happy-face-icon`; render `direct-image`; visibility `always`; asset `happy-face-icon`
+          - Fact `reference-size`: `32×32px`; provenance: `figma-literal` at `42:47130`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `42:47130`
+      - `root-content-area-emoji-buttons-neutral` — role `neutral`; render `presentation-table`; visibility `always`
+        - Fact `reference-size`: `252×44px`; provenance: `figma-literal` at `15:592`
+        - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `15:592`
+        - Fact `layout-gap`: `10px`; provenance: `figma-literal` at `15:592`
+        - Fact `padding-top`: `6px`; provenance: `figma-literal` at `15:592`
+        - Fact `padding-right`: `23px`; provenance: `figma-literal` at `15:592`
+        - Fact `padding-bottom`: `6px`; provenance: `figma-literal` at `15:592`
+        - Fact `padding-left`: `23px`; provenance: `figma-literal` at `15:592`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `15:592`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `15:592`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `15:592`
+        - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `15:592`
+        - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `15:592`
+        - Fact `border-radius`: `32px`; provenance: `figma-literal` at `15:592`
+        - Fact `background`: `#F8F8FA`; provenance: `figma-literal` at `15:592`
+        - `root-content-area-emoji-buttons-neutral-neutral-face-icon` — role `neutral-face-icon`; render `direct-image`; visibility `always`; asset `neutral-face-icon`
+          - Fact `reference-size`: `32×32px`; provenance: `figma-literal` at `42:47113`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `42:47113`
+      - `root-content-area-emoji-buttons-bad` — role `bad`; render `presentation-table`; visibility `always`
+        - Fact `reference-size`: `252×44px`; provenance: `figma-literal` at `15:594`
+        - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `15:594`
+        - Fact `layout-gap`: `10px`; provenance: `figma-literal` at `15:594`
+        - Fact `padding-top`: `6px`; provenance: `figma-literal` at `15:594`
+        - Fact `padding-right`: `23px`; provenance: `figma-literal` at `15:594`
+        - Fact `padding-bottom`: `6px`; provenance: `figma-literal` at `15:594`
+        - Fact `padding-left`: `23px`; provenance: `figma-literal` at `15:594`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `15:594`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `15:594`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `15:594`
+        - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `15:594`
+        - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `15:594`
+        - Fact `border-radius`: `32px`; provenance: `figma-literal` at `15:594`
+        - Fact `background`: `#F8F8FA`; provenance: `figma-literal` at `15:594`
+        - `root-content-area-emoji-buttons-bad-sad-face-icon` — role `sad-face-icon`; render `direct-image`; visibility `always`; asset `sad-face-icon`
+          - Fact `reference-size`: `32×32px`; provenance: `figma-literal` at `42:47147`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `42:47147`
 
 ### Properties and variants
 
@@ -6637,18 +8217,16 @@ RENDER: HTML
   - Aspect ratio: 42:42
   - Crop: `figma-fill`; position `concrete-desktop-instance`
   - Background: own fill `preserve`; artificial matte `forbid`
-- Link: `mobile` `/contracts/mobile/root/children/1/children/0`
-- Asset usage: `mobile` `/contracts/mobile/root/children/1/children/0/children/0` → `happy-face-icon` as `direct-image`
-- Link: `mobile` `/contracts/mobile/root/children/1/children/1`
-- Asset usage: `mobile` `/contracts/mobile/root/children/1/children/1/children/0` → `neutral-face-icon` as `direct-image`
-- Link: `mobile` `/contracts/mobile/root/children/1/children/2`
-- Asset usage: `mobile` `/contracts/mobile/root/children/1/children/2/children/0` → `sad-face-icon` as `direct-image`
-- Link: `desktop` `/contracts/desktop/root/children/1/children/0`
-- Asset usage: `desktop` `/contracts/desktop/root/children/1/children/0/children/0` → `happy-face-icon` as `direct-image`
-- Link: `desktop` `/contracts/desktop/root/children/1/children/1`
-- Asset usage: `desktop` `/contracts/desktop/root/children/1/children/1/children/0` → `neutral-face-icon` as `direct-image`
-- Link: `desktop` `/contracts/desktop/root/children/1/children/2`
-- Asset usage: `desktop` `/contracts/desktop/root/children/1/children/2/children/0` → `sad-face-icon` as `direct-image`
+- Asset usage: `mobile` `/contracts/mobile/root/children/0/children/1/children/0/children/0` → `happy-face-icon` as `direct-image`
+- Asset usage: `mobile` `/contracts/mobile/root/children/0/children/1/children/1/children/0` → `neutral-face-icon` as `direct-image`
+- Asset usage: `mobile` `/contracts/mobile/root/children/0/children/1/children/2/children/0` → `sad-face-icon` as `direct-image`
+- Asset usage: `desktop` `/contracts/desktop/root/children/0/children/1/children/0/children/0` → `happy-face-icon` as `direct-image`
+- Asset usage: `desktop` `/contracts/desktop/root/children/0/children/1/children/1/children/0` → `neutral-face-icon` as `direct-image`
+- Asset usage: `desktop` `/contracts/desktop/root/children/0/children/1/children/2/children/0` → `sad-face-icon` as `direct-image`
+
+### Constraints and dependencies
+
+- Constraint `evaluation-links-cover-tiles` — scope `all`; kind `interaction`; severity `critical`: Каждый видимый вариант оценки — отдельная ссылка со своим href, занимающая всю площадь кнопки. Mobile кнопка шириной 100% доступной области и высотой 44px; Desktop кнопки равномерно делят строку, высота 54px, между ними gap 12px. Count=2/3 выбирает весь вариант состава; не скрывать варианты оценок независимо от Count.
 
 ### Output contract classification
 
@@ -7095,22 +8673,70 @@ RENDER: ASSET
 ### Desktop
 
 - `root` — role `badge`; render `presentation-table`; visibility `always`
-  - `status` — role `status-text`; render `html-text`; visibility `always`
+  - Fact `reference-size`: `117×30px`; provenance: `figma-literal` at `466:13290`
+  - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `466:13290`
+  - Fact `layout-gap`: `10px`; provenance: `figma-literal` at `466:13290`
+  - Fact `padding-top`: `4px`; provenance: `figma-literal` at `466:13290`
+  - Fact `padding-right`: `12px`; provenance: `figma-literal` at `466:13290`
+  - Fact `padding-bottom`: `4px`; provenance: `figma-literal` at `466:13290`
+  - Fact `padding-left`: `12px`; provenance: `figma-literal` at `466:13290`
+  - Fact `horizontal-sizing`: `hug`; provenance: `figma-literal` at `466:13290`
+  - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `466:13290`
+  - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `466:13290`
+  - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `466:13290`
+  - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `466:13290`
+  - Fact `border-radius`: `63px`; provenance: `figma-literal` at `466:13290`
+  - Fact `background`: `#FAE6AF`; provenance: `figma-literal` at `466:13290`
+  - `root-status-label` — role `status-label`; render `html-text`; visibility `always`
+    - Fact `reference-size`: `93×22px`; provenance: `figma-literal` at `466:13291`
+    - Fact `text-color`: `#8C5D00`; provenance: `figma-literal` at `466:13291`
+    - Fact `source-text`: `В обработке`; provenance: `figma-literal` at `466:13291`
+    - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `466:13291`
+    - Fact `font-style`: `Regular`; provenance: `figma-literal` at `466:13291`
+    - Fact `font-size`: `16px`; provenance: `figma-literal` at `466:13291`
+    - Fact `text-align`: `left`; provenance: `figma-literal` at `466:13291`
+    - Fact `text-decoration`: `none`; provenance: `figma-literal` at `466:13291`
+    - Fact `figma-style-id`: `S:0eb6b02f56ee5f02f09611af5a13a41b6121e78d,`; provenance: `figma-literal` at `466:13291`
+    - Fact `line-height`: `140%`; provenance: `figma-literal` at `466:13291`
+    - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `466:13291`
+    - Fact `text-auto-resize`: `width_and_height`; provenance: `figma-literal` at `466:13291`
+    - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `466:13291`
+    - Fact `text-case`: `original`; provenance: `figma-literal` at `466:13291`
+    - Fact `figma-style-name`: `Desktop/Body/Medium`; provenance: `figma-literal` at `466:13291`
 
 ### Mobile
 
 - `root` — role `badge`; render `presentation-table`; visibility `always`
-  - Fact `description-1`: `4px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-2`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-3`: `63px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-4`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-5`: `#FAE6AF`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-6`: `#8C5D00`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-7`: `#B0FCC0`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-8`: `#00991F`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-9`: `#FFC7C8`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-10`: `#CC2944`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - `status` — role `status-text`; render `html-text`; visibility `always`
+  - Fact `reference-size`: `94×25px`; provenance: `figma-literal` at `459:29367`
+  - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `459:29367`
+  - Fact `layout-gap`: `10px`; provenance: `figma-literal` at `459:29367`
+  - Fact `padding-top`: `4px`; provenance: `figma-literal` at `459:29367`
+  - Fact `padding-right`: `12px`; provenance: `figma-literal` at `459:29367`
+  - Fact `padding-bottom`: `4px`; provenance: `figma-literal` at `459:29367`
+  - Fact `padding-left`: `12px`; provenance: `figma-literal` at `459:29367`
+  - Fact `horizontal-sizing`: `hug`; provenance: `figma-literal` at `459:29367`
+  - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `459:29367`
+  - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `459:29367`
+  - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `459:29367`
+  - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `459:29367`
+  - Fact `border-radius`: `63px`; provenance: `figma-literal` at `459:29367`
+  - Fact `background`: `#FAE6AF`; provenance: `figma-literal` at `459:29367`
+  - `root-status-label` — role `status-label`; render `html-text`; visibility `always`
+    - Fact `reference-size`: `70×17px`; provenance: `figma-literal` at `459:29368`
+    - Fact `text-color`: `#8C5D00`; provenance: `figma-literal` at `459:29368`
+    - Fact `source-text`: `В обработке`; provenance: `figma-literal` at `459:29368`
+    - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `459:29368`
+    - Fact `font-style`: `Regular`; provenance: `figma-literal` at `459:29368`
+    - Fact `font-size`: `12px`; provenance: `figma-literal` at `459:29368`
+    - Fact `text-align`: `left`; provenance: `figma-literal` at `459:29368`
+    - Fact `text-decoration`: `none`; provenance: `figma-literal` at `459:29368`
+    - Fact `figma-style-id`: `S:8ad84dd262e81c148a758758a15bb9b15e8f30fe,`; provenance: `figma-literal` at `459:29368`
+    - Fact `line-height`: `140%`; provenance: `figma-literal` at `459:29368`
+    - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `459:29368`
+    - Fact `text-auto-resize`: `width_and_height`; provenance: `figma-literal` at `459:29368`
+    - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `459:29368`
+    - Fact `text-case`: `original`; provenance: `figma-literal` at `459:29368`
+    - Fact `figma-style-name`: `Mobile/Body/Medium`; provenance: `figma-literal` at `459:29368`
 
 ### Properties and variants
 
@@ -7169,128 +8795,232 @@ RENDER: HTML
 ### Desktop
 
 - `root` — role `banner`; render `presentation-table`; visibility `always`
-  - Fact `root-layout-direction`: `vertical`; provenance: `figma-literal` at `502:25046`
-  - Fact `root-item-gap`: `12px`; provenance: `figma-literal` at `502:25046`
-  - Fact `root-padding-top`: `24px`; provenance: `figma-literal` at `502:25046`
-  - Fact `root-padding-right`: `24px`; provenance: `figma-literal` at `502:25046`
-  - Fact `root-padding-left`: `24px`; provenance: `figma-literal` at `502:25046`
+  - Fact `reference-size`: `600×228px`; provenance: `figma-literal` at `502:25046`
+  - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `502:25046`
+  - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `502:25046`
+  - Fact `padding-top`: `24px`; provenance: `figma-literal` at `502:25046`
+  - Fact `padding-right`: `24px`; provenance: `figma-literal` at `502:25046`
+  - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `502:25046`
+  - Fact `padding-left`: `24px`; provenance: `figma-literal` at `502:25046`
+  - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `502:25046`
+  - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `502:25046`
+  - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `502:25046`
+  - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `502:25046`
+  - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `502:25046`
+  - Fact `border-radius`: `0px`; provenance: `figma-literal` at `502:25046`
   - `root-item-01` — role `item-01`; render `presentation-table`; visibility `always`
-    - Fact `root-item-01-layout-direction`: `horizontal`; provenance: `figma-literal` at `497:19958`
-    - Fact `root-item-01-item-gap`: `24px`; provenance: `figma-literal` at `497:19958`
-    - Fact `root-item-01-padding-top`: `24px`; provenance: `figma-literal` at `497:19958`
-    - Fact `root-item-01-padding-right`: `24px`; provenance: `figma-literal` at `497:19958`
-    - Fact `root-item-01-padding-bottom`: `24px`; provenance: `figma-literal` at `497:19958`
-    - Fact `root-item-01-padding-left`: `24px`; provenance: `figma-literal` at `497:19958`
-    - Fact `root-item-01-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `497:19958`
-    - Fact `root-item-01-corner-radius`: `26px`; provenance: `figma-literal` at `497:19958`
-    - Fact `root-item-01-fill-color`: `#FFFFFF`; provenance: `figma-literal` at `497:19958`
-    - `root-item-01-logo-cell` — role `logo-cell`; render `html-link`; visibility `always`
-      - `root-item-01-logo-cell-ofd-badge` — role `ofd-badge`; render `direct-image`; visibility `always`; asset `ofd-badge`
-        - Fact `root-item-01-logo-cell-ofd-badge-corner-radius`: `48px`; provenance: `figma-literal` at `497:19959`
-        - Fact `root-item-01-logo-cell-ofd-badge-clips-content`: `true`; provenance: `figma-literal` at `497:19959`
-        - Fact `root-item-01-logo-cell-ofd-badge-display-width`: `48px`; provenance: `figma-literal` at `497:19959`
-        - Fact `root-item-01-logo-cell-ofd-badge-display-height`: `48px`; provenance: `figma-literal` at `497:19959`
-    - `root-item-01-text-cell` — role `text-cell`; render `html-link`; visibility `always`
-      - `root-item-01-text-cell-link-text` — role `link-text`; render `html-text`; visibility `always`
-        - Fact `root-item-01-text-cell-link-text-fill-color`: `#000000`; provenance: `figma-literal` at `497:19960`
-        - Fact `root-item-01-text-cell-link-text-font-size`: `18px`; provenance: `figma-literal` at `497:19960`
-        - Fact `root-item-01-text-cell-link-text-line-height`: `140%`; provenance: `figma-literal` at `497:19960`
-        - Fact `root-item-01-text-cell-link-text-text-style`: `Desktop/Body/Large`; provenance: `figma-literal` at `497:19960`
-    - `root-item-01-chevron-cell` — role `chevron-cell`; render `html-link`; visibility `always`
-      - `root-item-01-chevron-cell-chevron-icon` — role `chevron-icon`; render `direct-image`; visibility `always`; asset `chevron-icon`
-        - Fact `root-item-01-chevron-cell-chevron-icon-clips-content`: `true`; provenance: `figma-literal` at `497:19961`
-        - Fact `root-item-01-chevron-cell-chevron-icon-display-width`: `24px`; provenance: `figma-literal` at `497:19961`
-        - Fact `root-item-01-chevron-cell-chevron-icon-display-height`: `24px`; provenance: `figma-literal` at `497:19961`
+    - Fact `reference-size`: `552×96px`; provenance: `figma-literal` at `497:19958`
+    - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `497:19958`
+    - Fact `layout-gap`: `24px`; provenance: `figma-literal` at `497:19958`
+    - Fact `padding-top`: `24px`; provenance: `figma-literal` at `497:19958`
+    - Fact `padding-right`: `24px`; provenance: `figma-literal` at `497:19958`
+    - Fact `padding-bottom`: `24px`; provenance: `figma-literal` at `497:19958`
+    - Fact `padding-left`: `24px`; provenance: `figma-literal` at `497:19958`
+    - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `497:19958`
+    - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `497:19958`
+    - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `497:19958`
+    - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `497:19958`
+    - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `497:19958`
+    - Fact `border-radius`: `26px`; provenance: `figma-literal` at `497:19958`
+    - Fact `background`: `#FFFFFF`; provenance: `figma-literal` at `497:19958`
+    - `root-item-01-ofd-badge` — role `ofd-badge`; render `direct-image`; visibility `always`; asset `ofd-badge`
+      - Fact `reference-size`: `48×48px`; provenance: `figma-literal` at `497:19959`
+      - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `497:19959`
+      - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `497:19959`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `497:19959`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `497:19959`
+      - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `497:19959`
+      - Fact `border-radius`: `48px`; provenance: `figma-literal` at `497:19959`
+      - Fact `stroke-color-1`: `#DFDFE0`; provenance: `figma-literal` at `497:19959`
+      - Fact `stroke-weight`: `0.375px`; provenance: `figma-literal` at `497:19959`
+    - `root-item-01-link-text` — role `link-text`; render `html-text`; visibility `always`
+      - Fact `reference-size`: `384×25px`; provenance: `figma-literal` at `497:19960`
+      - Fact `text-color`: `#000000`; provenance: `figma-literal` at `497:19960`
+      - Fact `source-text`: `Фискальный чек на сайте Платформы ОФД`; provenance: `figma-literal` at `497:19960`
+      - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `497:19960`
+      - Fact `font-style`: `Regular`; provenance: `figma-literal` at `497:19960`
+      - Fact `font-size`: `18px`; provenance: `figma-literal` at `497:19960`
+      - Fact `text-align`: `left`; provenance: `figma-literal` at `497:19960`
+      - Fact `text-decoration`: `none`; provenance: `figma-literal` at `497:19960`
+      - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `497:19960`
+      - Fact `line-height`: `140%`; provenance: `figma-literal` at `497:19960`
+      - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `497:19960`
+      - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `497:19960`
+      - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `497:19960`
+      - Fact `text-case`: `original`; provenance: `figma-literal` at `497:19960`
+      - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `497:19960`
+    - `root-item-01-chevron-icon` — role `chevron-icon`; render `direct-image`; visibility `always`; asset `chevron-icon`
+      - Fact `reference-size`: `24×24px`; provenance: `figma-literal` at `497:19961`
+      - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `497:19961`
+      - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `497:19961`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `497:19961`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `497:19961`
+      - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `497:19961`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `497:19961`
   - `root-item-02` — role `item-02`; render `presentation-table`; visibility `always`
-    - Fact `root-item-02-layout-direction`: `horizontal`; provenance: `figma-literal` at `497:19963`
-    - Fact `root-item-02-item-gap`: `24px`; provenance: `figma-literal` at `497:19963`
-    - Fact `root-item-02-padding-top`: `24px`; provenance: `figma-literal` at `497:19963`
-    - Fact `root-item-02-padding-right`: `24px`; provenance: `figma-literal` at `497:19963`
-    - Fact `root-item-02-padding-bottom`: `24px`; provenance: `figma-literal` at `497:19963`
-    - Fact `root-item-02-padding-left`: `24px`; provenance: `figma-literal` at `497:19963`
-    - Fact `root-item-02-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `497:19963`
-    - Fact `root-item-02-corner-radius`: `26px`; provenance: `figma-literal` at `497:19963`
-    - Fact `root-item-02-fill-color`: `#FFFFFF`; provenance: `figma-literal` at `497:19963`
-    - `root-item-02-logo-cell` — role `logo-cell`; render `html-link`; visibility `always`
-      - `root-item-02-logo-cell-fns-badge` — role `fns-badge`; render `direct-image`; visibility `always`; asset `fns-badge`
-        - Fact `root-item-02-logo-cell-fns-badge-corner-radius`: `48px`; provenance: `figma-literal` at `497:19964`
-        - Fact `root-item-02-logo-cell-fns-badge-clips-content`: `true`; provenance: `figma-literal` at `497:19964`
-        - Fact `root-item-02-logo-cell-fns-badge-display-width`: `48px`; provenance: `figma-literal` at `497:19964`
-        - Fact `root-item-02-logo-cell-fns-badge-display-height`: `48px`; provenance: `figma-literal` at `497:19964`
-    - `root-item-02-text-cell` — role `text-cell`; render `html-link`; visibility `always`
-      - `root-item-02-text-cell-link-text` — role `link-text`; render `html-text`; visibility `always`
-        - Fact `root-item-02-text-cell-link-text-fill-color`: `#000000`; provenance: `figma-literal` at `497:19965`
-        - Fact `root-item-02-text-cell-link-text-font-size`: `18px`; provenance: `figma-literal` at `497:19965`
-        - Fact `root-item-02-text-cell-link-text-line-height`: `140%`; provenance: `figma-literal` at `497:19965`
-        - Fact `root-item-02-text-cell-link-text-text-style`: `Desktop/Body/Large`; provenance: `figma-literal` at `497:19965`
-    - `root-item-02-chevron-cell` — role `chevron-cell`; render `html-link`; visibility `always`
-      - `root-item-02-chevron-cell-chevron-icon` — role `chevron-icon`; render `direct-image`; visibility `always`; asset `chevron-icon`
-        - Fact `root-item-02-chevron-cell-chevron-icon-clips-content`: `true`; provenance: `figma-literal` at `497:19966`
-        - Fact `root-item-02-chevron-cell-chevron-icon-display-width`: `24px`; provenance: `figma-literal` at `497:19966`
-        - Fact `root-item-02-chevron-cell-chevron-icon-display-height`: `24px`; provenance: `figma-literal` at `497:19966`
+    - Fact `reference-size`: `552×96px`; provenance: `figma-literal` at `497:19963`
+    - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `497:19963`
+    - Fact `layout-gap`: `24px`; provenance: `figma-literal` at `497:19963`
+    - Fact `padding-top`: `24px`; provenance: `figma-literal` at `497:19963`
+    - Fact `padding-right`: `24px`; provenance: `figma-literal` at `497:19963`
+    - Fact `padding-bottom`: `24px`; provenance: `figma-literal` at `497:19963`
+    - Fact `padding-left`: `24px`; provenance: `figma-literal` at `497:19963`
+    - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `497:19963`
+    - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `497:19963`
+    - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `497:19963`
+    - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `497:19963`
+    - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `497:19963`
+    - Fact `border-radius`: `26px`; provenance: `figma-literal` at `497:19963`
+    - Fact `background`: `#FFFFFF`; provenance: `figma-literal` at `497:19963`
+    - `root-item-02-fns-badge` — role `fns-badge`; render `direct-image`; visibility `always`; asset `fns-badge`
+      - Fact `reference-size`: `48×48px`; provenance: `figma-literal` at `497:19964`
+      - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `497:19964`
+      - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `497:19964`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `497:19964`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `497:19964`
+      - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `497:19964`
+      - Fact `border-radius`: `48px`; provenance: `figma-literal` at `497:19964`
+      - Fact `stroke-color-1`: `#DFDFE0`; provenance: `figma-literal` at `497:19964`
+      - Fact `stroke-weight`: `0.375px`; provenance: `figma-literal` at `497:19964`
+    - `root-item-02-link-text` — role `link-text`; render `html-text`; visibility `always`
+      - Fact `reference-size`: `384×25px`; provenance: `figma-literal` at `497:19965`
+      - Fact `text-color`: `#000000`; provenance: `figma-literal` at `497:19965`
+      - Fact `source-text`: `Фискальный чек на сайте ФНС`; provenance: `figma-literal` at `497:19965`
+      - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `497:19965`
+      - Fact `font-style`: `Regular`; provenance: `figma-literal` at `497:19965`
+      - Fact `font-size`: `18px`; provenance: `figma-literal` at `497:19965`
+      - Fact `text-align`: `left`; provenance: `figma-literal` at `497:19965`
+      - Fact `text-decoration`: `none`; provenance: `figma-literal` at `497:19965`
+      - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `497:19965`
+      - Fact `line-height`: `140%`; provenance: `figma-literal` at `497:19965`
+      - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `497:19965`
+      - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `497:19965`
+      - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `497:19965`
+      - Fact `text-case`: `original`; provenance: `figma-literal` at `497:19965`
+      - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `497:19965`
+    - `root-item-02-chevron-icon` — role `chevron-icon`; render `direct-image`; visibility `always`; asset `chevron-icon`
+      - Fact `reference-size`: `24×24px`; provenance: `figma-literal` at `497:19966`
+      - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `497:19966`
+      - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `497:19966`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `497:19966`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `497:19966`
+      - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `497:19966`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `497:19966`
 
 ### Mobile
 
 - `root` — role `banner`; render `presentation-table`; visibility `always`
-  - Fact `root-layout-direction`: `vertical`; provenance: `figma-literal` at `502:25047`
-  - Fact `root-item-gap`: `8px`; provenance: `figma-literal` at `502:25047`
-  - Fact `root-padding-top`: `16px`; provenance: `figma-literal` at `502:25047`
-  - Fact `root-padding-right`: `16px`; provenance: `figma-literal` at `502:25047`
-  - Fact `root-padding-left`: `16px`; provenance: `figma-literal` at `502:25047`
+  - Fact `reference-size`: `328×196px`; provenance: `figma-literal` at `502:25047`
+  - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `502:25047`
+  - Fact `layout-gap`: `8px`; provenance: `figma-literal` at `502:25047`
+  - Fact `padding-top`: `16px`; provenance: `figma-literal` at `502:25047`
+  - Fact `padding-right`: `16px`; provenance: `figma-literal` at `502:25047`
+  - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `502:25047`
+  - Fact `padding-left`: `16px`; provenance: `figma-literal` at `502:25047`
+  - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `502:25047`
+  - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `502:25047`
+  - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `502:25047`
+  - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `502:25047`
+  - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `502:25047`
+  - Fact `border-radius`: `0px`; provenance: `figma-literal` at `502:25047`
   - `root-item-01` — role `item-01`; render `presentation-table`; visibility `always`
-    - Fact `root-item-01-layout-direction`: `horizontal`; provenance: `figma-literal` at `502:25000`
-    - Fact `root-item-01-item-gap`: `16px`; provenance: `figma-literal` at `502:25000`
-    - Fact `root-item-01-padding-top`: `16px`; provenance: `figma-literal` at `502:25000`
-    - Fact `root-item-01-padding-right`: `16px`; provenance: `figma-literal` at `502:25000`
-    - Fact `root-item-01-padding-bottom`: `16px`; provenance: `figma-literal` at `502:25000`
-    - Fact `root-item-01-padding-left`: `16px`; provenance: `figma-literal` at `502:25000`
-    - Fact `root-item-01-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `502:25000`
-    - Fact `root-item-01-corner-radius`: `22px`; provenance: `figma-literal` at `502:25000`
-    - Fact `root-item-01-fill-color`: `#FFFFFF`; provenance: `figma-literal` at `502:25000`
-    - `root-item-01-logo-cell` — role `logo-cell`; render `html-link`; visibility `always`
-      - `root-item-01-logo-cell-ofd-badge` — role `ofd-badge`; render `direct-image`; visibility `always`; asset `ofd-badge`
-        - Fact `root-item-01-logo-cell-ofd-badge-corner-radius`: `48px`; provenance: `figma-literal` at `502:25001`
-        - Fact `root-item-01-logo-cell-ofd-badge-clips-content`: `true`; provenance: `figma-literal` at `502:25001`
-        - Fact `root-item-01-logo-cell-ofd-badge-display-width`: `48px`; provenance: `figma-literal` at `502:25001`
-        - Fact `root-item-01-logo-cell-ofd-badge-display-height`: `48px`; provenance: `figma-literal` at `502:25001`
-    - `root-item-01-text-cell` — role `text-cell`; render `html-link`; visibility `always`
-      - `root-item-01-text-cell-link-text` — role `link-text`; render `html-text`; visibility `always`
-        - Fact `root-item-01-text-cell-link-text-fill-color`: `#000000`; provenance: `figma-literal` at `502:25002`
-        - Fact `root-item-01-text-cell-link-text-font-size`: `14px`; provenance: `figma-literal` at `502:25002`
-        - Fact `root-item-01-text-cell-link-text-line-height`: `140%`; provenance: `figma-literal` at `502:25002`
-        - Fact `root-item-01-text-cell-link-text-text-style`: `Mobile/Body/Large`; provenance: `figma-literal` at `502:25002`
-    - `root-item-01-chevron-cell` — role `chevron-cell`; render `html-link`; visibility `always`
-      - `root-item-01-chevron-cell-chevron-icon` — role `chevron-icon`; render `direct-image`; visibility `always`; asset `chevron-icon`
-        - Fact `root-item-01-chevron-cell-chevron-icon-clips-content`: `true`; provenance: `figma-literal` at `502:25003`
-        - Fact `root-item-01-chevron-cell-chevron-icon-display-width`: `24px`; provenance: `figma-literal` at `502:25003`
-        - Fact `root-item-01-chevron-cell-chevron-icon-display-height`: `24px`; provenance: `figma-literal` at `502:25003`
+    - Fact `reference-size`: `296×92px`; provenance: `figma-literal` at `502:25000`
+    - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `502:25000`
+    - Fact `layout-gap`: `16px`; provenance: `figma-literal` at `502:25000`
+    - Fact `padding-top`: `16px`; provenance: `figma-literal` at `502:25000`
+    - Fact `padding-right`: `16px`; provenance: `figma-literal` at `502:25000`
+    - Fact `padding-bottom`: `16px`; provenance: `figma-literal` at `502:25000`
+    - Fact `padding-left`: `16px`; provenance: `figma-literal` at `502:25000`
+    - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `502:25000`
+    - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `502:25000`
+    - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `502:25000`
+    - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `502:25000`
+    - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `502:25000`
+    - Fact `border-radius`: `22px`; provenance: `figma-literal` at `502:25000`
+    - Fact `background`: `#FFFFFF`; provenance: `figma-literal` at `502:25000`
+    - `root-item-01-ofd-badge` — role `ofd-badge`; render `direct-image`; visibility `always`; asset `ofd-badge`
+      - Fact `reference-size`: `48×48px`; provenance: `figma-literal` at `502:25001`
+      - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `502:25001`
+      - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `502:25001`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `502:25001`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `502:25001`
+      - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `502:25001`
+      - Fact `border-radius`: `48px`; provenance: `figma-literal` at `502:25001`
+      - Fact `stroke-color-1`: `#DFDFE0`; provenance: `figma-literal` at `502:25001`
+      - Fact `stroke-weight`: `0.375px`; provenance: `figma-literal` at `502:25001`
+    - `root-item-01-link-text` — role `link-text`; render `html-text`; visibility `always`
+      - Fact `reference-size`: `160×60px`; provenance: `figma-literal` at `502:25002`
+      - Fact `text-color`: `#000000`; provenance: `figma-literal` at `502:25002`
+      - Fact `source-text`: `Фискальный чек на сайте Платформы ОФД`; provenance: `figma-literal` at `502:25002`
+      - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `502:25002`
+      - Fact `font-style`: `Regular`; provenance: `figma-literal` at `502:25002`
+      - Fact `font-size`: `14px`; provenance: `figma-literal` at `502:25002`
+      - Fact `text-align`: `left`; provenance: `figma-literal` at `502:25002`
+      - Fact `text-decoration`: `none`; provenance: `figma-literal` at `502:25002`
+      - Fact `figma-style-id`: `S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,`; provenance: `figma-literal` at `502:25002`
+      - Fact `line-height`: `140%`; provenance: `figma-literal` at `502:25002`
+      - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `502:25002`
+      - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `502:25002`
+      - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `502:25002`
+      - Fact `text-case`: `original`; provenance: `figma-literal` at `502:25002`
+      - Fact `figma-style-name`: `Mobile/Body/Large`; provenance: `figma-literal` at `502:25002`
+    - `root-item-01-chevron-icon` — role `chevron-icon`; render `direct-image`; visibility `always`; asset `chevron-icon`
+      - Fact `reference-size`: `24×24px`; provenance: `figma-literal` at `502:25003`
+      - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `502:25003`
+      - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `502:25003`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `502:25003`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `502:25003`
+      - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `502:25003`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `502:25003`
   - `root-item-02` — role `item-02`; render `presentation-table`; visibility `always`
-    - Fact `root-item-02-layout-direction`: `horizontal`; provenance: `figma-literal` at `502:25005`
-    - Fact `root-item-02-item-gap`: `16px`; provenance: `figma-literal` at `502:25005`
-    - Fact `root-item-02-padding-top`: `16px`; provenance: `figma-literal` at `502:25005`
-    - Fact `root-item-02-padding-right`: `16px`; provenance: `figma-literal` at `502:25005`
-    - Fact `root-item-02-padding-bottom`: `16px`; provenance: `figma-literal` at `502:25005`
-    - Fact `root-item-02-padding-left`: `16px`; provenance: `figma-literal` at `502:25005`
-    - Fact `root-item-02-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `502:25005`
-    - Fact `root-item-02-corner-radius`: `22px`; provenance: `figma-literal` at `502:25005`
-    - Fact `root-item-02-fill-color`: `#FFFFFF`; provenance: `figma-literal` at `502:25005`
-    - `root-item-02-logo-cell` — role `logo-cell`; render `html-link`; visibility `always`
-      - `root-item-02-logo-cell-fns-badge` — role `fns-badge`; render `direct-image`; visibility `always`; asset `fns-badge`
-        - Fact `root-item-02-logo-cell-fns-badge-corner-radius`: `48px`; provenance: `figma-literal` at `502:25006`
-        - Fact `root-item-02-logo-cell-fns-badge-clips-content`: `true`; provenance: `figma-literal` at `502:25006`
-        - Fact `root-item-02-logo-cell-fns-badge-display-width`: `48px`; provenance: `figma-literal` at `502:25006`
-        - Fact `root-item-02-logo-cell-fns-badge-display-height`: `48px`; provenance: `figma-literal` at `502:25006`
-    - `root-item-02-text-cell` — role `text-cell`; render `html-link`; visibility `always`
-      - `root-item-02-text-cell-link-text` — role `link-text`; render `html-text`; visibility `always`
-        - Fact `root-item-02-text-cell-link-text-fill-color`: `#000000`; provenance: `figma-literal` at `502:25007`
-        - Fact `root-item-02-text-cell-link-text-font-size`: `14px`; provenance: `figma-literal` at `502:25007`
-        - Fact `root-item-02-text-cell-link-text-line-height`: `140%`; provenance: `figma-literal` at `502:25007`
-        - Fact `root-item-02-text-cell-link-text-text-style`: `Mobile/Body/Large`; provenance: `figma-literal` at `502:25007`
-    - `root-item-02-chevron-cell` — role `chevron-cell`; render `html-link`; visibility `always`
-      - `root-item-02-chevron-cell-chevron-icon` — role `chevron-icon`; render `direct-image`; visibility `always`; asset `chevron-icon`
-        - Fact `root-item-02-chevron-cell-chevron-icon-clips-content`: `true`; provenance: `figma-literal` at `502:25008`
-        - Fact `root-item-02-chevron-cell-chevron-icon-display-width`: `24px`; provenance: `figma-literal` at `502:25008`
-        - Fact `root-item-02-chevron-cell-chevron-icon-display-height`: `24px`; provenance: `figma-literal` at `502:25008`
+    - Fact `reference-size`: `296×80px`; provenance: `figma-literal` at `502:25005`
+    - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `502:25005`
+    - Fact `layout-gap`: `16px`; provenance: `figma-literal` at `502:25005`
+    - Fact `padding-top`: `16px`; provenance: `figma-literal` at `502:25005`
+    - Fact `padding-right`: `16px`; provenance: `figma-literal` at `502:25005`
+    - Fact `padding-bottom`: `16px`; provenance: `figma-literal` at `502:25005`
+    - Fact `padding-left`: `16px`; provenance: `figma-literal` at `502:25005`
+    - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `502:25005`
+    - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `502:25005`
+    - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `502:25005`
+    - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `502:25005`
+    - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `502:25005`
+    - Fact `border-radius`: `22px`; provenance: `figma-literal` at `502:25005`
+    - Fact `background`: `#FFFFFF`; provenance: `figma-literal` at `502:25005`
+    - `root-item-02-fns-badge` — role `fns-badge`; render `direct-image`; visibility `always`; asset `fns-badge`
+      - Fact `reference-size`: `48×48px`; provenance: `figma-literal` at `502:25006`
+      - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `502:25006`
+      - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `502:25006`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `502:25006`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `502:25006`
+      - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `502:25006`
+      - Fact `border-radius`: `48px`; provenance: `figma-literal` at `502:25006`
+      - Fact `stroke-color-1`: `#DFDFE0`; provenance: `figma-literal` at `502:25006`
+      - Fact `stroke-weight`: `0.375px`; provenance: `figma-literal` at `502:25006`
+    - `root-item-02-link-text` — role `link-text`; render `html-text`; visibility `always`
+      - Fact `reference-size`: `160×40px`; provenance: `figma-literal` at `502:25007`
+      - Fact `text-color`: `#000000`; provenance: `figma-literal` at `502:25007`
+      - Fact `source-text`: `Фискальный чек на сайте ФНС`; provenance: `figma-literal` at `502:25007`
+      - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `502:25007`
+      - Fact `font-style`: `Regular`; provenance: `figma-literal` at `502:25007`
+      - Fact `font-size`: `14px`; provenance: `figma-literal` at `502:25007`
+      - Fact `text-align`: `left`; provenance: `figma-literal` at `502:25007`
+      - Fact `text-decoration`: `none`; provenance: `figma-literal` at `502:25007`
+      - Fact `figma-style-id`: `S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,`; provenance: `figma-literal` at `502:25007`
+      - Fact `line-height`: `140%`; provenance: `figma-literal` at `502:25007`
+      - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `502:25007`
+      - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `502:25007`
+      - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `502:25007`
+      - Fact `text-case`: `original`; provenance: `figma-literal` at `502:25007`
+      - Fact `figma-style-name`: `Mobile/Body/Large`; provenance: `figma-literal` at `502:25007`
+    - `root-item-02-chevron-icon` — role `chevron-icon`; render `direct-image`; visibility `always`; asset `chevron-icon`
+      - Fact `reference-size`: `24×24px`; provenance: `figma-literal` at `502:25008`
+      - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `502:25008`
+      - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `502:25008`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `502:25008`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `502:25008`
+      - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `502:25008`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `502:25008`
 
 ### Properties and variants
 
@@ -7340,26 +9070,14 @@ RENDER: HTML
   - Aspect ratio: 24:24
   - Crop: `none`; position `exact-node-after-overrides`
   - Background: own fill `preserve`; artificial matte `forbid`
-- Link: `mobile` `/contracts/mobile/root/children/0/children/0`
-- Asset usage: `mobile` `/contracts/mobile/root/children/0/children/0/children/0` → `ofd-badge` as `direct-image`
-- Link: `mobile` `/contracts/mobile/root/children/0/children/1`
-- Link: `mobile` `/contracts/mobile/root/children/0/children/2`
-- Asset usage: `mobile` `/contracts/mobile/root/children/0/children/2/children/0` → `chevron-icon` as `direct-image`
-- Link: `mobile` `/contracts/mobile/root/children/1/children/0`
-- Asset usage: `mobile` `/contracts/mobile/root/children/1/children/0/children/0` → `fns-badge` as `direct-image`
-- Link: `mobile` `/contracts/mobile/root/children/1/children/1`
-- Link: `mobile` `/contracts/mobile/root/children/1/children/2`
-- Asset usage: `mobile` `/contracts/mobile/root/children/1/children/2/children/0` → `chevron-icon` as `direct-image`
-- Link: `desktop` `/contracts/desktop/root/children/0/children/0`
-- Asset usage: `desktop` `/contracts/desktop/root/children/0/children/0/children/0` → `ofd-badge` as `direct-image`
-- Link: `desktop` `/contracts/desktop/root/children/0/children/1`
-- Link: `desktop` `/contracts/desktop/root/children/0/children/2`
-- Asset usage: `desktop` `/contracts/desktop/root/children/0/children/2/children/0` → `chevron-icon` as `direct-image`
-- Link: `desktop` `/contracts/desktop/root/children/1/children/0`
-- Asset usage: `desktop` `/contracts/desktop/root/children/1/children/0/children/0` → `fns-badge` as `direct-image`
-- Link: `desktop` `/contracts/desktop/root/children/1/children/1`
-- Link: `desktop` `/contracts/desktop/root/children/1/children/2`
-- Asset usage: `desktop` `/contracts/desktop/root/children/1/children/2/children/0` → `chevron-icon` as `direct-image`
+- Asset usage: `mobile` `/contracts/mobile/root/children/0/children/0` → `ofd-badge` as `direct-image`
+- Asset usage: `mobile` `/contracts/mobile/root/children/0/children/2` → `chevron-icon` as `direct-image`
+- Asset usage: `mobile` `/contracts/mobile/root/children/1/children/0` → `fns-badge` as `direct-image`
+- Asset usage: `mobile` `/contracts/mobile/root/children/1/children/2` → `chevron-icon` as `direct-image`
+- Asset usage: `desktop` `/contracts/desktop/root/children/0/children/0` → `ofd-badge` as `direct-image`
+- Asset usage: `desktop` `/contracts/desktop/root/children/0/children/2` → `chevron-icon` as `direct-image`
+- Asset usage: `desktop` `/contracts/desktop/root/children/1/children/0` → `fns-badge` as `direct-image`
+- Asset usage: `desktop` `/contracts/desktop/root/children/1/children/2` → `chevron-icon` as `direct-image`
 
 ### Constraints and dependencies
 
@@ -7672,430 +9390,1952 @@ CRITICAL
 ### Desktop
 
 - `root` — role `block`; render `presentation-table`; visibility `always`
-  - Fact `root-layout-direction`: `vertical`; provenance: `figma-literal` at `510:16699`
-  - Fact `root-padding-top`: `24px`; provenance: `figma-literal` at `510:16699`
-  - Fact `root-padding-right`: `24px`; provenance: `figma-literal` at `510:16699`
-  - Fact `root-padding-left`: `24px`; provenance: `figma-literal` at `510:16699`
-  - Fact `root-clips-content`: `true`; provenance: `figma-literal` at `510:16699`
+  - Fact `reference-size`: `600×912px`; provenance: `figma-literal` at `510:16699`
+  - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `510:16699`
+  - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `510:16699`
+  - Fact `padding-top`: `24px`; provenance: `figma-literal` at `510:16699`
+  - Fact `padding-right`: `24px`; provenance: `figma-literal` at `510:16699`
+  - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16699`
+  - Fact `padding-left`: `24px`; provenance: `figma-literal` at `510:16699`
+  - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `510:16699`
+  - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16699`
+  - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16699`
+  - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16699`
+  - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16699`
+  - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16699`
   - `root-content-area` — role `content-area`; render `presentation-table`; visibility `always`
-    - Fact `root-content-area-layout-direction`: `vertical`; provenance: `figma-literal` at `510:16433`
-    - Fact `root-content-area-item-gap`: `24px`; provenance: `figma-literal` at `510:16433`
-    - Fact `root-content-area-padding-top`: `32px`; provenance: `figma-literal` at `510:16433`
-    - Fact `root-content-area-padding-right`: `32px`; provenance: `figma-literal` at `510:16433`
-    - Fact `root-content-area-padding-bottom`: `32px`; provenance: `figma-literal` at `510:16433`
-    - Fact `root-content-area-padding-left`: `32px`; provenance: `figma-literal` at `510:16433`
-    - Fact `root-content-area-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `510:16433`
-    - Fact `root-content-area-corner-radius`: `26px`; provenance: `figma-literal` at `510:16433`
-    - Fact `root-content-area-clips-content`: `true`; provenance: `figma-literal` at `510:16433`
-    - Fact `root-content-area-fill-color`: `#FFFFFF`; provenance: `figma-literal` at `510:16433`
+    - Fact `reference-size`: `552×888px`; provenance: `figma-literal` at `510:16433`
+    - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `510:16433`
+    - Fact `layout-gap`: `24px`; provenance: `figma-literal` at `510:16433`
+    - Fact `padding-top`: `32px`; provenance: `figma-literal` at `510:16433`
+    - Fact `padding-right`: `32px`; provenance: `figma-literal` at `510:16433`
+    - Fact `padding-bottom`: `32px`; provenance: `figma-literal` at `510:16433`
+    - Fact `padding-left`: `32px`; provenance: `figma-literal` at `510:16433`
+    - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `510:16433`
+    - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16433`
+    - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16433`
+    - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16433`
+    - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16433`
+    - Fact `border-radius`: `26px`; provenance: `figma-literal` at `510:16433`
+    - Fact `background`: `#FFFFFF`; provenance: `figma-literal` at `510:16433`
     - `root-content-area-warning` — role `warning`; render `presentation-table`; visibility property `show-warning` (`Show Warning`)
-      - Fact `root-content-area-warning-layout-direction`: `horizontal`; provenance: `figma-literal` at `531:13984`
-      - Fact `root-content-area-warning-item-gap`: `6px`; provenance: `figma-literal` at `531:13984`
+      - Fact `reference-size`: `192×25px`; provenance: `figma-literal` at `531:13984`
+      - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `531:13984`
+      - Fact `layout-gap`: `6px`; provenance: `figma-literal` at `531:13984`
+      - Fact `padding-top`: `0px`; provenance: `figma-literal` at `531:13984`
+      - Fact `padding-right`: `0px`; provenance: `figma-literal` at `531:13984`
+      - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `531:13984`
+      - Fact `padding-left`: `0px`; provenance: `figma-literal` at `531:13984`
+      - Fact `horizontal-sizing`: `hug`; provenance: `figma-literal` at `531:13984`
+      - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `531:13984`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `531:13984`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `531:13984`
+      - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `531:13984`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `531:13984`
       - `root-content-area-warning-error-warning-line` — role `error-warning-line`; render `direct-image`; visibility `always`; asset `error-warning-line`
-        - Fact `root-content-area-warning-error-warning-line-clips-content`: `true`; provenance: `figma-literal` at `531:13974`
-        - Fact `root-content-area-warning-error-warning-line-display-width`: `24px`; provenance: `figma-literal` at `531:13974`
-        - Fact `root-content-area-warning-error-warning-line-display-height`: `24px`; provenance: `figma-literal` at `531:13974`
+        - Fact `reference-size`: `24×24px`; provenance: `figma-literal` at `531:13974`
+        - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `531:13974`
+        - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `531:13974`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `531:13974`
+        - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `531:13974`
+        - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `531:13974`
+        - Fact `border-radius`: `0px`; provenance: `figma-literal` at `531:13974`
       - `root-content-area-warning-warning-text` — role `warning-text`; render `html-text`; visibility `always`
-        - Fact `root-content-area-warning-warning-text-fill-color`: `#DE2141`; provenance: `figma-literal` at `531:13896`
-        - Fact `root-content-area-warning-warning-text-font-size`: `18px`; provenance: `figma-literal` at `531:13896`
-        - Fact `root-content-area-warning-warning-text-line-height`: `140%`; provenance: `figma-literal` at `531:13896`
-        - Fact `root-content-area-warning-warning-text-text-style`: `Desktop/Body/Large`; provenance: `figma-literal` at `531:13896`
+        - Fact `reference-size`: `162×25px`; provenance: `figma-literal` at `531:13896`
+        - Fact `text-color`: `#DE2141`; provenance: `figma-literal` at `531:13896`
+        - Fact `source-text`: `Что нужно сделать`; provenance: `figma-literal` at `531:13896`
+        - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `531:13896`
+        - Fact `font-style`: `Regular`; provenance: `figma-literal` at `531:13896`
+        - Fact `font-size`: `18px`; provenance: `figma-literal` at `531:13896`
+        - Fact `text-align`: `left`; provenance: `figma-literal` at `531:13896`
+        - Fact `text-decoration`: `none`; provenance: `figma-literal` at `531:13896`
+        - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `531:13896`
+        - Fact `line-height`: `140%`; provenance: `figma-literal` at `531:13896`
+        - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `531:13896`
+        - Fact `text-auto-resize`: `width_and_height`; provenance: `figma-literal` at `531:13896`
+        - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `531:13896`
+        - Fact `text-case`: `original`; provenance: `figma-literal` at `531:13896`
+        - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `531:13896`
     - `root-content-area-numbered-list` — role `numbered-list`; render `presentation-table`; visibility `always`
-      - Fact `root-content-area-numbered-list-layout-direction`: `vertical`; provenance: `figma-literal` at `510:16442`
-      - Fact `root-content-area-numbered-list-item-gap`: `12px`; provenance: `figma-literal` at `510:16442`
-      - Fact `root-content-area-numbered-list-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `510:16442`
+      - Fact `reference-size`: `488×559px`; provenance: `figma-literal` at `510:16442`
+      - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `510:16442`
+      - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16442`
+      - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16442`
+      - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16442`
+      - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16442`
+      - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16442`
+      - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `510:16442`
+      - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16442`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16442`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16442`
+      - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16442`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16442`
       - `root-content-area-numbered-list-intro-01` — role `intro-01`; render `html-text`; visibility `always`
-        - Fact `root-content-area-numbered-list-intro-01-fill-color`: `#48494A`; provenance: `figma-literal` at `510:16443`
-        - Fact `root-content-area-numbered-list-intro-01-font-size`: `18px`; provenance: `figma-literal` at `510:16443`
-        - Fact `root-content-area-numbered-list-intro-01-line-height`: `140%`; provenance: `figma-literal` at `510:16443`
-        - Fact `root-content-area-numbered-list-intro-01-text-style`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16443`
+        - Fact `reference-size`: `488×50px`; provenance: `figma-literal` at `510:16443`
+        - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16443`
+        - Fact `source-text`: `Вы являетесь клиентом ЕДИНОГО ЦУПИС более года. Мы благодарны Вам за это.`; provenance: `figma-literal` at `510:16443`
+        - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16443`
+        - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16443`
+        - Fact `font-size`: `18px`; provenance: `figma-literal` at `510:16443`
+        - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16443`
+        - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16443`
+        - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `510:16443`
+        - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16443`
+        - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16443`
+        - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16443`
+        - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16443`
+        - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16443`
+        - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16443`
       - `root-content-area-numbered-list-intro-02` — role `intro-02`; render `html-text`; visibility `always`
-        - Fact `root-content-area-numbered-list-intro-02-fill-color`: `#48494A`; provenance: `figma-literal` at `510:16517`
-        - Fact `root-content-area-numbered-list-intro-02-font-size`: `18px`; provenance: `figma-literal` at `510:16517`
-        - Fact `root-content-area-numbered-list-intro-02-line-height`: `140%`; provenance: `figma-literal` at `510:16517`
-        - Fact `root-content-area-numbered-list-intro-02-text-style`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16517`
+        - Fact `reference-size`: `488×50px`; provenance: `figma-literal` at `510:16517`
+        - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16517`
+        - Fact `source-text`: `Чтобы начать его использовать, авторизуйтесь в нем повторно:`; provenance: `figma-literal` at `510:16517`
+        - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16517`
+        - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16517`
+        - Fact `font-size`: `18px`; provenance: `figma-literal` at `510:16517`
+        - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16517`
+        - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16517`
+        - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `510:16517`
+        - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16517`
+        - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16517`
+        - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16517`
+        - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16517`
+        - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16517`
+        - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16517`
       - `root-content-area-numbered-list-item-01` — role `item-01`; render `presentation-table`; visibility `always`
-        - Fact `root-content-area-numbered-list-item-01-layout-direction`: `vertical`; provenance: `figma-literal` at `510:16444`
-        - Fact `root-content-area-numbered-list-item-01-item-gap`: `6px`; provenance: `figma-literal` at `510:16444`
-        - Fact `root-content-area-numbered-list-item-01-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `510:16444`
+        - Fact `reference-size`: `488×106px`; provenance: `figma-literal` at `510:16444`
+        - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `510:16444`
+        - Fact `layout-gap`: `6px`; provenance: `figma-literal` at `510:16444`
+        - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16444`
+        - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16444`
+        - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16444`
+        - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16444`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `510:16444`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16444`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16444`
+        - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16444`
+        - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16444`
+        - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16444`
         - `root-content-area-numbered-list-item-01-numbered-row` — role `numbered-row`; render `presentation-table`; visibility `always`
-          - Fact `root-content-area-numbered-list-item-01-numbered-row-layout-direction`: `horizontal`; provenance: `figma-literal` at `510:16445`
-          - Fact `root-content-area-numbered-list-item-01-numbered-row-item-gap`: `12px`; provenance: `figma-literal` at `510:16445`
-          - Fact `root-content-area-numbered-list-item-01-numbered-row-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `510:16445`
+          - Fact `reference-size`: `488×50px`; provenance: `figma-literal` at `510:16445`
+          - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `510:16445`
+          - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16445`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16445`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16445`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16445`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16445`
+          - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `510:16445`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16445`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16445`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16445`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16445`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16445`
           - `root-content-area-numbered-list-item-01-numbered-row-number` — role `number`; render `html-text`; visibility `always`
-            - Fact `root-content-area-numbered-list-item-01-numbered-row-number-fill-color`: `#00991F`; provenance: `figma-literal` at `510:16446`
-            - Fact `root-content-area-numbered-list-item-01-numbered-row-number-font-size`: `18px`; provenance: `figma-literal` at `510:16446`
-            - Fact `root-content-area-numbered-list-item-01-numbered-row-number-line-height`: `140%`; provenance: `figma-literal` at `510:16446`
-            - Fact `root-content-area-numbered-list-item-01-numbered-row-number-text-style`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16446`
-            - Fact `root-content-area-numbered-list-item-01-numbered-row-number-text-align`: `right`; provenance: `figma-literal` at `510:16446`
-            - Fact `root-content-area-numbered-list-item-01-numbered-row-number-fixed-width`: `32px`; provenance: `figma-literal` at `510:16446`
+            - Fact `reference-size`: `32×25px`; provenance: `figma-literal` at `510:16446`
+            - Fact `text-color`: `#00991F`; provenance: `figma-literal` at `510:16446`
+            - Fact `source-text`: `1.`; provenance: `figma-literal` at `510:16446`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16446`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16446`
+            - Fact `font-size`: `18px`; provenance: `figma-literal` at `510:16446`
+            - Fact `text-align`: `right`; provenance: `figma-literal` at `510:16446`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16446`
+            - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `510:16446`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16446`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16446`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16446`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16446`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16446`
+            - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16446`
           - `root-content-area-numbered-list-item-01-numbered-row-content` — role `content`; render `html-text`; visibility `always`
-            - Fact `root-content-area-numbered-list-item-01-numbered-row-content-fill-color`: `#48494A`; provenance: `figma-literal` at `510:16447`
-            - Fact `root-content-area-numbered-list-item-01-numbered-row-content-font-size`: `18px`; provenance: `figma-literal` at `510:16447`
-            - Fact `root-content-area-numbered-list-item-01-numbered-row-content-line-height`: `140%`; provenance: `figma-literal` at `510:16447`
-            - Fact `root-content-area-numbered-list-item-01-numbered-row-content-text-style`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16447`
+            - Fact `reference-size`: `444×50px`; provenance: `figma-literal` at `510:16447`
+            - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16447`
+            - Fact `source-text`: `В правом верхнем углу нажать на свое имя / номер телефона`; provenance: `figma-literal` at `510:16447`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16447`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16447`
+            - Fact `font-size`: `18px`; provenance: `figma-literal` at `510:16447`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16447`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16447`
+            - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `510:16447`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16447`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16447`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16447`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16447`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16447`
+            - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16447`
         - `root-content-area-numbered-list-item-01-sub-item-01` — role `sub-item-01`; render `presentation-table`; visibility `always`
-          - Fact `root-content-area-numbered-list-item-01-sub-item-01-layout-direction`: `horizontal`; provenance: `figma-literal` at `510:16448`
-          - Fact `root-content-area-numbered-list-item-01-sub-item-01-item-gap`: `12px`; provenance: `figma-literal` at `510:16448`
-          - Fact `root-content-area-numbered-list-item-01-sub-item-01-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `510:16448`
+          - Fact `reference-size`: `488×50px`; provenance: `figma-literal` at `510:16448`
+          - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `510:16448`
+          - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16448`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16448`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16448`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16448`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16448`
+          - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `510:16448`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16448`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16448`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16448`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16448`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16448`
           - `root-content-area-numbered-list-item-01-sub-item-01-dash` — role `dash`; render `html-text`; visibility `always`
-            - Fact `root-content-area-numbered-list-item-01-sub-item-01-dash-fill-color`: `#00991F`; provenance: `figma-literal` at `510:16449`
-            - Fact `root-content-area-numbered-list-item-01-sub-item-01-dash-font-size`: `18px`; provenance: `figma-literal` at `510:16449`
-            - Fact `root-content-area-numbered-list-item-01-sub-item-01-dash-line-height`: `140%`; provenance: `figma-literal` at `510:16449`
-            - Fact `root-content-area-numbered-list-item-01-sub-item-01-dash-text-style`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16449`
-            - Fact `root-content-area-numbered-list-item-01-sub-item-01-dash-text-align`: `right`; provenance: `figma-literal` at `510:16449`
-            - Fact `root-content-area-numbered-list-item-01-sub-item-01-dash-fixed-width`: `64px`; provenance: `figma-literal` at `510:16449`
+            - Fact `reference-size`: `64×25px`; provenance: `figma-literal` at `510:16449`
+            - Fact `text-color`: `#00991F`; provenance: `figma-literal` at `510:16449`
+            - Fact `source-text`: `—`; provenance: `figma-literal` at `510:16449`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16449`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16449`
+            - Fact `font-size`: `18px`; provenance: `figma-literal` at `510:16449`
+            - Fact `text-align`: `right`; provenance: `figma-literal` at `510:16449`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16449`
+            - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `510:16449`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16449`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16449`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16449`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16449`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16449`
+            - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16449`
           - `root-content-area-numbered-list-item-01-sub-item-01-content` — role `content`; render `html-text`; visibility `always`
-            - Fact `root-content-area-numbered-list-item-01-sub-item-01-content-fill-color`: `#48494A`; provenance: `figma-literal` at `510:16450`
-            - Fact `root-content-area-numbered-list-item-01-sub-item-01-content-font-size`: `18px`; provenance: `figma-literal` at `510:16450`
-            - Fact `root-content-area-numbered-list-item-01-sub-item-01-content-line-height`: `140%`; provenance: `figma-literal` at `510:16450`
-            - Fact `root-content-area-numbered-list-item-01-sub-item-01-content-text-style`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16450`
+            - Fact `reference-size`: `412×50px`; provenance: `figma-literal` at `510:16450`
+            - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16450`
+            - Fact `source-text`: `В правом верхнем углу нажать на свое имя / номер телефона`; provenance: `figma-literal` at `510:16450`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16450`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16450`
+            - Fact `font-size`: `18px`; provenance: `figma-literal` at `510:16450`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16450`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16450`
+            - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `510:16450`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16450`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16450`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16450`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16450`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16450`
+            - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16450`
+        - `root-content-area-numbered-list-item-01-sub-item-02` — role `sub-item-02`; render `presentation-table`; visibility `always`
+          - Fact `reference-size`: `488×50px`; provenance: `figma-literal` at `510:16451`
+          - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `510:16451`
+          - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16451`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16451`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16451`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16451`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16451`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `510:16451`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16451`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16451`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16451`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16451`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16451`
+          - `root-content-area-numbered-list-item-01-sub-item-02-dash` — role `dash`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `64×25px`; provenance: `figma-literal` at `510:16452`
+            - Fact `text-color`: `#00991F`; provenance: `figma-literal` at `510:16452`
+            - Fact `source-text`: `—`; provenance: `figma-literal` at `510:16452`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16452`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16452`
+            - Fact `font-size`: `18px`; provenance: `figma-literal` at `510:16452`
+            - Fact `text-align`: `right`; provenance: `figma-literal` at `510:16452`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16452`
+            - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `510:16452`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16452`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16452`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16452`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16452`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16452`
+            - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16452`
+          - `root-content-area-numbered-list-item-01-sub-item-02-content` — role `content`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `412×50px`; provenance: `figma-literal` at `510:16453`
+            - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16453`
+            - Fact `source-text`: `В правом верхнем углу нажать на свое имя / номер телефона`; provenance: `figma-literal` at `510:16453`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16453`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16453`
+            - Fact `font-size`: `18px`; provenance: `figma-literal` at `510:16453`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16453`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16453`
+            - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `510:16453`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16453`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16453`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16453`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16453`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16453`
+            - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16453`
+        - `root-content-area-numbered-list-item-01-sub-item-03` — role `sub-item-03`; render `presentation-table`; visibility `always`
+          - Fact `reference-size`: `488×50px`; provenance: `figma-literal` at `510:16454`
+          - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `510:16454`
+          - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16454`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16454`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16454`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16454`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16454`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `510:16454`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16454`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16454`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16454`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16454`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16454`
+          - `root-content-area-numbered-list-item-01-sub-item-03-dash` — role `dash`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `64×25px`; provenance: `figma-literal` at `510:16455`
+            - Fact `text-color`: `#00991F`; provenance: `figma-literal` at `510:16455`
+            - Fact `source-text`: `—`; provenance: `figma-literal` at `510:16455`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16455`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16455`
+            - Fact `font-size`: `18px`; provenance: `figma-literal` at `510:16455`
+            - Fact `text-align`: `right`; provenance: `figma-literal` at `510:16455`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16455`
+            - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `510:16455`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16455`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16455`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16455`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16455`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16455`
+            - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16455`
+          - `root-content-area-numbered-list-item-01-sub-item-03-content` — role `content`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `412×50px`; provenance: `figma-literal` at `510:16456`
+            - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16456`
+            - Fact `source-text`: `В правом верхнем углу нажать на свое имя / номер телефона`; provenance: `figma-literal` at `510:16456`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16456`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16456`
+            - Fact `font-size`: `18px`; provenance: `figma-literal` at `510:16456`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16456`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16456`
+            - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `510:16456`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16456`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16456`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16456`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16456`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16456`
+            - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16456`
       - `root-content-area-numbered-list-item-02` — role `item-02`; render `presentation-table`; visibility `always`
-        - Fact `root-content-area-numbered-list-item-02-layout-direction`: `vertical`; provenance: `figma-literal` at `510:16457`
-        - Fact `root-content-area-numbered-list-item-02-item-gap`: `6px`; provenance: `figma-literal` at `510:16457`
-        - Fact `root-content-area-numbered-list-item-02-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `510:16457`
+        - Fact `reference-size`: `488×81px`; provenance: `figma-literal` at `510:16457`
+        - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `510:16457`
+        - Fact `layout-gap`: `6px`; provenance: `figma-literal` at `510:16457`
+        - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16457`
+        - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16457`
+        - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16457`
+        - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16457`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `510:16457`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16457`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16457`
+        - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16457`
+        - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16457`
+        - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16457`
         - `root-content-area-numbered-list-item-02-numbered-row` — role `numbered-row`; render `presentation-table`; visibility `always`
-          - Fact `root-content-area-numbered-list-item-02-numbered-row-layout-direction`: `horizontal`; provenance: `figma-literal` at `510:16458`
-          - Fact `root-content-area-numbered-list-item-02-numbered-row-item-gap`: `12px`; provenance: `figma-literal` at `510:16458`
-          - Fact `root-content-area-numbered-list-item-02-numbered-row-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `510:16458`
+          - Fact `reference-size`: `488×25px`; provenance: `figma-literal` at `510:16458`
+          - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `510:16458`
+          - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16458`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16458`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16458`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16458`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16458`
+          - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `510:16458`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16458`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16458`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16458`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16458`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16458`
           - `root-content-area-numbered-list-item-02-numbered-row-number` — role `number`; render `html-text`; visibility `always`
-            - Fact `root-content-area-numbered-list-item-02-numbered-row-number-fill-color`: `#00991F`; provenance: `figma-literal` at `510:16459`
-            - Fact `root-content-area-numbered-list-item-02-numbered-row-number-font-size`: `18px`; provenance: `figma-literal` at `510:16459`
-            - Fact `root-content-area-numbered-list-item-02-numbered-row-number-line-height`: `140%`; provenance: `figma-literal` at `510:16459`
-            - Fact `root-content-area-numbered-list-item-02-numbered-row-number-text-style`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16459`
-            - Fact `root-content-area-numbered-list-item-02-numbered-row-number-text-align`: `right`; provenance: `figma-literal` at `510:16459`
-            - Fact `root-content-area-numbered-list-item-02-numbered-row-number-fixed-width`: `32px`; provenance: `figma-literal` at `510:16459`
+            - Fact `reference-size`: `32×25px`; provenance: `figma-literal` at `510:16459`
+            - Fact `text-color`: `#00991F`; provenance: `figma-literal` at `510:16459`
+            - Fact `source-text`: `2.`; provenance: `figma-literal` at `510:16459`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16459`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16459`
+            - Fact `font-size`: `18px`; provenance: `figma-literal` at `510:16459`
+            - Fact `text-align`: `right`; provenance: `figma-literal` at `510:16459`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16459`
+            - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `510:16459`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16459`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16459`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16459`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16459`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16459`
+            - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16459`
           - `root-content-area-numbered-list-item-02-numbered-row-content` — role `content`; render `html-text`; visibility `always`
-            - Fact `root-content-area-numbered-list-item-02-numbered-row-content-fill-color`: `#48494A`; provenance: `figma-literal` at `510:16460`
-            - Fact `root-content-area-numbered-list-item-02-numbered-row-content-font-size`: `18px`; provenance: `figma-literal` at `510:16460`
-            - Fact `root-content-area-numbered-list-item-02-numbered-row-content-line-height`: `140%`; provenance: `figma-literal` at `510:16460`
-            - Fact `root-content-area-numbered-list-item-02-numbered-row-content-text-style`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16460`
+            - Fact `reference-size`: `444×25px`; provenance: `figma-literal` at `510:16460`
+            - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16460`
+            - Fact `source-text`: `Нажать кнопку «Выход»`; provenance: `figma-literal` at `510:16460`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16460`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16460`
+            - Fact `font-size`: `18px`; provenance: `figma-literal` at `510:16460`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16460`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16460`
+            - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `510:16460`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16460`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16460`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16460`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16460`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16460`
+            - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16460`
         - `root-content-area-numbered-list-item-02-sub-item-01` — role `sub-item-01`; render `presentation-table`; visibility `always`
-          - Fact `root-content-area-numbered-list-item-02-sub-item-01-layout-direction`: `horizontal`; provenance: `figma-literal` at `510:16461`
-          - Fact `root-content-area-numbered-list-item-02-sub-item-01-item-gap`: `12px`; provenance: `figma-literal` at `510:16461`
-          - Fact `root-content-area-numbered-list-item-02-sub-item-01-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `510:16461`
+          - Fact `reference-size`: `488×50px`; provenance: `figma-literal` at `510:16461`
+          - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `510:16461`
+          - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16461`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16461`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16461`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16461`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16461`
+          - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `510:16461`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16461`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16461`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16461`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16461`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16461`
           - `root-content-area-numbered-list-item-02-sub-item-01-dash` — role `dash`; render `html-text`; visibility `always`
-            - Fact `root-content-area-numbered-list-item-02-sub-item-01-dash-fill-color`: `#00991F`; provenance: `figma-literal` at `510:16462`
-            - Fact `root-content-area-numbered-list-item-02-sub-item-01-dash-font-size`: `18px`; provenance: `figma-literal` at `510:16462`
-            - Fact `root-content-area-numbered-list-item-02-sub-item-01-dash-line-height`: `140%`; provenance: `figma-literal` at `510:16462`
-            - Fact `root-content-area-numbered-list-item-02-sub-item-01-dash-text-style`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16462`
-            - Fact `root-content-area-numbered-list-item-02-sub-item-01-dash-text-align`: `right`; provenance: `figma-literal` at `510:16462`
-            - Fact `root-content-area-numbered-list-item-02-sub-item-01-dash-fixed-width`: `64px`; provenance: `figma-literal` at `510:16462`
+            - Fact `reference-size`: `64×25px`; provenance: `figma-literal` at `510:16462`
+            - Fact `text-color`: `#00991F`; provenance: `figma-literal` at `510:16462`
+            - Fact `source-text`: `—`; provenance: `figma-literal` at `510:16462`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16462`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16462`
+            - Fact `font-size`: `18px`; provenance: `figma-literal` at `510:16462`
+            - Fact `text-align`: `right`; provenance: `figma-literal` at `510:16462`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16462`
+            - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `510:16462`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16462`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16462`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16462`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16462`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16462`
+            - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16462`
           - `root-content-area-numbered-list-item-02-sub-item-01-content` — role `content`; render `html-text`; visibility `always`
-            - Fact `root-content-area-numbered-list-item-02-sub-item-01-content-fill-color`: `#48494A`; provenance: `figma-literal` at `510:16463`
-            - Fact `root-content-area-numbered-list-item-02-sub-item-01-content-font-size`: `18px`; provenance: `figma-literal` at `510:16463`
-            - Fact `root-content-area-numbered-list-item-02-sub-item-01-content-line-height`: `140%`; provenance: `figma-literal` at `510:16463`
-            - Fact `root-content-area-numbered-list-item-02-sub-item-01-content-text-style`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16463`
+            - Fact `reference-size`: `412×50px`; provenance: `figma-literal` at `510:16463`
+            - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16463`
+            - Fact `source-text`: `В правом верхнем углу нажать на свое имя / номер телефона`; provenance: `figma-literal` at `510:16463`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16463`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16463`
+            - Fact `font-size`: `18px`; provenance: `figma-literal` at `510:16463`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16463`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16463`
+            - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `510:16463`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16463`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16463`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16463`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16463`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16463`
+            - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16463`
+        - `root-content-area-numbered-list-item-02-sub-item-02` — role `sub-item-02`; render `presentation-table`; visibility `always`
+          - Fact `reference-size`: `488×50px`; provenance: `figma-literal` at `510:16464`
+          - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `510:16464`
+          - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16464`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16464`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16464`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16464`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16464`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `510:16464`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16464`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16464`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16464`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16464`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16464`
+          - `root-content-area-numbered-list-item-02-sub-item-02-dash` — role `dash`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `64×25px`; provenance: `figma-literal` at `510:16465`
+            - Fact `text-color`: `#00991F`; provenance: `figma-literal` at `510:16465`
+            - Fact `source-text`: `—`; provenance: `figma-literal` at `510:16465`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16465`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16465`
+            - Fact `font-size`: `18px`; provenance: `figma-literal` at `510:16465`
+            - Fact `text-align`: `right`; provenance: `figma-literal` at `510:16465`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16465`
+            - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `510:16465`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16465`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16465`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16465`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16465`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16465`
+            - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16465`
+          - `root-content-area-numbered-list-item-02-sub-item-02-content` — role `content`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `412×50px`; provenance: `figma-literal` at `510:16466`
+            - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16466`
+            - Fact `source-text`: `В правом верхнем углу нажать на свое имя / номер телефона`; provenance: `figma-literal` at `510:16466`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16466`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16466`
+            - Fact `font-size`: `18px`; provenance: `figma-literal` at `510:16466`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16466`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16466`
+            - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `510:16466`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16466`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16466`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16466`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16466`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16466`
+            - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16466`
+        - `root-content-area-numbered-list-item-02-sub-item-03` — role `sub-item-03`; render `presentation-table`; visibility `always`
+          - Fact `reference-size`: `488×50px`; provenance: `figma-literal` at `510:16467`
+          - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `510:16467`
+          - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16467`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16467`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16467`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16467`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16467`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `510:16467`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16467`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16467`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16467`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16467`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16467`
+          - `root-content-area-numbered-list-item-02-sub-item-03-dash` — role `dash`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `64×25px`; provenance: `figma-literal` at `510:16468`
+            - Fact `text-color`: `#00991F`; provenance: `figma-literal` at `510:16468`
+            - Fact `source-text`: `—`; provenance: `figma-literal` at `510:16468`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16468`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16468`
+            - Fact `font-size`: `18px`; provenance: `figma-literal` at `510:16468`
+            - Fact `text-align`: `right`; provenance: `figma-literal` at `510:16468`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16468`
+            - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `510:16468`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16468`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16468`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16468`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16468`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16468`
+            - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16468`
+          - `root-content-area-numbered-list-item-02-sub-item-03-content` — role `content`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `412×50px`; provenance: `figma-literal` at `510:16469`
+            - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16469`
+            - Fact `source-text`: `В правом верхнем углу нажать на свое имя / номер телефона`; provenance: `figma-literal` at `510:16469`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16469`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16469`
+            - Fact `font-size`: `18px`; provenance: `figma-literal` at `510:16469`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16469`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16469`
+            - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `510:16469`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16469`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16469`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16469`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16469`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16469`
+            - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16469`
       - `root-content-area-numbered-list-item-03` — role `item-03`; render `presentation-table`; visibility `always`
-        - Fact `root-content-area-numbered-list-item-03-layout-direction`: `vertical`; provenance: `figma-literal` at `510:16470`
-        - Fact `root-content-area-numbered-list-item-03-item-gap`: `6px`; provenance: `figma-literal` at `510:16470`
-        - Fact `root-content-area-numbered-list-item-03-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `510:16470`
+        - Fact `reference-size`: `488×106px`; provenance: `figma-literal` at `510:16470`
+        - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `510:16470`
+        - Fact `layout-gap`: `6px`; provenance: `figma-literal` at `510:16470`
+        - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16470`
+        - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16470`
+        - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16470`
+        - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16470`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `510:16470`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16470`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16470`
+        - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16470`
+        - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16470`
+        - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16470`
         - `root-content-area-numbered-list-item-03-numbered-row` — role `numbered-row`; render `presentation-table`; visibility `always`
-          - Fact `root-content-area-numbered-list-item-03-numbered-row-layout-direction`: `horizontal`; provenance: `figma-literal` at `510:16471`
-          - Fact `root-content-area-numbered-list-item-03-numbered-row-item-gap`: `12px`; provenance: `figma-literal` at `510:16471`
-          - Fact `root-content-area-numbered-list-item-03-numbered-row-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `510:16471`
+          - Fact `reference-size`: `488×50px`; provenance: `figma-literal` at `510:16471`
+          - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `510:16471`
+          - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16471`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16471`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16471`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16471`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16471`
+          - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `510:16471`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16471`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16471`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16471`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16471`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16471`
           - `root-content-area-numbered-list-item-03-numbered-row-number` — role `number`; render `html-text`; visibility `always`
-            - Fact `root-content-area-numbered-list-item-03-numbered-row-number-fill-color`: `#00991F`; provenance: `figma-literal` at `510:16472`
-            - Fact `root-content-area-numbered-list-item-03-numbered-row-number-font-size`: `18px`; provenance: `figma-literal` at `510:16472`
-            - Fact `root-content-area-numbered-list-item-03-numbered-row-number-line-height`: `140%`; provenance: `figma-literal` at `510:16472`
-            - Fact `root-content-area-numbered-list-item-03-numbered-row-number-text-style`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16472`
-            - Fact `root-content-area-numbered-list-item-03-numbered-row-number-text-align`: `right`; provenance: `figma-literal` at `510:16472`
-            - Fact `root-content-area-numbered-list-item-03-numbered-row-number-fixed-width`: `32px`; provenance: `figma-literal` at `510:16472`
+            - Fact `reference-size`: `32×25px`; provenance: `figma-literal` at `510:16472`
+            - Fact `text-color`: `#00991F`; provenance: `figma-literal` at `510:16472`
+            - Fact `source-text`: `3.`; provenance: `figma-literal` at `510:16472`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16472`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16472`
+            - Fact `font-size`: `18px`; provenance: `figma-literal` at `510:16472`
+            - Fact `text-align`: `right`; provenance: `figma-literal` at `510:16472`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16472`
+            - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `510:16472`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16472`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16472`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16472`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16472`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16472`
+            - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16472`
           - `root-content-area-numbered-list-item-03-numbered-row-content` — role `content`; render `html-text`; visibility `always`
-            - Fact `root-content-area-numbered-list-item-03-numbered-row-content-fill-color`: `#48494A`; provenance: `figma-literal` at `510:16473`
-            - Fact `root-content-area-numbered-list-item-03-numbered-row-content-font-size`: `18px`; provenance: `figma-literal` at `510:16473`
-            - Fact `root-content-area-numbered-list-item-03-numbered-row-content-line-height`: `140%`; provenance: `figma-literal` at `510:16473`
-            - Fact `root-content-area-numbered-list-item-03-numbered-row-content-text-style`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16473`
+            - Fact `reference-size`: `444×50px`; provenance: `figma-literal` at `510:16473`
+            - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16473`
+            - Fact `source-text`: `На странице входа в аккаунт указать номер телефона и пароль`; provenance: `figma-literal` at `510:16473`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16473`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16473`
+            - Fact `font-size`: `18px`; provenance: `figma-literal` at `510:16473`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16473`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16473`
+            - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `510:16473`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16473`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16473`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16473`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16473`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16473`
+            - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16473`
         - `root-content-area-numbered-list-item-03-sub-item-01` — role `sub-item-01`; render `presentation-table`; visibility `always`
-          - Fact `root-content-area-numbered-list-item-03-sub-item-01-layout-direction`: `horizontal`; provenance: `figma-literal` at `510:16474`
-          - Fact `root-content-area-numbered-list-item-03-sub-item-01-item-gap`: `12px`; provenance: `figma-literal` at `510:16474`
-          - Fact `root-content-area-numbered-list-item-03-sub-item-01-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `510:16474`
+          - Fact `reference-size`: `488×50px`; provenance: `figma-literal` at `510:16474`
+          - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `510:16474`
+          - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16474`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16474`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16474`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16474`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16474`
+          - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `510:16474`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16474`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16474`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16474`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16474`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16474`
           - `root-content-area-numbered-list-item-03-sub-item-01-dash` — role `dash`; render `html-text`; visibility `always`
-            - Fact `root-content-area-numbered-list-item-03-sub-item-01-dash-fill-color`: `#00991F`; provenance: `figma-literal` at `510:16475`
-            - Fact `root-content-area-numbered-list-item-03-sub-item-01-dash-font-size`: `18px`; provenance: `figma-literal` at `510:16475`
-            - Fact `root-content-area-numbered-list-item-03-sub-item-01-dash-line-height`: `140%`; provenance: `figma-literal` at `510:16475`
-            - Fact `root-content-area-numbered-list-item-03-sub-item-01-dash-text-style`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16475`
-            - Fact `root-content-area-numbered-list-item-03-sub-item-01-dash-text-align`: `right`; provenance: `figma-literal` at `510:16475`
-            - Fact `root-content-area-numbered-list-item-03-sub-item-01-dash-fixed-width`: `64px`; provenance: `figma-literal` at `510:16475`
+            - Fact `reference-size`: `64×25px`; provenance: `figma-literal` at `510:16475`
+            - Fact `text-color`: `#00991F`; provenance: `figma-literal` at `510:16475`
+            - Fact `source-text`: `—`; provenance: `figma-literal` at `510:16475`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16475`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16475`
+            - Fact `font-size`: `18px`; provenance: `figma-literal` at `510:16475`
+            - Fact `text-align`: `right`; provenance: `figma-literal` at `510:16475`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16475`
+            - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `510:16475`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16475`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16475`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16475`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16475`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16475`
+            - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16475`
           - `root-content-area-numbered-list-item-03-sub-item-01-content` — role `content`; render `html-text`; visibility `always`
-            - Fact `root-content-area-numbered-list-item-03-sub-item-01-content-fill-color`: `#48494A`; provenance: `figma-literal` at `510:16476`
-            - Fact `root-content-area-numbered-list-item-03-sub-item-01-content-font-size`: `18px`; provenance: `figma-literal` at `510:16476`
-            - Fact `root-content-area-numbered-list-item-03-sub-item-01-content-line-height`: `140%`; provenance: `figma-literal` at `510:16476`
-            - Fact `root-content-area-numbered-list-item-03-sub-item-01-content-text-style`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16476`
+            - Fact `reference-size`: `412×50px`; provenance: `figma-literal` at `510:16476`
+            - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16476`
+            - Fact `source-text`: `В правом верхнем углу нажать на свое имя / номер телефона`; provenance: `figma-literal` at `510:16476`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16476`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16476`
+            - Fact `font-size`: `18px`; provenance: `figma-literal` at `510:16476`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16476`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16476`
+            - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `510:16476`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16476`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16476`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16476`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16476`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16476`
+            - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16476`
+        - `root-content-area-numbered-list-item-03-sub-item-02` — role `sub-item-02`; render `presentation-table`; visibility `always`
+          - Fact `reference-size`: `488×50px`; provenance: `figma-literal` at `510:16477`
+          - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `510:16477`
+          - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16477`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16477`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16477`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16477`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16477`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `510:16477`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16477`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16477`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16477`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16477`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16477`
+          - `root-content-area-numbered-list-item-03-sub-item-02-dash` — role `dash`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `64×25px`; provenance: `figma-literal` at `510:16478`
+            - Fact `text-color`: `#00991F`; provenance: `figma-literal` at `510:16478`
+            - Fact `source-text`: `—`; provenance: `figma-literal` at `510:16478`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16478`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16478`
+            - Fact `font-size`: `18px`; provenance: `figma-literal` at `510:16478`
+            - Fact `text-align`: `right`; provenance: `figma-literal` at `510:16478`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16478`
+            - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `510:16478`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16478`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16478`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16478`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16478`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16478`
+            - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16478`
+          - `root-content-area-numbered-list-item-03-sub-item-02-content` — role `content`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `412×50px`; provenance: `figma-literal` at `510:16479`
+            - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16479`
+            - Fact `source-text`: `В правом верхнем углу нажать на свое имя / номер телефона`; provenance: `figma-literal` at `510:16479`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16479`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16479`
+            - Fact `font-size`: `18px`; provenance: `figma-literal` at `510:16479`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16479`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16479`
+            - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `510:16479`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16479`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16479`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16479`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16479`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16479`
+            - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16479`
+        - `root-content-area-numbered-list-item-03-sub-item-03` — role `sub-item-03`; render `presentation-table`; visibility `always`
+          - Fact `reference-size`: `488×50px`; provenance: `figma-literal` at `510:16480`
+          - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `510:16480`
+          - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16480`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16480`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16480`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16480`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16480`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `510:16480`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16480`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16480`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16480`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16480`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16480`
+          - `root-content-area-numbered-list-item-03-sub-item-03-dash` — role `dash`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `64×25px`; provenance: `figma-literal` at `510:16481`
+            - Fact `text-color`: `#00991F`; provenance: `figma-literal` at `510:16481`
+            - Fact `source-text`: `—`; provenance: `figma-literal` at `510:16481`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16481`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16481`
+            - Fact `font-size`: `18px`; provenance: `figma-literal` at `510:16481`
+            - Fact `text-align`: `right`; provenance: `figma-literal` at `510:16481`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16481`
+            - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `510:16481`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16481`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16481`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16481`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16481`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16481`
+            - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16481`
+          - `root-content-area-numbered-list-item-03-sub-item-03-content` — role `content`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `412×50px`; provenance: `figma-literal` at `510:16482`
+            - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16482`
+            - Fact `source-text`: `В правом верхнем углу нажать на свое имя / номер телефона`; provenance: `figma-literal` at `510:16482`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16482`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16482`
+            - Fact `font-size`: `18px`; provenance: `figma-literal` at `510:16482`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16482`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16482`
+            - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `510:16482`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16482`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16482`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16482`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16482`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16482`
+            - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16482`
       - `root-content-area-numbered-list-item-04` — role `item-04`; render `presentation-table`; visibility `always`
-        - Fact `root-content-area-numbered-list-item-04-layout-direction`: `vertical`; provenance: `figma-literal` at `510:16483`
-        - Fact `root-content-area-numbered-list-item-04-item-gap`: `6px`; provenance: `figma-literal` at `510:16483`
-        - Fact `root-content-area-numbered-list-item-04-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `510:16483`
+        - Fact `reference-size`: `488×106px`; provenance: `figma-literal` at `510:16483`
+        - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `510:16483`
+        - Fact `layout-gap`: `6px`; provenance: `figma-literal` at `510:16483`
+        - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16483`
+        - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16483`
+        - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16483`
+        - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16483`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `510:16483`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16483`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16483`
+        - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16483`
+        - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16483`
+        - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16483`
         - `root-content-area-numbered-list-item-04-numbered-row` — role `numbered-row`; render `presentation-table`; visibility `always`
-          - Fact `root-content-area-numbered-list-item-04-numbered-row-layout-direction`: `horizontal`; provenance: `figma-literal` at `510:16484`
-          - Fact `root-content-area-numbered-list-item-04-numbered-row-item-gap`: `12px`; provenance: `figma-literal` at `510:16484`
-          - Fact `root-content-area-numbered-list-item-04-numbered-row-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `510:16484`
+          - Fact `reference-size`: `488×50px`; provenance: `figma-literal` at `510:16484`
+          - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `510:16484`
+          - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16484`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16484`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16484`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16484`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16484`
+          - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `510:16484`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16484`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16484`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16484`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16484`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16484`
           - `root-content-area-numbered-list-item-04-numbered-row-number` — role `number`; render `html-text`; visibility `always`
-            - Fact `root-content-area-numbered-list-item-04-numbered-row-number-fill-color`: `#00991F`; provenance: `figma-literal` at `510:16485`
-            - Fact `root-content-area-numbered-list-item-04-numbered-row-number-font-size`: `18px`; provenance: `figma-literal` at `510:16485`
-            - Fact `root-content-area-numbered-list-item-04-numbered-row-number-line-height`: `140%`; provenance: `figma-literal` at `510:16485`
-            - Fact `root-content-area-numbered-list-item-04-numbered-row-number-text-style`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16485`
-            - Fact `root-content-area-numbered-list-item-04-numbered-row-number-text-align`: `right`; provenance: `figma-literal` at `510:16485`
-            - Fact `root-content-area-numbered-list-item-04-numbered-row-number-fixed-width`: `32px`; provenance: `figma-literal` at `510:16485`
+            - Fact `reference-size`: `32×25px`; provenance: `figma-literal` at `510:16485`
+            - Fact `text-color`: `#00991F`; provenance: `figma-literal` at `510:16485`
+            - Fact `source-text`: `4.`; provenance: `figma-literal` at `510:16485`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16485`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16485`
+            - Fact `font-size`: `18px`; provenance: `figma-literal` at `510:16485`
+            - Fact `text-align`: `right`; provenance: `figma-literal` at `510:16485`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16485`
+            - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `510:16485`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16485`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16485`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16485`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16485`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16485`
+            - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16485`
           - `root-content-area-numbered-list-item-04-numbered-row-content` — role `content`; render `html-text`; visibility `always`
-            - Fact `root-content-area-numbered-list-item-04-numbered-row-content-fill-color`: `#48494A`; provenance: `figma-literal` at `510:16486`
-            - Fact `root-content-area-numbered-list-item-04-numbered-row-content-font-size`: `18px`; provenance: `figma-literal` at `510:16486`
-            - Fact `root-content-area-numbered-list-item-04-numbered-row-content-line-height`: `140%`; provenance: `figma-literal` at `510:16486`
-            - Fact `root-content-area-numbered-list-item-04-numbered-row-content-text-style`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16486`
+            - Fact `reference-size`: `444×50px`; provenance: `figma-literal` at `510:16486`
+            - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16486`
+            - Fact `source-text`: `На странице входа в аккаунт указать номер телефона и пароль`; provenance: `figma-literal` at `510:16486`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16486`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16486`
+            - Fact `font-size`: `18px`; provenance: `figma-literal` at `510:16486`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16486`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16486`
+            - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `510:16486`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16486`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16486`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16486`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16486`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16486`
+            - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16486`
         - `root-content-area-numbered-list-item-04-sub-item-01` — role `sub-item-01`; render `presentation-table`; visibility `always`
-          - Fact `root-content-area-numbered-list-item-04-sub-item-01-layout-direction`: `horizontal`; provenance: `figma-literal` at `510:16487`
-          - Fact `root-content-area-numbered-list-item-04-sub-item-01-item-gap`: `12px`; provenance: `figma-literal` at `510:16487`
-          - Fact `root-content-area-numbered-list-item-04-sub-item-01-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `510:16487`
+          - Fact `reference-size`: `488×50px`; provenance: `figma-literal` at `510:16487`
+          - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `510:16487`
+          - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16487`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16487`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16487`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16487`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16487`
+          - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `510:16487`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16487`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16487`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16487`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16487`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16487`
           - `root-content-area-numbered-list-item-04-sub-item-01-dash` — role `dash`; render `html-text`; visibility `always`
-            - Fact `root-content-area-numbered-list-item-04-sub-item-01-dash-fill-color`: `#00991F`; provenance: `figma-literal` at `510:16488`
-            - Fact `root-content-area-numbered-list-item-04-sub-item-01-dash-font-size`: `18px`; provenance: `figma-literal` at `510:16488`
-            - Fact `root-content-area-numbered-list-item-04-sub-item-01-dash-line-height`: `140%`; provenance: `figma-literal` at `510:16488`
-            - Fact `root-content-area-numbered-list-item-04-sub-item-01-dash-text-style`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16488`
-            - Fact `root-content-area-numbered-list-item-04-sub-item-01-dash-text-align`: `right`; provenance: `figma-literal` at `510:16488`
-            - Fact `root-content-area-numbered-list-item-04-sub-item-01-dash-fixed-width`: `64px`; provenance: `figma-literal` at `510:16488`
+            - Fact `reference-size`: `64×25px`; provenance: `figma-literal` at `510:16488`
+            - Fact `text-color`: `#00991F`; provenance: `figma-literal` at `510:16488`
+            - Fact `source-text`: `—`; provenance: `figma-literal` at `510:16488`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16488`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16488`
+            - Fact `font-size`: `18px`; provenance: `figma-literal` at `510:16488`
+            - Fact `text-align`: `right`; provenance: `figma-literal` at `510:16488`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16488`
+            - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `510:16488`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16488`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16488`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16488`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16488`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16488`
+            - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16488`
           - `root-content-area-numbered-list-item-04-sub-item-01-content` — role `content`; render `html-text`; visibility `always`
-            - Fact `root-content-area-numbered-list-item-04-sub-item-01-content-fill-color`: `#48494A`; provenance: `figma-literal` at `510:16489`
-            - Fact `root-content-area-numbered-list-item-04-sub-item-01-content-font-size`: `18px`; provenance: `figma-literal` at `510:16489`
-            - Fact `root-content-area-numbered-list-item-04-sub-item-01-content-line-height`: `140%`; provenance: `figma-literal` at `510:16489`
-            - Fact `root-content-area-numbered-list-item-04-sub-item-01-content-text-style`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16489`
+            - Fact `reference-size`: `412×50px`; provenance: `figma-literal` at `510:16489`
+            - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16489`
+            - Fact `source-text`: `В правом верхнем углу нажать на свое имя / номер телефона`; provenance: `figma-literal` at `510:16489`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16489`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16489`
+            - Fact `font-size`: `18px`; provenance: `figma-literal` at `510:16489`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16489`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16489`
+            - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `510:16489`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16489`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16489`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16489`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16489`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16489`
+            - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16489`
+        - `root-content-area-numbered-list-item-04-sub-item-02` — role `sub-item-02`; render `presentation-table`; visibility `always`
+          - Fact `reference-size`: `488×50px`; provenance: `figma-literal` at `510:16490`
+          - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `510:16490`
+          - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16490`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16490`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16490`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16490`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16490`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `510:16490`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16490`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16490`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16490`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16490`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16490`
+          - `root-content-area-numbered-list-item-04-sub-item-02-dash` — role `dash`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `64×25px`; provenance: `figma-literal` at `510:16491`
+            - Fact `text-color`: `#00991F`; provenance: `figma-literal` at `510:16491`
+            - Fact `source-text`: `—`; provenance: `figma-literal` at `510:16491`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16491`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16491`
+            - Fact `font-size`: `18px`; provenance: `figma-literal` at `510:16491`
+            - Fact `text-align`: `right`; provenance: `figma-literal` at `510:16491`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16491`
+            - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `510:16491`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16491`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16491`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16491`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16491`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16491`
+            - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16491`
+          - `root-content-area-numbered-list-item-04-sub-item-02-content` — role `content`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `412×50px`; provenance: `figma-literal` at `510:16492`
+            - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16492`
+            - Fact `source-text`: `В правом верхнем углу нажать на свое имя / номер телефона`; provenance: `figma-literal` at `510:16492`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16492`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16492`
+            - Fact `font-size`: `18px`; provenance: `figma-literal` at `510:16492`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16492`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16492`
+            - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `510:16492`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16492`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16492`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16492`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16492`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16492`
+            - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16492`
+        - `root-content-area-numbered-list-item-04-sub-item-03` — role `sub-item-03`; render `presentation-table`; visibility `always`
+          - Fact `reference-size`: `488×50px`; provenance: `figma-literal` at `510:16493`
+          - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `510:16493`
+          - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16493`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16493`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16493`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16493`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16493`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `510:16493`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16493`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16493`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16493`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16493`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16493`
+          - `root-content-area-numbered-list-item-04-sub-item-03-dash` — role `dash`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `64×25px`; provenance: `figma-literal` at `510:16494`
+            - Fact `text-color`: `#00991F`; provenance: `figma-literal` at `510:16494`
+            - Fact `source-text`: `—`; provenance: `figma-literal` at `510:16494`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16494`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16494`
+            - Fact `font-size`: `18px`; provenance: `figma-literal` at `510:16494`
+            - Fact `text-align`: `right`; provenance: `figma-literal` at `510:16494`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16494`
+            - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `510:16494`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16494`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16494`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16494`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16494`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16494`
+            - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16494`
+          - `root-content-area-numbered-list-item-04-sub-item-03-content` — role `content`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `412×50px`; provenance: `figma-literal` at `510:16495`
+            - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16495`
+            - Fact `source-text`: `В правом верхнем углу нажать на свое имя / номер телефона`; provenance: `figma-literal` at `510:16495`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16495`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16495`
+            - Fact `font-size`: `18px`; provenance: `figma-literal` at `510:16495`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16495`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16495`
+            - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `510:16495`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16495`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16495`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16495`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16495`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16495`
+            - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `510:16495`
     - `root-content-area-alert` — role `alert`; render `presentation-table`; visibility property `show-alert` (`Show Alert`)
-      - Fact `root-content-area-alert-layout-direction`: `horizontal`; provenance: `figma-literal` at `510:16497`
-      - Fact `root-content-area-alert-padding-top`: `24px`; provenance: `figma-literal` at `510:16497`
-      - Fact `root-content-area-alert-padding-right`: `24px`; provenance: `figma-literal` at `510:16497`
-      - Fact `root-content-area-alert-padding-bottom`: `24px`; provenance: `figma-literal` at `510:16497`
-      - Fact `root-content-area-alert-padding-left`: `24px`; provenance: `figma-literal` at `510:16497`
-      - Fact `root-content-area-alert-corner-radius`: `18px`; provenance: `figma-literal` at `510:16497`
-      - Fact `root-content-area-alert-fill-color`: `#FFF1C9`; provenance: `figma-literal` at `510:16497`
+      - Fact `reference-size`: `488×88px`; provenance: `figma-literal` at `510:16497`
+      - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `510:16497`
+      - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `510:16497`
+      - Fact `padding-top`: `24px`; provenance: `figma-literal` at `510:16497`
+      - Fact `padding-right`: `24px`; provenance: `figma-literal` at `510:16497`
+      - Fact `padding-bottom`: `24px`; provenance: `figma-literal` at `510:16497`
+      - Fact `padding-left`: `24px`; provenance: `figma-literal` at `510:16497`
+      - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `510:16497`
+      - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16497`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16497`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16497`
+      - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `510:16497`
+      - Fact `border-radius`: `18px`; provenance: `figma-literal` at `510:16497`
+      - Fact `background`: `#FFF1C9`; provenance: `figma-literal` at `510:16497`
       - `root-content-area-alert-notice-link` — role `notice-link`; render `html-text`; visibility `always`
-        - Fact `root-content-area-alert-notice-link-fill-color`: `#AA7100`; provenance: `figma-literal` at `510:16498`
-        - Fact `root-content-area-alert-notice-link-text-style`: `Desktop/Caption`; provenance: `figma-literal` at `510:16498`
-        - Fact `root-content-area-alert-notice-link-segment-1-color`: `#AA7100`; provenance: `figma-literal` at `510:16498`
-        - Fact `root-content-area-alert-notice-link-segment-2-color`: `#AA7100`; provenance: `figma-literal` at `510:16498`
-        - Fact `root-content-area-alert-notice-link-segment-2-decoration`: `underline`; provenance: `figma-literal` at `510:16498`
+        - Fact `reference-size`: `440×40px`; provenance: `figma-literal` at `510:16498`
+        - Fact `text-color`: `#AA7100`; provenance: `figma-literal` at `510:16498`
+        - Fact `source-text`: `Если вы ничего не меняли, прямо сейчас позвоните +7 (495) 122-20-88 или напишите на help@1cupis.ru`; provenance: `figma-literal` at `510:16498`
+        - Fact `font-size`: `14px`; provenance: `figma-literal` at `510:16498`
+        - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16498`
+        - Fact `figma-style-id`: `S:3d171f9763dcbcd3a181c50411d876e67e072e75,`; provenance: `figma-literal` at `510:16498`
+        - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16498`
+        - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16498`
+        - Fact `styled-text-segments`: `[{"start":0,"end":84,"characters":"Если вы ничего не меняли, прямо сейчас позвоните +7 (495) 122-20-88 или напишите на ","font_family":"Roboto","font_style":"Regular","font_size_px":14,"line_height":{"unit":"PERCENT","value":140},"text_decoration":"NONE","fills":[{"type":"solid","visible":true,"opacity":1,"color":"#AA7100"}]},{"start":84,"end":98,"characters":"help@1cupis.ru","font_family":"Roboto","font_style":"Regular","font_size_px":14,"line_height":{"unit":"PERCENT","value":140},"text_decoration":"UNDERLINE","fills":[{"type":"solid","visible":true,"opacity":1,"color":"#AA7100"}]}]`; provenance: `figma-literal` at `510:16498`
+        - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16498`
+        - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16498`
+        - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16498`
     - `root-content-area-disclaimer` — role `disclaimer`; render `presentation-table`; visibility property `show-disclaimer` (`Show Disclaimer`)
-      - Fact `root-content-area-disclaimer-layout-direction`: `vertical`; provenance: `figma-literal` at `510:16499`
-      - Fact `root-content-area-disclaimer-item-gap`: `12px`; provenance: `figma-literal` at `510:16499`
-      - Fact `root-content-area-disclaimer-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `510:16499`
+      - Fact `reference-size`: `488×80px`; provenance: `figma-literal` at `510:16499`
+      - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `510:16499`
+      - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16499`
+      - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16499`
+      - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16499`
+      - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16499`
+      - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16499`
+      - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `510:16499`
+      - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16499`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16499`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16499`
+      - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16499`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16499`
+      - `root-content-area-disclaimer-divider` — role `divider`; render `presentation-table`; visibility `always`
+        - Fact `reference-size`: `488×1px`; provenance: `figma-literal` at `510:16500`
+        - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `510:16500`
+        - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `510:16500`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16500`
+        - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16500`
+        - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16500`
+        - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16500`
+        - Fact `background`: `#DFDFE0`; provenance: `figma-literal` at `510:16500`
       - `root-content-area-disclaimer-disclaimer-text` — role `disclaimer-text`; render `html-text`; visibility `always`
-        - Fact `root-content-area-disclaimer-disclaimer-text-fill-color`: `#98999C`; provenance: `figma-literal` at `510:16501`
-        - Fact `root-content-area-disclaimer-disclaimer-text-font-size`: `14px`; provenance: `figma-literal` at `510:16501`
-        - Fact `root-content-area-disclaimer-disclaimer-text-line-height`: `140%`; provenance: `figma-literal` at `510:16501`
-        - Fact `root-content-area-disclaimer-disclaimer-text-text-style`: `Desktop/Caption`; provenance: `figma-literal` at `510:16501`
+        - Fact `reference-size`: `488×80px`; provenance: `figma-literal` at `510:16501`
+        - Fact `text-color`: `#98999C`; provenance: `figma-literal` at `510:16501`
+        - Fact `source-text`: `* В соответствии с требованиями подпункта 3 пункта 1 статьи 7 Федерального закона № 115-ФЗ от 07.08.2001 «О противодействии легализации (отмыванию) доходов, полученных преступным путем, и финансированию терроризма» (далее — Закон № 115-ФЗ)`; provenance: `figma-literal` at `510:16501`
+        - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16501`
+        - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16501`
+        - Fact `font-size`: `14px`; provenance: `figma-literal` at `510:16501`
+        - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16501`
+        - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16501`
+        - Fact `figma-style-id`: `S:3d171f9763dcbcd3a181c50411d876e67e072e75,`; provenance: `figma-literal` at `510:16501`
+        - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16501`
+        - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16501`
+        - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16501`
+        - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16501`
+        - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16501`
+        - Fact `figma-style-name`: `Desktop/Caption`; provenance: `figma-literal` at `510:16501`
 
 ### Mobile
 
 - `root` — role `block`; render `presentation-table`; visibility `always`
-  - Fact `root-layout-direction`: `vertical`; provenance: `figma-literal` at `510:16700`
-  - Fact `root-padding-top`: `16px`; provenance: `figma-literal` at `510:16700`
-  - Fact `root-padding-right`: `16px`; provenance: `figma-literal` at `510:16700`
-  - Fact `root-padding-left`: `16px`; provenance: `figma-literal` at `510:16700`
-  - Fact `root-clips-content`: `true`; provenance: `figma-literal` at `510:16700`
+  - Fact `reference-size`: `328×906px`; provenance: `figma-literal` at `510:16700`
+  - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `510:16700`
+  - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `510:16700`
+  - Fact `padding-top`: `16px`; provenance: `figma-literal` at `510:16700`
+  - Fact `padding-right`: `16px`; provenance: `figma-literal` at `510:16700`
+  - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16700`
+  - Fact `padding-left`: `16px`; provenance: `figma-literal` at `510:16700`
+  - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `510:16700`
+  - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16700`
+  - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16700`
+  - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16700`
+  - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16700`
+  - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16700`
   - `root-content-area` — role `content-area`; render `presentation-table`; visibility `always`
-    - Fact `root-content-area-layout-direction`: `vertical`; provenance: `figma-literal` at `510:16615`
-    - Fact `root-content-area-item-gap`: `16px`; provenance: `figma-literal` at `510:16615`
-    - Fact `root-content-area-padding-top`: `22px`; provenance: `figma-literal` at `510:16615`
-    - Fact `root-content-area-padding-right`: `22px`; provenance: `figma-literal` at `510:16615`
-    - Fact `root-content-area-padding-bottom`: `22px`; provenance: `figma-literal` at `510:16615`
-    - Fact `root-content-area-padding-left`: `22px`; provenance: `figma-literal` at `510:16615`
-    - Fact `root-content-area-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `510:16615`
-    - Fact `root-content-area-corner-radius`: `22px`; provenance: `figma-literal` at `510:16615`
-    - Fact `root-content-area-clips-content`: `true`; provenance: `figma-literal` at `510:16615`
-    - Fact `root-content-area-fill-color`: `#FFFFFF`; provenance: `figma-literal` at `510:16615`
+    - Fact `reference-size`: `296×890px`; provenance: `figma-literal` at `510:16615`
+    - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `510:16615`
+    - Fact `layout-gap`: `16px`; provenance: `figma-literal` at `510:16615`
+    - Fact `padding-top`: `22px`; provenance: `figma-literal` at `510:16615`
+    - Fact `padding-right`: `22px`; provenance: `figma-literal` at `510:16615`
+    - Fact `padding-bottom`: `22px`; provenance: `figma-literal` at `510:16615`
+    - Fact `padding-left`: `22px`; provenance: `figma-literal` at `510:16615`
+    - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `510:16615`
+    - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16615`
+    - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16615`
+    - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16615`
+    - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16615`
+    - Fact `border-radius`: `22px`; provenance: `figma-literal` at `510:16615`
+    - Fact `background`: `#FFFFFF`; provenance: `figma-literal` at `510:16615`
     - `root-content-area-warning` — role `warning`; render `presentation-table`; visibility property `show-warning` (`Show Warning`)
-      - Fact `root-content-area-warning-layout-direction`: `horizontal`; provenance: `figma-literal` at `531:14001`
-      - Fact `root-content-area-warning-item-gap`: `4px`; provenance: `figma-literal` at `531:14001`
+      - Fact `reference-size`: `150×20px`; provenance: `figma-literal` at `531:14001`
+      - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `531:14001`
+      - Fact `layout-gap`: `4px`; provenance: `figma-literal` at `531:14001`
+      - Fact `padding-top`: `0px`; provenance: `figma-literal` at `531:14001`
+      - Fact `padding-right`: `0px`; provenance: `figma-literal` at `531:14001`
+      - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `531:14001`
+      - Fact `padding-left`: `0px`; provenance: `figma-literal` at `531:14001`
+      - Fact `horizontal-sizing`: `hug`; provenance: `figma-literal` at `531:14001`
+      - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `531:14001`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `531:14001`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `531:14001`
+      - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `531:14001`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `531:14001`
       - `root-content-area-warning-error-warning-line` — role `error-warning-line`; render `direct-image`; visibility `always`; asset `error-warning-line`
-        - Fact `root-content-area-warning-error-warning-line-clips-content`: `true`; provenance: `figma-literal` at `531:14002`
-        - Fact `root-content-area-warning-error-warning-line-display-width`: `20px`; provenance: `figma-literal` at `531:14002`
-        - Fact `root-content-area-warning-error-warning-line-display-height`: `20px`; provenance: `figma-literal` at `531:14002`
+        - Fact `reference-size`: `20×20px`; provenance: `figma-literal` at `531:14002`
+        - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `531:14002`
+        - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `531:14002`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `531:14002`
+        - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `531:14002`
+        - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `531:14002`
+        - Fact `border-radius`: `0px`; provenance: `figma-literal` at `531:14002`
       - `root-content-area-warning-warning-text` — role `warning-text`; render `html-text`; visibility `always`
-        - Fact `root-content-area-warning-warning-text-fill-color`: `#DE2141`; provenance: `figma-literal` at `531:14004`
-        - Fact `root-content-area-warning-warning-text-font-size`: `14px`; provenance: `figma-literal` at `531:14004`
-        - Fact `root-content-area-warning-warning-text-line-height`: `140%`; provenance: `figma-literal` at `531:14004`
-        - Fact `root-content-area-warning-warning-text-text-style`: `Mobile/Body/Large`; provenance: `figma-literal` at `531:14004`
+        - Fact `reference-size`: `126×20px`; provenance: `figma-literal` at `531:14004`
+        - Fact `text-color`: `#DE2141`; provenance: `figma-literal` at `531:14004`
+        - Fact `source-text`: `Что нужно сделать`; provenance: `figma-literal` at `531:14004`
+        - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `531:14004`
+        - Fact `font-style`: `Regular`; provenance: `figma-literal` at `531:14004`
+        - Fact `font-size`: `14px`; provenance: `figma-literal` at `531:14004`
+        - Fact `text-align`: `left`; provenance: `figma-literal` at `531:14004`
+        - Fact `text-decoration`: `none`; provenance: `figma-literal` at `531:14004`
+        - Fact `figma-style-id`: `S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,`; provenance: `figma-literal` at `531:14004`
+        - Fact `line-height`: `140%`; provenance: `figma-literal` at `531:14004`
+        - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `531:14004`
+        - Fact `text-auto-resize`: `width_and_height`; provenance: `figma-literal` at `531:14004`
+        - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `531:14004`
+        - Fact `text-case`: `original`; provenance: `figma-literal` at `531:14004`
+        - Fact `figma-style-name`: `Mobile/Body/Large`; provenance: `figma-literal` at `531:14004`
     - `root-content-area-numbered-list` — role `numbered-list`; render `presentation-table`; visibility `always`
-      - Fact `root-content-area-numbered-list-layout-direction`: `vertical`; provenance: `figma-literal` at `510:16624`
-      - Fact `root-content-area-numbered-list-item-gap`: `8px`; provenance: `figma-literal` at `510:16624`
-      - Fact `root-content-area-numbered-list-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `510:16624`
+      - Fact `reference-size`: `252×576px`; provenance: `figma-literal` at `510:16624`
+      - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `510:16624`
+      - Fact `layout-gap`: `8px`; provenance: `figma-literal` at `510:16624`
+      - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16624`
+      - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16624`
+      - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16624`
+      - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16624`
+      - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `510:16624`
+      - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16624`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16624`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16624`
+      - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16624`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16624`
       - `root-content-area-numbered-list-intro-01` — role `intro-01`; render `html-text`; visibility `always`
-        - Fact `root-content-area-numbered-list-intro-01-fill-color`: `#48494A`; provenance: `figma-literal` at `510:16625`
-        - Fact `root-content-area-numbered-list-intro-01-font-size`: `14px`; provenance: `figma-literal` at `510:16625`
-        - Fact `root-content-area-numbered-list-intro-01-line-height`: `140%`; provenance: `figma-literal` at `510:16625`
-        - Fact `root-content-area-numbered-list-intro-01-text-style`: `Mobile/Body/Large`; provenance: `figma-literal` at `510:16625`
+        - Fact `reference-size`: `252×60px`; provenance: `figma-literal` at `510:16625`
+        - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16625`
+        - Fact `source-text`: `Вы являетесь клиентом ЕДИНОГО ЦУПИС более года. Мы благодарны Вам за это.`; provenance: `figma-literal` at `510:16625`
+        - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16625`
+        - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16625`
+        - Fact `font-size`: `14px`; provenance: `figma-literal` at `510:16625`
+        - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16625`
+        - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16625`
+        - Fact `figma-style-id`: `S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,`; provenance: `figma-literal` at `510:16625`
+        - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16625`
+        - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16625`
+        - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16625`
+        - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16625`
+        - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16625`
+        - Fact `figma-style-name`: `Mobile/Body/Large`; provenance: `figma-literal` at `510:16625`
       - `root-content-area-numbered-list-intro-02` — role `intro-02`; render `html-text`; visibility `always`
-        - Fact `root-content-area-numbered-list-intro-02-fill-color`: `#48494A`; provenance: `figma-literal` at `510:16959`
-        - Fact `root-content-area-numbered-list-intro-02-font-size`: `14px`; provenance: `figma-literal` at `510:16959`
-        - Fact `root-content-area-numbered-list-intro-02-line-height`: `140%`; provenance: `figma-literal` at `510:16959`
-        - Fact `root-content-area-numbered-list-intro-02-text-style`: `Mobile/Body/Large`; provenance: `figma-literal` at `510:16959`
+        - Fact `reference-size`: `252×40px`; provenance: `figma-literal` at `510:16959`
+        - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16959`
+        - Fact `source-text`: `Чтобы начать его использовать, авторизуйтесь в нем повторно:`; provenance: `figma-literal` at `510:16959`
+        - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16959`
+        - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16959`
+        - Fact `font-size`: `14px`; provenance: `figma-literal` at `510:16959`
+        - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16959`
+        - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16959`
+        - Fact `figma-style-id`: `S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,`; provenance: `figma-literal` at `510:16959`
+        - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16959`
+        - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16959`
+        - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16959`
+        - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16959`
+        - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16959`
+        - Fact `figma-style-name`: `Mobile/Body/Large`; provenance: `figma-literal` at `510:16959`
       - `root-content-area-numbered-list-item-01` — role `item-01`; render `presentation-table`; visibility `always`
-        - Fact `root-content-area-numbered-list-item-01-layout-direction`: `vertical`; provenance: `figma-literal` at `510:16626`
-        - Fact `root-content-area-numbered-list-item-01-item-gap`: `4px`; provenance: `figma-literal` at `510:16626`
-        - Fact `root-content-area-numbered-list-item-01-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `510:16626`
+        - Fact `reference-size`: `252×104px`; provenance: `figma-literal` at `510:16626`
+        - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `510:16626`
+        - Fact `layout-gap`: `4px`; provenance: `figma-literal` at `510:16626`
+        - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16626`
+        - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16626`
+        - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16626`
+        - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16626`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `510:16626`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16626`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16626`
+        - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16626`
+        - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16626`
+        - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16626`
         - `root-content-area-numbered-list-item-01-numbered-row` — role `numbered-row`; render `presentation-table`; visibility `always`
-          - Fact `root-content-area-numbered-list-item-01-numbered-row-layout-direction`: `horizontal`; provenance: `figma-literal` at `510:16627`
-          - Fact `root-content-area-numbered-list-item-01-numbered-row-item-gap`: `12px`; provenance: `figma-literal` at `510:16627`
-          - Fact `root-content-area-numbered-list-item-01-numbered-row-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `510:16627`
+          - Fact `reference-size`: `252×40px`; provenance: `figma-literal` at `510:16627`
+          - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `510:16627`
+          - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16627`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16627`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16627`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16627`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16627`
+          - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `510:16627`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16627`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16627`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16627`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16627`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16627`
           - `root-content-area-numbered-list-item-01-numbered-row-number` — role `number`; render `html-text`; visibility `always`
-            - Fact `root-content-area-numbered-list-item-01-numbered-row-number-fill-color`: `#00991F`; provenance: `figma-literal` at `510:16628`
-            - Fact `root-content-area-numbered-list-item-01-numbered-row-number-font-size`: `14px`; provenance: `figma-literal` at `510:16628`
-            - Fact `root-content-area-numbered-list-item-01-numbered-row-number-line-height`: `140%`; provenance: `figma-literal` at `510:16628`
-            - Fact `root-content-area-numbered-list-item-01-numbered-row-number-text-style`: `Mobile/Body/Large`; provenance: `figma-literal` at `510:16628`
-            - Fact `root-content-area-numbered-list-item-01-numbered-row-number-text-align`: `right`; provenance: `figma-literal` at `510:16628`
-            - Fact `root-content-area-numbered-list-item-01-numbered-row-number-fixed-width`: `22px`; provenance: `figma-literal` at `510:16628`
+            - Fact `reference-size`: `22×20px`; provenance: `figma-literal` at `510:16628`
+            - Fact `text-color`: `#00991F`; provenance: `figma-literal` at `510:16628`
+            - Fact `source-text`: `1.`; provenance: `figma-literal` at `510:16628`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16628`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16628`
+            - Fact `font-size`: `14px`; provenance: `figma-literal` at `510:16628`
+            - Fact `text-align`: `right`; provenance: `figma-literal` at `510:16628`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16628`
+            - Fact `figma-style-id`: `S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,`; provenance: `figma-literal` at `510:16628`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16628`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16628`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16628`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16628`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16628`
+            - Fact `figma-style-name`: `Mobile/Body/Large`; provenance: `figma-literal` at `510:16628`
           - `root-content-area-numbered-list-item-01-numbered-row-content` — role `content`; render `html-text`; visibility `always`
-            - Fact `root-content-area-numbered-list-item-01-numbered-row-content-fill-color`: `#48494A`; provenance: `figma-literal` at `510:16629`
-            - Fact `root-content-area-numbered-list-item-01-numbered-row-content-font-size`: `14px`; provenance: `figma-literal` at `510:16629`
-            - Fact `root-content-area-numbered-list-item-01-numbered-row-content-line-height`: `140%`; provenance: `figma-literal` at `510:16629`
-            - Fact `root-content-area-numbered-list-item-01-numbered-row-content-text-style`: `Mobile/Body/Large`; provenance: `figma-literal` at `510:16629`
+            - Fact `reference-size`: `218×40px`; provenance: `figma-literal` at `510:16629`
+            - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16629`
+            - Fact `source-text`: `В правом верхнем углу нажать на свое имя / номер телефона`; provenance: `figma-literal` at `510:16629`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16629`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16629`
+            - Fact `font-size`: `14px`; provenance: `figma-literal` at `510:16629`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16629`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16629`
+            - Fact `figma-style-id`: `S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,`; provenance: `figma-literal` at `510:16629`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16629`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16629`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16629`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16629`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16629`
+            - Fact `figma-style-name`: `Mobile/Body/Large`; provenance: `figma-literal` at `510:16629`
         - `root-content-area-numbered-list-item-01-sub-item-01` — role `sub-item-01`; render `presentation-table`; visibility `always`
-          - Fact `root-content-area-numbered-list-item-01-sub-item-01-layout-direction`: `horizontal`; provenance: `figma-literal` at `510:16630`
-          - Fact `root-content-area-numbered-list-item-01-sub-item-01-item-gap`: `12px`; provenance: `figma-literal` at `510:16630`
-          - Fact `root-content-area-numbered-list-item-01-sub-item-01-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `510:16630`
+          - Fact `reference-size`: `252×60px`; provenance: `figma-literal` at `510:16630`
+          - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `510:16630`
+          - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16630`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16630`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16630`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16630`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16630`
+          - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `510:16630`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16630`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16630`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16630`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16630`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16630`
           - `root-content-area-numbered-list-item-01-sub-item-01-dash` — role `dash`; render `html-text`; visibility `always`
-            - Fact `root-content-area-numbered-list-item-01-sub-item-01-dash-fill-color`: `#00991F`; provenance: `figma-literal` at `510:16631`
-            - Fact `root-content-area-numbered-list-item-01-sub-item-01-dash-font-size`: `12px`; provenance: `figma-literal` at `510:16631`
-            - Fact `root-content-area-numbered-list-item-01-sub-item-01-dash-line-height`: `140%`; provenance: `figma-literal` at `510:16631`
-            - Fact `root-content-area-numbered-list-item-01-sub-item-01-dash-text-style`: `Mobile/Body/Medium`; provenance: `figma-literal` at `510:16631`
-            - Fact `root-content-area-numbered-list-item-01-sub-item-01-dash-text-align`: `right`; provenance: `figma-literal` at `510:16631`
-            - Fact `root-content-area-numbered-list-item-01-sub-item-01-dash-fixed-width`: `42px`; provenance: `figma-literal` at `510:16631`
+            - Fact `reference-size`: `42×17px`; provenance: `figma-literal` at `510:16631`
+            - Fact `text-color`: `#00991F`; provenance: `figma-literal` at `510:16631`
+            - Fact `source-text`: `—`; provenance: `figma-literal` at `510:16631`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16631`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16631`
+            - Fact `font-size`: `12px`; provenance: `figma-literal` at `510:16631`
+            - Fact `text-align`: `right`; provenance: `figma-literal` at `510:16631`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16631`
+            - Fact `figma-style-id`: `S:8ad84dd262e81c148a758758a15bb9b15e8f30fe,`; provenance: `figma-literal` at `510:16631`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16631`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16631`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16631`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16631`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16631`
+            - Fact `figma-style-name`: `Mobile/Body/Medium`; provenance: `figma-literal` at `510:16631`
           - `root-content-area-numbered-list-item-01-sub-item-01-content` — role `content`; render `html-text`; visibility `always`
-            - Fact `root-content-area-numbered-list-item-01-sub-item-01-content-fill-color`: `#48494A`; provenance: `figma-literal` at `510:16632`
-            - Fact `root-content-area-numbered-list-item-01-sub-item-01-content-font-size`: `14px`; provenance: `figma-literal` at `510:16632`
-            - Fact `root-content-area-numbered-list-item-01-sub-item-01-content-line-height`: `140%`; provenance: `figma-literal` at `510:16632`
-            - Fact `root-content-area-numbered-list-item-01-sub-item-01-content-text-style`: `Mobile/Body/Large`; provenance: `figma-literal` at `510:16632`
+            - Fact `reference-size`: `198×60px`; provenance: `figma-literal` at `510:16632`
+            - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16632`
+            - Fact `source-text`: `В правом верхнем углу нажать на свое имя / номер телефона`; provenance: `figma-literal` at `510:16632`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16632`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16632`
+            - Fact `font-size`: `14px`; provenance: `figma-literal` at `510:16632`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16632`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16632`
+            - Fact `figma-style-id`: `S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,`; provenance: `figma-literal` at `510:16632`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16632`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16632`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16632`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16632`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16632`
+            - Fact `figma-style-name`: `Mobile/Body/Large`; provenance: `figma-literal` at `510:16632`
+        - `root-content-area-numbered-list-item-01-sub-item-02` — role `sub-item-02`; render `presentation-table`; visibility `always`
+          - Fact `reference-size`: `252×60px`; provenance: `figma-literal` at `510:16633`
+          - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `510:16633`
+          - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16633`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16633`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16633`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16633`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16633`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `510:16633`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16633`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16633`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16633`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16633`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16633`
+          - `root-content-area-numbered-list-item-01-sub-item-02-dash` — role `dash`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `42×17px`; provenance: `figma-literal` at `510:16634`
+            - Fact `text-color`: `#00991F`; provenance: `figma-literal` at `510:16634`
+            - Fact `source-text`: `—`; provenance: `figma-literal` at `510:16634`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16634`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16634`
+            - Fact `font-size`: `12px`; provenance: `figma-literal` at `510:16634`
+            - Fact `text-align`: `right`; provenance: `figma-literal` at `510:16634`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16634`
+            - Fact `figma-style-id`: `S:8ad84dd262e81c148a758758a15bb9b15e8f30fe,`; provenance: `figma-literal` at `510:16634`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16634`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16634`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16634`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16634`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16634`
+            - Fact `figma-style-name`: `Mobile/Body/Medium`; provenance: `figma-literal` at `510:16634`
+          - `root-content-area-numbered-list-item-01-sub-item-02-content` — role `content`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `198×34px`; provenance: `figma-literal` at `510:16635`
+            - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16635`
+            - Fact `source-text`: `В правом верхнем углу нажать на свое имя / номер телефона`; provenance: `figma-literal` at `510:16635`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16635`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16635`
+            - Fact `font-size`: `12px`; provenance: `figma-literal` at `510:16635`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16635`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16635`
+            - Fact `figma-style-id`: `S:8ad84dd262e81c148a758758a15bb9b15e8f30fe,`; provenance: `figma-literal` at `510:16635`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16635`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16635`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16635`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16635`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16635`
+            - Fact `figma-style-name`: `Mobile/Body/Medium`; provenance: `figma-literal` at `510:16635`
+        - `root-content-area-numbered-list-item-01-sub-item-03` — role `sub-item-03`; render `presentation-table`; visibility `always`
+          - Fact `reference-size`: `252×60px`; provenance: `figma-literal` at `510:16636`
+          - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `510:16636`
+          - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16636`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16636`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16636`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16636`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16636`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `510:16636`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16636`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16636`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16636`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16636`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16636`
+          - `root-content-area-numbered-list-item-01-sub-item-03-dash` — role `dash`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `42×17px`; provenance: `figma-literal` at `510:16637`
+            - Fact `text-color`: `#00991F`; provenance: `figma-literal` at `510:16637`
+            - Fact `source-text`: `—`; provenance: `figma-literal` at `510:16637`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16637`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16637`
+            - Fact `font-size`: `12px`; provenance: `figma-literal` at `510:16637`
+            - Fact `text-align`: `right`; provenance: `figma-literal` at `510:16637`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16637`
+            - Fact `figma-style-id`: `S:8ad84dd262e81c148a758758a15bb9b15e8f30fe,`; provenance: `figma-literal` at `510:16637`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16637`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16637`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16637`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16637`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16637`
+            - Fact `figma-style-name`: `Mobile/Body/Medium`; provenance: `figma-literal` at `510:16637`
+          - `root-content-area-numbered-list-item-01-sub-item-03-content` — role `content`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `198×34px`; provenance: `figma-literal` at `510:16638`
+            - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16638`
+            - Fact `source-text`: `В правом верхнем углу нажать на свое имя / номер телефона`; provenance: `figma-literal` at `510:16638`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16638`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16638`
+            - Fact `font-size`: `12px`; provenance: `figma-literal` at `510:16638`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16638`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16638`
+            - Fact `figma-style-id`: `S:8ad84dd262e81c148a758758a15bb9b15e8f30fe,`; provenance: `figma-literal` at `510:16638`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16638`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16638`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16638`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16638`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16638`
+            - Fact `figma-style-name`: `Mobile/Body/Medium`; provenance: `figma-literal` at `510:16638`
       - `root-content-area-numbered-list-item-02` — role `item-02`; render `presentation-table`; visibility `always`
-        - Fact `root-content-area-numbered-list-item-02-layout-direction`: `vertical`; provenance: `figma-literal` at `510:16639`
-        - Fact `root-content-area-numbered-list-item-02-item-gap`: `4px`; provenance: `figma-literal` at `510:16639`
-        - Fact `root-content-area-numbered-list-item-02-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `510:16639`
+        - Fact `reference-size`: `252×84px`; provenance: `figma-literal` at `510:16639`
+        - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `510:16639`
+        - Fact `layout-gap`: `4px`; provenance: `figma-literal` at `510:16639`
+        - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16639`
+        - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16639`
+        - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16639`
+        - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16639`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `510:16639`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16639`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16639`
+        - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16639`
+        - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16639`
+        - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16639`
         - `root-content-area-numbered-list-item-02-numbered-row` — role `numbered-row`; render `presentation-table`; visibility `always`
-          - Fact `root-content-area-numbered-list-item-02-numbered-row-layout-direction`: `horizontal`; provenance: `figma-literal` at `510:16640`
-          - Fact `root-content-area-numbered-list-item-02-numbered-row-item-gap`: `12px`; provenance: `figma-literal` at `510:16640`
-          - Fact `root-content-area-numbered-list-item-02-numbered-row-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `510:16640`
+          - Fact `reference-size`: `252×20px`; provenance: `figma-literal` at `510:16640`
+          - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `510:16640`
+          - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16640`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16640`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16640`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16640`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16640`
+          - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `510:16640`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16640`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16640`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16640`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16640`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16640`
           - `root-content-area-numbered-list-item-02-numbered-row-number` — role `number`; render `html-text`; visibility `always`
-            - Fact `root-content-area-numbered-list-item-02-numbered-row-number-fill-color`: `#00991F`; provenance: `figma-literal` at `510:16641`
-            - Fact `root-content-area-numbered-list-item-02-numbered-row-number-font-size`: `14px`; provenance: `figma-literal` at `510:16641`
-            - Fact `root-content-area-numbered-list-item-02-numbered-row-number-line-height`: `140%`; provenance: `figma-literal` at `510:16641`
-            - Fact `root-content-area-numbered-list-item-02-numbered-row-number-text-style`: `Mobile/Body/Large`; provenance: `figma-literal` at `510:16641`
-            - Fact `root-content-area-numbered-list-item-02-numbered-row-number-text-align`: `right`; provenance: `figma-literal` at `510:16641`
-            - Fact `root-content-area-numbered-list-item-02-numbered-row-number-fixed-width`: `22px`; provenance: `figma-literal` at `510:16641`
+            - Fact `reference-size`: `22×20px`; provenance: `figma-literal` at `510:16641`
+            - Fact `text-color`: `#00991F`; provenance: `figma-literal` at `510:16641`
+            - Fact `source-text`: `2.`; provenance: `figma-literal` at `510:16641`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16641`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16641`
+            - Fact `font-size`: `14px`; provenance: `figma-literal` at `510:16641`
+            - Fact `text-align`: `right`; provenance: `figma-literal` at `510:16641`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16641`
+            - Fact `figma-style-id`: `S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,`; provenance: `figma-literal` at `510:16641`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16641`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16641`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16641`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16641`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16641`
+            - Fact `figma-style-name`: `Mobile/Body/Large`; provenance: `figma-literal` at `510:16641`
           - `root-content-area-numbered-list-item-02-numbered-row-content` — role `content`; render `html-text`; visibility `always`
-            - Fact `root-content-area-numbered-list-item-02-numbered-row-content-fill-color`: `#48494A`; provenance: `figma-literal` at `510:16642`
-            - Fact `root-content-area-numbered-list-item-02-numbered-row-content-font-size`: `14px`; provenance: `figma-literal` at `510:16642`
-            - Fact `root-content-area-numbered-list-item-02-numbered-row-content-line-height`: `140%`; provenance: `figma-literal` at `510:16642`
-            - Fact `root-content-area-numbered-list-item-02-numbered-row-content-text-style`: `Mobile/Body/Large`; provenance: `figma-literal` at `510:16642`
+            - Fact `reference-size`: `218×20px`; provenance: `figma-literal` at `510:16642`
+            - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16642`
+            - Fact `source-text`: `Нажать кнопку «Выход»`; provenance: `figma-literal` at `510:16642`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16642`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16642`
+            - Fact `font-size`: `14px`; provenance: `figma-literal` at `510:16642`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16642`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16642`
+            - Fact `figma-style-id`: `S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,`; provenance: `figma-literal` at `510:16642`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16642`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16642`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16642`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16642`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16642`
+            - Fact `figma-style-name`: `Mobile/Body/Large`; provenance: `figma-literal` at `510:16642`
         - `root-content-area-numbered-list-item-02-sub-item-01` — role `sub-item-01`; render `presentation-table`; visibility `always`
-          - Fact `root-content-area-numbered-list-item-02-sub-item-01-layout-direction`: `horizontal`; provenance: `figma-literal` at `510:16643`
-          - Fact `root-content-area-numbered-list-item-02-sub-item-01-item-gap`: `12px`; provenance: `figma-literal` at `510:16643`
-          - Fact `root-content-area-numbered-list-item-02-sub-item-01-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `510:16643`
+          - Fact `reference-size`: `252×60px`; provenance: `figma-literal` at `510:16643`
+          - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `510:16643`
+          - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16643`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16643`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16643`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16643`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16643`
+          - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `510:16643`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16643`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16643`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16643`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16643`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16643`
           - `root-content-area-numbered-list-item-02-sub-item-01-dash` — role `dash`; render `html-text`; visibility `always`
-            - Fact `root-content-area-numbered-list-item-02-sub-item-01-dash-fill-color`: `#00991F`; provenance: `figma-literal` at `510:16644`
-            - Fact `root-content-area-numbered-list-item-02-sub-item-01-dash-font-size`: `12px`; provenance: `figma-literal` at `510:16644`
-            - Fact `root-content-area-numbered-list-item-02-sub-item-01-dash-line-height`: `140%`; provenance: `figma-literal` at `510:16644`
-            - Fact `root-content-area-numbered-list-item-02-sub-item-01-dash-text-style`: `Mobile/Body/Medium`; provenance: `figma-literal` at `510:16644`
-            - Fact `root-content-area-numbered-list-item-02-sub-item-01-dash-text-align`: `right`; provenance: `figma-literal` at `510:16644`
-            - Fact `root-content-area-numbered-list-item-02-sub-item-01-dash-fixed-width`: `42px`; provenance: `figma-literal` at `510:16644`
+            - Fact `reference-size`: `42×17px`; provenance: `figma-literal` at `510:16644`
+            - Fact `text-color`: `#00991F`; provenance: `figma-literal` at `510:16644`
+            - Fact `source-text`: `—`; provenance: `figma-literal` at `510:16644`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16644`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16644`
+            - Fact `font-size`: `12px`; provenance: `figma-literal` at `510:16644`
+            - Fact `text-align`: `right`; provenance: `figma-literal` at `510:16644`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16644`
+            - Fact `figma-style-id`: `S:8ad84dd262e81c148a758758a15bb9b15e8f30fe,`; provenance: `figma-literal` at `510:16644`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16644`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16644`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16644`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16644`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16644`
+            - Fact `figma-style-name`: `Mobile/Body/Medium`; provenance: `figma-literal` at `510:16644`
           - `root-content-area-numbered-list-item-02-sub-item-01-content` — role `content`; render `html-text`; visibility `always`
-            - Fact `root-content-area-numbered-list-item-02-sub-item-01-content-fill-color`: `#48494A`; provenance: `figma-literal` at `510:16645`
-            - Fact `root-content-area-numbered-list-item-02-sub-item-01-content-font-size`: `14px`; provenance: `figma-literal` at `510:16645`
-            - Fact `root-content-area-numbered-list-item-02-sub-item-01-content-line-height`: `140%`; provenance: `figma-literal` at `510:16645`
-            - Fact `root-content-area-numbered-list-item-02-sub-item-01-content-text-style`: `Mobile/Body/Large`; provenance: `figma-literal` at `510:16645`
+            - Fact `reference-size`: `198×60px`; provenance: `figma-literal` at `510:16645`
+            - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16645`
+            - Fact `source-text`: `В правом верхнем углу нажать на свое имя / номер телефона`; provenance: `figma-literal` at `510:16645`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16645`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16645`
+            - Fact `font-size`: `14px`; provenance: `figma-literal` at `510:16645`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16645`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16645`
+            - Fact `figma-style-id`: `S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,`; provenance: `figma-literal` at `510:16645`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16645`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16645`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16645`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16645`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16645`
+            - Fact `figma-style-name`: `Mobile/Body/Large`; provenance: `figma-literal` at `510:16645`
+        - `root-content-area-numbered-list-item-02-sub-item-02` — role `sub-item-02`; render `presentation-table`; visibility `always`
+          - Fact `reference-size`: `252×60px`; provenance: `figma-literal` at `510:16646`
+          - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `510:16646`
+          - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16646`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16646`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16646`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16646`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16646`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `510:16646`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16646`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16646`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16646`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16646`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16646`
+          - `root-content-area-numbered-list-item-02-sub-item-02-dash` — role `dash`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `42×17px`; provenance: `figma-literal` at `510:16647`
+            - Fact `text-color`: `#00991F`; provenance: `figma-literal` at `510:16647`
+            - Fact `source-text`: `—`; provenance: `figma-literal` at `510:16647`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16647`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16647`
+            - Fact `font-size`: `12px`; provenance: `figma-literal` at `510:16647`
+            - Fact `text-align`: `right`; provenance: `figma-literal` at `510:16647`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16647`
+            - Fact `figma-style-id`: `S:8ad84dd262e81c148a758758a15bb9b15e8f30fe,`; provenance: `figma-literal` at `510:16647`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16647`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16647`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16647`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16647`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16647`
+            - Fact `figma-style-name`: `Mobile/Body/Medium`; provenance: `figma-literal` at `510:16647`
+          - `root-content-area-numbered-list-item-02-sub-item-02-content` — role `content`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `198×34px`; provenance: `figma-literal` at `510:16648`
+            - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16648`
+            - Fact `source-text`: `В правом верхнем углу нажать на свое имя / номер телефона`; provenance: `figma-literal` at `510:16648`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16648`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16648`
+            - Fact `font-size`: `12px`; provenance: `figma-literal` at `510:16648`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16648`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16648`
+            - Fact `figma-style-id`: `S:8ad84dd262e81c148a758758a15bb9b15e8f30fe,`; provenance: `figma-literal` at `510:16648`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16648`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16648`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16648`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16648`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16648`
+            - Fact `figma-style-name`: `Mobile/Body/Medium`; provenance: `figma-literal` at `510:16648`
+        - `root-content-area-numbered-list-item-02-sub-item-03` — role `sub-item-03`; render `presentation-table`; visibility `always`
+          - Fact `reference-size`: `252×60px`; provenance: `figma-literal` at `510:16649`
+          - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `510:16649`
+          - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16649`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16649`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16649`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16649`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16649`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `510:16649`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16649`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16649`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16649`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16649`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16649`
+          - `root-content-area-numbered-list-item-02-sub-item-03-dash` — role `dash`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `42×17px`; provenance: `figma-literal` at `510:16650`
+            - Fact `text-color`: `#00991F`; provenance: `figma-literal` at `510:16650`
+            - Fact `source-text`: `—`; provenance: `figma-literal` at `510:16650`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16650`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16650`
+            - Fact `font-size`: `12px`; provenance: `figma-literal` at `510:16650`
+            - Fact `text-align`: `right`; provenance: `figma-literal` at `510:16650`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16650`
+            - Fact `figma-style-id`: `S:8ad84dd262e81c148a758758a15bb9b15e8f30fe,`; provenance: `figma-literal` at `510:16650`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16650`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16650`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16650`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16650`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16650`
+            - Fact `figma-style-name`: `Mobile/Body/Medium`; provenance: `figma-literal` at `510:16650`
+          - `root-content-area-numbered-list-item-02-sub-item-03-content` — role `content`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `198×34px`; provenance: `figma-literal` at `510:16651`
+            - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16651`
+            - Fact `source-text`: `В правом верхнем углу нажать на свое имя / номер телефона`; provenance: `figma-literal` at `510:16651`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16651`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16651`
+            - Fact `font-size`: `12px`; provenance: `figma-literal` at `510:16651`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16651`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16651`
+            - Fact `figma-style-id`: `S:8ad84dd262e81c148a758758a15bb9b15e8f30fe,`; provenance: `figma-literal` at `510:16651`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16651`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16651`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16651`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16651`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16651`
+            - Fact `figma-style-name`: `Mobile/Body/Medium`; provenance: `figma-literal` at `510:16651`
       - `root-content-area-numbered-list-item-03` — role `item-03`; render `presentation-table`; visibility `always`
-        - Fact `root-content-area-numbered-list-item-03-layout-direction`: `vertical`; provenance: `figma-literal` at `510:16652`
-        - Fact `root-content-area-numbered-list-item-03-item-gap`: `4px`; provenance: `figma-literal` at `510:16652`
-        - Fact `root-content-area-numbered-list-item-03-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `510:16652`
+        - Fact `reference-size`: `252×124px`; provenance: `figma-literal` at `510:16652`
+        - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `510:16652`
+        - Fact `layout-gap`: `4px`; provenance: `figma-literal` at `510:16652`
+        - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16652`
+        - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16652`
+        - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16652`
+        - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16652`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `510:16652`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16652`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16652`
+        - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16652`
+        - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16652`
+        - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16652`
         - `root-content-area-numbered-list-item-03-numbered-row` — role `numbered-row`; render `presentation-table`; visibility `always`
-          - Fact `root-content-area-numbered-list-item-03-numbered-row-layout-direction`: `horizontal`; provenance: `figma-literal` at `510:16653`
-          - Fact `root-content-area-numbered-list-item-03-numbered-row-item-gap`: `12px`; provenance: `figma-literal` at `510:16653`
-          - Fact `root-content-area-numbered-list-item-03-numbered-row-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `510:16653`
+          - Fact `reference-size`: `252×60px`; provenance: `figma-literal` at `510:16653`
+          - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `510:16653`
+          - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16653`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16653`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16653`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16653`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16653`
+          - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `510:16653`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16653`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16653`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16653`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16653`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16653`
           - `root-content-area-numbered-list-item-03-numbered-row-number` — role `number`; render `html-text`; visibility `always`
-            - Fact `root-content-area-numbered-list-item-03-numbered-row-number-fill-color`: `#00991F`; provenance: `figma-literal` at `510:16654`
-            - Fact `root-content-area-numbered-list-item-03-numbered-row-number-font-size`: `14px`; provenance: `figma-literal` at `510:16654`
-            - Fact `root-content-area-numbered-list-item-03-numbered-row-number-line-height`: `140%`; provenance: `figma-literal` at `510:16654`
-            - Fact `root-content-area-numbered-list-item-03-numbered-row-number-text-style`: `Mobile/Body/Large`; provenance: `figma-literal` at `510:16654`
-            - Fact `root-content-area-numbered-list-item-03-numbered-row-number-text-align`: `right`; provenance: `figma-literal` at `510:16654`
-            - Fact `root-content-area-numbered-list-item-03-numbered-row-number-fixed-width`: `22px`; provenance: `figma-literal` at `510:16654`
+            - Fact `reference-size`: `22×20px`; provenance: `figma-literal` at `510:16654`
+            - Fact `text-color`: `#00991F`; provenance: `figma-literal` at `510:16654`
+            - Fact `source-text`: `3.`; provenance: `figma-literal` at `510:16654`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16654`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16654`
+            - Fact `font-size`: `14px`; provenance: `figma-literal` at `510:16654`
+            - Fact `text-align`: `right`; provenance: `figma-literal` at `510:16654`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16654`
+            - Fact `figma-style-id`: `S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,`; provenance: `figma-literal` at `510:16654`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16654`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16654`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16654`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16654`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16654`
+            - Fact `figma-style-name`: `Mobile/Body/Large`; provenance: `figma-literal` at `510:16654`
           - `root-content-area-numbered-list-item-03-numbered-row-content` — role `content`; render `html-text`; visibility `always`
-            - Fact `root-content-area-numbered-list-item-03-numbered-row-content-fill-color`: `#48494A`; provenance: `figma-literal` at `510:16655`
-            - Fact `root-content-area-numbered-list-item-03-numbered-row-content-font-size`: `14px`; provenance: `figma-literal` at `510:16655`
-            - Fact `root-content-area-numbered-list-item-03-numbered-row-content-line-height`: `140%`; provenance: `figma-literal` at `510:16655`
-            - Fact `root-content-area-numbered-list-item-03-numbered-row-content-text-style`: `Mobile/Body/Large`; provenance: `figma-literal` at `510:16655`
+            - Fact `reference-size`: `218×60px`; provenance: `figma-literal` at `510:16655`
+            - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16655`
+            - Fact `source-text`: `На странице входа в аккаунт указать номер телефона и пароль`; provenance: `figma-literal` at `510:16655`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16655`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16655`
+            - Fact `font-size`: `14px`; provenance: `figma-literal` at `510:16655`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16655`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16655`
+            - Fact `figma-style-id`: `S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,`; provenance: `figma-literal` at `510:16655`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16655`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16655`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16655`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16655`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16655`
+            - Fact `figma-style-name`: `Mobile/Body/Large`; provenance: `figma-literal` at `510:16655`
         - `root-content-area-numbered-list-item-03-sub-item-01` — role `sub-item-01`; render `presentation-table`; visibility `always`
-          - Fact `root-content-area-numbered-list-item-03-sub-item-01-layout-direction`: `horizontal`; provenance: `figma-literal` at `510:16656`
-          - Fact `root-content-area-numbered-list-item-03-sub-item-01-item-gap`: `12px`; provenance: `figma-literal` at `510:16656`
-          - Fact `root-content-area-numbered-list-item-03-sub-item-01-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `510:16656`
+          - Fact `reference-size`: `252×60px`; provenance: `figma-literal` at `510:16656`
+          - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `510:16656`
+          - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16656`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16656`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16656`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16656`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16656`
+          - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `510:16656`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16656`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16656`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16656`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16656`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16656`
           - `root-content-area-numbered-list-item-03-sub-item-01-dash` — role `dash`; render `html-text`; visibility `always`
-            - Fact `root-content-area-numbered-list-item-03-sub-item-01-dash-fill-color`: `#00991F`; provenance: `figma-literal` at `510:16657`
-            - Fact `root-content-area-numbered-list-item-03-sub-item-01-dash-font-size`: `12px`; provenance: `figma-literal` at `510:16657`
-            - Fact `root-content-area-numbered-list-item-03-sub-item-01-dash-line-height`: `140%`; provenance: `figma-literal` at `510:16657`
-            - Fact `root-content-area-numbered-list-item-03-sub-item-01-dash-text-style`: `Mobile/Body/Medium`; provenance: `figma-literal` at `510:16657`
-            - Fact `root-content-area-numbered-list-item-03-sub-item-01-dash-text-align`: `right`; provenance: `figma-literal` at `510:16657`
-            - Fact `root-content-area-numbered-list-item-03-sub-item-01-dash-fixed-width`: `42px`; provenance: `figma-literal` at `510:16657`
+            - Fact `reference-size`: `42×17px`; provenance: `figma-literal` at `510:16657`
+            - Fact `text-color`: `#00991F`; provenance: `figma-literal` at `510:16657`
+            - Fact `source-text`: `—`; provenance: `figma-literal` at `510:16657`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16657`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16657`
+            - Fact `font-size`: `12px`; provenance: `figma-literal` at `510:16657`
+            - Fact `text-align`: `right`; provenance: `figma-literal` at `510:16657`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16657`
+            - Fact `figma-style-id`: `S:8ad84dd262e81c148a758758a15bb9b15e8f30fe,`; provenance: `figma-literal` at `510:16657`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16657`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16657`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16657`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16657`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16657`
+            - Fact `figma-style-name`: `Mobile/Body/Medium`; provenance: `figma-literal` at `510:16657`
           - `root-content-area-numbered-list-item-03-sub-item-01-content` — role `content`; render `html-text`; visibility `always`
-            - Fact `root-content-area-numbered-list-item-03-sub-item-01-content-fill-color`: `#48494A`; provenance: `figma-literal` at `510:16658`
-            - Fact `root-content-area-numbered-list-item-03-sub-item-01-content-font-size`: `14px`; provenance: `figma-literal` at `510:16658`
-            - Fact `root-content-area-numbered-list-item-03-sub-item-01-content-line-height`: `140%`; provenance: `figma-literal` at `510:16658`
-            - Fact `root-content-area-numbered-list-item-03-sub-item-01-content-text-style`: `Mobile/Body/Large`; provenance: `figma-literal` at `510:16658`
+            - Fact `reference-size`: `198×60px`; provenance: `figma-literal` at `510:16658`
+            - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16658`
+            - Fact `source-text`: `В правом верхнем углу нажать на свое имя / номер телефона`; provenance: `figma-literal` at `510:16658`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16658`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16658`
+            - Fact `font-size`: `14px`; provenance: `figma-literal` at `510:16658`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16658`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16658`
+            - Fact `figma-style-id`: `S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,`; provenance: `figma-literal` at `510:16658`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16658`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16658`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16658`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16658`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16658`
+            - Fact `figma-style-name`: `Mobile/Body/Large`; provenance: `figma-literal` at `510:16658`
+        - `root-content-area-numbered-list-item-03-sub-item-02` — role `sub-item-02`; render `presentation-table`; visibility `always`
+          - Fact `reference-size`: `252×60px`; provenance: `figma-literal` at `510:16659`
+          - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `510:16659`
+          - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16659`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16659`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16659`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16659`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16659`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `510:16659`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16659`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16659`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16659`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16659`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16659`
+          - `root-content-area-numbered-list-item-03-sub-item-02-dash` — role `dash`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `42×17px`; provenance: `figma-literal` at `510:16660`
+            - Fact `text-color`: `#00991F`; provenance: `figma-literal` at `510:16660`
+            - Fact `source-text`: `—`; provenance: `figma-literal` at `510:16660`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16660`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16660`
+            - Fact `font-size`: `12px`; provenance: `figma-literal` at `510:16660`
+            - Fact `text-align`: `right`; provenance: `figma-literal` at `510:16660`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16660`
+            - Fact `figma-style-id`: `S:8ad84dd262e81c148a758758a15bb9b15e8f30fe,`; provenance: `figma-literal` at `510:16660`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16660`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16660`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16660`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16660`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16660`
+            - Fact `figma-style-name`: `Mobile/Body/Medium`; provenance: `figma-literal` at `510:16660`
+          - `root-content-area-numbered-list-item-03-sub-item-02-content` — role `content`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `198×34px`; provenance: `figma-literal` at `510:16661`
+            - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16661`
+            - Fact `source-text`: `В правом верхнем углу нажать на свое имя / номер телефона`; provenance: `figma-literal` at `510:16661`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16661`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16661`
+            - Fact `font-size`: `12px`; provenance: `figma-literal` at `510:16661`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16661`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16661`
+            - Fact `figma-style-id`: `S:8ad84dd262e81c148a758758a15bb9b15e8f30fe,`; provenance: `figma-literal` at `510:16661`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16661`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16661`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16661`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16661`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16661`
+            - Fact `figma-style-name`: `Mobile/Body/Medium`; provenance: `figma-literal` at `510:16661`
+        - `root-content-area-numbered-list-item-03-sub-item-03` — role `sub-item-03`; render `presentation-table`; visibility `always`
+          - Fact `reference-size`: `252×60px`; provenance: `figma-literal` at `510:16662`
+          - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `510:16662`
+          - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16662`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16662`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16662`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16662`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16662`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `510:16662`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16662`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16662`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16662`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16662`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16662`
+          - `root-content-area-numbered-list-item-03-sub-item-03-dash` — role `dash`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `42×17px`; provenance: `figma-literal` at `510:16663`
+            - Fact `text-color`: `#00991F`; provenance: `figma-literal` at `510:16663`
+            - Fact `source-text`: `—`; provenance: `figma-literal` at `510:16663`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16663`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16663`
+            - Fact `font-size`: `12px`; provenance: `figma-literal` at `510:16663`
+            - Fact `text-align`: `right`; provenance: `figma-literal` at `510:16663`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16663`
+            - Fact `figma-style-id`: `S:8ad84dd262e81c148a758758a15bb9b15e8f30fe,`; provenance: `figma-literal` at `510:16663`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16663`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16663`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16663`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16663`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16663`
+            - Fact `figma-style-name`: `Mobile/Body/Medium`; provenance: `figma-literal` at `510:16663`
+          - `root-content-area-numbered-list-item-03-sub-item-03-content` — role `content`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `198×34px`; provenance: `figma-literal` at `510:16664`
+            - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16664`
+            - Fact `source-text`: `В правом верхнем углу нажать на свое имя / номер телефона`; provenance: `figma-literal` at `510:16664`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16664`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16664`
+            - Fact `font-size`: `12px`; provenance: `figma-literal` at `510:16664`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16664`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16664`
+            - Fact `figma-style-id`: `S:8ad84dd262e81c148a758758a15bb9b15e8f30fe,`; provenance: `figma-literal` at `510:16664`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16664`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16664`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16664`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16664`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16664`
+            - Fact `figma-style-name`: `Mobile/Body/Medium`; provenance: `figma-literal` at `510:16664`
       - `root-content-area-numbered-list-item-04` — role `item-04`; render `presentation-table`; visibility `always`
-        - Fact `root-content-area-numbered-list-item-04-layout-direction`: `vertical`; provenance: `figma-literal` at `510:16665`
-        - Fact `root-content-area-numbered-list-item-04-item-gap`: `4px`; provenance: `figma-literal` at `510:16665`
-        - Fact `root-content-area-numbered-list-item-04-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `510:16665`
+        - Fact `reference-size`: `252×124px`; provenance: `figma-literal` at `510:16665`
+        - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `510:16665`
+        - Fact `layout-gap`: `4px`; provenance: `figma-literal` at `510:16665`
+        - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16665`
+        - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16665`
+        - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16665`
+        - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16665`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `510:16665`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16665`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16665`
+        - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16665`
+        - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16665`
+        - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16665`
         - `root-content-area-numbered-list-item-04-numbered-row` — role `numbered-row`; render `presentation-table`; visibility `always`
-          - Fact `root-content-area-numbered-list-item-04-numbered-row-layout-direction`: `horizontal`; provenance: `figma-literal` at `510:16666`
-          - Fact `root-content-area-numbered-list-item-04-numbered-row-item-gap`: `12px`; provenance: `figma-literal` at `510:16666`
-          - Fact `root-content-area-numbered-list-item-04-numbered-row-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `510:16666`
+          - Fact `reference-size`: `252×60px`; provenance: `figma-literal` at `510:16666`
+          - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `510:16666`
+          - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16666`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16666`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16666`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16666`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16666`
+          - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `510:16666`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16666`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16666`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16666`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16666`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16666`
           - `root-content-area-numbered-list-item-04-numbered-row-number` — role `number`; render `html-text`; visibility `always`
-            - Fact `root-content-area-numbered-list-item-04-numbered-row-number-fill-color`: `#00991F`; provenance: `figma-literal` at `510:16667`
-            - Fact `root-content-area-numbered-list-item-04-numbered-row-number-font-size`: `14px`; provenance: `figma-literal` at `510:16667`
-            - Fact `root-content-area-numbered-list-item-04-numbered-row-number-line-height`: `140%`; provenance: `figma-literal` at `510:16667`
-            - Fact `root-content-area-numbered-list-item-04-numbered-row-number-text-style`: `Mobile/Body/Large`; provenance: `figma-literal` at `510:16667`
-            - Fact `root-content-area-numbered-list-item-04-numbered-row-number-text-align`: `right`; provenance: `figma-literal` at `510:16667`
-            - Fact `root-content-area-numbered-list-item-04-numbered-row-number-fixed-width`: `22px`; provenance: `figma-literal` at `510:16667`
+            - Fact `reference-size`: `22×20px`; provenance: `figma-literal` at `510:16667`
+            - Fact `text-color`: `#00991F`; provenance: `figma-literal` at `510:16667`
+            - Fact `source-text`: `4.`; provenance: `figma-literal` at `510:16667`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16667`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16667`
+            - Fact `font-size`: `14px`; provenance: `figma-literal` at `510:16667`
+            - Fact `text-align`: `right`; provenance: `figma-literal` at `510:16667`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16667`
+            - Fact `figma-style-id`: `S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,`; provenance: `figma-literal` at `510:16667`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16667`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16667`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16667`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16667`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16667`
+            - Fact `figma-style-name`: `Mobile/Body/Large`; provenance: `figma-literal` at `510:16667`
           - `root-content-area-numbered-list-item-04-numbered-row-content` — role `content`; render `html-text`; visibility `always`
-            - Fact `root-content-area-numbered-list-item-04-numbered-row-content-fill-color`: `#48494A`; provenance: `figma-literal` at `510:16668`
-            - Fact `root-content-area-numbered-list-item-04-numbered-row-content-font-size`: `14px`; provenance: `figma-literal` at `510:16668`
-            - Fact `root-content-area-numbered-list-item-04-numbered-row-content-line-height`: `140%`; provenance: `figma-literal` at `510:16668`
-            - Fact `root-content-area-numbered-list-item-04-numbered-row-content-text-style`: `Mobile/Body/Large`; provenance: `figma-literal` at `510:16668`
+            - Fact `reference-size`: `218×60px`; provenance: `figma-literal` at `510:16668`
+            - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16668`
+            - Fact `source-text`: `На странице входа в аккаунт указать номер телефона и пароль`; provenance: `figma-literal` at `510:16668`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16668`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16668`
+            - Fact `font-size`: `14px`; provenance: `figma-literal` at `510:16668`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16668`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16668`
+            - Fact `figma-style-id`: `S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,`; provenance: `figma-literal` at `510:16668`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16668`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16668`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16668`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16668`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16668`
+            - Fact `figma-style-name`: `Mobile/Body/Large`; provenance: `figma-literal` at `510:16668`
         - `root-content-area-numbered-list-item-04-sub-item-01` — role `sub-item-01`; render `presentation-table`; visibility `always`
-          - Fact `root-content-area-numbered-list-item-04-sub-item-01-layout-direction`: `horizontal`; provenance: `figma-literal` at `510:16669`
-          - Fact `root-content-area-numbered-list-item-04-sub-item-01-item-gap`: `12px`; provenance: `figma-literal` at `510:16669`
-          - Fact `root-content-area-numbered-list-item-04-sub-item-01-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `510:16669`
+          - Fact `reference-size`: `252×60px`; provenance: `figma-literal` at `510:16669`
+          - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `510:16669`
+          - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16669`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16669`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16669`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16669`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16669`
+          - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `510:16669`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16669`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16669`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16669`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16669`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16669`
           - `root-content-area-numbered-list-item-04-sub-item-01-dash` — role `dash`; render `html-text`; visibility `always`
-            - Fact `root-content-area-numbered-list-item-04-sub-item-01-dash-fill-color`: `#00991F`; provenance: `figma-literal` at `510:16670`
-            - Fact `root-content-area-numbered-list-item-04-sub-item-01-dash-font-size`: `12px`; provenance: `figma-literal` at `510:16670`
-            - Fact `root-content-area-numbered-list-item-04-sub-item-01-dash-line-height`: `140%`; provenance: `figma-literal` at `510:16670`
-            - Fact `root-content-area-numbered-list-item-04-sub-item-01-dash-text-style`: `Mobile/Body/Medium`; provenance: `figma-literal` at `510:16670`
-            - Fact `root-content-area-numbered-list-item-04-sub-item-01-dash-text-align`: `right`; provenance: `figma-literal` at `510:16670`
-            - Fact `root-content-area-numbered-list-item-04-sub-item-01-dash-fixed-width`: `42px`; provenance: `figma-literal` at `510:16670`
+            - Fact `reference-size`: `42×17px`; provenance: `figma-literal` at `510:16670`
+            - Fact `text-color`: `#00991F`; provenance: `figma-literal` at `510:16670`
+            - Fact `source-text`: `—`; provenance: `figma-literal` at `510:16670`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16670`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16670`
+            - Fact `font-size`: `12px`; provenance: `figma-literal` at `510:16670`
+            - Fact `text-align`: `right`; provenance: `figma-literal` at `510:16670`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16670`
+            - Fact `figma-style-id`: `S:8ad84dd262e81c148a758758a15bb9b15e8f30fe,`; provenance: `figma-literal` at `510:16670`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16670`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16670`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16670`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16670`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16670`
+            - Fact `figma-style-name`: `Mobile/Body/Medium`; provenance: `figma-literal` at `510:16670`
           - `root-content-area-numbered-list-item-04-sub-item-01-content` — role `content`; render `html-text`; visibility `always`
-            - Fact `root-content-area-numbered-list-item-04-sub-item-01-content-fill-color`: `#48494A`; provenance: `figma-literal` at `510:16671`
-            - Fact `root-content-area-numbered-list-item-04-sub-item-01-content-font-size`: `14px`; provenance: `figma-literal` at `510:16671`
-            - Fact `root-content-area-numbered-list-item-04-sub-item-01-content-line-height`: `140%`; provenance: `figma-literal` at `510:16671`
-            - Fact `root-content-area-numbered-list-item-04-sub-item-01-content-text-style`: `Mobile/Body/Large`; provenance: `figma-literal` at `510:16671`
+            - Fact `reference-size`: `198×60px`; provenance: `figma-literal` at `510:16671`
+            - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16671`
+            - Fact `source-text`: `В правом верхнем углу нажать на свое имя / номер телефона`; provenance: `figma-literal` at `510:16671`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16671`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16671`
+            - Fact `font-size`: `14px`; provenance: `figma-literal` at `510:16671`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16671`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16671`
+            - Fact `figma-style-id`: `S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,`; provenance: `figma-literal` at `510:16671`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16671`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16671`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16671`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16671`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16671`
+            - Fact `figma-style-name`: `Mobile/Body/Large`; provenance: `figma-literal` at `510:16671`
+        - `root-content-area-numbered-list-item-04-sub-item-02` — role `sub-item-02`; render `presentation-table`; visibility `always`
+          - Fact `reference-size`: `252×60px`; provenance: `figma-literal` at `510:16672`
+          - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `510:16672`
+          - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16672`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16672`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16672`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16672`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16672`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `510:16672`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16672`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16672`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16672`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16672`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16672`
+          - `root-content-area-numbered-list-item-04-sub-item-02-dash` — role `dash`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `42×17px`; provenance: `figma-literal` at `510:16673`
+            - Fact `text-color`: `#00991F`; provenance: `figma-literal` at `510:16673`
+            - Fact `source-text`: `—`; provenance: `figma-literal` at `510:16673`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16673`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16673`
+            - Fact `font-size`: `12px`; provenance: `figma-literal` at `510:16673`
+            - Fact `text-align`: `right`; provenance: `figma-literal` at `510:16673`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16673`
+            - Fact `figma-style-id`: `S:8ad84dd262e81c148a758758a15bb9b15e8f30fe,`; provenance: `figma-literal` at `510:16673`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16673`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16673`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16673`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16673`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16673`
+            - Fact `figma-style-name`: `Mobile/Body/Medium`; provenance: `figma-literal` at `510:16673`
+          - `root-content-area-numbered-list-item-04-sub-item-02-content` — role `content`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `198×34px`; provenance: `figma-literal` at `510:16674`
+            - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16674`
+            - Fact `source-text`: `В правом верхнем углу нажать на свое имя / номер телефона`; provenance: `figma-literal` at `510:16674`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16674`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16674`
+            - Fact `font-size`: `12px`; provenance: `figma-literal` at `510:16674`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16674`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16674`
+            - Fact `figma-style-id`: `S:8ad84dd262e81c148a758758a15bb9b15e8f30fe,`; provenance: `figma-literal` at `510:16674`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16674`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16674`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16674`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16674`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16674`
+            - Fact `figma-style-name`: `Mobile/Body/Medium`; provenance: `figma-literal` at `510:16674`
+        - `root-content-area-numbered-list-item-04-sub-item-03` — role `sub-item-03`; render `presentation-table`; visibility `always`
+          - Fact `reference-size`: `252×60px`; provenance: `figma-literal` at `510:16675`
+          - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `510:16675`
+          - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16675`
+          - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16675`
+          - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16675`
+          - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16675`
+          - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16675`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `510:16675`
+          - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16675`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16675`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16675`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16675`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16675`
+          - `root-content-area-numbered-list-item-04-sub-item-03-dash` — role `dash`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `42×17px`; provenance: `figma-literal` at `510:16676`
+            - Fact `text-color`: `#00991F`; provenance: `figma-literal` at `510:16676`
+            - Fact `source-text`: `—`; provenance: `figma-literal` at `510:16676`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16676`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16676`
+            - Fact `font-size`: `12px`; provenance: `figma-literal` at `510:16676`
+            - Fact `text-align`: `right`; provenance: `figma-literal` at `510:16676`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16676`
+            - Fact `figma-style-id`: `S:8ad84dd262e81c148a758758a15bb9b15e8f30fe,`; provenance: `figma-literal` at `510:16676`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16676`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16676`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16676`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16676`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16676`
+            - Fact `figma-style-name`: `Mobile/Body/Medium`; provenance: `figma-literal` at `510:16676`
+          - `root-content-area-numbered-list-item-04-sub-item-03-content` — role `content`; render `html-text`; visibility `always`
+            - Fact `reference-size`: `198×34px`; provenance: `figma-literal` at `510:16677`
+            - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `510:16677`
+            - Fact `source-text`: `В правом верхнем углу нажать на свое имя / номер телефона`; provenance: `figma-literal` at `510:16677`
+            - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16677`
+            - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16677`
+            - Fact `font-size`: `12px`; provenance: `figma-literal` at `510:16677`
+            - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16677`
+            - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16677`
+            - Fact `figma-style-id`: `S:8ad84dd262e81c148a758758a15bb9b15e8f30fe,`; provenance: `figma-literal` at `510:16677`
+            - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16677`
+            - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16677`
+            - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16677`
+            - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16677`
+            - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16677`
+            - Fact `figma-style-name`: `Mobile/Body/Medium`; provenance: `figma-literal` at `510:16677`
     - `root-content-area-alert` — role `alert`; render `presentation-table`; visibility property `show-alert` (`Show Alert`)
-      - Fact `root-content-area-alert-layout-direction`: `vertical`; provenance: `figma-literal` at `510:16679`
-      - Fact `root-content-area-alert-item-gap`: `4px`; provenance: `figma-literal` at `510:16679`
-      - Fact `root-content-area-alert-padding-top`: `16px`; provenance: `figma-literal` at `510:16679`
-      - Fact `root-content-area-alert-padding-right`: `16px`; provenance: `figma-literal` at `510:16679`
-      - Fact `root-content-area-alert-padding-bottom`: `16px`; provenance: `figma-literal` at `510:16679`
-      - Fact `root-content-area-alert-padding-left`: `16px`; provenance: `figma-literal` at `510:16679`
-      - Fact `root-content-area-alert-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `510:16679`
-      - Fact `root-content-area-alert-corner-radius`: `14px`; provenance: `figma-literal` at `510:16679`
-      - Fact `root-content-area-alert-fill-color`: `#FFF1C9`; provenance: `figma-literal` at `510:16679`
+      - Fact `reference-size`: `252×83px`; provenance: `figma-literal` at `510:16679`
+      - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `510:16679`
+      - Fact `layout-gap`: `4px`; provenance: `figma-literal` at `510:16679`
+      - Fact `padding-top`: `16px`; provenance: `figma-literal` at `510:16679`
+      - Fact `padding-right`: `16px`; provenance: `figma-literal` at `510:16679`
+      - Fact `padding-bottom`: `16px`; provenance: `figma-literal` at `510:16679`
+      - Fact `padding-left`: `16px`; provenance: `figma-literal` at `510:16679`
+      - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `510:16679`
+      - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16679`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16679`
+      - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `510:16679`
+      - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16679`
+      - Fact `border-radius`: `14px`; provenance: `figma-literal` at `510:16679`
+      - Fact `background`: `#FFF1C9`; provenance: `figma-literal` at `510:16679`
       - `root-content-area-alert-notice-link` — role `notice-link`; render `html-text`; visibility `always`
-        - Fact `root-content-area-alert-notice-link-fill-color`: `#AA7100`; provenance: `figma-literal` at `510:16680`
-        - Fact `root-content-area-alert-notice-link-text-style`: `Mobile/Body/Medium`; provenance: `figma-literal` at `510:16680`
-        - Fact `root-content-area-alert-notice-link-segment-1-color`: `#AA7100`; provenance: `figma-literal` at `510:16680`
-        - Fact `root-content-area-alert-notice-link-segment-2-color`: `#AA7100`; provenance: `figma-literal` at `510:16680`
-        - Fact `root-content-area-alert-notice-link-segment-2-decoration`: `underline`; provenance: `figma-literal` at `510:16680`
+        - Fact `reference-size`: `220×51px`; provenance: `figma-literal` at `510:16680`
+        - Fact `text-color`: `#AA7100`; provenance: `figma-literal` at `510:16680`
+        - Fact `source-text`: `Если вы ничего не меняли, прямо сейчас позвоните +7 (495) 122-20-88 или напишите на help@1cupis.ru`; provenance: `figma-literal` at `510:16680`
+        - Fact `font-size`: `12px`; provenance: `figma-literal` at `510:16680`
+        - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16680`
+        - Fact `figma-style-id`: `S:8ad84dd262e81c148a758758a15bb9b15e8f30fe,`; provenance: `figma-literal` at `510:16680`
+        - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16680`
+        - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16680`
+        - Fact `styled-text-segments`: `[{"start":0,"end":84,"characters":"Если вы ничего не меняли, прямо сейчас позвоните +7 (495) 122-20-88 или напишите на ","font_family":"Roboto","font_style":"Regular","font_size_px":12,"line_height":{"unit":"PERCENT","value":140},"text_decoration":"NONE","fills":[{"type":"solid","visible":true,"opacity":1,"color":"#AA7100"}]},{"start":84,"end":98,"characters":"help@1cupis.ru","font_family":"Roboto","font_style":"Regular","font_size_px":12,"line_height":{"unit":"PERCENT","value":140},"text_decoration":"UNDERLINE","fills":[{"type":"solid","visible":true,"opacity":1,"color":"#AA7100"}]}]`; provenance: `figma-literal` at `510:16680`
+        - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16680`
+        - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16680`
+        - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16680`
     - `root-content-area-disclaimer` — role `disclaimer`; render `presentation-table`; visibility property `show-disclaimer` (`Show Disclaimer`)
-      - Fact `root-content-area-disclaimer-layout-direction`: `vertical`; provenance: `figma-literal` at `510:16681`
-      - Fact `root-content-area-disclaimer-item-gap`: `12px`; provenance: `figma-literal` at `510:16681`
-      - Fact `root-content-area-disclaimer-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `510:16681`
+      - Fact `reference-size`: `252×119px`; provenance: `figma-literal` at `510:16681`
+      - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `510:16681`
+      - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `510:16681`
+      - Fact `padding-top`: `0px`; provenance: `figma-literal` at `510:16681`
+      - Fact `padding-right`: `0px`; provenance: `figma-literal` at `510:16681`
+      - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `510:16681`
+      - Fact `padding-left`: `0px`; provenance: `figma-literal` at `510:16681`
+      - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `510:16681`
+      - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `510:16681`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16681`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16681`
+      - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16681`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16681`
+      - `root-content-area-disclaimer-divider` — role `divider`; render `presentation-table`; visibility `always`
+        - Fact `reference-size`: `252×1px`; provenance: `figma-literal` at `510:16682`
+        - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `510:16682`
+        - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `510:16682`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `510:16682`
+        - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `510:16682`
+        - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `510:16682`
+        - Fact `border-radius`: `0px`; provenance: `figma-literal` at `510:16682`
+        - Fact `background`: `#DFDFE0`; provenance: `figma-literal` at `510:16682`
       - `root-content-area-disclaimer-disclaimer-text` — role `disclaimer-text`; render `html-text`; visibility `always`
-        - Fact `root-content-area-disclaimer-disclaimer-text-fill-color`: `#98999C`; provenance: `figma-literal` at `510:16683`
-        - Fact `root-content-area-disclaimer-disclaimer-text-font-size`: `12px`; provenance: `figma-literal` at `510:16683`
-        - Fact `root-content-area-disclaimer-disclaimer-text-line-height`: `140%`; provenance: `figma-literal` at `510:16683`
-        - Fact `root-content-area-disclaimer-disclaimer-text-text-style`: `Mobile/Caption`; provenance: `figma-literal` at `510:16683`
+        - Fact `reference-size`: `252×119px`; provenance: `figma-literal` at `510:16683`
+        - Fact `text-color`: `#98999C`; provenance: `figma-literal` at `510:16683`
+        - Fact `source-text`: `* В соответствии с требованиями подпункта 3 пункта 1 статьи 7 Федерального закона № 115-ФЗ от 07.08.2001 «О противодействии легализации (отмыванию) доходов, полученных преступным путем, и финансированию терроризма» (далее — Закон № 115-ФЗ)`; provenance: `figma-literal` at `510:16683`
+        - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `510:16683`
+        - Fact `font-style`: `Regular`; provenance: `figma-literal` at `510:16683`
+        - Fact `font-size`: `12px`; provenance: `figma-literal` at `510:16683`
+        - Fact `text-align`: `left`; provenance: `figma-literal` at `510:16683`
+        - Fact `text-decoration`: `none`; provenance: `figma-literal` at `510:16683`
+        - Fact `figma-style-id`: `S:374419cb8d39f8db69f1e4fa2fd20dcdc72abcce,`; provenance: `figma-literal` at `510:16683`
+        - Fact `line-height`: `140%`; provenance: `figma-literal` at `510:16683`
+        - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `510:16683`
+        - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `510:16683`
+        - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `510:16683`
+        - Fact `text-case`: `original`; provenance: `figma-literal` at `510:16683`
+        - Fact `figma-style-name`: `Mobile/Caption`; provenance: `figma-literal` at `510:16683`
 
 ### Properties and variants
 
@@ -8128,6 +11368,7 @@ CRITICAL
 ### Constraints and dependencies
 
 - Constraint `fixed-list-marker-columns` — scope `all`; kind `email-rendering`; severity `critical`; Description critical: Number и dash занимают фиксированные колонки 22px и 42px Mobile / 32px и 64px Desktop; промежуток до HTML-текста 12px в обеих версиях.
+- Constraint `alert-inline-phone-link` — scope `all`; kind `interaction`; severity `critical`: В alert-notice-link подстрока «+7 (495) 122-20-88» внутри первого текстового фрагмента должна быть отдельной ссылкой с href="tel:+74951222088"; оставшийся текст этого фрагмента не делать ссылкой. Подчёркнутый второй фрагмент «help@1cupis.ru» — отдельная ссылка на адрес из данных письма, не объединять оба фрагмента одним href.
 
 ### Output contract classification
 
@@ -8174,258 +11415,638 @@ CRITICAL
 ### Desktop
 
 - `root` — role `block`; render `presentation-table`; visibility `always`
-  - Fact `root-layout-direction`: `vertical`; provenance: `figma-literal` at `491:22454`
-  - Fact `root-padding-top`: `24px`; provenance: `figma-literal` at `491:22454`
-  - Fact `root-padding-right`: `24px`; provenance: `figma-literal` at `491:22454`
-  - Fact `root-padding-left`: `24px`; provenance: `figma-literal` at `491:22454`
-  - Fact `root-clips-content`: `true`; provenance: `figma-literal` at `491:22454`
+  - Fact `reference-size`: `600×1204px`; provenance: `figma-literal` at `491:22454`
+  - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `491:22454`
+  - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `491:22454`
+  - Fact `padding-top`: `24px`; provenance: `figma-literal` at `491:22454`
+  - Fact `padding-right`: `24px`; provenance: `figma-literal` at `491:22454`
+  - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `491:22454`
+  - Fact `padding-left`: `24px`; provenance: `figma-literal` at `491:22454`
+  - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `491:22454`
+  - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `491:22454`
+  - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `491:22454`
+  - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `491:22454`
+  - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `491:22454`
+  - Fact `border-radius`: `0px`; provenance: `figma-literal` at `491:22454`
   - `root-card` — role `card`; render `presentation-table`; visibility `always`
-    - Fact `root-card-layout-direction`: `vertical`; provenance: `figma-literal` at `619:21431`
-    - Fact `root-card-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `619:21431`
-    - Fact `root-card-corner-radius`: `26px`; provenance: `figma-literal` at `619:21431`
-    - Fact `root-card-clips-content`: `true`; provenance: `figma-literal` at `619:21431`
+    - Fact `reference-size`: `552×1180px`; provenance: `figma-literal` at `619:21431`
+    - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `619:21431`
+    - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `619:21431`
+    - Fact `padding-top`: `0px`; provenance: `figma-literal` at `619:21431`
+    - Fact `padding-right`: `0px`; provenance: `figma-literal` at `619:21431`
+    - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `619:21431`
+    - Fact `padding-left`: `0px`; provenance: `figma-literal` at `619:21431`
+    - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `619:21431`
+    - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `619:21431`
+    - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `619:21431`
+    - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `619:21431`
+    - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `619:21431`
+    - Fact `border-radius`: `26px`; provenance: `figma-literal` at `619:21431`
     - `root-card-status-area` — role `status-area`; render `presentation-table`; visibility `always`
-      - Fact `root-card-status-area-layout-direction`: `vertical`; provenance: `figma-literal` at `491:22404`
-      - Fact `root-card-status-area-item-gap`: `24px`; provenance: `figma-literal` at `491:22404`
-      - Fact `root-card-status-area-padding-top`: `32px`; provenance: `figma-literal` at `491:22404`
-      - Fact `root-card-status-area-padding-right`: `32px`; provenance: `figma-literal` at `491:22404`
-      - Fact `root-card-status-area-padding-bottom`: `32px`; provenance: `figma-literal` at `491:22404`
-      - Fact `root-card-status-area-padding-left`: `32px`; provenance: `figma-literal` at `491:22404`
-      - Fact `root-card-status-area-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `491:22404`
-      - Fact `root-card-status-area-clips-content`: `true`; provenance: `figma-literal` at `491:22404`
-      - Fact `root-card-status-area-fill-color`: `#FFFFFF`; provenance: `figma-literal` at `491:22404`
+      - Fact `reference-size`: `552×136px`; provenance: `figma-literal` at `491:22404`
+      - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `491:22404`
+      - Fact `layout-gap`: `24px`; provenance: `figma-literal` at `491:22404`
+      - Fact `padding-top`: `32px`; provenance: `figma-literal` at `491:22404`
+      - Fact `padding-right`: `32px`; provenance: `figma-literal` at `491:22404`
+      - Fact `padding-bottom`: `32px`; provenance: `figma-literal` at `491:22404`
+      - Fact `padding-left`: `32px`; provenance: `figma-literal` at `491:22404`
+      - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `491:22404`
+      - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `491:22404`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `491:22404`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `491:22404`
+      - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `491:22404`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `491:22404`
+      - Fact `background`: `#FFFFFF`; provenance: `figma-literal` at `491:22404`
       - `root-card-status-area-status-row` — role `status-row`; render `presentation-table`; visibility `always`
-        - Fact `root-card-status-area-status-row-layout-direction`: `horizontal`; provenance: `figma-literal` at `491:22405`
-        - Fact `root-card-status-area-status-row-item-gap`: `24px`; provenance: `figma-literal` at `491:22405`
-        - Fact `root-card-status-area-status-row-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `491:22405`
+        - Fact `reference-size`: `488×72px`; provenance: `figma-literal` at `491:22405`
+        - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `491:22405`
+        - Fact `layout-gap`: `24px`; provenance: `figma-literal` at `491:22405`
+        - Fact `padding-top`: `0px`; provenance: `figma-literal` at `491:22405`
+        - Fact `padding-right`: `0px`; provenance: `figma-literal` at `491:22405`
+        - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `491:22405`
+        - Fact `padding-left`: `0px`; provenance: `figma-literal` at `491:22405`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `491:22405`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `491:22405`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `491:22405`
+        - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `491:22405`
+        - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `491:22405`
+        - Fact `border-radius`: `0px`; provenance: `figma-literal` at `491:22405`
         - `root-card-status-area-status-row-status-badge-positive` — role `status-badge-positive`; render `direct-image`; visibility `always`; asset `status-badge-positive`
-          - Fact `root-card-status-area-status-row-status-badge-positive-corner-radius`: `56.000003814697266px`; provenance: `figma-literal` at `491:22406`
-          - Fact `root-card-status-area-status-row-status-badge-positive-clips-content`: `true`; provenance: `figma-literal` at `491:22406`
-          - Fact `root-card-status-area-status-row-status-badge-positive-display-width`: `72px`; provenance: `figma-literal` at `491:22406`
-          - Fact `root-card-status-area-status-row-status-badge-positive-display-height`: `72px`; provenance: `figma-literal` at `491:22406`
+          - Fact `reference-size`: `72×72px`; provenance: `figma-literal` at `491:22406`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `491:22406`
+          - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `491:22406`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `491:22406`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `491:22406`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `491:22406`
+          - Fact `border-radius`: `56px`; provenance: `figma-literal` at `491:22406`
         - `root-card-status-area-status-row-heading` — role `heading`; render `html-text`; visibility `always`
-          - Fact `root-card-status-area-status-row-heading-fill-color`: `#000000`; provenance: `figma-literal` at `491:22407`
-          - Fact `root-card-status-area-status-row-heading-font-size`: `26px`; provenance: `figma-literal` at `491:22407`
-          - Fact `root-card-status-area-status-row-heading-line-height`: `120%`; provenance: `figma-literal` at `491:22407`
-          - Fact `root-card-status-area-status-row-heading-text-style`: `Desktop/Heading`; provenance: `figma-literal` at `491:22407`
+          - Fact `reference-size`: `392×62px`; provenance: `figma-literal` at `491:22407`
+          - Fact `text-color`: `#000000`; provenance: `figma-literal` at `491:22407`
+          - Fact `source-text`: `Обновление персональных данных`; provenance: `figma-literal` at `491:22407`
+          - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `491:22407`
+          - Fact `font-style`: `SemiBold`; provenance: `figma-literal` at `491:22407`
+          - Fact `font-size`: `26px`; provenance: `figma-literal` at `491:22407`
+          - Fact `text-align`: `left`; provenance: `figma-literal` at `491:22407`
+          - Fact `text-decoration`: `none`; provenance: `figma-literal` at `491:22407`
+          - Fact `figma-style-id`: `S:2d908d3c1b5ff810b297f4a37aac1ab4161bbdb5,`; provenance: `figma-literal` at `491:22407`
+          - Fact `line-height`: `120%`; provenance: `figma-literal` at `491:22407`
+          - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `491:22407`
+          - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `491:22407`
+          - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `491:22407`
+          - Fact `text-case`: `original`; provenance: `figma-literal` at `491:22407`
+          - Fact `figma-style-name`: `Desktop/Heading`; provenance: `figma-literal` at `491:22407`
     - `root-card-divider` — role `divider`; render `presentation-table`; visibility `always`
-      - Fact `root-card-divider-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `491:22408`
-      - Fact `root-card-divider-clips-content`: `true`; provenance: `figma-literal` at `491:22408`
-      - Fact `root-card-divider-fill-color`: `#DFDFE0`; provenance: `figma-literal` at `491:22408`
-      - Fact `root-card-divider-height`: `1px`; provenance: `figma-literal` at `491:22408`
+      - Fact `reference-size`: `552×1px`; provenance: `figma-literal` at `491:22408`
+      - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `491:22408`
+      - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `491:22408`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `491:22408`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `491:22408`
+      - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `491:22408`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `491:22408`
+      - Fact `background`: `#DFDFE0`; provenance: `figma-literal` at `491:22408`
     - `root-card-body-area` — role `body-area`; render `presentation-table`; visibility `always`
-      - Fact `root-card-body-area-layout-direction`: `vertical`; provenance: `figma-literal` at `491:22409`
-      - Fact `root-card-body-area-item-gap`: `24px`; provenance: `figma-literal` at `491:22409`
-      - Fact `root-card-body-area-padding-top`: `32px`; provenance: `figma-literal` at `491:22409`
-      - Fact `root-card-body-area-padding-right`: `32px`; provenance: `figma-literal` at `491:22409`
-      - Fact `root-card-body-area-padding-bottom`: `32px`; provenance: `figma-literal` at `491:22409`
-      - Fact `root-card-body-area-padding-left`: `32px`; provenance: `figma-literal` at `491:22409`
-      - Fact `root-card-body-area-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `491:22409`
-      - Fact `root-card-body-area-clips-content`: `true`; provenance: `figma-literal` at `491:22409`
-      - Fact `root-card-body-area-fill-color`: `#FFFFFF`; provenance: `figma-literal` at `491:22409`
+      - Fact `reference-size`: `552×1043px`; provenance: `figma-literal` at `491:22409`
+      - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `491:22409`
+      - Fact `layout-gap`: `24px`; provenance: `figma-literal` at `491:22409`
+      - Fact `padding-top`: `32px`; provenance: `figma-literal` at `491:22409`
+      - Fact `padding-right`: `32px`; provenance: `figma-literal` at `491:22409`
+      - Fact `padding-bottom`: `32px`; provenance: `figma-literal` at `491:22409`
+      - Fact `padding-left`: `32px`; provenance: `figma-literal` at `491:22409`
+      - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `491:22409`
+      - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `491:22409`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `491:22409`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `491:22409`
+      - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `491:22409`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `491:22409`
+      - Fact `background`: `#FFFFFF`; provenance: `figma-literal` at `491:22409`
       - `root-card-body-area-text-content` — role `text-content`; render `presentation-table`; visibility `always`
-        - Fact `root-card-body-area-text-content-layout-direction`: `vertical`; provenance: `figma-literal` at `491:22410`
-        - Fact `root-card-body-area-text-content-item-gap`: `12px`; provenance: `figma-literal` at `491:22410`
-        - Fact `root-card-body-area-text-content-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `491:22410`
+        - Fact `reference-size`: `488×467px`; provenance: `figma-literal` at `491:22410`
+        - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `491:22410`
+        - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `491:22410`
+        - Fact `padding-top`: `0px`; provenance: `figma-literal` at `491:22410`
+        - Fact `padding-right`: `0px`; provenance: `figma-literal` at `491:22410`
+        - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `491:22410`
+        - Fact `padding-left`: `0px`; provenance: `figma-literal` at `491:22410`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `491:22410`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `491:22410`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `491:22410`
+        - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `491:22410`
+        - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `491:22410`
+        - Fact `border-radius`: `0px`; provenance: `figma-literal` at `491:22410`
         - `root-card-body-area-text-content-greeting` — role `greeting`; render `html-text`; visibility `always`
-          - Fact `root-card-body-area-text-content-greeting-fill-color`: `#48494A`; provenance: `figma-literal` at `491:22411`
-          - Fact `root-card-body-area-text-content-greeting-font-size`: `18px`; provenance: `figma-literal` at `491:22411`
-          - Fact `root-card-body-area-text-content-greeting-line-height`: `140%`; provenance: `figma-literal` at `491:22411`
-          - Fact `root-card-body-area-text-content-greeting-text-style`: `Desktop/Body/Large`; provenance: `figma-literal` at `491:22411`
+          - Fact `reference-size`: `488×25px`; provenance: `figma-literal` at `491:22411`
+          - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `491:22411`
+          - Fact `source-text`: `Уважаемый, $user$!`; provenance: `figma-literal` at `491:22411`
+          - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `491:22411`
+          - Fact `font-style`: `Regular`; provenance: `figma-literal` at `491:22411`
+          - Fact `font-size`: `18px`; provenance: `figma-literal` at `491:22411`
+          - Fact `text-align`: `left`; provenance: `figma-literal` at `491:22411`
+          - Fact `text-decoration`: `none`; provenance: `figma-literal` at `491:22411`
+          - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `491:22411`
+          - Fact `line-height`: `140%`; provenance: `figma-literal` at `491:22411`
+          - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `491:22411`
+          - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `491:22411`
+          - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `491:22411`
+          - Fact `text-case`: `original`; provenance: `figma-literal` at `491:22411`
+          - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `491:22411`
         - `root-card-body-area-text-content-body-01` — role `body-01`; render `html-text`; visibility `always`
-          - Fact `root-card-body-area-text-content-body-01-fill-color`: `#48494A`; provenance: `figma-literal` at `491:22412`
-          - Fact `root-card-body-area-text-content-body-01-font-size`: `18px`; provenance: `figma-literal` at `491:22412`
-          - Fact `root-card-body-area-text-content-body-01-line-height`: `140%`; provenance: `figma-literal` at `491:22412`
-          - Fact `root-card-body-area-text-content-body-01-text-style`: `Desktop/Body/Large`; provenance: `figma-literal` at `491:22412`
+          - Fact `reference-size`: `488×50px`; provenance: `figma-literal` at `491:22412`
+          - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `491:22412`
+          - Fact `source-text`: `Вы являетесь клиентом ЕДИНОГО ЦУПИС более года. Мы благодарны Вам за это.`; provenance: `figma-literal` at `491:22412`
+          - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `491:22412`
+          - Fact `font-style`: `Regular`; provenance: `figma-literal` at `491:22412`
+          - Fact `font-size`: `18px`; provenance: `figma-literal` at `491:22412`
+          - Fact `text-align`: `left`; provenance: `figma-literal` at `491:22412`
+          - Fact `text-decoration`: `none`; provenance: `figma-literal` at `491:22412`
+          - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `491:22412`
+          - Fact `line-height`: `140%`; provenance: `figma-literal` at `491:22412`
+          - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `491:22412`
+          - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `491:22412`
+          - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `491:22412`
+          - Fact `text-case`: `original`; provenance: `figma-literal` at `491:22412`
+          - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `491:22412`
         - `root-card-body-area-text-content-body-02` — role `body-02`; render `html-text`; visibility `always`
-          - Fact `root-card-body-area-text-content-body-02-fill-color`: `#48494A`; provenance: `figma-literal` at `491:22413`
-          - Fact `root-card-body-area-text-content-body-02-font-size`: `18px`; provenance: `figma-literal` at `491:22413`
-          - Fact `root-card-body-area-text-content-body-02-line-height`: `140%`; provenance: `figma-literal` at `491:22413`
-          - Fact `root-card-body-area-text-content-body-02-text-style`: `Desktop/Body/Large`; provenance: `figma-literal` at `491:22413`
+          - Fact `reference-size`: `488×150px`; provenance: `figma-literal` at `491:22413`
+          - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `491:22413`
+          - Fact `source-text`: `В соответствии с законодательством Российской Федерации* мы, как кредитная организация, должны обновить Ваши данные. Если Вы получили новый паспорт или поменяли адрес регистрации, просим Вас предоставить новые сведения до конца текущего месяца через форму обратной связи Первого ЦУПИС.`; provenance: `figma-literal` at `491:22413`
+          - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `491:22413`
+          - Fact `font-style`: `Regular`; provenance: `figma-literal` at `491:22413`
+          - Fact `font-size`: `18px`; provenance: `figma-literal` at `491:22413`
+          - Fact `text-align`: `left`; provenance: `figma-literal` at `491:22413`
+          - Fact `text-decoration`: `none`; provenance: `figma-literal` at `491:22413`
+          - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `491:22413`
+          - Fact `line-height`: `140%`; provenance: `figma-literal` at `491:22413`
+          - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `491:22413`
+          - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `491:22413`
+          - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `491:22413`
+          - Fact `text-case`: `original`; provenance: `figma-literal` at `491:22413`
+          - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `491:22413`
         - `root-card-body-area-text-content-warning-text` — role `warning-text`; render `html-text`; visibility `always`
-          - Fact `root-card-body-area-text-content-warning-text-fill-color`: `#48494A`; provenance: `figma-literal` at `491:22414`
-          - Fact `root-card-body-area-text-content-warning-text-font-size`: `18px`; provenance: `figma-literal` at `491:22414`
-          - Fact `root-card-body-area-text-content-warning-text-line-height`: `140%`; provenance: `figma-literal` at `491:22414`
-          - Fact `root-card-body-area-text-content-warning-text-text-style`: `Desktop/Body/Large`; provenance: `figma-literal` at `491:22414`
+          - Fact `reference-size`: `488×50px`; provenance: `figma-literal` at `491:22414`
+          - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `491:22414`
+          - Fact `source-text`: `Если информация не будет предоставлена, мы учтем, что Ваши персональные данные не изменились.`; provenance: `figma-literal` at `491:22414`
+          - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `491:22414`
+          - Fact `font-style`: `Regular`; provenance: `figma-literal` at `491:22414`
+          - Fact `font-size`: `18px`; provenance: `figma-literal` at `491:22414`
+          - Fact `text-align`: `left`; provenance: `figma-literal` at `491:22414`
+          - Fact `text-decoration`: `none`; provenance: `figma-literal` at `491:22414`
+          - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `491:22414`
+          - Fact `line-height`: `140%`; provenance: `figma-literal` at `491:22414`
+          - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `491:22414`
+          - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `491:22414`
+          - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `491:22414`
+          - Fact `text-case`: `original`; provenance: `figma-literal` at `491:22414`
+          - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `491:22414`
         - `root-card-body-area-text-content-sign-off` — role `sign-off`; render `html-text`; visibility `always`
-          - Fact `root-card-body-area-text-content-sign-off-fill-color`: `#48494A`; provenance: `figma-literal` at `491:22415`
-          - Fact `root-card-body-area-text-content-sign-off-font-size`: `18px`; provenance: `figma-literal` at `491:22415`
-          - Fact `root-card-body-area-text-content-sign-off-line-height`: `140%`; provenance: `figma-literal` at `491:22415`
-          - Fact `root-card-body-area-text-content-sign-off-text-style`: `Desktop/Body/Large`; provenance: `figma-literal` at `491:22415`
+          - Fact `reference-size`: `488×50px`; provenance: `figma-literal` at `491:22415`
+          - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `491:22415`
+          - Fact `source-text`: `С уважением,
+команда Первого ЦУПИС`; provenance: `figma-literal` at `491:22415`
+          - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `491:22415`
+          - Fact `font-style`: `Regular`; provenance: `figma-literal` at `491:22415`
+          - Fact `font-size`: `18px`; provenance: `figma-literal` at `491:22415`
+          - Fact `text-align`: `left`; provenance: `figma-literal` at `491:22415`
+          - Fact `text-decoration`: `none`; provenance: `figma-literal` at `491:22415`
+          - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `491:22415`
+          - Fact `line-height`: `140%`; provenance: `figma-literal` at `491:22415`
+          - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `491:22415`
+          - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `491:22415`
+          - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `491:22415`
+          - Fact `text-case`: `original`; provenance: `figma-literal` at `491:22415`
+          - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `491:22415`
         - `root-card-body-area-text-content-action-link` — role `action-link`; render `html-link`; visibility `always`
-          - Fact `root-card-body-area-text-content-action-link-fill-color`: `#18B037`; provenance: `figma-literal` at `494:19991`
-          - Fact `root-card-body-area-text-content-action-link-font-size`: `18px`; provenance: `figma-literal` at `494:19991`
-          - Fact `root-card-body-area-text-content-action-link-line-height`: `140%`; provenance: `figma-literal` at `494:19991`
-          - Fact `root-card-body-area-text-content-action-link-text-style`: `Desktop/Body/Large`; provenance: `figma-literal` at `494:19991`
+          - Fact `reference-size`: `488×50px`; provenance: `figma-literal` at `494:19991`
+          - Fact `text-color`: `#18B037`; provenance: `figma-literal` at `494:19991`
+          - Fact `source-text`: `https://1cupis.ru/verifyemail/Kepsx6ETs9w+ZoCW4ZKAuYoqpsJ3Fim1Xo2aL2o2LTE=z`; provenance: `figma-literal` at `494:19991`
+          - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `494:19991`
+          - Fact `font-style`: `Regular`; provenance: `figma-literal` at `494:19991`
+          - Fact `font-size`: `18px`; provenance: `figma-literal` at `494:19991`
+          - Fact `text-align`: `left`; provenance: `figma-literal` at `494:19991`
+          - Fact `text-decoration`: `none`; provenance: `figma-literal` at `494:19991`
+          - Fact `figma-style-id`: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`; provenance: `figma-literal` at `494:19991`
+          - Fact `line-height`: `140%`; provenance: `figma-literal` at `494:19991`
+          - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `494:19991`
+          - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `494:19991`
+          - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `494:19991`
+          - Fact `text-case`: `original`; provenance: `figma-literal` at `494:19991`
+          - Fact `figma-style-name`: `Desktop/Body/Large`; provenance: `figma-literal` at `494:19991`
         - `root-card-body-area-text-content-link-expiry` — role `link-expiry`; render `html-text`; visibility `always`
-          - Fact `root-card-body-area-text-content-link-expiry-fill-color`: `#98999C`; provenance: `figma-literal` at `494:19985`
-          - Fact `root-card-body-area-text-content-link-expiry-font-size`: `14px`; provenance: `figma-literal` at `494:19985`
-          - Fact `root-card-body-area-text-content-link-expiry-line-height`: `140%`; provenance: `figma-literal` at `494:19985`
-          - Fact `root-card-body-area-text-content-link-expiry-text-style`: `Desktop/Caption`; provenance: `figma-literal` at `494:19985`
+          - Fact `reference-size`: `488×20px`; provenance: `figma-literal` at `494:19985`
+          - Fact `text-color`: `#98999C`; provenance: `figma-literal` at `494:19985`
+          - Fact `source-text`: `Ссылка действует до дд.мм.гггг.`; provenance: `figma-literal` at `494:19985`
+          - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `494:19985`
+          - Fact `font-style`: `Regular`; provenance: `figma-literal` at `494:19985`
+          - Fact `font-size`: `14px`; provenance: `figma-literal` at `494:19985`
+          - Fact `text-align`: `left`; provenance: `figma-literal` at `494:19985`
+          - Fact `text-decoration`: `none`; provenance: `figma-literal` at `494:19985`
+          - Fact `figma-style-id`: `S:3d171f9763dcbcd3a181c50411d876e67e072e75,`; provenance: `figma-literal` at `494:19985`
+          - Fact `line-height`: `140%`; provenance: `figma-literal` at `494:19985`
+          - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `494:19985`
+          - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `494:19985`
+          - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `494:19985`
+          - Fact `text-case`: `original`; provenance: `figma-literal` at `494:19985`
+          - Fact `figma-style-name`: `Desktop/Caption`; provenance: `figma-literal` at `494:19985`
       - `root-card-body-area-suspicious-operation-details` — role `suspicious-operation-details`; render `nested-component`; visibility property `show-operation-description` (`Show Operation Description`); component `details-suspicious-operation` (`Details/Suspicious-Operation`)
-        - Fact `root-card-body-area-suspicious-operation-details-layout-direction`: `vertical`; provenance: `figma-literal` at `497:25970`
-        - Fact `root-card-body-area-suspicious-operation-details-item-gap`: `24px`; provenance: `figma-literal` at `497:25970`
-        - Fact `root-card-body-area-suspicious-operation-details-padding-top`: `24px`; provenance: `figma-literal` at `497:25970`
-        - Fact `root-card-body-area-suspicious-operation-details-padding-right`: `24px`; provenance: `figma-literal` at `497:25970`
-        - Fact `root-card-body-area-suspicious-operation-details-padding-bottom`: `24px`; provenance: `figma-literal` at `497:25970`
-        - Fact `root-card-body-area-suspicious-operation-details-padding-left`: `24px`; provenance: `figma-literal` at `497:25970`
-        - Fact `root-card-body-area-suspicious-operation-details-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `497:25970`
-        - Fact `root-card-body-area-suspicious-operation-details-corner-radius`: `18px`; provenance: `figma-literal` at `497:25970`
-        - Fact `root-card-body-area-suspicious-operation-details-fill-color`: `#F8F8FA`; provenance: `figma-literal` at `497:25970`
-        - Fact `root-card-body-area-suspicious-operation-details-instance-viewport`: `Desktop`; provenance: `figma-literal` at `497:25970`
+        - Fact `reference-size`: `488×192px`; provenance: `figma-literal` at `497:25970`
+        - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `497:25970`
+        - Fact `layout-gap`: `24px`; provenance: `figma-literal` at `497:25970`
+        - Fact `padding-top`: `24px`; provenance: `figma-literal` at `497:25970`
+        - Fact `padding-right`: `24px`; provenance: `figma-literal` at `497:25970`
+        - Fact `padding-bottom`: `24px`; provenance: `figma-literal` at `497:25970`
+        - Fact `padding-left`: `24px`; provenance: `figma-literal` at `497:25970`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `497:25970`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `497:25970`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `497:25970`
+        - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `497:25970`
+        - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `497:25970`
+        - Fact `border-radius`: `18px`; provenance: `figma-literal` at `497:25970`
+        - Fact `background`: `#F8F8FA`; provenance: `figma-literal` at `497:25970`
+        - Fact `instance-viewport`: `desktop`; provenance: `figma-literal` at `497:25970`
       - `root-card-body-area-alert` — role `alert`; render `presentation-table`; visibility property `show-alert` (`Show Alert`)
-        - Fact `root-card-body-area-alert-layout-direction`: `horizontal`; provenance: `figma-literal` at `491:22450`
-        - Fact `root-card-body-area-alert-padding-top`: `24px`; provenance: `figma-literal` at `491:22450`
-        - Fact `root-card-body-area-alert-padding-right`: `24px`; provenance: `figma-literal` at `491:22450`
-        - Fact `root-card-body-area-alert-padding-bottom`: `24px`; provenance: `figma-literal` at `491:22450`
-        - Fact `root-card-body-area-alert-padding-left`: `24px`; provenance: `figma-literal` at `491:22450`
-        - Fact `root-card-body-area-alert-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `491:22450`
-        - Fact `root-card-body-area-alert-corner-radius`: `18px`; provenance: `figma-literal` at `491:22450`
-        - Fact `root-card-body-area-alert-fill-color`: `#FFF1C9`; provenance: `figma-literal` at `491:22450`
+        - Fact `reference-size`: `488×88px`; provenance: `figma-literal` at `491:22450`
+        - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `491:22450`
+        - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `491:22450`
+        - Fact `padding-top`: `24px`; provenance: `figma-literal` at `491:22450`
+        - Fact `padding-right`: `24px`; provenance: `figma-literal` at `491:22450`
+        - Fact `padding-bottom`: `24px`; provenance: `figma-literal` at `491:22450`
+        - Fact `padding-left`: `24px`; provenance: `figma-literal` at `491:22450`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `491:22450`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `491:22450`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `491:22450`
+        - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `491:22450`
+        - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `491:22450`
+        - Fact `border-radius`: `18px`; provenance: `figma-literal` at `491:22450`
+        - Fact `background`: `#FFF1C9`; provenance: `figma-literal` at `491:22450`
         - `root-card-body-area-alert-notice-link` — role `notice-link`; render `html-text`; visibility `always`
-          - Fact `root-card-body-area-alert-notice-link-fill-color`: `#AA7100`; provenance: `figma-literal` at `491:22451`
-          - Fact `root-card-body-area-alert-notice-link-text-style`: `Desktop/Caption`; provenance: `figma-literal` at `491:22451`
-          - Fact `root-card-body-area-alert-notice-link-segment-1-color`: `#AA7100`; provenance: `figma-literal` at `491:22451`
-          - Fact `root-card-body-area-alert-notice-link-segment-2-color`: `#AA7100`; provenance: `figma-literal` at `491:22451`
-          - Fact `root-card-body-area-alert-notice-link-segment-2-decoration`: `underline`; provenance: `figma-literal` at `491:22451`
+          - Fact `reference-size`: `440×40px`; provenance: `figma-literal` at `491:22451`
+          - Fact `text-color`: `#AA7100`; provenance: `figma-literal` at `491:22451`
+          - Fact `source-text`: `Если вы ничего не меняли, прямо сейчас позвоните +7 (495) 122-20-88 или напишите на help@1cupis.ru`; provenance: `figma-literal` at `491:22451`
+          - Fact `font-size`: `14px`; provenance: `figma-literal` at `491:22451`
+          - Fact `text-align`: `left`; provenance: `figma-literal` at `491:22451`
+          - Fact `figma-style-id`: `S:3d171f9763dcbcd3a181c50411d876e67e072e75,`; provenance: `figma-literal` at `491:22451`
+          - Fact `line-height`: `140%`; provenance: `figma-literal` at `491:22451`
+          - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `491:22451`
+          - Fact `styled-text-segments`: `[{"start":0,"end":84,"characters":"Если вы ничего не меняли, прямо сейчас позвоните +7 (495) 122-20-88 или напишите на ","font_family":"Roboto","font_style":"Regular","font_size_px":14,"line_height":{"unit":"PERCENT","value":140},"text_decoration":"NONE","fills":[{"type":"solid","visible":true,"opacity":1,"color":"#AA7100"}]},{"start":84,"end":98,"characters":"help@1cupis.ru","font_family":"Roboto","font_style":"Regular","font_size_px":14,"line_height":{"unit":"PERCENT","value":140},"text_decoration":"UNDERLINE","fills":[{"type":"solid","visible":true,"opacity":1,"color":"#AA7100"}]}]`; provenance: `figma-literal` at `491:22451`
+          - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `491:22451`
+          - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `491:22451`
+          - Fact `text-case`: `original`; provenance: `figma-literal` at `491:22451`
       - `root-card-body-area-disclaimer` — role `disclaimer`; render `presentation-table`; visibility property `show-disclaimer` (`Show Disclaimer`)
-        - Fact `root-card-body-area-disclaimer-layout-direction`: `vertical`; provenance: `figma-literal` at `491:22455`
-        - Fact `root-card-body-area-disclaimer-item-gap`: `12px`; provenance: `figma-literal` at `491:22455`
-        - Fact `root-card-body-area-disclaimer-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `491:22455`
+        - Fact `reference-size`: `488×160px`; provenance: `figma-literal` at `491:22455`
+        - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `491:22455`
+        - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `491:22455`
+        - Fact `padding-top`: `0px`; provenance: `figma-literal` at `491:22455`
+        - Fact `padding-right`: `0px`; provenance: `figma-literal` at `491:22455`
+        - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `491:22455`
+        - Fact `padding-left`: `0px`; provenance: `figma-literal` at `491:22455`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `491:22455`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `491:22455`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `491:22455`
+        - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `491:22455`
+        - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `491:22455`
+        - Fact `border-radius`: `0px`; provenance: `figma-literal` at `491:22455`
+        - `root-card-body-area-disclaimer-divider` — role `divider`; render `presentation-table`; visibility `always`
+          - Fact `reference-size`: `488×1px`; provenance: `figma-literal` at `491:22416`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `491:22416`
+          - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `491:22416`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `491:22416`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `491:22416`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `491:22416`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `491:22416`
+          - Fact `background`: `#DFDFE0`; provenance: `figma-literal` at `491:22416`
         - `root-card-body-area-disclaimer-disclaimer-text` — role `disclaimer-text`; render `html-text`; visibility `always`
-          - Fact `root-card-body-area-disclaimer-disclaimer-text-fill-color`: `#98999C`; provenance: `figma-literal` at `491:22417`
-          - Fact `root-card-body-area-disclaimer-disclaimer-text-font-size`: `14px`; provenance: `figma-literal` at `491:22417`
-          - Fact `root-card-body-area-disclaimer-disclaimer-text-line-height`: `140%`; provenance: `figma-literal` at `491:22417`
-          - Fact `root-card-body-area-disclaimer-disclaimer-text-text-style`: `Desktop/Caption`; provenance: `figma-literal` at `491:22417`
+          - Fact `reference-size`: `488×160px`; provenance: `figma-literal` at `491:22417`
+          - Fact `text-color`: `#98999C`; provenance: `figma-literal` at `491:22417`
+          - Fact `source-text`: `* В соответствии с требованиями подпункта 3 пункта 1 статьи 7 Федерального закона № 115-ФЗ от 07.08.2001 «О противодействии легализации (отмыванию) доходов, полученных преступным путем, и финансированию терроризма» (далее — Закон № 115-ФЗ) ООО НКО «Мобильная карта», являющееся центром учета переводов интерактивных ставок букмекерских контор или тотализаторов (далее — Первый ЦУПИС), обязано не реже одного раза в год обновлять идентификационные сведения о клиентах.`; provenance: `figma-literal` at `491:22417`
+          - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `491:22417`
+          - Fact `font-style`: `Regular`; provenance: `figma-literal` at `491:22417`
+          - Fact `font-size`: `14px`; provenance: `figma-literal` at `491:22417`
+          - Fact `text-align`: `left`; provenance: `figma-literal` at `491:22417`
+          - Fact `text-decoration`: `none`; provenance: `figma-literal` at `491:22417`
+          - Fact `figma-style-id`: `S:3d171f9763dcbcd3a181c50411d876e67e072e75,`; provenance: `figma-literal` at `491:22417`
+          - Fact `line-height`: `140%`; provenance: `figma-literal` at `491:22417`
+          - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `491:22417`
+          - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `491:22417`
+          - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `491:22417`
+          - Fact `text-case`: `original`; provenance: `figma-literal` at `491:22417`
+          - Fact `figma-style-name`: `Desktop/Caption`; provenance: `figma-literal` at `491:22417`
 
 ### Mobile
 
 - `root` — role `block`; render `presentation-table`; visibility `always`
-  - Fact `root-layout-direction`: `vertical`; provenance: `figma-literal` at `497:26054`
-  - Fact `root-padding-top`: `16px`; provenance: `figma-literal` at `497:26054`
-  - Fact `root-padding-right`: `16px`; provenance: `figma-literal` at `497:26054`
-  - Fact `root-padding-left`: `16px`; provenance: `figma-literal` at `497:26054`
-  - Fact `root-clips-content`: `true`; provenance: `figma-literal` at `497:26054`
+  - Fact `reference-size`: `328×1375px`; provenance: `figma-literal` at `497:26054`
+  - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `497:26054`
+  - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `497:26054`
+  - Fact `padding-top`: `16px`; provenance: `figma-literal` at `497:26054`
+  - Fact `padding-right`: `16px`; provenance: `figma-literal` at `497:26054`
+  - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `497:26054`
+  - Fact `padding-left`: `16px`; provenance: `figma-literal` at `497:26054`
+  - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `497:26054`
+  - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `497:26054`
+  - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `497:26054`
+  - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `497:26054`
+  - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `497:26054`
+  - Fact `border-radius`: `0px`; provenance: `figma-literal` at `497:26054`
   - `root-card` — role `card`; render `presentation-table`; visibility `always`
-    - Fact `root-card-layout-direction`: `vertical`; provenance: `figma-literal` at `619:21432`
-    - Fact `root-card-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `619:21432`
-    - Fact `root-card-corner-radius`: `22px`; provenance: `figma-literal` at `619:21432`
-    - Fact `root-card-clips-content`: `true`; provenance: `figma-literal` at `619:21432`
+    - Fact `reference-size`: `296×1359px`; provenance: `figma-literal` at `619:21432`
+    - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `619:21432`
+    - Fact `layout-gap`: `0px`; provenance: `figma-literal` at `619:21432`
+    - Fact `padding-top`: `0px`; provenance: `figma-literal` at `619:21432`
+    - Fact `padding-right`: `0px`; provenance: `figma-literal` at `619:21432`
+    - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `619:21432`
+    - Fact `padding-left`: `0px`; provenance: `figma-literal` at `619:21432`
+    - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `619:21432`
+    - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `619:21432`
+    - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `619:21432`
+    - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `619:21432`
+    - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `619:21432`
+    - Fact `border-radius`: `22px`; provenance: `figma-literal` at `619:21432`
     - `root-card-status-area` — role `status-area`; render `presentation-table`; visibility `always`
-      - Fact `root-card-status-area-layout-direction`: `vertical`; provenance: `figma-literal` at `497:25764`
-      - Fact `root-card-status-area-item-gap`: `16px`; provenance: `figma-literal` at `497:25764`
-      - Fact `root-card-status-area-padding-top`: `22px`; provenance: `figma-literal` at `497:25764`
-      - Fact `root-card-status-area-padding-right`: `22px`; provenance: `figma-literal` at `497:25764`
-      - Fact `root-card-status-area-padding-bottom`: `22px`; provenance: `figma-literal` at `497:25764`
-      - Fact `root-card-status-area-padding-left`: `22px`; provenance: `figma-literal` at `497:25764`
-      - Fact `root-card-status-area-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `497:25764`
-      - Fact `root-card-status-area-clips-content`: `true`; provenance: `figma-literal` at `497:25764`
-      - Fact `root-card-status-area-fill-color`: `#FFFFFF`; provenance: `figma-literal` at `497:25764`
+      - Fact `reference-size`: `296×176px`; provenance: `figma-literal` at `497:25764`
+      - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `497:25764`
+      - Fact `layout-gap`: `16px`; provenance: `figma-literal` at `497:25764`
+      - Fact `padding-top`: `22px`; provenance: `figma-literal` at `497:25764`
+      - Fact `padding-right`: `22px`; provenance: `figma-literal` at `497:25764`
+      - Fact `padding-bottom`: `22px`; provenance: `figma-literal` at `497:25764`
+      - Fact `padding-left`: `22px`; provenance: `figma-literal` at `497:25764`
+      - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `497:25764`
+      - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `497:25764`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `497:25764`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `497:25764`
+      - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `497:25764`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `497:25764`
+      - Fact `background`: `#FFFFFF`; provenance: `figma-literal` at `497:25764`
       - `root-card-status-area-status-row` — role `status-row`; render `presentation-table`; visibility `always`
-        - Fact `root-card-status-area-status-row-layout-direction`: `vertical`; provenance: `figma-literal` at `497:25765`
-        - Fact `root-card-status-area-status-row-item-gap`: `16px`; provenance: `figma-literal` at `497:25765`
-        - Fact `root-card-status-area-status-row-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `497:25765`
+        - Fact `reference-size`: `252×132px`; provenance: `figma-literal` at `497:25765`
+        - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `497:25765`
+        - Fact `layout-gap`: `16px`; provenance: `figma-literal` at `497:25765`
+        - Fact `padding-top`: `0px`; provenance: `figma-literal` at `497:25765`
+        - Fact `padding-right`: `0px`; provenance: `figma-literal` at `497:25765`
+        - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `497:25765`
+        - Fact `padding-left`: `0px`; provenance: `figma-literal` at `497:25765`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `497:25765`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `497:25765`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `497:25765`
+        - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `497:25765`
+        - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `497:25765`
+        - Fact `border-radius`: `0px`; provenance: `figma-literal` at `497:25765`
         - `root-card-status-area-status-row-status-badge-positive` — role `status-badge-positive`; render `direct-image`; visibility `always`; asset `status-badge-positive`
-          - Fact `root-card-status-area-status-row-status-badge-positive-corner-radius`: `56.000003814697266px`; provenance: `figma-literal` at `497:25809`
-          - Fact `root-card-status-area-status-row-status-badge-positive-clips-content`: `true`; provenance: `figma-literal` at `497:25809`
-          - Fact `root-card-status-area-status-row-status-badge-positive-display-width`: `72px`; provenance: `figma-literal` at `497:25809`
-          - Fact `root-card-status-area-status-row-status-badge-positive-display-height`: `72px`; provenance: `figma-literal` at `497:25809`
+          - Fact `reference-size`: `72×72px`; provenance: `figma-literal` at `497:25809`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `497:25809`
+          - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `497:25809`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `497:25809`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `497:25809`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `497:25809`
+          - Fact `border-radius`: `56px`; provenance: `figma-literal` at `497:25809`
         - `root-card-status-area-status-row-heading` — role `heading`; render `html-text`; visibility `always`
-          - Fact `root-card-status-area-status-row-heading-fill-color`: `#000000`; provenance: `figma-literal` at `497:25770`
-          - Fact `root-card-status-area-status-row-heading-font-size`: `18px`; provenance: `figma-literal` at `497:25770`
-          - Fact `root-card-status-area-status-row-heading-line-height`: `120%`; provenance: `figma-literal` at `497:25770`
-          - Fact `root-card-status-area-status-row-heading-text-style`: `Mobile/Heading`; provenance: `figma-literal` at `497:25770`
-          - Fact `root-card-status-area-status-row-heading-text-align`: `center`; provenance: `figma-literal` at `497:25770`
+          - Fact `reference-size`: `252×44px`; provenance: `figma-literal` at `497:25770`
+          - Fact `text-color`: `#000000`; provenance: `figma-literal` at `497:25770`
+          - Fact `source-text`: `Обновление персональных данных`; provenance: `figma-literal` at `497:25770`
+          - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `497:25770`
+          - Fact `font-style`: `SemiBold`; provenance: `figma-literal` at `497:25770`
+          - Fact `font-size`: `18px`; provenance: `figma-literal` at `497:25770`
+          - Fact `text-align`: `center`; provenance: `figma-literal` at `497:25770`
+          - Fact `text-decoration`: `none`; provenance: `figma-literal` at `497:25770`
+          - Fact `figma-style-id`: `S:31421a8c479c960e9e5fcdf32b0717960340b772,`; provenance: `figma-literal` at `497:25770`
+          - Fact `line-height`: `120%`; provenance: `figma-literal` at `497:25770`
+          - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `497:25770`
+          - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `497:25770`
+          - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `497:25770`
+          - Fact `text-case`: `original`; provenance: `figma-literal` at `497:25770`
+          - Fact `figma-style-name`: `Mobile/Heading`; provenance: `figma-literal` at `497:25770`
     - `root-card-divider` — role `divider`; render `presentation-table`; visibility `always`
-      - Fact `root-card-divider-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `497:25773`
-      - Fact `root-card-divider-clips-content`: `true`; provenance: `figma-literal` at `497:25773`
-      - Fact `root-card-divider-fill-color`: `#DFDFE0`; provenance: `figma-literal` at `497:25773`
-      - Fact `root-card-divider-height`: `1px`; provenance: `figma-literal` at `497:25773`
+      - Fact `reference-size`: `296×1px`; provenance: `figma-literal` at `497:25773`
+      - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `497:25773`
+      - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `497:25773`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `497:25773`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `497:25773`
+      - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `497:25773`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `497:25773`
+      - Fact `background`: `#DFDFE0`; provenance: `figma-literal` at `497:25773`
     - `root-card-body-area` — role `body-area`; render `presentation-table`; visibility `always`
-      - Fact `root-card-body-area-layout-direction`: `vertical`; provenance: `figma-literal` at `497:25774`
-      - Fact `root-card-body-area-item-gap`: `16px`; provenance: `figma-literal` at `497:25774`
-      - Fact `root-card-body-area-padding-top`: `22px`; provenance: `figma-literal` at `497:25774`
-      - Fact `root-card-body-area-padding-right`: `22px`; provenance: `figma-literal` at `497:25774`
-      - Fact `root-card-body-area-padding-bottom`: `22px`; provenance: `figma-literal` at `497:25774`
-      - Fact `root-card-body-area-padding-left`: `22px`; provenance: `figma-literal` at `497:25774`
-      - Fact `root-card-body-area-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `497:25774`
-      - Fact `root-card-body-area-clips-content`: `true`; provenance: `figma-literal` at `497:25774`
-      - Fact `root-card-body-area-fill-color`: `#FFFFFF`; provenance: `figma-literal` at `497:25774`
+      - Fact `reference-size`: `296×1182px`; provenance: `figma-literal` at `497:25774`
+      - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `497:25774`
+      - Fact `layout-gap`: `16px`; provenance: `figma-literal` at `497:25774`
+      - Fact `padding-top`: `22px`; provenance: `figma-literal` at `497:25774`
+      - Fact `padding-right`: `22px`; provenance: `figma-literal` at `497:25774`
+      - Fact `padding-bottom`: `22px`; provenance: `figma-literal` at `497:25774`
+      - Fact `padding-left`: `22px`; provenance: `figma-literal` at `497:25774`
+      - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `497:25774`
+      - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `497:25774`
+      - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `497:25774`
+      - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `497:25774`
+      - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `497:25774`
+      - Fact `border-radius`: `0px`; provenance: `figma-literal` at `497:25774`
+      - Fact `background`: `#FFFFFF`; provenance: `figma-literal` at `497:25774`
       - `root-card-body-area-text-content` — role `text-content`; render `presentation-table`; visibility `always`
-        - Fact `root-card-body-area-text-content-layout-direction`: `vertical`; provenance: `figma-literal` at `497:25821`
-        - Fact `root-card-body-area-text-content-item-gap`: `8px`; provenance: `figma-literal` at `497:25821`
-        - Fact `root-card-body-area-text-content-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `497:25821`
+        - Fact `reference-size`: `252×525px`; provenance: `figma-literal` at `497:25821`
+        - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `497:25821`
+        - Fact `layout-gap`: `8px`; provenance: `figma-literal` at `497:25821`
+        - Fact `padding-top`: `0px`; provenance: `figma-literal` at `497:25821`
+        - Fact `padding-right`: `0px`; provenance: `figma-literal` at `497:25821`
+        - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `497:25821`
+        - Fact `padding-left`: `0px`; provenance: `figma-literal` at `497:25821`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `497:25821`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `497:25821`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `497:25821`
+        - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `497:25821`
+        - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `497:25821`
+        - Fact `border-radius`: `0px`; provenance: `figma-literal` at `497:25821`
         - `root-card-body-area-text-content-greeting` — role `greeting`; render `html-text`; visibility `always`
-          - Fact `root-card-body-area-text-content-greeting-fill-color`: `#48494A`; provenance: `figma-literal` at `497:25822`
-          - Fact `root-card-body-area-text-content-greeting-font-size`: `14px`; provenance: `figma-literal` at `497:25822`
-          - Fact `root-card-body-area-text-content-greeting-line-height`: `140%`; provenance: `figma-literal` at `497:25822`
-          - Fact `root-card-body-area-text-content-greeting-text-style`: `Mobile/Body/Large`; provenance: `figma-literal` at `497:25822`
+          - Fact `reference-size`: `252×20px`; provenance: `figma-literal` at `497:25822`
+          - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `497:25822`
+          - Fact `source-text`: `Уважаемый, $user$!`; provenance: `figma-literal` at `497:25822`
+          - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `497:25822`
+          - Fact `font-style`: `Regular`; provenance: `figma-literal` at `497:25822`
+          - Fact `font-size`: `14px`; provenance: `figma-literal` at `497:25822`
+          - Fact `text-align`: `left`; provenance: `figma-literal` at `497:25822`
+          - Fact `text-decoration`: `none`; provenance: `figma-literal` at `497:25822`
+          - Fact `figma-style-id`: `S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,`; provenance: `figma-literal` at `497:25822`
+          - Fact `line-height`: `140%`; provenance: `figma-literal` at `497:25822`
+          - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `497:25822`
+          - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `497:25822`
+          - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `497:25822`
+          - Fact `text-case`: `original`; provenance: `figma-literal` at `497:25822`
+          - Fact `figma-style-name`: `Mobile/Body/Large`; provenance: `figma-literal` at `497:25822`
         - `root-card-body-area-text-content-body-01` — role `body-01`; render `html-text`; visibility `always`
-          - Fact `root-card-body-area-text-content-body-01-fill-color`: `#48494A`; provenance: `figma-literal` at `497:25823`
-          - Fact `root-card-body-area-text-content-body-01-font-size`: `14px`; provenance: `figma-literal` at `497:25823`
-          - Fact `root-card-body-area-text-content-body-01-line-height`: `140%`; provenance: `figma-literal` at `497:25823`
-          - Fact `root-card-body-area-text-content-body-01-text-style`: `Mobile/Body/Large`; provenance: `figma-literal` at `497:25823`
+          - Fact `reference-size`: `252×60px`; provenance: `figma-literal` at `497:25823`
+          - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `497:25823`
+          - Fact `source-text`: `Вы являетесь клиентом ЕДИНОГО ЦУПИС более года. Мы благодарны Вам за это.`; provenance: `figma-literal` at `497:25823`
+          - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `497:25823`
+          - Fact `font-style`: `Regular`; provenance: `figma-literal` at `497:25823`
+          - Fact `font-size`: `14px`; provenance: `figma-literal` at `497:25823`
+          - Fact `text-align`: `left`; provenance: `figma-literal` at `497:25823`
+          - Fact `text-decoration`: `none`; provenance: `figma-literal` at `497:25823`
+          - Fact `figma-style-id`: `S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,`; provenance: `figma-literal` at `497:25823`
+          - Fact `line-height`: `140%`; provenance: `figma-literal` at `497:25823`
+          - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `497:25823`
+          - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `497:25823`
+          - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `497:25823`
+          - Fact `text-case`: `original`; provenance: `figma-literal` at `497:25823`
+          - Fact `figma-style-name`: `Mobile/Body/Large`; provenance: `figma-literal` at `497:25823`
         - `root-card-body-area-text-content-body-02` — role `body-02`; render `html-text`; visibility `always`
-          - Fact `root-card-body-area-text-content-body-02-fill-color`: `#48494A`; provenance: `figma-literal` at `497:25824`
-          - Fact `root-card-body-area-text-content-body-02-font-size`: `14px`; provenance: `figma-literal` at `497:25824`
-          - Fact `root-card-body-area-text-content-body-02-line-height`: `140%`; provenance: `figma-literal` at `497:25824`
-          - Fact `root-card-body-area-text-content-body-02-text-style`: `Mobile/Body/Large`; provenance: `figma-literal` at `497:25824`
+          - Fact `reference-size`: `252×200px`; provenance: `figma-literal` at `497:25824`
+          - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `497:25824`
+          - Fact `source-text`: `В соответствии с законодательством Российской Федерации* мы, как кредитная организация, должны обновить Ваши данные. Если Вы получили новый паспорт или поменяли адрес регистрации, просим Вас предоставить новые сведения до конца текущего месяца через форму обратной связи Первого ЦУПИС.`; provenance: `figma-literal` at `497:25824`
+          - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `497:25824`
+          - Fact `font-style`: `Regular`; provenance: `figma-literal` at `497:25824`
+          - Fact `font-size`: `14px`; provenance: `figma-literal` at `497:25824`
+          - Fact `text-align`: `left`; provenance: `figma-literal` at `497:25824`
+          - Fact `text-decoration`: `none`; provenance: `figma-literal` at `497:25824`
+          - Fact `figma-style-id`: `S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,`; provenance: `figma-literal` at `497:25824`
+          - Fact `line-height`: `140%`; provenance: `figma-literal` at `497:25824`
+          - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `497:25824`
+          - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `497:25824`
+          - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `497:25824`
+          - Fact `text-case`: `original`; provenance: `figma-literal` at `497:25824`
+          - Fact `figma-style-name`: `Mobile/Body/Large`; provenance: `figma-literal` at `497:25824`
         - `root-card-body-area-text-content-warning-text` — role `warning-text`; render `html-text`; visibility `always`
-          - Fact `root-card-body-area-text-content-warning-text-fill-color`: `#48494A`; provenance: `figma-literal` at `497:25826`
-          - Fact `root-card-body-area-text-content-warning-text-font-size`: `14px`; provenance: `figma-literal` at `497:25826`
-          - Fact `root-card-body-area-text-content-warning-text-line-height`: `140%`; provenance: `figma-literal` at `497:25826`
-          - Fact `root-card-body-area-text-content-warning-text-text-style`: `Mobile/Body/Large`; provenance: `figma-literal` at `497:25826`
+          - Fact `reference-size`: `252×80px`; provenance: `figma-literal` at `497:25826`
+          - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `497:25826`
+          - Fact `source-text`: `Если информация не будет предоставлена, мы учтем, что Ваши персональные данные не изменились.`; provenance: `figma-literal` at `497:25826`
+          - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `497:25826`
+          - Fact `font-style`: `Regular`; provenance: `figma-literal` at `497:25826`
+          - Fact `font-size`: `14px`; provenance: `figma-literal` at `497:25826`
+          - Fact `text-align`: `left`; provenance: `figma-literal` at `497:25826`
+          - Fact `text-decoration`: `none`; provenance: `figma-literal` at `497:25826`
+          - Fact `figma-style-id`: `S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,`; provenance: `figma-literal` at `497:25826`
+          - Fact `line-height`: `140%`; provenance: `figma-literal` at `497:25826`
+          - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `497:25826`
+          - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `497:25826`
+          - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `497:25826`
+          - Fact `text-case`: `original`; provenance: `figma-literal` at `497:25826`
+          - Fact `figma-style-name`: `Mobile/Body/Large`; provenance: `figma-literal` at `497:25826`
         - `root-card-body-area-text-content-sign-off` — role `sign-off`; render `html-text`; visibility `always`
-          - Fact `root-card-body-area-text-content-sign-off-fill-color`: `#48494A`; provenance: `figma-literal` at `497:25828`
-          - Fact `root-card-body-area-text-content-sign-off-font-size`: `14px`; provenance: `figma-literal` at `497:25828`
-          - Fact `root-card-body-area-text-content-sign-off-line-height`: `140%`; provenance: `figma-literal` at `497:25828`
-          - Fact `root-card-body-area-text-content-sign-off-text-style`: `Mobile/Body/Large`; provenance: `figma-literal` at `497:25828`
+          - Fact `reference-size`: `252×40px`; provenance: `figma-literal` at `497:25828`
+          - Fact `text-color`: `#48494A`; provenance: `figma-literal` at `497:25828`
+          - Fact `source-text`: `С уважением,
+команда Первого ЦУПИС`; provenance: `figma-literal` at `497:25828`
+          - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `497:25828`
+          - Fact `font-style`: `Regular`; provenance: `figma-literal` at `497:25828`
+          - Fact `font-size`: `14px`; provenance: `figma-literal` at `497:25828`
+          - Fact `text-align`: `left`; provenance: `figma-literal` at `497:25828`
+          - Fact `text-decoration`: `none`; provenance: `figma-literal` at `497:25828`
+          - Fact `figma-style-id`: `S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,`; provenance: `figma-literal` at `497:25828`
+          - Fact `line-height`: `140%`; provenance: `figma-literal` at `497:25828`
+          - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `497:25828`
+          - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `497:25828`
+          - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `497:25828`
+          - Fact `text-case`: `original`; provenance: `figma-literal` at `497:25828`
+          - Fact `figma-style-name`: `Mobile/Body/Large`; provenance: `figma-literal` at `497:25828`
         - `root-card-body-area-text-content-action-link` — role `action-link`; render `html-link`; visibility `always`
-          - Fact `root-card-body-area-text-content-action-link-fill-color`: `#18B037`; provenance: `figma-literal` at `497:25830`
-          - Fact `root-card-body-area-text-content-action-link-font-size`: `14px`; provenance: `figma-literal` at `497:25830`
-          - Fact `root-card-body-area-text-content-action-link-line-height`: `140%`; provenance: `figma-literal` at `497:25830`
-          - Fact `root-card-body-area-text-content-action-link-text-style`: `Mobile/Body/Large`; provenance: `figma-literal` at `497:25830`
+          - Fact `reference-size`: `252×60px`; provenance: `figma-literal` at `497:25830`
+          - Fact `text-color`: `#18B037`; provenance: `figma-literal` at `497:25830`
+          - Fact `source-text`: `https://1cupis.ru/verifyemail/Kepsx6ETs9w+ZoCW4ZKAuYoqpsJ3Fim1Xo2aL2o2LTE=z`; provenance: `figma-literal` at `497:25830`
+          - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `497:25830`
+          - Fact `font-style`: `Regular`; provenance: `figma-literal` at `497:25830`
+          - Fact `font-size`: `14px`; provenance: `figma-literal` at `497:25830`
+          - Fact `text-align`: `left`; provenance: `figma-literal` at `497:25830`
+          - Fact `text-decoration`: `none`; provenance: `figma-literal` at `497:25830`
+          - Fact `figma-style-id`: `S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,`; provenance: `figma-literal` at `497:25830`
+          - Fact `line-height`: `140%`; provenance: `figma-literal` at `497:25830`
+          - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `497:25830`
+          - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `497:25830`
+          - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `497:25830`
+          - Fact `text-case`: `original`; provenance: `figma-literal` at `497:25830`
+          - Fact `figma-style-name`: `Mobile/Body/Large`; provenance: `figma-literal` at `497:25830`
         - `root-card-body-area-text-content-link-expiry` — role `link-expiry`; render `html-text`; visibility `always`
-          - Fact `root-card-body-area-text-content-link-expiry-fill-color`: `#98999C`; provenance: `figma-literal` at `497:25832`
-          - Fact `root-card-body-area-text-content-link-expiry-font-size`: `12px`; provenance: `figma-literal` at `497:25832`
-          - Fact `root-card-body-area-text-content-link-expiry-line-height`: `140%`; provenance: `figma-literal` at `497:25832`
-          - Fact `root-card-body-area-text-content-link-expiry-text-style`: `Mobile/Caption`; provenance: `figma-literal` at `497:25832`
+          - Fact `reference-size`: `252×17px`; provenance: `figma-literal` at `497:25832`
+          - Fact `text-color`: `#98999C`; provenance: `figma-literal` at `497:25832`
+          - Fact `source-text`: `Ссылка действует до дд.мм.гггг.`; provenance: `figma-literal` at `497:25832`
+          - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `497:25832`
+          - Fact `font-style`: `Regular`; provenance: `figma-literal` at `497:25832`
+          - Fact `font-size`: `12px`; provenance: `figma-literal` at `497:25832`
+          - Fact `text-align`: `left`; provenance: `figma-literal` at `497:25832`
+          - Fact `text-decoration`: `none`; provenance: `figma-literal` at `497:25832`
+          - Fact `figma-style-id`: `S:374419cb8d39f8db69f1e4fa2fd20dcdc72abcce,`; provenance: `figma-literal` at `497:25832`
+          - Fact `line-height`: `140%`; provenance: `figma-literal` at `497:25832`
+          - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `497:25832`
+          - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `497:25832`
+          - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `497:25832`
+          - Fact `text-case`: `original`; provenance: `figma-literal` at `497:25832`
+          - Fact `figma-style-name`: `Mobile/Caption`; provenance: `figma-literal` at `497:25832`
       - `root-card-body-area-suspicious-operation-details` — role `suspicious-operation-details`; render `nested-component`; visibility property `show-operation-description` (`Show Operation Description`); component `details-suspicious-operation` (`Details/Suspicious-Operation`)
-        - Fact `root-card-body-area-suspicious-operation-details-layout-direction`: `vertical`; provenance: `figma-literal` at `497:25956`
-        - Fact `root-card-body-area-suspicious-operation-details-item-gap`: `16px`; provenance: `figma-literal` at `497:25956`
-        - Fact `root-card-body-area-suspicious-operation-details-padding-top`: `16px`; provenance: `figma-literal` at `497:25956`
-        - Fact `root-card-body-area-suspicious-operation-details-padding-right`: `16px`; provenance: `figma-literal` at `497:25956`
-        - Fact `root-card-body-area-suspicious-operation-details-padding-bottom`: `16px`; provenance: `figma-literal` at `497:25956`
-        - Fact `root-card-body-area-suspicious-operation-details-padding-left`: `16px`; provenance: `figma-literal` at `497:25956`
-        - Fact `root-card-body-area-suspicious-operation-details-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `497:25956`
-        - Fact `root-card-body-area-suspicious-operation-details-corner-radius`: `14px`; provenance: `figma-literal` at `497:25956`
-        - Fact `root-card-body-area-suspicious-operation-details-fill-color`: `#F8F8FA`; provenance: `figma-literal` at `497:25956`
-        - Fact `root-card-body-area-suspicious-operation-details-instance-viewport`: `Mobile`; provenance: `figma-literal` at `497:25956`
+        - Fact `reference-size`: `252×244px`; provenance: `figma-literal` at `497:25956`
+        - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `497:25956`
+        - Fact `layout-gap`: `16px`; provenance: `figma-literal` at `497:25956`
+        - Fact `padding-top`: `16px`; provenance: `figma-literal` at `497:25956`
+        - Fact `padding-right`: `16px`; provenance: `figma-literal` at `497:25956`
+        - Fact `padding-bottom`: `16px`; provenance: `figma-literal` at `497:25956`
+        - Fact `padding-left`: `16px`; provenance: `figma-literal` at `497:25956`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `497:25956`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `497:25956`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `497:25956`
+        - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `497:25956`
+        - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `497:25956`
+        - Fact `border-radius`: `14px`; provenance: `figma-literal` at `497:25956`
+        - Fact `background`: `#F8F8FA`; provenance: `figma-literal` at `497:25956`
+        - Fact `instance-viewport`: `mobile`; provenance: `figma-literal` at `497:25956`
       - `root-card-body-area-alert` — role `alert`; render `presentation-table`; visibility property `show-alert` (`Show Alert`)
-        - Fact `root-card-body-area-alert-layout-direction`: `vertical`; provenance: `figma-literal` at `497:25776`
-        - Fact `root-card-body-area-alert-item-gap`: `4px`; provenance: `figma-literal` at `497:25776`
-        - Fact `root-card-body-area-alert-padding-top`: `16px`; provenance: `figma-literal` at `497:25776`
-        - Fact `root-card-body-area-alert-padding-right`: `16px`; provenance: `figma-literal` at `497:25776`
-        - Fact `root-card-body-area-alert-padding-bottom`: `16px`; provenance: `figma-literal` at `497:25776`
-        - Fact `root-card-body-area-alert-padding-left`: `16px`; provenance: `figma-literal` at `497:25776`
-        - Fact `root-card-body-area-alert-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `497:25776`
-        - Fact `root-card-body-area-alert-corner-radius`: `14px`; provenance: `figma-literal` at `497:25776`
-        - Fact `root-card-body-area-alert-fill-color`: `#FFF1C9`; provenance: `figma-literal` at `497:25776`
+        - Fact `reference-size`: `252×83px`; provenance: `figma-literal` at `497:25776`
+        - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `497:25776`
+        - Fact `layout-gap`: `4px`; provenance: `figma-literal` at `497:25776`
+        - Fact `padding-top`: `16px`; provenance: `figma-literal` at `497:25776`
+        - Fact `padding-right`: `16px`; provenance: `figma-literal` at `497:25776`
+        - Fact `padding-bottom`: `16px`; provenance: `figma-literal` at `497:25776`
+        - Fact `padding-left`: `16px`; provenance: `figma-literal` at `497:25776`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `497:25776`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `497:25776`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `497:25776`
+        - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `497:25776`
+        - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `497:25776`
+        - Fact `border-radius`: `14px`; provenance: `figma-literal` at `497:25776`
+        - Fact `background`: `#FFF1C9`; provenance: `figma-literal` at `497:25776`
         - `root-card-body-area-alert-notice-link` — role `notice-link`; render `html-text`; visibility `always`
-          - Fact `root-card-body-area-alert-notice-link-fill-color`: `#AA7100`; provenance: `figma-literal` at `497:25778`
-          - Fact `root-card-body-area-alert-notice-link-text-style`: `Mobile/Body/Medium`; provenance: `figma-literal` at `497:25778`
-          - Fact `root-card-body-area-alert-notice-link-segment-1-color`: `#AA7100`; provenance: `figma-literal` at `497:25778`
-          - Fact `root-card-body-area-alert-notice-link-segment-2-color`: `#AA7100`; provenance: `figma-literal` at `497:25778`
-          - Fact `root-card-body-area-alert-notice-link-segment-2-decoration`: `underline`; provenance: `figma-literal` at `497:25778`
+          - Fact `reference-size`: `220×51px`; provenance: `figma-literal` at `497:25778`
+          - Fact `text-color`: `#AA7100`; provenance: `figma-literal` at `497:25778`
+          - Fact `source-text`: `Если вы ничего не меняли, прямо сейчас позвоните +7 (495) 122-20-88 или напишите на help@1cupis.ru`; provenance: `figma-literal` at `497:25778`
+          - Fact `font-size`: `12px`; provenance: `figma-literal` at `497:25778`
+          - Fact `text-align`: `left`; provenance: `figma-literal` at `497:25778`
+          - Fact `figma-style-id`: `S:8ad84dd262e81c148a758758a15bb9b15e8f30fe,`; provenance: `figma-literal` at `497:25778`
+          - Fact `line-height`: `140%`; provenance: `figma-literal` at `497:25778`
+          - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `497:25778`
+          - Fact `styled-text-segments`: `[{"start":0,"end":84,"characters":"Если вы ничего не меняли, прямо сейчас позвоните +7 (495) 122-20-88 или напишите на ","font_family":"Roboto","font_style":"Regular","font_size_px":12,"line_height":{"unit":"PERCENT","value":140},"text_decoration":"NONE","fills":[{"type":"solid","visible":true,"opacity":1,"color":"#AA7100"}]},{"start":84,"end":98,"characters":"help@1cupis.ru","font_family":"Roboto","font_style":"Regular","font_size_px":12,"line_height":{"unit":"PERCENT","value":140},"text_decoration":"UNDERLINE","fills":[{"type":"solid","visible":true,"opacity":1,"color":"#AA7100"}]}]`; provenance: `figma-literal` at `497:25778`
+          - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `497:25778`
+          - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `497:25778`
+          - Fact `text-case`: `original`; provenance: `figma-literal` at `497:25778`
       - `root-card-body-area-disclaimer` — role `disclaimer`; render `presentation-table`; visibility property `show-disclaimer` (`Show Disclaimer`)
-        - Fact `root-card-body-area-disclaimer-layout-direction`: `vertical`; provenance: `figma-literal` at `497:25834`
-        - Fact `root-card-body-area-disclaimer-item-gap`: `12px`; provenance: `figma-literal` at `497:25834`
-        - Fact `root-card-body-area-disclaimer-horizontal-sizing`: `fill-parent`; provenance: `figma-literal` at `497:25834`
+        - Fact `reference-size`: `252×238px`; provenance: `figma-literal` at `497:25834`
+        - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `497:25834`
+        - Fact `layout-gap`: `12px`; provenance: `figma-literal` at `497:25834`
+        - Fact `padding-top`: `0px`; provenance: `figma-literal` at `497:25834`
+        - Fact `padding-right`: `0px`; provenance: `figma-literal` at `497:25834`
+        - Fact `padding-bottom`: `0px`; provenance: `figma-literal` at `497:25834`
+        - Fact `padding-left`: `0px`; provenance: `figma-literal` at `497:25834`
+        - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `497:25834`
+        - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `497:25834`
+        - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `497:25834`
+        - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `497:25834`
+        - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `497:25834`
+        - Fact `border-radius`: `0px`; provenance: `figma-literal` at `497:25834`
+        - `root-card-body-area-disclaimer-divider` — role `divider`; render `presentation-table`; visibility `always`
+          - Fact `reference-size`: `252×1px`; provenance: `figma-literal` at `497:25835`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `497:25835`
+          - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `497:25835`
+          - Fact `layout-wrap`: `no_wrap`; provenance: `figma-literal` at `497:25835`
+          - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `497:25835`
+          - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `497:25835`
+          - Fact `border-radius`: `0px`; provenance: `figma-literal` at `497:25835`
+          - Fact `background`: `#DFDFE0`; provenance: `figma-literal` at `497:25835`
         - `root-card-body-area-disclaimer-disclaimer-text` — role `disclaimer-text`; render `html-text`; visibility `always`
-          - Fact `root-card-body-area-disclaimer-disclaimer-text-fill-color`: `#98999C`; provenance: `figma-literal` at `497:25836`
-          - Fact `root-card-body-area-disclaimer-disclaimer-text-font-size`: `12px`; provenance: `figma-literal` at `497:25836`
-          - Fact `root-card-body-area-disclaimer-disclaimer-text-line-height`: `140%`; provenance: `figma-literal` at `497:25836`
-          - Fact `root-card-body-area-disclaimer-disclaimer-text-text-style`: `Mobile/Caption`; provenance: `figma-literal` at `497:25836`
+          - Fact `reference-size`: `252×238px`; provenance: `figma-literal` at `497:25836`
+          - Fact `text-color`: `#98999C`; provenance: `figma-literal` at `497:25836`
+          - Fact `source-text`: `* В соответствии с требованиями подпункта 3 пункта 1 статьи 7 Федерального закона № 115-ФЗ от 07.08.2001 «О противодействии легализации (отмыванию) доходов, полученных преступным путем, и финансированию терроризма» (далее — Закон № 115-ФЗ) ООО НКО «Мобильная карта», являющееся центром учета переводов интерактивных ставок букмекерских контор или тотализаторов (далее — Первый ЦУПИС), обязано не реже одного раза в год обновлять идентификационные сведения о клиентах.`; provenance: `figma-literal` at `497:25836`
+          - Fact `font-family`: `Roboto`; provenance: `figma-literal` at `497:25836`
+          - Fact `font-style`: `Regular`; provenance: `figma-literal` at `497:25836`
+          - Fact `font-size`: `12px`; provenance: `figma-literal` at `497:25836`
+          - Fact `text-align`: `left`; provenance: `figma-literal` at `497:25836`
+          - Fact `text-decoration`: `none`; provenance: `figma-literal` at `497:25836`
+          - Fact `figma-style-id`: `S:374419cb8d39f8db69f1e4fa2fd20dcdc72abcce,`; provenance: `figma-literal` at `497:25836`
+          - Fact `line-height`: `140%`; provenance: `figma-literal` at `497:25836`
+          - Fact `letter-spacing`: `0%`; provenance: `figma-literal` at `497:25836`
+          - Fact `text-auto-resize`: `height`; provenance: `figma-literal` at `497:25836`
+          - Fact `vertical-text-align`: `top`; provenance: `figma-literal` at `497:25836`
+          - Fact `text-case`: `original`; provenance: `figma-literal` at `497:25836`
+          - Fact `figma-style-name`: `Mobile/Caption`; provenance: `figma-literal` at `497:25836`
 
 ### Properties and variants
 
