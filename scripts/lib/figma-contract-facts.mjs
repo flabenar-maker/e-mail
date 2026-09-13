@@ -89,8 +89,14 @@ function contractFactPaths(record) {
   return result;
 }
 
+function canonicalFigmaNumber(value) {
+  if (typeof value !== "number" || !Number.isFinite(value)) return value;
+  const nearestInteger = Math.round(value);
+  return Math.abs(value - nearestInteger) < 0.0001 ? nearestInteger : value;
+}
+
 function transformed(value, transform) {
-  if (transform === "identity") return value;
+  if (transform === "identity") return canonicalFigmaNumber(value);
   if (transform === "lowercase" && typeof value === "string") return value.toLowerCase();
   return undefined;
 }
@@ -103,6 +109,9 @@ export function auditFigmaContractFacts({ record, live, mappings = [] }) {
   const issues = [];
   if (!live || !Array.isArray(live.variants)) {
     return { ok: false, issues: [issue("LIVE_FIGMA_REQUIRED", { component_id: record?.id ?? null })] };
+  }
+  if (Array.isArray(live.capture_errors) && live.capture_errors.length > 0) {
+    issues.push(issue("FIGMA_CAPTURE_UNSUPPORTED", { details: live.capture_errors }));
   }
   if (live.file_key !== record?.figma?.file_key || live.component_node_id !== record?.figma?.node_id) {
     issues.push(issue("FIGMA_IDENTITY_MISMATCH", { component_id: record?.id ?? null }));
