@@ -155,3 +155,36 @@ test("a Mobile source fact cannot certify a Desktop contract fact", () => {
   const report = auditFigmaContractFacts({ record, live: packet, mappings });
   assert.ok(report.issues.some((issue) => issue.code === "CONTRACT_VIEWPORT_MISMATCH"));
 });
+
+test("capture errors cannot be waived by mappings or a verification label", () => {
+  const { record, packet, mappings } = fixture();
+  record.figma.verification = { status: "figma-source-recorded" };
+  packet.capture_errors = [{ node_id: "3:1", code: "PAINT_UNSUPPORTED" }];
+  const report = auditFigmaContractFacts({ record, live: packet, mappings });
+  assert.ok(report.issues.some((issue) => issue.code === "FIGMA_CAPTURE_UNSUPPORTED"));
+});
+
+test("Figma float serialization noise is canonicalized, not a real 0.1 difference", () => {
+  const { record, packet, mappings } = fixture();
+  const lineHeight = {
+    id: "line-height",
+    value: { type: "measure", value: 140, unit: "percent" },
+  };
+  record.contracts.mobile.root.children[0].facts.push(lineHeight);
+  packet.variants[0].source_node.children[0].text_style.line_height.value = 139.9999976158142;
+  mappings.push({
+    variant_node_id: "2:1", node_id: "3:1",
+    source_path: "/text_style/line_height/value",
+    contract_path: "/contracts/mobile/root/children/0/facts/3/value/value",
+    transform: "identity",
+  });
+  const report = auditFigmaContractFacts({ record, live: packet, mappings });
+  assert.equal(report.issues.some((issue) =>
+    issue.code === "FIGMA_CONTRACT_MISMATCH" &&
+    issue.source_path === "/text_style/line_height/value"), false);
+  packet.variants[0].source_node.children[0].text_style.line_height.value = 139.9;
+  const changed = auditFigmaContractFacts({ record, live: packet, mappings });
+  assert.ok(changed.issues.some((issue) =>
+    issue.code === "FIGMA_CONTRACT_MISMATCH" &&
+    issue.source_path === "/text_style/line_height/value"));
+});
