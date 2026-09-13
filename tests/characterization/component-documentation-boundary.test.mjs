@@ -156,7 +156,7 @@ test("direct Figma source capture preserves shared and service registries and ma
   for (const record of recorded) {
     assert.deepEqual(
       record.contracts.source_variants.map(({ variant_node_id }) => variant_node_id).sort(),
-      record.variants.map(({ node_id }) => node_id).sort(),
+      (record.variants.length > 0 ? record.variants.map(({ node_id }) => node_id) : [record.figma.node_id]).sort(),
     );
   }
   for (const record of projected.marketing.filter(
