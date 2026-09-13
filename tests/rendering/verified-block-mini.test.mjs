@@ -122,3 +122,27 @@ test("Figma-verified Block/Receipt-Info preserves exact paired corner radii", as
   assert.match(output.html, /border-bottom-left-radius:26px/u);
   assert.match(output.html, /border-bottom-right-radius:26px/u);
 });
+function withHref(component) {
+  const content = contentFor(component);
+  for (const viewport of ["mobile", "desktop"]) {
+    for (const entry of Object.values(content[viewport])) entry.href ??= "https://example.invalid/action";
+  }
+  return content;
+}
+
+test("Figma-verified Details/Transfer Desktop retains 200px label and 288px right value columns", async () => {
+  const component = await record("service", "details-transfer");
+  const output = render(component, withHref(component));
+  assert.match(output.html, /<td width="200"[^>]*style="[^"]*width:200px/u);
+  assert.match(output.html, /<td width="288"[^>]*style="[^"]*text-align:right[^"]*width:288px/u);
+  assert.match(output.css, /max-width:660px/u);
+});
+
+test("Figma-verified Banner/App-Download mobile action is full-width with one centered anchor group", async () => {
+  const component = await record("marketing", "banner-app-download");
+  const output = render(component, withHref(component));
+  assert.deepEqual(output.diagnostics, []);
+  assert.match(output.html, /width="296"/u);
+  assert.match(output.html, /text-align:center/u);
+  assert.equal((output.html.match(/<a href="https:\/\/example\.invalid\/action"/gu) ?? []).length, 2);
+});
