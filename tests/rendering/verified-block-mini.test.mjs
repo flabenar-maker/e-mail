@@ -126,9 +126,17 @@ test("Figma-verified Block/Receipt-Info preserves exact paired corner radii", as
 });
 function withHref(component) {
   const content = contentFor(component);
-  for (const viewport of ["mobile", "desktop"]) {
-    for (const entry of Object.values(content[viewport])) entry.href ??= "https://example.invalid/action";
+  function walk(element, viewport) {
+    const entry = (content[viewport][element.id] ??= {});
+    for (const slot of element.content_slots ?? []) {
+      if (!slot.required) continue;
+      if (slot.id === "href") entry.href ??= "https://example.invalid/action";
+      else if (slot.id === "alt") entry.alt ??= "Store icon";
+      else if (slot.id === "text") entry.text ??= sourceText(element) ?? "Store";
+    }
+    for (const child of element.children ?? []) walk(child, viewport);
   }
+  for (const viewport of ["mobile", "desktop"]) walk(component.contracts[viewport].root, viewport);
   return content;
 }
 
@@ -136,7 +144,7 @@ test("Figma-verified Details/Transfer Desktop retains 200px label and 288px righ
   const component = await record("service", "details-transfer");
   const output = render(component, withHref(component));
   assert.match(output.html, /<td width="200"[^>]*style="[^"]*width:200px/u);
-  assert.match(output.html, /<td width="288"[^>]*style="[^"]*text-align:right[^"]*width:288px/u);
+  assert.match(output.html, /<td width="288"[^>]*style="[^"]*width:288px[^>]*>.*<p style="[^"]*text-align:right/u);
   assert.match(output.css, /max-width:660px/u);
 });
 
@@ -151,7 +159,8 @@ test("Figma-verified Banner/App-Download mobile action is full-width with one ce
   const assets = Object.fromEntries((component.asset_contracts ?? []).map(({ id }) => [id, { src: svg }]));
   const output = renderContractTree({ component, coverage: { component_id: component.id, mode: "interpreter" }, content, assets, foundations });
   assert.deepEqual(output.diagnostics, []);
-  assert.match(output.html, /width="296"/u);
+  assert.equal(component.contracts.mobile.root.children.flatMap((node) => node.children ?? []).flatMap((node) => node.children ?? []).some((node) => node.facts?.some(({ id, value }) => id === "reference-size" && value.width === 252)), true);
+  assert.match(output.html, /width="252"[^>]*style="[^"]*width:252px/u);
   assert.match(output.html, /text-align:center/u);
   assert.equal((output.html.match(/<a href="https:\/\/example\.invalid\/action"/gu) ?? []).length, 8);
 });
