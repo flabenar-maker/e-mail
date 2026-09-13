@@ -31,11 +31,11 @@ jobs:
             docs/generated/component-registry.md
             docs/generated/typography-registry.md
           )
-          mapfile -t changed < <(git status --porcelain | awk '{print $2}')
+          mapfile -t changed < <(git diff --name-only)
           for path in "${changed[@]}"; do
             case "$path" in
               docs/generated/asset-registry.md|docs/generated/component-registry.md|docs/generated/typography-registry.md) ;;
-              *) echo "Unexpected workspace change: $path" >&2; exit 1 ;;
+              *) echo "Unexpected tracked change: $path" >&2; exit 1 ;;
             esac
           done
           if (("${#changed[@]}" == 0)); then
