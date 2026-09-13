@@ -105,8 +105,13 @@ function equal(left, right) {
   return JSON.stringify(left) === JSON.stringify(right);
 }
 
-export function auditFigmaContractFacts({ record, live, mappings = [] }) {
+export function auditFigmaContractFacts({ record, live, mappings } = {}) {
   const issues = [];
+  const ownedMappings = record?.contracts?.figma_fact_links;
+  if (!Array.isArray(ownedMappings) ||
+      (mappings !== undefined && !equal(mappings, ownedMappings))) {
+    issues.push(issue("EVIDENCE_LINKS_NOT_IN_CONTRACT", { component_id: record?.id ?? null }));
+  }
   if (!live || !Array.isArray(live.variants)) {
     return { ok: false, issues: [issue("LIVE_FIGMA_REQUIRED", { component_id: record?.id ?? null })] };
   }
@@ -172,7 +177,7 @@ export function auditFigmaContractFacts({ record, live, mappings = [] }) {
   const coveredSource = new Set();
   const coveredContract = new Set();
   const seenMappings = new Set();
-  for (const mapping of mappings) {
+  for (const mapping of Array.isArray(ownedMappings) ? ownedMappings : []) {
     const { variant_node_id, node_id, source_path, contract_path, transform = "identity" } = mapping ?? {};
     const key = `${variant_node_id}|^@${node_id}|^@${source_path}`;
     const mapKey = `${key}|^@${contract_path}`;
