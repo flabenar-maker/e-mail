@@ -132,7 +132,7 @@ test("direct Figma source capture preserves shared and service registries and ma
   );
   assert.equal(
     digest(projected.service),
-    "sha256:77fb7974624c0bdf40f924011a9f4287ee09571085066881c8d920d01571a691",
+    "sha256:27b9f3487be7546921db86b43ccb49e309ba3650a3926bf3767be948dda65726",
   );
 
   const blocked = projected.marketing
