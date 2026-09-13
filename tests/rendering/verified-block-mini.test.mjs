@@ -109,6 +109,8 @@ test("Figma-verified Card/Image @2x keeps mobile fluid ratio and desktop exact d
   assert.match(output.html, /<img[^>]*width="252"[^>]*style="[^"]*height:auto[^"]*width:100%/u);
   assert.match(output.html, /<img[^>]*width="232"[^>]*style="[^"]*height:auto[^"]*width:100%/u);
   assert.doesNotMatch(output.html, /width="252"[^>]*style="[^"]*height:161px/u);
+  assert.match(output.html, /<img[^>]*width="232"[^>]*height="148"/u);
+  assert.doesNotMatch(output.html, /<img[^>]*height="322"/u);
 });
 test("Figma-verified Block/Receipt-Info preserves exact paired corner radii", async () => {
   const component = await record("service", "block-receipt-info");
