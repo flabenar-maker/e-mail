@@ -333,3 +333,31 @@ test("mixed text is supported when every styled segment is captured exactly", ()
   const report = auditFigmaContractFacts({ record, live });
   assert.equal(report.issues.some((issue) => issue.code === "FIGMA_CAPTURE_UNSUPPORTED"), false);
 });
+
+test("a live Mobile Accent variant may certify its exact variant_contract root fact", () => {
+  const { record, packet, mappings } = fixture();
+  const contractPath = "/contracts/variant_contracts/0/root/facts/0/value/value";
+  record.contracts.variant_contracts = [{
+    variant_node_id: "2:1",
+    axes: [{ name: "Viewport", value: "Mobile" }, { name: "Style", value: "Accent" }],
+    root: {
+      facts: [{
+        id: "gap",
+        value: { type: "integer", value: 12 },
+        provenance: { kind: "figma-literal", node_id: "2:1" },
+      }],
+      children: [],
+    },
+  }];
+  mappings.push({
+    variant_node_id: "2:1",
+    node_id: "2:1",
+    source_path: "/layout/item_spacing",
+    contract_path: contractPath,
+    transform: "identity",
+  });
+  const report = auditFigmaContractFacts({ record, live: packet, mappings });
+  assert.equal(report.issues.some((issue) =>
+    (issue.code === "CONTRACT_TARGET_INVALID" || issue.code === "CONTRACT_FACT_UNMAPPED") &&
+    issue.contract_path === contractPath), false, JSON.stringify(report.issues));
+});
