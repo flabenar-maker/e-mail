@@ -8,7 +8,7 @@
 
 Исходный `data/components/service.yaml` — миграционный черновик. В его Mobile/Desktop HTML-проекциях было 118 фактов с ID вида `description-N`, 115 с provenance `registry-literal`; Desktop root всех 18 компонентов был без фактов. Перенос из Markdown и совпадение отдельного числа не доказывают полноту HTML-контракта.
 
-После текущей проверки **10 компонентов** имеют статус `figma-source-recorded` и 19 записанных source variants. Это точная запись прочитанных параметров Figma, **не утверждение о проверенной HTML-проекции**. Ещё **8 компонентов** имеют статус `blocked-ambiguous-description`: для них новые source facts не добавлялись. Старые Mobile/Desktop HTML-деревья всех 18 компонентов остаются непроверенной миграционной проекцией.
+После адресной проверки неоднозначностей все **18 компонентов** имеют статус `figma-source-recorded` и 35 записанных source variants. У восьми ранее заблокированных компонентов дополнительно обновлены Mobile/Desktop semantic trees по непосредственно прочитанным Figma-узлам, property references, текстовым сегментам и двум отдельным фискальным бейджам. Статус означает, что источник и машинное выражение его фактов сверены; финальная применимость HTML-проекций в почтовых клиентах требует отдельной проверки рендера.
 
 | Компонент | Статус | Основание |
 |---|---|---|
@@ -22,21 +22,21 @@
 | Details/Receipt | source-recorded | Те же точные Mobile/Desktop правила label/value, подтверждённые на обоих вариантах. |
 | Details/Operation | source-recorded | Те же точные Mobile/Desktop правила label/value, подтверждённые на обоих вариантах. |
 | Badge/Operation-Status | source-recorded | Все шесть Viewport×State вариантов: padding `4px 12px`, radius `63px`, Mobile `12px`, Desktop `16px`; три пары точных цветов совпали с Figma Description. |
-| Block/Transaction-Success | blocked | «Белая карточка» задаёт HTML background словом; Figma показывает `#FFFFFF`. |
-| Block/Transaction-Error | blocked | «Белая карточка» задаёт HTML background словом; Figma показывает `#FFFFFF`. |
-| Block/Contact-Support | blocked | «Белая», «серый», «зелёная» и «radius из инстанса» не дают точный HTML-контракт; Figma показывает `#FFFFFF`, `#F8F8FA`, `#00991F`, help-notice radius `14px/18px`. |
-| Details/Suspicious-Operation | blocked | «Красного цвета» и radius из инстанса; Figma показывает heading `#DE2141`, radius `14px/18px`. |
-| Block/Personal-Data-Update | blocked | «Белая карточка» задаёт HTML background словом; Figma показывает `#FFFFFF`. |
-| Block/Receipt-Info | blocked | «Белые status-area и receipt-area» задаёт HTML backgrounds словом; Figma показывает `#FFFFFF`. |
-| Banner/Fiscal-Check-Link | blocked | «Белые кликабельные строки» задаёт HTML backgrounds словом; Figma показывает `#FFFFFF`. |
-| Block/Instruction-Steps | blocked | «red text» задаёт HTML warning color словом; Figma показывает `#DE2141`. |
+| Block/Transaction-Success | source-recorded | Прозрачный clipped card radius `22/26px`; `summary-area` и `details-area` имеют Fill `#FFFFFF`, divider `1px #DFDFE0`. Оба viewport и side effects Show Description/Show Limit Alert записаны. |
+| Block/Transaction-Error | source-recorded | Прозрачный clipped card radius `22/26px`; белые `summary-area`/`body-area`, divider `1px #DFDFE0`; отдельно подтверждены Desktop/Mobile стили primary/notice/supporting text. |
+| Block/Contact-Support | source-recorded | `content-area #FFFFFF`, `help-notice #F8F8FA` radius `14/18px`; Auto Layout gap `12px` без spacer; help-text — один rich-text узел с inline `«Помощь»` (`#00991F`, underline), база `#757678`. Исправлены фактические размеры heading/phone. |
+| Details/Suspicious-Operation | source-recorded | Контейнер `#F8F8FA`, radius `14/18px`, heading `#DE2141`; Mobile/Desktop padding/gap и вложенный Details/Operation-Plain сверены. |
+| Block/Personal-Data-Update | source-recorded | Прозрачный clipped card radius `22/26px`, два белых Fill `#FFFFFF`, divider `1px #DFDFE0`. Show Operation Description скрывает/показывает весь вложенный Details/Suspicious-Operation; action-link `#18B037`. |
+| Block/Receipt-Info | source-recorded | Нет внешнего белого card: верхние углы status-area `22/26px`, нижние receipt-area `22/26px`, промежуточные `0px`; обе секции `#FFFFFF`, divider `1px #DFDFE0`. |
+| Banner/Fiscal-Check-Link | source-recorded | Строки `#FFFFFF`, radius `22/26px`, gap корня `8/12px` без spacer. OFD и ФНС — разные artwork и отдельные `ofd-badge @4x`/`fns-badge @4x`; в каждой строке связанные ячейки используют её URL. |
+| Block/Instruction-Steps | source-recorded | Белая content-area, warning `#DE2141`; number/dash columns `22/42px` Mobile и `32/64px` Desktop; disclaimer `12/14px` соответственно. Show Warning/Alert/Disclaimer references записаны. |
 
-Значения в строках `blocked` — **диагностическое свидетельство**, не новый контракт. Перед их записью нужно точно уточнить соответствующие Figma Descriptions и синхронизировать Markdown-реестр. В текущем проходе Figma и реестр Descriptions не изменялись.
+Восьми ранее заблокированным component sets обновлены подробные Figma Description; их текст синхронизирован с рабочим Markdown-реестром. У Banner/Fiscal-Check-Link переименованы только четыре вложенных инстанса бейджей OFD/ФНС с сохранением `@4x`. Отдельный read-only re-fetch подтвердил тексты Description и совпадение структурных fingerprint до/после для всех восьми sets.
 
 ## Дополнительные наблюдения
 
 - `Details/Transfer` в библиотеке содержит 9 Mobile rows и 10 Desktop rows. Description корректно отдаёт состав полей конкретному инстансу; числа библиотеки не нужно превращать в обязательное количество строк письма.
 - У `Asset/Bank-Badge @4x` и `Asset/Icon-Badge @4x` внешняя обводка была бы потеряна прежней моделью source-node. `schemas/components.schema.json` дополнена полями `strokes`, `stroke_weight`, `stroke_align`, а значения взяты непосредственно из Figma. Утверждение о точном размере конечного PNG требует отдельной проверки экспорта; старые `pixel_dimensions` остаются непроверенной HTML/export-проекцией.
-- Для 18 компонентов проверены variant IDs и component-property definitions. Ни один исходный Figma-component, Description, дизайн, маркетинговый contract или готовое письмо не менялись.
+- Для 18 компонентов проверены variant IDs и component-property definitions. При последующем исправлении неоднозначностей изменены только 8 Figma Description и 4 разрешённых имени вложенных инстансов. Дизайн, геометрия, Fill, варианты, bindings, маркетинговые contracts и готовые письма не изменялись.
 
-Это диагностический снимок и evidence layer, а не инструкция рендера. До отдельной адресной сверки HTML-проекций и разрешения восьми описаний нельзя объявлять сервисные structured contracts полностью доказанным источником истины.
+Это evidence layer и подробная машинная запись Figma-фактов. HTML-проекции теперь привязаны к фактическим узлам, но качество конкретного email-rendering и export-assets будет отдельно подтверждаться тестовым письмом; один факт сверки Figma не является доказательством работы во всех почтовых клиентах.
