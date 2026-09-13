@@ -102,7 +102,11 @@ test("Figma-verified Card/Image @2x keeps mobile fluid ratio and desktop exact d
     foundations,
   });
   assert.deepEqual(output.diagnostics, []);
-  assert.match(output.html, /<img[^>]*width="252"[^>]*height="161"[^>]*style="[^"]*height:auto[^"]*width:100%/u);
-  assert.match(output.html, /<img[^>]*width="232"[^>]*height="148"[^>]*style="[^"]*height:148px[^"]*width:232px/u);
+  const mobileImage = component.contracts.mobile.root.children[0];
+  const desktopImage = component.contracts.desktop.root.children[0];
+  assert.deepEqual(mobileImage.facts.find(({ id }) => id === "reference-size").value, { type: "dimensions", width: 252, height: 161, unit: "px" });
+  assert.deepEqual(desktopImage.facts.find(({ id }) => id === "reference-size").value, { type: "dimensions", width: 232, height: 148, unit: "px" });
+  assert.match(output.html, /<img[^>]*width="252"[^>]*style="[^"]*height:auto[^"]*width:100%/u);
+  assert.match(output.html, /<img[^>]*width="232"[^>]*style="[^"]*height:auto[^"]*width:100%/u);
   assert.doesNotMatch(output.html, /width="252"[^>]*style="[^"]*height:161px/u);
 });
