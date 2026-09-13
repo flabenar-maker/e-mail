@@ -316,6 +316,12 @@
                   }
                 }
               }
+            },
+            "variant_contracts": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/additionalVariantContract"
+              }
             }
           }
         },
@@ -761,6 +767,30 @@
           "items": {
             "$ref": "#/$defs/element"
           }
+        },
+        "action": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "href_slot",
+            "required"
+          ],
+          "properties": {
+            "kind": {
+              "enum": [
+                "whole-element",
+                "distributed-cells"
+              ]
+            },
+            "href_slot": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "required": {
+              "type": "boolean"
+            }
+          }
         }
       },
       "allOf": [
@@ -885,6 +915,22 @@
             "value": {
               "type": "string",
               "minLength": 1
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mode",
+            "default_visible"
+          ],
+          "properties": {
+            "mode": {
+              "const": "instance"
+            },
+            "default_visible": {
+              "type": "boolean"
             }
           }
         }
@@ -1177,6 +1223,28 @@
                       "const": "registry-literal"
                     },
                     "source_path": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "kind",
+                    "node_id",
+                    "section"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "const": "figma-description"
+                    },
+                    "node_id": {
+                      "type": "string",
+                      "pattern": "^[0-9]+:[0-9]+$"
+                    },
+                    "section": {
                       "type": "string",
                       "minLength": 1
                     }
@@ -2106,6 +2174,47 @@
               "type": "string"
             }
           }
+        }
+      }
+    },
+    "additionalVariantContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "variant_node_id",
+        "axes",
+        "root"
+      ],
+      "properties": {
+        "variant_node_id": {
+          "type": "string",
+          "pattern": "^[0-9]+:[0-9]+$"
+        },
+        "axes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "value"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "value": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "root": {
+          "$ref": "#/$defs/element"
         }
       }
     }
