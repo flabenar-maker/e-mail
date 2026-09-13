@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: component-registry -->
-<!-- source-digest: sha256:0bd70aafe5f52d65f397aa2c40bfe06a1ce57eafe0886b8e1311d208cd91ba82 -->
+<!-- source-digest: sha256:412c6da870db7a25c31d1e88a6dc8013b702883e97a9dc88d918f02ae340b558 -->
 <!-- schema-versions: components=2.1.0, typography=1.0.0, spacing=1.0.0, assets=1.0.0 -->
 # CUPIS component registry
 
@@ -864,6 +864,7 @@ RENDER: ASSET
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#911:3992` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:4ea96e98980233ade86e540914b44ef5069f6895c8061619545b6237c18aa854`
 - Purpose: Составной растровый ассет карточки, включающий изображение и графические наложения.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Asset/Card-Image @2x` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -873,6 +874,7 @@ RENDER: ASSET
 - Render type: `ASSET`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -882,18 +884,14 @@ RENDER: ASSET
 ### Mobile
 
 - `root` — role `asset`; render `presentation-table`; visibility `always`
-  - Fact `description-1`: `@2x`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-2`: `232×148px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-3`: `464×296px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-4`: `232:148`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-5`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-6`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `card-image` — role `image`; render `direct-image`; visibility `always`; asset `card-image`
 
 ### Properties and variants
 
 - Variant `numbered` — Figma node `911:3991`; axes: `Style=Numbered`
 - Variant `plain` — Figma node `911:3990`; axes: `Style=Plain`
+- Direct Figma source: `911:3991`; `Style=Numbered`; reference frame 232×148px
+- Direct Figma source: `911:3990`; `Style=Plain`; reference frame 232×148px
 
 ### Assets and interaction
 
@@ -907,6 +905,7 @@ RENDER: ASSET
   - Clipping: `neutralize-presentation-only`
   - Export boundary: `node` `Asset/Card-Image @2x`
   - Pixel dimensions: 464×296px
+  - Raw Figma Fill dimensions: 888×480px
   - Aspect ratio: 232:148
   - Crop: `none`; position `exact-node-after-overrides`
   - Background: own fill `preserve`; artificial matte `forbid`
@@ -915,7 +914,7 @@ RENDER: ASSET
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -940,6 +939,7 @@ RENDER: ASSET
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#946:25769` (`component`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:422aaa33e22aab19999c7a1292d8a8a1d2ada2a1711a43fe13acdc2aeabd37bd`
 - Purpose: Составной прозрачный графический ассет функциональной иконки.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Asset/Feature-Icon @4x` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -949,6 +949,7 @@ RENDER: ASSET
 - Render type: `ASSET`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -958,7 +959,6 @@ RENDER: ASSET
 ### Mobile
 
 - `root` — role `asset`; render `presentation-table`; visibility `always`
-  - Fact `description-1`: `@4x`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `feature-icon` — role `icon`; render `direct-image`; visibility `always`; asset `feature-icon`
 
 ### Assets and interaction
@@ -981,7 +981,7 @@ RENDER: ASSET
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -1006,6 +1006,7 @@ RENDER: ASSET
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#18:2948` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:53d9db07d895b91700fb17155a254cdadf7aa9a0d02e9cf572db422f2df93647`
 - Purpose: Живой HTML-бейдж с номером шага для пошаговых блоков.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Badge/Step-Number` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -1015,6 +1016,7 @@ RENDER: ASSET
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -1024,10 +1026,6 @@ RENDER: ASSET
 ### Mobile
 
 - `root` — role `badge`; render `presentation-table`; visibility `always`
-  - Fact `description-1`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-2`: `19px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-3`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-4`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `number` — role `step-number`; render `html-text`; visibility `always`
 
 ### Properties and variants
@@ -1036,10 +1034,14 @@ RENDER: ASSET
 - Variant `mobile-accent` — Figma node `18:2947`; axes: `Viewport=Mobile`, `Style=Accent`
 - Variant `desktop-accent` — Figma node `230:3849`; axes: `Viewport=Desktop`, `Style=Accent`
 - Variant `desktop-neutral` — Figma node `230:3850`; axes: `Viewport=Desktop`, `Style=Neutral`
+- Direct Figma source: `18:2942`; `Viewport=Mobile, Style=Neutral`; reference frame 56×20px
+- Direct Figma source: `18:2947`; `Viewport=Mobile, Style=Accent`; reference frame 56×20px
+- Direct Figma source: `230:3849`; `Viewport=Desktop, Style=Accent`; reference frame 62×22px
+- Direct Figma source: `230:3850`; `Viewport=Desktop, Style=Neutral`; reference frame 62×22px
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -1064,6 +1066,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#337:6569` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `blocked-ambiguous-description` on `2026-09-13`; Описание использует словесные цвета кнопок/текста и округлённые размеры логотипа.
 - Structure fingerprint: `sha256:aeb50018c4411ea2752ab4c99aab86f095b51454b33a38ff659b58d65637b978`
 - Purpose: Промоблок приложения с логотипом, живым текстом и кнопками магазинов.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Banner/App-Download` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -1073,115 +1076,50 @@ RENDER: HTML
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
 - `root` — role `banner`; render `presentation-table`; visibility `always`
-  - Fact `banner-top-gap`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `card-border-radius`: `26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `app-card-width`: `552px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `root-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `content-area` — role `content-area`; render `presentation-table`; visibility `always`
-    - Fact `content-area-padding`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `content-area-layout-gap`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `content-area-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `text-qr` — role `text-qr`; render `presentation-table`; visibility `always`
-      - Fact `text-qr-layout-gap`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-      - Fact `text-qr-layout-axis`: `horizontal`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
       - `header-row` — role `header-row`; render `presentation-table`; visibility `always`
-        - Fact `header-row-layout-gap`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `header-row-width`: `334px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `header-row-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `app-logo` — role `logo`; render `direct-image`; visibility `always`; asset `app-logo`
-          - Fact `logo-display-dimensions`: `219×62px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `description` — role `description`; render `html-text`; visibility `always`
-          - Fact `description-font-size`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
       - `qr-code` — role `qr-code`; render `direct-image`; visibility `always`; asset `qr-code`
-        - Fact `qr-display-dimensions`: `130×130px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `store-buttons` — role `store-buttons`; render `presentation-table`; visibility `always`
-      - Fact `store-buttons-layout-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-      - Fact `store-buttons-layout-axis`: `horizontal`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
       - `rustore-link` — role `store-link`; render `html-link`; visibility `always`
-        - Fact `rustore-link-dimensions`: `116×56px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `rustore-link-border-radius`: `50px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `rustore-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `rustore-icon`
-          - Fact `rustore-icon-display-dimensions`: `32×32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `rustore-text` — role `store-text`; render `html-text`; visibility `always`
       - `google-play-link` — role `store-link`; render `html-link`; visibility `always`
-        - Fact `google-play-link-dimensions`: `116×56px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `google-play-link-border-radius`: `50px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `google-play-link-background`: `#F8F8FA`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `google-play-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `google-play-icon`
-          - Fact `google-play-icon-display-dimensions`: `32×32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `google-play-text` — role `store-text`; render `html-text`; visibility `always`
       - `appgallery-link` — role `store-link`; render `html-link`; visibility `always`
-        - Fact `appgallery-link-dimensions`: `116×56px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `appgallery-link-border-radius`: `50px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `appgallery-link-background`: `#F8F8FA`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `appgallery-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `appgallery-icon`
-          - Fact `appgallery-icon-display-dimensions`: `32×32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `appgallery-text` — role `store-text`; render `html-text`; visibility `always`
       - `getapps-link` — role `store-link`; render `html-link`; visibility `always`
-        - Fact `getapps-link-dimensions`: `116×56px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `getapps-link-border-radius`: `50px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `getapps-link-background`: `#F8F8FA`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `getapps-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `getapps-icon`
-          - Fact `getapps-icon-display-dimensions`: `32×32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `getapps-text` — role `store-text`; render `html-text`; visibility `always`
 
 ### Mobile
 
 - `root` — role `banner`; render `presentation-table`; visibility `always`
-  - Fact `banner-top-gap`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `card-border-radius`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `store-grid-layout-forbidden`: `2×2`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `root-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `content-area` — role `content-area`; render `presentation-table`; visibility `always`
-    - Fact `content-area-padding`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `content-area-layout-gap`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `content-area-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `app-logo` — role `logo`; render `direct-image`; visibility `always`; asset `app-logo`
-      - Fact `logo-display-dimensions`: `163×46px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `description` — role `description`; render `html-text`; visibility `always`
-      - Fact `description-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `store-buttons` — role `store-buttons`; render `presentation-table`; visibility `always`
-      - Fact `store-buttons-layout-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-      - Fact `store-buttons-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
       - `rustore-link` — role `store-link`; render `html-link`; visibility `always`
-        - Fact `rustore-link-height`: `44px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `rustore-link-border-radius`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `rustore-icon-text-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `rustore-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `rustore-icon`
-          - Fact `rustore-icon-display-dimensions`: `26×26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `rustore-text` — role `store-text`; render `html-text`; visibility `always`
-          - Fact `rustore-text-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
       - `google-play-link` — role `store-link`; render `html-link`; visibility `always`
-        - Fact `google-play-link-height`: `44px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `google-play-link-border-radius`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `google-play-icon-text-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `google-play-link-background`: `#F8F8FA`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `google-play-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `google-play-icon`
-          - Fact `google-play-icon-display-dimensions`: `26×26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `google-play-text` — role `store-text`; render `html-text`; visibility `always`
-          - Fact `google-play-text-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
       - `appgallery-link` — role `store-link`; render `html-link`; visibility `always`
-        - Fact `appgallery-link-height`: `44px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `appgallery-link-border-radius`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `appgallery-icon-text-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `appgallery-link-background`: `#F8F8FA`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `appgallery-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `appgallery-icon`
-          - Fact `appgallery-icon-display-dimensions`: `26×26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `appgallery-text` — role `store-text`; render `html-text`; visibility `always`
-          - Fact `appgallery-text-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
       - `getapps-link` — role `store-link`; render `html-link`; visibility `always`
-        - Fact `getapps-link-height`: `44px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `getapps-link-border-radius`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `getapps-icon-text-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-        - Fact `getapps-link-background`: `#F8F8FA`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `getapps-icon` — role `store-icon`; render `direct-image`; visibility `always`; asset `getapps-icon`
-          - Fact `getapps-icon-display-dimensions`: `26×26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
         - `getapps-text` — role `store-text`; render `html-text`; visibility `always`
-          - Fact `getapps-text-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
 
 ### Properties and variants
 
@@ -1290,7 +1228,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -1315,6 +1253,7 @@ RENDER: HYBRID
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#337:4460` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:adf95c6eaaf49c1b030ebe1a2a6cb3d3f043443b9ee158b40268bc1257182e48`
 - Purpose: Главный промобаннер с изображением, живым текстом и необязательным основным CTA.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Banner/Hero` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -1324,6 +1263,7 @@ RENDER: HYBRID
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -1336,20 +1276,6 @@ RENDER: HYBRID
 ### Mobile
 
 - `root` — role `banner`; render `presentation-table`; visibility `always`
-  - Fact `width-behavior`: `fluid-to-container`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `height-behavior`: `auto`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `fixed-height-forbidden`: `true`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-1`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-2`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-3`: `296:190`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-4`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-5`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-6`: `20px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-7`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-8`: `552×353px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-9`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-10`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-11`: `@2x`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - Fact `description-12`: asset `hero-image`
   - `hero-image` — role `image`; render `direct-image`; visibility `always`; asset `hero-image`
   - `heading` — role `heading`; render `html-text`; visibility `always`
@@ -1360,6 +1286,8 @@ RENDER: HYBRID
 
 - Variant `mobile` — Figma node `337:4359`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `230:3680`; axes: `Viewport=Desktop`
+- Direct Figma source: `337:4359`; `Viewport=Mobile`; reference frame 328×410px
+- Direct Figma source: `230:3680`; `Viewport=Desktop`; reference frame 600×636px
 - Property `show-body` (`Show Body`) — `boolean`; default `true`
 - Property `show-button` (`Show Button`) — `boolean`; default `true`
 
@@ -1375,6 +1303,7 @@ RENDER: HYBRID
   - Clipping: `preserve-artwork`
   - Export boundary: `fill` `hero-image @2x`
   - Pixel dimensions: 1104×706px
+  - Raw Figma Fill dimensions: 984×696px
   - Aspect ratio: 552:353
   - Crop: `figma-fill`; position `concrete-desktop-instance`
   - Background: own fill `preserve`; artificial matte `forbid`
@@ -1388,7 +1317,7 @@ RENDER: HYBRID
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -1413,6 +1342,7 @@ RENDER: HYBRID
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#337:5040` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:6b60ab0bafd0817f0afb5223b652c20100f23a0eb388d4a2ffcf2f74a03a1248`
 - Purpose: Компактный информационный баннер с живым текстом и ссылкой.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Banner/Inline` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -1422,6 +1352,7 @@ RENDER: HYBRID
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -1433,16 +1364,6 @@ RENDER: HYBRID
 ### Mobile
 
 - `root` — role `banner`; render `presentation-table`; visibility `always`
-  - Fact `description-1`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-2`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-3`: `42×42px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-4`: `24×24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-5`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-6`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-7`: `26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-8`: `48×48px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-9`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-10`: `@4x`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - Fact `description-11`: asset `chevron-icon`
   - `feature-icon` — role `icon`; render `direct-image`; visibility `always`; asset `feature-icon`
   - `text` — role `text`; render `html-text`; visibility `always`
@@ -1452,6 +1373,8 @@ RENDER: HYBRID
 
 - Variant `mobile` — Figma node `13:353`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `260:591`; axes: `Viewport=Desktop`
+- Direct Figma source: `13:353`; `Viewport=Mobile`; reference frame 328×108px
+- Direct Figma source: `260:591`; `Viewport=Desktop`; reference frame 600×122px
 
 ### Assets and interaction
 
@@ -1488,7 +1411,7 @@ RENDER: HYBRID
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -1513,6 +1436,7 @@ RENDER: HYBRID
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#337:4870` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:48d9b7a570ffefeeeac38e01469297b1d356d364e5b36b06a713a2a47f4edbed`
 - Purpose: Вторичный промобаннер с текстовой и визуальной областями.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Banner/Secondary` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -1522,56 +1446,34 @@ RENDER: HYBRID
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
 - `root` — role `banner`; render `presentation-table`; visibility `always`
-  - Fact `banner-top-gap`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `banner-inner-width`: `552px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `root-layout-axis`: `horizontal`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `content-area` — role `content-area`; render `presentation-table`; visibility `always`
-    - Fact `content-area-padding`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `content-area-layout-gap`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `content-area-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `content-area-width`: `300px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `text-content` — role `text-content`; render `presentation-table`; visibility `always`
-      - Fact `text-content-layout-gap`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-      - Fact `text-content-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-      - Fact `content-inner-width`: `236px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
       - `heading` — role `heading`; render `html-text`; visibility `always`
-        - Fact `heading-font-size`: `20px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
       - `body` — role `body`; render `html-text`; visibility property `show-body` (`Show Body`)
-        - Fact `body-font-size`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `button` — role `button`; render `nested-component`; visibility property `show-button` (`Show Button`); component `button-secondary` (`Button/Secondary`)
   - `secondary-image` — role `image`; render `background-image`; visibility `always`; asset `secondary-image`
-    - Fact `image-area-width`: `252px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
 
 ### Mobile
 
 - `root` — role `banner`; render `presentation-table`; visibility `always`
-  - Fact `banner-top-gap`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `root-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `secondary-image` — role `image`; render `direct-image`; visibility `always`; asset `secondary-image`
-    - Fact `width-behavior`: `fluid-to-container`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `height-behavior`: `auto`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `fixed-height-forbidden`: `true`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `content-area` — role `content-area`; render `presentation-table`; visibility `always`
-    - Fact `content-area-padding`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `content-area-layout-gap`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `content-area-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `text-content` — role `text-content`; render `presentation-table`; visibility `always`
-      - Fact `text-content-layout-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-      - Fact `text-content-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
       - `heading` — role `heading`; render `html-text`; visibility `always`
-        - Fact `heading-font-size`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
       - `body` — role `body`; render `html-text`; visibility property `show-body` (`Show Body`)
-        - Fact `body-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `button` — role `button`; render `nested-component`; visibility property `show-button` (`Show Button`); component `button-secondary` (`Button/Secondary`)
 
 ### Properties and variants
 
 - Variant `mobile` — Figma node `11:1218`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `337:4844`; axes: `Viewport=Desktop`
+- Direct Figma source: `11:1218`; `Viewport=Mobile`; reference frame 328×400px
+- Direct Figma source: `337:4844`; `Viewport=Desktop`; reference frame 600×262px
 - Property `show-body` (`Show Body`) — `boolean`; default `true`
 - Property `show-button` (`Show Button`) — `boolean`; default `true`
 
@@ -1587,6 +1489,7 @@ RENDER: HYBRID
   - Clipping: `preserve-artwork`
   - Export boundary: `fill` `secondary-image @2x`
   - Pixel dimensions: 592×376px
+  - Raw Figma Fill dimensions: 984×696px
   - Aspect ratio: 296:188
   - Crop: `figma-fill`; position `concrete-desktop-instance`
   - Background: own fill `preserve`; artificial matte `forbid`
@@ -1600,7 +1503,7 @@ RENDER: HYBRID
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -1625,6 +1528,7 @@ RENDER: HYBRID
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#337:4898` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:bf0c0c00cf94fdfb6a41a869fe60701489dafb252f2cd01515ef5e5b5aa39635`
 - Purpose: Контентный блок с заголовком, маркированным списком и необязательной подписью.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Block/Bullet-List` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -1634,6 +1538,7 @@ RENDER: HYBRID
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -1647,15 +1552,6 @@ RENDER: HYBRID
 ### Mobile
 
 - `root` — role `block`; render `presentation-table`; visibility `always`
-  - Fact `description-1`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-2`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-3`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-4`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-5`: `26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-6`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-7`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-8`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-9`: `#98999C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `heading` — role `heading`; render `html-text`; visibility `always`
   - `bullets` — role `bullets`; render `nested-component`; visibility `always`; component `item-bullet` (`Item/Bullet`)
   - `alert` — role `alert`; render `nested-component`; visibility property `show-alert` (`Show Alert`); component `item-alert` (`Item/Alert`)
@@ -1666,6 +1562,8 @@ RENDER: HYBRID
 
 - Variant `mobile` — Figma node `222:786`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `234:607`; axes: `Viewport=Desktop`
+- Direct Figma source: `222:786`; `Viewport=Mobile`; reference frame 328×645px
+- Direct Figma source: `234:607`; `Viewport=Desktop`; reference frame 600×761px
 - Property `show-alert` (`Show Alert`) — `boolean`; default `true`
 - Property `show-button` (`Show Button`) — `boolean`; default `true`
 - Property `show-caption` (`Show Caption`) — `boolean`; default `true`
@@ -1681,7 +1579,7 @@ RENDER: HYBRID
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -1706,6 +1604,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#326:5806` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `blocked-ambiguous-description` on `2026-09-13`; Описание называет фон карточки белым без точного кода.
 - Structure fingerprint: `sha256:1e99c3cea4bfd175c368c3a843dc694a1c945a2c9848af1666811119e49da1bc`
 - Purpose: Контентный блок с заголовком, вертикальным списком карточек с изображениями и необязательной подписью.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Block/Cards-Images` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -1715,6 +1614,7 @@ RENDER: HTML
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -1726,17 +1626,6 @@ RENDER: HTML
 ### Mobile
 
 - `root` — role `block`; render `presentation-table`; visibility `always`
-  - Fact `description-1`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-2`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-3`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-4`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-5`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-6`: `26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-7`: `252px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-8`: `488px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-9`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-10`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-11`: `#98999C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `heading` — role `heading`; render `html-text`; visibility `always`
   - `cards` — role `cards`; render `nested-component`; visibility `always`; component `card-image` (`Card/Image`)
   - `caption` — role `caption`; render `html-text`; visibility property `show-caption` (`Show Caption`)
@@ -1754,7 +1643,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -1779,6 +1668,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#337:4766` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:8df9797f5fe6579a653ed86f9d4e28a35dbf0be89861ae0f1bd683eb8ae86c19`
 - Purpose: Универсальный контентный блок с заголовком, текстом и управляемыми дополнительными элементами.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Block/Content` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -1788,6 +1678,7 @@ RENDER: HTML
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -1801,16 +1692,6 @@ RENDER: HTML
 ### Mobile
 
 - `root` — role `block`; render `presentation-table`; visibility `always`
-  - Fact `description-1`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-2`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-3`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-4`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-5`: `26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-6`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-7`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-8`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-9`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-10`: `#98999C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `text-content` — role `text-content`; render `html-text`; visibility `always`
   - `notification` — role `notification`; render `nested-component`; visibility property `show-notification` (`Show Notification`); component `item-notification` (`Item/Notification`)
   - `alert` — role `alert`; render `nested-component`; visibility property `show-alert` (`Show Alert`); component `item-alert` (`Item/Alert`)
@@ -1821,6 +1702,8 @@ RENDER: HTML
 
 - Variant `mobile` — Figma node `11:861`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `230:3770`; axes: `Viewport=Desktop`
+- Direct Figma source: `11:861`; `Viewport=Mobile`; reference frame 328×635px
+- Direct Figma source: `230:3770`; `Viewport=Desktop`; reference frame 600×667px
 - Property `show-button` (`Show Button`) — `boolean`; default `true`
 - Property `show-notification` (`Show Notification`) — `boolean`; default `true`
 - Property `show-alert` (`Show Alert`) — `boolean`; default `true`
@@ -1837,7 +1720,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -1862,6 +1745,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#326:6342` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `blocked-ambiguous-description` on `2026-09-13`; Описание называет фон карточки белым без точного кода.
 - Structure fingerprint: `sha256:c63c3dc20a045beeaba79ba062390ade2ee8608a623dc74a12efde6266651e92`
 - Purpose: Контентный блок с заголовком, вертикальным списком карточек с иконками и необязательной подписью.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Block/Icon-Cards` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -1871,6 +1755,7 @@ RENDER: HTML
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -1882,17 +1767,6 @@ RENDER: HTML
 ### Mobile
 
 - `root` — role `block`; render `presentation-table`; visibility `always`
-  - Fact `description-1`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-2`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-3`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-4`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-5`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-6`: `26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-7`: `252px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-8`: `488px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-9`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-10`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-11`: `#98999C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `heading` — role `heading`; render `html-text`; visibility `always`
   - `cards` — role `cards`; render `nested-component`; visibility `always`; component `card-icon` (`Card/Icon`)
   - `caption` — role `caption`; render `html-text`; visibility property `show-caption` (`Show Caption`)
@@ -1910,7 +1784,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -1935,6 +1809,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#946:26516` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `blocked-ambiguous-description` on `2026-09-13`; Описание задаёт белую карточку словом без точного кода.
 - Structure fingerprint: `sha256:758ae01e42519336077861f93e6c60cd8cfaec0784c8b97bc0d2017ea295f547`
 - Purpose: Контентный блок со списком строк, каждая из которых использует графическую иконку и живой текст.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Block/Icon-List` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -1944,6 +1819,7 @@ RENDER: HTML
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -1958,20 +1834,6 @@ RENDER: HTML
 ### Mobile
 
 - `root` — role `block`; render `presentation-table`; visibility `always`
-  - Fact `description-1`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-2`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-3`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-4`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-5`: `42×42px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-6`: `4px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-7`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-8`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-9`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-10`: `26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-11`: `56×56px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-12`: `6px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-13`: `@4x`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-14`: `#98999C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `heading` — role `heading`; render `html-text`; visibility `always`
   - `rows` — role `rows`; render `presentation-table`; visibility `always`
     - `feature-icon` — role `icon`; render `direct-image`; visibility `always`; asset `feature-icon`
@@ -2011,7 +1873,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -2036,6 +1898,7 @@ RENDER: HYBRID
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#337:5041` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:43e70af5f806c9820271f1726193d14bd61010f1fbe7ca4240cb7efe7a662012`
 - Purpose: Контентный информационный блок с выделенным сообщением.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Block/Info-Alert` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -2045,6 +1908,7 @@ RENDER: HYBRID
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -2055,17 +1919,7 @@ RENDER: HYBRID
 ### Mobile
 
 - `root` — role `block`; render `presentation-table`; visibility `always`
-  - Fact `description-1`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-2`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-3`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-4`: `24×24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-5`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-6`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-7`: `26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-8`: `26×26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-9`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - Fact `description-10`: asset `alert-icon`
-  - Fact `description-11`: `@4x`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `alert-icon` — role `icon`; render `direct-image`; visibility `always`; asset `alert-icon`
   - `text` — role `text`; render `html-text`; visibility `always`
 
@@ -2073,6 +1927,8 @@ RENDER: HYBRID
 
 - Variant `mobile` — Figma node `16:2738`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `260:571`; axes: `Viewport=Desktop`
+- Direct Figma source: `16:2738`; `Viewport=Mobile`; reference frame 328×88px
+- Direct Figma source: `260:571`; `Viewport=Desktop`; reference frame 600×98px
 
 ### Assets and interaction
 
@@ -2094,7 +1950,7 @@ RENDER: HYBRID
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -2119,6 +1975,7 @@ RENDER: HYBRID
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#337:4491` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:b3063c5e60fb157eb3997b2764a39b27662f58de1223efb1c46ec069dc3e18b4`
 - Purpose: Контентный блок с последовательностью шагов и управляемыми дополнительными секциями.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Block/Steps` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -2128,6 +1985,7 @@ RENDER: HYBRID
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -2142,18 +2000,6 @@ RENDER: HYBRID
 ### Mobile
 
 - `root` — role `block`; render `presentation-table`; visibility `always`
-  - Fact `description-1`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-2`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-3`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-4`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-5`: `26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-6`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-7`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-8`: `4px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-9`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-10`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-11`: `6px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-12`: `#98999C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `heading` — role `heading`; render `html-text`; visibility `always`
   - `steps` — role `steps`; render `nested-component`; visibility `always`; component `item-step` (`Item/Step`)
   - `notification` — role `notification`; render `nested-component`; visibility property `show-notification` (`Show Notification`); component `item-notification` (`Item/Notification`)
@@ -2165,6 +2011,8 @@ RENDER: HYBRID
 
 - Variant `mobile` — Figma node `12:1347`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `230:3832`; axes: `Viewport=Desktop`
+- Direct Figma source: `12:1347`; `Viewport=Mobile`; reference frame 328×920px
+- Direct Figma source: `230:3832`; `Viewport=Desktop`; reference frame 600×1037px
 - Property `show-alert` (`Show Alert`) — `boolean`; default `true`
 - Property `show-button` (`Show Button`) — `boolean`; default `true`
 - Property `show-caption` (`Show Caption`) — `boolean`; default `true`
@@ -2183,7 +2031,7 @@ RENDER: HYBRID
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -2208,6 +2056,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#337:4713` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `blocked-ambiguous-description` on `2026-09-13`; Описание использует приблизительный угол градиента и словесный цвет.
 - Structure fingerprint: `sha256:f72b837d30fd626373d960ba021ccc7d184765092d8a14d19052aa445533d4b3`
 - Purpose: Основная градиентная HTML-кнопка для главного действия письма.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Button/Primary` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -2217,32 +2066,17 @@ RENDER: HTML
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
 - `root` — role `button`; render `presentation-table`; visibility `always`
-  - Fact `button-padding-block`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `button-padding-inline`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `button-border-radius`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `background-fallback`: `#18B037`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `background-gradient-start`: `#18B037`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `background-gradient-end`: `#3DD55C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `background-replacement-forbidden`: `#00991F`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `link` — role `button-link`; render `html-link`; visibility `always`
-    - Fact `button-text-size`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
 
 ### Mobile
 
 - `root` — role `button`; render `presentation-table`; visibility `always`
-  - Fact `button-padding-block`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `button-padding-inline`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `button-border-radius`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `background-fallback`: `#18B037`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `background-gradient-start`: `#18B037`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `background-gradient-end`: `#3DD55C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `background-replacement-forbidden`: `#00991F`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `link` — role `button-link`; render `html-link`; visibility `always`
-    - Fact `button-text-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
 
 ### Properties and variants
 
@@ -2256,7 +2090,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -2281,6 +2115,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#337:4710` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `blocked-ambiguous-description` on `2026-09-13`; Описание задаёт белый текст словом без точного кода.
 - Structure fingerprint: `sha256:d2451da399ffb1e0a67a979bae64ad7442aac2617ee5ee95a2e94fe767283e81`
 - Purpose: Вторичная кликабельная HTML-кнопка для действий внутри письма.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Button/Secondary` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -2290,6 +2125,7 @@ RENDER: HTML
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -2299,12 +2135,6 @@ RENDER: HTML
 ### Mobile
 
 - `root` — role `button`; render `presentation-table`; visibility `always`
-  - Fact `description-1`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-2`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-3`: `26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-4`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-5`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-6`: `#48494A`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `link` — role `button-link`; render `html-link`; visibility `always`
 
 ### Properties and variants
@@ -2319,7 +2149,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -2344,6 +2174,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#326:5580` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:a36c2a891344e693c283d021aca44c4eea77cc087823eec968327605d84f7a6c`
 - Purpose: Карточка с графической иконкой, живым текстом и необязательной ссылкой.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Card/Icon` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -2353,6 +2184,7 @@ RENDER: HTML
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -2365,16 +2197,6 @@ RENDER: HTML
 ### Mobile
 
 - `root` — role `card`; render `presentation-table`; visibility `always`
-  - Fact `description-1`: `52×52px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-2`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-3`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-4`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-5`: `72×72px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-6`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-7`: `392px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-8`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-9`: `20px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-10`: `@4x`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `feature-icon` — role `icon`; render `direct-image`; visibility `always`; asset `feature-icon`
   - `heading` — role `heading`; render `html-text`; visibility `always`
   - `description` — role `description`; render `html-text`; visibility property `show-description` (`Show Description`)
@@ -2384,6 +2206,8 @@ RENDER: HTML
 
 - Variant `mobile` — Figma node `11:1020`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `260:662`; axes: `Viewport=Desktop`
+- Direct Figma source: `11:1020`; `Viewport=Mobile`; reference frame 271×182px
+- Direct Figma source: `260:662`; `Viewport=Desktop`; reference frame 488×138px
 - Property `show-description` (`Show Description`) — `boolean`; default `true`
 - Property `show-link` (`Show Link`) — `boolean`; default `true`
 
@@ -2409,7 +2233,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -2434,6 +2258,7 @@ RENDER: HYBRID
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#911:4132` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:e45ebbe8c07207092e26b3712d88d65bbc5d7d560f4b8daee20e1f4dfc6a2ab6`
 - Purpose: Карточка с составным изображением, живым текстом и необязательной ссылкой.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Card/Image` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -2443,51 +2268,32 @@ RENDER: HYBRID
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
 - `root` — role `card`; render `presentation-table`; visibility `always`
-  - Fact `root-layout-axis`: `horizontal`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `root-layout-gap`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `card-width`: `488px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `card-image` — role `image`; render `direct-image`; visibility `always`; asset `card-image`
-    - Fact `image-display-dimensions`: `232×148px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `image-border-radius`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `text-content` — role `text-content`; render `presentation-table`; visibility `always`
-    - Fact `text-content-layout-gap`: `6px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `text-content-width`: `232px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `text-content-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `heading` — role `heading`; render `html-text`; visibility `always`
-      - Fact `heading-font-size`: `20px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `description` — role `description`; render `html-text`; visibility `always`
-      - Fact `description-font-size`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `link` — role `link`; render `html-link`; visibility `always`
-      - Fact `link-font-size`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
 
 ### Mobile
 
 - `root` — role `card`; render `presentation-table`; visibility `always`
-  - Fact `root-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `root-layout-gap`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `card-image` — role `image`; render `direct-image`; visibility `always`; asset `card-image`
-    - Fact `width-behavior`: `fluid-to-container`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `height-behavior`: `auto`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `fixed-height-forbidden`: `true`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `image-border-radius`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `text-content` — role `text-content`; render `presentation-table`; visibility `always`
-    - Fact `text-content-layout-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `text-content-layout-axis`: `vertical`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `heading` — role `heading`; render `html-text`; visibility `always`
-      - Fact `heading-font-size`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `description` — role `description`; render `html-text`; visibility `always`
-      - Fact `description-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `link` — role `link`; render `html-link`; visibility `always`
-      - Fact `link-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
 
 ### Properties and variants
 
 - Variant `desktop` — Figma node `911:4131`; axes: `Viewport=Desktop`
 - Variant `mobile` — Figma node `911:4130`; axes: `Viewport=Mobile`
+- Direct Figma source: `911:4131`; `Viewport=Desktop`; reference frame 488×148px
+- Direct Figma source: `911:4130`; `Viewport=Mobile`; reference frame 252×291px
 
 ### Assets and interaction
 
@@ -2501,6 +2307,7 @@ RENDER: HYBRID
   - Clipping: `neutralize-presentation-only`
   - Export boundary: `node` `card-image @2x`
   - Pixel dimensions: 464×296px
+  - Raw Figma Fill dimensions: 888×480px
   - Aspect ratio: 232:148
   - Crop: `none`; position `exact-node-after-overrides`
   - Background: own fill `preserve`; artificial matte `forbid`
@@ -2511,7 +2318,7 @@ RENDER: HYBRID
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -2536,6 +2343,7 @@ RENDER: HYBRID
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#333:7477` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:f08c19aedc8e2a9da2c0bf8a0a130e89f725143ac215b53bb5db4fe53842f536`
 - Purpose: Основной полноширинный футер с дисклеймером, отпиской и управляемой секцией социальных ссылок.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Email/Footer` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -2545,55 +2353,36 @@ RENDER: HYBRID
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
 - `root` — role `email`; render `presentation-table`; visibility `always`
-  - Fact `email-wrapper-width`: `600px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `footer-top-gap`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `footer-body-padding-inline`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `footer-body-padding-bottom`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `footer-section-gap`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `footer-background`: `#F3F3F5`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `caption` — role `caption`; render `html-text`; visibility property `show-caption` (`Show Caption`)
-    - Fact `caption-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `caption-text-color`: `#98999C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `disclaimer` — role `disclaimer`; render `html-text`; visibility `always`
-    - Fact `disclaimer-text-gap`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `disclaimer-font-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `disclaimer-text-color`: `#98999C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `social-links` — role `social-links`; render `presentation-table`; visibility property `show-social-links` (`Show Social Links`)
-    - Fact `social-icon-gap`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `vk-link` — role `social-link`; render `html-link`; visibility `always`
       - `vk-icon` — role `social-icon`; render `direct-image`; visibility `always`; asset `vk-icon`
-        - Fact `social-icon-display-dimensions`: `42×42px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - `telegram-link` — role `social-link`; render `html-link`; visibility `always`
+      - `telegram-icon` — role `social-icon`; render `direct-image`; visibility `always`; asset `telegram-icon`
 
 ### Mobile
 
 - `root` — role `email`; render `presentation-table`; visibility `always`
-  - Fact `email-wrapper-width`: `600px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `footer-top-gap`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `footer-body-padding-inline`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `footer-body-padding-bottom`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `footer-section-gap`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `footer-background`: `#F3F3F5`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `caption` — role `caption`; render `html-text`; visibility property `show-caption` (`Show Caption`)
-    - Fact `caption-font-size`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `caption-text-color`: `#98999C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `disclaimer` — role `disclaimer`; render `html-text`; visibility `always`
-    - Fact `disclaimer-text-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `disclaimer-font-size`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-    - Fact `disclaimer-text-color`: `#98999C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `social-links` — role `social-links`; render `presentation-table`; visibility property `show-social-links` (`Show Social Links`)
-    - Fact `social-icon-gap`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
     - `vk-link` — role `social-link`; render `html-link`; visibility `always`
       - `vk-icon` — role `social-icon`; render `direct-image`; visibility `always`; asset `vk-icon`
-        - Fact `social-icon-display-dimensions`: `32×32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+    - `telegram-link` — role `social-link`; render `html-link`; visibility `always`
+      - `telegram-icon` — role `social-icon`; render `direct-image`; visibility `always`; asset `telegram-icon`
 
 ### Properties and variants
 
 - Variant `mobile` — Figma node `17:2763`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `261:4020`; axes: `Viewport=Desktop`
+- Direct Figma source: `17:2763`; `Viewport=Mobile`; reference frame 328×249px
+- Direct Figma source: `261:4020`; `Viewport=Desktop`; reference frame 600×258px
 - Property `show-caption` (`Show Caption`) — `boolean`; default `false`
 - Property `show-social-links` (`Show Social Links`) — `boolean`; default `true`
 
@@ -2612,14 +2401,31 @@ RENDER: HYBRID
   - Aspect ratio: 42:42
   - Crop: `none`; position `exact-node-after-overrides`
   - Background: own fill `preserve`; artificial matte `forbid`
+- Asset contract: `telegram-icon`
+  - Owner layer: `telegram-icon @4x`
+  - Source viewport: `desktop`
+  - Source mode: `rendered-node`
+  - Display mode: `direct-image`
+  - Export profile: `png-4x` — PNG, `.png`, scale 4, suffix `@4x`, sRGB
+  - Alpha: `transparent` — `transparent-outside-visual`
+  - Clipping: `preserve-artwork`
+  - Export boundary: `node` `telegram-icon @4x`
+  - Pixel dimensions: 168×168px
+  - Aspect ratio: 42:42
+  - Crop: `none`; position `exact-node-after-overrides`
+  - Background: own fill `preserve`; artificial matte `forbid`
 - Link: `mobile` `/contracts/mobile/root/children/2/children/0`
 - Asset usage: `mobile` `/contracts/mobile/root/children/2/children/0/children/0` → `vk-icon` as `direct-image`
+- Link: `mobile` `/contracts/mobile/root/children/2/children/1`
+- Asset usage: `mobile` `/contracts/mobile/root/children/2/children/1/children/0` → `telegram-icon` as `direct-image`
 - Link: `desktop` `/contracts/desktop/root/children/2/children/0`
 - Asset usage: `desktop` `/contracts/desktop/root/children/2/children/0/children/0` → `vk-icon` as `direct-image`
+- Link: `desktop` `/contracts/desktop/root/children/2/children/1`
+- Asset usage: `desktop` `/contracts/desktop/root/children/2/children/1/children/0` → `telegram-icon` as `direct-image`
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -2644,6 +2450,7 @@ RENDER: HYBRID
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#499:2431` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:4d2316dd74a0fe278cb20d3278ac6d89a09ae087c9208792c4b01c9800a0b651`
 - Purpose: Юридический полноширинный футер письма.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Email/Footer-Legal` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -2653,6 +2460,7 @@ RENDER: HYBRID
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -2662,24 +2470,18 @@ RENDER: HYBRID
 ### Mobile
 
 - `root` — role `email`; render `presentation-table`; visibility `always`
-  - Fact `description-1`: `600px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-2`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-3`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-4`: `#F3F3F5`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-5`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-6`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-7`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-8`: `#98999C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `disclaimer` — role `disclaimer`; render `html-text`; visibility `always`
 
 ### Properties and variants
 
 - Variant `mobile` — Figma node `499:2430`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `499:2429`; axes: `Viewport=Desktop`
+- Direct Figma source: `499:2430`; `Viewport=Mobile`; reference frame 328×176px
+- Direct Figma source: `499:2429`; `Viewport=Desktop`; reference frame 600×180px
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -2704,6 +2506,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#326:5159` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:2f6357a800cc5fd2cedc0181ce7c28f1cf0ce3b131044b9754809b0e83936ff0`
 - Purpose: Полноширинный хедер письма с центрированным составным логотипом.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Email/Header` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -2713,6 +2516,7 @@ RENDER: HTML
 - Render type: `ASSET`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -2722,20 +2526,15 @@ RENDER: HTML
 ### Mobile
 
 - `root` — role `email`; render `presentation-table`; visibility `always`
-  - Fact `description-1`: `600px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-2`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-3`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-4`: `@4x`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-5`: `212×33px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - Fact `description-6`: asset `header-logo`
-  - Fact `description-7`: `322×50px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-8`: `#F3F3F5`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `logo` — role `logo`; render `direct-image`; visibility `always`; asset `header-logo`
 
 ### Properties and variants
 
 - Variant `mobile` — Figma node `15:2037`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `230:3679`; axes: `Viewport=Desktop`
+- Direct Figma source: `15:2037`; `Viewport=Mobile`; reference frame 328×49px
+- Direct Figma source: `230:3679`; `Viewport=Desktop`; reference frame 600×74px
 
 ### Assets and interaction
 
@@ -2757,7 +2556,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -2782,6 +2581,7 @@ RENDER: ASSET
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#1024:19226` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:e94cc1564d7af39565a7707ef19f6fa71f8605016d888f8cb528072288a3c139`
 - Purpose: Вложенный предупреждающий элемент с живым текстом.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Item/Alert` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -2791,6 +2591,7 @@ RENDER: ASSET
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -2801,16 +2602,7 @@ RENDER: ASSET
 ### Mobile
 
 - `root` — role `item`; render `presentation-table`; visibility `always`
-  - Fact `description-1`: `#F8F8FA`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-2`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-3`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-4`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-5`: `24×24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-6`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-7`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-8`: `26×26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - Fact `description-9`: asset `alert-icon`
-  - Fact `description-10`: `@4x`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `alert-icon` — role `icon`; render `direct-image`; visibility `always`; asset `alert-icon`
   - `text` — role `text`; render `html-text`; visibility `always`
 
@@ -2818,6 +2610,8 @@ RENDER: ASSET
 
 - Variant `mobile` — Figma node `1024:19224`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `1024:19225`; axes: `Viewport=Desktop`
+- Direct Figma source: `1024:19224`; `Viewport=Mobile`; reference frame 252×66px
+- Direct Figma source: `1024:19225`; `Viewport=Desktop`; reference frame 488×74px
 
 ### Assets and interaction
 
@@ -2839,7 +2633,7 @@ RENDER: ASSET
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -2864,6 +2658,7 @@ RENDER: HYBRID
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#337:4958` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `blocked-ambiguous-description` on `2026-09-13`; Описание задаёт зелёный маркер словом без точного кода.
 - Structure fingerprint: `sha256:00506a80bff7fc52a80ed872823de640d3932e0045e416de034f2d38ab0c0899`
 - Purpose: Отдельный пункт маркированного списка с живым текстом.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Item/Bullet` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -2873,6 +2668,7 @@ RENDER: HYBRID
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -2884,14 +2680,6 @@ RENDER: HYBRID
 ### Mobile
 
 - `root` — role `item`; render `presentation-table`; visibility `always`
-  - Fact `description-1`: `8×8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-2`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-3`: `4px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-4`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-5`: `6px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-6`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-7`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-8`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `indicator` — role `bullet-indicator`; render `html-text`; visibility `always`
   - `text` — role `text`; render `html-text`; visibility `always`
   - `link` — role `link`; render `html-link`; visibility property `show-link` (`Show Link`)
@@ -2909,7 +2697,7 @@ RENDER: HYBRID
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -2934,6 +2722,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#1024:19285` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:46c60d5dc21992117cf67f770fea05d1b295bf932ee8763ab3a30f66044dd6e9`
 - Purpose: Вложенный информационный элемент с живым текстом.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Item/Notification` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -2943,6 +2732,7 @@ RENDER: HTML
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -2953,16 +2743,6 @@ RENDER: HTML
 ### Mobile
 
 - `root` — role `item`; render `presentation-table`; visibility `always`
-  - Fact `description-1`: `#F8F8FA`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-2`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-3`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-4`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-5`: `42×42px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-6`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-7`: `20px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-8`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-9`: `48×48px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-10`: `@4x`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `text` — role `text`; render `html-text`; visibility `always`
   - `feature-icon` — role `icon`; render `direct-image`; visibility `always`; asset `feature-icon`
 
@@ -2970,6 +2750,8 @@ RENDER: HTML
 
 - Variant `mobile` — Figma node `1024:19283`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `1024:19284`; axes: `Viewport=Desktop`
+- Direct Figma source: `1024:19283`; `Viewport=Mobile`; reference frame 252×100px
+- Direct Figma source: `1024:19284`; `Viewport=Desktop`; reference frame 488×96px
 
 ### Assets and interaction
 
@@ -2991,7 +2773,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -3016,6 +2798,7 @@ RENDER: HYBRID
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#337:5039` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:5cb7ff9481e6dc20d956a64dd93afc3d39fe966a952cfb51f4159905a9543c04`
 - Purpose: Отдельный пронумерованный шаг с живым текстом и необязательной подписью.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Item/Step` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -3025,6 +2808,7 @@ RENDER: HYBRID
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -3036,10 +2820,6 @@ RENDER: HYBRID
 ### Mobile
 
 - `root` — role `item`; render `presentation-table`; visibility `always`
-  - Fact `description-1`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-2`: `4px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-3`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-4`: `6px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `badge` — role `badge`; render `nested-component`; visibility `always`; component `badge-step-number` (`Badge/Step-Number`)
   - `heading` — role `heading`; render `html-text`; visibility `always`
   - `caption` — role `caption`; render `html-text`; visibility property `show-caption` (`Show Caption`)
@@ -3048,6 +2828,8 @@ RENDER: HYBRID
 
 - Variant `mobile` — Figma node `18:2939`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `230:3839`; axes: `Viewport=Desktop`
+- Direct Figma source: `18:2939`; `Viewport=Mobile`; reference frame 252×89px
+- Direct Figma source: `230:3839`; `Viewport=Desktop`; reference frame 488×87px
 - Property `show-caption` (`Show Caption`) — `boolean`; default `true`
 
 ### Constraints and dependencies
@@ -3057,7 +2839,7 @@ RENDER: HYBRID
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -3082,6 +2864,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#1084:16995` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно по компонентам Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:359fbab0689fef703cd244bffd17d3623916ac46e053fe0c45091fa03a1a4234`
 - Purpose: Адаптивная группа кликабельных вариантов оценки NPS.
 - Baseline: `registry/email-component-descriptions-registry.md` → `NPS/Options` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -3091,6 +2874,7 @@ RENDER: HTML
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
 
 ### Desktop
 
@@ -3099,7 +2883,7 @@ RENDER: HTML
   - `options` — role `options`; render `presentation-table`; visibility `always`
     - `happy-face-link` — role `rating-link`; render `html-link`; visibility `always`
       - `happy-face-icon` — role `rating-icon`; render `direct-image`; visibility `always`; asset `happy-face-icon`
-    - `neutral-face-link` — role `rating-link`; render `html-link`; visibility `always`
+    - `neutral-face-link` — role `rating-link`; render `html-link`; visibility variant `Count=3`
       - `neutral-face-icon` — role `rating-icon`; render `direct-image`; visibility `always`; asset `neutral-face-icon`
     - `sad-face-link` — role `rating-link`; render `html-link`; visibility `always`
       - `sad-face-icon` — role `rating-icon`; render `direct-image`; visibility `always`; asset `sad-face-icon`
@@ -3107,25 +2891,11 @@ RENDER: HTML
 ### Mobile
 
 - `root` — role `nps`; render `presentation-table`; visibility `always`
-  - Fact `description-1`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-2`: `24px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-3`: `296px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-4`: `22px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-5`: `552px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-6`: `32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-7`: `26px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-8`: `18px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-9`: `44px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-10`: `8px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-11`: `32×32px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-12`: `12px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-13`: `54px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
-  - Fact `description-14`: `42×42px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `heading` — role `heading`; render `html-text`; visibility `always`
   - `options` — role `options`; render `presentation-table`; visibility `always`
     - `happy-face-link` — role `rating-link`; render `html-link`; visibility `always`
       - `happy-face-icon` — role `rating-icon`; render `direct-image`; visibility `always`; asset `happy-face-icon`
-    - `neutral-face-link` — role `rating-link`; render `html-link`; visibility `always`
+    - `neutral-face-link` — role `rating-link`; render `html-link`; visibility variant `Count=3`
       - `neutral-face-icon` — role `rating-icon`; render `direct-image`; visibility `always`; asset `neutral-face-icon`
     - `sad-face-link` — role `rating-link`; render `html-link`; visibility `always`
       - `sad-face-icon` — role `rating-icon`; render `direct-image`; visibility `always`; asset `sad-face-icon`
@@ -3136,6 +2906,10 @@ RENDER: HTML
 - Variant `desktop-3` — Figma node `260:3974`; axes: `Viewport=Desktop`, `Count=3`
 - Variant `mobile-2` — Figma node `260:1346`; axes: `Viewport=Mobile`, `Count=2`
 - Variant `desktop-2` — Figma node `260:3976`; axes: `Viewport=Desktop`, `Count=2`
+- Direct Figma source: `15:599`; `Viewport=Mobile, Count=3`; reference frame 328×246px
+- Direct Figma source: `260:3974`; `Viewport=Desktop, Count=3`; reference frame 600×197px
+- Direct Figma source: `260:1346`; `Viewport=Mobile, Count=2`; reference frame 328×194px
+- Direct Figma source: `260:3976`; `Viewport=Desktop, Count=2`; reference frame 600×197px
 
 ### Assets and interaction
 
@@ -3149,6 +2923,7 @@ RENDER: HTML
   - Clipping: `preserve-artwork`
   - Export boundary: `fill` `happy-face-icon @4x`
   - Pixel dimensions: 168×168px
+  - Raw Figma Fill dimensions: 1024×1024px
   - Aspect ratio: 42:42
   - Crop: `figma-fill`; position `concrete-desktop-instance`
   - Background: own fill `preserve`; artificial matte `forbid`
@@ -3162,6 +2937,7 @@ RENDER: HTML
   - Clipping: `preserve-artwork`
   - Export boundary: `fill` `neutral-face-icon @4x`
   - Pixel dimensions: 168×168px
+  - Raw Figma Fill dimensions: 1024×1024px
   - Aspect ratio: 42:42
   - Crop: `figma-fill`; position `concrete-desktop-instance`
   - Background: own fill `preserve`; artificial matte `forbid`
@@ -3175,6 +2951,7 @@ RENDER: HTML
   - Clipping: `preserve-artwork`
   - Export boundary: `fill` `sad-face-icon @4x`
   - Pixel dimensions: 168×168px
+  - Raw Figma Fill dimensions: 1024×1024px
   - Aspect ratio: 42:42
   - Crop: `figma-fill`; position `concrete-desktop-instance`
   - Background: own fill `preserve`; artificial matte `forbid`
@@ -3193,7 +2970,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Standalone output is defined by the Mobile and Desktop contracts above.
+- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
