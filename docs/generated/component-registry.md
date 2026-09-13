@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: component-registry -->
-<!-- source-digest: sha256:f972434c1b977a209beff7913ededbfdbc29cea051b2cf61e379de60efc87b5a -->
+<!-- source-digest: sha256:8ac764014c57d55c1eb3b6b99ce9c844c83e187d5e8eb90ee71e06a3055d7154 -->
 <!-- schema-versions: components=2.1.0, typography=1.0.0, spacing=1.0.0, assets=1.0.0 -->
 # CUPIS component registry
 
@@ -1077,7 +1077,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#337:6569` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
-- Figma source check: `blocked-ambiguous-description` on `2026-09-13`; Описание использует словесные цвета кнопок/текста и округлённые размеры логотипа.
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно из Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:aeb50018c4411ea2752ab4c99aab86f095b51454b33a38ff659b58d65637b978`
 - Purpose: Промоблок приложения с логотипом, живым текстом и кнопками магазинов.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Banner/App-Download` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -1202,6 +1202,8 @@ RENDER: HTML
 
 - Variant `mobile` — Figma node `15:2586`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `260:1494`; axes: `Viewport=Desktop`
+- Direct Figma source: `15:2586`; `Viewport=Mobile`; reference frame 328×378px
+- Direct Figma source: `260:1494`; `Viewport=Desktop`; reference frame 600×298px
 
 ### Assets and interaction
 
@@ -1739,7 +1741,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#326:5806` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
-- Figma source check: `blocked-ambiguous-description` on `2026-09-13`; Описание называет фон карточки белым без точного кода.
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно из Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:1e99c3cea4bfd175c368c3a843dc694a1c945a2c9848af1666811119e49da1bc`
 - Purpose: Контентный блок с заголовком, вертикальным списком карточек с изображениями и необязательной подписью.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Block/Cards-Images` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -1780,6 +1782,8 @@ RENDER: HTML
 
 - Variant `desktop` — Figma node `398:7570`; axes: `Viewport=Desktop`
 - Variant `mobile` — Figma node `398:7598`; axes: `Viewport=Mobile`
+- Direct Figma source: `398:7570`; `Viewport=Desktop`; reference frame 600×1242px
+- Direct Figma source: `398:7598`; `Viewport=Mobile`; reference frame 328×2021px
 - Property `show-caption` (`Show Caption`) — `boolean`; default `true`
 
 ### Constraints and dependencies
@@ -1901,7 +1905,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#326:6342` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
-- Figma source check: `blocked-ambiguous-description` on `2026-09-13`; Описание называет фон карточки белым без точного кода.
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно из Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:c63c3dc20a045beeaba79ba062390ade2ee8608a623dc74a12efde6266651e92`
 - Purpose: Контентный блок с заголовком, вертикальным списком карточек с иконками и необязательной подписью.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Block/Icon-Cards` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -1942,6 +1946,8 @@ RENDER: HTML
 
 - Variant `desktop` — Figma node `398:7759`; axes: `Viewport=Desktop`
 - Variant `mobile` — Figma node `398:7953`; axes: `Viewport=Mobile`
+- Direct Figma source: `398:7759`; `Viewport=Desktop`; reference frame 600×1182px
+- Direct Figma source: `398:7953`; `Viewport=Mobile`; reference frame 328×1367px
 - Property `show-caption` (`Show Caption`) — `boolean`; default `true`
 
 ### Constraints and dependencies
@@ -1976,7 +1982,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#946:26516` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
-- Figma source check: `blocked-ambiguous-description` on `2026-09-13`; Описание задаёт белую карточку словом без точного кода.
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно из Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:758ae01e42519336077861f93e6c60cd8cfaec0784c8b97bc0d2017ea295f547`
 - Purpose: Контентный блок со списком строк, каждая из которых использует графическую иконку и живой текст.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Block/Icon-List` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -2026,6 +2032,8 @@ RENDER: HTML
 
 - Variant `desktop` — Figma node `946:26515`; axes: `Viewport=Desktop`
 - Variant `mobile` — Figma node `946:26514`; axes: `Viewport=Mobile`
+- Direct Figma source: `946:26515`; `Viewport=Desktop`; reference frame 600×768px
+- Direct Figma source: `946:26514`; `Viewport=Mobile`; reference frame 328×593px
 - Property `show-button` (`Show Button`) — `boolean`; default `true`
 - Property `show-caption` (`Show Caption`) — `boolean`; default `true`
 
@@ -2259,7 +2267,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#337:4713` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
-- Figma source check: `blocked-ambiguous-description` on `2026-09-13`; Описание использует приблизительный угол градиента и словесный цвет.
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры обоих вариантов записаны непосредственно из Figma; CSS-угол 25° отдельно утверждён для HTML и не выдаётся за угол Fill. HTML-проекция проверяется отдельно.
 - Structure fingerprint: `sha256:f72b837d30fd626373d960ba021ccc7d184765092d8a14d19052aa445533d4b3`
 - Purpose: Основная градиентная HTML-кнопка для главного действия письма.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Button/Primary` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -2280,6 +2288,7 @@ RENDER: HTML
   - Fact `background-fallback`: `#18B037`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - Fact `background-gradient-start`: `#18B037`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - Fact `background-gradient-end`: `#3DD55C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `background-gradient-css-angle-degrees`: `25`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - Fact `background-replacement-forbidden`: `#00991F`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `link` — role `button-link`; render `html-link`; visibility `always`
     - Fact `button-text-size`: `16px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
@@ -2293,6 +2302,7 @@ RENDER: HTML
   - Fact `background-fallback`: `#18B037`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - Fact `background-gradient-start`: `#18B037`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - Fact `background-gradient-end`: `#3DD55C`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
+  - Fact `background-gradient-css-angle-degrees`: `25`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - Fact `background-replacement-forbidden`: `#00991F`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
   - `link` — role `button-link`; render `html-link`; visibility `always`
     - Fact `button-text-size`: `14px`; provenance: `registry-literal` (`registry/email-component-descriptions-registry.md`)
@@ -2301,6 +2311,8 @@ RENDER: HTML
 
 - Variant `desktop` — Figma node `337:4694`; axes: `Viewport=Desktop`
 - Variant `mobile` — Figma node `337:4691`; axes: `Viewport=Mobile`
+- Direct Figma source: `337:4694`; `Viewport=Desktop`; reference frame 230×54px
+- Direct Figma source: `337:4691`; `Viewport=Mobile`; reference frame 158×44px
 
 ### Assets and interaction
 
@@ -2334,7 +2346,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#337:4710` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
-- Figma source check: `blocked-ambiguous-description` on `2026-09-13`; Описание задаёт белый текст словом без точного кода.
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно из Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:d2451da399ffb1e0a67a979bae64ad7442aac2617ee5ee95a2e94fe767283e81`
 - Purpose: Вторичная кликабельная HTML-кнопка для действий внутри письма.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Button/Secondary` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -2366,6 +2378,8 @@ RENDER: HTML
 
 - Variant `mobile` — Figma node `337:4576`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `337:4699`; axes: `Viewport=Desktop`
+- Direct Figma source: `337:4576`; `Viewport=Mobile`; reference frame 158×44px
+- Direct Figma source: `337:4699`; `Viewport=Desktop`; reference frame 230×46px
 
 ### Assets and interaction
 
@@ -2965,7 +2979,7 @@ RENDER: HYBRID
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#337:4958` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
-- Figma source check: `blocked-ambiguous-description` on `2026-09-13`; Описание задаёт зелёный маркер словом без точного кода.
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры вариантов записаны непосредственно из Figma; HTML-интерпретация проверяется отдельно.
 - Structure fingerprint: `sha256:00506a80bff7fc52a80ed872823de640d3932e0045e416de034f2d38ab0c0899`
 - Purpose: Отдельный пункт маркированного списка с живым текстом.
 - Baseline: `registry/email-component-descriptions-registry.md` → `Item/Bullet` (`52893694e97a8751517f9174a90376e1eb849e0c`)
@@ -3003,6 +3017,8 @@ RENDER: HYBRID
 
 - Variant `mobile` — Figma node `222:702`; axes: `Viewport=Mobile`
 - Variant `desktop` — Figma node `234:580`; axes: `Viewport=Desktop`
+- Direct Figma source: `222:702`; `Viewport=Mobile`; reference frame 252×106px
+- Direct Figma source: `234:580`; `Viewport=Desktop`; reference frame 488×109px
 - Property `show-link` (`Show Link`) — `boolean`; default `true`
 
 ### Assets and interaction
