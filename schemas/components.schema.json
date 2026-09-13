@@ -278,6 +278,44 @@
               "items": {
                 "$ref": "#/$defs/figmaSourceVariant"
               }
+            },
+            "figma_fact_links": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "variant_node_id",
+                  "node_id",
+                  "source_path",
+                  "contract_path",
+                  "transform"
+                ],
+                "properties": {
+                  "variant_node_id": {
+                    "type": "string",
+                    "pattern": "^[0-9]+:[0-9]+$"
+                  },
+                  "node_id": {
+                    "type": "string",
+                    "pattern": "^[0-9]+:[0-9]+$"
+                  },
+                  "source_path": {
+                    "type": "string",
+                    "pattern": "^/"
+                  },
+                  "contract_path": {
+                    "type": "string",
+                    "pattern": "^/(contracts|asset_contracts|variants|properties|identity)/"
+                  },
+                  "transform": {
+                    "enum": [
+                      "identity",
+                      "lowercase"
+                    ]
+                  }
+                }
+              }
             }
           }
         },
