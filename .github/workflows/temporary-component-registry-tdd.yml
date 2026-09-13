@@ -1,6 +1,8 @@
 name: Temporary targeted component-registry test
 
 "on":
+  push:
+    branches: [codex/verify-render-contracts]
   workflow_dispatch:
 
 permissions:
@@ -8,6 +10,7 @@ permissions:
 
 jobs:
   test:
+    if: "${{ github.event_name == 'workflow_dispatch' }}"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
