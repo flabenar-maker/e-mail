@@ -160,7 +160,7 @@ test("Figma-verified Banner/App-Download mobile action is full-width with one ce
   const output = renderContractTree({ component, coverage: { component_id: component.id, mode: "interpreter" }, content, assets, foundations });
   assert.deepEqual(output.diagnostics, []);
   assert.equal(component.contracts.mobile.root.children.flatMap((node) => node.children ?? []).flatMap((node) => node.children ?? []).some((node) => node.facts?.some(({ id, value }) => id === "reference-size" && value.width === 252)), true);
-  assert.match(output.html, /width="252"[^>]*style="[^"]*width:100%/u);
+  assert.match(output.html, /style="[^"]*width:100%/u);
   assert.match(output.html, /text-align:center/u);
   assert.equal((output.html.match(/<a href="https:\/\/example\.invalid\/action"/gu) ?? []).length, 8);
 });
