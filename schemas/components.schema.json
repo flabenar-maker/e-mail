@@ -1878,6 +1878,24 @@
         },
         "rotation": {
           "type": "number"
+        },
+        "strokes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/figmaSourceFill"
+          }
+        },
+        "stroke_weight": {
+          "type": "number",
+          "minimum": 0
+        },
+        "stroke_align": {
+          "type": "string",
+          "enum": [
+            "INSIDE",
+            "CENTER",
+            "OUTSIDE"
+          ]
         }
       }
     }
