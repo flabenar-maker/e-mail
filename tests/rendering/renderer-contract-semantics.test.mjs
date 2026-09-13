@@ -39,17 +39,26 @@ function component(root, variants = []) {
 // to the base viewport root is valid when an exact variant exists.
 test("selects the exact variant-contract root for the requested axes", async () => {
   const base = node({ id: "root", children: [node({ id: "copy", mode: "html-text", slots: [{ id: "text", required: true }] })] });
-  const accent = node({ id: "accent-root", children: [node({ id: "accent-copy", mode: "html-text", slots: [{ id: "text", required: true }] })] });
+  const mobileAccent = node({ id: "mobile-accent-root", children: [node({ id: "mobile-accent-copy", mode: "html-text", slots: [{ id: "text", required: true }] })] });
+  const desktopAccent = node({ id: "desktop-accent-root", children: [node({ id: "desktop-accent-copy", mode: "html-text", slots: [{ id: "text", required: true }] })] });
   const result = await render({
-    component: component(base, [{
-      variant_node_id: "1:1",
-      axes: [{ name: "Viewport", value: "Mobile" }, { name: "Style", value: "Accent" }],
-      root: accent,
-    }]),
+    component: component(base, [
+      {
+        variant_node_id: "1:1",
+        axes: [{ name: "Viewport", value: "Mobile" }, { name: "Style", value: "Accent" }],
+        root: mobileAccent,
+      },
+      {
+        variant_node_id: "1:2",
+        axes: [{ name: "Viewport", value: "Desktop" }, { name: "Style", value: "Accent" }],
+        root: desktopAccent,
+      },
+    ]),
     variantAxes: { Style: "Accent" },
-    content: { copy: { text: "Base" }, "accent-copy": { text: "Accent" } },
+    content: { copy: { text: "Base" }, "mobile-accent-copy": { text: "Mobile accent" }, "desktop-accent-copy": { text: "Desktop accent" } },
   });
-  assert.match(result.html, />Accent</u);
+  assert.match(result.html, />Mobile accent</u);
+  assert.match(result.html, />Desktop accent</u);
   assert.doesNotMatch(result.html, />Base</u);
   assert.deepEqual(result.diagnostics, []);
 });
