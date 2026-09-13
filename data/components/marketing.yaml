@@ -15347,7 +15347,7 @@
                     "fills": [
                       {
                         "id": "VariableID:2645e5dcb86a808341e1c609f5e1f850074dfb41/4383:1",
-                        "name": "?/_text/text-on-color-strong"
+                        "name": "✦/_text/text-on-color-strong"
                       }
                     ]
                   },
@@ -15476,7 +15476,7 @@
                     "fills": [
                       {
                         "id": "VariableID:2645e5dcb86a808341e1c609f5e1f850074dfb41/4383:1",
-                        "name": "?/_text/text-on-color-strong"
+                        "name": "✦/_text/text-on-color-strong"
                       }
                     ]
                   }
@@ -23948,7 +23948,7 @@
                 "id": "store-grid-layout-forbidden",
                 "value": {
                   "type": "string",
-                  "value": "2?2"
+                  "value": "2×2"
                 },
                 "provenance": {
                   "kind": "registry-literal",
