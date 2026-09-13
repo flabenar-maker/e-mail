@@ -13,6 +13,7 @@ function structureOf(element) {
     component_id: element?.component_id ?? null,
     asset_contract_id: element?.asset_contract_id ?? null,
     content_slots: element?.content_slots ?? [],
+    action: element?.action ?? null,
   };
 }
 
@@ -82,7 +83,7 @@ function resolveProperty(properties, viewport, id) {
 }
 
 function valueWithUnit(value) {
-  if (value?.type === "measure") return `${value.value}${value.unit}`;
+  if (value?.type === "measure") return `${value.value}${value.unit === "percent" ? "%" : value.unit}`;
   if (["color", "string", "keyword"].includes(value?.type)) return value.value;
   return undefined;
 }
@@ -147,6 +148,12 @@ function propsFromFacts(facts = [], { viewport, mode, isRoot = false } = {}) {
     else if (id.endsWith("-width")) props.width = value.value;
     else if (id.endsWith("-height")) props.height = value.value;
   }
+  const gradientStart = fact("background-gradient-start")?.value;
+  const gradientEnd = fact("background-gradient-end")?.value;
+  const gradientAngle = fact("background-gradient-css-angle-degrees")?.value;
+  if (gradientStart && gradientEnd && Number.isFinite(gradientAngle)) {
+    props.style["background-image"] = `linear-gradient(${gradientAngle}deg,${gradientStart},${gradientEnd})`;
+  }
   return props;
 }
 
@@ -200,24 +207,41 @@ function contentFor(context, viewport, element) {
   return { entry, diagnostics };
 }
 
+
+function visibilityFor(element, viewport, context, path) {
+  const visibility = element.visibility ?? { mode: "always" };
+  if (visibility.mode === "always") return { visible: true, diagnostics: [] };
+  if (visibility.mode === "property") {
+    const visible = resolveProperty(context.properties, viewport, visibility.property_id);
+    return visible === undefined
+      ? { visible: false, diagnostics: [diagnostic("RENDER_PROPERTY_UNRESOLVED", `/contracts/${viewport}/${path}/visibility/property_id`, `Property ${visibility.property_id} is not resolved.`)] }
+      : { visible, diagnostics: [] };
+  }
+  if (visibility.mode === "instance") {
+    const override = scopedEntry(context.visibility, viewport, element.id);
+    if (override !== undefined && typeof override !== "boolean") {
+      return { visible: false, diagnostics: [diagnostic("RENDER_INSTANCE_VISIBILITY_INVALID", `/contracts/${viewport}/${path}/visibility`, "Instance visibility override must be boolean.")] };
+    }
+    return { visible: override ?? visibility.default_visible, diagnostics: [] };
+  }
+  return { visible: false, diagnostics: [diagnostic("RENDER_VISIBILITY_UNSUPPORTED", `/contracts/${viewport}/${path}/visibility`, `Unsupported visibility mode: ${visibility.mode}.`)] };
+}
+
+function actionHref(element, entry) {
+  if (!element.action) return undefined;
+  return slotValue(entry, element.action.href_slot);
+}
+
+function wrapAction(element, entry, html) {
+  const href = actionHref(element, entry);
+  if (!href || !html) return html;
+  return renderPrimitive("link", { href, style: { display: "block", color: "inherit" } }, html);
+}
+
 function renderShell(element, viewport, path, childHtml, context) {
   if (!element) return { html: "", diagnostics: [] };
-  if (element.visibility?.mode === "property") {
-    const visible = resolveProperty(context.properties, viewport, element.visibility.property_id);
-    if (visible === undefined) {
-      return {
-        html: "",
-        diagnostics: [
-          diagnostic(
-            "RENDER_PROPERTY_UNRESOLVED",
-            `/contracts/${viewport}/${path}/visibility/property_id`,
-            `Property ${element.visibility.property_id} is not resolved.`,
-          ),
-        ],
-      };
-    }
-    if (!visible) return { html: "", diagnostics: [] };
-  }
+  const visibility = visibilityFor(element, viewport, context, path);
+  if (!visibility.visible) return { html: "", diagnostics: visibility.diagnostics };
 
   const { entry, diagnostics } = contentFor({ ...context, path }, viewport, element);
   if (diagnostics.length > 0) return { html: "", diagnostics };
@@ -227,6 +251,14 @@ function renderShell(element, viewport, path, childHtml, context) {
 
   switch (element.render_mode) {
     case "presentation-table": {
+      const dimensions = element.facts?.find(({ id }) => id === "reference-size")?.value;
+      if (element.semantic_role?.includes("divider") && dimensions?.height === 1 && children.length === 0) {
+        const cell = renderPrimitive("cell", {
+          height: 1,
+          style: { "background-color": factProps.style["background-color"], "font-size": "0", "line-height": "0" },
+        }, "&nbsp;");
+        return { html: renderPrimitive("table", { width: "100%" }, `<tr>${cell}</tr>`), diagnostics: [] };
+      }
       const axes = (element.facts ?? []).filter(({ id }) => id === "layout-axis" || id.endsWith("-layout-axis"));
       const gaps = (element.facts ?? []).filter(({ id }) => id === "layout-gap" || id.endsWith("-layout-gap"));
       // Components without an explicit layout contract retain their legacy HTML.
@@ -236,7 +268,7 @@ function renderShell(element, viewport, path, childHtml, context) {
             if (!child) return "";
             const cell = element.children?.[index]?.render_mode === "background-image"
               ? child
-              : renderPrimitive("cell", {}, child);
+              : renderPrimitive("cell", {}, wrapAction(element, entry, child));
             return "<tr>" + cell + "</tr>";
           })
           .join("");
@@ -263,7 +295,7 @@ function renderShell(element, viewport, path, childHtml, context) {
         .filter(({ html }) => Boolean(html));
       const cellFor = ({ html, node }) => node?.render_mode === "background-image"
         ? html
-        : renderPrimitive("cell", { width: propsFromFacts(node?.facts, { viewport, mode: node?.render_mode }).width, valign: element.facts?.some(({ id, value }) => id === "counter-alignment" && value.value === "center") ? "middle" : "top" }, html);
+        : renderPrimitive("cell", { width: propsFromFacts(node?.facts, { viewport, mode: node?.render_mode }).width, valign: element.facts?.some(({ id, value }) => id === "counter-alignment" && value.value === "center") ? "middle" : "top" }, wrapAction(element, entry, html));
       const rows = axis === "horizontal"
         ? `<tr>${visible.map(cellFor).join(gap > 0
           ? renderPrimitive("cell", { width: gap, style: { "font-size": "0", "line-height": "0" } }, "&nbsp;")
@@ -327,12 +359,13 @@ function renderShell(element, viewport, path, childHtml, context) {
         };
       }
       return {
-        html: renderPrimitive("direct-image", {
+        html: wrapAction(element, entry, renderPrimitive("direct-image", {
           ...asset,
           ...factProps,
+          height: element.facts?.some(({ id, value }) => id === "height-behavior" && value.value?.value === "auto") ? undefined : (factProps.height ?? asset.height),
           style: { ...(asset.style ?? {}), ...factProps.style },
           alt: slotValue(entry, "alt"),
-        }),
+        })),
         diagnostics: [],
       };
     }
@@ -356,6 +389,7 @@ function renderShell(element, viewport, path, childHtml, context) {
           {
             ...asset,
             ...factProps,
+            height: element.facts?.some(({ id, value }) => id === "height-behavior" && value.value?.value === "content-driven-cover") ? undefined : (factProps.height ?? asset.height),
             style: { ...(asset.style ?? {}), ...factProps.style },
           },
           joined,
@@ -385,6 +419,8 @@ function renderShell(element, viewport, path, childHtml, context) {
 
 function renderSingle(element, viewport, path, context) {
   if (!element) return { html: "", diagnostics: [] };
+  const visibility = visibilityFor(element, viewport, context, path);
+  if (!visibility.visible) return { html: "", diagnostics: visibility.diagnostics };
   const children = (element.children ?? []).map((child, index) =>
     renderSingle(child, viewport, `${path}/children/${index}`, context),
   );
@@ -429,6 +465,9 @@ function renderSplit(pair, path, context) {
 
 function renderPaired(pair, path, context) {
   if (pair.kind === "split") return renderSplit(pair, path, context);
+  if (pair.mobile.visibility?.mode !== "always" || pair.desktop.visibility?.mode !== "always") {
+    return renderSplit(pair, path, context);
+  }
   if (
     pair.mobile.render_mode === "presentation-table" &&
     pair.children.some(
@@ -480,12 +519,37 @@ function breakpointCss(rules, foundations, diagnostics) {
   return `@media only screen and (${breakpoint.query}:${breakpoint.value}${breakpoint.unit}){${[...new Set(rules)].join("")}}`;
 }
 
+
+function selectVariant(component, viewport, variantAxes) {
+  const base = component?.contracts?.[viewport]?.root;
+  const extras = component?.contracts?.variant_contracts ?? [];
+  if (Object.keys(variantAxes).length === 0 || extras.length === 0) return { root: base, diagnostics: [] };
+  const sources = component?.contracts?.source_variants ?? [];
+  const sourceFor = (root) => sources.find(({ source_node }) =>
+    source_node?.node_id === root?.facts?.find(({ id }) => id === "reference-size")?.provenance?.node_id);
+  const candidates = [
+    { root: base, axes: sourceFor(base)?.axes ?? [{ name: "Viewport", value: viewport }] },
+    ...extras.map(({ root, axes }) => ({ root, axes })),
+  ];
+  const expected = Object.entries(variantAxes).sort(([a], [b]) => a.localeCompare(b));
+  const selected = candidates.find(({ axes }) =>
+    axes.some(({ name, value }) => name === "Viewport" && value.toLowerCase() === viewport) &&
+    expected.every(([name, value]) => axes.some((axis) => axis.name === name && axis.value === value)) &&
+    axes.filter(({ name }) => name !== "Viewport").length === expected.length);
+  return selected
+    ? { root: selected.root, diagnostics: [] }
+    : { root: null, diagnostics: [diagnostic("RENDER_VARIANT_UNRESOLVED",
+      `/contracts/${viewport}/variant_contracts`, `No exact ${viewport} variant for ${JSON.stringify(variantAxes)}.`)] };
+}
+
 export function renderContractTree({
   component,
   coverage,
   content = {},
   assets = {},
   properties = {},
+  visibility = {},
+  variantAxes = {},
   foundations = {},
 }) {
   if (coverage?.component_id !== component?.id || coverage?.mode !== "interpreter") {
@@ -501,8 +565,13 @@ export function renderContractTree({
       ],
     };
   }
-  const mobile = component?.contracts?.mobile?.root;
-  const desktop = component?.contracts?.desktop?.root;
+  const selectedMobile = selectVariant(component, "mobile", variantAxes);
+  const selectedDesktop = selectVariant(component, "desktop", variantAxes);
+  const mobile = selectedMobile.root;
+  const desktop = selectedDesktop.root;
+  if (selectedMobile.diagnostics.length || selectedDesktop.diagnostics.length) {
+    return { html: "", css: "", diagnostics: sortDiagnostics([...selectedMobile.diagnostics, ...selectedDesktop.diagnostics]) };
+  }
   if (!mobile || !desktop) {
     return {
       html: "",
@@ -520,7 +589,7 @@ export function renderContractTree({
   const result = renderPaired(
     pairViewportTrees({ mobile, desktop }),
     "root",
-    { content, assets, properties, foundations },
+    { content, assets, properties, visibility, variantAxes, foundations },
   );
   const diagnostics = [...result.diagnostics];
   const css = breakpointCss(result.rules, foundations, diagnostics);
