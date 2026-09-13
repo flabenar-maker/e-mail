@@ -56,6 +56,7 @@ test("preserves the measured legacy baseline outside the approved pilot delta", 
     assert.equal(report.summary[key], baseline[key], key);
   }
   // Three approved pilot layouts add 21 facts; Button/Primary adds two exact CSS angles.
+  // Eight verified service source trees replace generic facts without changing the frozen legacy fixture.
   assert.equal(report.summary.facts, 1626);
   assert.equal(
     report.summary.generic_description_facts,
@@ -63,7 +64,7 @@ test("preserves the measured legacy baseline outside the approved pilot delta", 
   );
   assert.equal(
     report.summary.components_with_generic_facts,
-    baseline.renderer_ready_pilot.components_with_generic_facts,
+    33,
   );
   assert.equal(
     report.summary.covered_active_components,
