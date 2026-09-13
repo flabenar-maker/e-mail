@@ -470,7 +470,6 @@ function validateInternalIds(errors, record, rootPath) {
 
   for (const viewport of VIEWPORTS) {
     const seenElements = new Set();
-    const seenFacts = new Set();
     walkElementTree(
       record?.contracts?.[viewport]?.root,
       `${rootPath}/contracts/${viewport}/root`,
@@ -483,6 +482,7 @@ function validateInternalIds(errors, record, rootPath) {
           `${path}/id`,
           `${viewport} element id`,
         );
+        const seenFacts = new Set();
         (element.facts ?? []).forEach((fact, index) => {
           pushDuplicate(
             errors,
