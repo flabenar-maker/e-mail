@@ -253,3 +253,55 @@ test("mapped text, font size and color must match the live Figma values exactly"
     assert.ok(report.issues.some((issue) => issue.code === "FIGMA_CONTRACT_MISMATCH" && issue.source_path === path), path);
   }
 });
+
+test("a viewportless shared asset is checked once and may serve both viewports", () => {
+  const record = {
+    id: "asset-example",
+    identity: { semantic_role: "asset" },
+    figma: { file_key: "file-key", node_id: "1:1" },
+    variants: [],
+    asset_contracts: [],
+    contracts: {
+      mobile: { root: { facts: [], children: [] } },
+      desktop: { root: { facts: [], children: [] } },
+      figma_fact_links: [],
+    },
+  };
+  const live = {
+    capture_version: "1.0.0", capture_errors: [], component_properties: [],
+    file_key: "file-key", component_node_id: "1:1",
+    variants: [{ variant_node_id: "1:1", axes: [], source_node: { node_id: "1:1" } }],
+  };
+  const report = auditFigmaContractFacts({ record, live });
+  assert.equal(report.ok, true, JSON.stringify(report.issues));
+});
+
+test("exported asset artwork is an image boundary, not individually mapped vector CSS", () => {
+  const record = {
+    id: "header-example",
+    identity: { semantic_role: "email" },
+    figma: { file_key: "file-key", node_id: "1:1" },
+    variants: [{ node_id: "2:1" }, { node_id: "2:2" }],
+    asset_contracts: [{ owner_layer_name: "logo @4x" }],
+    contracts: {
+      mobile: { root: { facts: [], children: [] } },
+      desktop: { root: { facts: [], children: [] } },
+      figma_fact_links: [],
+    },
+  };
+  const asset = {
+    node_id: "3:1", name: "logo @4x", node_type: "FRAME",
+    children: [{ node_id: "4:1", name: "Vector", node_type: "VECTOR", fills: [{ type: "solid", color: "#000000" }] }],
+  };
+  const live = {
+    capture_version: "1.0.0", capture_errors: [{ node_id: "3:1", code: "ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW" }],
+    component_properties: [], file_key: "file-key", component_node_id: "1:1",
+    variants: [
+      { variant_node_id: "2:1", axes: [{ name: "Viewport", value: "Mobile" }], source_node: { node_id: "2:1", children: [asset] } },
+      { variant_node_id: "2:2", axes: [{ name: "Viewport", value: "Desktop" }], source_node: { node_id: "2:2" } },
+    ],
+  };
+  const report = auditFigmaContractFacts({ record, live });
+  assert.equal(report.issues.some((issue) => issue.code === "FIGMA_CAPTURE_UNSUPPORTED"), false);
+  assert.equal(report.issues.some((issue) => issue.node_id === "4:1"), false);
+});
