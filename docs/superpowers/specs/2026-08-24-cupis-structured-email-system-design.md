@@ -346,7 +346,7 @@ Fingerprint рассчитывается по нормализованным к�
 
 Расхождение не исправляется автоматически до определения фактического источника изменения.
 
-CI не заявляет live-проверку Figma. Codex получает Figma snapshot через MCP, а pure scripts нормализуют и сравнивают временный вход. Временный snapshot не коммитится.
+Локальная автоматическая проверка не заявляет live-проверку Figma. Codex получает Figma snapshot через MCP, а pure scripts нормализуют и сравнивают временный вход. Временный snapshot не коммитится.
 
 ## 9. Generated docs и context bundles
 
@@ -357,7 +357,7 @@ CI не заявляет live-проверку Figma. Codex получает Fig
 - генерируются из structured data;
 - содержат детерминированный digest исходных data-файлов и schema versions;
 - не редактируются вручную;
-- проверяются повторной детерминированной генерацией в CI.
+- проверяются повторной детерминированной генерацией локально.
 
 Generated docs являются представлением, а не источником истины. Полный component registry строится напрямую из structured contracts и не вставляет сохранённую prose-копию Figma Description. Compact Figma Description может показываться только как вспомогательная generated-проекция.
 
@@ -490,7 +490,7 @@ Automation использует:
 - dependency lockfile;
 - PowerShell только как bootstrap wrapper.
 
-Один Node major должен быть зафиксирован одинаково в package metadata, документации bootstrap и GitHub Actions во время foundation implementation.
+Один Node major должен быть зафиксирован одинаково в package metadata, документации bootstrap и локальной тестовой среде.
 
 Основные команды:
 
@@ -502,7 +502,7 @@ npm run generate:check
 npm run bundle -- --route <route>
 ```
 
-GitHub Actions выполняет tests, schemas, cross-references, generated-doc check и forbidden-duplicate/path checks.
+Локальный прогон выполняет tests, schemas, cross-references, generated-doc check и forbidden-duplicate/path checks на временном изолированном снимке точного cloud commit. GitHub Actions и PR Checks не используются.
 
 Validation и generation детерминированы и не требуют сети. Scripts не выполняют внешние записи.
 
@@ -607,7 +607,7 @@ Figma не откатывается автоматически. Сначала �
 6. foundations подключаются по проверяемым references;
 7. Description и implementation используют один contract;
 8. task получает один resolved bundle;
-9. CI блокирует structural errors;
+9. локальные проверки блокируют structural errors до merge;
 10. Figma mutations проходят impact gate;
 11. skills не дублируют rules;
 12. shadow scenarios подтверждены;
