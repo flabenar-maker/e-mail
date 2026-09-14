@@ -120,6 +120,15 @@ test("component traversal uses library order and stable ids", async () => {
   }
 });
 
+test("canonical manifest generates the full component registry", async () => {
+  const manifest = await readStrictYaml(join(repoRoot, "system/manifest.yaml"));
+  const rendered = await renderAllGeneratedDocs({ repoRoot, manifest });
+  const content = contentAt(rendered, "docs/generated/component-registry.md");
+
+  assert.match(content, /Block\/Cards-Images/u);
+  assert.match(content, /source-digest: sha256:[0-9a-f]{64}/u);
+  assert.equal((content.match(/^### /gmu) ?? []).length, 61);
+});
 test("all generated references share a deterministic provenance header", async () => {
   const first = await renderCanonical();
   const second = await renderCanonical();
