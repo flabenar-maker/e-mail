@@ -31,7 +31,7 @@
               {
                 "property_id": "show-button",
                 "scope": "all",
-                "value": false
+                "value": true
               }
             ],
             "content_values": [
@@ -50,7 +50,7 @@
                 "scope": "all",
                 "value": {
                   "type": "plain-text",
-                  "value": "Всё важное рядом"
+                  "value": "Небольшой заголовок на пару строк"
                 }
               },
               {
@@ -59,7 +59,7 @@
                 "scope": "all",
                 "value": {
                   "type": "plain-text",
-                  "value": "Управляйте сервисами в одном месте."
+                  "value": "Поясняющая подпись на несколько красивых строк"
                 }
               }
             ],
@@ -69,7 +69,43 @@
                 "path": "images/secondary.jpg"
               }
             ],
-            "slots": []
+            "slots": [],
+            "nested_components": [
+              {
+                "element_id": "root-card-content-area-button",
+                "instance": {
+                  "instance_id": "pilot-secondary-button",
+                  "component_id": "button-secondary",
+                  "variants": {
+                    "mobile": "mobile",
+                    "desktop": "desktop"
+                  },
+                  "property_values": [],
+                  "content_values": [
+                    {
+                      "element_id": "root",
+                      "slot_id": "href",
+                      "scope": "all",
+                      "value": {
+                        "type": "url",
+                        "value": "https://example.test/secondary"
+                      }
+                    },
+                    {
+                      "element_id": "root-label",
+                      "slot_id": "text",
+                      "scope": "all",
+                      "value": {
+                        "type": "plain-text",
+                        "value": "Какая-то кнопка"
+                      }
+                    }
+                  ],
+                  "asset_files": [],
+                  "slots": []
+                }
+              }
+            ]
           },
           {
             "instance_id": "pilot-app-download",
@@ -95,7 +131,7 @@
                 "scope": "mobile",
                 "value": {
                   "type": "plain-text",
-                  "value": "Скачайте приложение"
+                  "value": "Единственный финансовый сервис для тех, кто делает ставки на спорт"
                 }
               },
               {
@@ -149,7 +185,7 @@
                 "scope": "mobile",
                 "value": {
                   "type": "plain-text",
-                  "value": "Google Play"
+                  "value": "GooglePlay"
                 }
               },
               {
@@ -221,7 +257,7 @@
                 "scope": "desktop",
                 "value": {
                   "type": "plain-text",
-                  "value": "Скачайте приложение"
+                  "value": "Единственный финансовый сервис для тех, кто делает ставки на спорт"
                 }
               },
               {
@@ -333,7 +369,7 @@
                 "scope": "all",
                 "value": {
                   "type": "plain-text",
-                  "value": "Вы получили это письмо от CUPIS."
+                  "value": "ООО НКО «Мобильная карта», Лицензия банка России № 3522-К195112. Юридический адрес: Россия, Санкт-Петербург, проспект Малоохтинский, дом. 64, литера. В, этаж 1, помещение 19–20Н."
                 }
               },
               {
