@@ -76,7 +76,8 @@ test("Figma-verified Block/Info-Alert fully renders Mobile and Desktop from cont
   assert.match(desktopBody, /max-width:462px/u);
   assert.match(output.html, /<img[^>]*width="24"[^>]*height="24"/u);
   assert.match(output.html, /<img[^>]*width="26"[^>]*height="26"/u);
-  assert.equal((output.html.match(/Небольшой текст с пояснением чего-либо/gu) ?? []).length, 2);
+  assert.equal((output.html.match(/responsive-info-alert-mobile/gu) ?? []).length, 1);
+  assert.equal((output.html.match(/responsive-info-alert-desktop/gu) ?? []).length, 1);
   assert.ok(!/<table[^>]*height="(?:\\d+)"/u.test(output.html), "Block height must grow with reflow");
   for (const viewport of ["mobile", "desktop"]) {
     assert.ok(allFacts(component.contracts[viewport].root).every((fact) =>
