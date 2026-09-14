@@ -410,7 +410,14 @@
                 },
                 "facts": [],
                 "children": [],
-                "asset_contract_id": "header-logo"
+                "asset_contract_id": "header-logo",
+                "content_slots": [
+                  {
+                    "id": "alt",
+                    "type": "alt-text",
+                    "required": true
+                  }
+                ]
               }
             ]
           }
@@ -434,7 +441,14 @@
                 },
                 "facts": [],
                 "children": [],
-                "asset_contract_id": "header-logo"
+                "asset_contract_id": "header-logo",
+                "content_slots": [
+                  {
+                    "id": "alt",
+                    "type": "alt-text",
+                    "required": true
+                  }
+                ]
               }
             ]
           }
@@ -1303,4 +1317,4 @@
       "constraints": []
     }
   ]
-}
+}\n
