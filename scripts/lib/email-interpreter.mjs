@@ -248,6 +248,56 @@ function wrapAction(element, entry, html) {
   return renderPrimitive("link", { href, style: { display: "block", color: "inherit" } }, html);
 }
 
+function isWholeButtonAction(element) {
+  return element.action?.kind === "whole-element" && (
+    element.semantic_role === "button" || element.semantic_role?.endsWith("-button")
+  );
+}
+
+function inlineActionParts(childHtml, gap) {
+  const parts = childHtml.flatMap((html) =>
+    [...html.matchAll(/<img\b[^>]*>|<p\b[^>]*>[\s\S]*?<\/p>/gu)].map((match) => match[0]),
+  );
+  if (parts.length === 0) return null;
+
+  return parts.map((part, index) => {
+    const offset = index > 0 && gap > 0 ? "margin-left:" + gap + "px;" : "";
+    if (part.startsWith("<img")) {
+      return part.replace(/style="([^"]*)"/u, (_match, style) =>
+        'style="' + style + ';display:inline-block;vertical-align:middle;' + offset + '"',
+      );
+    }
+    return part.replace(/^<p([^>]*)>([\s\S]*)<\/p>$/u, (_match, attrs, body) => {
+      const style = attrs.match(/\sstyle="([^"]*)"/u);
+      const nextAttrs = style
+        ? attrs.replace(style[0], ' style="' + style[1] + ';display:inline-block;vertical-align:middle;' + offset + '"')
+        : attrs + ' style="display:inline-block;vertical-align:middle;' + offset + '"';
+      return "<span" + nextAttrs + ">" + body + "</span>";
+    });
+  });
+}
+
+function renderWholeButtonAction(element, entry, childHtml, factProps, gap) {
+  if (!isWholeButtonAction(element)) return null;
+
+  const href = actionHref(element, entry);
+  const parts = inlineActionParts(childHtml, gap);
+  if (!href || !parts) return null;
+
+  const padding = Object.fromEntries(
+    Object.entries(factProps.style).filter(([key]) => key === "padding" || key.startsWith("padding-")),
+  );
+  const style = { ...factProps.style };
+  for (const key of Object.keys(padding)) delete style[key];
+
+  const link = renderPrimitive("link", {
+    href,
+    style: { display: "block", color: "inherit", "text-align": "center", ...padding },
+  }, parts.join(""));
+  const cell = renderPrimitive("cell", { style: { "text-align": "center" } }, link);
+  return renderPrimitive("table", { ...factProps, style }, "<tr>" + cell + "</tr>");
+}
+
 function renderShell(element, viewport, path, childHtml, context) {
   if (!element) return { html: "", diagnostics: [] };
   const visibility = visibilityFor(element, viewport, context, path);
@@ -306,6 +356,11 @@ function renderShell(element, viewport, path, childHtml, context) {
           )],
         };
       }
+      if (isWholeButtonAction(element)) {
+        const actionHtml = renderWholeButtonAction(element, entry, children, factProps, gap);
+        if (actionHtml) return { html: actionHtml, diagnostics: [] };
+      }
+
       const visible = childHtml
         .map((html, index) => ({ html, node: element.children?.[index] }))
         .filter(({ html }) => Boolean(html));
