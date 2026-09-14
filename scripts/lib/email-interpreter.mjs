@@ -303,12 +303,17 @@ function renderShell(element, viewport, path, childHtml, context) {
       const centerGroup = axis === "horizontal" && primaryAlignment === "center";
       const spaceBetween = axis === "horizontal" && primaryAlignment === "space_between";
       const groupedAction = centerGroup && element.action?.kind === "whole-element" && visible.length > 1;
-      const cellFor = ({ html, node }) => node?.render_mode === "background-image"
-        ? html
-        : renderPrimitive("cell", {
-          width: spaceBetween ? node?.facts?.find(({ id }) => id === "reference-size")?.value?.width : propsFromFacts(node?.facts, { viewport, mode: node?.render_mode }).width,
+      const cellFor = ({ html, node }) => {
+        if (node?.render_mode === "background-image") return html;
+        const nodeProps = propsFromFacts(node?.facts, { viewport, mode: node?.render_mode });
+        return renderPrimitive("cell", {
+          width: spaceBetween ? node?.facts?.find(({ id }) => id === "reference-size")?.value?.width : nodeProps.width,
           valign: element.facts?.some(({ id, value }) => id === "counter-alignment" && value.value === "center") ? "middle" : "top",
+          ...(node?.render_mode === "html-link" && nodeProps.style["text-align"] === "center"
+            ? { style: { "text-align": "center" } }
+            : {}),
         }, groupedAction ? html : wrapAction(element, entry, html));
+      };
       const rawRows = axis === "horizontal"
         ? `<tr>${visible.map(cellFor).join(gap > 0
           ? renderPrimitive("cell", { width: gap, style: { "font-size": "0", "line-height": "0" } }, "&nbsp;")
