@@ -10,7 +10,7 @@
 
 **Spec:** `docs/superpowers/specs/2026-08-24-cupis-structured-email-system-design.md`, разделы 2, 3, 4, 6, 9, 10, 13–16.
 
-**Исторический план.** Этап 7B был реализован, но PR #69 временно перенёс полный generated component registry в `Legacy/` вместе со старым контуром. [PR #71](https://github.com/flabenar-maker/e-mail/pull/71) возвращает `docs/generated/component-registry.md` в manifest и blocking-проверки; старые active source lists и пути `registry/**` в шагах ниже описывают состояние на момент первоначального выполнения, а не нынешний маршрут. Актуальные статусы и дальнейший cutover определяются roadmap и manifest.
+**Исторический план.** Этап 7B был реализован, но PR #69 временно перенёс полный generated component registry в `Legacy/` вместе со старым контуром. [PR #71](https://github.com/flabenar-maker/e-mail/pull/71) вернул `docs/generated/component-registry.md` в `main`, manifest и blocking-проверки; старые active source lists и пути `registry/**` в шагах ниже описывают состояние на момент первоначального выполнения, а не нынешний маршрут. Актуальные статусы и дальнейший cutover определяются roadmap и manifest.
 
 **Prerequisite:** `docs/superpowers/plans/2026-09-07-cupis-component-documentation-contracts.md` должен быть реализован и слит до Task 4. Tasks 1–3 этого плана сохраняют смысл и могут существовать в draft PR до prerequisite, но generated component documentation по старой `description.blocks` модели запрещена.
 
