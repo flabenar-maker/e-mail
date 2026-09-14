@@ -340,7 +340,9 @@ function renderShell(element, viewport, path, childHtml, context) {
               renderPrimitive("table", { width: "auto", align: "center" }, rawRows)))}</tr>`
         : rawRows;
       const padding = Object.fromEntries(
-        Object.entries(factProps.style).filter(([key]) => key === "padding" || key.startsWith("padding-")),
+        Object.entries(factProps.style).filter(([key, value]) =>
+          (key === "padding" || key.startsWith("padding-")) && value !== "0px" && value !== 0,
+        ),
       );
       if (Object.keys(padding).length === 0) {
         return { html: renderPrimitive("table", factProps, rows), diagnostics: [] };
