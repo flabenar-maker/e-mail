@@ -90,13 +90,13 @@ test("pilot fixture contains only normalized component inputs", async () => {
   assert.equal(source.includes("<table"), false);
 });
 
-test("template slot produces one deterministic email document with live button content", async () => {
+test("template slot produces one deterministic email document without disabled secondary CTA", async () => {
   const { result } = await pilot();
 
   assert.deepEqual(result.diagnostics, []);
   assert.match(result.html, /^<!doctype html><html><head>/u);
   assert.match(result.html, /<body><table role="presentation"/u);
-  assert.match(result.html, /<a href="https:\/\/example\.test\/jobs"[^>]*>Откликнуться<\/a>/u);
+  assert.doesNotMatch(result.html, /https:\/\/example\.test\/jobs|Откликнуться/u);
   assert.doesNotMatch(result.html, /placeholder|\[object Object\]/u);
 });
 
@@ -111,11 +111,13 @@ test("secondary banner uses a direct image on mobile and a background image on d
 test("app download keeps store icons and text separate and stacks mobile store links", async () => {
   const { result } = await pilot();
 
-  assert.match(result.html, /<img[^>]+src="images\/rustore-icon\.png"[^>]*>[\s\S]*<p[^>]*>RuStore<\/p>/u);
-  assert.match(
-    result.html,
-    /href="https:\/\/example\.test\/rustore"[\s\S]*<\/a><\/td><\/tr><tr><td[\s\S]*href="https:\/\/example\.test\/google-play"/u,
-  );
+  for (const store of ["rustore", "google-play", "appgallery", "getapps"]) {
+    assert.match(
+      result.html,
+      new RegExp(`<a href="https://example\\.test/${store}">[\\s\\S]*?<img[^>]+src="images/${store === "google-play" ? "google-play" : store}-icon\\.png"`, "u"),
+    );
+  }
+  assert.match(result.html, /<p[^>]*>RuStore<\/p>/u);
 });
 
 test("footer resolves boolean properties without losing the enabled social link", async () => {
@@ -124,7 +126,7 @@ test("footer resolves boolean properties without losing the enabled social link"
   assert.doesNotMatch(result.html, /Скрытая подпись/u);
   assert.match(result.html, /Вы получили это письмо от CUPIS\./u);
   assert.match(result.html, /href="https:\/\/example\.test\/vk"/u);
-  assert.match(result.html, /href="https:\/\/example\.test\/telegram"/u);
+  assert.doesNotMatch(result.html, /href="https:\/\/example\.test\/telegram|images\/telegram-icon\.png/u);
 });
 
 test("document returns every referenced local asset once in deterministic order", async () => {
@@ -140,7 +142,6 @@ test("document returns every referenced local asset once in deterministic order"
       "images/qr-code.png",
       "images/rustore-icon.png",
       "images/secondary.jpg",
-      "images/telegram-icon.png",
       "images/vk-icon.png",
     ],
   );
