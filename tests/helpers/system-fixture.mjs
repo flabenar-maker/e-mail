@@ -31,6 +31,7 @@ export const canonicalSystemFixtureFiles = [
   "data/components/shared.yaml",
   "data/components/marketing.yaml",
   "data/components/service.yaml",
+  "docs/generated/component-registry.md",
   "docs/generated/typography-registry.md",
   "docs/generated/asset-registry.md",
   "docs/generated/naming-reference.md",
