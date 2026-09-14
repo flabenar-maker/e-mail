@@ -3409,7 +3409,14 @@
                   }
                 ],
                 "children": [],
-                "asset_contract_id": "header-logo"
+                "asset_contract_id": "header-logo",
+                "content_slots": [
+                  {
+                    "id": "alt",
+                    "type": "alt-text",
+                    "required": true
+                  }
+                ]
               }
             ]
           }
@@ -3748,7 +3755,14 @@
                   }
                 ],
                 "children": [],
-                "asset_contract_id": "header-logo"
+                "asset_contract_id": "header-logo",
+                "content_slots": [
+                  {
+                    "id": "alt",
+                    "type": "alt-text",
+                    "required": true
+                  }
+                ]
               }
             ]
           }
@@ -27401,6 +27415,11 @@
                                 "id": "href",
                                 "type": "url",
                                 "required": false
+                              },
+                              {
+                                "id": "alt",
+                                "type": "alt-text",
+                                "required": true
                               }
                             ]
                           },
@@ -27517,6 +27536,11 @@
                                 "id": "href",
                                 "type": "url",
                                 "required": false
+                              },
+                              {
+                                "id": "alt",
+                                "type": "alt-text",
+                                "required": true
                               }
                             ]
                           }
@@ -29478,6 +29502,11 @@
                                 "id": "href",
                                 "type": "url",
                                 "required": false
+                              },
+                              {
+                                "id": "alt",
+                                "type": "alt-text",
+                                "required": true
                               }
                             ]
                           },
@@ -29594,6 +29623,11 @@
                                 "id": "href",
                                 "type": "url",
                                 "required": false
+                              },
+                              {
+                                "id": "alt",
+                                "type": "alt-text",
+                                "required": true
                               }
                             ]
                           }
@@ -34792,7 +34826,14 @@
                       }
                     ],
                     "children": [],
-                    "asset_contract_id": "hero-image"
+                    "asset_contract_id": "hero-image",
+                    "content_slots": [
+                      {
+                        "id": "alt",
+                        "type": "alt-text",
+                        "required": true
+                      }
+                    ]
                   },
                   {
                     "id": "root-card-content-area",
@@ -36233,7 +36274,14 @@
                       }
                     ],
                     "children": [],
-                    "asset_contract_id": "hero-image"
+                    "asset_contract_id": "hero-image",
+                    "content_slots": [
+                      {
+                        "id": "alt",
+                        "type": "alt-text",
+                        "required": true
+                      }
+                    ]
                   },
                   {
                     "id": "root-card-content-area",
@@ -63846,7 +63894,7 @@
                         "type": "alt-text",
                         "required": true
                       }
-                ],
+                    ],
                     "children": [],
                     "asset_contract_id": "secondary-image"
                   },
@@ -85978,7 +86026,14 @@
                       }
                     ],
                     "children": [],
-                    "asset_contract_id": "feature-icon"
+                    "asset_contract_id": "feature-icon",
+                    "content_slots": [
+                      {
+                        "id": "alt",
+                        "type": "alt-text",
+                        "required": true
+                      }
+                    ]
                   },
                   {
                     "id": "root-content-area-body",
@@ -86291,7 +86346,14 @@
                       }
                     ],
                     "children": [],
-                    "asset_contract_id": "chevron-icon"
+                    "asset_contract_id": "chevron-icon",
+                    "content_slots": [
+                      {
+                        "id": "alt",
+                        "type": "alt-text",
+                        "required": true
+                      }
+                    ]
                   }
                 ],
                 "action": {
@@ -86767,7 +86829,14 @@
                       }
                     ],
                     "children": [],
-                    "asset_contract_id": "feature-icon"
+                    "asset_contract_id": "feature-icon",
+                    "content_slots": [
+                      {
+                        "id": "alt",
+                        "type": "alt-text",
+                        "required": true
+                      }
+                    ]
                   },
                   {
                     "id": "root-content-area-body",
@@ -87080,7 +87149,14 @@
                       }
                     ],
                     "children": [],
-                    "asset_contract_id": "chevron-icon"
+                    "asset_contract_id": "chevron-icon",
+                    "content_slots": [
+                      {
+                        "id": "alt",
+                        "type": "alt-text",
+                        "required": true
+                      }
+                    ]
                   }
                 ],
                 "action": {
@@ -89134,7 +89210,14 @@
                       }
                     ],
                     "children": [],
-                    "asset_contract_id": "alert-icon"
+                    "asset_contract_id": "alert-icon",
+                    "content_slots": [
+                      {
+                        "id": "alt",
+                        "type": "alt-text",
+                        "required": true
+                      }
+                    ]
                   },
                   {
                     "id": "root-content-area-body",
@@ -89786,7 +89869,14 @@
                       }
                     ],
                     "children": [],
-                    "asset_contract_id": "alert-icon"
+                    "asset_contract_id": "alert-icon",
+                    "content_slots": [
+                      {
+                        "id": "alt",
+                        "type": "alt-text",
+                        "required": true
+                      }
+                    ]
                   },
                   {
                     "id": "root-content-area-body",
@@ -92009,7 +92099,14 @@
                       }
                     ],
                     "children": [],
-                    "asset_contract_id": "app-logo"
+                    "asset_contract_id": "app-logo",
+                    "content_slots": [
+                      {
+                        "id": "alt",
+                        "type": "alt-text",
+                        "required": true
+                      }
+                    ]
                   },
                   {
                     "id": "root-content-area-body",
@@ -92611,7 +92708,14 @@
                               }
                             ],
                             "children": [],
-                            "asset_contract_id": "rustore-icon"
+                            "asset_contract_id": "rustore-icon",
+                            "content_slots": [
+                              {
+                                "id": "alt",
+                                "type": "alt-text",
+                                "required": true
+                              }
+                            ]
                           },
                           {
                             "id": "root-content-area-store-buttons-rustore-button-button-text",
@@ -93207,7 +93311,14 @@
                               }
                             ],
                             "children": [],
-                            "asset_contract_id": "google-play-icon"
+                            "asset_contract_id": "google-play-icon",
+                            "content_slots": [
+                              {
+                                "id": "alt",
+                                "type": "alt-text",
+                                "required": true
+                              }
+                            ]
                           },
                           {
                             "id": "root-content-area-store-buttons-google-play-button-button-text",
@@ -93803,7 +93914,14 @@
                               }
                             ],
                             "children": [],
-                            "asset_contract_id": "appgallery-icon"
+                            "asset_contract_id": "appgallery-icon",
+                            "content_slots": [
+                              {
+                                "id": "alt",
+                                "type": "alt-text",
+                                "required": true
+                              }
+                            ]
                           },
                           {
                             "id": "root-content-area-store-buttons-appgallery-button-button-text",
@@ -94399,7 +94517,14 @@
                               }
                             ],
                             "children": [],
-                            "asset_contract_id": "getapps-icon"
+                            "asset_contract_id": "getapps-icon",
+                            "content_slots": [
+                              {
+                                "id": "alt",
+                                "type": "alt-text",
+                                "required": true
+                              }
+                            ]
                           },
                           {
                             "id": "root-content-area-store-buttons-getapps-button-button-text",
@@ -95645,7 +95770,14 @@
                               }
                             ],
                             "children": [],
-                            "asset_contract_id": "app-logo"
+                            "asset_contract_id": "app-logo",
+                            "content_slots": [
+                              {
+                                "id": "alt",
+                                "type": "alt-text",
+                                "required": true
+                              }
+                            ]
                           },
                           {
                             "id": "root-content-area-text-qr-header-row-body",
@@ -96020,7 +96152,14 @@
                           }
                         ],
                         "children": [],
-                        "asset_contract_id": "qr-code"
+                        "asset_contract_id": "qr-code",
+                        "content_slots": [
+                          {
+                            "id": "alt",
+                            "type": "alt-text",
+                            "required": true
+                          }
+                        ]
                       }
                     ]
                   },
@@ -105882,7 +106021,14 @@
               }
             ],
             "children": [],
-            "asset_contract_id": "card-image"
+            "asset_contract_id": "card-image",
+            "content_slots": [
+              {
+                "id": "alt",
+                "type": "alt-text",
+                "required": true
+              }
+            ]
           }
         },
         "desktop": {
@@ -105987,7 +106133,14 @@
               }
             ],
             "children": [],
-            "asset_contract_id": "card-image"
+            "asset_contract_id": "card-image",
+            "content_slots": [
+              {
+                "id": "alt",
+                "type": "alt-text",
+                "required": true
+              }
+            ]
           }
         },
         "source_variants": [
@@ -106315,7 +106468,14 @@
                 }
               ],
               "children": [],
-              "asset_contract_id": "card-image"
+              "asset_contract_id": "card-image",
+              "content_slots": [
+                {
+                  "id": "alt",
+                  "type": "alt-text",
+                  "required": true
+                }
+              ]
             }
           }
         ],
@@ -111659,7 +111819,14 @@
                           }
                         ],
                         "children": [],
-                        "asset_contract_id": "feature-icon"
+                        "asset_contract_id": "feature-icon",
+                        "content_slots": [
+                          {
+                            "id": "alt",
+                            "type": "alt-text",
+                            "required": true
+                          }
+                        ]
                       },
                       {
                         "id": "root-content-area-item-01-text-content",
@@ -112265,7 +112432,14 @@
                           }
                         ],
                         "children": [],
-                        "asset_contract_id": "feature-icon"
+                        "asset_contract_id": "feature-icon",
+                        "content_slots": [
+                          {
+                            "id": "alt",
+                            "type": "alt-text",
+                            "required": true
+                          }
+                        ]
                       },
                       {
                         "id": "root-content-area-item-02-text-content",
@@ -112871,7 +113045,14 @@
                           }
                         ],
                         "children": [],
-                        "asset_contract_id": "feature-icon"
+                        "asset_contract_id": "feature-icon",
+                        "content_slots": [
+                          {
+                            "id": "alt",
+                            "type": "alt-text",
+                            "required": true
+                          }
+                        ]
                       },
                       {
                         "id": "root-content-area-item-03-text-content",
@@ -113477,7 +113658,14 @@
                           }
                         ],
                         "children": [],
-                        "asset_contract_id": "feature-icon"
+                        "asset_contract_id": "feature-icon",
+                        "content_slots": [
+                          {
+                            "id": "alt",
+                            "type": "alt-text",
+                            "required": true
+                          }
+                        ]
                       },
                       {
                         "id": "root-content-area-item-04-text-content",
@@ -114083,7 +114271,14 @@
                           }
                         ],
                         "children": [],
-                        "asset_contract_id": "feature-icon"
+                        "asset_contract_id": "feature-icon",
+                        "content_slots": [
+                          {
+                            "id": "alt",
+                            "type": "alt-text",
+                            "required": true
+                          }
+                        ]
                       },
                       {
                         "id": "root-content-area-item-05-text-content",
@@ -114689,7 +114884,14 @@
                           }
                         ],
                         "children": [],
-                        "asset_contract_id": "feature-icon"
+                        "asset_contract_id": "feature-icon",
+                        "content_slots": [
+                          {
+                            "id": "alt",
+                            "type": "alt-text",
+                            "required": true
+                          }
+                        ]
                       },
                       {
                         "id": "root-content-area-item-06-text-content",
@@ -116446,7 +116648,14 @@
                               }
                             ],
                             "children": [],
-                            "asset_contract_id": "feature-icon"
+                            "asset_contract_id": "feature-icon",
+                            "content_slots": [
+                              {
+                                "id": "alt",
+                                "type": "alt-text",
+                                "required": true
+                              }
+                            ]
                           },
                           {
                             "id": "root-content-area-items-item-01-text-content",
@@ -117052,7 +117261,14 @@
                               }
                             ],
                             "children": [],
-                            "asset_contract_id": "feature-icon"
+                            "asset_contract_id": "feature-icon",
+                            "content_slots": [
+                              {
+                                "id": "alt",
+                                "type": "alt-text",
+                                "required": true
+                              }
+                            ]
                           },
                           {
                             "id": "root-content-area-items-item-02-text-content",
@@ -117658,7 +117874,14 @@
                               }
                             ],
                             "children": [],
-                            "asset_contract_id": "feature-icon"
+                            "asset_contract_id": "feature-icon",
+                            "content_slots": [
+                              {
+                                "id": "alt",
+                                "type": "alt-text",
+                                "required": true
+                              }
+                            ]
                           },
                           {
                             "id": "root-content-area-items-item-03-text-content",
@@ -118264,7 +118487,14 @@
                               }
                             ],
                             "children": [],
-                            "asset_contract_id": "feature-icon"
+                            "asset_contract_id": "feature-icon",
+                            "content_slots": [
+                              {
+                                "id": "alt",
+                                "type": "alt-text",
+                                "required": true
+                              }
+                            ]
                           },
                           {
                             "id": "root-content-area-items-item-04-text-content",
@@ -118870,7 +119100,14 @@
                               }
                             ],
                             "children": [],
-                            "asset_contract_id": "feature-icon"
+                            "asset_contract_id": "feature-icon",
+                            "content_slots": [
+                              {
+                                "id": "alt",
+                                "type": "alt-text",
+                                "required": true
+                              }
+                            ]
                           },
                           {
                             "id": "root-content-area-items-item-05-text-content",
@@ -119476,7 +119713,14 @@
                               }
                             ],
                             "children": [],
-                            "asset_contract_id": "feature-icon"
+                            "asset_contract_id": "feature-icon",
+                            "content_slots": [
+                              {
+                                "id": "alt",
+                                "type": "alt-text",
+                                "required": true
+                              }
+                            ]
                           },
                           {
                             "id": "root-content-area-items-item-06-text-content",
@@ -128855,7 +129099,14 @@
                   }
                 ],
                 "children": [],
-                "asset_contract_id": "feature-icon"
+                "asset_contract_id": "feature-icon",
+                "content_slots": [
+                  {
+                    "id": "alt",
+                    "type": "alt-text",
+                    "required": true
+                  }
+                ]
               },
               {
                 "id": "root-text-content",
@@ -129956,7 +130207,14 @@
                   }
                 ],
                 "children": [],
-                "asset_contract_id": "feature-icon"
+                "asset_contract_id": "feature-icon",
+                "content_slots": [
+                  {
+                    "id": "alt",
+                    "type": "alt-text",
+                    "required": true
+                  }
+                ]
               },
               {
                 "id": "root-text-content",
@@ -132826,7 +133084,14 @@
               }
             ],
             "children": [],
-            "asset_contract_id": "feature-icon"
+            "asset_contract_id": "feature-icon",
+            "content_slots": [
+              {
+                "id": "alt",
+                "type": "alt-text",
+                "required": true
+              }
+            ]
           }
         },
         "desktop": {
@@ -132931,7 +133196,14 @@
               }
             ],
             "children": [],
-            "asset_contract_id": "feature-icon"
+            "asset_contract_id": "feature-icon",
+            "content_slots": [
+              {
+                "id": "alt",
+                "type": "alt-text",
+                "required": true
+              }
+            ]
           }
         },
         "source_variants": [
@@ -133557,7 +133829,14 @@
                   }
                 ],
                 "children": [],
-                "asset_contract_id": "alert-icon"
+                "asset_contract_id": "alert-icon",
+                "content_slots": [
+                  {
+                    "id": "alt",
+                    "type": "alt-text",
+                    "required": true
+                  }
+                ]
               },
               {
                 "id": "root-body",
@@ -134057,7 +134336,14 @@
                   }
                 ],
                 "children": [],
-                "asset_contract_id": "alert-icon"
+                "asset_contract_id": "alert-icon",
+                "content_slots": [
+                  {
+                    "id": "alt",
+                    "type": "alt-text",
+                    "required": true
+                  }
+                ]
               },
               {
                 "id": "root-body",
@@ -135856,7 +136142,14 @@
                   }
                 ],
                 "children": [],
-                "asset_contract_id": "feature-icon"
+                "asset_contract_id": "feature-icon",
+                "content_slots": [
+                  {
+                    "id": "alt",
+                    "type": "alt-text",
+                    "required": true
+                  }
+                ]
               }
             ]
           }
@@ -136356,7 +136649,14 @@
                   }
                 ],
                 "children": [],
-                "asset_contract_id": "feature-icon"
+                "asset_contract_id": "feature-icon",
+                "content_slots": [
+                  {
+                    "id": "alt",
+                    "type": "alt-text",
+                    "required": true
+                  }
+                ]
               }
             ]
           }
@@ -138507,7 +138807,14 @@
                               }
                             ],
                             "children": [],
-                            "asset_contract_id": "happy-face-icon"
+                            "asset_contract_id": "happy-face-icon",
+                            "content_slots": [
+                              {
+                                "id": "alt",
+                                "type": "alt-text",
+                                "required": true
+                              }
+                            ]
                           }
                         ],
                         "content_slots": [
@@ -138752,7 +139059,14 @@
                               }
                             ],
                             "children": [],
-                            "asset_contract_id": "neutral-face-icon"
+                            "asset_contract_id": "neutral-face-icon",
+                            "content_slots": [
+                              {
+                                "id": "alt",
+                                "type": "alt-text",
+                                "required": true
+                              }
+                            ]
                           }
                         ],
                         "content_slots": [
@@ -138997,7 +139311,14 @@
                               }
                             ],
                             "children": [],
-                            "asset_contract_id": "sad-face-icon"
+                            "asset_contract_id": "sad-face-icon",
+                            "content_slots": [
+                              {
+                                "id": "alt",
+                                "type": "alt-text",
+                                "required": true
+                              }
+                            ]
                           }
                         ],
                         "content_slots": [
@@ -139976,7 +140297,14 @@
                               }
                             ],
                             "children": [],
-                            "asset_contract_id": "happy-face-icon"
+                            "asset_contract_id": "happy-face-icon",
+                            "content_slots": [
+                              {
+                                "id": "alt",
+                                "type": "alt-text",
+                                "required": true
+                              }
+                            ]
                           }
                         ],
                         "content_slots": [
@@ -140221,7 +140549,14 @@
                               }
                             ],
                             "children": [],
-                            "asset_contract_id": "neutral-face-icon"
+                            "asset_contract_id": "neutral-face-icon",
+                            "content_slots": [
+                              {
+                                "id": "alt",
+                                "type": "alt-text",
+                                "required": true
+                              }
+                            ]
                           }
                         ],
                         "content_slots": [
@@ -140466,7 +140801,14 @@
                               }
                             ],
                             "children": [],
-                            "asset_contract_id": "sad-face-icon"
+                            "asset_contract_id": "sad-face-icon",
+                            "content_slots": [
+                              {
+                                "id": "alt",
+                                "type": "alt-text",
+                                "required": true
+                              }
+                            ]
                           }
                         ],
                         "content_slots": [
@@ -143345,7 +143687,14 @@
                                 }
                               ],
                               "children": [],
-                              "asset_contract_id": "happy-face-icon"
+                              "asset_contract_id": "happy-face-icon",
+                              "content_slots": [
+                                {
+                                  "id": "alt",
+                                  "type": "alt-text",
+                                  "required": true
+                                }
+                              ]
                             }
                           ],
                           "content_slots": [
@@ -143590,7 +143939,14 @@
                                 }
                               ],
                               "children": [],
-                              "asset_contract_id": "sad-face-icon"
+                              "asset_contract_id": "sad-face-icon",
+                              "content_slots": [
+                                {
+                                  "id": "alt",
+                                  "type": "alt-text",
+                                  "required": true
+                                }
+                              ]
                             }
                           ],
                           "content_slots": [
@@ -144580,7 +144936,14 @@
                                 }
                               ],
                               "children": [],
-                              "asset_contract_id": "happy-face-icon"
+                              "asset_contract_id": "happy-face-icon",
+                              "content_slots": [
+                                {
+                                  "id": "alt",
+                                  "type": "alt-text",
+                                  "required": true
+                                }
+                              ]
                             }
                           ],
                           "content_slots": [
@@ -144825,7 +145188,14 @@
                                 }
                               ],
                               "children": [],
-                              "asset_contract_id": "sad-face-icon"
+                              "asset_contract_id": "sad-face-icon",
+                              "content_slots": [
+                                {
+                                  "id": "alt",
+                                  "type": "alt-text",
+                                  "required": true
+                                }
+                              ]
                             }
                           ],
                           "content_slots": [
@@ -148036,4 +148406,4 @@
       ]
     }
   ]
-}
+}\n
