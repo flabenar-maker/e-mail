@@ -91,13 +91,13 @@ test("pilot fixture contains only normalized component inputs", async () => {
   assert.equal(source.includes("<table"), false);
 });
 
-test("template slot produces one deterministic email document without disabled secondary CTA", async () => {
+test("template slot produces one deterministic email document with the default secondary CTA", async () => {
   const { result } = await pilot();
 
   assert.deepEqual(result.diagnostics, []);
   assert.match(result.html, /^<!doctype html><html><head>/u);
   assert.match(result.html, /<body style="margin:0;padding:0"><table role="presentation"/u);
-  assert.doesNotMatch(result.html, /https:\/\/example\.test\/jobs|Откликнуться/u);
+  assert.match(result.html, /href="https:\/\/example\.test\/secondary"/u);
   assert.doesNotMatch(result.html, /placeholder|\[object Object\]/u);
 });
 
@@ -106,7 +106,7 @@ test("secondary banner uses a direct image on mobile and a background image on d
 
   assert.match(result.html, /<img[^>]+src="images\/secondary\.jpg"/u);
   assert.match(result.html, /<td background="images\/secondary\.jpg"/u);
-  assert.match(result.html, />Всё важное рядом</u);
+  assert.match(result.html, />Небольшой заголовок<br>на пару строк</u);
 });
 
 test("app download keeps store icons and text separate and stacks mobile store links", async () => {
@@ -125,7 +125,7 @@ test("footer resolves boolean properties without losing the enabled social link"
   const { result } = await pilot();
 
   assert.doesNotMatch(result.html, /Скрытая подпись/u);
-  assert.match(result.html, /Вы получили это письмо от CUPIS\./u);
+  assert.match(result.html, /Мобильная карта/u);
   assert.match(result.html, /href="https:\/\/example\.test\/vk"/u);
   assert.doesNotMatch(result.html, /href="https:\/\/example\.test\/telegram|images\/telegram-icon\.png/u);
 });
