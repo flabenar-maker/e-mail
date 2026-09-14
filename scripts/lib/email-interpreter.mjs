@@ -102,6 +102,8 @@ function propsFromFacts(facts = [], { viewport, mode, isRoot = false } = {}) {
       }
     } else if (mode === "html-text") {
       props.style["max-width"] = `${size.width}px`;
+    } else if (mode === "presentation-table" && sizing === "hug") {
+      props.width = "auto";
     } else if (isRoot && viewport === "desktop") {
       props.width = size.width;
     }
@@ -139,7 +141,7 @@ function propsFromFacts(facts = [], { viewport, mode, isRoot = false } = {}) {
     else if (id === "text-align") props.style["text-align"] = resolved;
     else if (id === "text-decoration") props.style["text-decoration"] = resolved;
     else if (id === "text-color" || id.endsWith("-text-color")) props.style.color = resolved;
-    else if (id === "background" || id.endsWith("-background") || id === "background-fallback") props.style["background-color"] = resolved;
+    else if (mode !== "direct-image" && (id === "background" || id.endsWith("-background") || id === "background-fallback")) props.style["background-color"] = resolved;
     else if (id === "border-radius" || id.endsWith("-border-radius")) props.style["border-radius"] = resolved;
     else if (/^border-radius-(?:top|bottom)-(?:left|right)$/u.test(id)) {
       const [, , side, corner] = id.split("-");
@@ -254,6 +256,12 @@ function renderShell(element, viewport, path, childHtml, context) {
   const { entry, diagnostics } = contentFor({ ...context, path }, viewport, element);
   if (diagnostics.length > 0) return { html: "", diagnostics };
   const factProps = propsFromFacts(element.facts, { viewport, mode: element.render_mode, isRoot: path === "root" });
+  if (element.render_mode === "presentation-table" && element.semantic_role === "social-icons" && factProps.width === "auto") {
+    factProps.align = "center";
+  }
+  if (element.render_mode === "presentation-table" && element.semantic_role === "button-text") {
+    factProps.style["white-space"] = "nowrap";
+  }
   const children = childHtml.filter(Boolean);
   const joined = children.join("");
 
@@ -311,6 +319,9 @@ function renderShell(element, viewport, path, childHtml, context) {
         return renderPrimitive("cell", {
           width: spaceBetween ? node?.facts?.find(({ id }) => id === "reference-size")?.value?.width : nodeProps.width,
           valign: element.facts?.some(({ id, value }) => id === "counter-alignment" && value.value === "center") ? "middle" : "top",
+          ...(axis === "horizontal" && nodeProps.style["background-color"]
+            ? { bgcolor: nodeProps.style["background-color"], style: { "background-color": nodeProps.style["background-color"] } }
+            : {}),
           ...(node?.render_mode === "html-link" && nodeProps.style["text-align"] === "center"
             ? { style: { "text-align": "center" } }
             : {}),
@@ -414,7 +425,7 @@ function renderShell(element, viewport, path, childHtml, context) {
           {
             ...asset,
             ...factProps,
-            height: element.facts?.some(({ id, value }) => id === "height-behavior" && value.value?.value === "content-driven-cover") ? undefined : (factProps.height ?? asset.height),
+            height: element.facts?.some(({ id, value }) => id === "height-behavior" && value.value === "content-driven-cover") ? undefined : (factProps.height ?? asset.height),
             style: { ...(asset.style ?? {}), ...factProps.style },
           },
           joined,
