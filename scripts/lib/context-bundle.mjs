@@ -485,7 +485,7 @@ function fullFoundationDefinition(id, foundation) {
     schema_version: foundation.schema_version,
     definition_group: "foundation",
     definition_id: "all",
-    value: structuredClone(foundation),
+    value: withoutHistoricalSourceMetadata(foundation),
   };
 }
 
@@ -511,7 +511,7 @@ function referencedFoundationDefinition(reference, model) {
     definition_group: reference.group,
     definition_id: reference.id,
     viewport: reference.viewport,
-    value: structuredClone(role.resolutions[reference.viewport]),
+    value: withoutHistoricalSourceMetadata(role.resolutions[reference.viewport]),
   };
 }
 
