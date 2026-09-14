@@ -60,7 +60,7 @@ PR #61–64 — корректирующая Figma-сверка и уточне�
 | 9 | Автоматическая проверка | Property branches и HTML invariants покрыты | Слит: [PR #58](https://github.com/flabenar-maker/e-mail/pull/58) |
 | 10 | Visual scenarios, включая Email/Header и Email/Footer | Фактический HTML и Mobile/Desktop geometry подтверждены; Header добавлен в pilot coverage до visual gate | Не завершён; Footer уже покрыт, Header отсутствует; PR #60 не содержит реализации preview |
 | 11 | Остальные активные компоненты | Readiness/coverage blockers равны нулю после пакета 10 | Не начат как пакет покрытия; PR #61–64 уточнили факты, но coverage остаётся пилотным |
-| 12 | Structured workflows и shadow comparison | Новый маршрут готов к Stage 9 без двойного контекста | Не начат |
+| 12 | Structured workflows и workflow-level comparison | Workflows готовы к Stage 9 без двойного контекста; сквозное сравнение остаётся этапу 13 | Не начат |
 
 ## Целевая карта файлов
 
@@ -510,11 +510,12 @@ git commit -m "test: enforce rendered email invariants"
 
 **Interfaces:** `node scripts/render-email-preview.mjs --model <fixture> --viewport mobile|desktop --output <temp-path>`.
 
+- [ ] **Prerequisite:** добавить и проверить узкое pilot coverage Email/Header без расширения остальной библиотеки; Footer уже покрыт.
 - [ ] **Step 1:** expected fixtures содержат только system pilot, не production письмо.
 - [ ] **Step 2:** tests сравнивают declared widths, responsive classes, image ratios и Header/Footer composition; Card отдельно доказывает пропорциональную высоту.
 - [ ] **Step 3:** manual browser gate сравнивает временные Mobile/Desktop preview с pilot Figma variants, включая Header и Footer; screenshots не коммитятся.
 - [ ] **Step 4:** browser preview не подменяет Litmus/Email on Acid/CRM, которые остаются optional.
-- [ ] **Step 5:** verify and commit.
+- [ ] **Step 5:** проверить точный cloud SHA и опубликовать cloud commit.
 
 ```powershell
 node --test tests/rendering/visual-scenarios.test.mjs
@@ -542,7 +543,7 @@ assert.equal(report.summary.covered_active_components, 61);
 Каждый active record имеет coverage. `source-only` и `unsupported` входят в covered count, но не в renderable count и при standalone render возвращают понятный blocker.
 
 - [ ] **Step 5:** `npm run generate`, `generate:check`, all-components test, verify.
-- [ ] **Step 6:** три reviewable commits: shared, marketing, service; generated docs в последнем.
+- [ ] **Step 6:** три reviewable cloud commits: shared, marketing, service; generated docs в последнем.
 
 Gate: no generic facts/unregistered active records/unexplained value changes; Figma unchanged.
 
@@ -563,7 +564,7 @@ Gate: no generic facts/unregistered active records/unexplained value changes; Fi
 - [ ] **Step 4: Structured shadow bundle** — архивные paths не допускаются в bundle; попытка смешать их со structured sources возвращает явную ошибку, а не активирует legacy mode.
 - [ ] **Step 5: Workflow-level semantic comparison** — каждое обязательство archived maintenance/email workflows из read-only `Legacy/` baseline связано с новым owner; различия объяснены проверенными фактами и approved renderer spec, а не автоматически перенесены в contracts. Сквозные rendered outputs, generated docs и все маршруты сравниваются позднее на этапе 13.
 - [ ] **Step 6: No hidden cutover** — текущие paused route lists и skill не переключены; `Legacy/`, Figma и письма не изменены.
-- [ ] **Step 7: Verify and commit**.
+- [ ] **Step 7: Verify and publish cloud commit**.
 
 ```powershell
 node --test tests/workflows/structured-workflows.test.mjs tests/characterization/html-rendering-shadow.test.mjs
