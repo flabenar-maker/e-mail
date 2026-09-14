@@ -163,9 +163,12 @@ Structured records остаются shadow-источником до generated b
 - [ ] Проверить фактический HTML обновлённого пилота и выполнить representative Mobile/Desktop visual scenarios; тестовое покрытие Email/Header ещё отсутствует.
 - [ ] Мигрировать renderer coverage остальных активных компонентов после успешного пилота.
 - [ ] Перевести maintenance и email-build workflows в структурированный формат и выполнить shadow comparison без двойного контекста.
+- [ ] Подтвердить, что HTML зависит от фактического инстанса и component contract, а не design-time золотых правил.
+- [ ] Не подавать legacy и structured наборы правил одновременно в рабочий bundle.
 - [ ] Завершить все проверки этапа 8 и только после этого отметить этап завершённым.
 
 Следующий технический шаг определяется после read-only проверки пилотного HTML и обсуждения исследования. Figma, production-письма и maintenance skill не входят в скрытую область этапа.
+
 ### 9. Maintenance skill cutover
 
 Manifest-driven разрешение source paths было выполнено на этапе 2. Этот этап не повторяет первоначальный переход на manifest: он переключает навык с временных Markdown-oriented profiles на итоговые generated context bundles.
