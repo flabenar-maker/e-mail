@@ -10,6 +10,8 @@
 
 **Spec:** docs/superpowers/specs/2026-08-24-cupis-structured-email-system-design.md. Статус и зависимости: docs/superpowers/plans/2026-08-25-cupis-migration-roadmap.md. Исходная ревизия выполнена на main@0dd2bd6fbabbd36993713aaf654f6ed2fa4c2b71.
 
+**Status:** план опубликован для review; пакеты 0–6 не начаты. Этот документ не является Figma-разрешением или разрешением на merge.
+
 ## Global Constraints
 
 - До каждого пакета заново закрепить SHA main, прочитать system/manifest.yaml, маршрут migration-progress, README, текущий roadmap и применимые Core/foundation/component sources. SHA в заголовке — исторический baseline, не разрешение работать с устаревшей версией.
