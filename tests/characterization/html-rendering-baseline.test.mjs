@@ -134,7 +134,9 @@ test("renderer readiness CLI prints JSON and creates no email output", async () 
 });
 
 test("does not track concrete email output in the system repository", async () => {
-  let stdout;`r`n  try {`r`n    ({ stdout } = await execFileAsync(
+  let stdout;
+  try {
+    ({ stdout } = await execFileAsync(
     "git",
     ["-C", repoRoot, "ls-files"],
     { encoding: "utf8" },

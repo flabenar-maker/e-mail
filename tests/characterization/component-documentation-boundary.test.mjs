@@ -175,7 +175,9 @@ test("migration preserves high-risk responsive, asset, property and template con
   const index = indexComponentRegistries(registries);
 
   const cardImage = index.bySystemId.get("card-image");
-  assert.deepEqual(findFact(cardImage, "mobile", "reference-size"), { type: "dimensions", width: 252, height: 291, unit: "px" });`r`n  assert.deepEqual(findFact(cardImage, "mobile", "layout-axis"), { type: "keyword", value: "vertical" });`r`n  assert.deepEqual(cardImage.asset_contracts[0].aspect_ratio, {
+  assert.deepEqual(findFact(cardImage, "mobile", "reference-size"), { type: "dimensions", width: 252, height: 291, unit: "px" });
+  assert.deepEqual(findFact(cardImage, "mobile", "layout-axis"), { type: "keyword", value: "vertical" });
+  assert.deepEqual(cardImage.asset_contracts[0].aspect_ratio, {
     width: 232,
     height: 148,
   });
