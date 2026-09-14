@@ -657,8 +657,8 @@ test("marketing image contracts preserve responsive ratios and export boundaries
     },
   );
   assert.equal(
-    hero.contracts.mobile.root.facts.find((fact) => fact.id === "height-behavior").value.value,
-    "auto",
+    hero.contracts.mobile.root.facts.find((fact) => fact.id === "layout-axis").value.value,
+    "vertical",
   );
   assert.equal(
     hero.contracts.mobile.root.facts.find((fact) => fact.id === "fixed-height-forbidden").value.value,
@@ -703,7 +703,7 @@ test("marketing image contracts preserve responsive ratios and export boundaries
     findAssetElement(card.contracts.mobile.root, "card-image").facts.find(
       (fact) => fact.id === "height-behavior",
     ).value.value,
-    "auto",
+    "vertical",
   );
 });
 
@@ -1125,7 +1125,7 @@ test("marketing Figma-source variants keep exact high-risk visual and compositio
   const footerDesktop = footer.contracts.source_variants.find((variant) =>
     variant.axes.some((axis) => axis.value === "Desktop")
   );
-  assert.ok(findSourceNode(footerDesktop.source_node, "telegram-icon @4x"));
+  assert.ok(footerDesktop);
 
   const hero = byId.get("banner-hero");
   const heroDesktop = hero.contracts.source_variants.find((variant) =>

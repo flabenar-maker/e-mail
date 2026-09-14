@@ -136,7 +136,7 @@ test("CLI renders the normalized model without copying it into output", async ()
       "--output", outputDir,
     ], { cwd: repoRoot });
     assert.deepEqual(await readdir(outputDir), ["email.html", "images"]);
-    assert.match(await readFile(join(outputDir, "email.html"), "utf8"), /Откликнуться/u);
+    assert.match(await readFile(join(outputDir, "email.html"), "utf8"), /Скачайте приложение/u);
     assert.equal((await readdir(outputDir)).includes("email-model.json"), false);
   } finally {
     await rm(folder, { recursive: true, force: true });
