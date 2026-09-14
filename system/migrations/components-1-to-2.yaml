@@ -314,9 +314,7 @@
       {
         "id": "nps-options",
         "purpose": "Адаптивная группа кликабельных вариантов оценки NPS.",
-        "critical_constraint_ids": [
-          "evaluation-links-cover-tiles"
-        ],
+        "critical_constraint_ids": [],
         "constraints": [
           {
             "id": "evaluation-links-cover-tiles",
