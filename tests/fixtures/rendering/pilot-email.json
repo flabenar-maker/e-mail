@@ -12,35 +12,6 @@
         "element_id": "content",
         "instances": [
           {
-            "instance_id": "pilot-primary-button",
-            "component_id": "button-primary",
-            "variants": { "mobile": "mobile", "desktop": "desktop" },
-            "property_values": [],
-            "content_values": [
-              { "element_id": "root", "slot_id": "href", "scope": "all", "value": { "type": "url", "value": "https://example.test/jobs" } },
-              { "element_id": "root-label", "slot_id": "text", "scope": "all", "value": { "type": "rich-text", "value": "Откликнуться" } }
-            ],
-            "asset_files": [],
-            "slots": []
-          },
-          {
-            "instance_id": "pilot-card",
-            "component_id": "card-image",
-            "variants": { "mobile": "mobile", "desktop": "desktop" },
-            "property_values": [],
-            "content_values": [
-              { "element_id": "root-card-image", "slot_id": "alt", "scope": "all", "value": { "type": "alt-text", "value": "Команда CUPIS" } },
-              { "element_id": "root-text-content-heading", "slot_id": "text", "scope": "all", "value": { "type": "plain-text", "value": "Работайте с нами" } },
-              { "element_id": "root-text-content-description", "slot_id": "text", "scope": "all", "value": { "type": "plain-text", "value": "Создавайте полезные продукты вместе с командой." } },
-              { "element_id": "root-text-content-link", "slot_id": "href", "scope": "all", "value": { "type": "url", "value": "https://example.test/team" } },
-              { "element_id": "root-text-content-link", "slot_id": "text", "scope": "all", "value": { "type": "plain-text", "value": "Подробнее" } }
-            ],
-            "asset_files": [
-              { "asset_contract_id": "card-image", "path": "images/card-image.jpg" }
-            ],
-            "slots": []
-          },
-          {
             "instance_id": "pilot-secondary",
             "component_id": "banner-secondary",
             "variants": { "mobile": "mobile", "desktop": "desktop" },
