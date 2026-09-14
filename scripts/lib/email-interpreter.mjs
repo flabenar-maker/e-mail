@@ -88,7 +88,7 @@ function valueWithUnit(value) {
   return undefined;
 }
 
-function propsFromFacts(facts = [], { viewport, mode, isRoot = false } = {}) {
+function propsFromFacts(facts = [], { viewport, mode, isRoot = false, parentAxis } = {}) {
   const props = { style: {} };
   const fact = (id) => facts.find((item) => item.id === id)?.value;
   const size = fact("reference-size");
@@ -102,7 +102,7 @@ function propsFromFacts(facts = [], { viewport, mode, isRoot = false } = {}) {
       }
     } else if (mode === "html-text") {
       const expands = viewport === "mobile" && (
-        sizing === "fill" || fact("layout-align")?.value === "stretch" || (fact("layout-grow")?.value ?? 0) > 0
+        sizing === "fill" || fact("layout-align")?.value === "stretch" || (parentAxis === "horizontal" && (fact("layout-grow")?.value ?? 0) > 0)
       );
       if (expands) props.style.width = "100%";
       else props.style["max-width"] = `${size.width}px`;
@@ -325,7 +325,7 @@ function renderShell(element, viewport, path, childHtml, context) {
 
   const { entry, diagnostics } = contentFor({ ...context, path }, viewport, element);
   if (diagnostics.length > 0) return { html: "", diagnostics };
-  const factProps = propsFromFacts(element.facts, { viewport, mode: element.render_mode, isRoot: path === "root" });
+  const factProps = propsFromFacts(element.facts, { viewport, mode: element.render_mode, isRoot: path === "root", parentAxis: context.parentLayoutAxis?.[viewport] });
   if (element.render_mode === "presentation-table" && element.semantic_role === "social-icons" && factProps.width === "auto") {
     factProps.align = "center";
   }
@@ -530,12 +530,21 @@ function renderShell(element, viewport, path, childHtml, context) {
   }
 }
 
+function layoutAxisFor(element) {
+  const axis = element?.facts?.find(({ id }) => id === "layout-axis" || id.endsWith("-layout-axis"))?.value?.value;
+  return ["horizontal", "vertical"].includes(axis) ? axis : undefined;
+}
+
 function renderSingle(element, viewport, path, context) {
   if (!element) return { html: "", diagnostics: [] };
   const visibility = visibilityFor(element, viewport, context, path);
   if (!visibility.visible) return { html: "", diagnostics: visibility.diagnostics };
+  const childContext = {
+    ...context,
+    parentLayoutAxis: { ...context.parentLayoutAxis, [viewport]: layoutAxisFor(element) },
+  };
   const children = (element.children ?? []).map((child, index) =>
-    renderSingle(child, viewport, `${path}/children/${index}`, context),
+    renderSingle(child, viewport, `${path}/children/${index}`, childContext),
   );
   const shell = renderShell(
     element,
@@ -592,8 +601,12 @@ function renderPaired(pair, path, context) {
     return renderSplit(pair, path, context);
   }
 
+  const childContext = {
+    ...context,
+    parentLayoutAxis: { mobile: layoutAxisFor(pair.mobile), desktop: layoutAxisFor(pair.desktop) },
+  };
   const children = pair.children.map((child, index) =>
-    renderPaired(child, `${path}-${index}`, context),
+    renderPaired(child, `${path}-${index}`, childContext),
   );
   const combinedChildren = children.map(({ html }) => html);
   const mobileShell = renderShell(pair.mobile, "mobile", path.replaceAll("-", "/children/"), combinedChildren, context);
