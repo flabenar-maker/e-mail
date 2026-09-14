@@ -18,6 +18,8 @@ Use cloud GitHub access in this order:
 
 Both channels are equivalent cloud sources. Never use a local checkout, attachment, cached copy or manually pasted token as a fallback, and never expose an authentication token in chat.
 
+A disposable isolated local snapshot of an exact cloud commit is allowed solely for validation; it is never a source fallback or working copy. Keep all repository edits in cloud GitHub. Run applicable tests and regression checks locally on that snapshot. Never start, read, or rely on GitHub Actions or PR Checks as evidence or merge gates.
+
 Treat `flabenar-maker/e-mail` as the only persistent source. Resolve and pin the current `main` commit, then fetch `system/manifest.yaml` at that exact SHA.
 
 Select the applicable `routes[].id`, resolve its `bundle_profile_id`, then resolve every listed `source_id` through `sources[]`. Fetch only those paths, always at the pinned SHA. Stop if the manifest, route, profile, source reference or file is missing or invalid. Never fall back to a second manifest, local checkout, attachment, cached copy, older commit or undeclared future path.
@@ -36,7 +38,7 @@ For any question about migration status, the next stage, completed stages, or up
 6. Make the smallest canonical change. Do not edit local system copies. Do not build or modify a concrete `email.html` or `images/` set with this skill.
 7. For a no-op, report the existing canonical rule with its commit and create no branch. For a write, re-read and validate the changed source before publication.
 8. Publish only through GitHub. Prefer authenticated `gh` CLI operations; use GitHub MCP only when the CLI is unavailable or insufficient. Create `codex/<semantic-slug>` from the pinned SHA, commit only the approved paths, and open one draft PR after the required publication authorization. Never update `main` or merge without separate authorization.
-9. Fetch the branch after the final write. Apply exactly the relevant checkpoint checklist plus changed-content, required-synchronization, allowed-path-diff, and preserved-blob checks. Add no generic codebase, build, visual, Figma-publishing, or delivery checks. Verify that no local email outputs, archives, reports, or duplicated system rules were added.
+9. Fetch the branch after the final write. Run exactly the relevant checkpoint checklist plus changed-content, required-synchronization, allowed-path-diff, and preserved-blob checks locally against the exact final branch SHA. Add no generic codebase, build, visual, Figma-publishing, or delivery checks. Verify that no local email outputs, archives, reports, or duplicated system rules were added.
 
 ## Figma Mutation Gate
 
