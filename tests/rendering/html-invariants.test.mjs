@@ -10,20 +10,22 @@ import {
 } from "../../scripts/lib/component-registry.mjs";
 import { loadRenderingFoundation } from "../../scripts/lib/rendering-foundation.mjs";
 import { loadRendererRegistry } from "../../scripts/lib/renderer-registry.mjs";
+import { loadEmailModel } from "../../scripts/lib/email-model.mjs";
 import { renderEmailDocument } from "../../scripts/lib/email-renderer.mjs";
 
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const fixturePath = join(repoRoot, "tests/fixtures/rendering/pilot-email.json");
+const schemaPath = join(repoRoot, "schemas/email-model.schema.json");
 
 async function pilot() {
-  const [source, registries, rendererRegistry, rendering] = await Promise.all([
-    readFile(fixturePath, "utf8"),
+  const [model, registries, rendererRegistry, rendering] = await Promise.all([
+    loadEmailModel({ modelPath: fixturePath, schemaPath }),
     loadComponentRegistries({ repoRoot }),
     loadRendererRegistry({ repoRoot }),
     loadRenderingFoundation({ repoRoot }),
   ]);
   return {
-    model: JSON.parse(source),
+    model,
     dependencies: {
       componentIndex: indexComponentRegistries(registries),
       rendererRegistry,
@@ -50,10 +52,11 @@ function cssValue(style, name) {
 }
 
 function checkTableNesting(html) {
+  const documentHtml = html.replace(/<!--\[if[\s\S]*?<!\[endif\]-->/giu, "");
   const stack = [];
   const expectedParent = { tbody: "table", tr: "tbody", td: "tr" };
   let tables = 0;
-  for (const match of html.matchAll(/<(\/?)(table|tbody|tr|td)\b[^>]*>/gu)) {
+  for (const match of documentHtml.matchAll(/<(\/?)(table|tbody|tr|td)\b[^>]*>/gu)) {
     const [, closing, tag] = match;
     if (closing) {
       assert.equal(stack.pop(), tag, "Unbalanced closing </" + tag + ">");
