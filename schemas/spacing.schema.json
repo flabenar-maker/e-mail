@@ -84,10 +84,10 @@
     "registryLiteralProvenance": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["kind", "source_path"],
+      "required": ["kind", "source_blob_sha"],
       "properties": {
         "kind": { "const": "registry-literal" },
-        "source_path": { "$ref": "#/$defs/repoPath" }
+        "source_blob_sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" }
       }
     },
     "figmaVariableProvenance": {
@@ -237,7 +237,7 @@
       "additionalProperties": false,
       "required": [
         "base_commit",
-        "registry_path",
+        "registry_blob_sha",
         "design_spec_path",
         "reviewed_at"
       ],
@@ -246,7 +246,7 @@
           "type": "string",
           "pattern": "^[0-9a-f]{40}$"
         },
-        "registry_path": { "$ref": "#/$defs/repoPath" },
+        "registry_blob_sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
         "design_spec_path": { "$ref": "#/$defs/repoPath" },
         "reviewed_at": {
           "type": "string",

@@ -235,9 +235,9 @@ export function validateComponentDocumentation(record) {
   if (Object.hasOwn(record ?? {}, "description")) {
     errors.push(
       diagnostic(
-        "COMPONENT_DOCUMENTATION_LEGACY_BLOCKS_FORBIDDEN",
+        "COMPONENT_DOCUMENTATION_RETIRED_BLOCKS_FORBIDDEN",
         "/description",
-        `${componentId}: legacy description blocks are forbidden in schema 2.0.0.`,
+        `${componentId}: retired description blocks are forbidden in schema 2.0.0.`,
       ),
     );
   }

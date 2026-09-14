@@ -118,5 +118,4 @@ organizational_names:
 provenance:
   baseline_commit: d2211556368b82d750152c94be0c646945e19b49
   comparison_sources:
-    - core/figma-component-naming-standard.md
     - docs/superpowers/specs/2026-08-24-cupis-structured-email-system-design.md

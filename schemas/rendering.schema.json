@@ -163,7 +163,6 @@
           "uniqueItems": true,
           "items": {
             "enum": [
-              "legacy-outlook-vml",
               "external-client-matrix"
             ]
           }

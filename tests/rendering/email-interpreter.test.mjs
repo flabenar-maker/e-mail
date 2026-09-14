@@ -287,6 +287,10 @@ test("interpreter dispatches supported modes without rendering Figma-only nodes"
   const { renderContractTree } = await interpreter();
   const root = element({
     id: "root",
+    facts: [
+      { id: "layout-axis", value: { type: "keyword", value: "vertical" } },
+      measure("layout-gap", 0),
+    ],
     children: [
       element({
         id: "link",

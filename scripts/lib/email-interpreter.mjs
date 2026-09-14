@@ -349,18 +349,15 @@ function renderShell(element, viewport, path, childHtml, context) {
       }
       const axes = (element.facts ?? []).filter(({ id }) => id === "layout-axis" || id.endsWith("-layout-axis"));
       const gaps = (element.facts ?? []).filter(({ id }) => id === "layout-gap" || id.endsWith("-layout-gap"));
-      // Components without an explicit layout contract retain their legacy HTML.
-      if (axes.length === 0 && gaps.length === 0) {
-        const rows = childHtml
-          .map((child, index) => {
-            if (!child) return "";
-            const cell = element.children?.[index]?.render_mode === "background-image"
-              ? child
-              : renderPrimitive("cell", {}, wrapAction(element, entry, child));
-            return "<tr>" + cell + "</tr>";
-          })
-          .join("");
-        return { html: renderPrimitive("table", factProps, rows), diagnostics: [] };
+      if (children.length > 1 && (axes.length !== 1 || gaps.length !== 1)) {
+        return {
+          html: "",
+          diagnostics: [diagnostic(
+            "RENDER_LAYOUT_UNSPECIFIED",
+            `/contracts/${viewport}/${path}/facts`,
+            "Presentation-table with multiple visible children requires exactly one layout axis and one integer gap.",
+          )],
+        };
       }
       const axis = axes[0]?.value?.value ?? "vertical";
       const gap = gaps[0]?.value?.value ?? 0;
