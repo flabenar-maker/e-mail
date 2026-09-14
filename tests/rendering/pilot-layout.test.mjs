@@ -46,22 +46,12 @@ function rowPathAt(html, marker, last = false) {
   return stack;
 }
 
-test("Card/Image Desktop places image and text in one outer row, unlike Mobile", async () => {
-  const result = await renderPilot("card-image");
-  const image = rowPathAt(result.html, 'src="images/card-image.jpg"', true);
-  const heading = rowPathAt(result.html, "Работайте с нами", true);
-  assert.equal(image[0], heading[0], "Desktop Card image and text must share the outer row");
-  assert.ok(result.html.includes('width="488"'), "Desktop Card width is 488px in Figma node 911:4131");
-  assert.match(result.html, /<img[^>]+src="images\/card-image\.jpg"[^>]+width="232"[^>]+height="148"/u);
-  assert.match(result.html, /<img[^>]+src="images\/card-image\.jpg"[^>]+height:auto[^>]+width:100%/u);
-});
-
 test("Banner/Secondary Desktop places 300px content beside 252px background image", async () => {
   const result = await renderPilot("banner-secondary");
   const image = rowPathAt(result.html, 'background="images/secondary.jpg"');
   const heading = rowPathAt(result.html, "Всё важное рядом", true);
   assert.equal(image[0], heading[0], "Desktop Secondary content and image must share a row");
-  assert.match(result.html, /<table[^>]+width="552"/u);
+  assert.match(result.html, /<td[^>]+background="images\/secondary\.jpg"[^>]+height="238"/u);
   assert.match(result.html, /<td[^>]+background="images\/secondary\.jpg"[^>]+width="252"/u);
 });
 

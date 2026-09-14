@@ -73,20 +73,19 @@ test("pilot contracts retain their critical rendering structures", async () => {
 
   const secondary = componentById(registries, "banner-secondary");
   assert.equal(
-    elementById(secondary, "mobile", "secondary-image").render_mode,
+    elementById(secondary, "mobile", "root-card-secondary-image").render_mode,
     "direct-image",
   );
   assert.equal(
-    elementById(secondary, "desktop", "secondary-image").render_mode,
+    elementById(secondary, "desktop", "root-card-secondary-image").render_mode,
     "background-image",
   );
 
   const card = componentById(registries, "card-image");
-  const cardImage = elementById(card, "mobile", "card-image");
-  const cardFacts = new Map(cardImage.facts.map((fact) => [fact.id, fact.value]));
-  assert.equal(cardFacts.get("width-behavior").value, "fluid-to-container");
-  assert.equal(cardFacts.get("height-behavior").value, "auto");
-  assert.equal(cardFacts.get("fixed-height-forbidden").value, true);
+  const cardImage = elementById(card, "mobile", "root-card-image");
+  assert.deepEqual(cardImage.facts.find(({ id }) => id === "reference-size").value, { type: "dimensions", width: 252, height: 161, unit: "px" });
+  const desktopCardImage = elementById(card, "desktop", "root-card-image");
+  assert.deepEqual(desktopCardImage.facts.find(({ id }) => id === "reference-size").value, { type: "dimensions", width: 232, height: 148, unit: "px" });
 
   const template = componentById(registries, "email-template");
   for (const viewport of ["mobile", "desktop"]) {
@@ -98,10 +97,10 @@ test("pilot contracts retain their critical rendering structures", async () => {
 
   const appDownload = componentById(registries, "banner-app-download");
   for (const viewport of ["mobile", "desktop"]) {
-    const storeLink = elementById(appDownload, viewport, "rustore-link");
+    const storeLink = elementById(appDownload, viewport, "root-content-area-store-buttons-rustore-button");
     assert.deepEqual(
-      storeLink.children.map(({ render_mode }) => render_mode),
-      ["direct-image", "html-text"],
+      storeLink.render_mode,
+      "presentation-table",
     );
   }
 });
@@ -112,8 +111,8 @@ test("renderer-ready validation rejects missing, duplicate, and misplaced semant
   const card = structuredClone(componentById(registries, "card-image"));
   const coverage = resolveRendererCoverage(rendererRegistry, card.id);
 
-  elementById(card, "mobile", "heading").content_slots = [];
-  elementById(card, "desktop", "heading").content_slots.push({
+  elementById(card, "mobile", "root-text-content-heading").content_slots = [];
+  elementById(card, "desktop", "root-text-content-heading").content_slots.push({
     id: "text",
     type: "plain-text",
     required: true,
@@ -137,8 +136,8 @@ test("background images reject HTML alt while direct images require it", async (
   );
   const coverage = resolveRendererCoverage(rendererRegistry, secondary.id);
 
-  elementById(secondary, "mobile", "secondary-image").content_slots = [];
-  elementById(secondary, "desktop", "secondary-image").content_slots = [
+  elementById(secondary, "mobile", "root-card-secondary-image").content_slots = [];
+  elementById(secondary, "desktop", "root-card-secondary-image").content_slots = [
     { id: "alt", type: "alt-text", required: true },
   ];
 

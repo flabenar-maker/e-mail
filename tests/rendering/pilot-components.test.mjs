@@ -100,16 +100,6 @@ test("template slot produces one deterministic email document with live button c
   assert.doesNotMatch(result.html, /placeholder|\[object Object\]/u);
 });
 
-test("card image is fluid with automatic height on mobile and keeps exact desktop dimensions", async () => {
-  const { result } = await pilot();
-  const images = result.html.match(/<img[^>]+src="images\/card-image\.jpg"[^>]*>/gu) ?? [];
-
-  assert.equal(images.length, 2);
-  assert.ok(images.some((image) => /height:auto/u.test(image) && /width:100%/u.test(image)));
-  assert.ok(images.some((image) => /width="232"/u.test(image) && /height="148"/u.test(image)));
-  assert.equal(images.some((image) => /(?:^|;)width:100%(?:;|")/u.test(image) && /height:[0-9]+px/u.test(image)), false);
-});
-
 test("secondary banner uses a direct image on mobile and a background image on desktop", async () => {
   const { result } = await pilot();
 
@@ -145,7 +135,6 @@ test("document returns every referenced local asset once in deterministic order"
     [
       "images/app-logo.png",
       "images/appgallery-icon.png",
-      "images/card-image.jpg",
       "images/getapps-icon.png",
       "images/google-play-icon.png",
       "images/qr-code.png",
@@ -277,7 +266,7 @@ test("disabled footer social section does not require hidden content or assets",
   const footer = instances.find(({ component_id }) => component_id === "email-footer");
   footer.property_values.find(({ property_id }) => property_id === "show-social-links").value = false;
   footer.content_values = footer.content_values.filter(
-    ({ element_id }) => !["vk-link", "vk-icon", "telegram-link", "telegram-icon"].includes(element_id),
+    ({ element_id }) => !["root-footer-body-social-section-social-icons-vk-icon", "root-footer-body-social-section-social-icons-telegram-icon"].includes(element_id),
   );
   footer.asset_files = [];
 

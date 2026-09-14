@@ -24,6 +24,7 @@ function contentFor(component) {
   function walk(element, viewport) {
     if (element.content_slots?.some((slot) => slot.id === "text")) {
       const entry = { text: sourceText(element) };
+      if (element.content_slots?.some((slot) => slot.id === "alt")) entry.alt = "Alert icon";
       if (element.id.endsWith("phone-number")) entry.href = "tel:+74951222088";
       if (element.id.endsWith("help-text")) entry["help-url"] = "https://example.invalid/help";
       content[viewport][element.id] = entry;
