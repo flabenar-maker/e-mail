@@ -106883,6 +106883,7 @@
                     }
                   }
                 ],
+                "content_slots": [`n                  {`n                    "id": "alt",`n                    "type": "alt-text",`n                    "required": true`n                  }`n                ],
                 "children": [],
                 "asset_contract_id": "card-image"
               },
@@ -107971,6 +107972,7 @@
                     }
                   }
                 ],
+                "content_slots": [`n                  {`n                    "id": "alt",`n                    "type": "alt-text",`n                    "required": true`n                  }`n                ],
                 "children": [],
                 "asset_contract_id": "card-image"
               },
