@@ -43,7 +43,6 @@ function registryEnvelope(library, components = []) {
             node_id: roots[library],
           },
         ],
-        baseline_path: baselinePath,
         baseline_commit: "397e13a916e9af1c2dfd8af663de730bcc2e1874",
         verified_at: "2026-09-06",
       },
@@ -57,8 +56,8 @@ function literalFact(id = "gap") {
     id,
     value: { type: "measure", value: 22, unit: "px" },
     provenance: {
-      kind: "registry-literal",
-      source_path: baselinePath,
+      kind: "figma-literal",
+      node_id: "2000:1",
     },
   };
 }
@@ -172,7 +171,6 @@ function validRecord(overrides = {}) {
     },
     constraints: [],
     provenance: {
-      baseline_path: baselinePath,
       baseline_heading: "Banner/Test",
       baseline_blob_sha: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
     },

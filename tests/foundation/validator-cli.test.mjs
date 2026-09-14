@@ -68,7 +68,7 @@ test("invalid fixture exits one with a sanitized diagnostic", async (t) => {
     `api_token = "${secret}"\n`,
   );
   const { rm } = await import("node:fs/promises");
-  await rm(join(root, "core/email-figma-prompt.md"));
+  await rm(join(root, "core/email-rendering-standard.md"));
 
   const result = await runValidator(root);
 
@@ -79,7 +79,7 @@ test("invalid fixture exits one with a sanitized diagnostic", async (t) => {
 
 test("missing generated documentation uses the generated-doc diagnostic", async (t) => {
   const root = await validFixture(t);
-  const path = "docs/generated/component-registry.md";
+  const path = "docs/generated/typography-registry.md";
   await rm(join(root, path));
 
   const result = await runValidator(root);
@@ -92,7 +92,7 @@ test("missing generated documentation uses the generated-doc diagnostic", async 
 
 test("stale generated documentation uses the generated-doc diagnostic", async (t) => {
   const root = await validFixture(t);
-  const path = "docs/generated/component-registry.md";
+  const path = "docs/generated/typography-registry.md";
   await appendFile(join(root, path), "manual edit\n", "utf8");
 
   const result = await runValidator(root);
@@ -140,7 +140,7 @@ test("generated document drift blocks generated bundle validation", async (t) =>
     `${JSON.stringify(manifest, null, 2)}\n`,
   );
   await appendFile(
-    join(root, "docs/generated/component-registry.md"),
+    join(root, "docs/generated/typography-registry.md"),
     "manual edit\n",
     "utf8",
   );
@@ -169,7 +169,7 @@ test("component errors block generated document comparison", async (t) => {
     `${JSON.stringify(registry, null, 2)}\n`,
   );
   await appendFile(
-    join(root, "docs/generated/component-registry.md"),
+    join(root, "docs/generated/typography-registry.md"),
     "manual edit\n",
     "utf8",
   );

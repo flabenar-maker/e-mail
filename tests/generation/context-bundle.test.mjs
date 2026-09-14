@@ -191,9 +191,11 @@ test("email bundle contains only exact component closure and referenced facts", 
     first.bundle.static_sources.map(({ id }) => id),
     [
       "repository-readme",
-      "email-figma-prompt",
-      "email-build-checkpoint",
-      "email-project-brief",
+      "email-rendering-standard",
+      "component-contract-standard",
+      "typography-standard",
+      "asset-export-standard",
+      "workflow-paused",
     ],
   );
   assert.deepEqual(
@@ -230,18 +232,6 @@ test("email bundle contains only exact component closure and referenced facts", 
       "source_modes/image-fill",
     ],
   );
-
-  const sourceIds = first.bundle.static_sources.map(({ id }) => id);
-  for (const forbidden of [
-    "component-descriptions-registry",
-    "typography-registry",
-    "figma-component-naming-standard",
-    "library-maintenance-checkpoint",
-    "component-contract-standard",
-    "figma-component-description-standard",
-  ]) {
-    assert.equal(sourceIds.includes(forbidden), false, forbidden);
-  }
 
   assert.deepEqual(validateBundleClosure(first.bundle), []);
   assert.equal(typeof renderContextBundle(first.bundle), "string");
@@ -349,7 +339,7 @@ test("routes without component context stay minimal", async () => {
     [
       "repository-readme",
       "migration-roadmap",
-      "library-maintenance-checkpoint",
+      "workflow-paused",
     ],
   );
 
