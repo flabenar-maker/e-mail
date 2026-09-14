@@ -97,12 +97,19 @@ test("pilot contracts retain their critical rendering structures", async () => {
 
   const appDownload = componentById(registries, "banner-app-download");
   for (const viewport of ["mobile", "desktop"]) {
-    const storeLink = elementById(appDownload, viewport, "root-content-area-store-buttons-rustore-button");
-    assert.deepEqual(
-      storeLink.render_mode,
-      "presentation-table",
-    );
+    const storeButton = elementById(appDownload, viewport, "root-content-area-store-buttons-rustore-button");
+    const storeIcon = elementById(appDownload, viewport, "root-content-area-store-buttons-rustore-button-rustore-icon");
+    assert.equal(storeButton.render_mode, "presentation-table");
+    assert.equal(storeIcon.render_mode, "direct-image");
   }
+  assert.equal(
+    elementById(appDownload, "mobile", "root-content-area-store-buttons-rustore-button-button-text-title").render_mode,
+    "html-text",
+  );
+  assert.equal(
+    elementById(appDownload, "desktop", "root-content-area-text-qr-qr-code").render_mode,
+    "direct-image",
+  );
 });
 
 test("renderer-ready validation rejects missing, duplicate, and misplaced semantics", async () => {

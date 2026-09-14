@@ -119,6 +119,19 @@ test("Figma-verified Card/Image @2x keeps mobile fluid ratio and desktop exact d
   assert.match(output.html, /<img[^>]*width="252"[^>]*style="[^"]*height:auto[^"]*width:100%/u);
   assert.match(output.html, /<img[^>]*width="232"[^>]*style="[^"]*height:auto[^"]*width:100%/u);
   assert.doesNotMatch(output.html, /width="252"[^>]*style="[^"]*height:161px/u);
+  function rowPathAt(marker) {
+    const position = output.html.lastIndexOf(marker);
+    assert.ok(position >= 0, "Missing marker: " + marker);
+    const rows = []; let nextId = 0;
+    for (const match of output.html.slice(0, position).matchAll(/<\/?tr\b[^>]*>/gu)) {
+      if (match[0].startsWith("</")) rows.pop(); else rows.push(++nextId);
+    }
+    return rows;
+  }
+  const imageRow = rowPathAt('src="data:image/svg+xml');
+  const headingRow = rowPathAt("Небольшой заголовок");
+  assert.equal(imageRow[0], headingRow[0], "Desktop Card image and text must share the outer row");
+  assert.match(output.html, /width="488"/u);
   assert.match(output.html, /<img[^>]*width="232"[^>]*height="148"/u);
   assert.doesNotMatch(output.html, /<img[^>]*height="322"/u);
 });
