@@ -98,6 +98,9 @@ test("Figma-verified Card/Image @2x keeps mobile fluid ratio and desktop exact d
   const component = await record("marketing", "card-image");
   const content = contentFor(component);
   for (const viewport of ["mobile", "desktop"]) {
+    content[viewport]["root-card-image"] = { alt: "Команда CUPIS" };
+  }
+  for (const viewport of ["mobile", "desktop"]) {
     content[viewport]["root-text-content-link"].href = "https://example.invalid/card";
   }
   const output = renderContractTree({
