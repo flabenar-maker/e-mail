@@ -433,6 +433,7 @@ export function renderComponent({
   const rendered = renderContractTree({
     component: {
       id: componentId,
+      identity: componentRecord(componentIndex, componentId)?.identity,
       contracts: {
         mobile: { root: roots.mobile },
         desktop: { root: roots.desktop },
