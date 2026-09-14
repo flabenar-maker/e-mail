@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const rendering = {
-  breakpoints: [{ id: "cupis-mobile", query: "max-width", value: 660, unit: "px" }],
+  breakpoints: [{ id: "cupis-mobile", query: "max-width", value: 659, unit: "px" }],
 };
 
 async function interpreter() {
@@ -185,7 +185,7 @@ test("interpreter emits a minimal responsive split when paired facts differ", as
   assert.match(result.html, /font-size:16px/u);
   assert.equal(
     result.css,
-    "@media only screen and (max-width:660px){.cupis-root-0-desktop{display:none!important;max-height:0!important;overflow:hidden!important}.cupis-root-0-mobile{display:block!important;max-height:none!important;overflow:visible!important}}",
+    "@media only screen and (max-width:659px){.cupis-root-0-desktop{display:none!important;max-height:0!important;overflow:hidden!important}.cupis-root-0-mobile{display:block!important;max-height:none!important;overflow:visible!important}}",
   );
   assert.deepEqual(result.diagnostics, []);
 });
