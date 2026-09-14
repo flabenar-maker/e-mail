@@ -239,7 +239,15 @@ function prepareElement({
         rendererRegistry,
         componentIndex,
       });
-      if (child) prepared.children.push(child);
+      if (child) {
+        const instanceSizing = element.facts?.find(({ id }) => id === "horizontal-sizing")?.value?.value;
+        if (instanceSizing === "fill") {
+          child.facts = child.facts?.map((fact) => fact.id === "horizontal-sizing"
+            ? { ...fact, value: { ...fact.value, value: "fill" } }
+            : fact);
+        }
+        prepared.children.push(child);
+      }
     }
   }
 
