@@ -117,7 +117,6 @@ function prepareElement({
   const originalId = element.id;
   const prepared = structuredClone(element);
   prepared.id = scopedId(instancePath, originalId);
-  prepared.render_component_library = record.identity?.library;
 
   let visible = prepared.visibility?.mode === "instance" ? prepared.visibility.default_visible : true;
   if (prepared.visibility?.mode === "property") {
@@ -434,7 +433,6 @@ export function renderComponent({
   const rendered = renderContractTree({
     component: {
       id: componentId,
-      identity: componentRecord(componentIndex, componentId)?.identity,
       contracts: {
         mobile: { root: roots.mobile },
         desktop: { root: roots.desktop },
