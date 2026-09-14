@@ -328,8 +328,14 @@ test("email document contains safe renderer version, commit and impact metadata"
     foundations: {
       rendering: {
         breakpoints: [
-          { id: "cupis-mobile", query: "max-width", value: 660, unit: "px" },
+          { id: "cupis-mobile", query: "max-width", value: 659, unit: "px" },
         ],
+        shell: {
+          background_color: "#F3F3F5",
+          horizontal_inset_px: 15,
+          max_width_px: 600,
+          min_width_px: 300,
+        },
         postprocessing: {
           allowed: ["normalize-attributes"],
           forbidden: [],
