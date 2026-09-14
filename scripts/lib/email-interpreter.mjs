@@ -325,7 +325,7 @@ function renderShell(element, viewport, path, childHtml, context) {
 
   const { entry, diagnostics } = contentFor({ ...context, path }, viewport, element);
   if (diagnostics.length > 0) return { html: "", diagnostics };
-  const factProps = propsFromFacts(element.facts, { viewport, mode: element.render_mode, isRoot: path === "root", fluidMobileText: context.componentLibrary === "marketing" });
+  const factProps = propsFromFacts(element.facts, { viewport, mode: element.render_mode, isRoot: path === "root", fluidMobileText: (element.render_component_library ?? context.componentLibrary) === "marketing" });
   if (element.render_mode === "presentation-table" && element.semantic_role === "social-icons" && factProps.width === "auto") {
     factProps.align = "center";
   }
