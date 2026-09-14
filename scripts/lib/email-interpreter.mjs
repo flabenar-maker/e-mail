@@ -255,23 +255,28 @@ function isWholeButtonAction(element) {
 }
 
 function inlineActionParts(childHtml, gap) {
-  const parts = childHtml.flatMap((html) =>
-    [...html.matchAll(/<img\b[^>]*>|<p\b[^>]*>[\s\S]*?<\/p>/gu)].map((match) => match[0]),
-  );
+  const parts = childHtml.flatMap((html) => {
+    const noWrap = html.includes("white-space:nowrap");
+    return [...html.matchAll(/<img\b[^>]*>|<p\b[^>]*>[\s\S]*?<\/p>/gu)].map((match) => ({
+      html: match[0],
+      noWrap,
+    }));
+  });
   if (parts.length === 0) return null;
 
-  return parts.map((part, index) => {
+  return parts.map(({ html, noWrap }, index) => {
     const offset = index > 0 && gap > 0 ? "margin-left:" + gap + "px;" : "";
-    if (part.startsWith("<img")) {
-      return part.replace(/style="([^"]*)"/u, (_match, style) =>
-        'style="' + style + ';display:inline-block;vertical-align:middle;' + offset + '"',
+    const whitespace = noWrap ? "white-space:nowrap;" : "";
+    if (html.startsWith("<img")) {
+      return html.replace(/style="([^"]*)"/u, (_match, style) =>
+        'style="' + style + ';display:inline-block;vertical-align:middle;' + whitespace + offset + '"',
       );
     }
-    return part.replace(/^<p([^>]*)>([\s\S]*)<\/p>$/u, (_match, attrs, body) => {
+    return html.replace(/^<p([^>]*)>([\s\S]*)<\/p>$/u, (_match, attrs, body) => {
       const style = attrs.match(/\sstyle="([^"]*)"/u);
       const nextAttrs = style
-        ? attrs.replace(style[0], ' style="' + style[1] + ';display:inline-block;vertical-align:middle;' + offset + '"')
-        : attrs + ' style="display:inline-block;vertical-align:middle;' + offset + '"';
+        ? attrs.replace(style[0], ' style="' + style[1] + ';display:inline-block;vertical-align:middle;' + whitespace + offset + '"')
+        : attrs + ' style="display:inline-block;vertical-align:middle;' + whitespace + offset + '"';
       return "<span" + nextAttrs + ">" + body + "</span>";
     });
   });
