@@ -128,11 +128,11 @@ test("direct Figma source capture preserves shared and service registries and ma
 
   assert.equal(
     digest(projected.shared),
-    "sha256:6d2edbadc53b3e759b4485a6b6238be8b04cdbf4e1e0f7e292d9a67c12c7f782",
+    "sha256:f8fe5b315f21c81c3b2896c3cf0d9f02be75859e5ad794b751509eb7882014e9",
   );
   assert.equal(
     digest(projected.service),
-    "sha256:ac5867babd46884bc646767a4ae36ed20860a6acf015857d480a44e83682aab3",
+    "sha256:99db1487c1526848aac4e08216df3f4e3c49ff9a79c13c251ea054313a7282f8",
   );
 
   const blocked = projected.marketing
@@ -175,18 +175,8 @@ test("migration preserves high-risk responsive, asset, property and template con
   const index = indexComponentRegistries(registries);
 
   const cardImage = index.bySystemId.get("card-image");
-  assert.deepEqual(findFact(cardImage, "mobile", "width-behavior"), {
-    type: "keyword",
-    value: "fluid-to-container",
-  });
-  assert.deepEqual(findFact(cardImage, "mobile", "height-behavior"), {
-    type: "keyword",
-    value: "auto",
-  });
-  assert.deepEqual(findFact(cardImage, "mobile", "fixed-height-forbidden"), {
-    type: "boolean",
-    value: true,
-  });
+  assert.deepEqual(findFact(cardImage, "mobile", "reference-size"), { type: "dimensions", width: 252, height: 291, unit: "px" });
+  assert.deepEqual(findFact(cardImage, "mobile", "layout-axis"), { type: "keyword", value: "vertical" });
   assert.deepEqual(cardImage.asset_contracts[0].aspect_ratio, {
     width: 232,
     height: 148,

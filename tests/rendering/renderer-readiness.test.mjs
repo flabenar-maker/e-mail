@@ -73,20 +73,19 @@ test("pilot contracts retain their critical rendering structures", async () => {
 
   const secondary = componentById(registries, "banner-secondary");
   assert.equal(
-    elementById(secondary, "mobile", "secondary-image").render_mode,
+    elementById(secondary, "mobile", "root-card-secondary-image").render_mode,
     "direct-image",
   );
   assert.equal(
-    elementById(secondary, "desktop", "secondary-image").render_mode,
+    elementById(secondary, "desktop", "root-card-secondary-image").render_mode,
     "background-image",
   );
 
   const card = componentById(registries, "card-image");
-  const cardImage = elementById(card, "mobile", "card-image");
-  const cardFacts = new Map(cardImage.facts.map((fact) => [fact.id, fact.value]));
-  assert.equal(cardFacts.get("width-behavior").value, "fluid-to-container");
-  assert.equal(cardFacts.get("height-behavior").value, "auto");
-  assert.equal(cardFacts.get("fixed-height-forbidden").value, true);
+  const cardImage = elementById(card, "mobile", "root-card-image");
+  assert.deepEqual(cardImage.facts.find(({ id }) => id === "reference-size").value, { type: "dimensions", width: 252, height: 161, unit: "px" });
+  const desktopCardImage = elementById(card, "desktop", "root-card-image");
+  assert.deepEqual(desktopCardImage.facts.find(({ id }) => id === "reference-size").value, { type: "dimensions", width: 232, height: 148, unit: "px" });
 
   const template = componentById(registries, "email-template");
   for (const viewport of ["mobile", "desktop"]) {
@@ -98,12 +97,19 @@ test("pilot contracts retain their critical rendering structures", async () => {
 
   const appDownload = componentById(registries, "banner-app-download");
   for (const viewport of ["mobile", "desktop"]) {
-    const storeLink = elementById(appDownload, viewport, "rustore-link");
-    assert.deepEqual(
-      storeLink.children.map(({ render_mode }) => render_mode),
-      ["direct-image", "html-text"],
-    );
+    const storeButton = elementById(appDownload, viewport, "root-content-area-store-buttons-rustore-button");
+    const storeIcon = elementById(appDownload, viewport, "root-content-area-store-buttons-rustore-button-rustore-icon");
+    assert.equal(storeButton.render_mode, "presentation-table");
+    assert.equal(storeIcon.render_mode, "direct-image");
   }
+  assert.equal(
+    elementById(appDownload, "mobile", "root-content-area-store-buttons-rustore-button-button-text-title").render_mode,
+    "html-text",
+  );
+  assert.equal(
+    elementById(appDownload, "desktop", "root-content-area-text-qr-qr-code").render_mode,
+    "direct-image",
+  );
 });
 
 test("renderer-ready validation rejects missing, duplicate, and misplaced semantics", async () => {
@@ -112,8 +118,8 @@ test("renderer-ready validation rejects missing, duplicate, and misplaced semant
   const card = structuredClone(componentById(registries, "card-image"));
   const coverage = resolveRendererCoverage(rendererRegistry, card.id);
 
-  elementById(card, "mobile", "heading").content_slots = [];
-  elementById(card, "desktop", "heading").content_slots.push({
+  elementById(card, "mobile", "root-text-content-heading").content_slots = [];
+  elementById(card, "desktop", "root-text-content-heading").content_slots.push({
     id: "text",
     type: "plain-text",
     required: true,
@@ -137,14 +143,43 @@ test("background images reject HTML alt while direct images require it", async (
   );
   const coverage = resolveRendererCoverage(rendererRegistry, secondary.id);
 
-  elementById(secondary, "mobile", "secondary-image").content_slots = [];
-  elementById(secondary, "desktop", "secondary-image").content_slots = [
+  elementById(secondary, "mobile", "root-card-secondary-image").content_slots = [];
+  elementById(secondary, "desktop", "root-card-secondary-image").content_slots = [
     { id: "alt", type: "alt-text", required: true },
   ];
 
   const errors = validateRendererReadyComponent(secondary, coverage);
   assert.ok(errors.some(({ code }) => code === "RENDER_IMAGE_ALT_MISSING"));
   assert.ok(errors.some(({ code }) => code === "RENDER_BACKGROUND_ALT_FORBIDDEN"));
+});
+
+test("every active direct image has exactly one required alt-text slot", async () => {
+  const registries = await loadComponentRegistries({ repoRoot });
+
+  for (const document of Object.values(registries)) {
+    for (const record of document.components) {
+      if (record.status !== "active") continue;
+      walkComponentElements(record, ({ element, path }) => {
+        const altSlots = (element.content_slots ?? []).filter(
+          ({ id }) => id === "alt",
+        );
+        if (element.render_mode === "direct-image") {
+          assert.deepEqual(
+            altSlots,
+            [{ id: "alt", type: "alt-text", required: true }],
+            `${record.id}${path} must declare one required alt-text slot`,
+          );
+        }
+        if (element.render_mode === "background-image") {
+          assert.deepEqual(
+            altSlots,
+            [],
+            `${record.id}${path} must not declare an alt slot`,
+          );
+        }
+      });
+    }
+  }
 });
 
 test("returns stable issue shapes and deterministic ordering", async () => {

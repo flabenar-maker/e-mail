@@ -253,3 +253,111 @@ test("mapped text, font size and color must match the live Figma values exactly"
     assert.ok(report.issues.some((issue) => issue.code === "FIGMA_CONTRACT_MISMATCH" && issue.source_path === path), path);
   }
 });
+
+test("a viewportless shared asset is checked once and may serve both viewports", () => {
+  const record = {
+    id: "asset-example",
+    identity: { semantic_role: "asset" },
+    figma: { file_key: "file-key", node_id: "1:1" },
+    variants: [],
+    asset_contracts: [],
+    contracts: {
+      mobile: { root: { facts: [], children: [] } },
+      desktop: { root: { facts: [], children: [] } },
+      figma_fact_links: [],
+    },
+  };
+  const live = {
+    capture_version: "1.0.0", capture_errors: [], component_properties: [],
+    file_key: "file-key", component_node_id: "1:1",
+    variants: [{ variant_node_id: "1:1", axes: [], source_node: { node_id: "1:1" } }],
+  };
+  const report = auditFigmaContractFacts({ record, live });
+  assert.equal(report.ok, true, JSON.stringify(report.issues));
+});
+
+test("exported asset artwork is an image boundary, not individually mapped vector CSS", () => {
+  const record = {
+    id: "header-example",
+    identity: { semantic_role: "email" },
+    figma: { file_key: "file-key", node_id: "1:1" },
+    variants: [{ node_id: "2:1" }, { node_id: "2:2" }],
+    asset_contracts: [{ owner_layer_name: "logo @4x" }],
+    contracts: {
+      mobile: { root: { facts: [], children: [] } },
+      desktop: { root: { facts: [], children: [] } },
+      figma_fact_links: [],
+    },
+  };
+  const asset = {
+    node_id: "3:1", name: "logo @4x", node_type: "FRAME",
+    children: [{ node_id: "4:1", name: "Vector", node_type: "VECTOR", fills: [{ type: "solid", color: "#000000" }] }],
+  };
+  const live = {
+    capture_version: "1.0.0", capture_errors: [{ node_id: "3:1", code: "ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW" }],
+    component_properties: [], file_key: "file-key", component_node_id: "1:1",
+    variants: [
+      { variant_node_id: "2:1", axes: [{ name: "Viewport", value: "Mobile" }], source_node: { node_id: "2:1", children: [asset] } },
+      { variant_node_id: "2:2", axes: [{ name: "Viewport", value: "Desktop" }], source_node: { node_id: "2:2" } },
+    ],
+  };
+  const report = auditFigmaContractFacts({ record, live });
+  assert.equal(report.issues.some((issue) => issue.code === "FIGMA_CAPTURE_UNSUPPORTED"), false);
+  assert.equal(report.issues.some((issue) => issue.node_id === "4:1"), false);
+});
+
+test("mixed text is supported when every styled segment is captured exactly", () => {
+  const record = {
+    id: "mixed-text", figma: { file_key: "file-key", node_id: "1:1" },
+    variants: [{ node_id: "2:1" }, { node_id: "2:2" }],
+    contracts: {
+      mobile: { root: { facts: [], children: [] } },
+      desktop: { root: { facts: [], children: [] } },
+      figma_fact_links: [],
+    },
+  };
+  const live = {
+    capture_version: "1.0.0", component_properties: [],
+    file_key: "file-key", component_node_id: "1:1",
+    capture_errors: [{ node_id: "3:1", code: "MIXED_VALUE", field: "fontName" }],
+    variants: [
+      { variant_node_id: "2:1", axes: [{ name: "Viewport", value: "Mobile" }],
+        source_node: { node_id: "2:1", children: [{
+          node_id: "3:1", node_type: "TEXT",
+          styled_text_segments: [{ start: 0, end: 1 }, { start: 1, end: 2 }],
+        }] } },
+      { variant_node_id: "2:2", axes: [{ name: "Viewport", value: "Desktop" }],
+        source_node: { node_id: "2:2" } },
+    ],
+  };
+  const report = auditFigmaContractFacts({ record, live });
+  assert.equal(report.issues.some((issue) => issue.code === "FIGMA_CAPTURE_UNSUPPORTED"), false);
+});
+
+test("a live Mobile Accent variant may certify its exact variant_contract root fact", () => {
+  const { record, packet, mappings } = fixture();
+  const contractPath = "/contracts/variant_contracts/0/root/facts/0/value/value";
+  record.contracts.variant_contracts = [{
+    variant_node_id: "2:1",
+    axes: [{ name: "Viewport", value: "Mobile" }, { name: "Style", value: "Accent" }],
+    root: {
+      facts: [{
+        id: "gap",
+        value: { type: "integer", value: 12 },
+        provenance: { kind: "figma-literal", node_id: "2:1" },
+      }],
+      children: [],
+    },
+  }];
+  mappings.push({
+    variant_node_id: "2:1",
+    node_id: "2:1",
+    source_path: "/layout/item_spacing",
+    contract_path: contractPath,
+    transform: "identity",
+  });
+  const report = auditFigmaContractFacts({ record, live: packet, mappings });
+  assert.equal(report.issues.some((issue) =>
+    (issue.code === "CONTRACT_TARGET_INVALID" || issue.code === "CONTRACT_FACT_UNMAPPED") &&
+    issue.contract_path === contractPath), false, JSON.stringify(report.issues));
+});

@@ -213,7 +213,15 @@
         "id": "item-bullet",
         "purpose": "Отдельный пункт маркированного списка с живым текстом.",
         "critical_constraint_ids": [],
-        "constraints": []
+        "constraints": [
+          {
+            "id": "link-remains-live-html",
+            "scope": "all",
+            "kind": "interaction",
+            "severity": "required",
+            "statement": "Слой link — отдельная HTML-ссылка: видимый текст остаётся живым, адрес передаётся письмом в content slot href; не растрировать ссылку и не переносить её на всю карточку."
+          }
+        ]
       },
       {
         "id": "item-step",
@@ -255,7 +263,15 @@
         "id": "card-image",
         "purpose": "Карточка с составным изображением, живым текстом и необязательной ссылкой.",
         "critical_constraint_ids": [],
-        "constraints": []
+        "constraints": [
+          {
+            "id": "link-remains-live-html",
+            "scope": "all",
+            "kind": "interaction",
+            "severity": "required",
+            "statement": "Слой link — отдельная HTML-ссылка: видимый текст остаётся живым, адрес передаётся письмом в content slot href; не растрировать ссылку и не переносить её на всю карточку."
+          }
+        ]
       },
       {
         "id": "block-icon-list",
@@ -267,7 +283,15 @@
         "id": "card-icon",
         "purpose": "Карточка с графической иконкой, живым текстом и необязательной ссылкой.",
         "critical_constraint_ids": [],
-        "constraints": []
+        "constraints": [
+          {
+            "id": "link-remains-live-html",
+            "scope": "all",
+            "kind": "interaction",
+            "severity": "required",
+            "statement": "Слой link — отдельная HTML-ссылка: видимый текст остаётся живым, адрес передаётся письмом в content slot href; не растрировать ссылку и не переносить её на всю карточку."
+          }
+        ]
       },
       {
         "id": "asset-feature-icon-4x",
@@ -291,7 +315,15 @@
         "id": "nps-options",
         "purpose": "Адаптивная группа кликабельных вариантов оценки NPS.",
         "critical_constraint_ids": [],
-        "constraints": []
+        "constraints": [
+          {
+            "id": "evaluation-links-cover-tiles",
+            "scope": "all",
+            "kind": "interaction",
+            "severity": "critical",
+            "statement": "Каждый видимый вариант оценки — отдельная ссылка со своим href, занимающая всю площадь кнопки. Mobile кнопка шириной 100% доступной области и высотой 44px; Desktop кнопки равномерно делят строку, высота 54px, между ними gap 12px. Count=2/3 выбирает весь вариант состава; не скрывать варианты оценок независимо от Count."
+          }
+        ]
       }
     ],
     "service": [
@@ -336,6 +368,14 @@
             "kind": "interaction",
             "severity": "critical",
             "statement": "Ссылка «Помощь» находится внутри одного help-text: базовый цвет #757678, встроенная ссылка #00991F с underline; URL поступает из данных письма."
+          }
+,
+          {
+            "id": "phone-link",
+            "scope": "all",
+            "kind": "interaction",
+            "severity": "critical",
+            "statement": "Номер +7 (495) 122-20-88 — HTML-ссылка tel:+74951222088 в обеих версиях; href не придумывать и не заменять URL сайта."
           }
         ]
       },
@@ -477,6 +517,14 @@
             "kind": "email-rendering",
             "severity": "critical",
             "statement": "Number и dash занимают фиксированные колонки 22px и 42px Mobile / 32px и 64px Desktop; промежуток до HTML-текста 12px в обеих версиях."
+          }
+,
+          {
+            "id": "alert-inline-phone-link",
+            "scope": "all",
+            "kind": "interaction",
+            "severity": "critical",
+            "statement": "В alert-notice-link подстрока «+7 (495) 122-20-88» внутри первого текстового фрагмента должна быть отдельной ссылкой с href=\"tel:+74951222088\"; оставшийся текст этого фрагмента не делать ссылкой. Подчёркнутый второй фрагмент «help@1cupis.ru» — отдельная ссылка на адрес из данных письма, не объединять оба фрагмента одним href."
           }
         ]
       },

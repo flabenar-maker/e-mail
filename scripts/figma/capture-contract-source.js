@@ -144,7 +144,23 @@ async function captureFigmaContractFacts(componentNodeId) {
       }
     }
     if ("effects" in node && node.effects.length > 0) {
-      errors.push({ node_id: node.id, code: "EFFECTS_REQUIRE_CAPTURE_SUPPORT" });
+      const active = node.effects.filter((effect) => effect.visible !== false);
+      if (active.length > 0) result.effects = active.map((effect, index) => {
+        const captured = { type: effect.type, visible: true };
+        if (["DROP_SHADOW", "INNER_SHADOW"].includes(effect.type)) {
+          captured.color = rgba(effect.color);
+          captured.radius = effect.radius;
+          captured.offset = { x: effect.offset.x, y: effect.offset.y };
+          captured.spread = effect.spread ?? 0;
+          captured.blend_mode = effect.blendMode;
+          captured.show_shadow_behind_node = effect.showShadowBehindNode ?? false;
+        } else if (["LAYER_BLUR", "BACKGROUND_BLUR"].includes(effect.type)) {
+          captured.radius = effect.radius;
+        } else {
+          errors.push({ node_id: node.id, code: "EFFECT_UNSUPPORTED", index, type: effect.type });
+        }
+        return captured;
+      });
     }
     if ("children" in node) result.children = node.children.map(serialize);
     return result;

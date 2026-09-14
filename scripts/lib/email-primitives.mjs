@@ -48,12 +48,13 @@ function renderTable(props, children) {
     "border-collapse": "collapse",
     "border-spacing": "0",
     ...(width === "100%" ? { width: "100%" } : {}),
+    ...(props.align === "center" ? { margin: "0 auto" } : {}),
     ...(props.style ?? {}),
   };
   const attrs = withStyle(
     [
       ["role", "presentation"],
-      ["width", width],
+      ["width", width === "auto" ? undefined : width],
       ["cellpadding", "0"],
       ["cellspacing", "0"],
       ["border", "0"],
@@ -82,7 +83,7 @@ function renderCell(props, children) {
 }
 
 function renderText(props, children) {
-  const body = `${props.text === undefined ? "" : escapeHtml(props.text)}${children}`;
+  const body = `${props.text === undefined ? "" : escapeHtml(props.text).replaceAll("\u2028", "<br>").replaceAll("\n", "<br>")}${children}`;
   return `<p${withStyle([], { margin: "0", ...(props.style ?? {}) })}>${body}</p>`;
 }
 

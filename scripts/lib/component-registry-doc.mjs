@@ -109,6 +109,8 @@ function formatFactValue(value, { record, index, foundations, viewport, path }) 
       return `property ${propertyLabel(record, value.property_id)}`;
     case "asset-reference":
       return `asset ${inlineCode(value.asset_contract_id)}`;
+    case "segments":
+      return inlineCode(JSON.stringify(value.items));
     default:
       throw registryDocError(
         "COMPONENT_REGISTRY_DOC_UNKNOWN_FACT",
