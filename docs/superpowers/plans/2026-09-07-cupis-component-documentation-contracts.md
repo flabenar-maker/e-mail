@@ -1,5 +1,7 @@
 # CUPIS Component Documentation Contracts Implementation Plan
 
+> **Исторический implementation plan.** Реализован в [PR #45](https://github.com/flabenar-maker/e-mail/pull/45). Команды, пути и чекбоксы ниже описывают выполнение того этапа, а не текущий рабочий маршрут: старый контур находится в Legacy/, маршруты остановлены, проверки теперь локальные. Для продолжения использовать свежие manifest и [roadmap](2026-08-25-cupis-migration-roadmap.md).
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (- [ ]) syntax for tracking.
 
 **Goal:** Ввести единые проверяемые правила полного component contract для generated registry и компактного Figma Description, удалить дублирующую prose-модель из structured component records и подготовить безопасную интеграцию с generated docs, routes, workflows и skills.
