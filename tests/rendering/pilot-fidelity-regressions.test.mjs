@@ -202,6 +202,6 @@ test("Mobile adaptive store buttons retain a fixed 76px text column for aligned 
       .find((match) => match[0].includes(">" + label + "</span>"))?.[0];
     assert.ok(span, "missing " + store + " text column");
     assert.match(span, /width:76px/u);
-    assert.match(span, /max-width:none/u);
+    assert.doesNotMatch(span, /max-width:/u, "fixed text column must have one unambiguous width");
   }
 });
