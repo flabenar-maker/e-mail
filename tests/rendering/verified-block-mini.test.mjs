@@ -46,9 +46,19 @@ function allFacts(element) {
   return [...element.facts, ...element.children.flatMap(allFacts)];
 }
 
+function openingParagraphTag(html, marker) {
+  const paragraph = [...html.matchAll(/<p\b[^>]*>[\s\S]*?<\/p>/gu)]
+    .find((match) => match[0].includes(marker))?.[0];
+  assert.ok(paragraph, "missing paragraph for " + marker);
+  return paragraph.slice(0, paragraph.indexOf(">") + 1);
+}
+
 test("Figma-verified Block/Info-Alert fully renders Mobile and Desktop from contracts", async () => {
   const component = await record("marketing", "block-info-alert");
-  const output = render(component);
+  const content = contentFor(component);
+  content.mobile["root-content-area-body"].text = "responsive-info-alert-mobile";
+  content.desktop["root-content-area-body"].text = "responsive-info-alert-desktop";
+  const output = render(component, content);
   assert.deepEqual(output.diagnostics, []);
   assert.match(output.css, /max-width:660px/u);
   assert.match(output.html, /width="600"/u);
@@ -59,7 +69,11 @@ test("Figma-verified Block/Info-Alert fully renders Mobile and Desktop from cont
   assert.match(output.html, /font-size:14px/u);
   assert.match(output.html, /font-size:18px/u);
   assert.match(output.html, /line-height:140%/u);
-  assert.match(output.html, /max-width:228px/u);
+  const mobileBody = openingParagraphTag(output.html, "responsive-info-alert-mobile");
+  assert.match(mobileBody, /width:100%/u);
+  assert.doesNotMatch(mobileBody, /max-width:/u);
+  const desktopBody = openingParagraphTag(output.html, "responsive-info-alert-desktop");
+  assert.match(desktopBody, /max-width:462px/u);
   assert.match(output.html, /<img[^>]*width="24"[^>]*height="24"/u);
   assert.match(output.html, /<img[^>]*width="26"[^>]*height="26"/u);
   assert.equal((output.html.match(/Небольшой текст с пояснением чего-либо/gu) ?? []).length, 2);
@@ -84,7 +98,15 @@ test("Figma-verified Block/Contact-Support preserves both inline links and rich 
   assert.match(output.html, /font-size:12px/u);
   assert.match(output.html, /font-size:16px/u);
   assert.match(output.html, /text-decoration:underline/u);
-  assert.match(output.html, /max-width:220px/u);
+  const helpParagraphs = [...output.html.matchAll(/<p\b[^>]*>[\s\S]*?<\/p>/gu)]
+    .map((match) => match[0])
+    .filter((paragraph) => paragraph.includes('href="https://example.invalid/help"'));
+  assert.equal(helpParagraphs.length, 2);
+  const mobileHelp = helpParagraphs[0].slice(0, helpParagraphs[0].indexOf(">") + 1);
+  assert.match(mobileHelp, /width:100%/u);
+  assert.doesNotMatch(mobileHelp, /max-width:/u);
+  const desktopHelp = helpParagraphs[1].slice(0, helpParagraphs[1].indexOf(">") + 1);
+  assert.match(desktopHelp, /max-width:440px/u);
   assert.ok(!/<table[^>]*height="(?:\d+)"/u.test(output.html), "Block height must grow with reflow");
   const missing = contentFor(component);
   delete missing.mobile["root-content-area-help-notice-help-text"]["help-url"];
