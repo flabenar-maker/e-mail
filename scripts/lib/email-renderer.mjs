@@ -117,6 +117,7 @@ function prepareElement({
   const originalId = element.id;
   const prepared = structuredClone(element);
   prepared.id = scopedId(instancePath, originalId);
+  prepared.render_component_library = record.identity?.library;
 
   let visible = prepared.visibility?.mode === "instance" ? prepared.visibility.default_visible : true;
   if (prepared.visibility?.mode === "property") {
