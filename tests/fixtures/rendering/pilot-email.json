@@ -70,16 +70,16 @@
               { "element_id": "qr-code", "slot_id": "alt", "scope": "desktop", "value": { "type": "alt-text", "value": "QR-код для скачивания" } },
               { "element_id": "root-content-area-store-buttons-rustore-button", "slot_id": "href", "scope": "all", "value": { "type": "url", "value": "https://example.test/rustore" } },
               { "element_id": "root-content-area-store-buttons-rustore-button-rustore-icon", "slot_id": "alt", "scope": "desktop", "value": { "type": "alt-text", "value": "RuStore" } },
-              { "element_id": "root-content-area-store-buttons-rustore-button-button-text-title", "slot_id": "text", "scope": "mobile", "value": { "type": "rich-text", "value": "RuStore" } },
+              { "element_id": "root-content-area-store-buttons-rustore-button-button-text-title", "slot_id": "text", "scope": "mobile", "value": { "type": "plain-text", "value": "RuStore" } },
               { "element_id": "root-content-area-store-buttons-google-play-button", "slot_id": "href", "scope": "all", "value": { "type": "url", "value": "https://example.test/google-play" } },
               { "element_id": "root-content-area-store-buttons-google-play-button-google-play-icon", "slot_id": "alt", "scope": "desktop", "value": { "type": "alt-text", "value": "Google Play" } },
-              { "element_id": "root-content-area-store-buttons-google-play-button-button-text-title", "slot_id": "text", "scope": "mobile", "value": { "type": "rich-text", "value": "Google Play" } },
+              { "element_id": "root-content-area-store-buttons-google-play-button-button-text-title", "slot_id": "text", "scope": "mobile", "value": { "type": "plain-text", "value": "Google Play" } },
               { "element_id": "root-content-area-store-buttons-appgallery-button", "slot_id": "href", "scope": "all", "value": { "type": "url", "value": "https://example.test/appgallery" } },
               { "element_id": "root-content-area-store-buttons-appgallery-button-appgallery-icon", "slot_id": "alt", "scope": "desktop", "value": { "type": "alt-text", "value": "AppGallery" } },
-              { "element_id": "root-content-area-store-buttons-appgallery-button-button-text-title", "slot_id": "text", "scope": "mobile", "value": { "type": "rich-text", "value": "AppGallery" } },
+              { "element_id": "root-content-area-store-buttons-appgallery-button-button-text-title", "slot_id": "text", "scope": "mobile", "value": { "type": "plain-text", "value": "AppGallery" } },
               { "element_id": "root-content-area-store-buttons-getapps-button", "slot_id": "href", "scope": "all", "value": { "type": "url", "value": "https://example.test/getapps" } },
               { "element_id": "root-content-area-store-buttons-getapps-button-getapps-icon", "slot_id": "alt", "scope": "desktop", "value": { "type": "alt-text", "value": "GetApps" } },
-              { "element_id": "root-content-area-store-buttons-getapps-button-button-text-title", "slot_id": "text", "scope": "mobile", "value": { "type": "rich-text", "value": "GetApps" } }
+              { "element_id": "root-content-area-store-buttons-getapps-button-button-text-title", "slot_id": "text", "scope": "mobile", "value": { "type": "plain-text", "value": "GetApps" } }
             ],
             "asset_files": [
               { "asset_contract_id": "app-logo", "path": "images/app-logo.png" },
