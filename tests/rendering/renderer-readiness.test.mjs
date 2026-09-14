@@ -147,6 +147,35 @@ test("background images reject HTML alt while direct images require it", async (
   assert.ok(errors.some(({ code }) => code === "RENDER_BACKGROUND_ALT_FORBIDDEN"));
 });
 
+test("every active direct image has exactly one required alt-text slot", async () => {
+  const registries = await loadComponentRegistries({ repoRoot });
+
+  for (const document of Object.values(registries)) {
+    for (const record of document.components) {
+      if (record.status !== "active") continue;
+      walkComponentElements(record, ({ element, path }) => {
+        const altSlots = (element.content_slots ?? []).filter(
+          ({ id }) => id === "alt",
+        );
+        if (element.render_mode === "direct-image") {
+          assert.deepEqual(
+            altSlots,
+            [{ id: "alt", type: "alt-text", required: true }],
+            `${record.id}${path} must declare one required alt-text slot`,
+          );
+        }
+        if (element.render_mode === "background-image") {
+          assert.deepEqual(
+            altSlots,
+            [],
+            `${record.id}${path} must not declare an alt slot`,
+          );
+        }
+      });
+    }
+  }
+});
+
 test("returns stable issue shapes and deterministic ordering", async () => {
   const registries = await loadComponentRegistries({ repoRoot });
   const rendererRegistry = await loadRendererRegistry({ repoRoot });
