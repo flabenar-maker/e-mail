@@ -10,7 +10,7 @@
 
 **Spec:** `docs/superpowers/specs/2026-09-10-cupis-html-rendering-design.md`.
 
-## Фактический статус на 2026-09-14
+## Фактический статус на 2026-09-15
 
 Пакеты 1–9 слиты в main через PR #50–58; PR #59 исправил пилотный Mobile/Desktop layout. В main есть пилотное техническое ядро: foundation, шесть записей renderer coverage, примитивы, interpreter, модель, CLI, атомарная публикация, diagnostics и автоматические HTML-инварианты. Это не готовый маршрут сборки произвольного production-письма: для CLI ещё нужна подготовленная временная модель, а покрытие остальных компонентов не закончено.
 
@@ -20,7 +20,7 @@ PR #61–64 — корректирующая Figma-сверка и уточне�
 
 [PR #66](https://github.com/flabenar-maker/e-mail/pull/66) дополнительно исправил оболочку пилота и границу Mobile/Desktop. [PR #69](https://github.com/flabenar-maker/e-mail/pull/69) временно вынес старый контур в `Legacy/` и остановил все маршруты; [PR #70](https://github.com/flabenar-maker/e-mail/pull/70) адаптировал тесты. Этот перенос не завершил shadow comparison и не разрешает использовать архивный контур для сборки. [PR #71](https://github.com/flabenar-maker/e-mail/pull/71) вернул полный generated component registry и его проверку в `main`; это отдельная починка документационного слоя, не закрывающая пакеты 10–12.
 
-Следующая работа: сначала диагностически проверить HTML, который реально создаёт обновлённый пилот, и отделить недостаток данных модели/контракта от ошибки renderer code. Затем обсудить выводы исследования и продолжить пакет 10; без доказанного расхождения не менять Core, contracts или renderer. Подробные checkbox-шаги ниже сохраняют исходную спецификацию реализации, а не отражают факт merge; актуальный статус пакетов указан в таблице.
+Следующая работа: сначала диагностически проверить HTML, который реально создаёт обновлённый пилот, и отделить недостаток данных модели/контракта от ошибки renderer code. Перед визуальным gate пакета 10 добавить узкое coverage для Email/Header и проверить Header вместе с уже покрытым Email/Footer. Исследование PR #60 рассматривается отдельно перед принятием новых правил и не блокирует диагностику пилота; без доказанного расхождения не менять Core, contracts или renderer. Подробные checkbox-шаги ниже сохраняют исходную спецификацию реализации, а не отражают факт merge; актуальный статус пакетов указан в таблице.
 
 ## Global Constraints
 
@@ -40,7 +40,7 @@ PR #61–64 — корректирующая Figma-сверка и уточне�
 - Нельзя исправлять сгенерированный NEW BUILD вручную как штатный путь. Ошибка исправляется в contract, foundation, recipe или renderer, затем письмо пересобирается.
 - CONTINUE/FIX остаётся отдельным режимом и всегда работает в новой локальной версии папки.
 - Все diagnostics используют стабильные code/path/message и сортируются детерминированно.
-- Никакой пакет не считается завершённым до свежих локальных `npm run verify`, Windows bootstrap check и allowed-diff проверки на точном SHA.
+- В ходе пакета выполнять локальные проверки затронутой области. Перед слиянием изменений кода или контрактов один раз запускать `npm run verify` на точном финальном SHA; для документационной правки достаточно применимых validation, link и scope checks. Windows-проверка выполняется, когда она относится к изменению. GitHub Actions и PR Checks не служат доказательством качества.
 - Merge выполняется только по отдельной команде пользователя.
 
 ---
@@ -58,9 +58,9 @@ PR #61–64 — корректирующая Figma-сверка и уточне�
 | 7 | Временная модель, CLI и атомарный output | Ошибка не повреждает прежний результат | Слит: [PR #56](https://github.com/flabenar-maker/e-mail/pull/56) |
 | 8 | Render-impact digest и diagnostics | Документация не инвалидирует renderer | Слит: [PR #57](https://github.com/flabenar-maker/e-mail/pull/57) |
 | 9 | Автоматическая проверка | Property branches и HTML invariants покрыты | Слит: [PR #58](https://github.com/flabenar-maker/e-mail/pull/58) |
-| 10 | Visual scenarios | Mobile/Desktop geometry подтверждена на пилоте | Не завершён; PR #60 больше не содержит его реализации |
-| 11 | Все активные компоненты | Readiness/coverage blockers равны нулю | Не начат как пакет покрытия; PR #61–64 уточнили факты, но coverage остаётся пилотным |
-| 12 | Structured workflows и shadow comparison | Новый маршрут готов к Stage 9 без двойного контекста | Не начат |
+| 10 | Visual scenarios, включая Email/Header и Email/Footer | Фактический HTML и Mobile/Desktop geometry подтверждены; Header добавлен в pilot coverage до visual gate | Не завершён; Footer уже покрыт, Header отсутствует; PR #60 не содержит реализации preview |
+| 11 | Остальные активные компоненты | Readiness/coverage blockers равны нулю после пакета 10 | Не начат как пакет покрытия; PR #61–64 уточнили факты, но coverage остаётся пилотным |
+| 12 | Structured workflows и workflow-level comparison | Workflows готовы к Stage 9 без двойного контекста; сквозное сравнение остаётся этапу 13 | Не начат |
 
 ## Целевая карта файлов
 
@@ -504,20 +504,22 @@ git commit -m "test: enforce rendered email invariants"
 
 ### Package 10: Mobile/Desktop visual scenarios
 
-**Files:** create preview CLI, visual tests and deterministic Mobile/Desktop expected HTML fixtures.
+Перед визуальным gate добавить Email/Header в пилотный renderer registry на основании его существующего точного контракта, проверить границу этого компонента и протестировать его рядом с уже покрытым Email/Footer. Это узкое дополнение пилота; остальное покрытие библиотеки остаётся пакету 11. Если для Header не хватает подтверждённого implementation-significant факта, остановиться на точечной проверке источника, не придумывая значение.
+
+**Files:** create preview CLI, visual tests and deterministic Mobile/Desktop expected HTML fixtures; add narrow Header coverage and its tests.
 
 **Interfaces:** `node scripts/render-email-preview.mjs --model <fixture> --viewport mobile|desktop --output <temp-path>`.
 
+- [ ] **Prerequisite:** добавить и проверить узкое pilot coverage Email/Header без расширения остальной библиотеки; Footer уже покрыт.
 - [ ] **Step 1:** expected fixtures содержат только system pilot, не production письмо.
-- [ ] **Step 2:** tests сравнивают declared widths, responsive classes и image ratios; Card отдельно доказывает пропорциональную высоту.
-- [ ] **Step 3:** manual browser gate сравнивает временные Mobile/Desktop preview с pilot Figma variants; screenshots не коммитятся.
+- [ ] **Step 2:** tests сравнивают declared widths, responsive classes, image ratios и Header/Footer composition; Card отдельно доказывает пропорциональную высоту.
+- [ ] **Step 3:** manual browser gate сравнивает временные Mobile/Desktop preview с pilot Figma variants, включая Header и Footer; screenshots не коммитятся.
 - [ ] **Step 4:** browser preview не подменяет Litmus/Email on Acid/CRM, которые остаются optional.
-- [ ] **Step 5:** verify and commit.
+- [ ] **Step 5:** проверить точный cloud SHA и опубликовать cloud commit.
 
 ```powershell
 node --test tests/rendering/visual-scenarios.test.mjs
 npm run verify
-git commit -m "test: add representative viewport rendering scenarios"
 ```
 
 ---
@@ -527,7 +529,7 @@ git commit -m "test: add representative viewport rendering scenarios"
 **Files:** modify three component files, renderer registry, generated docs; create `all-components.test.mjs`.
 
 - [ ] **Step 1: Shared** — semantic facts/slots/coverage; internal glyphs → `source-only`.
-- [ ] **Step 2: Marketing** — preserve exact contracts/properties/assets/numbers. `Banner/App-Download-Large` получает coverage mode `unsupported` и reason `visual-experiment-not-for-production`; его Figma status и дизайн не меняются.
+- [ ] **Step 2: Marketing** — покрыть остальные marketing records после пилотного Header; preserve exact contracts/properties/assets/numbers. `Banner/App-Download-Large` получает coverage mode `unsupported` и reason `visual-experiment-not-for-production`; его Figma status и дизайн не меняются.
 - [ ] **Step 3: Service** — та же schema без service-specific foundation; ambiguity blocks exact record.
 - [ ] **Step 4: Full coverage assertions**.
 
@@ -541,7 +543,7 @@ assert.equal(report.summary.covered_active_components, 61);
 Каждый active record имеет coverage. `source-only` и `unsupported` входят в covered count, но не в renderable count и при standalone render возвращают понятный blocker.
 
 - [ ] **Step 5:** `npm run generate`, `generate:check`, all-components test, verify.
-- [ ] **Step 6:** три reviewable commits: shared, marketing, service; generated docs в последнем.
+- [ ] **Step 6:** три reviewable cloud commits: shared, marketing, service; generated docs в последнем.
 
 Gate: no generic facts/unregistered active records/unexplained value changes; Figma unchanged.
 
@@ -560,17 +562,16 @@ Gate: no generic facts/unregistered active records/unexplained value changes; Fi
 - [ ] **Step 2: Maintenance workflow** — impact report, cloud GitHub, Figma gate/readback и stop conditions.
 - [ ] **Step 3: Email workflow** — NEW BUILD/CONTINUE/FIX, link validation, local versions, MCP asset export, temp model, CLI, final `email.html` + `images/`.
 - [ ] **Step 4: Structured shadow bundle** — архивные paths не допускаются в bundle; попытка смешать их со structured sources возвращает явную ошибку, а не активирует legacy mode.
-- [ ] **Step 5: Semantic comparison** — каждое обязательство из сохранённого `Legacy/` read-only baseline связано с новым owner; различия объяснены проверенными фактами и approved renderer spec, а не автоматически перенесены в contracts.
+- [ ] **Step 5: Workflow-level semantic comparison** — каждое обязательство archived maintenance/email workflows из read-only `Legacy/` baseline связано с новым owner; различия объяснены проверенными фактами и approved renderer spec, а не автоматически перенесены в contracts. Сквозные rendered outputs, generated docs и все маршруты сравниваются позднее на этапе 13.
 - [ ] **Step 6: No hidden cutover** — текущие paused route lists и skill не переключены; `Legacy/`, Figma и письма не изменены.
-- [ ] **Step 7: Verify and commit**.
+- [ ] **Step 7: Verify and publish cloud commit**.
 
 ```powershell
 node --test tests/workflows/structured-workflows.test.mjs tests/characterization/html-rendering-shadow.test.mjs
 npm run verify
-git commit -m "feat: prepare structured email workflows in shadow mode"
 ```
 
-Gate: Stage 8 готовит новый маршрут; Stage 9 отдельно переключает maintenance skill.
+Gate: Stage 8 готовит workflows; Stage 9 подготавливает maintenance skill без включения paused routes. Сквозное shadow comparison выполняется на этапе 13, фактический cutover — на этапе 14.
 
 ---
 
