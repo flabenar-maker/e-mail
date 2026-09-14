@@ -24,6 +24,11 @@ const cliPath = join(repoRoot, "scripts/generate-docs.mjs");
 
 const generatedSources = [
   {
+    id: "generated-component-registry",
+    kind: "generated",
+    path: "docs/generated/component-registry.md",
+  },
+  {
     id: "generated-typography-registry",
     kind: "generated",
     path: "docs/generated/typography-registry.md",
@@ -41,6 +46,23 @@ const generatedSources = [
 ];
 
 const generatedDefinitions = [
+  {
+    id: "component-registry",
+    output_source_id: "generated-component-registry",
+    renderer: "component-registry",
+    input_source_ids: [
+      "components-shared",
+      "components-marketing",
+      "components-service",
+      "components-schema",
+      "typography-foundation",
+      "typography-schema",
+      "spacing-foundation",
+      "spacing-schema",
+      "assets-foundation",
+      "assets-schema",
+    ],
+  },
   {
     id: "typography-registry",
     output_source_id: "generated-typography-registry",
