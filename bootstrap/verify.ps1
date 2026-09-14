@@ -77,7 +77,7 @@ foreach ($consumer in @(
     'bootstrap/README.md',
     '.agents/skills/maintaining-cupis-email-system/SKILL.md'
 )) {
-    Forbid-Literal $consumer 'bootstrap/manifest.yaml' 'the legacy bootstrap manifest'
+    Forbid-Literal $consumer 'bootstrap/manifest.yaml' 'the retired bootstrap manifest'
 }
 
 $configPath = Join-Path $RepositoryRoot 'bootstrap/config.portable.toml'

@@ -26,4 +26,4 @@ postprocessing:
 support_profiles:
   - id: cupis-default
     required: [table-layout, inline-style-output, media-query-responsive]
-    optional: [legacy-outlook-vml, external-client-matrix]
+    optional: [external-client-matrix]

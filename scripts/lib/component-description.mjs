@@ -78,6 +78,5 @@ export function compareFigmaComponentDescription(expected, actual) {
   ];
 }
 
-// Compatibility export for existing snapshot consumers. It renders only the
-// schema 2 compact projection and does not support legacy description.blocks.
+// Public alias for the schema 2 compact projection.
 export const renderComponentDescription = renderFigmaComponentDescription;

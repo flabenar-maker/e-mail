@@ -373,7 +373,7 @@ export async function validateManifestSemantics(manifest, repoRoot) {
     "assets",
     "figma-naming",
   ]);
-  const legacyRegistryIds = new Set([
+  const retiredRegistryIds = new Set([
     "component-descriptions-registry",
     "typography-registry",
   ]);
@@ -418,12 +418,12 @@ export async function validateManifestSemantics(manifest, repoRoot) {
           ),
         );
       }
-      if (legacyRegistryIds.has(sourceId)) {
+      if (retiredRegistryIds.has(sourceId)) {
         errors.push(
           diagnostic(
-            "generated-bundle-legacy-registry-forbidden",
+            "generated-bundle-retired-registry-forbidden",
             path,
-            `Legacy registry is forbidden in generated bundle: ${sourceId}.`,
+            `Retired registry is forbidden in generated bundle: ${sourceId}.`,
           ),
         );
       }
@@ -521,13 +521,13 @@ export async function validateManifestSemantics(manifest, repoRoot) {
   }
 
   for (const skill of allSkills) {
-    const legacyPath = resolve(repoRoot, "skills", skill.id);
-    if (await exists(legacyPath)) {
+    const retiredPath = resolve(repoRoot, "skills", skill.id);
+    if (await exists(retiredPath)) {
       errors.push(
         diagnostic(
-          "legacy-skill-path",
+          "retired-skill-path",
           `/skills/${skill.id}`,
-          `Legacy skill directory must be removed: skills/${skill.id}.`,
+          `Retired skill directory must be removed: skills/${skill.id}.`,
         ),
       );
     }
@@ -536,9 +536,9 @@ export async function validateManifestSemantics(manifest, repoRoot) {
   if (await exists(resolve(repoRoot, "bootstrap/manifest.yaml"))) {
     errors.push(
       diagnostic(
-        "legacy-manifest-path",
+        "retired-manifest-path",
         "/bootstrap/manifest.yaml",
-        "Legacy bootstrap manifest must be removed.",
+        "Retired bootstrap manifest must be removed.",
       ),
     );
   }
