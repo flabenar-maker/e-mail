@@ -1044,6 +1044,10 @@ test("canonical routes declare exact shadow bundle policies", async () => {
     })),
     [
       {
+        id: "component-registry",
+        output_source_id: "generated-component-registry",
+      },
+      {
         id: "typography-registry",
         output_source_id: "generated-typography-registry",
       },
