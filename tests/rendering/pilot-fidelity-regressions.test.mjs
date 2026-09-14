@@ -110,11 +110,13 @@ test("direct-image assets do not receive an HTML background already baked into t
   assert.doesNotMatch(imageTag(result.html, "images/rustore-icon.png", true), /background-color:/u);
 });
 
-test("store label table honors the Figma no-wrap contract", async () => {
+test("flattened store label preserves the Figma no-wrap contract", async () => {
   const result = await rendered("banner-app-download");
   assert.deepEqual(result.diagnostics, []);
-  const table = nearestTable(result.html, ">GooglePlay</p>");
-  assert.match(table, /white-space:nowrap/u);
+  const mobileGooglePlay = actionAnchors(result.html, "https://example.test/google-play")
+    .find((anchor) => anchor.includes("GooglePlay"));
+  assert.ok(mobileGooglePlay, "missing Mobile GooglePlay action");
+  assert.match(mobileGooglePlay, /white-space:nowrap/u);
 });
 
 function actionAnchors(html, href) {
