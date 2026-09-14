@@ -102,7 +102,9 @@ function propsFromFacts(facts = [], { viewport, mode, isRoot = false, parentAxis
       }
     } else if (mode === "html-text") {
       const expands = viewport === "mobile" && (
-        sizing === "fill" || fact("layout-align")?.value === "stretch" || (parentAxis === "horizontal" && (fact("layout-grow")?.value ?? 0) > 0)
+        sizing === "fill" ||
+        (parentAxis === "vertical" && fact("layout-align")?.value === "stretch") ||
+        (parentAxis === "horizontal" && (fact("layout-grow")?.value ?? 0) > 0)
       );
       if (expands) props.style.width = "100%";
       else props.style["max-width"] = `${size.width}px`;
