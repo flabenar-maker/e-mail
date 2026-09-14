@@ -49,7 +49,7 @@
               { "property_id": "show-button", "scope": "all", "value": false }
             ],
             "content_values": [
-              { "element_id": "secondary-image", "slot_id": "alt", "scope": "mobile", "value": { "type": "alt-text", "value": "Преимущества CUPIS" } },
+              { "element_id": "root-card-secondary-image", "slot_id": "alt", "scope": "mobile", "value": { "type": "alt-text", "value": "Преимущества CUPIS" } },
               { "element_id": "root-card-content-area-text-content-heading", "slot_id": "text", "scope": "all", "value": { "type": "plain-text", "value": "Всё важное рядом" } },
               { "element_id": "root-card-content-area-text-content-body", "slot_id": "text", "scope": "all", "value": { "type": "plain-text", "value": "Управляйте сервисами в одном месте." } }
             ],
