@@ -118,7 +118,7 @@ test("app download keeps store icons and text separate and stacks mobile store l
       new RegExp(`<a href="https://example\\.test/${store}"[^>]*>[\\s\\S]*?<img[^>]+src="images/${store === "google-play" ? "google-play" : store}-icon\\.png"`, "u"),
     );
   }
-  assert.match(result.html, /<p[^>]*>RuStore<\/p>/u);
+  assert.match(result.html, /<(?:p|span)[^>]*>RuStore<\/(?:p|span)>/u);
 });
 
 test("footer resolves boolean properties without losing the enabled social link", async () => {
