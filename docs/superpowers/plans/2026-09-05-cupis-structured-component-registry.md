@@ -1,5 +1,7 @@
 # CUPIS Structured Component Registry Implementation Plan
 
+> **Исторический implementation plan.** Реализован в [PR #40](https://github.com/flabenar-maker/e-mail/pull/40). Команды, пути и чекбоксы ниже описывают выполнение того этапа, а не текущий рабочий маршрут: старый контур находится в Legacy/, маршруты остановлены, проверки теперь локальные. Для продолжения использовать свежие manifest и [roadmap](2026-08-25-cupis-migration-roadmap.md).
+
 > **Для выполнения:** использовать superpowers:executing-plans. Выполнять задачи последовательно, с RED/GREEN-проверками и review checkpoints.
 
 **Goal:** Перенести фактические контракты CUPIS email-компонентов из текущего Markdown-реестра в три строгих shadow-реестра, сохранить независимые Mobile/Desktop-контракты и Figma provenance, добавить точное разрешение зарегистрированных компонентов, blocker для неизвестного компонента и чистые проверки синхронизации без изменения Figma или рабочих HTML-bundles.
