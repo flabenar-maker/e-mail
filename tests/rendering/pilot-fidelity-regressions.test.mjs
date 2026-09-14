@@ -154,3 +154,54 @@ test("pilot whole-button anchors own their visible-cell padding without nested t
     }
   }
 });
+
+function openingParagraphTag(html, marker) {
+  const paragraph = [...html.matchAll(/<p\b[^>]*>[\s\S]*?<\/p>/gu)]
+    .find((match) => match[0].includes(marker))?.[0];
+  assert.ok(paragraph, "missing paragraph " + marker);
+  return paragraph.slice(0, paragraph.indexOf(">") + 1);
+}
+
+test("Mobile stretch text fills its container while preserving Figma alignment", async () => {
+  const secondary = await rendered("banner-secondary");
+  const app = await rendered("banner-app-download");
+  const footer = await rendered("email-footer");
+  for (const result of [secondary, app, footer]) assert.deepEqual(result.diagnostics, []);
+
+  for (const marker of ["Небольшой заголовок", "Поясняющая подпись"]) {
+    const tag = openingParagraphTag(secondary.html, marker);
+    assert.match(tag, /width:100%/u, marker + " must track the Mobile card width");
+    assert.match(tag, /text-align:center/u);
+    assert.doesNotMatch(tag, /max-width:/u);
+  }
+
+  const legal = openingParagraphTag(footer.html, "Мобильная карта");
+  assert.match(legal, /width:100%/u);
+  assert.match(legal, /text-align:center/u);
+  assert.doesNotMatch(legal, /max-width:/u);
+
+  const appBody = openingParagraphTag(app.html, "Единственный финансовый");
+  assert.match(appBody, /width:100%/u);
+  assert.match(appBody, /text-align:left/u, "App description intentionally remains left aligned");
+  assert.doesNotMatch(appBody, /max-width:/u);
+});
+
+test("Mobile adaptive store buttons retain a fixed 76px text column for aligned icons", async () => {
+  const result = await rendered("banner-app-download");
+  assert.deepEqual(result.diagnostics, []);
+  for (const [store, label] of [
+    ["rustore", "RuStore"],
+    ["google-play", "GooglePlay"],
+    ["appgallery", "AppGallery"],
+    ["getapps", "GetApps"],
+  ]) {
+    const mobile = actionAnchors(result.html, "https://example.test/" + store)
+      .find((anchor) => anchor.includes(">" + label + "</span>"));
+    assert.ok(mobile, "missing Mobile " + store + " action");
+    const span = [...mobile.matchAll(/<span\b[^>]*>[^<]*<\/span>/gu)]
+      .find((match) => match[0].includes(">" + label + "</span>"))?.[0];
+    assert.ok(span, "missing " + store + " text column");
+    assert.match(span, /width:76px/u);
+    assert.doesNotMatch(span, /max-width:(?:50|72|69|82)px/u);
+  }
+});
