@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: naming-reference -->
-<!-- source-digest: sha256:d5acda3e3a673e430e29de542f43e66c2313a2ad9e32c2ef03b219e29cf547c8 -->
+<!-- source-digest: sha256:c94a26bcd23004bf9639ea17c09524830beaa260afc3b501e34c02f3e6dca411 -->
 <!-- schema-versions: figma-naming=1.0.0 -->
 # CUPIS Figma naming reference
 
