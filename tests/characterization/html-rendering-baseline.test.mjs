@@ -137,10 +137,18 @@ test("does not track concrete email output in the system repository", async () =
   let stdout;
   try {
     ({ stdout } = await execFileAsync(
-    "git",
-    ["-C", repoRoot, "ls-files"],
-    { encoding: "utf8" },
-  );
+      "git",
+      ["-C", repoRoot, "ls-files"],
+      { encoding: "utf8" },
+    ));
+  } catch (error) {
+    if (error.code === 128 && /not a git repository/u.test(error.stderr)) {
+      assert.equal(await exists("email.html"), false);
+      assert.equal(await exists("images"), false);
+      return;
+    }
+    throw error;
+  }
   const trackedPaths = stdout
     .split(/\r?\n/gu)
     .filter(Boolean)
