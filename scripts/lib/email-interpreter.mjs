@@ -88,7 +88,7 @@ function valueWithUnit(value) {
   return undefined;
 }
 
-function propsFromFacts(facts = [], { viewport, mode, isRoot = false } = {}) {
+function propsFromFacts(facts = [], { viewport, mode, isRoot = false, fluidMobileText = false } = {}) {
   const props = { style: {} };
   const fact = (id) => facts.find((item) => item.id === id)?.value;
   const size = fact("reference-size");
@@ -101,7 +101,7 @@ function propsFromFacts(facts = [], { viewport, mode, isRoot = false } = {}) {
         props.fluid = true;
       }
     } else if (mode === "html-text") {
-      const stretches = viewport === "mobile" && (
+      const stretches = viewport === "mobile" && fluidMobileText && (
         sizing === "fill" || fact("layout-align")?.value === "stretch"
       );
       if (stretches) props.style.width = "100%";
@@ -325,7 +325,7 @@ function renderShell(element, viewport, path, childHtml, context) {
 
   const { entry, diagnostics } = contentFor({ ...context, path }, viewport, element);
   if (diagnostics.length > 0) return { html: "", diagnostics };
-  const factProps = propsFromFacts(element.facts, { viewport, mode: element.render_mode, isRoot: path === "root" });
+  const factProps = propsFromFacts(element.facts, { viewport, mode: element.render_mode, isRoot: path === "root", fluidMobileText: context.componentLibrary === "marketing" });
   if (element.render_mode === "presentation-table" && element.semantic_role === "social-icons" && factProps.width === "auto") {
     factProps.align = "center";
   }
@@ -702,7 +702,7 @@ export function renderContractTree({
   const result = renderPaired(
     pairViewportTrees({ mobile, desktop }),
     "root",
-    { content, assets, properties, visibility, variantAxes, foundations },
+    { content, assets, properties, visibility, variantAxes, foundations, componentLibrary: component.identity?.library },
   );
   const diagnostics = [...result.diagnostics];
   const css = breakpointCss(result.rules, foundations, diagnostics);
