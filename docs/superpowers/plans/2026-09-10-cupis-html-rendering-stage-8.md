@@ -18,6 +18,8 @@ PR #61–64 — корректирующая Figma-сверка и уточне�
 
 Открытый [PR #60](https://github.com/flabenar-maker/e-mail/pull/60) содержит только read-only исследование внешних email-практик, а не реализацию viewport preview. Изучение источников проведено; тест готового письма в Яндекс Почте, Mail.ru и Gmail и обсуждение выводов ещё впереди. PR #60 не является gate-прохождением пакета 10 и не разрешает правку текущих контрактов.
 
+[PR #66](https://github.com/flabenar-maker/e-mail/pull/66) дополнительно исправил оболочку пилота и границу Mobile/Desktop. [PR #69](https://github.com/flabenar-maker/e-mail/pull/69) временно вынес старый контур в `Legacy/` и остановил все маршруты; [PR #70](https://github.com/flabenar-maker/e-mail/pull/70) адаптировал тесты. Этот перенос не завершил shadow comparison и не разрешает использовать архивный контур для сборки. [PR #71](https://github.com/flabenar-maker/e-mail/pull/71) возвращает полный generated component registry и его проверку; это отдельная починка документационного слоя, не закрывающая пакеты 10–12.
+
 Следующая работа: сначала диагностически проверить HTML, который реально создаёт обновлённый пилот, и отделить недостаток данных модели/контракта от ошибки renderer code. Затем обсудить выводы исследования и продолжить пакет 10; без доказанного расхождения не менять Core, contracts или renderer. Подробные checkbox-шаги ниже сохраняют исходную спецификацию реализации, а не отражают факт merge; актуальный статус пакетов указан в таблице.
 
 ## Global Constraints
@@ -27,8 +29,8 @@ PR #61–64 — корректирующая Figma-сверка и уточне�
 - Не использовать локальный checkout как канонический источник. Постоянные изменения публикуются через облачный GitHub; временный изолированный снимок точного SHA допускается только для локальных проверок.
 - Не изменять Figma, Figma Description, component properties, variants, geometry или assets в технических пакетах. Неясный факт разрешается read-only проверкой; Figma mutation требует отдельной задачи и impact gate.
 - Не добавлять в репозиторий production `email.html`, `images/`, реальные письма, временные модели, экспортированные assets или screenshots конкретной рассылки.
-- До финального shadow comparison не изменять действующие `bundle_profiles[].source_ids`, `routes[].bundle_profile_id` и repo-scoped maintenance skill.
-- Legacy `core/email-figma-prompt.md`, Markdown registries и Markdown workflows сохраняются как comparison baseline до отдельного общего cutover.
+- До отдельного cutover сохранять текущие остановленные `bundle_profiles[].source_ids`, `routes[].bundle_profile_id` и repo-scoped maintenance skill. Старый active source list до PR #69 является историческим baseline, а не требованием повторно активировать его.
+- Прежние Core prompt, Markdown registries и workflows хранятся в `Legacy/` только как read-only comparison baseline до отдельной ревизии после cutover; они не входят в runtime bundle.
 - Один факт имеет одного владельца: rendering foundation не копирует typography, spacing, assets или component facts; renderer code не хранит размеры и контент компонентов.
 - Spacing golden rule не вызывается при HTML-сборке. Renderer получает только точные факты resolved contract.
 - Figma Description не входит в email-build input.
@@ -111,10 +113,8 @@ PR #61–64 — корректирующая Figma-сверка и уточне�
 
 ### Сохранить до отдельного cutover
 
-- `core/email-figma-prompt.md`
-- `registry/*.md`
-- `workflows/*.md`
-- `.agents/skills/**`
+- Архивные версии Core prompt, registries, workflows и checkpoints в `Legacy/` как read-only baseline.
+- Текущие остановленные routes и repo-scoped maintenance skill — до отдельного решения о переключении.
 - Figma и production-письма.
 
 ---
@@ -549,19 +549,19 @@ Gate: no generic facts/unregistered active records/unexplained value changes; Fi
 
 ### Package 12: Structured workflows и shadow comparison
 
-**Files:** create two workflow data files, schema, loader, workflow and characterization tests; modify context bundle, `system/manifest.yaml`, `schemas/manifest.schema.json` and manifest tests; preserve Markdown workflows and skill.
+**Files:** create two workflow data files, schema, loader, workflow and characterization tests; modify context bundle, `system/manifest.yaml`, `schemas/manifest.schema.json` and manifest tests; preserve archived Markdown workflows in `Legacy/` and current skill.
 
 **Interfaces:**
 - `loadWorkflowRegistry({ repoRoot, workflowId })`.
 - `resolveWorkflowSteps(workflow, mode) -> ordered steps`.
-- Bundle option `workflow_mode: legacy|structured-shadow`; один bundle содержит один mode.
+- Bundle допускает только `structured-shadow`; архивный `Legacy/` не становится режимом bundle и читается отдельно только для comparison.
 
 - [ ] **Step 1: Workflow schema** — ID, status shadow, modes, ordered steps, required inputs, blockers, allowed outputs, handoff; ссылки на manifest source IDs без копии technical rules. Добавить structured-workflow capability в manifest schema и поднять manifest/schema loader с `1.1.0` до `1.2.0` в одном commit.
 - [ ] **Step 2: Maintenance workflow** — impact report, cloud GitHub, Figma gate/readback и stop conditions.
 - [ ] **Step 3: Email workflow** — NEW BUILD/CONTINUE/FIX, link validation, local versions, MCP asset export, temp model, CLI, final `email.html` + `images/`.
-- [ ] **Step 4: Structured shadow bundle** — mixed legacy/structured returns `CONTEXT_BUNDLE_SOURCE_MODE_MIXED`.
-- [ ] **Step 5: Semantic comparison** — каждое legacy obligation связано с новым owner; differences только из approved renderer spec.
-- [ ] **Step 6: No hidden cutover** — active route lists and skill byte-identical; no Figma/letters.
+- [ ] **Step 4: Structured shadow bundle** — архивные paths не допускаются в bundle; попытка смешать их со structured sources возвращает явную ошибку, а не активирует legacy mode.
+- [ ] **Step 5: Semantic comparison** — каждое обязательство из сохранённого `Legacy/` read-only baseline связано с новым owner; различия объяснены проверенными фактами и approved renderer spec, а не автоматически перенесены в contracts.
+- [ ] **Step 6: No hidden cutover** — текущие paused route lists и skill не переключены; `Legacy/`, Figma и письма не изменены.
 - [ ] **Step 7: Verify and commit**.
 
 ```powershell
@@ -583,7 +583,7 @@ Gate: Stage 8 готовит новый маршрут; Stage 9 отдельно
 - [ ] Representative NEW BUILD атомарно создаёт только `email.html` и `images/` во временной test folder.
 - [ ] Intentional failure не меняет существующую version folder.
 - [ ] Mobile/Desktop pilot previews проверены визуально.
-- [ ] Active route source lists и maintenance skill не изменены.
+- [ ] Текущие paused route source lists и maintenance skill не изменены; archived baseline не подключён к HTML-build bundle.
 - [ ] Figma, production-письма и реальные assets не изменены.
 - [ ] Allowed diff не содержит непредусмотренных файлов.
 - [ ] Roadmap/active context обновляются после merge и по команде пользователя.

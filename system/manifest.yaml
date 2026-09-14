@@ -33,10 +33,15 @@ sources:
   - { id: components-marketing, kind: registry, path: data/components/marketing.yaml }
   - { id: components-service, kind: registry, path: data/components/service.yaml }
   - { id: components-schema, kind: schema, path: schemas/components.schema.json }
+  - { id: generated-component-registry, kind: generated, path: docs/generated/component-registry.md }
   - { id: generated-typography-registry, kind: generated, path: docs/generated/typography-registry.md }
   - { id: generated-asset-registry, kind: generated, path: docs/generated/asset-registry.md }
   - { id: generated-naming-reference, kind: generated, path: docs/generated/naming-reference.md }
 generated_docs:
+  - id: component-registry
+    output_source_id: generated-component-registry
+    renderer: component-registry
+    input_source_ids: [components-shared, components-marketing, components-service, components-schema, typography-foundation, typography-schema, spacing-foundation, spacing-schema, assets-foundation, assets-schema]
   - id: typography-registry
     output_source_id: generated-typography-registry
     renderer: typography-registry
