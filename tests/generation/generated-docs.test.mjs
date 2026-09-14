@@ -151,6 +151,7 @@ test("canonical manifest generates the full component registry", async () => {
   assert.match(content, /source-digest: sha256:[0-9a-f]{64}/u);
   assert.equal((content.match(/^## /gmu) ?? []).length, 61);
 });
+
 test("all generated references share a deterministic provenance header", async () => {
   const first = await renderCanonical();
   const second = await renderCanonical();
@@ -177,7 +178,6 @@ test("generated references expose complete facts without mixing responsibilities
   const namingDoc = contentAt(rendered, "docs/generated/naming-reference.md");
 
   assert.match(componentDoc, /Block\/Cards-Images/u);
-  assert.equal((componentDoc.match(/^## /gmu) ?? []).length, 61);
 
   assert.match(typographyDoc, /Desktop\/Caption/u);
   assert.match(typographyDoc, /Consumers/u);
