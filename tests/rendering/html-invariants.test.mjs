@@ -132,7 +132,8 @@ test("direct image dimensions are positive integers and fluid @2x images keep au
   }
   const secondary = images.filter((image) => attribute(image, "src") === "images/secondary.jpg");
   assert.equal(secondary.length, 1);
-  assert.ok(secondary.some((image) => attribute(image, "width") === "296" && attribute(image, "height") === "188"));
+  assert.ok(secondary.some((image) => attribute(image, "width") === "296"));
+  assert.equal(attribute(secondary[0], "height"), undefined);
   assert.equal(cssValue(attribute(secondary[0], "style") ?? "", "width"), "100%");
   assert.match(attribute(secondary[0], "style") ?? "", /(?:^|;)height:auto(?:;|$)/u);
 });
@@ -149,7 +150,7 @@ test("pilot has no unresolved placeholders and repeats the declared section orde
   const landmarks = [
     "images/secondary.jpg",
     "images/app-logo.png",
-    "Вы получили это письмо от CUPIS.",
+    "images/vk-icon.png",
   ];
   const positions = landmarks.map((landmark) => first.html.indexOf(landmark));
   assert.ok(positions.every((position) => position >= 0));
@@ -183,7 +184,7 @@ test("all four Footer boolean combinations control caption and social assets ind
   }
 });
 
-test("all four Secondary boolean combinations either render or flag missing nested button data", async () => {
+test("all four Secondary boolean combinations control the supplied nested button", async () => {
   const { model, dependencies } = await pilot();
   const record = dependencies.componentIndex.bySystemId.get("banner-secondary");
   assert.deepEqual(
@@ -198,16 +199,9 @@ test("all four Secondary boolean combinations either render or flag missing nest
       banner.property_values.find(({ property_id }) => property_id === "show-body").value = body;
       banner.property_values.find(({ property_id }) => property_id === "show-button").value = button;
       const result = renderEmailDocument(variant, dependencies);
-      if (button) {
-        assert.equal(result.html, "");
-        assert.deepEqual(
-          new Set(result.diagnostics.map(({ code }) => code)),
-          new Set(["RENDER_NESTED_COMPONENT_DATA_MISSING"]),
-        );
-      } else {
-        assert.deepEqual(result.diagnostics, []);
-        assert.equal(result.html.includes("Управляйте сервисами в одном месте."), body);
-      }
+      assert.deepEqual(result.diagnostics, []);
+      assert.equal(result.html.includes("Поясняющая подпись на несколько красивых строк"), body);
+      assert.equal(result.html.includes("https://example.test/secondary"), button);
     }
   }
 });
