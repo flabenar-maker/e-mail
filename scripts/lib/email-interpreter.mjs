@@ -101,7 +101,11 @@ function propsFromFacts(facts = [], { viewport, mode, isRoot = false } = {}) {
         props.fluid = true;
       }
     } else if (mode === "html-text") {
-      props.style["max-width"] = `${size.width}px`;
+      const stretches = viewport === "mobile" && (
+        sizing === "fill" || fact("layout-align")?.value === "stretch"
+      );
+      if (stretches) props.style.width = "100%";
+      else props.style["max-width"] = `${size.width}px`;
     } else if (mode === "presentation-table" && sizing === "hug") {
       props.width = "auto";
     } else if (isRoot && viewport === "desktop") {
@@ -254,29 +258,37 @@ function isWholeButtonAction(element) {
   );
 }
 
-function inlineActionParts(childHtml, gap) {
-  const parts = childHtml.flatMap((html) => {
+function inlineActionParts(childHtml, childNodes, gap) {
+  const parts = childHtml.flatMap((html, index) => {
+    if (!html) return [];
     const noWrap = html.includes("white-space:nowrap");
+    const nodeFacts = childNodes?.[index]?.facts ?? [];
+    const fact = (id) => nodeFacts.find((item) => item.id === id)?.value;
+    const fixedWidth = fact("horizontal-sizing")?.value === "fixed"
+      ? fact("reference-size")?.width
+      : undefined;
     return [...html.matchAll(/<img\b[^>]*>|<p\b[^>]*>[\s\S]*?<\/p>/gu)].map((match) => ({
       html: match[0],
       noWrap,
+      fixedWidth: match[0].startsWith("<p") ? fixedWidth : undefined,
     }));
   });
   if (parts.length === 0) return null;
 
-  return parts.map(({ html, noWrap }, index) => {
+  return parts.map(({ html, noWrap, fixedWidth }, index) => {
     const offset = index > 0 && gap > 0 ? "margin-left:" + gap + "px;" : "";
     const whitespace = noWrap ? "white-space:nowrap;" : "";
+    const column = Number.isFinite(fixedWidth) ? "max-width:none;width:" + fixedWidth + "px;" : "";
     if (html.startsWith("<img")) {
       return html.replace(/style="([^"]*)"/u, (_match, style) =>
-        'style="' + style + ';display:inline-block;vertical-align:middle;' + whitespace + offset + '"',
+        'style="' + style + ';display:inline-block;vertical-align:middle;' + whitespace + column + offset + '"',
       );
     }
     return html.replace(/^<p([^>]*)>([\s\S]*)<\/p>$/u, (_match, attrs, body) => {
       const style = attrs.match(/\sstyle="([^"]*)"/u);
       const nextAttrs = style
-        ? attrs.replace(style[0], ' style="' + style[1] + ';display:inline-block;vertical-align:middle;' + whitespace + offset + '"')
-        : attrs + ' style="display:inline-block;vertical-align:middle;' + whitespace + offset + '"';
+        ? attrs.replace(style[0], ' style="' + style[1] + ';display:inline-block;vertical-align:middle;' + whitespace + column + offset + '"')
+        : attrs + ' style="display:inline-block;vertical-align:middle;' + whitespace + column + offset + '"';
       return "<span" + nextAttrs + ">" + body + "</span>";
     });
   });
@@ -286,7 +298,7 @@ function renderWholeButtonAction(element, entry, childHtml, factProps, gap) {
   if (!isWholeButtonAction(element)) return null;
 
   const href = actionHref(element, entry);
-  const parts = inlineActionParts(childHtml, gap);
+  const parts = inlineActionParts(childHtml, element.children, gap);
   if (!href || !parts) return null;
 
   const padding = Object.fromEntries(
@@ -362,7 +374,7 @@ function renderShell(element, viewport, path, childHtml, context) {
         };
       }
       if (isWholeButtonAction(element)) {
-        const actionHtml = renderWholeButtonAction(element, entry, children, factProps, gap);
+        const actionHtml = renderWholeButtonAction(element, entry, childHtml, factProps, gap);
         if (actionHtml) return { html: actionHtml, diagnostics: [] };
       }
 
