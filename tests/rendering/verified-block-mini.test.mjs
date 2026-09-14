@@ -88,6 +88,12 @@ test("Figma-verified Block/Contact-Support preserves both inline links and rich 
   assert.ok(render(component, missing).diagnostics.some((d) => d.code === "RENDER_CONTENT_MISSING"));
 });
 
+test("Figma-verified Block/Contact-Support centers each phone link in its enclosing cell", async () => {
+  const component = await record("service", "block-contact-support");
+  const output = render(component);
+  const phoneCells = [...output.html.matchAll(/<td\b[^>]*style="[^"]*text-align:center[^"]*"[^>]*><a href="tel:\+74951222088"/gu)];
+  assert.equal(phoneCells.length, 2);
+});
 test("Figma-verified Card/Image @2x keeps mobile fluid ratio and desktop exact dimensions", async () => {
   const component = await record("marketing", "card-image");
   const content = contentFor(component);
