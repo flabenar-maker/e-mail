@@ -681,7 +681,7 @@ test("marketing image contracts preserve responsive ratios and export boundaries
     "background-image",
   );
 
-  const card = byId.get("card-image");
+  const card = byId.get("asset-card-image-2x");
   const cardAsset = card.asset_contracts.find((asset) => asset.id === "card-image");
   assert.deepEqual(
     {
@@ -701,9 +701,9 @@ test("marketing image contracts preserve responsive ratios and export boundaries
   );
   assert.equal(
     findAssetElement(card.contracts.mobile.root, "card-image").facts.find(
-      (fact) => fact.id === "height-behavior",
+      (fact) => fact.id === "vertical-sizing",
     ).value.value,
-    "vertical",
+    "fixed",
   );
 });
 
