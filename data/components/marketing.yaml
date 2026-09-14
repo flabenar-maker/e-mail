@@ -63840,6 +63840,13 @@
                         }
                       }
                     ],
+                    "content_slots": [
+                      {
+                        "id": "alt",
+                        "type": "alt-text",
+                        "required": true
+                      }
+                ],
                     "children": [],
                     "asset_contract_id": "secondary-image"
                   },
