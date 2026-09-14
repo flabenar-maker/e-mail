@@ -127,7 +127,7 @@ test("CLI renders the raw valid pilot model into the canonical responsive email 
     ], { cwd: repoRoot });
     assert.deepEqual(await readdir(outputDir), ["email.html", "images"]);
     const html = await readFile(join(outputDir, "email.html"), "utf8");
-    assert.match(html, /Скачайте приложение/u);
+    assert.match(html, /Небольшой заголовок/u);
     assert.match(html, /<body style="margin:0;padding:0">/u);
     assert.match(html, /background-color:#F3F3F5/u);
     assert.match(html, /padding:0 15px/u);
