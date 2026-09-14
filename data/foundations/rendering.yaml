@@ -1,7 +1,12 @@
 schema_version: 1.0.0
 foundation: { id: rendering, status: shadow }
+shell:
+  background_color: '#F3F3F5'
+  horizontal_inset_px: 15
+  max_width_px: 600
+  min_width_px: 300
 breakpoints:
-  - { id: cupis-mobile, query: max-width, value: 660, unit: px }
+  - { id: cupis-mobile, query: max-width, value: 659, unit: px }
 responsive_strategies:
   - { id: shared-tree, contract: exact-structural-pairing }
   - { id: split-subtree, contract: explicit-viewport-subtree }
