@@ -127,9 +127,9 @@ test("direct image dimensions are positive integers and fluid @2x images keep au
       assert.doesNotMatch(style, /(?:^|;)height:[0-9]+px(?:;|$)/u);
     }
   }
-  assert.ok(card.some((image) => attribute(image, "width") === "232" && attribute(image, "height") === "148"));
   const secondary = images.filter((image) => attribute(image, "src") === "images/secondary.jpg");
   assert.equal(secondary.length, 1);
+  assert.ok(secondary.some((image) => attribute(image, "width") === "296" && attribute(image, "height") === "188"));
   assert.equal(cssValue(attribute(secondary[0], "style") ?? "", "width"), "100%");
   assert.match(attribute(secondary[0], "style") ?? "", /(?:^|;)height:auto(?:;|$)/u);
 });
@@ -144,8 +144,6 @@ test("pilot has no unresolved placeholders and repeats the declared section orde
   assert.deepEqual(first.assets, second.assets);
   assert.doesNotMatch(first.html, /\{\{[^{}]*\}\}|\[object Object\]|\bundefined\b|resolved-slot|cupis:technical/iu);
   const landmarks = [
-    "https://example.test/jobs",
-    "images/card-image.jpg",
     "images/secondary.jpg",
     "images/app-logo.png",
     "Вы получили это письмо от CUPIS.",

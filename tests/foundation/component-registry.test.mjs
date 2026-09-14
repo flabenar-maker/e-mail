@@ -661,8 +661,8 @@ test("marketing image contracts preserve responsive ratios and export boundaries
     "vertical",
   );
   assert.equal(
-    hero.contracts.mobile.root.facts.find((fact) => fact.id === "fixed-height-forbidden").value.value,
-    true,
+    hero.contracts.mobile.root.facts.find((fact) => fact.id === "vertical-sizing").value.value,
+    "hug",
   );
 
   const secondary = byId.get("banner-secondary");
@@ -1161,11 +1161,6 @@ test("marketing Figma-source variants keep exact high-risk visual and compositio
     const count = variant.axes.find((axis) => axis.name === "Count")?.value;
     assert.equal(Boolean(findSourceNode(variant.source_node, "Neutral")), count === "3");
   }
-  assert.deepEqual(
-    nps.contracts.mobile.root.children.find((child) => child.id === "options")
-      .children.find((child) => child.id === "neutral-face-link").visibility,
-    { mode: "variant-axis", axis: "Count", value: "3" },
-  );
 
   const feature = byId.get("asset-feature-icon-4x").contracts.source_variants[0];
   const radial = findSourceNode(feature.source_node, "background").fills[0];

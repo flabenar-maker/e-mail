@@ -316,8 +316,6 @@
         "purpose": "Адаптивная группа кликабельных вариантов оценки NPS.",
         "critical_constraint_ids": [],
         "constraints": []
-          }
-        ]
       }
     ],
     "service": [
