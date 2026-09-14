@@ -229,7 +229,7 @@ Manifest-driven разрешение source paths было выполнено н
 - [ ] Выполнить отдельной задачей после успешного cutover.
 - [ ] Для каждого migration/shadow-артефакта зафиксировать решение `remove` или `preserve` и его фактических потребителей.
 - [ ] Удалить старые источники, shadow-only bundle/profile wiring, comparison baselines, compatibility paths, временные flags/statuses и проверки, единственной целью которых была миграция.
-- [ ] Сохранить постоянные schemas, semantic validators/resolvers, локальную validation и regression-тесты, которые защищают действующие правила после cutover.
+- [ ] Сохранить постоянные schemas, semantic validators/resolvers, локальные проверки и регрессионные тесты, которые защищают действующие правила после cutover.
 - [ ] Подтвердить, что manifest, routes, bundles, skills и bootstrap не ссылаются на удалённые источники или временные механизмы.
 
 ## Правило обновления roadmap
