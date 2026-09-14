@@ -12,7 +12,13 @@ function image(id) {
   return { id, semantic_role: "image", render_mode: "direct-image", visibility: { mode: "always" }, facts: [], children: [], asset_contract_id: "image", content_slots: [{ id: "alt", type: "alt-text", required: true }] };
 }
 function root(id, children) {
-  return { id, semantic_role: "section", render_mode: "presentation-table", visibility: { mode: "always" }, facts: [], children };
+  const facts = children.length > 1
+    ? [
+      { id: "layout-axis", value: { type: "keyword", value: "vertical" } },
+      { id: "layout-gap", value: { type: "measure", value: 0, unit: "px" } },
+    ]
+    : [];
+  return { id, semantic_role: "section", render_mode: "presentation-table", visibility: { mode: "always" }, facts, children };
 }
 function record(id, mobileRoot, desktopRoot = structuredClone(mobileRoot), variantContracts = []) {
   return { id, properties: [], asset_contracts: [{ id: "image" }], contracts: { mobile: { root: mobileRoot }, desktop: { root: desktopRoot }, ...(variantContracts.length ? { variant_contracts: variantContracts } : {}) } };

@@ -25,11 +25,6 @@ const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 
 const generatedSources = [
   {
-    id: "generated-component-registry",
-    kind: "generated",
-    path: "docs/generated/component-registry.md",
-  },
-  {
     id: "generated-typography-registry",
     kind: "generated",
     path: "docs/generated/typography-registry.md",
@@ -47,23 +42,6 @@ const generatedSources = [
 ];
 
 const generatedDefinitions = [
-  {
-    id: "component-registry",
-    output_source_id: "generated-component-registry",
-    renderer: "component-registry",
-    input_source_ids: [
-      "components-shared",
-      "components-marketing",
-      "components-service",
-      "components-schema",
-      "typography-foundation",
-      "typography-schema",
-      "spacing-foundation",
-      "spacing-schema",
-      "assets-foundation",
-      "assets-schema",
-    ],
-  },
   {
     id: "typography-registry",
     output_source_id: "generated-typography-registry",
@@ -147,12 +125,12 @@ test("all generated references share a deterministic provenance header", async (
   const second = await renderCanonical();
 
   assert.deepEqual(first, second);
-  assert.equal(first.size, 4);
+  assert.equal(first.size, 3);
 
   for (const [path, content] of first) {
     assert.match(
       content,
-      /^<!-- GENERATED FILE — DO NOT EDIT MANUALLY\. -->\n<!-- renderer: (component-registry|typography-registry|asset-registry|naming-reference) -->\n<!-- source-digest: sha256:[0-9a-f]{64} -->\n<!-- schema-versions: [^\n]+ -->\n/u,
+      /^<!-- GENERATED FILE — DO NOT EDIT MANUALLY\. -->\n<!-- renderer: (typography-registry|asset-registry|naming-reference) -->\n<!-- source-digest: sha256:[0-9a-f]{64} -->\n<!-- schema-versions: [^\n]+ -->\n/u,
       path,
     );
     assert.doesNotMatch(content.slice(0, 300), /generated-at|timestamp/iu);
@@ -162,17 +140,9 @@ test("all generated references share a deterministic provenance header", async (
 
 test("generated references expose complete facts without mixing responsibilities", async () => {
   const rendered = await renderCanonical();
-  const componentDoc = contentAt(rendered, "docs/generated/component-registry.md");
   const typographyDoc = contentAt(rendered, "docs/generated/typography-registry.md");
   const assetDoc = contentAt(rendered, "docs/generated/asset-registry.md");
   const namingDoc = contentAt(rendered, "docs/generated/naming-reference.md");
-
-  assert.match(componentDoc, /61 component records/u);
-  assert.match(componentDoc, /banner-secondary/u);
-  assert.match(componentDoc, /Icon\/Bank-Card-2-Line/u);
-  assert.match(componentDoc, /Auxiliary Figma Description/u);
-  assert.match(componentDoc, /CUPIS ID: banner-secondary/u);
-  assert.match(componentDoc, /No standalone output contract/u);
 
   assert.match(typographyDoc, /Desktop\/Caption/u);
   assert.match(typographyDoc, /Consumers/u);
@@ -204,7 +174,6 @@ test("each generated source digest changes when one declared input changes", asy
 
   const baseline = await renderCanonical(fixture.root);
   const cases = [
-    ["data/components/shared.yaml", "docs/generated/component-registry.md"],
     ["data/foundations/typography.yaml", "docs/generated/typography-registry.md"],
     ["data/foundations/assets.yaml", "docs/generated/asset-registry.md"],
     ["data/foundations/figma-naming.yaml", "docs/generated/naming-reference.md"],
@@ -261,7 +230,7 @@ test("generated comparison reports missing and stale files by exact path", async
     [],
   );
 
-  const stalePath = "docs/generated/component-registry.md";
+  const stalePath = "docs/generated/typography-registry.md";
   await appendFile(join(fixture.root, stalePath), "manual edit\n", "utf8");
   assert.deepEqual(
     (await compareGeneratedDocs({ repoRoot: fixture.root, rendered })).map(

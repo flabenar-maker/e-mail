@@ -191,9 +191,11 @@ test("email bundle contains only exact component closure and referenced facts", 
     first.bundle.static_sources.map(({ id }) => id),
     [
       "repository-readme",
-      "email-figma-prompt",
-      "email-build-checkpoint",
-      "email-project-brief",
+      "email-rendering-standard",
+      "component-contract-standard",
+      "typography-standard",
+      "asset-export-standard",
+      "workflow-paused",
     ],
   );
   assert.deepEqual(
@@ -237,8 +239,8 @@ test("email bundle contains only exact component closure and referenced facts", 
     "typography-registry",
     "figma-component-naming-standard",
     "library-maintenance-checkpoint",
-    "component-contract-standard",
-    "figma-component-description-standard",
+    "email-build-checkpoint",
+    "email-project-brief",
   ]) {
     assert.equal(sourceIds.includes(forbidden), false, forbidden);
   }
@@ -349,7 +351,7 @@ test("routes without component context stay minimal", async () => {
     [
       "repository-readme",
       "migration-roadmap",
-      "library-maintenance-checkpoint",
+      "workflow-paused",
     ],
   );
 

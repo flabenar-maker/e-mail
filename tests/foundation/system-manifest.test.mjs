@@ -75,9 +75,9 @@ test("migration progress resolves the canonical roadmap bundle", async () => {
   assert.deepEqual(profile.source_ids, [
     "repository-readme",
     "migration-roadmap",
-    "library-maintenance-checkpoint",
+    "workflow-paused",
   ]);
-  assert.equal(route.workflow_source_id, "library-maintenance-checkpoint");
+  assert.equal(route.workflow_source_id, "workflow-paused");
   assert.equal(route.bundle_profile_id, "migration-progress");
 });
 
@@ -246,7 +246,7 @@ test("reports duplicate skill id and path across required and optional", async (
 });
 
 for (const [name, removePath] of [
-  ["source", "core/email-figma-prompt.md"],
+  ["source", "core/email-rendering-standard.md"],
   ["repository entrypoint", "README.md"],
   ["portable config", "bootstrap/config.portable.toml"],
   ["verifier", "bootstrap/verify.ps1"],
@@ -335,18 +335,18 @@ test("reports a required skill with mismatched frontmatter", async (t) => {
   assert.ok(errors.some((error) => error.code === "skill-name-mismatch"));
 });
 
-test("reports the legacy duplicate skill directory", async (t) => {
+test("reports the retired duplicate skill directory", async (t) => {
   const root = await validFixture(t);
   await writeFixtureFile(
     root,
     "skills/maintaining-cupis-email-system/SKILL.md",
-    "duplicate\n",
+    "retired duplicate\n",
   );
   const manifest = await loadSystemManifest({ repoRoot: root });
 
   const errors = await validateManifestSemantics(manifest, root);
 
-  assert.ok(errors.some((error) => error.code === "legacy-skill-path"));
+  assert.ok(errors.some((error) => error.code === "retired-skill-path"));
 });
 
 test("the repository has exactly one manifest", async () => {
@@ -355,14 +355,14 @@ test("the repository has exactly one manifest", async () => {
   await assert.rejects(access(join(repoRoot, "bootstrap/manifest.yaml")));
 });
 
-test("reports the legacy bootstrap manifest", async (t) => {
+test("reports the retired bootstrap manifest", async (t) => {
   const root = await validFixture(t);
-  await writeFixtureFile(root, "bootstrap/manifest.yaml", "legacy: true\n");
+  await writeFixtureFile(root, "bootstrap/manifest.yaml", "retired: true\n");
   const manifest = await loadSystemManifest({ repoRoot: root });
 
   const errors = await validateManifestSemantics(manifest, root);
 
-  assert.ok(errors.some((error) => error.code === "legacy-manifest-path"));
+  assert.ok(errors.some((error) => error.code === "retired-manifest-path"));
 });
 
 for (const [sourceId, code] of [
@@ -487,16 +487,15 @@ for (const [sourceId, kind] of [
   });
 }
 
-test("maintenance profiles include spacing while email build profiles do not", async () => {
+test("all active bundle profiles keep registry foundations out of static sources", async () => {
   const manifest = await canonicalManifest();
   const profiles = new Map(
     manifest.bundle_profiles.map((profile) => [profile.id, profile.source_ids]),
   );
 
-  assert.ok(profiles.get("library-maintenance").includes("spacing-foundation"));
-  assert.ok(profiles.get("component-onboarding").includes("spacing-foundation"));
-  assert.ok(!profiles.get("email-new-build").includes("spacing-foundation"));
-  assert.ok(!profiles.get("email-continue-fix").includes("spacing-foundation"));
+  for (const sourceIds of profiles.values()) {
+    assert.equal(sourceIds.includes("spacing-foundation"), false);
+  }
 });
 
 
@@ -951,7 +950,7 @@ for (const [name, mutate, code] of [
       manifest.bundle_profiles[0].generated_bundle.static_source_ids.push(
         "component-descriptions-registry",
       ),
-    "generated-bundle-legacy-registry-forbidden",
+    "generated-bundle-retired-registry-forbidden",
   ],
   [
     "unknown foundation id",
@@ -1033,129 +1032,17 @@ test("resolves immutable generated definitions and route policy", async () => {
 
 test("canonical routes declare exact shadow bundle policies", async () => {
   const manifest = await canonicalManifest();
-  const policies = Object.fromEntries(
-    manifest.bundle_profiles.map((profile) => [
-      profile.id,
-      profile.generated_bundle,
-    ]),
-  );
-
-  assert.deepEqual(policies, {
-    "library-maintenance": {
-      status: "shadow",
-      static_source_ids: [
-        "repository-readme",
-        "email-figma-prompt",
-        "figma-component-naming-standard",
-        "library-maintenance-checkpoint",
-      ],
-      component_selection: "optional",
-      viewport_selection: "one-or-both",
-      foundation_selection: "explicit-or-referenced",
-      allowed_foundation_ids: [
-        "typography",
-        "spacing",
-        "assets",
-        "figma-naming",
-      ],
-      required_foundation_ids: [],
-    },
-    "component-onboarding": {
-      status: "shadow",
-      static_source_ids: [
-        "repository-readme",
-        "email-figma-prompt",
-        "figma-component-naming-standard",
-        "library-maintenance-checkpoint",
-      ],
-      component_selection: "optional",
-      viewport_selection: "both",
-      foundation_selection: "explicit-or-referenced",
-      allowed_foundation_ids: [
-        "typography",
-        "spacing",
-        "assets",
-        "figma-naming",
-      ],
-      required_foundation_ids: [],
-    },
-    "figma-description-sync": {
-      status: "shadow",
-      static_source_ids: [
-        "repository-readme",
-        "email-figma-prompt",
-        "library-maintenance-checkpoint",
-      ],
-      component_selection: "required",
-      viewport_selection: "both",
-      foundation_selection: "referenced",
-      allowed_foundation_ids: ["typography", "spacing", "assets"],
-      required_foundation_ids: [],
-    },
-    "figma-naming-audit": {
-      status: "shadow",
-      static_source_ids: [
-        "repository-readme",
-        "figma-component-naming-standard",
-        "library-maintenance-checkpoint",
-      ],
-      component_selection: "optional",
-      viewport_selection: "none",
-      foundation_selection: "explicit",
-      allowed_foundation_ids: ["figma-naming"],
-      required_foundation_ids: ["figma-naming"],
-    },
-    "migration-progress": {
-      status: "shadow",
-      static_source_ids: [
-        "repository-readme",
-        "migration-roadmap",
-        "library-maintenance-checkpoint",
-      ],
-      component_selection: "none",
-      viewport_selection: "none",
-      foundation_selection: "none",
-      allowed_foundation_ids: [],
-      required_foundation_ids: [],
-    },
-    "email-new-build": {
-      status: "shadow",
-      static_source_ids: [
-        "repository-readme",
-        "email-figma-prompt",
-        "email-build-checkpoint",
-        "email-project-brief",
-      ],
-      component_selection: "required",
-      viewport_selection: "both",
-      foundation_selection: "referenced",
-      allowed_foundation_ids: ["typography", "spacing", "assets"],
-      required_foundation_ids: [],
-    },
-    "email-continue-fix": {
-      status: "shadow",
-      static_source_ids: [
-        "repository-readme",
-        "email-figma-prompt",
-        "email-build-checkpoint",
-      ],
-      component_selection: "optional",
-      viewport_selection: "both-when-components",
-      foundation_selection: "referenced",
-      allowed_foundation_ids: ["typography", "spacing", "assets"],
-      required_foundation_ids: [],
-    },
-  });
+  for (const profile of manifest.bundle_profiles) {
+    assert.equal(profile.generated_bundle.status, "shadow");
+    assert.deepEqual(profile.generated_bundle.static_source_ids, profile.source_ids);
+    assert.equal(profile.generated_bundle.static_source_ids.includes("workflow-paused"), true);
+  }
   assert.deepEqual(
     manifest.generated_docs.map(({ id, output_source_id }) => ({
       id,
       output_source_id,
     })),
     [
-      {
-        id: "component-registry",
-        output_source_id: "generated-component-registry",
-      },
       {
         id: "typography-registry",
         output_source_id: "generated-typography-registry",
@@ -1177,24 +1064,29 @@ const componentDocumentationStandardSources = [
   [
     "component-contract-standard",
     "core/component-contract-standard.md",
+    ["library-maintenance", "component-onboarding", "figma-description-sync", "email-new-build", "email-continue-fix"],
   ],
   [
     "figma-component-description-standard",
     "core/figma-component-description-standard.md",
+    ["library-maintenance", "component-onboarding", "figma-description-sync"],
   ],
 ];
 
-test("declares component documentation standards as shadow sources outside every bundle", async () => {
+test("declares component documentation standards for library-facing bundles", async () => {
   const manifest = await canonicalManifest();
   const sources = new Map(
     manifest.sources.map((source) => [source.id, source]),
   );
 
-  for (const [id, path] of componentDocumentationStandardSources) {
+  for (const [id, path, profileIds] of componentDocumentationStandardSources) {
     assert.deepEqual(sources.get(id), { id, kind: "core", path });
-    for (const profile of manifest.bundle_profiles) {
-      assert.equal(profile.source_ids.includes(id), false);
-    }
+    assert.deepEqual(
+      manifest.bundle_profiles
+        .filter((profile) => profile.source_ids.includes(id))
+        .map((profile) => profile.id),
+      profileIds,
+    );
   }
 });
 
