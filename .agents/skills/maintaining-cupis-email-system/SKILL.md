@@ -50,6 +50,6 @@ After the last write, perform a separate read-only re-fetch and compare the allo
 
 ## Boundary Check
 
-The skill owns routing, cloud-source selection, naming-audit activation, Figma mutation-gate activation, and handoff shape. The canonical files own all email rules, naming constants, workflows, and component facts. Change this skill only when its trigger, repository locator, canonical-set paths, routing boundary, naming-audit activation model, or cloud publication model changes.
+The skill owns routing, cloud-source selection, naming-audit activation, Figma mutation-gate activation, and handoff shape. The canonical files own all email rules, naming constants, workflows, and component facts. Change this skill only when its trigger, repository locator, canonical-set paths, routing boundary, naming-audit activation model, cloud publication model, or local-verification boundary changes.
 
 Handoff with the pinned base SHA, inspected sources, classification and scope, changed paths, checks actually run, cloud channel used (`gh` CLI or GitHub MCP), branch/commit/PR when created, and actual limitations. Never claim Figma or GitHub verification that was not performed.
