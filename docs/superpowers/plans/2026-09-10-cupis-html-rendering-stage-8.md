@@ -113,10 +113,8 @@ PR #61–64 — корректирующая Figma-сверка и уточне�
 
 ### Сохранить до отдельного cutover
 
-- `core/email-figma-prompt.md`
-- `registry/*.md`
-- `workflows/*.md`
-- `.agents/skills/**`
+- Архивные версии Core prompt, registries, workflows и checkpoints в `Legacy/` как read-only baseline.
+- Текущие остановленные routes и repo-scoped maintenance skill — до отдельного решения о переключении.
 - Figma и production-письма.
 
 ---
