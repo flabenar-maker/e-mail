@@ -106883,7 +106883,13 @@
                     }
                   }
                 ],
-                "content_slots": [`n                  {`n                    "id": "alt",`n                    "type": "alt-text",`n                    "required": true`n                  }`n                ],
+                "content_slots": [
+                  {
+                    "id": "alt",
+                    "type": "alt-text",
+                    "required": true
+                  }
+                ],
                 "children": [],
                 "asset_contract_id": "card-image"
               },
@@ -107972,7 +107978,13 @@
                     }
                   }
                 ],
-                "content_slots": [`n                  {`n                    "id": "alt",`n                    "type": "alt-text",`n                    "required": true`n                  }`n                ],
+                "content_slots": [
+                  {
+                    "id": "alt",
+                    "type": "alt-text",
+                    "required": true
+                  }
+                ],
                 "children": [],
                 "asset_contract_id": "card-image"
               },
