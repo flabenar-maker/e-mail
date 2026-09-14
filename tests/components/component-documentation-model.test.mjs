@@ -179,12 +179,17 @@ test("documentation validation rejects duplicate and broken critical references"
   assert.ok(errors.every((error) => error.message.includes(record.id)));
 });
 
-test("documentation validation rejects an empty purpose", () => {
+test("documentation validation rejects an empty purpose and retired prose blocks", () => {
   const record = renderRecord("html-text");
   record.documentation.purpose = "";
+  record.description = {
+    mode: "rendered",
+    blocks: [{ type: "heading", value: "SCOPE" }],
+  };
 
   const codes = diagnosticCodes(validateComponentDocumentation(record));
   assert.ok(codes.includes("COMPONENT_PURPOSE_MISSING"));
+  assert.ok(codes.includes("COMPONENT_DOCUMENTATION_RETIRED_BLOCKS_FORBIDDEN"));
 });
 
 test("render type is derived from actual viewport output modes", () => {

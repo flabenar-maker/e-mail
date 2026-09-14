@@ -56,8 +56,8 @@ function literalFact(id = "gap") {
     id,
     value: { type: "measure", value: 22, unit: "px" },
     provenance: {
-      kind: "figma-literal",
-      node_id: "2000:1",
+      kind: "registry-literal",
+      source_blob_sha: "be2203aef82db093fca37857f060d552b254c579",
     },
   };
 }

@@ -233,6 +233,18 @@ test("email bundle contains only exact component closure and referenced facts", 
     ],
   );
 
+  const sourceIds = first.bundle.static_sources.map(({ id }) => id);
+  for (const forbidden of [
+    "component-descriptions-registry",
+    "typography-registry",
+    "figma-component-naming-standard",
+    "library-maintenance-checkpoint",
+    "email-build-checkpoint",
+    "email-project-brief",
+  ]) {
+    assert.equal(sourceIds.includes(forbidden), false, forbidden);
+  }
+
   assert.deepEqual(validateBundleClosure(first.bundle), []);
   assert.equal(typeof renderContextBundle(first.bundle), "string");
   assert.equal(

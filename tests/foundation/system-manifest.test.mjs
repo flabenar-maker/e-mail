@@ -335,10 +335,34 @@ test("reports a required skill with mismatched frontmatter", async (t) => {
   assert.ok(errors.some((error) => error.code === "skill-name-mismatch"));
 });
 
+test("reports the retired duplicate skill directory", async (t) => {
+  const root = await validFixture(t);
+  await writeFixtureFile(
+    root,
+    "skills/maintaining-cupis-email-system/SKILL.md",
+    "retired duplicate\n",
+  );
+  const manifest = await loadSystemManifest({ repoRoot: root });
+
+  const errors = await validateManifestSemantics(manifest, root);
+
+  assert.ok(errors.some((error) => error.code === "retired-skill-path"));
+});
+
 test("the repository has exactly one manifest", async () => {
   const { access } = await import("node:fs/promises");
   await access(join(repoRoot, "system/manifest.yaml"));
   await assert.rejects(access(join(repoRoot, "bootstrap/manifest.yaml")));
+});
+
+test("reports the retired bootstrap manifest", async (t) => {
+  const root = await validFixture(t);
+  await writeFixtureFile(root, "bootstrap/manifest.yaml", "retired: true\n");
+  const manifest = await loadSystemManifest({ repoRoot: root });
+
+  const errors = await validateManifestSemantics(manifest, root);
+
+  assert.ok(errors.some((error) => error.code === "retired-manifest-path"));
 });
 
 for (const [sourceId, code] of [
