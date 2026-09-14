@@ -59,7 +59,7 @@ test("Banner/App-Download Desktop puts all stores in one row and Mobile stacks t
   const result = await renderPilot("banner-app-download");
   const stores = ["rustore", "google-play", "appgallery", "getapps"];
   const desktopRows = stores.map((store) =>
-    rowPathAt(result.html, 'href="https://example.test/' + store + '"', true).at(-1)
+    rowPathAt(result.html, 'href="https://example.test/' + store + '"', true)
   );
   assert.equal(new Set(desktopRows.map((row) => row.at(-4))).size, 1, "Desktop store buttons must share one row");
   const mobileRows = stores.map((store) =>
