@@ -12,7 +12,7 @@
           "node_id": "538:17236"
         }
       ],
-      "baseline_path": "registry/email-component-descriptions-registry.md",
+      "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
       "baseline_commit": "397e13a916e9af1c2dfd8af663de730bcc2e1874",
       "verified_at": "2026-09-06"
     }
@@ -2975,7 +2975,7 @@
         ]
       },
       "provenance": {
-        "baseline_path": "registry/email-component-descriptions-registry.md",
+        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Badge/Step-Number",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -4469,7 +4469,7 @@
         ]
       },
       "provenance": {
-        "baseline_path": "registry/email-component-descriptions-registry.md",
+        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Email/Header",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -14979,7 +14979,7 @@
         ]
       },
       "provenance": {
-        "baseline_path": "registry/email-component-descriptions-registry.md",
+        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Block/Cards-Images",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -25333,7 +25333,7 @@
         ]
       },
       "provenance": {
-        "baseline_path": "registry/email-component-descriptions-registry.md",
+        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Block/Icon-Cards",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -34250,7 +34250,7 @@
         ]
       },
       "provenance": {
-        "baseline_path": "registry/email-component-descriptions-registry.md",
+        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Email/Footer",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -40045,7 +40045,7 @@
         ]
       },
       "provenance": {
-        "baseline_path": "registry/email-component-descriptions-registry.md",
+        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Banner/Hero",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -49883,7 +49883,7 @@
         ]
       },
       "provenance": {
-        "baseline_path": "registry/email-component-descriptions-registry.md",
+        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Block/Steps",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -51484,7 +51484,7 @@
         ]
       },
       "provenance": {
-        "baseline_path": "registry/email-component-descriptions-registry.md",
+        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Button/Secondary",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -53225,7 +53225,7 @@
         ]
       },
       "provenance": {
-        "baseline_path": "registry/email-component-descriptions-registry.md",
+        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Button/Primary",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -63313,7 +63313,7 @@
         ]
       },
       "provenance": {
-        "baseline_path": "registry/email-component-descriptions-registry.md",
+        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Block/Content",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -69016,7 +69016,7 @@
         ]
       },
       "provenance": {
-        "baseline_path": "registry/email-component-descriptions-registry.md",
+        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Banner/Secondary",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -76539,7 +76539,7 @@
         ]
       },
       "provenance": {
-        "baseline_path": "registry/email-component-descriptions-registry.md",
+        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Block/Bullet-List",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -81792,7 +81792,7 @@
         ]
       },
       "provenance": {
-        "baseline_path": "registry/email-component-descriptions-registry.md",
+        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Item/Bullet",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -85449,7 +85449,7 @@
         ]
       },
       "provenance": {
-        "baseline_path": "registry/email-component-descriptions-registry.md",
+        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Item/Step",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -88675,7 +88675,7 @@
         ]
       },
       "provenance": {
-        "baseline_path": "registry/email-component-descriptions-registry.md",
+        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Banner/Inline",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -91349,7 +91349,7 @@
         ]
       },
       "provenance": {
-        "baseline_path": "registry/email-component-descriptions-registry.md",
+        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Block/Info-Alert",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -102123,7 +102123,7 @@
         ]
       },
       "provenance": {
-        "baseline_path": "registry/email-component-descriptions-registry.md",
+        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Banner/App-Download",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -105825,7 +105825,7 @@
         ]
       },
       "provenance": {
-        "baseline_path": "registry/email-component-descriptions-registry.md",
+        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Email/Footer-Legal",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -106672,7 +106672,7 @@
         ]
       },
       "provenance": {
-        "baseline_path": "registry/email-component-descriptions-registry.md",
+        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Asset/Card-Image @2x",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -110936,7 +110936,7 @@
         ]
       },
       "provenance": {
-        "baseline_path": "registry/email-component-descriptions-registry.md",
+        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Card/Image",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -128723,7 +128723,7 @@
         ]
       },
       "provenance": {
-        "baseline_path": "registry/email-component-descriptions-registry.md",
+        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Block/Icon-List",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -132906,7 +132906,7 @@
         ]
       },
       "provenance": {
-        "baseline_path": "registry/email-component-descriptions-registry.md",
+        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Card/Icon",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -133455,7 +133455,7 @@
         ]
       },
       "provenance": {
-        "baseline_path": "registry/email-component-descriptions-registry.md",
+        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Asset/Feature-Icon @4x",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -135558,7 +135558,7 @@
         ]
       },
       "provenance": {
-        "baseline_path": "registry/email-component-descriptions-registry.md",
+        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Item/Alert",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -137649,7 +137649,7 @@
         ]
       },
       "provenance": {
-        "baseline_path": "registry/email-component-descriptions-registry.md",
+        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Item/Notification",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -148387,7 +148387,7 @@
         ]
       },
       "provenance": {
-        "baseline_path": "registry/email-component-descriptions-registry.md",
+        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "NPS/Options",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },

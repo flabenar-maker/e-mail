@@ -409,6 +409,30 @@ function referencedIds(record, viewports, key) {
   );
 }
 
+function withoutHistoricalSourceMetadata(value) {
+  if (Array.isArray(value)) {
+    return value.map(withoutHistoricalSourceMetadata);
+  }
+  if (value === null || typeof value !== "object") {
+    return value;
+  }
+  const output = {};
+  for (const [key, item] of Object.entries(value)) {
+    if (
+      key === "provenance" &&
+      item !== null &&
+      typeof item === "object" &&
+      (item.kind === "registry-literal" ||
+        "baseline_path" in item ||
+        "comparison_sources" in item)
+    ) {
+      continue;
+    }
+    output[key] = withoutHistoricalSourceMetadata(item);
+  }
+  return output;
+}
+
 function projectComponent(record, viewports) {
   const propertyIds = referencedIds(record, viewports, "properties");
   const assetIds = referencedIds(record, viewports, "assets");
@@ -427,12 +451,11 @@ function projectComponent(record, viewports) {
     contracts: Object.fromEntries(
       viewports.map((viewport) => [
         viewport,
-        structuredClone(record.contracts[viewport]),
+        withoutHistoricalSourceMetadata(record.contracts[viewport]),
       ]),
     ),
     documentation: structuredClone(record.documentation),
     constraints: structuredClone(record.constraints),
-    provenance: structuredClone(record.provenance),
   };
 }
 

@@ -45,7 +45,7 @@ function formatProvenance(provenance) {
     return "";
   }
   if (provenance.kind === "registry-literal") {
-    return `${inlineCode(provenance.kind)} (${inlineCode(provenance.source_path)})`;
+    return "";
   }
   if (provenance.kind === "figma-literal") {
     return `${inlineCode(provenance.kind)} at ${inlineCode(provenance.node_id)}`;
@@ -336,7 +336,6 @@ function renderSection(record, index, sectionId) {
         ...(record.figma.verification ? [`- Figma source check: ${inlineCode(record.figma.verification.status)} on ${inlineCode(record.figma.verification.checked_at)}; ${oneLine(record.figma.verification.reason)}`] : []),
         `- Structure fingerprint: ${inlineCode(record.figma.structure_fingerprint)}`,
         `- Purpose: ${oneLine(record.documentation.purpose)}`,
-        `- Baseline: ${inlineCode(record.provenance.baseline_path)} → ${inlineCode(record.provenance.baseline_heading)} (${inlineCode(record.provenance.baseline_blob_sha)})`,
       ];
     case "structure-and-rendering": {
       const renderType = deriveComponentRenderType(record);

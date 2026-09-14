@@ -16,7 +16,7 @@
           "node_id": "1084:34055"
         }
       ],
-      "baseline_path": "registry/email-component-descriptions-registry.md",
+      "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
       "baseline_commit": "397e13a916e9af1c2dfd8af663de730bcc2e1874",
       "verified_at": "2026-09-06"
     }
@@ -133,7 +133,7 @@
         }
       },
       "provenance": {
-        "baseline_path": "registry/email-component-descriptions-registry.md",
+        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Email/Template",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -231,7 +231,7 @@
         }
       },
       "provenance": {
-        "baseline_path": "registry/email-component-descriptions-registry.md",
+        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Asset/Product-Logo",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -352,7 +352,7 @@
                 },
                 "provenance": {
                   "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
+                  "source_path": "Legacy/registry/email-component-descriptions-registry.md"
                 }
               },
               {
@@ -370,7 +370,7 @@
                 },
                 "provenance": {
                   "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
+                  "source_path": "Legacy/registry/email-component-descriptions-registry.md"
                 }
               },
               {
@@ -383,7 +383,7 @@
                 },
                 "provenance": {
                   "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
+                  "source_path": "Legacy/registry/email-component-descriptions-registry.md"
                 }
               },
               {
@@ -396,7 +396,7 @@
                 },
                 "provenance": {
                   "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
+                  "source_path": "Legacy/registry/email-component-descriptions-registry.md"
                 }
               }
             ],
@@ -455,7 +455,7 @@
         }
       },
       "provenance": {
-        "baseline_path": "registry/email-component-descriptions-registry.md",
+        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Asset/Header-Logo @4x",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -536,7 +536,7 @@
                 },
                 "provenance": {
                   "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
+                  "source_path": "Legacy/registry/email-component-descriptions-registry.md"
                 }
               },
               {
@@ -547,7 +547,7 @@
                 },
                 "provenance": {
                   "kind": "registry-literal",
-                  "source_path": "registry/email-component-descriptions-registry.md"
+                  "source_path": "Legacy/registry/email-component-descriptions-registry.md"
                 }
               }
             ],
@@ -568,7 +568,7 @@
         }
       },
       "provenance": {
-        "baseline_path": "registry/email-component-descriptions-registry.md",
+        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Asset/Header-Logo-Compact @4x",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
