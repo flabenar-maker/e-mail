@@ -17,7 +17,7 @@
             "variants": { "mobile": "mobile", "desktop": "desktop" },
             "property_values": [],
             "content_values": [
-              { "element_id": "root-text-content-link", "slot_id": "href", "scope": "all", "value": { "type": "url", "value": "https://example.test/jobs" } },
+              { "element_id": "link", "slot_id": "href", "scope": "all", "value": { "type": "url", "value": "https://example.test/jobs" } },
               { "element_id": "root-text-content-link", "slot_id": "text", "scope": "all", "value": { "type": "rich-text", "value": "Откликнуться" } }
             ],
             "asset_files": [],
