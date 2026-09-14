@@ -1,6 +1,6 @@
 # CUPIS Structured System Migration Roadmap
 
-Актуальность: 2026-09-10.
+Актуальность: 2026-09-14.
 
 ## Назначение
 
@@ -140,28 +140,35 @@ Structured records остаются shadow-источником до generated b
 
 Реализация этапа 7B слита в [PR #43](https://github.com/flabenar-maker/e-mail/pull/43), итоговый commit: `15a1c3ce09fec33d5aee82a87ffee4667e911702`. Generated docs и route-specific context bundles находятся в `main`, но остаются shadow-слоем: рабочие Core, workflows, skills и Figma этим этапом не переключались.
 
-### 8. Core, workflows и HTML rendering cutover
+### 8. Core, workflows и HTML rendering cutover — в работе
 
 Архитектурное основание: [CUPIS HTML Rendering Design](../specs/2026-09-10-cupis-html-rendering-design.md).
 
 Подробный implementation plan: [CUPIS HTML Rendering Stage 8](2026-09-10-cupis-html-rendering-stage-8.md).
 
-- [x] Согласовать направление contract-driven HTML-рендеринга и зафиксировать архитектурную спецификацию.
-- [ ] Зафиксировать characterization baseline и владельцев renderer-impacting данных.
-- [ ] Создать rendering foundation и renderer-ready schema без дублирования существующих foundations и contracts.
-- [ ] Нормализовать пилотные component contracts: facts должны принадлежать управляющим узлам, а не корневым `description-N`.
-- [ ] Разделить Core на `email-rendering-standard.md`, `typography-standard.md`, `asset-export-standard.md` и `figma-library-standard.md` без копирования structured definitions.
-- [ ] Реализовать email-примитивы, общий contract-tree interpreter и единый renderer registry; специальные обработчики допускать только для доказанных исключений.
-- [ ] Добавить временную модель, CLI, типизированную диагностику и атомарную публикацию `email.html` + `images/`.
-- [ ] Вычислять render-impact digest автоматически только из данных, влияющих на HTML.
-- [ ] Доказать архитектуру на representative Mobile/Desktop-пилоте до миграции всех активных компонентов.
-- [ ] Мигрировать остальные компоненты после успешного пилота и проверки coverage.
-- [ ] Перевести maintenance и email-build workflows в структурированный формат.
-- [ ] Сохранить HTML зависимым от фактического инстанса и component contract, а не design-time золотых правил.
-- [ ] Выполнить characterization и shadow comparison со старыми Markdown-источниками.
-- [ ] Не подавать legacy и structured наборы правил одновременно в рабочий bundle.
+Фактический статус на 2026-09-14: пакеты 1–9 слиты в main через PR #50–58; [PR #59](https://github.com/flabenar-maker/e-mail/pull/59) исправил пилотные Mobile/Desktop layout contracts. Реализованы rendering foundation, реестр шести пилотных renderer coverage, разделённый Core, email-примитивы, contract-tree interpreter, пилот, временная модель, CLI с атомарным выводом, render-impact diagnostics и автоматические HTML-инварианты. Наличие этого кода не означает готовности сборки произвольного production-письма.
 
-До технической реализации требуется отдельный reviewed implementation plan. Figma, production-письма и maintenance skill не входят в скрытую область этапа.
+После неудачной попытки получить убедительный пилотный результат обнаружилась недостаточная точность части мигрированных component contracts. [PR #61](https://github.com/flabenar-maker/e-mail/pull/61), [#62](https://github.com/flabenar-maker/e-mail/pull/62), [#63](https://github.com/flabenar-maker/e-mail/pull/63) и [#64](https://github.com/flabenar-maker/e-mail/pull/64) выполнили прямую сверку с Figma, добавили проверку фактических данных и уточнили маркетинговые и сервисные контракты. Это корректирующая работа внутри этапа 8, а не завершение пакетов 10–12.
+
+[PR #60](https://github.com/flabenar-maker/e-mail/pull/60) остаётся открытым исследовательским черновиком: в нём только план и результаты изучения внешних email-практик. Он не содержит реализацию viewport preview, не меняет действующие контракты и не закрывает пакет 10. Изучение источников выполнено; проверка готового письма в целевых мобильных почтовых приложениях и обсуждение выводов ещё впереди.
+
+- [x] Зафиксировать characterization baseline и владельцев renderer-impacting данных — PR #50.
+- [x] Создать rendering foundation и renderer-ready schema без дублирования существующих foundations и contracts — PR #51–52.
+- [x] Нормализовать пилотные component contracts и сверить значимые факты с Figma — PR #52 и #61–64.
+- [x] Разделить Core на четыре тематических стандарта — PR #53.
+- [x] Реализовать email-примитивы, общий contract-tree interpreter и пилотный renderer registry — PR #54–55.
+- [x] Добавить временную модель, CLI, типизированную диагностику и атомарную публикацию email.html + images/ — PR #56–57.
+- [x] Вычислять render-impact digest автоматически только из данных, влияющих на HTML — PR #57.
+- [x] Добавить автоматические HTML и property checks — PR #58.
+- [ ] Проверить фактический HTML обновлённого пилота и выполнить representative Mobile/Desktop visual scenarios; тестовое покрытие Email/Header ещё отсутствует.
+- [ ] Мигрировать renderer coverage остальных активных компонентов после успешного пилота.
+- [ ] Перевести maintenance и email-build workflows в структурированный формат и выполнить shadow comparison без двойного контекста.
+- [ ] Подтвердить, что HTML зависит от фактического инстанса и component contract, а не design-time золотых правил.
+- [ ] Не подавать legacy и structured наборы правил одновременно в рабочий bundle.
+- [ ] Завершить все проверки этапа 8 и только после этого отметить этап завершённым.
+
+Следующий технический шаг определяется после read-only проверки пилотного HTML и обсуждения исследования. Figma, production-письма и maintenance skill не входят в скрытую область этапа.
+
 ### 9. Maintenance skill cutover
 
 Manifest-driven разрешение source paths было выполнено на этапе 2. Этот этап не повторяет первоначальный переход на manifest: он переключает навык с временных Markdown-oriented profiles на итоговые generated context bundles.

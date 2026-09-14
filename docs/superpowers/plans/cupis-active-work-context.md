@@ -2,9 +2,9 @@
 
 Статус документа: ручной checkpoint для восстановления контекста.
 
-Последнее ручное обновление: 2026-09-10.
+Последнее ручное обновление: 2026-09-14.
 
-Снимок `main` на момент обновления: `15a1c3ce09fec33d5aee82a87ffee4667e911702`.
+Снимок main на момент обновления: f615dea17809aba03d6cfc77039f0f3bcccb07b6.
 
 ## 1. Зачем нужен этот файл
 
@@ -81,42 +81,26 @@
 
 ## 6. Уже подтверждённое состояние
 
-На снимке `main@15a1c3ce09fec33d5aee82a87ffee4667e911702` завершены и слиты:
+На снимке main@f615dea17809aba03d6cfc77039f0f3bcccb07b6 этапы 1–7 завершены. Structured component registry, generated docs и route-specific bundles существуют, но остаются shadow-слоем; действующие email-build routes ещё не переключены.
 
-1. master-спецификация и migration roadmap;
-2. системный foundation: manifest, schema, validation, CI и bootstrap;
-3. typography foundation pilot;
-4. spacing foundation;
-5. assets foundation;
-6. Figma naming foundation;
-7. structured component registry:
-   - три component data-файла;
-   - строгая schema;
-   - exact resolution и unregistered-component blocker;
-   - read-only Figma drift checks;
-8. component documentation contracts;
-9. generated docs и route-specific context bundles в shadow-режиме.
+В этапе 8 слиты пакеты 1–9 через PR #50–58. Созданы rendering foundation, разделённые Core-стандарты, пилотный renderer registry, HTML-примитивы, contract-tree interpreter, модель письма, CLI с атомарным выводом, render-impact diagnostics и автоматические HTML-инварианты. PR #59 скорректировал пилотные Mobile/Desktop layout contracts. Техническое ядро существует, но ещё не покрывает всю библиотеку и не является готовым процессом сборки произвольного production-письма.
 
-Structured component registry реализован через [PR #40](https://github.com/flabenar-maker/e-mail/pull/40), итоговый commit: `90f1e01365c80b7553b520e8d47c2e5bb7f88660`.
+После неубедительного пилотного результата проведена прямая Figma-сверка фактов компонентов: маркетинговые и сервисные контракты и механизм проверки уточнены в слитых PR #61–64. Эти изменения не заменяют Mobile/Desktop visual scenarios и расширение renderer coverage. На данном снимке registry содержит шесть пилотных записей, включая Email/Footer, но без Email/Header.
 
-Component documentation contracts реализованы через [PR #45](https://github.com/flabenar-maker/e-mail/pull/45), итоговый commit: `0eb8cfd4d2ff3401a6a7e91a80e8740435f7ab0e`.
+## 7. Текущий этап и исследовательское ответвление
 
-Этап 7 завершён через [PR #43](https://github.com/flabenar-maker/e-mail/pull/43), итоговый commit: `15a1c3ce09fec33d5aee82a87ffee4667e911702`. В `main` находятся четыре generated-справочника, deterministic digest, read-only route-specific context bundles, exact component selection, dependency/foundation closure и общая validation generated layer. Слой остаётся shadow: Core, workflows, skills и Figma на него ещё не переключены.
+Этап 8 остаётся в работе. Пакеты 10–12 не завершены: visual scenarios и проверка фактического HTML обновлённого пилота, coverage остальных активных компонентов, structured workflows и shadow comparison. Не отмечать этап 8 завершённым только по факту наличия CLI или автоматических тестов.
 
-## 7. Текущий этап
+[PR #60](https://github.com/flabenar-maker/e-mail/pull/60) открыт отдельно как read-only исследование Good Email Code, Email Guidelines, Cerberus и Can I Email. Изучение источников проведено 14.09.2026; проверка отправленного письма в мобильных приложениях Яндекс Почты, Mail.ru и Gmail и обсуждение выводов ещё не выполнены. PR #60 содержит только исследовательский документ, не содержит viewport preview и не разрешает менять текущие контракты, Core или renderer.
 
-Этап 7 завершён. Generated docs и route-specific context bundles находятся в `main` и остаются shadow-слоем.
-
-Направление этапа 8 согласовано и зафиксировано в [CUPIS HTML Rendering Design](../specs/2026-09-10-cupis-html-rendering-design.md). Техническая реализация ещё не начата. Подробный [implementation plan этапа 8](2026-09-10-cupis-html-rendering-stage-8.md) подготовлен в draft PR и ожидает review пользователя.
-
-Целевая архитектура строит новое письмо из фактических Mobile/Desktop-инстансов и resolved component contracts через временную модель, общий contract-tree interpreter и email-примитивы. Отдельный код разрешён только доказанным исключениям. Публикация атомарна и оставляет локально только `email.html` и `images/`.
+Целевая аудитория в основном использует эти мобильные приложения. Данных по версиям приложений и распределению iOS/Android пока нет. Preheader можно настраивать вручную в Altcraft; его обработка text/plain пока не выяснена и не блокирует текущую HTML-работу.
 
 ## 8. Следующий точный шаг
 
-1. Проверить спецификацию и подробный implementation plan этапа 8.
-2. После одобрения и merge документационного PR начать Package 1 в новой implementation branch от свежего `main`.
-3. Выполнять packages 1–12 строго последовательно с review и merge каждого пакета.
-4. Не изменять Figma и не переключать maintenance skill внутри Stage 8.
+1. После обновления checkpoint проверить read-only выходной HTML, который фактически создаёт текущий пилотный renderer, и классифицировать расхождения: входная модель, точный contract, renderer code или только браузерный preview. Не объявлять гипотезу о поведении без style подтверждённой ошибкой без воспроизведения.
+2. Сопоставить подтверждённые наблюдения с исследованием PR #60. Не менять правила и контракты автоматически по внешнему примеру.
+3. После обсуждения продолжить пакет 10 с Mobile/Desktop visual scenarios; явно учесть, что Email/Header ещё не входит в pilot coverage, хотя его тестирование вместе с Email/Footer ранее запрошено.
+4. Затем выполнить пакеты 11–12 и финальную проверку этапа 8. Maintenance skill cutover и следующие этапы начинаются только после завершения этапа 8.
 
 ## 9. Стабильная граница component documentation
 
@@ -133,24 +117,18 @@ Component documentation contracts реализованы через [PR #45](htt
 
 ## 10. Карта этапов миграции
 
-| Этап | Содержание | Статус на 2026-09-10 |
+| Этап | Содержание | Статус на 2026-09-14 |
 |---:|---|---|
-| 1 | Master-спецификация и первый implementation plan | Завершён |
-| 2 | Системный foundation: manifest, validation, CI и bootstrap | Завершён |
-| 3 | Typography foundation pilot | Завершён |
-| 4 | Spacing foundation | Завершён |
-| 5 | Assets foundation и Figma naming foundation | Завершён |
-| 6 | Структурированный component registry | Завершён в PR #40 |
-| 7A | Component documentation contracts | Завершён в PR #45 |
-| 7B | Generated docs и route-specific context bundles | Завершён в PR #43; shadow-слой сохранён |
-| 8 | Разделение Core и workflows, переход на новые источники | Следующий этап; требуется отдельный implementation plan |
-| 9 | Переключение maintenance skill на итоговые bundles | Ожидает этап 8 |
-| 10 | Стандарт и workflow разработки новых блоков | Ожидает системный cutover maintenance |
-| 11 | Навык разработки новых блоков | Ожидает этап 10 |
+| 1–7 | Архитектура, foundations, component registry, документация и bundles | Завершены в main; structured слой остаётся shadow |
+| 8 | Core, workflows и HTML rendering | В работе: пакеты 1–9 слиты; Figma-сверка PR #61–64 слита; пакеты 10–12 открыты |
+| 9 | Maintenance skill cutover | Ожидает завершения этапа 8 |
+| 10–11 | Стандарт, workflow и навык разработки новых блоков | Ожидают этап 9 |
 | 12 | Навык HTML-вёрстки конкретных писем | Ожидает этапы 10–11 |
 | 13 | Shadow comparison | Ожидает готовности маршрутов |
 | 14 | Общий cutover | Ожидает shadow comparison |
 | 15 | Удаление legacy-дублей и migration-артефактов | Только после стабильного cutover |
+
+Статус всегда перепроверяется по свежему main, roadmap, implementation plan и merged PR. Эта таблица — снимок на дату ручного обновления, а не автоматический трекер.
 
 ## 11. Стабильные рабочие решения
 
@@ -297,6 +275,9 @@ Figma naming foundation является shadow-источником и не з�
 - [Component documentation implementation PR #45](https://github.com/flabenar-maker/e-mail/pull/45)
 - [Generated docs and context bundles plan](2026-09-07-cupis-generated-docs-context-bundles.md)
 - [Generated docs and context bundles PR #43](https://github.com/flabenar-maker/e-mail/pull/43)
+- [Stage 8 implementation plan](2026-09-10-cupis-html-rendering-stage-8.md)
+- [Figma-grounded rendering contracts PR #64](https://github.com/flabenar-maker/e-mail/pull/64)
+- [Read-only email practices research PR #60](https://github.com/flabenar-maker/e-mail/pull/60)
 - [Assets foundation](../../../data/foundations/assets.yaml)
 - [Figma naming foundation](../../../data/foundations/figma-naming.yaml)
 - [Library maintenance checkpoint](../../../workflows/library-maintenance-checkpoint.md)
