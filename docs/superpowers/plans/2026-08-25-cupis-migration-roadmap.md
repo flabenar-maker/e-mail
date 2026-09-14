@@ -138,7 +138,7 @@ Structured records остаются shadow-источником до generated b
 - [x] Проверять, что каждый bundle содержит только применимые rules, contracts и workflows.
 - [x] Сохранить весь этап shadow до отдельного cutover.
 
-Реализация этапа 7B слита в [PR #43](https://github.com/flabenar-maker/e-mail/pull/43), итоговый commit: `15a1c3ce09fec33d5aee82a87ffee4667e911702`. Generated docs и route-specific context bundles были реализованы как shadow-слой. После PR #69 полный `docs/generated/component-registry.md` ошибочно оказался в `Legacy/` вместе со старым контуром; его renderer и структурированные входы остались. Восстановление файла, регистрации в manifest и blocking-проверок не создаёт второго источника component facts и не переключает остановленные маршруты.
+Реализация этапа 7B слита в [PR #43](https://github.com/flabenar-maker/e-mail/pull/43), итоговый commit: `15a1c3ce09fec33d5aee82a87ffee4667e911702`. Generated docs и route-specific context bundles были реализованы как shadow-слой. После PR #69 полный `docs/generated/component-registry.md` ошибочно оказался в `Legacy/` вместе со старым контуром; его renderer и структурированные входы остались. [PR #71](https://github.com/flabenar-maker/e-mail/pull/71) восстанавливает файл, регистрацию в manifest и blocking-проверки. Это не создаёт второго источника component facts и не переключает остановленные маршруты; до слияния PR в `main` реестр остаётся отсутствующим.
 
 ### 8. Core, workflows и HTML rendering cutover — в работе
 
@@ -167,7 +167,7 @@ Structured records остаются shadow-источником до generated b
 - [ ] Не подавать legacy и structured наборы правил одновременно в рабочий bundle.
 - [ ] Завершить все проверки этапа 8 и только после этого отметить этап завершённым.
 
-[PR #66](https://github.com/flabenar-maker/e-mail/pull/66) исправил оболочку пилотного письма и границу Mobile/Desktop. [PR #67–68](https://github.com/flabenar-maker/e-mail/pull/67) закрепили локальные проверки без GitHub Actions; [PR #69–70](https://github.com/flabenar-maker/e-mail/pull/69) изолировали Legacy и адаптировали тесты. Маршруты сейчас остановлены; восстановление полного generated component registry не означает завершения пакетов 10–12 или возобновления production-сборки.
+[PR #66](https://github.com/flabenar-maker/e-mail/pull/66) исправил оболочку пилотного письма и границу Mobile/Desktop. [PR #67](https://github.com/flabenar-maker/e-mail/pull/67) и [#68](https://github.com/flabenar-maker/e-mail/pull/68) закрепили локальные проверки без GitHub Actions; [PR #69–70](https://github.com/flabenar-maker/e-mail/pull/69) изолировали Legacy и адаптировали тесты. Маршруты сейчас остановлены; восстановление полного generated component registry не означает завершения пакетов 10–12 или возобновления production-сборки.
 
 ### 9. Maintenance skill cutover
 
