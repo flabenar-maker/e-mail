@@ -186,6 +186,39 @@ test("Mobile text growing on a vertical parent retains its reference width", asy
   assert.deepEqual(result.diagnostics, []);
 });
 
+test("Mobile stretch text in a horizontal parent retains its reference width", async () => {
+  const { renderContractTree } = await interpreter();
+  const root = element({
+    id: "root",
+    facts: [{ id: "layout-axis", value: { type: "keyword", value: "horizontal" } }],
+    children: [
+      element({
+        id: "copy",
+        mode: "html-text",
+        facts: [
+          { id: "reference-size", value: { type: "dimensions", width: 80, height: 20, unit: "px" } },
+          { id: "layout-grow", value: { type: "number", value: 0 } },
+          { id: "layout-align", value: { type: "keyword", value: "stretch" } },
+        ],
+        contentSlots: [{ id: "text", type: "plain-text", required: true }],
+      }),
+    ],
+  });
+
+  const result = renderContractTree({
+    component: { ...component(root), identity: { library: "marketing" } },
+    coverage,
+    content: { copy: { text: { type: "plain-text", value: "Horizontal stretch" } } },
+    assets: {},
+    properties: {},
+    foundations: { rendering },
+  });
+
+  assert.match(result.html, /<p style="[^"]*max-width:80px/u);
+  assert.doesNotMatch(result.html, /<p style="[^"]*width:100%/u);
+  assert.deepEqual(result.diagnostics, []);
+});
+
 test("interpreter emits a minimal responsive split when paired facts differ", async () => {
   const { renderContractTree } = await interpreter();
   const mobile = element({
