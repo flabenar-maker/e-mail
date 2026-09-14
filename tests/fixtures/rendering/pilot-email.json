@@ -65,7 +65,7 @@
             "property_values": [],
             "content_values": [
               { "element_id": "app-logo", "slot_id": "alt", "scope": "all", "value": { "type": "alt-text", "value": "Приложение CUPIS" } },
-              { "element_id": "root-content-area-body", "slot_id": "text", "scope": "mobile", "value": { "type": "plain-text", "value": "Скачайте приложение" },
+              { "element_id": "root-content-area-body", "slot_id": "text", "scope": "mobile", "value": { "type": "plain-text", "value": "Скачайте приложение" } },
               { "element_id": "root-content-area-text-qr-header-row-body", "slot_id": "text", "scope": "desktop", "value": { "type": "plain-text", "value": "Скачайте приложение" } },
               { "element_id": "qr-code", "slot_id": "alt", "scope": "desktop", "value": { "type": "alt-text", "value": "QR-код для скачивания" } },
               { "element_id": "root-content-area-store-buttons-rustore-button", "slot_id": "href", "scope": "all", "value": { "type": "url", "value": "https://example.test/rustore" } },
