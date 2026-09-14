@@ -149,7 +149,11 @@ test("canonical manifest generates the full component registry", async () => {
 
   assert.match(content, /Block\/Cards-Images/u);
   assert.match(content, /source-digest: sha256:[0-9a-f]{64}/u);
-  assert.equal((content.match(/^## /gmu) ?? []).length, 61);
+  const registries = await loadComponentRegistries({ repoRoot });
+  assert.equal(
+    (content.match(/^## /gmu) ?? []).length,
+    listComponentRecords(registries).length,
+  );
 });
 
 test("all generated references share a deterministic provenance header", async () => {
