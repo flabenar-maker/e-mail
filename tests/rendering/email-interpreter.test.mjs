@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const rendering = {
-  breakpoints: [{ id: "cupis-mobile", query: "max-width", value: 660, unit: "px" }],
+  breakpoints: [{ id: "cupis-mobile", query: "max-width", value: 659, unit: "px" }],
 };
 
 async function interpreter() {
@@ -153,6 +153,72 @@ test("interpreter renders an exact shared tree once and escapes content", async 
   assert.deepEqual(result.diagnostics, []);
 });
 
+test("Mobile text growing on a vertical parent retains its reference width", async () => {
+  const { renderContractTree } = await interpreter();
+  const root = element({
+    id: "root",
+    facts: [{ id: "layout-axis", value: { type: "keyword", value: "vertical" } }],
+    children: [
+      element({
+        id: "copy",
+        mode: "html-text",
+        facts: [
+          { id: "reference-size", value: { type: "dimensions", width: 80, height: 20, unit: "px" } },
+          { id: "layout-grow", value: { type: "number", value: 1 } },
+          { id: "layout-align", value: { type: "keyword", value: "inherit" } },
+        ],
+        contentSlots: [{ id: "text", type: "plain-text", required: true }],
+      }),
+    ],
+  });
+
+  const result = renderContractTree({
+    component: component(root),
+    coverage,
+    content: { copy: { text: { type: "plain-text", value: "Vertical grow" } } },
+    assets: {},
+    properties: {},
+    foundations: { rendering },
+  });
+
+  assert.match(result.html, /<p style="[^"]*max-width:80px/u);
+  assert.doesNotMatch(result.html, /<p style="[^"]*width:100%/u);
+  assert.deepEqual(result.diagnostics, []);
+});
+
+test("Mobile stretch text in a horizontal parent retains its reference width", async () => {
+  const { renderContractTree } = await interpreter();
+  const root = element({
+    id: "root",
+    facts: [{ id: "layout-axis", value: { type: "keyword", value: "horizontal" } }],
+    children: [
+      element({
+        id: "copy",
+        mode: "html-text",
+        facts: [
+          { id: "reference-size", value: { type: "dimensions", width: 80, height: 20, unit: "px" } },
+          { id: "layout-grow", value: { type: "number", value: 0 } },
+          { id: "layout-align", value: { type: "keyword", value: "stretch" } },
+        ],
+        contentSlots: [{ id: "text", type: "plain-text", required: true }],
+      }),
+    ],
+  });
+
+  const result = renderContractTree({
+    component: { ...component(root), identity: { library: "marketing" } },
+    coverage,
+    content: { copy: { text: { type: "plain-text", value: "Horizontal stretch" } } },
+    assets: {},
+    properties: {},
+    foundations: { rendering },
+  });
+
+  assert.match(result.html, /<p style="[^"]*max-width:80px/u);
+  assert.doesNotMatch(result.html, /<p style="[^"]*width:100%/u);
+  assert.deepEqual(result.diagnostics, []);
+});
+
 test("interpreter emits a minimal responsive split when paired facts differ", async () => {
   const { renderContractTree } = await interpreter();
   const mobile = element({
@@ -185,7 +251,7 @@ test("interpreter emits a minimal responsive split when paired facts differ", as
   assert.match(result.html, /font-size:16px/u);
   assert.equal(
     result.css,
-    "@media only screen and (max-width:660px){.cupis-root-0-desktop{display:none!important;max-height:0!important;overflow:hidden!important}.cupis-root-0-mobile{display:block!important;max-height:none!important;overflow:visible!important}}",
+    "@media only screen and (max-width:659px){.cupis-root-0-desktop{display:none!important;max-height:0!important;overflow:hidden!important}.cupis-root-0-mobile{display:block!important;max-height:none!important;overflow:visible!important}}",
   );
   assert.deepEqual(result.diagnostics, []);
 });

@@ -37,8 +37,14 @@ test("loads the canonical rendering foundation", async () => {
   assert.equal(rendering.foundation.id, "rendering");
   assert.equal(rendering.foundation.status, "shadow");
   assert.deepEqual(rendering.breakpoints, [
-    { id: "cupis-mobile", query: "max-width", value: 660, unit: "px" },
+    { id: "cupis-mobile", query: "max-width", value: 659, unit: "px" },
   ]);
+  assert.deepEqual(rendering.shell, {
+    background_color: "#F3F3F5",
+    horizontal_inset_px: 15,
+    max_width_px: 600,
+    min_width_px: 300,
+  });
   assert.deepEqual(
     rendering.responsive_strategies.map((item) => item.id),
     ["shared-tree", "split-subtree", "split-component"],

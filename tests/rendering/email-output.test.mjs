@@ -31,15 +31,6 @@ async function treeDigest(root) {
   return hash.digest("hex");
 }
 
-function richTextSegments(value) {
-  if (Array.isArray(value)) return value.map(richTextSegments);
-  if (!value || typeof value !== "object") return value;
-  if (value.type === "rich-text" && typeof value.value === "string") {
-    return { type: "rich-text", segments: [{ type: "text", value: value.value }] };
-  }
-  return Object.fromEntries(Object.entries(value).map(([key, child]) => [key, richTextSegments(child)]));
-}
-
 function collectAssets(instance, output = new Set()) {
   for (const asset of instance.asset_files ?? []) output.add(asset.path);
   for (const slot of instance.slots ?? []) {
@@ -117,12 +108,11 @@ test("failed publish never changes an existing non-empty output folder", async (
   }
 });
 
-test("CLI renders the normalized model without copying it into output", async () => {
+test("CLI renders the raw valid pilot model into the canonical responsive email shell", async () => {
   const folder = await mkdtemp(join(tmpdir(), "cupis-email-cli-"));
   const modelPath = join(folder, "email-model.json");
   const outputDir = join(folder, "rendered-1.0");
-  const pilot = JSON.parse(await readFile(join(repoRoot, "tests", "fixtures", "rendering", "pilot-email.json"), "utf8"));
-  const model = richTextSegments({ schema_version: "1.0.0", ...pilot });
+  const model = JSON.parse(await readFile(join(repoRoot, "tests", "fixtures", "rendering", "pilot-email.json"), "utf8"));
   for (const assetPath of collectAssets(model.root)) {
     const source = join(folder, ...assetPath.split("/"));
     await mkdir(dirname(source), { recursive: true });
@@ -136,7 +126,18 @@ test("CLI renders the normalized model without copying it into output", async ()
       "--output", outputDir,
     ], { cwd: repoRoot });
     assert.deepEqual(await readdir(outputDir), ["email.html", "images"]);
-    assert.match(await readFile(join(outputDir, "email.html"), "utf8"), /Скачайте приложение/u);
+    const html = await readFile(join(outputDir, "email.html"), "utf8");
+    assert.match(html, /Небольшой заголовок/u);
+    assert.match(html, /<body style="margin:0;padding:0">/u);
+    assert.match(html, /background-color:#F3F3F5/u);
+    assert.match(html, /padding:0 15px/u);
+    assert.match(html, /max-width:600px/u);
+    assert.match(html, /<!--\[if \(gte mso 9\)\|\(IE\)\]><table role="presentation" width="600" align="center"/u);
+    assert.match(html, /@media only screen and \(max-width:659px\)/u);
+    const styleStripped = html.replace(/<style>[\s\S]*?<\/style>/u, "");
+    assert.match(styleStripped, /class="cupis-[^"]+-mobile" style="display:none;max-height:0;overflow:hidden"/u);
+    assert.match(styleStripped, /class="cupis-[^"]+-desktop"/u);
+    assert.doesNotMatch(styleStripped, /class="cupis-[^"]+-desktop" style="display:none/u);
     assert.equal((await readdir(outputDir)).includes("email-model.json"), false);
   } finally {
     await rm(folder, { recursive: true, force: true });

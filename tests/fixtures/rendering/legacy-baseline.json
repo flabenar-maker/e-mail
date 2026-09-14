@@ -8,9 +8,9 @@
   "components_with_properties": 16,
   "components_with_assets": 27,
   "renderer_ready_pilot": {
-    "covered_components": 6,
-    "ready_components": 6,
-    "missing_coverage": 55,
+    "covered_components": 7,
+    "ready_components": 7,
+    "missing_coverage": 54,
     "facts": 452,
     "generic_description_facts": 315,
     "components_with_generic_facts": 41

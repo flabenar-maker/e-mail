@@ -7,6 +7,7 @@
   "required": [
     "schema_version",
     "foundation",
+    "shell",
     "breakpoints",
     "responsive_strategies",
     "primitives",
@@ -24,6 +25,7 @@
         "status": { "const": "shadow" }
       }
     },
+    "shell": { "$ref": "#/$defs/shell" },
     "breakpoints": {
       "type": "array",
       "minItems": 1,
@@ -50,6 +52,17 @@
     "id": {
       "type": "string",
       "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+    },
+    "shell": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["background_color", "horizontal_inset_px", "max_width_px", "min_width_px"],
+      "properties": {
+        "background_color": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+        "horizontal_inset_px": { "type": "integer", "minimum": 0 },
+        "max_width_px": { "type": "integer", "minimum": 1 },
+        "min_width_px": { "type": "integer", "minimum": 1 }
+      }
     },
     "breakpoint": {
       "type": "object",

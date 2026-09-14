@@ -1363,7 +1363,7 @@ test("invalid rendering data blocks system validation", async (t) => {
   });
   const invalidData = (
     await readFile(join(root, "data/foundations/rendering.yaml"), "utf8")
-  ).replace("value: 660", "value: 660.5");
+  ).replace("value: 659", "value: 659.5");
   await writeFixtureFile(
     root,
     "data/foundations/rendering.yaml",

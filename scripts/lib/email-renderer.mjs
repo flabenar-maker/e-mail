@@ -1,4 +1,5 @@
 import { renderContractTree, selectVariantRoot } from "./email-interpreter.mjs";
+import { renderPrimitive } from "./email-primitives.mjs";
 import {
   buildRenderImpactProjection,
   digestRenderImpact,
@@ -238,7 +239,15 @@ function prepareElement({
         rendererRegistry,
         componentIndex,
       });
-      if (child) prepared.children.push(child);
+      if (child) {
+        const instanceSizing = element.facts?.find(({ id }) => id === "horizontal-sizing")?.value?.value;
+        if (instanceSizing === "fill") {
+          child.facts = child.facts?.map((fact) => fact.id === "horizontal-sizing"
+            ? { ...fact, value: { ...fact.value, value: "fill" } }
+            : fact);
+        }
+        prepared.children.push(child);
+      }
     }
   }
 
@@ -497,10 +506,23 @@ export function renderEmailDocument(model, dependencies) {
     };
   }
 
+  const shell = dependencies?.foundations?.rendering?.shell;
+  if (!shell) {
+    return {
+      html: "",
+      assets: rendered.assets,
+      diagnostics: [diagnostic(
+        "RENDER_EMAIL_SHELL_MISSING",
+        "/foundations/rendering/shell",
+        "The canonical email shell is missing.",
+      )],
+    };
+  }
   const style = rendered.css ? `<style>${rendered.css}</style>` : "";
   const metadata = buildMetadataComment(model, dependencies);
+  const body = renderPrimitive("email-shell", shell, rendered.html);
   return {
-    html: `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${metadata}${style}</head><body>${rendered.html}</body></html>`,
+    html: `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${metadata}${style}</head><body style="margin:0;padding:0">${body}</body></html>`,
     assets: rendered.assets,
     diagnostics: [],
   };

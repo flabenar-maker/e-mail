@@ -88,7 +88,7 @@ function valueWithUnit(value) {
   return undefined;
 }
 
-function propsFromFacts(facts = [], { viewport, mode, isRoot = false } = {}) {
+function propsFromFacts(facts = [], { viewport, mode, isRoot = false, parentAxis } = {}) {
   const props = { style: {} };
   const fact = (id) => facts.find((item) => item.id === id)?.value;
   const size = fact("reference-size");
@@ -101,7 +101,15 @@ function propsFromFacts(facts = [], { viewport, mode, isRoot = false } = {}) {
         props.fluid = true;
       }
     } else if (mode === "html-text") {
-      props.style["max-width"] = `${size.width}px`;
+      const expands = viewport === "mobile" && (
+        sizing === "fill" ||
+        (parentAxis === "vertical" && fact("layout-align")?.value === "stretch") ||
+        (parentAxis === "horizontal" && (fact("layout-grow")?.value ?? 0) > 0)
+      );
+      if (expands) props.style.width = "100%";
+      else props.style["max-width"] = `${size.width}px`;
+    } else if (mode === "presentation-table" && sizing === "hug") {
+      props.width = "auto";
     } else if (isRoot && viewport === "desktop") {
       props.width = size.width;
     }
@@ -139,7 +147,7 @@ function propsFromFacts(facts = [], { viewport, mode, isRoot = false } = {}) {
     else if (id === "text-align") props.style["text-align"] = resolved;
     else if (id === "text-decoration") props.style["text-decoration"] = resolved;
     else if (id === "text-color" || id.endsWith("-text-color")) props.style.color = resolved;
-    else if (id === "background" || id.endsWith("-background") || id === "background-fallback") props.style["background-color"] = resolved;
+    else if (mode !== "direct-image" && (id === "background" || id.endsWith("-background") || id === "background-fallback")) props.style["background-color"] = resolved;
     else if (id === "border-radius" || id.endsWith("-border-radius")) props.style["border-radius"] = resolved;
     else if (/^border-radius-(?:top|bottom)-(?:left|right)$/u.test(id)) {
       const [, , side, corner] = id.split("-");
@@ -246,6 +254,72 @@ function wrapAction(element, entry, html) {
   return renderPrimitive("link", { href, style: { display: "block", color: "inherit" } }, html);
 }
 
+function isWholeButtonAction(element) {
+  return element.action?.kind === "whole-element" && (
+    element.semantic_role === "button" || element.semantic_role?.endsWith("-button")
+  );
+}
+
+function inlineActionParts(childHtml, childNodes, gap) {
+  const parts = childHtml.flatMap((html, index) => {
+    if (!html) return [];
+    const noWrap = html.includes("white-space:nowrap");
+    const nodeFacts = childNodes?.[index]?.facts ?? [];
+    const fact = (id) => nodeFacts.find((item) => item.id === id)?.value;
+    const fixedWidth = fact("horizontal-sizing")?.value === "fixed"
+      ? fact("reference-size")?.width
+      : undefined;
+    return [...html.matchAll(/<img\b[^>]*>|<p\b[^>]*>[\s\S]*?<\/p>/gu)].map((match) => ({
+      html: match[0],
+      noWrap,
+      fixedWidth: match[0].startsWith("<p") ? fixedWidth : undefined,
+    }));
+  });
+  if (parts.length === 0) return null;
+
+  return parts.map(({ html, noWrap, fixedWidth }, index) => {
+    const offset = index > 0 && gap > 0 ? "margin-left:" + gap + "px;" : "";
+    const whitespace = noWrap ? "white-space:nowrap;" : "";
+    const column = Number.isFinite(fixedWidth) ? "width:" + fixedWidth + "px;" : "";
+    if (html.startsWith("<img")) {
+      return html.replace(/style="([^"]*)"/u, (_match, style) =>
+        'style="' + style + ';display:inline-block;vertical-align:middle;' + whitespace + column + offset + '"',
+      );
+    }
+    return html.replace(/^<p([^>]*)>([\s\S]*)<\/p>$/u, (_match, attrs, body) => {
+      const style = attrs.match(/\sstyle="([^"]*)"/u);
+      const textStyle = Number.isFinite(fixedWidth)
+        ? style?.[1].replace(/(?:^|;)max-width:[^;]*/u, "")
+        : style?.[1];
+      const nextAttrs = style
+        ? attrs.replace(style[0], ' style="' + textStyle + ';display:inline-block;vertical-align:middle;' + whitespace + column + offset + '"')
+        : attrs + ' style="display:inline-block;vertical-align:middle;' + whitespace + column + offset + '"';
+      return "<span" + nextAttrs + ">" + body + "</span>";
+    });
+  });
+}
+
+function renderWholeButtonAction(element, entry, childHtml, factProps, gap) {
+  if (!isWholeButtonAction(element)) return null;
+
+  const href = actionHref(element, entry);
+  const parts = inlineActionParts(childHtml, element.children, gap);
+  if (!href || !parts) return null;
+
+  const padding = Object.fromEntries(
+    Object.entries(factProps.style).filter(([key]) => key === "padding" || key.startsWith("padding-")),
+  );
+  const style = { ...factProps.style };
+  for (const key of Object.keys(padding)) delete style[key];
+
+  const link = renderPrimitive("link", {
+    href,
+    style: { display: "block", color: "inherit", "text-align": "center", ...padding },
+  }, parts.join(""));
+  const cell = renderPrimitive("cell", { style: { "text-align": "center" } }, link);
+  return renderPrimitive("table", { ...factProps, style }, "<tr>" + cell + "</tr>");
+}
+
 function renderShell(element, viewport, path, childHtml, context) {
   if (!element) return { html: "", diagnostics: [] };
   const visibility = visibilityFor(element, viewport, context, path);
@@ -253,7 +327,13 @@ function renderShell(element, viewport, path, childHtml, context) {
 
   const { entry, diagnostics } = contentFor({ ...context, path }, viewport, element);
   if (diagnostics.length > 0) return { html: "", diagnostics };
-  const factProps = propsFromFacts(element.facts, { viewport, mode: element.render_mode, isRoot: path === "root" });
+  const factProps = propsFromFacts(element.facts, { viewport, mode: element.render_mode, isRoot: path === "root", parentAxis: context.parentLayoutAxis?.[viewport] });
+  if (element.render_mode === "presentation-table" && element.semantic_role === "social-icons" && factProps.width === "auto") {
+    factProps.align = "center";
+  }
+  if (element.render_mode === "presentation-table" && element.semantic_role === "button-text") {
+    factProps.style["white-space"] = "nowrap";
+  }
   const children = childHtml.filter(Boolean);
   const joined = children.join("");
 
@@ -298,6 +378,11 @@ function renderShell(element, viewport, path, childHtml, context) {
           )],
         };
       }
+      if (isWholeButtonAction(element)) {
+        const actionHtml = renderWholeButtonAction(element, entry, childHtml, factProps, gap);
+        if (actionHtml) return { html: actionHtml, diagnostics: [] };
+      }
+
       const visible = childHtml
         .map((html, index) => ({ html, node: element.children?.[index] }))
         .filter(({ html }) => Boolean(html));
@@ -311,6 +396,9 @@ function renderShell(element, viewport, path, childHtml, context) {
         return renderPrimitive("cell", {
           width: spaceBetween ? node?.facts?.find(({ id }) => id === "reference-size")?.value?.width : nodeProps.width,
           valign: element.facts?.some(({ id, value }) => id === "counter-alignment" && value.value === "center") ? "middle" : "top",
+          ...(axis === "horizontal" && nodeProps.style["background-color"]
+            ? { bgcolor: nodeProps.style["background-color"], style: { "background-color": nodeProps.style["background-color"] } }
+            : {}),
           ...(node?.render_mode === "html-link" && nodeProps.style["text-align"] === "center"
             ? { style: { "text-align": "center" } }
             : {}),
@@ -329,7 +417,9 @@ function renderShell(element, viewport, path, childHtml, context) {
               renderPrimitive("table", { width: "auto", align: "center" }, rawRows)))}</tr>`
         : rawRows;
       const padding = Object.fromEntries(
-        Object.entries(factProps.style).filter(([key]) => key === "padding" || key.startsWith("padding-")),
+        Object.entries(factProps.style).filter(([key, value]) =>
+          (key === "padding" || key.startsWith("padding-")) && value !== "0px" && value !== 0,
+        ),
       );
       if (Object.keys(padding).length === 0) {
         return { html: renderPrimitive("table", factProps, rows), diagnostics: [] };
@@ -414,7 +504,7 @@ function renderShell(element, viewport, path, childHtml, context) {
           {
             ...asset,
             ...factProps,
-            height: element.facts?.some(({ id, value }) => id === "height-behavior" && value.value?.value === "content-driven-cover") ? undefined : (factProps.height ?? asset.height),
+            height: element.facts?.some(({ id, value }) => id === "height-behavior" && value.value === "content-driven-cover") ? undefined : (factProps.height ?? asset.height),
             style: { ...(asset.style ?? {}), ...factProps.style },
           },
           joined,
@@ -442,12 +532,21 @@ function renderShell(element, viewport, path, childHtml, context) {
   }
 }
 
+function layoutAxisFor(element) {
+  const axis = element?.facts?.find(({ id }) => id === "layout-axis" || id.endsWith("-layout-axis"))?.value?.value;
+  return ["horizontal", "vertical"].includes(axis) ? axis : undefined;
+}
+
 function renderSingle(element, viewport, path, context) {
   if (!element) return { html: "", diagnostics: [] };
   const visibility = visibilityFor(element, viewport, context, path);
   if (!visibility.visible) return { html: "", diagnostics: visibility.diagnostics };
+  const childContext = {
+    ...context,
+    parentLayoutAxis: { ...context.parentLayoutAxis, [viewport]: layoutAxisFor(element) },
+  };
   const children = (element.children ?? []).map((child, index) =>
-    renderSingle(child, viewport, `${path}/children/${index}`, context),
+    renderSingle(child, viewport, `${path}/children/${index}`, childContext),
   );
   const shell = renderShell(
     element,
@@ -504,8 +603,12 @@ function renderPaired(pair, path, context) {
     return renderSplit(pair, path, context);
   }
 
+  const childContext = {
+    ...context,
+    parentLayoutAxis: { mobile: layoutAxisFor(pair.mobile), desktop: layoutAxisFor(pair.desktop) },
+  };
   const children = pair.children.map((child, index) =>
-    renderPaired(child, `${path}-${index}`, context),
+    renderPaired(child, `${path}-${index}`, childContext),
   );
   const combinedChildren = children.map(({ html }) => html);
   const mobileShell = renderShell(pair.mobile, "mobile", path.replaceAll("-", "/children/"), combinedChildren, context);
