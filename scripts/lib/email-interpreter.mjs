@@ -100,6 +100,8 @@ function propsFromFacts(facts = [], { viewport, mode, isRoot = false } = {}) {
       if (sizing === "fill" && mode === "direct-image") {
         props.fluid = true;
       }
+    } else if (mode === "html-text") {
+      props.style["max-width"] = `${size.width}px`;
     } else if (isRoot && viewport === "desktop") {
       props.width = size.width;
     }
@@ -307,9 +309,7 @@ function renderShell(element, viewport, path, childHtml, context) {
         if (node?.render_mode === "background-image") return html;
         const nodeProps = propsFromFacts(node?.facts, { viewport, mode: node?.render_mode });
         return renderPrimitive("cell", {
-          width: spaceBetween
-            ? node?.facts?.find(({ id }) => id === "reference-size")?.value?.width
-            : nodeProps.width ?? node?.facts?.find(({ id }) => id === "reference-size")?.value?.width,
+          width: spaceBetween ? node?.facts?.find(({ id }) => id === "reference-size")?.value?.width : nodeProps.width,
           valign: element.facts?.some(({ id, value }) => id === "counter-alignment" && value.value === "center") ? "middle" : "top",
           ...(node?.render_mode === "html-link" && nodeProps.style["text-align"] === "center"
             ? { style: { "text-align": "center" } }

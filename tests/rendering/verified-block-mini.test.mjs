@@ -59,7 +59,7 @@ test("Figma-verified Block/Info-Alert fully renders Mobile and Desktop from cont
   assert.match(output.html, /font-size:14px/u);
   assert.match(output.html, /font-size:18px/u);
   assert.match(output.html, /line-height:140%/u);
-  assert.match(output.html, /<td width="228"[^>]*style="[^"]*width:228px[^"]*"[^>]*><p[^>]*>Небольшой текст с пояснением чего-либо<\/p>/u);
+  assert.match(output.html, /max-width:228px/u);
   assert.match(output.html, /<img[^>]*width="24"[^>]*height="24"/u);
   assert.match(output.html, /<img[^>]*width="26"[^>]*height="26"/u);
   assert.equal((output.html.match(/Небольшой текст с пояснением чего-либо/gu) ?? []).length, 2);
@@ -84,7 +84,7 @@ test("Figma-verified Block/Contact-Support preserves both inline links and rich 
   assert.match(output.html, /font-size:12px/u);
   assert.match(output.html, /font-size:16px/u);
   assert.match(output.html, /text-decoration:underline/u);
-  assert.match(output.html, /<td width="220"[^>]*style="[^"]*width:220px[^"]*"[^>]*><p[^>]*>/u);
+  assert.match(output.html, /max-width:220px/u);
   assert.ok(!/<table[^>]*height="(?:\d+)"/u.test(output.html), "Block height must grow with reflow");
   const missing = contentFor(component);
   delete missing.mobile["root-content-area-help-notice-help-text"]["help-url"];
