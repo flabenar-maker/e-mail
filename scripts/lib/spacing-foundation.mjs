@@ -105,8 +105,8 @@ function validateResolution(errors, role, roleIndex, viewport) {
   const provenance = resolution.provenance;
   const registryLiteral =
     provenance?.kind === "registry-literal" &&
-    typeof provenance.source_path === "string" &&
-    provenance.source_path.length > 0 &&
+    typeof provenance.source_blob_sha === "string" &&
+    provenance.source_blob_sha.length > 0 &&
     provenance.variable_name === undefined &&
     provenance.evidence_node_id === undefined;
   const figmaVariable =
@@ -114,7 +114,7 @@ function validateResolution(errors, role, roleIndex, viewport) {
     typeof provenance.variable_name === "string" &&
     provenance.variable_name.length > 0 &&
     validFigmaNodeId(provenance.evidence_node_id) &&
-    provenance.source_path === undefined;
+    provenance.source_blob_sha === undefined;
 
   if (!registryLiteral && !figmaVariable) {
     errors.push(

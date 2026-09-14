@@ -12,7 +12,6 @@
           "node_id": "538:17235"
         }
       ],
-      "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
       "baseline_commit": "397e13a916e9af1c2dfd8af663de730bcc2e1874",
       "verified_at": "2026-09-06"
     }
@@ -13394,7 +13393,6 @@
         ]
       },
       "provenance": {
-        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Block/Transaction-Success",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -29077,7 +29075,6 @@
         ]
       },
       "provenance": {
-        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Block/Transaction-Error",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -34994,7 +34991,6 @@
         ]
       },
       "provenance": {
-        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Block/Contact-Support",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -35675,7 +35671,6 @@
         ]
       },
       "provenance": {
-        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Asset/Bank-Badge @4x",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -36203,7 +36198,6 @@
         ]
       },
       "provenance": {
-        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Asset/Partner-Badge @4x",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -37344,7 +37338,6 @@
         ]
       },
       "provenance": {
-        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Asset/Icon-Badge @4x",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -59001,7 +58994,6 @@
         ]
       },
       "provenance": {
-        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Details/Transfer",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -59572,7 +59564,6 @@
         ]
       },
       "provenance": {
-        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Asset/Status-Badge-Positive @4x",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -60131,7 +60122,6 @@
         ]
       },
       "provenance": {
-        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Asset/Status-Badge-Negative @4x",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -62670,7 +62660,6 @@
         ]
       },
       "provenance": {
-        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Details/Suspicious-Operation",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -80128,7 +80117,6 @@
         ]
       },
       "provenance": {
-        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Block/Personal-Data-Update",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -87502,7 +87490,6 @@
         ]
       },
       "provenance": {
-        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Details/Operation-Plain",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -105852,7 +105839,6 @@
         ]
       },
       "provenance": {
-        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Details/Receipt",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -112067,7 +112053,6 @@
         ]
       },
       "provenance": {
-        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Block/Receipt-Info",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -118808,7 +118793,6 @@
         ]
       },
       "provenance": {
-        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Banner/Fiscal-Check-Link",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -169751,7 +169735,6 @@
         ]
       },
       "provenance": {
-        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Block/Instruction-Steps",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -185936,7 +185919,6 @@
         ]
       },
       "provenance": {
-        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Details/Operation",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },
@@ -190419,7 +190401,6 @@
         ]
       },
       "provenance": {
-        "baseline_path": "Legacy/registry/email-component-descriptions-registry.md",
         "baseline_heading": "Badge/Operation-Status",
         "baseline_blob_sha": "52893694e97a8751517f9174a90376e1eb849e0c"
       },

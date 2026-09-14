@@ -57,7 +57,6 @@
           "required": [
             "figma_file_key",
             "roots",
-            "baseline_path",
             "baseline_commit",
             "verified_at"
           ],
@@ -90,10 +89,6 @@
                   }
                 }
               }
-            },
-            "baseline_path": {
-              "type": "string",
-              "minLength": 1
             },
             "baseline_commit": {
               "type": "string",
@@ -1216,15 +1211,15 @@
                   "additionalProperties": false,
                   "required": [
                     "kind",
-                    "source_path"
+                    "source_blob_sha"
                   ],
                   "properties": {
                     "kind": {
                       "const": "registry-literal"
                     },
-                    "source_path": {
+                    "source_blob_sha": {
                       "type": "string",
-                      "minLength": 1
+                      "pattern": "^[0-9a-f]{40}$"
                     }
                   }
                 },
@@ -1360,15 +1355,10 @@
           "type": "object",
           "additionalProperties": false,
           "required": [
-            "baseline_path",
             "baseline_heading",
             "baseline_blob_sha"
           ],
           "properties": {
-            "baseline_path": {
-              "type": "string",
-              "minLength": 1
-            },
             "baseline_heading": {
               "type": "string",
               "minLength": 1

@@ -10,8 +10,8 @@ roles:
     purpose: Внешний вертикальный ритм верхнеуровневого блока.
     applicability: [top-level]
     resolutions:
-      mobile: { value_px: 16, provenance: { kind: registry-literal, source_path: Legacy/registry/email-component-descriptions-registry.md } }
-      desktop: { value_px: 24, provenance: { kind: registry-literal, source_path: Legacy/registry/email-component-descriptions-registry.md } }
+      mobile: { value_px: 16, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
+      desktop: { value_px: 24, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
     evidence:
       - component: Email/Header
         relationship_path: root → logo
@@ -25,8 +25,8 @@ roles:
     purpose: Общий боковой inset обычных контентных блоков.
     applicability: [top-level, common-padding]
     resolutions:
-      mobile: { value_px: 16, provenance: { kind: registry-literal, source_path: Legacy/registry/email-component-descriptions-registry.md } }
-      desktop: { value_px: 24, provenance: { kind: registry-literal, source_path: Legacy/registry/email-component-descriptions-registry.md } }
+      mobile: { value_px: 16, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
+      desktop: { value_px: 24, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
     evidence:
       - component: Block/Content
         relationship_path: email shell → block root
@@ -38,8 +38,8 @@ roles:
     purpose: Боковой inset самостоятельного self-inset-компонента.
     applicability: [top-level, self-inset]
     resolutions:
-      mobile: { value_px: 16, provenance: { kind: registry-literal, source_path: Legacy/registry/email-component-descriptions-registry.md } }
-      desktop: { value_px: 24, provenance: { kind: registry-literal, source_path: Legacy/registry/email-component-descriptions-registry.md } }
+      mobile: { value_px: 16, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
+      desktop: { value_px: 24, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
     evidence:
       - component: NPS/Options
         relationship_path: email wrapper → component root
@@ -49,8 +49,8 @@ roles:
     purpose: Padding основной самостоятельной контентной поверхности.
     applicability: [top-level, primary-surface]
     resolutions:
-      mobile: { value_px: 22, provenance: { kind: registry-literal, source_path: Legacy/registry/email-component-descriptions-registry.md } }
-      desktop: { value_px: 32, provenance: { kind: registry-literal, source_path: Legacy/registry/email-component-descriptions-registry.md } }
+      mobile: { value_px: 22, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
+      desktop: { value_px: 32, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
     evidence:
       - component: Block/Content
         relationship_path: surface → content
@@ -64,8 +64,8 @@ roles:
     purpose: Padding вложенной или компактной поверхности.
     applicability: [nested, compact-surface]
     resolutions:
-      mobile: { value_px: 16, provenance: { kind: registry-literal, source_path: Legacy/registry/email-component-descriptions-registry.md } }
-      desktop: { value_px: 24, provenance: { kind: registry-literal, source_path: Legacy/registry/email-component-descriptions-registry.md } }
+      mobile: { value_px: 16, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
+      desktop: { value_px: 24, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
     evidence:
       - component: Item/Alert
         relationship_path: nested surface → content
@@ -77,8 +77,8 @@ roles:
     purpose: Основной интервал между крупными секциями внутри поверхности.
     applicability: [top-level, nested]
     resolutions:
-      mobile: { value_px: 16, provenance: { kind: registry-literal, source_path: Legacy/registry/email-component-descriptions-registry.md } }
-      desktop: { value_px: 24, provenance: { kind: registry-literal, source_path: Legacy/registry/email-component-descriptions-registry.md } }
+      mobile: { value_px: 16, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
+      desktop: { value_px: 24, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
     evidence:
       - component: Block/Steps
         relationship_path: heading → steps
@@ -90,8 +90,8 @@ roles:
     purpose: Интервал между heading, коллекцией и optional caption.
     applicability: [collection]
     resolutions:
-      mobile: { value_px: 22, provenance: { kind: registry-literal, source_path: Legacy/registry/email-component-descriptions-registry.md } }
-      desktop: { value_px: 32, provenance: { kind: registry-literal, source_path: Legacy/registry/email-component-descriptions-registry.md } }
+      mobile: { value_px: 22, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
+      desktop: { value_px: 32, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
     evidence:
       - component: Block/Cards-Images
         relationship_path: heading → cards → caption
@@ -103,8 +103,8 @@ roles:
     purpose: Интервал между крупными визуальными карточками.
     applicability: [collection, repeated-items]
     resolutions:
-      mobile: { value_px: 22, provenance: { kind: registry-literal, source_path: Legacy/registry/email-component-descriptions-registry.md } }
-      desktop: { value_px: 24, provenance: { kind: registry-literal, source_path: Legacy/registry/email-component-descriptions-registry.md } }
+      mobile: { value_px: 22, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
+      desktop: { value_px: 24, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
     evidence:
       - component: Block/Cards-Images
         relationship_path: card → next card
@@ -116,8 +116,8 @@ roles:
     purpose: Интервал между строками компактной таблицы реквизитов.
     applicability: [nested, details]
     resolutions:
-      mobile: { value_px: 12, provenance: { kind: registry-literal, source_path: Legacy/registry/email-component-descriptions-registry.md } }
-      desktop: { value_px: 16, provenance: { kind: registry-literal, source_path: Legacy/registry/email-component-descriptions-registry.md } }
+      mobile: { value_px: 12, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
+      desktop: { value_px: 16, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
     evidence:
       - component: Details/Receipt
         relationship_path: row → next row
@@ -129,8 +129,8 @@ roles:
     purpose: Интервал между крупными равноправными элементами композиции.
     applicability: [top-level, nested, inline]
     resolutions:
-      mobile: { value_px: 16, provenance: { kind: registry-literal, source_path: Legacy/registry/email-component-descriptions-registry.md } }
-      desktop: { value_px: 24, provenance: { kind: registry-literal, source_path: Legacy/registry/email-component-descriptions-registry.md } }
+      mobile: { value_px: 16, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
+      desktop: { value_px: 24, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
     evidence:
       - component: Block/Transaction-Success
         relationship_path: badge → details → status
@@ -142,8 +142,8 @@ roles:
     purpose: Интервал между компактными равноправными элементами.
     applicability: [nested, inline, compact]
     resolutions:
-      mobile: { value_px: 8, provenance: { kind: registry-literal, source_path: Legacy/registry/email-component-descriptions-registry.md } }
-      desktop: { value_px: 12, provenance: { kind: registry-literal, source_path: Legacy/registry/email-component-descriptions-registry.md } }
+      mobile: { value_px: 8, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
+      desktop: { value_px: 12, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
     evidence:
       - component: Email/Footer
         relationship_path: social icon → next icon
@@ -155,8 +155,8 @@ roles:
     purpose: Обычный интервал между heading, body и caption одной группы.
     applicability: [text]
     resolutions:
-      mobile: { value_px: 8, provenance: { kind: registry-literal, source_path: Legacy/registry/email-component-descriptions-registry.md } }
-      desktop: { value_px: 12, provenance: { kind: registry-literal, source_path: Legacy/registry/email-component-descriptions-registry.md } }
+      mobile: { value_px: 8, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
+      desktop: { value_px: 12, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
     evidence:
       - component: Block/Content
         relationship_path: heading → body
@@ -168,8 +168,8 @@ roles:
     purpose: Интервал между тесно связанными строками одного элемента.
     applicability: [text, compact]
     resolutions:
-      mobile: { value_px: 4, provenance: { kind: registry-literal, source_path: Legacy/registry/email-component-descriptions-registry.md } }
-      desktop: { value_px: 6, provenance: { kind: registry-literal, source_path: Legacy/registry/email-component-descriptions-registry.md } }
+      mobile: { value_px: 4, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
+      desktop: { value_px: 6, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
     evidence:
       - component: Item/Bullet
         relationship_path: text line → supporting line
@@ -181,8 +181,8 @@ roles:
     purpose: Интервал между крупным semantic asset и живым контентом.
     applicability: [top-level, nested]
     resolutions:
-      mobile: { value_px: 16, provenance: { kind: registry-literal, source_path: Legacy/registry/email-component-descriptions-registry.md } }
-      desktop: { value_px: 24, provenance: { kind: registry-literal, source_path: Legacy/registry/email-component-descriptions-registry.md } }
+      mobile: { value_px: 16, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
+      desktop: { value_px: 24, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
     evidence:
       - component: Block/Transaction-Success
         relationship_path: partner badge → content
@@ -194,8 +194,8 @@ roles:
     purpose: Интервал между компактным asset и живым контентом.
     applicability: [nested, compact]
     resolutions:
-      mobile: { value_px: 8, provenance: { kind: registry-literal, source_path: Legacy/registry/email-component-descriptions-registry.md } }
-      desktop: { value_px: 12, provenance: { kind: registry-literal, source_path: Legacy/registry/email-component-descriptions-registry.md } }
+      mobile: { value_px: 8, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
+      desktop: { value_px: 12, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
     evidence:
       - component: Item/Bullet
         relationship_path: bullet → text
@@ -213,6 +213,6 @@ global_invariants:
 exceptions: []
 provenance:
   base_commit: 41c05a3816a3263eff765fc07ddae9b047a6dfb7
-  registry_path: Legacy/registry/email-component-descriptions-registry.md
+  registry_blob_sha: be2203aef82db093fca37857f060d552b254c579
   design_spec_path: docs/superpowers/specs/2026-08-25-cupis-spacing-foundation-design.md
   reviewed_at: "2026-08-25"

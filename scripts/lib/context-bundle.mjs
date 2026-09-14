@@ -423,7 +423,7 @@ function withoutHistoricalSourceMetadata(value) {
       item !== null &&
       typeof item === "object" &&
       (item.kind === "registry-literal" ||
-        "baseline_path" in item ||
+        "registry_blob_sha" in item ||
         "comparison_sources" in item)
     ) {
       continue;

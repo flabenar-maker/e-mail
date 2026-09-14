@@ -234,6 +234,4 @@ provenance:
   baseline_commit: 8192e6c3262cd24fa13fbbbe248af653c8005231
   reviewed_on: "2026-08-27"
   comparison_sources:
-    - Legacy/core/email-figma-prompt.md
-    - Legacy/registry/email-component-descriptions-registry.md
     - docs/superpowers/specs/2026-08-24-cupis-structured-email-system-design.md
