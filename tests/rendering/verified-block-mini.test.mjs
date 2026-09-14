@@ -134,7 +134,7 @@ test("Figma-verified Card/Image @2x keeps mobile fluid ratio and desktop exact d
   const headingRow = rowPathAt("Небольшой заголовок");
   assert.equal(imageRow[0], headingRow[0], "Desktop Card image and text must share the outer row");
   assert.match(output.html, /width="488"/u);
-  assert.match(output.html, /<img[^>]*width="232"[^>]*height="148"/u);
+  assert.doesNotMatch(output.html, /<img[^>]*width="232"[^>]*\sheight="/u);
   assert.doesNotMatch(output.html, /<img[^>]*height="322"/u);
 });
 test("Figma-verified Block/Receipt-Info preserves exact paired corner radii", async () => {
