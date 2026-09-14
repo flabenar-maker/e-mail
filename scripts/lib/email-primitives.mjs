@@ -171,7 +171,7 @@ function renderEmailShell(props, children) {
     },
   }, "<tr>" + renderCell({}, children) + "</tr>");
   const outlookOpen = "<!--[if (gte mso 9)|(IE)]><table role=\"presentation\" width=\"" +
-    maxWidth + "\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td><![endif]-->";
+    maxWidth + "\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td><![endif]-->";
   const outlookClose = "<!--[if (gte mso 9)|(IE)]></td></tr></table><![endif]-->";
   const cell = renderCell({
     bgcolor: background,
