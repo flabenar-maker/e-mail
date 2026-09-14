@@ -88,7 +88,7 @@ function valueWithUnit(value) {
   return undefined;
 }
 
-function propsFromFacts(facts = [], { viewport, mode, isRoot = false, fluidMobileText = false } = {}) {
+function propsFromFacts(facts = [], { viewport, mode, isRoot = false } = {}) {
   const props = { style: {} };
   const fact = (id) => facts.find((item) => item.id === id)?.value;
   const size = fact("reference-size");
@@ -101,10 +101,10 @@ function propsFromFacts(facts = [], { viewport, mode, isRoot = false, fluidMobil
         props.fluid = true;
       }
     } else if (mode === "html-text") {
-      const stretches = viewport === "mobile" && fluidMobileText && (
-        sizing === "fill" || fact("layout-align")?.value === "stretch"
+      const expands = viewport === "mobile" && (
+        sizing === "fill" || fact("layout-align")?.value === "stretch" || (fact("layout-grow")?.value ?? 0) > 0
       );
-      if (stretches) props.style.width = "100%";
+      if (expands) props.style.width = "100%";
       else props.style["max-width"] = `${size.width}px`;
     } else if (mode === "presentation-table" && sizing === "hug") {
       props.width = "auto";
@@ -325,7 +325,7 @@ function renderShell(element, viewport, path, childHtml, context) {
 
   const { entry, diagnostics } = contentFor({ ...context, path }, viewport, element);
   if (diagnostics.length > 0) return { html: "", diagnostics };
-  const factProps = propsFromFacts(element.facts, { viewport, mode: element.render_mode, isRoot: path === "root", fluidMobileText: (element.render_component_library ?? context.componentLibrary) === "marketing" });
+  const factProps = propsFromFacts(element.facts, { viewport, mode: element.render_mode, isRoot: path === "root" });
   if (element.render_mode === "presentation-table" && element.semantic_role === "social-icons" && factProps.width === "auto") {
     factProps.align = "center";
   }
@@ -702,7 +702,7 @@ export function renderContractTree({
   const result = renderPaired(
     pairViewportTrees({ mobile, desktop }),
     "root",
-    { content, assets, properties, visibility, variantAxes, foundations, componentLibrary: component.identity?.library },
+    { content, assets, properties, visibility, variantAxes, foundations },
   );
   const diagnostics = [...result.diagnostics];
   const css = breakpointCss(result.rules, foundations, diagnostics);
