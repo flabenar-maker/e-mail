@@ -19,6 +19,7 @@ PR #61–64 — корректирующая Figma-сверка и уточне�
 Открытый [PR #60](https://github.com/flabenar-maker/e-mail/pull/60) содержит только read-only исследование внешних email-практик, а не реализацию viewport preview. Изучение источников проведено; тест готового письма в Яндекс Почте, Mail.ru и Gmail и обсуждение выводов ещё впереди. PR #60 не является gate-прохождением пакета 10 и не разрешает правку текущих контрактов.
 
 Следующая работа: сначала диагностически проверить HTML, который реально создаёт обновлённый пилот, и отделить недостаток данных модели/контракта от ошибки renderer code. Затем обсудить выводы исследования и продолжить пакет 10; без доказанного расхождения не менять Core, contracts или renderer. Подробные checkbox-шаги ниже сохраняют исходную спецификацию реализации, а не отражают факт merge; актуальный статус пакетов указан в таблице.
+
 ## Global Constraints
 
 - Перед каждым пакетом закрепить свежий `main`, перечитать manifest, roadmap, spec и этот plan на одном SHA.
@@ -44,20 +45,21 @@ PR #61–64 — корректирующая Figma-сверка и уточне�
 
 ## Карта реализации
 
-| Пакет | Результат | Фактический статус |
-|---:|---|---|
-| 1 | Characterization baseline и readiness-аудит | Слит: [PR #50](https://github.com/flabenar-maker/e-mail/pull/50) |
-| 2 | Rendering foundation и schema | Слит: [PR #51](https://github.com/flabenar-maker/e-mail/pull/51) |
-| 3 | Renderer registry, content slots и pilot contracts | Слит: [PR #52](https://github.com/flabenar-maker/e-mail/pull/52); факты дополнительно уточнены в PR #61–64 |
-| 4 | Разделённый Core | Слит: [PR #53](https://github.com/flabenar-maker/e-mail/pull/53) |
-| 5 | Email-примитивы и interpreter | Слит: [PR #54](https://github.com/flabenar-maker/e-mail/pull/54) |
-| 6 | Representative pilot | Код слит: [PR #55](https://github.com/flabenar-maker/e-mail/pull/55); layout скорректирован в PR #59, визуальное доказательство ещё требуется |
-| 7 | Временная модель, CLI и атомарный output | Слит: [PR #56](https://github.com/flabenar-maker/e-mail/pull/56) |
-| 8 | Render-impact digest и diagnostics | Слит: [PR #57](https://github.com/flabenar-maker/e-mail/pull/57) |
-| 9 | Автоматическая проверка | Слит: [PR #58](https://github.com/flabenar-maker/e-mail/pull/58) |
-| 10 | Visual scenarios | Не завершён; PR #60 больше не содержит его реализации |
-| 11 | Все активные компоненты | Не начат как пакет покрытия; PR #61–64 уточнили факты, но coverage остаётся пилотным |
-| 12 | Structured workflows и shadow comparison | Не начат |
+| Пакет | Результат | Исходный gate перед следующим | Фактический статус |
+|---:|---|---|---|
+| 1 | Characterization baseline и readiness-аудит | Подтверждены реальные gaps без изменения runtime | Слит: [PR #50](https://github.com/flabenar-maker/e-mail/pull/50) |
+| 2 | Rendering foundation и schema | Общие исполняемые определения валидируются | Слит: [PR #51](https://github.com/flabenar-maker/e-mail/pull/51) |
+| 3 | Renderer registry, content slots и pilot contracts | Шесть пилотных компонентов renderer-ready | Слит: [PR #52](https://github.com/flabenar-maker/e-mail/pull/52); факты дополнительно уточнены в PR #61–64 |
+| 4 | Разделённый Core | Нет semantic loss и дублей structured definitions | Слит: [PR #53](https://github.com/flabenar-maker/e-mail/pull/53) |
+| 5 | Email-примитивы и interpreter | Contract tree рендерится без component-specific HTML | Слит: [PR #54](https://github.com/flabenar-maker/e-mail/pull/54) |
+| 6 | Representative pilot | Шесть типов проходят Mobile/Desktop проверки | Код слит: [PR #55](https://github.com/flabenar-maker/e-mail/pull/55); layout скорректирован в PR #59, визуальное доказательство ещё требуется |
+| 7 | Временная модель, CLI и атомарный output | Ошибка не повреждает прежний результат | Слит: [PR #56](https://github.com/flabenar-maker/e-mail/pull/56) |
+| 8 | Render-impact digest и diagnostics | Документация не инвалидирует renderer | Слит: [PR #57](https://github.com/flabenar-maker/e-mail/pull/57) |
+| 9 | Автоматическая проверка | Property branches и HTML invariants покрыты | Слит: [PR #58](https://github.com/flabenar-maker/e-mail/pull/58) |
+| 10 | Visual scenarios | Mobile/Desktop geometry подтверждена на пилоте | Не завершён; PR #60 больше не содержит его реализации |
+| 11 | Все активные компоненты | Readiness/coverage blockers равны нулю | Не начат как пакет покрытия; PR #61–64 уточнили факты, но coverage остаётся пилотным |
+| 12 | Structured workflows и shadow comparison | Новый маршрут готов к Stage 9 без двойного контекста | Не начат |
+
 ## Целевая карта файлов
 
 ### Создать
