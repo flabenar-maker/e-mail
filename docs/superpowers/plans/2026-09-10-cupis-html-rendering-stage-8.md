@@ -6,7 +6,7 @@
 
 **Architecture:** Фактические Mobile/Desktop-инстансы сначала разрешаются в зарегистрированные component contracts и временную типизированную модель. Общий contract-tree interpreter собирает большинство компонентов через email-примитивы; renderer registry явно фиксирует покрытие, а отдельный handler допускается только для доказанного исключения. Точный breakpoint, primitive policy и postprocessing policy принадлежат rendering foundation; финальная локальная публикация атомарно создаёт только `email.html` и `images/`.
 
-**Tech Stack:** Node.js 24, ECMAScript modules (`.mjs`), YAML 2.9.0, AJV 8.20.0, JSON Schema Draft 2020-12, `node:test`, GitHub Actions; без нового runtime framework и без сетевого доступа из renderer CLI.
+**Tech Stack:** Node.js 24, ECMAScript modules (`.mjs`), YAML 2.9.0, AJV 8.20.0, JSON Schema Draft 2020-12, `node:test`; без нового runtime framework и без сетевого доступа из renderer CLI.
 
 **Spec:** `docs/superpowers/specs/2026-09-10-cupis-html-rendering-design.md`.
 
@@ -24,7 +24,7 @@ PR #61–64 — корректирующая Figma-сверка и уточне�
 
 - Перед каждым пакетом закрепить свежий `main`, перечитать manifest, roadmap, spec и этот plan на одном SHA.
 - Один пакет выполняется в отдельной `codex/<semantic-slug>` branch и draft PR; следующий начинается только после review и merge предыдущего.
-- Не использовать локальный checkout как канонический источник. Постоянные изменения публикуются через облачный GitHub.
+- Не использовать локальный checkout как канонический источник. Постоянные изменения публикуются через облачный GitHub; временный изолированный снимок точного SHA допускается только для локальных проверок.
 - Не изменять Figma, Figma Description, component properties, variants, geometry или assets в технических пакетах. Неясный факт разрешается read-only проверкой; Figma mutation требует отдельной задачи и impact gate.
 - Не добавлять в репозиторий production `email.html`, `images/`, реальные письма, временные модели, экспортированные assets или screenshots конкретной рассылки.
 - До финального shadow comparison не изменять действующие `bundle_profiles[].source_ids`, `routes[].bundle_profile_id` и repo-scoped maintenance skill.
@@ -38,7 +38,7 @@ PR #61–64 — корректирующая Figma-сверка и уточне�
 - Нельзя исправлять сгенерированный NEW BUILD вручную как штатный путь. Ошибка исправляется в contract, foundation, recipe или renderer, затем письмо пересобирается.
 - CONTINUE/FIX остаётся отдельным режимом и всегда работает в новой локальной версии папки.
 - Все diagnostics используют стабильные code/path/message и сортируются детерминированно.
-- Никакой пакет не считается завершённым до свежих `npm run verify`, Windows bootstrap check и allowed-diff проверки.
+- Никакой пакет не считается завершённым до свежих локальных `npm run verify`, Windows bootstrap check и allowed-diff проверки на точном SHA.
 - Merge выполняется только по отдельной команде пользователя.
 
 ---
@@ -488,7 +488,7 @@ git commit -m "feat: protect renderer compatibility with impact digests"
 
 ### Package 9: Автоматические HTML и property checks
 
-**Files:** create `html-invariants.test.mjs`; extend pilot tests; modify test command/CI only if needed.
+**Files:** create `html-invariants.test.mjs`; extend pilot tests; modify test command/local validation only if needed.
 
 - [ ] **Step 1:** проверить table structure, local src, forbidden filesystem paths, dimensions, fluid `@2x` height auto, placeholders и deterministic order.
 - [ ] **Step 2:** small Boolean sets — exhaustive; остальные — every branch + declared critical interactions. Каждая visibility branch встречается в тесте.
@@ -579,7 +579,7 @@ Gate: Stage 8 готовит новый маршрут; Stage 9 отдельно
 - [ ] Свежий branch SHA сравнен с актуальным `main`.
 - [ ] `npm run audit:rendering`: zero generic facts и zero missing coverage.
 - [ ] `npm run generate:check`, `npm run validate`, `npm test`, `npm run verify` проходят.
-- [ ] Node 24 и Windows bootstrap CI зелёные.
+- [ ] Node 24 и Windows bootstrap проверки локально пройдены на точном SHA.
 - [ ] Representative NEW BUILD атомарно создаёт только `email.html` и `images/` во временной test folder.
 - [ ] Intentional failure не меняет существующую version folder.
 - [ ] Mobile/Desktop pilot previews проверены визуально.
