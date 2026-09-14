@@ -1215,7 +1215,14 @@
                                   }
                                 ],
                                 "children": [],
-                                "asset_contract_id": "partner-badge"
+                                "asset_contract_id": "partner-badge",
+                                "content_slots": [
+                                  {
+                                    "id": "alt",
+                                    "type": "alt-text",
+                                    "required": true
+                                  }
+                                ]
                               },
                               {
                                 "id": "root-card-summary-area-partner-info-row-partner-details-text-details",
@@ -4431,7 +4438,14 @@
                               }
                             ],
                             "children": [],
-                            "asset_contract_id": "partner-badge"
+                            "asset_contract_id": "partner-badge",
+                            "content_slots": [
+                              {
+                                "id": "alt",
+                                "type": "alt-text",
+                                "required": true
+                              }
+                            ]
                           },
                           {
                             "id": "root-card-summary-area-partner-info-row-text-details",
@@ -14582,7 +14596,14 @@
                                   }
                                 ],
                                 "children": [],
-                                "asset_contract_id": "partner-badge"
+                                "asset_contract_id": "partner-badge",
+                                "content_slots": [
+                                  {
+                                    "id": "alt",
+                                    "type": "alt-text",
+                                    "required": true
+                                  }
+                                ]
                               },
                               {
                                 "id": "root-card-summary-area-partner-info-row-partner-details-text-details",
@@ -18423,7 +18444,14 @@
                               }
                             ],
                             "children": [],
-                            "asset_contract_id": "partner-badge"
+                            "asset_contract_id": "partner-badge",
+                            "content_slots": [
+                              {
+                                "id": "alt",
+                                "type": "alt-text",
+                                "required": true
+                              }
+                            ]
                           },
                           {
                             "id": "root-card-summary-area-partner-info-row-text-details",
@@ -35176,7 +35204,14 @@
               }
             ],
             "children": [],
-            "asset_contract_id": "bank-badge"
+            "asset_contract_id": "bank-badge",
+            "content_slots": [
+              {
+                "id": "alt",
+                "type": "alt-text",
+                "required": true
+              }
+            ]
           }
         },
         "desktop": {
@@ -35304,7 +35339,14 @@
               }
             ],
             "children": [],
-            "asset_contract_id": "bank-badge"
+            "asset_contract_id": "bank-badge",
+            "content_slots": [
+              {
+                "id": "alt",
+                "type": "alt-text",
+                "required": true
+              }
+            ]
           }
         },
         "source_variants": [
@@ -35803,7 +35845,14 @@
               }
             ],
             "children": [],
-            "asset_contract_id": "partner-badge"
+            "asset_contract_id": "partner-badge",
+            "content_slots": [
+              {
+                "id": "alt",
+                "type": "alt-text",
+                "required": true
+              }
+            ]
           }
         },
         "desktop": {
@@ -35908,7 +35957,14 @@
               }
             ],
             "children": [],
-            "asset_contract_id": "partner-badge"
+            "asset_contract_id": "partner-badge",
+            "content_slots": [
+              {
+                "id": "alt",
+                "type": "alt-text",
+                "required": true
+              }
+            ]
           }
         },
         "source_variants": [
@@ -36340,7 +36396,14 @@
               }
             ],
             "children": [],
-            "asset_contract_id": "icon-badge"
+            "asset_contract_id": "icon-badge",
+            "content_slots": [
+              {
+                "id": "alt",
+                "type": "alt-text",
+                "required": true
+              }
+            ]
           }
         },
         "desktop": {
@@ -36468,7 +36531,14 @@
               }
             ],
             "children": [],
-            "asset_contract_id": "icon-badge"
+            "asset_contract_id": "icon-badge",
+            "content_slots": [
+              {
+                "id": "alt",
+                "type": "alt-text",
+                "required": true
+              }
+            ]
           }
         },
         "source_variants": [
@@ -59101,7 +59171,14 @@
               }
             ],
             "children": [],
-            "asset_contract_id": "status-badge-positive"
+            "asset_contract_id": "status-badge-positive",
+            "content_slots": [
+              {
+                "id": "alt",
+                "type": "alt-text",
+                "required": true
+              }
+            ]
           }
         },
         "desktop": {
@@ -59206,7 +59283,14 @@
               }
             ],
             "children": [],
-            "asset_contract_id": "status-badge-positive"
+            "asset_contract_id": "status-badge-positive",
+            "content_slots": [
+              {
+                "id": "alt",
+                "type": "alt-text",
+                "required": true
+              }
+            ]
           }
         },
         "source_variants": [
@@ -59658,7 +59742,14 @@
               }
             ],
             "children": [],
-            "asset_contract_id": "status-badge-negative"
+            "asset_contract_id": "status-badge-negative",
+            "content_slots": [
+              {
+                "id": "alt",
+                "type": "alt-text",
+                "required": true
+              }
+            ]
           }
         },
         "desktop": {
@@ -59763,7 +59854,14 @@
               }
             ],
             "children": [],
-            "asset_contract_id": "status-badge-negative"
+            "asset_contract_id": "status-badge-negative",
+            "content_slots": [
+              {
+                "id": "alt",
+                "type": "alt-text",
+                "required": true
+              }
+            ]
           }
         },
         "source_variants": [
@@ -63599,7 +63697,14 @@
                               }
                             ],
                             "children": [],
-                            "asset_contract_id": "status-badge-positive"
+                            "asset_contract_id": "status-badge-positive",
+                            "content_slots": [
+                              {
+                                "id": "alt",
+                                "type": "alt-text",
+                                "required": true
+                              }
+                            ]
                           },
                           {
                             "id": "root-card-status-area-status-row-heading",
@@ -68038,7 +68143,14 @@
                               }
                             ],
                             "children": [],
-                            "asset_contract_id": "status-badge-positive"
+                            "asset_contract_id": "status-badge-positive",
+                            "content_slots": [
+                              {
+                                "id": "alt",
+                                "type": "alt-text",
+                                "required": true
+                              }
+                            ]
                           },
                           {
                             "id": "root-card-status-area-status-row-heading",
@@ -106582,7 +106694,14 @@
                           }
                         ],
                         "children": [],
-                        "asset_contract_id": "status-badge-positive"
+                        "asset_contract_id": "status-badge-positive",
+                        "content_slots": [
+                          {
+                            "id": "alt",
+                            "type": "alt-text",
+                            "required": true
+                          }
+                        ]
                       },
                       {
                         "id": "root-status-area-status-row-heading",
@@ -108150,7 +108269,14 @@
                           }
                         ],
                         "children": [],
-                        "asset_contract_id": "status-badge-positive"
+                        "asset_contract_id": "status-badge-positive",
+                        "content_slots": [
+                          {
+                            "id": "alt",
+                            "type": "alt-text",
+                            "required": true
+                          }
+                        ]
                       },
                       {
                         "id": "root-status-area-status-row-heading",
@@ -112648,7 +112774,14 @@
                       }
                     ],
                     "children": [],
-                    "asset_contract_id": "ofd-badge"
+                    "asset_contract_id": "ofd-badge",
+                    "content_slots": [
+                      {
+                        "id": "alt",
+                        "type": "alt-text",
+                        "required": true
+                      }
+                    ]
                   },
                   {
                     "id": "root-item-01-link-text",
@@ -112994,7 +113127,14 @@
                       }
                     ],
                     "children": [],
-                    "asset_contract_id": "chevron-icon"
+                    "asset_contract_id": "chevron-icon",
+                    "content_slots": [
+                      {
+                        "id": "alt",
+                        "type": "alt-text",
+                        "required": true
+                      }
+                    ]
                   }
                 ],
                 "action": {
@@ -113361,7 +113501,14 @@
                       }
                     ],
                     "children": [],
-                    "asset_contract_id": "fns-badge"
+                    "asset_contract_id": "fns-badge",
+                    "content_slots": [
+                      {
+                        "id": "alt",
+                        "type": "alt-text",
+                        "required": true
+                      }
+                    ]
                   },
                   {
                     "id": "root-item-02-link-text",
@@ -113707,7 +113854,14 @@
                       }
                     ],
                     "children": [],
-                    "asset_contract_id": "chevron-icon"
+                    "asset_contract_id": "chevron-icon",
+                    "content_slots": [
+                      {
+                        "id": "alt",
+                        "type": "alt-text",
+                        "required": true
+                      }
+                    ]
                   }
                 ],
                 "action": {
@@ -114272,7 +114426,14 @@
                       }
                     ],
                     "children": [],
-                    "asset_contract_id": "ofd-badge"
+                    "asset_contract_id": "ofd-badge",
+                    "content_slots": [
+                      {
+                        "id": "alt",
+                        "type": "alt-text",
+                        "required": true
+                      }
+                    ]
                   },
                   {
                     "id": "root-item-01-link-text",
@@ -114618,7 +114779,14 @@
                       }
                     ],
                     "children": [],
-                    "asset_contract_id": "chevron-icon"
+                    "asset_contract_id": "chevron-icon",
+                    "content_slots": [
+                      {
+                        "id": "alt",
+                        "type": "alt-text",
+                        "required": true
+                      }
+                    ]
                   }
                 ],
                 "action": {
@@ -114985,7 +115153,14 @@
                       }
                     ],
                     "children": [],
-                    "asset_contract_id": "fns-badge"
+                    "asset_contract_id": "fns-badge",
+                    "content_slots": [
+                      {
+                        "id": "alt",
+                        "type": "alt-text",
+                        "required": true
+                      }
+                    ]
                   },
                   {
                     "id": "root-item-02-link-text",
@@ -115331,7 +115506,14 @@
                       }
                     ],
                     "children": [],
-                    "asset_contract_id": "chevron-icon"
+                    "asset_contract_id": "chevron-icon",
+                    "content_slots": [
+                      {
+                        "id": "alt",
+                        "type": "alt-text",
+                        "required": true
+                      }
+                    ]
                   }
                 ],
                 "action": {
@@ -119477,7 +119659,14 @@
                           }
                         ],
                         "children": [],
-                        "asset_contract_id": "error-warning-line"
+                        "asset_contract_id": "error-warning-line",
+                        "content_slots": [
+                          {
+                            "id": "alt",
+                            "type": "alt-text",
+                            "required": true
+                          }
+                        ]
                       },
                       {
                         "id": "root-content-area-warning-warning-text",
@@ -133050,7 +133239,14 @@
                           }
                         ],
                         "children": [],
-                        "asset_contract_id": "error-warning-line"
+                        "asset_contract_id": "error-warning-line",
+                        "content_slots": [
+                          {
+                            "id": "alt",
+                            "type": "alt-text",
+                            "required": true
+                          }
+                        ]
                       },
                       {
                         "id": "root-content-area-warning-warning-text",
@@ -190234,4 +190430,4 @@
       "constraints": []
     }
   ]
-}
+}\n
