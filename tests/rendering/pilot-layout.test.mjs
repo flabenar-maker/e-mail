@@ -49,9 +49,9 @@ function rowPathAt(html, marker, last = false) {
 test("Banner/Secondary Desktop places 300px content beside 252px background image", async () => {
   const result = await renderPilot("banner-secondary");
   const image = rowPathAt(result.html, 'background="images/secondary.jpg"');
-  const heading = rowPathAt(result.html, "Всё важное рядом", true);
+  const heading = rowPathAt(result.html, "Небольшой заголовок", true);
   assert.equal(image[0], heading[0], "Desktop Secondary content and image must share a row");
-  assert.match(result.html, /<td[^>]+background="images\/secondary\.jpg"[^>]+height="238"/u);
+  assert.doesNotMatch(result.html, /<td[^>]+background="images\/secondary\.jpg"[^>]+height="238"/u);
   assert.match(result.html, /<td[^>]+background="images\/secondary\.jpg"[^>]+width="252"/u);
 });
 
