@@ -118,7 +118,7 @@ function renderDirectImage(props) {
     [
       ["src", props.src],
       ["width", props.width],
-      ["height", props.height],
+      ["height", props.fluid ? undefined : props.height],
       ["alt", props.alt ?? ""],
       ["border", "0"],
     ],
