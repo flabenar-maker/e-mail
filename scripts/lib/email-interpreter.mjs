@@ -278,7 +278,7 @@ function inlineActionParts(childHtml, childNodes, gap) {
   return parts.map(({ html, noWrap, fixedWidth }, index) => {
     const offset = index > 0 && gap > 0 ? "margin-left:" + gap + "px;" : "";
     const whitespace = noWrap ? "white-space:nowrap;" : "";
-    const column = Number.isFinite(fixedWidth) ? "max-width:none;width:" + fixedWidth + "px;" : "";
+    const column = Number.isFinite(fixedWidth) ? "width:" + fixedWidth + "px;" : "";
     if (html.startsWith("<img")) {
       return html.replace(/style="([^"]*)"/u, (_match, style) =>
         'style="' + style + ';display:inline-block;vertical-align:middle;' + whitespace + column + offset + '"',
@@ -286,8 +286,11 @@ function inlineActionParts(childHtml, childNodes, gap) {
     }
     return html.replace(/^<p([^>]*)>([\s\S]*)<\/p>$/u, (_match, attrs, body) => {
       const style = attrs.match(/\sstyle="([^"]*)"/u);
+      const textStyle = Number.isFinite(fixedWidth)
+        ? style?.[1].replace(/(?:^|;)max-width:[^;]*/u, "")
+        : style?.[1];
       const nextAttrs = style
-        ? attrs.replace(style[0], ' style="' + style[1] + ';display:inline-block;vertical-align:middle;' + whitespace + column + offset + '"')
+        ? attrs.replace(style[0], ' style="' + textStyle + ';display:inline-block;vertical-align:middle;' + whitespace + column + offset + '"')
         : attrs + ' style="display:inline-block;vertical-align:middle;' + whitespace + column + offset + '"';
       return "<span" + nextAttrs + ">" + body + "</span>";
     });
