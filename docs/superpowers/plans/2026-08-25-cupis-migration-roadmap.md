@@ -26,7 +26,7 @@ Master-спецификация владеет архитектурными ре
 4. сверить отмеченный статус с фактически слитыми в `main` артефактами;
 5. не восстанавливать статус только по памяти чата.
 
-Этап отмечается завершённым только после его слияния в `main`. После слияния в roadmap добавляются фактическая ссылка на implementation plan или PR и новый статус. Если подробный plan ещё не создан, следующим действием является его создание и review, а не начало реализации.
+Исторические пункты завершённых этапов описывают состояние на момент их реализации. После [PR #69](https://github.com/flabenar-maker/e-mail/pull/69) старый контур находится в `Legacy/`, все маршруты временно указывают на `workflow-paused`, а [PR #70](https://github.com/flabenar-maker/e-mail/pull/70) привёл тесты к этой изоляции. Это не cutover и не завершение миграции. Старые формулировки «действующий Markdown-источник» в завершённых этапах не описывают текущий рабочий путь. После слияния в roadmap добавляются фактическая ссылка на implementation plan или PR и новый статус. Если подробный plan ещё не создан, следующим действием является его создание и review, а не начало реализации.
 
 Для восстановления расширенного контекста в новом чате используй [ручной checkpoint текущей работы](cupis-active-work-context.md). Он является навигацией, не владельцем статуса, и обновляется только по прямой команде пользователя; его сведения всегда перепроверяются по актуальному `main`, manifest, этому roadmap и папке plans.
 
@@ -138,7 +138,7 @@ Structured records остаются shadow-источником до generated b
 - [x] Проверять, что каждый bundle содержит только применимые rules, contracts и workflows.
 - [x] Сохранить весь этап shadow до отдельного cutover.
 
-Реализация этапа 7B слита в [PR #43](https://github.com/flabenar-maker/e-mail/pull/43), итоговый commit: `15a1c3ce09fec33d5aee82a87ffee4667e911702`. Generated docs и route-specific context bundles находятся в `main`, но остаются shadow-слоем: рабочие Core, workflows, skills и Figma этим этапом не переключались.
+Реализация этапа 7B слита в [PR #43](https://github.com/flabenar-maker/e-mail/pull/43), итоговый commit: `15a1c3ce09fec33d5aee82a87ffee4667e911702`. Generated docs и route-specific context bundles были реализованы как shadow-слой. После PR #69 полный `docs/generated/component-registry.md` ошибочно оказался в `Legacy/` вместе со старым контуром; его renderer и структурированные входы остались. Восстановление файла, регистрации в manifest и blocking-проверок не создаёт второго источника component facts и не переключает остановленные маршруты.
 
 ### 8. Core, workflows и HTML rendering cutover — в работе
 
@@ -167,7 +167,7 @@ Structured records остаются shadow-источником до generated b
 - [ ] Не подавать legacy и structured наборы правил одновременно в рабочий bundle.
 - [ ] Завершить все проверки этапа 8 и только после этого отметить этап завершённым.
 
-Следующий технический шаг определяется после read-only проверки пилотного HTML и обсуждения исследования. Figma, production-письма и maintenance skill не входят в скрытую область этапа.
+[PR #66](https://github.com/flabenar-maker/e-mail/pull/66) исправил оболочку пилотного письма и границу Mobile/Desktop. [PR #67–68](https://github.com/flabenar-maker/e-mail/pull/67) закрепили локальные проверки без GitHub Actions; [PR #69–70](https://github.com/flabenar-maker/e-mail/pull/69) изолировали Legacy и адаптировали тесты. Маршруты сейчас остановлены; восстановление полного generated component registry не означает завершения пакетов 10–12 или возобновления production-сборки.
 
 ### 9. Maintenance skill cutover
 
@@ -213,24 +213,24 @@ Manifest-driven разрешение source paths было выполнено н
 
 ### 13. Shadow comparison
 
-- [ ] Сравнить structured outputs и context bundles с действующими Markdown-источниками.
+- [ ] Сравнить structured outputs и context bundles с сохранёнными read-only источниками в `Legacy/`; не подключать архив к действующим маршрутам и не считать перенос доказательством equivalence.
 - [ ] Устранить semantic drift до cutover.
 - [ ] Подтвердить, что маршруты maintenance, component development и email build получают разные минимальные наборы контекста.
 
 ### 14. Cutover
 
-- [ ] Переключить рабочие маршруты на структурированные источники и generated bundles.
+- [ ] Переключить временно остановленные маршруты `workflow-paused` на проверенные структурированные источники и generated bundles. Не возвращать `Legacy/` как промежуточный рабочий путь.
 - [ ] Перевести foundations, прошедшие shadow comparison, из временного `shadow`-режима в итоговый рабочий статус.
 - [ ] Подтвердить validation, bootstrap, skills и GitHub/Figma workflows.
 - [ ] Зафиксировать rollback point и полный список временных migration/shadow-артефактов перед очисткой.
 
-### 15. Удаление старых дублей и временных migration-артефактов
+### 15. Ревизия `Legacy/` и временных migration-артефактов
 
 - [ ] Выполнить отдельной задачей после успешного cutover.
 - [ ] Для каждого migration/shadow-артефакта зафиксировать решение `remove` или `preserve` и его фактических потребителей.
-- [ ] Удалить старые источники, shadow-only bundle/profile wiring, comparison baselines, compatibility paths, временные flags/statuses и проверки, единственной целью которых была миграция.
+- [ ] Для каждого файла `Legacy/` подтвердить structured replacement и отсутствие активных потребителей; только после этого удалить действительно ненужные дубли отдельным PR. Нужные исторические baseline и characterization-тесты сохранить с объяснением роли.
 - [ ] Сохранить постоянные schemas, semantic validators/resolvers, локальные проверки и регрессионные тесты, которые защищают действующие правила после cutover.
-- [ ] Подтвердить, что manifest, routes, bundles, skills и bootstrap не ссылаются на удалённые источники или временные механизмы.
+- [ ] Подтвердить, что manifest, routes, bundles, skills и bootstrap не ссылаются на удалённые источники или временные механизмы; сохранённый архив не является активным владельцем правил.
 
 ## Правило обновления roadmap
 
