@@ -22,7 +22,7 @@ function sourceText(element) {
 function contentFor(component) {
   const content = { mobile: {}, desktop: {} };
   function walk(element, viewport) {
-    if (element.content_slots?.some((slot) => slot.id === "text")) {
+    if (element.content_slots?.some((slot) => slot.id === "text" || slot.id === "alt")) {
       const entry = { text: sourceText(element) };
       if (element.content_slots?.some((slot) => slot.id === "alt")) entry.alt = "Alert icon";
       if (element.id.endsWith("phone-number")) entry.href = "tel:+74951222088";
