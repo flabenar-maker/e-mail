@@ -62,17 +62,13 @@ function Invoke-Verify {
 function Copy-ContractFixture {
     param([string]$Source, [string]$Destination)
     New-Item -ItemType Directory -Path $Destination | Out-Null
-    foreach ($file in @('README.md', 'AGENTS.md', '.gitattributes')) {
-        Copy-Item -LiteralPath (Join-Path $Source $file) -Destination (Join-Path $Destination $file)
-    }
-    foreach ($directory in @(
-        'bootstrap', '.agents', 'core', 'workflows',
-        'system', 'schemas', 'data', 'docs'
-    )) {
-        Copy-Item -Recurse -LiteralPath (Join-Path $Source $directory) -Destination (Join-Path $Destination $directory)
+    foreach ($file in $fixtureFiles) {
+        $sourcePath = Join-Path $Source $file
+        $destinationPath = Join-Path $Destination $file
+        New-Item -ItemType Directory -Path (Split-Path -Parent $destinationPath) -Force | Out-Null
+        Copy-Item -LiteralPath $sourcePath -Destination $destinationPath
     }
 }
-
 function Get-FixtureHash {
     param([string]$Root)
     $resolvedRoot = [System.IO.Path]::GetFullPath($Root).TrimEnd(
