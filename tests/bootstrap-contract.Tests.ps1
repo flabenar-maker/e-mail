@@ -27,9 +27,9 @@ function Get-ManifestFixtureFilePaths {
 import { lstat, readdir, readFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { join, relative, resolve } from "node:path";
-const require = createRequire(join(resolve(process.argv[2]), "package.json"));
+const require = createRequire(join(resolve(process.argv.at(-1)), "package.json"));
 const { parse } = require("yaml");
-const root = resolve(process.argv[1]);
+const root = resolve(process.argv.at(-2));
 const manifest = parse(await readFile(join(root, "system/manifest.yaml"), "utf8"));
 const declaredPaths = [manifest.entrypoints.repository, manifest.entrypoints.bootstrap, ...manifest.sources.map(({ path }) => path), manifest.bootstrap.portable_config, manifest.bootstrap.verifier, ...manifest.skills.required.map(({ path }) => path), "system/manifest.yaml", "AGENTS.md", ".gitattributes"];
 async function expand(relativePath) {
@@ -44,7 +44,7 @@ async function expand(relativePath) {
 }
 console.log(JSON.stringify([...new Set((await Promise.all(declaredPaths.map(expand))).flat())].sort()));
 "@
-    $output = & $node.Source --input-type=module --eval $program $Root $repoRoot 2>&1 | Out-String
+    $output = $program | & $node.Source --input-type=module - $Root $repoRoot 2>&1 | Out-String
     if ($LASTEXITCODE -ne 0) { throw "Could not derive fixture files from manifest:`n$output" }
     [string[]](ConvertFrom-Json $output)
 }
