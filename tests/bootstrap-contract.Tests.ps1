@@ -8,29 +8,6 @@ $powerShell = if (Get-Command pwsh -ErrorAction SilentlyContinue) {
     (Get-Command powershell -ErrorAction Stop).Source
 }
 
-$fixtureFiles = @(
-    'README.md', 'AGENTS.md', '.gitattributes',
-    'bootstrap/config.portable.toml', 'bootstrap/README.md', 'bootstrap/verify.ps1',
-    '.agents/skills/maintaining-cupis-email-system/SKILL.md',
-    '.agents/skills/maintaining-cupis-email-system/agents/openai.yaml',
-    'core/asset-export-standard.md', 'core/component-contract-standard.md',
-    'core/email-rendering-standard.md', 'core/figma-component-description-standard.md',
-    'core/figma-library-standard.md', 'core/typography-standard.md',
-    'workflows/system-paused.md', 'system/manifest.yaml',
-    'schemas/assets.schema.json', 'schemas/components.schema.json',
-    'schemas/figma-naming.schema.json', 'schemas/manifest.schema.json',
-    'schemas/renderer-registry.schema.json', 'schemas/rendering.schema.json',
-    'schemas/spacing.schema.json', 'schemas/typography.schema.json',
-    'data/components/marketing.yaml', 'data/components/service.yaml',
-    'data/components/shared.yaml', 'data/foundations/assets.yaml',
-    'data/foundations/figma-naming.yaml', 'data/foundations/rendering.yaml',
-    'data/foundations/spacing.yaml', 'data/foundations/typography.yaml',
-    'data/renderers/registry.yaml', 'docs/generated/asset-registry.md',
-    'docs/generated/component-registry.md', 'docs/generated/naming-reference.md',
-    'docs/generated/typography-registry.md',
-    'docs/superpowers/plans/2026-08-25-cupis-migration-roadmap.md'
-)
-
 function Get-FixtureRelativeFilePaths {
     param([string]$Root)
     $resolvedRoot = [System.IO.Path]::GetFullPath($Root).TrimEnd(
@@ -76,6 +53,9 @@ function Assert-True {
 
 function Invoke-Verify {
     param([string]$Root, [string]$Engine = $powerShell)
+    # Fixtures are data roots. Run the repository verifier so its scripts and
+    # installed dependencies are the real runtime closure; the copied verifier
+    # remains only as the manifest-declared path validated inside each fixture.
     $engineArguments = @('-NoProfile')
     if ([System.IO.Path]::GetFileNameWithoutExtension($Engine) -eq 'powershell') {
         $engineArguments += @('-ExecutionPolicy', 'Bypass')
@@ -88,7 +68,7 @@ function Invoke-Verify {
 function Copy-ContractFixture {
     param([string]$Source, [string]$Destination)
     New-Item -ItemType Directory -Path $Destination | Out-Null
-    foreach ($file in $fixtureFiles) {
+    foreach ($file in (Get-ManifestFixtureFilePaths $Source)) {
         $sourcePath = Join-Path $Source $file
         $destinationPath = Join-Path $Destination $file
         New-Item -ItemType Directory -Path (Split-Path -Parent $destinationPath) -Force | Out-Null
