@@ -32,6 +32,15 @@ function normalizeForComparison(value) {
   ]));
 }
 
+function matchesExpected(actual, expected) {
+  if (Array.isArray(expected)) {
+    return Array.isArray(actual) && actual.length === expected.length &&
+      expected.every((value, index) => matchesExpected(actual[index], value));
+  }
+  if (!expected || typeof expected !== "object") return actual === expected;
+  return actual && typeof actual === "object" &&
+    Object.entries(expected).every(([key, value]) => matchesExpected(actual[key], value));
+}
 function equal(left, right) {
   return JSON.stringify(normalizeForComparison(left)) ===
     JSON.stringify(normalizeForComparison(right));
@@ -314,7 +323,7 @@ export function validateAssetsSemantics(assets) {
     ],
   ];
   for (const [code, path, actual, expected] of exactContracts) {
-    if (!equal(actual, expected)) {
+    if (!matchesExpected(actual, expected)) {
       errors.push(diagnostic(code, path, "Asset-boundary rules must remain exact."));
     }
   }
@@ -334,7 +343,7 @@ export function validateAssetsSemantics(assets) {
       ...expectedDisplayContract,
       crop_owner: displayModeId === "direct-image" ? "none" : "html-wrapper",
     };
-    if (!equal(contract, expected)) {
+    if (!matchesExpected(contract, expected)) {
       errors.push(diagnostic(
         "ASSETS_DISPLAY_RATIO_GUARD_INVALID",
         `/display_modes/${displayModeId}/contract`,
