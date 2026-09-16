@@ -52,7 +52,7 @@ import { join, relative, resolve } from "node:path";
 import { parse } from "yaml";
 const root = resolve(process.argv[1]);
 const manifest = parse(await readFile(join(root, "system/manifest.yaml"), "utf8"));
-const declaredPaths = [manifest.entrypoints.repository, manifest.entrypoints.bootstrap, ...manifest.sources.map(({ path }) => path), manifest.bootstrap.portable_config, manifest.bootstrap.verifier, ...manifest.skills.required.map(({ path }) => path), "AGENTS.md", ".gitattributes"];
+const declaredPaths = [manifest.entrypoints.repository, manifest.entrypoints.bootstrap, ...manifest.sources.map(({ path }) => path), manifest.bootstrap.portable_config, manifest.bootstrap.verifier, ...manifest.skills.required.map(({ path }) => path), "system/manifest.yaml", "AGENTS.md", ".gitattributes"];
 async function expand(relativePath) {
   const absolutePath = resolve(root, relativePath);
   const stat = await lstat(absolutePath);
