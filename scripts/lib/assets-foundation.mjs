@@ -23,8 +23,18 @@ const FORBIDDEN_BUILD_CHOICE_KEYS = new Set([
   "component_id",
 ]);
 
+function normalizeForComparison(value) {
+  if (Array.isArray(value)) return value.map(normalizeForComparison);
+  if (!value || typeof value !== "object") return value;
+  return Object.fromEntries(Object.keys(value).sort().map((key) => [
+    key,
+    normalizeForComparison(value[key]),
+  ]));
+}
+
 function equal(left, right) {
-  return JSON.stringify(left) === JSON.stringify(right);
+  return JSON.stringify(normalizeForComparison(left)) ===
+    JSON.stringify(normalizeForComparison(right));
 }
 
 function diagnostic(code, path, message) {
