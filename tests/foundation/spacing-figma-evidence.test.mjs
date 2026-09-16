@@ -158,6 +158,9 @@ test("spacing Figma capture has the required auditable address shape and exact r
   const [fixture, spacing] = await Promise.all([capture(), readStrictYaml(spacingPath)]);
   const expectedRoleIds = [...CONFIRMED_ROLE_IDS, ...UNRESOLVED_ROLE_IDS].sort();
 
+  assert.match(fixture.file_key, /^[A-Za-z0-9]+$/u);
+  assert.match(fixture.captured_at, /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2})$/u);
+
   assert.deepEqual(sortedUnique(spacing.roles.map(({ id }) => id)), expectedRoleIds);
   assert.equal(fixture.addresses.length, expectedRoleIds.length * VIEWPORTS.length);
   assert.deepEqual(
