@@ -2,16 +2,27 @@ schema_version: 1.0.0
 foundation:
   id: spacing
   status: shadow
-viewports: [mobile, desktop]
+viewports:
+  - mobile
+  - desktop
 roles:
   - id: outer-flow
     relationship: email-outer-flow
     owner: top-level-component-root
     purpose: Внешний вертикальный ритм верхнеуровневого блока.
-    applicability: [top-level]
+    applicability:
+      - top-level
     resolutions:
-      mobile: { value_px: 16, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
-      desktop: { value_px: 24, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
+      mobile:
+        value_px: 16
+        provenance:
+          kind: registry-literal
+          source_blob_sha: be2203aef82db093fca37857f060d552b254c579
+      desktop:
+        value_px: 24
+        provenance:
+          kind: registry-literal
+          source_blob_sha: be2203aef82db093fca37857f060d552b254c579
     evidence:
       - component: Email/Header
         relationship_path: root → logo
@@ -23,10 +34,20 @@ roles:
     relationship: email-common-inset
     owner: email-shell
     purpose: Общий боковой inset обычных контентных блоков.
-    applicability: [top-level, common-padding]
+    applicability:
+      - top-level
+      - common-padding
     resolutions:
-      mobile: { value_px: 16, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
-      desktop: { value_px: 24, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
+      mobile:
+        value_px: 16
+        provenance:
+          kind: registry-literal
+          source_blob_sha: be2203aef82db093fca37857f060d552b254c579
+      desktop:
+        value_px: 24
+        provenance:
+          kind: registry-literal
+          source_blob_sha: be2203aef82db093fca37857f060d552b254c579
     evidence:
       - component: Block/Content
         relationship_path: email shell → block root
@@ -36,10 +57,32 @@ roles:
     relationship: component-self-inset
     owner: top-level-component-root
     purpose: Боковой inset самостоятельного self-inset-компонента.
-    applicability: [top-level, self-inset]
+    applicability:
+      - top-level
+      - self-inset
     resolutions:
-      mobile: { value_px: 16, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
-      desktop: { value_px: 24, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
+      mobile:
+        value_px: 16
+        provenance:
+          kind: figma-variable
+          file_key: 8zka5bHkcrJVK9I9dKjnhC
+          evidence_node_id: 15:599
+          field_path: /paddingLeft
+          variable_id: VariableID:11:326
+          variable_name: mobile/block-margin
+          variable_resolved_type: FLOAT
+          captured_at: 2026-09-16T15:29:10+03:00
+      desktop:
+        value_px: 24
+        provenance:
+          kind: figma-variable
+          file_key: 8zka5bHkcrJVK9I9dKjnhC
+          evidence_node_id: 260:3974
+          field_path: /paddingLeft
+          variable_id: VariableID:510:20764
+          variable_name: desktop/block-margin
+          variable_resolved_type: FLOAT
+          captured_at: 2026-09-16T15:29:10+03:00
     evidence:
       - component: NPS/Options
         relationship_path: email wrapper → component root
@@ -47,10 +90,32 @@ roles:
     relationship: component-container-padding
     owner: component-content-container
     purpose: Padding основной самостоятельной контентной поверхности.
-    applicability: [top-level, primary-surface]
+    applicability:
+      - top-level
+      - primary-surface
     resolutions:
-      mobile: { value_px: 22, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
-      desktop: { value_px: 32, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
+      mobile:
+        value_px: 22
+        provenance:
+          kind: figma-variable
+          file_key: 8zka5bHkcrJVK9I9dKjnhC
+          evidence_node_id: 11:773
+          field_path: /paddingTop
+          variable_id: VariableID:11:807
+          variable_name: mobile/content-padding
+          variable_resolved_type: FLOAT
+          captured_at: 2026-09-16T15:29:10+03:00
+      desktop:
+        value_px: 32
+        provenance:
+          kind: figma-variable
+          file_key: 8zka5bHkcrJVK9I9dKjnhC
+          evidence_node_id: 230:3756
+          field_path: /paddingTop
+          variable_id: VariableID:222:2307
+          variable_name: desktop/content-padding
+          variable_resolved_type: FLOAT
+          captured_at: 2026-09-16T15:29:10+03:00
     evidence:
       - component: Block/Content
         relationship_path: surface → content
@@ -62,10 +127,32 @@ roles:
     relationship: component-container-padding
     owner: nested-component
     purpose: Padding вложенной или компактной поверхности.
-    applicability: [nested, compact-surface]
+    applicability:
+      - nested
+      - compact-surface
     resolutions:
-      mobile: { value_px: 16, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
-      desktop: { value_px: 24, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
+      mobile:
+        value_px: 16
+        provenance:
+          kind: figma-variable
+          file_key: 8zka5bHkcrJVK9I9dKjnhC
+          evidence_node_id: 16:2734
+          field_path: /paddingTop
+          variable_id: VariableID:11:805
+          variable_name: mobile/content-padding-sm
+          variable_resolved_type: FLOAT
+          captured_at: 2026-09-16T15:29:10+03:00
+      desktop:
+        value_px: 24
+        provenance:
+          kind: figma-variable
+          file_key: 8zka5bHkcrJVK9I9dKjnhC
+          evidence_node_id: 260:562
+          field_path: /paddingTop
+          variable_id: VariableID:222:2306
+          variable_name: desktop/content-padding-sm
+          variable_resolved_type: FLOAT
+          captured_at: 2026-09-16T15:29:10+03:00
     evidence:
       - component: Item/Alert
         relationship_path: nested surface → content
@@ -75,10 +162,32 @@ roles:
     relationship: component-section-stack
     owner: component-content-container
     purpose: Основной интервал между крупными секциями внутри поверхности.
-    applicability: [top-level, nested]
+    applicability:
+      - top-level
+      - nested
     resolutions:
-      mobile: { value_px: 16, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
-      desktop: { value_px: 24, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
+      mobile:
+        value_px: 16
+        provenance:
+          kind: figma-variable
+          file_key: 8zka5bHkcrJVK9I9dKjnhC
+          evidence_node_id: 11:773
+          field_path: /itemSpacing
+          variable_id: VariableID:11:809
+          variable_name: mobile/content-gap
+          variable_resolved_type: FLOAT
+          captured_at: 2026-09-16T15:29:10+03:00
+      desktop:
+        value_px: 24
+        provenance:
+          kind: figma-variable
+          file_key: 8zka5bHkcrJVK9I9dKjnhC
+          evidence_node_id: 230:3756
+          field_path: /itemSpacing
+          variable_id: VariableID:222:2304
+          variable_name: desktop/content-gap
+          variable_resolved_type: FLOAT
+          captured_at: 2026-09-16T15:29:10+03:00
     evidence:
       - component: Block/Steps
         relationship_path: heading → steps
@@ -88,10 +197,31 @@ roles:
     relationship: collection-section-stack
     owner: collection-container
     purpose: Интервал между heading, коллекцией и optional caption.
-    applicability: [collection]
+    applicability:
+      - collection
     resolutions:
-      mobile: { value_px: 22, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
-      desktop: { value_px: 32, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
+      mobile:
+        value_px: 22
+        provenance:
+          kind: figma-variable
+          file_key: 8zka5bHkcrJVK9I9dKjnhC
+          evidence_node_id: 398:7599
+          field_path: /itemSpacing
+          variable_id: VariableID:1180:90
+          variable_name: mobile/content-gap-lg
+          variable_resolved_type: FLOAT
+          captured_at: 2026-09-16T15:29:10+03:00
+      desktop:
+        value_px: 32
+        provenance:
+          kind: figma-variable
+          file_key: 8zka5bHkcrJVK9I9dKjnhC
+          evidence_node_id: 398:7571
+          field_path: /itemSpacing
+          variable_id: VariableID:1180:91
+          variable_name: desktop/content-gap-lg
+          variable_resolved_type: FLOAT
+          captured_at: 2026-09-16T15:29:10+03:00
     evidence:
       - component: Block/Cards-Images
         relationship_path: heading → cards → caption
@@ -101,10 +231,32 @@ roles:
     relationship: repeated-visual-item-stack
     owner: repeated-item-parent
     purpose: Интервал между крупными визуальными карточками.
-    applicability: [collection, repeated-items]
+    applicability:
+      - collection
+      - repeated-items
     resolutions:
-      mobile: { value_px: 22, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
-      desktop: { value_px: 24, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
+      mobile:
+        value_px: 22
+        provenance:
+          kind: figma-variable
+          file_key: 8zka5bHkcrJVK9I9dKjnhC
+          evidence_node_id: 398:7599
+          field_path: /itemSpacing
+          variable_id: VariableID:1180:90
+          variable_name: mobile/content-gap-lg
+          variable_resolved_type: FLOAT
+          captured_at: 2026-09-16T15:29:10+03:00
+      desktop:
+        value_px: 24
+        provenance:
+          kind: figma-variable
+          file_key: 8zka5bHkcrJVK9I9dKjnhC
+          evidence_node_id: 398:7573
+          field_path: /itemSpacing
+          variable_id: VariableID:222:2304
+          variable_name: desktop/content-gap
+          variable_resolved_type: FLOAT
+          captured_at: 2026-09-16T15:29:10+03:00
     evidence:
       - component: Block/Cards-Images
         relationship_path: card → next card
@@ -114,10 +266,32 @@ roles:
     relationship: details-row-stack
     owner: details-rows-parent
     purpose: Интервал между строками компактной таблицы реквизитов.
-    applicability: [nested, details]
+    applicability:
+      - nested
+      - details
     resolutions:
-      mobile: { value_px: 12, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
-      desktop: { value_px: 16, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
+      mobile:
+        value_px: 12
+        provenance:
+          kind: figma-variable
+          file_key: 8zka5bHkcrJVK9I9dKjnhC
+          evidence_node_id: 502:24639
+          field_path: /itemSpacing
+          variable_id: VariableID:556:1863
+          variable_name: mobile/text-gap-lg
+          variable_resolved_type: FLOAT
+          captured_at: 2026-09-16T15:29:10+03:00
+      desktop:
+        value_px: 16
+        provenance:
+          kind: figma-variable
+          file_key: 8zka5bHkcrJVK9I9dKjnhC
+          evidence_node_id: 502:24638
+          field_path: /itemSpacing
+          variable_id: VariableID:556:1864
+          variable_name: desktop/text-gap-lg
+          variable_resolved_type: FLOAT
+          captured_at: 2026-09-16T15:29:10+03:00
     evidence:
       - component: Details/Receipt
         relationship_path: row → next row
@@ -127,10 +301,21 @@ roles:
     relationship: inline-peer-gap
     owner: inline-parent
     purpose: Интервал между крупными равноправными элементами композиции.
-    applicability: [top-level, nested, inline]
+    applicability:
+      - top-level
+      - nested
+      - inline
     resolutions:
-      mobile: { value_px: 16, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
-      desktop: { value_px: 24, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
+      mobile:
+        value_px: 16
+        provenance:
+          kind: registry-literal
+          source_blob_sha: be2203aef82db093fca37857f060d552b254c579
+      desktop:
+        value_px: 24
+        provenance:
+          kind: registry-literal
+          source_blob_sha: be2203aef82db093fca37857f060d552b254c579
     evidence:
       - component: Block/Transaction-Success
         relationship_path: badge → details → status
@@ -140,10 +325,33 @@ roles:
     relationship: inline-peer-gap
     owner: inline-parent
     purpose: Интервал между компактными равноправными элементами.
-    applicability: [nested, inline, compact]
+    applicability:
+      - nested
+      - inline
+      - compact
     resolutions:
-      mobile: { value_px: 8, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
-      desktop: { value_px: 12, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
+      mobile:
+        value_px: 8
+        provenance:
+          kind: figma-variable
+          file_key: 8zka5bHkcrJVK9I9dKjnhC
+          evidence_node_id: 17:2749
+          field_path: /itemSpacing
+          variable_id: VariableID:11:830
+          variable_name: mobile/content-gap-sm
+          variable_resolved_type: FLOAT
+          captured_at: 2026-09-16T15:29:10+03:00
+      desktop:
+        value_px: 12
+        provenance:
+          kind: figma-variable
+          file_key: 8zka5bHkcrJVK9I9dKjnhC
+          evidence_node_id: 261:4006
+          field_path: /itemSpacing
+          variable_id: VariableID:222:2303
+          variable_name: desktop/content-gap-sm
+          variable_resolved_type: FLOAT
+          captured_at: 2026-09-16T15:29:10+03:00
     evidence:
       - component: Email/Footer
         relationship_path: social icon → next icon
@@ -153,10 +361,31 @@ roles:
     relationship: text-stack
     owner: text-group
     purpose: Обычный интервал между heading, body и caption одной группы.
-    applicability: [text]
+    applicability:
+      - text
     resolutions:
-      mobile: { value_px: 8, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
-      desktop: { value_px: 12, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
+      mobile:
+        value_px: 8
+        provenance:
+          kind: figma-variable
+          file_key: 8zka5bHkcrJVK9I9dKjnhC
+          evidence_node_id: 11:774
+          field_path: /itemSpacing
+          variable_id: VariableID:11:810
+          variable_name: mobile/text-gap
+          variable_resolved_type: FLOAT
+          captured_at: 2026-09-16T15:29:10+03:00
+      desktop:
+        value_px: 12
+        provenance:
+          kind: figma-variable
+          file_key: 8zka5bHkcrJVK9I9dKjnhC
+          evidence_node_id: 230:3757
+          field_path: /itemSpacing
+          variable_id: VariableID:222:2302
+          variable_name: desktop/text-gap
+          variable_resolved_type: FLOAT
+          captured_at: 2026-09-16T15:29:10+03:00
     evidence:
       - component: Block/Content
         relationship_path: heading → body
@@ -166,10 +395,32 @@ roles:
     relationship: text-stack
     owner: text-group
     purpose: Интервал между тесно связанными строками одного элемента.
-    applicability: [text, compact]
+    applicability:
+      - text
+      - compact
     resolutions:
-      mobile: { value_px: 4, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
-      desktop: { value_px: 6, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
+      mobile:
+        value_px: 4
+        provenance:
+          kind: figma-variable
+          file_key: 8zka5bHkcrJVK9I9dKjnhC
+          evidence_node_id: 222:699
+          field_path: /itemSpacing
+          variable_id: VariableID:224:1291
+          variable_name: mobile/text-gap-sm
+          variable_resolved_type: FLOAT
+          captured_at: 2026-09-16T15:29:10+03:00
+      desktop:
+        value_px: 6
+        provenance:
+          kind: figma-variable
+          file_key: 8zka5bHkcrJVK9I9dKjnhC
+          evidence_node_id: 234:577
+          field_path: /itemSpacing
+          variable_id: VariableID:224:1290
+          variable_name: desktop/text-gap-sm
+          variable_resolved_type: FLOAT
+          captured_at: 2026-09-16T15:29:10+03:00
     evidence:
       - component: Item/Bullet
         relationship_path: text line → supporting line
@@ -179,10 +430,32 @@ roles:
     relationship: asset-to-content
     owner: asset-content-parent
     purpose: Интервал между крупным semantic asset и живым контентом.
-    applicability: [top-level, nested]
+    applicability:
+      - top-level
+      - nested
     resolutions:
-      mobile: { value_px: 16, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
-      desktop: { value_px: 24, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
+      mobile:
+        value_px: 16
+        provenance:
+          kind: figma-variable
+          file_key: 8zka5bHkcrJVK9I9dKjnhC
+          evidence_node_id: 459:28003
+          field_path: /itemSpacing
+          variable_id: VariableID:11:809
+          variable_name: mobile/content-gap
+          variable_resolved_type: FLOAT
+          captured_at: 2026-09-16T15:29:10+03:00
+      desktop:
+        value_px: 24
+        provenance:
+          kind: figma-variable
+          file_key: 8zka5bHkcrJVK9I9dKjnhC
+          evidence_node_id: 459:27423
+          field_path: /itemSpacing
+          variable_id: VariableID:222:2304
+          variable_name: desktop/content-gap
+          variable_resolved_type: FLOAT
+          captured_at: 2026-09-16T15:29:10+03:00
     evidence:
       - component: Block/Transaction-Success
         relationship_path: partner badge → content
@@ -192,10 +465,32 @@ roles:
     relationship: asset-to-content
     owner: asset-content-parent
     purpose: Интервал между компактным asset и живым контентом.
-    applicability: [nested, compact]
+    applicability:
+      - nested
+      - compact
     resolutions:
-      mobile: { value_px: 8, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
-      desktop: { value_px: 12, provenance: { kind: registry-literal, source_blob_sha: be2203aef82db093fca37857f060d552b254c579 } }
+      mobile:
+        value_px: 8
+        provenance:
+          kind: figma-variable
+          file_key: 8zka5bHkcrJVK9I9dKjnhC
+          evidence_node_id: 222:702
+          field_path: /itemSpacing
+          variable_id: VariableID:11:830
+          variable_name: mobile/content-gap-sm
+          variable_resolved_type: FLOAT
+          captured_at: 2026-09-16T15:29:10+03:00
+      desktop:
+        value_px: 12
+        provenance:
+          kind: figma-variable
+          file_key: 8zka5bHkcrJVK9I9dKjnhC
+          evidence_node_id: 234:580
+          field_path: /itemSpacing
+          variable_id: VariableID:222:2303
+          variable_name: desktop/content-gap-sm
+          variable_resolved_type: FLOAT
+          captured_at: 2026-09-16T15:29:10+03:00
     evidence:
       - component: Item/Bullet
         relationship_path: bullet → text
@@ -203,16 +498,18 @@ roles:
         relationship_path: store icon → text
 global_invariants:
   - id: one-outer-flow-owner
-    statement: Каждый верхнеуровневый компонент получает внешний top spacing ровно один раз.
+    statement: Каждый верхнеуровневый компонент получает внешний top spacing ровно
+      один раз.
   - id: independent-viewports
     statement: Mobile и Desktop разрешаются независимо.
   - id: exact-component-contract
-    statement: Результат design-time фиксируется как одно точное значение в component contract.
+    statement: Результат design-time фиксируется как одно точное значение в
+      component contract.
   - id: build-does-not-resolve
-    statement: HTML-вёрстка не применяет spacing foundation и использует только фактические component values.
+    statement: HTML-вёрстка не применяет spacing foundation и использует только
+      фактические component values.
 exceptions: []
 provenance:
   base_commit: 41c05a3816a3263eff765fc07ddae9b047a6dfb7
   registry_blob_sha: be2203aef82db093fca37857f060d552b254c579
   design_spec_path: docs/superpowers/specs/2026-08-25-cupis-spacing-foundation-design.md
-  reviewed_at: "2026-08-25"
