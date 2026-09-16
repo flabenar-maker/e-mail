@@ -160,9 +160,8 @@ try {
         Assert-True (-not (Test-Path -LiteralPath (Join-Path $readOnlyFixture $archivedPath))) "Fixture must not copy archived path: $archivedPath."
     }
     $actualFixtureFiles = Get-FixtureRelativeFilePaths $readOnlyFixture
-    $expectedFixtureFiles = Get-ManifestFixtureFilePaths $repoRoot
-    $fixtureDifference = Compare-Object -ReferenceObject $expectedFixtureFiles -DifferenceObject $actualFixtureFiles | ForEach-Object { "$($_.SideIndicator) $($_.InputObject)" }
-    Assert-True (($actualFixtureFiles -join "`n") -eq ($expectedFixtureFiles -join "`n")) "Fixture must copy only active manifest sources and bootstrap assertions: $($fixtureDifference -join '; ')"
+    $expectedFixtureFiles = Get-ManifestFixtureFilePaths $repoRoot | Sort-Object
+    Assert-True (($actualFixtureFiles -join "`n") -eq ($expectedFixtureFiles -join "`n")) 'Fixture must copy only active manifest sources and bootstrap assertions.'
 
     $manifestDrivenSource = Join-Path $tempRoot 'manifest-driven-source'
     Copy-ContractFixture -Source $repoRoot -Destination $manifestDrivenSource
@@ -179,7 +178,7 @@ try {
     $manifestDrivenFixture = Join-Path $tempRoot 'manifest-driven-fixture'
     Copy-ContractFixture -Source $manifestDrivenSource -Destination $manifestDrivenFixture
     $manifestDrivenActual = Get-FixtureRelativeFilePaths $manifestDrivenFixture
-    $manifestDrivenExpected = Get-ManifestFixtureFilePaths $manifestDrivenSource
+    $manifestDrivenExpected = Get-ManifestFixtureFilePaths $manifestDrivenSource | Sort-Object
     Assert-True (($manifestDrivenActual -join "`n") -eq ($manifestDrivenExpected -join "`n")) 'Fixture must derive active source files from the manifest.'
     $beforeHash = Get-FixtureHash $readOnlyFixture
     $firstRun = Invoke-Verify $readOnlyFixture
