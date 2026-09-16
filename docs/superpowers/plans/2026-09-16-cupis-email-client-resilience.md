@@ -535,7 +535,7 @@ Required clients: mobile Яндекс Почта, Mail.ru and Gmail. For Gmail, 
 - [ ] **Step 3: Apply the responsive decision gate**
 
 - If all material target combinations apply embedded CSS and normal Mobile layout: change `responsive_fallback.validation` to `validated-current` and keep `without_embedded_css: desktop`.
-- If a material target combination removes embedded CSS: implement and test `without_embedded_css: mobile-first` in a separate commit.
+- If a material target combination removes embedded CSS: implement and test `without_embedded_css: mobile-first` in a separate commit and set `responsive_fallback.validation` to `validated-current` only after the tests and evidence agree.
 - Do not implement `hybrid` unless a recorded Mobile-first preview fails the agreed desktop fallback criterion.
 
 - [ ] **Step 4: Apply the dark-mode decision gate**
