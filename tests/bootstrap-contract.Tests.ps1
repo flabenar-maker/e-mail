@@ -27,7 +27,8 @@ function Get-ManifestFixtureFilePaths {
 import { lstat, readdir, readFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { join, relative, resolve } from "node:path";
-const require = createRequire(join(resolve(process.argv[2]), "package.json"));`nconst { parse } = require("yaml");
+const require = createRequire(join(resolve(process.argv[2]), "package.json"));
+const { parse } = require("yaml");
 const root = resolve(process.argv[1]);
 const manifest = parse(await readFile(join(root, "system/manifest.yaml"), "utf8"));
 const declaredPaths = [manifest.entrypoints.repository, manifest.entrypoints.bootstrap, ...manifest.sources.map(({ path }) => path), manifest.bootstrap.portable_config, manifest.bootstrap.verifier, ...manifest.skills.required.map(({ path }) => path), "system/manifest.yaml", "AGENTS.md", ".gitattributes"];
