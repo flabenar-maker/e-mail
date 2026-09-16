@@ -152,15 +152,12 @@ Structured records остаются shadow-источником до generated b
 
 Этап 8 готовит renderer и структурированные workflows, но не переключает остановленные маршруты. Фактический cutover выполняется только на этапе 14 после сквозного сравнения этапа 13.
 
-Фактический статус на 2026-09-15: пакеты 1–9 слиты в main через PR #50–58; [PR #59](https://github.com/flabenar-maker/e-mail/pull/59) исправил пилотные Mobile/Desktop layout contracts. Реализованы rendering foundation, реестр шести пилотных renderer coverage, разделённый Core, email-примитивы, contract-tree interpreter, пилот, временная модель, CLI с атомарным выводом, render-impact diagnostics и автоматические HTML-инварианты. Наличие этого кода не означает готовности сборки произвольного production-письма.
+Фактический статус на 2026-09-16: пакеты 1–9 слиты в main через PR #50–58; [PR #59](https://github.com/flabenar-maker/e-mail/pull/59) исправил пилотные Mobile/Desktop layout contracts. Реализованы rendering foundation, реестр шести пилотных renderer coverage, разделённый Core, email-примитивы, contract-tree interpreter, пилот, временная модель, CLI с атомарным выводом, render-impact diagnostics и автоматические HTML-инварианты. Наличие этого кода не означает готовности сборки произвольного production-письма.
 
 После неудачной попытки получить убедительный пилотный результат обнаружилась недостаточная точность части мигрированных component contracts. [PR #61](https://github.com/flabenar-maker/e-mail/pull/61), [#62](https://github.com/flabenar-maker/e-mail/pull/62), [#63](https://github.com/flabenar-maker/e-mail/pull/63) и [#64](https://github.com/flabenar-maker/e-mail/pull/64) выполнили прямую сверку с Figma, добавили проверку фактических данных и уточнили маркетинговые и сервисные контракты. Это корректирующая работа внутри этапа 8, а не завершение пакетов 10–12.
 
-Перед продолжением незавершённых пакетов этапа 8 выполняется отдельный [корректирующий план для foundations этапов 2–5](2026-09-15-cupis-foundations-figma-verified-remediation.md). На draft [PR #75](https://github.com/flabenar-maker/e-mail/pull/75) реализованы пакеты 0–6, получены независимые review-заключения и выполнена общая локальная проверка на точном SHA `a55b696d63f123433d3534222968e09a7d1c0d68`: `npm run verify` 530/530, `generate:check`, bootstrap contract/direct verifier в PowerShell 7 и Windows PowerShell 5.1, allowed-path/bundle boundary diff. PR остаётся открытым и не слитым.
-
-Это означает, что корректирующая реализация и её техническая проверка готовы к отдельному решению о merge, но не закрывает фактические доменные расхождения: Figma `Desktop/Heading/Compact` 0px против YAML 0%; spacing roles `outer-flow`, `common-horizontal-inset`, `inline-peer-standard`; asset blockers Hero, Secondary, NPS и concrete-instance overrides; naming unresolved set из audit. После этого планового commit перед merge требуется повторный полный локальный verification на точном новом SHA. Корректирующий маршрут не отменяет историческую завершённость этапов 2–5, не завершает этапы 8/13/14, не подключает остановленные маршруты и не заменяет сквозное сравнение этапа 13.
-
-[PR #60](https://github.com/flabenar-maker/e-mail/pull/60) остаётся открытым исследовательским черновиком: в нём только план и результаты изучения внешних email-практик. Он не содержит реализацию viewport preview, не меняет действующие контракты и не закрывает пакет 10. Изучение источников выполнено; проверка готового письма в целевых мобильных почтовых приложениях и обсуждение выводов ещё впереди.
+[Корректирующий план для foundations этапов 2–5](2026-09-15-cupis-foundations-figma-verified-remediation.md) реализован и слит через [PR #75](https://github.com/flabenar-maker/e-mail/pull/75), merge commit `c8c485bde0d69316dac83925c40e4f6b2fc0037c`. Он усилил Figma-backed проверку typography, spacing, assets и naming, но не завершил Package 10–12, этап 8, сквозное сравнение этапа 13 или cutover этапа 14.
+[PR #60](https://github.com/flabenar-maker/e-mail/pull/60) остаётся открытым исследовательским черновиком: он не меняет active rules, component contracts или renderer. Результаты исследования преобразованы в согласованную [client-resilience спецификацию](../specs/2026-09-16-cupis-email-client-resilience-design.md) и [implementation plan](2026-09-16-cupis-email-client-resilience.md). Реальная проверка через Altcraft теперь является обязательным Package 10D, а не внешним напоминанием.
 
 - [x] Зафиксировать characterization baseline и владельцев renderer-impacting данных — PR #50.
 - [x] Создать rendering foundation и renderer-ready schema без дублирования существующих foundations и contracts — PR #51–52.
@@ -170,8 +167,12 @@ Structured records остаются shadow-источником до generated b
 - [x] Добавить временную модель, CLI, типизированную диагностику и атомарную публикацию email.html + images/ — PR #56–57.
 - [x] Вычислять render-impact digest автоматически только из данных, влияющих на HTML — PR #57.
 - [x] Добавить автоматические HTML и property checks — PR #58.
-- [ ] Проверить фактический HTML обновлённого пилота и классифицировать расхождения по входной модели, контракту, renderer code и browser preview.
-- [ ] Добавить точное пилотное renderer coverage для Email/Header: сейчас Email/Footer покрыт, а Header отсутствует в registry; затем выполнить representative Mobile/Desktop visual scenarios для обоих.
+- [x] Проверить фактический HTML обновлённого пилота и классифицировать расхождения по входной модели, контракту, renderer code и browser preview — исправления оболочки и Mobile/Desktop границы слиты в PR #66.
+- [ ] Package 10A: добавить exact client-resilience policies, обязательные document metadata и явную alt-семантику.
+- [ ] Package 10B: реализовать shell/alt propagation, exclusive CSS budget, output metrics и точную minimum-viewport семантику.
+- [ ] Package 10C: создать normal/no-style preview, проверить узкие viewport и добавить точное пилотное coverage Email/Header рядом с Email/Footer.
+- [ ] Package 10D: доставить неизменённый пилот через Altcraft в целевые мобильные приложения и выбрать responsive fallback по зафиксированным результатам.
+- [ ] Завершить representative Mobile/Desktop visual scenarios для Header, Footer и пилотных блоков после 10A–10D.
 - [ ] Мигрировать renderer coverage остальных активных компонентов после успешного пилота.
 - [ ] Перевести maintenance и email-build workflows в структурированный формат и сравнить их обязательства с read-only архивным baseline без двойного контекста. Полное сквозное сравнение маршрутов остаётся этапу 13.
 - [ ] Подтвердить, что HTML зависит от фактического инстанса и component contract, а не design-time золотых правил.

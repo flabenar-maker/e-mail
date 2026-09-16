@@ -502,28 +502,66 @@ git commit -m "test: enforce rendered email invariants"
 
 ---
 
-### Package 10: Mobile/Desktop visual scenarios
+### Package 10: Client resilience и Mobile/Desktop visual scenarios
 
-Перед визуальным gate добавить Email/Header в пилотный renderer registry на основании его существующего точного контракта, проверить границу этого компонента и протестировать его рядом с уже покрытым Email/Footer. Это узкое дополнение пилота; остальное покрытие библиотеки остаётся пакету 11. Если для Header не хватает подтверждённого implementation-significant факта, остановиться на точечной проверке источника, не придумывая значение.
+Архитектура client resilience закреплена в [CUPIS Email Client Resilience Design](../specs/2026-09-16-cupis-email-client-resilience-design.md). Пошаговая реализация находится в [отдельном implementation plan](2026-09-16-cupis-email-client-resilience.md). Все подпакеты 10A–10D обязательны и выполняются последовательно; Package 11 не начинается до их завершения и финального visual gate.
 
-**Files:** create preview CLI, visual tests and deterministic Mobile/Desktop expected HTML fixtures; add narrow Header coverage and its tests.
+#### Package 10A: Exact policy and email model
 
-**Interfaces:** `node scripts/render-email-preview.mjs --model <fixture> --viewport mobile|desktop --output <temp-path>`.
+**Files:** rendering foundation/schema/loader; email model/schema; pilot fixtures and focused tests.
 
-- [ ] **Prerequisite:** добавить и проверить узкое pilot coverage Email/Header без расширения остальной библиотеки; Footer уже покрыт.
-- [ ] **Step 1:** expected fixtures содержат только system pilot, не production письмо.
-- [ ] **Step 2:** tests сравнивают declared widths, responsive classes, image ratios и Header/Footer composition; Card отдельно доказывает пропорциональную высоту.
-- [ ] **Step 3:** manual browser gate сравнивает временные Mobile/Desktop preview с pilot Figma variants, включая Header и Footer; screenshots не коммитятся.
-- [ ] **Step 4:** browser preview не подменяет Litmus/Email on Acid/CRM, которые остаются optional.
-- [ ] **Step 5:** проверить точный cloud SHA и опубликовать cloud commit.
+- [ ] Заменить неоднозначный `shell.min_width_px` на `min_supported_viewport_px: 300`, означающий ширину всего viewport.
+- [ ] Зафиксировать exclusive embedded CSS budget `16384`, текущую точную dark policy `none/none` и фактический Desktop baseline без embedded CSS.
+- [ ] Сделать `language`, `direction` и tagged alt semantics обязательными полями email model без renderer defaults.
+- [ ] Read-only аудитом доказать, что каждый rendered `direct-image` имеет `alt-text` capability; обнаруженный пробел становится blocker, а не автоматически созданным contract fact.
+- [ ] Выполнить focused schema/model tests и `npm run validate`.
+
+#### Package 10B: Renderer implementation
+
+**Files:** email renderer/interpreter/primitives; diagnostics; focused layout and invariant tests.
+
+- [ ] Вывести одинаковые `lang`/`dir` на `<html>` и внутреннем content wrapper.
+- [ ] Удалить неявный `props.alt ?? ""`; informative/decorative значение должно быть явно разрешено model validation.
+- [ ] Измерять UTF-8 bytes и блокировать совокупный embedded CSS при `>= 16384`; вернуть `html_bytes` и `embedded_css_bytes` как renderer metrics.
+- [ ] Вычислять внутренний minimum content width как `min_supported_viewport_px - 2 * horizontal_inset_px`; невозможная конфигурация блокирует сборку.
+- [ ] Не добавлять color-scheme meta/CSS, dark assets или отсутствующую в Figma графику.
+
+#### Package 10C: Automated and browser resilience
+
+**Files:** normal/no-style preview CLI, client-resilience tests, visual scenarios, узкое Email/Header coverage и pilot fixture.
+
+- [ ] Создать два представления одного HTML: normal и no-style; второе удаляет только `<style>` и ничего больше.
+- [ ] Проверить normal widths `300`, `320`, `360`, `600`, `659`, `660` и no-style widths `300`, `320`, `360`, `600`.
+- [ ] Перед visual gate добавить Email/Header в pilot renderer registry на основании существующего точного контракта; Email/Footer сохранить.
+- [ ] Убедиться в отсутствии horizontal scroll, деформации изображений и расхождений Mobile/Desktop geometry, spacing, visibility и text alignment.
+- [ ] Visual regression выполняет `gpt-5.6-terra` с reasoning `medium`; screenshots остаются временными и не коммитятся.
+- [ ] Browser preview не считается доказательством конкретного почтового клиента.
+
+#### Package 10D: Altcraft target-client evidence and decision
+
+**Files:** один evidence document после фактической отправки; rendering foundation меняется только по зафиксированному решению.
+
+- [ ] Доставить неизменённый пилот через Altcraft в мобильные приложения Яндекс Почты, Mail.ru и Gmail.
+- [ ] Для каждой проверки записать ОС, версию ОС, версию приложения, тип аккаунта, тему, responsive result, overflow, image proportions и читаемость.
+- [ ] Если embedded CSS применяется в материальных целевых сочетаниях, подтвердить текущий Desktop baseline.
+- [ ] Если существенный целевой клиент удаляет embedded CSS, отдельным commit реализовать и проверить Mobile-first baseline; hybrid допускается только после доказанного провала Mobile-first.
+- [ ] Если dark mode выявляет конкретный компонентный или asset defect, остановиться на impact report и отдельном Figma-разрешении; не исправлять дизайн внутри Package 10.
+
+#### Финальный visual gate Package 10
+
+- [ ] Expected fixtures содержат только system pilot, не production письмо.
+- [ ] Header и Footer присутствуют ровно один раз внутри Email/Template; внутренние компоненты не становятся самостоятельными body-блоками.
+- [ ] Tests сравнивают declared widths, responsive classes, image ratios и Header/Footer composition; Card отдельно доказывает пропорциональную высоту.
+- [ ] Выполнить fresh local checks на точном cloud SHA без GitHub Actions.
+- [ ] Опубликовать reviewable commits и отметить Package 10 завершённым только после 10A–10D.
 
 ```powershell
-node --test tests/rendering/visual-scenarios.test.mjs
+node --test tests/foundation/rendering-foundation.test.mjs tests/rendering/email-model.test.mjs tests/rendering/email-metrics.test.mjs tests/rendering/email-preview.test.mjs tests/rendering/client-resilience.test.mjs tests/rendering/visual-scenarios.test.mjs
+npm run generate:check
 npm run verify
 ```
 
 ---
-
 ### Package 11: Остальные active components
 
 **Files:** modify three component files, renderer registry, generated docs; create `all-components.test.mjs`.
