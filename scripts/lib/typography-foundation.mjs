@@ -10,7 +10,7 @@ const FIGMA_DESCRIPTION_GOVERNANCE_SUFFIX =
   "Стиль управляется централизованно; локальные переопределения запрещены.";
 
 export function formatTypographyMeasure(measure) {
-  return `${measure.value}${measure.unit === "percent" ? "%" : measure.unit}`;
+  return measure.value === 0 ? "0" : `${measure.value}${measure.unit === "percent" ? "%" : measure.unit}`;
 }
 
 export function renderFigmaTypographyDescription(style) {
@@ -18,7 +18,7 @@ export function renderFigmaTypographyDescription(style) {
 }
 
 function semanticIdentity(style) {
-  return `${style.viewport}\u0000${style.role}\u0000${style.variant}`;
+  return `${style.viewport}^@${style.role}^@${style.variant}`;
 }
 
 
