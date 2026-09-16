@@ -2,7 +2,7 @@
 
 Дата: 2026-09-10.
 
-Статус: архитектура согласована; реализация не начата.
+Статус: архитектура согласована; пакеты 1–9 реализованы, Package 10 расширен обязательным client-resilience контуром.
 
 ## 1. Назначение
 
@@ -150,6 +150,8 @@ Responsive-решение может относиться ко всему ком
 
 Стратегия не угадывается по внешнему сходству. Breakpoint берётся только из rendering foundation.
 
+Fallback без embedded CSS, минимальная поддерживаемая ширина, CSS budget, document metadata, alt semantics и dark-mode policy определены в [CUPIS Email Client Resilience Design](2026-09-16-cupis-email-client-resilience-design.md). Эти свойства проверяются до расширения coverage на остальные компоненты.
+
 Обязательные защиты:
 
 - обе версии разрешаются до рендеринга;
@@ -280,7 +282,7 @@ Litmus, Email on Acid и CRM-тесты остаются опциональны�
 7. Нормализованная модель, CLI и атомарная публикация.
 8. Render-impact digest и типизированная диагностика.
 9. Автоматические HTML- и контрактные проверки.
-10. Mobile/Desktop visual scenarios.
+10. Client resilience 10A–10D и затем Mobile/Desktop visual scenarios.
 11. Миграция остальных компонентов.
 12. Shadow comparison и перевод workflows без одновременной подачи legacy/new правил.
 
@@ -290,6 +292,7 @@ Figma, production-письма и maintenance skill не переключают�
 
 Этап завершён, когда:
 
+- Package 10A–10D завершены, target-client fallback выбран по Altcraft evidence и зафиксирован в rendering foundation;
 - все активные компоненты имеют renderer-ready contracts и coverage;
 - стандартные компоненты собираются общим интерпретатором;
 - исключения обоснованы и протестированы;
