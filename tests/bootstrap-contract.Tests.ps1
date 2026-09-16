@@ -203,14 +203,14 @@ try {
     Set-Content -LiteralPath (Join-Path $legacySkill 'skills/maintaining-cupis-email-system/SKILL.md') -Value 'duplicate'
     $legacySkillResult = Invoke-Verify $legacySkill
     Assert-True ($legacySkillResult.ExitCode -ne 0) 'Verifier must reject a legacy skill.'
-    Assert-True ($legacySkillResult.Output.Contains('legacy-skill-path')) 'Legacy skill must expose its diagnostic code.'
+    Assert-True ($legacySkillResult.Output.Contains('retired-skill-path')) 'Legacy skill must expose its diagnostic code.'
 
     $legacyManifest = Join-Path $tempRoot 'legacy-manifest'
     Copy-ContractFixture -Source $repoRoot -Destination $legacyManifest
     Set-Content -LiteralPath (Join-Path $legacyManifest 'bootstrap/manifest.yaml') -Value 'legacy: true'
     $legacyManifestResult = Invoke-Verify $legacyManifest
     Assert-True ($legacyManifestResult.ExitCode -ne 0) 'Verifier must reject the legacy manifest.'
-    Assert-True ($legacyManifestResult.Output.Contains('legacy-manifest-path')) 'Legacy manifest must expose its diagnostic code.'
+    Assert-True ($legacyManifestResult.Output.Contains('retired-manifest-path')) 'Legacy manifest must expose its diagnostic code.'
 
     $secretFixture = Join-Path $tempRoot 'secret-config'
     Copy-ContractFixture -Source $repoRoot -Destination $secretFixture
