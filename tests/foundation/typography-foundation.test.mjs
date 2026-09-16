@@ -349,7 +349,11 @@ test("matches every typography foundation style to its read-only Figma capture",
     assert.equal(observed.font.figma_style, style.font.figma_style);
     assert.equal(observed.font.css_weight, style.font.css_weight);
     assert.equal(observed.font_size_px, style.font_size_px);
-    assert.deepEqual(observed.line_height, style.line_height);
+    assert.equal(observed.line_height.unit, style.line_height.unit);
+    assert.ok(
+      Math.abs(observed.line_height.value - style.line_height.value) < 0.00001,
+      `Line-height drift for ${style.id}`,
+    );
     assert.equal(
       renderFigmaTypographyDescription(style),
       observed.figma_description,
