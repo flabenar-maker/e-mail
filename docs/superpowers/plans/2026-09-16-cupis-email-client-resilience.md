@@ -59,7 +59,7 @@ assert.deepEqual(rendering.responsive_fallback, {
 });
 ```
 
-Also assert rejection of `max_bytes_exclusive: 0`, an unknown color declaration, and the removed `shell.min_width_px`.
+Also assert rejection of `max_bytes_exclusive: 0`, an unknown color declaration, the removed `shell.min_width_px`, and `2 * horizontal_inset_px >= min_supported_viewport_px`. The cross-field error is `RENDERING_SHELL_VIEWPORT_IMPOSSIBLE` at `/shell/min_supported_viewport_px`.
 
 - [ ] **Step 2: Run the focused test and confirm RED**
 
@@ -92,7 +92,7 @@ responsive_fallback:
   validation: required-before-change
 ```
 
-Preserve all existing breakpoint, primitive, postprocessing and support-profile records unchanged. Update `SUPPORTED_RENDERING_VERSION` to `1.1.0`.
+In schema, `responsive_fallback.without_embedded_css` is enum `desktop|mobile-first|hybrid`, `responsive_fallback.validation` is enum `required-before-change|validated-current`, and both color-scheme properties currently accept only `none`. Preserve all existing breakpoint, primitive, postprocessing and support-profile records unchanged. Update `SUPPORTED_RENDERING_VERSION` to `1.1.0` and add the cross-field semantic diagnostic before renderer execution.
 
 - [ ] **Step 4: Run focused tests and validation**
 
@@ -174,7 +174,7 @@ Require at root:
 }
 ```
 
-Define `metadata.language` as a non-empty BCP 47-shaped string and `metadata.direction` as enum `ltr|rtl`. Define `alt-text` as a tagged union whose `informative` branch requires non-empty `value` and whose `decorative` branch requires `value` equal to `""`.
+Define `metadata.language` with the exact accepted-subset pattern `^[A-Za-z]{2,3}(?:-[A-Za-z0-9]{2,8})*$` and `metadata.direction` as enum `ltr|rtl`. Define `alt-text` as a tagged union whose `informative` branch requires `minLength: 1` and whose semantic validator rejects `value.trim().length === 0`; the `decorative` branch requires `value` equal to `""`.
 
 Update the model loader supported version to `1.1.0`. Keep plain text, URL, placeholder, number and rich-text branches unchanged.
 
@@ -510,7 +510,7 @@ git commit -m "test: add client resilience pilot scenarios"
 ### Task 8: Package 10D — Altcraft client evidence
 
 **Files:**
-- Create after actual delivery: `docs/qa/cupis-client-resilience-evidence-YYYY-MM-DD.md`
+- Create after actual delivery: `docs/qa/cupis-client-resilience-evidence.md`
 - Modify after decision: `data/foundations/rendering.yaml`
 - Test after decision: `tests/foundation/rendering-foundation.test.mjs`
 
@@ -604,7 +604,7 @@ Expected: PASS; generated docs are changed only if their canonical renderer inpu
 
 ```powershell
 git add core/email-rendering-standard.md docs/superpowers
- git commit -m "docs: complete client resilience package handoff"
+git commit -m "docs: complete client resilience package handoff"
 ```
 
 ---
