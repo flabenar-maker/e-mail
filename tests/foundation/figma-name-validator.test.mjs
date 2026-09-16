@@ -188,6 +188,54 @@ for (const [name, candidate, expectedCodes] of [
   });
 }
 
+test("atomic implementation geometry is outside semantic naming only under a confirmed boundary", async () => {
+  const naming = await canonicalNaming();
+  for (const candidate of [
+    { name: "Vector", nodeType: "VECTOR" },
+    { name: "Subtract", nodeType: "BOOLEAN_OPERATION" },
+    { name: "Rectangle 3946", nodeType: "RECTANGLE" },
+  ]) {
+    assert.deepEqual(validateFigmaName(naming, {
+      objectKind: "layer",
+      namingScope: "implementation-geometry",
+      parentSemanticBoundaryConfirmed: true,
+      ...candidate,
+    }), []);
+  }
+
+  assert.deepEqual(codes(validateFigmaName(naming, {
+    objectKind: "layer",
+    namingScope: "implementation-geometry",
+    parentSemanticBoundaryConfirmed: false,
+    nodeType: "VECTOR",
+    name: "Vector",
+  })), ["FIGMA_NAME_GEOMETRY_BOUNDARY_REQUIRED"]);
+  assert.deepEqual(codes(validateFigmaName(naming, {
+    objectKind: "layer",
+    namingScope: "implementation-geometry",
+    parentSemanticBoundaryConfirmed: true,
+    nodeType: "GROUP",
+    name: "Clip path group",
+  })), ["FIGMA_NAME_GEOMETRY_NODE_TYPE_INVALID"]);
+
+  assert.deepEqual(auditExistingFigmaName(naming, {
+    objectKind: "layer",
+    namingScope: "implementation-geometry",
+    parentSemanticBoundaryConfirmed: true,
+    nodeType: "VECTOR",
+    name: "Vector",
+  }), {
+    status: "observed",
+    object_kind: "layer",
+    name: "Vector",
+    naming_scope: "implementation-geometry",
+    syntax_status: "not-applicable",
+    semantic_status: "not-applicable",
+    diagnostics: [],
+    rename_proposal: null,
+  });
+});
+
 test("validator does not mutate the candidate or foundation", async () => {
   const naming = await canonicalNaming();
   const candidate = {

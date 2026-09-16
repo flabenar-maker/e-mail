@@ -27,8 +27,6 @@ test("non-normative Figma naming capture keeps exact roots, representatives, and
     capture.unresolved.map((record) => record.code),
     [
       "OBSERVED_FIGMA_LAYER_SEMANTIC_ROLE_UNPROVEN",
-      "OBSERVED_FIGMA_EXPORT_SUFFIX_MISMATCH",
-      "OBSERVED_FIGMA_LEGACY_DEFAULT_LAYER_NAME",
     ],
   );
   assert.deepEqual(
@@ -41,8 +39,14 @@ test("non-normative Figma naming capture keeps exact roots, representatives, and
     [
       ["internal", "hero-image @2x", "@2x", 2],
       ["component", "Asset/Feature-Icon @4x", "@4x", 4],
+      ["internal", "vk-icon @4x", "@4x", 4],
     ],
   );
+  assert.deepEqual(capture.implementation_geometry, [
+    { id: "531:14003", name: "Vector", node_type: "VECTOR", parent_semantic_boundary: "error-warning-line @4x" },
+    { id: "491:22346", name: "Subtract", node_type: "BOOLEAN_OPERATION", parent_semantic_boundary: "Icon/Receipt-Fill" },
+    { id: "13:344", name: "Rectangle 3946", node_type: "RECTANGLE", parent_semantic_boundary: "chevron-icon @4x" },
+  ]);
   assert.deepEqual(
     capture.components.find(
       (component) => component.id === "1084:16996",
