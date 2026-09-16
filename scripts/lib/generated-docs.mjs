@@ -286,6 +286,7 @@ function renderTypographyRegistry(model) {
       `### ${style.figma_name}`,
       "",
       `- Stable ID: ${inlineCode(style.id)}`,
+      `- Figma style ID: ${inlineCode(style.figma_style_id)}`,
       `- Viewport: ${inlineCode(style.viewport)}`,
       `- Role: ${inlineCode(style.role)}`,
       `- Variant: ${inlineCode(style.variant)}`,
