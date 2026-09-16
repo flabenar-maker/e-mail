@@ -184,6 +184,10 @@ test("generated references expose complete facts without mixing responsibilities
   assert.match(componentDoc, /Block\/Cards-Images/u);
 
   assert.match(typographyDoc, /Desktop\/Caption/u);
+  assert.match(
+    typographyDoc,
+    /Figma style ID: `S:4d43ca77a0bc52ca7e43f97a078a4d69cee87651,`/u,
+  );
   assert.match(typographyDoc, /Consumers/u);
   assert.match(typographyDoc, /Responsive pair/u);
 
