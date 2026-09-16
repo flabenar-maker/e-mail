@@ -194,7 +194,7 @@ try {
 
     $missingSource = Join-Path $tempRoot 'missing-source'
     Copy-ContractFixture -Source $repoRoot -Destination $missingSource
-    Remove-Item -LiteralPath (Join-Path $missingSource 'core/email-figma-prompt.md')
+    Remove-Item -LiteralPath (Join-Path $missingSource 'core/email-rendering-standard.md')
     $missingSourceResult = Invoke-Verify $missingSource
     Assert-True ($missingSourceResult.ExitCode -ne 0) 'Verifier must reject a missing declared source.'
     Assert-True ($missingSourceResult.Output.Contains('missing-declared-path')) 'Missing source must expose its diagnostic code.'
