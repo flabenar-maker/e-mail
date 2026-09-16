@@ -12,33 +12,13 @@ This package may change only the spacing foundation provenance, its schema/seman
 
 ## Directly confirmed role/viewports
 
-The capture contains a unique address for every `role_id` + viewport. The following roles have a direct node → field → variable chain in both viewports and are promoted from registry literals to exact Figma-variable provenance:
+The capture contains one unique address for every `role_id` + viewport. All 15 roles now have a direct node → exact field → FLOAT variable chain in both Mobile and Desktop. The three previously unresolved roles are confirmed as follows:
 
-- `self-horizontal-inset`
-- `surface-padding-primary`
-- `surface-padding-compact`
-- `section-stack-standard`
-- `collection-stack-spacious`
-- `visual-item-stack`
-- `details-row-stack`
-- `inline-peer-compact`
-- `text-stack-standard`
-- `text-stack-tight`
-- `asset-to-content-standard`
-- `asset-to-content-compact`
+- `outer-flow`: `Email/Header` root top padding owns the top-level block flow and is bound to `mobile/block-margin` / `desktop/block-margin`.
+- `common-horizontal-inset`: the ordinary block root itself owns its left/right inset; the structured owner is therefore `top-level-component-root`, matching `Block/Content` in both viewports.
+- `inline-peer-standard`: `Block/Transaction-Success` uses the same adaptive peer parent in Mobile and Desktop, bound to `mobile/content-gap` / `desktop/content-gap`.
 
-Every confirmed address records component/variant node, exact field path, raw four-side padding, item/counter-axis spacing, alignment, sizing and the bound FLOAT variable ID/name. The test compares the observation with the structured source through `foundation-evidence.mjs`.
-
-## Unresolved relationships
-
-These values remain unchanged and retain `registry-literal` provenance:
-
-- `outer-flow` (Mobile and Desktop): a standalone component’s top padding is observable, but the external relationship to the preceding email block is not represented inside that component.
-- `common-horizontal-inset` (Mobile and Desktop): the observed owner is the top-level component root, not the declared `email-shell`.
-- `inline-peer-standard` (Mobile and Desktop): a candidate row has the same number and a direct variable, but it does not prove the declared badge → details → status peer relationship.
-
-They are intentionally not marked reviewed or converted to Figma provenance. No number was inferred from a matching token.
-
+Every confirmed address records component/variant node, exact field path, raw four-side padding, item/counter-axis spacing, alignment, sizing and the bound FLOAT variable ID/name. The test compares each observation with the structured source through `foundation-evidence.mjs`. No spacing number changed.
 ## Build boundary
 
 A generated email context bundle receives only `{ value_px }` for a referenced spacing role. All `provenance` objects — including Figma node, ownership, relationship, candidates and capture data — are stripped before bundling. `email-interpreter.mjs` has no import or call to `spacing-foundation` or `resolveDesignSpacing`.

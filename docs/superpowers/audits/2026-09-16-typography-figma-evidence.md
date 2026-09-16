@@ -48,6 +48,6 @@ Status: evidence record only. The machine-checkable read-only capture is [`tests
 - `mobile-caption`: `Block/Cards-Images` (1), `Block/Icon-Cards` (1), `Email/Footer` (4), `Block/Steps` (1), `Block/Content` (1), `Block/Bullet-List` (1), `Email/Footer-Legal` (2), `Block/Icon-List` (1), `Block/Transaction-Error` (2), `Block/Personal-Data-Update` (2), `Block/Instruction-Steps` (1).
 - `mobile-action`: `Block/Cards-Images` (6), `Block/Icon-Cards` (6), `Banner/Hero` (1), `Block/Steps` (1), `Button/Secondary` (1), `Button/Primary` (1), `Block/Content` (1), `Banner/Secondary` (1), `Block/Bullet-List` (4), `Item/Bullet` (1), `Banner/App-Download` (4), `Card/Image` (1), `Block/Icon-List` (1), `Card/Icon` (1).
 
-## Open typed mismatch
+## Resolved typed evidence
 
-`desktop-heading-compact` has a direct Figma reading of `letterSpacing: { unit: "PIXELS", value: 0 }`. The structured foundation intentionally remains `letter_spacing: { unit: percent, value: 0 }` until the user decides whether to align the Figma style or the foundation representation. This is `FOUNDATION_EVIDENCE_MISMATCH` on `data/foundations/typography.yaml#/styles[id=desktop-heading-compact]/letter_spacing`: same numeric value, different unit. Do not treat it as verified. Accordingly, `foundation.source.verified_at` remains `2026-08-24` rather than being advanced by this capture.
+`desktop-heading-compact` is stored exactly as observed in Figma: `letterSpacing: { unit: "PIXELS", value: 0 }`. The structured foundation now uses `letter_spacing: { unit: px, value: 0 }`; the numeric value and unit both match. All 15 typography styles therefore have exact read-only Figma evidence, and `foundation.source.verified_at` is advanced to `2026-09-16`.
