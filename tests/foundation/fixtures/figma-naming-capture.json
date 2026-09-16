@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "captured_at": "2026-09-16T00:00:00+03:00",
+  "captured_at": "2026-09-16T20:44:06+03:00",
   "purpose": "Non-normative, read-only Figma naming evidence. It records observed names and does not authorize a rename or alter the naming foundation.",
   "file_key": "8zka5bHkcrJVK9I9dKjnhC",
   "roots": [
@@ -76,7 +76,15 @@
     },
     {
       "id": "17:2751",
-      "name": "Clip path group"
+      "name": "artwork",
+      "role_id": "artwork",
+      "semantic_category": "role"
+    },
+    {
+      "id": "261:4008",
+      "name": "artwork",
+      "role_id": "artwork",
+      "semantic_category": "role"
     }
   ],
   "asset_owners": [
@@ -119,13 +127,7 @@
       "export_suffix_authoritative": false
     }
   ],
-  "unresolved": [
-    {
-      "code": "OBSERVED_FIGMA_LAYER_SEMANTIC_ROLE_UNPROVEN",
-      "observed_name": "Clip path group",
-      "reason": "The read proves the exact name but not a controlled semantic role. Existing-name audit must not propose a rename."
-    }
-  ],
+  "unresolved": [],
   "implementation_geometry": [
     {
       "id": "531:14003",

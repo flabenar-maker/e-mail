@@ -18,10 +18,13 @@ An existing node is audited as observed. Syntax validity is useful evidence, but
 
 ## Semantic naming boundary
 
-Semantic naming applies to structural layers, properties, asset owners and meaningful containers. Atomic VECTOR, BOOLEAN_OPERATION, RECTANGLE, ELLIPSE, LINE, POLYGON or STAR geometry is outside that scope only when its parent semantic boundary is independently confirmed. Therefore the observed `Vector`, `Subtract` and `Rectangle 3946` nodes do not require individual semantic renames; they remain implementation geometry inside named assets.
+Semantic naming applies to structural layers, properties, asset owners and meaningful containers. Atomic VECTOR, BOOLEAN_OPERATION, RECTANGLE, ELLIPSE, LINE, POLYGON or STAR geometry is outside that scope only when its parent semantic boundary is independently confirmed. Therefore the observed `Vector`, `Subtract` and `Rectangle 3946` nodes do not require individual semantic names; they remain implementation geometry inside named assets.
 
-The exact unresolved set now contains one item:
+The two meaningful VK artwork containers were explicitly authorized and renamed in Figma:
 
-- `OBSERVED_FIGMA_LAYER_SEMANTIC_ROLE_UNPROVEN`: `Clip path group` is a GROUP that owns meaningful VK artwork, so it is not atomic geometry. Its intended controlled role must be confirmed before an explicitly authorized rename.
+- `17:2751`: `Clip path group` → `artwork`;
+- `261:4008`: `Clip path group` → `artwork`.
 
-No Figma node, component contract or export setting was changed by this package. The empty configured export suffix on `vk-icon @4x` is no longer treated as a naming mismatch because the required `@4x` marker already exists in the owner name.
+A separate readback confirmed that both nodes remain GROUPs under the same `vk-icon @4x` parents and preserve coordinates, dimensions, visibility, opacity, blend mode, mask state, export settings and the exact child IDs/names/types. The capture now has no unresolved naming observations.
+
+The empty configured export suffix on `vk-icon @4x` is not a naming mismatch because the required `@4x` marker already exists in the owner name. No component contract, geometry, hierarchy, Fill or export setting changed.
