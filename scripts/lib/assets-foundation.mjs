@@ -269,6 +269,91 @@ export function validateAssetsSemantics(assets) {
     );
   });
 
+  const exactContracts = [
+    [
+      "ASSETS_IMAGE_FILL_BOUNDARY_INVALID",
+      "/source_modes/image-fill/contract",
+      maps.source_modes.get("image-fill")?.contract,
+      {
+        source_content: "source-raster-only",
+        concrete_desktop_instance_required: true,
+        own_visible_fill_included: true,
+        visible_nested_graphics_included: false,
+        parent_fill_included: false,
+        unrelated_layout_included: false,
+        live_html_included: false,
+      },
+    ],
+    [
+      "ASSETS_RENDERED_NODE_BOUNDARY_INVALID",
+      "/source_modes/rendered-node/contract",
+      maps.source_modes.get("rendered-node")?.contract,
+      {
+        source_content: "exact-node-after-overrides",
+        concrete_desktop_instance_required: true,
+        own_visible_fill_included: true,
+        visible_nested_graphics_included: true,
+        parent_fill_included: false,
+        unrelated_layout_included: false,
+        live_html_included: false,
+      },
+    ],
+  ];
+  for (const [code, path, actual, expected] of exactContracts) {
+    if (!equal(actual, expected)) {
+      errors.push(diagnostic(code, path, "Asset-boundary rules must remain exact."));
+    }
+  }
+
+  const expectedDisplayContract = {
+    intrinsic_ratio_required: true,
+    mobile_width_behavior: "fluid-to-container",
+    mobile_height_behavior: "auto",
+    fixed_mobile_height_forbidden: true,
+    html_height_attribute_forbidden: true,
+    image_height_100_percent_forbidden: true,
+    deformation_forbidden: true,
+  };
+  for (const displayModeId of ["direct-image", "fill-image"]) {
+    const contract = maps.display_modes.get(displayModeId)?.contract;
+    const expected = {
+      ...expectedDisplayContract,
+      crop_owner: displayModeId === "direct-image" ? "none" : "html-wrapper",
+    };
+    if (!equal(contract, expected)) {
+      errors.push(diagnostic(
+        "ASSETS_DISPLAY_RATIO_GUARD_INVALID",
+        `/display_modes/${displayModeId}/contract`,
+        "Mobile image display must remain proportional and non-deforming.",
+      ));
+    }
+  }
+
+  if (!equal(assets?.background_policy, {
+    own_visible_boundary_fill: "preserve",
+    parent_fill: "exclude",
+    invisible_fill: "exclude",
+    artificial_matte: "forbid",
+  })) {
+    errors.push(diagnostic(
+      "ASSETS_BACKGROUND_BOUNDARY_INVALID",
+      "/background_policy",
+      "Asset export must preserve only visible owned fills and must not add a matte.",
+    ));
+  }
+
+  const identity = assets?.identity_policy;
+  if (!identity?.concrete_desktop_instance_required ||
+      !identity?.shared_mobile_desktop_file ||
+      !identity?.shared_mobile_desktop_src ||
+      !identity?.placeholder_forbidden ||
+      !identity?.main_component_export_forbidden) {
+    errors.push(diagnostic(
+      "ASSETS_CONCRETE_INSTANCE_GATE_INVALID",
+      "/identity_policy",
+      "Asset export must use the concrete Desktop instance and one shared file/src.",
+    ));
+  }
   errors.push(...findBuildChoiceFields(assets));
   return sortDiagnostics(errors);
 }
