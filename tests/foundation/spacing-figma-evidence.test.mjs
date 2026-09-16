@@ -110,6 +110,9 @@ test("unresolved Figma spacing relationships remain visibly unpromoted", async (
 });
 
 const CONFIRMED_ROLE_IDS = Object.freeze([
+  "outer-flow",
+  "common-horizontal-inset",
+  "inline-peer-standard",
   "self-horizontal-inset",
   "surface-padding-primary",
   "surface-padding-compact",
@@ -123,11 +126,8 @@ const CONFIRMED_ROLE_IDS = Object.freeze([
   "asset-to-content-standard",
   "asset-to-content-compact",
 ]);
-const UNRESOLVED_ROLE_IDS = Object.freeze([
-  "outer-flow",
-  "common-horizontal-inset",
-  "inline-peer-standard",
-]);
+const UNRESOLVED_ROLE_IDS = Object.freeze([]);
+
 const VIEWPORTS = Object.freeze(["mobile", "desktop"]);
 const REQUIRED_ADDRESS_KEYS = Object.freeze([
   "role_id",
@@ -256,6 +256,18 @@ test("only the exact unresolved spacing roles remain registry literals in both v
 
 
 const CONFIRMED_CAPTURE_EXPECTATIONS = Object.freeze({
+  "outer-flow": {
+    mobile: { node_id: "15:2037", variant: "Viewport=Mobile", field_path: "/paddingTop" },
+    desktop: { node_id: "230:3679", variant: "Viewport=Desktop", field_path: "/paddingTop" },
+  },
+  "common-horizontal-inset": {
+    mobile: { node_id: "11:861", variant: "Viewport=Mobile", field_path: "/paddingLeft" },
+    desktop: { node_id: "230:3770", variant: "Viewport=Desktop", field_path: "/paddingLeft" },
+  },
+  "inline-peer-standard": {
+    mobile: { node_id: "459:28003", variant: "Viewport=Mobile", field_path: "/itemSpacing" },
+    desktop: { node_id: "459:27423", variant: "Viewport=Desktop", field_path: "/itemSpacing" },
+  },
   "self-horizontal-inset": {
     mobile: { node_id: "15:599", variant: "Viewport=Mobile, Count=3", field_path: "/paddingLeft" },
     desktop: { node_id: "260:3974", variant: "Viewport=Desktop, Count=3", field_path: "/paddingLeft" },
