@@ -395,7 +395,7 @@ export function renderFigmaNamingReference(naming) {
       })),
       proposal_gate: "semantic-role-required",
       existing_name_audit: "syntax-valid is not semantic-confirmed",
-      scale_change: "requires a separate export-contract decision",      implementation_geometry: "not semantically renamed under a confirmed parent boundary",
+      scale_change: "requires a separate export-contract decision",      implementation_geometry: "not assigned a semantic name under a confirmed parent boundary",
 
     },
     null,
