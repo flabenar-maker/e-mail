@@ -16,13 +16,25 @@ roles:
       mobile:
         value_px: 16
         provenance:
-          kind: registry-literal
-          source_blob_sha: be2203aef82db093fca37857f060d552b254c579
+          kind: figma-variable
+          file_key: 8zka5bHkcrJVK9I9dKjnhC
+          evidence_node_id: 15:2037
+          field_path: /paddingTop
+          variable_id: VariableID:11:326
+          variable_name: mobile/block-margin
+          variable_resolved_type: FLOAT
+          captured_at: 2026-09-16T15:29:10+03:00
       desktop:
         value_px: 24
         provenance:
-          kind: registry-literal
-          source_blob_sha: be2203aef82db093fca37857f060d552b254c579
+          kind: figma-variable
+          file_key: 8zka5bHkcrJVK9I9dKjnhC
+          evidence_node_id: 230:3679
+          field_path: /paddingTop
+          variable_id: VariableID:510:20764
+          variable_name: desktop/block-margin
+          variable_resolved_type: FLOAT
+          captured_at: 2026-09-16T15:29:10+03:00
     evidence:
       - component: Email/Header
         relationship_path: root → logo
@@ -32,7 +44,7 @@ roles:
         relationship_path: previous block → footer root
   - id: common-horizontal-inset
     relationship: email-common-inset
-    owner: email-shell
+    owner: top-level-component-root
     purpose: Общий боковой inset обычных контентных блоков.
     applicability:
       - top-level
@@ -41,13 +53,25 @@ roles:
       mobile:
         value_px: 16
         provenance:
-          kind: registry-literal
-          source_blob_sha: be2203aef82db093fca37857f060d552b254c579
+          kind: figma-variable
+          file_key: 8zka5bHkcrJVK9I9dKjnhC
+          evidence_node_id: 11:861
+          field_path: /paddingLeft
+          variable_id: VariableID:11:326
+          variable_name: mobile/block-margin
+          variable_resolved_type: FLOAT
+          captured_at: 2026-09-16T15:29:10+03:00
       desktop:
         value_px: 24
         provenance:
-          kind: registry-literal
-          source_blob_sha: be2203aef82db093fca37857f060d552b254c579
+          kind: figma-variable
+          file_key: 8zka5bHkcrJVK9I9dKjnhC
+          evidence_node_id: 230:3770
+          field_path: /paddingLeft
+          variable_id: VariableID:510:20764
+          variable_name: desktop/block-margin
+          variable_resolved_type: FLOAT
+          captured_at: 2026-09-16T15:29:10+03:00
     evidence:
       - component: Block/Content
         relationship_path: email shell → block root
@@ -309,13 +333,25 @@ roles:
       mobile:
         value_px: 16
         provenance:
-          kind: registry-literal
-          source_blob_sha: be2203aef82db093fca37857f060d552b254c579
+          kind: figma-variable
+          file_key: 8zka5bHkcrJVK9I9dKjnhC
+          evidence_node_id: 459:28003
+          field_path: /itemSpacing
+          variable_id: VariableID:11:809
+          variable_name: mobile/content-gap
+          variable_resolved_type: FLOAT
+          captured_at: 2026-09-16T15:29:10+03:00
       desktop:
         value_px: 24
         provenance:
-          kind: registry-literal
-          source_blob_sha: be2203aef82db093fca37857f060d552b254c579
+          kind: figma-variable
+          file_key: 8zka5bHkcrJVK9I9dKjnhC
+          evidence_node_id: 459:27423
+          field_path: /itemSpacing
+          variable_id: VariableID:222:2304
+          variable_name: desktop/content-gap
+          variable_resolved_type: FLOAT
+          captured_at: 2026-09-16T15:29:10+03:00
     evidence:
       - component: Block/Transaction-Success
         relationship_path: badge → details → status
