@@ -43,9 +43,9 @@ function capturedFieldValue(address) {
     "/paddingBottom": 2,
     "/paddingLeft": 3,
   }[address.field_path];
-  return address.field_path === "/itemSpacing"
-    ? address.raw.itemSpacing
-    : address.raw.padding[paddingIndex];
+  if (address.field_path === "/itemSpacing") return address.raw.itemSpacing;
+  if (address.field_path === "/counterAxisSpacing") return address.raw.counterAxisSpacing;
+  return address.raw.padding[paddingIndex];
 }
 
 function observation(address, fixture) {
@@ -250,6 +250,88 @@ test("only the exact unresolved spacing roles remain registry literals in both v
       assert.equal(typeof address.reason, "string");
       assert.ok(address.reason.length > 0);
       assert.equal(role.resolutions[viewport].provenance.kind, "registry-literal");
+    }
+  }
+});
+
+
+const CONFIRMED_CAPTURE_EXPECTATIONS = Object.freeze({
+  "self-horizontal-inset": {
+    mobile: { node_id: "15:599", variant: "Viewport=Mobile, Count=3", field_path: "/paddingLeft" },
+    desktop: { node_id: "260:3974", variant: "Viewport=Desktop, Count=3", field_path: "/paddingLeft" },
+  },
+  "surface-padding-primary": {
+    mobile: { node_id: "11:773", variant: "Viewport=Mobile", field_path: "/paddingTop" },
+    desktop: { node_id: "230:3756", variant: "Viewport=Desktop", field_path: "/paddingTop" },
+  },
+  "surface-padding-compact": {
+    mobile: { node_id: "16:2734", variant: "Viewport=Mobile", field_path: "/paddingTop" },
+    desktop: { node_id: "260:562", variant: "Viewport=Desktop", field_path: "/paddingTop" },
+  },
+  "section-stack-standard": {
+    mobile: { node_id: "11:773", variant: "Viewport=Mobile", field_path: "/itemSpacing" },
+    desktop: { node_id: "230:3756", variant: "Viewport=Desktop", field_path: "/itemSpacing" },
+  },
+  "collection-stack-spacious": {
+    mobile: { node_id: "398:7599", variant: "Viewport=Mobile", field_path: "/itemSpacing" },
+    desktop: { node_id: "398:7571", variant: "Viewport=Desktop", field_path: "/itemSpacing" },
+  },
+  "visual-item-stack": {
+    mobile: { node_id: "398:7599", variant: "Viewport=Mobile", field_path: "/itemSpacing" },
+    desktop: { node_id: "398:7573", variant: "Viewport=Desktop", field_path: "/itemSpacing" },
+  },
+  "details-row-stack": {
+    mobile: { node_id: "502:24639", variant: "Viewport=Mobile", field_path: "/itemSpacing" },
+    desktop: { node_id: "502:24638", variant: "Viewport=Desktop", field_path: "/itemSpacing" },
+  },
+  "inline-peer-compact": {
+    mobile: { node_id: "17:2749", variant: "Viewport=Mobile", field_path: "/itemSpacing" },
+    desktop: { node_id: "261:4006", variant: "Viewport=Desktop", field_path: "/itemSpacing" },
+  },
+  "text-stack-standard": {
+    mobile: { node_id: "11:774", variant: "Viewport=Mobile", field_path: "/itemSpacing" },
+    desktop: { node_id: "230:3757", variant: "Viewport=Desktop", field_path: "/itemSpacing" },
+  },
+  "text-stack-tight": {
+    mobile: { node_id: "222:699", variant: "Viewport=Mobile", field_path: "/itemSpacing" },
+    desktop: { node_id: "234:577", variant: "Viewport=Desktop", field_path: "/itemSpacing" },
+  },
+  "asset-to-content-standard": {
+    mobile: { node_id: "459:28003", variant: "Viewport=Mobile", field_path: "/itemSpacing" },
+    desktop: { node_id: "459:27423", variant: "Viewport=Desktop", field_path: "/itemSpacing" },
+  },
+  "asset-to-content-compact": {
+    mobile: { node_id: "222:702", variant: "Viewport=Mobile", field_path: "/itemSpacing" },
+    desktop: { node_id: "234:580", variant: "Viewport=Desktop", field_path: "/itemSpacing" },
+  },
+});
+
+test("each confirmed capture proves the exact role semantics, variant, node, field, and value", async () => {
+  const [fixture, spacing] = await Promise.all([capture(), readStrictYaml(spacingPath)]);
+  assert.deepEqual(Object.keys(CONFIRMED_CAPTURE_EXPECTATIONS).sort(), [...CONFIRMED_ROLE_IDS].sort());
+
+  for (const roleId of CONFIRMED_ROLE_IDS) {
+    const role = spacing.roles.find(({ id }) => id === roleId);
+    assert.ok(role, roleId);
+    for (const viewport of VIEWPORTS) {
+      const address = capturedAddress(fixture, roleId, viewport);
+      const expectedAddress = CONFIRMED_CAPTURE_EXPECTATIONS[roleId][viewport];
+      assert.deepEqual(
+        {
+          node_id: address.node_id,
+          variant: address.variant,
+          field_path: address.field_path,
+        },
+        expectedAddress,
+        `${roleId}/${viewport}`,
+      );
+      assert.equal(address.relationship, role.relationship, `${roleId}/${viewport} relationship`);
+      assert.equal(address.owner, role.owner, `${roleId}/${viewport} owner`);
+      assert.equal(
+        capturedFieldValue(address),
+        role.resolutions[viewport].value_px,
+        `${roleId}/${viewport} exact ${address.field_path} value`,
+      );
     }
   }
 });
