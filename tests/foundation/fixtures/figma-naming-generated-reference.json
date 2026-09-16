@@ -1,0 +1,42 @@
+{
+  "generated_examples": [
+    {
+      "object_kind": "component",
+      "name": "Block/Cards-Images",
+      "applied_rule_ids": [
+        "component-pattern",
+        "namespace-block",
+        "title-kebab"
+      ]
+    },
+    {
+      "object_kind": "layer",
+      "name": "artwork",
+      "applied_rule_ids": [
+        "lower-kebab",
+        "controlled-layer-role"
+      ]
+    },
+    {
+      "object_kind": "asset-owner",
+      "name": "feature-image @2x",
+      "applied_rule_ids": [
+        "asset-owner",
+        "lower-kebab",
+        "preserve-@2x"
+      ]
+    },
+    {
+      "object_kind": "asset-owner",
+      "name": "Asset/Feature-Icon @4x",
+      "applied_rule_ids": [
+        "asset-owner",
+        "lower-kebab",
+        "preserve-@4x"
+      ]
+    }
+  ],
+  "proposal_gate": "semantic-role-required",
+  "existing_name_audit": "syntax-valid is not semantic-confirmed",
+  "scale_change": "requires a separate export-contract decision"
+}

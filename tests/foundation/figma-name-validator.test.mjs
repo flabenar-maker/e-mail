@@ -4,7 +4,11 @@ import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { loadFigmaNamingFoundation } from "../../scripts/lib/figma-naming-foundation.mjs";
-import { validateFigmaName } from "../../scripts/lib/figma-name-validator.mjs";
+import {
+  auditExistingFigmaName,
+  validateFigmaName,
+  validateFigmaNameProposal,
+} from "../../scripts/lib/figma-name-validator.mjs";
 
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 
@@ -198,4 +202,80 @@ test("validator does not mutate the candidate or foundation", async () => {
 
   assert.deepEqual(naming, beforeNaming);
   assert.deepEqual(candidate, beforeCandidate);
+});
+
+test("existing-name audit keeps a syntax-valid observed layer out of rename scope when its role is unproven", async () => {
+  const naming = await canonicalNaming();
+  const result = auditExistingFigmaName(naming, {
+    objectKind: "layer",
+    name: "artwork",
+  });
+
+  assert.deepEqual(result, {
+    status: "observed",
+    object_kind: "layer",
+    name: "artwork",
+    syntax_status: "valid",
+    semantic_status: "unresolved",
+    diagnostics: ["semantic-role-required"],
+    rename_proposal: null,
+  });
+});
+
+test("syntax-valid layers with an unknown or prohibited category cannot become confirmed proposals", async () => {
+  const naming = await canonicalNaming();
+
+  const unknown = validateFigmaNameProposal(naming, {
+    objectKind: "layer",
+    name: "custom-decoration",
+    roleId: "custom-decoration",
+  });
+  const prohibited = validateFigmaNameProposal(naming, {
+    objectKind: "layer",
+    name: "blue-background",
+    roleId: "background",
+    semanticCategory: "color",
+  });
+  const missing = validateFigmaNameProposal(naming, {
+    objectKind: "layer",
+    name: "background",
+  });
+
+  assert.deepEqual(codes(unknown), ["semantic-role-required"]);
+  assert.deepEqual(codes(prohibited), ["FIGMA_NAME_PROHIBITED_SEMANTIC_CATEGORY"]);
+  assert.deepEqual(codes(missing), ["semantic-role-required"]);
+});
+
+test("validator distinguishes the two asset-owner kinds and requires a preserved existing scale for proposals", async () => {
+  const naming = await canonicalNaming();
+
+  assert.deepEqual(
+    validateFigmaNameProposal(naming, {
+      objectKind: "asset-owner",
+      assetOwnerKind: "internal",
+      name: "feature-image @2x",
+      existingName: "hero-image @2x",
+    }),
+    [],
+  );
+  assert.deepEqual(
+    validateFigmaNameProposal(naming, {
+      objectKind: "asset-owner",
+      assetOwnerKind: "component",
+      name: "Asset/Feature-Icon @4x",
+      existingName: "Asset/Bank-Badge @4x",
+    }),
+    [],
+  );
+  assert.deepEqual(
+    codes(
+      validateFigmaNameProposal(naming, {
+        objectKind: "asset-owner",
+        assetOwnerKind: "component",
+        name: "Asset/Feature-Icon @2x",
+        existingName: "Asset/Bank-Badge @4x",
+      }),
+    ),
+    ["FIGMA_NAME_SCALE_SUFFIX_MISMATCH"],
+  );
 });
