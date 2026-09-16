@@ -145,13 +145,13 @@ test("a changed capture field or unresolved code is detected", async () => {
   const alteredGeometry = structuredClone(evidence);
   alteredGeometry.representatives.find((item) => item.id === "hero-image-fill-jpeg-direct").live_figma.geometry.width = 551;
   assert.throws(() => assert.deepEqual(Object.fromEntries(alteredGeometry.representatives.map((item) => [item.id, projection(item)])), expectedRepresentatives));
-  const alteredCode = structuredClone(evidence);
-  alteredCode.unresolved[0].codes = ["RENAMED_CODE"];
-  assert.throws(() => assert.deepEqual(alteredCode.unresolved, expectedUnresolved));
-  const emptyCode = structuredClone(evidence);
-  emptyCode.unresolved[0].codes = [];
-  assert.throws(() => assert.deepEqual(emptyCode.unresolved, expectedUnresolved));
-  const missingCode = structuredClone(evidence);
-  missingCode.unresolved = missingCode.unresolved.filter((item) => item.record_id !== "concrete-desktop-instance-overrides");
-  assert.throws(() => assert.deepEqual(missingCode.unresolved, expectedUnresolved));
+  const alteredProfileAuthority = structuredClone(evidence);
+  alteredProfileAuthority.representatives[0].final_output_profile.source = "figma-export-settings";
+  assert.throws(() => assert.deepEqual(
+    alteredProfileAuthority.representatives[0].final_output_profile,
+    evidence.representatives[0].final_output_profile,
+  ));
+  const missingGate = structuredClone(evidence);
+  missingGate.build_time_gates = [];
+  assert.throws(() => assert.deepEqual(missingGate.build_time_gates, [expectedGate]));
 });
