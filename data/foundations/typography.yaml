@@ -3,8 +3,8 @@ foundation:
   id: typography
   source:
     figma_file_key: 8zka5bHkcrJVK9I9dKjnhC
-    page_node_id: "5:6"
-    verified_at: "2026-08-24"
+    page_node_id: 5:6
+    verified_at: 2026-08-24
 styles:
   - id: desktop-display
     figma_name: Desktop/Display
@@ -16,10 +16,14 @@ styles:
       figma_style: Bold
       css_weight: 700
     font_size_px: 32
-    line_height: { unit: percent, value: 120 }
-    letter_spacing: { unit: percent, value: 0 }
-    figma_description: >-
-      Главный выразительный текст Desktop для Hero-заголовка и крупного результата операции. Не использовать как обычный заголовок блока или карточки. Пара: Mobile/Display. Roboto Bold, 32px, line-height 120%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.
+    line_height:
+      unit: percent
+      value: 120
+    letter_spacing:
+      unit: percent
+      value: 0
+    figma_style_id: S:4d43ca77a0bc52ca7e43f97a078a4d69cee87651,
+    figma_description_semantics: "Главный выразительный текст Desktop для Hero-заголовка и крупного результата операции. Не использовать как обычный заголовок блока или карточки. Пара: Mobile/Display."
   - id: desktop-heading
     figma_name: Desktop/Heading
     viewport: desktop
@@ -30,10 +34,14 @@ styles:
       figma_style: SemiBold
       css_weight: 600
     font_size_px: 26
-    line_height: { unit: percent, value: 120 }
-    letter_spacing: { unit: percent, value: 0 }
-    figma_description: >-
-      Основной заголовок самостоятельного контентного блока в Desktop. Не использовать для Hero или заголовка карточки. Пара: Mobile/Heading. Roboto SemiBold, 26px, line-height 120%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.
+    line_height:
+      unit: percent
+      value: 120
+    letter_spacing:
+      unit: percent
+      value: 0
+    figma_style_id: S:2d908d3c1b5ff810b297f4a37aac1ab4161bbdb5,
+    figma_description_semantics: "Основной заголовок самостоятельного контентного блока в Desktop. Не использовать для Hero или заголовка карточки. Пара: Mobile/Heading."
   - id: desktop-title
     figma_name: Desktop/Title
     viewport: desktop
@@ -44,10 +52,14 @@ styles:
       figma_style: Medium
       css_weight: 500
     font_size_px: 20
-    line_height: { unit: percent, value: 120 }
-    letter_spacing: { unit: percent, value: 0 }
-    figma_description: >-
-      Заголовок карточки или внутренней сущности в Desktop, включая имя партнёра и локальный результат внутри блока. Не использовать как заголовок самостоятельного блока. Пара: Mobile/Title. Roboto Medium, 20px, line-height 120%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.
+    line_height:
+      unit: percent
+      value: 120
+    letter_spacing:
+      unit: percent
+      value: 0
+    figma_style_id: S:105e0e8a189848d91c13bf0f2887665713de21ca,
+    figma_description_semantics: "Заголовок карточки или внутренней сущности в Desktop, включая имя партнёра и локальный результат внутри блока. Не использовать как заголовок самостоятельного блока. Пара: Mobile/Title."
   - id: desktop-heading-compact
     figma_name: Desktop/Heading/Compact
     viewport: desktop
@@ -58,10 +70,14 @@ styles:
       figma_style: SemiBold
       css_weight: 600
     font_size_px: 20
-    line_height: { unit: percent, value: 120 }
-    letter_spacing: { unit: percent, value: 0 }
-    figma_description: >-
-      Компактный заголовок Desktop для ограниченного текстового контейнера; сейчас используется в Banner/Secondary. Не заменять обычным Desktop/Heading без проверки макета и контракта компонента. Мобильная роль: Mobile/Heading. Roboto SemiBold, 20px, line-height 120%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.
+    line_height:
+      unit: percent
+      value: 120
+    letter_spacing:
+      unit: percent
+      value: 0
+    figma_style_id: S:19f62229647b1872179c0b08e87bc09081f758ec,
+    figma_description_semantics: "Компактный заголовок Desktop для ограниченного текстового контейнера; сейчас используется в Banner/Secondary. Не заменять обычным Desktop/Heading без проверки макета и контракта компонента. Мобильная роль: Mobile/Heading."
   - id: desktop-body-large
     figma_name: Desktop/Body/Large
     viewport: desktop
@@ -72,10 +88,14 @@ styles:
       figma_style: Regular
       css_weight: 400
     font_size_px: 18
-    line_height: { unit: percent, value: 140 }
-    letter_spacing: { unit: percent, value: 0 }
-    figma_description: >-
-      Основной или акцентный содержательный текст в Desktop. Использовать для заметного текста блока; не применять к плотным подписям и значениям только ради увеличения размера. Основная мобильная пара: Mobile/Body/Large. Roboto Regular, 18px, line-height 140%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.
+    line_height:
+      unit: percent
+      value: 140
+    letter_spacing:
+      unit: percent
+      value: 0
+    figma_style_id: S:2dbbae937ad03f37307425810b92a1abedcfb705,
+    figma_description_semantics: "Основной или акцентный содержательный текст в Desktop. Использовать для заметного текста блока; не применять к плотным подписям и значениям только ради увеличения размера. Основная мобильная пара: Mobile/Body/Large."
   - id: desktop-body-medium
     figma_name: Desktop/Body/Medium
     viewport: desktop
@@ -86,10 +106,14 @@ styles:
       figma_style: Regular
       css_weight: 400
     font_size_px: 16
-    line_height: { unit: percent, value: 140 }
-    letter_spacing: { unit: percent, value: 0 }
-    figma_description: >-
-      Плотный информационный и вспомогательный текст в Desktop: подписи, значения и описания внутри компонентов. Не использовать как Caption или CTA. Основная мобильная пара: Mobile/Body/Medium; точный выбор задаёт контракт компонента. Roboto Regular, 16px, line-height 140%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.
+    line_height:
+      unit: percent
+      value: 140
+    letter_spacing:
+      unit: percent
+      value: 0
+    figma_style_id: S:0eb6b02f56ee5f02f09611af5a13a41b6121e78d,
+    figma_description_semantics: "Плотный информационный и вспомогательный текст в Desktop: подписи, значения и описания внутри компонентов. Не использовать как Caption или CTA. Основная мобильная пара: Mobile/Body/Medium; точный выбор задаёт контракт компонента."
   - id: desktop-caption
     figma_name: Desktop/Caption
     viewport: desktop
@@ -100,10 +124,14 @@ styles:
       figma_style: Regular
       css_weight: 400
     font_size_px: 14
-    line_height: { unit: percent, value: 140 }
-    letter_spacing: { unit: percent, value: 0 }
-    figma_description: >-
-      Вспомогательный, предупреждающий и юридический текст в Desktop: дисклеймеры, сроки действия и второстепенные пояснения. Не использовать для основного содержательного текста. Пара: Mobile/Caption. Roboto Regular, 14px, line-height 140%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.
+    line_height:
+      unit: percent
+      value: 140
+    letter_spacing:
+      unit: percent
+      value: 0
+    figma_style_id: S:3d171f9763dcbcd3a181c50411d876e67e072e75,
+    figma_description_semantics: "Вспомогательный, предупреждающий и юридический текст в Desktop: дисклеймеры, сроки действия и второстепенные пояснения. Не использовать для основного содержательного текста. Пара: Mobile/Caption."
   - id: desktop-action
     figma_name: Desktop/Action
     viewport: desktop
@@ -114,10 +142,14 @@ styles:
       figma_style: Medium
       css_weight: 500
     font_size_px: 16
-    line_height: { unit: percent, value: 140 }
-    letter_spacing: { unit: percent, value: 0 }
-    figma_description: >-
-      CTA-текст в Desktop внутри Primary/Secondary-кнопок и самостоятельных action-ссылок. Не применять к обычной inline-ссылке внутри Body-текста только из-за кликабельности. Пара: Mobile/Action. Roboto Medium, 16px, line-height 140%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.
+    line_height:
+      unit: percent
+      value: 140
+    letter_spacing:
+      unit: percent
+      value: 0
+    figma_style_id: S:80178ed95ee94439436fb7ea36e3eb926f986be2,
+    figma_description_semantics: "CTA-текст в Desktop внутри Primary/Secondary-кнопок и самостоятельных action-ссылок. Не применять к обычной inline-ссылке внутри Body-текста только из-за кликабельности. Пара: Mobile/Action."
   - id: mobile-display
     figma_name: Mobile/Display
     viewport: mobile
@@ -128,10 +160,14 @@ styles:
       figma_style: Bold
       css_weight: 700
     font_size_px: 20
-    line_height: { unit: percent, value: 120 }
-    letter_spacing: { unit: percent, value: 0 }
-    figma_description: >-
-      Главный выразительный текст Mobile для Hero-заголовка и крупного результата операции. Не использовать как обычный заголовок блока или карточки. Пара: Desktop/Display. Roboto Bold, 20px, line-height 120%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.
+    line_height:
+      unit: percent
+      value: 120
+    letter_spacing:
+      unit: percent
+      value: 0
+    figma_style_id: S:ca236b65a83eef2e55e95564b051765d4fbe7c60,
+    figma_description_semantics: "Главный выразительный текст Mobile для Hero-заголовка и крупного результата операции. Не использовать как обычный заголовок блока или карточки. Пара: Desktop/Display."
   - id: mobile-heading
     figma_name: Mobile/Heading
     viewport: mobile
@@ -142,10 +178,14 @@ styles:
       figma_style: SemiBold
       css_weight: 600
     font_size_px: 18
-    line_height: { unit: percent, value: 120 }
-    letter_spacing: { unit: percent, value: 0 }
-    figma_description: >-
-      Основной заголовок самостоятельного контентного блока в Mobile. В Banner/Secondary также выполняет мобильную роль компактного заголовка. Не использовать для Hero или заголовка карточки. Основная пара: Desktop/Heading. Roboto SemiBold, 18px, line-height 120%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.
+    line_height:
+      unit: percent
+      value: 120
+    letter_spacing:
+      unit: percent
+      value: 0
+    figma_style_id: S:31421a8c479c960e9e5fcdf32b0717960340b772,
+    figma_description_semantics: "Основной заголовок самостоятельного контентного блока в Mobile. В Banner/Secondary также выполняет мобильную роль компактного заголовка. Не использовать для Hero или заголовка карточки. Основная пара: Desktop/Heading."
   - id: mobile-title
     figma_name: Mobile/Title
     viewport: mobile
@@ -156,10 +196,14 @@ styles:
       figma_style: Medium
       css_weight: 500
     font_size_px: 16
-    line_height: { unit: percent, value: 120 }
-    letter_spacing: { unit: percent, value: 0 }
-    figma_description: >-
-      Заголовок карточки или внутренней сущности в Mobile, включая имя партнёра и локальный результат внутри блока. Не использовать как заголовок самостоятельного блока. Пара: Desktop/Title. Roboto Medium, 16px, line-height 120%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.
+    line_height:
+      unit: percent
+      value: 120
+    letter_spacing:
+      unit: percent
+      value: 0
+    figma_style_id: S:348cad38e7e2918d2bc09859e1c0ac3f9b5afbb0,
+    figma_description_semantics: "Заголовок карточки или внутренней сущности в Mobile, включая имя партнёра и локальный результат внутри блока. Не использовать как заголовок самостоятельного блока. Пара: Desktop/Title."
   - id: mobile-body-large
     figma_name: Mobile/Body/Large
     viewport: mobile
@@ -170,10 +214,14 @@ styles:
       figma_style: Regular
       css_weight: 400
     font_size_px: 14
-    line_height: { unit: percent, value: 140 }
-    letter_spacing: { unit: percent, value: 0 }
-    figma_description: >-
-      Основной содержательный текст и значения в Mobile. Использовать для основной читаемой информации блока; не применять к Caption или CTA. Основная desktop-пара: Desktop/Body/Large; точный выбор задаёт контракт компонента. Roboto Regular, 14px, line-height 140%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.
+    line_height:
+      unit: percent
+      value: 140
+    letter_spacing:
+      unit: percent
+      value: 0
+    figma_style_id: S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,
+    figma_description_semantics: "Основной содержательный текст и значения в Mobile. Использовать для основной читаемой информации блока; не применять к Caption или CTA. Основная desktop-пара: Desktop/Body/Large; точный выбор задаёт контракт компонента."
   - id: mobile-body-medium
     figma_name: Mobile/Body/Medium
     viewport: mobile
@@ -184,10 +232,14 @@ styles:
       figma_style: Regular
       css_weight: 400
     font_size_px: 12
-    line_height: { unit: percent, value: 140 }
-    letter_spacing: { unit: percent, value: 0 }
-    figma_description: >-
-      Компактный информационный и вспомогательный текст в Mobile. Использовать только там, где компоненту нужен более плотный уровень Body; не подменять им Caption. Основная desktop-пара: Desktop/Body/Medium; точный выбор задаёт контракт компонента. Roboto Regular, 12px, line-height 140%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.
+    line_height:
+      unit: percent
+      value: 140
+    letter_spacing:
+      unit: percent
+      value: 0
+    figma_style_id: S:8ad84dd262e81c148a758758a15bb9b15e8f30fe,
+    figma_description_semantics: "Компактный информационный и вспомогательный текст в Mobile. Использовать только там, где компоненту нужен более плотный уровень Body; не подменять им Caption. Основная desktop-пара: Desktop/Body/Medium; точный выбор задаёт контракт компонента."
   - id: mobile-caption
     figma_name: Mobile/Caption
     viewport: mobile
@@ -198,10 +250,14 @@ styles:
       figma_style: Regular
       css_weight: 400
     font_size_px: 12
-    line_height: { unit: percent, value: 140 }
-    letter_spacing: { unit: percent, value: 0 }
-    figma_description: >-
-      Вспомогательный, предупреждающий и юридический текст в Mobile: дисклеймеры, сроки действия и второстепенные пояснения. Не использовать как Mobile/Body/Medium только из-за совпадения параметров. Пара: Desktop/Caption. Roboto Regular, 12px, line-height 140%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.
+    line_height:
+      unit: percent
+      value: 140
+    letter_spacing:
+      unit: percent
+      value: 0
+    figma_style_id: S:374419cb8d39f8db69f1e4fa2fd20dcdc72abcce,
+    figma_description_semantics: "Вспомогательный, предупреждающий и юридический текст в Mobile: дисклеймеры, сроки действия и второстепенные пояснения. Не использовать как Mobile/Body/Medium только из-за совпадения параметров. Пара: Desktop/Caption."
   - id: mobile-action
     figma_name: Mobile/Action
     viewport: mobile
@@ -212,10 +268,14 @@ styles:
       figma_style: Medium
       css_weight: 500
     font_size_px: 14
-    line_height: { unit: percent, value: 140 }
-    letter_spacing: { unit: percent, value: 0 }
-    figma_description: >-
-      CTA-текст в Mobile внутри Primary/Secondary-кнопок, store-кнопок и самостоятельных action-ссылок. Не применять к обычной inline-ссылке внутри Body-текста только из-за кликабельности. Пара: Desktop/Action. Roboto Medium, 14px, line-height 140%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.
+    line_height:
+      unit: percent
+      value: 140
+    letter_spacing:
+      unit: percent
+      value: 0
+    figma_style_id: S:780f997658bfc56dc4db512b20c92d16c415c3f3,
+    figma_description_semantics: "CTA-текст в Mobile внутри Primary/Secondary-кнопок, store-кнопок и самостоятельных action-ссылок. Не применять к обычной inline-ссылке внутри Body-текста только из-за кликабельности. Пара: Desktop/Action."
 responsive_pairs:
   - id: display
     role: display
