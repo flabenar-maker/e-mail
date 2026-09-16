@@ -42,9 +42,14 @@ async function expand(relativePath) {
 }
 console.log(JSON.stringify([...new Set((await Promise.all(declaredPaths.map(expand))).flat())].sort()));
 "@
-    $output = & $node.Source --input-type=module --eval $program $Root 2>&1 | Out-String
-    if ($LASTEXITCODE -ne 0) { throw "Could not derive fixture files from manifest:`n$output" }
-    [string[]](ConvertFrom-Json $output)
+    Push-Location -LiteralPath $Root
+    try {
+        $output = & $node.Source --input-type=module --eval $program $Root 2>&1 | Out-String
+        if ($LASTEXITCODE -ne 0) { throw "Could not derive fixture files from manifest:`n$output" }
+        [string[]](ConvertFrom-Json $output)
+    } finally {
+        Pop-Location
+    }
 }
 function Assert-True {
     param([bool]$Condition, [string]$Message)
