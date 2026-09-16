@@ -244,7 +244,7 @@ test("typography registry derives the Figma description from semantic text and f
   delete style.figma_description;
   style.figma_description_semantics =
     "Главный выразительный текст Desktop для Hero-заголовка и крупного результата операции. Не использовать как обычный заголовок блока или карточки. Пара: Mobile/Display.";
-  style.figma_style_id = "S:test-display,";
+  style.figma_style_id = "S:testdisplay,";
   style.font_size_px = 33;
   style.font.figma_style = "Medium";
   style.line_height = { unit: "px", value: 30 };
