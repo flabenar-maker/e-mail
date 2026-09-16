@@ -24,7 +24,8 @@ function Get-ManifestFixtureFilePaths {
     param([string]$Root)
     $node = Get-Command node -ErrorAction Stop
     $program = @"
-import { lstat, readdir, readFile } from "node:fs/promises";`nimport { createRequire } from "node:module";
+import { lstat, readdir, readFile } from "node:fs/promises";
+import { createRequire } from "node:module";
 import { join, relative, resolve } from "node:path";
 const require = createRequire(join(resolve(process.argv[2]), "package.json"));`nconst { parse } = require("yaml");
 const root = resolve(process.argv[1]);
