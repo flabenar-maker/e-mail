@@ -149,9 +149,7 @@ try {
         Assert-True (-not (Test-Path -LiteralPath (Join-Path $readOnlyFixture $archivedPath))) "Fixture must not copy archived path: $archivedPath."
     }
     $actualFixtureFiles = Get-FixtureRelativeFilePaths $readOnlyFixture
-    Assert-True (($actualFixtureFiles -join "
-") -eq (($fixtureFiles | Sort-Object) -join "
-")) 'Fixture must copy only active manifest sources and bootstrap assertions.'
+    Assert-True (($actualFixtureFiles -join "`n") -eq (($fixtureFiles | Sort-Object) -join "`n")) 'Fixture must copy only active manifest sources and bootstrap assertions.'
     $beforeHash = Get-FixtureHash $readOnlyFixture
     $firstRun = Invoke-Verify $readOnlyFixture
     $secondRun = Invoke-Verify $readOnlyFixture
