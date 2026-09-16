@@ -16,7 +16,10 @@
     "foundation": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "source"],
+      "required": [
+        "id",
+        "source"
+      ],
       "properties": {
         "id": {
           "const": "typography"
@@ -55,7 +58,11 @@
     "source": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["figma_file_key", "page_node_id", "verified_at"],
+      "required": [
+        "figma_file_key",
+        "page_node_id",
+        "verified_at"
+      ],
       "properties": {
         "figma_file_key": {
           "$ref": "#/$defs/nonEmptyString"
@@ -73,7 +80,11 @@
     "font": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["family", "figma_style", "css_weight"],
+      "required": [
+        "family",
+        "figma_style",
+        "css_weight"
+      ],
       "properties": {
         "family": {
           "$ref": "#/$defs/nonEmptyString"
@@ -92,10 +103,16 @@
     "measure": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["unit", "value"],
+      "required": [
+        "unit",
+        "value"
+      ],
       "properties": {
         "unit": {
-          "enum": ["percent", "px"]
+          "enum": [
+            "percent",
+            "px"
+          ]
         },
         "value": {
           "type": "number"
@@ -105,10 +122,16 @@
     "positiveMeasure": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["unit", "value"],
+      "required": [
+        "unit",
+        "value"
+      ],
       "properties": {
         "unit": {
-          "enum": ["percent", "px"]
+          "enum": [
+            "percent",
+            "px"
+          ]
         },
         "value": {
           "type": "number",
@@ -122,6 +145,7 @@
       "required": [
         "id",
         "figma_name",
+        "figma_style_id",
         "viewport",
         "role",
         "variant",
@@ -129,7 +153,7 @@
         "font_size_px",
         "line_height",
         "letter_spacing",
-        "figma_description"
+        "figma_description_semantics"
       ],
       "properties": {
         "id": {
@@ -139,13 +163,28 @@
           "$ref": "#/$defs/nonEmptyString"
         },
         "viewport": {
-          "enum": ["desktop", "mobile"]
+          "enum": [
+            "desktop",
+            "mobile"
+          ]
         },
         "role": {
-          "enum": ["display", "heading", "title", "body", "caption", "action"]
+          "enum": [
+            "display",
+            "heading",
+            "title",
+            "body",
+            "caption",
+            "action"
+          ]
         },
         "variant": {
-          "enum": ["default", "compact", "large", "medium"]
+          "enum": [
+            "default",
+            "compact",
+            "large",
+            "medium"
+          ]
         },
         "font": {
           "$ref": "#/$defs/font"
@@ -160,7 +199,11 @@
         "letter_spacing": {
           "$ref": "#/$defs/measure"
         },
-        "figma_description": {
+        "figma_style_id": {
+          "type": "string",
+          "pattern": "^S:[A-Za-z0-9]+,$"
+        },
+        "figma_description_semantics": {
           "$ref": "#/$defs/nonEmptyString"
         }
       }
@@ -168,13 +211,25 @@
     "responsivePair": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "role", "desktop_style_id", "mobile_style_id"],
+      "required": [
+        "id",
+        "role",
+        "desktop_style_id",
+        "mobile_style_id"
+      ],
       "properties": {
         "id": {
           "$ref": "#/$defs/id"
         },
         "role": {
-          "enum": ["display", "heading", "title", "body", "caption", "action"]
+          "enum": [
+            "display",
+            "heading",
+            "title",
+            "body",
+            "caption",
+            "action"
+          ]
         },
         "desktop_style_id": {
           "$ref": "#/$defs/id"
