@@ -43,6 +43,32 @@ function Get-FixtureRelativeFilePaths {
         } |
         Sort-Object
 }
+function Get-ManifestFixtureFilePaths {
+    param([string]$Root)
+    $node = Get-Command node -ErrorAction Stop
+    $program = @"
+import { lstat, readdir, readFile } from "node:fs/promises";
+import { join, relative, resolve } from "node:path";
+import { parse } from "yaml";
+const root = resolve(process.argv[1]);
+const manifest = parse(await readFile(join(root, "system/manifest.yaml"), "utf8"));
+const declaredPaths = [manifest.entrypoints.repository, manifest.entrypoints.bootstrap, ...manifest.sources.map(({ path }) => path), manifest.bootstrap.portable_config, manifest.bootstrap.verifier, ...manifest.skills.required.map(({ path }) => path), "AGENTS.md", ".gitattributes"];
+async function expand(relativePath) {
+  const absolutePath = resolve(root, relativePath);
+  const stat = await lstat(absolutePath);
+  if (stat.isFile()) return [relative(root, absolutePath).replaceAll("\\", "/")];
+  const entries = await readdir(absolutePath, { withFileTypes: true });
+  return (await Promise.all(entries.map(async (entry) => {
+    const entryPath = join(absolutePath, entry.name);
+    return entry.isDirectory() ? expand(relative(root, entryPath)) : [relative(root, entryPath).replaceAll("\\", "/")];
+  }))).flat();
+}
+console.log(JSON.stringify([...new Set((await Promise.all(declaredPaths.map(expand))).flat())].sort()));
+"@
+    $output = & $node.Source --input-type=module --eval $program $Root 2>&1 | Out-String
+    if ($LASTEXITCODE -ne 0) { throw "Could not derive fixture files from manifest:`n$output" }
+    [string[]](ConvertFrom-Json $output)
+}
 function Assert-True {
     param([bool]$Condition, [string]$Message)
     if (-not $Condition) { throw $Message }
@@ -149,7 +175,26 @@ try {
         Assert-True (-not (Test-Path -LiteralPath (Join-Path $readOnlyFixture $archivedPath))) "Fixture must not copy archived path: $archivedPath."
     }
     $actualFixtureFiles = Get-FixtureRelativeFilePaths $readOnlyFixture
-    Assert-True (($actualFixtureFiles -join "`n") -eq (($fixtureFiles | Sort-Object) -join "`n")) 'Fixture must copy only active manifest sources and bootstrap assertions.'
+    $expectedFixtureFiles = Get-ManifestFixtureFilePaths $repoRoot
+    Assert-True (($actualFixtureFiles -join "`n") -eq ($expectedFixtureFiles -join "`n")) 'Fixture must copy only active manifest sources and bootstrap assertions.'
+
+    $manifestDrivenSource = Join-Path $tempRoot 'manifest-driven-source'
+    Copy-ContractFixture -Source $repoRoot -Destination $manifestDrivenSource
+    $manifestOnlySource = 'docs/superpowers/plans/2026-08-24-cupis-structured-system-foundation.md'
+    $manifestOnlyDestination = Join-Path $manifestDrivenSource $manifestOnlySource
+    New-Item -ItemType Directory -Path (Split-Path -Parent $manifestOnlyDestination) -Force | Out-Null
+    Copy-Item -LiteralPath (Join-Path $repoRoot $manifestOnlySource) -Destination $manifestOnlyDestination
+    $manifestPath = Join-Path $manifestDrivenSource 'system/manifest.yaml'
+    $manifestContent = Get-Content -Raw -LiteralPath $manifestPath
+    Set-Content -NoNewline -LiteralPath $manifestPath -Value ($manifestContent.Replace(
+        'sources:',
+        "sources:`n  - { id: fixture-manifest-source, kind: core, path: $manifestOnlySource }"
+    ))
+    $manifestDrivenFixture = Join-Path $tempRoot 'manifest-driven-fixture'
+    Copy-ContractFixture -Source $manifestDrivenSource -Destination $manifestDrivenFixture
+    $manifestDrivenActual = Get-FixtureRelativeFilePaths $manifestDrivenFixture
+    $manifestDrivenExpected = Get-ManifestFixtureFilePaths $manifestDrivenSource
+    Assert-True (($manifestDrivenActual -join "`n") -eq ($manifestDrivenExpected -join "`n")) 'Fixture must derive active source files from the manifest.'
     $beforeHash = Get-FixtureHash $readOnlyFixture
     $firstRun = Invoke-Verify $readOnlyFixture
     $secondRun = Invoke-Verify $readOnlyFixture
