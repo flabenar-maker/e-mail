@@ -87,6 +87,11 @@ layer_names:
       pattern: "^(?:Wrapper|Container)(?: [0-9]+)?$"
   forbidden_categories:
     [color, size, padding, gap, position, state, html-tag, viewport]
+  implementation_geometry:
+    parent_semantic_boundary_required: true
+    semantic_name_required: false
+    node_types:
+      [VECTOR, BOOLEAN_OPERATION, RECTANGLE, ELLIPSE, LINE, POLYGON, STAR]
 
 asset_owners:
   internal_pattern: "<semantic-name> @<scale>x"
@@ -118,5 +123,4 @@ organizational_names:
 provenance:
   baseline_commit: d2211556368b82d750152c94be0c646945e19b49
   comparison_sources:
-    - core/figma-component-naming-standard.md
     - docs/superpowers/specs/2026-08-24-cupis-structured-email-system-design.md

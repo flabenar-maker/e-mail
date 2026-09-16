@@ -142,6 +142,20 @@ test("component traversal uses library order and stable ids", async () => {
   }
 });
 
+test("canonical manifest generates the full component registry", async () => {
+  const manifest = await readStrictYaml(join(repoRoot, "system/manifest.yaml"));
+  const rendered = await renderAllGeneratedDocs({ repoRoot, manifest });
+  const content = contentAt(rendered, "docs/generated/component-registry.md");
+
+  assert.match(content, /Block\/Cards-Images/u);
+  assert.match(content, /source-digest: sha256:[0-9a-f]{64}/u);
+  const registries = await loadComponentRegistries({ repoRoot });
+  assert.equal(
+    (content.match(/^## /gmu) ?? []).length,
+    listComponentRecords(registries).length,
+  );
+});
+
 test("all generated references share a deterministic provenance header", async () => {
   const first = await renderCanonical();
   const second = await renderCanonical();
@@ -167,14 +181,13 @@ test("generated references expose complete facts without mixing responsibilities
   const assetDoc = contentAt(rendered, "docs/generated/asset-registry.md");
   const namingDoc = contentAt(rendered, "docs/generated/naming-reference.md");
 
-  assert.match(componentDoc, /61 component records/u);
-  assert.match(componentDoc, /banner-secondary/u);
-  assert.match(componentDoc, /Icon\/Bank-Card-2-Line/u);
-  assert.match(componentDoc, /Auxiliary Figma Description/u);
-  assert.match(componentDoc, /CUPIS ID: banner-secondary/u);
-  assert.match(componentDoc, /No standalone output contract/u);
+  assert.match(componentDoc, /Block\/Cards-Images/u);
 
   assert.match(typographyDoc, /Desktop\/Caption/u);
+  assert.match(
+    typographyDoc,
+    /Figma style ID: `S:4d43ca77a0bc52ca7e43f97a078a4d69cee87651,`/u,
+  );
   assert.match(typographyDoc, /Consumers/u);
   assert.match(typographyDoc, /Responsive pair/u);
 
@@ -204,7 +217,7 @@ test("each generated source digest changes when one declared input changes", asy
 
   const baseline = await renderCanonical(fixture.root);
   const cases = [
-    ["data/components/shared.yaml", "docs/generated/component-registry.md"],
+    ["data/components/marketing.yaml", "docs/generated/component-registry.md"],
     ["data/foundations/typography.yaml", "docs/generated/typography-registry.md"],
     ["data/foundations/assets.yaml", "docs/generated/asset-registry.md"],
     ["data/foundations/figma-naming.yaml", "docs/generated/naming-reference.md"],
@@ -219,6 +232,40 @@ test("each generated source digest changes when one declared input changes", asy
   }
 });
 
+test("typography registry derives the Figma description from semantic text and fields", async (t) => {
+  const fixture = await createSystemFixture();
+  t.after(fixture.cleanup);
+  await Promise.all(
+    canonicalSystemFixtureFiles.map((path) =>
+      copyFixtureFile(repoRoot, fixture.root, path),
+    ),
+  );
+
+  const typography = await readStrictYaml(
+    join(fixture.root, "data/foundations/typography.yaml"),
+  );
+  const style = typography.styles.find(({ id }) => id === "desktop-display");
+  delete style.figma_description;
+  style.figma_description_semantics =
+    "Главный выразительный текст Desktop для Hero-заголовка и крупного результата операции. Не использовать как обычный заголовок блока или карточки. Пара: Mobile/Display.";
+  style.figma_style_id = "S:testdisplay,";
+  style.font_size_px = 33;
+  style.font.figma_style = "Medium";
+  style.line_height = { unit: "px", value: 30 };
+  style.letter_spacing = { unit: "px", value: 1 };
+  style.figma_name = "Desktop/Display/Test";
+  await writeFixtureFile(
+    fixture.root,
+    "data/foundations/typography.yaml",
+    `${JSON.stringify(typography, null, 2)}\n`,
+  );
+
+  const rendered = await renderCanonical(fixture.root);
+  const content = contentAt(rendered, "docs/generated/typography-registry.md");
+  assert.match(content, /### Desktop\/Display\/Test/u);
+  assert.match(content, /Roboto Medium, 33px, line-height 30px, letter-spacing 1px/u);
+  assert.doesNotMatch(content, /Roboto Bold, 32px, line-height 120%, letter-spacing 0/u);
+});
 test("generated comparison reports missing and stale files by exact path", async (t) => {
   const fixture = await createSystemFixture();
   t.after(fixture.cleanup);
@@ -261,7 +308,7 @@ test("generated comparison reports missing and stale files by exact path", async
     [],
   );
 
-  const stalePath = "docs/generated/component-registry.md";
+  const stalePath = "docs/generated/typography-registry.md";
   await appendFile(join(fixture.root, stalePath), "manual edit\n", "utf8");
   assert.deepEqual(
     (await compareGeneratedDocs({ repoRoot: fixture.root, rendered })).map(

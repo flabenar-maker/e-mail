@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: asset-registry -->
-<!-- source-digest: sha256:fe762e6baff69c4ddbbaaa4c3026d5c779c557c6ca79acde7e5177e76065d5f6 -->
+<!-- source-digest: sha256:81f5fcc01f32ef5f7afaef999a5eb5c7544cfabee5cb91007b130a26d104f736 -->
 <!-- schema-versions: components=2.1.0, assets=1.0.0 -->
 # CUPIS asset registry
 
@@ -346,6 +346,17 @@ General export definitions are listed first. Component-specific choices remain o
 }
 ```
 
+### figma-export-setting-non-authoritative
+
+- Stable ID: `figma-export-setting-non-authoritative`
+- Definition:
+
+```json
+{
+  "statement": "Configured Figma export settings are observational helpers; the selected foundation export profile owns final format, scale, suffix, color space and quality."
+}
+```
+
 ### intrinsic-ratio-preserved
 
 - Stable ID: `intrinsic-ratio-preserved`
@@ -592,6 +603,14 @@ General export definitions are listed first. Component-specific choices remain o
 
 ### email-footer
 
+- `email-footer` → `telegram-icon @4x` → `rendered-node` → `direct-image` → `png-4x` → `transparent`
+  - Asset contract ID: `telegram-icon`
+  - Export boundary: `node` / `telegram-icon @4x`
+  - Pixel dimensions: 168×168px
+  - Aspect ratio: 42:42
+  - Crop: `none`; position `exact-node-after-overrides`
+  - Background: own visible boundary fill `preserve`; artificial matte `forbid`
+  - Clipping policy: `preserve-artwork`
 - `email-footer` → `vk-icon @4x` → `rendered-node` → `direct-image` → `png-4x` → `transparent`
   - Asset contract ID: `vk-icon`
   - Export boundary: `node` / `vk-icon @4x`
@@ -718,19 +737,27 @@ General export definitions are listed first. Component-specific choices remain o
 
 ### banner-fiscal-check-link
 
-- `banner-fiscal-check-link` → `bank-badge @4x` → `rendered-node` → `direct-image` → `png-4x` → `transparent`
-  - Asset contract ID: `bank-badge`
-  - Export boundary: `node` / `bank-badge @4x`
-  - Pixel dimensions: 192×192px
-  - Aspect ratio: 48:48
-  - Crop: `none`; position `exact-node-after-overrides`
-  - Background: own visible boundary fill `preserve`; artificial matte `forbid`
-  - Clipping policy: `preserve-artwork`
 - `banner-fiscal-check-link` → `chevron-icon @4x` → `rendered-node` → `direct-image` → `png-4x` → `transparent`
   - Asset contract ID: `chevron-icon`
   - Export boundary: `node` / `chevron-icon @4x`
   - Pixel dimensions: 96×96px
   - Aspect ratio: 24:24
+  - Crop: `none`; position `exact-node-after-overrides`
+  - Background: own visible boundary fill `preserve`; artificial matte `forbid`
+  - Clipping policy: `preserve-artwork`
+- `banner-fiscal-check-link` → `fns-badge @4x` → `rendered-node` → `direct-image` → `png-4x` → `transparent`
+  - Asset contract ID: `fns-badge`
+  - Export boundary: `node` / `fns-badge @4x`
+  - Pixel dimensions: 192×192px
+  - Aspect ratio: 48:48
+  - Crop: `none`; position `exact-node-after-overrides`
+  - Background: own visible boundary fill `preserve`; artificial matte `forbid`
+  - Clipping policy: `preserve-artwork`
+- `banner-fiscal-check-link` → `ofd-badge @4x` → `rendered-node` → `direct-image` → `png-4x` → `transparent`
+  - Asset contract ID: `ofd-badge`
+  - Export boundary: `node` / `ofd-badge @4x`
+  - Pixel dimensions: 192×192px
+  - Aspect ratio: 48:48
   - Crop: `none`; position `exact-node-after-overrides`
   - Background: own visible boundary fill `preserve`; artificial matte `forbid`
   - Clipping policy: `preserve-artwork`

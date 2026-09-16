@@ -1,5 +1,7 @@
 # CUPIS Spacing Foundation Implementation Plan
 
+> **Исторический implementation plan.** Реализован в [PR #25](https://github.com/flabenar-maker/e-mail/pull/25). Команды, пути и чекбоксы ниже описывают выполнение того этапа, а не текущий рабочий маршрут: старый контур находится в Legacy/, маршруты остановлены, проверки теперь локальные. Для продолжения использовать свежие manifest и [roadmap](2026-08-25-cupis-migration-roadmap.md).
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:subagent-driven-development` (recommended) or `superpowers:executing-plans` to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Derive, prove and encode one semantic spacing system that exactly explains the current CUPIS email libraries and gives Codex an unambiguous rule for creating future components without giving HTML builds any freedom to choose spacing values.

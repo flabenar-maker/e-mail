@@ -1,4 +1,5 @@
-import { renderContractTree } from "./email-interpreter.mjs";
+import { renderContractTree, selectVariantRoot } from "./email-interpreter.mjs";
+import { renderPrimitive } from "./email-primitives.mjs";
 import {
   buildRenderImpactProjection,
   digestRenderImpact,
@@ -117,7 +118,7 @@ function prepareElement({
   const prepared = structuredClone(element);
   prepared.id = scopedId(instancePath, originalId);
 
-  let visible = true;
+  let visible = prepared.visibility?.mode === "instance" ? prepared.visibility.default_visible : true;
   if (prepared.visibility?.mode === "property") {
     const propertyId = prepared.visibility.property_id;
     const value = propertyValue(instance, propertyId, viewport);
@@ -217,8 +218,18 @@ function prepareElement({
         ),
       );
     } else {
+      const inferredAxes = Object.fromEntries((element.facts ?? [])
+        .filter(({ id, value }) => id.startsWith("instance-") && id !== "instance-viewport" && typeof value?.value === "string")
+        .map(({ id, value }) => [id.slice("instance-".length).replace(/^./u, (letter) => letter.toUpperCase()), value.value]));
+      const childInstance = Object.keys(inferredAxes).length === 0 ? nested.instance : {
+        ...nested.instance,
+        variant_axes: {
+          ...(nested.instance.variant_axes ?? {}),
+          [viewport]: { ...inferredAxes, ...(nested.instance.variant_axes?.[viewport] ?? {}) },
+        },
+      };
       const child = prepareInstance({
-        instance: nested.instance,
+        instance: childInstance,
         expectedComponentId: element.component_id,
         viewport,
         path: `${path}/nested`,
@@ -228,7 +239,15 @@ function prepareElement({
         rendererRegistry,
         componentIndex,
       });
-      if (child) prepared.children.push(child);
+      if (child) {
+        const instanceSizing = element.facts?.find(({ id }) => id === "horizontal-sizing")?.value?.value;
+        if (instanceSizing === "fill") {
+          child.facts = child.facts?.map((fact) => fact.id === "horizontal-sizing"
+            ? { ...fact, value: { ...fact.value, value: "fill" } }
+            : fact);
+        }
+        prepared.children.push(child);
+      }
     }
   }
 
@@ -327,7 +346,12 @@ function prepareInstance({
     }
   }
 
-  const root = record.contracts?.[viewport]?.root;
+  const selection = selectVariantRoot(record, viewport, instance.variant_axes?.[viewport] ?? {});
+  for (const item of selection.diagnostics) {
+    accumulator.diagnostics.push({ ...item, path: `${path}${item.path}` });
+  }
+  if (selection.diagnostics.length > 0) return null;
+  const root = selection.root;
   if (!root) {
     accumulator.diagnostics.push(
       diagnostic(
@@ -482,10 +506,23 @@ export function renderEmailDocument(model, dependencies) {
     };
   }
 
+  const shell = dependencies?.foundations?.rendering?.shell;
+  if (!shell) {
+    return {
+      html: "",
+      assets: rendered.assets,
+      diagnostics: [diagnostic(
+        "RENDER_EMAIL_SHELL_MISSING",
+        "/foundations/rendering/shell",
+        "The canonical email shell is missing.",
+      )],
+    };
+  }
   const style = rendered.css ? `<style>${rendered.css}</style>` : "";
   const metadata = buildMetadataComment(model, dependencies);
+  const body = renderPrimitive("email-shell", shell, rendered.html);
   return {
-    html: `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${metadata}${style}</head><body>${rendered.html}</body></html>`,
+    html: `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${metadata}${style}</head><body style="margin:0;padding:0">${body}</body></html>`,
     assets: rendered.assets,
     diagnostics: [],
   };

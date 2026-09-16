@@ -6,19 +6,31 @@
 
 **Architecture:** Фактические Mobile/Desktop-инстансы сначала разрешаются в зарегистрированные component contracts и временную типизированную модель. Общий contract-tree interpreter собирает большинство компонентов через email-примитивы; renderer registry явно фиксирует покрытие, а отдельный handler допускается только для доказанного исключения. Точный breakpoint, primitive policy и postprocessing policy принадлежат rendering foundation; финальная локальная публикация атомарно создаёт только `email.html` и `images/`.
 
-**Tech Stack:** Node.js 24, ECMAScript modules (`.mjs`), YAML 2.9.0, AJV 8.20.0, JSON Schema Draft 2020-12, `node:test`, GitHub Actions; без нового runtime framework и без сетевого доступа из renderer CLI.
+**Tech Stack:** Node.js 24, ECMAScript modules (`.mjs`), YAML 2.9.0, AJV 8.20.0, JSON Schema Draft 2020-12, `node:test`; без нового runtime framework и без сетевого доступа из renderer CLI.
 
 **Spec:** `docs/superpowers/specs/2026-09-10-cupis-html-rendering-design.md`.
+
+## Фактический статус на 2026-09-15
+
+Пакеты 1–9 слиты в main через PR #50–58; PR #59 исправил пилотный Mobile/Desktop layout. В main есть пилотное техническое ядро: foundation, шесть записей renderer coverage, примитивы, interpreter, модель, CLI, атомарная публикация, diagnostics и автоматические HTML-инварианты. Это не готовый маршрут сборки произвольного production-письма: для CLI ещё нужна подготовленная временная модель, а покрытие остальных компонентов не закончено.
+
+PR #61–64 — корректирующая Figma-сверка и уточнение контрактов после неубедительного пилотного результата. Они слиты, но не заменяют проверки пакетов 10–12. Email/Footer находится в пилотном coverage, Email/Header пока отсутствует и не должен незаметно считаться протестированным.
+
+Открытый [PR #60](https://github.com/flabenar-maker/e-mail/pull/60) содержит только read-only исследование внешних email-практик, а не реализацию viewport preview. Изучение источников проведено; тест готового письма в Яндекс Почте, Mail.ru и Gmail и обсуждение выводов ещё впереди. PR #60 не является gate-прохождением пакета 10 и не разрешает правку текущих контрактов.
+
+[PR #66](https://github.com/flabenar-maker/e-mail/pull/66) дополнительно исправил оболочку пилота и границу Mobile/Desktop. [PR #69](https://github.com/flabenar-maker/e-mail/pull/69) временно вынес старый контур в `Legacy/` и остановил все маршруты; [PR #70](https://github.com/flabenar-maker/e-mail/pull/70) адаптировал тесты. Этот перенос не завершил shadow comparison и не разрешает использовать архивный контур для сборки. [PR #71](https://github.com/flabenar-maker/e-mail/pull/71) вернул полный generated component registry и его проверку в `main`; это отдельная починка документационного слоя, не закрывающая пакеты 10–12.
+
+Следующая работа: сначала диагностически проверить HTML, который реально создаёт обновлённый пилот, и отделить недостаток данных модели/контракта от ошибки renderer code. Перед визуальным gate пакета 10 добавить узкое coverage для Email/Header и проверить Header вместе с уже покрытым Email/Footer. Исследование PR #60 рассматривается отдельно перед принятием новых правил и не блокирует диагностику пилота; без доказанного расхождения не менять Core, contracts или renderer. Подробные checkbox-шаги ниже сохраняют исходную спецификацию реализации, а не отражают факт merge; актуальный статус пакетов указан в таблице.
 
 ## Global Constraints
 
 - Перед каждым пакетом закрепить свежий `main`, перечитать manifest, roadmap, spec и этот plan на одном SHA.
 - Один пакет выполняется в отдельной `codex/<semantic-slug>` branch и draft PR; следующий начинается только после review и merge предыдущего.
-- Не использовать локальный checkout как канонический источник. Постоянные изменения публикуются через облачный GitHub.
+- Не использовать локальный checkout как канонический источник. Постоянные изменения публикуются через облачный GitHub; временный изолированный снимок точного SHA допускается только для локальных проверок.
 - Не изменять Figma, Figma Description, component properties, variants, geometry или assets в технических пакетах. Неясный факт разрешается read-only проверкой; Figma mutation требует отдельной задачи и impact gate.
 - Не добавлять в репозиторий production `email.html`, `images/`, реальные письма, временные модели, экспортированные assets или screenshots конкретной рассылки.
-- До финального shadow comparison не изменять действующие `bundle_profiles[].source_ids`, `routes[].bundle_profile_id` и repo-scoped maintenance skill.
-- Legacy `core/email-figma-prompt.md`, Markdown registries и Markdown workflows сохраняются как comparison baseline до отдельного общего cutover.
+- До отдельного cutover сохранять текущие остановленные `bundle_profiles[].source_ids`, `routes[].bundle_profile_id` и repo-scoped maintenance skill. Старый active source list до PR #69 является историческим baseline, а не требованием повторно активировать его.
+- Прежние Core prompt, Markdown registries и workflows хранятся в `Legacy/` только как read-only comparison baseline до отдельной ревизии после cutover; они не входят в runtime bundle.
 - Один факт имеет одного владельца: rendering foundation не копирует typography, spacing, assets или component facts; renderer code не хранит размеры и контент компонентов.
 - Spacing golden rule не вызывается при HTML-сборке. Renderer получает только точные факты resolved contract.
 - Figma Description не входит в email-build input.
@@ -28,27 +40,27 @@
 - Нельзя исправлять сгенерированный NEW BUILD вручную как штатный путь. Ошибка исправляется в contract, foundation, recipe или renderer, затем письмо пересобирается.
 - CONTINUE/FIX остаётся отдельным режимом и всегда работает в новой локальной версии папки.
 - Все diagnostics используют стабильные code/path/message и сортируются детерминированно.
-- Никакой пакет не считается завершённым до свежих `npm run verify`, Windows bootstrap check и allowed-diff проверки.
+- В ходе пакета выполнять локальные проверки затронутой области. Перед слиянием изменений кода или контрактов один раз запускать `npm run verify` на точном финальном SHA; для документационной правки достаточно применимых validation, link и scope checks. Windows-проверка выполняется, когда она относится к изменению. GitHub Actions и PR Checks не служат доказательством качества.
 - Merge выполняется только по отдельной команде пользователя.
 
 ---
 
 ## Карта реализации
 
-| Пакет | Результат | Gate перед следующим |
-|---:|---|---|
-| 1 | Characterization baseline и readiness-аудит | Подтверждены реальные gaps без изменения runtime |
-| 2 | Rendering foundation и schema | Общие исполняемые определения валидируются |
-| 3 | Renderer registry, content slots и pilot contracts | Шесть пилотных компонентов renderer-ready |
-| 4 | Разделённый Core | Нет semantic loss и дублей structured definitions |
-| 5 | Email-примитивы и interpreter | Contract tree рендерится без component-specific HTML |
-| 6 | Representative pilot | Шесть типов проходят Mobile/Desktop проверки |
-| 7 | Временная модель, CLI и атомарный output | Ошибка не повреждает прежний результат |
-| 8 | Render-impact digest и diagnostics | Документация не инвалидирует renderer |
-| 9 | Автоматическая проверка | Property branches и HTML invariants покрыты |
-| 10 | Visual scenarios | Mobile/Desktop geometry подтверждена на пилоте |
-| 11 | Все активные компоненты | Readiness/coverage blockers равны нулю |
-| 12 | Structured workflows и shadow comparison | Новый маршрут готов к Stage 9 без двойного контекста |
+| Пакет | Результат | Исходный gate перед следующим | Фактический статус |
+|---:|---|---|---|
+| 1 | Characterization baseline и readiness-аудит | Подтверждены реальные gaps без изменения runtime | Слит: [PR #50](https://github.com/flabenar-maker/e-mail/pull/50) |
+| 2 | Rendering foundation и schema | Общие исполняемые определения валидируются | Слит: [PR #51](https://github.com/flabenar-maker/e-mail/pull/51) |
+| 3 | Renderer registry, content slots и pilot contracts | Шесть пилотных компонентов renderer-ready | Слит: [PR #52](https://github.com/flabenar-maker/e-mail/pull/52); факты дополнительно уточнены в PR #61–64 |
+| 4 | Разделённый Core | Нет semantic loss и дублей structured definitions | Слит: [PR #53](https://github.com/flabenar-maker/e-mail/pull/53) |
+| 5 | Email-примитивы и interpreter | Contract tree рендерится без component-specific HTML | Слит: [PR #54](https://github.com/flabenar-maker/e-mail/pull/54) |
+| 6 | Representative pilot | Шесть типов проходят Mobile/Desktop проверки | Код слит: [PR #55](https://github.com/flabenar-maker/e-mail/pull/55); layout скорректирован в PR #59, визуальное доказательство ещё требуется |
+| 7 | Временная модель, CLI и атомарный output | Ошибка не повреждает прежний результат | Слит: [PR #56](https://github.com/flabenar-maker/e-mail/pull/56) |
+| 8 | Render-impact digest и diagnostics | Документация не инвалидирует renderer | Слит: [PR #57](https://github.com/flabenar-maker/e-mail/pull/57) |
+| 9 | Автоматическая проверка | Property branches и HTML invariants покрыты | Слит: [PR #58](https://github.com/flabenar-maker/e-mail/pull/58) |
+| 10 | Visual scenarios, включая Email/Header и Email/Footer | Фактический HTML и Mobile/Desktop geometry подтверждены; Header добавлен в pilot coverage до visual gate | Не завершён; Footer уже покрыт, Header отсутствует; PR #60 не содержит реализации preview |
+| 11 | Остальные активные компоненты | Readiness/coverage blockers равны нулю после пакета 10 | Не начат как пакет покрытия; PR #61–64 уточнили факты, но coverage остаётся пилотным |
+| 12 | Structured workflows и workflow-level comparison | Workflows готовы к Stage 9 без двойного контекста; сквозное сравнение остаётся этапу 13 | Не начат |
 
 ## Целевая карта файлов
 
@@ -101,10 +113,8 @@
 
 ### Сохранить до отдельного cutover
 
-- `core/email-figma-prompt.md`
-- `registry/*.md`
-- `workflows/*.md`
-- `.agents/skills/**`
+- Архивные версии Core prompt, registries, workflows и checkpoints в `Legacy/` как read-only baseline.
+- Текущие остановленные routes и repo-scoped maintenance skill — до отдельного решения о переключении.
 - Figma и production-письма.
 
 ---
@@ -478,7 +488,7 @@ git commit -m "feat: protect renderer compatibility with impact digests"
 
 ### Package 9: Автоматические HTML и property checks
 
-**Files:** create `html-invariants.test.mjs`; extend pilot tests; modify test command/CI only if needed.
+**Files:** create `html-invariants.test.mjs`; extend pilot tests; modify test command/local validation only if needed.
 
 - [ ] **Step 1:** проверить table structure, local src, forbidden filesystem paths, dimensions, fluid `@2x` height auto, placeholders и deterministic order.
 - [ ] **Step 2:** small Boolean sets — exhaustive; остальные — every branch + declared critical interactions. Каждая visibility branch встречается в тесте.
@@ -492,32 +502,72 @@ git commit -m "test: enforce rendered email invariants"
 
 ---
 
-### Package 10: Mobile/Desktop visual scenarios
+### Package 10: Client resilience и Mobile/Desktop visual scenarios
 
-**Files:** create preview CLI, visual tests and deterministic Mobile/Desktop expected HTML fixtures.
+Архитектура client resilience закреплена в [CUPIS Email Client Resilience Design](../specs/2026-09-16-cupis-email-client-resilience-design.md). Пошаговая реализация находится в [отдельном implementation plan](2026-09-16-cupis-email-client-resilience.md). Все подпакеты 10A–10D обязательны и выполняются последовательно; Package 11 не начинается до их завершения и финального visual gate.
 
-**Interfaces:** `node scripts/render-email-preview.mjs --model <fixture> --viewport mobile|desktop --output <temp-path>`.
+#### Package 10A: Exact policy and email model
 
-- [ ] **Step 1:** expected fixtures содержат только system pilot, не production письмо.
-- [ ] **Step 2:** tests сравнивают declared widths, responsive classes и image ratios; Card отдельно доказывает пропорциональную высоту.
-- [ ] **Step 3:** manual browser gate сравнивает временные Mobile/Desktop preview с pilot Figma variants; screenshots не коммитятся.
-- [ ] **Step 4:** browser preview не подменяет Litmus/Email on Acid/CRM, которые остаются optional.
-- [ ] **Step 5:** verify and commit.
+**Files:** rendering foundation/schema/loader; email model/schema; pilot fixtures and focused tests.
+
+- [ ] Заменить неоднозначный `shell.min_width_px` на `min_supported_viewport_px: 300`, означающий ширину всего viewport.
+- [ ] Зафиксировать exclusive embedded CSS budget `16384`, текущую точную dark policy `none/none` и фактический Desktop baseline без embedded CSS.
+- [ ] Сделать `language`, `direction` и tagged alt semantics обязательными полями email model без renderer defaults.
+- [ ] Read-only аудитом доказать, что каждый rendered `direct-image` имеет `alt-text` capability; обнаруженный пробел становится blocker, а не автоматически созданным contract fact.
+- [ ] Выполнить focused schema/model tests и `npm run validate`.
+
+#### Package 10B: Renderer implementation
+
+**Files:** email renderer/interpreter/primitives; diagnostics; focused layout and invariant tests.
+
+- [ ] Вывести одинаковые `lang`/`dir` на `<html>` и внутреннем content wrapper.
+- [ ] Удалить неявный `props.alt ?? ""`; informative/decorative значение должно быть явно разрешено model validation.
+- [ ] Измерять UTF-8 bytes и блокировать совокупный embedded CSS при `>= 16384`; вернуть `html_bytes` и `embedded_css_bytes` как renderer metrics.
+- [ ] Вычислять внутренний minimum content width как `min_supported_viewport_px - 2 * horizontal_inset_px`; невозможная конфигурация блокирует сборку.
+- [ ] Не добавлять color-scheme meta/CSS, dark assets или отсутствующую в Figma графику.
+
+#### Package 10C: Automated and browser resilience
+
+**Files:** normal/no-style preview CLI, client-resilience tests, visual scenarios, узкое Email/Header coverage и pilot fixture.
+
+- [ ] Создать два представления одного HTML: normal и no-style; второе удаляет только `<style>` и ничего больше.
+- [ ] Проверить normal widths `300`, `320`, `360`, `600`, `659`, `660` и no-style widths `300`, `320`, `360`, `600`.
+- [ ] Перед visual gate добавить Email/Header в pilot renderer registry на основании существующего точного контракта; Email/Footer сохранить.
+- [ ] Убедиться в отсутствии horizontal scroll, деформации изображений и расхождений Mobile/Desktop geometry, spacing, visibility и text alignment.
+- [ ] Visual regression выполняет `gpt-5.6-terra` с reasoning `medium`; screenshots остаются временными и не коммитятся.
+- [ ] Browser preview не считается доказательством конкретного почтового клиента.
+
+#### Package 10D: Altcraft target-client evidence and decision
+
+**Files:** один evidence document после фактической отправки; rendering foundation меняется только по зафиксированному решению.
+
+- [ ] Доставить неизменённый пилот через Altcraft в мобильные приложения Яндекс Почты, Mail.ru и Gmail.
+- [ ] Для каждой проверки записать ОС, версию ОС, версию приложения, тип аккаунта, тему, responsive result, overflow, image proportions и читаемость.
+- [ ] Если embedded CSS применяется в материальных целевых сочетаниях, подтвердить текущий Desktop baseline.
+- [ ] Если существенный целевой клиент удаляет embedded CSS, отдельным commit реализовать и проверить Mobile-first baseline; hybrid допускается только после доказанного провала Mobile-first.
+- [ ] Если dark mode выявляет конкретный компонентный или asset defect, остановиться на impact report и отдельном Figma-разрешении; не исправлять дизайн внутри Package 10.
+
+#### Финальный visual gate Package 10
+
+- [ ] Expected fixtures содержат только system pilot, не production письмо.
+- [ ] Header и Footer присутствуют ровно один раз внутри Email/Template; внутренние компоненты не становятся самостоятельными body-блоками.
+- [ ] Tests сравнивают declared widths, responsive classes, image ratios и Header/Footer composition; Card отдельно доказывает пропорциональную высоту.
+- [ ] Выполнить fresh local checks на точном cloud SHA без GitHub Actions.
+- [ ] Опубликовать reviewable commits и отметить Package 10 завершённым только после 10A–10D.
 
 ```powershell
-node --test tests/rendering/visual-scenarios.test.mjs
+node --test tests/foundation/rendering-foundation.test.mjs tests/rendering/email-model.test.mjs tests/rendering/email-metrics.test.mjs tests/rendering/email-preview.test.mjs tests/rendering/client-resilience.test.mjs tests/rendering/visual-scenarios.test.mjs
+npm run generate:check
 npm run verify
-git commit -m "test: add representative viewport rendering scenarios"
 ```
 
 ---
-
 ### Package 11: Остальные active components
 
 **Files:** modify three component files, renderer registry, generated docs; create `all-components.test.mjs`.
 
 - [ ] **Step 1: Shared** — semantic facts/slots/coverage; internal glyphs → `source-only`.
-- [ ] **Step 2: Marketing** — preserve exact contracts/properties/assets/numbers. `Banner/App-Download-Large` получает coverage mode `unsupported` и reason `visual-experiment-not-for-production`; его Figma status и дизайн не меняются.
+- [ ] **Step 2: Marketing** — покрыть остальные marketing records после пилотного Header; preserve exact contracts/properties/assets/numbers.
 - [ ] **Step 3: Service** — та же schema без service-specific foundation; ambiguity blocks exact record.
 - [ ] **Step 4: Full coverage assertions**.
 
@@ -531,7 +581,7 @@ assert.equal(report.summary.covered_active_components, 61);
 Каждый active record имеет coverage. `source-only` и `unsupported` входят в covered count, но не в renderable count и при standalone render возвращают понятный blocker.
 
 - [ ] **Step 5:** `npm run generate`, `generate:check`, all-components test, verify.
-- [ ] **Step 6:** три reviewable commits: shared, marketing, service; generated docs в последнем.
+- [ ] **Step 6:** три reviewable cloud commits: shared, marketing, service; generated docs в последнем.
 
 Gate: no generic facts/unregistered active records/unexplained value changes; Figma unchanged.
 
@@ -539,28 +589,27 @@ Gate: no generic facts/unregistered active records/unexplained value changes; Fi
 
 ### Package 12: Structured workflows и shadow comparison
 
-**Files:** create two workflow data files, schema, loader, workflow and characterization tests; modify context bundle, `system/manifest.yaml`, `schemas/manifest.schema.json` and manifest tests; preserve Markdown workflows and skill.
+**Files:** create two workflow data files, schema, loader, workflow and characterization tests; modify context bundle, `system/manifest.yaml`, `schemas/manifest.schema.json` and manifest tests; preserve archived Markdown workflows in `Legacy/` and current skill.
 
 **Interfaces:**
 - `loadWorkflowRegistry({ repoRoot, workflowId })`.
 - `resolveWorkflowSteps(workflow, mode) -> ordered steps`.
-- Bundle option `workflow_mode: legacy|structured-shadow`; один bundle содержит один mode.
+- Bundle допускает только `structured-shadow`; архивный `Legacy/` не становится режимом bundle и читается отдельно только для comparison.
 
 - [ ] **Step 1: Workflow schema** — ID, status shadow, modes, ordered steps, required inputs, blockers, allowed outputs, handoff; ссылки на manifest source IDs без копии technical rules. Добавить structured-workflow capability в manifest schema и поднять manifest/schema loader с `1.1.0` до `1.2.0` в одном commit.
 - [ ] **Step 2: Maintenance workflow** — impact report, cloud GitHub, Figma gate/readback и stop conditions.
 - [ ] **Step 3: Email workflow** — NEW BUILD/CONTINUE/FIX, link validation, local versions, MCP asset export, temp model, CLI, final `email.html` + `images/`.
-- [ ] **Step 4: Structured shadow bundle** — mixed legacy/structured returns `CONTEXT_BUNDLE_SOURCE_MODE_MIXED`.
-- [ ] **Step 5: Semantic comparison** — каждое legacy obligation связано с новым owner; differences только из approved renderer spec.
-- [ ] **Step 6: No hidden cutover** — active route lists and skill byte-identical; no Figma/letters.
-- [ ] **Step 7: Verify and commit**.
+- [ ] **Step 4: Structured shadow bundle** — архивные paths не допускаются в bundle; попытка смешать их со structured sources возвращает явную ошибку, а не активирует legacy mode.
+- [ ] **Step 5: Workflow-level semantic comparison** — каждое обязательство archived maintenance/email workflows из read-only `Legacy/` baseline связано с новым owner; различия объяснены проверенными фактами и approved renderer spec, а не автоматически перенесены в contracts. Сквозные rendered outputs, generated docs и все маршруты сравниваются позднее на этапе 13.
+- [ ] **Step 6: No hidden cutover** — текущие paused route lists и skill не переключены; `Legacy/`, Figma и письма не изменены.
+- [ ] **Step 7: Verify and publish cloud commit**.
 
 ```powershell
 node --test tests/workflows/structured-workflows.test.mjs tests/characterization/html-rendering-shadow.test.mjs
 npm run verify
-git commit -m "feat: prepare structured email workflows in shadow mode"
 ```
 
-Gate: Stage 8 готовит новый маршрут; Stage 9 отдельно переключает maintenance skill.
+Gate: Stage 8 готовит workflows; Stage 9 подготавливает maintenance skill без включения paused routes. Сквозное shadow comparison выполняется на этапе 13, фактический cutover — на этапе 14.
 
 ---
 
@@ -569,11 +618,11 @@ Gate: Stage 8 готовит новый маршрут; Stage 9 отдельно
 - [ ] Свежий branch SHA сравнен с актуальным `main`.
 - [ ] `npm run audit:rendering`: zero generic facts и zero missing coverage.
 - [ ] `npm run generate:check`, `npm run validate`, `npm test`, `npm run verify` проходят.
-- [ ] Node 24 и Windows bootstrap CI зелёные.
+- [ ] Node 24 и Windows bootstrap проверки локально пройдены на точном SHA.
 - [ ] Representative NEW BUILD атомарно создаёт только `email.html` и `images/` во временной test folder.
 - [ ] Intentional failure не меняет существующую version folder.
 - [ ] Mobile/Desktop pilot previews проверены визуально.
-- [ ] Active route source lists и maintenance skill не изменены.
+- [ ] Текущие paused route source lists и maintenance skill не изменены; archived baseline не подключён к HTML-build bundle.
 - [ ] Figma, production-письма и реальные assets не изменены.
 - [ ] Allowed diff не содержит непредусмотренных файлов.
 - [ ] Roadmap/active context обновляются после merge и по команде пользователя.

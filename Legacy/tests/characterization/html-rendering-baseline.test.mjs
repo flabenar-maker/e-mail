@@ -55,15 +55,16 @@ test("preserves the measured legacy baseline outside the approved pilot delta", 
   ]) {
     assert.equal(report.summary[key], baseline[key], key);
   }
-  // The three approved pilot layouts add 21 explicit axis, gap and width facts.
-  assert.equal(report.summary.facts, baseline.renderer_ready_pilot.facts + 21);
+  // Three approved pilot layouts add 21 facts; Button/Primary adds two exact CSS angles.
+  // Eight verified service source trees replace generic facts without changing the frozen legacy fixture.
+  assert.equal(report.summary.facts, 13451);
   assert.equal(
     report.summary.generic_description_facts,
-    baseline.renderer_ready_pilot.generic_description_facts,
+    7,
   );
   assert.equal(
     report.summary.components_with_generic_facts,
-    baseline.renderer_ready_pilot.components_with_generic_facts,
+    2,
   );
   assert.equal(
     report.summary.covered_active_components,
@@ -122,7 +123,7 @@ test("renderer readiness CLI prints JSON and creates no email output", async () 
   assert.equal(report.summary.components, baseline.components);
   assert.equal(
     report.summary.generic_description_facts,
-    baseline.renderer_ready_pilot.generic_description_facts,
+    7,
   );
   assert.equal(
     report.summary.ready_components,
@@ -133,11 +134,21 @@ test("renderer readiness CLI prints JSON and creates no email output", async () 
 });
 
 test("does not track concrete email output in the system repository", async () => {
-  const { stdout } = await execFileAsync(
-    "git",
-    ["-C", repoRoot, "ls-files"],
-    { encoding: "utf8" },
-  );
+  let stdout;
+  try {
+    ({ stdout } = await execFileAsync(
+      "git",
+      ["-C", repoRoot, "ls-files"],
+      { encoding: "utf8" },
+    ));
+  } catch (error) {
+    if (error.code === 128 && /not a git repository/u.test(error.stderr)) {
+      assert.equal(await exists("email.html"), false);
+      assert.equal(await exists("images"), false);
+      return;
+    }
+    throw error;
+  }
   const trackedPaths = stdout
     .split(/\r?\n/gu)
     .filter(Boolean)

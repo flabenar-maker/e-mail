@@ -99,7 +99,7 @@ test("component documentation standards keep the full contract and Figma project
   assert.doesNotMatch(figmaStandard, /весь email workflow/u);
 });
 
-test("migration preserves every component field outside approved pilot contract normalization", async () => {
+test("direct Figma source capture preserves shared and service registries and marks marketing verification", async () => {
   const registries = await loadComponentRegistries({ repoRoot });
   const projected = Object.fromEntries(
     Object.entries(registries).map(([library, document]) => [
@@ -126,40 +126,38 @@ test("migration preserves every component field outside approved pilot contract 
   assert.equal(new Set(systemIds).size, 61);
   assert.equal(new Set(figmaIdentities).size, 61);
 
-  // Only these three contracts may change; identity, assets, properties and
-  // every other component remain pinned to the pre-layout baseline.
-  const pilotIds = new Set(["card-image", "banner-secondary", "banner-app-download"]);
-  const stableProjection = Object.fromEntries(
-    Object.entries(projected).map(([library, records]) => [
-      library,
-      records.map((record) =>
-        library === "marketing" && pilotIds.has(record.id)
-          ? { ...record, contracts: null }
-          : record,
-      ),
-    ]),
-  );
-
-  assert.deepEqual(
-    Object.fromEntries(
-      Object.entries(stableProjection).map(([library, records]) => [
-        library,
-        digest(records),
-      ]),
-    ),
-    {
-      shared:
-        "sha256:6d2edbadc53b3e759b4485a6b6238be8b04cdbf4e1e0f7e292d9a67c12c7f782",
-      marketing:
-        "sha256:f03df06ef08fcd2d013ddd9a5a790dcc46ef86ceb75ba59c18ecd79e861d3308",
-      service:
-        "sha256:77fb7974624c0bdf40f924011a9f4287ee09571085066881c8d920d01571a691",
-    },
+  assert.equal(
+    digest(projected.shared),
+    "sha256:30c694c30f3eaea89790428d64c689a64aae5dd5dfb99406555cca250fc0484f",
   );
   assert.equal(
-    digest(stableProjection),
-    "sha256:317485437839774b5346fd4948631b808ff2cce02af9382218c4be680e2915a4",
+    digest(projected.service),
+    "sha256:a85eee27bb2b1bbc13b4e19dfa21c23e382ef9a676e4eb0b4c94326f905f98ba",
   );
+
+  const blocked = projected.marketing
+    .filter((record) => record.figma.verification.status === "blocked-ambiguous-description")
+    .map((record) => record.id)
+    .sort();
+  assert.deepEqual(blocked, []);
+  const recorded = projected.marketing.filter(
+    (record) => record.figma.verification.status === "figma-source-recorded",
+  );
+  assert.equal(recorded.length, 26);
+  assert.equal(recorded.reduce((total, record) => total + record.contracts.source_variants.length, 0), 55);
+  for (const record of recorded) {
+    assert.deepEqual(
+      record.contracts.source_variants.map(({ variant_node_id }) => variant_node_id).sort(),
+      (record.variants.length > 0 ? record.variants.map(({ node_id }) => node_id) : [record.figma.node_id]).sort(),
+    );
+  }
+  const primary = projected.marketing.find((record) => record.id === "button-primary");
+  for (const viewport of ["mobile", "desktop"]) {
+    assert.deepEqual(findFact(primary, viewport, "background-gradient-css-angle-degrees"), {
+      type: "number",
+      value: 25,
+    });
+  }
 
   for (const record of allRecords) {
     assert.ok(record.contracts.mobile?.root, `${record.id}: missing Mobile`);
@@ -177,18 +175,8 @@ test("migration preserves high-risk responsive, asset, property and template con
   const index = indexComponentRegistries(registries);
 
   const cardImage = index.bySystemId.get("card-image");
-  assert.deepEqual(findFact(cardImage, "mobile", "width-behavior"), {
-    type: "keyword",
-    value: "fluid-to-container",
-  });
-  assert.deepEqual(findFact(cardImage, "mobile", "height-behavior"), {
-    type: "keyword",
-    value: "auto",
-  });
-  assert.deepEqual(findFact(cardImage, "mobile", "fixed-height-forbidden"), {
-    type: "boolean",
-    value: true,
-  });
+  assert.deepEqual(findFact(cardImage, "mobile", "reference-size"), { type: "dimensions", width: 252, height: 291, unit: "px" });
+  assert.deepEqual(findFact(cardImage, "mobile", "layout-axis"), { type: "keyword", value: "vertical" });
   assert.deepEqual(cardImage.asset_contracts[0].aspect_ratio, {
     width: 232,
     height: 148,

@@ -1,5 +1,7 @@
 # CUPIS Figma Naming Foundation Implementation Plan
 
+> **Исторический implementation plan.** Реализован в [PR #37](https://github.com/flabenar-maker/e-mail/pull/37). Команды, пути и чекбоксы ниже описывают выполнение того этапа, а не текущий рабочий маршрут: старый контур находится в Legacy/, маршруты остановлены, проверки теперь локальные. Для продолжения использовать свежие manifest и [roadmap](2026-08-25-cupis-migration-roadmap.md).
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Перенести универсальные правила нейминга Figma в строгий shadow-foundation и создать независимые generator и validator, которые помогают maintenance skill безопасно предлагать имена без автоматического аудита или изменения Figma.

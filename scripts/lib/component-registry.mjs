@@ -235,9 +235,9 @@ export function validateComponentDocumentation(record) {
   if (Object.hasOwn(record ?? {}, "description")) {
     errors.push(
       diagnostic(
-        "COMPONENT_DOCUMENTATION_LEGACY_BLOCKS_FORBIDDEN",
+        "COMPONENT_DOCUMENTATION_RETIRED_BLOCKS_FORBIDDEN",
         "/description",
-        `${componentId}: legacy description blocks are forbidden in schema 2.0.0.`,
+        `${componentId}: retired description blocks are forbidden in schema 2.0.0.`,
       ),
     );
   }
@@ -470,7 +470,6 @@ function validateInternalIds(errors, record, rootPath) {
 
   for (const viewport of VIEWPORTS) {
     const seenElements = new Set();
-    const seenFacts = new Set();
     walkElementTree(
       record?.contracts?.[viewport]?.root,
       `${rootPath}/contracts/${viewport}/root`,
@@ -483,6 +482,7 @@ function validateInternalIds(errors, record, rootPath) {
           `${path}/id`,
           `${viewport} element id`,
         );
+        const seenFacts = new Set();
         (element.facts ?? []).forEach((fact, index) => {
           pushDuplicate(
             errors,

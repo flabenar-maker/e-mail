@@ -1,0 +1,89 @@
+{
+  "source_commit": "ba5cd1f4bc7af1ecb1987dc31bdf25725b5bef84",
+  "components": 61,
+  "active_components": 61,
+  "facts": 395,
+  "generic_description_facts": 386,
+  "components_with_generic_facts": 46,
+  "components_with_properties": 16,
+  "components_with_assets": 27,
+  "renderer_ready_pilot": {
+    "covered_components": 7,
+    "ready_components": 7,
+    "missing_coverage": 54,
+    "facts": 452,
+    "generic_description_facts": 315,
+    "components_with_generic_facts": 41
+  },
+  "legacy_digests": {
+    "core/email-figma-prompt.md": "sha256:f25d073e5ecd5d135b28a040afeda4fc594fcb7f2f0dab220442c57488392665",
+    "registry/email-typography-registry.md": "sha256:b8303adeedae66a1423677a05c866e09d6cafef1627190df969c0de583e87cea",
+    "workflows/library-maintenance-checkpoint.md": "sha256:fdc6b47742a6072e1efb52957b30573cfa55294804e1efe185713d0792587416",
+    "workflows/email-build-checkpoint.md": "sha256:31558913bf66d0530c5111f68b306c1e379f48af19a022168de61da9d92476a7"
+  },
+  "active_bundle_source_ids": {
+    "library-maintenance": [
+      "repository-readme",
+      "email-figma-prompt",
+      "figma-component-naming-standard",
+      "component-descriptions-registry",
+      "typography-registry",
+      "spacing-foundation",
+      "library-maintenance-checkpoint"
+    ],
+    "component-onboarding": [
+      "repository-readme",
+      "email-figma-prompt",
+      "figma-component-naming-standard",
+      "component-descriptions-registry",
+      "typography-registry",
+      "spacing-foundation",
+      "library-maintenance-checkpoint"
+    ],
+    "figma-description-sync": [
+      "repository-readme",
+      "email-figma-prompt",
+      "component-descriptions-registry",
+      "typography-registry",
+      "library-maintenance-checkpoint"
+    ],
+    "figma-naming-audit": [
+      "repository-readme",
+      "figma-component-naming-standard",
+      "component-descriptions-registry",
+      "library-maintenance-checkpoint"
+    ],
+    "migration-progress": [
+      "repository-readme",
+      "migration-roadmap",
+      "library-maintenance-checkpoint"
+    ],
+    "email-new-build": [
+      "repository-readme",
+      "email-figma-prompt",
+      "figma-component-naming-standard",
+      "component-descriptions-registry",
+      "typography-registry",
+      "email-build-checkpoint",
+      "email-project-brief"
+    ],
+    "email-continue-fix": [
+      "repository-readme",
+      "email-figma-prompt",
+      "figma-component-naming-standard",
+      "component-descriptions-registry",
+      "typography-registry",
+      "email-build-checkpoint"
+    ]
+  },
+  "rendering_source_ids": [
+    "rendering-foundation",
+    "rendering-schema",
+    "renderer-registry",
+    "renderer-registry-schema",
+    "email-model-schema",
+    "workflows-schema",
+    "workflow-library-maintenance",
+    "workflow-email-build"
+  ]
+}

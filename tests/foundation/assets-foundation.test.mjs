@@ -287,7 +287,35 @@ test("canonical assets foundation is semantically valid", async () => {
 
   assert.deepEqual(assetsFoundation.validateAssetsSemantics(assets), []);
 });
+test("final export profile is contract-owned rather than inferred from a Figma node setting", async () => {
+  const assets = await canonicalAssets();
+  assert.deepEqual(
+    assets.global_invariants.find(({ id }) => id === "figma-export-setting-non-authoritative"),
+    {
+      id: "figma-export-setting-non-authoritative",
+      statement: "Configured Figma export settings are observational helpers; the selected foundation export profile owns final format, scale, suffix, color space and quality.",
+    },
+  );
+});
 
+
+test("semantic validation rejects a weakened exact export-boundary policy", async () => {
+  const assets = await canonicalAssets();
+  assets.source_modes.find((item) => item.id === "rendered-node").contract.visible_nested_graphics_included = false;
+
+  const errors = assetsFoundation.validateAssetsSemantics(assets);
+
+  assert.deepEqual(diagnosticCodes(errors), ["ASSETS_RENDERED_NODE_BOUNDARY_INVALID"]);
+});
+
+test("semantic validation rejects a deformable mobile display policy", async () => {
+  const assets = await canonicalAssets();
+  assets.display_modes.find((item) => item.id === "direct-image").contract.mobile_height_behavior = "fixed";
+
+  const errors = assetsFoundation.validateAssetsSemantics(assets);
+
+  assert.deepEqual(diagnosticCodes(errors), ["ASSETS_DISPLAY_RATIO_GUARD_INVALID"]);
+});
 for (const selection of [
   {
     sourceModeId: "image-fill",

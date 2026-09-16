@@ -2,9 +2,9 @@
 
 Статус документа: ручной checkpoint для восстановления контекста.
 
-Последнее ручное обновление: 2026-09-10.
+Последнее ручное обновление: 2026-09-15.
 
-Снимок `main` на момент обновления: `15a1c3ce09fec33d5aee82a87ffee4667e911702`.
+Базовый снимок main перед этой корректировкой планов: 7243a297b9bac64a2f2d78c943aad4b6ecab14b1 (после слитого [PR #72](https://github.com/flabenar-maker/e-mail/pull/72)). Проверять свежий main при каждом продолжении.
 
 ## 1. Зачем нужен этот файл
 
@@ -70,53 +70,37 @@
 
 ## 5. Почему система меняется поэтапно
 
-Старые Markdown-источники пока остаются рабочим baseline. Новые structured-файлы вводятся в shadow-режиме, сравниваются с действующими правилами и подключаются к рабочим bundles только после проверки.
+Прежние Markdown-источники временно сохранены в `Legacy/` только как read-only baseline. Все маршруты указывают на `workflow-paused`; structured-файлы и generated bundles ещё не переключены в production. Архивирование не означает, что сравнение или миграция завершены.
 
 Это предотвращает две ошибки:
 
 - внезапную потерю уже согласованных правил;
 - одновременное применение двух версий одного правила.
 
-Каждый технический этап выполняется в собственной GitHub branch и PR. Следующий этап начинается после проверки предыдущего. Merge всегда требует отдельного разрешения пользователя.
+Каждый технический пакет выполняется в собственной GitHub branch и PR. Следующий пакет начинается после проверки и слияния предыдущего. Merge всегда требует отдельного разрешения пользователя.
 
 ## 6. Уже подтверждённое состояние
 
-На снимке `main@15a1c3ce09fec33d5aee82a87ffee4667e911702` завершены и слиты:
+На базовом снимке main@7243a297b9bac64a2f2d78c943aad4b6ecab14b1 этапы 1–7 реализованы. После временной изоляции Legacy в PR #69 и адаптации тестов в PR #70 [PR #71](https://github.com/flabenar-maker/e-mail/pull/71) вернул полный `docs/generated/component-registry.md` и его blocking-проверки. Реестр снова строится из 61 structured records, но остаётся человекочитаемой проекцией, а не входом HTML-рендера. Все routes пока остановлены; глобальный cutover не выполнен.
 
-1. master-спецификация и migration roadmap;
-2. системный foundation: manifest, schema, validation, CI и bootstrap;
-3. typography foundation pilot;
-4. spacing foundation;
-5. assets foundation;
-6. Figma naming foundation;
-7. structured component registry:
-   - три component data-файла;
-   - строгая schema;
-   - exact resolution и unregistered-component blocker;
-   - read-only Figma drift checks;
-8. component documentation contracts;
-9. generated docs и route-specific context bundles в shadow-режиме.
+В этапе 8 слиты пакеты 1–9 через PR #50–58. Созданы rendering foundation, разделённые Core-стандарты, пилотный renderer registry, HTML-примитивы, contract-tree interpreter, модель письма, CLI с атомарным выводом, render-impact diagnostics и автоматические HTML-инварианты. PR #59 скорректировал пилотные Mobile/Desktop layout contracts. Техническое ядро существует, но ещё не покрывает всю библиотеку и не является готовым процессом сборки произвольного production-письма.
 
-Structured component registry реализован через [PR #40](https://github.com/flabenar-maker/e-mail/pull/40), итоговый commit: `90f1e01365c80b7553b520e8d47c2e5bb7f88660`.
+После неубедительного пилотного результата проведена прямая Figma-сверка фактов компонентов: маркетинговые и сервисные контракты и механизм проверки уточнены в слитых PR #61–64. Эти изменения не заменяют Mobile/Desktop visual scenarios и расширение renderer coverage. На данном снимке renderer registry содержит шесть пилотных записей, включая Email/Footer, но без Email/Header; это отдельный реестр от полного generated component registry.
 
-Component documentation contracts реализованы через [PR #45](https://github.com/flabenar-maker/e-mail/pull/45), итоговый commit: `0eb8cfd4d2ff3401a6a7e91a80e8740435f7ab0e`.
+## 7. Текущий этап и исследовательское ответвление
 
-Этап 7 завершён через [PR #43](https://github.com/flabenar-maker/e-mail/pull/43), итоговый commit: `15a1c3ce09fec33d5aee82a87ffee4667e911702`. В `main` находятся четыре generated-справочника, deterministic digest, read-only route-specific context bundles, exact component selection, dependency/foundation closure и общая validation generated layer. Слой остаётся shadow: Core, workflows, skills и Figma на него ещё не переключены.
+Этап 8 остаётся в работе. PR #66 исправил оболочку пилота и границу Mobile/Desktop, а PR #67–68 перевели проверки на локальный режим без GitHub Actions. Пакеты 10–12 не завершены: visual scenarios и проверка фактического HTML обновлённого пилота, coverage остальных активных компонентов, structured workflows и shadow comparison. Не отмечать этап 8 завершённым только по факту наличия CLI или автоматических тестов.
 
-## 7. Текущий этап
+[PR #60](https://github.com/flabenar-maker/e-mail/pull/60) открыт отдельно как read-only исследование Good Email Code, Email Guidelines, Cerberus и Can I Email. Изучение источников проведено 14.09.2026; проверка отправленного письма в мобильных приложениях Яндекс Почты, Mail.ru и Gmail и обсуждение выводов ещё не выполнены. PR #60 содержит только исследовательский документ, не содержит viewport preview и не разрешает менять текущие контракты, Core или renderer.
 
-Этап 7 завершён. Generated docs и route-specific context bundles находятся в `main` и остаются shadow-слоем.
-
-Направление этапа 8 согласовано и зафиксировано в [CUPIS HTML Rendering Design](../specs/2026-09-10-cupis-html-rendering-design.md). Техническая реализация ещё не начата. Подробный [implementation plan этапа 8](2026-09-10-cupis-html-rendering-stage-8.md) подготовлен в draft PR и ожидает review пользователя.
-
-Целевая архитектура строит новое письмо из фактических Mobile/Desktop-инстансов и resolved component contracts через временную модель, общий contract-tree interpreter и email-примитивы. Отдельный код разрешён только доказанным исключениям. Публикация атомарна и оставляет локально только `email.html` и `images/`.
+Целевая аудитория в основном использует эти мобильные приложения. Данных по версиям приложений и распределению iOS/Android пока нет. Preheader можно настраивать вручную в Altcraft; его обработка text/plain пока не выяснена и не блокирует текущую HTML-работу.
 
 ## 8. Следующий точный шаг
 
-1. Проверить спецификацию и подробный implementation plan этапа 8.
-2. После одобрения и merge документационного PR начать Package 1 в новой implementation branch от свежего `main`.
-3. Выполнять packages 1–12 строго последовательно с review и merge каждого пакета.
-4. Не изменять Figma и не переключать maintenance skill внутри Stage 8.
+1. Проверить read-only выходной HTML, который фактически создаёт текущий пилотный renderer, и классифицировать расхождения: входная модель, точный contract, renderer code или только браузерный preview. Не объявлять гипотезу об ошибке без воспроизведения.
+2. До visual gate пакета 10 добавить узкое pilot coverage для Email/Header на основании точного контракта и проверить его вместе с уже покрытым Email/Footer. Если факта не хватает, выполнить точечную проверку вместо догадки.
+3. Выполнить Mobile/Desktop visual scenarios. Исследование PR #60 обсудить до включения его выводов в правила, но не делать его техническим blocker диагностики пилота.
+4. Затем выполнить пакеты 11–12. Этап 9 подготавливает maintenance skill; этап 13 сравнивает весь маршрут; только этап 14 переключает paused routes.
 
 ## 9. Стабильная граница component documentation
 
@@ -129,28 +113,22 @@ Component documentation contracts реализованы через [PR #45](htt
 - Email-build bundle получает selected resolved contracts и не получает component-authoring standards или Figma Description.
 - Figma Description может быть синхронизирован только после GitHub data validation и отдельного Figma mutation gate.
 - Figma sync изменяет только явно разрешённые metadata fields и заканчивается MCP readback.
-- Legacy Markdown registry сохраняется как comparison baseline до cutover.
+- Старый рукописный Markdown registry находится в `Legacy/` только для read-only сравнения; полный `docs/generated/component-registry.md` остаётся постоянной производной проекцией structured contracts.
 
 ## 10. Карта этапов миграции
 
-| Этап | Содержание | Статус на 2026-09-10 |
+| Этап | Содержание | Статус на 2026-09-15 |
 |---:|---|---|
-| 1 | Master-спецификация и первый implementation plan | Завершён |
-| 2 | Системный foundation: manifest, validation, CI и bootstrap | Завершён |
-| 3 | Typography foundation pilot | Завершён |
-| 4 | Spacing foundation | Завершён |
-| 5 | Assets foundation и Figma naming foundation | Завершён |
-| 6 | Структурированный component registry | Завершён в PR #40 |
-| 7A | Component documentation contracts | Завершён в PR #45 |
-| 7B | Generated docs и route-specific context bundles | Завершён в PR #43; shadow-слой сохранён |
-| 8 | Разделение Core и workflows, переход на новые источники | Следующий этап; требуется отдельный implementation plan |
-| 9 | Переключение maintenance skill на итоговые bundles | Ожидает этап 8 |
-| 10 | Стандарт и workflow разработки новых блоков | Ожидает системный cutover maintenance |
-| 11 | Навык разработки новых блоков | Ожидает этап 10 |
+| 1–7 | Архитектура, foundations, component registry, документация и bundles | Реализованы в main; полный generated registry восстановлен PR #71; structured слой ещё не прошёл cutover |
+| 8 | Core, workflows и подготовка HTML-рендера | В работе: пакеты 1–9, Figma-сверка PR #61–64 и pilot fix PR #66 слиты; пакеты 10–12 открыты; Header ещё не покрыт, routes остановлены |
+| 9 | Подготовка maintenance skill | Ожидает завершения этапа 8; paused routes не включает |
+| 10–11 | Стандарт, workflow и навык разработки новых блоков | Ожидают этап 9 |
 | 12 | Навык HTML-вёрстки конкретных писем | Ожидает этапы 10–11 |
-| 13 | Shadow comparison | Ожидает готовности маршрутов |
-| 14 | Общий cutover | Ожидает shadow comparison |
-| 15 | Удаление legacy-дублей и migration-артефактов | Только после стабильного cutover |
+| 13 | Сквозное shadow comparison | Ожидает этапов 8–12; проверяет результаты всех маршрутов против read-only `Legacy/` |
+| 14 | Общий cutover | Ожидает успешного этапа 13; paused routes и навыки переключаются прямо на structured |
+| 15 | Ревизия `Legacy/` и migration-артефактов | Только после стабильного cutover; решение `remove`/`preserve` по каждому файлу |
+
+Статус всегда перепроверяется по свежему main, roadmap, implementation plan и merged PR. Эта таблица — снимок на дату ручного обновления, а не автоматический трекер.
 
 ## 11. Стабильные рабочие решения
 
@@ -161,9 +139,9 @@ Component documentation contracts реализованы через [PR #45](htt
 - Каждая запись начинается от зафиксированного SHA `main`.
 - Изменения идут через `codex/<semantic-slug>`, commit и draft PR.
 - До записи объявляется разрешённая область изменений и сохраняемые области.
-- После записи проверяются branch, allowed diff и необходимые CI-checks.
+- После записи проверяются branch, allowed diff и применимые локальные тесты на временном изолированном снимке точного SHA; GitHub Actions и PR Checks не используются.
 - Merge выполняется только после отдельной команды пользователя.
-- Историю и rollback обеспечивает Git; архивные копии файлов в репозитории не создаются.
+- Историю и rollback обеспечивает Git; `Legacy/` — явно согласованный временный архив PR #69, дополнительные произвольные копии не создаются.
 
 ### Figma
 
@@ -202,7 +180,7 @@ Component documentation contracts реализованы через [PR #45](htt
 
 ### Assets
 
-Assets foundation уже существует как валидируемый shadow-источник и объявлен в manifest, но до structured cutover рабочая HTML-вёрстка продолжает читать действующие детали из Core prompt и component contracts. Стабильные решения, которые нельзя потерять:
+Assets foundation существует как валидируемый structured-источник и объявлен в manifest. Старый Core prompt находится в `Legacy/` только для сравнения; production-маршруты остановлены, а пилотный renderer читает structured foundations и component contracts. Стабильные решения, которые нельзя потерять:
 
 - `@2x` и `@4x` сохраняются в имени asset owner;
 - один визуальный asset использует общий файл для Mobile и Desktop;
@@ -219,7 +197,7 @@ Assets foundation уже существует как валидируемый sh
 
 ### Figma naming
 
-Figma naming foundation является shadow-источником и не заменяет текущий naming standard до общего cutover. Нельзя потерять следующие решения:
+Figma naming foundation является structured shadow-источником; прежний naming standard сохранён в `Legacy/` как read-only baseline, но не подключён к остановленным маршрутам. Нельзя потерять следующие решения:
 
 - definitions, generator и validator остаются отдельными модулями;
 - непонятная семантика блокирует рекомендацию, а не запускает угадывание;
@@ -297,8 +275,11 @@ Figma naming foundation является shadow-источником и не з�
 - [Component documentation implementation PR #45](https://github.com/flabenar-maker/e-mail/pull/45)
 - [Generated docs and context bundles plan](2026-09-07-cupis-generated-docs-context-bundles.md)
 - [Generated docs and context bundles PR #43](https://github.com/flabenar-maker/e-mail/pull/43)
+- [Stage 8 implementation plan](2026-09-10-cupis-html-rendering-stage-8.md)
+- [Figma-grounded rendering contracts PR #64](https://github.com/flabenar-maker/e-mail/pull/64)
+- [Read-only email practices research PR #60](https://github.com/flabenar-maker/e-mail/pull/60)
 - [Assets foundation](../../../data/foundations/assets.yaml)
 - [Figma naming foundation](../../../data/foundations/figma-naming.yaml)
-- [Library maintenance checkpoint](../../../workflows/library-maintenance-checkpoint.md)
-- [Core email/Figma prompt](../../../core/email-figma-prompt.md)
-- [Legacy component descriptions registry](../../../registry/email-component-descriptions-registry.md)
+- [Archived library maintenance checkpoint](../../../Legacy/workflows/library-maintenance-checkpoint.md)
+- [Archived Core email/Figma prompt](../../../Legacy/core/email-figma-prompt.md)
+- [Generated component registry](../../../docs/generated/component-registry.md)

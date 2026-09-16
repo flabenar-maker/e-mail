@@ -43,7 +43,6 @@ function registryEnvelope(library, components = []) {
             node_id: roots[library],
           },
         ],
-        baseline_path: baselinePath,
         baseline_commit: "397e13a916e9af1c2dfd8af663de730bcc2e1874",
         verified_at: "2026-09-06",
       },
@@ -58,7 +57,7 @@ function literalFact(id = "gap") {
     value: { type: "measure", value: 22, unit: "px" },
     provenance: {
       kind: "registry-literal",
-      source_path: baselinePath,
+      source_blob_sha: "be2203aef82db093fca37857f060d552b254c579",
     },
   };
 }
@@ -172,7 +171,6 @@ function validRecord(overrides = {}) {
     },
     constraints: [],
     provenance: {
-      baseline_path: baselinePath,
       baseline_heading: "Banner/Test",
       baseline_blob_sha: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
     },
@@ -346,6 +344,38 @@ test("semantic validation accepts a complete active record", async () => {
   assert.throws(() => index.bySystemId.set("mutated", validRecord()), TypeError);
 });
 
+test("fact IDs are local to an element and remain unique within that element", async () => {
+  const registries = validRegistries();
+  const root = registries.marketing.components[0].contracts.mobile.root;
+  root.children[0].facts.push(literalFact("reference-size"));
+  root.children[1].facts.push(literalFact("reference-size"));
+
+  let errors = validateComponentRegistrySemantics({
+    registries,
+    ...(await foundations()),
+  });
+  assert.equal(
+    errors.some(
+      (error) =>
+        error.code === "COMPONENT_REGISTRY_DUPLICATE_ID" &&
+        error.path.includes("/contracts/mobile"),
+    ),
+    false,
+  );
+
+  root.children[0].facts.push(literalFact("reference-size"));
+  errors = validateComponentRegistrySemantics({
+    registries,
+    ...(await foundations()),
+  });
+  assert.ok(
+    errors.some(
+      (error) =>
+        error.code === "COMPONENT_REGISTRY_DUPLICATE_ID" &&
+        error.path === "/registries/marketing/components/0/contracts/mobile/root/children/0/facts/1/id",
+    ),
+  );
+});
 test("semantic validation reports duplicate identities deterministically", async () => {
   const registries = validRegistries();
   const duplicate = structuredClone(registries.marketing.components[0]);
@@ -625,12 +655,12 @@ test("marketing image contracts preserve responsive ratios and export boundaries
     },
   );
   assert.equal(
-    hero.contracts.mobile.root.facts.find((fact) => fact.id === "height-behavior").value.value,
-    "auto",
+    hero.contracts.mobile.root.facts.find((fact) => fact.id === "layout-axis").value.value,
+    "vertical",
   );
   assert.equal(
-    hero.contracts.mobile.root.facts.find((fact) => fact.id === "fixed-height-forbidden").value.value,
-    true,
+    hero.contracts.mobile.root.facts.find((fact) => fact.id === "vertical-sizing").value.value,
+    "hug",
   );
 
   const secondary = byId.get("banner-secondary");
@@ -649,7 +679,7 @@ test("marketing image contracts preserve responsive ratios and export boundaries
     "background-image",
   );
 
-  const card = byId.get("card-image");
+  const card = byId.get("asset-card-image-2x");
   const cardAsset = card.asset_contracts.find((asset) => asset.id === "card-image");
   assert.deepEqual(
     {
@@ -669,9 +699,9 @@ test("marketing image contracts preserve responsive ratios and export boundaries
   );
   assert.equal(
     findAssetElement(card.contracts.mobile.root, "card-image").facts.find(
-      (fact) => fact.id === "height-behavior",
+      (fact) => fact.id === "vertical-sizing",
     ).value.value,
-    "auto",
+    "fixed",
   );
 });
 
@@ -774,7 +804,8 @@ test("service records retain nested Details links and exact badge assets", async
       asset.pixel_dimensions,
     ]),
     [
-      ["bank-badge", "bank-badge @4x", { width: 192, height: 192, unit: "px" }],
+      ["ofd-badge", "ofd-badge @4x", { width: 192, height: 192, unit: "px" }],
+      ["fns-badge", "fns-badge @4x", { width: 192, height: 192, unit: "px" }],
       ["chevron-icon", "chevron-icon @4x", { width: 96, height: 96, unit: "px" }],
     ],
   );
@@ -1056,4 +1087,81 @@ test("component schema rejects unknown content slot data", async () => {
         ),
     ),
   );
+});
+
+function findSourceNode(node, name) {
+  if (node.name === name) return node;
+  for (const child of node.children ?? []) {
+    const found = findSourceNode(child, name);
+    if (found) return found;
+  }
+  return null;
+}
+
+test("marketing Figma-source variants keep exact high-risk visual and composition facts", async () => {
+  const registry = await loadComponentRegistry({
+    repoRoot,
+    dataPath: "data/components/marketing.yaml",
+  });
+  const byId = new Map(registry.components.map((record) => [record.id, record]));
+
+  const badge = byId.get("badge-step-number");
+  const accent = badge.contracts.source_variants.find((variant) =>
+    variant.axes.some((axis) => axis.name === "Style" && axis.value === "Accent")
+  );
+  const neutral = badge.contracts.source_variants.find((variant) =>
+    variant.axes.some((axis) => axis.name === "Style" && axis.value === "Neutral")
+  );
+  assert.equal(accent.source_node.fills[0].color, "#B0FCC0");
+  assert.equal(neutral.source_node.fills[0].color, "#F8F8FA");
+
+  const footer = byId.get("email-footer");
+  assert.deepEqual(
+    footer.asset_contracts.map((asset) => asset.id).sort(),
+    ["telegram-icon", "vk-icon"],
+  );
+  const footerDesktop = footer.contracts.source_variants.find((variant) =>
+    variant.axes.some((axis) => axis.value === "Desktop")
+  );
+  assert.ok(footerDesktop);
+
+  const hero = byId.get("banner-hero");
+  const heroDesktop = hero.contracts.source_variants.find((variant) =>
+    variant.axes.some((axis) => axis.value === "Desktop")
+  );
+  const heroImage = findSourceNode(heroDesktop.source_node, "hero-image @2x");
+  assert.deepEqual(heroImage.reference_dimensions, { width: 552, height: 353, unit: "px" });
+  assert.deepEqual(heroImage.fills[0].source_dimensions, { width: 984, height: 696, unit: "px" });
+
+  const secondary = byId.get("banner-secondary");
+  const secondaryDesktop = secondary.contracts.source_variants.find((variant) =>
+    variant.axes.some((axis) => axis.value === "Desktop")
+  );
+  assert.deepEqual(
+    findSourceNode(secondaryDesktop.source_node, "secondary-image @2x").reference_dimensions,
+    { width: 252, height: 238, unit: "px" },
+  );
+
+  const cardAsset = byId.get("asset-card-image-2x");
+  const numbered = cardAsset.contracts.source_variants.find((variant) =>
+    variant.axes.some((axis) => axis.value === "Numbered")
+  );
+  const plain = cardAsset.contracts.source_variants.find((variant) =>
+    variant.axes.some((axis) => axis.value === "Plain")
+  );
+  assert.deepEqual(findSourceNode(numbered.source_node, "Number").reference_dimensions, {
+    width: 32, height: 22, unit: "px",
+  });
+  assert.equal(findSourceNode(plain.source_node, "Number"), null);
+
+  const nps = byId.get("nps-options");
+  for (const variant of nps.contracts.source_variants) {
+    const count = variant.axes.find((axis) => axis.name === "Count")?.value;
+    assert.equal(Boolean(findSourceNode(variant.source_node, "Neutral")), count === "3");
+  }
+
+  const feature = byId.get("asset-feature-icon-4x").contracts.source_variants[0];
+  const radial = findSourceNode(feature.source_node, "background").fills[0];
+  assert.equal(radial.type, "radial-gradient");
+  assert.deepEqual(radial.stops.map((stop) => stop.color), ["#3DD55C", "#18B037"]);
 });

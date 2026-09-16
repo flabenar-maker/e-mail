@@ -57,7 +57,6 @@
           "required": [
             "figma_file_key",
             "roots",
-            "baseline_path",
             "baseline_commit",
             "verified_at"
           ],
@@ -90,10 +89,6 @@
                   }
                 }
               }
-            },
-            "baseline_path": {
-              "type": "string",
-              "minLength": 1
             },
             "baseline_commit": {
               "type": "string",
@@ -215,6 +210,31 @@
             "structure_fingerprint": {
               "type": "string",
               "pattern": "^sha256:[0-9a-f]{64}$"
+            },
+            "verification": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "checked_at",
+                "reason"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "figma-source-recorded",
+                    "blocked-ambiguous-description"
+                  ]
+                },
+                "checked_at": {
+                  "type": "string",
+                  "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
             }
           }
         },
@@ -246,6 +266,57 @@
             },
             "desktop": {
               "$ref": "#/$defs/viewportContract"
+            },
+            "source_variants": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/figmaSourceVariant"
+              }
+            },
+            "figma_fact_links": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "variant_node_id",
+                  "node_id",
+                  "source_path",
+                  "contract_path",
+                  "transform"
+                ],
+                "properties": {
+                  "variant_node_id": {
+                    "type": "string",
+                    "pattern": "^[0-9]+:[0-9]+$"
+                  },
+                  "node_id": {
+                    "type": "string",
+                    "pattern": "^[0-9]+:[0-9]+$"
+                  },
+                  "source_path": {
+                    "type": "string",
+                    "pattern": "^/"
+                  },
+                  "contract_path": {
+                    "type": "string",
+                    "pattern": "^/(contracts|asset_contracts|variants|properties|identity)/"
+                  },
+                  "transform": {
+                    "enum": [
+                      "identity",
+                      "lowercase"
+                    ]
+                  }
+                }
+              }
+            },
+            "variant_contracts": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/additionalVariantContract"
+              }
             }
           }
         },
@@ -564,6 +635,28 @@
               "const": "forbid"
             }
           }
+        },
+        "figma_raw_source_dimensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "width",
+            "height",
+            "unit"
+          ],
+          "properties": {
+            "width": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "height": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "unit": {
+              "const": "px"
+            }
+          }
         }
       }
     },
@@ -606,7 +699,8 @@
           "type": "boolean"
         }
       }
-    },    "element": {
+    },
+    "element": {
       "type": "object",
       "additionalProperties": false,
       "required": [
@@ -667,6 +761,30 @@
           "type": "array",
           "items": {
             "$ref": "#/$defs/element"
+          }
+        },
+        "action": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "href_slot",
+            "required"
+          ],
+          "properties": {
+            "kind": {
+              "enum": [
+                "whole-element",
+                "distributed-cells"
+              ]
+            },
+            "href_slot": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "required": {
+              "type": "boolean"
+            }
           }
         }
       },
@@ -770,6 +888,44 @@
             "property_id": {
               "type": "string",
               "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mode",
+            "axis",
+            "value"
+          ],
+          "properties": {
+            "mode": {
+              "const": "variant-axis"
+            },
+            "axis": {
+              "type": "string",
+              "minLength": 1
+            },
+            "value": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mode",
+            "default_visible"
+          ],
+          "properties": {
+            "mode": {
+              "const": "instance"
+            },
+            "default_visible": {
+              "type": "boolean"
             }
           }
         }
@@ -960,6 +1116,22 @@
                       "pattern": "^#[0-9A-F]{6}$"
                     }
                   }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "type",
+                    "items"
+                  ],
+                  "properties": {
+                    "type": {
+                      "const": "segments"
+                    },
+                    "items": {
+                      "$ref": "#/$defs/figmaSourceNode/properties/styled_text_segments"
+                    }
+                  }
                 }
               ]
             },
@@ -1039,13 +1211,35 @@
                   "additionalProperties": false,
                   "required": [
                     "kind",
-                    "source_path"
+                    "source_blob_sha"
                   ],
                   "properties": {
                     "kind": {
                       "const": "registry-literal"
                     },
-                    "source_path": {
+                    "source_blob_sha": {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{40}$"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "kind",
+                    "node_id",
+                    "section"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "const": "figma-description"
+                    },
+                    "node_id": {
+                      "type": "string",
+                      "pattern": "^[0-9]+:[0-9]+$"
+                    },
+                    "section": {
                       "type": "string",
                       "minLength": 1
                     }
@@ -1161,15 +1355,10 @@
           "type": "object",
           "additionalProperties": false,
           "required": [
-            "baseline_path",
             "baseline_heading",
             "baseline_blob_sha"
           ],
           "properties": {
-            "baseline_path": {
-              "type": "string",
-              "minLength": 1
-            },
             "baseline_heading": {
               "type": "string",
               "minLength": 1
@@ -1267,6 +1456,755 @@
           "type": "string",
           "minLength": 1,
           "pattern": "\\S"
+        }
+      }
+    },
+    "figmaSourceVariant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "variant_node_id",
+        "axes",
+        "source_node"
+      ],
+      "properties": {
+        "variant_node_id": {
+          "type": "string",
+          "pattern": "^[0-9]+:[0-9]+$"
+        },
+        "axes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "value"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "value": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "source_node": {
+          "$ref": "#/$defs/figmaSourceNode"
+        }
+      }
+    },
+    "figmaSourceFill": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "color",
+            "opacity",
+            "visible"
+          ],
+          "properties": {
+            "type": {
+              "const": "solid"
+            },
+            "color": {
+              "type": "string",
+              "pattern": "^#[0-9A-F]{6}$"
+            },
+            "opacity": {
+              "type": "number"
+            },
+            "visible": {
+              "type": "boolean"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "hash",
+            "scale_mode",
+            "transform",
+            "rotation",
+            "source_dimensions"
+          ],
+          "properties": {
+            "type": {
+              "const": "image"
+            },
+            "hash": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            },
+            "scale_mode": {
+              "type": "string"
+            },
+            "transform": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "items": {
+                "type": "array",
+                "minItems": 3,
+                "maxItems": 3,
+                "items": {
+                  "type": "number"
+                }
+              }
+            },
+            "rotation": {
+              "type": "number"
+            },
+            "source_dimensions": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "width",
+                "height",
+                "unit"
+              ],
+              "properties": {
+                "width": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "height": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "unit": {
+                  "const": "px"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "stops",
+            "transform"
+          ],
+          "properties": {
+            "type": {
+              "const": "linear-gradient"
+            },
+            "stops": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "position",
+                  "color",
+                  "opacity"
+                ],
+                "properties": {
+                  "position": {
+                    "type": "number"
+                  },
+                  "color": {
+                    "type": "string",
+                    "pattern": "^#[0-9A-F]{6}$"
+                  },
+                  "opacity": {
+                    "type": "number"
+                  }
+                }
+              }
+            },
+            "transform": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "items": {
+                "type": "array",
+                "minItems": 3,
+                "maxItems": 3,
+                "items": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "stops",
+            "transform",
+            "visible",
+            "opacity"
+          ],
+          "properties": {
+            "type": {
+              "const": "radial-gradient"
+            },
+            "stops": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "position",
+                  "color",
+                  "opacity"
+                ],
+                "properties": {
+                  "position": {
+                    "type": "number"
+                  },
+                  "color": {
+                    "type": "string",
+                    "pattern": "^#[0-9A-F]{6}$"
+                  },
+                  "opacity": {
+                    "type": "number"
+                  }
+                }
+              }
+            },
+            "transform": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "items": {
+                "type": "array",
+                "minItems": 3,
+                "maxItems": 3,
+                "items": {
+                  "type": "number"
+                }
+              }
+            },
+            "visible": {
+              "type": "boolean"
+            },
+            "opacity": {
+              "type": "number"
+            }
+          }
+        }
+      ]
+    },
+    "figmaSourceNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "node_id",
+        "name",
+        "node_type",
+        "reference_dimensions"
+      ],
+      "properties": {
+        "node_id": {
+          "type": "string",
+          "pattern": "^(?:I)?[0-9]+:[0-9]+(?:;[0-9]+:[0-9]+)*$"
+        },
+        "name": {
+          "type": "string"
+        },
+        "node_type": {
+          "type": "string"
+        },
+        "reference_dimensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "width",
+            "height",
+            "unit"
+          ],
+          "properties": {
+            "width": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "height": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "unit": {
+              "const": "px"
+            }
+          }
+        },
+        "visible": {
+          "type": "boolean"
+        },
+        "layout": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mode",
+            "padding"
+          ],
+          "properties": {
+            "mode": {
+              "type": "string"
+            },
+            "horizontal_sizing": {
+              "type": "string"
+            },
+            "vertical_sizing": {
+              "type": "string"
+            },
+            "primary_axis_sizing": {
+              "type": "string"
+            },
+            "counter_axis_sizing": {
+              "type": "string"
+            },
+            "item_spacing": {
+              "type": "number"
+            },
+            "counter_axis_spacing": {
+              "type": "number"
+            },
+            "wrap": {
+              "type": "string"
+            },
+            "primary_axis_alignment": {
+              "type": "string"
+            },
+            "counter_axis_alignment": {
+              "type": "string"
+            },
+            "padding": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "top",
+                "right",
+                "bottom",
+                "left"
+              ],
+              "properties": {
+                "top": {
+                  "type": "number"
+                },
+                "right": {
+                  "type": "number"
+                },
+                "bottom": {
+                  "type": "number"
+                },
+                "left": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        },
+        "corner_radius": {
+          "type": "number"
+        },
+        "fills": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/figmaSourceFill"
+          }
+        },
+        "text_style": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "font_family",
+            "font_style",
+            "font_size_px",
+            "line_height",
+            "figma_style_id",
+            "figma_style_name"
+          ],
+          "properties": {
+            "font_family": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "font_style": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "font_size_px": {
+              "type": "number"
+            },
+            "line_height": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "unit",
+                "value"
+              ],
+              "properties": {
+                "unit": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "number"
+                }
+              }
+            },
+            "figma_style_id": {
+              "type": "string"
+            },
+            "figma_style_name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "horizontal_alignment": {
+              "type": "string"
+            },
+            "font_weight": {
+              "type": "number"
+            },
+            "font_width": {
+              "type": "number"
+            },
+            "letter_spacing": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "unit",
+                "value"
+              ],
+              "properties": {
+                "unit": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "number"
+                }
+              }
+            },
+            "text_case": {
+              "type": "string"
+            },
+            "text_decoration": {
+              "type": "string"
+            }
+          }
+        },
+        "instance_properties": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "value",
+              "type"
+            ],
+            "properties": {
+              "value": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "boolean"
+                  }
+                ]
+              },
+              "type": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "variable_bindings": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "name"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/figmaSourceNode"
+          }
+        },
+        "clips_content": {
+          "type": "boolean"
+        },
+        "layout_align": {
+          "type": "string"
+        },
+        "layout_grow": {
+          "type": "number"
+        },
+        "minimum_width_px": {
+          "type": "number"
+        },
+        "maximum_width_px": {
+          "type": "number"
+        },
+        "minimum_height_px": {
+          "type": "number"
+        },
+        "maximum_height_px": {
+          "type": "number"
+        },
+        "layout_positioning": {
+          "type": "string"
+        },
+        "opacity": {
+          "type": "number"
+        },
+        "rotation": {
+          "type": "number"
+        },
+        "strokes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/figmaSourceFill"
+          }
+        },
+        "stroke_weight": {
+          "type": "number",
+          "minimum": 0
+        },
+        "stroke_align": {
+          "type": "string",
+          "enum": [
+            "INSIDE",
+            "CENTER",
+            "OUTSIDE"
+          ]
+        },
+        "corner_radii": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "top_left",
+            "top_right",
+            "bottom_right",
+            "bottom_left"
+          ],
+          "properties": {
+            "top_left": {
+              "type": "number",
+              "minimum": 0
+            },
+            "top_right": {
+              "type": "number",
+              "minimum": 0
+            },
+            "bottom_right": {
+              "type": "number",
+              "minimum": 0
+            },
+            "bottom_left": {
+              "type": "number",
+              "minimum": 0
+            }
+          }
+        },
+        "styled_text_segments": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "start",
+              "end",
+              "characters",
+              "font_family",
+              "font_style",
+              "font_size_px",
+              "line_height",
+              "text_decoration",
+              "fills"
+            ],
+            "properties": {
+              "start": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "end": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "characters": {
+                "type": "string"
+              },
+              "font_family": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "font_style": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "font_size_px": {
+                "type": "number"
+              },
+              "line_height": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "unit",
+                  "value"
+                ],
+                "properties": {
+                  "unit": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "number"
+                  }
+                }
+              },
+              "text_decoration": {
+                "type": "string"
+              },
+              "fills": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/figmaSourceFill"
+                }
+              }
+            }
+          }
+        },
+        "text_style_ref": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "figma_style_id",
+            "figma_style_name"
+          ],
+          "properties": {
+            "figma_style_id": {
+              "type": "string"
+            },
+            "figma_style_name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "component_property_references": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "characters": {
+          "type": "string"
+        },
+        "main_component_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[0-9]+:[0-9]+$"
+        },
+        "text_geometry": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "auto_resize",
+            "vertical_alignment",
+            "horizontal_alignment"
+          ],
+          "properties": {
+            "auto_resize": {
+              "type": "string"
+            },
+            "vertical_alignment": {
+              "type": "string"
+            },
+            "horizontal_alignment": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "additionalVariantContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "variant_node_id",
+        "axes",
+        "root"
+      ],
+      "properties": {
+        "variant_node_id": {
+          "type": "string",
+          "pattern": "^[0-9]+:[0-9]+$"
+        },
+        "axes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "value"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "value": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "root": {
+          "$ref": "#/$defs/element"
         }
       }
     }

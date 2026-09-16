@@ -45,7 +45,7 @@ function formatProvenance(provenance) {
     return "";
   }
   if (provenance.kind === "registry-literal") {
-    return `${inlineCode(provenance.kind)} (${inlineCode(provenance.source_path)})`;
+    return "";
   }
   if (provenance.kind === "figma-literal") {
     return `${inlineCode(provenance.kind)} at ${inlineCode(provenance.node_id)}`;
@@ -109,6 +109,8 @@ function formatFactValue(value, { record, index, foundations, viewport, path }) 
       return `property ${propertyLabel(record, value.property_id)}`;
     case "asset-reference":
       return `asset ${inlineCode(value.asset_contract_id)}`;
+    case "segments":
+      return inlineCode(JSON.stringify(value.items));
     default:
       throw registryDocError(
         "COMPONENT_REGISTRY_DOC_UNKNOWN_FACT",
@@ -136,6 +138,8 @@ function renderViewport(record, viewport, index) {
 
     if (element.visibility.mode === "property") {
       line += `property ${propertyLabel(record, element.visibility.property_id)}`;
+    } else if (element.visibility.mode === "variant-axis") {
+      line += `variant ${inlineCode(`${element.visibility.axis}=${element.visibility.value}`)}`;
     } else {
       line += inlineCode("always");
     }
@@ -184,6 +188,10 @@ function renderPropertiesAndVariants(record) {
         (axes ? `; axes: ${axes}` : ""),
     );
   }
+  for (const source of record.contracts?.source_variants ?? []) {
+    const axes = source.axes.map((axis) => `${axis.name}=${axis.value}`).join(", ");
+    lines.push(`- Direct Figma source: ${inlineCode(source.variant_node_id)}${axes ? `; ${inlineCode(axes)}` : ""}; reference frame ${source.source_node.reference_dimensions.width}×${source.source_node.reference_dimensions.height}px`);
+  }
   for (const property of record.properties ?? []) {
     lines.push(
       `- Property ${propertyLabel(record, property.id)} — ${inlineCode(property.type)}; default ${formatDefault(property.default)}`,
@@ -219,6 +227,7 @@ function renderAssetContract(asset, foundations) {
     `  - Clipping: ${inlineCode(asset.clipping_policy_id)}`,
     `  - Export boundary: ${inlineCode(asset.export_boundary.kind)} ${inlineCode(asset.export_boundary.semantic_node_name)}`,
     `  - Pixel dimensions: ${asset.pixel_dimensions.width}×${asset.pixel_dimensions.height}${asset.pixel_dimensions.unit}`,
+    ...(asset.figma_raw_source_dimensions ? [`  - Raw Figma Fill dimensions: ${asset.figma_raw_source_dimensions.width}×${asset.figma_raw_source_dimensions.height}${asset.figma_raw_source_dimensions.unit}`] : []),
     `  - Aspect ratio: ${asset.aspect_ratio.width}:${asset.aspect_ratio.height}`,
     `  - Crop: ${inlineCode(asset.crop.mode)}; position ${inlineCode(asset.crop.position_source)}`,
     `  - Background: own fill ${inlineCode(asset.background.own_visible_boundary_fill)}; artificial matte ${inlineCode(asset.background.artificial_matte)}`,
@@ -324,9 +333,9 @@ function renderSection(record, index, sectionId) {
         `- Figma: ${inlineCode(`${record.figma.file_key}#${record.figma.node_id}`)} (${inlineCode(record.identity.node_kind)})`,
         `- Source root: ${inlineCode(record.figma.source_root_node_id)}`,
         `- Verified: ${inlineCode(record.figma.verified_at)}`,
+        ...(record.figma.verification ? [`- Figma source check: ${inlineCode(record.figma.verification.status)} on ${inlineCode(record.figma.verification.checked_at)}; ${oneLine(record.figma.verification.reason)}`] : []),
         `- Structure fingerprint: ${inlineCode(record.figma.structure_fingerprint)}`,
         `- Purpose: ${oneLine(record.documentation.purpose)}`,
-        `- Baseline: ${inlineCode(record.provenance.baseline_path)} → ${inlineCode(record.provenance.baseline_heading)} (${inlineCode(record.provenance.baseline_blob_sha)})`,
       ];
     case "structure-and-rendering": {
       const renderType = deriveComponentRenderType(record);
@@ -341,6 +350,7 @@ function renderSection(record, index, sectionId) {
         `- Render type: ${inlineCode(renderType)}`,
         `- Desktop root: ${inlineCode(record.contracts.desktop.root.id)} — ${inlineCode(record.contracts.desktop.root.render_mode)}`,
         `- Mobile root: ${inlineCode(record.contracts.mobile.root.id)} — ${inlineCode(record.contracts.mobile.root.render_mode)}`,
+        ...(record.figma.verification ? ["- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input."] : []),
       ];
     }
     case "desktop":

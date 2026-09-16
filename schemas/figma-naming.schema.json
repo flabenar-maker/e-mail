@@ -237,7 +237,8 @@
         "extension_forms",
         "repeater_index",
         "forbidden_patterns",
-        "forbidden_categories"
+        "forbidden_categories",
+        "implementation_geometry"
       ],
       "properties": {
         "case": {
@@ -317,6 +318,39 @@
               "html-tag",
               "viewport"
             ]
+          }
+        },
+        "implementation_geometry": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "parent_semantic_boundary_required",
+            "semantic_name_required",
+            "node_types"
+          ],
+          "properties": {
+            "parent_semantic_boundary_required": {
+              "const": true
+            },
+            "semantic_name_required": {
+              "const": false
+            },
+            "node_types": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "VECTOR",
+                  "BOOLEAN_OPERATION",
+                  "RECTANGLE",
+                  "ELLIPSE",
+                  "LINE",
+                  "POLYGON",
+                  "STAR"
+                ]
+              }
+            }
           }
         }
       }

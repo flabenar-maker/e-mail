@@ -1,5 +1,5 @@
 import { SystemValidationError } from "./diagnostics.mjs";
-import { validateFigmaName } from "./figma-name-validator.mjs";
+import { validateFigmaNameProposal } from "./figma-name-validator.mjs";
 
 function blocked(code, path, message) {
   return {
@@ -48,7 +48,7 @@ function titleWords(naming, tokens) {
 }
 
 function generated(naming, request, name, appliedRuleIds, validation) {
-  const errors = validateFigmaName(naming, {
+  const errors = validateFigmaNameProposal(naming, {
     objectKind: request.objectKind,
     name,
     ...validation,
@@ -101,6 +101,13 @@ function generateComponent(naming, request) {
 }
 
 function generateLayer(naming, request) {
+  if (request.namingScope === "implementation-geometry") {
+    return blocked(
+      "FIGMA_NAME_GEOMETRY_RENAME_NOT_REQUIRED",
+      "/request/namingScope",
+      "Atomic implementation geometry remains unnamed semantically under its confirmed parent boundary.",
+    );
+  }
   const role = request.roleId;
   if (
     typeof role !== "string" ||
@@ -146,6 +153,7 @@ function generateLayer(naming, request) {
     request,
     name,
     ["lower-kebab", "controlled-layer-role"],
+    { roleId: role, semanticCategory: "role" },
   );
 }
 
@@ -215,24 +223,58 @@ function generateAssetOwner(naming, request) {
     );
   }
 
-  const scale = naming.asset_owners.scale_suffixes.find(
-    (item) => item.scale === request.currentScale,
+  const scale = naming.asset_owners.scale_suffixes.find((item) =>
+    typeof request.existingName === "string" &&
+    request.existingName.endsWith(" " + item.suffix),
   );
   if (!scale) {
     return blocked(
       "FIGMA_NAME_SCALE_SUFFIX_REQUIRED",
-      "/request/currentScale",
-      "An existing @2x or @4x scale is required for an asset owner.",
+      "/request/existingName",
+      "An existing @2x or @4x asset owner name is required for an asset owner rename.",
     );
   }
 
-  const name = lowerKebab(tokens) + " " + scale.suffix;
+  const kind = request.assetOwnerKind;
+  if (kind !== "internal" && kind !== "component") {
+    return blocked(
+      "semantic-role-required",
+      "/request/assetOwnerKind",
+      "A confirmed internal or component asset owner kind is required.",
+    );
+  }
+  if (
+    (kind === "internal" && request.existingName.startsWith("Asset/")) ||
+    (kind === "component" && !request.existingName.startsWith("Asset/"))
+  ) {
+    return blocked(
+      "FIGMA_NAME_ASSET_OWNER_KIND_MISMATCH",
+      "/request/existingName",
+      "Ordinary naming requests cannot change the asset owner kind.",
+    );
+  }
+
+  const semanticName =
+    kind === "component" ? titleKebab(naming, tokens) : lowerKebab(tokens);
+  const name =
+    (kind === "component" ? "Asset/" : "") +
+    semanticName +
+    " " +
+    scale.suffix;
   return generated(
     naming,
     request,
     name,
-    ["asset-owner", "lower-kebab", `preserve-${scale.suffix}`],
-    { expectedScale: scale.scale },
+    [
+      "asset-owner",
+      kind === "component" ? "title-kebab-component-segment" : "lower-kebab",
+      `preserve-${scale.suffix}`,
+    ],
+    {
+      expectedScale: scale.scale,
+      assetOwnerKind: kind,
+      existingName: request.existingName,
+    },
   );
 }
 
@@ -320,4 +362,43 @@ export function generateFigmaName(naming, request = {}) {
     "/request/objectKind",
     `Unknown Figma naming object kind: ${String(request.objectKind)}.`,
   );
+}
+
+export function renderFigmaNamingReference(naming) {
+  const examples = [
+    {
+      objectKind: "component",
+      namespaceId: "block",
+      semanticTokens: ["cards", "images"],
+    },
+    { objectKind: "layer", roleId: "artwork" },
+    {
+      objectKind: "asset-owner",
+      assetOwnerKind: "internal",
+      existingName: "hero-image @2x",
+      semanticTokens: ["feature", "image"],
+    },
+    {
+      objectKind: "asset-owner",
+      assetOwnerKind: "component",
+      existingName: "Asset/Bank-Badge @4x",
+      semanticTokens: ["feature", "icon"],
+    },
+  ].map((request) => generateFigmaName(naming, request));
+
+  return JSON.stringify(
+    {
+      generated_examples: examples.map((result) => ({
+        object_kind: result.object_kind,
+        name: result.name,
+        applied_rule_ids: result.applied_rule_ids,
+      })),
+      proposal_gate: "semantic-role-required",
+      existing_name_audit: "syntax-valid is not semantic-confirmed",
+      scale_change: "requires a separate export-contract decision",      implementation_geometry: "not assigned a semantic name under a confirmed parent boundary",
+
+    },
+    null,
+    2,
+  ) + "\n";
 }

@@ -1,6 +1,6 @@
 # CUPIS Structured System Migration Roadmap
 
-Актуальность: 2026-09-10.
+Актуальность: 2026-09-15.
 
 ## Назначение
 
@@ -11,8 +11,8 @@ Master-спецификация владеет архитектурными ре
 ## Статусы
 
 - `[x]` — этап завершён и находится в `main`;
-- `[ ]` — этап ещё не начат;
-- один технический этап выполняется в отдельной branch и PR;
+- `[ ]` — этап или пункт ещё не завершён;
+- каждый технический пакет выполняется в отдельной branch и PR;
 - следующий этап начинается после проверки и слияния предыдущего;
 - если этап требует нового архитектурного решения, сначала обновляется master-спецификация.
 
@@ -25,6 +25,8 @@ Master-спецификация владеет архитектурными ре
 3. проверить состав папки `docs/superpowers/plans/` и наличие связанного implementation plan текущего этапа;
 4. сверить отмеченный статус с фактически слитыми в `main` артефактами;
 5. не восстанавливать статус только по памяти чата.
+
+Исторические пункты завершённых этапов описывают состояние на момент их реализации. После [PR #69](https://github.com/flabenar-maker/e-mail/pull/69) старый контур находится в `Legacy/`, все маршруты временно указывают на `workflow-paused`, а [PR #70](https://github.com/flabenar-maker/e-mail/pull/70) привёл тесты к этой изоляции. Это не cutover и не завершение миграции. Старые формулировки «действующий Markdown-источник» в завершённых этапах не описывают текущий рабочий путь.
 
 Этап отмечается завершённым только после его слияния в `main`. После слияния в roadmap добавляются фактическая ссылка на implementation plan или PR и новый статус. Если подробный plan ещё не создан, следующим действием является его создание и review, а не начало реализации.
 
@@ -47,6 +49,8 @@ Master-спецификация владеет архитектурными ре
 - [x] Ввести `system/manifest.yaml`, строгую schema, validation CLI и bootstrap cutover.
 - [x] Подключить CI и characterization-защиту области миграции.
 - [x] Сделать manifest единственной машинно-читаемой картой источников, routes, bundles, skills и plugins.
+
+Этап реализован в [PR #17](https://github.com/flabenar-maker/e-mail/pull/17). CI был частью исторического результата; [PR #67](https://github.com/flabenar-maker/e-mail/pull/67) убрал GitHub Actions, и текущие проверки выполняются локально.
 
 ### 3. Typography foundation pilot
 
@@ -138,35 +142,50 @@ Structured records остаются shadow-источником до generated b
 - [x] Проверять, что каждый bundle содержит только применимые rules, contracts и workflows.
 - [x] Сохранить весь этап shadow до отдельного cutover.
 
-Реализация этапа 7B слита в [PR #43](https://github.com/flabenar-maker/e-mail/pull/43), итоговый commit: `15a1c3ce09fec33d5aee82a87ffee4667e911702`. Generated docs и route-specific context bundles находятся в `main`, но остаются shadow-слоем: рабочие Core, workflows, skills и Figma этим этапом не переключались.
+Реализация этапа 7B слита в [PR #43](https://github.com/flabenar-maker/e-mail/pull/43), итоговый commit: `15a1c3ce09fec33d5aee82a87ffee4667e911702`. Generated docs и route-specific context bundles были реализованы как shadow-слой. После PR #69 полный `docs/generated/component-registry.md` ошибочно оказался в `Legacy/` вместе со старым контуром; его renderer и структурированные входы остались. [PR #71](https://github.com/flabenar-maker/e-mail/pull/71) восстановил полный generated registry, его регистрацию в manifest и blocking-проверки в `main`. Файл вновь является производным представлением 61 structured contracts, не вторым источником component facts; остановленные маршруты не переключались.
 
-### 8. Core, workflows и HTML rendering cutover
+### 8. Core, workflows и подготовка HTML-рендера — в работе
 
 Архитектурное основание: [CUPIS HTML Rendering Design](../specs/2026-09-10-cupis-html-rendering-design.md).
 
 Подробный implementation plan: [CUPIS HTML Rendering Stage 8](2026-09-10-cupis-html-rendering-stage-8.md).
 
-- [x] Согласовать направление contract-driven HTML-рендеринга и зафиксировать архитектурную спецификацию.
-- [ ] Зафиксировать characterization baseline и владельцев renderer-impacting данных.
-- [ ] Создать rendering foundation и renderer-ready schema без дублирования существующих foundations и contracts.
-- [ ] Нормализовать пилотные component contracts: facts должны принадлежать управляющим узлам, а не корневым `description-N`.
-- [ ] Разделить Core на `email-rendering-standard.md`, `typography-standard.md`, `asset-export-standard.md` и `figma-library-standard.md` без копирования structured definitions.
-- [ ] Реализовать email-примитивы, общий contract-tree interpreter и единый renderer registry; специальные обработчики допускать только для доказанных исключений.
-- [ ] Добавить временную модель, CLI, типизированную диагностику и атомарную публикацию `email.html` + `images/`.
-- [ ] Вычислять render-impact digest автоматически только из данных, влияющих на HTML.
-- [ ] Доказать архитектуру на representative Mobile/Desktop-пилоте до миграции всех активных компонентов.
-- [ ] Мигрировать остальные компоненты после успешного пилота и проверки coverage.
-- [ ] Перевести maintenance и email-build workflows в структурированный формат.
-- [ ] Сохранить HTML зависимым от фактического инстанса и component contract, а не design-time золотых правил.
-- [ ] Выполнить characterization и shadow comparison со старыми Markdown-источниками.
+Этап 8 готовит renderer и структурированные workflows, но не переключает остановленные маршруты. Фактический cutover выполняется только на этапе 14 после сквозного сравнения этапа 13.
+
+Фактический статус на 2026-09-16: пакеты 1–9 слиты в main через PR #50–58; [PR #59](https://github.com/flabenar-maker/e-mail/pull/59) исправил пилотные Mobile/Desktop layout contracts. Реализованы rendering foundation, реестр шести пилотных renderer coverage, разделённый Core, email-примитивы, contract-tree interpreter, пилот, временная модель, CLI с атомарным выводом, render-impact diagnostics и автоматические HTML-инварианты. Наличие этого кода не означает готовности сборки произвольного production-письма.
+
+После неудачной попытки получить убедительный пилотный результат обнаружилась недостаточная точность части мигрированных component contracts. [PR #61](https://github.com/flabenar-maker/e-mail/pull/61), [#62](https://github.com/flabenar-maker/e-mail/pull/62), [#63](https://github.com/flabenar-maker/e-mail/pull/63) и [#64](https://github.com/flabenar-maker/e-mail/pull/64) выполнили прямую сверку с Figma, добавили проверку фактических данных и уточнили маркетинговые и сервисные контракты. Это корректирующая работа внутри этапа 8, а не завершение пакетов 10–12.
+
+[Корректирующий план для foundations этапов 2–5](2026-09-15-cupis-foundations-figma-verified-remediation.md) реализован и слит через [PR #75](https://github.com/flabenar-maker/e-mail/pull/75), merge commit `c8c485bde0d69316dac83925c40e4f6b2fc0037c`. Он усилил Figma-backed проверку typography, spacing, assets и naming, но не завершил Package 10–12, этап 8, сквозное сравнение этапа 13 или cutover этапа 14.
+[PR #60](https://github.com/flabenar-maker/e-mail/pull/60) остаётся открытым исследовательским черновиком: он не меняет active rules, component contracts или renderer. Результаты исследования преобразованы в согласованную [client-resilience спецификацию](../specs/2026-09-16-cupis-email-client-resilience-design.md) и [implementation plan](2026-09-16-cupis-email-client-resilience.md). Реальная проверка через Altcraft теперь является обязательным Package 10D, а не внешним напоминанием.
+
+- [x] Зафиксировать characterization baseline и владельцев renderer-impacting данных — PR #50.
+- [x] Создать rendering foundation и renderer-ready schema без дублирования существующих foundations и contracts — PR #51–52.
+- [x] Нормализовать пилотные component contracts и сверить значимые факты с Figma — PR #52 и #61–64.
+- [x] Разделить Core на четыре тематических стандарта — PR #53.
+- [x] Реализовать email-примитивы, общий contract-tree interpreter и пилотный renderer registry — PR #54–55.
+- [x] Добавить временную модель, CLI, типизированную диагностику и атомарную публикацию email.html + images/ — PR #56–57.
+- [x] Вычислять render-impact digest автоматически только из данных, влияющих на HTML — PR #57.
+- [x] Добавить автоматические HTML и property checks — PR #58.
+- [x] Проверить фактический HTML обновлённого пилота и классифицировать расхождения по входной модели, контракту, renderer code и browser preview — исправления оболочки и Mobile/Desktop границы слиты в PR #66.
+- [ ] Package 10A: добавить exact client-resilience policies, обязательные document metadata и явную alt-семантику.
+- [ ] Package 10B: реализовать shell/alt propagation, exclusive CSS budget, output metrics и точную minimum-viewport семантику.
+- [ ] Package 10C: создать normal/no-style preview, проверить узкие viewport и добавить точное пилотное coverage Email/Header рядом с Email/Footer.
+- [ ] Package 10D: доставить неизменённый пилот через Altcraft в целевые мобильные приложения и выбрать responsive fallback по зафиксированным результатам.
+- [ ] Завершить representative Mobile/Desktop visual scenarios для Header, Footer и пилотных блоков после 10A–10D.
+- [ ] Мигрировать renderer coverage остальных активных компонентов после успешного пилота.
+- [ ] Перевести maintenance и email-build workflows в структурированный формат и сравнить их обязательства с read-only архивным baseline без двойного контекста. Полное сквозное сравнение маршрутов остаётся этапу 13.
+- [ ] Подтвердить, что HTML зависит от фактического инстанса и component contract, а не design-time золотых правил.
 - [ ] Не подавать legacy и structured наборы правил одновременно в рабочий bundle.
+- [ ] Завершить все проверки этапа 8 и только после этого отметить этап завершённым.
 
-До технической реализации требуется отдельный reviewed implementation plan. Figma, production-письма и maintenance skill не входят в скрытую область этапа.
-### 9. Maintenance skill cutover
+[PR #66](https://github.com/flabenar-maker/e-mail/pull/66) исправил оболочку пилотного письма и границу Mobile/Desktop. [PR #67](https://github.com/flabenar-maker/e-mail/pull/67) и [#68](https://github.com/flabenar-maker/e-mail/pull/68) закрепили локальные проверки без GitHub Actions; [PR #69](https://github.com/flabenar-maker/e-mail/pull/69) и [#70](https://github.com/flabenar-maker/e-mail/pull/70) изолировали Legacy и адаптировали тесты. Маршруты сейчас остановлены; восстановленный полный generated component registry не означает завершения пакетов 10–12 или возобновления production-сборки.
 
-Manifest-driven разрешение source paths было выполнено на этапе 2. Этот этап не повторяет первоначальный переход на manifest: он переключает навык с временных Markdown-oriented profiles на итоговые generated context bundles.
+### 9. Подготовка maintenance skill
 
-- [ ] Перевести `maintaining-cupis-email-system` на итоговые route-specific context bundles.
+Manifest-driven разрешение source paths было выполнено на этапе 2. Этот этап не повторяет первоначальный переход на manifest: он подготавливает навык к итоговым generated context bundles, но не запускает временно остановленные маршруты. Их фактическое включение остаётся этапу 14 после этапа 13.
+
+- [ ] Подготовить `maintaining-cupis-email-system` к итоговым route-specific context bundles, сохранив остановленные маршруты до этапа 14.
 - [ ] Сохранить навык тонким маршрутизатором без копий правил и жёсткого списка путей.
 - [ ] Сохранить отдельный `migration-progress` route, требующий свежей сверки с roadmap перед ответом о статусе или следующих шагах.
 - [ ] Проверить mutation impact gate, cloud-only GitHub flow и Figma mutation gate.
@@ -204,27 +223,29 @@ Manifest-driven разрешение source paths было выполнено н
 - [ ] Собирать HTML по готовым Mobile/Desktop-инстансам, resolved component contracts и фактическим значениям.
 - [ ] Проверить создание нового письма, версионное изменение готового письма и границы локальной рабочей папки.
 
-### 13. Shadow comparison
+### 13. Сквозное shadow comparison
 
-- [ ] Сравнить structured outputs и context bundles с действующими Markdown-источниками.
-- [ ] Устранить semantic drift до cutover.
-- [ ] Подтвердить, что маршруты maintenance, component development и email build получают разные минимальные наборы контекста.
+Этап начинается после подготовки workflows, навыков и renderer coverage на этапах 8–12. В отличие от ограниченной проверки workflow-обязательств в пакете 12 этапа 8, здесь проверяется результат всего маршрута до включения production.
+
+- [ ] Сравнить generated docs, resolved context bundles и representative результаты maintenance, component development и email build с сохранёнными read-only источниками в `Legacy/`; не подключать архив к действующим маршрутам и не считать перенос доказательством equivalence.
+- [ ] Перенести необходимые characterization assertions из архивного baseline в активные проверки или заменить их проверками с тем же смыслом; тесты, лежащие в `Legacy/`, не считаются частью текущего `npm test`.
+- [ ] Устранить semantic drift до cutover и подтвердить, что три типа маршрутов получают разные минимальные наборы контекста.
 
 ### 14. Cutover
 
-- [ ] Переключить рабочие маршруты на структурированные источники и generated bundles.
+- [ ] Только после успешного этапа 13 переключить временно остановленные маршруты `workflow-paused` и подготовленные навыки на проверенные структурированные workflows, источники и generated bundles. Не возвращать `Legacy/` как промежуточный рабочий путь.
 - [ ] Перевести foundations, прошедшие shadow comparison, из временного `shadow`-режима в итоговый рабочий статус.
 - [ ] Подтвердить validation, bootstrap, skills и GitHub/Figma workflows.
 - [ ] Зафиксировать rollback point и полный список временных migration/shadow-артефактов перед очисткой.
 
-### 15. Удаление старых дублей и временных migration-артефактов
+### 15. Ревизия `Legacy/` и временных migration-артефактов
 
 - [ ] Выполнить отдельной задачей после успешного cutover.
 - [ ] Для каждого migration/shadow-артефакта зафиксировать решение `remove` или `preserve` и его фактических потребителей.
-- [ ] Удалить старые источники, shadow-only bundle/profile wiring, comparison baselines, compatibility paths, временные flags/statuses и проверки, единственной целью которых была миграция.
-- [ ] Сохранить постоянные schemas, semantic validators/resolvers, CI validation и regression-тесты, которые защищают действующие правила после cutover.
-- [ ] Подтвердить, что manifest, routes, bundles, skills и bootstrap не ссылаются на удалённые источники или временные механизмы.
+- [ ] Для каждого файла `Legacy/` подтвердить structured replacement и отсутствие активных потребителей; только после этого удалить действительно ненужные дубли отдельным PR. Нужные исторические baseline и characterization-тесты сохранить с объяснением роли.
+- [ ] Сохранить постоянные schemas, semantic validators/resolvers, локальные проверки и регрессионные тесты, которые защищают действующие правила после cutover.
+- [ ] Подтвердить, что manifest, routes, bundles, skills и bootstrap не ссылаются на удалённые источники или временные механизмы; сохранённый архив не является активным владельцем правил.
 
 ## Правило обновления roadmap
 
-После слияния этапа обновляется только его статус и ссылка на фактический implementation plan или PR. Перед таким обновлением статус повторно проверяется по актуальному `main` и содержимому `docs/superpowers/plans/`. Новое системное правило сначала фиксируется в master-спецификации; roadmap не используется как скрытый источник технических правил.
+После слияния этапа статус, ссылка на фактический implementation plan или PR, следующий gate и зависимости сверяются с актуальным `main` и содержимым `docs/superpowers/plans/`. Если реализация изменила путь к cutover, эти части roadmap корректируются без переписывания исторических задач как будто они выполнялись иначе. Новое системное правило сначала фиксируется в master-спецификации; roadmap не используется как скрытый источник технических правил.

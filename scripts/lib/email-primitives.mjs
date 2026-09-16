@@ -48,12 +48,13 @@ function renderTable(props, children) {
     "border-collapse": "collapse",
     "border-spacing": "0",
     ...(width === "100%" ? { width: "100%" } : {}),
+    ...(props.align === "center" ? { margin: "0 auto" } : {}),
     ...(props.style ?? {}),
   };
   const attrs = withStyle(
     [
       ["role", "presentation"],
-      ["width", width],
+      ["width", width === "auto" ? undefined : width],
       ["cellpadding", "0"],
       ["cellspacing", "0"],
       ["border", "0"],
@@ -75,14 +76,14 @@ function renderCell(props, children) {
     ...(props.style ?? {}),
   };
   const attrs = withStyle(
-    [["width", props.width], ["height", props.height], ["valign", valign]],
+    [["width", props.width], ["height", props.height], ["valign", valign], ["bgcolor", props.bgcolor]],
     style,
   );
   return `<td${attrs}>${children}</td>`;
 }
 
 function renderText(props, children) {
-  const body = `${props.text === undefined ? "" : escapeHtml(props.text)}${children}`;
+  const body = `${props.text === undefined ? "" : escapeHtml(props.text).replaceAll("\u2028", "<br>").replaceAll("\n", "<br>")}${children}`;
   return `<p${withStyle([], { margin: "0", ...(props.style ?? {}) })}>${body}</p>`;
 }
 
@@ -117,7 +118,7 @@ function renderDirectImage(props) {
     [
       ["src", props.src],
       ["width", props.width],
-      ["height", props.height],
+      ["height", props.fluid ? undefined : props.height],
       ["alt", props.alt ?? ""],
       ["border", "0"],
     ],
@@ -156,9 +157,36 @@ function renderVisibility(props, children) {
   return `<div${withStyle([["class", props.className]], style)}>${children}</div>`;
 }
 
+function renderEmailShell(props, children) {
+  const maxWidth = props.max_width_px;
+  const minWidth = props.min_width_px;
+  const inset = props.horizontal_inset_px;
+  const background = props.background_color;
+  const inner = renderTable({
+    width: "100%",
+    align: "center",
+    style: {
+      "max-width": pixels(maxWidth),
+      "min-width": pixels(minWidth),
+    },
+  }, "<tr>" + renderCell({}, children) + "</tr>");
+  const outlookOpen = "<!--[if (gte mso 9)|(IE)]><table role=\"presentation\" width=\"" +
+    maxWidth + "\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td><![endif]-->";
+  const outlookClose = "<!--[if (gte mso 9)|(IE)]></td></tr></table><![endif]-->";
+  const cell = renderCell({
+    bgcolor: background,
+    style: {
+      "background-color": background,
+      padding: "0 " + pixels(inset),
+      "text-align": "center",
+    },
+  }, outlookOpen + inner + outlookClose);
+  return renderTable({ width: "100%" }, "<tr>" + cell + "</tr>");
+}
+
 export function renderPrimitive(id, props = {}, children = "") {
   const handlers = {
-    "email-shell": renderTable,
+    "email-shell": renderEmailShell,
     section: renderTable,
     table: renderTable,
     cell: renderCell,

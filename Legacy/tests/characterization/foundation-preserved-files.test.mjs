@@ -8,7 +8,7 @@ import { fileURLToPath } from "node:url";
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const preserved = {
   ".agents/skills/maintaining-cupis-email-system/SKILL.md":
-    "79f76cc61cb1c5c6a147f2c164ed248fb935ad82",
+    "5bf171527cd2e4737997397f4e7fcdcf48857c23",
   ".agents/skills/maintaining-cupis-email-system/agents/openai.yaml":
     "5bc8931c02b653295005bb955172c2c62f6bdf41",
   "core/email-figma-prompt.md":
@@ -16,15 +16,15 @@ const preserved = {
   "core/figma-component-naming-standard.md":
     "97c922e918244d6142d3e82bc89f9ca09652389d",
   "registry/email-component-descriptions-registry.md":
-    "52893694e97a8751517f9174a90376e1eb849e0c",
+    "be2203aef82db093fca37857f060d552b254c579",
   "registry/email-typography-registry.md":
     "12e5ae0b0aa1c5f18f9132e2e948e6a712c0f1bd",
   "workflows/library-maintenance-checkpoint.md":
-    "81d951189f73a65efb74d70cc390c5213c5f2e9f",
+    "0fe0abb332876c55613c0503fa20dc6b260eff16",
   "workflows/email-build-checkpoint.md":
     "42f8f91ca6e867b514c6d1af3dbef5c292cb8106",
   "docs/superpowers/specs/2026-08-24-cupis-structured-email-system-design.md":
-    "a03be3cac63729af5cbd4e23d73c19027eeace45",
+    "42346b3abbb04903d36934feb4b024175c073815",
 };
 
 async function gitBlobSha(relativePath) {

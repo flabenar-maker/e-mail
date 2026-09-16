@@ -1,9 +1,13 @@
 {
+  "schema_version": "1.0.0",
   "id": "stage-8-representative-pilot",
   "root": {
     "instance_id": "pilot-template",
     "component_id": "email-template",
-    "variants": { "mobile": "mobile", "desktop": "desktop" },
+    "variants": {
+      "mobile": "mobile",
+      "desktop": "desktop"
+    },
     "property_values": [],
     "content_values": [],
     "asset_files": [],
@@ -12,100 +16,458 @@
         "element_id": "content",
         "instances": [
           {
-            "instance_id": "pilot-primary-button",
-            "component_id": "button-primary",
-            "variants": { "mobile": "mobile", "desktop": "desktop" },
-            "property_values": [],
-            "content_values": [
-              { "element_id": "link", "slot_id": "href", "scope": "all", "value": { "type": "url", "value": "https://example.test/jobs" } },
-              { "element_id": "link", "slot_id": "text", "scope": "all", "value": { "type": "rich-text", "value": "Откликнуться" } }
-            ],
-            "asset_files": [],
-            "slots": []
-          },
-          {
-            "instance_id": "pilot-card",
-            "component_id": "card-image",
-            "variants": { "mobile": "mobile", "desktop": "desktop" },
-            "property_values": [],
-            "content_values": [
-              { "element_id": "card-image", "slot_id": "alt", "scope": "all", "value": { "type": "alt-text", "value": "Команда CUPIS" } },
-              { "element_id": "heading", "slot_id": "text", "scope": "all", "value": { "type": "rich-text", "value": "Работайте с нами" } },
-              { "element_id": "description", "slot_id": "text", "scope": "all", "value": { "type": "rich-text", "value": "Создавайте полезные продукты вместе с командой." } },
-              { "element_id": "link", "slot_id": "href", "scope": "all", "value": { "type": "url", "value": "https://example.test/team" } },
-              { "element_id": "link", "slot_id": "text", "scope": "all", "value": { "type": "rich-text", "value": "Подробнее" } }
-            ],
-            "asset_files": [
-              { "asset_contract_id": "card-image", "path": "images/card-image.jpg" }
-            ],
-            "slots": []
-          },
-          {
             "instance_id": "pilot-secondary",
             "component_id": "banner-secondary",
-            "variants": { "mobile": "mobile", "desktop": "desktop" },
+            "variants": {
+              "mobile": "mobile",
+              "desktop": "desktop"
+            },
             "property_values": [
-              { "property_id": "show-body", "scope": "all", "value": true },
-              { "property_id": "show-button", "scope": "all", "value": false }
+              {
+                "property_id": "show-body",
+                "scope": "all",
+                "value": true
+              },
+              {
+                "property_id": "show-button",
+                "scope": "all",
+                "value": true
+              }
             ],
             "content_values": [
-              { "element_id": "secondary-image", "slot_id": "alt", "scope": "mobile", "value": { "type": "alt-text", "value": "Преимущества CUPIS" } },
-              { "element_id": "heading", "slot_id": "text", "scope": "all", "value": { "type": "rich-text", "value": "Всё важное рядом" } },
-              { "element_id": "body", "slot_id": "text", "scope": "all", "value": { "type": "rich-text", "value": "Управляйте сервисами в одном месте." } }
+              {
+                "element_id": "root-card-secondary-image",
+                "slot_id": "alt",
+                "scope": "mobile",
+                "value": {
+                  "type": "alt-text",
+                  "value": "Преимущества CUPIS"
+                }
+              },
+              {
+                "element_id": "root-card-content-area-text-content-heading",
+                "slot_id": "text",
+                "scope": "all",
+                "value": {
+                  "type": "plain-text",
+                  "value": "Небольшой заголовок на пару строк"
+                }
+              },
+              {
+                "element_id": "root-card-content-area-text-content-body",
+                "slot_id": "text",
+                "scope": "all",
+                "value": {
+                  "type": "plain-text",
+                  "value": "Поясняющая подпись на несколько красивых строк"
+                }
+              }
             ],
             "asset_files": [
-              { "asset_contract_id": "secondary-image", "path": "images/secondary.jpg" }
+              {
+                "asset_contract_id": "secondary-image",
+                "path": "images/secondary.jpg"
+              }
             ],
-            "slots": []
+            "slots": [],
+            "nested_components": [
+              {
+                "element_id": "root-card-content-area-button",
+                "instance": {
+                  "instance_id": "pilot-secondary-button",
+                  "component_id": "button-secondary",
+                  "variants": {
+                    "mobile": "mobile",
+                    "desktop": "desktop"
+                  },
+                  "property_values": [],
+                  "content_values": [
+                    {
+                      "element_id": "root",
+                      "slot_id": "href",
+                      "scope": "all",
+                      "value": {
+                        "type": "url",
+                        "value": "https://example.test/secondary"
+                      }
+                    },
+                    {
+                      "element_id": "root-label",
+                      "slot_id": "text",
+                      "scope": "all",
+                      "value": {
+                        "type": "plain-text",
+                        "value": "Какая-то кнопка"
+                      }
+                    }
+                  ],
+                  "asset_files": [],
+                  "slots": []
+                }
+              }
+            ]
           },
           {
             "instance_id": "pilot-app-download",
             "component_id": "banner-app-download",
-            "variants": { "mobile": "mobile", "desktop": "desktop" },
+            "variants": {
+              "mobile": "mobile",
+              "desktop": "desktop"
+            },
             "property_values": [],
             "content_values": [
-              { "element_id": "app-logo", "slot_id": "alt", "scope": "all", "value": { "type": "alt-text", "value": "Приложение CUPIS" } },
-              { "element_id": "description", "slot_id": "text", "scope": "all", "value": { "type": "rich-text", "value": "Скачайте приложение" } },
-              { "element_id": "qr-code", "slot_id": "alt", "scope": "desktop", "value": { "type": "alt-text", "value": "QR-код для скачивания" } },
-              { "element_id": "rustore-link", "slot_id": "href", "scope": "all", "value": { "type": "url", "value": "https://example.test/rustore" } },
-              { "element_id": "rustore-icon", "slot_id": "alt", "scope": "all", "value": { "type": "alt-text", "value": "RuStore" } },
-              { "element_id": "rustore-text", "slot_id": "text", "scope": "all", "value": { "type": "rich-text", "value": "RuStore" } },
-              { "element_id": "google-play-link", "slot_id": "href", "scope": "all", "value": { "type": "url", "value": "https://example.test/google-play" } },
-              { "element_id": "google-play-icon", "slot_id": "alt", "scope": "all", "value": { "type": "alt-text", "value": "Google Play" } },
-              { "element_id": "google-play-text", "slot_id": "text", "scope": "all", "value": { "type": "rich-text", "value": "Google Play" } },
-              { "element_id": "appgallery-link", "slot_id": "href", "scope": "all", "value": { "type": "url", "value": "https://example.test/appgallery" } },
-              { "element_id": "appgallery-icon", "slot_id": "alt", "scope": "all", "value": { "type": "alt-text", "value": "AppGallery" } },
-              { "element_id": "appgallery-text", "slot_id": "text", "scope": "all", "value": { "type": "rich-text", "value": "AppGallery" } },
-              { "element_id": "getapps-link", "slot_id": "href", "scope": "all", "value": { "type": "url", "value": "https://example.test/getapps" } },
-              { "element_id": "getapps-icon", "slot_id": "alt", "scope": "all", "value": { "type": "alt-text", "value": "GetApps" } },
-              { "element_id": "getapps-text", "slot_id": "text", "scope": "all", "value": { "type": "rich-text", "value": "GetApps" } }
+              {
+                "element_id": "root-content-area-app-logo",
+                "slot_id": "alt",
+                "scope": "mobile",
+                "value": {
+                  "type": "alt-text",
+                  "value": "Приложение CUPIS"
+                }
+              },
+              {
+                "element_id": "root-content-area-body",
+                "slot_id": "text",
+                "scope": "mobile",
+                "value": {
+                  "type": "plain-text",
+                  "value": "Единственный финансовый сервис для тех, кто делает ставки на спорт"
+                }
+              },
+              {
+                "element_id": "root-content-area-store-buttons-rustore-button",
+                "slot_id": "href",
+                "scope": "all",
+                "value": {
+                  "type": "url",
+                  "value": "https://example.test/rustore"
+                }
+              },
+              {
+                "element_id": "root-content-area-store-buttons-rustore-button-rustore-icon",
+                "slot_id": "alt",
+                "scope": "mobile",
+                "value": {
+                  "type": "alt-text",
+                  "value": "RuStore"
+                }
+              },
+              {
+                "element_id": "root-content-area-store-buttons-rustore-button-button-text-title",
+                "slot_id": "text",
+                "scope": "mobile",
+                "value": {
+                  "type": "plain-text",
+                  "value": "RuStore"
+                }
+              },
+              {
+                "element_id": "root-content-area-store-buttons-google-play-button",
+                "slot_id": "href",
+                "scope": "all",
+                "value": {
+                  "type": "url",
+                  "value": "https://example.test/google-play"
+                }
+              },
+              {
+                "element_id": "root-content-area-store-buttons-google-play-button-google-play-icon",
+                "slot_id": "alt",
+                "scope": "mobile",
+                "value": {
+                  "type": "alt-text",
+                  "value": "Google Play"
+                }
+              },
+              {
+                "element_id": "root-content-area-store-buttons-google-play-button-button-text-title",
+                "slot_id": "text",
+                "scope": "mobile",
+                "value": {
+                  "type": "plain-text",
+                  "value": "GooglePlay"
+                }
+              },
+              {
+                "element_id": "root-content-area-store-buttons-appgallery-button",
+                "slot_id": "href",
+                "scope": "all",
+                "value": {
+                  "type": "url",
+                  "value": "https://example.test/appgallery"
+                }
+              },
+              {
+                "element_id": "root-content-area-store-buttons-appgallery-button-appgallery-icon",
+                "slot_id": "alt",
+                "scope": "mobile",
+                "value": {
+                  "type": "alt-text",
+                  "value": "AppGallery"
+                }
+              },
+              {
+                "element_id": "root-content-area-store-buttons-appgallery-button-button-text-title",
+                "slot_id": "text",
+                "scope": "mobile",
+                "value": {
+                  "type": "plain-text",
+                  "value": "AppGallery"
+                }
+              },
+              {
+                "element_id": "root-content-area-store-buttons-getapps-button",
+                "slot_id": "href",
+                "scope": "all",
+                "value": {
+                  "type": "url",
+                  "value": "https://example.test/getapps"
+                }
+              },
+              {
+                "element_id": "root-content-area-store-buttons-getapps-button-getapps-icon",
+                "slot_id": "alt",
+                "scope": "mobile",
+                "value": {
+                  "type": "alt-text",
+                  "value": "GetApps"
+                }
+              },
+              {
+                "element_id": "root-content-area-store-buttons-getapps-button-button-text-title",
+                "slot_id": "text",
+                "scope": "mobile",
+                "value": {
+                  "type": "plain-text",
+                  "value": "GetApps"
+                }
+              },
+              {
+                "element_id": "root-content-area-text-qr-header-row-app-logo",
+                "slot_id": "alt",
+                "scope": "desktop",
+                "value": {
+                  "type": "alt-text",
+                  "value": "Приложение CUPIS"
+                }
+              },
+              {
+                "element_id": "root-content-area-text-qr-header-row-body",
+                "slot_id": "text",
+                "scope": "desktop",
+                "value": {
+                  "type": "plain-text",
+                  "value": "Единственный финансовый сервис для тех, кто делает ставки на спорт"
+                }
+              },
+              {
+                "element_id": "root-content-area-text-qr-qr-code",
+                "slot_id": "alt",
+                "scope": "desktop",
+                "value": {
+                  "type": "alt-text",
+                  "value": "QR-код для скачивания"
+                }
+              },
+              {
+                "element_id": "root-content-area-store-buttons-rustore-button-rustore-icon",
+                "slot_id": "alt",
+                "scope": "desktop",
+                "value": {
+                  "type": "alt-text",
+                  "value": "RuStore"
+                }
+              },
+              {
+                "element_id": "root-content-area-store-buttons-google-play-button-google-play-icon",
+                "slot_id": "alt",
+                "scope": "desktop",
+                "value": {
+                  "type": "alt-text",
+                  "value": "Google Play"
+                }
+              },
+              {
+                "element_id": "root-content-area-store-buttons-appgallery-button-appgallery-icon",
+                "slot_id": "alt",
+                "scope": "desktop",
+                "value": {
+                  "type": "alt-text",
+                  "value": "AppGallery"
+                }
+              },
+              {
+                "element_id": "root-content-area-store-buttons-getapps-button-getapps-icon",
+                "slot_id": "alt",
+                "scope": "desktop",
+                "value": {
+                  "type": "alt-text",
+                  "value": "GetApps"
+                }
+              }
             ],
             "asset_files": [
-              { "asset_contract_id": "app-logo", "path": "images/app-logo.png" },
-              { "asset_contract_id": "qr-code", "path": "images/qr-code.png" },
-              { "asset_contract_id": "rustore-icon", "path": "images/rustore-icon.png" },
-              { "asset_contract_id": "google-play-icon", "path": "images/google-play-icon.png" },
-              { "asset_contract_id": "appgallery-icon", "path": "images/appgallery-icon.png" },
-              { "asset_contract_id": "getapps-icon", "path": "images/getapps-icon.png" }
+              {
+                "asset_contract_id": "app-logo",
+                "path": "images/app-logo.png"
+              },
+              {
+                "asset_contract_id": "qr-code",
+                "path": "images/qr-code.png"
+              },
+              {
+                "asset_contract_id": "rustore-icon",
+                "path": "images/rustore-icon.png"
+              },
+              {
+                "asset_contract_id": "google-play-icon",
+                "path": "images/google-play-icon.png"
+              },
+              {
+                "asset_contract_id": "appgallery-icon",
+                "path": "images/appgallery-icon.png"
+              },
+              {
+                "asset_contract_id": "getapps-icon",
+                "path": "images/getapps-icon.png"
+              }
             ],
             "slots": []
           },
           {
             "instance_id": "pilot-footer",
             "component_id": "email-footer",
-            "variants": { "mobile": "mobile", "desktop": "desktop" },
+            "variants": {
+              "mobile": "mobile",
+              "desktop": "desktop"
+            },
             "property_values": [
-              { "property_id": "show-caption", "scope": "all", "value": false },
-              { "property_id": "show-social-links", "scope": "all", "value": true }
+              {
+                "property_id": "show-caption",
+                "scope": "all",
+                "value": false
+              },
+              {
+                "property_id": "show-social-links",
+                "scope": "all",
+                "value": true
+              }
             ],
             "content_values": [
-              { "element_id": "caption", "slot_id": "text", "scope": "all", "value": { "type": "rich-text", "value": "Скрытая подпись" } },
-              { "element_id": "disclaimer", "slot_id": "text", "scope": "all", "value": { "type": "rich-text", "value": "Вы получили это письмо от CUPIS." } },
-              { "element_id": "vk-link", "slot_id": "href", "scope": "all", "value": { "type": "url", "value": "https://example.test/vk" } },
-              { "element_id": "vk-icon", "slot_id": "alt", "scope": "all", "value": { "type": "alt-text", "value": "VK" } }
+              {
+                "element_id": "root-footer-body-disclaimer-section-caption",
+                "slot_id": "text",
+                "scope": "all",
+                "value": {
+                  "type": "plain-text",
+                  "value": "Скрытая подпись"
+                }
+              },
+              {
+                "element_id": "root-footer-body-disclaimer-section-disclaimer-text-01",
+                "slot_id": "text",
+                "scope": "all",
+                "value": {
+                  "type": "plain-text",
+                  "value": "ООО НКО «Мобильная карта», Лицензия банка России № 3522-К195112. Юридический адрес: Россия, Санкт-Петербург, проспект Малоохтинский, дом. 64, литера. В, этаж 1, помещение 19–20Н."
+                }
+              },
+              {
+                "element_id": "root-footer-body-disclaimer-section-disclaimer-text-02",
+                "slot_id": "text",
+                "scope": "all",
+                "value": {
+                  "type": "rich-text",
+                  "segments": [
+                    {
+                      "type": "text",
+                      "value": "Если вы не регистрировались на сайте 1cupis.ru, напишите службе поддержки. Мы удалим почту из базы и больше не будем вам писать."
+                    }
+                  ]
+                }
+              },
+              {
+                "element_id": "root-footer-body-disclaimer-section-disclaimer-text-02",
+                "slot_id": "link-2-url",
+                "scope": "all",
+                "value": {
+                  "type": "url",
+                  "value": "https://example.test/support"
+                }
+              },
+              {
+                "element_id": "root-footer-body-disclaimer-section-disclaimer-text-02",
+                "slot_id": "link-4-url",
+                "scope": "all",
+                "value": {
+                  "type": "url",
+                  "value": "https://example.test/privacy"
+                }
+              },
+              {
+                "element_id": "root-footer-body-disclaimer-section-disclaimer-text-03",
+                "slot_id": "text",
+                "scope": "all",
+                "value": {
+                  "type": "plain-text",
+                  "value": "Отписаться от рассылки"
+                }
+              },
+              {
+                "element_id": "root-footer-body-disclaimer-section-disclaimer-text-03",
+                "slot_id": "href",
+                "scope": "all",
+                "value": {
+                  "type": "url",
+                  "value": "https://example.test/unsubscribe"
+                }
+              },
+              {
+                "element_id": "root-footer-body-social-section-social-icons-vk-icon",
+                "slot_id": "href",
+                "scope": "all",
+                "value": {
+                  "type": "url",
+                  "value": "https://example.test/vk"
+                }
+              },
+              {
+                "element_id": "root-footer-body-social-section-social-icons-vk-icon",
+                "slot_id": "alt",
+                "scope": "all",
+                "value": {
+                  "type": "alt-text",
+                  "value": "VK"
+                }
+              },
+              {
+                "element_id": "root-footer-body-social-section-social-icons-telegram-icon",
+                "slot_id": "href",
+                "scope": "all",
+                "value": {
+                  "type": "url",
+                  "value": "https://example.test/telegram"
+                }
+              },
+              {
+                "element_id": "root-footer-body-social-section-social-icons-telegram-icon",
+                "slot_id": "alt",
+                "scope": "all",
+                "value": {
+                  "type": "alt-text",
+                  "value": "Telegram"
+                }
+              }
             ],
             "asset_files": [
-              { "asset_contract_id": "vk-icon", "path": "images/vk-icon.png" }
+              {
+                "asset_contract_id": "vk-icon",
+                "path": "images/vk-icon.png"
+              },
+              {
+                "asset_contract_id": "telegram-icon",
+                "path": "images/telegram-icon.png"
+              }
             ],
             "slots": []
           }

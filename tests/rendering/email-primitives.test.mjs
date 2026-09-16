@@ -66,9 +66,10 @@ test("direct image uses fluid width with automatic proportional height", async (
 
   assert.equal(
     html,
-    '<img src="images/card.jpg" width="232" height="148" alt="Card &amp; &quot;badge&quot;" border="0" style="border:0;border-radius:18px;display:block;height:auto;line-height:100%;max-width:100%;outline:none;text-decoration:none;width:100%">',
+    '<img src="images/card.jpg" width="232" alt="Card &amp; &quot;badge&quot;" border="0" style="border:0;border-radius:18px;display:block;height:auto;line-height:100%;max-width:100%;outline:none;text-decoration:none;width:100%">',
   );
   assert.match(html, /height:auto/u);
+  assert.doesNotMatch(html, /\sheight="/u);
   assert.doesNotMatch(html, /height:148px/u);
 });
 

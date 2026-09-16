@@ -1,5 +1,7 @@
 # CUPIS Structured System Foundation Implementation Plan
 
+> **Исторический implementation plan.** Реализован в [PR #17](https://github.com/flabenar-maker/e-mail/pull/17). Команды, пути и чекбоксы ниже описывают выполнение того этапа, а не текущий рабочий маршрут: старый контур находится в Legacy/, маршруты остановлены, проверки теперь локальные. Для продолжения использовать свежие manifest и [roadmap](2026-08-25-cupis-migration-roadmap.md).
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Создать первый исполняемый фундамент новой CUPIS email-системы: один канонический `system/manifest.yaml`, строгую машинную проверку и атомарное переключение всех текущих потребителей без изменения правил писем, реестров, Figma или локальных email-проектов.

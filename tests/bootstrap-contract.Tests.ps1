@@ -8,6 +8,46 @@ $powerShell = if (Get-Command pwsh -ErrorAction SilentlyContinue) {
     (Get-Command powershell -ErrorAction Stop).Source
 }
 
+function Get-FixtureRelativeFilePaths {
+    param([string]$Root)
+    $resolvedRoot = [System.IO.Path]::GetFullPath($Root).TrimEnd(
+        [System.IO.Path]::DirectorySeparatorChar,
+        [System.IO.Path]::AltDirectorySeparatorChar
+    ) + [System.IO.Path]::DirectorySeparatorChar
+    Get-ChildItem -LiteralPath $Root -File -Recurse |
+        ForEach-Object {
+            ([System.IO.Path]::GetFullPath($_.FullName)).Substring($resolvedRoot.Length).Replace('\', '/')
+        } |
+        Sort-Object
+}
+function Get-ManifestFixtureFilePaths {
+    param([string]$Root)
+    $node = Get-Command node -ErrorAction Stop
+    $program = @"
+import { lstat, readdir, readFile } from "node:fs/promises";
+import { createRequire } from "node:module";
+import { join, relative, resolve } from "node:path";
+const require = createRequire(join(resolve(process.argv.at(-1)), "package.json"));
+const { parse } = require("yaml");
+const root = resolve(process.argv.at(-2));
+const manifest = parse(await readFile(join(root, "system/manifest.yaml"), "utf8"));
+const declaredPaths = [manifest.entrypoints.repository, manifest.entrypoints.bootstrap, ...manifest.sources.map(({ path }) => path), manifest.bootstrap.portable_config, manifest.bootstrap.verifier, ...manifest.skills.required.map(({ path }) => path), "system/manifest.yaml", "AGENTS.md", ".gitattributes"];
+async function expand(relativePath) {
+  const absolutePath = resolve(root, relativePath);
+  const stat = await lstat(absolutePath);
+  if (stat.isFile()) return [relative(root, absolutePath).replaceAll("\\", "/")];
+  const entries = await readdir(absolutePath, { withFileTypes: true });
+  return (await Promise.all(entries.map(async (entry) => {
+    const entryPath = join(absolutePath, entry.name);
+    return entry.isDirectory() ? expand(relative(root, entryPath)) : [relative(root, entryPath).replaceAll("\\", "/")];
+  }))).flat();
+}
+console.log(JSON.stringify([...new Set((await Promise.all(declaredPaths.map(expand))).flat())].sort()));
+"@
+    $output = $program | & $node.Source --input-type=module - $Root $repoRoot 2>&1 | Out-String
+    if ($LASTEXITCODE -ne 0) { throw "Could not derive fixture files from manifest:`n$output" }
+    [string[]](ConvertFrom-Json $output)
+}
 function Assert-True {
     param([bool]$Condition, [string]$Message)
     if (-not $Condition) { throw $Message }
@@ -15,6 +55,9 @@ function Assert-True {
 
 function Invoke-Verify {
     param([string]$Root, [string]$Engine = $powerShell)
+    # Fixtures are data roots. Run the repository verifier so its scripts and
+    # installed dependencies are the real runtime closure; the copied verifier
+    # remains only as the manifest-declared path validated inside each fixture.
     $engineArguments = @('-NoProfile')
     if ([System.IO.Path]::GetFileNameWithoutExtension($Engine) -eq 'powershell') {
         $engineArguments += @('-ExecutionPolicy', 'Bypass')
@@ -27,14 +70,20 @@ function Invoke-Verify {
 function Copy-ContractFixture {
     param([string]$Source, [string]$Destination)
     New-Item -ItemType Directory -Path $Destination | Out-Null
-    foreach ($file in @('README.md', 'AGENTS.md', '.gitattributes')) {
-        Copy-Item -LiteralPath (Join-Path $Source $file) -Destination (Join-Path $Destination $file)
+    foreach ($file in (Get-ManifestFixtureFilePaths $Source)) {
+        $sourcePath = Join-Path $Source $file
+        $destinationPath = Join-Path $Destination $file
+        New-Item -ItemType Directory -Path (Split-Path -Parent $destinationPath) -Force | Out-Null
+        Copy-Item -LiteralPath $sourcePath -Destination $destinationPath
     }
-    foreach ($directory in @(
-        'bootstrap', '.agents', 'core', 'registry', 'workflows',
-        'system', 'schemas', 'templates', 'data', 'docs'
-    )) {
-        Copy-Item -Recurse -LiteralPath (Join-Path $Source $directory) -Destination (Join-Path $Destination $directory)
+}
+function Get-Sha256Hex {
+    param([byte[]]$Bytes)
+    $sha256 = [System.Security.Cryptography.SHA256]::Create()
+    try {
+        ([System.BitConverter]::ToString($sha256.ComputeHash($Bytes))).Replace('-', '')
+    } finally {
+        $sha256.Dispose()
     }
 }
 
@@ -49,13 +98,10 @@ function Get-FixtureHash {
         ForEach-Object {
             $fullName = [System.IO.Path]::GetFullPath($_.FullName)
             $relative = $fullName.Substring($resolvedRoot.Length)
-            $hash = (Get-FileHash -Algorithm SHA256 -LiteralPath $_.FullName).Hash
+            $hash = Get-Sha256Hex ([System.IO.File]::ReadAllBytes($_.FullName))
             "$relative=$hash"
         }
-    $bytes = [System.Text.Encoding]::UTF8.GetBytes(($lines -join "`n"))
-    $stream = [System.IO.MemoryStream]::new($bytes)
-    try { (Get-FileHash -Algorithm SHA256 -InputStream $stream).Hash }
-    finally { $stream.Dispose() }
+    Get-Sha256Hex ([System.Text.Encoding]::UTF8.GetBytes(($lines -join "`n")))
 }
 
 function Add-RequiredSkill {
@@ -114,6 +160,30 @@ try {
 
     $readOnlyFixture = Join-Path $tempRoot 'read-only'
     Copy-ContractFixture -Source $repoRoot -Destination $readOnlyFixture
+    foreach ($archivedPath in @('Legacy', 'registry', 'templates')) {
+        Assert-True (-not (Test-Path -LiteralPath (Join-Path $readOnlyFixture $archivedPath))) "Fixture must not copy archived path: $archivedPath."
+    }
+    $actualFixtureFiles = Get-FixtureRelativeFilePaths $readOnlyFixture
+    $expectedFixtureFiles = Get-ManifestFixtureFilePaths $repoRoot | Sort-Object
+    Assert-True (($actualFixtureFiles -join "`n") -eq ($expectedFixtureFiles -join "`n")) 'Fixture must copy only active manifest sources and bootstrap assertions.'
+
+    $manifestDrivenSource = Join-Path $tempRoot 'manifest-driven-source'
+    Copy-ContractFixture -Source $repoRoot -Destination $manifestDrivenSource
+    $manifestOnlySource = 'docs/superpowers/plans/2026-08-24-cupis-structured-system-foundation.md'
+    $manifestOnlyDestination = Join-Path $manifestDrivenSource $manifestOnlySource
+    New-Item -ItemType Directory -Path (Split-Path -Parent $manifestOnlyDestination) -Force | Out-Null
+    Copy-Item -LiteralPath (Join-Path $repoRoot $manifestOnlySource) -Destination $manifestOnlyDestination
+    $manifestPath = Join-Path $manifestDrivenSource 'system/manifest.yaml'
+    $manifestContent = Get-Content -Raw -LiteralPath $manifestPath
+    Set-Content -NoNewline -LiteralPath $manifestPath -Value ($manifestContent.Replace(
+        'sources:',
+        "sources:`n  - { id: fixture-manifest-source, kind: core, path: $manifestOnlySource }"
+    ))
+    $manifestDrivenFixture = Join-Path $tempRoot 'manifest-driven-fixture'
+    Copy-ContractFixture -Source $manifestDrivenSource -Destination $manifestDrivenFixture
+    $manifestDrivenActual = Get-FixtureRelativeFilePaths $manifestDrivenFixture
+    $manifestDrivenExpected = Get-ManifestFixtureFilePaths $manifestDrivenSource | Sort-Object
+    Assert-True (($manifestDrivenActual -join "`n") -eq ($manifestDrivenExpected -join "`n")) 'Fixture must derive active source files from the manifest.'
     $beforeHash = Get-FixtureHash $readOnlyFixture
     $firstRun = Invoke-Verify $readOnlyFixture
     $secondRun = Invoke-Verify $readOnlyFixture
@@ -156,7 +226,7 @@ try {
 
     $missingSource = Join-Path $tempRoot 'missing-source'
     Copy-ContractFixture -Source $repoRoot -Destination $missingSource
-    Remove-Item -LiteralPath (Join-Path $missingSource 'core/email-figma-prompt.md')
+    Remove-Item -LiteralPath (Join-Path $missingSource 'core/email-rendering-standard.md')
     $missingSourceResult = Invoke-Verify $missingSource
     Assert-True ($missingSourceResult.ExitCode -ne 0) 'Verifier must reject a missing declared source.'
     Assert-True ($missingSourceResult.Output.Contains('missing-declared-path')) 'Missing source must expose its diagnostic code.'
@@ -167,14 +237,14 @@ try {
     Set-Content -LiteralPath (Join-Path $legacySkill 'skills/maintaining-cupis-email-system/SKILL.md') -Value 'duplicate'
     $legacySkillResult = Invoke-Verify $legacySkill
     Assert-True ($legacySkillResult.ExitCode -ne 0) 'Verifier must reject a legacy skill.'
-    Assert-True ($legacySkillResult.Output.Contains('legacy-skill-path')) 'Legacy skill must expose its diagnostic code.'
+    Assert-True ($legacySkillResult.Output.Contains('retired-skill-path')) 'Legacy skill must expose its diagnostic code.'
 
     $legacyManifest = Join-Path $tempRoot 'legacy-manifest'
     Copy-ContractFixture -Source $repoRoot -Destination $legacyManifest
     Set-Content -LiteralPath (Join-Path $legacyManifest 'bootstrap/manifest.yaml') -Value 'legacy: true'
     $legacyManifestResult = Invoke-Verify $legacyManifest
     Assert-True ($legacyManifestResult.ExitCode -ne 0) 'Verifier must reject the legacy manifest.'
-    Assert-True ($legacyManifestResult.Output.Contains('legacy-manifest-path')) 'Legacy manifest must expose its diagnostic code.'
+    Assert-True ($legacyManifestResult.Output.Contains('retired-manifest-path')) 'Legacy manifest must expose its diagnostic code.'
 
     $secretFixture = Join-Path $tempRoot 'secret-config'
     Copy-ContractFixture -Source $repoRoot -Destination $secretFixture

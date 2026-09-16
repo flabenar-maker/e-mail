@@ -200,7 +200,7 @@ Manifest не содержит component contracts или копии норма�
 - `marketing.yaml` — только маркетинговый;
 - `service.yaml` — только сервисный.
 
-После cutover старый `registry/`, прежние Markdown-checkpoints и разобранный общий prompt удаляются, когда их содержимое подтверждённо представлено новыми владельцами.
+С 2026-09-14 прежний рабочий контур временно изолирован в `Legacy/`, а маршруты остановлены. Это сохранение comparison baseline, не cutover и не доказательство переноса каждого правила. После cutover каждый архивный файл проверяется по содержимому, потребителям и структурированной замене; решение `remove` или `preserve` принимается отдельно.
 
 ### 5.1. Подсистема Figma naming
 
@@ -346,7 +346,7 @@ Fingerprint рассчитывается по нормализованным к�
 
 Расхождение не исправляется автоматически до определения фактического источника изменения.
 
-CI не заявляет live-проверку Figma. Codex получает Figma snapshot через MCP, а pure scripts нормализуют и сравнивают временный вход. Временный snapshot не коммитится.
+Локальная автоматическая проверка не заявляет live-проверку Figma. Codex получает Figma snapshot через MCP, а pure scripts нормализуют и сравнивают временный вход. Временный snapshot не коммитится.
 
 ## 9. Generated docs и context bundles
 
@@ -357,7 +357,7 @@ CI не заявляет live-проверку Figma. Codex получает Fig
 - генерируются из structured data;
 - содержат детерминированный digest исходных data-файлов и schema versions;
 - не редактируются вручную;
-- проверяются повторной детерминированной генерацией в CI.
+- проверяются повторной детерминированной генерацией локально.
 
 Generated docs являются представлением, а не источником истины. Полный component registry строится напрямую из structured contracts и не вставляет сохранённую prose-копию Figma Description. Compact Figma Description может показываться только как вспомогательная generated-проекция.
 
@@ -490,7 +490,7 @@ Automation использует:
 - dependency lockfile;
 - PowerShell только как bootstrap wrapper.
 
-Один Node major должен быть зафиксирован одинаково в package metadata, документации bootstrap и GitHub Actions во время foundation implementation.
+Один Node major должен быть зафиксирован одинаково в package metadata, документации bootstrap и локальной тестовой среде.
 
 Основные команды:
 
@@ -502,7 +502,7 @@ npm run generate:check
 npm run bundle -- --route <route>
 ```
 
-GitHub Actions выполняет tests, schemas, cross-references, generated-doc check и forbidden-duplicate/path checks.
+Локальный прогон выполняет tests, schemas, cross-references, generated-doc check и forbidden-duplicate/path checks на временном изолированном снимке точного cloud commit. GitHub Actions и PR Checks не используются.
 
 Validation и generation детерминированы и не требуют сети. Scripts не выполняют внешние записи.
 
@@ -560,7 +560,7 @@ Master-спецификация остаётся единственным вла
 
 Если во время этапа обнаруживается новая архитектурная развилка, сначала обновляется master-спецификация и проходит review. Phase plan не может самостоятельно вводить новое системное правило.
 
-Во время shadow mode старые источники используются только как comparison baseline. Новая runtime-логика не смешивает старый и новый контекст.
+Во время shadow mode архивные источники из `Legacy/` используются только read-only для сравнения. Текущие маршруты остановлены, пока не подключён проверенный структурированный контур; новая runtime-логика не смешивает старый и новый контекст. Перенос файла в `Legacy/` сам по себе не означает ни утраты его исторических правил, ни завершения миграции.
 
 ## 16. Cutover и rollback
 
@@ -568,13 +568,13 @@ Cutover разрешён, когда:
 
 - все records и references валидны;
 - Mobile/Desktop contracts полны;
-- generated docs эквивалентны подтверждённому baseline;
+- generated docs полны, проверяются по structured inputs и сверены с архивным baseline; каждое содержательное отличие объяснено подтверждённым изменением, а не механическим переносом legacy-текста;
 - representative maintenance routes проходят;
 - representative local email builds не показывают новых нарушений;
 - skills используют manifest и bundles;
 - старые источники больше не читаются runtime.
 
-После cutover старые дубли удаляются отдельным PR.
+После cutover отдельная ревизия `Legacy/` устанавливает для каждого файла решение `remove` или `preserve`. Удаление допускается только при подтверждённой замене и отсутствии потребителей; архив не удаляется автоматически.
 
 Rollback не выполняется force-reset. Используется исправляющий или revert PR. Резервная ветка сохраняет состояние до миграции.
 
@@ -607,9 +607,9 @@ Figma не откатывается автоматически. Сначала �
 6. foundations подключаются по проверяемым references;
 7. Description и implementation используют один contract;
 8. task получает один resolved bundle;
-9. CI блокирует structural errors;
+9. локальные проверки блокируют structural errors до merge;
 10. Figma mutations проходят impact gate;
 11. skills не дублируют rules;
 12. shadow scenarios подтверждены;
-13. старые дубли удалены;
+13. ни один архивный источник не используется как активный дублирующий владелец; для каждого файла `Legacy/` принято и выполнено обоснованное решение `remove` или `preserve`;
 14. резервная ветка сохранена.

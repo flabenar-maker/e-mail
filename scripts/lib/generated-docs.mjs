@@ -15,7 +15,10 @@ import { digestTextEntries, canonicalize } from "./content-digest.mjs";
 import { SystemValidationError } from "./diagnostics.mjs";
 import { loadFigmaNamingFoundation } from "./figma-naming-foundation.mjs";
 import { loadSpacingFoundation } from "./spacing-foundation.mjs";
-import { loadTypographyFoundation } from "./typography-foundation.mjs";
+import {
+  loadTypographyFoundation,
+  renderFigmaTypographyDescription,
+} from "./typography-foundation.mjs";
 
 const LIBRARY_ORDER = ["shared", "marketing", "service"];
 const SCHEMA_ORDER = [
@@ -207,6 +210,10 @@ function renderComponentRegistry(model) {
       lines.push(
         "- No standalone output contract: `figma-source-only` component used inside a parent rendered asset.",
       );
+    } else if (record.figma.verification) {
+      lines.push(
+        "- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.",
+      );
     } else {
       lines.push(
         "- Standalone output is defined by the Mobile and Desktop contracts above.",
@@ -279,6 +286,7 @@ function renderTypographyRegistry(model) {
       `### ${style.figma_name}`,
       "",
       `- Stable ID: ${inlineCode(style.id)}`,
+      `- Figma style ID: ${inlineCode(style.figma_style_id)}`,
       `- Viewport: ${inlineCode(style.viewport)}`,
       `- Role: ${inlineCode(style.role)}`,
       `- Variant: ${inlineCode(style.variant)}`,
@@ -288,7 +296,7 @@ function renderTypographyRegistry(model) {
       `- Letter-spacing: ${inlineCode(formatMeasure(style.letter_spacing))}`,
       `- Responsive pair: ${pair ? inlineCode(pair.id) : "none"}`,
       `- Consumers: ${usedBy.length > 0 ? usedBy.map(inlineCode).join(", ") : "none"}`,
-      `- Figma description: ${oneLine(style.figma_description)}`,
+      `- Figma description: ${oneLine(renderFigmaTypographyDescription(style))}`,
       "",
     );
   }

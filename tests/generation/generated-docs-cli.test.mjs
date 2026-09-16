@@ -202,7 +202,7 @@ test("generated docs CLI reports one stale output by exact path", async (t) => {
     0,
   );
 
-  const stalePath = "docs/generated/component-registry.md";
+  const stalePath = "docs/generated/typography-registry.md";
   await appendFile(join(fixture.root, stalePath), "manual edit\n", "utf8");
 
   const checked = await runCli(["--check", "--repo-root", fixture.root]);

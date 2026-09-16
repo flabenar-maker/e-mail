@@ -409,6 +409,23 @@ function referencedIds(record, viewports, key) {
   );
 }
 
+function withoutDesignTimeMetadata(value) {
+  if (Array.isArray(value)) {
+    return value.map(withoutDesignTimeMetadata);
+  }
+  if (value === null || typeof value !== "object") {
+    return value;
+  }
+  const output = {};
+  for (const [key, item] of Object.entries(value)) {
+    if (key === "provenance") {
+      continue;
+    }
+    output[key] = withoutDesignTimeMetadata(item);
+  }
+  return output;
+}
+
 function projectComponent(record, viewports) {
   const propertyIds = referencedIds(record, viewports, "properties");
   const assetIds = referencedIds(record, viewports, "assets");
@@ -427,12 +444,11 @@ function projectComponent(record, viewports) {
     contracts: Object.fromEntries(
       viewports.map((viewport) => [
         viewport,
-        structuredClone(record.contracts[viewport]),
+        withoutDesignTimeMetadata(record.contracts[viewport]),
       ]),
     ),
     documentation: structuredClone(record.documentation),
     constraints: structuredClone(record.constraints),
-    provenance: structuredClone(record.provenance),
   };
 }
 
@@ -462,7 +478,7 @@ function fullFoundationDefinition(id, foundation) {
     schema_version: foundation.schema_version,
     definition_group: "foundation",
     definition_id: "all",
-    value: structuredClone(foundation),
+    value: withoutDesignTimeMetadata(foundation),
   };
 }
 
@@ -488,7 +504,7 @@ function referencedFoundationDefinition(reference, model) {
     definition_group: reference.group,
     definition_id: reference.id,
     viewport: reference.viewport,
-    value: structuredClone(role.resolutions[reference.viewport]),
+    value: withoutDesignTimeMetadata(role.resolutions[reference.viewport]),
   };
 }
 

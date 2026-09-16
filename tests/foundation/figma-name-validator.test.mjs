@@ -4,7 +4,11 @@ import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { loadFigmaNamingFoundation } from "../../scripts/lib/figma-naming-foundation.mjs";
-import { validateFigmaName } from "../../scripts/lib/figma-name-validator.mjs";
+import {
+  auditExistingFigmaName,
+  validateFigmaName,
+  validateFigmaNameProposal,
+} from "../../scripts/lib/figma-name-validator.mjs";
 
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 
@@ -184,6 +188,54 @@ for (const [name, candidate, expectedCodes] of [
   });
 }
 
+test("atomic implementation geometry is outside semantic naming only under a confirmed boundary", async () => {
+  const naming = await canonicalNaming();
+  for (const candidate of [
+    { name: "Vector", nodeType: "VECTOR" },
+    { name: "Subtract", nodeType: "BOOLEAN_OPERATION" },
+    { name: "Rectangle 3946", nodeType: "RECTANGLE" },
+  ]) {
+    assert.deepEqual(validateFigmaName(naming, {
+      objectKind: "layer",
+      namingScope: "implementation-geometry",
+      parentSemanticBoundaryConfirmed: true,
+      ...candidate,
+    }), []);
+  }
+
+  assert.deepEqual(codes(validateFigmaName(naming, {
+    objectKind: "layer",
+    namingScope: "implementation-geometry",
+    parentSemanticBoundaryConfirmed: false,
+    nodeType: "VECTOR",
+    name: "Vector",
+  })), ["FIGMA_NAME_GEOMETRY_BOUNDARY_REQUIRED"]);
+  assert.deepEqual(codes(validateFigmaName(naming, {
+    objectKind: "layer",
+    namingScope: "implementation-geometry",
+    parentSemanticBoundaryConfirmed: true,
+    nodeType: "GROUP",
+    name: "Clip path group",
+  })), ["FIGMA_NAME_GEOMETRY_NODE_TYPE_INVALID"]);
+
+  assert.deepEqual(auditExistingFigmaName(naming, {
+    objectKind: "layer",
+    namingScope: "implementation-geometry",
+    parentSemanticBoundaryConfirmed: true,
+    nodeType: "VECTOR",
+    name: "Vector",
+  }), {
+    status: "observed",
+    object_kind: "layer",
+    name: "Vector",
+    naming_scope: "implementation-geometry",
+    syntax_status: "not-applicable",
+    semantic_status: "not-applicable",
+    diagnostics: [],
+    rename_proposal: null,
+  });
+});
+
 test("validator does not mutate the candidate or foundation", async () => {
   const naming = await canonicalNaming();
   const candidate = {
@@ -198,4 +250,108 @@ test("validator does not mutate the candidate or foundation", async () => {
 
   assert.deepEqual(naming, beforeNaming);
   assert.deepEqual(candidate, beforeCandidate);
+});
+
+test("existing-name audit keeps a syntax-valid observed layer out of rename scope when its role is unproven", async () => {
+  const naming = await canonicalNaming();
+  const result = auditExistingFigmaName(naming, {
+    objectKind: "layer",
+    name: "artwork",
+  });
+
+  assert.deepEqual(result, {
+    status: "observed",
+    object_kind: "layer",
+    name: "artwork",
+    syntax_status: "valid",
+    semantic_status: "unresolved",
+    diagnostics: ["semantic-role-required"],
+    rename_proposal: null,
+  });
+});
+
+test("syntax-valid layers with an unknown or prohibited category cannot become confirmed proposals", async () => {
+  const naming = await canonicalNaming();
+
+  const missingRole = validateFigmaNameProposal(naming, {
+    objectKind: "layer",
+    name: "custom-decoration",
+    roleId: "custom-decoration",
+  });
+  const unknownCategory = validateFigmaNameProposal(naming, {
+    objectKind: "layer",
+    name: "background",
+    roleId: "background",
+    semanticCategory: "custom-decoration",
+  });
+  const prohibited = validateFigmaNameProposal(naming, {
+    objectKind: "layer",
+    name: "blue-background",
+    roleId: "background",
+    semanticCategory: "color",
+  });
+  const missing = validateFigmaNameProposal(naming, {
+    objectKind: "layer",
+    name: "background",
+  });
+
+  assert.deepEqual(codes(missingRole), ["semantic-role-required"]);
+  assert.deepEqual(codes(unknownCategory), ["semantic-category-required"]);
+  assert.deepEqual(codes(prohibited), ["FIGMA_NAME_PROHIBITED_SEMANTIC_CATEGORY"]);
+  assert.deepEqual(codes(missing), ["semantic-role-required"]);
+});
+
+test("existing-name audit applies the same unknown and prohibited category gate as proposals", async () => {
+  const naming = await canonicalNaming();
+  const unknown = auditExistingFigmaName(naming, {
+    objectKind: "layer",
+    name: "background",
+    roleId: "background",
+    semanticCategory: "custom-decoration",
+  });
+  const prohibited = auditExistingFigmaName(naming, {
+    objectKind: "layer",
+    name: "background",
+    roleId: "background",
+    semanticCategory: "color",
+  });
+
+  assert.deepEqual(unknown.diagnostics, ["semantic-category-required"]);
+  assert.equal(unknown.semantic_status, "unresolved");
+  assert.deepEqual(prohibited.diagnostics, ["FIGMA_NAME_PROHIBITED_SEMANTIC_CATEGORY"]);
+  assert.equal(prohibited.semantic_status, "unresolved");
+});
+
+test("validator distinguishes the two asset-owner kinds and requires a preserved existing scale for proposals", async () => {
+  const naming = await canonicalNaming();
+
+  assert.deepEqual(
+    validateFigmaNameProposal(naming, {
+      objectKind: "asset-owner",
+      assetOwnerKind: "internal",
+      name: "feature-image @2x",
+      existingName: "hero-image @2x",
+    }),
+    [],
+  );
+  assert.deepEqual(
+    validateFigmaNameProposal(naming, {
+      objectKind: "asset-owner",
+      assetOwnerKind: "component",
+      name: "Asset/Feature-Icon @4x",
+      existingName: "Asset/Bank-Badge @4x",
+    }),
+    [],
+  );
+  assert.deepEqual(
+    codes(
+      validateFigmaNameProposal(naming, {
+        objectKind: "asset-owner",
+        assetOwnerKind: "component",
+        name: "Asset/Feature-Icon @2x",
+        existingName: "Asset/Bank-Badge @4x",
+      }),
+    ),
+    ["FIGMA_NAME_SCALE_SUFFIX_MISMATCH"],
+  );
 });

@@ -213,7 +213,15 @@
         "id": "item-bullet",
         "purpose": "Отдельный пункт маркированного списка с живым текстом.",
         "critical_constraint_ids": [],
-        "constraints": []
+        "constraints": [
+          {
+            "id": "link-remains-live-html",
+            "scope": "all",
+            "kind": "interaction",
+            "severity": "required",
+            "statement": "Слой link — отдельная HTML-ссылка: видимый текст остаётся живым, адрес передаётся письмом в content slot href; не растрировать ссылку и не переносить её на всю карточку."
+          }
+        ]
       },
       {
         "id": "item-step",
@@ -255,7 +263,15 @@
         "id": "card-image",
         "purpose": "Карточка с составным изображением, живым текстом и необязательной ссылкой.",
         "critical_constraint_ids": [],
-        "constraints": []
+        "constraints": [
+          {
+            "id": "link-remains-live-html",
+            "scope": "all",
+            "kind": "interaction",
+            "severity": "required",
+            "statement": "Слой link — отдельная HTML-ссылка: видимый текст остаётся живым, адрес передаётся письмом в content slot href; не растрировать ссылку и не переносить её на всю карточку."
+          }
+        ]
       },
       {
         "id": "block-icon-list",
@@ -267,7 +283,15 @@
         "id": "card-icon",
         "purpose": "Карточка с графической иконкой, живым текстом и необязательной ссылкой.",
         "critical_constraint_ids": [],
-        "constraints": []
+        "constraints": [
+          {
+            "id": "link-remains-live-html",
+            "scope": "all",
+            "kind": "interaction",
+            "severity": "required",
+            "statement": "Слой link — отдельная HTML-ссылка: видимый текст остаётся живым, адрес передаётся письмом в content slot href; не растрировать ссылку и не переносить её на всю карточку."
+          }
+        ]
       },
       {
         "id": "asset-feature-icon-4x",
@@ -291,7 +315,15 @@
         "id": "nps-options",
         "purpose": "Адаптивная группа кликабельных вариантов оценки NPS.",
         "critical_constraint_ids": [],
-        "constraints": []
+        "constraints": [
+          {
+            "id": "evaluation-links-cover-tiles",
+            "scope": "all",
+            "kind": "interaction",
+            "severity": "critical",
+            "statement": "Каждый видимый вариант оценки — отдельная ссылка со своим href, занимающая всю площадь кнопки. Mobile кнопка шириной 100% доступной области и высотой 44px; Desktop кнопки равномерно делят строку, высота 54px, между ними gap 12px. Count=2/3 выбирает весь вариант состава; не скрывать варианты оценок независимо от Count."
+          }
+        ]
       }
     ],
     "service": [
@@ -299,19 +331,53 @@
         "id": "block-transaction-success",
         "purpose": "Сервисный блок успешной операции с партнёром, суммой, статусом и реквизитами.",
         "critical_constraint_ids": [],
-        "constraints": []
+        "constraints": [
+          {
+            "id": "composite-white-card",
+            "scope": "all",
+            "kind": "layout",
+            "severity": "required",
+            "statement": "Корневой card прозрачен и обрезает по radius 22px Mobile / 26px Desktop; белый Fill #FFFFFF принадлежит двум вложенным секциям, разделённым divider 1px #DFDFE0."
+          }
+        ]
       },
       {
         "id": "block-transaction-error",
         "purpose": "Сервисный блок неуспешной операции с партнёром, статусом и поясняющим текстом.",
         "critical_constraint_ids": [],
-        "constraints": []
+        "constraints": [
+          {
+            "id": "composite-white-card",
+            "scope": "all",
+            "kind": "layout",
+            "severity": "required",
+            "statement": "Корневой card прозрачен и обрезает по radius 22px Mobile / 26px Desktop; белый Fill #FFFFFF принадлежит summary-area и body-area, разделённым divider 1px #DFDFE0."
+          }
+        ]
       },
       {
         "id": "block-contact-support",
         "purpose": "Контактный блок поддержки с телефонным действием и ссылкой на раздел помощи.",
-        "critical_constraint_ids": [],
-        "constraints": []
+        "critical_constraint_ids": [
+          "inline-help-link"
+        ],
+        "constraints": [
+          {
+            "id": "inline-help-link",
+            "scope": "all",
+            "kind": "interaction",
+            "severity": "critical",
+            "statement": "Ссылка «Помощь» находится внутри одного help-text: базовый цвет #757678, встроенная ссылка #00991F с underline; URL поступает из данных письма."
+          }
+,
+          {
+            "id": "phone-link",
+            "scope": "all",
+            "kind": "interaction",
+            "severity": "critical",
+            "statement": "Номер +7 (495) 122-20-88 — HTML-ссылка tel:+74951222088 в обеих версиях; href не придумывать и не заменять URL сайта."
+          }
+        ]
       },
       {
         "id": "asset-bank-badge-4x",
@@ -353,13 +419,31 @@
         "id": "details-suspicious-operation",
         "purpose": "Вложенный предупреждающий блок с реквизитами подозрительной операции.",
         "critical_constraint_ids": [],
-        "constraints": []
+        "constraints": [
+          {
+            "id": "fixed-red-heading",
+            "scope": "all",
+            "kind": "layout",
+            "severity": "required",
+            "statement": "Заголовок имеет цвет #DE2141; контейнер #F8F8FA со скруглением 14px Mobile / 18px Desktop."
+          }
+        ]
       },
       {
         "id": "block-personal-data-update",
         "purpose": "Сервисный блок обновления персональных данных со статусом и управляемыми пояснениями.",
-        "critical_constraint_ids": [],
-        "constraints": []
+        "critical_constraint_ids": [
+          "operation-description-toggles-entire-details"
+        ],
+        "constraints": [
+          {
+            "id": "operation-description-toggles-entire-details",
+            "scope": "all",
+            "kind": "property-behavior",
+            "severity": "critical",
+            "statement": "Show Operation Description управляет видимостью всего вложенного инстанса Details/Suspicious-Operation, а не отдельной строки его текста."
+          }
+        ]
       },
       {
         "id": "details-operation-plain",
@@ -376,14 +460,25 @@
       {
         "id": "block-receipt-info",
         "purpose": "Сервисный блок со статусом и реквизитами чека.",
-        "critical_constraint_ids": [],
-        "constraints": []
+        "critical_constraint_ids": [
+          "split-corner-radii"
+        ],
+        "constraints": [
+          {
+            "id": "split-corner-radii",
+            "scope": "all",
+            "kind": "layout",
+            "severity": "critical",
+            "statement": "Нет внешнего белого card: status-area скруглена только сверху, receipt-area только снизу; величина видимых углов 22px Mobile / 26px Desktop, промежуточные углы 0px."
+          }
+        ]
       },
       {
         "id": "banner-fiscal-check-link",
         "purpose": "Группа кликабельных строк со ссылками на проверку фискального чека.",
         "critical_constraint_ids": [
-          "linked-cells-cover-entire-row"
+          "linked-cells-cover-entire-row",
+          "two-distinct-logos"
         ],
         "constraints": [
           {
@@ -392,14 +487,46 @@
             "kind": "email-rendering",
             "severity": "critical",
             "statement": "Каждая видимая ячейка строки содержит ссылку с одним URL, чтобы кликабельной оставалась вся площадь строки без помещения таблицы внутрь ссылки."
+          },
+          {
+            "id": "two-distinct-logos",
+            "scope": "all",
+            "kind": "asset-export",
+            "severity": "critical",
+            "statement": "item-01 использует отдельный ofd-badge @4x, item-02 отдельный fns-badge @4x; эти изображения не заменяются общим bank-badge."
+          },
+          {
+            "id": "row-gap-is-auto-layout",
+            "scope": "all",
+            "kind": "layout",
+            "severity": "required",
+            "statement": "Зазор между строками равен itemSpacing корня 8px Mobile / 12px Desktop; отдельного spacer-слоя нет."
           }
         ]
       },
       {
         "id": "block-instruction-steps",
         "purpose": "Сервисный блок с инструкцией, нумерованными шагами и управляемыми предупреждениями.",
-        "critical_constraint_ids": [],
-        "constraints": []
+        "critical_constraint_ids": [
+          "fixed-list-marker-columns"
+        ],
+        "constraints": [
+          {
+            "id": "fixed-list-marker-columns",
+            "scope": "all",
+            "kind": "email-rendering",
+            "severity": "critical",
+            "statement": "Number и dash занимают фиксированные колонки 22px и 42px Mobile / 32px и 64px Desktop; промежуток до HTML-текста 12px в обеих версиях."
+          }
+,
+          {
+            "id": "alert-inline-phone-link",
+            "scope": "all",
+            "kind": "interaction",
+            "severity": "critical",
+            "statement": "В alert-notice-link подстрока «+7 (495) 122-20-88» внутри первого текстового фрагмента должна быть отдельной ссылкой с href=\"tel:+74951222088\"; оставшийся текст этого фрагмента не делать ссылкой. Подчёркнутый второй фрагмент «help@1cupis.ru» — отдельная ссылка на адрес из данных письма, не объединять оба фрагмента одним href."
+          }
+        ]
       },
       {
         "id": "details-operation",

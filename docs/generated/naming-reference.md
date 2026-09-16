@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: naming-reference -->
-<!-- source-digest: sha256:d5acda3e3a673e430e29de542f43e66c2313a2ad9e32c2ef03b219e29cf547c8 -->
+<!-- source-digest: sha256:ada43fa0b0dd8900cfddd8a733f761a720adcdf5fd4fdaa41c5aa8395be34888 -->
 <!-- schema-versions: figma-naming=1.0.0 -->
 # CUPIS Figma naming reference
 
@@ -208,6 +208,19 @@ This reference contains universal naming vocabulary and templates only. It does 
       "pattern": "^(?:Wrapper|Container)(?: [0-9]+)?$"
     }
   ],
+  "implementation_geometry": {
+    "node_types": [
+      "VECTOR",
+      "BOOLEAN_OPERATION",
+      "RECTANGLE",
+      "ELLIPSE",
+      "LINE",
+      "POLYGON",
+      "STAR"
+    ],
+    "parent_semantic_boundary_required": true,
+    "semantic_name_required": false
+  },
   "repeater_index": {
     "digits": 2,
     "starts_at": 1

@@ -10,20 +10,22 @@ import {
 } from "../../scripts/lib/component-registry.mjs";
 import { loadRenderingFoundation } from "../../scripts/lib/rendering-foundation.mjs";
 import { loadRendererRegistry } from "../../scripts/lib/renderer-registry.mjs";
+import { loadEmailModel } from "../../scripts/lib/email-model.mjs";
 import { renderEmailDocument } from "../../scripts/lib/email-renderer.mjs";
 
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const fixturePath = join(repoRoot, "tests/fixtures/rendering/pilot-email.json");
+const schemaPath = join(repoRoot, "schemas/email-model.schema.json");
 
 async function pilot() {
-  const [source, registries, rendererRegistry, rendering] = await Promise.all([
-    readFile(fixturePath, "utf8"),
+  const [model, registries, rendererRegistry, rendering] = await Promise.all([
+    loadEmailModel({ modelPath: fixturePath, schemaPath }),
     loadComponentRegistries({ repoRoot }),
     loadRendererRegistry({ repoRoot }),
     loadRenderingFoundation({ repoRoot }),
   ]);
   return {
-    model: JSON.parse(source),
+    model,
     dependencies: {
       componentIndex: indexComponentRegistries(registries),
       rendererRegistry,
@@ -50,10 +52,11 @@ function cssValue(style, name) {
 }
 
 function checkTableNesting(html) {
+  const documentHtml = html.replace(/<!--\[if[\s\S]*?<!\[endif\]-->/giu, "");
   const stack = [];
   const expectedParent = { tbody: "table", tr: "tbody", td: "tr" };
   let tables = 0;
-  for (const match of html.matchAll(/<(\/?)(table|tbody|tr|td)\b[^>]*>/gu)) {
+  for (const match of documentHtml.matchAll(/<(\/?)(table|tbody|tr|td)\b[^>]*>/gu)) {
     const [, closing, tag] = match;
     if (closing) {
       assert.equal(stack.pop(), tag, "Unbalanced closing </" + tag + ">");
@@ -127,12 +130,10 @@ test("direct image dimensions are positive integers and fluid @2x images keep au
       assert.doesNotMatch(style, /(?:^|;)height:[0-9]+px(?:;|$)/u);
     }
   }
-  const card = images.filter((image) => attribute(image, "src") === "images/card-image.jpg");
-  assert.equal(card.length, 2, "Mobile and Desktop must share the card asset");
-  assert.ok(card.some((image) => cssValue(attribute(image, "style") ?? "", "width") === "100%"));
-  assert.ok(card.some((image) => attribute(image, "width") === "232" && attribute(image, "height") === "148"));
   const secondary = images.filter((image) => attribute(image, "src") === "images/secondary.jpg");
   assert.equal(secondary.length, 1);
+  assert.ok(secondary.some((image) => attribute(image, "width") === "296"));
+  assert.equal(attribute(secondary[0], "height"), undefined);
   assert.equal(cssValue(attribute(secondary[0], "style") ?? "", "width"), "100%");
   assert.match(attribute(secondary[0], "style") ?? "", /(?:^|;)height:auto(?:;|$)/u);
 });
@@ -147,11 +148,9 @@ test("pilot has no unresolved placeholders and repeats the declared section orde
   assert.deepEqual(first.assets, second.assets);
   assert.doesNotMatch(first.html, /\{\{[^{}]*\}\}|\[object Object\]|\bundefined\b|resolved-slot|cupis:technical/iu);
   const landmarks = [
-    "https://example.test/jobs",
-    "images/card-image.jpg",
     "images/secondary.jpg",
     "images/app-logo.png",
-    "Вы получили это письмо от CUPIS.",
+    "images/vk-icon.png",
   ];
   const positions = landmarks.map((landmark) => first.html.indexOf(landmark));
   assert.ok(positions.every((position) => position >= 0));
@@ -178,11 +177,14 @@ test("all four Footer boolean combinations control caption and social assets ind
       assert.equal(result.html.includes("https://example.test/vk"), social);
       assert.equal(result.html.includes("images/vk-icon.png"), social);
       assert.equal(result.assets.some(({ path }) => path === "images/vk-icon.png"), social);
+      assert.equal(result.html.includes("https://example.test/telegram"), false);
+      assert.equal(result.html.includes("images/telegram-icon.png"), false);
+      assert.equal(result.assets.some(({ path }) => path === "images/telegram-icon.png"), false);
     }
   }
 });
 
-test("all four Secondary boolean combinations either render or flag missing nested button data", async () => {
+test("all four Secondary boolean combinations control the supplied nested button", async () => {
   const { model, dependencies } = await pilot();
   const record = dependencies.componentIndex.bySystemId.get("banner-secondary");
   assert.deepEqual(
@@ -197,16 +199,9 @@ test("all four Secondary boolean combinations either render or flag missing nest
       banner.property_values.find(({ property_id }) => property_id === "show-body").value = body;
       banner.property_values.find(({ property_id }) => property_id === "show-button").value = button;
       const result = renderEmailDocument(variant, dependencies);
-      if (button) {
-        assert.equal(result.html, "");
-        assert.deepEqual(
-          new Set(result.diagnostics.map(({ code }) => code)),
-          new Set(["RENDER_NESTED_COMPONENT_DATA_MISSING"]),
-        );
-      } else {
-        assert.deepEqual(result.diagnostics, []);
-        assert.equal(result.html.includes("Управляйте сервисами в одном месте."), body);
-      }
+      assert.deepEqual(result.diagnostics, []);
+      assert.equal(result.html.includes("Поясняющая подпись на несколько красивых строк"), body);
+      assert.equal(result.html.includes("https://example.test/secondary"), button);
     }
   }
 });

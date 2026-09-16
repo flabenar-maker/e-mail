@@ -9,19 +9,13 @@ sources:
   - { id: repository-readme, kind: entrypoint, path: README.md }
   - { id: bootstrap-readme, kind: entrypoint, path: bootstrap/README.md }
   - { id: migration-roadmap, kind: entrypoint, path: docs/superpowers/plans/2026-08-25-cupis-migration-roadmap.md }
-  - { id: email-figma-prompt, kind: core, path: core/email-figma-prompt.md }
-  - { id: figma-component-naming-standard, kind: core, path: core/figma-component-naming-standard.md }
   - { id: component-contract-standard, kind: core, path: core/component-contract-standard.md }
   - { id: figma-component-description-standard, kind: core, path: core/figma-component-description-standard.md }
   - { id: email-rendering-standard, kind: core, path: core/email-rendering-standard.md }
   - { id: typography-standard, kind: core, path: core/typography-standard.md }
   - { id: asset-export-standard, kind: core, path: core/asset-export-standard.md }
   - { id: figma-library-standard, kind: core, path: core/figma-library-standard.md }
-  - { id: component-descriptions-registry, kind: registry, path: registry/email-component-descriptions-registry.md }
-  - { id: typography-registry, kind: registry, path: registry/email-typography-registry.md }
-  - { id: library-maintenance-checkpoint, kind: workflow, path: workflows/library-maintenance-checkpoint.md }
-  - { id: email-build-checkpoint, kind: workflow, path: workflows/email-build-checkpoint.md }
-  - { id: email-project-brief, kind: template, path: templates/email-project-brief.md }
+  - { id: workflow-paused, kind: workflow, path: workflows/system-paused.md }
   - { id: manifest-schema, kind: schema, path: schemas/manifest.schema.json }
   - { id: typography-foundation, kind: registry, path: data/foundations/typography.yaml }
   - { id: typography-schema, kind: schema, path: schemas/typography.schema.json }
@@ -62,83 +56,83 @@ generated_docs:
     input_source_ids: [figma-naming-foundation, figma-naming-schema]
 bundle_profiles:
   - id: library-maintenance
-    source_ids: [repository-readme, email-figma-prompt, figma-component-naming-standard, component-descriptions-registry, typography-registry, spacing-foundation, library-maintenance-checkpoint]
+    source_ids: [repository-readme, figma-library-standard, component-contract-standard, figma-component-description-standard, workflow-paused]
     generated_bundle:
       status: shadow
-      static_source_ids: [repository-readme, email-figma-prompt, figma-component-naming-standard, library-maintenance-checkpoint]
+      static_source_ids: [repository-readme, figma-library-standard, component-contract-standard, figma-component-description-standard, workflow-paused]
       component_selection: optional
       viewport_selection: one-or-both
       foundation_selection: explicit-or-referenced
       allowed_foundation_ids: [typography, spacing, assets, figma-naming]
       required_foundation_ids: []
   - id: component-onboarding
-    source_ids: [repository-readme, email-figma-prompt, figma-component-naming-standard, component-descriptions-registry, typography-registry, spacing-foundation, library-maintenance-checkpoint]
+    source_ids: [repository-readme, figma-library-standard, component-contract-standard, figma-component-description-standard, workflow-paused]
     generated_bundle:
       status: shadow
-      static_source_ids: [repository-readme, email-figma-prompt, figma-component-naming-standard, library-maintenance-checkpoint]
+      static_source_ids: [repository-readme, figma-library-standard, component-contract-standard, figma-component-description-standard, workflow-paused]
       component_selection: optional
       viewport_selection: both
       foundation_selection: explicit-or-referenced
       allowed_foundation_ids: [typography, spacing, assets, figma-naming]
       required_foundation_ids: []
   - id: figma-description-sync
-    source_ids: [repository-readme, email-figma-prompt, component-descriptions-registry, typography-registry, library-maintenance-checkpoint]
+    source_ids: [repository-readme, figma-library-standard, component-contract-standard, figma-component-description-standard, workflow-paused]
     generated_bundle:
       status: shadow
-      static_source_ids: [repository-readme, email-figma-prompt, library-maintenance-checkpoint]
+      static_source_ids: [repository-readme, figma-library-standard, component-contract-standard, figma-component-description-standard, workflow-paused]
       component_selection: required
       viewport_selection: both
       foundation_selection: referenced
       allowed_foundation_ids: [typography, spacing, assets]
       required_foundation_ids: []
   - id: figma-naming-audit
-    source_ids: [repository-readme, figma-component-naming-standard, component-descriptions-registry, library-maintenance-checkpoint]
+    source_ids: [repository-readme, figma-library-standard, workflow-paused]
     generated_bundle:
       status: shadow
-      static_source_ids: [repository-readme, figma-component-naming-standard, library-maintenance-checkpoint]
+      static_source_ids: [repository-readme, figma-library-standard, workflow-paused]
       component_selection: optional
       viewport_selection: none
       foundation_selection: explicit
       allowed_foundation_ids: [figma-naming]
       required_foundation_ids: [figma-naming]
   - id: migration-progress
-    source_ids: [repository-readme, migration-roadmap, library-maintenance-checkpoint]
+    source_ids: [repository-readme, migration-roadmap, workflow-paused]
     generated_bundle:
       status: shadow
-      static_source_ids: [repository-readme, migration-roadmap, library-maintenance-checkpoint]
+      static_source_ids: [repository-readme, migration-roadmap, workflow-paused]
       component_selection: none
       viewport_selection: none
       foundation_selection: none
       allowed_foundation_ids: []
       required_foundation_ids: []
   - id: email-new-build
-    source_ids: [repository-readme, email-figma-prompt, figma-component-naming-standard, component-descriptions-registry, typography-registry, email-build-checkpoint, email-project-brief]
+    source_ids: [repository-readme, email-rendering-standard, component-contract-standard, typography-standard, asset-export-standard, workflow-paused]
     generated_bundle:
       status: shadow
-      static_source_ids: [repository-readme, email-figma-prompt, email-build-checkpoint, email-project-brief]
+      static_source_ids: [repository-readme, email-rendering-standard, component-contract-standard, typography-standard, asset-export-standard, workflow-paused]
       component_selection: required
       viewport_selection: both
       foundation_selection: referenced
       allowed_foundation_ids: [typography, spacing, assets]
       required_foundation_ids: []
   - id: email-continue-fix
-    source_ids: [repository-readme, email-figma-prompt, figma-component-naming-standard, component-descriptions-registry, typography-registry, email-build-checkpoint]
+    source_ids: [repository-readme, email-rendering-standard, component-contract-standard, typography-standard, asset-export-standard, workflow-paused]
     generated_bundle:
       status: shadow
-      static_source_ids: [repository-readme, email-figma-prompt, email-build-checkpoint]
+      static_source_ids: [repository-readme, email-rendering-standard, component-contract-standard, typography-standard, asset-export-standard, workflow-paused]
       component_selection: optional
       viewport_selection: both-when-components
       foundation_selection: referenced
       allowed_foundation_ids: [typography, spacing, assets]
       required_foundation_ids: []
 routes:
-  - { id: library-maintenance, workflow_source_id: library-maintenance-checkpoint, bundle_profile_id: library-maintenance }
-  - { id: component-onboarding, workflow_source_id: library-maintenance-checkpoint, bundle_profile_id: component-onboarding }
-  - { id: figma-description-sync, workflow_source_id: library-maintenance-checkpoint, bundle_profile_id: figma-description-sync }
-  - { id: figma-naming-audit, workflow_source_id: library-maintenance-checkpoint, bundle_profile_id: figma-naming-audit }
-  - { id: migration-progress, workflow_source_id: library-maintenance-checkpoint, bundle_profile_id: migration-progress }
-  - { id: email-new-build, workflow_source_id: email-build-checkpoint, bundle_profile_id: email-new-build }
-  - { id: email-continue-fix, workflow_source_id: email-build-checkpoint, bundle_profile_id: email-continue-fix }
+  - { id: library-maintenance, workflow_source_id: workflow-paused, bundle_profile_id: library-maintenance }
+  - { id: component-onboarding, workflow_source_id: workflow-paused, bundle_profile_id: component-onboarding }
+  - { id: figma-description-sync, workflow_source_id: workflow-paused, bundle_profile_id: figma-description-sync }
+  - { id: figma-naming-audit, workflow_source_id: workflow-paused, bundle_profile_id: figma-naming-audit }
+  - { id: migration-progress, workflow_source_id: workflow-paused, bundle_profile_id: migration-progress }
+  - { id: email-new-build, workflow_source_id: workflow-paused, bundle_profile_id: email-new-build }
+  - { id: email-continue-fix, workflow_source_id: workflow-paused, bundle_profile_id: email-continue-fix }
 skills:
   required:
     - { id: maintaining-cupis-email-system, path: .agents/skills/maintaining-cupis-email-system }

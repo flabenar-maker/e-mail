@@ -10,6 +10,7 @@ import {
 } from "../../scripts/lib/component-registry.mjs";
 import { loadRenderingFoundation } from "../../scripts/lib/rendering-foundation.mjs";
 import { loadRendererRegistry } from "../../scripts/lib/renderer-registry.mjs";
+import { loadEmailModel } from "../../scripts/lib/email-model.mjs";
 import {
   renderComponent,
   renderEmailDocument,
@@ -17,6 +18,7 @@ import {
 
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const fixturePath = join(repoRoot, "tests/fixtures/rendering/pilot-email.json");
+const schemaPath = join(repoRoot, "schemas/email-model.schema.json");
 
 async function dependencies() {
   const [registries, rendererRegistry, rendering] = await Promise.all([
@@ -32,11 +34,10 @@ async function dependencies() {
 }
 
 async function pilot() {
-  const [source, deps] = await Promise.all([
-    readFile(fixturePath, "utf8"),
+  const [model, deps] = await Promise.all([
+    loadEmailModel({ modelPath: fixturePath, schemaPath }),
     dependencies(),
   ]);
-  const model = JSON.parse(source);
   return { model, result: renderEmailDocument(model, deps) };
 }
 
@@ -90,24 +91,14 @@ test("pilot fixture contains only normalized component inputs", async () => {
   assert.equal(source.includes("<table"), false);
 });
 
-test("template slot produces one deterministic email document with live button content", async () => {
+test("template slot produces one deterministic email document with the default secondary CTA", async () => {
   const { result } = await pilot();
 
   assert.deepEqual(result.diagnostics, []);
   assert.match(result.html, /^<!doctype html><html><head>/u);
-  assert.match(result.html, /<body><table role="presentation"/u);
-  assert.match(result.html, /<a href="https:\/\/example\.test\/jobs"[^>]*>Откликнуться<\/a>/u);
+  assert.match(result.html, /<body style="margin:0;padding:0"><table role="presentation"/u);
+  assert.match(result.html, /href="https:\/\/example\.test\/secondary"/u);
   assert.doesNotMatch(result.html, /placeholder|\[object Object\]/u);
-});
-
-test("card image is fluid with automatic height on mobile and keeps exact desktop dimensions", async () => {
-  const { result } = await pilot();
-  const images = result.html.match(/<img[^>]+src="images\/card-image\.jpg"[^>]*>/gu) ?? [];
-
-  assert.equal(images.length, 2);
-  assert.ok(images.some((image) => /height:auto/u.test(image) && /width:100%/u.test(image)));
-  assert.ok(images.some((image) => /width="232"/u.test(image) && /height="148"/u.test(image)));
-  assert.equal(images.some((image) => /(?:^|;)width:100%(?:;|")/u.test(image) && /height:[0-9]+px/u.test(image)), false);
 });
 
 test("secondary banner uses a direct image on mobile and a background image on desktop", async () => {
@@ -115,25 +106,28 @@ test("secondary banner uses a direct image on mobile and a background image on d
 
   assert.match(result.html, /<img[^>]+src="images\/secondary\.jpg"/u);
   assert.match(result.html, /<td background="images\/secondary\.jpg"/u);
-  assert.match(result.html, />Всё важное рядом</u);
+  assert.match(result.html, />Небольшой заголовок<br>на пару строк</u);
 });
 
 test("app download keeps store icons and text separate and stacks mobile store links", async () => {
   const { result } = await pilot();
 
-  assert.match(result.html, /<img[^>]+src="images\/rustore-icon\.png"[^>]*>[\s\S]*<p[^>]*>RuStore<\/p>/u);
-  assert.match(
-    result.html,
-    /href="https:\/\/example\.test\/rustore"[\s\S]*<\/a><\/td><\/tr><tr><td[\s\S]*href="https:\/\/example\.test\/google-play"/u,
-  );
+  for (const store of ["rustore", "google-play", "appgallery", "getapps"]) {
+    assert.match(
+      result.html,
+      new RegExp(`<a href="https://example\\.test/${store}"[^>]*>[\\s\\S]*?<img[^>]+src="images/${store === "google-play" ? "google-play" : store}-icon\\.png"`, "u"),
+    );
+  }
+  assert.match(result.html, /<(?:p|span)[^>]*>RuStore<\/(?:p|span)>/u);
 });
 
 test("footer resolves boolean properties without losing the enabled social link", async () => {
   const { result } = await pilot();
 
   assert.doesNotMatch(result.html, /Скрытая подпись/u);
-  assert.match(result.html, /Вы получили это письмо от CUPIS\./u);
+  assert.match(result.html, /Мобильная карта/u);
   assert.match(result.html, /href="https:\/\/example\.test\/vk"/u);
+  assert.doesNotMatch(result.html, /href="https:\/\/example\.test\/telegram|images\/telegram-icon\.png/u);
 });
 
 test("document returns every referenced local asset once in deterministic order", async () => {
@@ -144,7 +138,6 @@ test("document returns every referenced local asset once in deterministic order"
     [
       "images/app-logo.png",
       "images/appgallery-icon.png",
-      "images/card-image.jpg",
       "images/getapps-icon.png",
       "images/google-play-icon.png",
       "images/qr-code.png",
@@ -266,22 +259,22 @@ test("recursive component references stop with a stable cycle diagnostic", async
   assert.ok(result.diagnostics.every(({ code }) => code === "RENDER_COMPONENT_CYCLE"));
 });
 test("disabled footer social section does not require hidden content or assets", async () => {
-  const [source, deps] = await Promise.all([
-    readFile(fixturePath, "utf8"),
+  const [model, deps] = await Promise.all([
+    loadEmailModel({ modelPath: fixturePath, schemaPath }),
     dependencies(),
   ]);
-  const model = JSON.parse(source);
   const instances = model.root.slots[0].instances;
   const footer = instances.find(({ component_id }) => component_id === "email-footer");
   footer.property_values.find(({ property_id }) => property_id === "show-social-links").value = false;
   footer.content_values = footer.content_values.filter(
-    ({ element_id }) => !["vk-link", "vk-icon"].includes(element_id),
+    ({ element_id }) => !["root-footer-body-social-section-social-icons-vk-icon", "root-footer-body-social-section-social-icons-telegram-icon"].includes(element_id),
   );
   footer.asset_files = [];
 
   const result = renderEmailDocument(model, deps);
 
   assert.deepEqual(result.diagnostics, []);
-  assert.doesNotMatch(result.html, /example\.test\/vk|images\/vk-icon\.png/u);
+  assert.doesNotMatch(result.html, /example\.test\/(?:vk|telegram)|images\/(?:vk|telegram)-icon\.png/u);
   assert.equal(result.assets.some(({ path }) => path === "images/vk-icon.png"), false);
+  assert.equal(result.assets.some(({ path }) => path === "images/telegram-icon.png"), false);
 });
