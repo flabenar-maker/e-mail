@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: asset-registry -->
-<!-- source-digest: sha256:591ab76ad01528ab91d68256a71e2e6ce5fd4a2660beec35933ab4caa99c8d34 -->
+<!-- source-digest: sha256:81f5fcc01f32ef5f7afaef999a5eb5c7544cfabee5cb91007b130a26d104f736 -->
 <!-- schema-versions: components=2.1.0, assets=1.0.0 -->
 # CUPIS asset registry
 
@@ -343,6 +343,17 @@ General export definitions are listed first. Component-specific choices remain o
 ```json
 {
   "statement": "The component contract selects the exact export boundary."
+}
+```
+
+### figma-export-setting-non-authoritative
+
+- Stable ID: `figma-export-setting-non-authoritative`
+- Definition:
+
+```json
+{
+  "statement": "Configured Figma export settings are observational helpers; the selected foundation export profile owns final format, scale, suffix, color space and quality."
 }
 ```
 
