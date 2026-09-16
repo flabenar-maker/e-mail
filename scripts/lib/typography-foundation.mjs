@@ -6,6 +6,21 @@ import { validateDocumentShape } from "./schema-validation.mjs";
 import { readStrictYaml } from "./strict-yaml.mjs";
 
 const SUPPORTED_TYPOGRAPHY_VERSION = "1.0.0";
+const FIGMA_DESCRIPTION_GOVERNANCE_SUFFIX =
+  "Стиль управляется централизованно; локальные переопределения запрещены.";
+
+export function formatTypographyMeasure(measure) {
+  return `${measure.value}${measure.unit === "percent" ? "%" : measure.unit}`;
+}
+
+export function renderFigmaTypographyDescription(style) {
+  return `${style.figma_description_semantics} ${style.font.family} ${style.font.figma_style}, ${style.font_size_px}px, line-height ${formatTypographyMeasure(style.line_height)}, letter-spacing ${formatTypographyMeasure(style.letter_spacing)}. ${FIGMA_DESCRIPTION_GOVERNANCE_SUFFIX}`;
+}
+
+function semanticIdentity(style) {
+  return `${style.viewport}\u0000${style.role}\u0000${style.variant}`;
+}
+
 
 function diagnostic(code, path, message) {
   return new SystemValidationError(code, path, message);
@@ -85,6 +100,23 @@ export function validateTypographySemantics(typography) {
     typography.styles,
     "figma_name",
     "duplicate-typography-figma-name",
+    "/styles",
+  );  pushDuplicateDiagnostics(
+    errors,
+    typography.styles,
+    "figma_style_id",
+    "duplicate-typography-figma-style-id",
+    "/styles",
+  );
+  const semanticIdentityStyles = typography.styles.map((style) => ({
+    ...style,
+    semantic_identity: semanticIdentity(style),
+  }));
+  pushDuplicateDiagnostics(
+    errors,
+    semanticIdentityStyles,
+    "semantic_identity",
+    "duplicate-typography-semantic-identity",
     "/styles",
   );
   pushDuplicateDiagnostics(
