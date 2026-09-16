@@ -258,7 +258,7 @@ test("typography registry derives the Figma description from semantic text and f
 
   const rendered = await renderCanonical(fixture.root);
   const content = contentAt(rendered, "docs/generated/typography-registry.md");
-  assert.match(content, /### Desktop\\/Display\\/Test/u);
+  assert.match(content, /### Desktop\/Display\/Test/u);
   assert.match(content, /Roboto Medium, 33px, line-height 30px, letter-spacing 1px/u);
   assert.doesNotMatch(content, /Roboto Bold, 32px, line-height 120%, letter-spacing 0/u);
 });
