@@ -24,9 +24,9 @@ function Get-ManifestFixtureFilePaths {
     param([string]$Root)
     $node = Get-Command node -ErrorAction Stop
     $program = @"
-import { lstat, readdir, readFile } from "node:fs/promises";
+import { lstat, readdir, readFile } from "node:fs/promises";`nimport { createRequire } from "node:module";
 import { join, relative, resolve } from "node:path";
-import { parse } from "yaml";
+const require = createRequire(join(resolve(process.argv[2]), "package.json"));`nconst { parse } = require("yaml");
 const root = resolve(process.argv[1]);
 const manifest = parse(await readFile(join(root, "system/manifest.yaml"), "utf8"));
 const declaredPaths = [manifest.entrypoints.repository, manifest.entrypoints.bootstrap, ...manifest.sources.map(({ path }) => path), manifest.bootstrap.portable_config, manifest.bootstrap.verifier, ...manifest.skills.required.map(({ path }) => path), "system/manifest.yaml", "AGENTS.md", ".gitattributes"];
@@ -42,14 +42,9 @@ async function expand(relativePath) {
 }
 console.log(JSON.stringify([...new Set((await Promise.all(declaredPaths.map(expand))).flat())].sort()));
 "@
-    Push-Location -LiteralPath $Root
-    try {
-        $output = & $node.Source --input-type=module --eval $program $Root 2>&1 | Out-String
-        if ($LASTEXITCODE -ne 0) { throw "Could not derive fixture files from manifest:`n$output" }
-        [string[]](ConvertFrom-Json $output)
-    } finally {
-        Pop-Location
-    }
+    $output = & $node.Source --input-type=module --eval $program $Root $repoRoot 2>&1 | Out-String
+    if ($LASTEXITCODE -ne 0) { throw "Could not derive fixture files from manifest:`n$output" }
+    [string[]](ConvertFrom-Json $output)
 }
 function Assert-True {
     param([bool]$Condition, [string]$Message)
