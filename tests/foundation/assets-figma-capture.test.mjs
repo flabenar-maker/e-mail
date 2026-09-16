@@ -23,6 +23,15 @@ const expectedUnresolved = [
   { record_id: "concrete-desktop-instance-overrides", codes: ["CONCRETE_DESKTOP_INSTANCE_OVERRIDES_UNVERIFIED"] },
 ];
 
+const expectedChildren = {
+  "header-logo-rendered-png-opaque": ["Asset/Product-Logo"],
+  "hero-image-fill-jpeg-direct": [],
+  "secondary-image-fill-jpeg-wrapper-crop": [],
+  "card-image-rendered-jpeg-neutralized": ["Number"],
+  "app-logo-rendered-png-source-alpha": ["artwork"],
+  "feature-icon-rendered-png-transparent": ["background", "account-circle-line"],
+  "nps-face-image-fill-png-source-alpha": ["happy-face-icon @4x"],
+};
 const expectedRepresentatives = {
   "header-logo-rendered-png-opaque": {
     selection: { component_id: "email-header", asset_contract_id: "header-logo" },
@@ -82,6 +91,13 @@ const expectedRepresentatives = {
   },
 };
 
+for (const [id, expected] of Object.entries(expectedRepresentatives)) {
+  expected.child_boundary = {
+    required_visible_child_names: expectedChildren[id],
+    forbidden_visible_child_names: [],
+  };
+}
+
 async function capture() { return JSON.parse(await readFile(fixturePath, "utf8")); }
 async function componentRecords() {
   const families = await Promise.all(["marketing", "service", "shared"].map((family) => readStrictYaml(join(repoRoot, "data/components", `${family}.yaml`))));
@@ -125,6 +141,9 @@ test("a changed capture field or unresolved code is detected", async () => {
   const alteredCode = structuredClone(evidence);
   alteredCode.unresolved[0].codes = ["RENAMED_CODE"];
   assert.throws(() => assert.deepEqual(alteredCode.unresolved, expectedUnresolved));
+  const emptyCode = structuredClone(evidence);
+  emptyCode.unresolved[0].codes = [];
+  assert.throws(() => assert.deepEqual(emptyCode.unresolved, expectedUnresolved));
   const missingCode = structuredClone(evidence);
   missingCode.unresolved = missingCode.unresolved.filter((item) => item.record_id !== "concrete-desktop-instance-overrides");
   assert.throws(() => assert.deepEqual(missingCode.unresolved, expectedUnresolved));
