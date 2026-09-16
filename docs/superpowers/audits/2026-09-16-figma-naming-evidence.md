@@ -8,7 +8,7 @@ This is an observation record, not a naming migration, a mass-rename plan, an ex
 
 ## What the capture proves
 
-`tests/foundation/fixtures/figma-naming-capture.json` records exact representative component names, variant strings, raw property-definition names, controlled layer roles and both asset-owner kinds. It confirms the suffix grammar as it is used by a direct internal owner (`hero-image @2x`) and a published component owner (`Asset/Feature-Icon @4x`). Both observed exports report the matching PNG scale and suffix.
+`tests/foundation/fixtures/figma-naming-capture.json` records exact representative component names, variant strings, raw property-definition names, controlled layer roles and both asset-owner kinds. It confirms the suffix grammar for a direct internal owner (`hero-image @2x`), a published component owner (`Asset/Feature-Icon @4x`) and `vk-icon @4x`. The scale marker is owned by the semantic asset name; an empty optional export-settings suffix does not invalidate an existing `@4x` name.
 
 `tests/foundation/fixtures/figma-naming-generated-reference.json` is generated from the name generator and checked byte-for-byte. It demonstrates that a proposal has a separate semantic gate and that a normal asset rename keeps its existing `@2x` or `@4x` suffix. Changing scale is not a naming operation: it requires an export-contract decision.
 
@@ -16,12 +16,12 @@ This is an observation record, not a naming migration, a mass-rename plan, an ex
 
 An existing node is audited as observed. Syntax validity is useful evidence, but it never implies that a name should change. A new proposal is generated only after its semantic role is confirmed. This prevents a syntactically valid lower-kebab string from becoming a trusted recommendation just because it looks tidy.
 
-## Mandatory unresolved observations
+## Semantic naming boundary
 
-The capture contains an exact unresolved set:
+Semantic naming applies to structural layers, properties, asset owners and meaningful containers. Atomic VECTOR, BOOLEAN_OPERATION, RECTANGLE, ELLIPSE, LINE, POLYGON or STAR geometry is outside that scope only when its parent semantic boundary is independently confirmed. Therefore the observed `Vector`, `Subtract` and `Rectangle 3946` nodes do not require individual semantic renames; they remain implementation geometry inside named assets.
 
-- `OBSERVED_FIGMA_LAYER_SEMANTIC_ROLE_UNPROVEN`: `Clip path group` has an observed name but no proven controlled role.
-- `OBSERVED_FIGMA_EXPORT_SUFFIX_MISMATCH`: desktop `vk-icon @4x` node `261:4007` has an empty configured export suffix despite its name.
-- `OBSERVED_FIGMA_LEGACY_DEFAULT_LAYER_NAME`: `Vector`, `Subtract` and `Rectangle 3946` are observed defaults or legacy names.
+The exact unresolved set now contains one item:
 
-No Figma node, component contract, foundation rule, or export setting was changed by this package. The unresolved set remains evidence for a later explicitly approved maintenance task.
+- `OBSERVED_FIGMA_LAYER_SEMANTIC_ROLE_UNPROVEN`: `Clip path group` is a GROUP that owns meaningful VK artwork, so it is not atomic geometry. Its intended controlled role must be confirmed before an explicitly authorized rename.
+
+No Figma node, component contract or export setting was changed by this package. The empty configured export suffix on `vk-icon @4x` is no longer treated as a naming mismatch because the required `@4x` marker already exists in the owner name.
