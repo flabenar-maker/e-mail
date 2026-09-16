@@ -225,10 +225,16 @@ test("existing-name audit keeps a syntax-valid observed layer out of rename scop
 test("syntax-valid layers with an unknown or prohibited category cannot become confirmed proposals", async () => {
   const naming = await canonicalNaming();
 
-  const unknown = validateFigmaNameProposal(naming, {
+  const missingRole = validateFigmaNameProposal(naming, {
     objectKind: "layer",
     name: "custom-decoration",
     roleId: "custom-decoration",
+  });
+  const unknownCategory = validateFigmaNameProposal(naming, {
+    objectKind: "layer",
+    name: "background",
+    roleId: "background",
+    semanticCategory: "custom-decoration",
   });
   const prohibited = validateFigmaNameProposal(naming, {
     objectKind: "layer",
@@ -241,9 +247,31 @@ test("syntax-valid layers with an unknown or prohibited category cannot become c
     name: "background",
   });
 
-  assert.deepEqual(codes(unknown), ["semantic-role-required"]);
+  assert.deepEqual(codes(missingRole), ["semantic-role-required"]);
+  assert.deepEqual(codes(unknownCategory), ["semantic-category-required"]);
   assert.deepEqual(codes(prohibited), ["FIGMA_NAME_PROHIBITED_SEMANTIC_CATEGORY"]);
   assert.deepEqual(codes(missing), ["semantic-role-required"]);
+});
+
+test("existing-name audit applies the same unknown and prohibited category gate as proposals", async () => {
+  const naming = await canonicalNaming();
+  const unknown = auditExistingFigmaName(naming, {
+    objectKind: "layer",
+    name: "background",
+    roleId: "background",
+    semanticCategory: "custom-decoration",
+  });
+  const prohibited = auditExistingFigmaName(naming, {
+    objectKind: "layer",
+    name: "background",
+    roleId: "background",
+    semanticCategory: "color",
+  });
+
+  assert.deepEqual(unknown.diagnostics, ["semantic-category-required"]);
+  assert.equal(unknown.semantic_status, "unresolved");
+  assert.deepEqual(prohibited.diagnostics, ["FIGMA_NAME_PROHIBITED_SEMANTIC_CATEGORY"]);
+  assert.equal(prohibited.semantic_status, "unresolved");
 });
 
 test("validator distinguishes the two asset-owner kinds and requires a preserved existing scale for proposals", async () => {

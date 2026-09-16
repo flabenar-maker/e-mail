@@ -146,7 +146,7 @@ function generateLayer(naming, request) {
     request,
     name,
     ["lower-kebab", "controlled-layer-role"],
-    { roleId: role },
+    { roleId: role, semanticCategory: "role" },
   );
 }
 
@@ -258,7 +258,11 @@ function generateAssetOwner(naming, request) {
     naming,
     request,
     name,
-    ["asset-owner", "lower-kebab", `preserve-${scale.suffix}`],
+    [
+      "asset-owner",
+      kind === "component" ? "title-kebab-component-segment" : "lower-kebab",
+      `preserve-${scale.suffix}`,
+    ],
     {
       expectedScale: scale.scale,
       assetOwnerKind: kind,

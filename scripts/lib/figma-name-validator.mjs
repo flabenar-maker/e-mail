@@ -162,6 +162,45 @@ function roleRequired(path = "/candidate/roleId") {
   );
 }
 
+function semanticCategoryRequired(path = "/candidate/semanticCategory") {
+  return diagnostic(
+    "semantic-category-required",
+    path,
+    "A confirmed non-prohibited semantic category is required for a layer naming proposal.",
+  );
+}
+
+function resolveLayerSemantics(naming, candidate) {
+  const role = candidate.roleId;
+  if (
+    typeof role !== "string" ||
+    !naming.layer_names.controlled_roles.includes(role)
+  ) {
+    return { confirmed: false, errors: [roleRequired()] };
+  }
+
+  const category = candidate.semanticCategory;
+  if (typeof category !== "string" || category.length === 0) {
+    return { confirmed: false, errors: [semanticCategoryRequired()] };
+  }
+  if (naming.layer_names.forbidden_categories.includes(category)) {
+    return {
+      confirmed: false,
+      errors: [
+        diagnostic(
+          "FIGMA_NAME_PROHIBITED_SEMANTIC_CATEGORY",
+          "/candidate/semanticCategory",
+          `Layer proposals cannot be based on the prohibited ${category} category.`,
+        ),
+      ],
+    };
+  }
+  if (category !== "role") {
+    return { confirmed: false, errors: [semanticCategoryRequired()] };
+  }
+  return { confirmed: true, errors: [] };
+}
+
 function assetOwnerKindFromName(name) {
   return typeof name === "string" && name.startsWith("Asset/")
     ? "component"
@@ -385,27 +424,7 @@ export function validateFigmaNameProposal(naming, candidate = {}) {
   const errors = validateFigmaName(naming, candidate);
 
   if (candidate.objectKind === "layer") {
-    const role = candidate.roleId;
-    if (
-      typeof role !== "string" ||
-      !naming.layer_names.controlled_roles.includes(role)
-    ) {
-      errors.push(roleRequired());
-    }
-    if (
-      typeof candidate.semanticCategory === "string" &&
-      naming.layer_names.forbidden_categories.includes(
-        candidate.semanticCategory,
-      )
-    ) {
-      errors.push(
-        diagnostic(
-          "FIGMA_NAME_PROHIBITED_SEMANTIC_CATEGORY",
-          "/candidate/semanticCategory",
-          `Layer proposals cannot be based on the prohibited ${candidate.semanticCategory} category.`,
-        ),
-      );
-    }
+    errors.push(...resolveLayerSemantics(naming, candidate).errors);
   }
 
   if (candidate.objectKind === "asset-owner") {
@@ -476,17 +495,16 @@ export function auditExistingFigmaName(naming, candidate = {}) {
   );
   const syntaxStatus = diagnostics.length === 0 ? "valid" : "invalid";
   const isLayer = candidate.objectKind === "layer";
-  const roleConfirmed =
-    typeof candidate.roleId === "string" &&
-    naming.layer_names.controlled_roles.includes(candidate.roleId);
+  const layerSemantics = isLayer
+    ? resolveLayerSemantics(naming, candidate)
+    : { confirmed: true, errors: [] };
   const semanticStatus =
     syntaxStatus !== "valid"
       ? "unresolved"
-      : isLayer && !roleConfirmed
+      : !layerSemantics.confirmed
         ? "unresolved"
         : "confirmed";
-  const semanticDiagnostics =
-    isLayer && !roleConfirmed ? ["semantic-role-required"] : [];
+  const semanticDiagnostics = layerSemantics.errors.map((error) => error.code);
 
   return {
     status: "observed",

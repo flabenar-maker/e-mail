@@ -211,6 +211,7 @@ test("generator output passes proposal validation for every confirmed candidate"
     {
       objectKind: "layer",
       roleId: "artwork",
+      semanticCategory: "role",
     },
     {
       objectKind: "asset-owner",

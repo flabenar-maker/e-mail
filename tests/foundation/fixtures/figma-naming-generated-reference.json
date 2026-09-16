@@ -31,7 +31,7 @@
       "name": "Asset/Feature-Icon @4x",
       "applied_rule_ids": [
         "asset-owner",
-        "lower-kebab",
+        "title-kebab-component-segment",
         "preserve-@4x"
       ]
     }

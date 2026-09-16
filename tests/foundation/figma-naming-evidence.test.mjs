@@ -43,17 +43,32 @@ test("non-normative Figma naming capture keeps exact roots, representatives, and
       ["component", "Asset/Feature-Icon @4x", "@4x", 4],
     ],
   );
+  assert.deepEqual(
+    capture.components.find(
+      (component) => component.id === "1084:16996",
+    ).variants,
+    [
+      "Viewport=Mobile, State=Pending",
+      "Viewport=Mobile, State=Success",
+      "Viewport=Mobile, State=Error",
+      "Viewport=Desktop, State=Pending",
+      "Viewport=Desktop, State=Success",
+      "Viewport=Desktop, State=Error",
+    ],
+  );
 });
 
 test("capture audits existing observed names without proposing a rename", async () => {
   const naming = await loadFigmaNamingFoundation({ repoRoot });
   const capture = await fixture("figma-naming-capture.json");
-  const audited = capture.layers.map(({ name, role_id: roleId }) =>
-    auditExistingFigmaName(naming, {
-      objectKind: "layer",
-      name,
-      ...(roleId ? { roleId } : {}),
-    }),
+  const audited = capture.layers.map(
+    ({ name, role_id: roleId, semantic_category: semanticCategory }) =>
+      auditExistingFigmaName(naming, {
+        objectKind: "layer",
+        name,
+        ...(roleId ? { roleId } : {}),
+        ...(semanticCategory ? { semanticCategory } : {}),
+      }),
   );
 
   assert.equal(audited.every((result) => result.rename_proposal === null), true);
@@ -63,12 +78,16 @@ test("capture audits existing observed names without proposing a rename", async 
   );
 });
 
-test("checked generated naming reference is exactly derived from the generator", async () => {
+test("checked generated naming reference is canonically derived from the generator", async () => {
   const naming = await loadFigmaNamingFoundation({ repoRoot });
   const referencePath = join(
     repoRoot,
     "tests/foundation/fixtures/figma-naming-generated-reference.json",
   );
 
-  assert.equal(await readFile(referencePath, "utf8"), renderFigmaNamingReference(naming));
+  const stored = await readFile(referencePath, "utf8");
+  assert.equal(
+    stored.replaceAll("\r\n", "\n"),
+    renderFigmaNamingReference(naming),
+  );
 });

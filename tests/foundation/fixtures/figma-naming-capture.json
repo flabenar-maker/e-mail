@@ -23,14 +23,21 @@
     {
       "id": "1084:16996",
       "name": "Badge/Operation-Status",
-      "variants": ["Viewport=Mobile, State=Pending", "Viewport=Desktop, State=Success"],
+      "variants": [
+        "Viewport=Mobile, State=Pending",
+        "Viewport=Mobile, State=Success",
+        "Viewport=Mobile, State=Error",
+        "Viewport=Desktop, State=Pending",
+        "Viewport=Desktop, State=Success",
+        "Viewport=Desktop, State=Error"
+      ],
       "property_definition_names": ["Viewport", "State"]
     }
   ],
   "layers": [
-    { "id": "481:19658", "name": "artwork", "role_id": "artwork" },
-    { "id": "484:19978", "name": "glyph", "role_id": "glyph" },
-    { "id": "946:25766", "name": "background", "role_id": "background" },
+    { "id": "481:19658", "name": "artwork", "role_id": "artwork", "semantic_category": "role" },
+    { "id": "484:19978", "name": "glyph", "role_id": "glyph", "semantic_category": "role" },
+    { "id": "946:25766", "name": "background", "role_id": "background", "semantic_category": "role" },
     { "id": "17:2751", "name": "Clip path group" }
   ],
   "asset_owners": [
