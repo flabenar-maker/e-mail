@@ -253,7 +253,7 @@ test("typography registry derives the Figma description from semantic text and f
   await writeFixtureFile(
     fixture.root,
     "data/foundations/typography.yaml",
-    `${JSON.stringify(typography, null, 2)}\\n`,
+    `${JSON.stringify(typography, null, 2)}\n`,
   );
 
   const rendered = await renderCanonical(fixture.root);
