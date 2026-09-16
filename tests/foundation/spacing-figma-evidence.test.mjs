@@ -36,6 +36,18 @@ function expectedResolution(role, viewport) {
   };
 }
 
+function capturedFieldValue(address) {
+  const paddingIndex = {
+    "/paddingTop": 0,
+    "/paddingRight": 1,
+    "/paddingBottom": 2,
+    "/paddingLeft": 3,
+  }[address.field_path];
+  return address.field_path === "/itemSpacing"
+    ? address.raw.itemSpacing
+    : address.raw.padding[paddingIndex];
+}
+
 function observation(address, fixture) {
   return {
     file_key: fixture.file_key,
@@ -44,9 +56,7 @@ function observation(address, fixture) {
     viewport: address.viewport,
     field_path: address.field_path,
     expected_source_path: sourcePath(address.role_id, address.viewport),
-    raw_value: address.field_path === "/itemSpacing"
-      ? address.raw.itemSpacing
-      : address.raw.padding[0],
+    raw_value: capturedFieldValue(address),
     captured_at: fixture.captured_at,
     binding_claim: "variable",
     binding: address.binding,
