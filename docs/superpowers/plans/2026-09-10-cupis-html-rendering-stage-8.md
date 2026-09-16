@@ -529,7 +529,7 @@ npm run verify
 **Files:** modify three component files, renderer registry, generated docs; create `all-components.test.mjs`.
 
 - [ ] **Step 1: Shared** — semantic facts/slots/coverage; internal glyphs → `source-only`.
-- [ ] **Step 2: Marketing** — покрыть остальные marketing records после пилотного Header; preserve exact contracts/properties/assets/numbers. `Banner/App-Download-Large` получает coverage mode `unsupported` и reason `visual-experiment-not-for-production`; его Figma status и дизайн не меняются.
+- [ ] **Step 2: Marketing** — покрыть остальные marketing records после пилотного Header; preserve exact contracts/properties/assets/numbers.
 - [ ] **Step 3: Service** — та же schema без service-specific foundation; ambiguity blocks exact record.
 - [ ] **Step 4: Full coverage assertions**.
 
