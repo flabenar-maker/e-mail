@@ -70,6 +70,12 @@
         "source_content": "exact-node-after-overrides",
         "live_html_included": false,
         "parent_fill_included": false
+      },
+      "child_boundary": {
+        "required_visible_child_names": [
+          "Asset/Product-Logo"
+        ],
+        "forbidden_visible_child_names": []
       }
     },
     {
@@ -138,6 +144,10 @@
         "source_content": "source-raster-only",
         "live_html_included": false,
         "parent_fill_included": false
+      },
+      "child_boundary": {
+        "required_visible_child_names": [],
+        "forbidden_visible_child_names": []
       }
     },
     {
@@ -207,6 +217,10 @@
         "source_content": "source-raster-only",
         "live_html_included": false,
         "parent_fill_included": false
+      },
+      "child_boundary": {
+        "required_visible_child_names": [],
+        "forbidden_visible_child_names": []
       }
     },
     {
@@ -271,6 +285,12 @@
         "source_content": "exact-node-after-overrides",
         "live_html_included": false,
         "parent_fill_included": false
+      },
+      "child_boundary": {
+        "required_visible_child_names": [
+          "Number"
+        ],
+        "forbidden_visible_child_names": []
       }
     },
     {
@@ -328,6 +348,12 @@
         "source_content": "exact-node-after-overrides",
         "live_html_included": false,
         "parent_fill_included": false
+      },
+      "child_boundary": {
+        "required_visible_child_names": [
+          "artwork"
+        ],
+        "forbidden_visible_child_names": []
       }
     },
     {
@@ -396,6 +422,13 @@
         "source_content": "exact-node-after-overrides",
         "live_html_included": false,
         "parent_fill_included": false
+      },
+      "child_boundary": {
+        "required_visible_child_names": [
+          "background",
+          "account-circle-line"
+        ],
+        "forbidden_visible_child_names": []
       }
     },
     {
@@ -456,6 +489,12 @@
         "source_content": "source-raster-only",
         "live_html_included": false,
         "parent_fill_included": false
+      },
+      "child_boundary": {
+        "required_visible_child_names": [
+          "happy-face-icon @4x"
+        ],
+        "forbidden_visible_child_names": []
       }
     }
   ],
