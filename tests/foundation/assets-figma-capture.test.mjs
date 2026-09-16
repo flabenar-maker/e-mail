@@ -16,12 +16,7 @@ const expectedGate = {
   code: "CONCRETE_DESKTOP_INSTANCE_OVERRIDES_UNVERIFIED",
   reason: "The library exposes placeholder component state, not a concrete email instance with marketer overrides.",
 };
-const expectedUnresolved = [
-  { record_id: "hero-image-fill-jpeg-direct", codes: ["FIGMA_NODE_EXPORT_PROFILE_CONFLICT"] },
-  { record_id: "secondary-image-fill-jpeg-wrapper-crop", codes: ["FIGMA_NODE_EXPORT_PROFILE_CONFLICT", "FIGMA_OWNER_DISPLAY_GEOMETRY_MISMATCH"] },
-  { record_id: "nps-face-image-fill-png-source-alpha", codes: ["FIGMA_IMAGE_OWNER_NODE_NOT_ISOLATED"] },
-  { record_id: "concrete-desktop-instance-overrides", codes: ["CONCRETE_DESKTOP_INSTANCE_OVERRIDES_UNVERIFIED"] },
-];
+const expectedUnresolved = [];
 
 const expectedChildren = {
   "header-logo-rendered-png-opaque": ["Asset/Product-Logo"],
@@ -47,7 +42,7 @@ const expectedRepresentatives = {
     component_asset: { owner_layer_name: "hero-image @2x", source_viewport: "desktop", export_boundary: { kind: "fill", semantic_node_name: "hero-image @2x" } },
     source_boundary: { source_content: "source-raster-only", concrete_desktop_instance_required: true, own_visible_fill_included: true, visible_nested_graphics_included: false, parent_fill_included: false, unrelated_layout_included: false, live_html_included: false },
     live_figma: { file_key: "8zka5bHkcrJVK9I9dKjnhC", node_id: "230:3689", node_name: "hero-image @2x", variant: "Viewport=Desktop", viewport: "desktop", geometry: { width: 552, height: 353 }, own_visible_fill: true, own_fill_type: "IMAGE", visible_nested_graphics: false, parent_fill_included: false, presentation: { clips_content: true, corner_radius: 0 }, export_settings: [{ format: "PNG", suffix: "@2x", scale: 2, contents_only: true }] },
-    boundary_status: "unresolved", unresolved_codes: ["FIGMA_NODE_EXPORT_PROFILE_CONFLICT"], build_time_gate_id: "concrete-desktop-instance-overrides",
+    boundary_status: "confirmed", build_time_gate_id: "concrete-desktop-instance-overrides",
   },
   "secondary-image-fill-jpeg-wrapper-crop": {
     selection: { component_id: "banner-secondary", asset_contract_id: "secondary-image" },
@@ -55,7 +50,7 @@ const expectedRepresentatives = {
     component_asset: { owner_layer_name: "secondary-image @2x", source_viewport: "desktop", export_boundary: { kind: "fill", semantic_node_name: "secondary-image @2x" } },
     source_boundary: { source_content: "source-raster-only", concrete_desktop_instance_required: true, own_visible_fill_included: true, visible_nested_graphics_included: false, parent_fill_included: false, unrelated_layout_included: false, live_html_included: false },
     live_figma: { file_key: "8zka5bHkcrJVK9I9dKjnhC", node_id: "326:6618", node_name: "secondary-image @2x", variant: "Viewport=Desktop", viewport: "desktop", geometry: { width: 252, height: 238 }, own_visible_fill: true, own_fill_type: "IMAGE", visible_nested_graphics: false, parent_fill_included: false, presentation: { clips_content: true, corner_radius: 0 }, export_settings: [{ format: "PNG", suffix: "@2x", scale: 2, contents_only: true }] },
-    boundary_status: "unresolved", unresolved_codes: ["FIGMA_NODE_EXPORT_PROFILE_CONFLICT", "FIGMA_OWNER_DISPLAY_GEOMETRY_MISMATCH"], build_time_gate_id: "concrete-desktop-instance-overrides",
+    boundary_status: "confirmed", build_time_gate_id: "concrete-desktop-instance-overrides",
   },
   "card-image-rendered-jpeg-neutralized": {
     selection: { component_id: "card-image", asset_contract_id: "card-image" },
@@ -86,8 +81,8 @@ const expectedRepresentatives = {
     foundation_selection: { sourceModeId: "image-fill", displayModeId: "direct-image", exportProfileId: "png-4x", expectedAlphaId: "source", clippingPolicyId: "preserve-artwork" },
     component_asset: { owner_layer_name: "happy-face-icon @4x", source_viewport: "desktop", export_boundary: { kind: "fill", semantic_node_name: "happy-face-icon @4x" } },
     source_boundary: { source_content: "source-raster-only", concrete_desktop_instance_required: true, own_visible_fill_included: true, visible_nested_graphics_included: false, parent_fill_included: false, unrelated_layout_included: false, live_html_included: false },
-    live_figma: { file_key: "8zka5bHkcrJVK9I9dKjnhC", node_id: "260:3968", node_name: "Good", variant: "Viewport=Desktop, Count=3", viewport: "desktop", geometry: { width: 154.6666717529297, height: 54 }, own_visible_fill: true, visible_nested_graphics: false, parent_fill_included: false, presentation: { clips_content: true, corner_radius: 32 }, export_settings: [] },
-    boundary_status: "unresolved", unresolved_codes: ["FIGMA_IMAGE_OWNER_NODE_NOT_ISOLATED"], build_time_gate_id: "concrete-desktop-instance-overrides",
+    live_figma: { file_key: "8zka5bHkcrJVK9I9dKjnhC", node_id: "260:3969", node_name: "happy-face-icon @4x", variant: "Viewport=Desktop, Count=3", viewport: "desktop", geometry: { width: 42, height: 42 }, own_visible_fill: true, own_fill_type: "IMAGE", visible_nested_graphics: false, parent_fill_included: false, presentation: { clips_content: false, corner_radius: 0 }, export_settings: [{ format: "PNG", suffix: "@4x", scale: 4, contents_only: true }] },
+    boundary_status: "confirmed", build_time_gate_id: "concrete-desktop-instance-overrides",
   },
 };
 
@@ -116,6 +111,18 @@ test("Figma asset capture matches the canonical exact representative map", async
   assert.deepEqual(evidence.build_time_gates, [expectedGate]);
   assert.deepEqual(evidence.unresolved, expectedUnresolved);
   assert.deepEqual(Object.fromEntries(evidence.representatives.map((item) => [item.id, projection(item)])), expectedRepresentatives);
+});
+
+test("Figma capture keeps configured node export settings observational and final output contract-owned", async () => {
+  const evidence = await capture();
+  for (const item of evidence.representatives) {
+    assert.deepEqual(item.final_output_profile, {
+      source: "foundation-selection",
+      figma_export_settings_authoritative: false,
+    });
+  }
+  assert.equal(evidence.unresolved.some(({ codes }) => codes.includes("FIGMA_NODE_EXPORT_PROFILE_CONFLICT")), false);
+  assert.equal(evidence.unresolved.some(({ codes }) => codes.includes("FIGMA_OWNER_DISPLAY_GEOMETRY_MISMATCH")), false);
 });
 
 test("Figma asset capture maps exact component asset owners and source boundaries", async () => {
