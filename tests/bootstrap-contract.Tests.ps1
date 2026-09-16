@@ -8,6 +8,41 @@ $powerShell = if (Get-Command pwsh -ErrorAction SilentlyContinue) {
     (Get-Command powershell -ErrorAction Stop).Source
 }
 
+$fixtureFiles = @(
+    'README.md', 'AGENTS.md', '.gitattributes',
+    'bootstrap/config.portable.toml', 'bootstrap/README.md', 'bootstrap/verify.ps1',
+    '.agents/skills/maintaining-cupis-email-system/SKILL.md',
+    '.agents/skills/maintaining-cupis-email-system/agents/openai.yaml',
+    'core/asset-export-standard.md', 'core/component-contract-standard.md',
+    'core/email-rendering-standard.md', 'core/figma-component-description-standard.md',
+    'core/figma-library-standard.md', 'core/typography-standard.md',
+    'workflows/system-paused.md', 'system/manifest.yaml',
+    'schemas/assets.schema.json', 'schemas/components.schema.json',
+    'schemas/figma-naming.schema.json', 'schemas/manifest.schema.json',
+    'schemas/renderer-registry.schema.json', 'schemas/rendering.schema.json',
+    'schemas/spacing.schema.json', 'schemas/typography.schema.json',
+    'data/components/marketing.yaml', 'data/components/service.yaml',
+    'data/components/shared.yaml', 'data/foundations/assets.yaml',
+    'data/foundations/figma-naming.yaml', 'data/foundations/rendering.yaml',
+    'data/foundations/spacing.yaml', 'data/foundations/typography.yaml',
+    'data/renderers/registry.yaml', 'docs/generated/asset-registry.md',
+    'docs/generated/component-registry.md', 'docs/generated/naming-reference.md',
+    'docs/generated/typography-registry.md',
+    'docs/superpowers/plans/2026-08-25-cupis-migration-roadmap.md'
+)
+
+function Get-FixtureRelativeFilePaths {
+    param([string]$Root)
+    $resolvedRoot = [System.IO.Path]::GetFullPath($Root).TrimEnd(
+        [System.IO.Path]::DirectorySeparatorChar,
+        [System.IO.Path]::AltDirectorySeparatorChar
+    ) + [System.IO.Path]::DirectorySeparatorChar
+    Get-ChildItem -LiteralPath $Root -File -Recurse |
+        ForEach-Object {
+            ([System.IO.Path]::GetFullPath($_.FullName)).Substring($resolvedRoot.Length).Replace('\', '/')
+        } |
+        Sort-Object
+}
 function Assert-True {
     param([bool]$Condition, [string]$Message)
     if (-not $Condition) { throw $Message }
@@ -117,6 +152,10 @@ try {
     foreach ($archivedPath in @('Legacy', 'registry', 'templates')) {
         Assert-True (-not (Test-Path -LiteralPath (Join-Path $readOnlyFixture $archivedPath))) "Fixture must not copy archived path: $archivedPath."
     }
+    $actualFixtureFiles = Get-FixtureRelativeFilePaths $readOnlyFixture
+    Assert-True (($actualFixtureFiles -join "
+") -eq (($fixtureFiles | Sort-Object) -join "
+")) 'Fixture must copy only active manifest sources and bootstrap assertions.'
     $beforeHash = Get-FixtureHash $readOnlyFixture
     $firstRun = Invoke-Verify $readOnlyFixture
     $secondRun = Invoke-Verify $readOnlyFixture
