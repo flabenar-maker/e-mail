@@ -228,7 +228,8 @@ global_invariants:
   - id: concrete-instance-source
     statement: Export uses the concrete Desktop email instance after its overrides.
   - id: artificial-background-forbidden
-    statement: No matte or background absent from the owned export boundary may be added.
+    statement: No matte or background absent from the owned export boundary may be added.  - id: figma-export-setting-non-authoritative
+    statement: Configured Figma export settings are observational helpers; the selected foundation export profile owns final format, scale, suffix, color space and quality.
 
 provenance:
   baseline_commit: 8192e6c3262cd24fa13fbbbe248af653c8005231

@@ -76,6 +76,10 @@
           "Asset/Product-Logo"
         ],
         "forbidden_visible_child_names": []
+      },
+      "final_output_profile": {
+        "source": "foundation-selection",
+        "figma_export_settings_authoritative": false
       }
     },
     {
@@ -123,10 +127,7 @@
           }
         ]
       },
-      "boundary_status": "unresolved",
-      "unresolved_codes": [
-        "FIGMA_NODE_EXPORT_PROFILE_CONFLICT"
-      ],
+      "boundary_status": "confirmed",
       "build_time_gate_id": "concrete-desktop-instance-overrides",
       "component_asset": {
         "export_boundary": {
@@ -148,6 +149,10 @@
       "child_boundary": {
         "required_visible_child_names": [],
         "forbidden_visible_child_names": []
+      },
+      "final_output_profile": {
+        "source": "foundation-selection",
+        "figma_export_settings_authoritative": false
       }
     },
     {
@@ -195,11 +200,7 @@
           }
         ]
       },
-      "boundary_status": "unresolved",
-      "unresolved_codes": [
-        "FIGMA_NODE_EXPORT_PROFILE_CONFLICT",
-        "FIGMA_OWNER_DISPLAY_GEOMETRY_MISMATCH"
-      ],
+      "boundary_status": "confirmed",
       "build_time_gate_id": "concrete-desktop-instance-overrides",
       "component_asset": {
         "export_boundary": {
@@ -221,6 +222,10 @@
       "child_boundary": {
         "required_visible_child_names": [],
         "forbidden_visible_child_names": []
+      },
+      "final_output_profile": {
+        "source": "foundation-selection",
+        "figma_export_settings_authoritative": false
       }
     },
     {
@@ -291,6 +296,10 @@
           "Number"
         ],
         "forbidden_visible_child_names": []
+      },
+      "final_output_profile": {
+        "source": "foundation-selection",
+        "figma_export_settings_authoritative": false
       }
     },
     {
@@ -354,6 +363,10 @@
           "artwork"
         ],
         "forbidden_visible_child_names": []
+      },
+      "final_output_profile": {
+        "source": "foundation-selection",
+        "figma_export_settings_authoritative": false
       }
     },
     {
@@ -429,6 +442,10 @@
           "account-circle-line"
         ],
         "forbidden_visible_child_names": []
+      },
+      "final_output_profile": {
+        "source": "foundation-selection",
+        "figma_export_settings_authoritative": false
       }
     },
     {
@@ -451,27 +468,32 @@
       ],
       "live_figma": {
         "file_key": "8zka5bHkcrJVK9I9dKjnhC",
-        "node_id": "260:3968",
-        "node_name": "Good",
+        "node_id": "260:3969",
+        "node_name": "happy-face-icon @4x",
         "variant": "Viewport=Desktop, Count=3",
         "viewport": "desktop",
         "geometry": {
-          "width": 154.6666717529297,
-          "height": 54
+          "width": 42,
+          "height": 42
         },
         "own_visible_fill": true,
         "visible_nested_graphics": false,
         "parent_fill_included": false,
         "presentation": {
-          "clips_content": true,
-          "corner_radius": 32
+          "clips_content": false,
+          "corner_radius": 0
         },
-        "export_settings": []
+        "export_settings": [
+          {
+            "format": "PNG",
+            "suffix": "@4x",
+            "scale": 4,
+            "contents_only": true
+          }
+        ],
+        "own_fill_type": "IMAGE"
       },
-      "boundary_status": "unresolved",
-      "unresolved_codes": [
-        "FIGMA_IMAGE_OWNER_NODE_NOT_ISOLATED"
-      ],
+      "boundary_status": "confirmed",
       "build_time_gate_id": "concrete-desktop-instance-overrides",
       "component_asset": {
         "export_boundary": {
@@ -495,34 +517,12 @@
           "happy-face-icon @4x"
         ],
         "forbidden_visible_child_names": []
+      },
+      "final_output_profile": {
+        "source": "foundation-selection",
+        "figma_export_settings_authoritative": false
       }
     }
   ],
-  "unresolved": [
-    {
-      "codes": [
-        "FIGMA_NODE_EXPORT_PROFILE_CONFLICT"
-      ],
-      "record_id": "hero-image-fill-jpeg-direct"
-    },
-    {
-      "codes": [
-        "FIGMA_NODE_EXPORT_PROFILE_CONFLICT",
-        "FIGMA_OWNER_DISPLAY_GEOMETRY_MISMATCH"
-      ],
-      "record_id": "secondary-image-fill-jpeg-wrapper-crop"
-    },
-    {
-      "codes": [
-        "FIGMA_IMAGE_OWNER_NODE_NOT_ISOLATED"
-      ],
-      "record_id": "nps-face-image-fill-png-source-alpha"
-    },
-    {
-      "codes": [
-        "CONCRETE_DESKTOP_INSTANCE_OVERRIDES_UNVERIFIED"
-      ],
-      "record_id": "concrete-desktop-instance-overrides"
-    }
-  ]
+  "unresolved": []
 }
