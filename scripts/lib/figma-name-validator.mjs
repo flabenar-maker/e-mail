@@ -154,6 +154,66 @@ function validateLayer(naming, candidate, errors) {
   }
 }
 
+function roleRequired(path = "/candidate/roleId") {
+  return diagnostic(
+    "semantic-role-required",
+    path,
+    "A confirmed controlled semantic role is required for a naming proposal.",
+  );
+}
+
+function semanticCategoryRequired(path = "/candidate/semanticCategory") {
+  return diagnostic(
+    "semantic-category-required",
+    path,
+    "A confirmed non-prohibited semantic category is required for a layer naming proposal.",
+  );
+}
+
+function resolveLayerSemantics(naming, candidate) {
+  const role = candidate.roleId;
+  if (
+    typeof role !== "string" ||
+    !naming.layer_names.controlled_roles.includes(role)
+  ) {
+    return { confirmed: false, errors: [roleRequired()] };
+  }
+
+  const category = candidate.semanticCategory;
+  if (typeof category !== "string" || category.length === 0) {
+    return { confirmed: false, errors: [semanticCategoryRequired()] };
+  }
+  if (naming.layer_names.forbidden_categories.includes(category)) {
+    return {
+      confirmed: false,
+      errors: [
+        diagnostic(
+          "FIGMA_NAME_PROHIBITED_SEMANTIC_CATEGORY",
+          "/candidate/semanticCategory",
+          `Layer proposals cannot be based on the prohibited ${category} category.`,
+        ),
+      ],
+    };
+  }
+  if (category !== "role") {
+    return { confirmed: false, errors: [semanticCategoryRequired()] };
+  }
+  return { confirmed: true, errors: [] };
+}
+
+function assetOwnerKindFromName(name) {
+  return typeof name === "string" && name.startsWith("Asset/")
+    ? "component"
+    : "internal";
+}
+
+function scaleFromAssetOwnerName(naming, name) {
+  if (typeof name !== "string") return null;
+  return naming.asset_owners.scale_suffixes.find((item) =>
+    name.endsWith(" " + item.suffix),
+  ) ?? null;
+}
+
 function validateProperty(naming, candidate, errors) {
   const name = candidate.name;
   const kind = candidate.propertyKind;
@@ -353,4 +413,106 @@ export function validateFigmaName(naming, candidate = {}) {
   }
 
   return sortDiagnostics(errors);
+}
+
+/**
+ * Checks a proposed future name. Unlike an audit of an existing Figma node,
+ * this API must have independently confirmed semantics before it can return
+ * an empty diagnostic set.
+ */
+export function validateFigmaNameProposal(naming, candidate = {}) {
+  const errors = validateFigmaName(naming, candidate);
+
+  if (candidate.objectKind === "layer") {
+    errors.push(...resolveLayerSemantics(naming, candidate).errors);
+  }
+
+  if (candidate.objectKind === "asset-owner") {
+    const kind = candidate.assetOwnerKind;
+    if (kind !== "internal" && kind !== "component") {
+      errors.push(
+        roleRequired("/candidate/assetOwnerKind"));
+    } else if (typeof candidate.name === "string") {
+      const actualKind = assetOwnerKindFromName(candidate.name);
+      if (actualKind !== kind) {
+        errors.push(
+          diagnostic(
+            "FIGMA_NAME_ASSET_OWNER_KIND_MISMATCH",
+            "/candidate/name",
+            `Asset owner name is ${actualKind}, not ${kind}.`,
+          ),
+        );
+      }
+    }
+
+    const existingScale = scaleFromAssetOwnerName(
+      naming,
+      candidate.existingName,
+    );
+    const proposedScale = scaleFromAssetOwnerName(naming, candidate.name);
+    if (!existingScale) {
+      errors.push(
+        diagnostic(
+          "FIGMA_NAME_SCALE_SUFFIX_REQUIRED",
+          "/candidate/existingName",
+          "An existing @2x or @4x asset owner name is required to preserve scale during an ordinary rename.",
+        ),
+      );
+    } else if (proposedScale && existingScale.scale !== proposedScale.scale) {
+      errors.push(
+        diagnostic(
+          "FIGMA_NAME_SCALE_SUFFIX_MISMATCH",
+          "/candidate/name",
+          `Ordinary rename must preserve ${existingScale.suffix}.`,
+        ),
+      );
+    }
+    if (
+      existingScale &&
+      (kind === "internal" || kind === "component") &&
+      assetOwnerKindFromName(candidate.existingName) !== kind
+    ) {
+      errors.push(
+        diagnostic(
+          "FIGMA_NAME_ASSET_OWNER_KIND_MISMATCH",
+          "/candidate/existingName",
+          "Ordinary rename cannot change the asset owner kind.",
+        ),
+      );
+    }
+  }
+
+  return sortDiagnostics(errors);
+}
+
+/**
+ * Records what Figma already contains. It never implies a rename and it does
+ * not turn syntax alone into proof of a layer's semantic role.
+ */
+export function auditExistingFigmaName(naming, candidate = {}) {
+  const diagnostics = validateFigmaName(naming, candidate).map(
+    (error) => error.code,
+  );
+  const syntaxStatus = diagnostics.length === 0 ? "valid" : "invalid";
+  const isLayer = candidate.objectKind === "layer";
+  const layerSemantics = isLayer
+    ? resolveLayerSemantics(naming, candidate)
+    : { confirmed: true, errors: [] };
+  const semanticStatus =
+    syntaxStatus !== "valid"
+      ? "unresolved"
+      : !layerSemantics.confirmed
+        ? "unresolved"
+        : "confirmed";
+  const semanticDiagnostics = layerSemantics.errors.map((error) => error.code);
+
+  return {
+    status: "observed",
+    object_kind: candidate.objectKind,
+    name: candidate.name,
+    syntax_status: syntaxStatus,
+    semantic_status: semanticStatus,
+    diagnostics: [...new Set([...diagnostics, ...semanticDiagnostics])].sort(),
+    rename_proposal: null,
+  };
 }

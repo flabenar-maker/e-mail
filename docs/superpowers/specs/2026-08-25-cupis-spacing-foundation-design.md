@@ -1,6 +1,6 @@
 # CUPIS Spacing Foundation Design
 
-**Статус:** draft — ожидает подтверждения Checkpoint 3  
+**Статус:** draft — частичная прямая Figma-проверка Checkpoint 3; полное подтверждение ещё не достигнуто
 **Базовый commit:** `f46985e57b2058f86f91b78de8e37600b766c21c`  
 **Источник фактических значений для этого документа:** актуальный `registry/email-component-descriptions-registry.md` на базовом commit; ранее согласованные результаты аудита библиотеки.
 
@@ -318,3 +318,13 @@ resolved_exact_value
 - неизвестное структурное отношение вызывает foundation-extension blocker;
 - Mobile и Desktop разрешаются независимо;
 - документ не меняет текущий дизайн или поведение писем.
+
+## 16. Статус фактической Figma-проверки (2026-09-16)
+
+Этот документ остаётся черновиком. Прямая read-only проверка Figma зафиксирована в `tests/fixtures/foundation/spacing-figma-capture.json` и аудите `docs/superpowers/audits/2026-09-16-spacing-figma-evidence-audit.md`.
+
+- 12 из 15 ролей подтверждены для Mobile и Desktop прямой цепочкой: Figma node → exact field → FLOAT variable. Их structured provenance содержит только конкретные Figma-данные.
+- `outer-flow`, `common-horizontal-inset` и `inline-peer-standard` остаются неподтверждёнными для обоих viewport. Их числа не меняются, но provenance остаётся `registry-literal`; это не является Figma-подтверждением.
+- Полный статус не присваивается, пока каждая роль и каждый viewport не будут подтверждены без подмены relationship или owner.
+
+Результат не меняет значения отступов, не меняет component contracts и не передаёт design-time relationship, owner, binding или provenance в HTML bundle.

@@ -5,7 +5,11 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { loadFigmaNamingFoundation } from "../../scripts/lib/figma-naming-foundation.mjs";
-import { generateFigmaName } from "../../scripts/lib/figma-name-generator.mjs";
+import {
+  generateFigmaName,
+  renderFigmaNamingReference,
+} from "../../scripts/lib/figma-name-generator.mjs";
+import { validateFigmaNameProposal } from "../../scripts/lib/figma-name-validator.mjs";
 
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 
@@ -88,9 +92,19 @@ for (const [request, expected] of [
     {
       objectKind: "asset-owner",
       semanticTokens: ["feature", "image"],
-      currentScale: 4,
+      assetOwnerKind: "internal",
+      existingName: "hero-image @4x",
     },
     "feature-image @4x",
+  ],
+  [
+    {
+      objectKind: "asset-owner",
+      semanticTokens: ["feature", "icon"],
+      assetOwnerKind: "component",
+      existingName: "Asset/Bank-Badge @4x",
+    },
+    "Asset/Feature-Icon @4x",
   ],
   [
     {
@@ -157,7 +171,8 @@ test("blocks unsupported or attempted asset scale mutation", async () => {
   const unsupported = generateFigmaName(naming, {
     objectKind: "asset-owner",
     semanticTokens: ["feature", "image"],
-    currentScale: 3,
+    assetOwnerKind: "internal",
+    existingName: "hero-image @3x",
   });
   assert.equal(unsupported.status, "blocked");
   assert.equal(
@@ -168,7 +183,8 @@ test("blocks unsupported or attempted asset scale mutation", async () => {
   const mutation = generateFigmaName(naming, {
     objectKind: "asset-owner",
     semanticTokens: ["feature", "image"],
-    currentScale: 4,
+    assetOwnerKind: "internal",
+    existingName: "hero-image @4x",
     targetScale: 2,
   });
   assert.equal(mutation.status, "blocked");
@@ -176,6 +192,55 @@ test("blocks unsupported or attempted asset scale mutation", async () => {
     mutation.error.code,
     "FIGMA_NAME_SCALE_SUFFIX_MISMATCH",
   );
+});
+
+test("blocks a lower-kebab layer proposal until a controlled semantic role is confirmed", async () => {
+  const naming = await canonicalNaming();
+  const result = generateFigmaName(naming, {
+    objectKind: "layer",
+    roleId: "custom-decoration",
+  });
+
+  assert.equal(result.status, "blocked");
+  assert.equal(result.error.code, "semantic-role-required");
+});
+
+test("generator output passes proposal validation for every confirmed candidate", async () => {
+  const naming = await canonicalNaming();
+  const requests = [
+    {
+      objectKind: "layer",
+      roleId: "artwork",
+      semanticCategory: "role",
+    },
+    {
+      objectKind: "asset-owner",
+      assetOwnerKind: "component",
+      existingName: "Asset/Bank-Badge @4x",
+      semanticTokens: ["partner", "badge"],
+    },
+  ];
+
+  for (const request of requests) {
+    const result = generateFigmaName(naming, request);
+    assert.equal(result.status, "generated");
+    assert.deepEqual(
+      validateFigmaNameProposal(naming, {
+        ...request,
+        name: result.name,
+      }),
+      [],
+    );
+  }
+});
+
+test("generated naming reference is deterministic and excludes rename instructions", async () => {
+  const naming = await canonicalNaming();
+  const reference = renderFigmaNamingReference(naming);
+
+  assert.match(reference, /Asset\/Feature-Icon @4x/u);
+  assert.match(reference, /semantic-role-required/u);
+  assert.doesNotMatch(reference, /rename/iu);
 });
 
 test("generator does not mutate its inputs", async () => {

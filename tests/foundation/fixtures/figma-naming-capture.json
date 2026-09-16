@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0.0",
+  "captured_at": "2026-09-16T00:00:00+03:00",
+  "purpose": "Non-normative, read-only Figma naming evidence. It records observed names and does not authorize a rename or alter the naming foundation.",
+  "file_key": "8zka5bHkcrJVK9I9dKjnhC",
+  "roots": [
+    { "id": "538:17236", "name": "Marketing Emails" },
+    { "id": "538:17235", "name": "Service Emails" }
+  ],
+  "components": [
+    {
+      "id": "326:5159",
+      "name": "Email/Header",
+      "variants": ["Viewport=Mobile", "Viewport=Desktop"],
+      "property_definition_names": ["Viewport"]
+    },
+    {
+      "id": "459:29177",
+      "name": "Block/Transaction-Success",
+      "variants": ["Viewport=Desktop", "Viewport=Mobile"],
+      "property_definition_names": ["Show Limit Alert#459:0", "Show Description#477:0", "Viewport"]
+    },
+    {
+      "id": "1084:16996",
+      "name": "Badge/Operation-Status",
+      "variants": [
+        "Viewport=Mobile, State=Pending",
+        "Viewport=Mobile, State=Success",
+        "Viewport=Mobile, State=Error",
+        "Viewport=Desktop, State=Pending",
+        "Viewport=Desktop, State=Success",
+        "Viewport=Desktop, State=Error"
+      ],
+      "property_definition_names": ["Viewport", "State"]
+    }
+  ],
+  "layers": [
+    { "id": "481:19658", "name": "artwork", "role_id": "artwork", "semantic_category": "role" },
+    { "id": "484:19978", "name": "glyph", "role_id": "glyph", "semantic_category": "role" },
+    { "id": "946:25766", "name": "background", "role_id": "background", "semantic_category": "role" },
+    { "id": "17:2751", "name": "Clip path group" }
+  ],
+  "asset_owners": [
+    {
+      "kind": "internal",
+      "id": "230:3689",
+      "name": "hero-image @2x",
+      "suffix": "@2x",
+      "scale": 2,
+      "export": { "format": "PNG", "suffix": "@2x", "scale": 2 }
+    },
+    {
+      "kind": "component",
+      "id": "946:25769",
+      "name": "Asset/Feature-Icon @4x",
+      "suffix": "@4x",
+      "scale": 4,
+      "export": { "format": "PNG", "suffix": "@4x", "scale": 4 }
+    }
+  ],
+  "unresolved": [
+    {
+      "code": "OBSERVED_FIGMA_LAYER_SEMANTIC_ROLE_UNPROVEN",
+      "observed_name": "Clip path group",
+      "reason": "The read proves the exact name but not a controlled semantic role. Existing-name audit must not propose a rename."
+    },
+    {
+      "code": "OBSERVED_FIGMA_EXPORT_SUFFIX_MISMATCH",
+      "observed_name": "vk-icon @4x",
+      "node_id": "261:4007",
+      "reason": "The owner name carries @4x but its observed desktop export setting uses an empty suffix. Naming cannot silently decide the export-contract correction."
+    },
+    {
+      "code": "OBSERVED_FIGMA_LEGACY_DEFAULT_LAYER_NAME",
+      "observed_names": ["Vector", "Subtract", "Rectangle 3946"],
+      "reason": "These observed legacy/default child names require a separately confirmed semantic role before any proposal."
+    }
+  ]
+}

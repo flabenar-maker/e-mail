@@ -11,6 +11,7 @@ import {
 } from "../../scripts/lib/strict-yaml.mjs";
 import {
   loadTypographyFoundation,
+  renderFigmaTypographyDescription,
   validateTypographyFoundation,
   validateTypographySemantics,
 } from "../../scripts/lib/typography-foundation.mjs";
@@ -53,6 +54,29 @@ test("loads the canonical typography foundation", async () => {
   assert.equal(typography.responsive_pairs.length, 8);
 });
 
+test("renders Figma descriptions from semantic text and exact typography metrics", async () => {
+  const typography = await canonicalTypography();
+  const style = typography.styles.find(({ id }) => id === "desktop-display");
+
+  assert.equal(
+    renderFigmaTypographyDescription(style),
+    "Главный выразительный текст Desktop для Hero-заголовка и крупного результата операции. Не использовать как обычный заголовок блока или карточки. Пара: Mobile/Display. Roboto Bold, 32px, line-height 120%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.",
+  );
+
+  const mutations = [
+    ["font size", (value) => { value.font_size_px = 33; }, "33px", "32px"],
+    ["font style", (value) => { value.font.figma_style = "Medium"; }, "Roboto Medium", "Roboto Bold"],
+    ["line-height", (value) => { value.line_height = { unit: "px", value: 30 }; }, "line-height 30px", "line-height 120%"],
+    ["letter-spacing", (value) => { value.letter_spacing = { unit: "px", value: 1 }; }, "letter-spacing 1px", "letter-spacing 0"],
+  ];
+  for (const [, mutate, expected, retired] of mutations) {
+    const changed = structuredClone(style);
+    mutate(changed);
+    const description = renderFigmaTypographyDescription(changed);
+    assert.ok(description.includes(expected));
+    assert.equal(description.includes(retired), false);
+  }
+});
 test("rejects an unsupported typography version", async () => {
   const [schema, typography] = await Promise.all([
     readSchema(),
@@ -274,6 +298,79 @@ for (const [name, mutate, code] of [
   });
 }
 
+test("requires a unique exact Figma style id for every semantic style", async () => {
+  const typography = await canonicalTypography();
+  delete typography.styles[0].figma_style_id;
+  const schema = await readSchema();
+  assert.ok(
+    validate(typography, schema).some(
+      (error) => error.code === "typography-schema" && error.path === "/styles/0",
+    ),
+  );
+
+  const duplicate = await canonicalTypography();
+  duplicate.styles[1].figma_style_id = duplicate.styles[0].figma_style_id;
+  assert.ok(
+    validateTypographySemantics(duplicate).some(
+      (error) => error.code === "duplicate-typography-figma-style-id",
+    ),
+  );
+
+  const sameSemanticRole = await canonicalTypography();
+  sameSemanticRole.styles[1].viewport = sameSemanticRole.styles[0].viewport;
+  sameSemanticRole.styles[1].role = sameSemanticRole.styles[0].role;
+  sameSemanticRole.styles[1].variant = sameSemanticRole.styles[0].variant;
+  assert.ok(
+    validateTypographySemantics(sameSemanticRole).some(
+      (error) => error.code === "duplicate-typography-semantic-identity",
+    ),
+  );
+});
+test("matches every typography foundation style to its read-only Figma capture", async () => {
+  const [typography, captureText] = await Promise.all([
+    canonicalTypography(),
+    readFile(
+      join(repoRoot, "tests/fixtures/figma/typography-capture.json"),
+      "utf8",
+    ),
+  ]);
+  const capture = JSON.parse(captureText);
+
+  assert.equal(capture.file_key, typography.foundation.source.figma_file_key);
+  assert.equal(capture.styles.length, typography.styles.length);
+  for (const style of typography.styles) {
+    const observed = capture.styles.find(
+      ({ foundation_id }) => foundation_id === style.id,
+    );
+    assert.ok(observed, `Missing Figma capture for ${style.id}`);
+    assert.equal(observed.figma_style_id, style.figma_style_id);
+    assert.equal(observed.figma_name, style.figma_name);
+    assert.equal(observed.font.family, style.font.family);
+    assert.equal(observed.font.figma_style, style.font.figma_style);
+    assert.equal(observed.font.css_weight, style.font.css_weight);
+    assert.equal(observed.font_size_px, style.font_size_px);
+    assert.equal(observed.line_height.unit, style.line_height.unit);
+    assert.ok(
+      Math.abs(observed.line_height.value - style.line_height.value) < 0.00001,
+      `Line-height drift for ${style.id}`,
+    );
+    assert.equal(
+      renderFigmaTypographyDescription(style),
+      observed.figma_description,
+    );
+    assert.equal(observed.usage_binding.property, "TEXT.textStyleId");
+    assert.ok(observed.usage_binding.owners.length > 0);
+
+    if (style.id === "desktop-heading-compact") {
+      assert.deepEqual(observed.letter_spacing, { unit: "px", value: 0 });
+      assert.deepEqual(style.letter_spacing, { unit: "percent", value: 0 });
+      assert.equal(observed.capture_status, "unresolved-mismatch");
+      continue;
+    }
+    assert.deepEqual(observed.letter_spacing, style.letter_spacing);
+    assert.equal(observed.capture_status, "exact-match");
+  }
+});
 test("sorts semantic diagnostics deterministically", async () => {
   const typography = await canonicalTypography();
   typography.styles[0].figma_name = "Mobile/Wrong";

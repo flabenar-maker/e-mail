@@ -1,5 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const rendering = {
   breakpoints: [{ id: "cupis-mobile", query: "max-width", value: 660, unit: "px" }],
@@ -141,4 +144,11 @@ test("linear-gradient facts preserve the approved 25 degree CSS direction and st
   const result = await render({ component: component(root), content: {} });
   assert.match(result.html, /linear-gradient\(25deg,#B0FCC0,#2F80ED\)/u);
   assert.deepEqual(result.diagnostics, []);
+});
+// The interpreter consumes already-resolved contract facts. It must not import or invoke
+// the design-time spacing resolver, so it cannot make a fresh spacing choice in HTML.
+test("email interpreter has no design-time spacing resolver dependency", async () => {
+  const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
+  const source = await readFile(join(repoRoot, "scripts/lib/email-interpreter.mjs"), "utf8");
+  assert.doesNotMatch(source, /spacing-foundation|resolveDesignSpacing/u);
 });

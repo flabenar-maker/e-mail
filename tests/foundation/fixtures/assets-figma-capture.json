@@ -1,0 +1,528 @@
+{
+  "schema_version": "1.0.0",
+  "captured_at": "2026-09-16T00:00:00+03:00",
+  "purpose": "Non-normative read-only Figma evidence. It is not an export recipe and cannot replace a concrete email-instance readback.",
+  "historical_comparison_sources": [
+    "docs/superpowers/specs/2026-08-24-cupis-structured-email-system-design.md",
+    "core/asset-export-standard.md"
+  ],
+  "build_time_gates": [
+    {
+      "id": "concrete-desktop-instance-overrides",
+      "status": "unverified",
+      "reason": "The library exposes placeholder component state, not a concrete email instance with marketer overrides.",
+      "required": true,
+      "code": "CONCRETE_DESKTOP_INSTANCE_OVERRIDES_UNVERIFIED"
+    }
+  ],
+  "representatives": [
+    {
+      "id": "header-logo-rendered-png-opaque",
+      "selection": {
+        "component_id": "email-header",
+        "asset_contract_id": "header-logo"
+      },
+      "foundation_selection": {
+        "sourceModeId": "rendered-node",
+        "displayModeId": "direct-image",
+        "exportProfileId": "png-4x",
+        "expectedAlphaId": "opaque",
+        "clippingPolicyId": "preserve-artwork"
+      },
+      "foundation_source_paths": [
+        "data/foundations/assets.yaml#/source_modes[id=rendered-node]/contract",
+        "data/foundations/assets.yaml#/export_profiles[id=png-4x]/contract"
+      ],
+      "live_figma": {
+        "file_key": "8zka5bHkcrJVK9I9dKjnhC",
+        "node_id": "1008:1823",
+        "node_name": "header-logo @4x",
+        "variant": "Viewport=Desktop",
+        "viewport": "desktop",
+        "geometry": {
+          "width": 322,
+          "height": 50
+        },
+        "own_visible_fill": true,
+        "visible_nested_graphics": true,
+        "parent_fill_included": false,
+        "presentation": {
+          "clips_content": false,
+          "corner_radius": 55
+        },
+        "export_settings": []
+      },
+      "boundary_status": "confirmed",
+      "build_time_gate_id": "concrete-desktop-instance-overrides",
+      "component_asset": {
+        "export_boundary": {
+          "kind": "node",
+          "semantic_node_name": "header-logo @4x"
+        },
+        "source_viewport": "desktop",
+        "owner_layer_name": "header-logo @4x"
+      },
+      "source_boundary": {
+        "visible_nested_graphics_included": true,
+        "unrelated_layout_included": false,
+        "own_visible_fill_included": true,
+        "concrete_desktop_instance_required": true,
+        "source_content": "exact-node-after-overrides",
+        "live_html_included": false,
+        "parent_fill_included": false
+      },
+      "child_boundary": {
+        "required_visible_child_names": [
+          "Asset/Product-Logo"
+        ],
+        "forbidden_visible_child_names": []
+      }
+    },
+    {
+      "id": "hero-image-fill-jpeg-direct",
+      "selection": {
+        "component_id": "banner-hero",
+        "asset_contract_id": "hero-image"
+      },
+      "foundation_selection": {
+        "sourceModeId": "image-fill",
+        "displayModeId": "direct-image",
+        "exportProfileId": "jpeg-2x",
+        "expectedAlphaId": "none",
+        "clippingPolicyId": "preserve-artwork"
+      },
+      "foundation_source_paths": [
+        "data/foundations/assets.yaml#/source_modes[id=image-fill]/contract",
+        "data/foundations/assets.yaml#/display_modes[id=direct-image]/contract",
+        "data/foundations/assets.yaml#/export_profiles[id=jpeg-2x]/contract"
+      ],
+      "live_figma": {
+        "file_key": "8zka5bHkcrJVK9I9dKjnhC",
+        "node_id": "230:3689",
+        "node_name": "hero-image @2x",
+        "variant": "Viewport=Desktop",
+        "viewport": "desktop",
+        "geometry": {
+          "width": 552,
+          "height": 353
+        },
+        "own_visible_fill": true,
+        "own_fill_type": "IMAGE",
+        "visible_nested_graphics": false,
+        "parent_fill_included": false,
+        "presentation": {
+          "clips_content": true,
+          "corner_radius": 0
+        },
+        "export_settings": [
+          {
+            "format": "PNG",
+            "suffix": "@2x",
+            "scale": 2,
+            "contents_only": true
+          }
+        ]
+      },
+      "boundary_status": "unresolved",
+      "unresolved_codes": [
+        "FIGMA_NODE_EXPORT_PROFILE_CONFLICT"
+      ],
+      "build_time_gate_id": "concrete-desktop-instance-overrides",
+      "component_asset": {
+        "export_boundary": {
+          "kind": "fill",
+          "semantic_node_name": "hero-image @2x"
+        },
+        "source_viewport": "desktop",
+        "owner_layer_name": "hero-image @2x"
+      },
+      "source_boundary": {
+        "visible_nested_graphics_included": false,
+        "unrelated_layout_included": false,
+        "own_visible_fill_included": true,
+        "concrete_desktop_instance_required": true,
+        "source_content": "source-raster-only",
+        "live_html_included": false,
+        "parent_fill_included": false
+      },
+      "child_boundary": {
+        "required_visible_child_names": [],
+        "forbidden_visible_child_names": []
+      }
+    },
+    {
+      "id": "secondary-image-fill-jpeg-wrapper-crop",
+      "selection": {
+        "component_id": "banner-secondary",
+        "asset_contract_id": "secondary-image"
+      },
+      "foundation_selection": {
+        "sourceModeId": "image-fill",
+        "displayModeId": "fill-image",
+        "exportProfileId": "jpeg-2x",
+        "expectedAlphaId": "none",
+        "clippingPolicyId": "preserve-artwork"
+      },
+      "foundation_source_paths": [
+        "data/foundations/assets.yaml#/source_modes[id=image-fill]/contract",
+        "data/foundations/assets.yaml#/display_modes[id=fill-image]/contract",
+        "data/foundations/assets.yaml#/export_profiles[id=jpeg-2x]/contract"
+      ],
+      "live_figma": {
+        "file_key": "8zka5bHkcrJVK9I9dKjnhC",
+        "node_id": "326:6618",
+        "node_name": "secondary-image @2x",
+        "variant": "Viewport=Desktop",
+        "viewport": "desktop",
+        "geometry": {
+          "width": 252,
+          "height": 238
+        },
+        "own_visible_fill": true,
+        "own_fill_type": "IMAGE",
+        "visible_nested_graphics": false,
+        "parent_fill_included": false,
+        "presentation": {
+          "clips_content": true,
+          "corner_radius": 0
+        },
+        "export_settings": [
+          {
+            "format": "PNG",
+            "suffix": "@2x",
+            "scale": 2,
+            "contents_only": true
+          }
+        ]
+      },
+      "boundary_status": "unresolved",
+      "unresolved_codes": [
+        "FIGMA_NODE_EXPORT_PROFILE_CONFLICT",
+        "FIGMA_OWNER_DISPLAY_GEOMETRY_MISMATCH"
+      ],
+      "build_time_gate_id": "concrete-desktop-instance-overrides",
+      "component_asset": {
+        "export_boundary": {
+          "kind": "fill",
+          "semantic_node_name": "secondary-image @2x"
+        },
+        "source_viewport": "desktop",
+        "owner_layer_name": "secondary-image @2x"
+      },
+      "source_boundary": {
+        "visible_nested_graphics_included": false,
+        "unrelated_layout_included": false,
+        "own_visible_fill_included": true,
+        "concrete_desktop_instance_required": true,
+        "source_content": "source-raster-only",
+        "live_html_included": false,
+        "parent_fill_included": false
+      },
+      "child_boundary": {
+        "required_visible_child_names": [],
+        "forbidden_visible_child_names": []
+      }
+    },
+    {
+      "id": "card-image-rendered-jpeg-neutralized",
+      "selection": {
+        "component_id": "card-image",
+        "asset_contract_id": "card-image"
+      },
+      "foundation_selection": {
+        "sourceModeId": "rendered-node",
+        "displayModeId": "direct-image",
+        "exportProfileId": "jpeg-2x",
+        "expectedAlphaId": "none",
+        "clippingPolicyId": "neutralize-presentation-only"
+      },
+      "foundation_source_paths": [
+        "data/foundations/assets.yaml#/source_modes[id=rendered-node]/contract",
+        "data/foundations/assets.yaml#/clipping_policies[id=neutralize-presentation-only]/contract",
+        "data/foundations/assets.yaml#/export_profiles[id=jpeg-2x]/contract"
+      ],
+      "live_figma": {
+        "file_key": "8zka5bHkcrJVK9I9dKjnhC",
+        "node_id": "911:3991",
+        "node_name": "Style=Numbered",
+        "variant": "Style=Numbered, Viewport=Desktop",
+        "viewport": "desktop",
+        "geometry": {
+          "width": 232,
+          "height": 148
+        },
+        "own_visible_fill": true,
+        "own_fill_type": "IMAGE",
+        "visible_nested_graphics": true,
+        "nested_graphic_names": [
+          "Number"
+        ],
+        "parent_fill_included": false,
+        "presentation": {
+          "source_owner_clips_content": true,
+          "source_owner_corner_radius": 0,
+          "instance_node_id": "911:4005",
+          "instance_corner_radius": 18,
+          "neutralize_only_presentation_radius": true
+        },
+        "export_settings": []
+      },
+      "boundary_status": "confirmed",
+      "build_time_gate_id": "concrete-desktop-instance-overrides",
+      "component_asset": {
+        "export_boundary": {
+          "kind": "node",
+          "semantic_node_name": "card-image @2x"
+        },
+        "source_viewport": "desktop",
+        "owner_layer_name": "card-image @2x"
+      },
+      "source_boundary": {
+        "visible_nested_graphics_included": true,
+        "unrelated_layout_included": false,
+        "own_visible_fill_included": true,
+        "concrete_desktop_instance_required": true,
+        "source_content": "exact-node-after-overrides",
+        "live_html_included": false,
+        "parent_fill_included": false
+      },
+      "child_boundary": {
+        "required_visible_child_names": [
+          "Number"
+        ],
+        "forbidden_visible_child_names": []
+      }
+    },
+    {
+      "id": "app-logo-rendered-png-source-alpha",
+      "selection": {
+        "component_id": "banner-app-download",
+        "asset_contract_id": "app-logo"
+      },
+      "foundation_selection": {
+        "sourceModeId": "rendered-node",
+        "displayModeId": "direct-image",
+        "exportProfileId": "png-4x",
+        "expectedAlphaId": "source",
+        "clippingPolicyId": "preserve-artwork"
+      },
+      "foundation_source_paths": [
+        "data/foundations/assets.yaml#/source_modes[id=rendered-node]/contract",
+        "data/foundations/assets.yaml#/export_profiles[id=png-4x]/contract"
+      ],
+      "live_figma": {
+        "file_key": "8zka5bHkcrJVK9I9dKjnhC",
+        "node_id": "961:37495",
+        "node_name": "app-logo @4x",
+        "variant": "Viewport=Desktop",
+        "viewport": "desktop",
+        "geometry": {
+          "width": 219,
+          "height": 62
+        },
+        "own_visible_fill": true,
+        "own_fill_type": "SOLID",
+        "visible_nested_graphics": true,
+        "parent_fill_included": false,
+        "presentation": {
+          "clips_content": false,
+          "corner_radius": 0
+        },
+        "export_settings": []
+      },
+      "boundary_status": "confirmed",
+      "build_time_gate_id": "concrete-desktop-instance-overrides",
+      "component_asset": {
+        "export_boundary": {
+          "kind": "node",
+          "semantic_node_name": "app-logo @4x"
+        },
+        "source_viewport": "desktop",
+        "owner_layer_name": "app-logo @4x"
+      },
+      "source_boundary": {
+        "visible_nested_graphics_included": true,
+        "unrelated_layout_included": false,
+        "own_visible_fill_included": true,
+        "concrete_desktop_instance_required": true,
+        "source_content": "exact-node-after-overrides",
+        "live_html_included": false,
+        "parent_fill_included": false
+      },
+      "child_boundary": {
+        "required_visible_child_names": [
+          "artwork"
+        ],
+        "forbidden_visible_child_names": []
+      }
+    },
+    {
+      "id": "feature-icon-rendered-png-transparent",
+      "selection": {
+        "component_id": "asset-feature-icon-4x",
+        "asset_contract_id": "feature-icon"
+      },
+      "foundation_selection": {
+        "sourceModeId": "rendered-node",
+        "displayModeId": "direct-image",
+        "exportProfileId": "png-4x",
+        "expectedAlphaId": "transparent",
+        "clippingPolicyId": "preserve-artwork"
+      },
+      "foundation_source_paths": [
+        "data/foundations/assets.yaml#/source_modes[id=rendered-node]/contract",
+        "data/foundations/assets.yaml#/alpha_modes[id=transparent]/contract",
+        "data/foundations/assets.yaml#/export_profiles[id=png-4x]/contract"
+      ],
+      "live_figma": {
+        "file_key": "8zka5bHkcrJVK9I9dKjnhC",
+        "node_id": "946:25769",
+        "node_name": "Asset/Feature-Icon @4x",
+        "variant": "Asset",
+        "viewport": "desktop",
+        "geometry": {
+          "width": 64,
+          "height": 64
+        },
+        "own_visible_fill": false,
+        "visible_nested_graphics": true,
+        "nested_graphic_names": [
+          "background",
+          "account-circle-line"
+        ],
+        "parent_fill_included": false,
+        "presentation": {
+          "clips_content": true,
+          "corner_radius": 0
+        },
+        "export_settings": [
+          {
+            "format": "PNG",
+            "suffix": "@4x",
+            "scale": 4,
+            "contents_only": true
+          }
+        ]
+      },
+      "boundary_status": "confirmed",
+      "build_time_gate_id": "concrete-desktop-instance-overrides",
+      "component_asset": {
+        "export_boundary": {
+          "kind": "node",
+          "semantic_node_name": "Asset/Feature-Icon @4x"
+        },
+        "source_viewport": "desktop",
+        "owner_layer_name": "Asset/Feature-Icon @4x"
+      },
+      "source_boundary": {
+        "visible_nested_graphics_included": true,
+        "unrelated_layout_included": false,
+        "own_visible_fill_included": true,
+        "concrete_desktop_instance_required": true,
+        "source_content": "exact-node-after-overrides",
+        "live_html_included": false,
+        "parent_fill_included": false
+      },
+      "child_boundary": {
+        "required_visible_child_names": [
+          "background",
+          "account-circle-line"
+        ],
+        "forbidden_visible_child_names": []
+      }
+    },
+    {
+      "id": "nps-face-image-fill-png-source-alpha",
+      "selection": {
+        "component_id": "nps-options",
+        "asset_contract_id": "happy-face-icon"
+      },
+      "foundation_selection": {
+        "sourceModeId": "image-fill",
+        "displayModeId": "direct-image",
+        "exportProfileId": "png-4x",
+        "expectedAlphaId": "source",
+        "clippingPolicyId": "preserve-artwork"
+      },
+      "foundation_source_paths": [
+        "data/foundations/assets.yaml#/source_modes[id=image-fill]/contract",
+        "data/foundations/assets.yaml#/alpha_modes[id=source]/contract",
+        "data/foundations/assets.yaml#/export_profiles[id=png-4x]/contract"
+      ],
+      "live_figma": {
+        "file_key": "8zka5bHkcrJVK9I9dKjnhC",
+        "node_id": "260:3968",
+        "node_name": "Good",
+        "variant": "Viewport=Desktop, Count=3",
+        "viewport": "desktop",
+        "geometry": {
+          "width": 154.6666717529297,
+          "height": 54
+        },
+        "own_visible_fill": true,
+        "visible_nested_graphics": false,
+        "parent_fill_included": false,
+        "presentation": {
+          "clips_content": true,
+          "corner_radius": 32
+        },
+        "export_settings": []
+      },
+      "boundary_status": "unresolved",
+      "unresolved_codes": [
+        "FIGMA_IMAGE_OWNER_NODE_NOT_ISOLATED"
+      ],
+      "build_time_gate_id": "concrete-desktop-instance-overrides",
+      "component_asset": {
+        "export_boundary": {
+          "kind": "fill",
+          "semantic_node_name": "happy-face-icon @4x"
+        },
+        "source_viewport": "desktop",
+        "owner_layer_name": "happy-face-icon @4x"
+      },
+      "source_boundary": {
+        "visible_nested_graphics_included": false,
+        "unrelated_layout_included": false,
+        "own_visible_fill_included": true,
+        "concrete_desktop_instance_required": true,
+        "source_content": "source-raster-only",
+        "live_html_included": false,
+        "parent_fill_included": false
+      },
+      "child_boundary": {
+        "required_visible_child_names": [
+          "happy-face-icon @4x"
+        ],
+        "forbidden_visible_child_names": []
+      }
+    }
+  ],
+  "unresolved": [
+    {
+      "codes": [
+        "FIGMA_NODE_EXPORT_PROFILE_CONFLICT"
+      ],
+      "record_id": "hero-image-fill-jpeg-direct"
+    },
+    {
+      "codes": [
+        "FIGMA_NODE_EXPORT_PROFILE_CONFLICT",
+        "FIGMA_OWNER_DISPLAY_GEOMETRY_MISMATCH"
+      ],
+      "record_id": "secondary-image-fill-jpeg-wrapper-crop"
+    },
+    {
+      "codes": [
+        "FIGMA_IMAGE_OWNER_NODE_NOT_ISOLATED"
+      ],
+      "record_id": "nps-face-image-fill-png-source-alpha"
+    },
+    {
+      "codes": [
+        "CONCRETE_DESKTOP_INSTANCE_OVERRIDES_UNVERIFIED"
+      ],
+      "record_id": "concrete-desktop-instance-overrides"
+    }
+  ]
+}

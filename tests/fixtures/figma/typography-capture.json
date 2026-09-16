@@ -1,0 +1,1237 @@
+{
+  "capture_kind": "read-only-figma-typography",
+  "file_key": "8zka5bHkcrJVK9I9dKjnhC",
+  "captured_at": "2026-09-16",
+  "roots": [
+    {
+      "library": "marketing",
+      "node_id": "538:17236"
+    },
+    {
+      "library": "service",
+      "node_id": "538:17235"
+    }
+  ],
+  "styles": [
+    {
+      "foundation_id": "desktop-action",
+      "figma_style_id": "S:80178ed95ee94439436fb7ea36e3eb926f986be2,",
+      "figma_name": "Desktop/Action",
+      "figma_description": "CTA-текст в Desktop внутри Primary/Secondary-кнопок и самостоятельных action-ссылок. Не применять к обычной inline-ссылке внутри Body-текста только из-за кликабельности. Пара: Mobile/Action. Roboto Medium, 16px, line-height 140%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.",
+      "font": {
+        "family": "Roboto",
+        "figma_style": "Medium",
+        "css_weight": 500
+      },
+      "font_size_px": 16,
+      "line_height": {
+        "unit": "percent",
+        "value": 139.9999976158142
+      },
+      "letter_spacing": {
+        "unit": "percent",
+        "value": 0
+      },
+      "usage_binding": {
+        "property": "TEXT.textStyleId",
+        "roots": [
+          {
+            "library": "marketing",
+            "node_id": "538:17236"
+          },
+          {
+            "library": "service",
+            "node_id": "538:17235"
+          }
+        ],
+        "owners": [
+          {
+            "name": "Banner/Hero",
+            "count": 1
+          },
+          {
+            "name": "Banner/Secondary",
+            "count": 1
+          },
+          {
+            "name": "Block/Bullet-List",
+            "count": 4
+          },
+          {
+            "name": "Block/Cards-Images",
+            "count": 6
+          },
+          {
+            "name": "Block/Content",
+            "count": 1
+          },
+          {
+            "name": "Block/Icon-Cards",
+            "count": 6
+          },
+          {
+            "name": "Block/Icon-List",
+            "count": 1
+          },
+          {
+            "name": "Block/Steps",
+            "count": 1
+          },
+          {
+            "name": "Button/Primary",
+            "count": 1
+          },
+          {
+            "name": "Button/Secondary",
+            "count": 1
+          },
+          {
+            "name": "Card/Icon",
+            "count": 1
+          },
+          {
+            "name": "Card/Image",
+            "count": 1
+          },
+          {
+            "name": "Item/Bullet",
+            "count": 1
+          }
+        ]
+      },
+      "capture_status": "exact-match"
+    },
+    {
+      "foundation_id": "desktop-body-large",
+      "figma_style_id": "S:2dbbae937ad03f37307425810b92a1abedcfb705,",
+      "figma_name": "Desktop/Body/Large",
+      "figma_description": "Основной или акцентный содержательный текст в Desktop. Использовать для заметного текста блока; не применять к плотным подписям и значениям только ради увеличения размера. Основная мобильная пара: Mobile/Body/Large. Roboto Regular, 18px, line-height 140%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.",
+      "font": {
+        "family": "Roboto",
+        "figma_style": "Regular",
+        "css_weight": 400
+      },
+      "font_size_px": 18,
+      "line_height": {
+        "unit": "percent",
+        "value": 139.9999976158142
+      },
+      "letter_spacing": {
+        "unit": "percent",
+        "value": 0
+      },
+      "usage_binding": {
+        "property": "TEXT.textStyleId",
+        "roots": [
+          {
+            "library": "marketing",
+            "node_id": "538:17236"
+          },
+          {
+            "library": "service",
+            "node_id": "538:17235"
+          }
+        ],
+        "owners": [
+          {
+            "name": "Banner/App-Download",
+            "count": 1
+          },
+          {
+            "name": "Banner/Fiscal-Check-Link",
+            "count": 2
+          },
+          {
+            "name": "Banner/Hero",
+            "count": 1
+          },
+          {
+            "name": "Banner/Inline",
+            "count": 1
+          },
+          {
+            "name": "Block/Bullet-List",
+            "count": 3
+          },
+          {
+            "name": "Block/Contact-Support",
+            "count": 1
+          },
+          {
+            "name": "Block/Content",
+            "count": 5
+          },
+          {
+            "name": "Block/Icon-List",
+            "count": 6
+          },
+          {
+            "name": "Block/Info-Alert",
+            "count": 1
+          },
+          {
+            "name": "Block/Instruction-Steps",
+            "count": 35
+          },
+          {
+            "name": "Block/Personal-Data-Update",
+            "count": 6
+          },
+          {
+            "name": "Block/Steps",
+            "count": 5
+          },
+          {
+            "name": "Block/Transaction-Error",
+            "count": 2
+          },
+          {
+            "name": "Item/Bullet",
+            "count": 1
+          },
+          {
+            "name": "Item/Step",
+            "count": 1
+          }
+        ]
+      },
+      "capture_status": "exact-match"
+    },
+    {
+      "foundation_id": "desktop-body-medium",
+      "figma_style_id": "S:0eb6b02f56ee5f02f09611af5a13a41b6121e78d,",
+      "figma_name": "Desktop/Body/Medium",
+      "figma_description": "Плотный информационный и вспомогательный текст в Desktop: подписи, значения и описания внутри компонентов. Не использовать как Caption или CTA. Основная мобильная пара: Mobile/Body/Medium; точный выбор задаёт контракт компонента. Roboto Regular, 16px, line-height 140%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.",
+      "font": {
+        "family": "Roboto",
+        "figma_style": "Regular",
+        "css_weight": 400
+      },
+      "font_size_px": 16,
+      "line_height": {
+        "unit": "percent",
+        "value": 139.9999976158142
+      },
+      "letter_spacing": {
+        "unit": "percent",
+        "value": 0
+      },
+      "usage_binding": {
+        "property": "TEXT.textStyleId",
+        "roots": [
+          {
+            "library": "marketing",
+            "node_id": "538:17236"
+          },
+          {
+            "library": "service",
+            "node_id": "538:17235"
+          }
+        ],
+        "owners": [
+          {
+            "name": "Badge/Operation-Status",
+            "count": 3
+          },
+          {
+            "name": "Badge/Step-Number",
+            "count": 2
+          },
+          {
+            "name": "Banner/Secondary",
+            "count": 1
+          },
+          {
+            "name": "Block/Bullet-List",
+            "count": 7
+          },
+          {
+            "name": "Block/Cards-Images",
+            "count": 6
+          },
+          {
+            "name": "Block/Contact-Support",
+            "count": 1
+          },
+          {
+            "name": "Block/Content",
+            "count": 2
+          },
+          {
+            "name": "Block/Icon-Cards",
+            "count": 6
+          },
+          {
+            "name": "Block/Personal-Data-Update",
+            "count": 7
+          },
+          {
+            "name": "Block/Receipt-Info",
+            "count": 16
+          },
+          {
+            "name": "Block/Steps",
+            "count": 12
+          },
+          {
+            "name": "Block/Transaction-Error",
+            "count": 1
+          },
+          {
+            "name": "Block/Transaction-Success",
+            "count": 16
+          },
+          {
+            "name": "Card/Icon",
+            "count": 1
+          },
+          {
+            "name": "Card/Image",
+            "count": 1
+          },
+          {
+            "name": "Details/Operation",
+            "count": 14
+          },
+          {
+            "name": "Details/Operation-Plain",
+            "count": 6
+          },
+          {
+            "name": "Details/Receipt",
+            "count": 16
+          },
+          {
+            "name": "Details/Suspicious-Operation",
+            "count": 7
+          },
+          {
+            "name": "Details/Transfer",
+            "count": 20
+          },
+          {
+            "name": "Item/Alert",
+            "count": 1
+          },
+          {
+            "name": "Item/Bullet",
+            "count": 2
+          },
+          {
+            "name": "Item/Notification",
+            "count": 1
+          },
+          {
+            "name": "Item/Step",
+            "count": 2
+          }
+        ]
+      },
+      "capture_status": "exact-match"
+    },
+    {
+      "foundation_id": "desktop-caption",
+      "figma_style_id": "S:3d171f9763dcbcd3a181c50411d876e67e072e75,",
+      "figma_name": "Desktop/Caption",
+      "figma_description": "Вспомогательный, предупреждающий и юридический текст в Desktop: дисклеймеры, сроки действия и второстепенные пояснения. Не использовать для основного содержательного текста. Пара: Mobile/Caption. Roboto Regular, 14px, line-height 140%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.",
+      "font": {
+        "family": "Roboto",
+        "figma_style": "Regular",
+        "css_weight": 400
+      },
+      "font_size_px": 14,
+      "line_height": {
+        "unit": "percent",
+        "value": 139.9999976158142
+      },
+      "letter_spacing": {
+        "unit": "percent",
+        "value": 0
+      },
+      "usage_binding": {
+        "property": "TEXT.textStyleId",
+        "roots": [
+          {
+            "library": "marketing",
+            "node_id": "538:17236"
+          },
+          {
+            "library": "service",
+            "node_id": "538:17235"
+          }
+        ],
+        "owners": [
+          {
+            "name": "Block/Bullet-List",
+            "count": 1
+          },
+          {
+            "name": "Block/Cards-Images",
+            "count": 1
+          },
+          {
+            "name": "Block/Content",
+            "count": 1
+          },
+          {
+            "name": "Block/Icon-Cards",
+            "count": 1
+          },
+          {
+            "name": "Block/Icon-List",
+            "count": 1
+          },
+          {
+            "name": "Block/Instruction-Steps",
+            "count": 2
+          },
+          {
+            "name": "Block/Personal-Data-Update",
+            "count": 3
+          },
+          {
+            "name": "Block/Steps",
+            "count": 1
+          },
+          {
+            "name": "Block/Transaction-Error",
+            "count": 3
+          },
+          {
+            "name": "Block/Transaction-Success",
+            "count": 2
+          },
+          {
+            "name": "Email/Footer",
+            "count": 4
+          },
+          {
+            "name": "Email/Footer-Legal",
+            "count": 2
+          }
+        ]
+      },
+      "capture_status": "exact-match"
+    },
+    {
+      "foundation_id": "desktop-display",
+      "figma_style_id": "S:4d43ca77a0bc52ca7e43f97a078a4d69cee87651,",
+      "figma_name": "Desktop/Display",
+      "figma_description": "Главный выразительный текст Desktop для Hero-заголовка и крупного результата операции. Не использовать как обычный заголовок блока или карточки. Пара: Mobile/Display. Roboto Bold, 32px, line-height 120%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.",
+      "font": {
+        "family": "Roboto",
+        "figma_style": "Bold",
+        "css_weight": 700
+      },
+      "font_size_px": 32,
+      "line_height": {
+        "unit": "percent",
+        "value": 120.00000476837158
+      },
+      "letter_spacing": {
+        "unit": "percent",
+        "value": 0
+      },
+      "usage_binding": {
+        "property": "TEXT.textStyleId",
+        "roots": [
+          {
+            "library": "marketing",
+            "node_id": "538:17236"
+          },
+          {
+            "library": "service",
+            "node_id": "538:17235"
+          }
+        ],
+        "owners": [
+          {
+            "name": "Banner/Hero",
+            "count": 1
+          },
+          {
+            "name": "Block/Transaction-Error",
+            "count": 1
+          },
+          {
+            "name": "Block/Transaction-Success",
+            "count": 1
+          }
+        ]
+      },
+      "capture_status": "exact-match"
+    },
+    {
+      "foundation_id": "desktop-heading",
+      "figma_style_id": "S:2d908d3c1b5ff810b297f4a37aac1ab4161bbdb5,",
+      "figma_name": "Desktop/Heading",
+      "figma_description": "Основной заголовок самостоятельного контентного блока в Desktop. Не использовать для Hero или заголовка карточки. Пара: Mobile/Heading. Roboto SemiBold, 26px, line-height 120%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.",
+      "font": {
+        "family": "Roboto",
+        "figma_style": "SemiBold",
+        "css_weight": 600
+      },
+      "font_size_px": 26,
+      "line_height": {
+        "unit": "percent",
+        "value": 120.00000476837158
+      },
+      "letter_spacing": {
+        "unit": "percent",
+        "value": 0
+      },
+      "usage_binding": {
+        "property": "TEXT.textStyleId",
+        "roots": [
+          {
+            "library": "marketing",
+            "node_id": "538:17236"
+          },
+          {
+            "library": "service",
+            "node_id": "538:17235"
+          }
+        ],
+        "owners": [
+          {
+            "name": "Block/Bullet-List",
+            "count": 1
+          },
+          {
+            "name": "Block/Cards-Images",
+            "count": 1
+          },
+          {
+            "name": "Block/Contact-Support",
+            "count": 1
+          },
+          {
+            "name": "Block/Content",
+            "count": 1
+          },
+          {
+            "name": "Block/Icon-Cards",
+            "count": 1
+          },
+          {
+            "name": "Block/Icon-List",
+            "count": 1
+          },
+          {
+            "name": "Block/Personal-Data-Update",
+            "count": 1
+          },
+          {
+            "name": "Block/Receipt-Info",
+            "count": 1
+          },
+          {
+            "name": "Block/Steps",
+            "count": 1
+          },
+          {
+            "name": "NPS/Options",
+            "count": 2
+          }
+        ]
+      },
+      "capture_status": "exact-match"
+    },
+    {
+      "foundation_id": "desktop-heading-compact",
+      "figma_style_id": "S:19f62229647b1872179c0b08e87bc09081f758ec,",
+      "figma_name": "Desktop/Heading/Compact",
+      "figma_description": "Компактный заголовок Desktop для ограниченного текстового контейнера; сейчас используется в Banner/Secondary. Не заменять обычным Desktop/Heading без проверки макета и контракта компонента. Мобильная роль: Mobile/Heading. Roboto SemiBold, 20px, line-height 120%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.",
+      "font": {
+        "family": "Roboto",
+        "figma_style": "SemiBold",
+        "css_weight": 600
+      },
+      "font_size_px": 20,
+      "line_height": {
+        "unit": "percent",
+        "value": 120.00000476837158
+      },
+      "letter_spacing": {
+        "unit": "px",
+        "value": 0
+      },
+      "usage_binding": {
+        "property": "TEXT.textStyleId",
+        "roots": [
+          {
+            "library": "marketing",
+            "node_id": "538:17236"
+          },
+          {
+            "library": "service",
+            "node_id": "538:17235"
+          }
+        ],
+        "owners": [
+          {
+            "name": "Banner/Secondary",
+            "count": 1
+          }
+        ]
+      },
+      "capture_status": "unresolved-mismatch"
+    },
+    {
+      "foundation_id": "desktop-title",
+      "figma_style_id": "S:105e0e8a189848d91c13bf0f2887665713de21ca,",
+      "figma_name": "Desktop/Title",
+      "figma_description": "Заголовок карточки или внутренней сущности в Desktop, включая имя партнёра и локальный результат внутри блока. Не использовать как заголовок самостоятельного блока. Пара: Mobile/Title. Roboto Medium, 20px, line-height 120%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.",
+      "font": {
+        "family": "Roboto",
+        "figma_style": "Medium",
+        "css_weight": 500
+      },
+      "font_size_px": 20,
+      "line_height": {
+        "unit": "percent",
+        "value": 120.00000476837158
+      },
+      "letter_spacing": {
+        "unit": "percent",
+        "value": 0
+      },
+      "usage_binding": {
+        "property": "TEXT.textStyleId",
+        "roots": [
+          {
+            "library": "marketing",
+            "node_id": "538:17236"
+          },
+          {
+            "library": "service",
+            "node_id": "538:17235"
+          }
+        ],
+        "owners": [
+          {
+            "name": "Block/Cards-Images",
+            "count": 6
+          },
+          {
+            "name": "Block/Icon-Cards",
+            "count": 6
+          },
+          {
+            "name": "Block/Transaction-Error",
+            "count": 1
+          },
+          {
+            "name": "Block/Transaction-Success",
+            "count": 1
+          },
+          {
+            "name": "Card/Icon",
+            "count": 1
+          },
+          {
+            "name": "Card/Image",
+            "count": 1
+          }
+        ]
+      },
+      "capture_status": "exact-match"
+    },
+    {
+      "foundation_id": "mobile-action",
+      "figma_style_id": "S:780f997658bfc56dc4db512b20c92d16c415c3f3,",
+      "figma_name": "Mobile/Action",
+      "figma_description": "CTA-текст в Mobile внутри Primary/Secondary-кнопок, store-кнопок и самостоятельных action-ссылок. Не применять к обычной inline-ссылке внутри Body-текста только из-за кликабельности. Пара: Desktop/Action. Roboto Medium, 14px, line-height 140%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.",
+      "font": {
+        "family": "Roboto",
+        "figma_style": "Medium",
+        "css_weight": 500
+      },
+      "font_size_px": 14,
+      "line_height": {
+        "unit": "percent",
+        "value": 139.9999976158142
+      },
+      "letter_spacing": {
+        "unit": "percent",
+        "value": 0
+      },
+      "usage_binding": {
+        "property": "TEXT.textStyleId",
+        "roots": [
+          {
+            "library": "marketing",
+            "node_id": "538:17236"
+          },
+          {
+            "library": "service",
+            "node_id": "538:17235"
+          }
+        ],
+        "owners": [
+          {
+            "name": "Banner/App-Download",
+            "count": 4
+          },
+          {
+            "name": "Banner/Hero",
+            "count": 1
+          },
+          {
+            "name": "Banner/Secondary",
+            "count": 1
+          },
+          {
+            "name": "Block/Bullet-List",
+            "count": 4
+          },
+          {
+            "name": "Block/Cards-Images",
+            "count": 6
+          },
+          {
+            "name": "Block/Content",
+            "count": 1
+          },
+          {
+            "name": "Block/Icon-Cards",
+            "count": 6
+          },
+          {
+            "name": "Block/Icon-List",
+            "count": 1
+          },
+          {
+            "name": "Block/Steps",
+            "count": 1
+          },
+          {
+            "name": "Button/Primary",
+            "count": 1
+          },
+          {
+            "name": "Button/Secondary",
+            "count": 1
+          },
+          {
+            "name": "Card/Icon",
+            "count": 1
+          },
+          {
+            "name": "Card/Image",
+            "count": 1
+          },
+          {
+            "name": "Item/Bullet",
+            "count": 1
+          }
+        ]
+      },
+      "capture_status": "exact-match"
+    },
+    {
+      "foundation_id": "mobile-body-large",
+      "figma_style_id": "S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,",
+      "figma_name": "Mobile/Body/Large",
+      "figma_description": "Основной содержательный текст и значения в Mobile. Использовать для основной читаемой информации блока; не применять к Caption или CTA. Основная desktop-пара: Desktop/Body/Large; точный выбор задаёт контракт компонента. Roboto Regular, 14px, line-height 140%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.",
+      "font": {
+        "family": "Roboto",
+        "figma_style": "Regular",
+        "css_weight": 400
+      },
+      "font_size_px": 14,
+      "line_height": {
+        "unit": "percent",
+        "value": 139.9999976158142
+      },
+      "letter_spacing": {
+        "unit": "percent",
+        "value": 0
+      },
+      "usage_binding": {
+        "property": "TEXT.textStyleId",
+        "roots": [
+          {
+            "library": "marketing",
+            "node_id": "538:17236"
+          },
+          {
+            "library": "service",
+            "node_id": "538:17235"
+          }
+        ],
+        "owners": [
+          {
+            "name": "Badge/Step-Number",
+            "count": 2
+          },
+          {
+            "name": "Banner/App-Download",
+            "count": 1
+          },
+          {
+            "name": "Banner/Fiscal-Check-Link",
+            "count": 2
+          },
+          {
+            "name": "Banner/Hero",
+            "count": 1
+          },
+          {
+            "name": "Banner/Inline",
+            "count": 1
+          },
+          {
+            "name": "Banner/Secondary",
+            "count": 1
+          },
+          {
+            "name": "Block/Bullet-List",
+            "count": 3
+          },
+          {
+            "name": "Block/Cards-Images",
+            "count": 6
+          },
+          {
+            "name": "Block/Contact-Support",
+            "count": 1
+          },
+          {
+            "name": "Block/Content",
+            "count": 5
+          },
+          {
+            "name": "Block/Icon-Cards",
+            "count": 6
+          },
+          {
+            "name": "Block/Icon-List",
+            "count": 6
+          },
+          {
+            "name": "Block/Info-Alert",
+            "count": 1
+          },
+          {
+            "name": "Block/Instruction-Steps",
+            "count": 15
+          },
+          {
+            "name": "Block/Personal-Data-Update",
+            "count": 13
+          },
+          {
+            "name": "Block/Receipt-Info",
+            "count": 16
+          },
+          {
+            "name": "Block/Steps",
+            "count": 10
+          },
+          {
+            "name": "Block/Transaction-Error",
+            "count": 2
+          },
+          {
+            "name": "Block/Transaction-Success",
+            "count": 14
+          },
+          {
+            "name": "Card/Icon",
+            "count": 1
+          },
+          {
+            "name": "Card/Image",
+            "count": 1
+          },
+          {
+            "name": "Details/Operation",
+            "count": 14
+          },
+          {
+            "name": "Details/Operation-Plain",
+            "count": 6
+          },
+          {
+            "name": "Details/Receipt",
+            "count": 16
+          },
+          {
+            "name": "Details/Suspicious-Operation",
+            "count": 7
+          },
+          {
+            "name": "Details/Transfer",
+            "count": 18
+          },
+          {
+            "name": "Item/Bullet",
+            "count": 1
+          },
+          {
+            "name": "Item/Step",
+            "count": 2
+          }
+        ]
+      },
+      "capture_status": "exact-match"
+    },
+    {
+      "foundation_id": "mobile-body-medium",
+      "figma_style_id": "S:8ad84dd262e81c148a758758a15bb9b15e8f30fe,",
+      "figma_name": "Mobile/Body/Medium",
+      "figma_description": "Компактный информационный и вспомогательный текст в Mobile. Использовать только там, где компоненту нужен более плотный уровень Body; не подменять им Caption. Основная desktop-пара: Desktop/Body/Medium; точный выбор задаёт контракт компонента. Roboto Regular, 12px, line-height 140%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.",
+      "font": {
+        "family": "Roboto",
+        "figma_style": "Regular",
+        "css_weight": 400
+      },
+      "font_size_px": 12,
+      "line_height": {
+        "unit": "percent",
+        "value": 139.9999976158142
+      },
+      "letter_spacing": {
+        "unit": "percent",
+        "value": 0
+      },
+      "usage_binding": {
+        "property": "TEXT.textStyleId",
+        "roots": [
+          {
+            "library": "marketing",
+            "node_id": "538:17236"
+          },
+          {
+            "library": "service",
+            "node_id": "538:17235"
+          }
+        ],
+        "owners": [
+          {
+            "name": "Badge/Operation-Status",
+            "count": 3
+          },
+          {
+            "name": "Block/Bullet-List",
+            "count": 7
+          },
+          {
+            "name": "Block/Contact-Support",
+            "count": 1
+          },
+          {
+            "name": "Block/Content",
+            "count": 2
+          },
+          {
+            "name": "Block/Instruction-Steps",
+            "count": 21
+          },
+          {
+            "name": "Block/Personal-Data-Update",
+            "count": 1
+          },
+          {
+            "name": "Block/Steps",
+            "count": 7
+          },
+          {
+            "name": "Block/Transaction-Error",
+            "count": 2
+          },
+          {
+            "name": "Block/Transaction-Success",
+            "count": 4
+          },
+          {
+            "name": "Item/Alert",
+            "count": 1
+          },
+          {
+            "name": "Item/Bullet",
+            "count": 2
+          },
+          {
+            "name": "Item/Notification",
+            "count": 1
+          },
+          {
+            "name": "Item/Step",
+            "count": 1
+          }
+        ]
+      },
+      "capture_status": "exact-match"
+    },
+    {
+      "foundation_id": "mobile-caption",
+      "figma_style_id": "S:374419cb8d39f8db69f1e4fa2fd20dcdc72abcce,",
+      "figma_name": "Mobile/Caption",
+      "figma_description": "Вспомогательный, предупреждающий и юридический текст в Mobile: дисклеймеры, сроки действия и второстепенные пояснения. Не использовать как Mobile/Body/Medium только из-за совпадения параметров. Пара: Desktop/Caption. Roboto Regular, 12px, line-height 140%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.",
+      "font": {
+        "family": "Roboto",
+        "figma_style": "Regular",
+        "css_weight": 400
+      },
+      "font_size_px": 12,
+      "line_height": {
+        "unit": "percent",
+        "value": 139.9999976158142
+      },
+      "letter_spacing": {
+        "unit": "percent",
+        "value": 0
+      },
+      "usage_binding": {
+        "property": "TEXT.textStyleId",
+        "roots": [
+          {
+            "library": "marketing",
+            "node_id": "538:17236"
+          },
+          {
+            "library": "service",
+            "node_id": "538:17235"
+          }
+        ],
+        "owners": [
+          {
+            "name": "Block/Bullet-List",
+            "count": 1
+          },
+          {
+            "name": "Block/Cards-Images",
+            "count": 1
+          },
+          {
+            "name": "Block/Content",
+            "count": 1
+          },
+          {
+            "name": "Block/Icon-Cards",
+            "count": 1
+          },
+          {
+            "name": "Block/Icon-List",
+            "count": 1
+          },
+          {
+            "name": "Block/Instruction-Steps",
+            "count": 1
+          },
+          {
+            "name": "Block/Personal-Data-Update",
+            "count": 2
+          },
+          {
+            "name": "Block/Steps",
+            "count": 1
+          },
+          {
+            "name": "Block/Transaction-Error",
+            "count": 2
+          },
+          {
+            "name": "Email/Footer",
+            "count": 4
+          },
+          {
+            "name": "Email/Footer-Legal",
+            "count": 2
+          }
+        ]
+      },
+      "capture_status": "exact-match"
+    },
+    {
+      "foundation_id": "mobile-display",
+      "figma_style_id": "S:ca236b65a83eef2e55e95564b051765d4fbe7c60,",
+      "figma_name": "Mobile/Display",
+      "figma_description": "Главный выразительный текст Mobile для Hero-заголовка и крупного результата операции. Не использовать как обычный заголовок блока или карточки. Пара: Desktop/Display. Roboto Bold, 20px, line-height 120%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.",
+      "font": {
+        "family": "Roboto",
+        "figma_style": "Bold",
+        "css_weight": 700
+      },
+      "font_size_px": 20,
+      "line_height": {
+        "unit": "percent",
+        "value": 120.00000476837158
+      },
+      "letter_spacing": {
+        "unit": "percent",
+        "value": 0
+      },
+      "usage_binding": {
+        "property": "TEXT.textStyleId",
+        "roots": [
+          {
+            "library": "marketing",
+            "node_id": "538:17236"
+          },
+          {
+            "library": "service",
+            "node_id": "538:17235"
+          }
+        ],
+        "owners": [
+          {
+            "name": "Banner/Hero",
+            "count": 1
+          },
+          {
+            "name": "Block/Transaction-Error",
+            "count": 1
+          },
+          {
+            "name": "Block/Transaction-Success",
+            "count": 1
+          }
+        ]
+      },
+      "capture_status": "exact-match"
+    },
+    {
+      "foundation_id": "mobile-heading",
+      "figma_style_id": "S:31421a8c479c960e9e5fcdf32b0717960340b772,",
+      "figma_name": "Mobile/Heading",
+      "figma_description": "Основной заголовок самостоятельного контентного блока в Mobile. В Banner/Secondary также выполняет мобильную роль компактного заголовка. Не использовать для Hero или заголовка карточки. Основная пара: Desktop/Heading. Roboto SemiBold, 18px, line-height 120%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.",
+      "font": {
+        "family": "Roboto",
+        "figma_style": "SemiBold",
+        "css_weight": 600
+      },
+      "font_size_px": 18,
+      "line_height": {
+        "unit": "percent",
+        "value": 120.00000476837158
+      },
+      "letter_spacing": {
+        "unit": "percent",
+        "value": 0
+      },
+      "usage_binding": {
+        "property": "TEXT.textStyleId",
+        "roots": [
+          {
+            "library": "marketing",
+            "node_id": "538:17236"
+          },
+          {
+            "library": "service",
+            "node_id": "538:17235"
+          }
+        ],
+        "owners": [
+          {
+            "name": "Banner/Secondary",
+            "count": 1
+          },
+          {
+            "name": "Block/Bullet-List",
+            "count": 1
+          },
+          {
+            "name": "Block/Cards-Images",
+            "count": 1
+          },
+          {
+            "name": "Block/Contact-Support",
+            "count": 1
+          },
+          {
+            "name": "Block/Content",
+            "count": 1
+          },
+          {
+            "name": "Block/Icon-Cards",
+            "count": 1
+          },
+          {
+            "name": "Block/Icon-List",
+            "count": 1
+          },
+          {
+            "name": "Block/Personal-Data-Update",
+            "count": 1
+          },
+          {
+            "name": "Block/Receipt-Info",
+            "count": 1
+          },
+          {
+            "name": "Block/Steps",
+            "count": 1
+          },
+          {
+            "name": "NPS/Options",
+            "count": 2
+          }
+        ]
+      },
+      "capture_status": "exact-match"
+    },
+    {
+      "foundation_id": "mobile-title",
+      "figma_style_id": "S:348cad38e7e2918d2bc09859e1c0ac3f9b5afbb0,",
+      "figma_name": "Mobile/Title",
+      "figma_description": "Заголовок карточки или внутренней сущности в Mobile, включая имя партнёра и локальный результат внутри блока. Не использовать как заголовок самостоятельного блока. Пара: Desktop/Title. Roboto Medium, 16px, line-height 120%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.",
+      "font": {
+        "family": "Roboto",
+        "figma_style": "Medium",
+        "css_weight": 500
+      },
+      "font_size_px": 16,
+      "line_height": {
+        "unit": "percent",
+        "value": 120.00000476837158
+      },
+      "letter_spacing": {
+        "unit": "percent",
+        "value": 0
+      },
+      "usage_binding": {
+        "property": "TEXT.textStyleId",
+        "roots": [
+          {
+            "library": "marketing",
+            "node_id": "538:17236"
+          },
+          {
+            "library": "service",
+            "node_id": "538:17235"
+          }
+        ],
+        "owners": [
+          {
+            "name": "Block/Cards-Images",
+            "count": 6
+          },
+          {
+            "name": "Block/Icon-Cards",
+            "count": 6
+          },
+          {
+            "name": "Block/Transaction-Error",
+            "count": 1
+          },
+          {
+            "name": "Block/Transaction-Success",
+            "count": 1
+          },
+          {
+            "name": "Card/Icon",
+            "count": 1
+          },
+          {
+            "name": "Card/Image",
+            "count": 1
+          }
+        ]
+      },
+      "capture_status": "exact-match"
+    }
+  ]
+}

@@ -1,0 +1,1094 @@
+{
+  "schema_version": "1.0.0",
+  "kind": "non-normative-figma-capture",
+  "file_key": "8zka5bHkcrJVK9I9dKjnhC",
+  "captured_at": "2026-09-16T15:29:10+03:00",
+  "addresses": [
+    {
+      "role_id": "outer-flow",
+      "viewport": "mobile",
+      "node_id": "15:2037",
+      "variant": "Viewport=Mobile",
+      "field_path": "/paddingTop",
+      "relationship": "email outer flow to top-level component",
+      "owner": "component root",
+      "raw": {
+        "padding": [
+          16,
+          0,
+          0,
+          0
+        ],
+        "itemSpacing": 0,
+        "counterAxisSpacing": 0,
+        "alignment": [
+          "MIN",
+          "CENTER"
+        ],
+        "sizing": [
+          "AUTO",
+          "FIXED",
+          "FIXED",
+          "HUG"
+        ]
+      },
+      "binding": {
+        "kind": "variable",
+        "id": "VariableID:11:326",
+        "name": "mobile/block-margin",
+        "resolved_type": "FLOAT"
+      },
+      "result": "unresolved",
+      "reason": "Standalone component padding cannot prove the external email-flow relationship."
+    },
+    {
+      "role_id": "outer-flow",
+      "viewport": "desktop",
+      "node_id": "230:3679",
+      "variant": "Viewport=Desktop",
+      "field_path": "/paddingTop",
+      "relationship": "email outer flow to top-level component",
+      "owner": "component root",
+      "raw": {
+        "padding": [
+          24,
+          0,
+          0,
+          0
+        ],
+        "itemSpacing": 0,
+        "counterAxisSpacing": 0,
+        "alignment": [
+          "MIN",
+          "CENTER"
+        ],
+        "sizing": [
+          "AUTO",
+          "FIXED",
+          "FIXED",
+          "HUG"
+        ]
+      },
+      "binding": {
+        "kind": "variable",
+        "id": "VariableID:510:20764",
+        "name": "desktop/block-margin",
+        "resolved_type": "FLOAT"
+      },
+      "result": "unresolved",
+      "reason": "Standalone component padding cannot prove the external email-flow relationship."
+    },
+    {
+      "role_id": "common-horizontal-inset",
+      "viewport": "mobile",
+      "node_id": "11:861",
+      "variant": "Viewport=Mobile",
+      "field_path": "/paddingLeft",
+      "relationship": "email shell to block root",
+      "owner": "top-level component root",
+      "raw": {
+        "padding": [
+          16,
+          16,
+          0,
+          16
+        ],
+        "itemSpacing": 0,
+        "counterAxisSpacing": 0,
+        "alignment": [
+          "MIN",
+          "CENTER"
+        ],
+        "sizing": [
+          "AUTO",
+          "FIXED",
+          "FIXED",
+          "HUG"
+        ]
+      },
+      "binding": {
+        "kind": "variable",
+        "id": "VariableID:11:326",
+        "name": "mobile/block-margin",
+        "resolved_type": "FLOAT"
+      },
+      "result": "unresolved",
+      "reason": "Observed owner is a component root, not the declared email shell."
+    },
+    {
+      "role_id": "common-horizontal-inset",
+      "viewport": "desktop",
+      "node_id": "230:3770",
+      "variant": "Viewport=Desktop",
+      "field_path": "/paddingLeft",
+      "relationship": "email shell to block root",
+      "owner": "top-level component root",
+      "raw": {
+        "padding": [
+          24,
+          24,
+          0,
+          24
+        ],
+        "itemSpacing": 0,
+        "counterAxisSpacing": 0,
+        "alignment": [
+          "CENTER",
+          "CENTER"
+        ],
+        "sizing": [
+          "AUTO",
+          "FIXED",
+          "FIXED",
+          "HUG"
+        ]
+      },
+      "binding": {
+        "kind": "variable",
+        "id": "VariableID:510:20764",
+        "name": "desktop/block-margin",
+        "resolved_type": "FLOAT"
+      },
+      "result": "unresolved",
+      "reason": "Observed owner is a component root, not the declared email shell."
+    },
+    {
+      "role_id": "self-horizontal-inset",
+      "viewport": "mobile",
+      "node_id": "15:599",
+      "variant": "Viewport=Mobile, Count=3",
+      "field_path": "/paddingLeft",
+      "relationship": "component-self-inset",
+      "owner": "top-level-component-root",
+      "raw": {
+        "padding": [
+          16,
+          16,
+          0,
+          16
+        ],
+        "itemSpacing": 0,
+        "counterAxisSpacing": 0,
+        "alignment": [
+          "MIN",
+          "CENTER"
+        ],
+        "sizing": [
+          "AUTO",
+          "FIXED",
+          "FIXED",
+          "HUG"
+        ]
+      },
+      "binding": {
+        "kind": "variable",
+        "id": "VariableID:11:326",
+        "name": "mobile/block-margin",
+        "resolved_type": "FLOAT"
+      },
+      "result": "confirmed"
+    },
+    {
+      "role_id": "self-horizontal-inset",
+      "viewport": "desktop",
+      "node_id": "260:3974",
+      "variant": "Viewport=Desktop, Count=3",
+      "field_path": "/paddingLeft",
+      "relationship": "component-self-inset",
+      "owner": "top-level-component-root",
+      "raw": {
+        "padding": [
+          24,
+          24,
+          0,
+          24
+        ],
+        "itemSpacing": 0,
+        "counterAxisSpacing": 0,
+        "alignment": [
+          "MIN",
+          "CENTER"
+        ],
+        "sizing": [
+          "AUTO",
+          "FIXED",
+          "FIXED",
+          "HUG"
+        ]
+      },
+      "binding": {
+        "kind": "variable",
+        "id": "VariableID:510:20764",
+        "name": "desktop/block-margin",
+        "resolved_type": "FLOAT"
+      },
+      "result": "confirmed"
+    },
+    {
+      "role_id": "surface-padding-primary",
+      "viewport": "mobile",
+      "node_id": "11:773",
+      "variant": "Viewport=Mobile",
+      "field_path": "/paddingTop",
+      "relationship": "component-container-padding",
+      "owner": "component-content-container",
+      "raw": {
+        "padding": [
+          22,
+          22,
+          22,
+          22
+        ],
+        "itemSpacing": 16,
+        "counterAxisSpacing": 0,
+        "alignment": [
+          "MIN",
+          "MIN"
+        ],
+        "sizing": [
+          "AUTO",
+          "FIXED",
+          "FILL",
+          "HUG"
+        ]
+      },
+      "binding": {
+        "kind": "variable",
+        "id": "VariableID:11:807",
+        "name": "mobile/content-padding",
+        "resolved_type": "FLOAT"
+      },
+      "result": "confirmed"
+    },
+    {
+      "role_id": "surface-padding-primary",
+      "viewport": "desktop",
+      "node_id": "230:3756",
+      "variant": "Viewport=Desktop",
+      "field_path": "/paddingTop",
+      "relationship": "component-container-padding",
+      "owner": "component-content-container",
+      "raw": {
+        "padding": [
+          32,
+          32,
+          32,
+          32
+        ],
+        "itemSpacing": 24,
+        "counterAxisSpacing": 0,
+        "alignment": [
+          "MIN",
+          "MIN"
+        ],
+        "sizing": [
+          "AUTO",
+          "FIXED",
+          "FILL",
+          "HUG"
+        ]
+      },
+      "binding": {
+        "kind": "variable",
+        "id": "VariableID:222:2307",
+        "name": "desktop/content-padding",
+        "resolved_type": "FLOAT"
+      },
+      "result": "confirmed"
+    },
+    {
+      "role_id": "surface-padding-compact",
+      "viewport": "mobile",
+      "node_id": "16:2734",
+      "variant": "Viewport=Mobile",
+      "field_path": "/paddingTop",
+      "relationship": "component-container-padding",
+      "owner": "nested-component",
+      "raw": {
+        "padding": [
+          16,
+          16,
+          16,
+          16
+        ],
+        "itemSpacing": 12,
+        "counterAxisSpacing": 0,
+        "alignment": [
+          "MIN",
+          "CENTER"
+        ],
+        "sizing": [
+          "FIXED",
+          "AUTO",
+          "FILL",
+          "HUG"
+        ]
+      },
+      "binding": {
+        "kind": "variable",
+        "id": "VariableID:11:805",
+        "name": "mobile/content-padding-sm",
+        "resolved_type": "FLOAT"
+      },
+      "result": "confirmed"
+    },
+    {
+      "role_id": "surface-padding-compact",
+      "viewport": "desktop",
+      "node_id": "260:562",
+      "variant": "Viewport=Desktop",
+      "field_path": "/paddingTop",
+      "relationship": "component-container-padding",
+      "owner": "nested-component",
+      "raw": {
+        "padding": [
+          24,
+          24,
+          24,
+          24
+        ],
+        "itemSpacing": 16,
+        "counterAxisSpacing": 0,
+        "alignment": [
+          "MIN",
+          "CENTER"
+        ],
+        "sizing": [
+          "FIXED",
+          "AUTO",
+          "FILL",
+          "HUG"
+        ]
+      },
+      "binding": {
+        "kind": "variable",
+        "id": "VariableID:222:2306",
+        "name": "desktop/content-padding-sm",
+        "resolved_type": "FLOAT"
+      },
+      "result": "confirmed"
+    },
+    {
+      "role_id": "section-stack-standard",
+      "viewport": "mobile",
+      "node_id": "11:773",
+      "variant": "Viewport=Mobile",
+      "field_path": "/itemSpacing",
+      "relationship": "component-section-stack",
+      "owner": "component-content-container",
+      "raw": {
+        "padding": [
+          22,
+          22,
+          22,
+          22
+        ],
+        "itemSpacing": 16,
+        "counterAxisSpacing": 0,
+        "alignment": [
+          "MIN",
+          "MIN"
+        ],
+        "sizing": [
+          "AUTO",
+          "FIXED",
+          "FILL",
+          "HUG"
+        ]
+      },
+      "binding": {
+        "kind": "variable",
+        "id": "VariableID:11:809",
+        "name": "mobile/content-gap",
+        "resolved_type": "FLOAT"
+      },
+      "result": "confirmed"
+    },
+    {
+      "role_id": "section-stack-standard",
+      "viewport": "desktop",
+      "node_id": "230:3756",
+      "variant": "Viewport=Desktop",
+      "field_path": "/itemSpacing",
+      "relationship": "component-section-stack",
+      "owner": "component-content-container",
+      "raw": {
+        "padding": [
+          32,
+          32,
+          32,
+          32
+        ],
+        "itemSpacing": 24,
+        "counterAxisSpacing": 0,
+        "alignment": [
+          "MIN",
+          "MIN"
+        ],
+        "sizing": [
+          "AUTO",
+          "FIXED",
+          "FILL",
+          "HUG"
+        ]
+      },
+      "binding": {
+        "kind": "variable",
+        "id": "VariableID:222:2304",
+        "name": "desktop/content-gap",
+        "resolved_type": "FLOAT"
+      },
+      "result": "confirmed"
+    },
+    {
+      "role_id": "collection-stack-spacious",
+      "viewport": "mobile",
+      "node_id": "398:7599",
+      "variant": "Viewport=Mobile",
+      "field_path": "/itemSpacing",
+      "relationship": "collection-section-stack",
+      "owner": "collection-container",
+      "raw": {
+        "padding": [
+          22,
+          22,
+          22,
+          22
+        ],
+        "itemSpacing": 22,
+        "counterAxisSpacing": 0,
+        "alignment": [
+          "MIN",
+          "MIN"
+        ],
+        "sizing": [
+          "AUTO",
+          "FIXED",
+          "FILL",
+          "HUG"
+        ]
+      },
+      "binding": {
+        "kind": "variable",
+        "id": "VariableID:1180:90",
+        "name": "mobile/content-gap-lg",
+        "resolved_type": "FLOAT"
+      },
+      "result": "confirmed"
+    },
+    {
+      "role_id": "collection-stack-spacious",
+      "viewport": "desktop",
+      "node_id": "398:7571",
+      "variant": "Viewport=Desktop",
+      "field_path": "/itemSpacing",
+      "relationship": "collection-section-stack",
+      "owner": "collection-container",
+      "raw": {
+        "padding": [
+          32,
+          32,
+          32,
+          32
+        ],
+        "itemSpacing": 32,
+        "counterAxisSpacing": 0,
+        "alignment": [
+          "MIN",
+          "MIN"
+        ],
+        "sizing": [
+          "AUTO",
+          "FIXED",
+          "FILL",
+          "HUG"
+        ]
+      },
+      "binding": {
+        "kind": "variable",
+        "id": "VariableID:1180:91",
+        "name": "desktop/content-gap-lg",
+        "resolved_type": "FLOAT"
+      },
+      "result": "confirmed"
+    },
+    {
+      "role_id": "visual-item-stack",
+      "viewport": "mobile",
+      "node_id": "398:7599",
+      "variant": "Viewport=Mobile",
+      "field_path": "/itemSpacing",
+      "relationship": "repeated-visual-item-stack",
+      "owner": "repeated-item-parent",
+      "raw": {
+        "padding": [
+          22,
+          22,
+          22,
+          22
+        ],
+        "itemSpacing": 22,
+        "counterAxisSpacing": 0,
+        "alignment": [
+          "MIN",
+          "MIN"
+        ],
+        "sizing": [
+          "AUTO",
+          "FIXED",
+          "FILL",
+          "HUG"
+        ]
+      },
+      "binding": {
+        "kind": "variable",
+        "id": "VariableID:1180:90",
+        "name": "mobile/content-gap-lg",
+        "resolved_type": "FLOAT"
+      },
+      "result": "confirmed"
+    },
+    {
+      "role_id": "visual-item-stack",
+      "viewport": "desktop",
+      "node_id": "398:7573",
+      "variant": "Viewport=Desktop",
+      "field_path": "/itemSpacing",
+      "relationship": "repeated-visual-item-stack",
+      "owner": "repeated-item-parent",
+      "raw": {
+        "padding": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "itemSpacing": 24,
+        "counterAxisSpacing": 0,
+        "alignment": [
+          "MIN",
+          "MIN"
+        ],
+        "sizing": [
+          "AUTO",
+          "FIXED",
+          "FILL",
+          "HUG"
+        ]
+      },
+      "binding": {
+        "kind": "variable",
+        "id": "VariableID:222:2304",
+        "name": "desktop/content-gap",
+        "resolved_type": "FLOAT"
+      },
+      "result": "confirmed"
+    },
+    {
+      "role_id": "details-row-stack",
+      "viewport": "mobile",
+      "node_id": "502:24639",
+      "variant": "Viewport=Mobile",
+      "field_path": "/itemSpacing",
+      "relationship": "details-row-stack",
+      "owner": "details-rows-parent",
+      "raw": {
+        "padding": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "itemSpacing": 12,
+        "counterAxisSpacing": 0,
+        "alignment": [
+          "MIN",
+          "MIN"
+        ],
+        "sizing": [
+          "AUTO",
+          "FIXED",
+          "FIXED",
+          "HUG"
+        ]
+      },
+      "binding": {
+        "kind": "variable",
+        "id": "VariableID:556:1863",
+        "name": "mobile/text-gap-lg",
+        "resolved_type": "FLOAT"
+      },
+      "result": "confirmed"
+    },
+    {
+      "role_id": "details-row-stack",
+      "viewport": "desktop",
+      "node_id": "502:24638",
+      "variant": "Viewport=Desktop",
+      "field_path": "/itemSpacing",
+      "relationship": "details-row-stack",
+      "owner": "details-rows-parent",
+      "raw": {
+        "padding": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "itemSpacing": 16,
+        "counterAxisSpacing": 0,
+        "alignment": [
+          "MIN",
+          "MIN"
+        ],
+        "sizing": [
+          "AUTO",
+          "FIXED",
+          "FIXED",
+          "HUG"
+        ]
+      },
+      "binding": {
+        "kind": "variable",
+        "id": "VariableID:556:1864",
+        "name": "desktop/text-gap-lg",
+        "resolved_type": "FLOAT"
+      },
+      "result": "confirmed"
+    },
+    {
+      "role_id": "inline-peer-standard",
+      "viewport": "mobile",
+      "node_id": "459:28003",
+      "variant": "Viewport=Mobile",
+      "field_path": "/itemSpacing",
+      "relationship": "candidate partner row",
+      "owner": "summary area",
+      "raw": {
+        "padding": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "itemSpacing": 16,
+        "counterAxisSpacing": 0,
+        "alignment": [
+          "MIN",
+          "CENTER"
+        ],
+        "sizing": [
+          "AUTO",
+          "FIXED",
+          "FILL",
+          "HUG"
+        ]
+      },
+      "binding": {
+        "kind": "variable",
+        "id": "VariableID:11:809",
+        "name": "mobile/content-gap",
+        "resolved_type": "FLOAT"
+      },
+      "result": "unresolved",
+      "reason": "Candidate does not prove the declared badge-details-status peer relationship."
+    },
+    {
+      "role_id": "inline-peer-standard",
+      "viewport": "desktop",
+      "node_id": "459:27423",
+      "variant": "Viewport=Desktop",
+      "field_path": "/itemSpacing",
+      "relationship": "candidate partner row",
+      "owner": "summary area",
+      "raw": {
+        "padding": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "itemSpacing": 24,
+        "counterAxisSpacing": 0,
+        "alignment": [
+          "MIN",
+          "CENTER"
+        ],
+        "sizing": [
+          "FIXED",
+          "AUTO",
+          "FILL",
+          "HUG"
+        ]
+      },
+      "binding": {
+        "kind": "variable",
+        "id": "VariableID:222:2304",
+        "name": "desktop/content-gap",
+        "resolved_type": "FLOAT"
+      },
+      "result": "unresolved",
+      "reason": "Candidate does not prove the declared badge-details-status peer relationship."
+    },
+    {
+      "role_id": "inline-peer-compact",
+      "viewport": "mobile",
+      "node_id": "17:2749",
+      "variant": "Viewport=Mobile",
+      "field_path": "/itemSpacing",
+      "relationship": "inline-peer-gap",
+      "owner": "inline-parent",
+      "raw": {
+        "padding": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "itemSpacing": 8,
+        "counterAxisSpacing": 0,
+        "alignment": [
+          "MIN",
+          "MIN"
+        ],
+        "sizing": [
+          "AUTO",
+          "AUTO",
+          "HUG",
+          "HUG"
+        ]
+      },
+      "binding": {
+        "kind": "variable",
+        "id": "VariableID:11:830",
+        "name": "mobile/content-gap-sm",
+        "resolved_type": "FLOAT"
+      },
+      "result": "confirmed"
+    },
+    {
+      "role_id": "inline-peer-compact",
+      "viewport": "desktop",
+      "node_id": "261:4006",
+      "variant": "Viewport=Desktop",
+      "field_path": "/itemSpacing",
+      "relationship": "inline-peer-gap",
+      "owner": "inline-parent",
+      "raw": {
+        "padding": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "itemSpacing": 12,
+        "counterAxisSpacing": 0,
+        "alignment": [
+          "MIN",
+          "MIN"
+        ],
+        "sizing": [
+          "AUTO",
+          "AUTO",
+          "HUG",
+          "HUG"
+        ]
+      },
+      "binding": {
+        "kind": "variable",
+        "id": "VariableID:222:2303",
+        "name": "desktop/content-gap-sm",
+        "resolved_type": "FLOAT"
+      },
+      "result": "confirmed"
+    },
+    {
+      "role_id": "text-stack-standard",
+      "viewport": "mobile",
+      "node_id": "11:774",
+      "variant": "Viewport=Mobile",
+      "field_path": "/itemSpacing",
+      "relationship": "text-stack",
+      "owner": "text-group",
+      "raw": {
+        "padding": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "itemSpacing": 8,
+        "counterAxisSpacing": 0,
+        "alignment": [
+          "MIN",
+          "MIN"
+        ],
+        "sizing": [
+          "AUTO",
+          "FIXED",
+          "FILL",
+          "HUG"
+        ]
+      },
+      "binding": {
+        "kind": "variable",
+        "id": "VariableID:11:810",
+        "name": "mobile/text-gap",
+        "resolved_type": "FLOAT"
+      },
+      "result": "confirmed"
+    },
+    {
+      "role_id": "text-stack-standard",
+      "viewport": "desktop",
+      "node_id": "230:3757",
+      "variant": "Viewport=Desktop",
+      "field_path": "/itemSpacing",
+      "relationship": "text-stack",
+      "owner": "text-group",
+      "raw": {
+        "padding": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "itemSpacing": 12,
+        "counterAxisSpacing": 0,
+        "alignment": [
+          "MIN",
+          "MIN"
+        ],
+        "sizing": [
+          "AUTO",
+          "FIXED",
+          "FILL",
+          "HUG"
+        ]
+      },
+      "binding": {
+        "kind": "variable",
+        "id": "VariableID:222:2302",
+        "name": "desktop/text-gap",
+        "resolved_type": "FLOAT"
+      },
+      "result": "confirmed"
+    },
+    {
+      "role_id": "text-stack-tight",
+      "viewport": "mobile",
+      "node_id": "222:699",
+      "variant": "Viewport=Mobile",
+      "field_path": "/itemSpacing",
+      "relationship": "text-stack",
+      "owner": "text-group",
+      "raw": {
+        "padding": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "itemSpacing": 4,
+        "counterAxisSpacing": 0,
+        "alignment": [
+          "MIN",
+          "MIN"
+        ],
+        "sizing": [
+          "AUTO",
+          "FIXED",
+          "FILL",
+          "HUG"
+        ]
+      },
+      "binding": {
+        "kind": "variable",
+        "id": "VariableID:224:1291",
+        "name": "mobile/text-gap-sm",
+        "resolved_type": "FLOAT"
+      },
+      "result": "confirmed"
+    },
+    {
+      "role_id": "text-stack-tight",
+      "viewport": "desktop",
+      "node_id": "234:577",
+      "variant": "Viewport=Desktop",
+      "field_path": "/itemSpacing",
+      "relationship": "text-stack",
+      "owner": "text-group",
+      "raw": {
+        "padding": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "itemSpacing": 6,
+        "counterAxisSpacing": 0,
+        "alignment": [
+          "MIN",
+          "MIN"
+        ],
+        "sizing": [
+          "AUTO",
+          "FIXED",
+          "FILL",
+          "HUG"
+        ]
+      },
+      "binding": {
+        "kind": "variable",
+        "id": "VariableID:224:1290",
+        "name": "desktop/text-gap-sm",
+        "resolved_type": "FLOAT"
+      },
+      "result": "confirmed"
+    },
+    {
+      "role_id": "asset-to-content-standard",
+      "viewport": "mobile",
+      "node_id": "459:28003",
+      "variant": "Viewport=Mobile",
+      "field_path": "/itemSpacing",
+      "relationship": "asset-to-content",
+      "owner": "asset-content-parent",
+      "raw": {
+        "padding": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "itemSpacing": 16,
+        "counterAxisSpacing": 0,
+        "alignment": [
+          "MIN",
+          "CENTER"
+        ],
+        "sizing": [
+          "AUTO",
+          "FIXED",
+          "FILL",
+          "HUG"
+        ]
+      },
+      "binding": {
+        "kind": "variable",
+        "id": "VariableID:11:809",
+        "name": "mobile/content-gap",
+        "resolved_type": "FLOAT"
+      },
+      "result": "confirmed"
+    },
+    {
+      "role_id": "asset-to-content-standard",
+      "viewport": "desktop",
+      "node_id": "459:27423",
+      "variant": "Viewport=Desktop",
+      "field_path": "/itemSpacing",
+      "relationship": "asset-to-content",
+      "owner": "asset-content-parent",
+      "raw": {
+        "padding": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "itemSpacing": 24,
+        "counterAxisSpacing": 0,
+        "alignment": [
+          "MIN",
+          "CENTER"
+        ],
+        "sizing": [
+          "FIXED",
+          "AUTO",
+          "FILL",
+          "HUG"
+        ]
+      },
+      "binding": {
+        "kind": "variable",
+        "id": "VariableID:222:2304",
+        "name": "desktop/content-gap",
+        "resolved_type": "FLOAT"
+      },
+      "result": "confirmed"
+    },
+    {
+      "role_id": "asset-to-content-compact",
+      "viewport": "mobile",
+      "node_id": "222:702",
+      "variant": "Viewport=Mobile",
+      "field_path": "/itemSpacing",
+      "relationship": "asset-to-content",
+      "owner": "asset-content-parent",
+      "raw": {
+        "padding": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "itemSpacing": 8,
+        "counterAxisSpacing": 0,
+        "alignment": [
+          "MIN",
+          "MIN"
+        ],
+        "sizing": [
+          "FIXED",
+          "AUTO",
+          "FIXED",
+          "HUG"
+        ]
+      },
+      "binding": {
+        "kind": "variable",
+        "id": "VariableID:11:830",
+        "name": "mobile/content-gap-sm",
+        "resolved_type": "FLOAT"
+      },
+      "result": "confirmed"
+    },
+    {
+      "role_id": "asset-to-content-compact",
+      "viewport": "desktop",
+      "node_id": "234:580",
+      "variant": "Viewport=Desktop",
+      "field_path": "/itemSpacing",
+      "relationship": "asset-to-content",
+      "owner": "asset-content-parent",
+      "raw": {
+        "padding": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "itemSpacing": 12,
+        "counterAxisSpacing": 0,
+        "alignment": [
+          "MIN",
+          "MIN"
+        ],
+        "sizing": [
+          "FIXED",
+          "AUTO",
+          "FIXED",
+          "HUG"
+        ]
+      },
+      "binding": {
+        "kind": "variable",
+        "id": "VariableID:222:2303",
+        "name": "desktop/content-gap-sm",
+        "resolved_type": "FLOAT"
+      },
+      "result": "confirmed"
+    }
+  ]
+}

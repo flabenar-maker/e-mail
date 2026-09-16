@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: typography-registry -->
-<!-- source-digest: sha256:0e0a40d6c09fdf7f827d3cfa1da6e8a3aafa787b30917a0d3f1c7dcbfc96f2a7 -->
+<!-- source-digest: sha256:8e971b28944cff8028e785f5929281e015e2334835db5fc6af89d29bb4a61367 -->
 <!-- schema-versions: components=2.1.0, typography=1.0.0 -->
 # CUPIS typography registry
 
@@ -22,6 +22,7 @@ Typography definitions come from the structured foundation. Consumers are comput
 ### Desktop/Action
 
 - Stable ID: `desktop-action`
+- Figma style ID: `S:80178ed95ee94439436fb7ea36e3eb926f986be2,`
 - Viewport: `desktop`
 - Role: `action`
 - Variant: `default`
@@ -36,6 +37,7 @@ Typography definitions come from the structured foundation. Consumers are comput
 ### Desktop/Body/Large
 
 - Stable ID: `desktop-body-large`
+- Figma style ID: `S:2dbbae937ad03f37307425810b92a1abedcfb705,`
 - Viewport: `desktop`
 - Role: `body`
 - Variant: `large`
@@ -50,6 +52,7 @@ Typography definitions come from the structured foundation. Consumers are comput
 ### Desktop/Body/Medium
 
 - Stable ID: `desktop-body-medium`
+- Figma style ID: `S:0eb6b02f56ee5f02f09611af5a13a41b6121e78d,`
 - Viewport: `desktop`
 - Role: `body`
 - Variant: `medium`
@@ -64,6 +67,7 @@ Typography definitions come from the structured foundation. Consumers are comput
 ### Desktop/Caption
 
 - Stable ID: `desktop-caption`
+- Figma style ID: `S:3d171f9763dcbcd3a181c50411d876e67e072e75,`
 - Viewport: `desktop`
 - Role: `caption`
 - Variant: `default`
@@ -78,6 +82,7 @@ Typography definitions come from the structured foundation. Consumers are comput
 ### Desktop/Display
 
 - Stable ID: `desktop-display`
+- Figma style ID: `S:4d43ca77a0bc52ca7e43f97a078a4d69cee87651,`
 - Viewport: `desktop`
 - Role: `display`
 - Variant: `default`
@@ -92,6 +97,7 @@ Typography definitions come from the structured foundation. Consumers are comput
 ### Desktop/Heading
 
 - Stable ID: `desktop-heading`
+- Figma style ID: `S:2d908d3c1b5ff810b297f4a37aac1ab4161bbdb5,`
 - Viewport: `desktop`
 - Role: `heading`
 - Variant: `default`
@@ -106,6 +112,7 @@ Typography definitions come from the structured foundation. Consumers are comput
 ### Desktop/Heading/Compact
 
 - Stable ID: `desktop-heading-compact`
+- Figma style ID: `S:19f62229647b1872179c0b08e87bc09081f758ec,`
 - Viewport: `desktop`
 - Role: `heading`
 - Variant: `compact`
@@ -120,6 +127,7 @@ Typography definitions come from the structured foundation. Consumers are comput
 ### Desktop/Title
 
 - Stable ID: `desktop-title`
+- Figma style ID: `S:105e0e8a189848d91c13bf0f2887665713de21ca,`
 - Viewport: `desktop`
 - Role: `title`
 - Variant: `default`
@@ -134,6 +142,7 @@ Typography definitions come from the structured foundation. Consumers are comput
 ### Mobile/Action
 
 - Stable ID: `mobile-action`
+- Figma style ID: `S:780f997658bfc56dc4db512b20c92d16c415c3f3,`
 - Viewport: `mobile`
 - Role: `action`
 - Variant: `default`
@@ -148,6 +157,7 @@ Typography definitions come from the structured foundation. Consumers are comput
 ### Mobile/Body/Large
 
 - Stable ID: `mobile-body-large`
+- Figma style ID: `S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,`
 - Viewport: `mobile`
 - Role: `body`
 - Variant: `large`
@@ -162,6 +172,7 @@ Typography definitions come from the structured foundation. Consumers are comput
 ### Mobile/Body/Medium
 
 - Stable ID: `mobile-body-medium`
+- Figma style ID: `S:8ad84dd262e81c148a758758a15bb9b15e8f30fe,`
 - Viewport: `mobile`
 - Role: `body`
 - Variant: `medium`
@@ -176,6 +187,7 @@ Typography definitions come from the structured foundation. Consumers are comput
 ### Mobile/Caption
 
 - Stable ID: `mobile-caption`
+- Figma style ID: `S:374419cb8d39f8db69f1e4fa2fd20dcdc72abcce,`
 - Viewport: `mobile`
 - Role: `caption`
 - Variant: `default`
@@ -190,6 +202,7 @@ Typography definitions come from the structured foundation. Consumers are comput
 ### Mobile/Display
 
 - Stable ID: `mobile-display`
+- Figma style ID: `S:ca236b65a83eef2e55e95564b051765d4fbe7c60,`
 - Viewport: `mobile`
 - Role: `display`
 - Variant: `default`
@@ -204,6 +217,7 @@ Typography definitions come from the structured foundation. Consumers are comput
 ### Mobile/Heading
 
 - Stable ID: `mobile-heading`
+- Figma style ID: `S:31421a8c479c960e9e5fcdf32b0717960340b772,`
 - Viewport: `mobile`
 - Role: `heading`
 - Variant: `default`
@@ -218,6 +232,7 @@ Typography definitions come from the structured foundation. Consumers are comput
 ### Mobile/Title
 
 - Stable ID: `mobile-title`
+- Figma style ID: `S:348cad38e7e2918d2bc09859e1c0ac3f9b5afbb0,`
 - Viewport: `mobile`
 - Role: `title`
 - Variant: `default`

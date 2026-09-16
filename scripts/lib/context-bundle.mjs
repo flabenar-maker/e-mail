@@ -409,26 +409,19 @@ function referencedIds(record, viewports, key) {
   );
 }
 
-function withoutHistoricalSourceMetadata(value) {
+function withoutDesignTimeMetadata(value) {
   if (Array.isArray(value)) {
-    return value.map(withoutHistoricalSourceMetadata);
+    return value.map(withoutDesignTimeMetadata);
   }
   if (value === null || typeof value !== "object") {
     return value;
   }
   const output = {};
   for (const [key, item] of Object.entries(value)) {
-    if (
-      key === "provenance" &&
-      item !== null &&
-      typeof item === "object" &&
-      (item.kind === "registry-literal" ||
-        "registry_blob_sha" in item ||
-        "comparison_sources" in item)
-    ) {
+    if (key === "provenance") {
       continue;
     }
-    output[key] = withoutHistoricalSourceMetadata(item);
+    output[key] = withoutDesignTimeMetadata(item);
   }
   return output;
 }
@@ -451,7 +444,7 @@ function projectComponent(record, viewports) {
     contracts: Object.fromEntries(
       viewports.map((viewport) => [
         viewport,
-        withoutHistoricalSourceMetadata(record.contracts[viewport]),
+        withoutDesignTimeMetadata(record.contracts[viewport]),
       ]),
     ),
     documentation: structuredClone(record.documentation),
@@ -485,7 +478,7 @@ function fullFoundationDefinition(id, foundation) {
     schema_version: foundation.schema_version,
     definition_group: "foundation",
     definition_id: "all",
-    value: withoutHistoricalSourceMetadata(foundation),
+    value: withoutDesignTimeMetadata(foundation),
   };
 }
 
@@ -511,7 +504,7 @@ function referencedFoundationDefinition(reference, model) {
     definition_group: reference.group,
     definition_id: reference.id,
     viewport: reference.viewport,
-    value: withoutHistoricalSourceMetadata(role.resolutions[reference.viewport]),
+    value: withoutDesignTimeMetadata(role.resolutions[reference.viewport]),
   };
 }
 
