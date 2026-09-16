@@ -175,3 +175,13 @@ test("semantic diagnostics are sorted deterministically", async () => {
 
   assert.deepEqual(errors, sorted);
 });
+
+
+test("spacing schema preserves the original safe repository-path rule including the NUL guard", async () => {
+  const schema = await readSchema();
+  assert.deepEqual(schema.$defs.repoPath, {
+    type: "string",
+    minLength: 1,
+    pattern: "^(?!/)(?![A-Za-z]:)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\)[^\\u0000]+$",
+  });
+});
