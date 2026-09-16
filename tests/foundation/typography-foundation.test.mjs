@@ -326,6 +326,47 @@ test("requires a unique exact Figma style id for every semantic style", async ()
     ),
   );
 });
+test("matches every typography foundation style to its read-only Figma capture", async () => {
+  const [typography, captureText] = await Promise.all([
+    canonicalTypography(),
+    readFile(
+      join(repoRoot, "tests/fixtures/figma/typography-capture.json"),
+      "utf8",
+    ),
+  ]);
+  const capture = JSON.parse(captureText);
+
+  assert.equal(capture.file_key, typography.foundation.source.figma_file_key);
+  assert.equal(capture.styles.length, typography.styles.length);
+  for (const style of typography.styles) {
+    const observed = capture.styles.find(
+      ({ foundation_id }) => foundation_id === style.id,
+    );
+    assert.ok(observed, `Missing Figma capture for ${style.id}`);
+    assert.equal(observed.figma_style_id, style.figma_style_id);
+    assert.equal(observed.figma_name, style.figma_name);
+    assert.equal(observed.font.family, style.font.family);
+    assert.equal(observed.font.figma_style, style.font.figma_style);
+    assert.equal(observed.font.css_weight, style.font.css_weight);
+    assert.equal(observed.font_size_px, style.font_size_px);
+    assert.deepEqual(observed.line_height, style.line_height);
+    assert.equal(
+      renderFigmaTypographyDescription(style),
+      observed.figma_description,
+    );
+    assert.equal(observed.usage_binding.property, "TEXT.textStyleId");
+    assert.ok(observed.usage_binding.owners.length > 0);
+
+    if (style.id === "desktop-heading-compact") {
+      assert.deepEqual(observed.letter_spacing, { unit: "px", value: 0 });
+      assert.deepEqual(style.letter_spacing, { unit: "percent", value: 0 });
+      assert.equal(observed.capture_status, "unresolved-mismatch");
+      continue;
+    }
+    assert.deepEqual(observed.letter_spacing, style.letter_spacing);
+    assert.equal(observed.capture_status, "exact-match");
+  }
+});
 test("sorts semantic diagnostics deterministically", async () => {
   const typography = await canonicalTypography();
   typography.styles[0].figma_name = "Mobile/Wrong";
