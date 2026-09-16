@@ -228,6 +228,40 @@ test("each generated source digest changes when one declared input changes", asy
   }
 });
 
+test("typography registry derives the Figma description from semantic text and fields", async (t) => {
+  const fixture = await createSystemFixture();
+  t.after(fixture.cleanup);
+  await Promise.all(
+    canonicalSystemFixtureFiles.map((path) =>
+      copyFixtureFile(repoRoot, fixture.root, path),
+    ),
+  );
+
+  const typography = await readStrictYaml(
+    join(fixture.root, "data/foundations/typography.yaml"),
+  );
+  const style = typography.styles.find(({ id }) => id === "desktop-display");
+  delete style.figma_description;
+  style.figma_description_semantics =
+    "Главный выразительный текст Desktop для Hero-заголовка и крупного результата операции. Не использовать как обычный заголовок блока или карточки. Пара: Mobile/Display.";
+  style.figma_style_id = "S:test-display,";
+  style.font_size_px = 33;
+  style.font.figma_style = "Medium";
+  style.line_height = { unit: "px", value: 30 };
+  style.letter_spacing = { unit: "px", value: 1 };
+  style.figma_name = "Desktop/Display/Test";
+  await writeFixtureFile(
+    fixture.root,
+    "data/foundations/typography.yaml",
+    `${JSON.stringify(typography, null, 2)}\\n`,
+  );
+
+  const rendered = await renderCanonical(fixture.root);
+  const content = contentAt(rendered, "docs/generated/typography-registry.md");
+  assert.match(content, /### Desktop\\/Display\\/Test/u);
+  assert.match(content, /Roboto Medium, 33px, line-height 30px, letter-spacing 1px/u);
+  assert.doesNotMatch(content, /Roboto Bold, 32px, line-height 120%, letter-spacing 0/u);
+});
 test("generated comparison reports missing and stale files by exact path", async (t) => {
   const fixture = await createSystemFixture();
   t.after(fixture.cleanup);
