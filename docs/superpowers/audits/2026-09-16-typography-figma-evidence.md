@@ -1,6 +1,6 @@
 # Typography Figma evidence — 2026-09-16
 
-Status: evidence record only. This document is not a normative typography source, does not replace `data/foundations/typography.yaml`, and must not be used to infer values absent from that foundation.
+Status: evidence record only. The machine-checkable read-only capture is [`tests/fixtures/figma/typography-capture.json`](../../../tests/fixtures/figma/typography-capture.json). Neither document is a normative typography source, replaces `data/foundations/typography.yaml`, or may be used to infer values absent from that foundation.
 
 ## Capture boundary
 
