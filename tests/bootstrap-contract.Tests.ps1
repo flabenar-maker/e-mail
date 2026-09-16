@@ -77,6 +77,16 @@ function Copy-ContractFixture {
         Copy-Item -LiteralPath $sourcePath -Destination $destinationPath
     }
 }
+function Get-Sha256Hex {
+    param([byte[]]$Bytes)
+    $sha256 = [System.Security.Cryptography.SHA256]::Create()
+    try {
+        ([System.BitConverter]::ToString($sha256.ComputeHash($Bytes))).Replace('-', '')
+    } finally {
+        $sha256.Dispose()
+    }
+}
+
 function Get-FixtureHash {
     param([string]$Root)
     $resolvedRoot = [System.IO.Path]::GetFullPath($Root).TrimEnd(
@@ -88,13 +98,10 @@ function Get-FixtureHash {
         ForEach-Object {
             $fullName = [System.IO.Path]::GetFullPath($_.FullName)
             $relative = $fullName.Substring($resolvedRoot.Length)
-            $hash = (Get-FileHash -Algorithm SHA256 -LiteralPath $_.FullName).Hash
+            $hash = Get-Sha256Hex ([System.IO.File]::ReadAllBytes($_.FullName))
             "$relative=$hash"
         }
-    $bytes = [System.Text.Encoding]::UTF8.GetBytes(($lines -join "`n"))
-    $stream = [System.IO.MemoryStream]::new($bytes)
-    try { (Get-FileHash -Algorithm SHA256 -InputStream $stream).Hash }
-    finally { $stream.Dispose() }
+    Get-Sha256Hex ([System.Text.Encoding]::UTF8.GetBytes(($lines -join "`n")))
 }
 
 function Add-RequiredSkill {
