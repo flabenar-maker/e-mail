@@ -161,6 +161,7 @@ try {
     }
     $actualFixtureFiles = Get-FixtureRelativeFilePaths $readOnlyFixture
     $expectedFixtureFiles = Get-ManifestFixtureFilePaths $repoRoot
+    $fixtureDifference = Compare-Object -ReferenceObject $expectedFixtureFiles -DifferenceObject $actualFixtureFiles | ForEach-Object { "$($_.SideIndicator) $($_.InputObject)" }
     Assert-True (($actualFixtureFiles -join "`n") -eq ($expectedFixtureFiles -join "`n")) 'Fixture must copy only active manifest sources and bootstrap assertions.'
 
     $manifestDrivenSource = Join-Path $tempRoot 'manifest-driven-source'
