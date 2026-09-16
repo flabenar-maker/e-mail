@@ -114,6 +114,9 @@ try {
 
     $readOnlyFixture = Join-Path $tempRoot 'read-only'
     Copy-ContractFixture -Source $repoRoot -Destination $readOnlyFixture
+    foreach ($archivedPath in @('Legacy', 'registry', 'templates')) {
+        Assert-True (-not (Test-Path -LiteralPath (Join-Path $readOnlyFixture $archivedPath))) "Fixture must not copy archived path: $archivedPath."
+    }
     $beforeHash = Get-FixtureHash $readOnlyFixture
     $firstRun = Invoke-Verify $readOnlyFixture
     $secondRun = Invoke-Verify $readOnlyFixture
