@@ -23,6 +23,10 @@ const FORBIDDEN_BUILD_CHOICE_KEYS = new Set([
   "component_id",
 ]);
 
+function equal(left, right) {
+  return JSON.stringify(left) === JSON.stringify(right);
+}
+
 function diagnostic(code, path, message) {
   return new SystemValidationError(code, path, message);
 }
