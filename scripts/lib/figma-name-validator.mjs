@@ -154,6 +154,34 @@ function validateLayer(naming, candidate, errors) {
   }
 }
 
+function validateImplementationGeometry(naming, candidate) {
+  if (candidate.namingScope !== "implementation-geometry") return null;
+  const errors = [];
+  const contract = naming.layer_names.implementation_geometry;
+  if (
+    contract.parent_semantic_boundary_required &&
+    candidate.parentSemanticBoundaryConfirmed !== true
+  ) {
+    errors.push(
+      diagnostic(
+        "FIGMA_NAME_GEOMETRY_BOUNDARY_REQUIRED",
+        "/candidate/parentSemanticBoundaryConfirmed",
+        "Atomic implementation geometry is outside semantic naming only under a confirmed semantic parent boundary.",
+      ),
+    );
+  }
+  if (!contract.node_types.includes(candidate.nodeType)) {
+    errors.push(
+      diagnostic(
+        "FIGMA_NAME_GEOMETRY_NODE_TYPE_INVALID",
+        "/candidate/nodeType",
+        "The candidate node type is not atomic implementation geometry.",
+      ),
+    );
+  }
+  return errors;
+}
+
 function roleRequired(path = "/candidate/roleId") {
   return diagnostic(
     "semantic-role-required",
@@ -403,7 +431,9 @@ export function validateFigmaName(naming, candidate = {}) {
   if (candidate.objectKind === "component") {
     validateComponent(naming, candidate, errors);
   } else if (candidate.objectKind === "layer") {
-    validateLayer(naming, candidate, errors);
+    const geometryErrors = validateImplementationGeometry(naming, candidate);
+    if (geometryErrors === null) validateLayer(naming, candidate, errors);
+    else errors.push(...geometryErrors);
   } else if (candidate.objectKind === "property") {
     validateProperty(naming, candidate, errors);
   } else if (candidate.objectKind === "asset-owner") {
@@ -424,7 +454,17 @@ export function validateFigmaNameProposal(naming, candidate = {}) {
   const errors = validateFigmaName(naming, candidate);
 
   if (candidate.objectKind === "layer") {
-    errors.push(...resolveLayerSemantics(naming, candidate).errors);
+    if (candidate.namingScope === "implementation-geometry") {
+      errors.push(
+        diagnostic(
+          "FIGMA_NAME_GEOMETRY_RENAME_NOT_REQUIRED",
+          "/candidate/namingScope",
+          "Atomic implementation geometry under a confirmed semantic boundary does not receive a semantic rename.",
+        ),
+      );
+    } else {
+      errors.push(...resolveLayerSemantics(naming, candidate).errors);
+    }
   }
 
   if (candidate.objectKind === "asset-owner") {
@@ -493,6 +533,30 @@ export function auditExistingFigmaName(naming, candidate = {}) {
   const diagnostics = validateFigmaName(naming, candidate).map(
     (error) => error.code,
   );
+  if (candidate.objectKind === "layer" && candidate.namingScope === "implementation-geometry") {
+    if (diagnostics.length > 0) {
+      return {
+        status: "observed",
+        object_kind: candidate.objectKind,
+        name: candidate.name,
+        naming_scope: candidate.namingScope,
+        syntax_status: "invalid",
+        semantic_status: "unresolved",
+        diagnostics: [...new Set(diagnostics)].sort(),
+        rename_proposal: null,
+      };
+    }
+    return {
+      status: "observed",
+      object_kind: candidate.objectKind,
+      name: candidate.name,
+      naming_scope: candidate.namingScope,
+      syntax_status: "not-applicable",
+      semantic_status: "not-applicable",
+      diagnostics: [],
+      rename_proposal: null,
+    };
+  }
   const syntaxStatus = diagnostics.length === 0 ? "valid" : "invalid";
   const isLayer = candidate.objectKind === "layer";
   const layerSemantics = isLayer

@@ -101,6 +101,13 @@ function generateComponent(naming, request) {
 }
 
 function generateLayer(naming, request) {
+  if (request.namingScope === "implementation-geometry") {
+    return blocked(
+      "FIGMA_NAME_GEOMETRY_RENAME_NOT_REQUIRED",
+      "/request/namingScope",
+      "Atomic implementation geometry remains unnamed semantically under its confirmed parent boundary.",
+    );
+  }
   const role = request.roleId;
   if (
     typeof role !== "string" ||
@@ -388,7 +395,8 @@ export function renderFigmaNamingReference(naming) {
       })),
       proposal_gate: "semantic-role-required",
       existing_name_audit: "syntax-valid is not semantic-confirmed",
-      scale_change: "requires a separate export-contract decision",
+      scale_change: "requires a separate export-contract decision",      implementation_geometry: "not assigned a semantic name under a confirmed parent boundary",
+
     },
     null,
     2,

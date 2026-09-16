@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: typography-registry -->
-<!-- source-digest: sha256:8e971b28944cff8028e785f5929281e015e2334835db5fc6af89d29bb4a61367 -->
+<!-- source-digest: sha256:5c2541286574706532fb1afac407f9067e2386c041e1547652d9b3fd146e32a9 -->
 <!-- schema-versions: components=2.1.0, typography=1.0.0 -->
 # CUPIS typography registry
 
@@ -119,7 +119,7 @@ Typography definitions come from the structured foundation. Consumers are comput
 - Font: `Roboto` `SemiBold`; CSS weight `600`
 - Font size: `20px`
 - Line-height: `120%`
-- Letter-spacing: `0%`
+- Letter-spacing: `0px`
 - Responsive pair: `heading-compact`
 - Consumers: none
 - Figma description: Компактный заголовок Desktop для ограниченного текстового контейнера; сейчас используется в Banner/Secondary. Не заменять обычным Desktop/Heading без проверки макета и контракта компонента. Мобильная роль: Mobile/Heading. Roboto SemiBold, 20px, line-height 120%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.

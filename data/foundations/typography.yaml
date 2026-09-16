@@ -4,7 +4,7 @@ foundation:
   source:
     figma_file_key: 8zka5bHkcrJVK9I9dKjnhC
     page_node_id: 5:6
-    verified_at: 2026-08-24
+    verified_at: 2026-09-16
 styles:
   - id: desktop-display
     figma_name: Desktop/Display
@@ -74,7 +74,7 @@ styles:
       unit: percent
       value: 120
     letter_spacing:
-      unit: percent
+      unit: px
       value: 0
     figma_style_id: S:19f62229647b1872179c0b08e87bc09081f758ec,
     figma_description_semantics: "Компактный заголовок Desktop для ограниченного текстового контейнера; сейчас используется в Banner/Secondary. Не заменять обычным Desktop/Heading без проверки макета и контракта компонента. Мобильная роль: Mobile/Heading."

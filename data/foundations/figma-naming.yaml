@@ -87,6 +87,11 @@ layer_names:
       pattern: "^(?:Wrapper|Container)(?: [0-9]+)?$"
   forbidden_categories:
     [color, size, padding, gap, position, state, html-tag, viewport]
+  implementation_geometry:
+    parent_semantic_boundary_required: true
+    semantic_name_required: false
+    node_types:
+      [VECTOR, BOOLEAN_OPERATION, RECTANGLE, ELLIPSE, LINE, POLYGON, STAR]
 
 asset_owners:
   internal_pattern: "<semantic-name> @<scale>x"

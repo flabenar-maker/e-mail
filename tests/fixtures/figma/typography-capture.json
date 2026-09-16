@@ -575,7 +575,7 @@
           }
         ]
       },
-      "capture_status": "unresolved-mismatch"
+      "capture_status": "exact-match"
     },
     {
       "foundation_id": "desktop-title",

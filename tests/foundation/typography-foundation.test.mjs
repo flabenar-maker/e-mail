@@ -361,12 +361,7 @@ test("matches every typography foundation style to its read-only Figma capture",
     assert.equal(observed.usage_binding.property, "TEXT.textStyleId");
     assert.ok(observed.usage_binding.owners.length > 0);
 
-    if (style.id === "desktop-heading-compact") {
-      assert.deepEqual(observed.letter_spacing, { unit: "px", value: 0 });
-      assert.deepEqual(style.letter_spacing, { unit: "percent", value: 0 });
-      assert.equal(observed.capture_status, "unresolved-mismatch");
-      continue;
-    }
+
     assert.deepEqual(observed.letter_spacing, style.letter_spacing);
     assert.equal(observed.capture_status, "exact-match");
   }

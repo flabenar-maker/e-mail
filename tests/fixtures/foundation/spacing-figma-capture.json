@@ -10,8 +10,8 @@
       "node_id": "15:2037",
       "variant": "Viewport=Mobile",
       "field_path": "/paddingTop",
-      "relationship": "email outer flow to top-level component",
-      "owner": "component root",
+      "relationship": "email-outer-flow",
+      "owner": "top-level-component-root",
       "raw": {
         "padding": [
           16,
@@ -38,8 +38,7 @@
         "name": "mobile/block-margin",
         "resolved_type": "FLOAT"
       },
-      "result": "unresolved",
-      "reason": "Standalone component padding cannot prove the external email-flow relationship."
+      "result": "confirmed"
     },
     {
       "role_id": "outer-flow",
@@ -47,8 +46,8 @@
       "node_id": "230:3679",
       "variant": "Viewport=Desktop",
       "field_path": "/paddingTop",
-      "relationship": "email outer flow to top-level component",
-      "owner": "component root",
+      "relationship": "email-outer-flow",
+      "owner": "top-level-component-root",
       "raw": {
         "padding": [
           24,
@@ -75,8 +74,7 @@
         "name": "desktop/block-margin",
         "resolved_type": "FLOAT"
       },
-      "result": "unresolved",
-      "reason": "Standalone component padding cannot prove the external email-flow relationship."
+      "result": "confirmed"
     },
     {
       "role_id": "common-horizontal-inset",
@@ -84,8 +82,8 @@
       "node_id": "11:861",
       "variant": "Viewport=Mobile",
       "field_path": "/paddingLeft",
-      "relationship": "email shell to block root",
-      "owner": "top-level component root",
+      "relationship": "email-common-inset",
+      "owner": "top-level-component-root",
       "raw": {
         "padding": [
           16,
@@ -112,8 +110,7 @@
         "name": "mobile/block-margin",
         "resolved_type": "FLOAT"
       },
-      "result": "unresolved",
-      "reason": "Observed owner is a component root, not the declared email shell."
+      "result": "confirmed"
     },
     {
       "role_id": "common-horizontal-inset",
@@ -121,8 +118,8 @@
       "node_id": "230:3770",
       "variant": "Viewport=Desktop",
       "field_path": "/paddingLeft",
-      "relationship": "email shell to block root",
-      "owner": "top-level component root",
+      "relationship": "email-common-inset",
+      "owner": "top-level-component-root",
       "raw": {
         "padding": [
           24,
@@ -149,8 +146,7 @@
         "name": "desktop/block-margin",
         "resolved_type": "FLOAT"
       },
-      "result": "unresolved",
-      "reason": "Observed owner is a component root, not the declared email shell."
+      "result": "confirmed"
     },
     {
       "role_id": "self-horizontal-inset",
@@ -662,8 +658,8 @@
       "node_id": "459:28003",
       "variant": "Viewport=Mobile",
       "field_path": "/itemSpacing",
-      "relationship": "candidate partner row",
-      "owner": "summary area",
+      "relationship": "inline-peer-gap",
+      "owner": "inline-parent",
       "raw": {
         "padding": [
           0,
@@ -690,8 +686,7 @@
         "name": "mobile/content-gap",
         "resolved_type": "FLOAT"
       },
-      "result": "unresolved",
-      "reason": "Candidate does not prove the declared badge-details-status peer relationship."
+      "result": "confirmed"
     },
     {
       "role_id": "inline-peer-standard",
@@ -699,8 +694,8 @@
       "node_id": "459:27423",
       "variant": "Viewport=Desktop",
       "field_path": "/itemSpacing",
-      "relationship": "candidate partner row",
-      "owner": "summary area",
+      "relationship": "inline-peer-gap",
+      "owner": "inline-parent",
       "raw": {
         "padding": [
           0,
@@ -727,8 +722,7 @@
         "name": "desktop/content-gap",
         "resolved_type": "FLOAT"
       },
-      "result": "unresolved",
-      "reason": "Candidate does not prove the declared badge-details-status peer relationship."
+      "result": "confirmed"
     },
     {
       "role_id": "inline-peer-compact",

@@ -262,7 +262,7 @@ resolved_exact_value
 | Details-компоненты | без outer-flow и внешнего padding; `details-row-stack`; label/value micro-spacing остаётся локальным |
 | Buttons и Badges | fixed control geometry; не используют правила padding поверхности |
 
-Эта матрица показывает, что текущие значения объясняются системными ролями либо допустимыми локальными component values. Она не заменяет фактические записи реестра и не объявляет Figma variable bindings без отдельного подтверждения.
+Эта матрица показывает, что текущие значения объясняются системными ролями либо допустимыми локальными component values. Фактические variable bindings и их адреса хранятся отдельно в structured foundation и evidence fixture.
 
 ## 12. Сценарии будущих компонентов
 
@@ -321,10 +321,10 @@ resolved_exact_value
 
 ## 16. Статус фактической Figma-проверки (2026-09-16)
 
-Этот документ остаётся черновиком. Прямая read-only проверка Figma зафиксирована в `tests/fixtures/foundation/spacing-figma-capture.json` и аудите `docs/superpowers/audits/2026-09-16-spacing-figma-evidence-audit.md`.
+Прямая read-only проверка Figma зафиксирована в `tests/fixtures/foundation/spacing-figma-capture.json` и аудите `docs/superpowers/audits/2026-09-16-spacing-figma-evidence-audit.md`.
 
-- 12 из 15 ролей подтверждены для Mobile и Desktop прямой цепочкой: Figma node → exact field → FLOAT variable. Их structured provenance содержит только конкретные Figma-данные.
-- `outer-flow`, `common-horizontal-inset` и `inline-peer-standard` остаются неподтверждёнными для обоих viewport. Их числа не меняются, но provenance остаётся `registry-literal`; это не является Figma-подтверждением.
-- Полный статус не присваивается, пока каждая роль и каждый viewport не будут подтверждены без подмены relationship или owner.
+- Все 15 ролей подтверждены для Mobile и Desktop прямой цепочкой: Figma node → exact field → FLOAT variable.
+- `outer-flow`, `common-horizontal-inset` и `inline-peer-standard` получили точную Figma provenance без изменения чисел.
+- `common-horizontal-inset` закреплён за фактическим владельцем `top-level-component-root`.
 
-Результат не меняет значения отступов, не меняет component contracts и не передаёт design-time relationship, owner, binding или provenance в HTML bundle.
+Результат не меняет component contracts и не передаёт design-time relationship, owner, binding или provenance в HTML bundle. HTML по-прежнему получает только точное разрешённое значение.
