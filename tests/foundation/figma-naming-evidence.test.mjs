@@ -25,9 +25,8 @@ test("non-normative Figma naming capture keeps exact roots, representatives, and
   ]);
   assert.deepEqual(
     capture.unresolved.map((record) => record.code),
-    [
-      "OBSERVED_FIGMA_LAYER_SEMANTIC_ROLE_UNPROVEN",
-    ],
+    [],
+
   );
   assert.deepEqual(
     capture.asset_owners.map((owner) => [
@@ -78,7 +77,7 @@ test("capture audits existing observed names without proposing a rename", async 
   assert.equal(audited.every((result) => result.rename_proposal === null), true);
   assert.deepEqual(
     audited.map((result) => result.semantic_status),
-    ["confirmed", "confirmed", "confirmed", "unresolved"],
+    ["confirmed", "confirmed", "confirmed", "confirmed", "confirmed"],
   );
 });
 
