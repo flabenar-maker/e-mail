@@ -8,7 +8,7 @@
 
 **Tech Stack:** Node.js 24, ECMAScript modules, YAML 2.9.0, AJV 8.20.0, `node:test`, PowerShell bootstrap, GitHub CLI.
 
-**Spec:** `docs/superpowers/specs/2026-08-24-cupis-structured-email-system-design.md`, разделы 9, 11, 12 и 15.\n\n**Implementation:** [PR #85](https://github.com/flabenar-maker/e-mail/pull/85); финальный exact-SHA gate ещё не отмечен.
+**Spec:** `docs/superpowers/specs/2026-08-24-cupis-structured-email-system-design.md`, разделы 9, 11, 12 и 15.\n\n**Implementation:** [PR #85](https://github.com/flabenar-maker/e-mail/pull/85). На `e35dd2e702656624913edbc718b3320d80df9981` локально прошли resolver check, targeted suite 40/40, `npm run generate:check`, `npm run verify` 585/585 и Windows bootstrap; все семь routes остались `workflow-paused`.
 
 ## Global Constraints
 
@@ -220,7 +220,7 @@ Expected: all tests pass.
 **Files:**
 - Modify only the paths listed in Tasks 1–5.
 
-- [ ] **Step 1: Run focused checks locally**
+- [x] **Step 1: Run focused checks locally**
 
 ```powershell
 npm ci
@@ -228,18 +228,18 @@ node --test tests/skills/*.test.mjs tests/workflows/structured-workflows.test.mj
 npm run generate:check
 ```
 
-- [ ] **Step 2: Run the full gate once on the final cloud SHA**
+- [x] **Step 2: Run the full gate once on the final cloud SHA**
 
 ```powershell
 npm run verify
 pwsh -NoProfile -File bootstrap/verify.ps1
 ```
 
-- [ ] **Step 3: Inspect preserved boundaries**
+- [x] **Step 3: Inspect preserved boundaries**
 
 Confirm all route workflow source IDs remain `workflow-paused`, Figma/component/foundation/generated files are byte-identical to base, and no concrete email output or local system copy entered the diff.
 
-- [ ] **Step 4: Publish one PR**
+- [x] **Step 4: Publish one PR**
 
 The PR must state exact SHA, local commands/results, preserved paused routes, and that GitHub Actions/Checks were not used.
 
@@ -250,4 +250,5 @@ The PR must state exact SHA, local commands/results, preserved paused routes, an
 - The skill has no duplicate rules or canonical path list and cannot bypass paused state.
 - Cloud-only ownership, Figma mutation gate, impact report, read-back and separate merge authorization remain intact.
 - All local checks pass on the exact final cloud SHA; Figma and email outputs remain unchanged.
+
 
