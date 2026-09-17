@@ -548,11 +548,12 @@ Validation и generation детерминированы и не требуют �
 7. generated docs и bundles;
 8. Core и workflows;
 9. maintenance skill;
-10. стандарт и навык разработки компонентов;
-11. email-build skill;
-12. shadow comparison;
-13. cutover;
-14. отдельное удаление старых дублей.
+10. email-build skill;
+11. стандарт и workflow разработки новых компонентов;
+12. навык разработки новых компонентов;
+13. shadow comparison;
+14. cutover;
+15. отдельная ревизия `Legacy/` и временных migration-артефактов.
 
 На каждом этапе создаются отдельные branch и PR. Следующий этап начинается после проверки предыдущего.
 
