@@ -82,7 +82,7 @@ export function renderFigmaComponentDescription(record) {
       lines.push(`- ${normalizeLf(constraint.statement).replaceAll("\n", " ").trim()}`);
     }
   }
-  return `${lines.join("\n")}\n`;
+  return lines.join("\n");
 }
 
 export function compareFigmaComponentDescription(expected, actual) {
