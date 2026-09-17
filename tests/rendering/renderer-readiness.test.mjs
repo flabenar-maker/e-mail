@@ -56,16 +56,18 @@ test("all eight pilot interpreter contracts are renderer-ready", async () => {
   const registries = await loadComponentRegistries({ repoRoot });
   const rendererRegistry = await loadRendererRegistry({ repoRoot });
 
-  for (const entry of rendererRegistry.coverage) {
+  for (const entry of rendererRegistry.coverage.filter(
+    ({ mode }) => mode === "interpreter",
+  )) {
     const record = componentById(registries, entry.component_id);
     assert.equal(entry.mode, "interpreter");
     assert.deepEqual(validateRendererReadyComponent(record, entry), []);
   }
 
   const report = auditRendererReadiness(registries, rendererRegistry);
-  assert.equal(report.summary.covered_active_components, 8);
+  assert.equal(report.summary.covered_active_components, 24);
   assert.equal(report.summary.ready_components, 8);
-  assert.equal(report.summary.missing_coverage, 53);
+  assert.equal(report.summary.missing_coverage, 37);
 });
 
 test("pilot contracts retain their critical rendering structures", async () => {
@@ -216,6 +218,6 @@ test("returns stable issue shapes and deterministic ordering", async () => {
     report.components.filter(({ issues }) =>
       issues.some(({ code }) => code === "RENDER_COVERAGE_MISSING"),
     ).length,
-    53,
+    37,
   );
 });

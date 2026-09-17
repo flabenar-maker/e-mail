@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: component-registry -->
-<!-- source-digest: sha256:8255560d665731240a23d647cfd5902b8ef6dfec705141d3bfb2ea19c88f2d62 -->
+<!-- source-digest: sha256:613742376311f568cefd645dbe1a3e93a26c36e74c74c139748923d1f760ff43 -->
 <!-- schema-versions: components=2.1.0, typography=1.0.0, spacing=1.0.0, assets=1.0.0 -->
 # CUPIS component registry
 
@@ -42,11 +42,11 @@
 ### Mobile
 
 - `root` — role `asset`; render `presentation-table`; visibility `always`
-  - Fact `description-1`: `#F3F3F5`
-  - Fact `description-2`: asset `header-logo`
-  - Fact `description-3`: `@4x`
-  - Fact `description-4`: `322×50px`
-  - Fact `description-5`: `212×33px`
+  - Fact `protective-background-color`: `#F3F3F5`
+  - Fact `export-asset-reference`: asset `header-logo`
+  - Fact `export-scale-suffix`: `@4x`
+  - Fact `desktop-display-size`: `322×50px`
+  - Fact `mobile-display-size`: `212×33px`
   - `header-logo` — role `image`; render `direct-image`; visibility `always`; asset `header-logo`
 
 ### Properties and variants
@@ -116,8 +116,8 @@ RENDER: ASSET
 ### Mobile
 
 - `root` — role `asset`; render `figma-source-only`; visibility `always`
-  - Fact `description-1`: `212×33px`
-  - Fact `description-2`: `@4x`
+  - Fact `mobile-display-size`: `212×33px`
+  - Fact `export-scale-suffix`: `@4x`
 
 ### Properties and variants
 

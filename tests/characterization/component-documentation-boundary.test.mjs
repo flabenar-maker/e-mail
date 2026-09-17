@@ -128,7 +128,7 @@ test("direct Figma source capture preserves shared and service registries and ma
 
   assert.equal(
     digest(projected.shared),
-    "sha256:30c694c30f3eaea89790428d64c689a64aae5dd5dfb99406555cca250fc0484f",
+    "sha256:352dbe44834ff570012af0e46cc6adb8a2f00e08aedc59cac44ee7f744e6c08d",
   );
   assert.equal(
     digest(projected.service),

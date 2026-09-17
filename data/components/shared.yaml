@@ -342,7 +342,7 @@
             },
             "facts": [
               {
-                "id": "description-1",
+                "id": "protective-background-color",
                 "value": {
                   "type": "color",
                   "value": "#F3F3F5"
@@ -353,14 +353,14 @@
                 }
               },
               {
-                "id": "description-2",
+                "id": "export-asset-reference",
                 "value": {
                   "type": "asset-reference",
                   "asset_contract_id": "header-logo"
                 }
               },
               {
-                "id": "description-3",
+                "id": "export-scale-suffix",
                 "value": {
                   "type": "string",
                   "value": "@4x"
@@ -371,7 +371,7 @@
                 }
               },
               {
-                "id": "description-4",
+                "id": "desktop-display-size",
                 "value": {
                   "type": "dimensions",
                   "width": 322,
@@ -384,7 +384,7 @@
                 }
               },
               {
-                "id": "description-5",
+                "id": "mobile-display-size",
                 "value": {
                   "type": "dimensions",
                   "width": 212,
@@ -523,7 +523,7 @@
             },
             "facts": [
               {
-                "id": "description-1",
+                "id": "mobile-display-size",
                 "value": {
                   "type": "dimensions",
                   "width": 212,
@@ -536,7 +536,7 @@
                 }
               },
               {
-                "id": "description-2",
+                "id": "export-scale-suffix",
                 "value": {
                   "type": "string",
                   "value": "@4x"

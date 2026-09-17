@@ -36,7 +36,7 @@ function auditComponent(record, library, coverageById) {
     issues.push(
       issue("RENDER_COVERAGE_MISSING", "/coverage", record.id, "all"),
     );
-  } else if (record.status === "active") {
+  } else if (record.status === "active" && coverage.mode === "interpreter") {
     issues.push(...validateRendererReadyComponent(record, coverage));
   }
 
@@ -51,7 +51,10 @@ function auditComponent(record, library, coverageById) {
       id: record.id,
       library,
       status: record.status,
-      ready: record.status === "active" && Boolean(coverage) && issues.length === 0,
+      ready:
+        record.status === "active" &&
+        coverage?.mode === "interpreter" &&
+        issues.length === 0,
       issues,
     },
     facts,

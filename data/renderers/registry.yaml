@@ -9,3 +9,19 @@ coverage:
   - { component_id: banner-secondary, mode: interpreter }
   - { component_id: banner-app-download, mode: interpreter }
   - { component_id: email-footer, mode: interpreter }
+  - { component_id: asset-header-logo-4x, mode: source-only, reason: "Export asset source; HTML output is owned by Email/Header." }
+  - { component_id: asset-header-logo-compact-4x, mode: source-only, reason: "Mobile layout source; it does not create a separate email asset or standalone HTML." }
+  - { component_id: asset-product-logo, mode: source-only, reason: "Nested source for parent-owned composite assets; it has no standalone HTML output." }
+  - { component_id: icon-bank-card-2-line, mode: source-only, reason: "Nested icon source; HTML output is owned by its parent component." }
+  - { component_id: icon-fingerprint-2-line, mode: source-only, reason: "Nested icon source; HTML output is owned by its parent component." }
+  - { component_id: icon-gift-2-line, mode: source-only, reason: "Nested icon source; HTML output is owned by its parent component." }
+  - { component_id: icon-global-line, mode: source-only, reason: "Nested icon source; HTML output is owned by its parent component." }
+  - { component_id: icon-lock-password-fill, mode: source-only, reason: "Nested icon source; HTML output is owned by its parent component." }
+  - { component_id: icon-mail-fill, mode: source-only, reason: "Nested icon source; HTML output is owned by its parent component." }
+  - { component_id: icon-mir-logo, mode: source-only, reason: "Nested icon source; HTML output is owned by its parent component." }
+  - { component_id: icon-receipt-fill, mode: source-only, reason: "Nested icon source; HTML output is owned by its parent component." }
+  - { component_id: icon-shopping-basket-2-line, mode: source-only, reason: "Nested icon source; HTML output is owned by its parent component." }
+  - { component_id: icon-smartphone-fill, mode: source-only, reason: "Nested icon source; HTML output is owned by its parent component." }
+  - { component_id: icon-user-follow-fill, mode: source-only, reason: "Nested icon source; HTML output is owned by its parent component." }
+  - { component_id: icon-user-forbid-fill, mode: source-only, reason: "Nested icon source; HTML output is owned by its parent component." }
+  - { component_id: icon-user-unfollow-fill, mode: source-only, reason: "Nested icon source; HTML output is owned by its parent component." }
