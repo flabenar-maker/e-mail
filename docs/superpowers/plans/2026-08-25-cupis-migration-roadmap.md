@@ -181,20 +181,39 @@ Structured records остаются shadow-источником до generated b
 
 [PR #66](https://github.com/flabenar-maker/e-mail/pull/66) исправил оболочку пилотного письма и границу Mobile/Desktop. [PR #67](https://github.com/flabenar-maker/e-mail/pull/67) и [#68](https://github.com/flabenar-maker/e-mail/pull/68) закрепили локальные проверки без GitHub Actions; [PR #69](https://github.com/flabenar-maker/e-mail/pull/69) и [#70](https://github.com/flabenar-maker/e-mail/pull/70) изолировали Legacy и адаптировали тесты. Маршруты сейчас остановлены; восстановленный полный generated component registry не означает завершения пакетов 10–12 или возобновления production-сборки.
 
-### 9. Подготовка maintenance skill — в работе
+### 9. Подготовка maintenance skill — завершён
 
 Подробный implementation plan: [CUPIS Maintenance Skill Stage 9](2026-09-17-cupis-maintenance-skill-stage-9.md).
 
-Manifest-driven разрешение source paths было выполнено на этапе 2. Этот этап не повторяет первоначальный переход на manifest: он подготавливает навык к итоговым generated context bundles, но не запускает временно остановленные маршруты. Их фактическое включение остаётся этапу 14 после этапа 13.
+Manifest-driven разрешение source paths было выполнено на этапе 2. Этот этап не повторяет первоначальный переход на manifest: он подготовил навык к итоговым generated context bundles, но не запустил временно остановленные маршруты. Их фактическое включение остаётся этапу 14 после этапа 13.
 
-- [ ] Подготовить `maintaining-cupis-email-system` к итоговым route-specific context bundles, сохранив остановленные маршруты до этапа 14.
-- [ ] Сохранить навык тонким маршрутизатором без копий правил и жёсткого списка путей.
-- [ ] Сохранить отдельный `migration-progress` route, требующий свежей сверки с roadmap перед ответом о статусе или следующих шагах.
-- [ ] Проверить mutation impact gate, cloud-only GitHub flow и Figma mutation gate.
+- [x] Подготовить `maintaining-cupis-email-system` к итоговым route-specific context bundles, сохранив остановленные маршруты до этапа 14.
+- [x] Сохранить навык тонким маршрутизатором без копий правил и жёсткого списка путей.
+- [x] Сохранить отдельный `migration-progress` route, требующий свежей сверки с roadmap перед ответом о статусе или следующих шагах.
+- [x] Проверить mutation impact gate, cloud-only GitHub flow и Figma mutation gate.
 
-### 10. Стандарт и workflow разработки новых блоков
+[PR #85](https://github.com/flabenar-maker/e-mail/pull/85), merge commit `258aa22e12b680ea54507d82430d325228c87bbe`, добавил machine resolver, CLI, boundary tests и тонкий maintenance skill. На точном финальном SHA локально прошли 585 тестов и Windows bootstrap; все семь routes остались `workflow-paused`.
 
-Этот этап выполняется после остальных foundations, component registry, generated bundles, Core/workflows и maintenance skill, но до создания навыка HTML-вёрстки.
+### 10. Навык HTML-вёрстки конкретных писем
+
+Подробный implementation plan: [CUPIS Email Build Skill Stage 10](2026-09-17-cupis-email-build-skill-stage-10.md).
+
+Этот этап начинается после завершённого maintenance skill и использует готовые renderer, structured email workflow и machine resolver. Он не зависит от стандарта или навыка разработки новых блоков: письмо собирается только из уже зарегистрированных компонентов, а неизвестный компонент остаётся typed blocker. Подготовленный навык не включает остановленные routes; cutover остаётся этапу 14 после сквозного сравнения этапа 13.
+
+- [ ] Создать repo-scoped skill `building-cupis-emails` как тонкий маршрутизатор к `email-new-build` и `email-continue-fix`.
+- [ ] Не копировать в skill HTML-правила, component contracts, foundation values, asset profiles, workflow steps или список canonical paths.
+- [ ] Проверить однозначную классификацию нового письма, design-dependent изменения, technical изменения, read-only задачи и запроса, требующего уточнения.
+- [ ] Проверить обязательные Mobile/Desktop Figma-входы только для design-dependent режимов и запрет догадок при отсутствующей или перепутанной паре.
+- [ ] Проверить локальное версионирование без перезаписи источника: новое письмо начинает с `1.0`, каждое следующее изменение создаёт новую папку с шагом `0.1`, а итоговая папка содержит только `email.html` и `images/`.
+- [ ] Проверить, что новое письмо проходит через temporary email model и renderer CLI, а незарегистрированный компонент, неполный contract или asset contract останавливают сборку.
+- [ ] Проверить сборку от корневого Email/Template-инстанса без подъёма вложенных cards, items, buttons, badges или assets в самостоятельные блоки письма.
+- [ ] Проверить MCP-only экспорт ассетов, локальные `src`, отсутствие лишних файлов и применение точных значений только из resolved bundle.
+- [ ] Проверить локальные HTML-инварианты, Mobile/Desktop и visual regression на representative marketing/service сценариях без GitHub Actions.
+- [ ] Сохранить Figma-библиотеку, component-development standard, локальные исходные версии писем и routes без изменений.
+
+### 11. Стандарт и workflow разработки новых блоков
+
+Этот этап выполняется после подготовки навыка сборки писем. Он создаёт отдельный design-time маршрут и не расширяет email-build skill правилами проектирования новых компонентов.
 
 - [ ] Обновить master-спецификацию и зафиксировать отдельный route разработки новых email-блоков.
 - [ ] Создать отдельный стандарт проектирования email-компонентов; не добавлять эти design-time правила в HTML-rendering instruction.
@@ -204,7 +223,7 @@ Manifest-driven разрешение source paths было выполнено н
 - [ ] Оставлять прототип example/frame без Component и Description, пока пользователь отдельно не разрешит productionization.
 - [ ] Добавить route и bundle в manifest, не подключая design-time standard к `email-new-build` и `email-continue-fix`.
 
-### 11. Навык разработки новых блоков
+### 12. Навык разработки новых блоков
 
 - [ ] Создать repo-scoped skill `developing-cupis-email-components`.
 - [ ] Использовать skill только как маршрутизатор к component-development route, standard и workflow.
@@ -215,19 +234,9 @@ Manifest-driven разрешение source paths было выполнено н
   - maintenance skill — поддержка существующей production-библиотеки.
 - [ ] Проверить безопасный переход от одобренного прототипа к отдельной productionization-задаче.
 
-### 12. Навык HTML-вёрстки конкретных писем
-
-Этот этап начинается только после завершения этапов 10–11.
-
-- [ ] Создать repo-scoped skill вёрстки конкретных CUPIS-писем.
-- [ ] Подключить только `email-new-build` и `email-continue-fix` bundles.
-- [ ] Не загружать в этот skill стандарт проектирования новых блоков и component-development workflow.
-- [ ] Собирать HTML по готовым Mobile/Desktop-инстансам, resolved component contracts и фактическим значениям.
-- [ ] Проверить создание нового письма, версионное изменение готового письма и границы локальной рабочей папки.
-
 ### 13. Сквозное shadow comparison
 
-Этап начинается после подготовки workflows, навыков и renderer coverage на этапах 8–12. В отличие от ограниченной проверки workflow-обязательств в пакете 12 этапа 8, здесь проверяется результат всего маршрута до включения production.
+Этап начинается после подготовки workflows, навыков и renderer coverage на этапах 8–12. В отличие от ограниченной проверки workflow-обязательств в пакете 12 этапа 8, здесь проверяется результат всего маршрута до включения production. Перенос email-build skill на этап 10 позволяет проверить его отдельно до подключения design-time маршрута новых блоков; итоговое сравнение всё равно охватывает все три типа задач.
 
 - [ ] Сравнить generated docs, resolved context bundles и representative результаты maintenance, component development и email build с сохранёнными read-only источниками в `Legacy/`; не подключать архив к действующим маршрутам и не считать перенос доказательством equivalence.
 - [ ] Перенести необходимые characterization assertions из архивного baseline в активные проверки или заменить их проверками с тем же смыслом; тесты, лежащие в `Legacy/`, не считаются частью текущего `npm test`.
