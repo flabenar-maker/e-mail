@@ -20,6 +20,44 @@
         "element_id": "content",
         "instances": [
           {
+            "instance_id": "pilot-header",
+            "component_id": "email-header",
+            "variants": {
+              "mobile": "mobile",
+              "desktop": "desktop"
+            },
+            "property_values": [],
+            "content_values": [
+              {
+                "element_id": "root-header-logo-compact",
+                "slot_id": "alt",
+                "scope": "mobile",
+                "value": {
+                  "type": "alt-text",
+                  "purpose": "informative",
+                  "value": "CUPIS"
+                }
+              },
+              {
+                "element_id": "root-header-logo",
+                "slot_id": "alt",
+                "scope": "desktop",
+                "value": {
+                  "type": "alt-text",
+                  "purpose": "informative",
+                  "value": "CUPIS"
+                }
+              }
+            ],
+            "asset_files": [
+              {
+                "asset_contract_id": "header-logo",
+                "path": "images/header-logo.png"
+              }
+            ],
+            "slots": []
+          },
+          {
             "instance_id": "pilot-secondary",
             "component_id": "banner-secondary",
             "variants": {
