@@ -22,7 +22,7 @@ import {
   renderAllGeneratedDocs,
 } from "./generated-docs.mjs";
 
-const SUPPORTED_MANIFEST_VERSION = "1.1.0";
+const SUPPORTED_MANIFEST_VERSION = "1.2.0";
 
 export function validateManifestShape(manifest, schema) {
   return validateDocumentShape({
@@ -303,6 +303,45 @@ export async function validateManifestSemantics(manifest, repoRoot) {
   const sourceById = new Map(
     manifest.sources.map((source) => [source.id, source]),
   );
+  const structuredWorkflows = manifest.structured_workflows;
+  pushDuplicateDiagnostics(
+    errors,
+    structuredWorkflows.entries,
+    "id",
+    "duplicate-structured-workflow-id",
+    "/structured_workflows/entries",
+  );
+  pushDuplicateDiagnostics(
+    errors,
+    structuredWorkflows.entries,
+    "source_id",
+    "duplicate-structured-workflow-source",
+    "/structured_workflows/entries",
+  );
+  const workflowSchemaSource = sourceById.get(
+    structuredWorkflows.schema_source_id,
+  );
+  if (!workflowSchemaSource || workflowSchemaSource.kind !== "schema") {
+    errors.push(
+      diagnostic(
+        "invalid-structured-workflow-schema-source",
+        "/structured_workflows/schema_source_id",
+        "Structured workflow schema_source_id must resolve to a schema source.",
+      ),
+    );
+  }
+  structuredWorkflows.entries.forEach((entry, entryIndex) => {
+    const source = sourceById.get(entry.source_id);
+    if (!source || source.kind !== "workflow") {
+      errors.push(
+        diagnostic(
+          "invalid-structured-workflow-source",
+          `/structured_workflows/entries/${entryIndex}/source_id`,
+          `Structured workflow source must resolve to kind workflow: ${entry.source_id}.`,
+        ),
+      );
+    }
+  });
   const profileIds = new Set(
     manifest.bundle_profiles.map((profile) => profile.id),
   );
@@ -1027,6 +1066,17 @@ export async function validateSystem({
     ]);
     if (prerequisiteErrors.length > 0) {
       return { manifest, errors: prerequisiteErrors };
+    }
+
+    const { validateStructuredWorkflows } = await import(
+      "./workflow-registry.mjs"
+    );
+    const workflowErrors = await validateStructuredWorkflows({
+      repoRoot,
+      manifest,
+    });
+    if (workflowErrors.length > 0) {
+      return { manifest, errors: workflowErrors };
     }
 
     const [

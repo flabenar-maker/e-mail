@@ -13,6 +13,7 @@ import { tmpdir } from "node:os";
 
 export const canonicalSystemFixtureFiles = [
   "schemas/manifest.schema.json",
+  "schemas/workflows.schema.json",
   "schemas/typography.schema.json",
   "system/manifest.yaml",
   "docs/superpowers/plans/2026-08-25-cupis-migration-roadmap.md",
@@ -31,6 +32,8 @@ export const canonicalSystemFixtureFiles = [
   "data/components/shared.yaml",
   "data/components/marketing.yaml",
   "data/components/service.yaml",
+  "data/workflows/library-maintenance.yaml",
+  "data/workflows/email-build.yaml",
   "docs/generated/component-registry.md",
   "docs/generated/typography-registry.md",
   "docs/generated/asset-registry.md",

@@ -1,4 +1,4 @@
-schema_version: 1.1.0
+schema_version: 1.2.0
 system:
   id: cupis-email-system
   repository: flabenar-maker/e-mail
@@ -16,6 +16,9 @@ sources:
   - { id: asset-export-standard, kind: core, path: core/asset-export-standard.md }
   - { id: figma-library-standard, kind: core, path: core/figma-library-standard.md }
   - { id: workflow-paused, kind: workflow, path: workflows/system-paused.md }
+  - { id: workflows-schema, kind: schema, path: schemas/workflows.schema.json }
+  - { id: workflow-library-maintenance, kind: workflow, path: data/workflows/library-maintenance.yaml }
+  - { id: workflow-email-build, kind: workflow, path: data/workflows/email-build.yaml }
   - { id: manifest-schema, kind: schema, path: schemas/manifest.schema.json }
   - { id: typography-foundation, kind: registry, path: data/foundations/typography.yaml }
   - { id: typography-schema, kind: schema, path: schemas/typography.schema.json }
@@ -37,6 +40,12 @@ sources:
   - { id: generated-typography-registry, kind: generated, path: docs/generated/typography-registry.md }
   - { id: generated-asset-registry, kind: generated, path: docs/generated/asset-registry.md }
   - { id: generated-naming-reference, kind: generated, path: docs/generated/naming-reference.md }
+structured_workflows:
+  status: shadow
+  schema_source_id: workflows-schema
+  entries:
+    - { id: library-maintenance, source_id: workflow-library-maintenance }
+    - { id: email-build, source_id: workflow-email-build }
 generated_docs:
   - id: component-registry
     output_source_id: generated-component-registry
@@ -58,7 +67,7 @@ bundle_profiles:
   - id: library-maintenance
     source_ids: [repository-readme, figma-library-standard, component-contract-standard, figma-component-description-standard, workflow-paused]
     generated_bundle:
-      status: shadow
+      status: structured-shadow
       static_source_ids: [repository-readme, figma-library-standard, component-contract-standard, figma-component-description-standard, workflow-paused]
       component_selection: optional
       viewport_selection: one-or-both
@@ -68,7 +77,7 @@ bundle_profiles:
   - id: component-onboarding
     source_ids: [repository-readme, figma-library-standard, component-contract-standard, figma-component-description-standard, workflow-paused]
     generated_bundle:
-      status: shadow
+      status: structured-shadow
       static_source_ids: [repository-readme, figma-library-standard, component-contract-standard, figma-component-description-standard, workflow-paused]
       component_selection: optional
       viewport_selection: both
@@ -78,7 +87,7 @@ bundle_profiles:
   - id: figma-description-sync
     source_ids: [repository-readme, figma-library-standard, component-contract-standard, figma-component-description-standard, workflow-paused]
     generated_bundle:
-      status: shadow
+      status: structured-shadow
       static_source_ids: [repository-readme, figma-library-standard, component-contract-standard, figma-component-description-standard, workflow-paused]
       component_selection: required
       viewport_selection: both
@@ -88,7 +97,7 @@ bundle_profiles:
   - id: figma-naming-audit
     source_ids: [repository-readme, figma-library-standard, workflow-paused]
     generated_bundle:
-      status: shadow
+      status: structured-shadow
       static_source_ids: [repository-readme, figma-library-standard, workflow-paused]
       component_selection: optional
       viewport_selection: none
@@ -98,7 +107,7 @@ bundle_profiles:
   - id: migration-progress
     source_ids: [repository-readme, migration-roadmap, workflow-paused]
     generated_bundle:
-      status: shadow
+      status: structured-shadow
       static_source_ids: [repository-readme, migration-roadmap, workflow-paused]
       component_selection: none
       viewport_selection: none
@@ -108,7 +117,7 @@ bundle_profiles:
   - id: email-new-build
     source_ids: [repository-readme, email-rendering-standard, component-contract-standard, typography-standard, asset-export-standard, workflow-paused]
     generated_bundle:
-      status: shadow
+      status: structured-shadow
       static_source_ids: [repository-readme, email-rendering-standard, component-contract-standard, typography-standard, asset-export-standard, workflow-paused]
       component_selection: required
       viewport_selection: both
@@ -118,7 +127,7 @@ bundle_profiles:
   - id: email-continue-fix
     source_ids: [repository-readme, email-rendering-standard, component-contract-standard, typography-standard, asset-export-standard, workflow-paused]
     generated_bundle:
-      status: shadow
+      status: structured-shadow
       static_source_ids: [repository-readme, email-rendering-standard, component-contract-standard, typography-standard, asset-export-standard, workflow-paused]
       component_selection: optional
       viewport_selection: both-when-components

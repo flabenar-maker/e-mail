@@ -51,7 +51,7 @@ async function mutateFixtureManifest(root, mutate) {
 
 test("loads the repository canonical manifest", async () => {
   const manifest = await canonicalManifest();
-  assert.equal(manifest.schema_version, "1.1.0");
+  assert.equal(manifest.schema_version, "1.2.0");
   assert.equal(manifest.system.id, "cupis-email-system");
 });
 
@@ -83,7 +83,7 @@ test("migration progress resolves the canonical roadmap bundle", async () => {
 
 test("rejects an unsupported manifest schema version", async () => {
   const manifest = structuredClone(await canonicalManifest());
-  manifest.schema_version = "1.2.0";
+  manifest.schema_version = "1.1.0";
 
   const errors = validateManifestShape(manifest, schema);
 
@@ -743,7 +743,7 @@ test("reports a missing declared component registry file", async (t) => {
 
 
 const testGeneratedBundle = {
-  status: "shadow",
+  status: "structured-shadow",
   static_source_ids: ["repository-readme"],
   component_selection: "none",
   viewport_selection: "none",
@@ -753,7 +753,7 @@ const testGeneratedBundle = {
 };
 
 function addGeneratedCapability(manifest) {
-  manifest.schema_version = "1.1.0";
+  manifest.schema_version = "1.2.0";
   manifest.sources = manifest.sources.filter(
     (source) => source.kind !== "generated",
   );
@@ -802,12 +802,12 @@ async function generatedFixture(t) {
   return { root, manifest };
 }
 
-test("accepts optional generated docs and shadow bundle capability", async () => {
+test("accepts optional generated docs and structured-shadow bundle capability", async () => {
   const manifest = addGeneratedCapability(
     structuredClone(await canonicalManifest()),
   );
   manifest.bundle_profiles[0].generated_bundle = {
-    status: "shadow",
+    status: "structured-shadow",
     static_source_ids: [
       "repository-readme",
       "email-figma-prompt",
@@ -1030,10 +1030,10 @@ test("resolves immutable generated definitions and route policy", async () => {
 });
 
 
-test("canonical routes declare exact shadow bundle policies", async () => {
+test("canonical routes declare exact structured-shadow bundle policies", async () => {
   const manifest = await canonicalManifest();
   for (const profile of manifest.bundle_profiles) {
-    assert.equal(profile.generated_bundle.status, "shadow");
+    assert.equal(profile.generated_bundle.status, "structured-shadow");
     assert.deepEqual(profile.generated_bundle.static_source_ids, profile.source_ids);
     assert.equal(profile.generated_bundle.static_source_ids.includes("workflow-paused"), true);
   }
