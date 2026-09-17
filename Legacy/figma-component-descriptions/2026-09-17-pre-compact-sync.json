@@ -1,0 +1,1118 @@
+{
+  "schema_version": "1.0.0",
+  "captured_at": "2026-09-17T20:23:35Z",
+  "figma_file_key": "8zka5bHkcrJVK9I9dKjnhC",
+  "roots": [
+    {
+      "role": "marketing",
+      "node_id": "538:17236"
+    },
+    {
+      "role": "service",
+      "node_id": "538:17235"
+    },
+    {
+      "role": "shared-library",
+      "node_id": "539:38025"
+    },
+    {
+      "role": "shared-templates",
+      "node_id": "1084:34055"
+    }
+  ],
+  "nodes": [
+    {
+      "node_id": "1008:1473",
+      "name": "Product=CUPIS",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "1008:1474",
+      "name": "Product=Card",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "1008:1475",
+      "name": "Product=Wallet",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "1008:1476",
+      "name": "Asset/Header-Logo @4x",
+      "node_kind": "COMPONENT_SET",
+      "description": "Asset/Header-Logo @4x\n\nASSET ROLE\nКанонический общий Header asset для Product=CUPIS | Card | Wallet. Внешний компонент содержит логотип и защитную подложку #F3F3F5.\n\nEXPORT\nЭкспортировать внешний слой header-logo @4x целиком из конкретного Desktop-инстанса как PNG @4x. Не экспортировать вложенный Product Logo отдельно и не добавлять HTML-подложку.\n\nUSAGE\nОдин файл и один src для Mobile и Desktop. Display-size определяет Email/Header: 322×50px Desktop и 212×33px Mobile.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "1008:1686",
+      "name": "Product=CUPIS",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "1008:1687",
+      "name": "Product=Card",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "1008:1688",
+      "name": "Product=Wallet",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "1008:1708",
+      "name": "Asset/Header-Logo-Compact @4x",
+      "node_kind": "COMPONENT_SET",
+      "description": "Asset/Header-Logo-Compact @4x\n\nROLE\nВспомогательный Figma layout-source для точного отображения Mobile-варианта Email/Header в размере 212×33px.\n\nEXPORT\nОтдельно не экспортировать и не создавать для него Mobile-файл. Канонический файл письма экспортируется из Desktop-слоя header-logo @4x компонента Asset/Header-Logo @4x.\n\nUSAGE\nИспользовать только внутри Viewport=Mobile компонента Email/Header.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "1008:871",
+      "name": "Product=CUPIS",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "1008:872",
+      "name": "Product=Card",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "1008:873",
+      "name": "Product=Wallet",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "1008:874",
+      "name": "Asset/Product-Logo",
+      "node_kind": "COMPONENT_SET",
+      "description": "Asset/Product-Logo\n\nROLE\nВнутренний набор векторных логотипов Product=CUPIS | Card | Wallet для сборки производных assets. Сам по себе не задаёт export boundary письма.\n\nUSAGE\nИспользовать как вложенный источник внутри семантического asset owner. Не экспортировать отдельно, если родительский component description требует внешний составной asset.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "1009:2505",
+      "name": "Icon/Bank-Card-2-Line",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "1009:2506",
+      "name": "Icon/Global-Line",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "1024:19224",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "1024:19225",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "1024:19226",
+      "name": "Item/Alert",
+      "node_kind": "COMPONENT_SET",
+      "description": "Item/Alert\n\nSCOPE\nВнутренний элемент для Block/Steps, Block/Content и Block/Bullet-List. Собственного внешнего top gap не имеет; расстояние задаёт родительский блок. Не заменять standalone-компонентом Block/Info-Alert.\n\nSTRUCTURE\nОдна presentation-table строка: фиксированная icon-cell слева и живой HTML text-cell справа. Фон #F8F8FA.\n\nMOBILE\nWidth 100% внутренней области; padding 16px; gap 12px; radius 14px.\nIcon 24×24px; text 12px/140%.\n\nDESKTOP\nWidth 100% внутренней области; padding 24px; gap 16px; radius 18px.\nIcon 26×26px; text 16px/140%.\n\nASSET\nИз конкретного Desktop-инстанса экспортировать внешний слой “alert-icon @4x” целиком как PNG @4x с прозрачностью за пределами собственного визуала. Один файл/src использовать в Mobile и Desktop. Не экспортировать текст и фон; не добавлять HTML-подложку. Иконка фиксированная, без width:100%.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "1024:19283",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "1024:19284",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "1024:19285",
+      "name": "Item/Notification",
+      "node_kind": "COMPONENT_SET",
+      "description": "Item/Notification\n\nSCOPE\nВнутренний элемент для Block/Steps и Block/Content. Собственного внешнего top gap не имеет; расстояние задаёт родительский блок.\n\nSTRUCTURE\nОдна presentation-table строка: живой HTML text-cell слева и фиксированная icon-cell справа. Фон #F8F8FA. Ячейки выровнены по вертикальному центру.\n\nMOBILE\nWidth 100% внутренней области; padding 16px; gap 16px; radius 14px.\nText 12px/140%; Asset/Feature-Icon @4x 42×42px.\n\nDESKTOP\nWidth 100% внутренней области; padding 24px; gap 20px; radius 18px.\nText 16px/140%; Asset/Feature-Icon @4x 48×48px.\n\nASSET\nЭкспортировать Asset/Feature-Icon @4x целиком из конкретного Desktop-инстанса как PNG @4x с прозрачностью за пределами собственного визуала. Один файл/src использовать в Mobile и Desktop. Не экспортировать текст и фон; не добавлять HTML-подложку; не применять width:100% к иконке.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "1084:16995",
+      "name": "NPS/Options",
+      "node_kind": "COMPONENT_SET",
+      "description": "NPS/Options\n\nSCOPE\nSelf-inset компонент: отдельная полноширинная строка email-wrapper со своими боковыми inset. Не помещать внутрь общего email-padding.\nOuter inset: Mobile 16px сверху и по бокам; Desktop 24px.\n\nVARIANTS\nViewport=Mobile | Desktop.\nCount=2 | 3 определяет число видимых вариантов оценки. Не добавлять и не скрывать кнопки независимо от Count.\n\nCARD\nMobile: width 100% оставшегося пространства, контрольная ширина 296px, padding 22px, radius 22px, gap heading→buttons 16px.\nDesktop: width 552px, padding 32px, radius 26px, gap heading→buttons 24px.\nHeading остаётся HTML и выровнен по центру: Mobile 18px, Desktop 26px. Высота карточки определяется контентом.\n\nMOBILE BUTTONS\nКнопки идут вертикально. Каждая занимает 100% внутренней ширины, height 44px; spacer-row между соседними кнопками 8px.\nИконка 32×32px и центрирована внутри linked button-cell.\n\nDESKTOP BUTTONS\nКнопки идут в одной строке и поровну делят доступную ширину. Между соседними button-cells обязательна spacer-cell 12px.\nКаждая кнопка height 54px; иконка 42×42px и центрирована. Фиксированные ширины отдельных кнопок не задавать.\n\nКаждая оценка — отдельная ссылка на всю площадь кнопки. Фон и radius задавать на linked button-cell. Для каждой иконки использовать один Desktop-source и один src в обоих Viewport. Href брать из данных письма.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "1084:16996",
+      "name": "Badge/Operation-Status",
+      "node_kind": "COMPONENT_SET",
+      "description": "Badge/Operation-Status\n\nSCOPE\nАтомарный живой HTML-status. Не экспортировать как изображение и не растягивать по ширине.\n\nVARIANTS\nViewport=Mobile | Desktop.\nState=Pending | Success | Error.\n\nIMPLEMENTATION\nInline-table или compact table-cell: padding 4px 12px, radius 63px, nowrap.\nMobile: текст 12px/140% Regular.\nDesktop: текст 16px/140% Regular.\n\nSTATE\nPending: “В обработке”, background #FAE6AF, text #8C5D00.\nSuccess: “Успешно”, background #B0FCC0, text #00991F.\nError: “Отклонено”, background #FFC7C8, text #CC2944.\n\nРасположение и alignment внутри родительского блока определяет description родительского компонента.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "11:1020",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "11:1218",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "11:861",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "1102:6",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "1102:7",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "1102:8",
+      "name": "Email/Template",
+      "node_kind": "COMPONENT_SET",
+      "description": "Email/Template\n\nROLE\nКорневой assembly-компонент письма. Реализовать ровно один раз как основу общей HTML-структуры, внутри которой размещаются верхнеуровневые библиотечные компоненты.\n\nVARIANTS\nViewport=Mobile | Desktop. Для каждой версии письма использовать соответствующий вариант и фактический состав Content в конкретном инстансе. Не переносить состав, свойства или видимость между Mobile и Desktop автоматически.\n\nROOT CONTRACT\nКорневую email-обёртку и её техническую HTML-структуру реализовать по глобальной инструкции по вёрстке. Сам Email/Template не экспортировать как изображение или отдельный asset.\n\nCONTENT SLOT\nContent задаёт порядок и состав верхнеуровневых компонентов письма. Каждый вложенный компонент верстать по его собственному Description. Сам Slot не задаёт самостоятельной визуальной геометрии: не добавлять из-за него отсутствующие в макете padding, gap, background или другие визуальные слои. Не считать Slot запретом на технические table-обёртки, необходимые общей email-структуре.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "12:1347",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "13:353",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "15:2037",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "15:2586",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "15:599",
+      "name": "Viewport=Mobile, Count=3",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "16:2738",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "17:2763",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "18:2939",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "18:2942",
+      "name": "Viewport=Mobile, Style=Neutral",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "18:2947",
+      "name": "Viewport=Mobile, Style=Accent",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "18:2948",
+      "name": "Badge/Step-Number",
+      "node_kind": "COMPONENT_SET",
+      "description": "Badge/Step-Number\n\nSCOPE\nАтомарный живой HTML-элемент. Не экспортировать как изображение.\n\nIMPLEMENTATION\nСобрать как inline presentation-table или отдельную table-cell с текстом номера шага. Фон, горизонтальный padding и radius задавать на ячейке. Бейдж не растягивать по ширине родителя.\n\nMOBILE\nPadding: 0 8px; radius 19px; текст 14px/140% Regular.\n\nDESKTOP\nPadding: 0 8px; radius 19px; текст 16px/140%.\n\nЦвет текста и фона брать из Style конкретного инстанса. Текст остаётся HTML.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "222:702",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "222:786",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "230:3679",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "230:3680",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "230:3770",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "230:3832",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "230:3839",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "230:3849",
+      "name": "Viewport=Desktop, Style=Accent",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "230:3850",
+      "name": "Viewport=Desktop, Style=Neutral",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "234:580",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "234:607",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "260:1346",
+      "name": "Viewport=Mobile, Count=2",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "260:1494",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "260:3974",
+      "name": "Viewport=Desktop, Count=3",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "260:3976",
+      "name": "Viewport=Desktop, Count=2",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "260:571",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "260:591",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "260:662",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "261:4020",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "326:5159",
+      "name": "Email/Header",
+      "node_kind": "COMPONENT_SET",
+      "description": "Email/Header\n\nSCOPE\nПолноширинная строка внутри 600px email-wrapper. Не помещать в общий email-padding.\n\nSTRUCTURE\nОдна presentation-table на всю ширину: верхний spacer и центрированная ячейка с логотипом.\nОтступ перед логотипом: Mobile 16px, Desktop 24px. Дополнительный боковой inset не добавлять.\n\nFIGMA SOURCES\nMobile использует вложенный layout-source “header-logo-compact @4x” размером 212×33px. Desktop использует “header-logo @4x” размером 322×50px. Раздельные Figma sources нужны только для точного отображения вариантов и не означают два файла письма.\n\nEXPORT\nЭкспортировать только внешний слой “header-logo @4x” из конкретного Desktop-инстанса как PNG @4x. Он уже содержит логотип и защитную подложку #F3F3F5. Вложенный Product Logo и Mobile layout-source отдельно не экспортировать.\n\nВ HTML использовать один общий файл и один src:\n— Desktop display: 322×50px;\n— Mobile display: 212×33px.\n\nИзображение фиксированное и центрированное; не применять width:100%. Не добавлять отдельный dark-mode asset или HTML-подложку.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "326:5580",
+      "name": "Card/Icon",
+      "node_kind": "COMPONENT_SET",
+      "description": "Card/Icon\n\nSTRUCTURE\nКарточка без общего HTML-фона: фиксированная Asset/Feature-Icon @4x и text-content с живыми HTML heading, optional description и optional link.\nBoolean-свойство Show Description управляет description; Show Link управляет link. Heading отображается всегда.\n\nMOBILE\nВертикальная структура на 100% ширины родителя, содержимое центрировано.\nIcon 52×52px. Gap icon→text-content 16px. Внутри text-content gap 8px.\nHeading 16px, description 14px/140%, link 14px/140%.\n\nDESKTOP\nОдна presentation-table строка: icon-cell 72×72px, spacer-cell 24px, text-cell шириной 392px; обе ячейки выровнены по верхнему краю.\nВнутри text-content gap 12px.\nHeading 20px, description 16px/140%, link 16px/140%.\n\nASSET\nAsset/Feature-Icon @4x экспортировать целиком из конкретного Desktop-инстанса как PNG @4x с прозрачностью за пределами собственного визуала. Один файл/src использовать в Mobile и Desktop. Не добавлять HTML-подложку и не применять width:100% к иконке.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "326:5806",
+      "name": "Block/Cards-Images",
+      "node_kind": "COMPONENT_SET",
+      "description": "Block/Cards-Images\n\nSCOPE\nОбычный контентный блок внутри общего email-padding. Не добавлять второй внешний боковой inset.\nTop gap: Mobile 16px, Desktop 24px.\n\nCONTENT AREA\nБелая оболочка блока (#FFFFFF) с HTML heading, последовательностью Card/Image и optional block caption.\nMobile: padding 22px, radius 22px, gap между элементами верхнего уровня 22px. Heading 18px/120% SemiBold.\nDesktop: padding 32px, radius 26px, gap между элементами верхнего уровня 32px. Heading 26px/120% SemiBold.\n\nCARDS\nСвойства Count нет. Рендерить все видимые Card/Image конкретного инстанса в их фактическом порядке; библиотечный пример содержит шесть карточек.\n\nMobile:\n— одна Card/Image в строке;\n— ширина карточки 100% внутренней области;\n— 252px — контрольная ширина инстанса, не фиксированный HTML-width;\n— расстояние между карточками 22px.\n\nDesktop:\n— одна Card/Image в строке на всю внутреннюю ширину 488px;\n— расстояние между карточками 24px;\n— не создавать двухколоночную сетку и equal-height оболочки.\n\nСодержимое карточки реализовать по description Card/Image.\n\nBLOCK CAPTION\nЕсли Show Caption включён, после списка вывести отдельный HTML-текст на всю внутреннюю ширину: Mobile 12px/140% Regular, Desktop 14px/140% Regular, #98999C, слева. Gap от последней карточки: Mobile 22px, Desktop 32px.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "326:6342",
+      "name": "Block/Icon-Cards",
+      "node_kind": "COMPONENT_SET",
+      "description": "Block/Icon-Cards\n\nSCOPE\nОбычный контентный блок внутри общего email-padding. Не добавлять второй внешний боковой inset.\nTop gap: Mobile 16px, Desktop 24px.\n\nCONTENT AREA\nБелая оболочка блока (#FFFFFF) с HTML heading, последовательностью Card/Icon и optional block caption.\nMobile: padding 22px, radius 22px, gap между элементами верхнего уровня 22px. Heading 18px/120% SemiBold.\nDesktop: padding 32px, radius 26px, gap между элементами верхнего уровня 32px. Heading 26px/120% SemiBold.\n\nCARDS\nСвойства Count нет. Рендерить все видимые Card/Icon конкретного инстанса в их фактическом порядке; библиотечный пример содержит шесть карточек.\n\nMobile:\n— одна Card/Icon в строке;\n— ширина карточки 100% внутренней области;\n— 252px — контрольная ширина инстанса, не фиксированный HTML-width;\n— расстояние между карточками 22px.\n\nDesktop:\n— одна Card/Icon в строке на всю внутреннюю ширину 488px;\n— расстояние между карточками 24px;\n— не создавать двухколоночную сетку, фон карточки или equal-height оболочку.\n\nСодержимое карточки реализовать по description Card/Icon.\n\nBLOCK CAPTION\nЕсли Show Caption включён, после списка вывести отдельный HTML-текст на всю внутреннюю ширину: Mobile 12px/140% Regular, Desktop 14px/140% Regular, #98999C, слева. Gap от последней карточки: Mobile 22px, Desktop 32px.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "333:7477",
+      "name": "Email/Footer",
+      "node_kind": "COMPONENT_SET",
+      "description": "Email/Footer\n\nSCOPE\nПолноширинный footer внутри 600px email-wrapper. Не помещать в общий email-padding.\n\nLAYOUT\nКорневой компонент создаёт только внешний отступ перед footer: Mobile 16px, Desktop 24px.\nВнутри расположен footer-body на всю ширину. Фон footer-body всегда #F3F3F5, без border, shadow и radius. Фон воспроизводить в HTML; отдельный фоновый asset не создавать.\nfooter-body:\n— Mobile: padding 0 16px 16px; gap между видимыми секциями 16px;\n— Desktop: padding 0 24px 24px; gap между видимыми секциями 24px.\nМежсекционный gap принадлежит footer-body. Если social-section скрыта, не оставлять этот gap или пустой spacer.\n\nDISCLAIMER\nПорядок видимых элементов:\n1. Optional block caption.\n2. Основной disclaimer paragraph.\n3. Текст для ошибочного получателя.\n4. Отдельная unsubscribe link.\n\ndisclaimer-section не добавляет собственного padding.\nGap между её текстовыми элементами: Mobile 8px, Desktop 12px.\nТекст: Mobile 12px/140% Regular, Desktop 14px/140% Regular; #98999C, по центру. Ссылки того же цвета и подчёркнуты. Сохранять только смысловые hard breaks.\n\nCAPTION\nBoolean-свойство Show Caption, по умолчанию выключено. Если включено, caption становится первым элементом disclaimer-section и использует ту же типографику.\n\nSOCIAL ICONS\nBoolean-свойство Show Social Links управляет всей social-section. Если выключено, не выводить секцию и не оставлять межсекционный gap.\nsocial-section не добавляет собственного padding или item gap. Внутри неё находится центрированная группа social-icons:\n— Mobile: icon 32×32px; gap между видимыми иконками 8px;\n— Desktop: icon 42×42px; gap 12px.\n\nASSETS\nЭкспортировать каждый видимый внешний слой вида “*-icon @4x” целиком из конкретного Desktop-инстанса как PNG @4x с прозрачностью. Один src использовать в Mobile и Desktop; display-size задаёт вариант. Скрытые иконки не экспортировать. Не добавлять HTML-подложку.\n\nКаждую иконку оборачивать в ссылку только при наличии утверждённого URL; URL не придумывать.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "337:4359",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "337:4460",
+      "name": "Banner/Hero",
+      "node_kind": "COMPONENT_SET",
+      "description": "Banner/Hero\n\nSCOPE\nОбычный контентный блок внутри общего email-padding.\nTop gap: Mobile 16px, Desktop 24px.\n\nSTRUCTURE\nОдна карточка-table: image-area → content-area с живыми HTML heading, optional body и optional CTA. Текст поверх изображения не размещается. Radius и clipping задаёт только внешняя карточка.\n\nMOBILE\nImage-area занимает 100% доступной ширины; контрольная пропорция 296:190.\nContent-area: padding 22px, gap 16px.\nText-content: gap 12px; heading 20px Bold; body 14px/140%.\nCTA — instance Button/Primary, Viewport=Mobile, full-width.\n\nDESKTOP\nImage-area: контрольный контейнер 552×353px.\nContent-area: padding 32px, gap 24px.\nText-content: gap 16px; heading 32px Bold; body 18px/140%.\nCTA — instance Button/Primary, Viewport=Desktop, content-width по содержимому.\n\nIMAGE @2x\nИз конкретного Desktop-инстанса экспортировать исходный растр из Fill слоя hero-image @2x как один JPEG @2x. Один файл и один src использовать в Mobile и Desktop.\n\nНа Mobile img остаётся в обычном потоке, получает width:100%; height:auto и формирует высоту image-area; фиксированный height и HTML-атрибут height запрещены.\nНа Desktop воспроизвести crop и позицию по Fill выбранного инстанса внутри контейнера 552×353px без искажения.\n\nНе приравнивать img одновременно к width и height контейнера. Не использовать VML, пока в инстансе нет текста поверх изображения.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "337:4491",
+      "name": "Block/Steps",
+      "node_kind": "COMPONENT_SET",
+      "description": "Block/Steps\n\nSCOPE\nОбычный контентный блок внутри общего email-padding.\n\nCARD\nMobile: top gap 16px, padding 22px, radius 22px, основной gap 16px.\nDesktop: top gap 24px, padding 32px, radius 26px, основной gap 24px.\n\nORDER\n1. HTML heading.\n2. Таблица Item/Step.\n3. Optional Item/Notification.\n4. Optional Item/Alert.\n5. Optional Button/Secondary.\n6. Optional block caption.\nСостав определяется Boolean-свойствами конкретного инстанса.\n\nHEADING AND STEPS\nHeading: Mobile 18px, Desktop 26px.\nGap heading→первый шаг: Mobile 16px, Desktop 24px.\nGap между шагами: Mobile 16px, Desktop 24px.\n\nКаждый шаг — отдельная presentation-table строка: живой Badge/Step-Number, spacer, затем HTML heading и optional item caption. Бейдж не экспортировать.\nMobile: badge→text 8px; heading→item caption 4px; heading 14px; item caption 12px.\nDesktop: badge→text 12px; heading→item caption 6px; heading 18px; item caption 16px.\n\nNESTED ITEMS\nNotification реализовать строго по description Item/Notification.\nAlert реализовать строго по description Item/Alert, не как standalone Block/Info-Alert.\nButton/Secondary: full-width Mobile, content-width Desktop.\nGap между последующими видимыми элементами верхнего уровня: Mobile 16px, Desktop 24px.\n\nBLOCK CAPTION\nЕсли Show Caption включён, вывести последним отдельный HTML-текст: Mobile 12px/140% Regular, Desktop 14px/140% Regular, #98999C, слева.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "337:4576",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "337:4691",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "337:4694",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "337:4699",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "337:4710",
+      "name": "Button/Secondary",
+      "node_kind": "COMPONENT_SET",
+      "description": "Button/Secondary\n\nIMPLEMENTATION\nКликабельная email-кнопка: presentation-table → button-cell → &lt;a&gt;. Вся видимая площадь кнопки находится внутри ссылки; таблицу внутрь &lt;a&gt; не помещать.\nFull-width или content-width определяется конкретным инстансом и родительским блоком.\n\nMOBILE\nViewport=Mobile. Padding 12px 24px, radius 26px, HTML-текст 14px/140% Medium.\n\nDESKTOP\nViewport=Desktop. Padding 12px 24px, radius 26px, HTML-текст 16px/140% Medium.\n\nФон #48494A, текст #FFFFFF. Для белого текста применять предусмотренную основной инструкцией защиту.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "337:4713",
+      "name": "Button/Primary",
+      "node_kind": "COMPONENT_SET",
+      "description": "Button/Primary\n\nIMPLEMENTATION\nКликабельная email-кнопка: presentation-table → button-cell → &lt;a&gt;. Вся видимая площадь кнопки находится внутри ссылки; таблицу внутрь &lt;a&gt; не помещать.\nFull-width или content-width определяется конкретным инстансом и родительским блоком. Для content-width ширина следует за текстом и padding; минимальную ширину не добавлять, если её не задаёт родитель.\n\nMOBILE\nViewport=Mobile. Padding 12px 24px, radius 32px, HTML-текст 14px/140% Medium.\n\nDESKTOP\nViewport=Desktop. Padding 16px 32px, radius 32px, HTML-текст 16px/140% Medium.\n\nBACKGROUND\nВ обоих вариантах: solid fallback #18B037; CSS linear-gradient(25deg, #18B037 0%, #3DD55C 100%). 25° — утверждённый точный параметр HTML-интерпретации, а не новое значение Fill в Figma.\nНе заменять градиент сплошным #00991F.\n\nТекст #FFFFFF и остаётся HTML. Применять предусмотренную основной инструкцией защиту белого текста.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "337:4766",
+      "name": "Block/Content",
+      "node_kind": "COMPONENT_SET",
+      "description": "Block/Content\n\nSCOPE\nОбычный контентный блок внутри общего email-padding.\n\nCARD\nMobile: top gap 16px, padding 22px, radius 22px, основной gap 16px.\nDesktop: top gap 24px, padding 32px, radius 26px, основной gap 24px.\n\nORDER\n1. text-content: heading и видимые body paragraphs.\n2. Optional Item/Notification.\n3. Optional Item/Alert.\n4. Optional Button/Secondary.\n5. Optional block caption.\nСостав определяется Boolean-свойствами конкретного инстанса.\n\nTEXT\nMobile: heading 18px, body 14px/140%, gap внутри text-content 8px.\nDesktop: heading 26px, body 18px/140%, gap внутри text-content 12px.\n\nNESTED ITEMS\nNotification реализовать строго по description Item/Notification.\nAlert реализовать строго по description Item/Alert, не как standalone Block/Info-Alert.\nButton/Secondary: full-width Mobile, content-width Desktop.\nGap между видимыми элементами верхнего уровня: Mobile 16px, Desktop 24px.\n\nBLOCK CAPTION\nЕсли Show Caption включён, вывести последним отдельный HTML-текст на всю внутреннюю ширину: Mobile 12px/140% Regular, Desktop 14px/140% Regular, #98999C, слева.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "337:4844",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "337:4870",
+      "name": "Banner/Secondary",
+      "node_kind": "COMPONENT_SET",
+      "description": "Banner/Secondary\n\nSCOPE\nОбычный контентный блок внутри общего email-padding.\nTop gap: Mobile 16px, Desktop 24px. Mobile и Desktop имеют разные внешние структуры.\n\nCONTENT\nHeading, body и optional Button/Secondary остаются HTML. Высота определяется живым контентом; текст не обрезать. Radius и clipping задаёт внешняя карточка.\n\nMOBILE\nsecondary-image @2x сверху: width:100%; height:auto; без HTML-атрибута height; контрольная пропорция 296:188.\nContent-area снизу: padding 22px, gap 16px. Text-content gap 8px; heading 18px, body 14px/140%, по центру. Button/Secondary — full-width.\n\nDESKTOP\nОдна строка общей внутренней шириной 552px.\nContent-area слева: фиксированная ширина 300px, padding 32px, внутреннее содержимое 236px, gap 24px.\nText-content gap 12px; heading 20px SemiBold, body 16px/140%, по левому краю. Button/Secondary — content-width.\nImage-area справа: ширина 252px и высота всей строки.\n\nIMAGE ASSET\nИз конкретного Desktop-инстанса экспортировать исходный растр из Fill слоя secondary-image @2x как один JPEG @2x. Один файл и один src использовать в Mobile и Desktop.\n\nНа Mobile изображение остаётся обычным пропорциональным img. На Desktop использовать тот же JPEG как background ячейки: background-size:cover; background-repeat:no-repeat; background-position по Fill Desktop-инстанса. При росте текста изображение пропорционально кропается, но не растягивается. Не преобразовывать блок в Hero.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "337:4898",
+      "name": "Block/Bullet-List",
+      "node_kind": "COMPONENT_SET",
+      "description": "Block/Bullet-List\n\nSCOPE\nОбычный контентный блок внутри общего email-padding.\n\nCARD\nMobile: top gap 16px, padding 22px, radius 22px, основной gap 16px.\nDesktop: top gap 24px, padding 32px, radius 26px, основной gap 24px.\n\nORDER\n1. HTML heading.\n2. Таблица видимых Item/Bullet.\n3. Optional Item/Alert.\n4. Optional Button/Secondary.\n5. Optional block caption.\nСостав определяется Boolean-свойствами и содержимым конкретного инстанса.\n\nHEADING AND BULLETS\nHeading: Mobile 18px, Desktop 26px.\nКаждый Item/Bullet — отдельная строка.\nGap между пунктами: Mobile 16px, Desktop 24px; использовать spacer-row, не margin на td.\nДополнительного padding перед контейнером bullets нет. Пункт реализовать по description Item/Bullet; список не растрировать.\n\nNESTED ITEMS\nAlert реализовать строго по description Item/Alert, не как standalone Block/Info-Alert.\nButton/Secondary: full-width Mobile, content-width Desktop.\nGap от списка и между последующими видимыми элементами верхнего уровня: Mobile 16px, Desktop 24px.\n\nBLOCK CAPTION\nЕсли Show Caption включён, вывести последним отдельный HTML-текст: Mobile 12px/140% Regular, Desktop 14px/140% Regular, #98999C, слева.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "337:4958",
+      "name": "Item/Bullet",
+      "node_kind": "COMPONENT_SET",
+      "description": "Item/Bullet\n\nIMPLEMENTATION\nОдна вложенная presentation-table с двумя колонками:\n— фиксированная колонка живого bullet-indicator #18B037;\n— колонка живого HTML text-content.\nИндикатор не экспортировать как изображение и выровнять по первой строке primary text.\n\nGEOMETRY\nMobile: bullet 8×8px; gap bullet→text 8px; локальный gap между строками text-content 4px.\nDesktop: bullet 8×8px; gap bullet→text 12px; локальный gap между строками text-content 6px.\n\nTEXT CONTENT\nПорядок видимых строк конкретного инстанса:\n1. primary text — 14px/140% Mobile, 18px/140% Desktop;\n2. supporting-text-01 — 12px/140% Mobile, 16px/140% Desktop;\n3. supporting-text-02 — 12px/140% Mobile, 16px/140% Desktop;\n4. optional link — живой &lt;a&gt;, 14px/140% Medium Mobile, 16px/140% Medium Desktop, #00991F (Green/500).\n\nНе объединять строки и ссылку в изображение. Внешний вертикальный интервал между пунктами задаёт Block/Bullet-List.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "337:5039",
+      "name": "Item/Step",
+      "node_kind": "COMPONENT_SET",
+      "description": "Item/Step\n\nIMPLEMENTATION\nВертикальная вложенная presentation-table:\n1. живой Badge/Step-Number;\n2. spacer;\n3. HTML heading;\n4. optional HTML caption.\n\nMobile: badge→text 8px, heading→caption 4px.\nDesktop: badge→text 12px, heading→caption 6px.\n\nBadge не экспортировать как изображение. Внешний интервал между шагами задаёт родительский Block/Steps. Наличие caption и значения Type/Color брать из конкретного инстанса.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "337:5040",
+      "name": "Banner/Inline",
+      "node_kind": "COMPONENT_SET",
+      "description": "Banner/Inline\n\nSCOPE\nОбычный контентный блок внутри общего email-padding.\n\nSTRUCTURE\nОдна кликабельная строка-table: icon-cell → text-cell → chevron-cell. В каждой ячейке отдельный &lt;a&gt; с одинаковым href; таблицу внутрь ссылки не помещать.\nPadding и gaps должны находиться внутри кликабельной площади соответствующих ссылок. Текст остаётся HTML.\n\nMOBILE\nTop gap 16px; card padding 16px; gap 16px; radius 22px.\nIcon 42×42px; chevron 24×24px; text 14px.\n\nDESKTOP\nTop gap 24px; card padding 24px; gap 24px; radius 26px.\nIcon 48×48px; chevron 24×24px; text 18px.\n\nASSETS\nЭкспортировать из конкретного Desktop-инстанса внешний визуальный слой Icon @4x и слой chevron-icon @4x отдельно. Оба — PNG @4x с прозрачностью за пределами собственного визуала.\nИспользовать один файл/src каждого asset в Mobile и Desktop. Не добавлять HTML-подложку, отсутствующую внутри экспортируемого слоя. Размеры фиксированные; не применять width:100%.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "337:5041",
+      "name": "Block/Info-Alert",
+      "node_kind": "COMPONENT_SET",
+      "description": "Block/Info-Alert\n\nSCOPE\nСамостоятельный контентный блок внутри общего email-padding. Не использовать его для вложенных alert-элементов внутри Block/Steps, Block/Content или Block/Bullet-List: там применяется Item/Alert.\n\nSTRUCTURE\nОдна presentation-table строка: фиксированная icon-cell слева и живой HTML text-cell справа.\n\nMOBILE\nStandalone top gap 16px; padding 16px; gap 12px; radius 22px.\nIcon 24×24px; text 14px/140%.\n\nDESKTOP\nStandalone top gap 24px; padding 24px; gap 16px; radius 26px.\nIcon 26×26px; text 18px/140%.\n\nASSET\nИз конкретного Desktop-инстанса экспортировать внешний слой “alert-icon @4x” отдельно от HTML-фона и текста как PNG @4x с прозрачностью за пределами собственного визуала. Один файл/src использовать в Mobile и Desktop. Не добавлять подложку, если её нет внутри alert-icon @4x; иконка фиксированная, без width:100%.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "337:6569",
+      "name": "Banner/App-Download",
+      "node_kind": "COMPONENT_SET",
+      "description": "Banner/App-Download\n\nSCOPE\nОбычный контентный блок внутри общего email-padding. Не добавлять второй боковой inset. Mobile и Desktop реализовать отдельными внешними вариантами.\n\nASSETS\nВсе assets экспортировать из конкретного Desktop-инстанса письма.\n— app-logo @4x: экспортировать внешний визуальный слой вместе с его собственным Fill #FFFFFF, без HTML-padding; один PNG/src; display 163×46px Mobile и 219×62px Desktop.\n— store-buttons: общий контейнер четырёх кнопок в каждом варианте.\n— store icons: экспортировать только вложенные слои rustore-icon @4x, google-play-icon @4x, appgallery-icon @4x и getapps-icon @4x без button-фона, radius, padding и текста; PNG с прозрачностью; один src; display 26×26px Mobile и 32×32px Desktop.\n— QR: экспортировать целиком слой qr-code @4x со знаком в центре; display 130×130px; только Desktop.\nНе добавлять asset-подложку в HTML, если её нет внутри экспортируемого слоя.\n\nMOBILE\nTop gap 16px. Карточка #FFFFFF: padding 22px, radius 22px, основной gap 16px.\nПорядок:\n1. app logo 163×46px;\n2. HTML description 14px/140%, #48494A;\n3. четыре store buttons вертикально на всю внутреннюю ширину.\n\nStore buttons: width 100%, height 44px, vertical gap 8px, radius 24px. Каждая кнопка — отдельная ссылка на всю площадь.\nВнутри: icon 26×26px → gap 8px → живой HTML-текст 14px/140% Medium; вся группа центрируется внутри кнопки.\nRuStore: фон #1E60DD, текст #FFFFFF. GooglePlay, AppGallery и GetApps: фон #F8F8FA, текст #2B2C2E.\nНе собирать кнопки в сетку 2×2.\n\nDESKTOP\nTop gap 24px. Карточка #FFFFFF: padding 32px, radius 26px, основной gap 24px.\nВерхняя строка: слева вертикальная группа app logo 219×62px и HTML description 18px/140%, #48494A с gap 16px; справа QR 130×130px; gap между колонками 24px.\nНижняя строка: четыре icon-only ссылки 116×56px, gap 8px, radius 50px. Иконки 32×32px центрированы. RuStore — фон #1E60DD, остальные — фон #F8F8FA. Видимого текста нет; alt содержит название магазина.\n\nHref каждой кнопки брать из данных конкретного письма.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "398:7570",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "398:7598",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "398:7759",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "398:7953",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "459:29175",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "459:29176",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "459:29177",
+      "name": "Block/Transaction-Success",
+      "node_kind": "COMPONENT_SET",
+      "description": "Block/Transaction-Success\n\nSCOPE\nОбычный контентный блок внутри общего email-padding. Внешний top gap: Mobile 16px, Desktop 24px.\n\nCARD\nКорневой card не имеет собственного Fill, обрезает содержимое по radius 22px Mobile / 26px Desktop. Белый фон #FFFFFF задан отдельно у summary-area и details-area. Между ними ровно один divider высотой 1px с Fill #DFDFE0.\n\nSECTION 1 — HEADER\nMobile: padding 22px, gap 16px.\nDesktop: padding 32px, gap 24px.\n\nPartner row:\n— Desktop: горизонтально [partner-badge @4x 72×72] → gap 24px → text-details → live status badge; все элементы выровнены по вертикальному центру;\n— Mobile: вертикальный стек по центру [partner-badge @4x → text-details → status], gap 16px.\n\nPartner name, amount и optional description остаются HTML. Описание показывать только при включённом свойстве Show Description.\n\nSECTION 2 — DETAILS\nMobile: padding 22px, gap 16px.\nDesktop: padding 32px, gap 24px.\n\nСначала Details/Operation, затем optional limit-alert (свойство Show Limit Alert). Внутри Details/Operation нет divider между строками; единственный divider компонента разделяет две основные секции.\n\nASSETS\nAsset/Partner-Badge @4x экспортировать целиком из соответствующего слоя конкретного Desktop-инстанса. Использовать один src и display 72×72 в обоих вариантах. Status — живой HTML по Badge/Operation-Status.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "459:29367",
+      "name": "Viewport=Mobile, State=Pending",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "459:29369",
+      "name": "Viewport=Mobile, State=Success",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "459:29371",
+      "name": "Viewport=Mobile, State=Error",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "459:29443",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "459:30150",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "459:30151",
+      "name": "Block/Transaction-Error",
+      "node_kind": "COMPONENT_SET",
+      "description": "Block/Transaction-Error\n\nSCOPE\nОбычный контентный блок внутри общего email-padding. Внешний top gap: Mobile 16px, Desktop 24px.\n\nCARD\nКорневой card не имеет собственного Fill, обрезает содержимое по radius 22px Mobile / 26px Desktop. Белый фон #FFFFFF задан отдельно у summary-area и body-area. Между ними ровно один divider высотой 1px с Fill #DFDFE0.\n\nSECTION 1 — HEADER\nMobile: padding 22px, gap 16px.\nDesktop: padding 32px, gap 24px.\n\nPartner row:\n— Desktop: горизонтально [partner-badge @4x 72×72] → gap 24px → text-details → error status; вертикальное выравнивание по центру;\n— Mobile: вертикальный центрированный стек с gap 16px.\n\nPartner name, amount и status остаются HTML, кроме графического partner-badge @4x.\n\nSECTION 2 — BODY\nНесколько HTML-параграфов в порядке конкретного инстанса.\nMobile: padding 22px, основной gap 16px. В primary-content heading/error-description 14px #48494A; notice-text 12px #AA7100; supporting-content 12px #98999C.\nDesktop: padding 32px, основной gap 24px. В primary-content heading/error-description 18px #48494A; notice-text 14px #AA7100; supporting-content 14px #98999C.\n\nНе добавлять divider между абзацами. Status реализовать живым Badge/Operation-Status с State=Error.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "466:13290",
+      "name": "Viewport=Desktop, State=Pending",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "466:13292",
+      "name": "Viewport=Desktop, State=Success",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "466:13294",
+      "name": "Viewport=Desktop, State=Error",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "472:16997",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "472:16998",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "472:16999",
+      "name": "Block/Contact-Support",
+      "node_kind": "COMPONENT_SET",
+      "description": "Block/Contact-Support\n\nSCOPE\nОбычный контентный блок внутри общего email-padding.\nTop gap: Mobile 16px, Desktop 24px.\n\nCARD\ncontent-area с Fill #FFFFFF:\n— Mobile: padding 22px, radius 22px, gap 16px;\n— Desktop: padding 32px, radius 26px, gap 24px.\nВсё содержимое центрировано.\n\nORDER\n1. phone-cta: HTML heading → Auto Layout gap 12px → кликабельный номер телефона. Отдельного spacer-слоя нет.\n2. help-notice: вложенный блок с Fill #F8F8FA и одним HTML-текстом; «Помощь» — подчёркнутая ссылка внутри этой же строки.\n\nPHONE\nСсылка tel:+74951222088; видимый текст +7 (495) 122-20-88.\nMobile: heading 14px (Mobile/Body/Large), phone 18px (Mobile/Heading).\nDesktop: heading 18px (Desktop/Body/Large), phone 26px (Desktop/Heading).\nЦвет номера #00991F.\n\nHELP NOTICE\nMobile: padding 16px, radius 14px; help-text 12px/140% (Mobile/Body/Medium).\nDesktop: padding 24px, radius 18px; help-text 16px/140% (Desktop/Body/Medium).\nОсновной текст #757678; встроенное слово «Помощь» #00991F и подчёркнуто. URL брать из данных письма; не заменять ссылкой главной страницы.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "477:21325",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "477:21326",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "477:21327",
+      "name": "Details/Operation",
+      "node_kind": "COMPONENT_SET",
+      "description": "Details/Operation\n\nSCOPE\nВложенная таблица реквизитов операции. Не добавляет внешний card, padding или section divider.\n\nDesktop:\n— rows расположены вертикально с gap 16px;\n— label-cell 200px слева;\n— value-cell занимает остаток и выравнивается вправо;\n— текст 16px/140%, Regular;\n— label #98999C, value #000000.\n\nMobile:\n— rows с gap 12px;\n— внутри каждого row label расположен над value с gap 4px;\n— обе строки выровнены влево;\n— текст 14px/140%, Regular.\n\nОдна responsive-структура допустима: порядок полей не меняется, на Mobile td складываются вертикально. Между rows нет divider. Values не делать жирными. Состав и порядок брать из конкретного инстанса.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "481:19664",
+      "name": "Asset/Bank-Badge @4x",
+      "node_kind": "COMPONENT",
+      "description": "Asset/Bank-Badge @4x\n\nАтомарный графический asset банковского бейджа. Мастер имеет размер 72×72px, но не задаёт универсальный HTML display-размер.\n\nЭкспортировать внешний визуальный badge целиком из соответствующего слоя конкретного Desktop-инстанса письма, включая круглый фон/рамку. Не экспортировать вложенный логотип отдельно и не добавлять HTML-padding внутрь изображения.\n\nDisplay-размер определяет родительский layout-компонент. Использовать один общий src для Mobile и Desktop.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "481:19665",
+      "name": "Asset/Partner-Badge @4x",
+      "node_kind": "COMPONENT",
+      "description": "Asset/Partner-Badge @4x\n\nАтомарный графический asset партнёрского бейджа. Мастер имеет размер 72×72px, но не задаёт универсальный HTML display-размер.\n\nЭкспортировать внешний визуальный badge целиком из соответствующего слоя конкретного Desktop-инстанса письма, включая круглый фон и логотип. Не экспортировать вложенный логотип отдельно.\n\nDisplay-размер определяет родительский layout-компонент. В Block/Transaction-Success и Block/Transaction-Error он равен 72×72px в обеих версиях. Использовать один общий src.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "484:20039",
+      "name": "Asset/Icon-Badge @4x",
+      "node_kind": "COMPONENT",
+      "description": "Asset/Icon-Badge @4x\n\nУниверсальный атомарный графический badge. Мастер имеет размер 72×72px, но не задаёт универсальный HTML display-размер.\n\nЭкспортировать внешний визуальный badge целиком из соответствующего слоя конкретного Desktop-инстанса письма, включая круглый фон/рамку и внутреннюю иконку. Не добавлять HTML-padding внутрь изображения.\n\nDisplay-размер определяет родительский layout-компонент. Использовать один общий src для Mobile и Desktop.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "484:20068",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "484:20760",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "484:20761",
+      "name": "Details/Transfer",
+      "node_kind": "COMPONENT_SET",
+      "description": "Details/Transfer\n\nSCOPE\nВложенная таблица реквизитов перевода/возврата. Не добавляет внешний card, padding или section divider.\n\nROWS\nКаждое видимое поле — отдельная presentation-table. Между полями нет линий.\n\nDesktop:\n— общий вертикальный gap между rows 16px;\n— label-cell 200px слева;\n— value-cell занимает остаток и выравнивается вправо;\n— текст 16px/140%, Regular;\n— label #98999C, value #000000.\n\nMobile:\n— общий gap между rows 12px;\n— внутри row label расположен над value с gap 4px;\n— обе строки выровнены влево;\n— текст 14px/140%, Regular.\n\nСостав, порядок и текст полей брать из конкретного инстанса. Для Mobile допускается одна responsive-разметка со stacking td, поскольку порядок не меняется. Не добавлять divider и не делать values жирными.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "491:22074",
+      "name": "Asset/Status-Badge-Positive @4x",
+      "node_kind": "COMPONENT",
+      "description": "Asset/Status-Badge-Positive @4x\n\nАтомарная положительная status-иконка. Мастер имеет размер 72×72px.\n\nЭкспортировать внешний badge целиком из конкретного Desktop-инстанса, включая градиентный круг и белую иконку. Не экспортировать внутренний vector отдельно и не воспроизводить фон в HTML.\n\nDisplay-размер определяет родительский компонент; в Block/Receipt-Info используется 72×72px. Один общий src для Mobile и Desktop.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "491:22178",
+      "name": "Asset/Status-Badge-Negative @4x",
+      "node_kind": "COMPONENT",
+      "description": "Asset/Status-Badge-Negative @4x\n\nАтомарная отрицательная status-иконка. Мастер имеет размер 72×72px.\n\nЭкспортировать внешний badge целиком из конкретного Desktop-инстанса, включая градиентный круг и белую иконку. Не экспортировать внутренний vector отдельно и не воспроизводить фон в HTML.\n\nDisplay-размер определяет родительский компонент. Один общий src для Mobile и Desktop.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "491:22369",
+      "name": "Icon/Lock-Password-Fill",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "491:22370",
+      "name": "Icon/Fingerprint-2-Line",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "491:22371",
+      "name": "Icon/Smartphone-Fill",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "491:22372",
+      "name": "Icon/Mail-Fill",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "491:22373",
+      "name": "Icon/User-Forbid-Fill",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "491:22374",
+      "name": "Icon/Receipt-Fill",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "491:22375",
+      "name": "Icon/User-Follow-Fill",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "491:22376",
+      "name": "Icon/User-Unfollow-Fill",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "491:22454",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "497:25953",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "497:25954",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "497:25955",
+      "name": "Details/Suspicious-Operation",
+      "node_kind": "COMPONENT_SET",
+      "description": "Details/Suspicious-Operation\n\nSCOPE\nВложенный notice-блок с заголовком и Details/Operation-Plain. Не добавляет внешний email-padding.\n\nCONTAINER\nФон #F8F8FA.\nDesktop: padding 24px, основной gap 24px, ширина по родителю.\nMobile: padding 16px, основной gap 16px.\nRadius: Mobile 14px, Desktop 18px.\n\nORDER\n1. HTML heading с цветом #DE2141 (Figma Red_500): Mobile 14px/140% (Mobile/Body/Large), Desktop 16px/140% (Desktop/Body/Medium).\n2. Details/Operation-Plain.\n\nВнутри таблицы реквизитов нет divider. Desktop строки горизонтальные с gap 16px; Mobile label/value stacked с внутренним gap 4px и gap между строками 12px. Состав полей определяет конкретный инстанс.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "497:26054",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "497:26055",
+      "name": "Block/Personal-Data-Update",
+      "node_kind": "COMPONENT_SET",
+      "description": "Block/Personal-Data-Update\n\nSCOPE\nОбычный контентный блок, а не полный шаблон письма. Размещается внутри общего email-padding.\nTop gap: Mobile 16px, Desktop 24px.\n\nCARD\nКорневой card не имеет собственного Fill, обрезает содержимое по radius 22px Mobile / 26px Desktop. Белый фон #FFFFFF задан отдельно у status-area и body-area. Между ними ровно один divider высотой 1px с Fill #DFDFE0.\n\nHEADER SECTION\nMobile: padding 22px; вертикальный центрированный header [status icon 72×72 → heading], gap 16px.\nDesktop: padding 32px; горизонтальный header [status icon 72×72 → heading], gap 24px, вертикальное выравнивание по центру.\n\nBODY SECTION\nMobile: padding 22px, основной gap 16px, text-content gap 8px.\nDesktop: padding 32px, основной gap 24px, text-content gap 12px.\n\nПорядок:\n1. HTML text-content внутри body-area конкретного инстанса.\n2. Details/Suspicious-Operation — весь вложенный инстанс виден только при Show Operation Description.\n3. alert — виден только при Show Alert.\n4. legal disclaimer — виден только при Show Disclaimer.\n\nСсылка action-link остаётся HTML-текстом цвета #18B037. Status icon экспортировать целиком из конкретного Desktop-инстанса и использовать одним src. Не добавлять divider внутри Details или между обычными абзацами.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "497:26101",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "497:26102",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "497:26103",
+      "name": "Details/Operation-Plain",
+      "node_kind": "COMPONENT_SET",
+      "description": "Details/Operation-Plain\n\nSCOPE\nВложенная таблица label/value без собственного заголовка, фона, padding и section divider.\n\nDesktop:\n— rows расположены вертикально с gap 16px;\n— label-cell 200px слева;\n— value-cell занимает остаток и выравнивается вправо;\n— 16px/140% Regular;\n— label #98999C, value #000000.\n\nMobile:\n— rows с gap 12px;\n— label расположен над value с внутренним gap 4px;\n— обе строки слева;\n— 14px/140% Regular.\n\nМежду полями нет линий. Values не делать жирными. Состав и порядок полей брать из конкретного инстанса.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "499:2429",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "499:2430",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "499:2431",
+      "name": "Email/Footer-Legal",
+      "node_kind": "COMPONENT_SET",
+      "description": "Email/Footer-Legal\n\nSCOPE\nПолноширинный footer внутри 600px email-wrapper. Не помещать в общий email-padding. Использовать только когда этот компонент выбран в конкретном инстансе письма; тип письма сам по себе не заменяет выбранный footer.\n\nLAYOUT\nКорневой компонент создаёт только внешний отступ перед footer: Mobile 16px, Desktop 24px.\nВнутри расположен footer-body на всю ширину с фоном #F3F3F5, без border, shadow и radius.\nfooter-body:\n— Mobile: padding 0 16px 16px;\n— Desktop: padding 0 24px 24px.\nВ Footer-Legal внутри footer-body находится одна disclaimer-section, поэтому межсекционный gap не добавлять.\n\nCONTENT\ndisclaimer-section не добавляет собственного padding.\nGap между текстовыми элементами: Mobile 8px, Desktop 12px.\nТекст: Roboto/Arial; Mobile 12px/140% Regular, Desktop 14px/140% Regular; #98999C, по центру. Содержимое брать из конкретного инстанса. Сохранять смысловые hard breaks, но не превращать автоматический перенос Figma в &lt;br&gt;.\n\nНе добавлять social-section, иконки или ссылки, которых нет в выбранном инстансе. Тёмный фон вокруг библиотечного компонента является только презентационным.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "502:24638",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "502:24639",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "502:24640",
+      "name": "Details/Receipt",
+      "node_kind": "COMPONENT_SET",
+      "description": "Details/Receipt\n\nSCOPE\nВложенная таблица реквизитов чека. Не добавляет внешний card, padding или section divider.\n\nDesktop:\n— rows с вертикальным gap 16px;\n— label-cell 200px;\n— value-cell занимает остаток и выравнивается вправо;\n— 16px/140% Regular;\n— label #98999C, value #000000.\n\nMobile:\n— rows с gap 12px;\n— внутри row label над value, gap 4px;\n— обе строки слева;\n— 14px/140% Regular.\n\nМежду строками нет divider. Values не делать жирными. Состав, порядок и значения полей брать из конкретного инстанса.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "502:24693",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "502:24694",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "502:24695",
+      "name": "Block/Receipt-Info",
+      "node_kind": "COMPONENT_SET",
+      "description": "Block/Receipt-Info\n\nSCOPE\nОбычный контентный блок внутри общего email-padding.\nTop gap: Mobile 16px, Desktop 24px.\n\nCARD\nВнешнего белого card-слоя нет. status-area и receipt-area имеют Fill #FFFFFF и разделены одним divider высотой 1px с Fill #DFDFE0. У status-area скруглены только верхние углы: Mobile 22px, Desktop 26px; нижние 0px. У receipt-area верхние углы 0px, скруглены только нижние: Mobile 22px, Desktop 26px.\n\nHEADER SECTION\nMobile: padding 22px; вертикальный центрированный стек [status-badge-positive @4x 72×72 → HTML heading], gap 16px.\nDesktop: padding 32px; горизонтальная строка [badge 72×72 → heading], gap 24px, вертикальное выравнивание по центру.\n\nDETAILS SECTION\nMobile: padding 22px; Details/Receipt с gap строк 12px и stacked label/value.\nDesktop: padding 32px; Details/Receipt с gap строк 16px и горизонтальными label/value.\n\nВнутри Details/Receipt нет divider. Status icon экспортировать внешним badge целиком из конкретного Desktop-инстанса и использовать одним src.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "502:25046",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "502:25047",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "502:25048",
+      "name": "Banner/Fiscal-Check-Link",
+      "node_kind": "COMPONENT_SET",
+      "description": "Banner/Fiscal-Check-Link\n\nSCOPE\nОбычный контентный блок внутри общего email-padding.\nTop gap: Mobile 16px, Desktop 24px.\n\nSTRUCTURE\nДве отдельные строки с Fill #FFFFFF; расстояние задаётся Auto Layout gap корневого компонента, отдельного spacer-слоя нет:\n— Mobile gap 8px;\n— Desktop gap 12px.\n\nКаждая строка — presentation-table: logo-cell → text-cell → chevron-cell. В каждой ячейке находится отдельный &lt;a&gt; с одинаковым URL соответствующей строки. Таблицу внутрь ссылки не помещать. Padding/gap размещать внутри linked cells, чтобы видимая площадь строки была кликабельной.\n\nMobile:\n— row padding 16px, gap 16px;\n— logo 48×48, chevron 24×24;\n— text 14px;\n— высота строки определяется текстом конкретного инстанса.\n\nDesktop:\n— row padding 24px, gap 24px;\n— logo 48×48, chevron 24×24;\n— text 18px.\n\nЭкспортировать отдельно ofd-badge @4x из item-01, fns-badge @4x из item-02 и общий chevron-icon @4x из конкретного Desktop-инстанса. Бейджи содержат собственный видимый Fill #F8F8FA; не добавлять к ним внешний искусственный фон. Для каждого визуального ассета один src в Mobile и Desktop. URL OFD и ФНС брать из данных письма; не придумывать.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "510:16699",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "510:16700",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "510:16701",
+      "name": "Block/Instruction-Steps",
+      "node_kind": "COMPONENT_SET",
+      "description": "Block/Instruction-Steps\n\nSCOPE\nОбычный контентный блок внутри общего email-padding.\nTop gap: Mobile 16px, Desktop 24px.\n\nCARD\ncontent-area с Fill #FFFFFF.\nMobile: padding 22px, radius 22px, основной gap 16px.\nDesktop: padding 32px, radius 26px, основной gap 24px.\n\nORDER\n1. Optional warning heading.\n2. Intro paragraphs и кастомный numbered-list.\n3. Optional alert.\n4. Optional disclaimer.\nВидимость определяется свойствами конкретного инстанса.\n\nWARNING HEADING\nMobile: icon 20px, gap 4px, text 14px/140% #DE2141.\nDesktop: icon 24px, gap 6px, text 18px/140% #DE2141.\nИконка — отдельный фиксированный asset.\n\nNUMBERED LIST\nНе использовать браузерный &lt;ol&gt;. Каждый пункт — собственная таблица:\n— Mobile: number-cell 22px, marker-cell 42px; Desktop: number-cell 32px, marker-cell 64px;\n— gap от number-cell/marker-cell до основного текста 12px в обеих версиях;\n— sub-item использует символ “—”;\n— текст остаётся HTML.\n\nMobile: основной текст 14px/140%, общий text gap 8px, gap внутри list-item 4px.\nDesktop: 18px/140%, общий text gap 12px, gap внутри list-item 6px.\n\nALERT\nФон #FFF1C9, текст #AA7100.\nMobile: padding 16px, radius 14px.\nDesktop: padding 24px, radius 18px.\nТелефон и email внутри текста делать отдельными ссылками.\n\nDISCLAIMER\nMobile: 12px/140% (Mobile/Caption), #98999C. Desktop: 14px/140% (Desktop/Caption), #98999C. Divider добавлять только если он видим в конкретном инстансе; в текущих библиотечных вариантах divider скрыт.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "911:3990",
+      "name": "Style=Plain",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "911:3991",
+      "name": "Style=Numbered",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "911:3992",
+      "name": "Asset/Card-Image @2x",
+      "node_kind": "COMPONENT_SET",
+      "description": "Asset/Card-Image @2x\n\nSCOPE\nАтомарный составной asset внутри Card/Image. HTML-текст карточки в asset не входит.\n\nSOURCE AND DISPLAY MODES\nSource mode: RENDERED NODE.\nDisplay mode: DIRECT IMAGE.\n\nVARIANTS\nStyle=Plain: только изображение.\nStyle=Numbered: изображение вместе с видимым слоем Number. Номер является частью итогового JPEG; не верстать его живым HTML и не экспортировать отдельным файлом.\n\nEXPORT BOUNDARY\nИз конкретного Desktop-инстанса письма экспортировать точный вложенный инстанс “Asset/Card-Image @2x” после применения Style и всех overrides, включая собственный Fill и все видимые вложенные графические элементы.\n\nНе экспортировать main component, исходный библиотечный вариант или placeholder. Не извлекать только IMAGE Fill и не отделять Number.\n\nЕсли фактический export boundary содержит presentation-only radius или clipsContent, экспортировать через временную копию того же инстанса с общим и покомпонентными radius 0 и clipsContent=false. Fill, crop, размеры, пропорции, Style, overrides и вложенную графику не изменять. Сначала экспортировать lossless PNG @2x, затем локально перекодировать его в JPEG по общей инструкции. Временную копию удалить и проверить отсутствие изменений исходного инстанса.\n\nPROPORTIONS AND RADIUS\nDesktop display: 232×148px; итоговый JPEG @2x: 464×296px. Asset остаётся прямоугольным в пропорции 232:148. Скругление 14px Mobile / 18px Desktop задаёт clipping-контейнер Card/Image в HTML; не запекать скругление или matte-подложку в JPEG.\n\nИспользовать один JPEG и один src для Mobile и Desktop.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "911:4130",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "911:4131",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "911:4132",
+      "name": "Card/Image",
+      "node_kind": "COMPONENT_SET",
+      "description": "Card/Image\n\nSTRUCTURE\nСамостоятельная карточка без общего HTML-фона: Asset/Card-Image @2x, затем живые HTML heading, description и link. Слои текста: heading, description, link.\n\nMOBILE\nВертикальная структура на 100% ширины родителя.\nImage: width:100%; height:auto; без HTML-атрибута height; контрольная пропорция 232:148; radius 14px.\nGap image→text-content 16px. Внутри text-content gap 8px.\nHeading 16px, description 14px/140%, link 14px/140%.\n\nDESKTOP\nОдна presentation-table строка: image-cell 232×148px, spacer-cell 24px, text-cell 232px; text-cell выровнена по верхнему краю.\nImage radius 18px. Внутри text-content gap 6px.\nHeading 20px, description 16px/140%, link 16px/140%.\n\nASSET\nSource mode: RENDERED NODE.\nDisplay mode: DIRECT IMAGE.\n\nИз конкретного Desktop-инстанса письма экспортировать точный вложенный инстанс Asset/Card-Image @2x после применения Style и всех overrides. Экспортировать весь составной asset: фактическое изображение из Fill этого инстанса, видимый Number для Style=Numbered и остальные вложенные графические элементы, относящиеся к asset.\n\nНе экспортировать main component или библиотечный placeholder. Не извлекать только исходный IMAGE Fill. Number не верстать живым HTML и не экспортировать отдельно.\n\nИтоговый asset должен быть прямоугольным, без запечённого скругления и matte-подложки. Радиус 14px Mobile / 18px Desktop задаёт clipping-контейнер в HTML. Если export boundary в Figma содержит presentation-only radius или clipsContent, применять процедуру временной копии из основной инструкции.\n\nDesktop display: 232×148px; итоговый JPEG @2x: 464×296px. Один файл и один src использовать в Mobile и Desktop.\n\nНа Mobile использовать width:100%; height:auto без HTML-атрибута height. Изменение ширины изображения обязано пропорционально менять его высоту. Не задавать фиксированную высоту, не использовать cover и не растягивать изображение одновременно по двум осям.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "946:25480",
+      "name": "Icon/Shopping-Basket-2-Line",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "946:25485",
+      "name": "Icon/MIR-Logo",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "946:25576",
+      "name": "Icon/Gift-2-Line",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "946:25769",
+      "name": "Asset/Feature-Icon @4x",
+      "node_kind": "COMPONENT",
+      "description": "Asset/Feature-Icon @4x\n\nASSET ROLE\nАтомарный составной visual asset для карточек и строк с иконками.\n\nEXPORT\nИз конкретного Desktop-инстанса письма экспортировать внешний слой Asset/Feature-Icon @4x целиком, включая собственный круглый фон и glyph.\nФормат PNG @4x с прозрачностью за пределами собственного визуала. Не экспортировать glyph отдельно, не добавлять HTML-подложку и не запекать дополнительный фон.\n\nUSAGE\nИспользовать один файл и один src в Mobile и Desktop. Display-size задаёт родительский компонент. Иконка остаётся фиксированной и не получает width:100%.",
+      "documentation_links": []
+    },
+    {
+      "node_id": "946:26514",
+      "name": "Viewport=Mobile",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "946:26515",
+      "name": "Viewport=Desktop",
+      "node_kind": "COMPONENT",
+      "description": "",
+      "documentation_links": []
+    },
+    {
+      "node_id": "946:26516",
+      "name": "Block/Icon-List",
+      "node_kind": "COMPONENT_SET",
+      "description": "Block/Icon-List\n\nSCOPE\nОбычный контентный блок внутри общего email-padding.\nTop gap: Mobile 16px, Desktop 24px.\n\nSTRUCTURE\nОболочка блока #FFFFFF: HTML heading → таблица видимых Row/Icon → optional Button/Secondary → optional block caption. Рендерить строки конкретного инстанса в их фактическом порядке.\n\nMOBILE\nCard: padding 22px, radius 22px, основной gap 22px.\nHeading 18px.\nRows: вертикально, gap 22px.\nRow/Icon: icon 42×42px → gap 16px → HTML text-content. Локальный text gap 4px; основной текст 14px/140%; optional supporting text 12px/140%.\nOptional Button/Secondary — full-width.\n\nDESKTOP\nCard: padding 32px, radius 26px, основной gap 32px.\nHeading 26px.\nRows: вертикально, gap 24px.\nRow/Icon: icon 56×56px → gap 24px → HTML text-content. Локальный text gap 6px; основной текст 18px/140%; optional supporting text 16px/140%.\nOptional Button/Secondary — content-width.\n\nICON ASSET\nКаждую Asset/Feature-Icon @4x экспортировать целиком из конкретного Desktop-инстанса как PNG @4x с прозрачностью за пределами собственного визуала. Фон и glyph внутри asset входят в один файл. Один src использовать в Mobile и Desktop; display-size задаёт вариант. Не добавлять HTML-подложку и не применять width:100%.\n\nBLOCK CAPTION\nЕсли Show Caption включён, вывести отдельный HTML-текст на всю внутреннюю ширину: Mobile 12px/140% Regular, Desktop 14px/140% Regular, #98999C, слева. Gap от предыдущего видимого элемента: Mobile 22px, Desktop 32px.",
+      "documentation_links": []
+    }
+  ]
+}
+
