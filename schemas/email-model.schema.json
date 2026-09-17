@@ -4,10 +4,11 @@
   "title": "CUPIS temporary normalized email model",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "id", "root"],
+  "required": ["schema_version", "id", "metadata", "root"],
   "properties": {
-    "schema_version": { "const": "1.0.0" },
+    "schema_version": { "const": "1.1.0" },
     "id": { "$ref": "#/$defs/id" },
+    "metadata": { "$ref": "#/$defs/metadata" },
     "root": { "$ref": "#/$defs/instance" }
   },
   "$defs": {
@@ -15,6 +16,18 @@
       "type": "string",
       "minLength": 1,
       "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["language", "direction"],
+      "properties": {
+        "language": {
+          "type": "string",
+          "pattern": "^[A-Za-z]{2,3}(?:-[A-Za-z0-9]{2,8})*$"
+        },
+        "direction": { "enum": ["ltr", "rtl"] }
+      }
     },
     "scope": {
       "enum": ["all", "mobile", "desktop"]
@@ -26,8 +39,28 @@
           "additionalProperties": false,
           "required": ["type", "value"],
           "properties": {
-            "type": { "enum": ["plain-text", "url", "placeholder", "alt-text"] },
+            "type": { "enum": ["plain-text", "url", "placeholder"] },
             "value": { "type": "string" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "purpose", "value"],
+          "properties": {
+            "type": { "const": "alt-text" },
+            "purpose": { "const": "informative" },
+            "value": { "type": "string", "minLength": 1 }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "purpose", "value"],
+          "properties": {
+            "type": { "const": "alt-text" },
+            "purpose": { "const": "decorative" },
+            "value": { "const": "" }
           }
         },
         {
