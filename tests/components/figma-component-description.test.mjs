@@ -174,14 +174,16 @@ test("renderer rejects compact-description bounds with typed errors", async () =
       error?.path === "/documentation/purpose",
   );
 
-  const multiline = structuredClone(await byId("banner-secondary"));
-  multiline.documentation.purpose = "Первая строка.\nВторая строка.";
-  assert.throws(
-    () => renderFigmaComponentDescription(multiline),
-    (error) =>
-      error?.code === "COMPONENT_PURPOSE_MULTILINE" &&
-      error?.path === "/documentation/purpose",
-  );
+  for (const separator of ["\n", "\r", "\u2028", "\u2029"]) {
+    const multiline = structuredClone(await byId("banner-secondary"));
+    multiline.documentation.purpose = `Первая строка.${separator}Вторая строка.`;
+    assert.throws(
+      () => renderFigmaComponentDescription(multiline),
+      (error) =>
+        error?.code === "COMPONENT_PURPOSE_MULTILINE" &&
+        error?.path === "/documentation/purpose",
+    );
+  }
 
   const tooManyCritical = structuredClone(await byId("banner-secondary"));
   tooManyCritical.constraints = ["one", "two", "three"].map((id) => ({
@@ -244,18 +246,7 @@ test("renderer is deterministic and does not mutate the component record", async
   assert.equal(first.endsWith("\n"), true);
 });
 
-test("renderer and comparison normalize every JavaScript line separator", async () => {
-  const record = structuredClone(await byId("banner-secondary"));
-  record.documentation.purpose = "Первая строка.\u2028Вторая строка.\u2029Третья строка.";
-
-  assert.equal(
-    renderFigmaComponentDescription(record),
-    [
-      "CUPIS ID: banner-secondary",
-      "PURPOSE: Первая строка. Вторая строка. Третья строка.",
-      "RENDER: HYBRID",
-    ].join("\n"),
-  );
+test("comparison normalizes every JavaScript line separator", () => {
   assert.deepEqual(
     compareFigmaComponentDescription(
       "one\r\ntwo\rthree\u2028four\u2029",
@@ -264,7 +255,6 @@ test("renderer and comparison normalize every JavaScript line separator", async 
     [],
   );
 });
-
 test("comparison reports one exact drift and otherwise ignores no content", () => {
   assert.deepEqual(
     compareFigmaComponentDescription("one\r\ntwo\r\n", "one\ntwo\n"),
