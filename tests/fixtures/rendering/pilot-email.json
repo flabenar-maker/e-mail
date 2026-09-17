@@ -1,6 +1,10 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "id": "stage-8-representative-pilot",
+  "metadata": {
+    "language": "ru",
+    "direction": "ltr"
+  },
   "root": {
     "instance_id": "pilot-template",
     "component_id": "email-template",
@@ -41,6 +45,7 @@
                 "scope": "mobile",
                 "value": {
                   "type": "alt-text",
+                  "purpose": "informative",
                   "value": "Преимущества CUPIS"
                 }
               },
@@ -122,6 +127,7 @@
                 "scope": "mobile",
                 "value": {
                   "type": "alt-text",
+                  "purpose": "informative",
                   "value": "Приложение CUPIS"
                 }
               },
@@ -149,6 +155,7 @@
                 "scope": "mobile",
                 "value": {
                   "type": "alt-text",
+                  "purpose": "informative",
                   "value": "RuStore"
                 }
               },
@@ -176,6 +183,7 @@
                 "scope": "mobile",
                 "value": {
                   "type": "alt-text",
+                  "purpose": "informative",
                   "value": "Google Play"
                 }
               },
@@ -203,6 +211,7 @@
                 "scope": "mobile",
                 "value": {
                   "type": "alt-text",
+                  "purpose": "informative",
                   "value": "AppGallery"
                 }
               },
@@ -230,6 +239,7 @@
                 "scope": "mobile",
                 "value": {
                   "type": "alt-text",
+                  "purpose": "informative",
                   "value": "GetApps"
                 }
               },
@@ -248,6 +258,7 @@
                 "scope": "desktop",
                 "value": {
                   "type": "alt-text",
+                  "purpose": "informative",
                   "value": "Приложение CUPIS"
                 }
               },
@@ -266,6 +277,7 @@
                 "scope": "desktop",
                 "value": {
                   "type": "alt-text",
+                  "purpose": "informative",
                   "value": "QR-код для скачивания"
                 }
               },
@@ -275,6 +287,7 @@
                 "scope": "desktop",
                 "value": {
                   "type": "alt-text",
+                  "purpose": "informative",
                   "value": "RuStore"
                 }
               },
@@ -284,6 +297,7 @@
                 "scope": "desktop",
                 "value": {
                   "type": "alt-text",
+                  "purpose": "informative",
                   "value": "Google Play"
                 }
               },
@@ -293,6 +307,7 @@
                 "scope": "desktop",
                 "value": {
                   "type": "alt-text",
+                  "purpose": "informative",
                   "value": "AppGallery"
                 }
               },
@@ -302,6 +317,7 @@
                 "scope": "desktop",
                 "value": {
                   "type": "alt-text",
+                  "purpose": "informative",
                   "value": "GetApps"
                 }
               }
@@ -437,6 +453,7 @@
                 "scope": "all",
                 "value": {
                   "type": "alt-text",
+                  "purpose": "informative",
                   "value": "VK"
                 }
               },
@@ -455,6 +472,7 @@
                 "scope": "all",
                 "value": {
                   "type": "alt-text",
+                  "purpose": "informative",
                   "value": "Telegram"
                 }
               }

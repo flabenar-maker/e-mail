@@ -4,7 +4,7 @@ import { isAbsolute, posix, win32 } from "node:path";
 import { SystemValidationError } from "./diagnostics.mjs";
 import { validateDocumentShape } from "./schema-validation.mjs";
 
-const SUPPORTED_VERSION = "1.0.0";
+const SUPPORTED_VERSION = "1.1.0";
 const VIEWPORTS = ["mobile", "desktop"];
 
 function diagnostic(code, path, message) {
@@ -253,6 +253,19 @@ function validateDeclaredBindings(instance, record, maps, errors, path) {
 
   (instance.content_values ?? []).forEach((item, index) => {
     const itemPath = path + "/content_values/" + index;
+    if (
+      item.value?.type === "alt-text" &&
+      item.value.purpose === "informative" &&
+      item.value.value.trim().length === 0
+    ) {
+      errors.push(
+        diagnostic(
+          "EMAIL_MODEL_INFORMATIVE_ALT_EMPTY",
+          itemPath + "/value/value",
+          "Informative alt text must contain a non-whitespace value.",
+        ),
+      );
+    }
     const targetViewports = item.scope === "all" ? VIEWPORTS : [item.scope];
     const matches = targetViewports.flatMap((viewport) => {
       const element = maps[viewport].get(item.element_id);

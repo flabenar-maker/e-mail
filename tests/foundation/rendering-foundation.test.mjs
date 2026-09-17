@@ -43,7 +43,16 @@ test("loads the canonical rendering foundation", async () => {
     background_color: "#F3F3F5",
     horizontal_inset_px: 15,
     max_width_px: 600,
-    min_width_px: 300,
+    min_supported_viewport_px: 300,
+  });
+  assert.deepEqual(rendering.embedded_css, { max_bytes_exclusive: 16384 });
+  assert.deepEqual(rendering.color_scheme, {
+    declaration: "none",
+    dark_variant: "none",
+  });
+  assert.deepEqual(rendering.responsive_fallback, {
+    without_embedded_css: "desktop",
+    validation: "required-before-change",
   });
   assert.deepEqual(
     rendering.responsive_strategies.map((item) => item.id),
@@ -84,7 +93,7 @@ test("shape validation rejects unsupported version", async () => {
     canonicalRendering(),
     readSchema(),
   ]);
-  rendering.schema_version = "1.1.0";
+  rendering.schema_version = "2.0.0";
 
   const errors = validateRenderingShape(rendering, schema);
 
@@ -115,7 +124,7 @@ test("strict YAML rejects duplicate rendering keys", () => {
   assert.throws(
     () =>
       parseStrictYaml(
-        "schema_version: 1.0.0\nschema_version: 1.0.0\n",
+        "schema_version: 1.1.0\nschema_version: 1.1.0\n",
         "rendering.yaml",
       ),
     (error) => error.code === "yaml-duplicate-key",
@@ -218,4 +227,49 @@ test("combined foundation validator loads canonical data", async () => {
 
   assert.equal(result.rendering.foundation.id, "rendering");
   assert.deepEqual(result.errors, []);
+});
+
+test("schema requires exact client resilience policies and rejects removed shell naming", async () => {
+  const [rendering, schema] = await Promise.all([
+    canonicalRendering(),
+    readSchema(),
+  ]);
+  rendering.embedded_css = { max_bytes_exclusive: 0 };
+  rendering.color_scheme = { declaration: "dark", dark_variant: "none" };
+  rendering.responsive_fallback = {
+    without_embedded_css: "desktop",
+    validation: "required-before-change",
+  };
+  rendering.shell.min_supported_viewport_px = 300;
+  rendering.shell.min_width_px = 300;
+
+  const errors = validateRenderingShape(rendering, schema);
+
+  assert.ok(
+    hasDiagnostic(
+      errors,
+      "rendering-schema",
+      "/embedded_css/max_bytes_exclusive",
+    ),
+  );
+  assert.ok(
+    hasDiagnostic(errors, "rendering-schema", "/color_scheme/declaration"),
+  );
+  assert.ok(hasDiagnostic(errors, "rendering-schema", "/shell"));
+});
+
+test("semantic validation rejects a viewport consumed by horizontal shell insets", async () => {
+  const rendering = await canonicalRendering();
+  delete rendering.shell.min_width_px;
+  rendering.shell.min_supported_viewport_px = 30;
+
+  const errors = validateRenderingSemantics(rendering);
+
+  assert.ok(
+    hasDiagnostic(
+      errors,
+      "RENDERING_SHELL_VIEWPORT_IMPOSSIBLE",
+      "/shell/min_supported_viewport_px",
+    ),
+  );
 });

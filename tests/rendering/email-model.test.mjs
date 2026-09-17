@@ -37,7 +37,8 @@ function record() {
 
 function model() {
   return {
-    schema_version: "1.0.0", id: "test-email",
+    schema_version: "1.1.0", id: "test-email",
+    metadata: { language: "ru", direction: "ltr" },
     root: {
       instance_id: "root-instance", component_id: "test-card",
       variants: { mobile: "mobile", desktop: "desktop" },
@@ -49,7 +50,7 @@ function model() {
         },
         {
           element_id: "image", slot_id: "alt", scope: "all",
-          value: { type: "alt-text", value: "Team" },
+          value: { type: "alt-text", purpose: "informative", value: "Team" },
         },
       ],
       asset_files: [{ asset_contract_id: "image", path: "images/card.jpg" }],
@@ -68,6 +69,25 @@ function dependencies() {
 
 function has(errors, code) {
   return errors.some((error) => error.code === code);
+}
+
+function hasPath(errors, code, path) {
+  return errors.some((error) => error.code === code && error.path === path);
+}
+
+async function loadErrors(source) {
+  const folder = await mkdtemp(join(tmpdir(), "cupis-email-model-"));
+  const modelPath = join(folder, "email-model.json");
+  await writeFile(modelPath, JSON.stringify(source), "utf8");
+  try {
+    await loadEmailModel({ modelPath, schemaPath });
+    return [];
+  } catch (error) {
+    if (error instanceof AggregateError) return error.errors;
+    throw error;
+  } finally {
+    await rm(folder, { recursive: true, force: true });
+  }
 }
 
 test("loader validates the model and normalizes restricted rich text", async () => {
@@ -134,4 +154,94 @@ test("semantic validation rejects content and property type mismatches", () => {
   const errors = validateEmailModelSemantics(value, dependencies());
   assert.ok(has(errors, "EMAIL_MODEL_CONTENT_TYPE_MISMATCH"));
   assert.ok(has(errors, "EMAIL_MODEL_PROPERTY_TYPE_MISMATCH"));
+});
+
+test("loader accepts required document metadata and tagged alt values", async () => {
+  const informative = model();
+  assert.deepEqual(await loadErrors(informative), []);
+
+  const decorative = model();
+  decorative.root.content_values[1].value = {
+    type: "alt-text",
+    purpose: "decorative",
+    value: "",
+  };
+  assert.deepEqual(await loadErrors(decorative), []);
+});
+
+test("loader rejects missing or invalid document metadata at exact paths", async () => {
+  const missing = model();
+  delete missing.metadata;
+  assert.ok(hasPath(await loadErrors(missing), "email-model-schema", "/"));
+
+  const language = model();
+  language.metadata.language = "";
+  assert.ok(
+    hasPath(
+      await loadErrors(language),
+      "email-model-schema",
+      "/metadata/language",
+    ),
+  );
+
+  const direction = model();
+  direction.metadata.direction = "auto";
+  assert.ok(
+    hasPath(
+      await loadErrors(direction),
+      "email-model-schema",
+      "/metadata/direction",
+    ),
+  );
+});
+
+test("loader rejects incomplete or contradictory tagged alt values", async () => {
+  const missingPurpose = model();
+  delete missingPurpose.root.content_values[1].value.purpose;
+  assert.ok(
+    hasPath(
+      await loadErrors(missingPurpose),
+      "email-model-schema",
+      "/root/content_values/1/value",
+    ),
+  );
+
+  const emptyInformative = model();
+  emptyInformative.root.content_values[1].value.value = "";
+  assert.ok(
+    hasPath(
+      await loadErrors(emptyInformative),
+      "email-model-schema",
+      "/root/content_values/1/value/value",
+    ),
+  );
+
+  const nonEmptyDecorative = model();
+  nonEmptyDecorative.root.content_values[1].value = {
+    type: "alt-text",
+    purpose: "decorative",
+    value: "Logo",
+  };
+  assert.ok(
+    hasPath(
+      await loadErrors(nonEmptyDecorative),
+      "email-model-schema",
+      "/root/content_values/1/value/value",
+    ),
+  );
+});
+
+test("semantic validation rejects whitespace-only informative alt text", () => {
+  const value = model();
+  value.root.content_values[1].value.value = "   ";
+
+  const errors = validateEmailModelSemantics(value, dependencies());
+
+  assert.ok(
+    hasPath(
+      errors,
+      "EMAIL_MODEL_INFORMATIVE_ALT_EMPTY",
+      "/root/content_values/1/value/value",
+    ),
+  );
 });
