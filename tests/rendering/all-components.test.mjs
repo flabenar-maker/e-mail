@@ -32,6 +32,31 @@ const sharedSourceOnlyIds = [
   "icon-user-unfollow-fill",
 ];
 
+const marketingInterpreterIds = [
+  "badge-step-number",
+  "banner-hero",
+  "banner-inline",
+  "block-bullet-list",
+  "block-cards-images",
+  "block-content",
+  "block-icon-cards",
+  "block-icon-list",
+  "block-info-alert",
+  "block-steps",
+  "card-icon",
+  "email-footer-legal",
+  "item-alert",
+  "item-bullet",
+  "item-notification",
+  "item-step",
+  "nps-options",
+];
+
+const marketingSourceOnlyIds = [
+  "asset-card-image-2x",
+  "asset-feature-icon-4x",
+];
+
 function componentById(registries, componentId) {
   for (const document of Object.values(registries)) {
     const record = document.components.find(({ id }) => id === componentId);
@@ -55,9 +80,6 @@ test("Package 11 Shared classifies every non-HTML source explicitly", async () =
     assert.equal(audited.ready, false, componentId);
   }
 
-  assert.equal(report.summary.covered_active_components, 24);
-  assert.equal(report.summary.ready_components, 8);
-  assert.equal(report.summary.missing_coverage, 37);
   assert.equal(report.summary.generic_description_facts, 0);
 });
 
@@ -73,4 +95,32 @@ test("source-only Shared records fail standalone rendering without guessed HTML"
   assert.deepEqual(result.diagnostics.map(({ code }) => code), [
     "RENDER_INTERPRETER_COVERAGE_REQUIRED",
   ]);
+});
+
+test("Package 11 Marketing gives every active record exact coverage", async () => {
+  const registries = await loadComponentRegistries({ repoRoot });
+  const rendererRegistry = await loadRendererRegistry({ repoRoot });
+  const report = auditRendererReadiness(registries, rendererRegistry);
+
+  for (const componentId of marketingInterpreterIds) {
+    const coverage = resolveRendererCoverage(rendererRegistry, componentId);
+    assert.equal(coverage.mode, "interpreter", componentId);
+    const audited = report.components.find(({ id }) => id === componentId);
+    assert.deepEqual(audited.issues, [], componentId);
+    assert.equal(audited.ready, true, componentId);
+  }
+
+  for (const componentId of marketingSourceOnlyIds) {
+    const coverage = resolveRendererCoverage(rendererRegistry, componentId);
+    assert.equal(coverage.mode, "source-only", componentId);
+    assert.ok(coverage.reason.trim().length > 0, componentId);
+    const audited = report.components.find(({ id }) => id === componentId);
+    assert.deepEqual(audited.issues, [], componentId);
+    assert.equal(audited.ready, false, componentId);
+  }
+
+  assert.equal(report.summary.covered_active_components, 43);
+  assert.equal(report.summary.ready_components, 25);
+  assert.equal(report.summary.missing_coverage, 18);
+  assert.equal(report.summary.generic_description_facts, 0);
 });

@@ -40,20 +40,24 @@ function hasDiagnostic(errors, code, path = null) {
   );
 }
 
-test("loads exact interpreter coverage for the eight pilot components", async () => {
+test("preserves exact interpreter coverage for the eight pilot components", async () => {
   const registry = await loadRendererRegistry({ repoRoot });
 
   assert.equal(registry.registry.id, "email-renderers");
   assert.equal(registry.registry.status, "shadow");
+  const interpreterCoverage = registry.coverage.filter(
+    ({ mode }) => mode === "interpreter",
+  );
   assert.deepEqual(
-    registry.coverage
-      .filter(({ mode }) => mode === "interpreter")
-      .map(({ component_id, mode }) => ({ component_id, mode })),
+    interpreterCoverage.slice(0, pilotIds.length).map(
+      ({ component_id, mode }) => ({ component_id, mode }),
+    ),
     pilotIds.map((component_id) => ({
       component_id,
       mode: "interpreter",
     })),
   );
+  assert.equal(interpreterCoverage.length, 25);
   assert.deepEqual(validateRendererRegistrySemantics(registry), []);
 });
 
