@@ -10,17 +10,17 @@
 
 **Spec:** `docs/superpowers/specs/2026-09-10-cupis-html-rendering-design.md`.
 
-## Фактический статус на 2026-09-15
+## Фактический статус на 2026-09-17
 
-Пакеты 1–9 слиты в main через PR #50–58; PR #59 исправил пилотный Mobile/Desktop layout. В main есть пилотное техническое ядро: foundation, шесть записей renderer coverage, примитивы, interpreter, модель, CLI, атомарная публикация, diagnostics и автоматические HTML-инварианты. Это не готовый маршрут сборки произвольного production-письма: для CLI ещё нужна подготовленная временная модель, а покрытие остальных компонентов не закончено.
+Пакеты 1–9 слиты в main через PR #50–58; PR #59 исправил пилотный Mobile/Desktop layout. Package 10A слит через [PR #78](https://github.com/flabenar-maker/e-mail/pull/78), Package 10B — через [PR #79](https://github.com/flabenar-maker/e-mail/pull/79), Package 10C реализован в [PR #80](https://github.com/flabenar-maker/e-mail/pull/80). В пилотном coverage теперь восемь компонентов, включая Email/Header и Email/Footer; normal-preview прошёл автоматические и browser-проверки, но покрытие остальных компонентов ещё не закончено.
 
-PR #61–64 — корректирующая Figma-сверка и уточнение контрактов после неубедительного пилотного результата. Они слиты, но не заменяют проверки пакетов 10–12. Email/Footer находится в пилотном coverage, Email/Header пока отсутствует и не должен незаметно считаться протестированным.
+PR #61–64 — корректирующая Figma-сверка и уточнение контрактов после неубедительного пилотного результата. Они остаются доказательством component facts, а Package 10C добавил Header в representative pilot и исправил выявленную generic-интерпретацию image padding и counter alignment без изменения Figma или component contracts.
 
 Открытый [PR #60](https://github.com/flabenar-maker/e-mail/pull/60) содержит только read-only исследование внешних email-практик, а не реализацию viewport preview. Изучение источников проведено; тест готового письма в Яндекс Почте, Mail.ru и Gmail и обсуждение выводов ещё впереди. PR #60 не является gate-прохождением пакета 10 и не разрешает правку текущих контрактов.
 
 [PR #66](https://github.com/flabenar-maker/e-mail/pull/66) дополнительно исправил оболочку пилота и границу Mobile/Desktop. [PR #69](https://github.com/flabenar-maker/e-mail/pull/69) временно вынес старый контур в `Legacy/` и остановил все маршруты; [PR #70](https://github.com/flabenar-maker/e-mail/pull/70) адаптировал тесты. Этот перенос не завершил shadow comparison и не разрешает использовать архивный контур для сборки. [PR #71](https://github.com/flabenar-maker/e-mail/pull/71) вернул полный generated component registry и его проверку в `main`; это отдельная починка документационного слоя, не закрывающая пакеты 10–12.
 
-Следующая работа: сначала диагностически проверить HTML, который реально создаёт обновлённый пилот, и отделить недостаток данных модели/контракта от ошибки renderer code. Перед визуальным gate пакета 10 добавить узкое coverage для Email/Header и проверить Header вместе с уже покрытым Email/Footer. Исследование PR #60 рассматривается отдельно перед принятием новых правил и не блокирует диагностику пилота; без доказанного расхождения не менять Core, contracts или renderer. Подробные checkbox-шаги ниже сохраняют исходную спецификацию реализации, а не отражают факт merge; актуальный статус пакетов указан в таблице.
+Следующая работа после слияния PR #80 — Package 11: расширение renderer coverage остальных активных компонентов. Package 10D с доставкой через Altcraft исключён из текущего маршрута 17.09.2026 по прямому решению пользователя из-за отсутствия доступа; он не считается пройденным, а `responsive_fallback.validation` остаётся `required-before-change`. Исследование PR #60 остаётся read-only и не разрешает менять текущие контракты. Подробные checkbox-шаги ниже сохраняют исходную спецификацию, а фактический маршрут задаётся этой статусной секцией и таблицей.
 
 ## Global Constraints
 
@@ -58,7 +58,7 @@ PR #61–64 — корректирующая Figma-сверка и уточне�
 | 7 | Временная модель, CLI и атомарный output | Ошибка не повреждает прежний результат | Слит: [PR #56](https://github.com/flabenar-maker/e-mail/pull/56) |
 | 8 | Render-impact digest и diagnostics | Документация не инвалидирует renderer | Слит: [PR #57](https://github.com/flabenar-maker/e-mail/pull/57) |
 | 9 | Автоматическая проверка | Property branches и HTML invariants покрыты | Слит: [PR #58](https://github.com/flabenar-maker/e-mail/pull/58) |
-| 10 | Visual scenarios, включая Email/Header и Email/Footer | Фактический HTML и Mobile/Desktop geometry подтверждены; Header добавлен в pilot coverage до visual gate | Не завершён; Footer уже покрыт, Header отсутствует; PR #60 не содержит реализации preview |
+| 10 | Visual scenarios, включая Email/Header и Email/Footer | Фактический HTML и Mobile/Desktop geometry подтверждены; Header добавлен в pilot coverage | Package 10A–10B слиты PR #78–79; Package 10C реализован в PR #80. Normal-preview прошёл, no-style Desktop fallback на 300–360px зафиксирован как неподтверждённый; Package 10D исключён из текущего маршрута без имитации client evidence |
 | 11 | Остальные активные компоненты | Readiness/coverage blockers равны нулю после пакета 10 | Не начат как пакет покрытия; PR #61–64 уточнили факты, но coverage остаётся пилотным |
 | 12 | Structured workflows и workflow-level comparison | Workflows готовы к Stage 9 без двойного контекста; сквозное сравнение остаётся этапу 13 | Не начат |
 
