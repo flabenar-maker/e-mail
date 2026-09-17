@@ -387,18 +387,28 @@ function renderShell(element, viewport, path, childHtml, context) {
       const centerGroup = axis === "horizontal" && primaryAlignment === "center";
       const spaceBetween = axis === "horizontal" && primaryAlignment === "space_between";
       const groupedAction = centerGroup && element.action?.kind === "whole-element" && visible.length > 1;
+      const counterAlignment = element.facts?.find(({ id }) => id === "counter-alignment")?.value?.value;
       const cellFor = ({ html, node }) => {
         if (node?.render_mode === "background-image") return html;
         const nodeProps = propsFromFacts(node?.facts, { viewport, mode: node?.render_mode });
-        return renderPrimitive("cell", {
-          width: spaceBetween ? node?.facts?.find(({ id }) => id === "reference-size")?.value?.width : nodeProps.width,
-          valign: element.facts?.some(({ id, value }) => id === "counter-alignment" && value.value === "center") ? "middle" : "top",
+        const cellStyle = {
+          ...(axis === "vertical" && counterAlignment === "center"
+            ? { "text-align": "center" }
+            : {}),
           ...(axis === "horizontal" && nodeProps.style["background-color"]
-            ? { bgcolor: nodeProps.style["background-color"], style: { "background-color": nodeProps.style["background-color"] } }
+            ? { "background-color": nodeProps.style["background-color"] }
             : {}),
           ...(node?.render_mode === "html-link" && nodeProps.style["text-align"] === "center"
-            ? { style: { "text-align": "center" } }
+            ? { "text-align": "center" }
             : {}),
+        };
+        return renderPrimitive("cell", {
+          width: spaceBetween ? node?.facts?.find(({ id }) => id === "reference-size")?.value?.width : nodeProps.width,
+          valign: axis === "horizontal" && counterAlignment === "center" ? "middle" : "top",
+          ...(axis === "horizontal" && nodeProps.style["background-color"]
+            ? { bgcolor: nodeProps.style["background-color"] }
+            : {}),
+          ...(Object.keys(cellStyle).length > 0 ? { style: cellStyle } : {}),
         }, groupedAction ? html : wrapAction(element, entry, html));
       };
       const rawRows = axis === "horizontal"
