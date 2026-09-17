@@ -2,6 +2,7 @@ schema_version: 1.0.0
 registry: { id: email-renderers, status: shadow }
 coverage:
   - { component_id: email-template, mode: interpreter }
+  - { component_id: email-header, mode: interpreter }
   - { component_id: button-primary, mode: interpreter }
   - { component_id: button-secondary, mode: interpreter }
   - { component_id: card-image, mode: interpreter }
