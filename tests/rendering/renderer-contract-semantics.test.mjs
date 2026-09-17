@@ -4,6 +4,12 @@ import { readFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import {
+  listComponentRecords,
+  loadComponentRegistries,
+  walkComponentElements,
+} from "../../scripts/lib/component-registry.mjs";
+
 const rendering = {
   breakpoints: [{ id: "cupis-mobile", query: "max-width", value: 660, unit: "px" }],
 };
@@ -151,4 +157,33 @@ test("email interpreter has no design-time spacing resolver dependency", async (
   const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
   const source = await readFile(join(repoRoot, "scripts/lib/email-interpreter.mjs"), "utf8");
   assert.doesNotMatch(source, /spacing-foundation|resolveDesignSpacing/u);
+});
+
+test("every direct-image contract element exposes exactly one alt-text slot", async () => {
+  const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
+  const registries = await loadComponentRegistries({ repoRoot });
+  const missing = [];
+
+  for (const { record } of listComponentRecords(registries)) {
+    walkComponentElements(record, ({ element, path }) => {
+      if (element.render_mode !== "direct-image") return;
+      const altSlots = (element.content_slots ?? []).filter(
+        (slot) => slot.type === "alt-text",
+      );
+      if (altSlots.length !== 1) {
+        missing.push({
+          component_id: record.id,
+          element_path: path,
+          alt_slot_count: altSlots.length,
+        });
+      }
+    });
+  }
+
+  assert.deepEqual(
+    missing,
+    [],
+    "Every direct-image must expose exactly one alt-text slot: " +
+      JSON.stringify(missing),
+  );
 });
