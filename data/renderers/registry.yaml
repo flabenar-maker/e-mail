@@ -44,3 +44,21 @@ coverage:
   - { component_id: item-notification, mode: interpreter }
   - { component_id: item-step, mode: interpreter }
   - { component_id: nps-options, mode: interpreter }
+  - { component_id: asset-bank-badge-4x, mode: source-only, reason: "Export asset source; HTML output is owned by its parent service component." }
+  - { component_id: asset-icon-badge-4x, mode: source-only, reason: "Export asset source; HTML output is owned by its parent service component." }
+  - { component_id: asset-partner-badge-4x, mode: source-only, reason: "Export asset source; HTML output is owned by its parent service component." }
+  - { component_id: asset-status-badge-negative-4x, mode: source-only, reason: "Export asset source; HTML output is owned by its parent service component." }
+  - { component_id: asset-status-badge-positive-4x, mode: source-only, reason: "Export asset source; HTML output is owned by its parent service component." }
+  - { component_id: badge-operation-status, mode: interpreter }
+  - { component_id: banner-fiscal-check-link, mode: interpreter }
+  - { component_id: block-contact-support, mode: interpreter }
+  - { component_id: block-instruction-steps, mode: interpreter }
+  - { component_id: block-personal-data-update, mode: interpreter }
+  - { component_id: block-receipt-info, mode: interpreter }
+  - { component_id: block-transaction-error, mode: interpreter }
+  - { component_id: block-transaction-success, mode: interpreter }
+  - { component_id: details-operation, mode: interpreter }
+  - { component_id: details-operation-plain, mode: interpreter }
+  - { component_id: details-receipt, mode: interpreter }
+  - { component_id: details-suspicious-operation, mode: interpreter }
+  - { component_id: details-transfer, mode: interpreter }

@@ -65,9 +65,9 @@ test("all declared interpreter contracts are renderer-ready", async () => {
   }
 
   const report = auditRendererReadiness(registries, rendererRegistry);
-  assert.equal(report.summary.covered_active_components, 43);
-  assert.equal(report.summary.ready_components, 25);
-  assert.equal(report.summary.missing_coverage, 18);
+  assert.equal(report.summary.covered_active_components, 61);
+  assert.equal(report.summary.ready_components, 38);
+  assert.equal(report.summary.missing_coverage, 0);
 });
 
 test("pilot contracts retain their critical rendering structures", async () => {
@@ -218,6 +218,6 @@ test("returns stable issue shapes and deterministic ordering", async () => {
     report.components.filter(({ issues }) =>
       issues.some(({ code }) => code === "RENDER_COVERAGE_MISSING"),
     ).length,
-    18,
+    0,
   );
 });
