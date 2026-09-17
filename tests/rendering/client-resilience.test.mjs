@@ -8,7 +8,10 @@ import { buildEmailPreview } from "../../scripts/lib/email-preview.mjs";
 import { renderEmailDocument } from "../../scripts/lib/email-renderer.mjs";
 import { loadRenderingFoundation } from "../../scripts/lib/rendering-foundation.mjs";
 
-import {`n  indexComponentRegistries,`n  loadComponentRegistries,`n} from "../../scripts/lib/component-registry.mjs";
+import {
+  indexComponentRegistries,
+  loadComponentRegistries,
+} from "../../scripts/lib/component-registry.mjs";
 import {
   loadRendererRegistry,
   resolveRendererCoverage,
