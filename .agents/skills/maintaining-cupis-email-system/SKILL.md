@@ -30,6 +30,8 @@ When the resolver returns `paused` with `SKILL_ROUTE_PAUSED`, use its bundle onl
 
 Repository migration work is allowed only when the user request names the change and an applicable implementation plan defines its boundary. It still requires cloud publication, exact-SHA local verification and separate merge authorization.
 
+A direct user request does not replace an applicable implementation plan while the route is paused. If the task is neither read-only navigation nor covered by such a plan, return `not ready` without any mutation.
+
 ## Change boundary
 
 1. State whether the request is read-only or a write. Before any write, produce an impact report naming the proposed change, affected objects and properties, dependent sources, preserved areas, expected generated outputs and checks.
