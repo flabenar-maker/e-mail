@@ -20,7 +20,12 @@ function cssUrl(value) {
 
 function styleText(styles) {
   return Object.entries(styles)
-    .filter(([, value]) => value !== undefined && value !== null && value !== "")
+    .filter(
+      ([name, value]) =>
+        value !== undefined &&
+        value !== null &&
+        (value !== "" || name === "alt"),
+    )
     .sort(([left], [right]) => left.localeCompare(right))
     .map(([name, value]) => `${name}:${String(value)}`)
     .join(";");
@@ -28,7 +33,12 @@ function styleText(styles) {
 
 function attributes(entries) {
   return entries
-    .filter(([, value]) => value !== undefined && value !== null && value !== "")
+    .filter(
+      ([name, value]) =>
+        value !== undefined &&
+        value !== null &&
+        (value !== "" || name === "alt"),
+    )
     .map(([name, value]) => ` ${name}="${escapeHtml(value)}"`)
     .join("");
 }
@@ -104,6 +114,11 @@ function renderLink(props, children) {
 }
 
 function renderDirectImage(props) {
+  if (!Object.hasOwn(props, "alt")) {
+    const error = new Error("Direct images require an explicit alt property.");
+    error.code = "DIRECT_IMAGE_ALT_REQUIRED";
+    throw error;
+  }
   const critical = {
     border: "0",
     display: "block",
