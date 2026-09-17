@@ -29,7 +29,6 @@ const fiscalExpected = [
   "CRITICAL",
   "- Каждая видимая ячейка строки содержит ссылку с одним URL, чтобы кликабельной оставалась вся площадь строки без помещения таблицы внутрь ссылки.",
   "- item-01 использует отдельный ofd-badge @4x, item-02 отдельный fns-badge @4x; эти изображения не заменяются общим bank-badge.",
-  "",
 ].join("\n");
 
 test("renderer produces the exact compact projection with selected CRITICAL only", async () => {
@@ -37,6 +36,7 @@ test("renderer produces the exact compact projection with selected CRITICAL only
 
   assert.equal(renderFigmaComponentDescription(record), fiscalExpected);
   assert.equal(renderComponentDescription(record), fiscalExpected);
+  assert.doesNotMatch(fiscalExpected, /\n$/u);
 });
 
 test("renderer omits the whole CRITICAL section when selection is empty", async () => {
@@ -47,7 +47,6 @@ test("renderer omits the whole CRITICAL section when selection is empty", async 
       "CUPIS ID: banner-secondary",
       "PURPOSE: Вторичный промобаннер с текстовой и визуальной областями.",
       "RENDER: HYBRID",
-      "",
     ].join("\n"),
   );
 });
@@ -165,6 +164,48 @@ test("renderer rejects missing or non-critical selected constraints", async () =
   );
 });
 
+test("renderer rejects compact-description bounds with typed errors", async () => {
+  const tooLong = structuredClone(await byId("banner-secondary"));
+  tooLong.documentation.purpose = "я".repeat(161);
+  assert.throws(
+    () => renderFigmaComponentDescription(tooLong),
+    (error) =>
+      error?.code === "COMPONENT_PURPOSE_TOO_LONG" &&
+      error?.path === "/documentation/purpose",
+  );
+
+  for (const separator of ["\n", "\r", "\u2028", "\u2029"]) {
+    const multiline = structuredClone(await byId("banner-secondary"));
+    multiline.documentation.purpose = `Первая строка.${separator}Вторая строка.`;
+    assert.throws(
+      () => renderFigmaComponentDescription(multiline),
+      (error) =>
+        error?.code === "COMPONENT_PURPOSE_MULTILINE" &&
+        error?.path === "/documentation/purpose",
+    );
+  }
+
+  const tooManyCritical = structuredClone(await byId("banner-secondary"));
+  tooManyCritical.constraints = ["one", "two", "three"].map((id) => ({
+    id,
+    scope: "all",
+    kind: "email-rendering",
+    severity: "critical",
+    statement: `Критическое правило ${id}.`,
+  }));
+  tooManyCritical.documentation.critical_constraint_ids = [
+    "one",
+    "two",
+    "three",
+  ];
+  assert.throws(
+    () => renderFigmaComponentDescription(tooManyCritical),
+    (error) =>
+      error?.code === "COMPONENT_DESCRIPTION_CRITICAL_LIMIT" &&
+      error?.path === "/documentation/critical_constraint_ids",
+  );
+});
+
 test("renderer blocks missing purpose and unresolved render type", async () => {
   const missingPurpose = structuredClone(await byId("banner-secondary"));
   missingPurpose.documentation.purpose = "";
@@ -202,22 +243,10 @@ test("renderer is deterministic and does not mutate the component record", async
 
   assert.equal(first, second);
   assert.deepEqual(record, before);
-  assert.equal(first.endsWith("\n"), true);
+  assert.equal(first.endsWith("\n"), false);
 });
 
-test("renderer and comparison normalize every JavaScript line separator", async () => {
-  const record = structuredClone(await byId("banner-secondary"));
-  record.documentation.purpose = "Первая строка.\u2028Вторая строка.\u2029Третья строка.";
-
-  assert.equal(
-    renderFigmaComponentDescription(record),
-    [
-      "CUPIS ID: banner-secondary",
-      "PURPOSE: Первая строка. Вторая строка. Третья строка.",
-      "RENDER: HYBRID",
-      "",
-    ].join("\n"),
-  );
+test("comparison normalizes every JavaScript line separator", () => {
   assert.deepEqual(
     compareFigmaComponentDescription(
       "one\r\ntwo\rthree\u2028four\u2029",
@@ -226,7 +255,6 @@ test("renderer and comparison normalize every JavaScript line separator", async 
     [],
   );
 });
-
 test("comparison reports one exact drift and otherwise ignores no content", () => {
   assert.deepEqual(
     compareFigmaComponentDescription("one\r\ntwo\r\n", "one\ntwo\n"),

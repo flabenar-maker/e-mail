@@ -13,7 +13,15 @@ function criticalConstraints(record) {
   const byId = new Map(
     (record?.constraints ?? []).map((constraint) => [constraint.id, constraint]),
   );
-  return (record?.documentation?.critical_constraint_ids ?? []).map(
+  const selectedIds = record?.documentation?.critical_constraint_ids ?? [];
+  if (selectedIds.length > 2) {
+    throw descriptionError(
+      "COMPONENT_DESCRIPTION_CRITICAL_LIMIT",
+      "/documentation/critical_constraint_ids",
+      `Cannot render more than two critical constraints for ${String(record?.id)}.`,
+    );
+  }
+  return selectedIds.map(
     (id, index) => {
       const constraint = byId.get(id);
       if (!constraint || constraint.severity !== "critical") {
@@ -37,6 +45,22 @@ export function renderFigmaComponentDescription(record) {
       `Cannot render Description without a purpose for ${String(record?.id)}.`,
     );
   }
+  const normalizedPurpose = normalizeLf(purpose);
+  if (normalizedPurpose.includes("\n")) {
+    throw descriptionError(
+      "COMPONENT_PURPOSE_MULTILINE",
+      "/documentation/purpose",
+      `Cannot render a multiline purpose for ${String(record?.id)}.`,
+    );
+  }
+  if ([...purpose].length > 160) {
+    throw descriptionError(
+      "COMPONENT_PURPOSE_TOO_LONG",
+      "/documentation/purpose",
+      `Cannot render a purpose longer than 160 Unicode code points for ${String(record?.id)}.`,
+    );
+  }
+
   const renderType = deriveComponentRenderType(record);
   if (renderType === null) {
     throw descriptionError(
@@ -48,7 +72,7 @@ export function renderFigmaComponentDescription(record) {
 
   const lines = [
     `CUPIS ID: ${record.id}`,
-    `PURPOSE: ${normalizeLf(purpose).replaceAll("\n", " ").trim()}`,
+    `PURPOSE: ${normalizedPurpose.trim()}`,
     `RENDER: ${renderType}`,
   ];
   const critical = criticalConstraints(record);
@@ -58,7 +82,7 @@ export function renderFigmaComponentDescription(record) {
       lines.push(`- ${normalizeLf(constraint.statement).replaceAll("\n", " ").trim()}`);
     }
   }
-  return `${lines.join("\n")}\n`;
+  return lines.join("\n");
 }
 
 export function compareFigmaComponentDescription(expected, actual) {

@@ -1400,10 +1400,12 @@
         "purpose": {
           "type": "string",
           "minLength": 1,
-          "pattern": "\\S"
+          "maxLength": 160,
+          "pattern": "^(?=[^\\r\\n\\u2028\\u2029]*\\S)[^\\r\\n\\u2028\\u2029]*$"
         },
         "critical_constraint_ids": {
           "type": "array",
+          "maxItems": 2,
           "uniqueItems": true,
           "items": {
             "type": "string",

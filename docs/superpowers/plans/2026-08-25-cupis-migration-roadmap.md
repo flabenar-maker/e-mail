@@ -200,12 +200,14 @@ Manifest-driven разрешение source paths было выполнено н
 
 Это отдельный завершающий пакет component documentation, а не часть HTML-rendering runtime. До его выполнения пользователь предоставляет четыре ссылки на тестовые письма для этапа 10: Mobile/Desktop маркетингового и Mobile/Desktop сервисного письма.
 
-- [ ] Снять через Figma MCP raw Description и Documentation link всех component/component-set nodes внутри библиотечных roots, включая пустые значения и variant nodes с собственной metadata.
-- [ ] Сохранить один самостоятельный snapshot в `Legacy/` без stable component IDs, manifest source, bundle reference, runtime consumer или validation dependency.
-- [ ] Сопоставить canonical Figma owners с active component records и отдельно показать missing, duplicate и ambiguous mappings; не придумывать ID.
-- [ ] Зафиксировать compact generated format `CUPIS ID` → `PURPOSE` → `RENDER` → optional `CRITICAL`, ограничив PURPOSE 160 символами, а CRITICAL двумя пунктами.
-- [ ] Сгенерировать полный old → new preview и получить отдельное разрешение пользователя на Description-only Figma mutation.
-- [ ] Записать только Description canonical component owners через MCP и выполнить отдельный read-back с проверкой structural fingerprints и неизменности дизайна.
+- [x] Снять через Figma MCP raw Description и Documentation link всех component/component-set nodes внутри библиотечных roots, включая пустые значения и variant nodes с собственной metadata.
+- [x] Сохранить один самостоятельный snapshot в `Legacy/` без stable component IDs, manifest source, bundle reference, runtime consumer или validation dependency.
+- [x] Сопоставить canonical Figma owners с active component records и отдельно показать missing, duplicate и ambiguous mappings; не придумывать ID.
+- [x] Зафиксировать compact generated format `CUPIS ID` → `PURPOSE` → `RENDER` → optional `CRITICAL`, ограничив PURPOSE 160 символами, а CRITICAL двумя пунктами.
+- [x] Сгенерировать полный old → new preview и получить отдельное разрешение пользователя на Description-only Figma mutation.
+- [x] Записать только Description canonical component owners через MCP и выполнить отдельный read-back с проверкой фактических полей и неизменности дизайна.
+
+Draft PR [#87](https://github.com/flabenar-maker/e-mail/pull/87) содержит raw snapshot 156 Figma nodes, guards compact-формата и обновление 61 canonical Description. Все 61 owners сопоставлены active records, Description/name/Documentation links подтверждены read-back, а 272 contract-linked Figma facts повторно сверены без расхождений. Component contracts, foundations, HTML renderer/runtime, manifest и локальные письма не изменялись. Этап 10 не начинается до отдельного handoff этого prerequisite и получения четырёх ссылок на два тестовых письма.
 
 ### 10. Навык HTML-вёрстки конкретных писем
 

@@ -148,6 +148,47 @@ for (const [name, mutate] of [
   });
 }
 
+test("schema 2.1 rejects compact-description bounds at exact documentation paths", async () => {
+  const schema = JSON.parse(await readFile(schemaPath, "utf8"));
+  const cases = [
+    {
+      mutate(record) {
+        record.documentation.purpose = "я".repeat(161);
+      },
+      path: "/components/0/documentation/purpose",
+    },
+    {
+      mutate(record) {
+        record.documentation.purpose = "Первая строка.\nВторая строка.";
+      },
+      path: "/components/0/documentation/purpose",
+    },
+    {
+      mutate(record) {
+        record.documentation.critical_constraint_ids = [
+          "critical-one",
+          "critical-two",
+          "critical-three",
+        ];
+      },
+      path: "/components/0/documentation/critical_constraint_ids",
+    },
+  ];
+
+  for (const fixture of cases) {
+    const document = await canonicalV2Document();
+    fixture.mutate(document.components[0]);
+    const errors = validateComponentRegistryShape(document, schema);
+    assert.ok(
+      errors.some(
+        (error) =>
+          error.code === "components-schema" && error.path === fixture.path,
+      ),
+      `Expected schema error at ${fixture.path}`,
+    );
+  }
+});
+
 test("documentation validation rejects duplicate and broken critical references", () => {
   const record = renderRecord("html-text");
   record.constraints = [
