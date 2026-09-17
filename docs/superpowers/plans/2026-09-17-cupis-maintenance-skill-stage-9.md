@@ -1,6 +1,6 @@
 # CUPIS Maintenance Skill Stage 9 Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Подготовить maintenance skill к единственному машинно-разрешённому route-specific bundle и structured workflow, не включая остановленные маршруты и не создавая второй список правил или путей.
 
@@ -8,7 +8,7 @@
 
 **Tech Stack:** Node.js 24, ECMAScript modules, YAML 2.9.0, AJV 8.20.0, `node:test`, PowerShell bootstrap, GitHub CLI.
 
-**Spec:** `docs/superpowers/specs/2026-08-24-cupis-structured-email-system-design.md`, разделы 9, 11, 12 и 15.
+**Spec:** `docs/superpowers/specs/2026-08-24-cupis-structured-email-system-design.md`, разделы 9, 11, 12 и 15.\n\n**Implementation:** [PR #85](https://github.com/flabenar-maker/e-mail/pull/85); финальный exact-SHA gate ещё не отмечен.
 
 ## Global Constraints
 
@@ -32,15 +32,15 @@
 - Consumes: merged PR #81–84 and main SHA after Package 12.
 - Produces: canonical roadmap status and this executable plan.
 
-- [ ] **Step 1: Mark Stage 8 complete from merged facts**
+- [x] **Step 1: Mark Stage 8 complete from merged facts**
 
 Record PR #81–84, 61 covered active records, structured workflows, `structured-shadow`, paused routes and local final verification. Do not mark Package 10D complete.
 
-- [ ] **Step 2: Link Stage 9 to this implementation plan**
+- [x] **Step 2: Link Stage 9 to this implementation plan**
 
 Mark Stage 9 `в работе`; state that it prepares the skill but does not activate routes.
 
-- [ ] **Step 3: Verify documentation scope**
+- [x] **Step 3: Verify documentation scope**
 
 Run:
 
@@ -56,14 +56,13 @@ Expected at this checkpoint: only the roadmap and this plan.
 
 **Files:**
 - Create: `tests/skills/skill-context.test.mjs`
-- Modify: `tests/helpers/system-fixture.mjs`
 - Modify: `package.json`
 
 **Interfaces:**
 - Consumes: `buildContextBundle`, `loadSystemManifest`, `loadWorkflowRegistry`, `resolveWorkflowSteps`.
 - Produces: required behavior for `resolveSkillContext({ repoRoot, routeId, workflowMode, candidates, viewports, foundationIds })`.
 
-- [ ] **Step 1: Write the paused-route test**
+- [x] **Step 1: Write the paused-route test**
 
 ```js
 const result = await resolveSkillContext({
@@ -78,19 +77,19 @@ assert.deepEqual(result.blockers.map(({ code }) => code), [
 ]);
 ```
 
-- [ ] **Step 2: Write the future-active fixture test**
+- [x] **Step 2: Write the future-active fixture test**
 
 In an isolated fixture, replace only the maintenance route/profile workflow source from `workflow-paused` to `workflow-library-maintenance`. Resolve `library-maintenance` / `read-only` with `viewports: ["mobile"]` and assert ordered step IDs `pin-canonical-state` through `verify-read-only-findings`.
 
-- [ ] **Step 3: Write deterministic blocker tests**
+- [x] **Step 3: Write deterministic blocker tests**
 
 Cover unknown route, active route without `workflowMode`, unknown structured workflow source and unknown mode. Assert stable code/path/message ordering.
 
-- [ ] **Step 4: Add the tests to the local suite**
+- [x] **Step 4: Add the tests to the local suite**
 
 Extend `package.json` with `tests/skills/*.test.mjs` and add only required workflow/resolver files to `canonicalSystemFixtureFiles`.
 
-- [ ] **Step 5: Run RED**
+- [x] **Step 5: Run RED**
 
 ```powershell
 node --test tests/skills/skill-context.test.mjs
@@ -113,23 +112,23 @@ Expected: import failure for missing `scripts/lib/skill-context.mjs`.
   - resolved: `{ status: "resolved", route, bundle, workflow: { id, mode, steps } }`;
   - blocked: `{ status: "blocked", blockers }`.
 
-- [ ] **Step 1: Resolve the generated bundle once**
+- [x] **Step 1: Resolve the generated bundle once**
 
 Call `buildContextBundle` with the exact route selections. Reuse its typed blockers; do not reimplement bundle selection.
 
-- [ ] **Step 2: Return the paused boundary**
+- [x] **Step 2: Return the paused boundary**
 
 When `bundle.route.workflow_source_id === "workflow-paused"`, return one `SKILL_ROUTE_PAUSED` blocker, the resolved shadow bundle and no workflow.
 
-- [ ] **Step 3: Map an active route through manifest capability**
+- [x] **Step 3: Map an active route through manifest capability**
 
 Find `manifest.structured_workflows.entries[].source_id` equal to the route workflow source. If absent, return `SKILL_WORKFLOW_UNSTRUCTURED`. Never infer workflow ID from a path or filename.
 
-- [ ] **Step 4: Resolve exact workflow mode and immutable steps**
+- [x] **Step 4: Resolve exact workflow mode and immutable steps**
 
 Require `workflowMode` for a non-paused route, call the Package 12 loader/resolver and return the ordered frozen steps. Convert known validation errors to stable blockers.
 
-- [ ] **Step 5: Run GREEN**
+- [x] **Step 5: Run GREEN**
 
 ```powershell
 node --test tests/skills/skill-context.test.mjs
@@ -151,19 +150,19 @@ Expected: all tests pass.
 - Stdout: canonical JSON result followed by one newline.
 - Exit codes: `0` for `paused` or `resolved`; `1` for invalid arguments or `blocked`.
 
-- [ ] **Step 1: Write RED CLI tests**
+- [x] **Step 1: Write RED CLI tests**
 
 Assert deterministic JSON, no stderr for current paused route, repeated selectors, invalid viewport diagnostics and nonzero blocked status.
 
-- [ ] **Step 2: Reuse existing argument semantics**
+- [x] **Step 2: Reuse existing argument semantics**
 
 Reuse the same route/component/viewport/foundation meanings as `build-context-bundle.mjs`; add only optional `--mode`.
 
-- [ ] **Step 3: Implement JSON-only output**
+- [x] **Step 3: Implement JSON-only output**
 
 Do not render Markdown, read environment secrets or perform network/Figma/GitHub writes.
 
-- [ ] **Step 4: Run GREEN**
+- [x] **Step 4: Run GREEN**
 
 ```powershell
 node --test tests/skills/skill-context-cli.test.mjs
@@ -183,7 +182,7 @@ Expected: all tests pass.
 - Consumes: `resolve:skill-context` output only.
 - Preserves: cloud GitHub priority, migration-progress refresh, Figma mutation gate, naming gate, local exact-commit verification and separate merge authorization.
 
-- [ ] **Step 1: Write RED boundary tests**
+- [x] **Step 1: Write RED boundary tests**
 
 Assert that the skill:
 
@@ -194,19 +193,19 @@ Assert that the skill:
 - does not authorize Figma writes, email builds or route activation while paused;
 - preserves migration-progress refresh and impact/read-back gates.
 
-- [ ] **Step 2: Replace manual source resolution with resolver invocation**
+- [x] **Step 2: Replace manual source resolution with resolver invocation**
 
 After pinning cloud `main`, materialize a disposable exact-SHA snapshot, run `npm ci --ignore-scripts`, invoke the resolver and verify the snapshot HEAD equals the pinned SHA. The snapshot is read-only input to the resolver and local checks, never the persistent edit source.
 
-- [ ] **Step 3: Define paused behavior without fallback**
+- [x] **Step 3: Define paused behavior without fallback**
 
 For a paused result, permit only read-only navigation and an explicitly scoped migration implementation plan; stop production library operations, Figma mutation and email build. Never substitute another workflow or source list.
 
-- [ ] **Step 4: Define future active behavior**
+- [x] **Step 4: Define future active behavior**
 
 For a resolved result, use only returned bundle and workflow steps. Do not reopen static sources by path or add prose copies to the skill.
 
-- [ ] **Step 5: Run GREEN**
+- [x] **Step 5: Run GREEN**
 
 ```powershell
 node --test tests/skills/maintenance-skill-boundary.test.mjs
@@ -251,3 +250,4 @@ The PR must state exact SHA, local commands/results, preserved paused routes, an
 - The skill has no duplicate rules or canonical path list and cannot bypass paused state.
 - Cloud-only ownership, Figma mutation gate, impact report, read-back and separate merge authorization remain intact.
 - All local checks pass on the exact final cloud SHA; Figma and email outputs remain unchanged.
+
