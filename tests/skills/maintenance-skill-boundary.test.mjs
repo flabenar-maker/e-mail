@@ -31,6 +31,8 @@ test("paused routes cannot fall back or authorize production operations", () => 
   assert.match(skill, /Figma write/iu);
   assert.match(skill, /email build/iu);
   assert.match(skill, /Do not substitute another workflow/iu);
+  assert.match(skill, /direct user request.*does not replace.*implementation plan/iu);
+  assert.match(skill, /return `not ready` without any mutation/iu);
 });
 
 test("maintenance safety gates remain explicit", () => {
