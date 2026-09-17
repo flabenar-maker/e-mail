@@ -11,10 +11,11 @@
     "generate": "node scripts/generate-docs.mjs --write",
     "generate:check": "node scripts/generate-docs.mjs --check",
     "bundle": "node scripts/build-context-bundle.mjs",
+    "resolve:skill-context": "node scripts/resolve-skill-context.mjs",
     "audit:rendering": "node scripts/audit-renderer-readiness.mjs",
     "render:email": "node scripts/render-email.mjs",
     "preview:email": "node scripts/render-email-preview.mjs",
-    "test": "node --test tests/foundation/*.test.mjs tests/characterization/*.test.mjs tests/components/*.test.mjs tests/generation/*.test.mjs tests/rendering/*.test.mjs tests/workflows/*.test.mjs",
+    "test": "node --test tests/foundation/*.test.mjs tests/characterization/*.test.mjs tests/components/*.test.mjs tests/generation/*.test.mjs tests/rendering/*.test.mjs tests/workflows/*.test.mjs tests/skills/*.test.mjs",
     "verify": "npm run validate && npm test"
   },
   "dependencies": {

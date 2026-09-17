@@ -134,13 +134,15 @@ test("remediation preserves paused routes and required current pilot coverage wi
   }
 });
 
-test("roadmap retains stages 8, 13, and 14 as incomplete during foundations remediation", async () => {
+test("roadmap records completed Stage 8 while retaining stages 13 and 14 as incomplete", async () => {
   const [roadmap, remediationPlan] = await Promise.all([
     readFile(join(repoRoot, roadmapPath), "utf8"),
     readFile(join(repoRoot, remediationPlanPath), "utf8"),
   ]);
 
-  for (const stageNumber of [8, 13, 14]) {
+  assert.doesNotMatch(numberedStage(roadmap, 8), /- \[ \] /u);
+  assert.match(numberedStage(roadmap, 8), /- \[x\] /u);
+  for (const stageNumber of [13, 14]) {
     assert.match(numberedStage(roadmap, stageNumber), /- \[ \] /u);
   }
   assert.match(
