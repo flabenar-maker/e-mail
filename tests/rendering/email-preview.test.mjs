@@ -1,5 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { execFile } from "node:child_process";
+import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { dirname, join } from "node:path";
+import { promisify } from "node:util";
+import { fileURLToPath } from "node:url";
 
 import { buildEmailPreview } from "../../scripts/lib/email-preview.mjs";
 
@@ -21,4 +27,25 @@ test("preview rejects an unsupported mode", () => {
     () => buildEmailPreview({ html: HTML, mode: "invent-layout" }),
     (error) => error.code === "EMAIL_PREVIEW_MODE_UNSUPPORTED",
   );
+});
+const execFileAsync = promisify(execFile);
+const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
+
+test("preview CLI writes normal and no-style views of the same rendered email", async () => {
+  const folder = await mkdtemp(join(tmpdir(), "cupis-preview-"));
+  const model = join(repoRoot, "tests", "fixtures", "rendering", "pilot-email.json");
+  const normalPath = join(folder, "normal.html");
+  const noStylePath = join(folder, "no-style.html");
+  const script = join(repoRoot, "scripts", "render-email-preview.mjs");
+  try {
+    await execFileAsync(process.execPath, [script, "--model", model, "--mode", "normal", "--output", normalPath], { cwd: repoRoot });
+    await execFileAsync(process.execPath, [script, "--model", model, "--mode", "no-style", "--output", noStylePath], { cwd: repoRoot });
+    const normal = await readFile(normalPath, "utf8");
+    const noStyle = await readFile(noStylePath, "utf8");
+    assert.match(normal, /<style>[\s\S]*<\/style>/u);
+    assert.doesNotMatch(noStyle, /<style\b/iu);
+    assert.equal(noStyle, buildEmailPreview({ html: normal, mode: "no-style" }));
+  } finally {
+    await rm(folder, { recursive: true, force: true });
+  }
 });
