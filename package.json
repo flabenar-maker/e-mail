@@ -13,6 +13,7 @@
     "bundle": "node scripts/build-context-bundle.mjs",
     "audit:rendering": "node scripts/audit-renderer-readiness.mjs",
     "render:email": "node scripts/render-email.mjs",
+    "preview:email": "node scripts/render-email-preview.mjs",
     "test": "node --test tests/foundation/*.test.mjs tests/characterization/*.test.mjs tests/components/*.test.mjs tests/generation/*.test.mjs tests/rendering/*.test.mjs",
     "verify": "npm run validate && npm test"
   },

@@ -157,7 +157,7 @@ Structured records остаются shadow-источником до generated b
 После неудачной попытки получить убедительный пилотный результат обнаружилась недостаточная точность части мигрированных component contracts. [PR #61](https://github.com/flabenar-maker/e-mail/pull/61), [#62](https://github.com/flabenar-maker/e-mail/pull/62), [#63](https://github.com/flabenar-maker/e-mail/pull/63) и [#64](https://github.com/flabenar-maker/e-mail/pull/64) выполнили прямую сверку с Figma, добавили проверку фактических данных и уточнили маркетинговые и сервисные контракты. Это корректирующая работа внутри этапа 8, а не завершение пакетов 10–12.
 
 [Корректирующий план для foundations этапов 2–5](2026-09-15-cupis-foundations-figma-verified-remediation.md) реализован и слит через [PR #75](https://github.com/flabenar-maker/e-mail/pull/75), merge commit `c8c485bde0d69316dac83925c40e4f6b2fc0037c`. Он усилил Figma-backed проверку typography, spacing, assets и naming, но не завершил Package 10–12, этап 8, сквозное сравнение этапа 13 или cutover этапа 14.
-[PR #60](https://github.com/flabenar-maker/e-mail/pull/60) остаётся открытым исследовательским черновиком: он не меняет active rules, component contracts или renderer. Результаты исследования преобразованы в согласованную [client-resilience спецификацию](../specs/2026-09-16-cupis-email-client-resilience-design.md) и [implementation plan](2026-09-16-cupis-email-client-resilience.md). Реальная проверка через Altcraft теперь является обязательным Package 10D, а не внешним напоминанием.
+[PR #60](https://github.com/flabenar-maker/e-mail/pull/60) остаётся открытым исследовательским черновиком: он не меняет active rules, component contracts или renderer. Результаты исследования преобразованы в согласованную [client-resilience спецификацию](../specs/2026-09-16-cupis-email-client-resilience-design.md) и [implementation plan](2026-09-16-cupis-email-client-resilience.md). Проверка через Altcraft была запланирована как Package 10D, но 17.09.2026 исключена из текущего маршрута по прямому решению пользователя из-за отсутствия доступа. Она не считается выполненной, а responsive fallback остаётся неподтверждённым (`required-before-change`).
 
 - [x] Зафиксировать characterization baseline и владельцев renderer-impacting данных — PR #50.
 - [x] Создать rendering foundation и renderer-ready schema без дублирования существующих foundations и contracts — PR #51–52.
@@ -168,11 +168,11 @@ Structured records остаются shadow-источником до generated b
 - [x] Вычислять render-impact digest автоматически только из данных, влияющих на HTML — PR #57.
 - [x] Добавить автоматические HTML и property checks — PR #58.
 - [x] Проверить фактический HTML обновлённого пилота и классифицировать расхождения по входной модели, контракту, renderer code и browser preview — исправления оболочки и Mobile/Desktop границы слиты в PR #66.
-- [ ] Package 10A: добавить exact client-resilience policies, обязательные document metadata и явную alt-семантику.
-- [ ] Package 10B: реализовать shell/alt propagation, exclusive CSS budget, output metrics и точную minimum-viewport семантику.
-- [ ] Package 10C: создать normal/no-style preview, проверить узкие viewport и добавить точное пилотное coverage Email/Header рядом с Email/Footer.
-- [ ] Package 10D: доставить неизменённый пилот через Altcraft в целевые мобильные приложения и выбрать responsive fallback по зафиксированным результатам.
-- [ ] Завершить representative Mobile/Desktop visual scenarios для Header, Footer и пилотных блоков после 10A–10D.
+- [x] Package 10A: exact client-resilience policies, обязательные document metadata и явная alt-семантика — [PR #78](https://github.com/flabenar-maker/e-mail/pull/78).
+- [x] Package 10B: shell/alt propagation, exclusive CSS budget, output metrics и точная minimum-viewport семантика — [PR #79](https://github.com/flabenar-maker/e-mail/pull/79).
+- [x] Package 10C: normal/no-style preview, узкие viewport, Email/Header рядом с Email/Footer и доступный browser visual gate — [PR #80](https://github.com/flabenar-maker/e-mail/pull/80). Normal mode прошёл; no-style выявил Desktop-fallback overflow на 300–360px.
+- [x] Package 10D исключён из текущего маршрута по решению пользователя из-за отсутствия доступа к Altcraft и целевым приложениям. Проверка не выполнена; `responsive_fallback.validation` остаётся `required-before-change`.
+- [x] Доступные representative Mobile/Desktop visual scenarios для Header, Footer и пилотных блоков выполнены в Package 10C; real-client evidence не заявляется.
 - [ ] Мигрировать renderer coverage остальных активных компонентов после успешного пилота.
 - [ ] Перевести maintenance и email-build workflows в структурированный формат и сравнить их обязательства с read-only архивным baseline без двойного контекста. Полное сквозное сравнение маршрутов остаётся этапу 13.
 - [ ] Подтвердить, что HTML зависит от фактического инстанса и component contract, а не design-time золотых правил.

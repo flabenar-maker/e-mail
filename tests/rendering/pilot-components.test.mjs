@@ -140,6 +140,7 @@ test("document returns every referenced local asset once in deterministic order"
       "images/appgallery-icon.png",
       "images/getapps-icon.png",
       "images/google-play-icon.png",
+      "images/header-logo.png",
       "images/qr-code.png",
       "images/rustore-icon.png",
       "images/secondary.jpg",
