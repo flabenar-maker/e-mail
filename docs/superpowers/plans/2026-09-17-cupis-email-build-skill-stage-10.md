@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Создать repo-scoped навык сборки и точечного изменения конкретных CUPIS-писем, который управляет существующим structured email-build workflow через machine resolver, но не дублирует правила рендера и не включает paused routes.
+**Goal:** Создать и установить repo-scoped навык сборки и точечного изменения конкретных CUPIS-писем, доказать его на двух реальных письмах и включить только два проверенных email routes для повседневной работы.
 
-**Architecture:** `building-cupis-emails` является тонким маршрутизатором: он классифицирует запрос, выбирает `email-new-build` или `email-continue-fix`, вызывает существующий `resolve:skill-context` и исполняет только возвращённый режим workflow. Точные component facts, HTML-правила, typography, spacing и asset profiles остаются в structured owners; локальная папка письма является только выходом конкретной задачи. Этап подготавливает и проверяет навык в shadow-режиме, а фактическое включение routes выполняется только на этапе 14 после сквозного сравнения этапа 13.
+**Architecture:** `building-cupis-emails` является тонким маршрутизатором: он классифицирует запрос, выбирает `email-new-build` или `email-continue-fix`, вызывает существующий `resolve:skill-context` и исполняет только возвращённый режим workflow. Точные component facts, HTML-правила, typography, spacing и asset profiles остаются в structured owners; локальная папка письма является только выходом конкретной задачи. После fixture shadow tests email-only cutover сначала готовится только в candidate branch. На её exact SHA из чистого контекста выполняются реальные marketing/service builds и versioned continue/fix; только затем branch может быть слита, а exact skill установлен. Остальные routes остаются paused до этапа 14.
 
 **Tech Stack:** Markdown skill, YAML/JSON-compatible manifest и workflows, Node.js 24 ESM, `node:test`, существующие context resolver, renderer CLI и bootstrap verifier.
 
@@ -13,7 +13,7 @@
 ## Global Constraints
 
 - Канонический репозиторий — `flabenar-maker/e-mail`; persistent edits выполняются через cloud GitHub branch и PR.
-- Все семь routes остаются `workflow-paused` до этапа 14; Stage 10 не выполняет cutover.
+- До реальных E2E-проверок все routes остаются `workflow-paused`. В конце Stage 10 активируются только `email-new-build` и `email-continue-fix`; остальные routes остаются paused до этапа 14.
 - Готовые `email.html`, `images/`, Figma exports, screenshots и временные модели не добавляются в репозиторий.
 - Skill не содержит копий component contracts, foundation values, HTML/CSS recipes, export profiles, workflow steps или списка canonical paths.
 - Для нового письма и design-dependent изменения требуются проверенные Mobile/Desktop-инстансы конкретного письма. Technical continue/fix не требует Figma, если изменение действительно не зависит от дизайна.
@@ -25,7 +25,18 @@
 - Точный пользовательский текст берётся из конкретного инстанса или явно переданного content input. Skill не восстанавливает контент по памяти и не заменяет его демонстрационными значениями.
 - Финальные marketing URLs могут быть заменены вручную в Altcraft: skill сохраняет предоставленные ссылки или разрешённые безопасные placeholders, но не выполняет отправку через CRM и не блокирует техническую сборку из-за отсутствия финальной campaign-ссылки.
 - Проверки выполняются локально на точном cloud SHA. GitHub Actions и PR Checks не запускаются и не используются как evidence.
-- Figma-библиотека, component contracts, foundations, renderer behavior и component-development route не меняются в этом этапе.
+- Figma-библиотека не меняется в этом этапе. Component contracts, foundations, renderer или workflow разрешено менять только отдельным scoped repair PR после воспроизведённого E2E-дефекта; такие изменения повторно проходят точную Figma-проверку, когда затрагивают implementation-significant fact.
+
+## Entry Gate
+
+До первого implementation commit пользователь предоставляет четыре точные Figma-ссылки:
+
+1. Mobile-инстанс одного маркетингового тестового письма;
+2. Desktop-инстанс того же маркетингового письма;
+3. Mobile-инстанс одного сервисного тестового письма;
+4. Desktop-инстанс того же сервисного письма.
+
+Каждая пара должна относиться к одному письму, использовать существующие active компоненты библиотеки и содержать хотя бы один реальный asset, чтобы проверить MCP-export path. Если ссылки отсутствуют, роли Mobile/Desktop перепутаны или пары относятся к разным письмам, Stage 10 не начинается и запрашивает только недостающие или исправленные ссылки.
 
 ---
 
@@ -104,9 +115,9 @@ Expected: FAIL, потому что `.agents/skills/building-cupis-emails/SKILL.
 
 Если запрос однозначен и не конфликтует с resolved workflow, дополнительный вопрос запрещён. Если тип задачи или Mobile/Desktop-роли не определены, skill обязан запросить ровно недостающий факт.
 
-- [ ] **Step 3: Описать paused и future-active поведение**
+- [ ] **Step 3: Описать paused и active поведение**
 
-При `paused` разрешены только read-only navigation и реализация этого migration plan. Production build и изменение локального письма не выполняются. При будущем `resolved` skill исполняет только returned bundle и ordered workflow steps, не открывая источники по памяти или ручному списку.
+До cutover Task 7 при `paused` разрешены только read-only navigation и реализация этого migration plan. Production build и изменение пользовательского письма не выполняются. После cutover при `resolved` skill исполняет только returned bundle и ordered workflow steps, не открывая источники по памяти или ручному списку.
 
 - [ ] **Step 4: Зарегистрировать skill**
 
@@ -116,7 +127,7 @@ Expected: FAIL, потому что `.agents/skills/building-cupis-emails/SKILL.
 - { id: building-cupis-emails, path: .agents/skills/building-cupis-emails }
 ```
 
-README должен сообщать, что skill подготовлен в shadow-режиме и ещё не является разрешением production-сборки до cutover.
+README должен сообщать, что skill становится рабочим только после успешного E2E-gate и email-only cutover Task 7; наличие каталога skill до этого момента не разрешает production-сборку.
 
 - [ ] **Step 5: Запустить GREEN для skill и manifest**
 
@@ -228,7 +239,7 @@ Expected: orchestration boundary проходит; component, foundation и rend
 
 ---
 
-### Task 5: Выполнить shadow-проверку навыка без cutover
+### Task 5: Выполнить shadow-проверку навыка до cutover
 
 **Files:**
 - Modify: test fixtures under `tests/skills/` only
@@ -237,7 +248,7 @@ Expected: orchestration boundary проходит; component, foundation и rend
 
 **Interfaces:**
 - Consumes: подготовленный skill, resolver, structured email workflow and representative fixtures.
-- Produces: Stage 10 verification summary для будущего сквозного сравнения этапа 13.
+- Produces: pre-cutover verification summary и готовность к подготовке candidate cutover в Task 6 и реальным E2E-сборкам Task 7.
 
 - [ ] **Step 1: В fixture явно активировать только тестируемый email route**
 
@@ -262,23 +273,145 @@ node --test tests/skills/*.test.mjs tests/workflows/structured-workflows.test.mj
 npm run generate:check
 ```
 
-Expected: all tests pass; fixture proves future behavior, canonical routes remain paused.
+Expected: all tests pass; fixture proves candidate behavior, canonical routes remain paused до реального E2E-gate.
 
 ---
 
-### Task 6: Проверить exact cloud commit и опубликовать Stage 10
+### Task 6: Подготовить email-only cutover в candidate branch
 
 **Files:**
-- Modify only paths explicitly introduced by Tasks 1–5.
+- Modify: `system/manifest.yaml`
+- Modify: `schemas/manifest.schema.json`
+- Modify: `schemas/workflows.schema.json`
+- Modify: `data/workflows/email-build.yaml`
+- Modify: `schemas/components.schema.json`
+- Modify: `data/components/shared.yaml`
+- Modify: `data/components/marketing.yaml`
+- Modify: `data/components/service.yaml`
+- Modify: `schemas/typography.schema.json`
+- Modify: `data/foundations/typography.yaml`
+- Modify: `schemas/spacing.schema.json`
+- Modify: `data/foundations/spacing.yaml`
+- Modify: `schemas/assets.schema.json`
+- Modify: `data/foundations/assets.yaml`
+- Modify: `schemas/rendering.schema.json`
+- Modify: `data/foundations/rendering.yaml`
+- Modify: `schemas/renderer-registry.schema.json`
+- Modify: `data/renderers/registry.yaml`
+- Modify: `tests/foundation/system-manifest.test.mjs`
+- Modify: `tests/workflows/structured-workflows.test.mjs`
+- Modify: `tests/skills/skill-context.test.mjs`
+- Preserve: Figma naming foundation, maintenance workflow/profile/routes and every non-email route
+
+**Interfaces:**
+- Consumes: successful Task 5 shadow gate.
+- Produces: candidate branch с двумя active email routes и active email dependencies; cloud `main` и все non-email routes остаются paused.
+
+- [ ] **Step 1: Написать RED-тесты частичного cutover**
+
+Проверить следующие invariants:
+
+- `structured_workflows.status` равен `partial`, когда email workflow active, а library maintenance workflow остаётся shadow;
+- email bundle profiles имеют `structured-active`, не содержат `workflow-paused` и соответствуют active routes;
+- `email-new-build` и `email-continue-fix` указывают на `workflow-email-build`;
+- остальные routes продолжают указывать на `workflow-paused`;
+- active email route не может разрешить shadow component registry, typography, spacing, assets, rendering foundation или renderer registry;
+- resolver возвращает `resolved` для двух email routes и `paused` для остальных.
+
+- [ ] **Step 2: Расширить status schemas без неявного перехода**
+
+Разрешить точные состояния `shadow | partial | active` только там, где существует агрегированный статус, и `shadow | active` для отдельного registry/workflow/profile. Добавить cross-source semantic validation: статус `active` не выводится автоматически и допустим только при явном согласованном значении владельца.
+
+- [ ] **Step 3: Активировать проверенные email dependencies**
+
+Перевести в `active`:
+
+- `data/workflows/email-build.yaml`;
+- component registries shared/marketing/service;
+- typography, spacing, assets и rendering foundations;
+- renderer registry;
+- bundle profiles `email-new-build` и `email-continue-fix`.
+
+Figma naming foundation и library-maintenance workflow остаются shadow.
+
+- [ ] **Step 4: Переключить только два route**
+
+Для `email-new-build` и `email-continue-fix` установить `workflow_source_id: workflow-email-build`, удалить `workflow-paused` из их `source_ids` и `generated_bundle.static_source_ids`. Ни один другой route/profile не менять.
+
+- [ ] **Step 5: Запустить cutover tests**
+
+```powershell
+node --test tests/foundation/system-manifest.test.mjs tests/workflows/structured-workflows.test.mjs tests/skills/skill-context.test.mjs tests/skills/skill-context-cli.test.mjs
+npm run generate:check
+```
+
+Expected: на candidate SHA email routes resolve ordered workflow steps; remaining routes return `SKILL_ROUTE_PAUSED`; generated outputs do not drift unexpectedly. Branch не сливается до Task 7.
+
+---
+
+### Task 7: Собрать два реальных письма и выполнить versioned continue/fix
+
+**Files:**
+- Create locally only: `<marketing-semantic-name>_1.0/email.html`
+- Create locally only: `<marketing-semantic-name>_1.0/images/`
+- Create locally only: `<service-semantic-name>_1.0/email.html`
+- Create locally only: `<service-semantic-name>_1.0/images/`
+- Create locally only: `<selected-semantic-name>_1.1/email.html`
+- Create locally only: `<selected-semantic-name>_1.1/images/`
+- Preserve: repository tree, source Figma design and every `1.0` source folder during continue/fix
+
+**Interfaces:**
+- Consumes: four user-provided Figma instance URLs, exact candidate SHA from Task 6, candidate skill, Figma MCP and renderer CLI.
+- Produces: two complete local builds, one versioned update and classified visual/technical evidence.
+
+- [ ] **Step 1: Validate the four design inputs**
+
+Через Figma MCP подтвердить для каждой пары Mobile/Desktop role, принадлежность одному письму, корневой Email/Template, только зарегистрированные active components и наличие asset path. Не выполнять полный library audit и не изменять Figma.
+
+- [ ] **Step 2: Запустить candidate skill из чистого контекста**
+
+Передать задачу fresh execution context, который получает только обычный пользовательский запрос, четыре ссылки и exact candidate SHA. Не использовать историю текущего чата, ручной список component facts, generated Markdown registry или Figma Description как implementation input.
+
+- [ ] **Step 3: Собрать маркетинговое письмо**
+
+Пройти полный `new-build`: validate sources → inspect design → resolve contracts → export assets через MCP → temporary model → renderer CLI → local output. Папка версии содержит только `email.html` и `images/`.
+
+- [ ] **Step 4: Собрать сервисное письмо**
+
+Повторить тот же путь независимо для сервисной пары. Использовать фактический component tree конкретного Email/Template и не поднимать nested-only records в самостоятельные блоки.
+
+- [ ] **Step 5: Выполнить visual regression**
+
+Сравнить обе сборки с соответствующими Mobile/Desktop Figma-инстансами. Классифицировать geometry, layout, spacing, visibility, image, typography/content и responsive regressions. Успех требует нуля неклассифицированных расхождений; различия браузерного antialiasing допускаются только как явно записанная неструктурная причина.
+
+- [ ] **Step 6: Исправить доказанные defects в правильном владельце**
+
+Skill wording не маскирует defect contract, renderer, asset foundation или workflow. Каждый implementation-significant Figma mismatch получает отдельный impact report и read-only перепроверку; изменение contract выполняется отдельным scoped PR. После любого исправления обе реальные сборки и focused regression запускаются заново.
+
+- [ ] **Step 7: Проверить continue/fix и версионирование**
+
+На одном из двух писем выполнить одну точную design-dependent или technical правку через skill. Создать sibling version `1.1`; подтвердить hash исходных `1.0/email.html` и всех файлов `1.0/images/` до и после операции. Новая папка снова содержит только `email.html` и `images/`.
+
+- [ ] **Step 8: Проверить output evidence**
+
+Для всех трёх output folders подтвердить существование каждого локального `src`, отсутствие orphan assets и временных model/log/screenshot файлов, корректные HTML-инварианты и отсутствие ссылок за пределы своей `images/`, кроме разрешённых внешних URL.
+
+---
+
+### Task 8: Опубликовать cutover, установить skill и проверить чистый чат
+
+**Files:**
+- Deploy after merge: local Codex skill installation from `.agents/skills/building-cupis-emails/`
+- Modify only paths explicitly introduced by Tasks 1–7.
 - Modify after merge: `docs/superpowers/plans/2026-08-25-cupis-migration-roadmap.md`.
 
 **Interfaces:**
-- Consumes: final Stage 10 cloud branch SHA.
-- Produces: reviewed PR, local verification evidence and exact Stage 10 status.
+- Consumes: final Stage 10 candidate SHA, real E2E evidence and two candidate active email routes.
+- Produces: reviewed PR, installed exact skill, clean-chat acceptance and exact Stage 10 status.
 
 - [ ] **Step 1: Выполнить changed-content и preserved-boundary checks**
 
-Проверить allowed-path diff, отсутствие Figma changes, отсутствие concrete email outputs, неизменность component/foundation/render facts и сохранение всех canonical routes на `workflow-paused`.
+Проверить allowed-path diff, отсутствие Figma changes и concrete email outputs в репозитории, объяснённость каждого status change и сохранение всех non-email routes на `workflow-paused`.
 
 - [ ] **Step 2: Выполнить полный локальный gate на точном финальном SHA**
 
@@ -292,11 +425,19 @@ Expected: all checks pass locally. GitHub Actions/Checks не запускали
 
 - [ ] **Step 3: Открыть один draft PR**
 
-PR должен перечислять: точный SHA, затронутые paths, локальные команды и результаты, сохранённые paused routes, отсутствие Figma и production-email изменений, а также отложенный Stage 13 shadow comparison и Stage 14 cutover.
+PR должен перечислять: точный SHA, затронутые paths, локальные команды и результаты, две реальные сборки и versioned fix, активируемые email routes, сохранённые paused routes, отсутствие Figma и repository-email mutations, rollback commit и оставшиеся ограничения client evidence.
 
-- [ ] **Step 4: После отдельного разрешения на merge обновить roadmap**
+- [ ] **Step 4: После отдельного разрешения слить PR и установить exact skill**
 
-Отметить Stage 10 завершённым только после появления implementation artifacts в `main`; добавить PR и merge commit. Не начинать Stage 11 автоматически.
+Установить локальный skill только из merged commit и проверить побайтовое совпадение установленного `SKILL.md` с repo-scoped source. Локальная установка является deployment-копией, а не источником редактирования.
+
+- [ ] **Step 5: Выполнить clean-chat acceptance**
+
+В новом чате без истории разработки дать обычный read-only запрос по одной проверенной Mobile/Desktop-паре, затем при подтверждённом `resolved` route выполнить новый build или scoped continue/fix в новой версии. Skill должен самостоятельно выбрать route/mode и разрешить контекст из merged `main`. Любая необходимость в памяти старого чата означает провал gate и требует исправляющего или revert PR по rollback point.
+
+- [ ] **Step 6: Обновить roadmap**
+
+Отметить Stage 10 завершённым только после merge, установки exact skill и clean-chat acceptance; добавить PR и merge commit. Зафиксировать два активных email routes и остальные paused routes. Не начинать Stage 11 автоматически.
 
 ## Success Criteria
 
@@ -306,5 +447,9 @@ PR должен перечислять: точный SHA, затронутые p
 - Версионирование не перезаписывает исходник, использует шаг `0.1`, а output содержит только `email.html` и `images/`.
 - Новый HTML проходит через resolved contracts, temporary model и renderer CLI; неизвестные или неполные факты дают typed blocker.
 - Asset operations требуют MCP и resolved asset contract; все локальные `src` существуют.
-- Representative marketing/service orchestration tests и локальные проверки проходят на точном cloud SHA.
-- Canonical routes остаются `workflow-paused`; Figma, component contracts, foundations, renderer rules и local production emails не изменены.
+- Реальное маркетинговое и сервисное письмо собраны из чистого контекста по Figma через MCP; visual gate не содержит неклассифицированных отклонений.
+- Одно существующее письмо изменено через `continue/fix` в версии `1.1`, исходная `1.0` побайтово сохранена.
+- `email-new-build` и `email-continue-fix` возвращают `resolved` и используют active structured dependencies; остальные routes возвращают `SKILL_ROUTE_PAUSED`.
+- Local skill установлен из merged SHA и проходит clean-chat acceptance без памяти предыдущего чата.
+- Figma и local source emails не изменены; готовые письма, assets и visual reports не попали в репозиторий.
+- Известное отсутствие Altcraft/real-client evidence явно указано и не выдается за browser-tested compatibility.
