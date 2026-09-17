@@ -17,6 +17,7 @@ const dataPath = join(repoRoot, "data/renderers/registry.yaml");
 const schemaPath = join(repoRoot, "schemas/renderer-registry.schema.json");
 const pilotIds = [
   "email-template",
+  "email-header",
   "button-primary",
   "button-secondary",
   "card-image",
@@ -39,7 +40,7 @@ function hasDiagnostic(errors, code, path = null) {
   );
 }
 
-test("loads exact interpreter coverage for the seven pilot components", async () => {
+test("loads exact interpreter coverage for the eight pilot components", async () => {
   const registry = await loadRendererRegistry({ repoRoot });
 
   assert.equal(registry.registry.id, "email-renderers");
