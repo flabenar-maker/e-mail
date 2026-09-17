@@ -117,7 +117,7 @@ Expected: FAIL, потому что `.agents/skills/building-cupis-emails/SKILL.
 
 - [ ] **Step 3: Описать paused и active поведение**
 
-До cutover Task 7 при `paused` разрешены только read-only navigation и реализация этого migration plan. Production build и изменение пользовательского письма не выполняются. После cutover при `resolved` skill исполняет только returned bundle и ordered workflow steps, не открывая источники по памяти или ручному списку.
+До публикации cutover в Task 8 при `paused` разрешены только read-only navigation и реализация этого migration plan. Production build и изменение пользовательского письма не выполняются. После cutover при `resolved` skill исполняет только returned bundle и ordered workflow steps, не открывая источники по памяти или ручному списку.
 
 - [ ] **Step 4: Зарегистрировать skill**
 
@@ -127,7 +127,7 @@ Expected: FAIL, потому что `.agents/skills/building-cupis-emails/SKILL.
 - { id: building-cupis-emails, path: .agents/skills/building-cupis-emails }
 ```
 
-README должен сообщать, что skill становится рабочим только после успешного E2E-gate и email-only cutover Task 7; наличие каталога skill до этого момента не разрешает production-сборку.
+README должен сообщать, что skill становится рабочим только после успешного E2E-gate Task 7 и публикации email-only cutover в Task 8; наличие каталога skill до этого момента не разрешает production-сборку.
 
 - [ ] **Step 5: Запустить GREEN для skill и manifest**
 
