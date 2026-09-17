@@ -35,8 +35,8 @@ Baseline: `main@48e4d6c5f51e1ccd2311b52f5805616f183150a8`.
 6. Generated-файлы не редактируются вручную.
 7. Figma-запись всегда ограничивается заранее подтверждённой областью.
 8. Точный результат важнее автоматического продолжения при расхождении.
-9. Миграция выполняется по доменам с shadow-сравнением.
-10. Старые дубли удаляются только после подтверждённого cutover.
+9. Миграция выполняется по доменам с shadow-сравнением и допускает отдельный cutover готового маршрута без преждевременного включения остальных.
+10. Старые дубли удаляются только после подтверждённого cutover соответствующего домена.
 11. Полный component registry и компактный Figma Description генерируются из одной structured component-записи.
 12. Figma Description не является источником implementation semantics и не входит в HTML-build context.
 13. Полный component contract содержит только факты, влияющие на реализацию; безвредный внутренний инвентарь Figma в него не переносится.
@@ -277,7 +277,7 @@ Asset owner сохраняет `@2x` или `@4x` при обычном rename.
 
 `core/component-contract-standard.md` определяет, какие implementation-significant данные обязан иметь любой текущий или новый component contract и в каком порядке они показываются в полном generated registry.
 
-`core/figma-component-description-standard.md` определяет компактную Figma-проекцию. Её фиксированный порядок: `CUPIS ID`, `PURPOSE`, `RENDER`, затем optional `CRITICAL`. `RENDER` вычисляется из contract tree; `CRITICAL` выводит только выбранные critical constraints и отсутствует при пустом списке.
+`core/figma-component-description-standard.md` определяет компактную Figma-проекцию. Её фиксированный порядок: `CUPIS ID`, `PURPOSE`, `RENDER`, затем optional `CRITICAL`. `PURPOSE` является одним человекочитаемым предложением длиной не более 160 символов. `RENDER` вычисляется из contract tree; `CRITICAL` выводит не более двух выбранных critical constraints и отсутствует при пустом списке. Перед первой массовой публикацией текущие Figma Description сохраняются как самостоятельный raw snapshot внутри `Legacy/`: snapshot не объявляется в manifest, не связывается с component records и не используется runtime, generation или validation.
 
 Полный generated registry должен включать идентификацию и назначение, structure/rendering, независимые Desktop и Mobile contracts, properties/variants, assets/interaction, constraints/dependencies и resolved foundation references. Это человекочитаемый output, а не редактируемый источник.
 
@@ -548,11 +548,12 @@ Validation и generation детерминированы и не требуют �
 7. generated docs и bundles;
 8. Core и workflows;
 9. maintenance skill;
-10. email-build skill;
+перед этапом 10 — отдельный prerequisite-пакет архивации исходных Figma Description и публикации compact generated Description;
+10. email-build skill, реальные E2E-сборки и cutover только email routes;
 11. стандарт и workflow разработки новых компонентов;
 12. навык разработки новых компонентов;
-13. shadow comparison;
-14. cutover;
+13. shadow comparison оставшихся maintenance/component-development маршрутов и regression уже активного email-build;
+14. cutover оставшихся маршрутов;
 15. отдельная ревизия `Legacy/` и временных migration-артефактов.
 
 На каждом этапе создаются отдельные branch и PR. Следующий этап начинается после проверки предыдущего.
@@ -561,19 +562,25 @@ Master-спецификация остаётся единственным вла
 
 Если во время этапа обнаруживается новая архитектурная развилка, сначала обновляется master-спецификация и проходит review. Phase plan не может самостоятельно вводить новое системное правило.
 
-Во время shadow mode архивные источники из `Legacy/` используются только read-only для сравнения. Текущие маршруты остановлены, пока не подключён проверенный структурированный контур; новая runtime-логика не смешивает старый и новый контекст. Перенос файла в `Legacy/` сам по себе не означает ни утраты его исторических правил, ни завершения миграции.
+Во время shadow mode архивные источники из `Legacy/` используются только read-only для сравнения. Конкретный route остаётся остановленным, пока для него не подключён и не проверен structured-контур; новая runtime-логика не смешивает старый и новый контекст. Перенос файла в `Legacy/` сам по себе не означает ни утраты его исторических правил, ни завершения миграции.
 
 ## 16. Cutover и rollback
 
-Cutover разрешён, когда:
+Cutover разрешён отдельно для готового домена, когда:
 
 - все records и references валидны;
 - Mobile/Desktop contracts полны;
 - generated docs полны, проверяются по structured inputs и сверены с архивным baseline; каждое содержательное отличие объяснено подтверждённым изменением, а не механическим переносом legacy-текста;
-- representative maintenance routes проходят;
-- representative local email builds не показывают новых нарушений;
+- representative маршруты этого домена проходят;
+- для email-build успешно собраны из чистого контекста одно реальное маркетинговое и одно реальное сервисное письмо по точным Mobile/Desktop-инстансам;
+- для email-build выполнено хотя бы одно версионное изменение готового письма без изменения исходной версии;
+- representative local email builds не показывают неклассифицированных нарушений геометрии, layout, spacing, visibility, изображений или текста;
 - skills используют manifest и bundles;
 - старые источники больше не читаются runtime.
+
+Этап 10 выполняет cutover только `email-new-build` и `email-continue-fix`, активирует их workflow/bundle dependencies и устанавливает проверенный email skill. Остальные routes остаются `workflow-paused`. Этап 13 сравнивает оставшиеся маршруты и повторно проверяет отсутствие email-build regression; этап 14 включает только оставшиеся готовые routes.
+
+Отсутствие прямого теста отправленного письма через Altcraft в мобильных приложениях не подменяется браузерной симуляцией и фиксируется как известное ограничение client evidence. Оно не блокирует локальную сборку после успешных E2E- и visual-проверок этапа 10, пока responsive strategy не меняется без такого evidence.
 
 После cutover отдельная ревизия `Legacy/` устанавливает для каждого файла решение `remove` или `preserve`. Удаление допускается только при подтверждённой замене и отсутствии потребителей; архив не удаляется автоматически.
 
