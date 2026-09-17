@@ -165,6 +165,46 @@ test("renderer rejects missing or non-critical selected constraints", async () =
   );
 });
 
+test("renderer rejects compact-description bounds with typed errors", async () => {
+  const tooLong = structuredClone(await byId("banner-secondary"));
+  tooLong.documentation.purpose = "я".repeat(161);
+  assert.throws(
+    () => renderFigmaComponentDescription(tooLong),
+    (error) =>
+      error?.code === "COMPONENT_PURPOSE_TOO_LONG" &&
+      error?.path === "/documentation/purpose",
+  );
+
+  const multiline = structuredClone(await byId("banner-secondary"));
+  multiline.documentation.purpose = "Первая строка.\nВторая строка.";
+  assert.throws(
+    () => renderFigmaComponentDescription(multiline),
+    (error) =>
+      error?.code === "COMPONENT_PURPOSE_MULTILINE" &&
+      error?.path === "/documentation/purpose",
+  );
+
+  const tooManyCritical = structuredClone(await byId("banner-secondary"));
+  tooManyCritical.constraints = ["one", "two", "three"].map((id) => ({
+    id,
+    scope: "all",
+    kind: "email-rendering",
+    severity: "critical",
+    statement: `Критическое правило ${id}.`,
+  }));
+  tooManyCritical.documentation.critical_constraint_ids = [
+    "one",
+    "two",
+    "three",
+  ];
+  assert.throws(
+    () => renderFigmaComponentDescription(tooManyCritical),
+    (error) =>
+      error?.code === "COMPONENT_DESCRIPTION_CRITICAL_LIMIT" &&
+      error?.path === "/documentation/critical_constraint_ids",
+  );
+});
+
 test("renderer blocks missing purpose and unresolved render type", async () => {
   const missingPurpose = structuredClone(await byId("banner-secondary"));
   missingPurpose.documentation.purpose = "";
