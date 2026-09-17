@@ -91,7 +91,7 @@ test("mobile secondary direct image remains fluid with height:auto", async () =>
   root.children[0].asset_contract_id = "secondary-image";
   const result = await render({
     component: component(root),
-    content: {},
+    content: { "secondary-image": { alt: "" } },
     assets: { "secondary-image": { src: "secondary.png", width: 296, height: 188 } },
   });
   assert.match(result.html, /<img[^>]*src="secondary\.png"[^>]*style="[^"]*height:auto/u);
