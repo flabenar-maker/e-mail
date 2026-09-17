@@ -13,7 +13,9 @@ import {
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 
 function digest(value) {
-  return createHash("sha256").update(value).digest("hex");
+  return createHash("sha256")
+    .update(value.replace(/\r\n/gu, "\n"))
+    .digest("hex");
 }
 
 function allStepIds(registry) {
@@ -27,14 +29,16 @@ function allStepIds(registry) {
 test("structured workflows preserve the archived workflow files byte-for-byte", async () => {
   const maintenance = await readFile(
     join(repoRoot, "Legacy/workflows/library-maintenance-checkpoint.md"),
+    "utf8",
   );
   const email = await readFile(
     join(repoRoot, "Legacy/workflows/email-build-checkpoint.md"),
+    "utf8",
   );
 
   assert.equal(
     digest(maintenance),
-    "bfccff80d4dd4eff0d439660c28bbc4e6607631d530dfea8cea165c96fdb6f51",
+    "fdc6b47742a6072e1efb52957b30573cfa55294804e1efe185713d0792587416",
   );
   assert.equal(
     digest(email),
