@@ -250,5 +250,3 @@ The PR must state exact SHA, local commands/results, preserved paused routes, an
 - The skill has no duplicate rules or canonical path list and cannot bypass paused state.
 - Cloud-only ownership, Figma mutation gate, impact report, read-back and separate merge authorization remain intact.
 - All local checks pass on the exact final cloud SHA; Figma and email outputs remain unchanged.
-
-
