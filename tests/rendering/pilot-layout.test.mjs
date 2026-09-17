@@ -1,25 +1,25 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { indexComponentRegistries, loadComponentRegistries } from "../../scripts/lib/component-registry.mjs";
 import { loadRenderingFoundation } from "../../scripts/lib/rendering-foundation.mjs";
+import { loadEmailModel } from "../../scripts/lib/email-model.mjs";
 import { loadRendererRegistry } from "../../scripts/lib/renderer-registry.mjs";
 import { renderComponent, renderEmailDocument } from "../../scripts/lib/email-renderer.mjs";
 
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const fixturePath = join(repoRoot, "tests/fixtures/rendering/pilot-email.json");
+const schemaPath = join(repoRoot, "schemas/email-model.schema.json");
 
 async function renderPilot(componentId) {
-  const [source, registries, rendererRegistry, rendering] = await Promise.all([
-    readFile(fixturePath, "utf8"),
+  const [model, registries, rendererRegistry, rendering] = await Promise.all([
+    loadEmailModel({ modelPath: fixturePath, schemaPath }),
     loadComponentRegistries({ repoRoot }),
     loadRendererRegistry({ repoRoot }),
     loadRenderingFoundation({ repoRoot }),
   ]);
-  const model = JSON.parse(source);
   const instance = model.root.slots[0].instances.find((entry) => entry.component_id === componentId);
   assert.ok(instance, "Missing pilot instance: " + componentId);
   const result = renderComponent({
@@ -72,13 +72,13 @@ test("Banner/App-Download Desktop puts all stores in one row and Mobile stacks t
   assert.ok(logo.includes(qr.at(-1)), "Desktop logo and QR must share the header row");
 });
 test("pilot shell uses 270px inner minimum width for the 300px supported viewport", async () => {
-  const [source, registries, rendererRegistry, rendering] = await Promise.all([
-    readFile(fixturePath, "utf8"),
+  const [model, registries, rendererRegistry, rendering] = await Promise.all([
+    loadEmailModel({ modelPath: fixturePath, schemaPath }),
     loadComponentRegistries({ repoRoot }),
     loadRendererRegistry({ repoRoot }),
     loadRenderingFoundation({ repoRoot }),
   ]);
-  const result = renderEmailDocument(JSON.parse(source), {
+  const result = renderEmailDocument(model, {
     componentIndex: indexComponentRegistries(registries),
     rendererRegistry,
     foundations: { rendering },
@@ -90,14 +90,14 @@ test("pilot shell uses 270px inner minimum width for the 300px supported viewpor
 });
 
 test("pilot renderer blocks an impossible minimum viewport instead of clamping", async () => {
-  const [source, registries, rendererRegistry, rendering] = await Promise.all([
-    readFile(fixturePath, "utf8"),
+  const [model, registries, rendererRegistry, rendering] = await Promise.all([
+    loadEmailModel({ modelPath: fixturePath, schemaPath }),
     loadComponentRegistries({ repoRoot }),
     loadRendererRegistry({ repoRoot }),
     loadRenderingFoundation({ repoRoot }),
   ]);
   rendering.shell.min_supported_viewport_px = 30;
-  const result = renderEmailDocument(JSON.parse(source), {
+  const result = renderEmailDocument(model, {
     componentIndex: indexComponentRegistries(registries),
     rendererRegistry,
     foundations: { rendering },
