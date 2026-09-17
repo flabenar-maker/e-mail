@@ -52,7 +52,7 @@ test("uncovered components report coverage only without speculative interpretati
   ]);
 });
 
-test("all eight pilot interpreter contracts are renderer-ready", async () => {
+test("all declared interpreter contracts are renderer-ready", async () => {
   const registries = await loadComponentRegistries({ repoRoot });
   const rendererRegistry = await loadRendererRegistry({ repoRoot });
 
@@ -65,9 +65,9 @@ test("all eight pilot interpreter contracts are renderer-ready", async () => {
   }
 
   const report = auditRendererReadiness(registries, rendererRegistry);
-  assert.equal(report.summary.covered_active_components, 24);
-  assert.equal(report.summary.ready_components, 8);
-  assert.equal(report.summary.missing_coverage, 37);
+  assert.equal(report.summary.covered_active_components, 43);
+  assert.equal(report.summary.ready_components, 25);
+  assert.equal(report.summary.missing_coverage, 18);
 });
 
 test("pilot contracts retain their critical rendering structures", async () => {
@@ -218,6 +218,6 @@ test("returns stable issue shapes and deterministic ordering", async () => {
     report.components.filter(({ issues }) =>
       issues.some(({ code }) => code === "RENDER_COVERAGE_MISSING"),
     ).length,
-    37,
+    18,
   );
 });
