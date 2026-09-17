@@ -140,7 +140,7 @@ CRITICAL
 
 - [ ] **Step 4: Реализовать минимальные guards**
 
-Schema и renderer отклоняют только новые запрещённые состояния. Rendered labels, порядок, LF normalization, trailing newline и derived `RENDER` не меняются.
+Schema и renderer отклоняют только новые запрещённые состояния. Rendered labels, порядок, LF normalization и derived `RENDER` не меняются. Terminal line break отсутствует, потому что Figma удаляет завершающий перенос при сохранении Description.
 
 - [ ] **Step 5: Запустить focused tests**
 
