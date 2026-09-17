@@ -1,6 +1,6 @@
 # CUPIS Structured System Migration Roadmap
 
-Актуальность: 2026-09-15.
+Актуальность: 2026-09-17.
 
 ## Назначение
 
@@ -144,7 +144,7 @@ Structured records остаются shadow-источником до generated b
 
 Реализация этапа 7B слита в [PR #43](https://github.com/flabenar-maker/e-mail/pull/43), итоговый commit: `15a1c3ce09fec33d5aee82a87ffee4667e911702`. Generated docs и route-specific context bundles были реализованы как shadow-слой. После PR #69 полный `docs/generated/component-registry.md` ошибочно оказался в `Legacy/` вместе со старым контуром; его renderer и структурированные входы остались. [PR #71](https://github.com/flabenar-maker/e-mail/pull/71) восстановил полный generated registry, его регистрацию в manifest и blocking-проверки в `main`. Файл вновь является производным представлением 61 structured contracts, не вторым источником component facts; остановленные маршруты не переключались.
 
-### 8. Core, workflows и подготовка HTML-рендера — в работе
+### 8. Core, workflows и подготовка HTML-рендера — завершён
 
 Архитектурное основание: [CUPIS HTML Rendering Design](../specs/2026-09-10-cupis-html-rendering-design.md).
 
@@ -152,7 +152,7 @@ Structured records остаются shadow-источником до generated b
 
 Этап 8 готовит renderer и структурированные workflows, но не переключает остановленные маршруты. Фактический cutover выполняется только на этапе 14 после сквозного сравнения этапа 13.
 
-Фактический статус на 2026-09-16: пакеты 1–9 слиты в main через PR #50–58; [PR #59](https://github.com/flabenar-maker/e-mail/pull/59) исправил пилотные Mobile/Desktop layout contracts. Реализованы rendering foundation, реестр шести пилотных renderer coverage, разделённый Core, email-примитивы, contract-tree interpreter, пилот, временная модель, CLI с атомарным выводом, render-impact diagnostics и автоматические HTML-инварианты. Наличие этого кода не означает готовности сборки произвольного production-письма.
+Фактический статус на 2026-09-17: пакеты 1–9 слиты в main через PR #50–58; [PR #59](https://github.com/flabenar-maker/e-mail/pull/59) исправил пилотные Mobile/Desktop layout contracts. Package 10A–10C слиты через PR #78–80; Package 10D исключён из текущего маршрута без имитации client evidence. Package 11 завершил coverage всех 61 active component records через PR #81–83. Package 12 добавил structured workflows, `structured-shadow` bundle mode и archive-path blocker в [PR #84](https://github.com/flabenar-maker/e-mail/pull/84). Все семь routes остаются `workflow-paused`; это завершение подготовки Stage 8, а не production cutover.
 
 После неудачной попытки получить убедительный пилотный результат обнаружилась недостаточная точность части мигрированных component contracts. [PR #61](https://github.com/flabenar-maker/e-mail/pull/61), [#62](https://github.com/flabenar-maker/e-mail/pull/62), [#63](https://github.com/flabenar-maker/e-mail/pull/63) и [#64](https://github.com/flabenar-maker/e-mail/pull/64) выполнили прямую сверку с Figma, добавили проверку фактических данных и уточнили маркетинговые и сервисные контракты. Это корректирующая работа внутри этапа 8, а не завершение пакетов 10–12.
 
@@ -173,15 +173,17 @@ Structured records остаются shadow-источником до generated b
 - [x] Package 10C: normal/no-style preview, узкие viewport, Email/Header рядом с Email/Footer и доступный browser visual gate — [PR #80](https://github.com/flabenar-maker/e-mail/pull/80). Normal mode прошёл; no-style выявил Desktop-fallback overflow на 300–360px.
 - [x] Package 10D исключён из текущего маршрута по решению пользователя из-за отсутствия доступа к Altcraft и целевым приложениям. Проверка не выполнена; `responsive_fallback.validation` остаётся `required-before-change`.
 - [x] Доступные representative Mobile/Desktop visual scenarios для Header, Footer и пилотных блоков выполнены в Package 10C; real-client evidence не заявляется.
-- [ ] Мигрировать renderer coverage остальных активных компонентов после успешного пилота.
-- [ ] Перевести maintenance и email-build workflows в структурированный формат и сравнить их обязательства с read-only архивным baseline без двойного контекста. Полное сквозное сравнение маршрутов остаётся этапу 13.
-- [ ] Подтвердить, что HTML зависит от фактического инстанса и component contract, а не design-time золотых правил.
-- [ ] Не подавать legacy и structured наборы правил одновременно в рабочий bundle.
-- [ ] Завершить все проверки этапа 8 и только после этого отметить этап завершённым.
+- [x] Мигрировать renderer coverage остальных активных компонентов после успешного пилота — PR #81–83: 61 active/covered, 38 interpreter-ready и 23 source-only, zero missing coverage.
+- [x] Перевести maintenance и email-build workflows в структурированный формат и сравнить их обязательства с read-only архивным baseline без двойного контекста — PR #84. Полное сквозное сравнение маршрутов остаётся этапу 13.
+- [x] Подтвердить, что HTML зависит от фактического инстанса и component contract, а не design-time золотых правил — contract-tree interpreter и renderer coverage защищены локальными tests этапа 8.
+- [x] Не подавать архивный и structured наборы правил одновременно в рабочий bundle — PR #84 возвращает `CONTEXT_BUNDLE_ARCHIVED_SOURCE_FORBIDDEN` для архивного path.
+- [x] Завершить проверки этапа 8 — на финальном SHA PR #84 локально прошли rendering audit, generated-doc check, полный `npm run verify` и Windows bootstrap; GitHub Actions не использовались.
 
 [PR #66](https://github.com/flabenar-maker/e-mail/pull/66) исправил оболочку пилотного письма и границу Mobile/Desktop. [PR #67](https://github.com/flabenar-maker/e-mail/pull/67) и [#68](https://github.com/flabenar-maker/e-mail/pull/68) закрепили локальные проверки без GitHub Actions; [PR #69](https://github.com/flabenar-maker/e-mail/pull/69) и [#70](https://github.com/flabenar-maker/e-mail/pull/70) изолировали Legacy и адаптировали тесты. Маршруты сейчас остановлены; восстановленный полный generated component registry не означает завершения пакетов 10–12 или возобновления production-сборки.
 
-### 9. Подготовка maintenance skill
+### 9. Подготовка maintenance skill — в работе
+
+Подробный implementation plan: [CUPIS Maintenance Skill Stage 9](2026-09-17-cupis-maintenance-skill-stage-9.md).
 
 Manifest-driven разрешение source paths было выполнено на этапе 2. Этот этап не повторяет первоначальный переход на manifest: он подготавливает навык к итоговым generated context bundles, но не запускает временно остановленные маршруты. Их фактическое включение остаётся этапу 14 после этапа 13.
 
