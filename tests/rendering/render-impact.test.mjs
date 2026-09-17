@@ -308,6 +308,7 @@ test("email document contains safe renderer version, commit and impact metadata"
     },
   };
   const model = {
+    metadata: { language: "ru", direction: "ltr" },
     root: {
       instance_id: "email",
       component_id: "email-template",
