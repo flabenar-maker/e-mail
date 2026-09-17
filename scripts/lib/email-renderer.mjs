@@ -13,6 +13,15 @@ function diagnostic(code, path, message) {
   return { code, path, message };
 }
 
+function escapeAttribute(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
 function sortDiagnostics(items) {
   const unique = new Map();
   for (const item of items) {
@@ -521,8 +530,10 @@ export function renderEmailDocument(model, dependencies) {
   const style = rendered.css ? `<style>${rendered.css}</style>` : "";
   const metadata = buildMetadataComment(model, dependencies);
   const body = renderPrimitive("email-shell", shell, rendered.html);
+  const language = escapeAttribute(model.metadata.language);
+  const direction = escapeAttribute(model.metadata.direction);
   return {
-    html: `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${metadata}${style}</head><body style="margin:0;padding:0">${body}</body></html>`,
+    html: `<!doctype html><html lang="${language}" dir="${direction}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${metadata}${style}</head><body style="margin:0;padding:0"><div lang="${language}" dir="${direction}">${body}</div></body></html>`,
     assets: rendered.assets,
     diagnostics: [],
   };
