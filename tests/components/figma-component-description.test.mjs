@@ -29,7 +29,6 @@ const fiscalExpected = [
   "CRITICAL",
   "- Каждая видимая ячейка строки содержит ссылку с одним URL, чтобы кликабельной оставалась вся площадь строки без помещения таблицы внутрь ссылки.",
   "- item-01 использует отдельный ofd-badge @4x, item-02 отдельный fns-badge @4x; эти изображения не заменяются общим bank-badge.",
-  "",
 ].join("\n");
 
 test("renderer produces the exact compact projection with selected CRITICAL only", async () => {
@@ -37,6 +36,7 @@ test("renderer produces the exact compact projection with selected CRITICAL only
 
   assert.equal(renderFigmaComponentDescription(record), fiscalExpected);
   assert.equal(renderComponentDescription(record), fiscalExpected);
+  assert.doesNotMatch(fiscalExpected, /\n$/u);
 });
 
 test("renderer omits the whole CRITICAL section when selection is empty", async () => {
@@ -47,7 +47,6 @@ test("renderer omits the whole CRITICAL section when selection is empty", async 
       "CUPIS ID: banner-secondary",
       "PURPOSE: Вторичный промобаннер с текстовой и визуальной областями.",
       "RENDER: HYBRID",
-      "",
     ].join("\n"),
   );
 });
@@ -255,7 +254,6 @@ test("renderer and comparison normalize every JavaScript line separator", async 
       "CUPIS ID: banner-secondary",
       "PURPOSE: Первая строка. Вторая строка. Третья строка.",
       "RENDER: HYBRID",
-      "",
     ].join("\n"),
   );
   assert.deepEqual(
