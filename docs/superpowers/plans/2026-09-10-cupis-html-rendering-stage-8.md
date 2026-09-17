@@ -504,7 +504,7 @@ git commit -m "test: enforce rendered email invariants"
 
 ### Package 10: Client resilience и Mobile/Desktop visual scenarios
 
-Архитектура client resilience закреплена в [CUPIS Email Client Resilience Design](../specs/2026-09-16-cupis-email-client-resilience-design.md). Пошаговая реализация находится в [отдельном implementation plan](2026-09-16-cupis-email-client-resilience.md). Все подпакеты 10A–10D обязательны и выполняются последовательно; Package 11 не начинается до их завершения и финального visual gate.
+Архитектура client resilience закреплена в [CUPIS Email Client Resilience Design](../specs/2026-09-16-cupis-email-client-resilience-design.md). Пошаговая реализация находится в [отдельном implementation plan](2026-09-16-cupis-email-client-resilience.md). Подпакеты 10A–10C выполнены последовательно. Package 10D был внешним client-evidence gate, но исключён из текущего маршрута 17.09.2026 из-за отсутствия доступа; это не подтверждает fallback. По прямому решению пользователя Package 11 начинается после слияния Package 10C и доступного normal visual gate.
 
 #### Package 10A: Exact policy and email model
 
@@ -553,7 +553,7 @@ git commit -m "test: enforce rendered email invariants"
 - [ ] Header и Footer присутствуют ровно один раз внутри Email/Template; внутренние компоненты не становятся самостоятельными body-блоками.
 - [ ] Tests сравнивают declared widths, responsive classes, image ratios и Header/Footer composition; Card отдельно доказывает пропорциональную высоту.
 - [ ] Выполнить fresh local checks на точном cloud SHA без GitHub Actions.
-- [ ] Опубликовать reviewable commits и отметить Package 10 завершённым только после 10A–10D.
+- [ ] Опубликовать reviewable commits; техническую часть Package 10 считать завершённой после 10C, но не помечать responsive fallback как client-validated без 10D.
 
 ```powershell
 node --test tests/foundation/rendering-foundation.test.mjs tests/rendering/email-model.test.mjs tests/rendering/email-metrics.test.mjs tests/rendering/email-preview.test.mjs tests/rendering/client-resilience.test.mjs tests/rendering/visual-scenarios.test.mjs
