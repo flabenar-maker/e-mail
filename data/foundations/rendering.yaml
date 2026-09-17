@@ -1,10 +1,18 @@
-schema_version: 1.0.0
+schema_version: 1.1.0
 foundation: { id: rendering, status: shadow }
 shell:
   background_color: '#F3F3F5'
   horizontal_inset_px: 15
   max_width_px: 600
-  min_width_px: 300
+  min_supported_viewport_px: 300
+embedded_css:
+  max_bytes_exclusive: 16384
+color_scheme:
+  declaration: none
+  dark_variant: none
+responsive_fallback:
+  without_embedded_css: desktop
+  validation: required-before-change
 breakpoints:
   - { id: cupis-mobile, query: max-width, value: 659, unit: px }
 responsive_strategies:
