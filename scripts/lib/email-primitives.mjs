@@ -20,12 +20,7 @@ function cssUrl(value) {
 
 function styleText(styles) {
   return Object.entries(styles)
-    .filter(
-      ([name, value]) =>
-        value !== undefined &&
-        value !== null &&
-        (value !== "" || name === "alt"),
-    )
+    .filter(([, value]) => value !== undefined && value !== null && value !== "")
     .sort(([left], [right]) => left.localeCompare(right))
     .map(([name, value]) => `${name}:${String(value)}`)
     .join(";");
