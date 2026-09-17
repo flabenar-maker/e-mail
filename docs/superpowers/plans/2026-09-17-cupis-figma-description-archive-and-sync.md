@@ -13,7 +13,7 @@
 ## Global Constraints
 
 - Использовать только Figma MCP. Browser scraping, REST token, ручное копирование и локальный Figma-файл запрещены.
-- Capture охватывает library roots из canonical manifest и сохраняет raw metadata без преобразования текста.
+- Capture охватывает все активные library roots, разрешённые из manifest и manifest-declared component sources: marketing, service, shared library и shared templates. Raw metadata сохраняется без преобразования текста.
 - Archive path не объявляется в `system/manifest.yaml`, не входит в bundles/generated docs, не импортируется scripts/tests и не связывается со stable component IDs.
 - Snapshot содержит Figma node ID и имя только как исторические координаты исходного снимка; поле `component_id` запрещено.
 - Canonical component owner — component set для variant family или standalone component для одиночного компонента. Variant node не получает отдельный generated Description, потому что не имеет самостоятельного component record.
@@ -39,15 +39,15 @@
 
 - [ ] **Step 1: Объявить read-only impact boundary**
 
-Зафиксировать exact Figma file key, marketing/service roots, типы читаемых узлов (`COMPONENT_SET`, `COMPONENT`), читаемые metadata fields (`id`, `name`, `type`, `description`, `documentationLinks`) и отсутствие любых Figma writes.
+Зафиксировать exact Figma file key и четыре canonical roots: marketing `538:17236`, service `538:17235`, shared library `539:38025`, shared templates `1084:34055`. Зафиксировать типы читаемых узлов (`COMPONENT_SET`, `COMPONENT`), metadata fields (`id`, `name`, `type`, `description`, `documentationLinks`) и отсутствие любых Figma writes.
 
 - [ ] **Step 2: Загрузить обязательные Figma skills**
 
 Перед каждым `use_figma` action использовать `figma:figma-use`; для чтения nodes и metadata использовать общий `figma` workflow. Не переходить к browser или REST fallback при ошибке.
 
-- [ ] **Step 3: Выполнить MCP capture обоих roots**
+- [ ] **Step 3: Выполнить MCP capture всех четырёх roots**
 
-Обойти все component sets и components внутри roots. Включить canonical owners, variant nodes и пустые Description, чтобы snapshot доказывал полноту, а не только наличие текста. Для каждого node получить:
+Обойти все component sets и components внутри marketing, service, shared library и shared templates roots. Включить canonical owners, variant nodes и пустые Description, чтобы snapshot доказывал полноту, а не только наличие текста. Для каждого node получить:
 
 ```json
 {
@@ -246,10 +246,11 @@ PR перечисляет capture count, owner count, replaced/unchanged counts,
 
 ## Success Criteria
 
-- Raw description snapshot содержит все component/component-set nodes из обоих library roots, включая пустые и variant metadata, но не содержит stable component IDs или active-system links.
+- Raw description snapshot содержит все component/component-set nodes из четырёх canonical roots, включая пустые и variant metadata, но не содержит stable component IDs или active-system links.
 - Каждый active component record сопоставлен ровно одному canonical Figma owner; отсутствуют missing, unregistered, duplicate и identity mismatch blockers.
 - Compact format остаётся `CUPIS ID`, `PURPOSE`, `RENDER`, optional `CRITICAL`; PURPOSE не длиннее 160 code points, CRITICAL содержит не более двух пунктов.
 - Каждый canonical owner получил exact generated Description через MCP; Figma read-back совпал побайтово.
 - Documentation links, variants, properties, layers, geometry, bindings, assets and design не изменены.
 - Figma Description не вошёл в email-build runtime и не стал вторым implementation source.
 - Archive не объявлен и не потребляется активной системой.
+
