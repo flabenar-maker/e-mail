@@ -57,7 +57,7 @@ test("preserves exact interpreter coverage for the eight pilot components", asyn
       mode: "interpreter",
     })),
   );
-  assert.equal(interpreterCoverage.length, 25);
+  assert.equal(interpreterCoverage.length, 38);
   assert.deepEqual(validateRendererRegistrySemantics(registry), []);
 });
 
