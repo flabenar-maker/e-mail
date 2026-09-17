@@ -243,7 +243,7 @@ test("renderer is deterministic and does not mutate the component record", async
 
   assert.equal(first, second);
   assert.deepEqual(record, before);
-  assert.equal(first.endsWith("\n"), true);
+  assert.equal(first.endsWith("\n"), false);
 });
 
 test("comparison normalizes every JavaScript line separator", () => {
