@@ -205,3 +205,50 @@ test("all four Secondary boolean combinations control the supplied nested button
     }
   }
 });
+
+test("document shell propagates exact language and direction to html and body wrapper", async () => {
+  const { model, dependencies } = await pilot();
+  const result = renderEmailDocument(model, dependencies);
+
+  assert.deepEqual(result.diagnostics, []);
+  assert.match(result.html, /^<!doctype html><html lang="ru" dir="ltr">/u);
+  assert.match(
+    result.html,
+    /<body style="margin:0;padding:0"><div lang="ru" dir="ltr">/u,
+  );
+  assert.match(result.html, /<\/div><\/body><\/html>$/u);
+});
+
+test("tagged informative and decorative alt values render without implicit defaults", async () => {
+  const { model, dependencies } = await pilot();
+  const secondary = instance(model, "banner-secondary");
+  const alt = secondary.content_values.find(
+    ({ element_id, slot_id }) =>
+      element_id === "root-card-secondary-image" && slot_id === "alt",
+  );
+  assert.ok(alt);
+
+  alt.value = {
+    type: "alt-text",
+    purpose: "informative",
+    value: 'CUPIS & "спорт"',
+  };
+  const informative = renderEmailDocument(model, dependencies);
+  assert.deepEqual(informative.diagnostics, []);
+  assert.match(
+    informative.html,
+    /<img[^>]*src="images\/secondary\.jpg"[^>]*alt="CUPIS &amp; &quot;спорт&quot;"/u,
+  );
+
+  alt.value = {
+    type: "alt-text",
+    purpose: "decorative",
+    value: "",
+  };
+  const decorative = renderEmailDocument(model, dependencies);
+  assert.deepEqual(decorative.diagnostics, []);
+  assert.match(
+    decorative.html,
+    /<img[^>]*src="images\/secondary\.jpg"[^>]*alt=""/u,
+  );
+});
