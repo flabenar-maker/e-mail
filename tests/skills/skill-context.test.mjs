@@ -37,12 +37,12 @@ function replaceWorkflowSource(manifest, routeId, sourceId) {
     ({ id }) => id === route.bundle_profile_id,
   );
   route.workflow_source_id = sourceId;
-  profile.source_ids = profile.source_ids.map((id) =>
-    id === "workflow-paused" ? sourceId : id,
+  profile.source_ids = profile.source_ids.filter(
+    (id) => id !== "workflow-paused",
   );
   profile.generated_bundle.static_source_ids =
-    profile.generated_bundle.static_source_ids.map((id) =>
-      id === "workflow-paused" ? sourceId : id,
+    profile.generated_bundle.static_source_ids.filter(
+      (id) => id !== "workflow-paused",
     );
 }
 
@@ -79,6 +79,10 @@ test("an explicitly active maintenance route resolves exact ordered steps", asyn
   });
 
   assert.equal(result.status, "resolved");
+  assert.equal(
+    result.bundle.static_sources.some(({ kind }) => kind === "workflow"),
+    false,
+  );
   assert.deepEqual(
     result.workflow.steps.map(({ id }) => id),
     [
