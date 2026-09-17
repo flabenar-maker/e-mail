@@ -81,3 +81,20 @@ test("normal and no-style scenarios preserve safe shell and proportional direct 
     assert.match(noStyle, new RegExp(asset.path.replaceAll(".", "\\."), "u"));
   }
 });
+test("Header asset stays fixed-size and is centered by its layout wrapper", async () => {
+  const result = await renderPilot();
+  assert.deepEqual(result.diagnostics, []);
+  const images = [...result.html.matchAll(/<img\b[^>]*src="images\/header-logo\.png"[^>]*>/gu)].map((match) => match[0]);
+  assert.equal(images.length, 2);
+  assert.deepEqual(
+    images.map((image) => [attribute(image, "width"), attribute(image, "height")]).sort(),
+    [["212", "33"], ["322", "50"]],
+  );
+  for (const image of images) {
+    assert.doesNotMatch(attribute(image, "style") ?? "", /(?:^|;)padding(?:-|:)/u);
+  }
+  assert.equal(
+    [...result.html.matchAll(/<td\b[^>]*style="[^"]*text-align:center[^"]*"[^>]*>[\s\S]*?<img\b[^>]*src="images\/header-logo\.png"/gu)].length,
+    2,
+  );
+});
