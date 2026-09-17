@@ -351,7 +351,7 @@ test("interpreter dispatches supported modes without rendering Figma-only nodes"
     coverage,
     content: {
       link: { href: { type: "url", value: "https://example.test" } },
-      icon: { alt: { type: "alt-text", value: "Icon" } },
+      icon: { alt: { type: "alt-text", purpose: "informative", value: "Icon" } },
       "live-copy": { text: { type: "plain-text", value: "Live" } },
       "nested-copy": { text: { type: "plain-text", value: "Nested" } },
       "slot-copy": { text: { type: "plain-text", value: "Slot" } },
