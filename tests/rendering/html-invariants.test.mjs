@@ -252,3 +252,30 @@ test("tagged informative and decorative alt values render without implicit defau
     /<img[^>]*src="images\/secondary\.jpg"[^>]*alt=""/u,
   );
 });
+test("pilot output exposes UTF-8 byte metrics", async () => {
+  const { model, dependencies } = await pilot();
+  const result = renderEmailDocument(model, dependencies);
+
+  assert.deepEqual(result.diagnostics, []);
+  assert.deepEqual(result.metrics, {
+    html_bytes: Buffer.byteLength(result.html, "utf8"),
+    embedded_css_bytes: result.metrics.embedded_css_bytes,
+  });
+  assert.ok(result.metrics.embedded_css_bytes > 0);
+});
+
+test("renderer blocks output at or above the exclusive embedded CSS limit", async () => {
+  const { model, dependencies } = await pilot();
+  dependencies.foundations.rendering.embedded_css.max_bytes_exclusive = 1;
+
+  const result = renderEmailDocument(model, dependencies);
+
+  assert.equal(result.html, "");
+  assert.ok(
+    result.diagnostics.some(
+      ({ code, path }) =>
+        code === "RENDER_EMBEDDED_CSS_BUDGET_EXCEEDED" &&
+        path === "/embedded_css",
+    ),
+  );
+});
