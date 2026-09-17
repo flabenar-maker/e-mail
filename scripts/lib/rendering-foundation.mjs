@@ -5,7 +5,7 @@ import { SystemValidationError } from "./diagnostics.mjs";
 import { validateDocumentShape } from "./schema-validation.mjs";
 import { readStrictYaml } from "./strict-yaml.mjs";
 
-const SUPPORTED_RENDERING_VERSION = "1.0.0";
+const SUPPORTED_RENDERING_VERSION = "1.1.0";
 const DEFINITION_GROUPS = [
   "breakpoints",
   "responsive_strategies",
@@ -127,6 +127,22 @@ export function validateRenderingSemantics(rendering) {
         ),
       );
     }
+  }
+
+  const horizontalInset = rendering?.shell?.horizontal_inset_px;
+  const minimumViewport = rendering?.shell?.min_supported_viewport_px;
+  if (
+    Number.isInteger(horizontalInset) &&
+    Number.isInteger(minimumViewport) &&
+    2 * horizontalInset >= minimumViewport
+  ) {
+    errors.push(
+      diagnostic(
+        "RENDERING_SHELL_VIEWPORT_IMPOSSIBLE",
+        "/shell/min_supported_viewport_px",
+        "Minimum supported viewport must exceed both horizontal shell insets.",
+      ),
+    );
   }
 
   errors.push(...findConcreteRecords(rendering));
