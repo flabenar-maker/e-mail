@@ -57,6 +57,30 @@ const marketingSourceOnlyIds = [
   "asset-feature-icon-4x",
 ];
 
+const serviceInterpreterIds = [
+  "badge-operation-status",
+  "banner-fiscal-check-link",
+  "block-contact-support",
+  "block-instruction-steps",
+  "block-personal-data-update",
+  "block-receipt-info",
+  "block-transaction-error",
+  "block-transaction-success",
+  "details-operation",
+  "details-operation-plain",
+  "details-receipt",
+  "details-suspicious-operation",
+  "details-transfer",
+];
+
+const serviceSourceOnlyIds = [
+  "asset-bank-badge-4x",
+  "asset-icon-badge-4x",
+  "asset-partner-badge-4x",
+  "asset-status-badge-negative-4x",
+  "asset-status-badge-positive-4x",
+];
+
 function componentById(registries, componentId) {
   for (const document of Object.values(registries)) {
     const record = document.components.find(({ id }) => id === componentId);
@@ -119,8 +143,33 @@ test("Package 11 Marketing gives every active record exact coverage", async () =
     assert.equal(audited.ready, false, componentId);
   }
 
-  assert.equal(report.summary.covered_active_components, 43);
-  assert.equal(report.summary.ready_components, 25);
-  assert.equal(report.summary.missing_coverage, 18);
+  assert.equal(report.summary.generic_description_facts, 0);
+});
+
+test("Package 11 Service closes exact coverage for every active component", async () => {
+  const registries = await loadComponentRegistries({ repoRoot });
+  const rendererRegistry = await loadRendererRegistry({ repoRoot });
+  const report = auditRendererReadiness(registries, rendererRegistry);
+
+  for (const componentId of serviceInterpreterIds) {
+    const coverage = resolveRendererCoverage(rendererRegistry, componentId);
+    assert.equal(coverage.mode, "interpreter", componentId);
+    const audited = report.components.find(({ id }) => id === componentId);
+    assert.deepEqual(audited.issues, [], componentId);
+    assert.equal(audited.ready, true, componentId);
+  }
+
+  for (const componentId of serviceSourceOnlyIds) {
+    const coverage = resolveRendererCoverage(rendererRegistry, componentId);
+    assert.equal(coverage.mode, "source-only", componentId);
+    assert.ok(coverage.reason.trim().length > 0, componentId);
+    const audited = report.components.find(({ id }) => id === componentId);
+    assert.deepEqual(audited.issues, [], componentId);
+    assert.equal(audited.ready, false, componentId);
+  }
+
+  assert.equal(report.summary.covered_active_components, 61);
+  assert.equal(report.summary.ready_components, 38);
+  assert.equal(report.summary.missing_coverage, 0);
   assert.equal(report.summary.generic_description_facts, 0);
 });
