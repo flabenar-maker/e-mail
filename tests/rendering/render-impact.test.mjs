@@ -308,6 +308,7 @@ test("email document contains safe renderer version, commit and impact metadata"
     },
   };
   const model = {
+    metadata: { language: "ru", direction: "ltr" },
     root: {
       instance_id: "email",
       component_id: "email-template",
@@ -334,7 +335,10 @@ test("email document contains safe renderer version, commit and impact metadata"
           background_color: "#F3F3F5",
           horizontal_inset_px: 15,
           max_width_px: 600,
-          min_width_px: 300,
+          min_supported_viewport_px: 300,
+        },
+        embedded_css: {
+          max_bytes_exclusive: 16384,
         },
         postprocessing: {
           allowed: ["normalize-attributes"],

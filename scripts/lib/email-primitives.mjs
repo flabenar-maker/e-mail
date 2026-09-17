@@ -28,7 +28,12 @@ function styleText(styles) {
 
 function attributes(entries) {
   return entries
-    .filter(([, value]) => value !== undefined && value !== null && value !== "")
+    .filter(
+      ([name, value]) =>
+        value !== undefined &&
+        value !== null &&
+        (value !== "" || name === "alt"),
+    )
     .map(([name, value]) => ` ${name}="${escapeHtml(value)}"`)
     .join("");
 }
@@ -104,6 +109,11 @@ function renderLink(props, children) {
 }
 
 function renderDirectImage(props) {
+  if (!Object.hasOwn(props, "alt") || typeof props.alt !== "string") {
+    const error = new Error("Direct images require an explicit alt property.");
+    error.code = "DIRECT_IMAGE_ALT_REQUIRED";
+    throw error;
+  }
   const critical = {
     border: "0",
     display: "block",
@@ -119,7 +129,7 @@ function renderDirectImage(props) {
       ["src", props.src],
       ["width", props.width],
       ["height", props.fluid ? undefined : props.height],
-      ["alt", props.alt ?? ""],
+      ["alt", props.alt],
       ["border", "0"],
     ],
     { ...(props.style ?? {}), ...critical },
@@ -159,8 +169,11 @@ function renderVisibility(props, children) {
 
 function renderEmailShell(props, children) {
   const maxWidth = props.max_width_px;
-  const minWidth = props.min_width_px;
   const inset = props.horizontal_inset_px;
+  const minWidth = Math.max(
+    1,
+    props.min_supported_viewport_px - 2 * inset,
+  );
   const background = props.background_color;
   const inner = renderTable({
     width: "100%",

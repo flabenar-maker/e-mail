@@ -136,3 +136,44 @@ test("primitive module stays pure and component-agnostic", async () => {
     assert.equal(source.includes(id), false, `unexpected component id ${id}`);
   }
 });
+
+test("direct image requires an own alt property and preserves explicit decorative alt", async () => {
+  const { renderPrimitive } = await primitives();
+
+  assert.throws(
+    () => renderPrimitive("direct-image", { src: "images/decorative.png" }),
+    (error) => error.code === "DIRECT_IMAGE_ALT_REQUIRED",
+  );
+  assert.throws(
+    () =>
+      renderPrimitive("direct-image", {
+        src: "images/decorative.png",
+        alt: undefined,
+      }),
+    (error) => error.code === "DIRECT_IMAGE_ALT_REQUIRED",
+  );
+
+  const html = renderPrimitive("direct-image", {
+    src: "images/decorative.png",
+    alt: "",
+    width: 24,
+    height: 24,
+  });
+  assert.match(html, /\salt=""/u);
+});
+test("email shell derives inner minimum width from the whole supported viewport", async () => {
+  const { renderPrimitive } = await primitives();
+  const html = renderPrimitive(
+    "email-shell",
+    {
+      background_color: "#F3F3F5",
+      horizontal_inset_px: 15,
+      max_width_px: 600,
+      min_supported_viewport_px: 300,
+    },
+    "Body",
+  );
+
+  assert.match(html, /min-width:270px/u);
+  assert.doesNotMatch(html, /min-width:300px/u);
+});
