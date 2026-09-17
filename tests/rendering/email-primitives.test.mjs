@@ -153,3 +153,19 @@ test("direct image requires an own alt property and preserves explicit decorativ
   });
   assert.match(html, /\salt=""/u);
 });
+test("email shell derives inner minimum width from the whole supported viewport", async () => {
+  const { renderPrimitive } = await primitives();
+  const html = renderPrimitive(
+    "email-shell",
+    {
+      background_color: "#F3F3F5",
+      horizontal_inset_px: 15,
+      max_width_px: 600,
+      min_supported_viewport_px: 300,
+    },
+    "Body",
+  );
+
+  assert.match(html, /min-width:270px/u);
+  assert.doesNotMatch(html, /min-width:300px/u);
+});
