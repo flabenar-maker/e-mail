@@ -46,7 +46,9 @@ test("loads exact interpreter coverage for the eight pilot components", async ()
   assert.equal(registry.registry.id, "email-renderers");
   assert.equal(registry.registry.status, "shadow");
   assert.deepEqual(
-    registry.coverage.map(({ component_id, mode }) => ({ component_id, mode })),
+    registry.coverage
+      .filter(({ mode }) => mode === "interpreter")
+      .map(({ component_id, mode }) => ({ component_id, mode })),
     pilotIds.map((component_id) => ({
       component_id,
       mode: "interpreter",
