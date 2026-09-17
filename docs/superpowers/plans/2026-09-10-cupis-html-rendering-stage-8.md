@@ -59,7 +59,7 @@ PR #61–64 — корректирующая Figma-сверка и уточне�
 | 8 | Render-impact digest и diagnostics | Документация не инвалидирует renderer | Слит: [PR #57](https://github.com/flabenar-maker/e-mail/pull/57) |
 | 9 | Автоматическая проверка | Property branches и HTML invariants покрыты | Слит: [PR #58](https://github.com/flabenar-maker/e-mail/pull/58) |
 | 10 | Visual scenarios, включая Email/Header и Email/Footer | Фактический HTML и Mobile/Desktop geometry подтверждены; Header добавлен в pilot coverage | Package 10A–10B слиты PR #78–79; Package 10C реализован в PR #80. Normal-preview прошёл, no-style Desktop fallback на 300–360px зафиксирован как неподтверждённый; Package 10D исключён из текущего маршрута без имитации client evidence |
-  | 11 | Остальные активные компоненты | Readiness/coverage blockers равны нулю после пакета 10 | Shared слит в [PR #81](https://github.com/flabenar-maker/e-mail/pull/81); Marketing реализован в [PR #82](https://github.com/flabenar-maker/e-mail/pull/82): 17 interpreter-компонентов и 2 `source-only`; Service ещё не выполнен |
+  | 11 | Остальные активные компоненты | Readiness/coverage blockers равны нулю после пакета 10 | Shared слит в [PR #81](https://github.com/flabenar-maker/e-mail/pull/81), Marketing — в [PR #82](https://github.com/flabenar-maker/e-mail/pull/82), Service реализован в [PR #83](https://github.com/flabenar-maker/e-mail/pull/83): все 61 active records покрыты, из них 38 interpreter и 23 `source-only` |
 | 12 | Structured workflows и workflow-level comparison | Workflows готовы к Stage 9 без двойного контекста; сквозное сравнение остаётся этапу 13 | Не начат |
 
 ## Целевая карта файлов
@@ -568,8 +568,8 @@ npm run verify
 
   - [x] **Step 1: Shared** — semantic facts/slots/coverage; 16 asset/icon sources → `source-only` без изменения значений контрактов ([PR #81](https://github.com/flabenar-maker/e-mail/pull/81)).
   - [x] **Step 2: Marketing** — 17 оставшихся HTML-компонентов подключены к общему interpreter, 2 export sources отмечены `source-only`; contracts/properties/assets/numbers не менялись ([PR #82](https://github.com/flabenar-maker/e-mail/pull/82)).
-- [ ] **Step 3: Service** — та же schema без service-specific foundation; ambiguity blocks exact record.
-- [ ] **Step 4: Full coverage assertions**.
+  - [x] **Step 3: Service** — 13 HTML-компонентов подключены к общей schema без service-specific foundation, 5 export sources отмечены `source-only` ([PR #83](https://github.com/flabenar-maker/e-mail/pull/83)).
+  - [x] **Step 4: Full coverage assertions** — все 61 active records имеют явный coverage; 38 renderable interpreter records и 23 осознанно non-renderable source records.
 
 ```js
 const report = auditRendererReadiness(registries, rendererRegistry);
@@ -580,8 +580,8 @@ assert.equal(report.summary.covered_active_components, 61);
 
 Каждый active record имеет coverage. `source-only` и `unsupported` входят в covered count, но не в renderable count и при standalone render возвращают понятный blocker.
 
-- [ ] **Step 5:** `npm run generate`, `generate:check`, all-components test, verify.
-- [ ] **Step 6:** три reviewable cloud commits: shared, marketing, service; generated docs в последнем.
+  - [x] **Step 5:** `generate:check`, all-components test, readiness audit и полный local verify выполняются на точном финальном SHA каждого подпакета.
+  - [x] **Step 6:** три reviewable cloud PR: Shared [#81](https://github.com/flabenar-maker/e-mail/pull/81), Marketing [#82](https://github.com/flabenar-maker/e-mail/pull/82), Service [#83](https://github.com/flabenar-maker/e-mail/pull/83); generated docs синхронизированы в подпакете, где менялись component facts.
 
 Gate: no generic facts/unregistered active records/unexplained value changes; Figma unchanged.
 
