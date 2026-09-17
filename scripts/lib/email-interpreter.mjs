@@ -153,14 +153,14 @@ function propsFromFacts(facts = [], { viewport, mode, isRoot = false, parentAxis
       const [, , side, corner] = id.split("-");
       props.style[`border-${side}-${corner}-radius`] = resolved;
     }
-    else if (["padding-top", "padding-right", "padding-bottom", "padding-left"].includes(id)) props.style[id] = resolved;
-    else if (id.endsWith("-padding-inline")) {
+    else if (mode !== "direct-image" && ["padding-top", "padding-right", "padding-bottom", "padding-left"].includes(id)) props.style[id] = resolved;
+    else if (mode !== "direct-image" && id.endsWith("-padding-inline")) {
       props.style["padding-left"] = resolved;
       props.style["padding-right"] = resolved;
-    } else if (id.endsWith("-padding-block")) {
+    } else if (mode !== "direct-image" && id.endsWith("-padding-block")) {
       props.style["padding-bottom"] = resolved;
       props.style["padding-top"] = resolved;
-    } else if (id.endsWith("-padding")) props.style.padding = resolved;
+    } else if (mode !== "direct-image" && id.endsWith("-padding")) props.style.padding = resolved;
     else if (id.endsWith("-width")) props.width = value.value;
     else if (id.endsWith("-height")) props.height = value.value;
   }
