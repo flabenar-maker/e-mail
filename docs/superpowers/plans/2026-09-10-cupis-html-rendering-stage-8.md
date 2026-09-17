@@ -59,7 +59,7 @@ PR #61–64 — корректирующая Figma-сверка и уточне�
 | 8 | Render-impact digest и diagnostics | Документация не инвалидирует renderer | Слит: [PR #57](https://github.com/flabenar-maker/e-mail/pull/57) |
 | 9 | Автоматическая проверка | Property branches и HTML invariants покрыты | Слит: [PR #58](https://github.com/flabenar-maker/e-mail/pull/58) |
 | 10 | Visual scenarios, включая Email/Header и Email/Footer | Фактический HTML и Mobile/Desktop geometry подтверждены; Header добавлен в pilot coverage | Package 10A–10B слиты PR #78–79; Package 10C реализован в PR #80. Normal-preview прошёл, no-style Desktop fallback на 300–360px зафиксирован как неподтверждённый; Package 10D исключён из текущего маршрута без имитации client evidence |
-| 11 | Остальные активные компоненты | Readiness/coverage blockers равны нулю после пакета 10 | Не начат как пакет покрытия; PR #61–64 уточнили факты, но coverage остаётся пилотным |
+  | 11 | Остальные активные компоненты | Readiness/coverage blockers равны нулю после пакета 10 | Shared-подпакет реализован в [PR #81](https://github.com/flabenar-maker/e-mail/pull/81): 16 исходников явно классифицированы как `source-only`; Marketing и Service ещё не выполнены |
 | 12 | Structured workflows и workflow-level comparison | Workflows готовы к Stage 9 без двойного контекста; сквозное сравнение остаётся этапу 13 | Не начат |
 
 ## Целевая карта файлов
@@ -566,7 +566,7 @@ npm run verify
 
 **Files:** modify three component files, renderer registry, generated docs; create `all-components.test.mjs`.
 
-- [ ] **Step 1: Shared** — semantic facts/slots/coverage; internal glyphs → `source-only`.
+  - [x] **Step 1: Shared** — semantic facts/slots/coverage; 16 asset/icon sources → `source-only` без изменения значений контрактов ([PR #81](https://github.com/flabenar-maker/e-mail/pull/81)).
 - [ ] **Step 2: Marketing** — покрыть остальные marketing records после пилотного Header; preserve exact contracts/properties/assets/numbers.
 - [ ] **Step 3: Service** — та же schema без service-specific foundation; ambiguity blocks exact record.
 - [ ] **Step 4: Full coverage assertions**.
