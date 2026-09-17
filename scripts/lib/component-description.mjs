@@ -104,4 +104,3 @@ export function compareFigmaComponentDescription(expected, actual) {
 
 // Public alias for the schema 2 compact projection.
 export const renderComponentDescription = renderFigmaComponentDescription;
-
