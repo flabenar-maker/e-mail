@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/flabenar-maker/e-mail/schemas/workflows.schema.json",
+  "title": "CUPIS structured workflow",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "workflow"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "workflow": { "$ref": "#/$defs/workflow" }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+    },
+    "idList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/id" }
+    },
+    "workflow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "status", "source_ids", "modes"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "status": { "const": "shadow" },
+        "source_ids": {
+          "allOf": [
+            { "$ref": "#/$defs/idList" },
+            { "minItems": 1 }
+          ]
+        },
+        "modes": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/mode" }
+        }
+      }
+    },
+    "mode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "required_inputs", "allowed_outputs", "steps"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "required_inputs": { "$ref": "#/$defs/idList" },
+        "allowed_outputs": { "$ref": "#/$defs/idList" },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/step" }
+        }
+      }
+    },
+    "step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "order",
+        "source_ids",
+        "required_inputs",
+        "blockers",
+        "allowed_outputs",
+        "handoff"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "order": { "type": "integer", "minimum": 1 },
+        "condition_id": { "$ref": "#/$defs/id" },
+        "source_ids": { "$ref": "#/$defs/idList" },
+        "required_inputs": { "$ref": "#/$defs/idList" },
+        "blockers": { "$ref": "#/$defs/idList" },
+        "allowed_outputs": { "$ref": "#/$defs/idList" },
+        "handoff": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["on_success", "on_blocked"],
+          "properties": {
+            "on_success": { "enum": ["next", "complete"] },
+            "on_blocked": { "enum": ["stop", "request-input"] }
+          }
+        }
+      }
+    }
+  }
+}
+

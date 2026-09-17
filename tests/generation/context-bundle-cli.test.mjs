@@ -82,7 +82,7 @@ test("bundle CLI renders deterministic route-specific Markdown without writing f
   assert.equal(first.stdout, second.stdout);
   assert.match(
     first.stdout,
-    /^---\nbundle_schema_version: 1\.0\.0\nmode: shadow\nroute_id: migration-progress\nbundle_profile_id: migration-progress\ndigest: sha256:[0-9a-f]{64}\n---\n\n# CUPIS resolved context bundle\n/u,
+    /^---\nbundle_schema_version: 1\.0\.0\nmode: structured-shadow\nroute_id: migration-progress\nbundle_profile_id: migration-progress\ndigest: sha256:[0-9a-f]{64}\n---\n\n# CUPIS resolved context bundle\n/u,
   );
   assert.match(first.stdout, /## Static sources\n/u);
   assert.match(first.stdout, /### repository-readme\n/u);

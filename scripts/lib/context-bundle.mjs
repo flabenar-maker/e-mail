@@ -699,6 +699,13 @@ async function collectStaticSources(repoRoot, manifest, ids) {
   const result = [];
   for (const id of ids) {
     const source = requireSource(manifest, id);
+    if (/^legacy(?:[\\/]|$)/iu.test(source.path)) {
+      throw new SystemValidationError(
+        "CONTEXT_BUNDLE_ARCHIVED_SOURCE_FORBIDDEN",
+        `/sources/${id}/path`,
+        `Archived source paths cannot be included in context bundles: ${source.path}.`,
+      );
+    }
     const content = await readFile(join(repoRoot, source.path), "utf8");
     result.push({
       id: source.id,
