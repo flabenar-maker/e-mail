@@ -109,7 +109,7 @@ function renderLink(props, children) {
 }
 
 function renderDirectImage(props) {
-  if (!Object.hasOwn(props, "alt")) {
+  if (!Object.hasOwn(props, "alt") || typeof props.alt !== "string") {
     const error = new Error("Direct images require an explicit alt property.");
     error.code = "DIRECT_IMAGE_ALT_REQUIRED";
     throw error;
@@ -129,7 +129,7 @@ function renderDirectImage(props) {
       ["src", props.src],
       ["width", props.width],
       ["height", props.fluid ? undefined : props.height],
-      ["alt", props.alt ?? ""],
+      ["alt", props.alt],
       ["border", "0"],
     ],
     { ...(props.style ?? {}), ...critical },
