@@ -1,4 +1,8 @@
 import { renderContractTree, selectVariantRoot } from "./email-interpreter.mjs";
+import {
+  measureEmailOutput,
+  validateEmbeddedCssBudget,
+} from "./email-metrics.mjs";
 import { renderPrimitive } from "./email-primitives.mjs";
 import {
   buildRenderImpactProjection,
@@ -527,14 +531,28 @@ export function renderEmailDocument(model, dependencies) {
       )],
     };
   }
-  const style = rendered.css ? `<style>${rendered.css}</style>` : "";
+  const css = rendered.css ?? "";
+  const budgetDiagnostics = validateEmbeddedCssBudget(
+    css,
+    dependencies.foundations.rendering.embedded_css.max_bytes_exclusive,
+  );
+  if (budgetDiagnostics.length > 0) {
+    return {
+      html: "",
+      assets: rendered.assets,
+      diagnostics: budgetDiagnostics,
+    };
+  }
+  const style = css ? `<style>${css}</style>` : "";
   const metadata = buildMetadataComment(model, dependencies);
   const body = renderPrimitive("email-shell", shell, rendered.html);
   const language = escapeAttribute(model.metadata.language);
   const direction = escapeAttribute(model.metadata.direction);
+  const html = `<!doctype html><html lang="${language}" dir="${direction}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${metadata}${style}</head><body style="margin:0;padding:0"><div lang="${language}" dir="${direction}">${body}</div></body></html>`;
   return {
-    html: `<!doctype html><html lang="${language}" dir="${direction}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${metadata}${style}</head><body style="margin:0;padding:0"><div lang="${language}" dir="${direction}">${body}</div></body></html>`,
+    html,
     assets: rendered.assets,
     diagnostics: [],
+    metrics: measureEmailOutput({ html, css }),
   };
 }
