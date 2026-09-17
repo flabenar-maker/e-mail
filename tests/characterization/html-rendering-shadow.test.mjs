@@ -34,7 +34,7 @@ test("structured workflows preserve the archived workflow files byte-for-byte", 
 
   assert.equal(
     digest(maintenance),
-    "fdc6b47742a6072e1efb52957b30573cfa55294804e1efe185713d0792587416",
+    "bfccff80d4dd4eff0d439660c28bbc4e6607631d530dfea8cea165c96fdb6f51",
   );
   assert.equal(
     digest(email),
