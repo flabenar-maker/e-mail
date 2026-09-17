@@ -96,7 +96,7 @@ test("template slot produces one deterministic email document with the default s
 
   assert.deepEqual(result.diagnostics, []);
   assert.match(result.html, /^<!doctype html><html lang="ru" dir="ltr"><head>/u);
-  assert.match(result.html, /<body style="margin:0;padding:0"><table role="presentation"/u);
+  assert.match(result.html, /<body style="margin:0;padding:0"><div lang="ru" dir="ltr"><table role="presentation"/u);
   assert.match(result.html, /href="https:\/\/example\.test\/secondary"/u);
   assert.doesNotMatch(result.html, /placeholder|\[object Object\]/u);
 });
