@@ -136,3 +136,20 @@ test("primitive module stays pure and component-agnostic", async () => {
     assert.equal(source.includes(id), false, `unexpected component id ${id}`);
   }
 });
+
+test("direct image requires an own alt property and preserves explicit decorative alt", async () => {
+  const { renderPrimitive } = await primitives();
+
+  assert.throws(
+    () => renderPrimitive("direct-image", { src: "images/decorative.png" }),
+    (error) => error.code === "DIRECT_IMAGE_ALT_REQUIRED",
+  );
+
+  const html = renderPrimitive("direct-image", {
+    src: "images/decorative.png",
+    alt: "",
+    width: 24,
+    height: 24,
+  });
+  assert.match(html, /\salt=""/u);
+});
