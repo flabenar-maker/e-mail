@@ -144,6 +144,14 @@ test("direct image requires an own alt property and preserves explicit decorativ
     () => renderPrimitive("direct-image", { src: "images/decorative.png" }),
     (error) => error.code === "DIRECT_IMAGE_ALT_REQUIRED",
   );
+  assert.throws(
+    () =>
+      renderPrimitive("direct-image", {
+        src: "images/decorative.png",
+        alt: undefined,
+      }),
+    (error) => error.code === "DIRECT_IMAGE_ALT_REQUIRED",
+  );
 
   const html = renderPrimitive("direct-image", {
     src: "images/decorative.png",
