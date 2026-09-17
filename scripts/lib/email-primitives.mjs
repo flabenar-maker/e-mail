@@ -174,8 +174,11 @@ function renderVisibility(props, children) {
 
 function renderEmailShell(props, children) {
   const maxWidth = props.max_width_px;
-  const minWidth = props.min_width_px;
   const inset = props.horizontal_inset_px;
+  const minWidth = Math.max(
+    1,
+    props.min_supported_viewport_px - 2 * inset,
+  );
   const background = props.background_color;
   const inner = renderTable({
     width: "100%",
