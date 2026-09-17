@@ -8,6 +8,9 @@
     "schema_version",
     "foundation",
     "shell",
+    "embedded_css",
+    "color_scheme",
+    "responsive_fallback",
     "breakpoints",
     "responsive_strategies",
     "primitives",
@@ -15,7 +18,7 @@
     "support_profiles"
   ],
   "properties": {
-    "schema_version": { "const": "1.0.0" },
+    "schema_version": { "const": "1.1.0" },
     "foundation": {
       "type": "object",
       "additionalProperties": false,
@@ -26,6 +29,9 @@
       }
     },
     "shell": { "$ref": "#/$defs/shell" },
+    "embedded_css": { "$ref": "#/$defs/embeddedCss" },
+    "color_scheme": { "$ref": "#/$defs/colorScheme" },
+    "responsive_fallback": { "$ref": "#/$defs/responsiveFallback" },
     "breakpoints": {
       "type": "array",
       "minItems": 1,
@@ -56,12 +62,47 @@
     "shell": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["background_color", "horizontal_inset_px", "max_width_px", "min_width_px"],
+      "required": [
+        "background_color",
+        "horizontal_inset_px",
+        "max_width_px",
+        "min_supported_viewport_px"
+      ],
       "properties": {
         "background_color": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
         "horizontal_inset_px": { "type": "integer", "minimum": 0 },
         "max_width_px": { "type": "integer", "minimum": 1 },
-        "min_width_px": { "type": "integer", "minimum": 1 }
+        "min_supported_viewport_px": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "embeddedCss": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_bytes_exclusive"],
+      "properties": {
+        "max_bytes_exclusive": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "colorScheme": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["declaration", "dark_variant"],
+      "properties": {
+        "declaration": { "const": "none" },
+        "dark_variant": { "const": "none" }
+      }
+    },
+    "responsiveFallback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["without_embedded_css", "validation"],
+      "properties": {
+        "without_embedded_css": {
+          "enum": ["desktop", "mobile-first", "hybrid"]
+        },
+        "validation": {
+          "enum": ["required-before-change", "validated-current"]
+        }
       }
     },
     "breakpoint": {
