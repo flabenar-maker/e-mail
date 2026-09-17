@@ -21,7 +21,7 @@
 - `min_supported_viewport_px` is the entire viewport width. Inner minimum content width is computed, not stored.
 - `language`, `direction` and image alt purpose are required input; renderer does not guess defaults.
 - Dark-mode declaration remains exactly `none`; renderer adds no dark variant, asset swap or artificial background.
-- Package 11 cannot start until Package 10A–10D and the final Header/Footer pilot gate are complete.
+- Package 11 starts after Package 10C and the available normal Header/Footer pilot gate. Package 10D was explicitly skipped on 17.09.2026 because Altcraft/target-client access is unavailable; this is not client validation, so `responsive_fallback.validation` remains `required-before-change`.
 
 ---
 
@@ -509,6 +509,8 @@ git commit -m "test: add client resilience pilot scenarios"
 
 ### Task 8: Package 10D — Altcraft client evidence
 
+> **Статус 17.09.2026:** исключён из текущего маршрута по прямому решению пользователя из-за отсутствия доступа к Altcraft и целевым приложениям. Шаги ниже сохранены как будущая внешняя проверка, но не считаются выполненными. Browser/no-style observation не заменяет client evidence, и fallback не переводится в `validated-current`.
+
 **Files:**
 - Create after actual delivery: `docs/qa/cupis-client-resilience-evidence.md`
 - Modify after decision: `data/foundations/rendering.yaml`
@@ -569,7 +571,7 @@ git commit -m "docs: record target client fallback decision"
 - Modify later with Package 12: structured email-build workflow files created by Package 12
 
 **Interfaces:**
-- Consumes: completed Package 10A–10D outputs.
+- Consumes: completed Package 10A–10C outputs and the explicit recorded skip of unavailable Package 10D.
 - Produces: one unambiguous next step: Package 11.
 
 - [ ] **Step 1: Add principles without duplicating exact values**
@@ -585,7 +587,7 @@ Do not copy `300`, `15`, `16384`, `ru`, `ltr` or current fallback value into Cor
 
 - [ ] **Step 2: Mark Package 10 subpackages with actual evidence**
 
-Check off 10A–10D only when their commits and tests exist. Link the evidence document and selected fallback. Do not mark Package 11 or Stage 8 complete.
+Check off 10A–10C only when their commits and tests exist. Record Package 10D as skipped, not passed; do not invent an evidence document or selected fallback. Package 11 may start, but do not mark Stage 8 complete.
 
 - [ ] **Step 3: Preserve skill and workflow boundaries**
 
