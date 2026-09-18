@@ -46,6 +46,24 @@ async function fixtureSnapshot(root, relative = "") {
   return snapshot.sort(([left], [right]) => left.localeCompare(right));
 }
 
+async function productionOutputSnapshot(root, relative = "") {
+  const snapshot = [];
+  for (const entry of await readdir(
+    relative ? join(root, relative) : root,
+    { withFileTypes: true },
+  )) {
+    if ([".git", "node_modules"].includes(entry.name)) continue;
+    const path = relative ? `${relative}/${entry.name}` : entry.name;
+    if (entry.isDirectory()) {
+      if (entry.name === "images") snapshot.push(["directory", path]);
+      snapshot.push(...await productionOutputSnapshot(root, path));
+    } else if (entry.name === "email.html" || path.includes("/images/")) {
+      snapshot.push(["file", path, (await readFile(join(root, path))).toString("base64")]);
+    }
+  }
+  return snapshot.sort((left, right) => left[1].localeCompare(right[1]));
+}
+
 function replaceWorkflowSource(manifest, routeId, sourceId) {
   const route = manifest.routes.find(({ id }) => id === routeId);
   const profile = manifest.bundle_profiles.find(
@@ -130,6 +148,7 @@ test("temporary email shadow fixture resolves every structured mode without acti
     }
   }
 
+  const canonicalOutputBefore = await productionOutputSnapshot(repoRoot);
   for (const routeId of ["email-new-build", "email-continue-fix"]) {
     const canonical = await resolveSkillContext({
       repoRoot,
@@ -140,6 +159,11 @@ test("temporary email shadow fixture resolves every structured mode without acti
     assert.equal(canonical.status, "paused", routeId);
     assert.deepEqual(canonical.blockers.map(({ code }) => code), ["SKILL_ROUTE_PAUSED"]);
   }
+  assert.deepEqual(
+    await productionOutputSnapshot(repoRoot),
+    canonicalOutputBefore,
+    "canonical paused resolution must not create or change production email output artifacts",
+  );
 
   assert.deepEqual(
     await fixtureSnapshot(fixture.root),
