@@ -103,7 +103,7 @@ export async function resolveSkillContext({
   } catch (error) {
     return blocked(blockersFrom(error));
   }
-  const semanticErrors = validateManifestSemantics(manifest, repoRoot);
+  const semanticErrors = await validateManifestSemantics(manifest, repoRoot);
   if (semanticErrors.length > 0) return blocked(semanticErrors);
   const manifestRoute = manifest.routes.find(({ id }) => id === routeId);
   const manifestProfile = manifest.bundle_profiles.find(
