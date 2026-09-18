@@ -47,6 +47,14 @@
         "id": { "$ref": "#/$defs/id" },
         "required_inputs": { "$ref": "#/$defs/idList" },
         "allowed_outputs": { "$ref": "#/$defs/idList" },
+        "input_blockers": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/inputBlocker" }
+        },
+        "input_relations": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/inputRelation" }
+        },
         "steps": {
           "type": "array",
           "minItems": 1,
@@ -54,7 +62,32 @@
         }
       }
     },
-    "step": {
+    "inputBlocker": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["input", "blocker"],
+      "properties": { "input": { "$ref": "#/$defs/id" }, "blocker": { "$ref": "#/$defs/id" } }
+    },
+    "inputRelation": {
+      "oneOf": [
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "inputs", "field", "values", "blocker"],
+          "properties": {
+            "kind": { "const": "ordered-field-values" }, "inputs": { "allOf": [{ "$ref": "#/$defs/idList" }, { "minItems": 2 }] },
+            "field": { "type": "string", "minLength": 1 }, "values": { "type": "array", "minItems": 2, "items": { "type": "string" } }, "blocker": { "$ref": "#/$defs/id" }
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "inputs", "field", "blocker"],
+          "properties": {
+            "kind": { "const": "same-field" }, "inputs": { "allOf": [{ "$ref": "#/$defs/idList" }, { "minItems": 2 }] },
+            "field": { "type": "string", "minLength": 1 }, "blocker": { "$ref": "#/$defs/id" }
+          }
+        }
+      ]
+    },    "step": {
       "type": "object",
       "additionalProperties": false,
       "required": [
