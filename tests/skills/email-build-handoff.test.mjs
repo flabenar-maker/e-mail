@@ -210,12 +210,28 @@ async function fixture(root, topLevel, id = "fixture") {
   };
 }
 
-function suppliedLiterals(model) {
-  return everyInstance(model.root).flatMap((instance) =>
-    (instance.content_values ?? []).flatMap(({ value }) => {
-      if (typeof value.value === "string") return value.value.startsWith("hidden-") ? [] : [value.value];
-      return (value.segments ?? []).map((segment) => segment.value);
-    }));
+async function contractRepoCopy(root, name) {
+  const target = join(root, name);
+  await cp(join(repoRoot, "data"), join(target, "data"), { recursive: true });
+  await cp(join(repoRoot, "schemas"), join(target, "schemas"), { recursive: true });
+  return target;
+}
+
+function suppliedValues(model) {
+  const text = [];
+  const urls = [];
+  for (const instance of everyInstance(model.root)) {
+    for (const { value } of instance.content_values ?? []) {
+      if (value.type === "url") {
+        urls.push(value.value);
+      } else if (typeof value.value === "string" && !value.value.startsWith("hidden-")) {
+        text.push(value.value);
+      } else {
+        text.push(...(value.segments ?? []).map((segment) => segment.value));
+      }
+    }
+  }
+  return { text, urls };
 }
 
 async function executeFixture(root, source) {
@@ -237,9 +253,11 @@ async function executeFixture(root, source) {
     .replaceAll("&gt;", ">")
     .replaceAll("&quot;", "\"")
     .replaceAll("&#39;", "'");
-  for (const literal of suppliedLiterals(source.model)) {
+  const supplied = suppliedValues(source.model);
+  for (const literal of supplied.text) {
     assert.ok(html.includes(literal) || plainText.includes(literal), literal);
   }
+  for (const url of supplied.urls) assert.ok(html.includes(`href="${url}"`), url);
   assert.deepEqual(await readdir(outputDir), ["email.html", "images"]);
 }
 
@@ -278,6 +296,37 @@ test("resolved dual-viewport placement rejects standalone nested-only components
   secondary.nested_components[0].element_id = "root-card-content-area-text-content-heading";
   const wrongParent = await prepareEmailBuildHandoff({ ...wrongParentSource, repoRoot, assetRoot: root });
   assert.ok(wrongParent.blockers.includes("contract-ambiguous"));
+
+  const slotRepo = await contractRepoCopy(root, "slot-repo");
+  const marketingPath = join(slotRepo, "data", "components", "marketing.yaml");
+  const marketing = JSON.parse(await readFile(marketingPath, "utf8"));
+  const banner = marketing.components.find(({ id }) => id === "banner-secondary");
+  for (const viewport of VIEWPORTS) {
+    banner.contracts[viewport].root.children.push({
+      id: "injected-slot",
+      semantic_role: "content",
+      render_mode: "slot",
+      visibility: { mode: "always" },
+      facts: [],
+      children: [],
+      content_slots: [{ id: "content", type: "placeholder", required: true }],
+    });
+  }
+  await writeFile(marketingPath, JSON.stringify(marketing), "utf8");
+  const slotSource = await fixture(root, ["banner-secondary"], "slot-attack");
+  registryIndex = indexComponentRegistries(slotSource.registries);
+  const slotBanner = slotSource.model.root.slots[0].instances[0];
+  slotBanner.slots.push({
+    element_id: "injected-slot",
+    instances: [buildInstance(slotSource.assetsFoundation, "button-secondary", "slot-button")],
+  });
+  slotSource.candidates = candidatesFor(slotSource.model);
+  const slotAttack = await prepareEmailBuildHandoff({
+    ...slotSource,
+    repoRoot: slotRepo,
+    assetRoot: root,
+  });
+  assert.ok(slotAttack.blockers.includes("contract-ambiguous"));
 });
 
 test("the actual handoff gate prevents renderer invocation for every required blocker", async (t) => {
@@ -296,9 +345,7 @@ test("the actual handoff gate prevents renderer invocation for every required bl
   });
 
   assert.ok((await execute({ candidates: [{ id: "missing-component" }] })).blockers.includes("component-unregistered"));
-  const incompleteRepo = join(root, "incomplete-repo");
-  await cp(join(repoRoot, "data"), join(incompleteRepo, "data"), { recursive: true });
-  await cp(join(repoRoot, "schemas"), join(incompleteRepo, "schemas"), { recursive: true });
+  const incompleteRepo = await contractRepoCopy(root, "incomplete-repo");
   const marketingPath = join(incompleteRepo, "data", "components", "marketing.yaml");
   const incomplete = JSON.parse(await readFile(marketingPath, "utf8"));
   delete incomplete.components.find(({ id }) => id === "banner-secondary").contracts.desktop;
@@ -324,6 +371,22 @@ test("the actual handoff gate prevents renderer invocation for every required bl
   });
   assert.ok(designWithoutVisualProof.blockers.includes("visual-regression"));
   assert.equal(invocations, 0);
+  const verifiedDesign = await execute({
+    resolution: { mode: "continue-fix-design" },
+    continueFixEvidence: {
+      figma_instances: {
+        mobile: { role: "mobile", email_id: "same", file_key: "file", node_id: "1:1" },
+        desktop: { role: "desktop", email_id: "same", file_key: "file", node_id: "1:2" },
+      },
+      visual_regression: {
+        status: "passed",
+        reference_id: "figma-reference",
+        render_id: "local-render",
+      },
+    },
+  });
+  assert.equal(verifiedDesign.executed, true);
+  assert.equal(invocations, 1);
 });
 
 test("asset evidence binds exact filename, digest, owner, Figma node, and physical root", async (t) => {
@@ -343,7 +406,8 @@ test("asset evidence binds exact filename, digest, owner, Figma node, and physic
     (copy) => {
       const target = everyInstance(copy.model.root).find(({ asset_files }) => asset_files?.length).asset_files[0];
       const item = copy.assetEvidence.find(({ path }) => path === target.path);
-      target.path = "images/wrong.jpg";
+      const extension = target.path.slice(target.path.lastIndexOf("."));
+      target.path = `images/${target.asset_contract_id}-arbitrary-suffix${extension}`;
       item.path = target.path;
     },
   ]) {
