@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 
 import { loadSystemManifest } from "../../scripts/lib/system-manifest.mjs";
 import { resolveSkillContext } from "../../scripts/lib/skill-context.mjs";
+import { loadWorkflowRegistry, resolveWorkflowSteps } from "../../scripts/lib/workflow-registry.mjs";
 import {
   canonicalSystemFixtureFiles,
   copyFixtureFile,
@@ -59,6 +60,70 @@ test("canonical maintenance routes resolve one paused shadow context", async () 
   assert.deepEqual(result.blockers.map(({ code }) => code), [
     "SKILL_ROUTE_PAUSED",
   ]);
+});
+
+test("temporary email shadow fixture resolves every structured mode without activating canonical routes", async (t) => {
+  const fixture = await systemFixture(t);
+  const manifest = await loadSystemManifest({ repoRoot: fixture.root });
+  replaceWorkflowSource(manifest, "email-new-build", "workflow-email-build");
+  replaceWorkflowSource(manifest, "email-continue-fix", "workflow-email-build");
+  await writeManifest(fixture.root, manifest);
+
+  const owner = await loadWorkflowRegistry({ repoRoot: fixture.root, workflowId: "email-build" });
+  const modes = ["new-build", "continue-fix-design", "continue-fix-technical", "read-only", "clarify"];
+  for (const mode of modes) {
+    const result = await resolveSkillContext({
+      repoRoot: fixture.root,
+      routeId: mode === "new-build" ? "email-new-build" : "email-continue-fix",
+      workflowMode: mode,
+      candidates: mode === "new-build" ? [{ id: "banner-hero" }] : [],
+      viewports: mode === "new-build" ? ["mobile", "desktop"] : [],
+    });
+
+    assert.equal(result.status, "resolved", mode);
+    assert.deepEqual(result.workflow.steps, resolveWorkflowSteps(owner, mode), mode);
+    assert.deepEqual(
+      result.workflow.steps.map(({ order }) => order),
+      result.workflow.steps.map((_, index) => index + 1),
+      mode,
+    );
+    for (const step of result.workflow.steps) {
+      assert.ok(Array.isArray(step.required_inputs), `${mode}/${step.id} inputs`);
+      assert.ok(Array.isArray(step.blockers), `${mode}/${step.id} blockers`);
+      assert.ok(Array.isArray(step.allowed_outputs), `${mode}/${step.id} outputs`);
+      assert.ok(["next", "complete"].includes(step.handoff.on_success), `${mode}/${step.id} handoff`);
+      assert.ok(["request-input", "stop"].includes(step.handoff.on_blocked), `${mode}/${step.id} blocked handoff`);
+    }
+
+    if (mode === "new-build") {
+      assert.deepEqual(result.bundle.components.map(({ id }) => id), ["button-primary", "banner-hero"]);
+      assert.deepEqual(
+        [...new Set(result.bundle.foundation_definitions.map(({ foundation_id }) => foundation_id))],
+        ["assets"],
+      );
+      const staticSourceIds = result.bundle.static_sources.map(({ id }) => id);
+      for (const excluded of [
+        "workflow-paused",
+        "workflow-email-build",
+        "figma-component-description-standard",
+        "workflow-library-maintenance",
+        "generated-component-registry",
+        "generated-typography-registry",
+        "generated-asset-registry",
+      ]) assert.equal(staticSourceIds.includes(excluded), false, excluded);
+    }
+  }
+
+  for (const routeId of ["email-new-build", "email-continue-fix"]) {
+    const canonical = await resolveSkillContext({
+      repoRoot,
+      routeId,
+      candidates: routeId === "email-new-build" ? [{ id: "banner-hero" }] : [],
+      viewports: routeId === "email-new-build" ? ["mobile", "desktop"] : [],
+    });
+    assert.equal(canonical.status, "paused", routeId);
+    assert.deepEqual(canonical.blockers.map(({ code }) => code), ["SKILL_ROUTE_PAUSED"]);
+  }
 });
 
 test("an explicitly active maintenance route resolves exact ordered steps", async (t) => {
