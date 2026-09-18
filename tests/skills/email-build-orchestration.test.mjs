@@ -67,7 +67,7 @@ test("resolved workflow classifies typed inputs and only exposes that mode's out
   );
   assert.deepEqual(
     resolveEmailBuildRequest({ workflow: emailWorkflow, inputs: { request: input(), "output-parent": input(), "mobile-figma-instance": input(), "desktop-figma-instance": input() } }),
-    { mode: "new-build", blocker: "request-missing", allowedOutputs: [] },
+    { mode: "new-build", blocker: "version-path-unsafe", allowedOutputs: [] },
   );
 });
 
