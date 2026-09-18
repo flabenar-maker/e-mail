@@ -350,6 +350,7 @@ export async function validateManifestSemantics(manifest, repoRoot) {
   );
   const emailRouteIds = new Set(["email-new-build", "email-continue-fix"]);
   const expectedEmailWorkflow = "workflow-email-build";
+  const expectedMaintenanceWorkflow = "workflow-library-maintenance";
   const activeRoutes = manifest.routes.filter(
     ({ workflow_source_id }) => workflow_source_id !== "workflow-paused",
   );
@@ -389,6 +390,13 @@ export async function validateManifestSemantics(manifest, repoRoot) {
       }
     }))
     : [];
+  const canonicalActiveRouteTopology = manifest.routes.every(
+    ({ id, workflow_source_id, bundle_profile_id }) =>
+      bundle_profile_id === id &&
+      workflow_source_id === (emailRouteIds.has(id)
+        ? expectedEmailWorkflow
+        : expectedMaintenanceWorkflow),
+  );
   const topologyInvalid =
     (partial && (
       activeRoutes.length !== 2 ||
@@ -407,6 +415,7 @@ export async function validateManifestSemantics(manifest, repoRoot) {
       activeRoutes.length !== manifest.routes.length ||
       manifest.bundle_profiles.some(({ generated_bundle }) => generated_bundle?.status !== "structured-active") ||
       activeRouteTopology.some((coherent) => !coherent) ||
+      !canonicalActiveRouteTopology ||
       structuredWorkflowTopology.some((coherent) => !coherent)
     )) ||
     (!partial && !active && activeRoutes.length > 0);
