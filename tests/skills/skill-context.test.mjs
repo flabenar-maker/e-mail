@@ -93,6 +93,18 @@ function replaceWorkflowSource(manifest, routeId, sourceId) {
     );
 }
 
+function activateAllRoutes(manifest) {
+  manifest.structured_workflows.status = "active";
+  for (const route of manifest.routes) {
+    if (route.workflow_source_id === "workflow-paused") {
+      route.workflow_source_id = "workflow-library-maintenance";
+    }
+  }
+  for (const profile of manifest.bundle_profiles) {
+    profile.generated_bundle.status = "structured-active";
+  }
+}
+
 test("canonical maintenance routes resolve one paused shadow context", async () => {
   const result = await resolveSkillContext({
     repoRoot,
@@ -274,6 +286,7 @@ test("an explicitly active maintenance route resolves exact ordered steps", asyn
     "library-maintenance",
     "workflow-library-maintenance",
   );
+  activateAllRoutes(manifest);
   await writeManifest(fixture.root, manifest);
 
   const result = await resolveSkillContext({
@@ -322,6 +335,7 @@ test("active route requires an exact workflow mode", async (t) => {
     "library-maintenance",
     "workflow-library-maintenance",
   );
+  activateAllRoutes(manifest);
   await writeManifest(fixture.root, manifest);
 
   const missing = await resolveSkillContext({
@@ -362,6 +376,7 @@ test("active route blocks a workflow source absent from structured capability", 
     "library-maintenance",
     "workflow-unstructured",
   );
+  activateAllRoutes(manifest);
   await writeManifest(fixture.root, manifest);
 
   const result = await resolveSkillContext({
