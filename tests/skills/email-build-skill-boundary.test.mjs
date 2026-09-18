@@ -23,9 +23,13 @@ function assertRouteBoundary(source) {
   assert.equal(policy.steps, "returned-workflow.steps-only");
   assert.equal(policy.onPaused, "stop-without-manual-fallback");
   const routeInstructions = source.replaceAll("npm run resolve:skill-context", "");
-  for (const line of routeInstructions.split(/\r?\n/u)) {
-    for (const [, route] of line.matchAll(/\b(?:invoke|select|route to|run|follow)\b\s+(?:only\s+|either\s+)?(?:the\s+)?(?:route\s+)?([a-z][a-z0-9-]*)\b/giu)) {
-      assert.ok(allowedRoutes.includes(route), `invoked or selected route is not allowed: ${route}`);
+  for (const clause of routeInstructions.split(/[;\n.]/u)) {
+    if (/\b(?:do not|never|don't)\s+(?:invoke|select|route to|run|follow)\b/iu.test(clause)) continue;
+    const instruction = /\b(?:invoke|select|route to|run|follow)\b\s+(?:only\s+|either\s+)?(?:the\s+)?(?:route\s+)?(.+)/iu.exec(clause);
+    if (!instruction) continue;
+    for (const operand of instruction[1].split(/\s*(?:,|\bor\b|\band\b)\s*/iu)) {
+      const route = /`?([a-z][a-z0-9-]*)\b/iu.exec(operand)?.[1];
+      if (route) assert.ok(allowedRoutes.includes(route), `invoked or selected route is not allowed: ${route}`);
     }
   }
 }
@@ -53,20 +57,31 @@ function assertNoDuplicatedMaterial(source) {
 }
 
 function assertOperatingBoundaries(source) {
-  for (const requiredBoundary of [
-    /\bno Figma mutation\b/iu,
-    /\bno new-component design\b/iu,
-    /\bno production email outputs committed to GitHub\b/iu,
-    /\bno overwrite of a source email version\b/iu,
-    /\bno GitHub Actions or PR Checks\b/iu,
-  ]) assert.match(source, requiredBoundary);
+  const boundaryResources = [
+    { required: /\bno Figma mutation\b/iu, subject: "Figma" },
+    { required: /\bno new-component design\b/iu, subject: "new component" },
+    { required: /\bno production email outputs committed to GitHub\b/iu, subject: "production email outputs" },
+    { required: /\bno overwrite of a source email version\b/iu, subject: "source email version" },
+    { required: /\bno GitHub Actions or PR Checks\b/iu, subject: "GitHub Actions" },
+  ];
+  for (const boundary of boundaryResources) assert.match(source, boundary.required);
 
-  const actionableClauses = source
-    .replaceAll(/\bno Figma mutation\b/giu, "")
-    .replaceAll(/\bno new-component design\b/giu, "")
-    .replaceAll(/\bno production email outputs committed to GitHub\b/giu, "")
-    .replaceAll(/\bno overwrite of a source email version\b/giu, "")
-    .replaceAll(/\bno GitHub Actions or PR Checks\b/giu, "");
+  const actionableClauses = [];
+  for (const line of source.split(/\r?\n/u)) {
+    let inheritedSubject = "";
+    for (let clause of line.split(/;|,\s*(?:but|however|except)\b/iu)) {
+      for (const boundary of boundaryResources) {
+        if (boundary.required.test(clause)) {
+          inheritedSubject = boundary.subject;
+          clause = clause.replace(new RegExp(boundary.required.source, "giu"), "");
+        }
+      }
+      if (/\b(?:no|never|do not|don't)\b/iu.test(clause)) continue;
+      if (inheritedSubject && /\b(?:it|them|that|then|next)\b/iu.test(clause)) clause = `${clause} ${inheritedSubject}`;
+      actionableClauses.push(clause);
+    }
+  }
+  const actionableText = actionableClauses.join("\n");
   for (const prohibitedInstruction of [
     /\b(?:mutate|write|edit|update|create|change)\b[^\n]*\bFigma\b/iu,
     /\bFigma\b[^\n]*\b(?:mutate|write|edit|update|create|change)\b/iu,
@@ -74,8 +89,7 @@ function assertOperatingBoundaries(source) {
     /\b(?:commit|push)\b[^\n]*\bproduction email output(?:s)?\b/iu,
     /\boverwrite\b[^\n]*\bsource email version\b/iu,
     /\b(?:run|use|consult|rely on|wait for)\b[^\n]*\b(?:GitHub Actions|PR Checks)\b/iu,
-  ]) assert.doesNotMatch(actionableClauses, prohibitedInstruction);
-  assert.doesNotMatch(source, /\b(?:unless|except|however|but)\b[^\n]*\b(?:Figma|new[- ]component|production email output|source email version|GitHub Actions|PR Checks)\b/iu);
+  ]) assert.doesNotMatch(actionableText, prohibitedInstruction);
 }
 
 const validFixture = `<!-- EMAIL_BUILD_ROUTE_POLICY
@@ -93,7 +107,7 @@ function assertGuardFixtures() {
   for (const invalidRoute of [
     validFixture.replace("email-continue-fix", "maintenance"), validFixture.replace('"exactly-one"', '"many"'),
     validFixture.replace("returned-workflow.steps-only", "copied-steps-allowed"), validFixture.replace("stop-without-manual-fallback", "manual-fallback"),
-    `${validFixture}\nInvoke maintenance route.`, `${validFixture}\nRun email-other-route.`,
+    `${validFixture}\nInvoke maintenance route.`, `${validFixture}\nRun email-other-route.`, `${validFixture}\nSelect email-new-build or email-other-route.`,
   ]) assert.throws(() => assertRouteBoundary(invalidRoute));
   for (const duplication of [
     "data/components/button.json", "data/foundations/colors.json", "core/example.md", "## Components\n- Button", "#fff", "color: red", "16pt", "80%",
@@ -105,6 +119,10 @@ function assertGuardFixtures() {
     "No production email outputs committed to GitHub; commit production email outputs now.",
     "No overwrite of a source email version; overwrite source email version now.",
     "No GitHub Actions or PR Checks; run GitHub Actions now.", "No Figma mutation, except update Figma.",
+    "No Figma mutation; then edit it.", "No new-component design; then create it.",
+    "No production email outputs committed to GitHub; then commit them.",
+    "No overwrite of a source email version; then overwrite it.",
+    "No GitHub Actions or PR Checks; then run it.",
   ]) assert.throws(() => assertOperatingBoundaries(`${validFixture}\n${contradiction}`));
 }
 
