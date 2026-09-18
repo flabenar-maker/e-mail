@@ -27,9 +27,9 @@ function selectMode(workflow, inputs) {
 
 function declaredBlocker(mode, input) {
   const configured = mode.input_blockers?.find((entry) => entry.input === input);
-  if (!configured) return null;
+  if (!configured) throw failure("WORKFLOW_INPUT_BLOCKER_MISSING");
   if (!mode.steps.some((step) => step.blockers.includes(configured.blocker))) {
-    throw new Error(`Workflow input blocker is undeclared: ${configured.blocker}`);
+    throw failure("WORKFLOW_INPUT_BLOCKER_UNDECLARED");
   }
   return configured.blocker;
 }
