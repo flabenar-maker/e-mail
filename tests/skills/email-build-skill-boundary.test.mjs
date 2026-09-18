@@ -24,12 +24,14 @@ function assertRouteBoundary(source) {
   assert.equal(policy.onPaused, "stop-without-manual-fallback");
   const routeInstructions = source.replaceAll("npm run resolve:skill-context", "");
   for (const clause of routeInstructions.split(/[;\n.]/u)) {
-    if (/\b(?:do not|never|don't)\s+(?:invoke|select|route to|run|follow)\b/iu.test(clause)) continue;
-    const instruction = /\b(?:invoke|select|route to|run|follow)\b\s+(?:only\s+|either\s+)?(?:the\s+)?(?:route\s+)?(.+)/iu.exec(clause);
-    if (!instruction) continue;
-    for (const operand of instruction[1].split(/\s*(?:,|\bor\b|\band\b)\s*/iu)) {
-      const route = /`?([a-z][a-z0-9-]*)\b/iu.exec(operand)?.[1];
-      if (route) assert.ok(allowedRoutes.includes(route), `invoked or selected route is not allowed: ${route}`);
+    for (const imperativeSegment of clause.split(/\s*,?\s*(?:(?:but|however|except|and|or)\s+)(?=(?:(?:do not|never|don't)\s+)?(?:invoke|select|route to|run|follow)\b)/iu)) {
+      if (/\b(?:do not|never|don't)\s+(?:invoke|select|route to|run|follow)\b/iu.test(imperativeSegment)) continue;
+      const instruction = /\b(?:invoke|select|route to|run|follow)\b\s+(?:only\s+|either\s+)?(?:the\s+)?(?:route\s+)?(.+)/iu.exec(imperativeSegment);
+      if (!instruction) continue;
+      for (const operand of instruction[1].split(/\s*(?:,|\bor\b|\band\b)\s*/iu)) {
+        const route = /`?([a-z][a-z0-9-]*)\b/iu.exec(operand)?.[1];
+        if (route) assert.ok(allowedRoutes.includes(route), `invoked or selected route is not allowed: ${route}`);
+      }
     }
   }
 }
@@ -67,8 +69,8 @@ function assertOperatingBoundaries(source) {
   for (const boundary of boundaryResources) assert.match(source, boundary.required);
 
   const actionableClauses = [];
+  let inheritedSubject = "";
   for (const line of source.split(/\r?\n/u)) {
-    let inheritedSubject = "";
     for (let clause of line.split(/;|,\s*(?:but|however|except)\b/iu)) {
       for (const boundary of boundaryResources) {
         if (boundary.required.test(clause)) {
@@ -104,10 +106,11 @@ No GitHub Actions or PR Checks.`;
 
 function assertGuardFixtures() {
   assert.doesNotThrow(() => { assertRouteBoundary(validFixture); assertNoDuplicatedMaterial(validFixture); assertOperatingBoundaries(validFixture); });
+  assert.doesNotThrow(() => assertRouteBoundary(`${validFixture}\nDo not run maintenance route, but run email-new-build.`));
   for (const invalidRoute of [
     validFixture.replace("email-continue-fix", "maintenance"), validFixture.replace('"exactly-one"', '"many"'),
     validFixture.replace("returned-workflow.steps-only", "copied-steps-allowed"), validFixture.replace("stop-without-manual-fallback", "manual-fallback"),
-    `${validFixture}\nInvoke maintenance route.`, `${validFixture}\nRun email-other-route.`, `${validFixture}\nSelect email-new-build or email-other-route.`,
+    `${validFixture}\nInvoke maintenance route.`, `${validFixture}\nRun email-other-route.`, `${validFixture}\nSelect email-new-build or email-other-route.`, `${validFixture}\nDo not run maintenance route, but run email-other-route.`,
   ]) assert.throws(() => assertRouteBoundary(invalidRoute));
   for (const duplication of [
     "data/components/button.json", "data/foundations/colors.json", "core/example.md", "## Components\n- Button", "#fff", "color: red", "16pt", "80%",
@@ -123,6 +126,10 @@ function assertGuardFixtures() {
     "No production email outputs committed to GitHub; then commit them.",
     "No overwrite of a source email version; then overwrite it.",
     "No GitHub Actions or PR Checks; then run it.",
+    "No Figma mutation.\nThen edit it.", "No new-component design.\nThen create it.",
+    "No production email outputs committed to GitHub.\nThen commit them.",
+    "No overwrite of a source email version.\nThen overwrite it.",
+    "No GitHub Actions or PR Checks.\nThen run it.",
   ]) assert.throws(() => assertOperatingBoundaries(`${validFixture}\n${contradiction}`));
 }
 
