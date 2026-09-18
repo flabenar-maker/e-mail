@@ -74,7 +74,7 @@
           "type": "object", "additionalProperties": false,
           "required": ["kind", "inputs", "field", "values", "blocker"],
           "properties": {
-            "kind": { "const": "ordered-field-values" }, "inputs": { "allOf": [{ "$ref": "#/$defs/idList" }, { "minItems": 2 }] },
+            "kind": { "const": "ordered-field-values" }, "inputs": { "allOf": [{ "$ref": "#/$defs/idList" }, { "type": "array", "minItems": 2 }] },
             "field": { "type": "string", "minLength": 1 }, "values": { "type": "array", "minItems": 2, "items": { "type": "string" } }, "blocker": { "$ref": "#/$defs/id" }
           }
         },
@@ -82,7 +82,7 @@
           "type": "object", "additionalProperties": false,
           "required": ["kind", "inputs", "field", "blocker"],
           "properties": {
-            "kind": { "const": "same-field" }, "inputs": { "allOf": [{ "$ref": "#/$defs/idList" }, { "minItems": 2 }] },
+            "kind": { "const": "same-field" }, "inputs": { "allOf": [{ "$ref": "#/$defs/idList" }, { "type": "array", "minItems": 2 }] },
             "field": { "type": "string", "minLength": 1 }, "blocker": { "$ref": "#/$defs/id" }
           }
         }
