@@ -145,6 +145,7 @@ routes:
 skills:
   required:
     - { id: maintaining-cupis-email-system, path: .agents/skills/maintaining-cupis-email-system }
+    - { id: building-cupis-emails, path: .agents/skills/building-cupis-emails }
   optional: []
 plugins:
   required: [figma@openai-curated-remote, github@openai-curated-remote]
