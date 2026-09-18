@@ -5,55 +5,100 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
-const skill = await readFile(
-  join(repoRoot, ".agents/skills/building-cupis-emails/SKILL.md"),
-  "utf8",
-);
+const allowedRoutes = ["email-new-build", "email-continue-fix"];
+const allowedInlineTokens = new Set(["npm run resolve:skill-context", "workflow.steps", "SKILL_ROUTE_PAUSED", ...allowedRoutes]);
 
-const forbiddenCanonicalPaths = [
-  /data\/components\//u,
-  /data\/foundations\//u,
-  /core\/[^\s/]+\.md/u,
-];
+function routePolicy(source) {
+  const policies = [...source.matchAll(/<!-- EMAIL_BUILD_ROUTE_POLICY\n([\s\S]*?)\n-->/gu)];
+  assert.equal(policies.length, 1, "the skill must contain exactly one route policy");
+  return JSON.parse(policies[0][1]);
+}
 
-const forbiddenDomainFacts = [
-  /#[0-9a-f]{3,8}\b/iu,
-  /\brgba?\s*\(/iu,
-  /\b\d+(?:\.\d+)?\s*(?:px|rem|em)\b/iu,
-  /\b(?:min|max)-width\s*:\s*\d+/iu,
-  /\b\d+\s*dpi\b/iu,
-  /\b(?:jpeg|jpg|png|webp)\s+(?:quality|compression)\s*[:=]?\s*\d+/iu,
-  /<(?:table|div|style|html|body)\b/iu,
-  /\{\s*(?:color|font-size|width|margin|padding)\s*:/iu,
-];
+function assertRouteBoundary(source) {
+  assert.match(source, /npm run resolve:skill-context/u);
+  const policy = routePolicy(source);
+  assert.deepEqual(Object.keys(policy).sort(), ["onPaused", "resolvedBundle", "routes", "steps"]);
+  assert.deepEqual(policy.routes, allowedRoutes);
+  assert.equal(policy.resolvedBundle, "exactly-one");
+  assert.equal(policy.steps, "returned-workflow.steps-only");
+  assert.equal(policy.onPaused, "stop-without-manual-fallback");
+  assert.doesNotMatch(source, /\b(?:invoke|select|route to|run|follow)\b[^\n]*(?:maintenance|component-development)\b/iu);
+}
 
-test("email-build skill routes only through the resolver-selected email build workflows", () => {
-  assert.match(skill, /npm run resolve:skill-context/u);
-  assert.match(skill, /(?:only|exactly)\s+one resolved bundle/iu);
-  assert.match(skill, /only returned `?workflow\.steps`?/iu);
-  assert.match(skill, /(?:only|either).*email-new-build.*email-continue-fix/iu);
-  assert.match(skill, /SKILL_ROUTE_PAUSED/u);
-  assert.match(skill, /SKILL_ROUTE_PAUSED.*(?:stop|return|halt).*without (?:a )?manual fallback/isu);
-  assert.match(skill, /never invoke (?:the )?(?:maintenance|component-development) routes/iu);
-});
+function assertNoDuplicatedMaterial(source) {
+  for (const forbidden of [
+    /data\/(?:components|foundations)(?:\/|\b)/iu,
+    /core\/[^\s/`]+\.md\b/iu,
+    /(?:component\s+catalog|catalog\s+of\s+components)[\s\S]{0,300}(?:\n\s*(?:[-*+]|\d+\.)\s+|\|)/iu,
+    /(?:^|\n)\s*#{1,6}\s*components?\s*\n(?:\s*\n){0,2}\s*(?:[-*+]|\d+\.)\s+/imu,
+    /#[0-9a-f]{3,8}\b/iu,
+    /\b(?:rgba?|hsla?)\s*\(/iu,
+    /\b(?:color|background(?:-color)?|border(?:-color)?)\s*:\s*(?:red|blue|green|black|white|gray|grey|yellow|orange|purple|pink|brown)\b/iu,
+    /\b\d+(?:\.\d+)?\s*(?:px|pt|pc|rem|em|ex|ch|vh|vw|vmin|vmax|cm|mm|in|%)\b/iu,
+    /@media\b|\b(?:min|max)-(?:width|height)\s*:/iu,
+    /\b(?:export|image|asset)\s+(?:quality|compression|format)\b[^\n]*\b(?:\d+|lossless|lossy|high|medium|low)\b/iu,
+    /<\/?[a-z][^>]*>/iu,
+    /(?:^|\n)\s*(?:[.#][\w-]+|[a-z][\w-]*)\s*\{[^}]*\}/imu,
+  ]) assert.doesNotMatch(source, forbidden);
 
-test("email-build skill keeps canonical facts and implementation fragments out of the skill", () => {
-  for (const forbidden of forbiddenCanonicalPaths) {
-    assert.doesNotMatch(skill, forbidden);
+  for (const [, token] of source.matchAll(/`([^`\n]+)`/gu)) {
+    const isStepIdentifier = /^[a-z][a-z0-9]*(?:[-_][a-z0-9]+)+$/iu.test(token);
+    assert.ok(!isStepIdentifier || allowedInlineTokens.has(token), `copied workflow step identifier: ${token}`);
   }
+}
 
-  for (const forbidden of forbiddenDomainFacts) {
-    assert.doesNotMatch(skill, forbidden);
-  }
+function assertOperatingBoundaries(source) {
+  for (const requiredBoundary of [
+    /\bno Figma mutation\b/iu,
+    /\bno new-component design\b/iu,
+    /\bno production email outputs committed to GitHub\b/iu,
+    /\bno overwrite of a source email version\b/iu,
+    /\bno GitHub Actions or PR Checks\b/iu,
+  ]) assert.match(source, requiredBoundary);
 
-  assert.doesNotMatch(skill, /(?:workflow step id|step_id)\s*[:=]\s*`?[^`\s]+`?/iu);
-  assert.match(skill, /workflow\.steps/u);
-});
+  const actionableLines = source.split(/\r?\n/u).filter((line) => !/\b(?:no|never|do not|don't)\b/iu.test(line)).join("\n");
+  for (const prohibitedInstruction of [
+    /\b(?:mutate|write|edit|update|create|change)\b[^\n]*\bFigma\b/iu,
+    /\bFigma\b[^\n]*\b(?:mutate|write|edit|update|create|change)\b/iu,
+    /\b(?:create|design|add|build)\b[^\n]*\bnew[- ]component\b/iu,
+    /\b(?:commit|push)\b[^\n]*\bproduction email output(?:s)?\b/iu,
+    /\boverwrite\b[^\n]*\bsource email version\b/iu,
+    /\b(?:run|use|consult|rely on|wait for)\b[^\n]*\b(?:GitHub Actions|PR Checks)\b/iu,
+  ]) assert.doesNotMatch(actionableLines, prohibitedInstruction);
+  assert.doesNotMatch(source, /\b(?:unless|except|however|but)\b[^\n]*\b(?:Figma|new[- ]component|production email output|source email version|GitHub Actions|PR Checks)\b/iu);
+}
 
-test("email-build skill states operating boundaries explicitly", () => {
-  assert.match(skill, /no Figma mutation/iu);
-  assert.match(skill, /no new-component design/iu);
-  assert.match(skill, /no production email outputs committed to GitHub/iu);
-  assert.match(skill, /no overwrite of a source email version/iu);
-  assert.match(skill, /no GitHub Actions or PR Checks/iu);
-});
+const validFixture = `<!-- EMAIL_BUILD_ROUTE_POLICY
+{"routes":["email-new-build","email-continue-fix"],"resolvedBundle":"exactly-one","steps":"returned-workflow.steps-only","onPaused":"stop-without-manual-fallback"}
+-->
+npm run resolve:skill-context
+No Figma mutation.
+No new-component design.
+No production email outputs committed to GitHub.
+No overwrite of a source email version.
+No GitHub Actions or PR Checks.`;
+
+function assertGuardFixtures() {
+  assert.doesNotThrow(() => { assertRouteBoundary(validFixture); assertNoDuplicatedMaterial(validFixture); assertOperatingBoundaries(validFixture); });
+  for (const invalidRoute of [
+    validFixture.replace("email-continue-fix", "maintenance"), validFixture.replace('"exactly-one"', '"many"'),
+    validFixture.replace("returned-workflow.steps-only", "copied-steps-allowed"), validFixture.replace("stop-without-manual-fallback", "manual-fallback"),
+    `${validFixture}\nInvoke maintenance route.`,
+  ]) assert.throws(() => assertRouteBoundary(invalidRoute));
+  for (const duplication of [
+    "data/components/button.json", "data/foundations/colors.json", "core/example.md", "## Components\n- Button", "#fff", "color: red", "16pt", "80%",
+    "@media (min-width: 600px)", "export quality 80", "<a href=\"#\">", ".button { color: red; }", "`render-email-html`",
+  ]) assert.throws(() => assertNoDuplicatedMaterial(`${validFixture}\n${duplication}`));
+  for (const contradiction of [
+    "Edit Figma now.", "Create a new component.", "Commit production email outputs.", "Overwrite the source email version.", "Run GitHub Actions.",
+    "No Figma mutation, except update Figma.",
+  ]) assert.throws(() => assertOperatingBoundaries(`${validFixture}\n${contradiction}`));
+}
+
+assertGuardFixtures();
+
+const skill = await readFile(join(repoRoot, ".agents/skills/building-cupis-emails/SKILL.md"), "utf8");
+
+test("email-build skill obeys the resolver route boundary", () => assertRouteBoundary(skill));
+test("email-build skill does not duplicate canonical material", () => assertNoDuplicatedMaterial(skill));
+test("email-build skill has no contradictory prohibited instructions", () => assertOperatingBoundaries(skill));
