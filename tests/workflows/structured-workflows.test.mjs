@@ -48,7 +48,7 @@ test("manifest declares a partial email-only structured workflow cutover", async
     assert.equal(profile.generated_bundle.status, "structured-active");
     assert.deepEqual(profile.generated_bundle.static_source_ids, profile.source_ids);
     assert.equal(profile.source_ids.includes("workflow-paused"), false);
-    assert.equal(profile.source_ids.includes("workflow-email-build"), false);
+    assert.equal(profile.source_ids.includes("workflow-email-build"), true);
   }
 });
 
