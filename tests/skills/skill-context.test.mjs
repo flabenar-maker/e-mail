@@ -5,6 +5,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { loadSystemManifest } from "../../scripts/lib/system-manifest.mjs";
+import { readStrictYaml } from "../../scripts/lib/strict-yaml.mjs";
 import { resolveSkillContext } from "../../scripts/lib/skill-context.mjs";
 import { loadWorkflowRegistry, resolveWorkflowSteps } from "../../scripts/lib/workflow-registry.mjs";
 import {
@@ -32,6 +33,19 @@ async function writeManifest(root, manifest) {
     `${JSON.stringify(manifest, null, 2)}\n`,
   );
 }
+
+async function writeStatusFixture(root, path, mutate) {
+  const document = await readStrictYaml(join(root, path));
+  mutate(document);
+  await writeFixtureFile(root, path, `${JSON.stringify(document, null, 2)}\n`);
+}
+
+const activeEmailRequest = (routeId) => ({
+  routeId,
+  workflowMode: routeId === "email-new-build" ? "new-build" : "continue-fix-design",
+  candidates: routeId === "email-new-build" ? [{ id: "banner-hero" }] : [],
+  viewports: ["mobile", "desktop"],
+});
 
 async function fixtureSnapshot(root, relative = "") {
   const snapshot = [];
@@ -117,6 +131,35 @@ test("canonical email-only cutover resolves email routes and pauses every other 
       assert.deepEqual(result.blockers.map(({ code }) => code), ["SKILL_ROUTE_PAUSED"], route.id);
     }
   }
+});
+
+test("active email routes refuse every shadow status dependency", async (t) => {
+  const cases = [
+    ["aggregate", async (root) => { const manifest = await loadSystemManifest({ repoRoot: root }); manifest.structured_workflows.status = "shadow"; await writeManifest(root, manifest); }],
+    ["aggregate-active-with-paused-routes", async (root) => { const manifest = await loadSystemManifest({ repoRoot: root }); manifest.structured_workflows.status = "active"; await writeManifest(root, manifest); }],
+    ["profile", async (root) => { const manifest = await loadSystemManifest({ repoRoot: root }); for (const profile of manifest.bundle_profiles.filter(({ id }) => id.startsWith("email-"))) profile.generated_bundle.status = "structured-shadow"; await writeManifest(root, manifest); }],
+    ["workflow", (root) => writeStatusFixture(root, "data/workflows/email-build.yaml", (document) => { document.workflow.status = "shadow"; })],
+    ["components-shared", (root) => writeStatusFixture(root, "data/components/shared.yaml", (document) => { document.registry.status = "shadow"; })],
+    ["components-marketing", (root) => writeStatusFixture(root, "data/components/marketing.yaml", (document) => { document.registry.status = "shadow"; })],
+    ["components-service", (root) => writeStatusFixture(root, "data/components/service.yaml", (document) => { document.registry.status = "shadow"; })],
+    ["typography", (root) => writeStatusFixture(root, "data/foundations/typography.yaml", (document) => { document.foundation.status = "shadow"; })],
+    ["spacing", (root) => writeStatusFixture(root, "data/foundations/spacing.yaml", (document) => { document.foundation.status = "shadow"; })],
+    ["assets", (root) => writeStatusFixture(root, "data/foundations/assets.yaml", (document) => { document.foundation.status = "shadow"; })],
+    ["rendering", (root) => writeStatusFixture(root, "data/foundations/rendering.yaml", (document) => { document.foundation.status = "shadow"; })],
+    ["renderer-registry", (root) => writeStatusFixture(root, "data/renderers/registry.yaml", (document) => { document.registry.status = "shadow"; })],
+  ];
+  await Promise.all(cases.map(async ([dependency, mutate]) => {
+    const fixture = await systemFixture(t);
+    await mutate(fixture.root);
+    const results = await Promise.all(["email-new-build", "email-continue-fix"].map(async (routeId) => [
+      routeId,
+      await resolveSkillContext({ repoRoot: fixture.root, ...activeEmailRequest(routeId) }),
+    ]));
+    for (const [routeId, result] of results) {
+      assert.notEqual(result.status, "resolved", `${dependency}/${routeId}`);
+      assert.deepEqual(result.blockers.map(({ code }) => code), ["SKILL_ROUTE_STATUS_INACTIVE"], `${dependency}/${routeId}`);
+    }
+  }));
 });
 
 test("email workflow resolves every structured mode without changing output artifacts", async (t) => {
