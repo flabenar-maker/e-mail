@@ -91,18 +91,41 @@ function replaceWorkflowSource(manifest, routeId, sourceId) {
     profile.generated_bundle.static_source_ids.filter(
       (id) => id !== "workflow-paused",
     );
+  if (!profile.source_ids.includes(sourceId)) profile.source_ids.push(sourceId);
+  if (!profile.generated_bundle.static_source_ids.includes(sourceId)) {
+    profile.generated_bundle.static_source_ids.push(sourceId);
+  }
 }
 
-function activateAllRoutes(manifest) {
+async function activateAllRoutes(root, manifest) {
   manifest.structured_workflows.status = "active";
   for (const route of manifest.routes) {
     if (route.workflow_source_id === "workflow-paused") {
       route.workflow_source_id = "workflow-library-maintenance";
     }
+    const profile = manifest.bundle_profiles.find(
+      ({ id }) => id === route.bundle_profile_id,
+    );
+    profile.source_ids = profile.source_ids.filter((id) => id !== "workflow-paused");
+    profile.generated_bundle.static_source_ids = profile.generated_bundle.static_source_ids.filter(
+      (id) => id !== "workflow-paused",
+    );
+    if (!profile.source_ids.includes(route.workflow_source_id)) {
+      profile.source_ids.push(route.workflow_source_id);
+      profile.generated_bundle.static_source_ids.push(route.workflow_source_id);
+    }
   }
   for (const profile of manifest.bundle_profiles) {
     profile.generated_bundle.status = "structured-active";
   }
+  await Promise.all([
+    writeStatusFixture(root, "data/workflows/email-build.yaml", (document) => {
+      document.workflow.status = "active";
+    }),
+    writeStatusFixture(root, "data/workflows/library-maintenance.yaml", (document) => {
+      document.workflow.status = "active";
+    }),
+  ]);
 }
 
 test("canonical maintenance routes resolve one paused shadow context", async () => {
@@ -159,8 +182,46 @@ test("skill resolution cannot bypass incoherent partial email-cutover topology",
     ["email route profile mismatch", (manifest) => {
       manifest.routes.find(({ id }) => id === "email-new-build").bundle_profile_id = "email-continue-fix";
     }],
+    ...["email-new-build", "email-continue-fix"].flatMap((profileId) => [
+      [`${profileId} retains paused source`, (manifest) => {
+        manifest.bundle_profiles.find(({ id }) => id === profileId).source_ids.push("workflow-paused");
+      }],
+      [`${profileId} retains paused static source`, (manifest) => {
+        manifest.bundle_profiles.find(({ id }) => id === profileId).generated_bundle.static_source_ids.push("workflow-paused");
+      }],
+      [`${profileId} source and static lists differ`, (manifest) => {
+        manifest.bundle_profiles.find(({ id }) => id === profileId).generated_bundle.static_source_ids.pop();
+      }],
+    ]),
     ["active aggregate with partial topology", (manifest) => {
       manifest.structured_workflows.status = "active";
+    }],
+    ["active aggregate routes everything to email while maintenance stays shadow", (manifest) => {
+      manifest.structured_workflows.status = "active";
+      for (const route of manifest.routes) route.workflow_source_id = "workflow-email-build";
+      for (const profile of manifest.bundle_profiles) {
+        profile.generated_bundle.status = "structured-active";
+        profile.source_ids = profile.source_ids.filter((id) => id !== "workflow-paused");
+        profile.generated_bundle.static_source_ids = profile.generated_bundle.static_source_ids.filter((id) => id !== "workflow-paused");
+        if (!profile.source_ids.includes("workflow-email-build")) {
+          profile.source_ids.push("workflow-email-build");
+          profile.generated_bundle.static_source_ids.push("workflow-email-build");
+        }
+      }
+    }],
+    ["active aggregate route/profile/workflow association mismatch", (manifest) => {
+      manifest.structured_workflows.status = "active";
+      for (const route of manifest.routes) route.workflow_source_id = "workflow-email-build";
+      for (const profile of manifest.bundle_profiles) {
+        profile.generated_bundle.status = "structured-active";
+        profile.source_ids = profile.source_ids.filter((id) => id !== "workflow-paused");
+        profile.generated_bundle.static_source_ids = profile.generated_bundle.static_source_ids.filter((id) => id !== "workflow-paused");
+        if (!profile.source_ids.includes("workflow-email-build")) {
+          profile.source_ids.push("workflow-email-build");
+          profile.generated_bundle.static_source_ids.push("workflow-email-build");
+        }
+      }
+      manifest.routes.find(({ id }) => id === "email-new-build").workflow_source_id = "workflow-library-maintenance";
     }],
   ];
 
@@ -169,15 +230,17 @@ test("skill resolution cannot bypass incoherent partial email-cutover topology",
     const manifest = await loadSystemManifest({ repoRoot: fixture.root });
     mutate(manifest);
     await writeManifest(fixture.root, manifest);
-    const result = await resolveSkillContext({
-      repoRoot: fixture.root,
-      ...activeEmailRequest("email-new-build"),
-    });
-    assert.equal(result.status, "blocked", name);
-    assert.ok(
-      result.blockers.some(({ code }) => code === "structured-workflow-status-topology-invalid"),
-      name,
-    );
+    for (const routeId of ["email-new-build", "email-continue-fix"]) {
+      const result = await resolveSkillContext({
+        repoRoot: fixture.root,
+        ...activeEmailRequest(routeId),
+      });
+      assert.equal(result.status, "blocked", `${name}/${routeId}`);
+      assert.ok(
+        result.blockers.some(({ code }) => code === "structured-workflow-status-topology-invalid"),
+        `${name}/${routeId}`,
+      );
+    }
   }
 });
 
@@ -251,9 +314,9 @@ test("email workflow resolves every structured mode without changing output arti
         ["assets"],
       );
       const staticSourceIds = result.bundle.static_sources.map(({ id }) => id);
+      assert.equal(staticSourceIds.includes("workflow-email-build"), true);
       for (const excluded of [
         "workflow-paused",
-        "workflow-email-build",
         "figma-library-standard",
         "figma-component-description-standard",
         "workflow-library-maintenance",
@@ -286,7 +349,7 @@ test("an explicitly active maintenance route resolves exact ordered steps", asyn
     "library-maintenance",
     "workflow-library-maintenance",
   );
-  activateAllRoutes(manifest);
+  await activateAllRoutes(fixture.root, manifest);
   await writeManifest(fixture.root, manifest);
 
   const result = await resolveSkillContext({
@@ -299,7 +362,7 @@ test("an explicitly active maintenance route resolves exact ordered steps", asyn
   assert.equal(result.status, "resolved");
   assert.equal(
     result.bundle.static_sources.some(({ kind }) => kind === "workflow"),
-    false,
+    true,
   );
   assert.deepEqual(
     result.workflow.steps.map(({ id }) => id),
@@ -335,7 +398,7 @@ test("active route requires an exact workflow mode", async (t) => {
     "library-maintenance",
     "workflow-library-maintenance",
   );
-  activateAllRoutes(manifest);
+  await activateAllRoutes(fixture.root, manifest);
   await writeManifest(fixture.root, manifest);
 
   const missing = await resolveSkillContext({
@@ -376,7 +439,7 @@ test("active route blocks a workflow source absent from structured capability", 
     "library-maintenance",
     "workflow-unstructured",
   );
-  activateAllRoutes(manifest);
+  await activateAllRoutes(fixture.root, manifest);
   await writeManifest(fixture.root, manifest);
 
   const result = await resolveSkillContext({
@@ -388,6 +451,6 @@ test("active route blocks a workflow source absent from structured capability", 
 
   assert.equal(result.status, "blocked");
   assert.deepEqual(result.blockers.map(({ code }) => code), [
-    "SKILL_WORKFLOW_UNSTRUCTURED",
+    "structured-workflow-status-topology-invalid",
   ]);
 });

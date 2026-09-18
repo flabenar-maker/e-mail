@@ -1078,8 +1078,46 @@ test("semantic validation rejects incoherent partial email-cutover topology", as
     ["email route profile mismatch", (manifest) => {
       manifest.routes.find(({ id }) => id === "email-new-build").bundle_profile_id = "email-continue-fix";
     }],
+    ...["email-new-build", "email-continue-fix"].flatMap((profileId) => [
+      [`${profileId} retains paused source`, (manifest) => {
+        manifest.bundle_profiles.find(({ id }) => id === profileId).source_ids.push("workflow-paused");
+      }],
+      [`${profileId} retains paused static source`, (manifest) => {
+        manifest.bundle_profiles.find(({ id }) => id === profileId).generated_bundle.static_source_ids.push("workflow-paused");
+      }],
+      [`${profileId} source and static lists differ`, (manifest) => {
+        manifest.bundle_profiles.find(({ id }) => id === profileId).generated_bundle.static_source_ids.pop();
+      }],
+    ]),
     ["active aggregate with partial topology", (manifest) => {
       manifest.structured_workflows.status = "active";
+    }],
+    ["active aggregate routes everything to email while maintenance stays shadow", (manifest) => {
+      manifest.structured_workflows.status = "active";
+      for (const route of manifest.routes) route.workflow_source_id = "workflow-email-build";
+      for (const profile of manifest.bundle_profiles) {
+        profile.generated_bundle.status = "structured-active";
+        profile.source_ids = profile.source_ids.filter((id) => id !== "workflow-paused");
+        profile.generated_bundle.static_source_ids = profile.generated_bundle.static_source_ids.filter((id) => id !== "workflow-paused");
+        if (!profile.source_ids.includes("workflow-email-build")) {
+          profile.source_ids.push("workflow-email-build");
+          profile.generated_bundle.static_source_ids.push("workflow-email-build");
+        }
+      }
+    }],
+    ["active aggregate route/profile/workflow association mismatch", (manifest) => {
+      manifest.structured_workflows.status = "active";
+      for (const route of manifest.routes) route.workflow_source_id = "workflow-email-build";
+      for (const profile of manifest.bundle_profiles) {
+        profile.generated_bundle.status = "structured-active";
+        profile.source_ids = profile.source_ids.filter((id) => id !== "workflow-paused");
+        profile.generated_bundle.static_source_ids = profile.generated_bundle.static_source_ids.filter((id) => id !== "workflow-paused");
+        if (!profile.source_ids.includes("workflow-email-build")) {
+          profile.source_ids.push("workflow-email-build");
+          profile.generated_bundle.static_source_ids.push("workflow-email-build");
+        }
+      }
+      manifest.routes.find(({ id }) => id === "email-new-build").workflow_source_id = "workflow-library-maintenance";
     }],
   ];
 

@@ -115,20 +115,20 @@ bundle_profiles:
       allowed_foundation_ids: []
       required_foundation_ids: []
   - id: email-new-build
-    source_ids: [repository-readme, email-rendering-standard, component-contract-standard, typography-standard, asset-export-standard]
+    source_ids: [repository-readme, email-rendering-standard, component-contract-standard, typography-standard, asset-export-standard, workflow-email-build]
     generated_bundle:
       status: structured-active
-      static_source_ids: [repository-readme, email-rendering-standard, component-contract-standard, typography-standard, asset-export-standard]
+      static_source_ids: [repository-readme, email-rendering-standard, component-contract-standard, typography-standard, asset-export-standard, workflow-email-build]
       component_selection: required
       viewport_selection: both
       foundation_selection: referenced
       allowed_foundation_ids: [typography, spacing, assets]
       required_foundation_ids: []
   - id: email-continue-fix
-    source_ids: [repository-readme, email-rendering-standard, component-contract-standard, typography-standard, asset-export-standard]
+    source_ids: [repository-readme, email-rendering-standard, component-contract-standard, typography-standard, asset-export-standard, workflow-email-build]
     generated_bundle:
       status: structured-active
-      static_source_ids: [repository-readme, email-rendering-standard, component-contract-standard, typography-standard, asset-export-standard]
+      static_source_ids: [repository-readme, email-rendering-standard, component-contract-standard, typography-standard, asset-export-standard, workflow-email-build]
       component_selection: optional
       viewport_selection: both-when-components
       foundation_selection: referenced

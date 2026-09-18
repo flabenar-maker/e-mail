@@ -355,6 +355,40 @@ export async function validateManifestSemantics(manifest, repoRoot) {
   );
   const partial = structuredWorkflows.status === "partial";
   const active = structuredWorkflows.status === "active";
+  const activeRouteTopology = await Promise.all(activeRoutes.map(async (route) => {
+    const profile = profileById.get(route.bundle_profile_id);
+    const bundle = profile?.generated_bundle;
+    const workflow = sourceById.get(route.workflow_source_id);
+    if (
+      !bundle ||
+      bundle.status !== "structured-active" ||
+      !Array.isArray(profile.source_ids) ||
+      !Array.isArray(bundle.static_source_ids) ||
+      profile.source_ids.includes("workflow-paused") ||
+      bundle.static_source_ids.includes("workflow-paused") ||
+      !profile.source_ids.includes(route.workflow_source_id) ||
+      !bundle.static_source_ids.includes(route.workflow_source_id) ||
+      profile.source_ids.length !== bundle.static_source_ids.length ||
+      profile.source_ids.some((sourceId, index) => sourceId !== bundle.static_source_ids[index]) ||
+      workflow?.kind !== "workflow"
+    ) return false;
+    try {
+      return (await readStrictYaml(join(repoRoot, workflow.path))).workflow?.status === "active";
+    } catch {
+      return false;
+    }
+  }));
+  const structuredWorkflowTopology = active
+    ? await Promise.all(structuredWorkflows.entries.map(async ({ source_id }) => {
+      const source = sourceById.get(source_id);
+      if (source?.kind !== "workflow") return false;
+      try {
+        return (await readStrictYaml(join(repoRoot, source.path))).workflow?.status === "active";
+      } catch {
+        return false;
+      }
+    }))
+    : [];
   const topologyInvalid =
     (partial && (
       activeRoutes.length !== 2 ||
@@ -366,11 +400,14 @@ export async function validateManifestSemantics(manifest, repoRoot) {
       manifest.routes.some(({ id, workflow_source_id }) => !emailRouteIds.has(id) && workflow_source_id !== "workflow-paused") ||
       manifest.bundle_profiles.some(({ id, generated_bundle }) => emailRouteIds.has(id)
         ? generated_bundle?.status !== "structured-active"
-        : generated_bundle?.status !== "structured-shadow")
+        : generated_bundle?.status !== "structured-shadow") ||
+      activeRouteTopology.some((coherent) => !coherent)
     )) ||
     (active && (
       activeRoutes.length !== manifest.routes.length ||
-      manifest.bundle_profiles.some(({ generated_bundle }) => generated_bundle?.status !== "structured-active")
+      manifest.bundle_profiles.some(({ generated_bundle }) => generated_bundle?.status !== "structured-active") ||
+      activeRouteTopology.some((coherent) => !coherent) ||
+      structuredWorkflowTopology.some((coherent) => !coherent)
     )) ||
     (!partial && !active && activeRoutes.length > 0);
   if (topologyInvalid) {
