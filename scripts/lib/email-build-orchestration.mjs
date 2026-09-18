@@ -26,8 +26,10 @@ function selectMode(workflow, inputs) {
 }
 
 function declaredBlocker(mode, input) {
-  const configured = mode.input_blockers?.find((entry) => entry.input === input);
-  if (!configured) throw failure("WORKFLOW_INPUT_BLOCKER_MISSING");
+  const mappings = mode.input_blockers?.filter((entry) => entry.input === input) ?? [];
+  if (mappings.length === 0) throw failure("WORKFLOW_INPUT_BLOCKER_MISSING");
+  if (mappings.length > 1) throw failure("WORKFLOW_INPUT_BLOCKER_DUPLICATE");
+  const [configured] = mappings;
   if (!mode.steps.some((step) => step.blockers.includes(configured.blocker))) {
     throw failure("WORKFLOW_INPUT_BLOCKER_UNDECLARED");
   }
