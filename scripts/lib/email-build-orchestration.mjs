@@ -1,5 +1,5 @@
-import { access, cp, mkdir, readdir, writeFile, realpath, readFile } from "node:fs/promises";
-import { createHash } from "node:crypto";
+import { cp, mkdir, readdir, writeFile, realpath, readFile, rm } from "node:fs/promises";
+import { createHash, randomUUID } from "node:crypto";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { isAbsolute, join, relative, resolve } from "node:path";
@@ -34,28 +34,151 @@ function instances(instance, output = []) {
   return output;
 }
 
-function assetKey(componentId, assetContractId, path) {
-  return `${componentId}\0${assetContractId}\0${path}`;
-}
-const execFileAsync = promisify(execFile);
-function contractElement(record, viewport, id) { const walk = (n) => !n ? null : n.id === id ? n : (n.children ?? []).map(walk).find(Boolean); return walk(record.contracts?.[viewport]?.root); }
-function placement(model, index, resolved) {
-  const blockers = new Set(); const ids = new Set(resolved.map(({ id }) => id));
-  const visit = (instance, parent = null, placementId = null, top = false) => {
-    const record = index.bySystemId.get(instance.component_id);
-    if (!ids.has(instance.component_id)) blockers.add("contract-ambiguous");
-    if (!record) return;
-    if (top && !["email", "block", "banner", "nps"].includes(record.identity.semantic_role)) blockers.add("contract-ambiguous");
-    if (parent && placementId) for (const viewport of ["mobile", "desktop"]) { const element = contractElement(parent, viewport, placementId); if (!element || (element.render_mode === "nested-component" && element.component_id !== instance.component_id)) blockers.add("contract-ambiguous"); }
-    for (const slot of instance.slots ?? []) { for (const viewport of ["mobile", "desktop"]) { const el = contractElement(record, viewport, slot.element_id); if (!el || el.render_mode !== "slot") blockers.add("contract-ambiguous"); } for (const child of slot.instances ?? []) visit(child, record, slot.element_id, record.id === "email-template"); }
-    for (const nested of instance.nested_components ?? []) visit(nested.instance, record, nested.element_id, false);
-  }; visit(model.root); return blockers;
+function assetKey(instanceId, componentId, assetContractId, path) {
+  return `${instanceId}\0${componentId}\0${assetContractId}\0${path}`;
 }
 
-async function exists(path) {
+const execFileAsync = promisify(execFile);
+const VIEWPORTS = ["mobile", "desktop"];
+const TOP_LEVEL_ROLES = new Set(["email", "block", "banner", "nps"]);
+const FIGMA_NODE_ID = /^(?:I)?[0-9]+:[0-9]+(?:;[0-9]+:[0-9]+)*$/u;
+const SHA256 = /^[0-9a-f]{64}$/u;
+
+function contractElement(record, viewport, id) {
+  const visit = (element) => {
+    if (!element) return null;
+    if (element.id === id) return element;
+    for (const child of element.children ?? []) {
+      const match = visit(child);
+      if (match) return match;
+    }
+    return null;
+  };
+  return visit(record.contracts?.[viewport]?.root);
+}
+
+function nestedOnlyComponentIds(index) {
+  const result = new Set();
+  for (const record of index.bySystemId.values()) {
+    for (const viewport of VIEWPORTS) {
+      const visit = (element) => {
+        if (!element) return;
+        if (element.render_mode === "nested-component") result.add(element.component_id);
+        for (const child of element.children ?? []) visit(child);
+      };
+      visit(record.contracts?.[viewport]?.root);
+    }
+  }
+  return result;
+}
+
+function validateModelPlacement(model, index, resolvedContracts) {
+  const blockers = new Set();
+  const idsByViewport = new Map(VIEWPORTS.map((viewport) => [
+    viewport,
+    new Set(resolvedContracts.filter((item) => item.viewport === viewport).map((item) => item.id)),
+  ]));
+  const nestedOnly = nestedOnlyComponentIds(index);
+
+  const visit = (instance, relation = null) => {
+    const record = index.bySystemId.get(instance.component_id);
+    if (VIEWPORTS.some((viewport) => !idsByViewport.get(viewport).has(instance.component_id))) {
+      blockers.add("contract-ambiguous");
+    }
+    if (!record) return;
+
+    if (relation?.kind === "top-level") {
+      if (!TOP_LEVEL_ROLES.has(record.identity.semantic_role) || nestedOnly.has(record.id)) {
+        blockers.add("contract-ambiguous");
+      }
+    }
+
+    if (relation?.kind === "nested") {
+      const elements = VIEWPORTS
+        .map((viewport) => contractElement(relation.parent, viewport, relation.elementId))
+        .filter(Boolean);
+      if (
+        elements.length === 0 ||
+        elements.some((element) =>
+          element.render_mode !== "nested-component" ||
+          element.component_id !== instance.component_id)
+      ) {
+        blockers.add("contract-ambiguous");
+      }
+    }
+
+    for (const slot of instance.slots ?? []) {
+      const slotElements = VIEWPORTS
+        .map((viewport) => contractElement(record, viewport, slot.element_id))
+        .filter(Boolean);
+      if (
+        slotElements.length === 0 ||
+        slotElements.some((element) => element.render_mode !== "slot")
+      ) {
+        blockers.add("contract-ambiguous");
+      }
+      for (const child of slot.instances ?? []) {
+        visit(child, {
+          kind: record.id === "email-template" && slot.element_id === "content"
+            ? "top-level"
+            : "slot",
+          parent: record,
+          elementId: slot.element_id,
+        });
+      }
+    }
+
+    for (const nested of instance.nested_components ?? []) {
+      visit(nested.instance, {
+        kind: "nested",
+        parent: record,
+        elementId: nested.element_id,
+      });
+    }
+  };
+
+  visit(model.root);
+  return blockers;
+}
+
+function resolvedAssetSelection(assets, contract) {
+  return resolveAssetContract(assets, {
+    sourceModeId: contract.source_mode_id,
+    displayModeId: contract.display_mode_id,
+    exportProfileId: contract.export_profile_id,
+    expectedAlphaId: contract.alpha_mode_id,
+    clippingPolicyId: contract.clipping_policy_id,
+  });
+}
+
+async function validateAssetEvidence({ assetRoot, component, contract, asset, item, resolved }) {
+  const extension = resolved.export_profile.contract.extension;
+  const escapedId = contract.id.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
+  const escapedExtension = extension.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
+  const allowedPath = new RegExp(
+    `^images/${escapedId}(?:-[a-z0-9]+)*${escapedExtension}$`,
+    "u",
+  );
+  if (
+    !allowedPath.test(asset.path) ||
+    item?.mcp_export?.source !== "figma-mcp" ||
+    typeof item.mcp_export.evidence_id !== "string" ||
+    item.mcp_export.evidence_id.trim() === "" ||
+    item.mcp_export.owner_layer_name !== contract.owner_layer_name ||
+    item.mcp_export.file_key !== component.figma.file_key ||
+    !FIGMA_NODE_ID.test(item.mcp_export.source_node_id ?? "") ||
+    !SHA256.test(item.sha256 ?? "")
+  ) {
+    return false;
+  }
+
   try {
-    await access(path);
-    return true;
+    const physicalRoot = await realpath(assetRoot);
+    const sourcePath = join(assetRoot, ...asset.path.split("/"));
+    const physical = await realpath(sourcePath);
+    if (!inside(physicalRoot, physical)) return false;
+    const digest = createHash("sha256").update(await readFile(physical)).digest("hex");
+    return item.sha256 === digest;
   } catch {
     return false;
   }
@@ -82,7 +205,7 @@ export async function prepareEmailBuildHandoff({
   const blockers = new Set();
   const resolvedContracts = [];
 
-  for (const viewport of ["mobile", "desktop"]) {
+  for (const viewport of VIEWPORTS) {
     const resolved = resolveComponentContracts({ index: componentIndex, candidates, viewport });
     if (resolved.status === "blocked") {
       resolved.blockers.forEach((item) => blockers.add(handoffBlocker(item.code)));
@@ -93,7 +216,7 @@ export async function prepareEmailBuildHandoff({
   if (blockers.size > 0) return { blockers: [...blockers].sort(), model, resolvedContracts, assetContracts: [] };
 
   if (model?.root?.component_id !== "email-template") blockers.add("renderer-diagnostic");
-  for (const value of placement(model, componentIndex, resolvedContracts)) blockers.add(value);
+  for (const value of validateModelPlacement(model, componentIndex, resolvedContracts)) blockers.add(value);
   const semantics = validateEmailModelSemantics(model, {
     componentIndex,
     rendererRegistry,
@@ -102,42 +225,47 @@ export async function prepareEmailBuildHandoff({
   if (blockers.size > 0) return { blockers: [...blockers].sort(), model, resolvedContracts, assetContracts: [] };
 
   const evidence = new Map((assetEvidence ?? []).map((item) => [
-    assetKey(item.component_id, item.asset_contract_id, item.path), item,
+    assetKey(item.instance_id, item.component_id, item.asset_contract_id, item.path), item,
   ]));
   const assetContracts = [];
   for (const instance of instances(model.root)) {
     const component = componentIndex.bySystemId.get(instance.component_id);
     for (const asset of instance.asset_files ?? []) {
-      const item = evidence.get(assetKey(instance.component_id, asset.asset_contract_id, asset.path));
+      const item = evidence.get(assetKey(
+        instance.instance_id,
+        instance.component_id,
+        asset.asset_contract_id,
+        asset.path,
+      ));
       const contract = component?.asset_contracts?.find(({ id }) => id === asset.asset_contract_id);
-      if (!item?.mcp_export?.evidence_id || item.mcp_export.source !== "figma-mcp" || !contract) {
+      if (!contract) {
         blockers.add("asset-contract-missing");
         continue;
       }
-      const sourcePath = join(assetRoot, ...asset.path.split("/"));
-      if (!(await exists(sourcePath))) {
-        blockers.add("asset-contract-missing");
-        continue;
-      }
-      const physical = await realpath(sourcePath); const physicalRoot = await realpath(assetRoot);
-      const digest = createHash("sha256").update(await readFile(physical)).digest("hex");
-      if (!inside(physicalRoot, physical) || (item.sha256 && item.sha256 !== digest) || (item.mcp_export.owner_layer_name && item.mcp_export.owner_layer_name !== contract.owner_layer_name) || (item.mcp_export.file_key && item.mcp_export.file_key !== component.figma.file_key) || (item.mcp_export.source_node_id !== undefined && typeof item.mcp_export.source_node_id !== "string")) { blockers.add("asset-contract-missing"); continue; }
+      let resolved;
       try {
-        assetContracts.push({
-          component_id: instance.component_id,
-          asset_contract_id: asset.asset_contract_id,
-          path: asset.path,
-          resolved: resolveAssetContract(assets, {
-            sourceModeId: contract.source_mode_id,
-            displayModeId: contract.display_mode_id,
-            exportProfileId: contract.export_profile_id,
-            expectedAlphaId: contract.alpha_mode_id,
-            clippingPolicyId: contract.clipping_policy_id,
-          }),
-        });
+        resolved = resolvedAssetSelection(assets, contract);
       } catch {
         blockers.add("asset-contract-missing");
+        continue;
       }
+      if (!await validateAssetEvidence({
+        assetRoot,
+        component,
+        contract,
+        asset,
+        item,
+        resolved,
+      })) {
+        blockers.add("asset-contract-missing");
+        continue;
+      }
+      assetContracts.push({
+        component_id: instance.component_id,
+        asset_contract_id: asset.asset_contract_id,
+        path: asset.path,
+        resolved,
+      });
     }
   }
   return {
@@ -148,13 +276,63 @@ export async function prepareEmailBuildHandoff({
   };
 }
 
-export async function executeEmailBuildHandoff({ outputDir, ...input }) {
+async function defaultRendererRunner({ repoRoot, modelPath, outputDir }) {
+  await execFileAsync(
+    process.execPath,
+    [join(repoRoot, "scripts", "render-email.mjs"), "--model", modelPath, "--output", outputDir],
+    { cwd: repoRoot },
+  );
+}
+
+function continueFixEvidenceBlockers(resolution, evidence) {
+  if (resolution?.mode !== "continue-fix-design") return [];
+  const blockers = new Set();
+  const mobile = evidence?.figma_instances?.mobile;
+  const desktop = evidence?.figma_instances?.desktop;
+  const validFigma =
+    mobile?.role === "mobile" &&
+    desktop?.role === "desktop" &&
+    typeof mobile.email_id === "string" &&
+    mobile.email_id === desktop.email_id &&
+    typeof mobile.file_key === "string" &&
+    mobile.file_key === desktop.file_key &&
+    FIGMA_NODE_ID.test(mobile.node_id ?? "") &&
+    FIGMA_NODE_ID.test(desktop.node_id ?? "");
+  if (!validFigma) blockers.add("figma-source-missing");
+  const visual = evidence?.visual_regression;
+  if (
+    visual?.status !== "passed" ||
+    typeof visual.reference_id !== "string" ||
+    visual.reference_id.trim() === "" ||
+    typeof visual.render_id !== "string" ||
+    visual.render_id.trim() === ""
+  ) {
+    blockers.add("visual-regression");
+  }
+  return [...blockers].sort();
+}
+
+export async function executeEmailBuildHandoff({
+  outputDir,
+  rendererRunner = defaultRendererRunner,
+  resolution,
+  continueFixEvidence,
+  ...input
+}) {
   const handoff = await prepareEmailBuildHandoff(input);
-  if (handoff.blockers.length) return { ...handoff, executed: false };
-  const modelPath = join(input.assetRoot, "temporary-email-model.json");
-  await writeFile(modelPath, JSON.stringify(handoff.model), "utf8");
-  await execFileAsync(process.execPath, [join(input.repoRoot, "scripts", "render-email.mjs"), "--model", modelPath, "--output", outputDir], { cwd: input.repoRoot });
-  return { ...handoff, executed: true };
+  const blockers = [...new Set([
+    ...handoff.blockers,
+    ...continueFixEvidenceBlockers(resolution, continueFixEvidence),
+  ])].sort();
+  if (blockers.length) return { ...handoff, blockers, executed: false };
+  const modelPath = join(input.assetRoot, `.temporary-email-model-${randomUUID()}.json`);
+  try {
+    await writeFile(modelPath, JSON.stringify(handoff.model), "utf8");
+    await rendererRunner({ repoRoot: input.repoRoot, modelPath, outputDir });
+    return { ...handoff, executed: true };
+  } finally {
+    await rm(modelPath, { force: true });
+  }
 }
 
 function hasValue(value) {
