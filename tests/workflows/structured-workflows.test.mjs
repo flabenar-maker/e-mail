@@ -198,3 +198,30 @@ test("email workflow declares mode-specific orchestration boundaries", async () 
   assert.equal(technicalFix.required_inputs.includes("desktop-figma-instance"), false);
   assert.deepEqual(clarify.allowed_outputs, ["audit-findings", "clarification-request"]);
 });
+test("workflow semantics reject incomplete orchestration metadata", async () => {
+  const workflow = structuredClone(await canonicalWorkflow("email-build"));
+  const manifest = await loadSystemManifest({ repoRoot });
+  const mode = workflow.workflow.modes.find(({ id }) => id === "new-build");
+  const relation = mode.input_relations[0];
+
+  mode.input_blockers = mode.input_blockers.filter(
+    ({ input }) => input !== "request",
+  );
+  assert.ok(
+    validateWorkflowRegistrySemantics(workflow, manifest).some(
+      ({ code }) => code === "WORKFLOW_INPUT_BLOCKER_MISSING",
+    ),
+  );
+
+  mode.input_blockers.push({ input: "unknown-input", blocker: "version-path-unsafe" });
+  relation.inputs[0] = "unknown-input";
+  relation.values.pop();
+  relation.blocker = "unknown-blocker";
+  const codes = new Set(
+    validateWorkflowRegistrySemantics(workflow, manifest).map(({ code }) => code),
+  );
+  assert.ok(codes.has("WORKFLOW_INPUT_BLOCKER_INPUT_UNREQUIRED"));
+  assert.ok(codes.has("WORKFLOW_INPUT_RELATION_INPUT_UNREQUIRED"));
+  assert.ok(codes.has("WORKFLOW_INPUT_RELATION_VALUES_LENGTH"));
+  assert.ok(codes.has("WORKFLOW_INPUT_RELATION_BLOCKER_UNDECLARED"));
+});
