@@ -10,6 +10,10 @@
 
 **Spec:** `docs/superpowers/specs/2026-08-24-cupis-structured-email-system-design.md`
 
+## Уточнение продолжения от 2026-09-18
+
+Tasks 7–8 выполняются по [детальному плану заполнения модели и E2E](2026-09-18-cupis-email-model-assembly-and-e2e.md), с предварительными пакетами уточнения входного процесса и проверки переноса данных. Существующий `email-model` сохраняется единственным форматом композиции; отсутствие отдельного автоматического Figma-импортёра само по себе не является блокером. Этот план не объявляет Tasks 7–8 завершёнными и не меняет их итоговые acceptance gates.
+
 ## Global Constraints
 
 - Канонический репозиторий — `flabenar-maker/e-mail`; persistent edits выполняются через cloud GitHub branch и PR.
