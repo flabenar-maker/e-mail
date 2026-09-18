@@ -176,3 +176,25 @@ test("context bundles use structured-shadow and block archived source paths", as
     "CONTEXT_BUNDLE_ARCHIVED_SOURCE_FORBIDDEN",
   ]);
 });
+test("email workflow declares mode-specific orchestration boundaries", async () => {
+  const email = await canonicalWorkflow("email-build");
+  const modes = new Map(email.workflow.modes.map((mode) => [mode.id, mode]));
+  const newBuild = modes.get("new-build");
+  const designFix = modes.get("continue-fix-design");
+  const technicalFix = modes.get("continue-fix-technical");
+  const clarify = modes.get("clarify");
+  const createVersion = newBuild.steps.find(
+    (step) => step.id === "create-version-folder",
+  );
+
+  assert.ok(newBuild.required_inputs.includes("email-purpose"));
+  assert.ok(createVersion.required_inputs.includes("email-purpose"));
+  assert.deepEqual(
+    newBuild.steps[0].blockers,
+    ["figma-source-missing", "viewport-role-ambiguous", "email-instances-mismatch"],
+  );
+  assert.ok(designFix.required_inputs.includes("exact-change-scope"));
+  assert.equal(technicalFix.required_inputs.includes("mobile-figma-instance"), false);
+  assert.equal(technicalFix.required_inputs.includes("desktop-figma-instance"), false);
+  assert.deepEqual(clarify.allowed_outputs, ["audit-findings", "clarification-request"]);
+});
