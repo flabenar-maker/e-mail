@@ -68,7 +68,8 @@ export function validateWorkflowRegistrySemantics(workflow, manifest) {
   });
 
   (workflow?.workflow?.modes ?? []).forEach((mode, modeIndex) => {
-    if (mode.input_blockers !== undefined || mode.input_relations !== undefined) {`n    const requiredInputs = new Set(mode.required_inputs ?? []);
+    if (mode.input_blockers !== undefined || mode.input_relations !== undefined) {
+    const requiredInputs = new Set(mode.required_inputs ?? []);
     const stepBlockers = new Set((mode.steps ?? []).flatMap((step) => step.blockers ?? []));
     const inputBlockers = new Map();
     (mode.input_blockers ?? []).forEach(({ input, blocker }, inputIndex) => {
@@ -85,7 +86,8 @@ export function validateWorkflowRegistrySemantics(workflow, manifest) {
       });
       if (relation.kind === "ordered-field-values" && relation.values.length !== relation.inputs.length) errors.push(diagnostic("WORKFLOW_INPUT_RELATION_VALUES_LENGTH", `/workflow/modes/${modeIndex}/input_relations/${relationIndex}/values`, "Ordered input relation values must match the input count."));
       if (!stepBlockers.has(relation.blocker)) errors.push(diagnostic("WORKFLOW_INPUT_RELATION_BLOCKER_UNDECLARED", `/workflow/modes/${modeIndex}/input_relations/${relationIndex}/blocker`, `Input relation blocker must be declared by a mode step: ${relation.blocker}.`));
-    });    }`n    for (const id of duplicates(mode.steps.map(({ id }) => id))) {
+    });    }
+    for (const id of duplicates(mode.steps.map(({ id }) => id))) {
       errors.push(
         diagnostic(
           "WORKFLOW_STEP_DUPLICATE",
