@@ -1,4 +1,7 @@
-import { access, cp, mkdir, readdir, writeFile } from "node:fs/promises";
+import { access, cp, mkdir, readdir, writeFile, realpath, readFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 import { isAbsolute, join, relative, resolve } from "node:path";
 
 import {
@@ -33,6 +36,20 @@ function instances(instance, output = []) {
 
 function assetKey(componentId, assetContractId, path) {
   return `${componentId}\0${assetContractId}\0${path}`;
+}
+const execFileAsync = promisify(execFile);
+function contractElement(record, viewport, id) { const walk = (n) => !n ? null : n.id === id ? n : (n.children ?? []).map(walk).find(Boolean); return walk(record.contracts?.[viewport]?.root); }
+function placement(model, index, resolved) {
+  const blockers = new Set(); const ids = new Set(resolved.map(({ id }) => id));
+  const visit = (instance, parent = null, placementId = null, top = false) => {
+    const record = index.bySystemId.get(instance.component_id);
+    if (!ids.has(instance.component_id)) blockers.add("contract-ambiguous");
+    if (!record) return;
+    if (top && !["email", "block", "banner", "nps"].includes(record.identity.semantic_role)) blockers.add("contract-ambiguous");
+    if (parent && placementId) for (const viewport of ["mobile", "desktop"]) { const element = contractElement(parent, viewport, placementId); if (!element || (element.render_mode === "nested-component" && element.component_id !== instance.component_id)) blockers.add("contract-ambiguous"); }
+    for (const slot of instance.slots ?? []) { for (const viewport of ["mobile", "desktop"]) { const el = contractElement(record, viewport, slot.element_id); if (!el || el.render_mode !== "slot") blockers.add("contract-ambiguous"); } for (const child of slot.instances ?? []) visit(child, record, slot.element_id, record.id === "email-template"); }
+    for (const nested of instance.nested_components ?? []) visit(nested.instance, record, nested.element_id, false);
+  }; visit(model.root); return blockers;
 }
 
 async function exists(path) {
@@ -76,6 +93,7 @@ export async function prepareEmailBuildHandoff({
   if (blockers.size > 0) return { blockers: [...blockers].sort(), model, resolvedContracts, assetContracts: [] };
 
   if (model?.root?.component_id !== "email-template") blockers.add("renderer-diagnostic");
+  for (const value of placement(model, componentIndex, resolvedContracts)) blockers.add(value);
   const semantics = validateEmailModelSemantics(model, {
     componentIndex,
     rendererRegistry,
@@ -101,6 +119,9 @@ export async function prepareEmailBuildHandoff({
         blockers.add("asset-contract-missing");
         continue;
       }
+      const physical = await realpath(sourcePath); const physicalRoot = await realpath(assetRoot);
+      const digest = createHash("sha256").update(await readFile(physical)).digest("hex");
+      if (!inside(physicalRoot, physical) || (item.sha256 && item.sha256 !== digest) || (item.mcp_export.owner_layer_name && item.mcp_export.owner_layer_name !== contract.owner_layer_name) || (item.mcp_export.file_key && item.mcp_export.file_key !== component.figma.file_key) || (item.mcp_export.source_node_id !== undefined && typeof item.mcp_export.source_node_id !== "string")) { blockers.add("asset-contract-missing"); continue; }
       try {
         assetContracts.push({
           component_id: instance.component_id,
@@ -125,6 +146,15 @@ export async function prepareEmailBuildHandoff({
     resolvedContracts,
     assetContracts,
   };
+}
+
+export async function executeEmailBuildHandoff({ outputDir, ...input }) {
+  const handoff = await prepareEmailBuildHandoff(input);
+  if (handoff.blockers.length) return { ...handoff, executed: false };
+  const modelPath = join(input.assetRoot, "temporary-email-model.json");
+  await writeFile(modelPath, JSON.stringify(handoff.model), "utf8");
+  await execFileAsync(process.execPath, [join(input.repoRoot, "scripts", "render-email.mjs"), "--model", modelPath, "--output", outputDir], { cwd: input.repoRoot });
+  return { ...handoff, executed: true };
 }
 
 function hasValue(value) {
