@@ -1064,6 +1064,36 @@ test("canonical routes declare exact partial-cutover bundle policies", async () 
   );
 });
 
+test("semantic validation rejects incoherent partial email-cutover topology", async (t) => {
+  const cases = [
+    ["wrong active route set", (manifest) => {
+      manifest.routes.find(({ id }) => id === "email-continue-fix").workflow_source_id = "workflow-paused";
+    }],
+    ["non-email route active during partial", (manifest) => {
+      manifest.routes.find(({ id }) => id === "library-maintenance").workflow_source_id = "workflow-library-maintenance";
+    }],
+    ["email route bound to wrong workflow", (manifest) => {
+      manifest.routes.find(({ id }) => id === "email-new-build").workflow_source_id = "workflow-library-maintenance";
+    }],
+    ["email route profile mismatch", (manifest) => {
+      manifest.routes.find(({ id }) => id === "email-new-build").bundle_profile_id = "email-continue-fix";
+    }],
+    ["active aggregate with partial topology", (manifest) => {
+      manifest.structured_workflows.status = "active";
+    }],
+  ];
+
+  for (const [name, mutate] of cases) {
+    const root = await validFixture(t);
+    const manifest = await mutateFixtureManifest(root, mutate);
+    const errors = await validateManifestSemantics(manifest, root);
+    assert.ok(
+      errors.some(({ code }) => code === "structured-workflow-status-topology-invalid"),
+      name,
+    );
+  }
+});
+
 
 const componentDocumentationStandardSources = [
   [

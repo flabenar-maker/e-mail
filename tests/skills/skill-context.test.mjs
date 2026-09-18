@@ -133,6 +133,42 @@ test("canonical email-only cutover resolves email routes and pauses every other 
   }
 });
 
+test("skill resolution cannot bypass incoherent partial email-cutover topology", async (t) => {
+  const cases = [
+    ["wrong active route set", (manifest) => {
+      manifest.routes.find(({ id }) => id === "email-continue-fix").workflow_source_id = "workflow-paused";
+    }],
+    ["non-email route active during partial", (manifest) => {
+      manifest.routes.find(({ id }) => id === "library-maintenance").workflow_source_id = "workflow-library-maintenance";
+    }],
+    ["email route bound to wrong workflow", (manifest) => {
+      manifest.routes.find(({ id }) => id === "email-new-build").workflow_source_id = "workflow-library-maintenance";
+    }],
+    ["email route profile mismatch", (manifest) => {
+      manifest.routes.find(({ id }) => id === "email-new-build").bundle_profile_id = "email-continue-fix";
+    }],
+    ["active aggregate with partial topology", (manifest) => {
+      manifest.structured_workflows.status = "active";
+    }],
+  ];
+
+  for (const [name, mutate] of cases) {
+    const fixture = await systemFixture(t);
+    const manifest = await loadSystemManifest({ repoRoot: fixture.root });
+    mutate(manifest);
+    await writeManifest(fixture.root, manifest);
+    const result = await resolveSkillContext({
+      repoRoot: fixture.root,
+      ...activeEmailRequest("email-new-build"),
+    });
+    assert.equal(result.status, "blocked", name);
+    assert.ok(
+      result.blockers.some(({ code }) => code === "structured-workflow-status-topology-invalid"),
+      name,
+    );
+  }
+});
+
 test("active email routes refuse every shadow status dependency", async (t) => {
   const cases = [
     ["aggregate", async (root) => { const manifest = await loadSystemManifest({ repoRoot: root }); manifest.structured_workflows.status = "shadow"; await writeManifest(root, manifest); }],

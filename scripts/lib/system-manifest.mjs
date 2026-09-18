@@ -349,6 +349,7 @@ export async function validateManifestSemantics(manifest, repoRoot) {
     manifest.bundle_profiles.map((profile) => [profile.id, profile]),
   );
   const emailRouteIds = new Set(["email-new-build", "email-continue-fix"]);
+  const expectedEmailWorkflow = "workflow-email-build";
   const activeRoutes = manifest.routes.filter(
     ({ workflow_source_id }) => workflow_source_id !== "workflow-paused",
   );
@@ -357,15 +358,19 @@ export async function validateManifestSemantics(manifest, repoRoot) {
   const topologyInvalid =
     (partial && (
       activeRoutes.length !== 2 ||
-      activeRoutes.some(({ id, workflow_source_id }) => !emailRouteIds.has(id) || workflow_source_id !== "workflow-email-build") ||
+      activeRoutes.some(({ id, workflow_source_id, bundle_profile_id }) =>
+        !emailRouteIds.has(id) ||
+        workflow_source_id !== expectedEmailWorkflow ||
+        bundle_profile_id !== id,
+      ) ||
       manifest.routes.some(({ id, workflow_source_id }) => !emailRouteIds.has(id) && workflow_source_id !== "workflow-paused") ||
       manifest.bundle_profiles.some(({ id, generated_bundle }) => emailRouteIds.has(id)
-        ? generated_bundle.status !== "structured-active"
-        : generated_bundle.status !== "structured-shadow")
+        ? generated_bundle?.status !== "structured-active"
+        : generated_bundle?.status !== "structured-shadow")
     )) ||
     (active && (
       activeRoutes.length !== manifest.routes.length ||
-      manifest.bundle_profiles.some(({ generated_bundle }) => generated_bundle.status !== "structured-active")
+      manifest.bundle_profiles.some(({ generated_bundle }) => generated_bundle?.status !== "structured-active")
     )) ||
     (!partial && !active && activeRoutes.length > 0);
   if (topologyInvalid) {
