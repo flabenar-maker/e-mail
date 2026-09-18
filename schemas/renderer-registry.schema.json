@@ -13,7 +13,7 @@
       "required": ["id", "status"],
       "properties": {
         "id": { "const": "email-renderers" },
-        "status": { "const": "shadow" }
+        "status": { "enum": ["shadow", "active"] }
       }
     },
     "coverage": {

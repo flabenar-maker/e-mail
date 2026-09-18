@@ -1,7 +1,7 @@
 schema_version: 1.0.0
 foundation:
   id: spacing
-  status: shadow
+  status: active
 viewports:
   - mobile
   - desktop

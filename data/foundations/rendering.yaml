@@ -1,5 +1,5 @@
 schema_version: 1.1.0
-foundation: { id: rendering, status: shadow }
+foundation: { id: rendering, status: active }
 shell:
   background_color: '#F3F3F5'
   horizontal_inset_px: 15

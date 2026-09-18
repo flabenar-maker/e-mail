@@ -94,7 +94,32 @@ test("canonical maintenance routes resolve one paused shadow context", async () 
   ]);
 });
 
-test("temporary email shadow fixture resolves every structured mode without activating canonical routes", async (t) => {
+test("canonical email-only cutover resolves email routes and pauses every other route", async () => {
+  const manifest = await loadSystemManifest({ repoRoot });
+  for (const route of manifest.routes) {
+    const email = ["email-new-build", "email-continue-fix"].includes(route.id);
+    const profile = manifest.bundle_profiles.find(({ id }) => id === route.bundle_profile_id);
+    const bothViewports = ["both", "both-when-components"].includes(profile.generated_bundle.viewport_selection);
+    const needsComponent = profile.generated_bundle.component_selection === "required";
+    const result = await resolveSkillContext({
+      repoRoot,
+      routeId: route.id,
+      workflowMode: email ? (route.id === "email-new-build" ? "new-build" : "continue-fix-design") : null,
+      candidates: email || needsComponent ? [{ id: "banner-hero" }] : [],
+      viewports: profile.generated_bundle.viewport_selection === "none" ? [] : bothViewports ? ["mobile", "desktop"] : ["mobile"],
+    });
+    assert.equal(result.status, email ? "resolved" : "paused", route.id);
+    if (email) {
+      assert.equal(result.route.workflow_source_id, "workflow-email-build", route.id);
+      assert.equal(result.bundle.mode, "structured-active", route.id);
+      assert.deepEqual(result.blockers, undefined, route.id);
+    } else {
+      assert.deepEqual(result.blockers.map(({ code }) => code), ["SKILL_ROUTE_PAUSED"], route.id);
+    }
+  }
+});
+
+test("email workflow resolves every structured mode without changing output artifacts", async (t) => {
   const fixture = await systemFixture(t);
   const manifest = await loadSystemManifest({ repoRoot: fixture.root });
   replaceWorkflowSource(manifest, "email-new-build", "workflow-email-build");
@@ -149,20 +174,10 @@ test("temporary email shadow fixture resolves every structured mode without acti
   }
 
   const canonicalOutputBefore = await productionOutputSnapshot(repoRoot);
-  for (const routeId of ["email-new-build", "email-continue-fix"]) {
-    const canonical = await resolveSkillContext({
-      repoRoot,
-      routeId,
-      candidates: routeId === "email-new-build" ? [{ id: "banner-hero" }] : [],
-      viewports: routeId === "email-new-build" ? ["mobile", "desktop"] : [],
-    });
-    assert.equal(canonical.status, "paused", routeId);
-    assert.deepEqual(canonical.blockers.map(({ code }) => code), ["SKILL_ROUTE_PAUSED"]);
-  }
   assert.deepEqual(
     await productionOutputSnapshot(repoRoot),
     canonicalOutputBefore,
-    "canonical paused resolution must not create or change production email output artifacts",
+    "canonical resolution must not create or change production email output artifacts",
   );
 
   assert.deepEqual(

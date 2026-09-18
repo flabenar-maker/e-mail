@@ -18,11 +18,15 @@
       "additionalProperties": false,
       "required": [
         "id",
+        "status",
         "source"
       ],
       "properties": {
         "id": {
           "const": "typography"
+        },
+        "status": {
+          "enum": ["shadow", "active"]
         },
         "source": {
           "$ref": "#/$defs/source"

@@ -25,7 +25,7 @@
       "required": ["id", "status", "source_ids", "modes"],
       "properties": {
         "id": { "$ref": "#/$defs/id" },
-        "status": { "const": "shadow" },
+        "status": { "enum": ["shadow", "active"] },
         "source_ids": {
           "allOf": [
             { "$ref": "#/$defs/idList" },

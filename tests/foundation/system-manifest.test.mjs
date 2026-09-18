@@ -1030,12 +1030,13 @@ test("resolves immutable generated definitions and route policy", async () => {
 });
 
 
-test("canonical routes declare exact structured-shadow bundle policies", async () => {
+test("canonical routes declare exact partial-cutover bundle policies", async () => {
   const manifest = await canonicalManifest();
   for (const profile of manifest.bundle_profiles) {
-    assert.equal(profile.generated_bundle.status, "structured-shadow");
     assert.deepEqual(profile.generated_bundle.static_source_ids, profile.source_ids);
-    assert.equal(profile.generated_bundle.static_source_ids.includes("workflow-paused"), true);
+    const email = ["email-new-build", "email-continue-fix"].includes(profile.id);
+    assert.equal(profile.generated_bundle.status, email ? "structured-active" : "structured-shadow");
+    assert.equal(profile.generated_bundle.static_source_ids.includes("workflow-paused"), !email);
   }
   assert.deepEqual(
     manifest.generated_docs.map(({ id, output_source_id }) => ({
