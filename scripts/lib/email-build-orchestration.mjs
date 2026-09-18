@@ -57,6 +57,17 @@ function contractElement(record, viewport, id) {
   return visit(record.contracts?.[viewport]?.root);
 }
 
+function nestedComponentIds(record, viewport) {
+  const result = new Set();
+  const visit = (element) => {
+    if (!element) return;
+    if (element.render_mode === "nested-component") result.add(element.component_id);
+    for (const child of element.children ?? []) visit(child);
+  };
+  visit(record.contracts?.[viewport]?.root);
+  return result;
+}
+
 function nestedOnlyComponentIds(index) {
   const result = new Set();
   for (const record of index.bySystemId.values()) {
@@ -94,17 +105,22 @@ function validateModelPlacement(model, index, resolvedContracts) {
     }
 
     if (relation?.kind === "nested") {
-      const elements = VIEWPORTS
-        .map((viewport) => contractElement(relation.parent, viewport, relation.elementId))
-        .filter(Boolean);
-      if (
-        elements.length === 0 ||
-        elements.some((element) =>
-          element.render_mode !== "nested-component" ||
-          element.component_id !== instance.component_id)
-      ) {
-        blockers.add("contract-ambiguous");
+      let exactPlacementCount = 0;
+      for (const viewport of VIEWPORTS) {
+        const element = contractElement(relation.parent, viewport, relation.elementId);
+        if (element) {
+          exactPlacementCount += 1;
+          if (
+            element.render_mode !== "nested-component" ||
+            element.component_id !== instance.component_id
+          ) {
+            blockers.add("contract-ambiguous");
+          }
+        } else if (!nestedComponentIds(relation.parent, viewport).has(instance.component_id)) {
+          blockers.add("contract-ambiguous");
+        }
       }
+      if (exactPlacementCount === 0) blockers.add("contract-ambiguous");
     }
 
     for (const slot of instance.slots ?? []) {
@@ -112,16 +128,24 @@ function validateModelPlacement(model, index, resolvedContracts) {
         .map((viewport) => contractElement(record, viewport, slot.element_id))
         .filter(Boolean);
       if (
-        slotElements.length === 0 ||
+        slotElements.length !== VIEWPORTS.length ||
         slotElements.some((element) => element.render_mode !== "slot")
       ) {
         blockers.add("contract-ambiguous");
       }
       for (const child of slot.instances ?? []) {
+        const relationKind = record.id === "email-template" && slot.element_id === "content"
+          ? "top-level"
+          : "slot";
+        const childRecord = index.bySystemId.get(child.component_id);
+        if (
+          relationKind === "slot" &&
+          (nestedOnly.has(child.component_id) || !TOP_LEVEL_ROLES.has(childRecord?.identity?.semantic_role))
+        ) {
+          blockers.add("contract-ambiguous");
+        }
         visit(child, {
-          kind: record.id === "email-template" && slot.element_id === "content"
-            ? "top-level"
-            : "slot",
+          kind: relationKind,
           parent: record,
           elementId: slot.element_id,
         });
@@ -151,16 +175,14 @@ function resolvedAssetSelection(assets, contract) {
   });
 }
 
-async function validateAssetEvidence({ assetRoot, component, contract, asset, item, resolved }) {
+async function validateAssetEvidence({ assetRoot, instance, component, contract, asset, item, resolved }) {
   const extension = resolved.export_profile.contract.extension;
-  const escapedId = contract.id.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
-  const escapedExtension = extension.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
-  const allowedPath = new RegExp(
-    `^images/${escapedId}(?:-[a-z0-9]+)*${escapedExtension}$`,
-    "u",
-  );
+  const allowedPaths = new Set([
+    `images/${contract.id}${extension}`,
+    `images/${contract.id}-${instance.instance_id}${extension}`,
+  ]);
   if (
-    !allowedPath.test(asset.path) ||
+    !allowedPaths.has(asset.path) ||
     item?.mcp_export?.source !== "figma-mcp" ||
     typeof item.mcp_export.evidence_id !== "string" ||
     item.mcp_export.evidence_id.trim() === "" ||
@@ -251,6 +273,7 @@ export async function prepareEmailBuildHandoff({
       }
       if (!await validateAssetEvidence({
         assetRoot,
+        instance,
         component,
         contract,
         asset,
