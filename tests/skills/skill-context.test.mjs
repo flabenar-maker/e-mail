@@ -168,6 +168,26 @@ test("canonical email-only cutover resolves email routes and pauses every other 
   }
 });
 
+test("fully active topology rejects a route cross-wired to the email workflow", async (t) => {
+  const fixture = await systemFixture(t);
+  const manifest = await loadSystemManifest({ repoRoot: fixture.root });
+  await activateAllRoutes(fixture.root, manifest);
+  replaceWorkflowSource(manifest, "library-maintenance", "workflow-email-build");
+  await writeManifest(fixture.root, manifest);
+
+  const result = await resolveSkillContext({
+    repoRoot: fixture.root,
+    routeId: "library-maintenance",
+    workflowMode: "read-only",
+    viewports: ["mobile"],
+  });
+
+  assert.equal(result.status, "blocked");
+  assert.ok(
+    result.blockers.some(({ code }) => code === "structured-workflow-status-topology-invalid"),
+  );
+});
+
 test("skill resolution cannot bypass incoherent partial email-cutover topology", async (t) => {
   const cases = [
     ["wrong active route set", (manifest) => {
