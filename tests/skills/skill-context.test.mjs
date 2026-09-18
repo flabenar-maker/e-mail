@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { dirname } from "node:path";
+import { readdir, readFile } from "node:fs/promises";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { loadSystemManifest } from "../../scripts/lib/system-manifest.mjs";
@@ -30,6 +31,19 @@ async function writeManifest(root, manifest) {
     "system/manifest.yaml",
     `${JSON.stringify(manifest, null, 2)}\n`,
   );
+}
+
+async function fixtureSnapshot(root, relative = "") {
+  const snapshot = [];
+  for (const entry of await readdir(
+    relative ? join(root, relative) : root,
+    { withFileTypes: true },
+  )) {
+    const path = relative ? `${relative}/${entry.name}` : entry.name;
+    if (entry.isDirectory()) snapshot.push(...await fixtureSnapshot(root, path));
+    else snapshot.push([path, (await readFile(join(root, path))).toString("base64")]);
+  }
+  return snapshot.sort(([left], [right]) => left.localeCompare(right));
 }
 
 function replaceWorkflowSource(manifest, routeId, sourceId) {
@@ -68,6 +82,7 @@ test("temporary email shadow fixture resolves every structured mode without acti
   replaceWorkflowSource(manifest, "email-new-build", "workflow-email-build");
   replaceWorkflowSource(manifest, "email-continue-fix", "workflow-email-build");
   await writeManifest(fixture.root, manifest);
+  const snapshotBeforeResolution = await fixtureSnapshot(fixture.root);
 
   const owner = await loadWorkflowRegistry({ repoRoot: fixture.root, workflowId: "email-build" });
   const modes = ["new-build", "continue-fix-design", "continue-fix-technical", "read-only", "clarify"];
@@ -105,6 +120,7 @@ test("temporary email shadow fixture resolves every structured mode without acti
       for (const excluded of [
         "workflow-paused",
         "workflow-email-build",
+        "figma-library-standard",
         "figma-component-description-standard",
         "workflow-library-maintenance",
         "generated-component-registry",
@@ -124,6 +140,12 @@ test("temporary email shadow fixture resolves every structured mode without acti
     assert.equal(canonical.status, "paused", routeId);
     assert.deepEqual(canonical.blockers.map(({ code }) => code), ["SKILL_ROUTE_PAUSED"]);
   }
+
+  assert.deepEqual(
+    await fixtureSnapshot(fixture.root),
+    snapshotBeforeResolution,
+    "resolving the shadow fixture must not create a production email output",
+  );
 });
 
 test("an explicitly active maintenance route resolves exact ordered steps", async (t) => {
