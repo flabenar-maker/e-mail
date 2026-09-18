@@ -22,7 +22,13 @@ function assertRouteBoundary(source) {
   assert.equal(policy.resolvedBundle, "exactly-one");
   assert.equal(policy.steps, "returned-workflow.steps-only");
   assert.equal(policy.onPaused, "stop-without-manual-fallback");
-  assert.doesNotMatch(source, /\b(?:invoke|select|route to|run|follow)\b[^\n]*(?:maintenance|component-development)\b/iu);
+  const routeInstructions = source.replaceAll("npm run resolve:skill-context", "");
+  for (const line of routeInstructions.split(/\r?\n/u)) {
+    if (!/\b(?:invoke|select|route to|run|follow|use)\b/iu.test(line)) continue;
+    for (const route of line.matchAll(/\b[a-z][a-z0-9]*(?:-[a-z0-9]+)+\b/giu)) {
+      assert.ok(allowedRoutes.includes(route[0]), `invoked or selected route is not allowed: ${route[0]}`);
+    }
+  }
 }
 
 function assertNoDuplicatedMaterial(source) {
@@ -56,7 +62,12 @@ function assertOperatingBoundaries(source) {
     /\bno GitHub Actions or PR Checks\b/iu,
   ]) assert.match(source, requiredBoundary);
 
-  const actionableLines = source.split(/\r?\n/u).filter((line) => !/\b(?:no|never|do not|don't)\b/iu.test(line)).join("\n");
+  const actionableClauses = source
+    .replaceAll(/\bno Figma mutation\b/giu, "")
+    .replaceAll(/\bno new-component design\b/giu, "")
+    .replaceAll(/\bno production email outputs committed to GitHub\b/giu, "")
+    .replaceAll(/\bno overwrite of a source email version\b/giu, "")
+    .replaceAll(/\bno GitHub Actions or PR Checks\b/giu, "");
   for (const prohibitedInstruction of [
     /\b(?:mutate|write|edit|update|create|change)\b[^\n]*\bFigma\b/iu,
     /\bFigma\b[^\n]*\b(?:mutate|write|edit|update|create|change)\b/iu,
@@ -64,7 +75,7 @@ function assertOperatingBoundaries(source) {
     /\b(?:commit|push)\b[^\n]*\bproduction email output(?:s)?\b/iu,
     /\boverwrite\b[^\n]*\bsource email version\b/iu,
     /\b(?:run|use|consult|rely on|wait for)\b[^\n]*\b(?:GitHub Actions|PR Checks)\b/iu,
-  ]) assert.doesNotMatch(actionableLines, prohibitedInstruction);
+  ]) assert.doesNotMatch(actionableClauses, prohibitedInstruction);
   assert.doesNotMatch(source, /\b(?:unless|except|however|but)\b[^\n]*\b(?:Figma|new[- ]component|production email output|source email version|GitHub Actions|PR Checks)\b/iu);
 }
 
@@ -83,7 +94,7 @@ function assertGuardFixtures() {
   for (const invalidRoute of [
     validFixture.replace("email-continue-fix", "maintenance"), validFixture.replace('"exactly-one"', '"many"'),
     validFixture.replace("returned-workflow.steps-only", "copied-steps-allowed"), validFixture.replace("stop-without-manual-fallback", "manual-fallback"),
-    `${validFixture}\nInvoke maintenance route.`,
+    `${validFixture}\nInvoke maintenance route.`, `${validFixture}\nRun email-other-route.`,
   ]) assert.throws(() => assertRouteBoundary(invalidRoute));
   for (const duplication of [
     "data/components/button.json", "data/foundations/colors.json", "core/example.md", "## Components\n- Button", "#fff", "color: red", "16pt", "80%",
@@ -91,7 +102,10 @@ function assertGuardFixtures() {
   ]) assert.throws(() => assertNoDuplicatedMaterial(`${validFixture}\n${duplication}`));
   for (const contradiction of [
     "Edit Figma now.", "Create a new component.", "Commit production email outputs.", "Overwrite the source email version.", "Run GitHub Actions.",
-    "No Figma mutation, except update Figma.",
+    "No Figma mutation; edit Figma now.", "No new-component design; create a new component now.",
+    "No production email outputs committed to GitHub; commit production email outputs now.",
+    "No overwrite of a source email version; overwrite source email version now.",
+    "No GitHub Actions or PR Checks; run GitHub Actions now.", "No Figma mutation, except update Figma.",
   ]) assert.throws(() => assertOperatingBoundaries(`${validFixture}\n${contradiction}`));
 }
 
