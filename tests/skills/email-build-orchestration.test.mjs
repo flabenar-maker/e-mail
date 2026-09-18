@@ -36,28 +36,28 @@ test("resolved workflow classifies typed inputs and only exposes that mode's out
 
   assert.deepEqual(
     resolveEmailBuildRequest({ workflow: emailWorkflow, inputs: { "email-purpose": "Billing renewal notice", "output-parent": input(), "mobile-figma-instance": { role: "mobile", emailId: "a" }, "desktop-figma-instance": { role: "desktop", emailId: "a" } } }),
-    { mode: "new-build", blocker: "version-path-unsafe", allowedOutputs: [] },
+    { mode: "new-build", blocker: "request-missing", allowedOutputs: [] },
   );  assert.deepEqual(
     resolveEmailBuildRequest({ workflow: emailWorkflow, inputs: { ...base, "mobile-figma-instance": { role: "mobile", emailId: "a" } } }),
     { mode: "new-build", blocker: "figma-source-missing", allowedOutputs: [] },
   );
   assert.deepEqual(
     resolveEmailBuildRequest({ workflow: emailWorkflow, inputs: { "email-purpose": "Billing renewal notice", "output-parent": input(), "mobile-figma-instance": { role: "mobile", emailId: "a" }, "desktop-figma-instance": { role: "desktop", emailId: "a" } } }),
-    { mode: "new-build", blocker: "version-path-unsafe", allowedOutputs: [] },
+    { mode: "new-build", blocker: "request-missing", allowedOutputs: [] },
   );  assert.deepEqual(
     resolveEmailBuildRequest({ workflow: emailWorkflow, inputs: { ...base, "mobile-figma-instance": { role: "desktop", emailId: "a" }, "desktop-figma-instance": { role: "mobile", emailId: "a" } } }),
     { mode: "new-build", blocker: "viewport-role-ambiguous", allowedOutputs: [] },
   );
   assert.deepEqual(
     resolveEmailBuildRequest({ workflow: emailWorkflow, inputs: { "email-purpose": "Billing renewal notice", "output-parent": input(), "mobile-figma-instance": { role: "mobile", emailId: "a" }, "desktop-figma-instance": { role: "desktop", emailId: "a" } } }),
-    { mode: "new-build", blocker: "version-path-unsafe", allowedOutputs: [] },
+    { mode: "new-build", blocker: "request-missing", allowedOutputs: [] },
   );  assert.deepEqual(
     resolveEmailBuildRequest({ workflow: emailWorkflow, inputs: { ...base, "mobile-figma-instance": { role: "mobile", emailId: "a" }, "desktop-figma-instance": { role: "desktop", emailId: "b" } } }),
     { mode: "new-build", blocker: "email-instances-mismatch", allowedOutputs: [] },
   );
   assert.deepEqual(
     resolveEmailBuildRequest({ workflow: emailWorkflow, inputs: { "email-purpose": "Billing renewal notice", "output-parent": input(), "mobile-figma-instance": { role: "mobile", emailId: "a" }, "desktop-figma-instance": { role: "desktop", emailId: "a" } } }),
-    { mode: "new-build", blocker: "version-path-unsafe", allowedOutputs: [] },
+    { mode: "new-build", blocker: "request-missing", allowedOutputs: [] },
   );  assert.deepEqual(
     resolveEmailBuildRequest({ workflow: emailWorkflow, inputs: { ...base, "mobile-figma-instance": { role: "mobile", emailId: "a" }, "desktop-figma-instance": { role: "desktop", emailId: "a" } } }),
     { mode: "new-build", blocker: null, allowedOutputs: ["version-folder", "email-html", "images-directory", "verification-summary", "handoff-summary"] },
@@ -76,7 +76,7 @@ test("resolved workflow classifies typed inputs and only exposes that mode's out
   );
   assert.deepEqual(
     resolveEmailBuildRequest({ workflow: emailWorkflow, inputs: { request: input(), "output-parent": input(), "mobile-figma-instance": input(), "desktop-figma-instance": input() } }),
-    { mode: "new-build", blocker: "version-path-unsafe", allowedOutputs: [] },
+    { mode: "new-build", blocker: "request-missing", allowedOutputs: [] },
   );
 });
 
