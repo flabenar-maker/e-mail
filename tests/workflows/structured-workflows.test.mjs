@@ -191,7 +191,7 @@ test("email workflow declares mode-specific orchestration boundaries", async () 
   assert.ok(createVersion.required_inputs.includes("email-purpose"));
   assert.deepEqual(
     newBuild.steps[0].blockers,
-    ["figma-source-missing", "viewport-role-ambiguous", "email-instances-mismatch"],
+    ["request-missing", "figma-source-missing", "viewport-role-ambiguous", "email-instances-mismatch"],
   );
   assert.ok(designFix.required_inputs.includes("exact-change-scope"));
   assert.equal(technicalFix.required_inputs.includes("mobile-figma-instance"), false);
