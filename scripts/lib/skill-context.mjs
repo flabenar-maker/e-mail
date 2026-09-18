@@ -1,7 +1,7 @@
 import { buildContextBundle } from "./context-bundle.mjs";
 import { join } from "node:path";
 import { SystemValidationError } from "./diagnostics.mjs";
-import { loadSystemManifest } from "./system-manifest.mjs";
+import { loadSystemManifest, validateManifestSemantics } from "./system-manifest.mjs";
 import { readStrictYaml } from "./strict-yaml.mjs";
 import {
   loadWorkflowRegistry,
@@ -103,6 +103,8 @@ export async function resolveSkillContext({
   } catch (error) {
     return blocked(blockersFrom(error));
   }
+  const semanticErrors = validateManifestSemantics(manifest, repoRoot);
+  if (semanticErrors.length > 0) return blocked(semanticErrors);
   const manifestRoute = manifest.routes.find(({ id }) => id === routeId);
   const manifestProfile = manifest.bundle_profiles.find(
     ({ id }) => id === manifestRoute?.bundle_profile_id,

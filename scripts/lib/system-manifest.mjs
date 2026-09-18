@@ -348,6 +348,33 @@ export async function validateManifestSemantics(manifest, repoRoot) {
   const profileById = new Map(
     manifest.bundle_profiles.map((profile) => [profile.id, profile]),
   );
+  const emailRouteIds = new Set(["email-new-build", "email-continue-fix"]);
+  const activeRoutes = manifest.routes.filter(
+    ({ workflow_source_id }) => workflow_source_id !== "workflow-paused",
+  );
+  const partial = structuredWorkflows.status === "partial";
+  const active = structuredWorkflows.status === "active";
+  const topologyInvalid =
+    (partial && (
+      activeRoutes.length !== 2 ||
+      activeRoutes.some(({ id, workflow_source_id }) => !emailRouteIds.has(id) || workflow_source_id !== "workflow-email-build") ||
+      manifest.routes.some(({ id, workflow_source_id }) => !emailRouteIds.has(id) && workflow_source_id !== "workflow-paused") ||
+      manifest.bundle_profiles.some(({ id, generated_bundle }) => emailRouteIds.has(id)
+        ? generated_bundle.status !== "structured-active"
+        : generated_bundle.status !== "structured-shadow")
+    )) ||
+    (active && (
+      activeRoutes.length !== manifest.routes.length ||
+      manifest.bundle_profiles.some(({ generated_bundle }) => generated_bundle.status !== "structured-active")
+    )) ||
+    (!partial && !active && activeRoutes.length > 0);
+  if (topologyInvalid) {
+    errors.push(diagnostic(
+      "structured-workflow-status-topology-invalid",
+      "/structured_workflows/status",
+      "Structured workflow status must match the explicit route and profile cutover topology.",
+    ));
+  }
   const generatedDocs = manifest.generated_docs ?? [];
   pushDuplicateDiagnostics(
     errors,
