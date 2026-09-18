@@ -42,8 +42,13 @@ function everyInstance(instance, output = []) {
   return output;
 }
 
-function semanticVisible(element, record) {
+function semanticVisible(element, record, propertyValues, viewport) {
   if (element.visibility?.mode !== "property") return true;
+  const configured = propertyValues.find(({ property_id, scope }) =>
+    property_id === element.visibility.property_id && scope === viewport)
+    ?? propertyValues.find(({ property_id, scope }) =>
+      property_id === element.visibility.property_id && scope === "all");
+  if (configured) return configured.value === true;
   return record.properties.find(({ id }) => id === element.visibility.property_id)?.default === true;
 }
 
@@ -61,12 +66,12 @@ function contentValue(type, marker, element) {
   return { type, value: marker };
 }
 
-function collectVisibleContract(record, viewport) {
+function collectVisibleContract(record, viewport, propertyValues) {
   const content = [];
   const assets = new Set();
   const nested = new Map();
   const visit = (element, parentRendered = true) => {
-    if (!element || !semanticVisible(element, record)) return;
+    if (!element || !semanticVisible(element, record, propertyValues, viewport)) return;
     const rendered = parentRendered && renderedByDefault(element);
     for (const slot of element.content_slots ?? []) {
       if (slot.type !== "placeholder" && (rendered || slot.required)) {
@@ -83,14 +88,17 @@ function collectVisibleContract(record, viewport) {
   return { content, assets, nested };
 }
 
-function buildInstance(assets, componentId, instanceId) {
+function buildInstance(assets, componentId, instanceId, blueprint = null) {
   const record = registryIndex.bySystemId.get(componentId);
+  const concreteInput = blueprint?.component_inputs?.[componentId];
   const property_values = (record.properties ?? [])
     .filter(({ type }) => type === "boolean")
-    .map((property) => ({ property_id: property.id, scope: "all", value: property.default }));
+    .map((property) => concreteInput?.property_values?.find(({ property_id, scope }) =>
+      property_id === property.id && scope === "all")
+      ?? { property_id: property.id, scope: "all", value: property.default });
   const byViewport = new Map(VIEWPORTS.map((viewport) => [
     viewport,
-    collectVisibleContract(record, viewport),
+    collectVisibleContract(record, viewport, property_values),
   ]));
 
   const contentMap = new Map();
@@ -132,7 +140,7 @@ function buildInstance(assets, componentId, instanceId) {
   }
   const nested_components = [...nestedMap].map(([element_id, nestedId], index) => ({
     element_id,
-    instance: buildInstance(assets, nestedId, `${instanceId}-nested-${index}`),
+    instance: buildInstance(assets, nestedId, `${instanceId}-nested-${index}`, blueprint),
   }));
 
   return {
@@ -147,15 +155,45 @@ function buildInstance(assets, componentId, instanceId) {
   };
 }
 
-function buildEmailModel({ index, assets, id, topLevel }) {
+function buildEmailModel({ index, assets, id, topLevel, blueprint = null }) {
   registryIndex = index;
-  const root = buildInstance(assets, "email-template", `${id}-template`);
+  const root = buildInstance(assets, "email-template", `${id}-template`, blueprint);
   root.slots = [{
     element_id: "content",
     instances: topLevel.map((componentId, indexValue) =>
-      buildInstance(assets, componentId, `${id}-${indexValue}`)),
+      buildInstance(assets, componentId, `${id}-${indexValue}`, blueprint)),
   }];
   return { schema_version: "1.1.0", id, metadata: { language: "ru", direction: "ltr" }, root };
+}
+
+function applyConcreteEmailBlueprint(model, blueprint) {
+  const expectedTopLevel = blueprint.top_level.map(({ component_id }) => component_id);
+  const actualTopLevel = model.root.slots.find(({ element_id }) => element_id === "content")
+    ?.instances.map(({ component_id }) => component_id);
+  assert.deepEqual(actualTopLevel, expectedTopLevel);
+
+  const seen = new Set();
+  for (const instance of everyInstance(model.root)) {
+    const concreteInput = blueprint.component_inputs[instance.component_id];
+    if (!concreteInput) {
+      assert.equal(
+        instance.content_values.length,
+        0,
+        `missing concrete content map for ${instance.component_id}`,
+      );
+      continue;
+    }
+    seen.add(instance.component_id);
+    if (concreteInput.content_values) {
+      instance.content_values = structuredClone(concreteInput.content_values);
+    }
+    if (concreteInput.property_values) {
+      assert.deepEqual(instance.property_values, concreteInput.property_values);
+    }
+  }
+  for (const componentId of Object.keys(blueprint.component_inputs)) {
+    assert.ok(seen.has(componentId), `unused concrete input for ${componentId}`);
+  }
 }
 
 function candidatesFor(model) {
@@ -192,14 +230,15 @@ async function writeAssetsAndEvidence(root, model, index) {
   return evidence;
 }
 
-async function fixture(root, topLevel, id = "fixture") {
+async function fixture(root, topLevel, id = "fixture", blueprint = null) {
   const [registries, rendererRegistry, assetsFoundation] = await Promise.all([
     loadComponentRegistries({ repoRoot }),
     loadRendererRegistry({ repoRoot }),
     loadAssetsFoundation({ repoRoot }),
   ]);
   const index = indexComponentRegistries(registries);
-  const model = buildEmailModel({ index, assets: assetsFoundation, id, topLevel });
+  const model = buildEmailModel({ index, assets: assetsFoundation, id, topLevel, blueprint });
+  if (blueprint) applyConcreteEmailBlueprint(model, blueprint);
   return {
     model,
     candidates: candidatesFor(model),
@@ -255,7 +294,9 @@ async function executeFixture(root, source) {
     .replaceAll("&#39;", "'");
   const supplied = suppliedValues(source.model);
   for (const literal of supplied.text) {
-    assert.ok(html.includes(literal) || plainText.includes(literal), literal);
+    for (const fragment of literal.split(/\r?\n/u)) {
+      assert.ok(html.includes(fragment) || plainText.includes(fragment), fragment);
+    }
   }
   for (const url of supplied.urls) assert.ok(html.includes(`href="${url}"`), url);
   assert.deepEqual(await readdir(outputDir), ["email.html", "images"]);
@@ -271,10 +312,23 @@ test("marketing and service fixtures follow resolved contracts through the real 
   const marketing = await fixture(marketingRoot, [
     "email-header", "banner-secondary", "banner-app-download", "email-footer",
   ], "marketing");
-  const service = await fixture(serviceRoot, [
-    "email-header", "block-transaction-success", "banner-secondary",
-    "block-contact-support", "banner-app-download", "email-footer",
-  ], "service");
+  const serviceBlueprint = JSON.parse(await readFile(
+    new URL("../fixtures/skills/service-email-template-figma.json", import.meta.url),
+    "utf8",
+  ));
+  const service = await fixture(
+    serviceRoot,
+    serviceBlueprint.top_level.map(({ component_id }) => component_id),
+    "service",
+    serviceBlueprint,
+  );
+  assert.deepEqual(serviceBlueprint.figma.mobile, {
+    node_id: "1533:20379", role: "mobile", width: 328, height: 2223,
+  });
+  assert.deepEqual(serviceBlueprint.figma.desktop, {
+    node_id: "1533:20380", role: "desktop", width: 600, height: 1847,
+  });
+  assert.ok(suppliedValues(service.model).text.every((value) => !value.includes("service-")));
   await executeFixture(marketingRoot, marketing);
   await executeFixture(serviceRoot, service);
 });

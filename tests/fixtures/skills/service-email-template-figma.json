@@ -1,0 +1,280 @@
+{
+  "id": "service-email-template-1533-20379-20380",
+  "figma": {
+    "file_key": "8zka5bHkcrJVK9I9dKjnhC",
+    "mobile": {
+      "node_id": "1533:20379",
+      "role": "mobile",
+      "width": 328,
+      "height": 2223
+    },
+    "desktop": {
+      "node_id": "1533:20380",
+      "role": "desktop",
+      "width": 600,
+      "height": 1847
+    }
+  },
+  "top_level": [
+    {
+      "component_id": "email-header",
+      "mobile_node_id": "I1533:20379;1103:7;1533:21152",
+      "desktop_node_id": "I1533:20380;1103:8;1533:20424"
+    },
+    {
+      "component_id": "block-transaction-success",
+      "mobile_node_id": "I1533:20379;1103:7;1533:21194",
+      "desktop_node_id": "I1533:20380;1103:8;1533:20466"
+    },
+    {
+      "component_id": "banner-secondary",
+      "mobile_node_id": "I1533:20379;1103:7;1533:21204",
+      "desktop_node_id": "I1533:20380;1103:8;1533:20476"
+    },
+    {
+      "component_id": "block-contact-support",
+      "mobile_node_id": "I1533:20379;1103:7;1533:21212",
+      "desktop_node_id": "I1533:20380;1103:8;1533:20484"
+    },
+    {
+      "component_id": "banner-app-download",
+      "mobile_node_id": "I1533:20379;1103:7;1533:21281",
+      "desktop_node_id": "I1533:20380;1103:8;1533:21102"
+    },
+    {
+      "component_id": "email-footer",
+      "mobile_node_id": "I1533:20379;1103:7;1533:21282",
+      "desktop_node_id": "I1533:20380;1103:8;1533:21111"
+    }
+  ],
+  "component_inputs": {
+    "email-header": {
+      "content_values": [
+        {
+          "element_id": "root-header-logo-compact",
+          "slot_id": "alt",
+          "scope": "mobile",
+          "value": { "type": "alt-text", "purpose": "informative", "value": "Единый ЦУПИС" }
+        },
+        {
+          "element_id": "root-header-logo",
+          "slot_id": "alt",
+          "scope": "desktop",
+          "value": { "type": "alt-text", "purpose": "informative", "value": "Единый ЦУПИС" }
+        }
+      ]
+    },
+    "block-transaction-success": {
+      "content_values": [
+        {
+          "element_id": "root-card-summary-area-partner-info-row-partner-details-partner-badge",
+          "slot_id": "alt",
+          "scope": "mobile",
+          "value": { "type": "alt-text", "purpose": "informative", "value": "Логотип 1xbet" }
+        },
+        {
+          "element_id": "root-card-summary-area-partner-info-row-partner-details-text-details-partner-name",
+          "slot_id": "text",
+          "scope": "mobile",
+          "value": { "type": "plain-text", "value": "1xbet" }
+        },
+        {
+          "element_id": "root-card-summary-area-partner-info-row-partner-details-text-details-amount",
+          "slot_id": "text",
+          "scope": "mobile",
+          "value": { "type": "plain-text", "value": "100,00 ₽" }
+        },
+        {
+          "element_id": "root-card-summary-area-partner-info-row-partner-badge",
+          "slot_id": "alt",
+          "scope": "desktop",
+          "value": { "type": "alt-text", "purpose": "informative", "value": "Логотип 1xbet" }
+        },
+        {
+          "element_id": "root-card-summary-area-partner-info-row-text-details-partner-name",
+          "slot_id": "text",
+          "scope": "desktop",
+          "value": { "type": "plain-text", "value": "1xbet" }
+        },
+        {
+          "element_id": "root-card-summary-area-partner-info-row-text-details-amount",
+          "slot_id": "text",
+          "scope": "desktop",
+          "value": { "type": "plain-text", "value": "100,00 ₽" }
+        },
+        {
+          "element_id": "root-card-summary-area-description-text",
+          "slot_id": "text",
+          "scope": "all",
+          "value": {
+            "type": "plain-text",
+            "value": "Скорее всего, перевод прошел успешно, но у нас нет подтверждения от «Лига Ставок». Пожалуйста, подождите полчаса. Если деньги не придут, обратитесь к «Лига ставок»."
+          }
+        },
+        {
+          "element_id": "root-card-details-area-limit-alert-notice-text",
+          "slot_id": "text",
+          "scope": "all",
+          "value": { "type": "plain-text", "value": "Скоро Вы достигнете лимита на проведение платежей." }
+        },
+        {
+          "element_id": "root-card-details-area-limit-alert-notice-link",
+          "slot_id": "text",
+          "scope": "mobile",
+          "value": {
+            "type": "rich-text",
+            "segments": [
+              { "type": "text", "value": "Чтобы узнать как увеличить лимиты до 550 000 ₽ на операцию без ограничений в месяц перейдите по ссылке" }
+            ]
+          }
+        },
+        {
+          "element_id": "root-card-details-area-limit-alert-notice-link",
+          "slot_id": "text",
+          "scope": "desktop",
+          "value": {
+            "type": "rich-text",
+            "segments": [
+              { "type": "text", "value": "Чтобы узнать как увеличить лимиты до 550 000 ₽ на операцию без ограничений в месяц перейдите по ссылке" }
+            ]
+          }
+        },
+        {
+          "element_id": "root-card-details-area-limit-alert-notice-link",
+          "slot_id": "link-2-url",
+          "scope": "all",
+          "value": { "type": "url", "value": "https://example.test/limits" }
+        }
+      ]
+    },
+    "badge-operation-status": {
+      "content_values": [
+        {
+          "element_id": "root-status-label",
+          "slot_id": "text",
+          "scope": "all",
+          "value": { "type": "plain-text", "value": "В обработке" }
+        }
+      ]
+    },
+    "details-operation": {
+      "content_values": [
+        { "element_id": "root-row-01-label", "slot_id": "text", "scope": "all", "value": { "type": "plain-text", "value": "Вид операции" } },
+        { "element_id": "root-row-01-value", "slot_id": "text", "scope": "all", "value": { "type": "plain-text", "value": "Пополнение баланса" } },
+        { "element_id": "root-row-02-label", "slot_id": "text", "scope": "all", "value": { "type": "plain-text", "value": "Способ оплаты" } },
+        { "element_id": "root-row-02-value", "slot_id": "text", "scope": "all", "value": { "type": "plain-text", "value": "Кошелек ЦУПИС" } },
+        { "element_id": "root-row-03-label", "slot_id": "text", "scope": "all", "value": { "type": "plain-text", "value": "Получатель" } },
+        { "element_id": "root-row-03-value", "slot_id": "text", "scope": "all", "value": { "type": "plain-text", "value": "1xbet" } },
+        { "element_id": "root-row-04-label", "slot_id": "text", "scope": "all", "value": { "type": "plain-text", "value": "Дата и время" } },
+        { "element_id": "root-row-04-value", "slot_id": "text", "scope": "all", "value": { "type": "plain-text", "value": "26.03.2021, 12:45 МСК" } },
+        { "element_id": "root-row-05-label", "slot_id": "text", "scope": "all", "value": { "type": "plain-text", "value": "Комиссия" } },
+        { "element_id": "root-row-05-value", "slot_id": "text", "scope": "all", "value": { "type": "plain-text", "value": "0,00 ₽" } },
+        { "element_id": "root-row-06-label", "slot_id": "text", "scope": "all", "value": { "type": "plain-text", "value": "Номер операции" } },
+        { "element_id": "root-row-06-value", "slot_id": "text", "scope": "all", "value": { "type": "plain-text", "value": "0185305415324" } },
+        { "element_id": "root-row-07-label", "slot_id": "text", "scope": "all", "value": { "type": "plain-text", "value": "ЭСП" } },
+        { "element_id": "root-row-07-value", "slot_id": "text", "scope": "all", "value": { "type": "plain-text", "value": "184-9006247773" } }
+      ]
+    },
+    "banner-secondary": {
+      "content_values": [
+        {
+          "element_id": "root-card-secondary-image",
+          "slot_id": "alt",
+          "scope": "mobile",
+          "value": { "type": "alt-text", "purpose": "informative", "value": "Карта ЦУПИС для пополнения букмекера" }
+        },
+        {
+          "element_id": "root-card-content-area-text-content-heading",
+          "slot_id": "text",
+          "scope": "all",
+          "value": { "type": "plain-text", "value": "Вы можете пополнять баланс букмекера картой ЦУПИС" }
+        },
+        {
+          "element_id": "root-card-content-area-text-content-body",
+          "slot_id": "text",
+          "scope": "all",
+          "value": { "type": "plain-text", "value": "- Нет комиссии\n- Сразу виден доступный лимит для пополнения" }
+        }
+      ]
+    },
+    "button-secondary": {
+      "content_values": [
+        { "element_id": "root", "slot_id": "href", "scope": "all", "value": { "type": "url", "value": "https://example.test/card-details" } },
+        { "element_id": "root-label", "slot_id": "text", "scope": "all", "value": { "type": "plain-text", "value": "Узнать подробнее" } }
+      ]
+    },
+    "block-contact-support": {
+      "content_values": [
+        { "element_id": "root-content-area-phone-cta-heading", "slot_id": "text", "scope": "mobile", "value": { "type": "plain-text", "value": "Возникли вопросы?\nПозвоните нам:" } },
+        { "element_id": "root-content-area-phone-cta-heading", "slot_id": "text", "scope": "desktop", "value": { "type": "plain-text", "value": "Возникли вопросы? Позвоните нам:" } },
+        { "element_id": "root-content-area-phone-cta-phone-number", "slot_id": "text", "scope": "all", "value": { "type": "plain-text", "value": "+7 (495) 122-20-88" } },
+        { "element_id": "root-content-area-phone-cta-phone-number", "slot_id": "href", "scope": "all", "value": { "type": "url", "value": "tel:+74951222088" } },
+        {
+          "element_id": "root-content-area-help-notice-help-text",
+          "slot_id": "text",
+          "scope": "all",
+          "value": {
+            "type": "rich-text",
+            "segments": [
+              { "type": "text", "value": "Как снизить риски операций без согласия, читайте на нашем сайте в разделе «Помощь»" }
+            ]
+          }
+        },
+        { "element_id": "root-content-area-help-notice-help-text", "slot_id": "help-url", "scope": "all", "value": { "type": "url", "value": "https://example.test/help" } }
+      ]
+    },
+    "banner-app-download": {
+      "content_values": [
+        { "element_id": "root-content-area-app-logo", "slot_id": "alt", "scope": "mobile", "value": { "type": "alt-text", "purpose": "informative", "value": "Кошелек ЦУПИС" } },
+        { "element_id": "root-content-area-body", "slot_id": "text", "scope": "mobile", "value": { "type": "plain-text", "value": "Единственный финансовый сервис для тех, кто делает ставки на спорт" } },
+        { "element_id": "root-content-area-text-qr-header-row-app-logo", "slot_id": "alt", "scope": "desktop", "value": { "type": "alt-text", "purpose": "informative", "value": "Кошелек ЦУПИС" } },
+        { "element_id": "root-content-area-text-qr-header-row-body", "slot_id": "text", "scope": "desktop", "value": { "type": "plain-text", "value": "Единственный финансовый сервис для тех, кто делает ставки на спорт" } },
+        { "element_id": "root-content-area-text-qr-qr-code", "slot_id": "alt", "scope": "desktop", "value": { "type": "alt-text", "purpose": "informative", "value": "QR-код для загрузки приложения Кошелек ЦУПИС" } },
+        { "element_id": "root-content-area-store-buttons-rustore-button", "slot_id": "href", "scope": "all", "value": { "type": "url", "value": "https://example.test/rustore" } },
+        { "element_id": "root-content-area-store-buttons-rustore-button-rustore-icon", "slot_id": "alt", "scope": "all", "value": { "type": "alt-text", "purpose": "informative", "value": "RuStore" } },
+        { "element_id": "root-content-area-store-buttons-rustore-button-button-text-title", "slot_id": "text", "scope": "mobile", "value": { "type": "plain-text", "value": "RuStore" } },
+        { "element_id": "root-content-area-store-buttons-google-play-button", "slot_id": "href", "scope": "all", "value": { "type": "url", "value": "https://example.test/google-play" } },
+        { "element_id": "root-content-area-store-buttons-google-play-button-google-play-icon", "slot_id": "alt", "scope": "all", "value": { "type": "alt-text", "purpose": "informative", "value": "Google Play" } },
+        { "element_id": "root-content-area-store-buttons-google-play-button-button-text-title", "slot_id": "text", "scope": "mobile", "value": { "type": "plain-text", "value": "GooglePlay" } },
+        { "element_id": "root-content-area-store-buttons-appgallery-button", "slot_id": "href", "scope": "all", "value": { "type": "url", "value": "https://example.test/appgallery" } },
+        { "element_id": "root-content-area-store-buttons-appgallery-button-appgallery-icon", "slot_id": "alt", "scope": "all", "value": { "type": "alt-text", "purpose": "informative", "value": "AppGallery" } },
+        { "element_id": "root-content-area-store-buttons-appgallery-button-button-text-title", "slot_id": "text", "scope": "mobile", "value": { "type": "plain-text", "value": "AppGallery" } },
+        { "element_id": "root-content-area-store-buttons-getapps-button", "slot_id": "href", "scope": "all", "value": { "type": "url", "value": "https://example.test/getapps" } },
+        { "element_id": "root-content-area-store-buttons-getapps-button-getapps-icon", "slot_id": "alt", "scope": "all", "value": { "type": "alt-text", "purpose": "informative", "value": "GetApps" } },
+        { "element_id": "root-content-area-store-buttons-getapps-button-button-text-title", "slot_id": "text", "scope": "mobile", "value": { "type": "plain-text", "value": "GetApps" } }
+      ]
+    },
+    "email-footer": {
+      "property_values": [
+        { "property_id": "show-caption", "scope": "all", "value": false },
+        { "property_id": "show-social-links", "scope": "all", "value": false }
+      ],
+      "content_values": [
+        {
+          "element_id": "root-footer-body-disclaimer-section-disclaimer-text-01",
+          "slot_id": "text",
+          "scope": "all",
+          "value": {
+            "type": "plain-text",
+            "value": "ООО НКО «Мобильная карта», Лицензия банка России № 3522-К195112. Юридический адрес: Россия, Санкт-Петербург, проспект Малоохтинский, дом. 64, литера. В, этаж 1, помещение 19–20Н."
+          }
+        },
+        {
+          "element_id": "root-footer-body-disclaimer-section-disclaimer-text-02",
+          "slot_id": "text",
+          "scope": "all",
+          "value": {
+            "type": "rich-text",
+            "segments": [
+              { "type": "text", "value": "Если вы не регистрировались на сайте 1cupis.ru, напишите службе поддержки. Мы удалим почту из базы и больше не будем вам писать." }
+            ]
+          }
+        },
+        { "element_id": "root-footer-body-disclaimer-section-disclaimer-text-02", "slot_id": "link-2-url", "scope": "all", "value": { "type": "url", "value": "https://example.test/1cupis" } },
+        { "element_id": "root-footer-body-disclaimer-section-disclaimer-text-02", "slot_id": "link-4-url", "scope": "all", "value": { "type": "url", "value": "https://example.test/support" } },
+        { "element_id": "root-footer-body-disclaimer-section-disclaimer-text-03", "slot_id": "text", "scope": "all", "value": { "type": "plain-text", "value": "Отписаться от рассылки" } },
+        { "element_id": "root-footer-body-disclaimer-section-disclaimer-text-03", "slot_id": "href", "scope": "all", "value": { "type": "url", "value": "https://example.test/unsubscribe" } }
+      ]
+    }
+  }
+}
