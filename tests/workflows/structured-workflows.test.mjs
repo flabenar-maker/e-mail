@@ -213,7 +213,14 @@ test("workflow semantics reject incomplete orchestration metadata", async () => 
     ),
   );
 
-  mode.input_blockers.push({ input: "email-purpose", blocker: "version-folder-exists" });`n  assert.ok(`n    validateWorkflowRegistrySemantics(workflow, manifest).some(`n      ({ code }) => code === "WORKFLOW_INPUT_BLOCKER_DUPLICATE",`n    ),`n  );`n`n  mode.input_blockers.push({ input: "unknown-input", blocker: "version-path-unsafe" });
+  mode.input_blockers.push({ input: "email-purpose", blocker: "version-folder-exists" });
+  assert.ok(
+    validateWorkflowRegistrySemantics(workflow, manifest).some(
+      ({ code }) => code === "WORKFLOW_INPUT_BLOCKER_DUPLICATE",
+    ),
+  );
+
+  mode.input_blockers.push({ input: "unknown-input", blocker: "version-path-unsafe" });
   relation.inputs[0] = "unknown-input";
   relation.values.pop();
   relation.blocker = "unknown-blocker";
