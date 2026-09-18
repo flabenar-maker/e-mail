@@ -24,9 +24,8 @@ function assertRouteBoundary(source) {
   assert.equal(policy.onPaused, "stop-without-manual-fallback");
   const routeInstructions = source.replaceAll("npm run resolve:skill-context", "");
   for (const line of routeInstructions.split(/\r?\n/u)) {
-    if (!/\b(?:invoke|select|route to|run|follow|use)\b/iu.test(line)) continue;
-    for (const route of line.matchAll(/\b[a-z][a-z0-9]*(?:-[a-z0-9]+)+\b/giu)) {
-      assert.ok(allowedRoutes.includes(route[0]), `invoked or selected route is not allowed: ${route[0]}`);
+    for (const [, route] of line.matchAll(/\b(?:invoke|select|route to|run|follow)\b\s+(?:only\s+|either\s+)?(?:the\s+)?(?:route\s+)?([a-z][a-z0-9-]*)\b/giu)) {
+      assert.ok(allowedRoutes.includes(route), `invoked or selected route is not allowed: ${route}`);
     }
   }
 }
