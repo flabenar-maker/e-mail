@@ -19,11 +19,11 @@
     "modes": [
       {
         "id": "new-build",
-        "required_inputs": ["request", "mobile-figma-instance", "desktop-figma-instance", "output-parent"],
+        "required_inputs": ["request", "email-purpose", "mobile-figma-instance", "desktop-figma-instance", "output-parent"],
         "allowed_outputs": ["version-folder", "email-html", "images-directory", "verification-summary", "handoff-summary"],
         "steps": [
           { "id": "validate-specific-email-sources", "order": 1, "source_ids": ["figma-library-standard", "component-contract-standard"], "required_inputs": ["mobile-figma-instance", "desktop-figma-instance"], "blockers": ["figma-source-missing", "viewport-role-ambiguous", "email-instances-mismatch"], "allowed_outputs": ["validated-design-sources"], "handoff": { "on_success": "next", "on_blocked": "request-input" } },
-          { "id": "create-version-folder", "order": 2, "source_ids": ["email-rendering-standard"], "required_inputs": ["request", "output-parent"], "blockers": ["version-folder-exists", "version-path-unsafe"], "allowed_outputs": ["version-folder"], "handoff": { "on_success": "next", "on_blocked": "stop" } },
+          { "id": "create-version-folder", "order": 2, "source_ids": ["email-rendering-standard"], "required_inputs": ["request", "email-purpose", "output-parent"], "blockers": ["version-folder-exists", "version-path-unsafe"], "allowed_outputs": ["version-folder"], "handoff": { "on_success": "next", "on_blocked": "stop" } },
           { "id": "inspect-design", "order": 3, "source_ids": ["figma-library-standard", "component-contract-standard"], "required_inputs": ["validated-design-sources"], "blockers": ["design-structure-ambiguous"], "allowed_outputs": ["component-map"], "handoff": { "on_success": "next", "on_blocked": "request-input" } },
           { "id": "resolve-component-contracts", "order": 4, "source_ids": ["component-contract-standard", "components-shared", "components-marketing", "components-service"], "required_inputs": ["component-map"], "blockers": ["component-unregistered", "contract-ambiguous", "viewport-contract-missing"], "allowed_outputs": ["resolved-component-contracts"], "handoff": { "on_success": "next", "on_blocked": "stop" } },
           { "id": "export-assets-via-mcp", "order": 5, "source_ids": ["asset-export-standard", "components-shared", "components-marketing", "components-service"], "required_inputs": ["resolved-component-contracts", "validated-design-sources"], "blockers": ["asset-contract-missing", "asset-export-failed"], "allowed_outputs": ["images-directory"], "handoff": { "on_success": "next", "on_blocked": "stop" } },
