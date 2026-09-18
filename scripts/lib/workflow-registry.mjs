@@ -73,6 +73,7 @@ export function validateWorkflowRegistrySemantics(workflow, manifest) {
     const stepBlockers = new Set((mode.steps ?? []).flatMap((step) => step.blockers ?? []));
     const inputBlockers = new Map();
     (mode.input_blockers ?? []).forEach(({ input, blocker }, inputIndex) => {
+      if (inputBlockers.has(input)) errors.push(diagnostic("WORKFLOW_INPUT_BLOCKER_DUPLICATE", `/workflow/modes/${modeIndex}/input_blockers/${inputIndex}/input`, `Required input has more than one blocker mapping: ${input}.`));
       inputBlockers.set(input, blocker);
       if (!requiredInputs.has(input)) errors.push(diagnostic("WORKFLOW_INPUT_BLOCKER_INPUT_UNREQUIRED", `/workflow/modes/${modeIndex}/input_blockers/${inputIndex}/input`, `Input blocker must reference a mode required input: ${input}.`));
       if (!stepBlockers.has(blocker)) errors.push(diagnostic("WORKFLOW_INPUT_BLOCKER_UNDECLARED", `/workflow/modes/${modeIndex}/input_blockers/${inputIndex}/blocker`, `Input blocker must be declared by a mode step: ${blocker}.`));
