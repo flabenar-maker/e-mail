@@ -34,7 +34,7 @@ function assertNoDuplicatedMaterial(source) {
     /#[0-9a-f]{3,8}\b/iu,
     /\b(?:rgba?|hsla?)\s*\(/iu,
     /\b(?:color|background(?:-color)?|border(?:-color)?)\s*:\s*(?:red|blue|green|black|white|gray|grey|yellow|orange|purple|pink|brown)\b/iu,
-    /\b\d+(?:\.\d+)?\s*(?:px|pt|pc|rem|em|ex|ch|vh|vw|vmin|vmax|cm|mm|in|%)\b/iu,
+    /(?:\b\d+(?:\.\d+)?\s*(?:px|pt|pc|rem|em|ex|ch|vh|vw|vmin|vmax|cm|mm|in)\b|\b\d+(?:\.\d+)?\s*%)/iu,
     /@media\b|\b(?:min|max)-(?:width|height)\s*:/iu,
     /\b(?:export|image|asset)\s+(?:quality|compression|format)\b[^\n]*\b(?:\d+|lossless|lossy|high|medium|low)\b/iu,
     /<\/?[a-z][^>]*>/iu,
