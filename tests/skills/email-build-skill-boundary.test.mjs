@@ -71,10 +71,14 @@ function assertOperatingBoundaries(source) {
   const actionableClauses = [];
   let inheritedSubject = "";
   for (const line of source.split(/\r?\n/u)) {
+    const isAdjacentContinuation = inheritedSubject && /^(?:(?:and\s+)?then|next|after that)\b|^(?:it|them|that)\b/iu.test(line.trim());
+    if (!isAdjacentContinuation) inheritedSubject = "";
+    let lineSubject = "";
     for (let clause of line.split(/;|,\s*(?:but|however|except)\b/iu)) {
       for (const boundary of boundaryResources) {
         if (boundary.required.test(clause)) {
           inheritedSubject = boundary.subject;
+          lineSubject = boundary.subject;
           clause = clause.replace(new RegExp(boundary.required.source, "giu"), "");
         }
       }
@@ -82,6 +86,7 @@ function assertOperatingBoundaries(source) {
       if (inheritedSubject && /\b(?:it|them|that|then|next)\b/iu.test(clause)) clause = `${clause} ${inheritedSubject}`;
       actionableClauses.push(clause);
     }
+    inheritedSubject = lineSubject;
   }
   const actionableText = actionableClauses.join("\n");
   for (const prohibitedInstruction of [
@@ -107,6 +112,7 @@ No GitHub Actions or PR Checks.`;
 function assertGuardFixtures() {
   assert.doesNotThrow(() => { assertRouteBoundary(validFixture); assertNoDuplicatedMaterial(validFixture); assertOperatingBoundaries(validFixture); });
   assert.doesNotThrow(() => assertRouteBoundary(`${validFixture}\nDo not run maintenance route, but run email-new-build.`));
+  assert.doesNotThrow(() => assertOperatingBoundaries(`${validFixture}\nNo Figma mutation.\nEdit it after generating the draft.`));
   for (const invalidRoute of [
     validFixture.replace("email-continue-fix", "maintenance"), validFixture.replace('"exactly-one"', '"many"'),
     validFixture.replace("returned-workflow.steps-only", "copied-steps-allowed"), validFixture.replace("stop-without-manual-fallback", "manual-fallback"),
