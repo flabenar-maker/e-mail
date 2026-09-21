@@ -27,9 +27,11 @@ If the task type or Mobile/Desktop roles are unknown, ask only for that missing 
 
 Pin the current main SHA in flabenar-maker/e-mail through authenticated gh CLI, or GitHub MCP if CLI is unavailable. An explicitly authorized candidate test uses its exact cloud SHA instead. Read system/manifest.yaml at that SHA; resolve the selected route, profile and workflow through its source references. Missing sources stop the request.
 
-Before a full bundle, prepare resolver inputs read-only. For a design-dependent request, use Figma MCP to establish the supplied pair's roles and exact canonical component identities, including nested instances. Match identities against the component records declared by the workflow, using registered owner/variant links. Layer names, visual similarity and Description are not identity proof. Unknown or ambiguous matches require the affected node ID and a diagnostic.
+Before a full bundle, prepare resolver inputs read-only. For design-dependent work, use Figma MCP to identify the pair's roles, email root and components in the model tree, including nested components declared by their parent's contract. Match registered owner/variant identities in the workflow's component records. Asset wrappers and internal graphics belong to their registered export owner, not separate resolver candidates. Names, visual similarity and Description are not identity proof. Unknown or ambiguous required component or asset-owner matches require the affected node ID and a diagnostic.
 
 This preparation reads identity and routing data only; it does not authorize asset export or HTML output. It must not change a paused route. Technical fixes require no Figma input. Read-only requests inspect only the evidence needed for the question; when no components are selected, email-continue-fix supports read-only and clarify modes without a component prerequisite.
+
+The resolver and handoff read execution files from repoRoot, not from the cloud SHA argument. Before invoking either, verify that those files match the pinned cloud commit. Candidate tests use an authorized disposable exact-SHA verification snapshot, never a local authoring copy. If a matching execution environment cannot be verified, stop and report it; do not use an arbitrary checkout. This is an execution prerequisite, not a claim of an implemented runtime SHA gate.
 
 The command requires the chosen route and mode:
 
