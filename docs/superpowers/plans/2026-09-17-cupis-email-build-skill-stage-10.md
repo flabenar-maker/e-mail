@@ -17,7 +17,7 @@ Tasks 7–8 выполняются по [детальному плану зап�
 ## Global Constraints
 
 - Канонический репозиторий — `flabenar-maker/e-mail`; persistent edits выполняются через cloud GitHub branch и PR.
-- До реальных E2E-проверок все routes остаются `workflow-paused`. В конце Stage 10 активируются только `email-new-build` и `email-continue-fix`; остальные routes остаются paused до этапа 14.
+- До Task 6 routes в candidate остаются `workflow-paused`; Task 6 явно активирует только `email-new-build`, `email-continue-fix` и их зависимости в candidate для реальных E2E Task 7. До успешного Task 7 и разрешённого merge Task 8 маршруты `main` остаются paused. Остальные routes candidate и main остаются paused до этапа 14.
 - Готовые `email.html`, `images/`, Figma exports, screenshots и временные модели не добавляются в репозиторий.
 - Skill не содержит копий component contracts, foundation values, HTML/CSS recipes, export profiles, workflow steps или списка canonical paths.
 - Для нового письма и design-dependent изменения требуются проверенные Mobile/Desktop-инстансы конкретного письма. Technical continue/fix не требует Figma, если изменение действительно не зависит от дизайна.
