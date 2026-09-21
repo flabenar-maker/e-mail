@@ -31,7 +31,7 @@ Before a full bundle, prepare resolver inputs read-only. For design-dependent wo
 
 This preparation reads identity and routing data only; it does not authorize asset export or HTML output. It must not change a paused route. Technical fixes require no Figma input. Read-only requests inspect only the evidence needed for the question; when no components are selected, email-continue-fix supports read-only and clarify modes without a component prerequisite.
 
-The resolver and handoff read execution files from repoRoot, not from the cloud SHA argument. Before invoking either, verify that those files match the pinned cloud commit. Candidate tests use an authorized disposable exact-SHA verification snapshot, never a local authoring copy. If a matching execution environment cannot be verified, stop and report it; do not use an arbitrary checkout. This is an execution prerequisite, not a claim of an implemented runtime SHA gate.
+The resolver and handoff read execution files from repoRoot; they do not automatically fetch the pinned cloud commit. Before invoking either, verify that those files match the pinned cloud commit. Candidate tests use an authorized disposable exact-SHA verification snapshot, never a local authoring copy. If a matching execution environment cannot be verified, stop and report it; do not use an arbitrary checkout. This is an execution prerequisite, not a claim of an implemented runtime SHA gate.
 
 The command requires the chosen route and mode:
 

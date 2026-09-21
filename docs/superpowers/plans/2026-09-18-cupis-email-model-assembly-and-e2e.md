@@ -79,15 +79,26 @@ Figma file key: `8zka5bHkcrJVK9I9dKjnhC`.
 
 **Зависимость:** текущий candidate Stage 10. **Результат:** одно согласованное описание реально исполнимого пути к существующему renderer.
 
-- [ ] Прочитать на закреплённом candidate SHA skill, manifest, workflow, schema model, `prepareEmailBuildHandoff`, `executeEmailBuildHandoff` и resolver CLI. Сверить их с секциями 3, 4, 6, 10, 12 rendering design.
-- [ ] Зафиксировать роли: Figma определяет состав/контент/состояния конкретного письма; contracts определяют точный способ отображения; model описывает конкретную композицию; evidence доказывает перенос; renderer получает model и разрешённые dependencies.
-- [ ] Согласовать описание модели со схемой: resolved contracts, repo SHA и evidence могут передаваться окружением/handoff и не должны слепо копироваться в JSON model, если schema их не принимает. Устранить расхождение prose и фактического интерфейса через точное описание envelope ответственности, не создавая второй формат письма.
-- [ ] Проверить initial discovery: resolver требует выбранные component IDs, но их ещё надо получить из письма. Разрешить минимальное read-only MCP-чтение пары для идентификации компонентов, затем один действующий resolved bundle. Если состав уточняется, bundle пересобирается целиком и заменяет старый; два набора правил не объединяются.
-- [ ] Использовать canonical component identity из ответа MCP и зарегистрированные связи. Description и похожее имя не доказывают идентичность. Неизвестная/неоднозначная связь даёт конкретное сообщение с node ID.
-- [ ] Уточнить gate active candidate: реальные E2E выполняются на разрешённой candidate ветке до merge; `main` и остальные paused routes этим не активируются. Убрать противоречивое требование, будто email routes candidate тоже обязаны оставаться paused до этих же E2E.
-- [ ] Подготовить локальный impact report по точным путям до правок. Внести только это уточнение в design/workflow/skill routing по их ответственности; не включать будущий сайт как зависимость этапа.
+- [x] Прочитать на закреплённом candidate SHA skill, manifest, workflow, schema model, `prepareEmailBuildHandoff`, `executeEmailBuildHandoff` и resolver CLI. Сверить их с секциями 3, 4, 6, 10, 12 rendering design.
+- [x] Зафиксировать роли: Figma определяет состав/контент/состояния конкретного письма; contracts определяют точный способ отображения; model описывает конкретную композицию; evidence доказывает перенос; renderer получает model и разрешённые dependencies.
+- [x] Согласовать описание модели со схемой: resolved contracts, repo SHA и evidence могут передаваться окружением/handoff и не должны слепо копироваться в JSON model, если schema их не принимает. Устранить расхождение prose и фактического интерфейса через точное описание envelope ответственности, не создавая второй формат письма.
+- [x] Проверить initial discovery: resolver требует выбранные component IDs, но их ещё надо получить из письма. Разрешить минимальное read-only MCP-чтение пары для идентификации компонентов, затем один действующий resolved bundle. Если состав уточняется, bundle пересобирается целиком и заменяет старый; два набора правил не объединяются.
+- [x] Использовать canonical component identity из ответа MCP и зарегистрированные связи. Description и похожее имя не доказывают идентичность. Неизвестная/неоднозначная связь даёт конкретное сообщение с node ID.
+- [x] Уточнить gate active candidate: реальные E2E выполняются на разрешённой candidate ветке до merge; `main` и остальные paused routes этим не активируются. Убрать противоречивое требование, будто email routes candidate тоже обязаны оставаться paused до этих же E2E.
+- [x] Подготовить локальный impact report по точным путям до правок. Внести только это уточнение в design/workflow/skill routing по их ответственности; не включать будущий сайт как зависимость этапа.
 
 **Проверка:** пройти путь запроса от четырёх URL до component candidates и возвращённого workflow без неизвестного шага, обращения к памяти и бесконечного требования уже иметь component IDs. Relevant resolver/skill tests запускает Terra.
+
+**Результат пакета 1 — 2026-09-21:** реализован и проверен в candidate; не слит в `main`, Stage 10 не завершён. Исходный SHA пакета: `df2f23ad80a18065e3606409884b1028fd24f5e9`. Regression tests добавлены в `a18af78957b6fafaa57febfdb3a750df054b785f`, изменения — `e1ebe005a4225058de43271518a6b7942d1d1f6d`, замечания независимого ревью исправлены в `e104b71e1982c9e157620342686b5f1c04d8824a`.
+
+- Разделены модель письма, resolved contracts, окружение и evidence; JSON schema и runtime не менялись.
+- Skill получает identity до bundle, использует зарегистрированные связи и различает model components и внутренности assets. Замена состава приводит к замене всего bundle, не объединению двух контекстов.
+- Workflow явно передаёт component map, instance inputs, resolved contracts и export evidence нужным шагам. Это описание передачи данных, не новая автоматическая source-fidelity проверка пакета 3.
+- Устранено противоречие candidate E2E и paused main. Resolver/handoff читают `repoRoot`; исполнитель обязан проверить его соответствие cloud SHA. Автоматический SHA gate не заявляется.
+- MCP read-only подтвердил четыре корня, их Desktop/Mobile main-component identities и родительские связи. На `e104b71` по ним выполнены отдельные identity → candidate → resolver проверки: 23 подтверждённых model candidates маркетинговой пары и 10 сервисной, оба CLI-вызова завершились `resolved` (exit 0); внутренних asset candidates нет. Текст, properties, asset contents и визуальное соответствие этим не проверены; полная сборка остаётся в пакетах 4–6.
+- Локальная проверка Terra: RED двух новых dataflow tests на `a18af789` → GREEN 2/2 на `e1ebe005`; 14/14 затронутых skill-boundary/CLI/workflow tests и системная валидация успешны. После review-правок skill-boundary 3/3 на `e104b71`. Полный suite оставлен финальному gate; Actions не использовались.
+- Независимое ревью после исправлений: открытых существенных замечаний нет. Component facts, Figma design, локальные письма и ручной context file не менялись.
+
 
 **Следующий пакет:** записать общие правила заполнения модели и обеспечить их получение через bundle.
 
