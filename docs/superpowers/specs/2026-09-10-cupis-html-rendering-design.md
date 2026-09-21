@@ -85,7 +85,7 @@ Foundation не содержит component IDs, Figma node IDs, контент �
 
 ## 6. Временная модель письма
 
-Модель существует во время текущей сборки и не становится постоянным реестром. Её единственный формат задаёт `schemas/email-model.schema.json`.
+Модель существует во время текущей сборки и не становится постоянным реестром. Её единственный формат задаёт `schemas/email-model.schema.json`. Правила заполнения и трассировки принадлежат [Core-стандарту заполнения модели](../../../core/email-model-assembly-standard.md); workflow доставляет стандарт и существующую схему в одном email bundle.
 
 JSON-вход содержит `schema_version`, `id`, `metadata` (язык и направление текста) и `root`. Дерево экземпляров содержит `instance_id`, `component_id`, Mobile/Desktop `variants`, `property_values`, типизированные `content_values`, `asset_files`, упорядоченные `slots` и, когда требуются, `nested_components`. Связь model instance IDs с фактическими Figma node IDs сохраняется отдельно: сырой instance path Figma не обязан соответствовать синтаксису model ID.
 
