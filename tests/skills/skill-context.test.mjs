@@ -168,6 +168,79 @@ test("canonical email-only cutover resolves email routes and pauses every other 
   }
 });
 
+test("new-build preserves complete resolved contracts while declaring model handoff evidence", async () => {
+  const result = await resolveSkillContext({
+    repoRoot,
+    routeId: "email-new-build",
+    workflowMode: "new-build",
+    candidates: [{ id: "banner-hero" }],
+    viewports: ["mobile", "desktop"],
+  });
+
+  assert.equal(result.status, "resolved");
+  assert.deepEqual(
+    result.bundle.components.map(({ id }) => id),
+    ["button-primary", "banner-hero"],
+  );
+  for (const component of result.bundle.components) {
+    assert.ok(component.contracts.mobile.root, `${component.id}/mobile contract`);
+    assert.ok(component.contracts.desktop.root, `${component.id}/desktop contract`);
+  }
+
+  const steps = new Map(result.workflow.steps.map((step) => [step.id, step]));
+  const inspect = steps.get("inspect-design");
+  const exportAssets = steps.get("export-assets-via-mcp");
+  const buildModel = steps.get("build-temporary-email-model");
+  const render = steps.get("render-email-cli");
+
+  assert.ok(inspect.allowed_outputs.includes("component-map"));
+  assert.ok(inspect.allowed_outputs.includes("instance-inputs"));
+  assert.ok(exportAssets.allowed_outputs.includes("images-directory"));
+  assert.ok(exportAssets.allowed_outputs.includes("asset-export-evidence"));
+  for (const input of [
+    "component-map",
+    "instance-inputs",
+    "resolved-component-contracts",
+    "images-directory",
+    "asset-export-evidence",
+  ]) assert.ok(buildModel.required_inputs.includes(input), `model/${input}`);
+  for (const input of [
+    "temporary-email-model",
+    "component-map",
+    "asset-export-evidence",
+    "images-directory",
+    "version-folder",
+  ]) assert.ok(render.required_inputs.includes(input), `render/${input}`);
+});
+
+test("design fixes pass instance inputs without requiring conditional asset evidence", async () => {
+  const result = await resolveSkillContext({
+    repoRoot,
+    routeId: "email-continue-fix",
+    workflowMode: "continue-fix-design",
+    viewports: ["mobile", "desktop"],
+  });
+
+  assert.equal(result.status, "resolved");
+  const steps = new Map(result.workflow.steps.map((step) => [step.id, step]));
+  const inspect = steps.get("inspect-design");
+  const updateAssets = steps.get("update-assets-via-mcp");
+  const apply = steps.get("apply-scoped-html-change");
+
+  assert.ok(inspect.allowed_outputs.includes("component-map"));
+  assert.ok(inspect.allowed_outputs.includes("instance-inputs"));
+  assert.ok(updateAssets.allowed_outputs.includes("asset-export-evidence"));
+  assert.ok(updateAssets.condition_id, "asset update stays conditional");
+  for (const input of ["component-map", "instance-inputs", "images-directory"]) {
+    assert.ok(apply.required_inputs.includes(input), `apply/${input}`);
+  }
+  assert.equal(
+    apply.required_inputs.includes("asset-export-evidence"),
+    false,
+    "a no-asset design fix must not require conditional export evidence",
+  );
+});
+
 test("fully active topology rejects a route cross-wired to the email workflow", async (t) => {
   const fixture = await systemFixture(t);
   const manifest = await loadSystemManifest({ repoRoot: fixture.root });
