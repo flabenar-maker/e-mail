@@ -128,6 +128,70 @@ async function activateAllRoutes(root, manifest) {
   ]);
 }
 
+test("email routes deliver model assembly material to the workflow steps that consume it", async () => {
+  const sourceDefinitions = [
+    {
+      id: "email-model-assembly-standard",
+      kind: "core",
+      path: "core/email-model-assembly-standard.md",
+      stepIds: {
+        "email-new-build": ["inspect-design", "resolve-component-contracts", "build-temporary-email-model"],
+        "email-continue-fix": ["inspect-design", "resolve-component-contracts", "apply-scoped-html-change"],
+      },
+    },
+    {
+      id: "email-model-schema",
+      kind: "schema",
+      path: "schemas/email-model.schema.json",
+      stepIds: {
+        "email-new-build": ["build-temporary-email-model"],
+        "email-continue-fix": ["apply-scoped-html-change"],
+      },
+    },
+  ];
+  const routeRequests = [
+    ["email-new-build", "new-build", [{ id: "banner-hero" }], ["mobile", "desktop"]],
+    ["email-continue-fix", "continue-fix-design", [], ["mobile", "desktop"]],
+  ];
+
+  for (const [routeId, workflowMode, candidates, viewports] of routeRequests) {
+    const result = await resolveSkillContext({ repoRoot, routeId, workflowMode, candidates, viewports });
+    assert.equal(result.status, "resolved", routeId);
+    const steps = new Map(result.workflow.steps.map((step) => [step.id, step]));
+    for (const source of sourceDefinitions) {
+      const delivered = result.bundle.static_sources.filter(({ id }) => id === source.id);
+      assert.equal(delivered.length, 1, `${routeId}/${source.id} delivery`);
+      assert.equal(delivered[0].kind, source.kind, `${routeId}/${source.id} kind`);
+      assert.equal(delivered[0].path, source.path, `${routeId}/${source.id} path`);
+      assert.equal(
+        delivered[0].content,
+        await readFile(join(repoRoot, source.path), "utf8"),
+        `${routeId}/${source.id} content`,
+      );
+      for (const stepId of source.stepIds[routeId]) {
+        assert.ok(steps.get(stepId).source_ids.includes(source.id), `${routeId}/${stepId}/${source.id}`);
+      }
+    }
+  }
+});
+
+test("technical and read-only email resolution has no Figma input prerequisite", async () => {
+  for (const workflowMode of ["continue-fix-technical", "read-only"]) {
+    const result = await resolveSkillContext({
+      repoRoot,
+      routeId: "email-continue-fix",
+      workflowMode,
+      candidates: [],
+      viewports: [],
+    });
+    assert.equal(result.status, "resolved", workflowMode);
+    assert.equal(
+      result.workflow.steps.some((step) => step.required_inputs.some((input) => input.includes("figma"))),
+      false,
+      `${workflowMode} Figma prerequisite`,
+    );
+  }
+});
 test("canonical maintenance routes resolve one paused shadow context", async () => {
   const result = await resolveSkillContext({
     repoRoot,
