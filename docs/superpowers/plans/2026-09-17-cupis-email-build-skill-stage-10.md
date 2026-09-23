@@ -103,7 +103,7 @@ Expected: FAIL, потому что `.agents/skills/building-cupis-emails/SKILL.
 
 **Interfaces:**
 - Consumes: `npm run resolve:skill-context -- --route <route-id> --mode <workflow-mode> ...`.
-- Produces: skill `building-cupis-emails`, зарегистрированный в `manifest.skills.required`.
+- Produces: подготовленный repo-scoped skill `building-cupis-emails` без обязательной установки. Регистрация в `manifest.skills.required` перенесена в Task 8 вместе с публикацией проверенной активации.
 
 - [ ] **Step 1: Добавить skill frontmatter и trigger**
 
@@ -127,13 +127,9 @@ Expected: FAIL, потому что `.agents/skills/building-cupis-emails/SKILL.
 
 До публикации cutover в Task 8 при `paused` разрешены только read-only navigation и реализация этого migration plan. Production build и изменение пользовательского письма не выполняются. После cutover при `resolved` skill исполняет только returned bundle и ordered workflow steps, не открывая источники по памяти или ручному списку.
 
-- [ ] **Step 4: Зарегистрировать skill**
+- [ ] **Step 4: Зафиксировать подготовленный, но не установленный skill**
 
-Добавить в `manifest.skills.required`:
-
-```yaml
-- { id: building-cupis-emails, path: .agents/skills/building-cupis-emails }
-```
+В подготовительном PR сохранить файл навыка, но не добавлять его в `manifest.skills.required`. Проверить, что наличие каталога не меняет поведение paused routes. Обязательная регистрация и установка выполняются только в Task 8 после реальных E2E.
 
 README должен сообщать, что skill становится рабочим только после успешного E2E-gate Task 7 и публикации email-only cutover в Task 8; наличие каталога skill до этого момента не разрешает production-сборку.
 
@@ -417,7 +413,9 @@ Skill wording не маскирует defect contract, renderer, asset foundatio
 - Consumes: final Stage 10 candidate SHA, real E2E evidence and two candidate active email routes.
 - Produces: reviewed PR, installed exact skill, clean-chat acceptance and exact Stage 10 status.
 
-- [ ] **Step 1: Выполнить changed-content и preserved-boundary checks**
+- [ ] **Step 1: Зарегистрировать проверенный skill и проверить границы финального PR**
+
+После успешного Task 7 добавить `building-cupis-emails` с путём `.agents/skills/building-cupis-emails` в `manifest.skills.required` вместе с email-only activation. Финальный PR строится от нового актуального main и не повторяет уже слитую подготовку; исходная candidate-ветка не сливается целиком.
 
 Проверить allowed-path diff, отсутствие Figma changes и concrete email outputs в репозитории, объяснённость каждого status change и сохранение всех non-email routes на `workflow-paused`.
 
