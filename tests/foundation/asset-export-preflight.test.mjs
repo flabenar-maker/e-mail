@@ -121,3 +121,25 @@ test("low source resolution pauses for a per-email, per-asset decision and recor
   assert.equal(approved?.status, "ready");
   assert.equal(approved?.lowResolutionAccepted, true);
 });
+test("rejects a contract whose crop source disagrees with its selected viewport", async () => {
+  const badAsset = {
+    ...asset,
+    crop: { mode: "figma-fill", position_source: "concrete-desktop-instance" },
+  };
+  const result = await assess({ asset: badAsset, evidence: evidence() });
+  assert.equal(result?.status, "blocked");
+  assert.ok(result?.issues.some((entry) => entry.code === "contract-crop-source-mismatch"));
+});
+
+test("rejects a target file whose declared dimensions deform its aspect ratio", async () => {
+  const badAsset = {
+    ...asset,
+    pixel_dimensions: { width: 815, height: 517, unit: "px" },
+  };
+  const result = await assess({
+    asset: badAsset,
+    evidence: evidence({ outputPixelDimensions: { width: 815, height: 517 } }),
+  });
+  assert.equal(result?.status, "blocked");
+  assert.ok(result?.issues.some((entry) => entry.code === "contract-ratio-mismatch"));
+});
