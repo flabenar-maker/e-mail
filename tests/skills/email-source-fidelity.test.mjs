@@ -239,7 +239,7 @@ test("contract-backed rich-text segments allow exact supported inline styling", 
   input.readings.fields.find(({ node_id }) => node_id === "m-a-title").inline_runs = runs;
   input.resolvedContracts = new Map([["block-inline-sample", {
     contracts: { mobile: { root: { id: "root", children: [{
-      id: "mobile-title", facts: [{ id: "styled-text-segments", value: { type: "segments", items: runs } }],
+      id: "mobile-title", facts: [{ id: "styled-text-segments", value: { type: "segments", items: structuredClone(runs) } }],
     }] } } },
   }]]);
   assert.deepEqual(codes(input), []);
@@ -277,7 +277,7 @@ test("contract-backed rich-text requires source inline runs", () => {
   ];
   input.resolvedContracts = new Map([["block-inline-sample", {
     contracts: { mobile: { root: { id: "root", children: [{
-      id: "mobile-title", facts: [{ id: "styled-text-segments", value: { type: "segments", items: runs } }],
+      id: "mobile-title", facts: [{ id: "styled-text-segments", value: { type: "segments", items: structuredClone(runs) } }],
     }] } } },
   }]]);
 
