@@ -225,3 +225,23 @@ test("source variant selection must match the email model", () => {
   input.readings.instances.find(({ node_id }) => node_id === "m-a").variant_id = "desktop";
   assert.ok(codes(input).includes("EMAIL_SOURCE_VARIANT_MISMATCH"));
 });
+
+
+test("contract-backed rich-text segments allow exact supported inline styling", () => {
+  const input = scenario();
+  const a = input.model.root.slots[0].instances[0];
+  a.content_values[0].value = { type: "rich-text", segments: [{ type: "text", value: "A mobile" }] };
+  const runs = [
+    { start: 0, end: 2, characters: "A ", text_decoration: "NONE", fills: [{ type: "solid", color: "#757678" }] },
+    { start: 2, end: 8, characters: "mobile", text_decoration: "UNDERLINE", fills: [{ type: "solid", color: "#00991F" }] },
+  ];
+  input.readings.fields.find(({ node_id }) => node_id === "m-a-title").inline_runs = runs;
+  input.resolvedContracts = new Map([["block-sample", {
+    contracts: { mobile: { root: { id: "root", children: [{
+      id: "mobile-title", facts: [{ id: "styled-text-segments", value: { type: "segments", items: runs } }],
+    }] } } },
+  }]]);
+  assert.deepEqual(codes(input), []);
+  input.readings.fields.find(({ node_id }) => node_id === "m-a-title").inline_runs[1].text_decoration = "NONE";
+  assert.ok(codes(input).includes("EMAIL_SOURCE_INLINE_UNSUPPORTED"));
+});
