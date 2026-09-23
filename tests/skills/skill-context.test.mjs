@@ -242,7 +242,14 @@ test("canonical repository keeps every route paused until activation", async () 
   assert.equal(manifest.structured_workflows.status, "shadow");
   for (const route of manifest.routes) {
     const profile = manifest.bundle_profiles.find(({ id }) => id === route.bundle_profile_id);
-    const result = await resolveSkillContext({ repoRoot, routeId: route.id });
+    const bundle = profile.generated_bundle;
+    const result = await resolveSkillContext({
+      repoRoot,
+      routeId: route.id,
+      candidates: bundle.component_selection === "required" ? [{ id: "banner-hero" }] : [],
+      viewports: bundle.viewport_selection === "none" ? [] : ["mobile", "desktop"],
+      foundationIds: bundle.required_foundation_ids,
+    });
     assert.equal(route.workflow_source_id, "workflow-paused", route.id);
     assert.equal(profile.generated_bundle.status, "structured-shadow", route.id);
     assert.equal(result.status, "paused", route.id);
@@ -257,7 +264,10 @@ test("explicit email activation still blocks when typography status is absent", 
   await writeManifest(fixture.root, manifest);
   const result = await resolveSkillContext({ repoRoot: fixture.root, ...activeEmailRequest("email-new-build") });
   assert.notEqual(result.status, "resolved");
-  assert.ok(result.blockers.some(({ code, path }) => code === "SKILL_ROUTE_STATUS_INACTIVE" && path === "/typography"));
+  assert.ok(result.blockers.some(({ code, path }) => (
+    code === "SKILL_ROUTE_STATUS_INACTIVE" &&
+    path === "/sources/typography-foundation/status"
+  )));
 });
 test("new-build preserves complete resolved contracts while declaring model handoff evidence", async (t) => {
   const fixture = await systemFixture(t);
@@ -629,12 +639,12 @@ test("active route blocks a workflow source absent from structured capability", 
     kind: "workflow",
     path: "workflows/unstructured.md",
   });
+  await activateAllRoutes(fixture.root, manifest);
   replaceWorkflowSource(
     manifest,
     "library-maintenance",
     "workflow-unstructured",
   );
-  await activateAllRoutes(fixture.root, manifest);
   await writeManifest(fixture.root, manifest);
 
   const result = await resolveSkillContext({
