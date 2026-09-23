@@ -207,6 +207,9 @@ function propertyTypeMatches(value, expected) {
 }
 
 function visible(element, instance, viewport, errors, path) {
+  if (element.visibility?.mode === "instance") {
+    return element.visibility.default_visible;
+  }
   if (element.visibility?.mode !== "property") return true;
   const propertyId = element.visibility.property_id;
   const value = propertyValue(instance, propertyId, viewport);

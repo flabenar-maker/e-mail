@@ -124,6 +124,24 @@ test("semantic validation accepts exact component, slot, property and asset IDs"
   assert.deepEqual(validateEmailModelSemantics(model(), dependencies()), []);
 });
 
+test("semantic validation ignores required bindings for default-hidden instance children", () => {
+  const component = record();
+  for (const viewport of ["mobile", "desktop"]) {
+    component.contracts[viewport].root.children.push({
+      id: "hidden-image", semantic_role: "image", render_mode: "direct-image",
+      visibility: { mode: "instance", default_visible: false }, facts: [],
+      content_slots: [{ id: "alt", type: "alt-text", required: true }],
+      asset_contract_id: "hidden-image", children: [],
+    });
+  }
+  const deps = {
+    componentIndex: { bySystemId: new Map([[component.id, component]]) },
+    rendererRegistry: { coverage: [{ component_id: component.id, mode: "interpreter" }] },
+  };
+
+  assert.deepEqual(validateEmailModelSemantics(model(), deps), []);
+});
+
 test("semantic validation rejects unknown IDs and missing required content", () => {
   const unknown = model();
   unknown.root.component_id = "unknown-component";
