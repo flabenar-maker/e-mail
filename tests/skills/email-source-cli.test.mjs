@@ -17,7 +17,7 @@ function minimalInput() {
     model: { schema_version: "1.1.0", id: "source-cli", metadata: { language: "ru", direction: "ltr" }, root },
     readings: { capture_id: "capture-1", file_key: "file", captured_at: "2026-09-23T12:00:00Z", complete: true,
       selection: { mobile: { root_node_id: "m-root", terminal: true, truncated: false, scope: "full-email", expected_top_level_count: 0 },
-        desktop: { root_node_id: "d-root", terminal: true, truncated: false, scope: "full-email" } },
+        desktop: { root_node_id: "d-root", terminal: true, truncated: false, scope: "full-email", expected_top_level_count: 0 } },
       instances: [
         { viewport: "mobile", node_id: "m-root", parent_node_id: null, order: 0, relation: null, variant_id: "mobile" },
         { viewport: "desktop", node_id: "d-root", parent_node_id: null, order: 0, relation: null, variant_id: "desktop" },
@@ -94,3 +94,4 @@ test("production scope checks the Figma slot child count independently", async (
   assert.equal(result.status, 1);
   assert.ok(JSON.parse(result.stdout).diagnostics.some(({ code }) => code === "EMAIL_SOURCE_SCOPE_INCOMPLETE"));
 });
+
