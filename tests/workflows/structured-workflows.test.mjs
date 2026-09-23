@@ -25,12 +25,12 @@ async function canonicalWorkflow(workflowId) {
   return loadWorkflowRegistry({ repoRoot, workflowId });
 }
 
-test("canonical manifest keeps structured workflows paused", async () => {
+test("canonical manifest activates only email structured workflows", async () => {
   const manifest = await loadSystemManifest({ repoRoot });
 
   assert.equal(manifest.schema_version, "1.2.0");
   assert.deepEqual(manifest.structured_workflows, {
-    status: "shadow",
+    status: "partial",
     schema_source_id: "workflows-schema",
     entries: [
       {
@@ -42,22 +42,38 @@ test("canonical manifest keeps structured workflows paused", async () => {
   });
   const emailRoutes = manifest.routes.filter(({ id }) => id.startsWith("email-"));
   assert.deepEqual(emailRoutes.map(({ id }) => id), ["email-new-build", "email-continue-fix"]);
-  assert.equal(manifest.routes.every(({ workflow_source_id }) => workflow_source_id === "workflow-paused"), true);
+  assert.equal(
+    emailRoutes.every(({ workflow_source_id }) => workflow_source_id === "workflow-email-build"),
+    true,
+  );
+  assert.equal(
+    manifest.routes
+      .filter(({ id }) => !id.startsWith("email-"))
+      .every(({ workflow_source_id }) => workflow_source_id === "workflow-paused"),
+    true,
+  );
   for (const profile of manifest.bundle_profiles) {
-    assert.equal(profile.generated_bundle.status, "structured-shadow");
+    const emailProfile = profile.id.startsWith("email-");
+    assert.equal(
+      profile.generated_bundle.status,
+      emailProfile ? "structured-active" : "structured-shadow",
+    );
     assert.deepEqual(profile.generated_bundle.static_source_ids, profile.source_ids);
-    assert.equal(profile.source_ids.includes("workflow-paused"), true);
+    assert.equal(
+      profile.source_ids.includes(emailProfile ? "workflow-email-build" : "workflow-paused"),
+      true,
+    );
   }
 });
 
-test("loads exact maintenance and email workflow registries", async () => {
+test("loads exact shadow maintenance and active email workflow registries", async () => {
   const maintenance = await canonicalWorkflow("library-maintenance");
   const email = await canonicalWorkflow("email-build");
 
   assert.equal(maintenance.schema_version, "1.0.0");
   assert.equal(maintenance.workflow.id, "library-maintenance");
   assert.equal(maintenance.workflow.status, "shadow");
-  assert.equal(email.workflow.status, "shadow");
+  assert.equal(email.workflow.status, "active");
   assert.deepEqual(
     maintenance.workflow.modes.map(({ id }) => id),
     ["read-only", "write"],
