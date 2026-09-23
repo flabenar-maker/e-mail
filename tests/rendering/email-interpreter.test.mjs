@@ -517,3 +517,31 @@ test("direct image preserves layout box while displaying overflow artwork at its
   assert.match(result.html, /transform:scale\(1\.0645161555363583\)/u);
   assert.match(result.html, /transform-origin:center center/u);
 });
+test("fluid cover image follows its Figma viewport ratio without a fixed Mobile height", async () => {
+  const { renderContractTree } = await interpreter();
+  const media = element({
+    id: "media",
+    mode: "background-image",
+    assetContractId: "secondary-image",
+    facts: [
+      { id: "reference-size", value: { type: "dimensions", width: 296, height: 188, unit: "px" } },
+      { id: "horizontal-sizing", value: { type: "keyword", value: "fill" } },
+      { id: "height-behavior", value: { type: "keyword", value: "proportional-cover" } },
+    ],
+  });
+  const root = element({ id: "root", children: [media] });
+  const result = renderContractTree({
+    component: component(root),
+    coverage,
+    content: {},
+    assets: { "secondary-image": { src: "images/secondary-image.jpg" } },
+    properties: {},
+    foundations: { rendering },
+  });
+
+  assert.deepEqual(result.diagnostics, []);
+  assert.match(result.html, /background="images\/secondary-image\.jpg"/u);
+  assert.match(result.html, /background-size:cover/u);
+  assert.match(result.html, /padding-top:63\.51351351351351%/u);
+  assert.doesNotMatch(result.html, /height="188"|height:188px/u);
+});
