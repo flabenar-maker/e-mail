@@ -37,6 +37,7 @@ test("source CLI is a failing pre-render gate, not a manual passed flag", async 
   const pass = spawnSync(process.execPath, [fileURLToPath(command), path], { encoding: "utf8" });
   assert.equal(pass.status, 0);
   assert.deepEqual(JSON.parse(pass.stdout).diagnostics, []);
+  assert.equal(JSON.parse(pass.stdout).scope, "full-email");
 
   const bad = minimalInput();
   bad.readings.instances[0].variant_id = "desktop";
@@ -77,4 +78,6 @@ test("production CLI rejects a selected-subtree proof and test-only inputs", asy
   assert.ok(codes.includes("EMAIL_SOURCE_INPUT_UNAUTHORIZED"));
   const selected = spawnSync(process.execPath, [fileURLToPath(command), path, "--selected-test"], { encoding: "utf8" });
   assert.equal(selected.status, 0);
+  assert.equal(JSON.parse(selected.stdout).scope, "selected-test");
 });
+
