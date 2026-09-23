@@ -92,6 +92,7 @@ test("Header asset stays fixed-size and is centered by its layout wrapper", asyn
   );
   for (const image of images) {
     assert.doesNotMatch(attribute(image, "style") ?? "", /(?:^|;)padding(?:-|:)/u);
+    assert.match(attribute(image, "style") ?? "", /(?:^|;)margin:0 auto(?:;|$)/u);
   }
   assert.equal(
     [...result.html.matchAll(/<td\b[^>]*style="[^"]*text-align:center[^"]*"[^>]*>[\s\S]*?<img\b[^>]*src="images\/header-logo\.png"/gu)].length,
