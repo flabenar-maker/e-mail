@@ -63384,15 +63384,7 @@
             "kind": "fill",
             "semantic_node_name": "secondary-image @2x"
           },
-          "pixel_dimensions": {
-            "width": 984,
-            "height": 696,
-            "unit": "px"
-          },
-          "aspect_ratio": {
-            "width": 41,
-            "height": 29
-          },
+          "source_geometry": "concrete-instance-fill",
           "crop": {
             "mode": "none",
             "position_source": "source-raster"
@@ -63400,11 +63392,6 @@
           "background": {
             "own_visible_boundary_fill": "preserve",
             "artificial_matte": "forbid"
-          },
-          "figma_raw_source_dimensions": {
-            "width": 984,
-            "height": 696,
-            "unit": "px"
           }
         }
       ],
