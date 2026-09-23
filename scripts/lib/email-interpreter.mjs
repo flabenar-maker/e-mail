@@ -480,6 +480,25 @@ function renderShell(element, viewport, path, childHtml, context) {
           ],
         };
       }
+      const artwork = element.facts?.find(({ id }) => id === "visible-artwork-size")?.value;
+      if (artwork) {
+        const box = element.facts?.find(({ id }) => id === "reference-size")?.value;
+        const scaleX = artwork.width / box?.width;
+        const scaleY = artwork.height / box?.height;
+        if (!Number.isFinite(scaleX) || scaleX <= 0 || !Number.isFinite(scaleY) ||
+            scaleY <= 0 || Math.abs(scaleX - scaleY) > 1e-9) {
+          return {
+            html: "",
+            diagnostics: [diagnostic(
+              "RENDER_IMAGE_ARTWORK_SCALE_INVALID",
+              "/contracts/" + viewport + "/" + path + "/facts",
+              "Visible artwork must scale uniformly from its reference box.",
+            )],
+          };
+        }
+        factProps.style.transform = "scale(" + scaleX + ")";
+        factProps.style["transform-origin"] = "center center";
+      }
       return {
         html: wrapAction(element, entry, renderPrimitive("direct-image", {
           ...asset,

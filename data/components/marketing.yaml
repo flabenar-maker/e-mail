@@ -91433,8 +91433,8 @@
             "semantic_node_name": "qr-code @4x"
           },
           "pixel_dimensions": {
-            "width": 520,
-            "height": 520,
+            "width": 554,
+            "height": 554,
             "unit": "px"
           },
           "aspect_ratio": {
@@ -95993,6 +95993,19 @@
                             "provenance": {
                               "kind": "figma-literal",
                               "node_id": "961:37515"
+                            }
+                          },
+                          {
+                            "id": "visible-artwork-size",
+                            "value": {
+                              "type": "dimensions",
+                              "width": 138.38710021972656,
+                              "height": 138.38710021972656,
+                              "unit": "px"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "961:37516"
                             }
                           },
                           {
