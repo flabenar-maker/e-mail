@@ -107,7 +107,8 @@ function validateModelPlacement(model, index, resolvedContracts) {
     if (relation?.kind === "nested") {
       let exactPlacementCount = 0;
       for (const viewport of VIEWPORTS) {
-        const element = contractElement(relation.parent, viewport, relation.elementId);
+        const elementId = relation.elementIds?.[viewport] ?? relation.elementId;
+        const element = contractElement(relation.parent, viewport, elementId);
         if (element) {
           exactPlacementCount += 1;
           if (
@@ -116,7 +117,7 @@ function validateModelPlacement(model, index, resolvedContracts) {
           ) {
             blockers.add("contract-ambiguous");
           }
-        } else if (!nestedComponentIds(relation.parent, viewport).has(instance.component_id)) {
+        } else if (relation.elementIds || !nestedComponentIds(relation.parent, viewport).has(instance.component_id)) {
           blockers.add("contract-ambiguous");
         }
       }
@@ -157,6 +158,7 @@ function validateModelPlacement(model, index, resolvedContracts) {
         kind: "nested",
         parent: record,
         elementId: nested.element_id,
+        elementIds: nested.element_ids,
       });
     }
   };
