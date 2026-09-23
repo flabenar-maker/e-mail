@@ -178,12 +178,6 @@
     "banner-secondary": {
       "content_values": [
         {
-          "element_id": "root-card-secondary-image",
-          "slot_id": "alt",
-          "scope": "mobile",
-          "value": { "type": "alt-text", "purpose": "informative", "value": "Карта ЦУПИС для пополнения букмекера" }
-        },
-        {
           "element_id": "root-card-content-area-text-content-heading",
           "slot_id": "text",
           "scope": "all",
