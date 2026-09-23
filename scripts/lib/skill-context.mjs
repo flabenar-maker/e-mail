@@ -15,7 +15,7 @@ function diagnostic(code, path, message) {
 const EMAIL_ROUTE_IDS = new Set(["email-new-build", "email-continue-fix"]);
 
 async function activeEmailRouteStatusBlocker({ repoRoot, manifest, route, profile }) {
-  if (!EMAIL_ROUTE_IDS.has(route.id)) return null;
+  if (!EMAIL_ROUTE_IDS.has(route.id) || route.workflow_source_id === "workflow-paused") return null;
   const sources = new Map(manifest.sources.map((source) => [source.id, source]));
   const sourcePath = (id) => sources.get(id)?.path;
   const dependencies = [
