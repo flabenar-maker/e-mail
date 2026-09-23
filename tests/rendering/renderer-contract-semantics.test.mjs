@@ -83,18 +83,25 @@ test("default-hidden instance subtree neither renders nor requires its slots", a
   assert.deepEqual(result.diagnostics, []);
 });
 
-test("mobile secondary direct image remains fluid with height:auto", async () => {
+test("mobile secondary background image preserves its proportional cover ratio", async () => {
   const root = node({ id: "root", children: [node({
-    id: "secondary-image", role: "secondary-image", mode: "direct-image",
-    facts: [fact("reference-size", { type: "dimensions", width: 296, height: 188, unit: "px" }), fact("height-behavior", { type: "keyword", value: "auto" })],
+    id: "secondary-image", role: "secondary-image", mode: "background-image",
+    facts: [
+      fact("reference-size", { type: "dimensions", width: 296, height: 188, unit: "px" }),
+      fact("horizontal-sizing", { type: "keyword", value: "fill" }),
+      fact("height-behavior", { type: "keyword", value: "proportional-cover" }),
+    ],
   })] });
   root.children[0].asset_contract_id = "secondary-image";
   const result = await render({
     component: component(root),
-    content: { "secondary-image": { alt: "" } },
-    assets: { "secondary-image": { src: "secondary.png", width: 296, height: 188 } },
+    content: {},
+    assets: { "secondary-image": { src: "secondary.png" } },
   });
-  assert.match(result.html, /<img[^>]*src="secondary\.png"[^>]*style="[^"]*height:auto/u);
+  assert.match(result.html, /background="secondary\.png"/u);
+  assert.match(result.html, /background-size:cover/u);
+  assert.match(result.html, /padding-top:63\.51351351351351%/u);
+  assert.doesNotMatch(result.html, /height="188"|height:188px/u);
   assert.deepEqual(result.diagnostics, []);
 });
 

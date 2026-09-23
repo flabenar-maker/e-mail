@@ -669,10 +669,23 @@ test("marketing image contracts preserve responsive ratios and export boundaries
   );
   assert.equal(secondaryAsset.source_mode_id, "image-fill");
   assert.equal(secondaryAsset.display_mode_id, "fill-image");
-  assert.deepEqual(secondaryAsset.aspect_ratio, { width: 296, height: 188 });
+  assert.deepEqual(secondaryAsset.pixel_dimensions, {
+    width: 984,
+    height: 696,
+    unit: "px",
+  });
+  assert.deepEqual(secondaryAsset.aspect_ratio, { width: 41, height: 29 });
+  const mobileSecondary = findAssetElement(
+    secondary.contracts.mobile.root,
+    "secondary-image",
+  );
   assert.equal(
-    findAssetElement(secondary.contracts.mobile.root, "secondary-image").render_mode,
-    "direct-image",
+    mobileSecondary.render_mode,
+    "background-image",
+  );
+  assert.equal(
+    mobileSecondary.facts.find((fact) => fact.id === "height-behavior").value.value,
+    "proportional-cover",
   );
   assert.equal(
     findAssetElement(secondary.contracts.desktop.root, "secondary-image").render_mode,

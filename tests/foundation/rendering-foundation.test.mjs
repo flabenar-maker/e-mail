@@ -35,7 +35,7 @@ test("loads the canonical rendering foundation", async () => {
   const rendering = await loadRenderingFoundation({ repoRoot });
 
   assert.equal(rendering.foundation.id, "rendering");
-  assert.equal(rendering.foundation.status, "shadow");
+  assert.equal(rendering.foundation.status, "active");
   assert.deepEqual(rendering.breakpoints, [
     { id: "cupis-mobile", query: "max-width", value: 659, unit: "px" },
   ]);
@@ -267,6 +267,7 @@ test("schema requires exact client resilience policies and rejects removed shell
 test("semantic validation rejects a viewport consumed by horizontal shell insets", async () => {
   const rendering = await canonicalRendering();
   delete rendering.shell.min_width_px;
+  rendering.shell.horizontal_inset_px = 15;
   rendering.shell.min_supported_viewport_px = 30;
 
   const errors = validateRenderingSemantics(rendering);
