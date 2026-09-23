@@ -519,10 +519,11 @@ test("email workflow resolves every structured mode without changing output arti
         ["assets"],
       );
       const staticSourceIds = result.bundle.static_sources.map(({ id }) => id);
-      assert.equal(staticSourceIds.includes("workflow-email-build"), true);
+      for (const required of ["workflow-email-build", "figma-library-standard", "rendering-foundation", "renderer-registry"]) {
+        assert.equal(staticSourceIds.includes(required), true, required);
+      }
       for (const excluded of [
         "workflow-paused",
-        "figma-library-standard",
         "figma-component-description-standard",
         "workflow-library-maintenance",
         "generated-component-registry",
@@ -659,3 +660,4 @@ test("active route blocks a workflow source absent from structured capability", 
     "structured-workflow-status-topology-invalid",
   ]);
 });
+
