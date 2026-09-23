@@ -663,13 +663,19 @@
       "oneOf": [
         {
           "required": ["pixel_dimensions", "aspect_ratio"],
-          "not": {
-            "required": ["source_geometry"]
+          "properties": {
+            "pixel_dimensions": {},
+            "aspect_ratio": {},
+            "source_geometry": false
           }
         },
         {
           "required": ["source_geometry"],
           "properties": {
+            "source_geometry": {},
+            "pixel_dimensions": false,
+            "aspect_ratio": false,
+            "figma_raw_source_dimensions": false,
             "source_mode_id": {
               "const": "image-fill"
             },
@@ -683,13 +689,6 @@
                 }
               }
             }
-          },
-          "not": {
-            "anyOf": [
-              { "required": ["pixel_dimensions"] },
-              { "required": ["aspect_ratio"] },
-              { "required": ["figma_raw_source_dimensions"] }
-            ]
           }
         }
       ]
