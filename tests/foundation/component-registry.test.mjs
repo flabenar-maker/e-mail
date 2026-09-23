@@ -685,12 +685,17 @@ test("marketing image contracts preserve responsive ratios and export boundaries
   );
   assert.equal(secondaryAsset.source_mode_id, "image-fill");
   assert.equal(secondaryAsset.display_mode_id, "fill-image");
-  assert.deepEqual(secondaryAsset.pixel_dimensions, {
-    width: 984,
-    height: 696,
-    unit: "px",
-  });
-  assert.deepEqual(secondaryAsset.aspect_ratio, { width: 41, height: 29 });
+  assert.equal(secondaryAsset.source_geometry, "concrete-instance-fill");
+  assert.equal("pixel_dimensions" in secondaryAsset, false);
+  assert.equal("aspect_ratio" in secondaryAsset, false);
+  assert.equal("figma_raw_source_dimensions" in secondaryAsset, false);
+  for (const viewport of ["mobile", "desktop"]) {
+    const root = secondary.contracts[viewport].root;
+    assert.equal(
+      root.facts.find((fact) => fact.id === "vertical-sizing").value.value,
+      "hug",
+    );
+  }
   const mobileSecondary = findAssetElement(
     secondary.contracts.mobile.root,
     "secondary-image",
