@@ -15,8 +15,9 @@ source_modes:
       unrelated_layout_included: false
       live_html_included: false
     description: >-
-      Export the original source raster from the Fill of the concrete contract-selected
-      email instance without its container, nested graphics or live HTML.
+      Read the original raster from the Fill of the concrete contract-selected
+      email instance. Apply only the component-owned rectangular crop and exact
+      output dimensions; exclude the container, nested graphics and live HTML.
   - id: rendered-node
     label: RENDERED NODE
     contract:
@@ -78,9 +79,10 @@ export_profiles:
         escalation_condition: visible-artifacts-only
       rendered_node_intermediate: lossless-png
     description: >-
-      Export an sRGB JPEG at scale 2. Start at quality 82 and increase to 90
-      only when visible artifacts remain; rendered nodes use a lossless PNG
-      intermediate before JPEG conversion.
+      Export an sRGB JPEG to the component contract's exact @2x pixel dimensions,
+      never by multiplying the raw Fill dimensions. Start at quality 82 and
+      increase to 90 only for visible artifacts; rendered nodes use a lossless
+      PNG intermediate before JPEG conversion.
   - id: png-4x
     label: PNG @4x
     contract:
