@@ -242,9 +242,16 @@ test("canonical email cutover resolves only email routes", async () => {
   const emailRouteIds = new Set(["email-new-build", "email-continue-fix"]);
 
   for (const route of manifest.routes) {
+    const profile = manifest.bundle_profiles.find(({ id }) => id === route.bundle_profile_id);
+    const bundle = profile.generated_bundle;
     const result = await resolveSkillContext({
       repoRoot,
-      ...(emailRouteIds.has(route.id) ? activeEmailRequest(route.id) : { routeId: route.id }),
+      ...(emailRouteIds.has(route.id) ? activeEmailRequest(route.id) : {
+        routeId: route.id,
+        candidates: bundle.component_selection === "required" ? [{ id: "banner-hero" }] : [],
+        viewports: bundle.viewport_selection === "none" ? [] : ["mobile", "desktop"],
+        foundationIds: bundle.required_foundation_ids,
+      }),
     });
     if (emailRouteIds.has(route.id)) {
       assert.equal(result.status, "resolved", route.id);
