@@ -31,23 +31,24 @@ function scenario() {
   root.slots = [{ element_id: "content", instances: [a, b] }];
 
   const readings = {
-    capture_id: "capture-1", complete: true, captured_at: "2026-09-23T12:00:00Z",
+    capture_id: "capture-1", file_key: "design-file", complete: true, captured_at: "2026-09-23T12:00:00Z",
+    selection: { mobile: { root_node_id: "m-root", terminal: true, truncated: false }, desktop: { root_node_id: "d-root", terminal: true, truncated: false } },
     instances: [], fields: [], assets: [],
   };
-  const correspondence = { capture_id: "capture-1", instances: [], fields: [], assets: [] };
+  const correspondence = { capture_id: "capture-1", file_key: "design-file", instances: [], fields: [], assets: [] };
   for (const viewport of ["mobile", "desktop"]) {
     const prefix = viewport === "mobile" ? "m" : "d";
     readings.instances.push(
-      { viewport, node_id: `${prefix}-root`, parent_node_id: null, order: 0 },
-      { viewport, node_id: `${prefix}-a`, parent_node_id: `${prefix}-root`, order: 0 },
-      { viewport, node_id: `${prefix}-b`, parent_node_id: `${prefix}-root`, order: 1 },
-      { viewport, node_id: `${prefix}-a-child`, parent_node_id: `${prefix}-a`, order: 0 },
-      { viewport, node_id: `${prefix}-b-child`, parent_node_id: `${prefix}-b`, order: 0 },
+      { viewport, node_id: `${prefix}-root`, parent_node_id: null, order: 0, relation: null },
+      { viewport, node_id: `${prefix}-a`, parent_node_id: `${prefix}-root`, order: 0, relation: { kind: "slot", element_id: "content" } },
+      { viewport, node_id: `${prefix}-b`, parent_node_id: `${prefix}-root`, order: 1, relation: { kind: "slot", element_id: "content" } },
+      { viewport, node_id: `${prefix}-a-child`, parent_node_id: `${prefix}-a`, order: 0, relation: { kind: "nested", element_id: "child" } },
+      { viewport, node_id: `${prefix}-b-child`, parent_node_id: `${prefix}-b`, order: 0, relation: { kind: "nested", element_id: "child" } },
     );
     for (const [id, name, order] of [["a", "A", 0], ["b", "B", 1]]) {
       readings.fields.push(
-        { viewport, node_id: `${prefix}-${id}-title`, field: "characters", value: `${name} ${viewport}` },
-        { viewport, node_id: `${prefix}-${id}`, field: "componentProperty:Show Body", value: false },
+        { viewport, node_id: `${prefix}-${id}-title`, owner_node_id: `${prefix}-${id}`, field: "characters", value: `${name} ${viewport}` },
+        { viewport, node_id: `${prefix}-${id}`, owner_node_id: `${prefix}-${id}`, field: "componentProperty:Show Body", value: false },
       );
       correspondence.fields.push(
         { instance_id: id, kind: "content", element_id: `${viewport}-title`, slot_id: "text", viewport, node_id: `${prefix}-${id}-title`, field: "characters", origin: "figma" },
@@ -56,7 +57,7 @@ function scenario() {
       assert.equal(order, id === "a" ? 0 : 1);
     }
     for (const [id, value] of [["a-child", "first"], ["b-child", "second"]]) {
-      readings.fields.push({ viewport, node_id: `${prefix}-${id}-label`, field: "characters", value });
+      readings.fields.push({ viewport, node_id: `${prefix}-${id}-label`, owner_node_id: `${prefix}-${id}`, field: "characters", value });
       correspondence.fields.push({ instance_id: id, kind: "content", element_id: "label", slot_id: "text", viewport, node_id: `${prefix}-${id}-label`, field: "characters", origin: "figma" });
     }
   }
@@ -67,9 +68,9 @@ function scenario() {
   for (const id of ["a", "b"]) {
     const node_id = `d-${id}-asset`;
     const evidence_id = `export-${id}`;
-    readings.assets.push({ viewport: "desktop", node_id, evidence_id });
+    readings.assets.push({ viewport: "desktop", node_id, owner_node_id: `d-${id}`, evidence_id });
     correspondence.assets.push({ instance_id: id, asset_contract_id: "photo", viewport: "desktop", node_id });
-    assetEvidence.push({ instance_id: id, asset_contract_id: "photo", path: `images/photo-${id}.jpg`, mcp_export: { source_node_id: node_id, evidence_id } });
+    assetEvidence.push({ instance_id: id, asset_contract_id: "photo", path: `images/photo-${id}.jpg`, mcp_export: { source_node_id: node_id, evidence_id, capture_id: "capture-1", file_key: "design-file" } });
   }
   return {
     model: { schema_version: "1.1.0", id: "source-check", metadata: { language: "ru", direction: "ltr" }, root },
@@ -157,4 +158,63 @@ test("missing, incomplete, and stale evidence never pass", () => {
   const stale = scenario();
   stale.correspondence.capture_id = "capture-old";
   assert.ok(codes(stale).includes("EMAIL_SOURCE_EVIDENCE_STALE"));
+});
+
+
+test("unclaimed source text and asset require an explicit exclusion", () => {
+  const textInput = scenario();
+  textInput.readings.fields.push({ viewport: "mobile", node_id: "m-extra", owner_node_id: "m-a", field: "characters", value: "unrepresented" });
+  assert.ok(codes(textInput).includes("EMAIL_SOURCE_FIELD_UNREPRESENTED"));
+  const assetInput = scenario();
+  assetInput.readings.assets.push({ viewport: "desktop", node_id: "d-extra", owner_node_id: "d-a", evidence_id: "export-extra" });
+  assert.ok(codes(assetInput).includes("EMAIL_SOURCE_ASSET_UNREPRESENTED"));
+});
+
+test("identical repeated content cannot be swapped between Figma owners", () => {
+  const input = scenario();
+  const children = input.model.root.slots[0].instances.map((block) => block.nested_components[0].instance);
+  children[1].content_values[0].value.value = "first";
+  for (const field of input.readings.fields.filter(({ node_id }) => node_id.endsWith("-b-child-label"))) field.value = "first";
+  for (const viewport of ["mobile", "desktop"]) {
+    const fields = input.correspondence.fields.filter((item) => item.kind === "content" && item.element_id === "label" && item.viewport === viewport);
+    [fields[0].node_id, fields[1].node_id] = [fields[1].node_id, fields[0].node_id];
+  }
+  assert.ok(codes(input).includes("EMAIL_SOURCE_OWNER_MISMATCH"));
+});
+
+test("asset correspondence and receipt swapped together still fail independent owner", () => {
+  const input = scenario();
+  const first = input.correspondence.assets[0];
+  const second = input.correspondence.assets[1];
+  [first.node_id, second.node_id] = [second.node_id, first.node_id];
+  [input.assetEvidence[0].mcp_export, input.assetEvidence[1].mcp_export] = [input.assetEvidence[1].mcp_export, input.assetEvidence[0].mcp_export];
+  assert.ok(codes(input).includes("EMAIL_SOURCE_ASSET_OWNER_MISMATCH"));
+});
+
+test("missing or stale asset capture identifiers do not establish freshness", () => {
+  const absent = scenario();
+  delete absent.readings.assets[0].evidence_id;
+  delete absent.assetEvidence[0].mcp_export.evidence_id;
+  assert.ok(codes(absent).includes("EMAIL_SOURCE_ASSET_EVIDENCE_MISSING"));
+  const stale = scenario();
+  stale.assetEvidence[0].mcp_export.capture_id = "capture-old";
+  assert.ok(codes(stale).includes("EMAIL_SOURCE_EVIDENCE_STALE"));
+});
+
+test("slot-vs-nested relationship and source scope are verified", () => {
+  const relation = scenario();
+  relation.readings.instances.find(({ node_id }) => node_id === "m-a").relation = { kind: "nested", element_id: "content" };
+  assert.ok(codes(relation).includes("EMAIL_SOURCE_RELATION_MISMATCH"));
+  const scope = scenario();
+  scope.readings.selection.mobile.terminal = false;
+  assert.ok(codes(scope).includes("EMAIL_SOURCE_EVIDENCE_INCOMPLETE"));
+});
+
+test("duplicate source or correspondence keys cannot be silently overwritten", () => {
+  const source = scenario();
+  source.readings.fields.push({ ...source.readings.fields[0] });
+  assert.ok(codes(source).includes("EMAIL_SOURCE_DUPLICATE"));
+  const mapped = scenario();
+  mapped.correspondence.fields.push({ ...mapped.correspondence.fields[0] });
+  assert.ok(codes(mapped).includes("EMAIL_SOURCE_DUPLICATE"));
 });
