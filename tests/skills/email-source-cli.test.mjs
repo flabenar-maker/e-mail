@@ -16,7 +16,7 @@ function minimalInput() {
   return {
     model: { schema_version: "1.1.0", id: "source-cli", metadata: { language: "ru", direction: "ltr" }, root },
     readings: { capture_id: "capture-1", file_key: "file", captured_at: "2026-09-23T12:00:00Z", complete: true,
-      selection: { mobile: { root_node_id: "m-root", terminal: true, truncated: false, scope: "full-email" },
+      selection: { mobile: { root_node_id: "m-root", terminal: true, truncated: false, scope: "full-email", expected_top_level_count: 0 },
         desktop: { root_node_id: "d-root", terminal: true, truncated: false, scope: "full-email" } },
       instances: [
         { viewport: "mobile", node_id: "m-root", parent_node_id: null, order: 0, relation: null, variant_id: "mobile" },
@@ -81,3 +81,16 @@ test("production CLI rejects a selected-subtree proof and test-only inputs", asy
   assert.equal(JSON.parse(selected.stdout).scope, "selected-test");
 });
 
+
+
+test("production scope checks the Figma slot child count independently", async (t) => {
+  const dir = await mkdtemp(join(tmpdir(), "cupis-source-count-"));
+  t.after(() => rm(dir, { recursive: true, force: true }));
+  const path = join(dir, "source.json");
+  const input = minimalInput();
+  input.readings.selection.desktop.expected_top_level_count = 1;
+  await writeFile(path, JSON.stringify(input), "utf8");
+  const result = spawnSync(process.execPath, [fileURLToPath(command), path], { encoding: "utf8" });
+  assert.equal(result.status, 1);
+  assert.ok(JSON.parse(result.stdout).diagnostics.some(({ code }) => code === "EMAIL_SOURCE_SCOPE_INCOMPLETE"));
+});
