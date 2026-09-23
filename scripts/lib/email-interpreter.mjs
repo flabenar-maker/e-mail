@@ -393,7 +393,7 @@ function renderShell(element, viewport, path, childHtml, context) {
         const nodeProps = propsFromFacts(node?.facts, { viewport, mode: node?.render_mode });
         const centeredImage = axis === "vertical" && counterAlignment === "center" &&
           node?.render_mode === "direct-image" && !nodeProps.fluid
-          ? html.replace(/style="([^"]*)"/u, (_match, style) => `style="${style};margin:0 auto"`)
+          ? html.replace(/(<img\b[^>]*\sstyle=")([^"]*)"/u, (_match, prefix, style) => `${prefix}${style};margin:0 auto"`)
           : html;
         const cellStyle = {
           ...(axis === "vertical" && counterAlignment === "center"

@@ -283,6 +283,49 @@ test("property visibility omits disabled subtrees", async () => {
   assert.deepEqual(result.diagnostics, []);
 });
 
+test("centered linked fixed images receive their auto margin on the image", async () => {
+  const { renderContractTree } = await interpreter();
+  const image = element({
+    id: "icon",
+    role: "image",
+    mode: "direct-image",
+    assetContractId: "icon-asset",
+    contentSlots: [{ id: "alt", type: "alt-text", required: true }],
+  });
+  image.action = { kind: "whole-element", href_slot: "href" };
+  const root = element({
+    id: "root",
+    facts: [
+      { id: "layout-axis", value: { type: "keyword", value: "vertical" } },
+      measure("layout-gap", 0),
+      { id: "counter-alignment", value: { type: "keyword", value: "center" } },
+    ],
+    children: [image],
+  });
+
+  const result = renderContractTree({
+    component: component(root),
+    coverage,
+    content: {
+      icon: {
+        alt: { type: "alt-text", value: "Icon" },
+        href: { type: "url", value: "https://example.test/icon" },
+      },
+    },
+    assets: { "icon-asset": { src: "images/icon.png", width: 16, height: 16 } },
+    properties: {},
+    foundations: { rendering },
+  });
+
+  const anchor = result.html.match(/<a\b[^>]*>[\s\S]*?<\/a>/u)?.[0];
+  const imageTag = result.html.match(/<img\b[^>]*>/u)?.[0];
+  assert.ok(anchor, "missing image action anchor");
+  assert.ok(imageTag, "missing image");
+  assert.doesNotMatch(anchor.match(/<a\b[^>]*>/u)?.[0] ?? "", /margin:0 auto/u);
+  assert.match(imageTag, /style="[^"]*margin:0 auto/u);
+  assert.deepEqual(result.diagnostics, []);
+});
+
 test("interpreter dispatches supported modes without rendering Figma-only nodes", async () => {
   const { renderContractTree } = await interpreter();
   const root = element({
