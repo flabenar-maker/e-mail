@@ -63385,11 +63385,14 @@
             "semantic_node_name": "secondary-image @2x"
           },
           "pixel_dimensions": {
-            "width": 814,
-          },
+              "width": 814,
+              "height": 517,
+              "unit": "px"
+            },
           "aspect_ratio": {
-            "width": 296,
-          },
+              "width": 296,
+              "height": 188
+            },
           "crop": {
             "mode": "figma-fill",
             "position_source": "concrete-mobile-instance"
