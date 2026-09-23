@@ -132,6 +132,9 @@ export function verifyEmailModelSource({
       if (!parent && readings.selection[viewport].root_node_id !== nodeId) {
         errors.push(issue("EMAIL_SOURCE_SCOPE_MISMATCH", path, `${viewport} selected root differs from the mapped model root.`));
       }
+      if (!observed.variant_id || observed.variant_id !== instance.variants?.[viewport]) {
+        errors.push(issue("EMAIL_SOURCE_VARIANT_MISMATCH", path, `${instance.instance_id}: ${viewport} variant differs from the selected Figma instance.`));
+      }
       const expectedParent = parent ? mappedInstances.get(parent.instance_id)?.nodes?.[viewport] : null;
       if (observed.parent_node_id !== expectedParent) {
         errors.push(issue("EMAIL_SOURCE_PARENT_MISMATCH", path, `${instance.instance_id}: ${viewport} parent differs from MCP reading.`));
@@ -249,4 +252,5 @@ export function verifyEmailModelSource({
   }
   return errors.sort((left, right) => left.path.localeCompare(right.path) || left.code.localeCompare(right.code));
 }
+
 
