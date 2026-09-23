@@ -14,11 +14,24 @@ function normalizedValue(value) {
   if (value?.type === "rich-text") {
     return value.segments.map(({ value: text }) => text).join("");
   }
+  if (value?.type === "alt-text") {
+    return { purpose: value.purpose, value: value.value };
+  }
   return value?.value;
 }
 
 function equal(left, right) {
   return JSON.stringify(left) === JSON.stringify(right);
+}
+
+function findElement(root, id) {
+  if (!root) return null;
+  if (root.id === id) return root;
+  for (const child of root.children ?? []) {
+    const found = findElement(child, id);
+    if (found) return found;
+  }
+  return null;
 }
 
 function instancesWithPaths(root) {
@@ -80,7 +93,7 @@ function excluded(readings, kind, source) {
  * disputed nodes and run the separate visual gate.
  */
 export function verifyEmailModelSource({
-  model, readings, correspondence, authorizedInputs = [], assetEvidence = [],
+  model, readings, correspondence, authorizedInputs = [], assetEvidence = [], resolvedContracts = new Map(),
 } = {}) {
   const errors = [];
   if (!readings || !correspondence || !model?.root) {
@@ -182,7 +195,14 @@ export function verifyEmailModelSource({
             }
           }
           if (target.origin === "figma" && observed.inline_runs?.length) {
-            errors.push(issue("EMAIL_SOURCE_INLINE_UNSUPPORTED", itemPath, `${instance.instance_id}/${itemId}: ${viewport} inline styling requires an explicit supported mapping.`));
+            const contractRoot = resolvedContracts.get(instance.component_id)?.contracts?.[viewport]?.root;
+            const contractElement = findElement(contractRoot, itemId);
+            const contractRuns = contractElement?.facts?.find(({ id }) => id === "styled-text-segments")?.value?.items;
+            if (kind !== "content" || item.value?.type !== "rich-text" || slotId !== "text" ||
+                contractElement?.render_mode !== "html-text" || !Array.isArray(contractRuns) ||
+                !equal(contractRuns, observed.inline_runs)) {
+              errors.push(issue("EMAIL_SOURCE_INLINE_UNSUPPORTED", itemPath, `${instance.instance_id}/${itemId}: ${viewport} inline styling differs from the resolved component contract or has no supported mapping.`));
+            }
           }
           const actual = kind === "property" ? item.value : normalizedValue(item.value);
           if (!equal(actual, observed.value)) {
