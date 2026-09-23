@@ -63374,7 +63374,7 @@
         {
           "id": "secondary-image",
           "owner_layer_name": "secondary-image @2x",
-          "source_viewport": "desktop",
+          "source_viewport": "mobile",
           "source_mode_id": "image-fill",
           "display_mode_id": "fill-image",
           "export_profile_id": "jpeg-2x",
@@ -63385,17 +63385,14 @@
             "semantic_node_name": "secondary-image @2x"
           },
           "pixel_dimensions": {
-            "width": 984,
-            "height": 696,
-            "unit": "px"
+            "width": 814,
           },
           "aspect_ratio": {
-            "width": 41,
-            "height": 29
+            "width": 296,
           },
           "crop": {
-            "mode": "none",
-            "position_source": "source-raster"
+            "mode": "figma-fill",
+            "position_source": "concrete-mobile-instance"
           },
           "background": {
             "own_visible_boundary_fill": "preserve",
