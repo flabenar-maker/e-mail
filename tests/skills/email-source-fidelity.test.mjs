@@ -245,3 +245,22 @@ test("contract-backed rich-text segments allow exact supported inline styling", 
   input.readings.fields.find(({ node_id }) => node_id === "m-a-title").inline_runs[1].text_decoration = "NONE";
   assert.ok(codes(input).includes("EMAIL_SOURCE_INLINE_UNSUPPORTED"));
 });
+
+
+test("alt purpose is part of the authorized value, not only its text", () => {
+  const input = scenario();
+  const a = input.model.root.slots[0].instances[0];
+  a.content_values[0].value = { type: "alt-text", purpose: "informative", value: "A mobile" };
+  input.readings.fields = input.readings.fields.filter(({ node_id }) => node_id !== "m-a-title");
+  const target = input.correspondence.fields.find(({ instance_id, element_id, viewport }) =>
+    instance_id === "a" && element_id === "mobile-title" && viewport === "mobile");
+  target.origin = "user";
+  delete target.node_id;
+  delete target.field;
+  input.authorizedInputs.push({ instance_id: "a", kind: "content", element_id: "mobile-title",
+    slot_id: "text", viewport: "mobile", origin: "user",
+    value: { purpose: "informative", value: "A mobile" } });
+  assert.deepEqual(codes(input), []);
+  a.content_values[0].value.purpose = "decorative";
+  assert.ok(codes(input).includes("EMAIL_SOURCE_VALUE_MISMATCH"));
+});
