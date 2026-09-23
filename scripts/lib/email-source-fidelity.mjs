@@ -194,14 +194,18 @@ export function verifyEmailModelSource({
               errors.push(issue("EMAIL_SOURCE_OWNER_MISMATCH", itemPath, `${instance.instance_id}/${itemId}: ${viewport} field belongs to another source instance.`));
             }
           }
-          if (target.origin === "figma" && observed.inline_runs?.length) {
+          if (target.origin === "figma") {
             const contractRoot = resolvedContracts.get(instance.component_id)?.contracts?.[viewport]?.root;
             const contractElement = findElement(contractRoot, itemId);
             const contractRuns = contractElement?.facts?.find(({ id }) => id === "styled-text-segments")?.value?.items;
-            if (kind !== "content" || item.value?.type !== "rich-text" || slotId !== "text" ||
-                contractElement?.render_mode !== "html-text" || !Array.isArray(contractRuns) ||
-                !equal(contractRuns, observed.inline_runs)) {
-              errors.push(issue("EMAIL_SOURCE_INLINE_UNSUPPORTED", itemPath, `${instance.instance_id}/${itemId}: ${viewport} inline styling differs from the resolved component contract or has no supported mapping.`));
+            const sourceRuns = observed.inline_runs;
+            const hasContractRuns = Array.isArray(contractRuns) && contractRuns.length > 0;
+            const hasSourceRuns = Array.isArray(sourceRuns) && sourceRuns.length > 0;
+            if (item.value?.type === "rich-text" || hasContractRuns || hasSourceRuns) {
+              if (kind !== "content" || item.value?.type !== "rich-text" || slotId !== "text" ||
+                  !hasContractRuns || !hasSourceRuns || !equal(contractRuns, sourceRuns)) {
+                errors.push(issue("EMAIL_SOURCE_INLINE_UNSUPPORTED", itemPath, `${instance.instance_id}/${itemId}: ${viewport} inline styling differs from the resolved component contract or has no supported mapping.`));
+              }
             }
           }
           const actual = kind === "property" ? item.value : normalizedValue(item.value);
