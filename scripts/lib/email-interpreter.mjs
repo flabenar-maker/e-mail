@@ -391,6 +391,10 @@ function renderShell(element, viewport, path, childHtml, context) {
       const cellFor = ({ html, node }) => {
         if (node?.render_mode === "background-image") return html;
         const nodeProps = propsFromFacts(node?.facts, { viewport, mode: node?.render_mode });
+        const centeredImage = axis === "vertical" && counterAlignment === "center" &&
+          node?.render_mode === "direct-image" && !nodeProps.fluid
+          ? html.replace(/style="([^"]*)"/u, (_match, style) => `style="${style};margin:0 auto"`)
+          : html;
         const cellStyle = {
           ...(axis === "vertical" && counterAlignment === "center"
             ? { "text-align": "center" }
@@ -409,7 +413,7 @@ function renderShell(element, viewport, path, childHtml, context) {
             ? { bgcolor: nodeProps.style["background-color"] }
             : {}),
           ...(Object.keys(cellStyle).length > 0 ? { style: cellStyle } : {}),
-        }, groupedAction ? html : wrapAction(element, entry, html));
+        }, groupedAction ? centeredImage : wrapAction(element, entry, centeredImage));
       };
       const rawRows = axis === "horizontal"
         ? `<tr>${visible.map(cellFor).join(gap > 0
