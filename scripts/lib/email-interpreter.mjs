@@ -164,7 +164,13 @@ function propsFromFacts(facts = [], { viewport, mode, isRoot = false, parentAxis
     else if (id.endsWith("-width")) props.width = value.value;
     else if (id.endsWith("-height")) props.height = value.value;
   }
-  const gradientStart = fact("background-gradient-start")?.value;
+  if (mode === "background-image" && fact("height-behavior")?.value === "proportional-cover") {
+    props.width = "100%";
+    props.height = undefined;
+    props.style["padding-top"] = String((size.height / size.width) * 100) + "%";
+    props.style["font-size"] = "0";
+    props.style["line-height"] = "0";
+  }  const gradientStart = fact("background-gradient-start")?.value;
   const gradientEnd = fact("background-gradient-end")?.value;
   const gradientAngle = fact("background-gradient-css-angle-degrees")?.value;
   if (gradientStart && gradientEnd && Number.isFinite(gradientAngle)) {
@@ -534,7 +540,7 @@ function renderShell(element, viewport, path, childHtml, context) {
           {
             ...asset,
             ...factProps,
-            height: element.facts?.some(({ id, value }) => id === "height-behavior" && value.value === "content-driven-cover") ? undefined : (factProps.height ?? asset.height),
+            height: element.facts?.some(({ id, value }) => id === "height-behavior" && ["content-driven-cover", "proportional-cover"].includes(value.value)) ? undefined : (factProps.height ?? asset.height),
             style: { ...(asset.style ?? {}), ...factProps.style },
           },
           joined,
