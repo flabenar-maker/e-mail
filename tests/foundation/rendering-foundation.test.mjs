@@ -41,7 +41,7 @@ test("loads the canonical rendering foundation", async () => {
   ]);
   assert.deepEqual(rendering.shell, {
     background_color: "#F3F3F5",
-    horizontal_inset_px: 15,
+    horizontal_inset_px: 0,
     max_width_px: 600,
     min_supported_viewport_px: 300,
   });
