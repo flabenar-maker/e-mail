@@ -74,6 +74,12 @@ test("loads the canonical rendering foundation", async () => {
   assert.deepEqual(validateRenderingSemantics(rendering), []);
 });
 
+test("Figma Mobile 328 root has no outer shell gutter", async () => {
+  const rendering = await loadRenderingFoundation({ repoRoot });
+
+  assert.equal(rendering.shell.horizontal_inset_px, 0);
+});
+
 test("schema rejects unknown root and nested fields", async () => {
   const [rendering, schema] = await Promise.all([
     canonicalRendering(),
