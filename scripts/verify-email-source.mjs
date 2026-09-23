@@ -32,11 +32,12 @@ if (!path || process.argv.length > 4 || (process.argv.length === 4 && !selectedT
         }
       }
     }
-    process.stdout.write(`${JSON.stringify({ status: diagnostics.length ? "failed" : "passed", diagnostics }, null, 2)}\n`);
+    process.stdout.write(`${JSON.stringify({ status: diagnostics.length ? "failed" : "passed", scope: selectedTest ? "selected-test" : "full-email", diagnostics }, null, 2)}\n`);
     if (diagnostics.length) process.exitCode = 1;
   } catch (error) {
     process.stderr.write(`Source evidence could not be read: ${error.message}\n`);
     process.exitCode = 2;
   }
 }
+
 
