@@ -49,6 +49,10 @@ function selectedVariantId(record, viewport, axes, fallback) {
   return matches.length === 1 ? matches[0].id : null;
 }
 
+function relationElementId(relation, viewport) {
+  return relation?.element_ids?.[viewport] ?? relation?.element_id;
+}
+
 function instancesWithPaths(root) {
   const entries = [];
   function visit(instance, path, parent = null, relation = null) {
@@ -62,7 +66,7 @@ function instancesWithPaths(root) {
     }
     for (const [order, nested] of (instance.nested_components ?? []).entries()) {
       visit(nested.instance, `${path}/nested_components/${order}/instance`, instance, {
-        kind: "nested", element_id: nested.element_id, order,
+        kind: "nested", element_id: nested.element_id, element_ids: nested.element_ids, order,
       });
     }
   }
@@ -171,13 +175,13 @@ export function verifyEmailModelSource({
       if (observed.parent_node_id !== expectedParent) {
         errors.push(issue("EMAIL_SOURCE_PARENT_MISMATCH", path, `${instance.instance_id}: ${viewport} parent differs from MCP reading.`));
       }
-      if (!equal(relation && { kind: relation.kind, element_id: relation.element_id }, observed.relation)) {
+      if (!equal(relation && { kind: relation.kind, element_id: relationElementId(relation, viewport) }, observed.relation)) {
         errors.push(issue("EMAIL_SOURCE_RELATION_MISMATCH", path, `${instance.instance_id}: ${viewport} slot/nested relation differs from MCP reading.`));
       }
       if (relation) {
         const siblings = entries.filter((other) =>
           other.parent === parent && other.relation?.kind === relation.kind &&
-          other.relation?.element_id === relation.element_id);
+          relationElementId(other.relation, viewport) === relationElementId(relation, viewport));
         const previous = siblings.filter((other) => other.relation.order < relation.order).at(-1);
         const previousNode = mappedInstances.get(previous?.instance.instance_id)?.nodes?.[viewport];
         const previousObserved = sourceInstances.get(key(viewport, previousNode));

@@ -329,6 +329,10 @@ function validateDeclaredBindings(instance, record, maps, errors, path) {
   });
 }
 
+function nestedElementId(item, viewport) {
+  return item.element_ids?.[viewport] ?? item.element_id;
+}
+
 function validateRequiredTree(element, instance, viewport, errors, path) {
   if (!visible(element, instance, viewport, errors, path)) return;
 
@@ -375,7 +379,7 @@ function validateRequiredTree(element, instance, viewport, errors, path) {
 
   if (element.render_mode === "nested-component") {
     const nested = (instance.nested_components ?? []).find(
-      (item) => item.element_id === element.id,
+      (item) => nestedElementId(item, viewport) === element.id,
     );
     if (!nested) {
       errors.push(
@@ -466,13 +470,15 @@ function validateInstance(instance, dependencies, errors, path, stack) {
     (item) => item.element_id,
     "slot",
   );
-  validateUniqueBindings(
-    errors,
-    instance.nested_components,
-    path + "/nested_components",
-    (item) => item.element_id,
-    "nested component",
-  );
+  for (const viewport of VIEWPORTS) {
+    validateUniqueBindings(
+      errors,
+      instance.nested_components,
+      path + "/nested_components",
+      (item) => nestedElementId(item, viewport),
+      "nested component in " + viewport,
+    );
+  }
 
   const selectedRoots = {};
   for (const viewport of VIEWPORTS) {
@@ -508,6 +514,26 @@ function validateInstance(instance, dependencies, errors, path, stack) {
     VIEWPORTS.map((viewport) => [viewport, elementMap(selectedRoots[viewport])]),
   );
   validateDeclaredBindings(instance, record, maps, errors, path);
+  (instance.nested_components ?? []).forEach((nested, index) => {
+    for (const viewport of VIEWPORTS) {
+      if (!selectedRoots[viewport]) continue;
+      const elementId = nestedElementId(nested, viewport);
+      const element = maps[viewport].get(elementId);
+      if (!element || element.render_mode !== "nested-component") {
+        errors.push(diagnostic(
+          "EMAIL_MODEL_NESTED_ELEMENT_UNKNOWN",
+          path + "/nested_components/" + index,
+          "Nested element " + elementId + " is not declared for " + viewport + ".",
+        ));
+      } else if (element.component_id !== nested.instance.component_id) {
+        errors.push(diagnostic(
+          "EMAIL_MODEL_NESTED_COMPONENT_MISMATCH",
+          path + "/nested_components/" + index,
+          "Expected nested component " + element.component_id + " for " + viewport + ".",
+        ));
+      }
+    }
+  });
   for (const viewport of VIEWPORTS) {
     const root = selectedRoots[viewport];
     if (!root) continue;

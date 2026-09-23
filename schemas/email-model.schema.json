@@ -147,9 +147,22 @@
     "nestedValue": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["element_id", "instance"],
+      "required": ["instance"],
+      "oneOf": [
+        { "required": ["element_id"] },
+        { "required": ["element_ids"] }
+      ],
       "properties": {
         "element_id": { "$ref": "#/$defs/id" },
+        "element_ids": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mobile", "desktop"],
+          "properties": {
+            "mobile": { "$ref": "#/$defs/id" },
+            "desktop": { "$ref": "#/$defs/id" }
+          }
+        },
         "instance": { "$ref": "#/$defs/instance" }
       }
     },
