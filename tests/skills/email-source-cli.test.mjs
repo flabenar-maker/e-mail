@@ -4,6 +4,7 @@ import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 
 const command = new URL("../../scripts/verify-email-source.mjs", import.meta.url);
 const workflow = new URL("../../data/workflows/email-build.yaml", import.meta.url);
@@ -33,14 +34,14 @@ test("source CLI is a failing pre-render gate, not a manual passed flag", async 
   t.after(() => rm(dir, { recursive: true, force: true }));
   const path = join(dir, "source.json");
   await writeFile(path, JSON.stringify(minimalInput()), "utf8");
-  const pass = spawnSync(process.execPath, [command.pathname, path], { encoding: "utf8" });
+  const pass = spawnSync(process.execPath, [fileURLToPath(command), path], { encoding: "utf8" });
   assert.equal(pass.status, 0);
   assert.deepEqual(JSON.parse(pass.stdout).diagnostics, []);
 
   const bad = minimalInput();
   bad.readings.instances[0].variant_id = "desktop";
   await writeFile(path, JSON.stringify(bad), "utf8");
-  const fail = spawnSync(process.execPath, [command.pathname, path], { encoding: "utf8" });
+  const fail = spawnSync(process.execPath, [fileURLToPath(command), path], { encoding: "utf8" });
   assert.equal(fail.status, 1);
   assert.ok(JSON.parse(fail.stdout).diagnostics.some(({ code }) => code === "EMAIL_SOURCE_VARIANT_MISMATCH"));
 });
@@ -56,3 +57,4 @@ test("new-build workflow requires source correspondence after model assembly and
   assert.ok(steps[source].required_inputs.includes("source-correspondence"));
   assert.ok(steps[render].required_inputs.includes("source-comparison"));
 });
+
