@@ -53,10 +53,22 @@ function bindingFor(instance, entry, viewport) {
     matches.find((item) => item.scope === "all") ?? null;
 }
 
-function bindingPath(instance, path, entry) {
-  const kind = entry.kind === "property" ? "property_values" : "content_values";
-  const index = (instance[kind] ?? []).findIndex((item) => item === bindingFor(instance, entry, entry.viewport));
-  return `${path}/${kind}${index < 0 ? "" : `/${index}`}`;
+function uniqueIndex(items, keyOf, label, errors) {
+  const result = new Map();
+  for (const item of items) {
+    const id = keyOf(item);
+    if (result.has(id)) {
+      errors.push(issue("EMAIL_SOURCE_DUPLICATE", `/source/${label}`, `Duplicate ${label} key: ${id.replaceAll("\\0", "/")}.`));
+    }
+    result.set(id, item);
+  }
+  return result;
+}
+
+function excluded(readings, kind, source) {
+  return (readings.exclusions ?? []).some((item) =>
+    item.kind === kind && item.viewport === source.viewport && item.node_id === source.node_id &&
+    (kind !== "field" || item.field === source.field) && typeof item.reason === "string" && item.reason.trim().length > 0);
 }
 
 /**
@@ -74,29 +86,34 @@ export function verifyEmailModelSource({
   if (!readings || !correspondence || !model?.root) {
     return [issue("EMAIL_SOURCE_EVIDENCE_MISSING", "/source", "Model, source readings, and correspondence are required.")];
   }
-  if (readings.complete !== true || !Array.isArray(readings.instances) || !Array.isArray(readings.fields) || !Array.isArray(readings.assets)) {
+  if (readings.complete !== true || !Array.isArray(readings.instances) || !Array.isArray(readings.fields) || !Array.isArray(readings.assets) ||
+      !readings.file_key || !readings.captured_at ||
+      VIEWPORTS.some((viewport) => !readings.selection?.[viewport]?.root_node_id ||
+        readings.selection[viewport].terminal !== true || readings.selection[viewport].truncated !== false)) {
     errors.push(issue("EMAIL_SOURCE_EVIDENCE_INCOMPLETE", "/source", "The selected MCP reading is incomplete or truncated."));
   }
-  if (!readings.capture_id || readings.capture_id !== correspondence.capture_id) {
+  if (!readings.capture_id || readings.capture_id !== correspondence.capture_id || readings.file_key !== correspondence.file_key) {
     errors.push(issue("EMAIL_SOURCE_EVIDENCE_STALE", "/correspondence/capture_id", "Correspondence does not belong to this MCP capture."));
   }
   if (errors.length) return errors;
 
   const entries = instancesWithPaths(model.root);
-  const byId = new Map(entries.map((entry) => [entry.instance.instance_id, entry]));
-  const sourceInstances = new Map(readings.instances.map((item) => [key(item.viewport, item.node_id), item]));
-  const sourceFields = new Map(readings.fields.map((item) => [key(item.viewport, item.node_id, item.field), item]));
-  const sourceAssets = new Map(readings.assets.map((item) => [key(item.viewport, item.node_id), item]));
-  const mappedInstances = new Map((correspondence.instances ?? []).map((item) => [item.instance_id, item]));
-  const mappedFields = new Map((correspondence.fields ?? []).map((item) => [key(
+  const byId = uniqueIndex(entries, (entry) => entry.instance.instance_id, "model-instances", errors);
+  const sourceInstances = uniqueIndex(readings.instances, (item) => key(item.viewport, item.node_id), "instances", errors);
+  const sourceFields = uniqueIndex(readings.fields, (item) => key(item.viewport, item.node_id, item.field), "fields", errors);
+  const sourceAssets = uniqueIndex(readings.assets, (item) => key(item.viewport, item.node_id), "assets", errors);
+  const mappedInstances = uniqueIndex(correspondence.instances ?? [], (item) => item.instance_id, "correspondence/instances", errors);
+  const mappedFields = uniqueIndex(correspondence.fields ?? [], (item) => key(
     item.instance_id, item.kind, item.element_id ?? item.property_id, item.slot_id ?? "", item.viewport,
-  ), item]));
-  const mappedAssets = new Map((correspondence.assets ?? []).map((item) => [key(item.instance_id, item.asset_contract_id), item]));
-  const inputs = new Map(authorizedInputs.map((item) => [key(
+  ), "correspondence/fields", errors);
+  const mappedAssets = uniqueIndex(correspondence.assets ?? [], (item) => key(item.instance_id, item.asset_contract_id), "correspondence/assets", errors);
+  const inputs = uniqueIndex(authorizedInputs, (item) => key(
     item.instance_id, item.kind, item.element_id ?? item.property_id, item.slot_id ?? "", item.viewport,
-  ), item]));
-  const receipts = new Map(assetEvidence.map((item) => [key(item.instance_id, item.asset_contract_id, item.path), item]));
+  ), "authorized-inputs", errors);
+  const receipts = uniqueIndex(assetEvidence, (item) => key(item.instance_id, item.asset_contract_id, item.path), "asset-receipts", errors);
   const claimedSourceInstances = new Set();
+  const claimedSourceFields = new Set();
+  const claimedSourceAssets = new Set();
 
   for (const { instance, path, parent, relation } of entries) {
     const mapped = mappedInstances.get(instance.instance_id);
@@ -112,9 +129,15 @@ export function verifyEmailModelSource({
         errors.push(issue("EMAIL_SOURCE_TARGET_COLLISION", path, `${viewport} source node ${nodeId} is mapped to multiple model instances.`));
       }
       claimedSourceInstances.add(claim);
+      if (!parent && readings.selection[viewport].root_node_id !== nodeId) {
+        errors.push(issue("EMAIL_SOURCE_SCOPE_MISMATCH", path, `${viewport} selected root differs from the mapped model root.`));
+      }
       const expectedParent = parent ? mappedInstances.get(parent.instance_id)?.nodes?.[viewport] : null;
       if (observed.parent_node_id !== expectedParent) {
         errors.push(issue("EMAIL_SOURCE_PARENT_MISMATCH", path, `${instance.instance_id}: ${viewport} parent differs from MCP reading.`));
+      }
+      if (!equal(relation && { kind: relation.kind, element_id: relation.element_id }, observed.relation)) {
+        errors.push(issue("EMAIL_SOURCE_RELATION_MISMATCH", path, `${instance.instance_id}: ${viewport} slot/nested relation differs from MCP reading.`));
       }
       if (relation) {
         const siblings = entries.filter((other) =>
@@ -148,6 +171,13 @@ export function verifyEmailModelSource({
             errors.push(issue("EMAIL_SOURCE_EVIDENCE_MISSING", itemPath, `${instance.instance_id}/${itemId}: ${viewport} ${target.origin} evidence is missing.`));
             continue;
           }
+          if (target.origin === "figma") {
+            claimedSourceFields.add(key(viewport, target.node_id, target.field));
+            const ownerNode = mapped?.nodes?.[viewport];
+            if (!ownerNode || observed.owner_node_id !== ownerNode) {
+              errors.push(issue("EMAIL_SOURCE_OWNER_MISMATCH", itemPath, `${instance.instance_id}/${itemId}: ${viewport} field belongs to another source instance.`));
+            }
+          }
           if (target.origin === "figma" && observed.inline_runs?.length) {
             errors.push(issue("EMAIL_SOURCE_INLINE_UNSUPPORTED", itemPath, `${instance.instance_id}/${itemId}: ${viewport} inline styling requires an explicit supported mapping.`));
           }
@@ -166,12 +196,23 @@ export function verifyEmailModelSource({
         errors.push(issue("EMAIL_SOURCE_TARGET_MISSING", assetPath, `${instance.instance_id}/${asset.asset_contract_id}: source owner is missing.`));
         continue;
       }
+      claimedSourceAssets.add(key(target.viewport, target.node_id));
+      const source = sourceAssets.get(key(target.viewport, target.node_id));
+      if (source.owner_node_id !== mapped?.nodes?.[target.viewport]) {
+        errors.push(issue("EMAIL_SOURCE_ASSET_OWNER_MISMATCH", assetPath, `${instance.instance_id}/${asset.asset_contract_id}: asset belongs to another source instance.`));
+      }
       const receipt = receipts.get(key(instance.instance_id, asset.asset_contract_id, asset.path));
       if (!receipt) {
         errors.push(issue("EMAIL_SOURCE_ASSET_MISSING", assetPath, `${instance.instance_id}/${asset.asset_contract_id}: export receipt is missing.`));
         continue;
       }
-      const source = sourceAssets.get(key(target.viewport, target.node_id));
+      if (!source.evidence_id || !receipt.mcp_export?.evidence_id) {
+        errors.push(issue("EMAIL_SOURCE_ASSET_EVIDENCE_MISSING", assetPath, `${instance.instance_id}/${asset.asset_contract_id}: export evidence ID is missing.`));
+      }
+      if (!receipt.mcp_export?.capture_id || receipt.mcp_export.capture_id !== readings.capture_id ||
+          !receipt.mcp_export?.file_key || receipt.mcp_export.file_key !== readings.file_key) {
+        errors.push(issue("EMAIL_SOURCE_EVIDENCE_STALE", assetPath, `${instance.instance_id}/${asset.asset_contract_id}: export receipt belongs to another source capture.`));
+      }
       if (receipt.mcp_export?.source_node_id !== target.node_id || receipt.mcp_export?.evidence_id !== source.evidence_id) {
         errors.push(issue("EMAIL_SOURCE_ASSET_OWNER_MISMATCH", assetPath, `${instance.instance_id}/${asset.asset_contract_id}: receipt does not belong to the observed Figma owner.`));
       }
@@ -191,10 +232,21 @@ export function verifyEmailModelSource({
       errors.push(issue("EMAIL_SOURCE_ASSET_MISSING", `${entry?.path ?? "/root"}/asset_files`, `${target.instance_id}/${target.asset_contract_id}: asset binding is absent from the model.`));
     }
   }
+  for (const source of readings.fields) {
+    if (!claimedSourceFields.has(key(source.viewport, source.node_id, source.field)) && !excluded(readings, "field", source)) {
+      errors.push(issue("EMAIL_SOURCE_FIELD_UNREPRESENTED", "/source/fields", `${source.viewport} source field ${source.node_id}/${source.field} has no model correspondence or justified exclusion.`));
+    }
+  }
+  for (const source of readings.assets) {
+    if (!claimedSourceAssets.has(key(source.viewport, source.node_id)) && !excluded(readings, "asset", source)) {
+      errors.push(issue("EMAIL_SOURCE_ASSET_UNREPRESENTED", "/source/assets", `${source.viewport} source asset ${source.node_id} has no model correspondence or justified exclusion.`));
+    }
+  }
   for (const source of readings.instances) {
-    if (!claimedSourceInstances.has(key(source.viewport, source.node_id))) {
+    if (!claimedSourceInstances.has(key(source.viewport, source.node_id)) && !excluded(readings, "instance", source)) {
       errors.push(issue("EMAIL_SOURCE_STRUCTURE_UNREPRESENTED", "/source/instances", `${source.viewport} source instance ${source.node_id} has no model correspondence.`));
     }
   }
   return errors.sort((left, right) => left.path.localeCompare(right.path) || left.code.localeCompare(right.code));
 }
+
