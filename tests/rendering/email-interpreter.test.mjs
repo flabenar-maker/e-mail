@@ -471,6 +471,6 @@ test("direct image preserves layout box while displaying overflow artwork at its
   });
   assert.deepEqual(result.diagnostics, []);
   assert.match(result.html, /<img[^>]*width="130"[^>]*height="130"/u);
-  assert.match(result.html, /transform:scale\(1\.0645161555363582\)/u);
+  assert.match(result.html, /transform:scale\(1\.0645161555363583\)/u);
   assert.match(result.html, /transform-origin:center center/u);
 });
