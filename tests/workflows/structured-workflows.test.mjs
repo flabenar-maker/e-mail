@@ -25,12 +25,12 @@ async function canonicalWorkflow(workflowId) {
   return loadWorkflowRegistry({ repoRoot, workflowId });
 }
 
-test("manifest declares a partial email-only structured workflow cutover", async () => {
+test("canonical manifest keeps structured workflows paused", async () => {
   const manifest = await loadSystemManifest({ repoRoot });
 
   assert.equal(manifest.schema_version, "1.2.0");
   assert.deepEqual(manifest.structured_workflows, {
-    status: "partial",
+    status: "shadow",
     schema_source_id: "workflows-schema",
     entries: [
       {
@@ -42,13 +42,11 @@ test("manifest declares a partial email-only structured workflow cutover", async
   });
   const emailRoutes = manifest.routes.filter(({ id }) => id.startsWith("email-"));
   assert.deepEqual(emailRoutes.map(({ id }) => id), ["email-new-build", "email-continue-fix"]);
-  assert.equal(emailRoutes.every(({ workflow_source_id }) => workflow_source_id === "workflow-email-build"), true);
-  assert.equal(manifest.routes.filter(({ id }) => !id.startsWith("email-")).every(({ workflow_source_id }) => workflow_source_id === "workflow-paused"), true);
-  for (const profile of manifest.bundle_profiles.filter(({ id }) => id.startsWith("email-"))) {
-    assert.equal(profile.generated_bundle.status, "structured-active");
+  assert.equal(manifest.routes.every(({ workflow_source_id }) => workflow_source_id === "workflow-paused"), true);
+  for (const profile of manifest.bundle_profiles) {
+    assert.equal(profile.generated_bundle.status, "structured-shadow");
     assert.deepEqual(profile.generated_bundle.static_source_ids, profile.source_ids);
-    assert.equal(profile.source_ids.includes("workflow-paused"), false);
-    assert.equal(profile.source_ids.includes("workflow-email-build"), true);
+    assert.equal(profile.source_ids.includes("workflow-paused"), true);
   }
 });
 
@@ -59,7 +57,7 @@ test("loads exact maintenance and email workflow registries", async () => {
   assert.equal(maintenance.schema_version, "1.0.0");
   assert.equal(maintenance.workflow.id, "library-maintenance");
   assert.equal(maintenance.workflow.status, "shadow");
-  assert.equal(email.workflow.status, "active");
+  assert.equal(email.workflow.status, "shadow");
   assert.deepEqual(
     maintenance.workflow.modes.map(({ id }) => id),
     ["read-only", "write"],

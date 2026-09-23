@@ -98,12 +98,16 @@ function replaceWorkflowSource(manifest, routeId, sourceId) {
 }
 
 async function activateEmailRoutesExceptTypography(root, manifest) {
+  await activateEmailRoutes(root, manifest, { includeTypography: false });
+}
+
+async function activateEmailRoutes(root, manifest, { includeTypography = true } = {}) {
   manifest.structured_workflows.status = "partial";
   for (const routeId of ["email-new-build", "email-continue-fix"]) {
     replaceWorkflowSource(manifest, routeId, "workflow-email-build");
     manifest.bundle_profiles.find(({ id }) => id === routeId).generated_bundle.status = "structured-active";
   }
-  await Promise.all([
+  const dependencies = [
     ["data/workflows/email-build.yaml", "workflow"],
     ["data/components/shared.yaml", "registry"],
     ["data/components/marketing.yaml", "registry"],
@@ -112,16 +116,18 @@ async function activateEmailRoutesExceptTypography(root, manifest) {
     ["data/foundations/assets.yaml", "foundation"],
     ["data/foundations/rendering.yaml", "foundation"],
     ["data/renderers/registry.yaml", "registry"],
-  ].map(([path, section]) => writeStatusFixture(root, path, (document) => {
+  ];
+  if (includeTypography) dependencies.push(["data/foundations/typography.yaml", "foundation"]);
+  await Promise.all(dependencies.map(([path, section]) => writeStatusFixture(root, path, (document) => {
     document[section].status = "active";
   })));
 }
 async function activateAllRoutes(root, manifest) {
   manifest.structured_workflows.status = "active";
   for (const route of manifest.routes) {
-    if (route.workflow_source_id === "workflow-paused") {
-      route.workflow_source_id = "workflow-library-maintenance";
-    }
+    route.workflow_source_id = route.id.startsWith("email-")
+      ? "workflow-email-build"
+      : "workflow-library-maintenance";
     const profile = manifest.bundle_profiles.find(
       ({ id }) => id === route.bundle_profile_id,
     );
@@ -137,17 +143,14 @@ async function activateAllRoutes(root, manifest) {
   for (const profile of manifest.bundle_profiles) {
     profile.generated_bundle.status = "structured-active";
   }
-  await Promise.all([
-    writeStatusFixture(root, "data/workflows/email-build.yaml", (document) => {
-      document.workflow.status = "active";
-    }),
-    writeStatusFixture(root, "data/workflows/library-maintenance.yaml", (document) => {
-      document.workflow.status = "active";
-    }),
-  ]);
+  await activateEmailRoutes(root, manifest);
+  manifest.structured_workflows.status = "active";
+  await writeStatusFixture(root, "data/workflows/library-maintenance.yaml", (document) => {
+    document.workflow.status = "active";
+  });
 }
 
-test("email routes deliver model assembly material to the workflow steps that consume it", async () => {
+test("email routes deliver model assembly material to the workflow steps that consume it", async (t) => {
   const sourceDefinitions = [
     {
       id: "email-model-assembly-standard",
@@ -173,8 +176,12 @@ test("email routes deliver model assembly material to the workflow steps that co
     ["email-continue-fix", "continue-fix-design", [], ["mobile", "desktop"]],
   ];
 
+  const fixture = await systemFixture(t);
+  const manifest = await loadSystemManifest({ repoRoot: fixture.root });
+  await activateEmailRoutes(fixture.root, manifest);
+  await writeManifest(fixture.root, manifest);
   for (const [routeId, workflowMode, candidates, viewports] of routeRequests) {
-    const result = await resolveSkillContext({ repoRoot, routeId, workflowMode, candidates, viewports });
+    const result = await resolveSkillContext({ repoRoot: fixture.root, routeId, workflowMode, candidates, viewports });
     assert.equal(result.status, "resolved", routeId);
     const steps = new Map(result.workflow.steps.map((step) => [step.id, step]));
     for (const source of sourceDefinitions) {
@@ -184,7 +191,7 @@ test("email routes deliver model assembly material to the workflow steps that co
       assert.equal(delivered[0].path, source.path, `${routeId}/${source.id} path`);
       assert.equal(
         delivered[0].content,
-        await readFile(join(repoRoot, source.path), "utf8"),
+        await readFile(join(fixture.root, source.path), "utf8"),
         `${routeId}/${source.id} content`,
       );
       for (const stepId of source.stepIds[routeId]) {
@@ -194,10 +201,14 @@ test("email routes deliver model assembly material to the workflow steps that co
   }
 });
 
-test("technical and read-only email resolution has no Figma input prerequisite", async () => {
+test("technical and read-only email resolution has no Figma input prerequisite", async (t) => {
+  const fixture = await systemFixture(t);
+  const manifest = await loadSystemManifest({ repoRoot: fixture.root });
+  await activateEmailRoutes(fixture.root, manifest);
+  await writeManifest(fixture.root, manifest);
   for (const workflowMode of ["continue-fix-technical", "read-only"]) {
     const result = await resolveSkillContext({
-      repoRoot,
+      repoRoot: fixture.root,
       routeId: "email-continue-fix",
       workflowMode,
       candidates: [],
@@ -248,9 +259,13 @@ test("explicit email activation still blocks when typography status is absent", 
   assert.notEqual(result.status, "resolved");
   assert.ok(result.blockers.some(({ code, path }) => code === "SKILL_ROUTE_STATUS_INACTIVE" && path === "/typography"));
 });
-test("new-build preserves complete resolved contracts while declaring model handoff evidence", async () => {
+test("new-build preserves complete resolved contracts while declaring model handoff evidence", async (t) => {
+  const fixture = await systemFixture(t);
+  const manifest = await loadSystemManifest({ repoRoot: fixture.root });
+  await activateEmailRoutes(fixture.root, manifest);
+  await writeManifest(fixture.root, manifest);
   const result = await resolveSkillContext({
-    repoRoot,
+    repoRoot: fixture.root,
     routeId: "email-new-build",
     workflowMode: "new-build",
     candidates: [{ id: "banner-hero" }],
@@ -293,9 +308,13 @@ test("new-build preserves complete resolved contracts while declaring model hand
   ]) assert.ok(render.required_inputs.includes(input), `render/${input}`);
 });
 
-test("design fixes pass instance inputs without requiring conditional asset evidence", async () => {
+test("design fixes pass instance inputs without requiring conditional asset evidence", async (t) => {
+  const fixture = await systemFixture(t);
+  const manifest = await loadSystemManifest({ repoRoot: fixture.root });
+  await activateEmailRoutes(fixture.root, manifest);
+  await writeManifest(fixture.root, manifest);
   const result = await resolveSkillContext({
-    repoRoot,
+    repoRoot: fixture.root,
     routeId: "email-continue-fix",
     workflowMode: "continue-fix-design",
     viewports: ["mobile", "desktop"],
@@ -401,6 +420,7 @@ test("skill resolution cannot bypass incoherent partial email-cutover topology",
   for (const [name, mutate] of cases) {
     const fixture = await systemFixture(t);
     const manifest = await loadSystemManifest({ repoRoot: fixture.root });
+    await activateEmailRoutes(fixture.root, manifest);
     mutate(manifest);
     await writeManifest(fixture.root, manifest);
     for (const routeId of ["email-new-build", "email-continue-fix"]) {
@@ -434,6 +454,9 @@ test("active email routes refuse every shadow status dependency", async (t) => {
   ];
   await Promise.all(cases.map(async ([dependency, mutate]) => {
     const fixture = await systemFixture(t);
+    const manifest = await loadSystemManifest({ repoRoot: fixture.root });
+    await activateEmailRoutes(fixture.root, manifest);
+    await writeManifest(fixture.root, manifest);
     await mutate(fixture.root);
     const results = await Promise.all(["email-new-build", "email-continue-fix"].map(async (routeId) => [
       routeId,
@@ -449,8 +472,7 @@ test("active email routes refuse every shadow status dependency", async (t) => {
 test("email workflow resolves every structured mode without changing output artifacts", async (t) => {
   const fixture = await systemFixture(t);
   const manifest = await loadSystemManifest({ repoRoot: fixture.root });
-  replaceWorkflowSource(manifest, "email-new-build", "workflow-email-build");
-  replaceWorkflowSource(manifest, "email-continue-fix", "workflow-email-build");
+  await activateEmailRoutes(fixture.root, manifest);
   await writeManifest(fixture.root, manifest);
   const snapshotBeforeResolution = await fixtureSnapshot(fixture.root);
 

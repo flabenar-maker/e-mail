@@ -49,6 +49,22 @@ async function mutateFixtureManifest(root, mutate) {
   return manifest;
 }
 
+function activateEmailCutover(manifest) {
+  manifest.structured_workflows.status = "partial";
+  for (const routeId of ["email-new-build", "email-continue-fix"]) {
+    const route = manifest.routes.find(({ id }) => id === routeId);
+    const profile = manifest.bundle_profiles.find(({ id }) => id === route.bundle_profile_id);
+    route.workflow_source_id = "workflow-email-build";
+    profile.generated_bundle.status = "structured-active";
+    profile.source_ids = profile.source_ids.filter((id) => id !== "workflow-paused");
+    profile.generated_bundle.static_source_ids = profile.generated_bundle.static_source_ids.filter(
+      (id) => id !== "workflow-paused",
+    );
+    profile.source_ids.push("workflow-email-build");
+    profile.generated_bundle.static_source_ids.push("workflow-email-build");
+  }
+}
+
 test("loads the repository canonical manifest", async () => {
   const manifest = await canonicalManifest();
   assert.equal(manifest.schema_version, "1.2.0");
@@ -1030,13 +1046,14 @@ test("resolves immutable generated definitions and route policy", async () => {
 });
 
 
-test("canonical routes declare exact partial-cutover bundle policies", async () => {
+test("canonical routes remain paused with shadow bundle policies", async () => {
   const manifest = await canonicalManifest();
+  assert.equal(manifest.structured_workflows.status, "shadow");
+  assert.equal(manifest.routes.every(({ workflow_source_id }) => workflow_source_id === "workflow-paused"), true);
   for (const profile of manifest.bundle_profiles) {
     assert.deepEqual(profile.generated_bundle.static_source_ids, profile.source_ids);
-    const email = ["email-new-build", "email-continue-fix"].includes(profile.id);
-    assert.equal(profile.generated_bundle.status, email ? "structured-active" : "structured-shadow");
-    assert.equal(profile.generated_bundle.static_source_ids.includes("workflow-paused"), !email);
+    assert.equal(profile.generated_bundle.status, "structured-shadow");
+    assert.equal(profile.generated_bundle.static_source_ids.includes("workflow-paused"), true);
   }
   assert.deepEqual(
     manifest.generated_docs.map(({ id, output_source_id }) => ({
@@ -1123,7 +1140,10 @@ test("semantic validation rejects incoherent partial email-cutover topology", as
 
   for (const [name, mutate] of cases) {
     const root = await validFixture(t);
-    const manifest = await mutateFixtureManifest(root, mutate);
+    const manifest = await mutateFixtureManifest(root, (fixtureManifest) => {
+      activateEmailCutover(fixtureManifest);
+      mutate(fixtureManifest);
+    });
     const errors = await validateManifestSemantics(manifest, root);
     assert.ok(
       errors.some(({ code }) => code === "structured-workflow-status-topology-invalid"),
