@@ -143,3 +143,27 @@ test("rejects a target file whose declared dimensions deform its aspect ratio", 
   assert.equal(result?.status, "blocked");
   assert.ok(result?.issues.some((entry) => entry.code === "contract-ratio-mismatch"));
 });
+test("accepts a rendered Card/Image composite with its own exact-node crop source", async () => {
+  const card = {
+    ...asset,
+    id: "card-image",
+    source_viewport: "desktop",
+    source_mode_id: "rendered-node",
+    export_boundary: { kind: "node", semantic_node_name: "card-image @2x" },
+    pixel_dimensions: { width: 464, height: 296, unit: "px" },
+    aspect_ratio: { width: 232, height: 148 },
+    crop: { mode: "none", position_source: "exact-node-after-overrides" },
+  };
+  const result = await assess({
+    asset: card,
+    evidence: evidence({
+      assetId: "card-image",
+      sourceViewport: "desktop",
+      sourceNodeName: "card-image @2x",
+      outputPixelDimensions: { width: 464, height: 296 },
+      effectiveSourcePixelDimensions: { width: 752, height: 480 },
+      outputHasBakedPresentationRadius: false,
+    }),
+  });
+  assert.equal(result?.status, "ready");
+});
