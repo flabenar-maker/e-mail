@@ -63,7 +63,8 @@ export function assessAssetExport({ asset, evidence, lowResolutionDecision } = {
     issues.push(issue("contract-ratio-mismatch", "The target pixel dimensions deform the declared aspect ratio."));
   }
   const expectedCropSource = asset.crop?.mode === "figma-fill"
-    ? `concrete-${asset.source_viewport}-instance` : "source-raster";
+    ? `concrete-${asset.source_viewport}-instance` :
+    asset.source_mode_id === "rendered-node" ? "exact-node-after-overrides" : "source-raster";
   if (asset.crop?.position_source !== expectedCropSource) {
     issues.push(issue("contract-crop-source-mismatch", "The crop position source disagrees with the selected viewport."));
   }
