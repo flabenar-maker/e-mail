@@ -1,7 +1,7 @@
 schema_version: 1.0.0
 foundation:
   id: assets
-  status: shadow
+  status: active
 
 source_modes:
   - id: image-fill
