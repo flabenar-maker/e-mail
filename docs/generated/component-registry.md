@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: component-registry -->
-<!-- source-digest: sha256:d60e8475b19e3b2e8fc1f738ee470ca03be505b92796a8aa22a944f7eef855ca -->
+<!-- source-digest: sha256:2b0be8fc44aca60eebc2d3d3b9a2ef8de1650df14a748ce7f7eda12cf52c789b -->
 <!-- schema-versions: components=2.1.0, typography=1.0.0, spacing=1.0.0, assets=1.0.0 -->
 # CUPIS component registry
 
@@ -2580,17 +2580,17 @@ RENDER: HYBRID
 
 - Asset contract: `secondary-image`
   - Owner layer: `secondary-image @2x`
-  - Source viewport: `desktop`
+  - Source viewport: `mobile`
   - Source mode: `image-fill`
   - Display mode: `fill-image`
   - Export profile: `jpeg-2x` — JPEG, `.jpg`, scale 2, suffix `@2x`, sRGB
   - Alpha: `none` — `no-alpha`
   - Clipping: `preserve-artwork`
   - Export boundary: `fill` `secondary-image @2x`
-  - Pixel dimensions: 984×696px
+  - Pixel dimensions: 814×517px
   - Raw Figma Fill dimensions: 984×696px
-  - Aspect ratio: 41:29
-  - Crop: `none`; position `source-raster`
+  - Aspect ratio: 296:188
+  - Crop: `figma-fill`; position `concrete-mobile-instance`
   - Background: own fill `preserve`; artificial matte `forbid`
 - Asset usage: `mobile` `/contracts/mobile/root/children/0/children/0` → `secondary-image` as `background-image`
 - Asset usage: `desktop` `/contracts/desktop/root/children/0/children/1` → `secondary-image` as `background-image`

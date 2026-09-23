@@ -38,7 +38,7 @@ test("loads the canonical assets foundation through its strict shape contract", 
   const assets = await loadAssetsFoundation({ repoRoot });
 
   assert.equal(assets.foundation.id, "assets");
-  assert.equal(assets.foundation.status, "shadow");
+  assert.equal(assets.foundation.status, "active");
   assert.deepEqual(
     assets.source_modes.map((item) => item.id),
     ["image-fill", "rendered-node"],

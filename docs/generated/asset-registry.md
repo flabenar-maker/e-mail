@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: asset-registry -->
-<!-- source-digest: sha256:3a6aa5b31a7665b7eb7de9927606adb47ce53770852938622129a23e641aed8b -->
+<!-- source-digest: sha256:fcb1cf59c4414e8d96ce80cbf2824b167244f01d1db13162ea470961a37ab7e7 -->
 <!-- schema-versions: components=2.1.0, assets=1.0.0 -->
 # CUPIS asset registry
 
@@ -11,12 +11,12 @@ General export definitions are listed first. Component-specific choices remain o
 ### IMAGE FILL
 
 - Stable ID: `image-fill`
-- Description: Export the original source raster from the Fill of the concrete Desktop email instance without its container, nested graphics or live HTML.
+- Description: Export the original source raster from the Fill of the concrete contract-selected email instance without its container, nested graphics or live HTML.
 - Contract:
 
 ```json
 {
-  "concrete_desktop_instance_required": true,
+  "concrete_email_instance_required": true,
   "live_html_included": false,
   "own_visible_fill_included": true,
   "parent_fill_included": false,
@@ -29,12 +29,12 @@ General export definitions are listed first. Component-specific choices remain o
 ### RENDERED NODE
 
 - Stable ID: `rendered-node`
-- Description: Export the exact selected node from the concrete Desktop email instance after overrides, including its own visible Fill and visible nested graphics but excluding parent Fill and unrelated layout.
+- Description: Export the exact selected node from the concrete contract-selected email instance after overrides, including its own visible Fill and visible nested graphics but excluding parent Fill and unrelated layout.
 - Contract:
 
 ```json
 {
-  "concrete_desktop_instance_required": true,
+  "concrete_email_instance_required": true,
   "live_html_included": false,
   "own_visible_fill_included": true,
   "parent_fill_included": false,
@@ -331,7 +331,7 @@ General export definitions are listed first. Component-specific choices remain o
 
 ```json
 {
-  "statement": "Export uses the concrete Desktop email instance after its overrides."
+  "statement": "Export uses the concrete contract-selected email instance after its overrides."
 }
 ```
 
@@ -406,7 +406,7 @@ General export definitions are listed first. Component-specific choices remain o
 ```json
 {
   "base_name_source": "nearest-semantic-asset-owner",
-  "concrete_desktop_instance_required": true,
+  "concrete_email_instance_required": true,
   "main_component_export_forbidden": true,
   "placeholder_forbidden": true,
   "scale_suffix_required": true,
@@ -551,9 +551,9 @@ General export definitions are listed first. Component-specific choices remain o
 - `banner-secondary` → `secondary-image @2x` → `image-fill` → `fill-image` → `jpeg-2x` → `none`
   - Asset contract ID: `secondary-image`
   - Export boundary: `fill` / `secondary-image @2x`
-  - Pixel dimensions: 984×696px
-  - Aspect ratio: 41:29
-  - Crop: `none`; position `source-raster`
+  - Pixel dimensions: 814×517px
+  - Aspect ratio: 296:188
+  - Crop: `figma-fill`; position `concrete-mobile-instance`
   - Background: own visible boundary fill `preserve`; artificial matte `forbid`
   - Clipping policy: `preserve-artwork`
 

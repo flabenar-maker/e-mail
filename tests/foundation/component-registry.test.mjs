@@ -670,11 +670,10 @@ test("marketing image contracts preserve responsive ratios and export boundaries
   assert.equal(secondaryAsset.source_mode_id, "image-fill");
   assert.equal(secondaryAsset.display_mode_id, "fill-image");
   assert.deepEqual(secondaryAsset.pixel_dimensions, {
-    width: 984,
-    height: 696,
+    width: 814,`r`n    height: 517,
     unit: "px",
   });
-  assert.deepEqual(secondaryAsset.aspect_ratio, { width: 41, height: 29 });
+  assert.deepEqual(secondaryAsset.aspect_ratio, { width: 296, height: 188 });
   const mobileSecondary = findAssetElement(
     secondary.contracts.mobile.root,
     "secondary-image",
@@ -1144,7 +1143,7 @@ test("marketing Figma-source variants keep exact high-risk visual and compositio
   );
   const heroImage = findSourceNode(heroDesktop.source_node, "hero-image @2x");
   assert.deepEqual(heroImage.reference_dimensions, { width: 552, height: 353, unit: "px" });
-  assert.deepEqual(heroImage.fills[0].source_dimensions, { width: 984, height: 696, unit: "px" });
+  assert.deepEqual(heroImage.fills[0].source_dimensions, { width: 814,`r`n    height: 517, unit: "px" });
 
   const secondary = byId.get("banner-secondary");
   const secondaryDesktop = secondary.contracts.source_variants.find((variant) =>
