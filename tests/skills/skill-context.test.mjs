@@ -237,23 +237,21 @@ test("canonical maintenance routes resolve one paused shadow context", async () 
   ]);
 });
 
-test("canonical repository keeps every route paused until activation", async () => {
+test("canonical email cutover resolves only email routes", async () => {
   const manifest = await loadSystemManifest({ repoRoot });
-  assert.equal(manifest.structured_workflows.status, "shadow");
+  const emailRouteIds = new Set(["email-new-build", "email-continue-fix"]);
+
   for (const route of manifest.routes) {
-    const profile = manifest.bundle_profiles.find(({ id }) => id === route.bundle_profile_id);
-    const bundle = profile.generated_bundle;
     const result = await resolveSkillContext({
       repoRoot,
-      routeId: route.id,
-      candidates: bundle.component_selection === "required" ? [{ id: "banner-hero" }] : [],
-      viewports: bundle.viewport_selection === "none" ? [] : ["mobile", "desktop"],
-      foundationIds: bundle.required_foundation_ids,
+      ...(emailRouteIds.has(route.id) ? activeEmailRequest(route.id) : { routeId: route.id }),
     });
-    assert.equal(route.workflow_source_id, "workflow-paused", route.id);
-    assert.equal(profile.generated_bundle.status, "structured-shadow", route.id);
-    assert.equal(result.status, "paused", route.id);
-    assert.deepEqual(result.blockers.map(({ code }) => code), ["SKILL_ROUTE_PAUSED"], route.id);
+    if (emailRouteIds.has(route.id)) {
+      assert.equal(result.status, "resolved", route.id);
+    } else {
+      assert.equal(result.status, "paused", route.id);
+      assert.deepEqual(result.blockers.map(({ code }) => code), ["SKILL_ROUTE_PAUSED"], route.id);
+    }
   }
 });
 

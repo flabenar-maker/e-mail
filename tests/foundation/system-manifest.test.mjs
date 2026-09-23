@@ -1046,39 +1046,38 @@ test("resolves immutable generated definitions and route policy", async () => {
 });
 
 
-test("canonical routes remain paused with shadow bundle policies", async () => {
+test("canonical manifest activates only email routes with their required dependencies", async () => {
   const manifest = await canonicalManifest();
-  assert.equal(manifest.structured_workflows.status, "shadow");
-  assert.equal(manifest.routes.every(({ workflow_source_id }) => workflow_source_id === "workflow-paused"), true);
-  for (const profile of manifest.bundle_profiles) {
-    assert.deepEqual(profile.generated_bundle.static_source_ids, profile.source_ids);
-    assert.equal(profile.generated_bundle.status, "structured-shadow");
-    assert.equal(profile.generated_bundle.static_source_ids.includes("workflow-paused"), true);
+  const emailRouteIds = new Set(["email-new-build", "email-continue-fix"]);
+  assert.equal(manifest.structured_workflows.status, "partial");
+
+  for (const route of manifest.routes) {
+    const profile = manifest.bundle_profiles.find(({ id }) => id === route.bundle_profile_id);
+    if (emailRouteIds.has(route.id)) {
+      assert.equal(route.workflow_source_id, "workflow-email-build", route.id);
+      assert.equal(profile.generated_bundle.status, "structured-active", route.id);
+      assert.equal(profile.source_ids.includes("workflow-paused"), false, route.id);
+      assert.equal(profile.generated_bundle.static_source_ids.includes("workflow-paused"), false, route.id);
+    } else {
+      assert.equal(route.workflow_source_id, "workflow-paused", route.id);
+      assert.equal(profile.generated_bundle.status, "structured-shadow", route.id);
+    }
   }
-  assert.deepEqual(
-    manifest.generated_docs.map(({ id, output_source_id }) => ({
-      id,
-      output_source_id,
-    })),
-    [
-      {
-        id: "component-registry",
-        output_source_id: "generated-component-registry",
-      },
-      {
-        id: "typography-registry",
-        output_source_id: "generated-typography-registry",
-      },
-      {
-        id: "asset-registry",
-        output_source_id: "generated-asset-registry",
-      },
-      {
-        id: "naming-reference",
-        output_source_id: "generated-naming-reference",
-      },
-    ],
-  );
+
+  for (const [path, section] of [
+    ["data/workflows/email-build.yaml", "workflow"],
+    ["data/components/shared.yaml", "registry"],
+    ["data/components/marketing.yaml", "registry"],
+    ["data/components/service.yaml", "registry"],
+    ["data/foundations/typography.yaml", "foundation"],
+    ["data/foundations/spacing.yaml", "foundation"],
+    ["data/foundations/assets.yaml", "foundation"],
+    ["data/foundations/rendering.yaml", "foundation"],
+    ["data/renderers/registry.yaml", "registry"],
+  ]) {
+    const document = await readStrictYaml(join(repoRoot, path));
+    assert.equal(document[section].status, "active", path);
+  }
 });
 
 test("semantic validation rejects incoherent partial email-cutover topology", async (t) => {
