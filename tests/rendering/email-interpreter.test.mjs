@@ -447,3 +447,30 @@ test("a shared table splits around viewport-specific background cells", async ()
   assert.doesNotMatch(result.html, /<td[^>]*><td background=/u);
   assert.doesNotMatch(result.html, /<tr><td[^>]*><div[^>]*><td background=/u);
 });
+
+test("direct image preserves layout box while displaying overflow artwork at its Figma size", async () => {
+  const { renderContractTree } = await interpreter();
+  const image = element({
+    id: "qr",
+    mode: "direct-image",
+    assetContractId: "qr-code",
+    facts: [
+      { id: "reference-size", value: { type: "dimensions", width: 130, height: 130, unit: "px" } },
+      { id: "visible-artwork-size", value: { type: "dimensions", width: 138.38710021972656, height: 138.38710021972656, unit: "px" } },
+    ],
+    contentSlots: [{ id: "alt", type: "alt-text", required: true }],
+  });
+  const root = element({ id: "root", children: [image] });
+  const result = renderContractTree({
+    component: component(root),
+    coverage,
+    content: { qr: { alt: { type: "alt-text", value: "QR code" } } },
+    assets: { "qr-code": { src: "images/qr-code.png" } },
+    properties: {},
+    foundations: { rendering },
+  });
+  assert.deepEqual(result.diagnostics, []);
+  assert.match(result.html, /<img[^>]*width="130"[^>]*height="130"/u);
+  assert.match(result.html, /transform:scale\(1\.0645161555363582\)/u);
+  assert.match(result.html, /transform-origin:center center/u);
+});
