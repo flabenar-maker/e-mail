@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: component-registry -->
-<!-- source-digest: sha256:f853865b5728cf5e3aa1bcac8d1d41193517d8eb3bd76a3c543fbcb373f1b4cd -->
+<!-- source-digest: sha256:20fce1d2fda37bea0eb277dd5836f898eb992ea2b93ad8f9eb260bde629388aa -->
 <!-- schema-versions: components=2.1.0, typography=1.0.0, spacing=1.0.0, assets=1.0.0 -->
 # CUPIS component registry
 
@@ -1242,6 +1242,7 @@ RENDER: HTML
           - Fact `layout-align`: `stretch`; provenance: `figma-literal` at `961:37514`
       - `root-content-area-text-qr-qr-code` — role `qr-code`; render `direct-image`; visibility `always`; asset `qr-code`
         - Fact `reference-size`: `130×130px`; provenance: `figma-literal` at `961:37515`
+        - Fact `visible-artwork-size`: `138.38710021972656×138.38710021972656px`; provenance: `figma-literal` at `961:37516`
         - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `961:37515`
         - Fact `layout-gap`: `8.676355361938477px`; provenance: `figma-literal` at `961:37515`
         - Fact `padding-top`: `0px`; provenance: `figma-literal` at `961:37515`
@@ -1655,10 +1656,10 @@ RENDER: HTML
   - Source mode: `rendered-node`
   - Display mode: `direct-image`
   - Export profile: `png-4x` — PNG, `.png`, scale 4, suffix `@4x`, sRGB
-  - Alpha: `opaque` — `fully-opaque`
+  - Alpha: `source` — `preserve-source`
   - Clipping: `preserve-artwork`
   - Export boundary: `node` `qr-code @4x`
-  - Pixel dimensions: 520×520px
+  - Pixel dimensions: 554×554px
   - Aspect ratio: 130:130
   - Crop: `none`; position `exact-node-after-overrides`
   - Background: own fill `preserve`; artificial matte `forbid`

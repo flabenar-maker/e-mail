@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: asset-registry -->
-<!-- source-digest: sha256:0633fb481e4d352b30d0e2bf7af5a9c777baedb8b9129c8da64f4a5e5a345c31 -->
+<!-- source-digest: sha256:6ae7404b9a8e8f92617c5a3bb779c950178305f0c4d7fedc57ee8efd9aae5085 -->
 <!-- schema-versions: components=2.1.0, assets=1.0.0 -->
 # CUPIS asset registry
 
@@ -499,10 +499,10 @@ General export definitions are listed first. Component-specific choices remain o
   - Crop: `none`; position `exact-node-after-overrides`
   - Background: own visible boundary fill `preserve`; artificial matte `forbid`
   - Clipping policy: `preserve-artwork`
-- `banner-app-download` → `qr-code @4x` → `rendered-node` → `direct-image` → `png-4x` → `opaque`
+- `banner-app-download` → `qr-code @4x` → `rendered-node` → `direct-image` → `png-4x` → `source`
   - Asset contract ID: `qr-code`
   - Export boundary: `node` / `qr-code @4x`
-  - Pixel dimensions: 520×520px
+  - Pixel dimensions: 554×554px
   - Aspect ratio: 130:130
   - Crop: `none`; position `exact-node-after-overrides`
   - Background: own visible boundary fill `preserve`; artificial matte `forbid`
