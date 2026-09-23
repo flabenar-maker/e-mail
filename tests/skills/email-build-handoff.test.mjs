@@ -134,12 +134,20 @@ function buildInstance(assets, componentId, instanceId, blueprint = null) {
 
   const nestedMap = new Map();
   for (const viewport of VIEWPORTS) {
+    const occurrences = new Map();
     for (const [elementId, nestedId] of byViewport.get(viewport).nested) {
-      nestedMap.set(elementId, nestedId);
+      const ordinal = occurrences.get(nestedId) ?? 0;
+      occurrences.set(nestedId, ordinal + 1);
+      const key = `${nestedId}\0${ordinal}`;
+      const entry = nestedMap.get(key) ?? { nestedId, elementIds: {} };
+      entry.elementIds[viewport] = elementId;
+      nestedMap.set(key, entry);
     }
   }
-  const nested_components = [...nestedMap].map(([element_id, nestedId], index) => ({
-    element_id,
+  const nested_components = [...nestedMap.values()].map(({ nestedId, elementIds }, index) => ({
+    ...(elementIds.mobile && elementIds.desktop && elementIds.mobile !== elementIds.desktop
+      ? { element_ids: elementIds }
+      : { element_id: elementIds.mobile ?? elementIds.desktop }),
     instance: buildInstance(assets, nestedId, `${instanceId}-nested-${index}`, blueprint),
   }));
 
