@@ -63385,17 +63385,17 @@
             "semantic_node_name": "secondary-image @2x"
           },
           "pixel_dimensions": {
-            "width": 592,
-            "height": 376,
+            "width": 984,
+            "height": 696,
             "unit": "px"
           },
           "aspect_ratio": {
-            "width": 296,
-            "height": 188
+            "width": 41,
+            "height": 29
           },
           "crop": {
-            "mode": "figma-fill",
-            "position_source": "concrete-desktop-instance"
+            "mode": "none",
+            "position_source": "source-raster"
           },
           "background": {
             "own_visible_boundary_fill": "preserve",
@@ -63757,7 +63757,7 @@
                   {
                     "id": "root-card-secondary-image",
                     "semantic_role": "secondary-image",
-                    "render_mode": "direct-image",
+                    "render_mode": "background-image",
                     "visibility": {
                       "mode": "always"
                     },
@@ -63846,12 +63846,11 @@
                         "id": "height-behavior",
                         "value": {
                           "type": "keyword",
-                          "value": "auto"
+                          "value": "proportional-cover"
                         },
                         "provenance": {
-                          "kind": "figma-description",
-                          "node_id": "337:4870",
-                          "section": "IMAGE ASSET"
+                          "kind": "figma-literal",
+                          "node_id": "11:1184"
                         }
                       },
                       {
@@ -63875,13 +63874,6 @@
                           "kind": "figma-literal",
                           "node_id": "11:1184"
                         }
-                      }
-                    ],
-                    "content_slots": [
-                      {
-                        "id": "alt",
-                        "type": "alt-text",
-                        "required": true
                       }
                     ],
                     "children": [],
