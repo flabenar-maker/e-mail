@@ -117,20 +117,20 @@ bundle_profiles:
       allowed_foundation_ids: []
       required_foundation_ids: []
   - id: email-new-build
-    source_ids: [repository-readme, email-rendering-standard, email-model-assembly-standard, email-model-schema, component-contract-standard, typography-standard, asset-export-standard, workflow-paused]
+    source_ids: [repository-readme, figma-library-standard, email-rendering-standard, email-model-assembly-standard, email-model-schema, component-contract-standard, typography-standard, asset-export-standard, rendering-foundation, renderer-registry, workflow-paused]
     generated_bundle:
       status: structured-shadow
-      static_source_ids: [repository-readme, email-rendering-standard, email-model-assembly-standard, email-model-schema, component-contract-standard, typography-standard, asset-export-standard, workflow-paused]
+      static_source_ids: [repository-readme, figma-library-standard, email-rendering-standard, email-model-assembly-standard, email-model-schema, component-contract-standard, typography-standard, asset-export-standard, rendering-foundation, renderer-registry, workflow-paused]
       component_selection: required
       viewport_selection: both
       foundation_selection: referenced
       allowed_foundation_ids: [typography, spacing, assets]
       required_foundation_ids: []
   - id: email-continue-fix
-    source_ids: [repository-readme, email-rendering-standard, email-model-assembly-standard, email-model-schema, component-contract-standard, typography-standard, asset-export-standard, workflow-paused]
+    source_ids: [repository-readme, figma-library-standard, email-rendering-standard, email-model-assembly-standard, email-model-schema, component-contract-standard, typography-standard, asset-export-standard, rendering-foundation, renderer-registry, workflow-paused]
     generated_bundle:
       status: structured-shadow
-      static_source_ids: [repository-readme, email-rendering-standard, email-model-assembly-standard, email-model-schema, component-contract-standard, typography-standard, asset-export-standard, workflow-paused]
+      static_source_ids: [repository-readme, figma-library-standard, email-rendering-standard, email-model-assembly-standard, email-model-schema, component-contract-standard, typography-standard, asset-export-standard, rendering-foundation, renderer-registry, workflow-paused]
       component_selection: optional
       viewport_selection: both-when-components
       foundation_selection: referenced
