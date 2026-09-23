@@ -175,13 +175,13 @@
       ],
       "live_figma": {
         "file_key": "8zka5bHkcrJVK9I9dKjnhC",
-        "node_id": "326:6618",
+        "node_id": "11:1184",
         "node_name": "secondary-image @2x",
-        "variant": "Viewport=Desktop",
-        "viewport": "desktop",
+        "variant": "Viewport=Mobile",
+        "viewport": "mobile",
         "geometry": {
-          "width": 252,
-          "height": 238
+          "width": 296,
+          "height": 188
         },
         "own_visible_fill": true,
         "own_fill_type": "IMAGE",
@@ -207,7 +207,7 @@
           "kind": "fill",
           "semantic_node_name": "secondary-image @2x"
         },
-        "source_viewport": "desktop",
+        "source_viewport": "mobile",
         "owner_layer_name": "secondary-image @2x"
       },
       "source_boundary": {

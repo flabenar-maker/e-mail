@@ -47,9 +47,9 @@ const expectedRepresentatives = {
   "secondary-image-fill-jpeg-wrapper-crop": {
     selection: { component_id: "banner-secondary", asset_contract_id: "secondary-image" },
     foundation_selection: { sourceModeId: "image-fill", displayModeId: "fill-image", exportProfileId: "jpeg-2x", expectedAlphaId: "none", clippingPolicyId: "preserve-artwork" },
-    component_asset: { owner_layer_name: "secondary-image @2x", source_viewport: "desktop", export_boundary: { kind: "fill", semantic_node_name: "secondary-image @2x" } },
+    component_asset: { owner_layer_name: "secondary-image @2x", source_viewport: "mobile", export_boundary: { kind: "fill", semantic_node_name: "secondary-image @2x" } },
     source_boundary: { source_content: "source-raster-only", concrete_email_instance_required: true, own_visible_fill_included: true, visible_nested_graphics_included: false, parent_fill_included: false, unrelated_layout_included: false, live_html_included: false },
-    live_figma: { file_key: "8zka5bHkcrJVK9I9dKjnhC", node_id: "326:6618", node_name: "secondary-image @2x", variant: "Viewport=Desktop", viewport: "desktop", geometry: { width: 252, height: 238 }, own_visible_fill: true, own_fill_type: "IMAGE", visible_nested_graphics: false, parent_fill_included: false, presentation: { clips_content: true, corner_radius: 0 }, export_settings: [{ format: "PNG", suffix: "@2x", scale: 2, contents_only: true }] },
+    live_figma: { file_key: "8zka5bHkcrJVK9I9dKjnhC", node_id: "11:1184", node_name: "secondary-image @2x", variant: "Viewport=Mobile", viewport: "mobile", geometry: { width: 296, height: 188 }, own_visible_fill: true, own_fill_type: "IMAGE", visible_nested_graphics: false, parent_fill_included: false, presentation: { clips_content: true, corner_radius: 0 }, export_settings: [{ format: "PNG", suffix: "@2x", scale: 2, contents_only: true }] },
     boundary_status: "confirmed", build_time_gate_id: "concrete-desktop-instance-overrides",
   },
   "card-image-rendered-jpeg-neutralized": {

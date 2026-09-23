@@ -1144,8 +1144,7 @@ test("marketing Figma-source variants keep exact high-risk visual and compositio
   );
   const heroImage = findSourceNode(heroDesktop.source_node, "hero-image @2x");
   assert.deepEqual(heroImage.reference_dimensions, { width: 552, height: 353, unit: "px" });
-  assert.deepEqual(heroImage.fills[0].source_dimensions, { width: 814,
-    height: 517, unit: "px" });
+  assert.deepEqual(heroImage.fills[0].source_dimensions, { width: 984, height: 696, unit: "px" });
 
   const secondary = byId.get("banner-secondary");
   const secondaryDesktop = secondary.contracts.source_variants.find((variant) =>
