@@ -1,4 +1,5 @@
 import { SystemValidationError } from "./diagnostics.mjs";
+import { selectVariantRoot } from "./email-interpreter.mjs";
 
 const VIEWPORTS = ["mobile", "desktop"];
 
@@ -32,6 +33,20 @@ function findElement(root, id) {
     if (found) return found;
   }
   return null;
+}
+
+function selectedVariantId(record, viewport, axes, fallback) {
+  const expected = Object.entries(axes ?? {});
+  if (expected.length === 0) return fallback;
+  const matches = (record?.variants ?? []).filter((variant) => {
+    const variantAxes = variant.axes ?? [];
+    return variantAxes.some(({ name, value }) =>
+      name === "Viewport" && String(value).toLowerCase() === viewport) &&
+      variantAxes.filter(({ name }) => name !== "Viewport").length === expected.length &&
+      expected.every(([name, value]) => variantAxes.some((axis) =>
+        axis.name === name && String(axis.value).toLowerCase() === String(value).toLowerCase()));
+  });
+  return matches.length === 1 ? matches[0].id : null;
 }
 
 function instancesWithPaths(root) {
@@ -145,7 +160,11 @@ export function verifyEmailModelSource({
       if (!parent && readings.selection[viewport].root_node_id !== nodeId) {
         errors.push(issue("EMAIL_SOURCE_SCOPE_MISMATCH", path, `${viewport} selected root differs from the mapped model root.`));
       }
-      if (!observed.variant_id || observed.variant_id !== instance.variants?.[viewport]) {
+      const resolvedRecord = resolvedContracts.get(instance.component_id);
+      const expectedVariantId = selectedVariantId(
+        resolvedRecord, viewport, instance.variant_axes?.[viewport], instance.variants?.[viewport],
+      );
+      if (!observed.variant_id || observed.variant_id !== expectedVariantId) {
         errors.push(issue("EMAIL_SOURCE_VARIANT_MISMATCH", path, `${instance.instance_id}: ${viewport} variant differs from the selected Figma instance.`));
       }
       const expectedParent = parent ? mappedInstances.get(parent.instance_id)?.nodes?.[viewport] : null;
@@ -195,7 +214,8 @@ export function verifyEmailModelSource({
             }
           }
           if (target.origin === "figma") {
-            const contractRoot = resolvedContracts.get(instance.component_id)?.contracts?.[viewport]?.root;
+            const record = resolvedContracts.get(instance.component_id);
+            const contractRoot = selectVariantRoot(record, viewport, instance.variant_axes?.[viewport] ?? {}).root;
             const contractElement = findElement(contractRoot, itemId);
             const contractRuns = contractElement?.facts?.find(({ id }) => id === "styled-text-segments")?.value?.items;
             const sourceRuns = observed.inline_runs;
