@@ -43,11 +43,14 @@ Figma INSTANCE внутри границы изображения не стан�
 | `id`, `metadata` | ID письма, язык и направление текста из подтверждённых входов; это не component facts |
 | `root` | Корневой model instance |
 | `instance_id`, `component_id`, `variants` | ID конкретного экземпляра, зарегистрированный компонент и селекторы Mobile/Desktop в форме схемы |
+| `variant_axes` | При наличии дополнительных осей варианта — точные значения для Mobile и Desktop из конкретных инстансов (например, `Count: "2"` у NPS) |
 | `property_values` | Записи `property_id + scope + value` с разрешённым типом |
 | `content_values` | Записи `element_id + slot_id + scope + value`, где `value` имеет тип соответствующего content slot |
 | `asset_files` | `asset_contract_id + path` на файлы данного экземпляра |
 | `slots` | `element_id + instances` для упорядоченного наполнения слота |
 | `nested_components` | `element_id + instance` для каждой объявленной вложенной позиции |
+
+Дополнительные оси варианта не кодируются в `variants` и не подменяются свойствами или внешним сходством. Если у выбранного инстанса есть оси помимо `Viewport`, заполняется `variant_axes.mobile` и `variant_axes.desktop` точными строковыми значениями из Figma; выбранный набор должен иметь соответствующий contract root. Для базового варианта без дополнительных осей поле не нужно.
 
 Обязательные массивы присутствуют даже когда пусты. Нельзя добавлять произвольные поля модели, HTML, Figma dumps, contracts, repo SHA, параметры экспорта или verification statuses. Эти данные передаются соответствующими источниками/окружением/handoff.
 

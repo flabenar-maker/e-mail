@@ -153,6 +153,11 @@
         "instance": { "$ref": "#/$defs/instance" }
       }
     },
+    "variantAxisValues": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "type": "string", "minLength": 1 }
+    },
     "instance": {
       "type": "object",
       "additionalProperties": false,
@@ -175,6 +180,15 @@
           "properties": {
             "mobile": { "const": "mobile" },
             "desktop": { "const": "desktop" }
+          }
+        },
+        "variant_axes": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mobile", "desktop"],
+          "properties": {
+            "mobile": { "$ref": "#/$defs/variantAxisValues" },
+            "desktop": { "$ref": "#/$defs/variantAxisValues" }
           }
         },
         "property_values": {

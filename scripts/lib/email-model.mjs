@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import { isAbsolute, posix, win32 } from "node:path";
 
 import { SystemValidationError } from "./diagnostics.mjs";
+import { selectVariantRoot } from "./email-interpreter.mjs";
 import { validateDocumentShape } from "./schema-validation.mjs";
 
 const SUPPORTED_VERSION = "1.1.0";
@@ -473,25 +474,43 @@ function validateInstance(instance, dependencies, errors, path, stack) {
     "nested component",
   );
 
+  const selectedRoots = {};
+  for (const viewport of VIEWPORTS) {
+    if (!record.contracts?.[viewport]?.root) {
+      errors.push(diagnostic(
+        "EMAIL_MODEL_VIEWPORT_CONTRACT_MISSING",
+        path + "/variants/" + viewport,
+        "Component " + record.id + " has no " + viewport + " contract.",
+      ));
+      continue;
+    }
+    const axes = instance.variant_axes?.[viewport] ?? {};
+    if (Object.keys(axes).length > 0 && !(record.contracts?.variant_contracts?.length > 0)) {
+      errors.push(diagnostic(
+        "EMAIL_MODEL_VARIANT_UNRESOLVED",
+        path + "/variant_axes/" + viewport,
+        "Component " + record.id + " has no contract for additional variant axes.",
+      ));
+      continue;
+    }
+    const selected = selectVariantRoot(record, viewport, axes);
+    if (!selected.root || selected.diagnostics.length > 0) {
+      errors.push(diagnostic(
+        "EMAIL_MODEL_VARIANT_UNRESOLVED",
+        path + "/variant_axes/" + viewport,
+        "No exact " + viewport + " contract for " + JSON.stringify(axes) + ".",
+      ));
+      continue;
+    }
+    selectedRoots[viewport] = selected.root;
+  }
   const maps = Object.fromEntries(
-    VIEWPORTS.map((viewport) => [
-      viewport,
-      elementMap(record.contracts?.[viewport]?.root),
-    ]),
+    VIEWPORTS.map((viewport) => [viewport, elementMap(selectedRoots[viewport])]),
   );
   validateDeclaredBindings(instance, record, maps, errors, path);
   for (const viewport of VIEWPORTS) {
-    const root = record.contracts?.[viewport]?.root;
-    if (!root) {
-      errors.push(
-        diagnostic(
-          "EMAIL_MODEL_VIEWPORT_CONTRACT_MISSING",
-          path + "/variants/" + viewport,
-          "Component " + record.id + " has no " + viewport + " contract.",
-        ),
-      );
-      continue;
-    }
+    const root = selectedRoots[viewport];
+    if (!root) continue;
     validateRequiredTree(
       root,
       instance,
