@@ -99,6 +99,9 @@ function replaceWorkflowSource(manifest, routeId, sourceId) {
 
 async function activateEmailRoutesExceptTypography(root, manifest) {
   await activateEmailRoutes(root, manifest, { includeTypography: false });
+  await writeStatusFixture(root, "data/foundations/typography.yaml", (document) => {
+    delete document.foundation.status;
+  });
 }
 
 async function activateEmailRoutes(root, manifest, { includeTypography = true } = {}) {
