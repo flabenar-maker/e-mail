@@ -210,6 +210,22 @@ test("strict schema accepts the complete component registry envelope", async () 
   );
 });
 
+test("instance Fill geometry comes from the concrete source instead of fixed pixels", async () => {
+  const schema = await readSchema();
+  const document = registryEnvelope("marketing", [validRecord()]);
+  const asset = document.components[0].asset_contracts[0];
+  asset.display_mode_id = "fill-image";
+  delete asset.pixel_dimensions;
+  delete asset.aspect_ratio;
+  asset.source_geometry = "concrete-instance-fill";
+  assert.deepEqual(validateComponentRegistryShape(document, schema), []);
+
+  asset.display_mode_id = "direct-image";
+  assert.notDeepEqual(validateComponentRegistryShape(document, schema), []);
+  asset.display_mode_id = "fill-image";
+  asset.pixel_dimensions = { width: 464, height: 296, unit: "px" };
+  assert.notDeepEqual(validateComponentRegistryShape(document, schema), []);
+});
 test("schema rejects unknown root and nested fields", async () => {
   const schema = await readSchema();
   const document = registryEnvelope("marketing", [validRecord()]);
