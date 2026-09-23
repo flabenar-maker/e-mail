@@ -1,6 +1,3 @@
-Warning: truncated output (original token count: 3046)
-Total output lines: 221
-
 import assert from "node:assert/strict";
 import test from "node:test";
 
@@ -38,3 +35,4 @@ test("source variant selection must match the email model", () => {
   input.readings.instances.find(({ node_id }) => node_id === "m-a").variant_id = "desktop";
   assert.ok(codes(input).includes("EMAIL_SOURCE_VARIANT_MISMATCH"));
 });
+
