@@ -16,8 +16,8 @@ function minimalInput() {
   return {
     model: { schema_version: "1.1.0", id: "source-cli", metadata: { language: "ru", direction: "ltr" }, root },
     readings: { capture_id: "capture-1", file_key: "file", captured_at: "2026-09-23T12:00:00Z", complete: true,
-      selection: { mobile: { root_node_id: "m-root", terminal: true, truncated: false },
-        desktop: { root_node_id: "d-root", terminal: true, truncated: false } },
+      selection: { mobile: { root_node_id: "m-root", terminal: true, truncated: false, scope: "full-email" },
+        desktop: { root_node_id: "d-root", terminal: true, truncated: false, scope: "full-email" } },
       instances: [
         { viewport: "mobile", node_id: "m-root", parent_node_id: null, order: 0, relation: null, variant_id: "mobile" },
         { viewport: "desktop", node_id: "d-root", parent_node_id: null, order: 0, relation: null, variant_id: "desktop" },
@@ -58,3 +58,23 @@ test("new-build workflow requires source correspondence after model assembly and
   assert.ok(steps[render].required_inputs.includes("source-comparison"));
 });
 
+
+
+test("production CLI rejects a selected-subtree proof and test-only inputs", async (t) => {
+  const dir = await mkdtemp(join(tmpdir(), "cupis-source-scope-"));
+  t.after(() => rm(dir, { recursive: true, force: true }));
+  const path = join(dir, "source.json");
+  const input = minimalInput();
+  input.readings.selection.mobile.scope = "selected-subtrees";
+  input.readings.selection.desktop.scope = "selected-subtrees";
+  input.authorizedInputs.push({ instance_id: "letter", kind: "content", element_id: "none", slot_id: "text",
+    viewport: "mobile", origin: "test-fixture", value: "example" });
+  await writeFile(path, JSON.stringify(input), "utf8");
+  const blocked = spawnSync(process.execPath, [fileURLToPath(command), path], { encoding: "utf8" });
+  assert.equal(blocked.status, 1);
+  const codes = JSON.parse(blocked.stdout).diagnostics.map(({ code }) => code);
+  assert.ok(codes.includes("EMAIL_SOURCE_SCOPE_INCOMPLETE"));
+  assert.ok(codes.includes("EMAIL_SOURCE_INPUT_UNAUTHORIZED"));
+  const selected = spawnSync(process.execPath, [fileURLToPath(command), path, "--selected-test"], { encoding: "utf8" });
+  assert.equal(selected.status, 0);
+});
