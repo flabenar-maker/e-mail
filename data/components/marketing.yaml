@@ -91426,7 +91426,7 @@
           "source_mode_id": "rendered-node",
           "display_mode_id": "direct-image",
           "export_profile_id": "png-4x",
-          "alpha_mode_id": "opaque",
+          "alpha_mode_id": "source",
           "clipping_policy_id": "preserve-artwork",
           "export_boundary": {
             "kind": "node",
