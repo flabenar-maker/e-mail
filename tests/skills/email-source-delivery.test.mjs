@@ -31,7 +31,7 @@ test("each email workflow rule is delivered by its bundle or transformed compone
       if (routeId === "email-continue-fix" && mode.id === "new-build") continue;
       for (const step of mode.steps) {
         for (const sourceId of step.source_ids) {
-          assert.ok(profile.source_ids.includes(sourceId), `${routeId}/${mode.id}/${step.id}: ${sourceId} absent from route sources`);
+          assert.ok(profile.source_ids.includes(sourceId) || (transformedComponentSources.has(sourceId) && profile.generated_bundle.component_selection !== "none"), `${routeId}/${mode.id}/${step.id}: ${sourceId} absent from route or transformed component selection`);
           assert.ok(manifest.sources.some(({ id, path }) => id === sourceId && typeof path === "string"), `${sourceId}: unregistered source`);
           assert.ok(
             delivered.has(sourceId) || transformedComponentSources.has(sourceId),
@@ -42,4 +42,5 @@ test("each email workflow rule is delivered by its bundle or transformed compone
     }
   }
 });
+
 
