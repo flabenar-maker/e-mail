@@ -8,11 +8,11 @@
   ],
   "build_time_gates": [
     {
-      "id": "concrete-desktop-instance-overrides",
+      "id": "concrete-contract-selected-instance-overrides",
       "status": "unverified",
-      "reason": "The library exposes placeholder component state, not a concrete email instance with marketer overrides.",
+      "reason": "The library exposes placeholder component state, not a concrete contract-selected email instance with marketer overrides.",
       "required": true,
-      "code": "CONCRETE_DESKTOP_INSTANCE_OVERRIDES_UNVERIFIED"
+      "code": "CONCRETE_CONTRACT_SELECTED_INSTANCE_OVERRIDES_UNVERIFIED"
     }
   ],
   "representatives": [
@@ -53,7 +53,7 @@
         "export_settings": []
       },
       "boundary_status": "confirmed",
-      "build_time_gate_id": "concrete-desktop-instance-overrides",
+      "build_time_gate_id": "concrete-contract-selected-instance-overrides",
       "component_asset": {
         "export_boundary": {
           "kind": "node",
@@ -128,7 +128,7 @@
         ]
       },
       "boundary_status": "confirmed",
-      "build_time_gate_id": "concrete-desktop-instance-overrides",
+      "build_time_gate_id": "concrete-contract-selected-instance-overrides",
       "component_asset": {
         "export_boundary": {
           "kind": "fill",
@@ -201,7 +201,7 @@
         ]
       },
       "boundary_status": "confirmed",
-      "build_time_gate_id": "concrete-desktop-instance-overrides",
+      "build_time_gate_id": "concrete-contract-selected-instance-overrides",
       "component_asset": {
         "export_boundary": {
           "kind": "fill",
@@ -273,7 +273,7 @@
         "export_settings": []
       },
       "boundary_status": "confirmed",
-      "build_time_gate_id": "concrete-desktop-instance-overrides",
+      "build_time_gate_id": "concrete-contract-selected-instance-overrides",
       "component_asset": {
         "export_boundary": {
           "kind": "node",
@@ -340,7 +340,7 @@
         "export_settings": []
       },
       "boundary_status": "confirmed",
-      "build_time_gate_id": "concrete-desktop-instance-overrides",
+      "build_time_gate_id": "concrete-contract-selected-instance-overrides",
       "component_asset": {
         "export_boundary": {
           "kind": "node",
@@ -418,7 +418,7 @@
         ]
       },
       "boundary_status": "confirmed",
-      "build_time_gate_id": "concrete-desktop-instance-overrides",
+      "build_time_gate_id": "concrete-contract-selected-instance-overrides",
       "component_asset": {
         "export_boundary": {
           "kind": "node",
@@ -494,7 +494,7 @@
         "own_fill_type": "IMAGE"
       },
       "boundary_status": "confirmed",
-      "build_time_gate_id": "concrete-desktop-instance-overrides",
+      "build_time_gate_id": "concrete-contract-selected-instance-overrides",
       "component_asset": {
         "export_boundary": {
           "kind": "fill",
