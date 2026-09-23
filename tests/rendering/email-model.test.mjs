@@ -276,3 +276,41 @@ test("model variant axes select the exact two-option contract instead of the bas
   value.root.variant_axes.mobile.Count = "4";
   assert.ok(has(validateEmailModelSemantics(value, deps), "EMAIL_MODEL_VARIANT_UNRESOLVED"));
 });
+
+test("one nested model instance can map to different mobile and desktop element IDs", async () => {
+  const value = model();
+  value.root.nested_components = [{
+    element_ids: { mobile: "mobile-status", desktop: "desktop-status" },
+    instance: {
+      instance_id: "status-1", component_id: "test-status",
+      variants: { mobile: "mobile", desktop: "desktop" },
+      property_values: [], content_values: [], asset_files: [], slots: [],
+    },
+  }];
+  assert.deepEqual(await loadErrors(value), []);
+
+  const parent = record();
+  for (const viewport of ["mobile", "desktop"]) {
+    parent.contracts[viewport].root.children.push({
+      id: viewport + "-status", semantic_role: "status",
+      render_mode: "nested-component", component_id: "test-status",
+      visibility: { mode: "always" }, facts: [], children: [],
+    });
+  }
+  const childRoot = {
+    id: "root", semantic_role: "status", render_mode: "presentation-table",
+    visibility: { mode: "always" }, facts: [], children: [],
+  };
+  const status = {
+    id: "test-status", properties: [], asset_contracts: [],
+    contracts: { mobile: { root: structuredClone(childRoot) }, desktop: { root: structuredClone(childRoot) } },
+  };
+  const deps = {
+    componentIndex: { bySystemId: new Map([[parent.id, parent], [status.id, status]]) },
+    rendererRegistry: { coverage: [
+      { component_id: parent.id, mode: "interpreter" },
+      { component_id: status.id, mode: "interpreter" },
+    ] },
+  };
+  assert.deepEqual(validateEmailModelSemantics(value, deps), []);
+});

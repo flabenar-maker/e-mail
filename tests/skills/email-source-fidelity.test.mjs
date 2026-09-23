@@ -300,3 +300,15 @@ test("source variant identity follows the model's exact additional axes", () => 
   input.readings.instances.find(({ node_id }) => node_id === "m-a").variant_id = "mobile-3";
   assert.ok(codes(input).includes("EMAIL_SOURCE_VARIANT_MISMATCH"));
 });
+
+test("one nested instance retains viewport-specific relation IDs", () => {
+  const input = scenario();
+  const block = input.model.root.slots[0].instances[0];
+  block.nested_components[0] = {
+    element_ids: { mobile: "mobile-child", desktop: "desktop-child" },
+    instance: block.nested_components[0].instance,
+  };
+  input.readings.instances.find(({ node_id }) => node_id === "m-a-child").relation.element_id = "mobile-child";
+  input.readings.instances.find(({ node_id }) => node_id === "d-a-child").relation.element_id = "desktop-child";
+  assert.deepEqual(codes(input), []);
+});
