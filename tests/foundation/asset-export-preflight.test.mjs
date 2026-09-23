@@ -25,6 +25,8 @@ function evidence(overrides = {}) {
     sourceNodeName: "secondary-image @2x",
     sourceHash: "source-hash-1",
     sourcePixelDimensions: { width: 984, height: 696 },
+    fillScaleMode: "FILL",
+    imageTransform: [[1, 0, 0], [0, 1, 0]],
     cropRect: { x: 0, y: 35.5135135135, width: 984, height: 624.972972973 },
     outputPixelDimensions: { width: 814, height: 517 },
     outputHasBakedPresentationRadius: false,
@@ -83,12 +85,12 @@ test("low source resolution pauses for a per-email, per-asset decision and recor
     assetId: "hero-image",
     sourceViewport: "desktop",
     sourceNodeName: "hero-image @2x",
-    cropRect: { x: 0, y: 33.1304347826, width: 984, height: 629.739130435 },
+    cropRect: { x: 0, y: 33.3695652174, width: 984, height: 629.260869565 },
     outputPixelDimensions: { width: 1104, height: 706 },
   });
   const pending = await assess({ asset: hero, evidence: heroEvidence });
   assert.equal(pending?.status, "needs-user-decision");
-  assert.deepEqual(pending?.sourceShortfall, { width: 120, height: 76.260869565 });
+  assert.deepEqual(pending?.sourceShortfall, { width: 120, height: 77 });
 
   const unrelated = await assess({
     asset: hero,
