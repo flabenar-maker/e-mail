@@ -662,6 +662,7 @@
       },
       "oneOf": [
         {
+          "type": "object",
           "required": ["pixel_dimensions", "aspect_ratio"],
           "properties": {
             "pixel_dimensions": {},
@@ -670,6 +671,7 @@
           }
         },
         {
+          "type": "object",
           "required": ["source_geometry"],
           "properties": {
             "source_geometry": {},
@@ -683,6 +685,7 @@
               "const": "fill-image"
             },
             "export_boundary": {
+              "type": "object",
               "properties": {
                 "kind": {
                   "const": "fill"
