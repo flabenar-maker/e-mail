@@ -245,3 +245,34 @@ test("semantic validation rejects whitespace-only informative alt text", () => {
     ),
   );
 });
+
+test("model variant axes select the exact two-option contract instead of the base variant", async () => {
+  const value = model();
+  value.root.variant_axes = {
+    mobile: { Count: "2" },
+    desktop: { Count: "2" },
+  };
+  assert.deepEqual(await loadErrors(value), []);
+
+  const component = record();
+  for (const viewport of ["mobile", "desktop"]) {
+    component.contracts[viewport].root.children.push({
+      id: "neutral", semantic_role: "label", render_mode: "html-text",
+      visibility: { mode: "always" }, facts: [],
+      content_slots: [{ id: "text", type: "plain-text", required: true }],
+      children: [],
+    });
+  }
+  component.contracts.variant_contracts = ["mobile", "desktop"].map((viewport) => ({
+    axes: [{ name: "Viewport", value: viewport }, { name: "Count", value: "2" }],
+    root: structuredClone(record().contracts[viewport].root),
+  }));
+  const deps = {
+    componentIndex: { bySystemId: new Map([[component.id, component]]) },
+    rendererRegistry: { coverage: [{ component_id: component.id, mode: "interpreter" }] },
+  };
+  assert.deepEqual(validateEmailModelSemantics(value, deps), []);
+
+  value.root.variant_axes.mobile.Count = "4";
+  assert.ok(has(validateEmailModelSemantics(value, deps), "EMAIL_MODEL_VARIANT_UNRESOLVED"));
+});
