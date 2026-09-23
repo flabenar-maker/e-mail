@@ -140,20 +140,6 @@ test("registry renderer is deterministic, ordered and does not mutate input", as
   );
 });
 
-test("instance Fill geometry is described without inventing fixed raster dimensions", async () => {
-  const { index } = await loadContext();
-  const source = structuredClone(record(index, "banner-secondary"));
-  const asset = source.asset_contracts.find(({ id }) => id === "secondary-image");
-  delete asset.pixel_dimensions;
-  delete asset.aspect_ratio;
-  delete asset.figma_raw_source_dimensions;
-  asset.source_geometry = "concrete-instance-fill";
-
-  const rendered = renderComponentRegistrySection(source, index);
-  assert.match(rendered, /Source geometry: `concrete-instance-fill`/u);
-  assert.doesNotMatch(rendered, /Pixel dimensions: 984×696px/u);
-  assert.doesNotMatch(rendered, /Aspect ratio: 41:29/u);
-});
 test("full registry projection covers HTML, ASSET, HYBRID and template cases", async () => {
   const { index } = await loadContext();
   const html = renderComponentRegistrySection(record(index, "button-secondary"), index);

@@ -500,6 +500,8 @@
         "alpha_mode_id",
         "clipping_policy_id",
         "export_boundary",
+        "pixel_dimensions",
+        "aspect_ratio",
         "crop",
         "background"
       ],
@@ -554,9 +556,6 @@
               "minLength": 1
             }
           }
-        },
-        "source_geometry": {
-          "const": "concrete-instance-fill"
         },
         "pixel_dimensions": {
           "type": "object",
@@ -659,42 +658,7 @@
             }
           }
         }
-      },
-      "oneOf": [
-        {
-          "type": "object",
-          "required": ["pixel_dimensions", "aspect_ratio"],
-          "properties": {
-            "pixel_dimensions": {},
-            "aspect_ratio": {},
-            "source_geometry": false
-          }
-        },
-        {
-          "type": "object",
-          "required": ["source_geometry"],
-          "properties": {
-            "source_geometry": {},
-            "pixel_dimensions": false,
-            "aspect_ratio": false,
-            "figma_raw_source_dimensions": false,
-            "source_mode_id": {
-              "const": "image-fill"
-            },
-            "display_mode_id": {
-              "const": "fill-image"
-            },
-            "export_boundary": {
-              "type": "object",
-              "properties": {
-                "kind": {
-                  "const": "fill"
-                }
-              }
-            }
-          }
-        }
-      ]
+      }
     },
     "viewportContract": {
       "type": "object",

@@ -226,10 +226,9 @@ function renderAssetContract(asset, foundations) {
     `  - Alpha: ${inlineCode(asset.alpha_mode_id)} — ${inlineCode(resolved.expected_alpha.contract.expectation)}`,
     `  - Clipping: ${inlineCode(asset.clipping_policy_id)}`,
     `  - Export boundary: ${inlineCode(asset.export_boundary.kind)} ${inlineCode(asset.export_boundary.semantic_node_name)}`,
-    ...(asset.source_geometry ? [`  - Source geometry: ${inlineCode(asset.source_geometry)}`] : []),
-    ...(asset.pixel_dimensions ? [`  - Pixel dimensions: ${asset.pixel_dimensions.width}×${asset.pixel_dimensions.height}${asset.pixel_dimensions.unit}`] : []),
+    `  - Pixel dimensions: ${asset.pixel_dimensions.width}×${asset.pixel_dimensions.height}${asset.pixel_dimensions.unit}`,
     ...(asset.figma_raw_source_dimensions ? [`  - Raw Figma Fill dimensions: ${asset.figma_raw_source_dimensions.width}×${asset.figma_raw_source_dimensions.height}${asset.figma_raw_source_dimensions.unit}`] : []),
-    ...(asset.aspect_ratio ? [`  - Aspect ratio: ${asset.aspect_ratio.width}:${asset.aspect_ratio.height}`] : []),
+    `  - Aspect ratio: ${asset.aspect_ratio.width}:${asset.aspect_ratio.height}`,
     `  - Crop: ${inlineCode(asset.crop.mode)}; position ${inlineCode(asset.crop.position_source)}`,
     `  - Background: own fill ${inlineCode(asset.background.own_visible_boundary_fill)}; artificial matte ${inlineCode(asset.background.artificial_matte)}`,
   ];

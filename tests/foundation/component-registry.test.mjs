@@ -210,22 +210,6 @@ test("strict schema accepts the complete component registry envelope", async () 
   );
 });
 
-test("instance Fill geometry comes from the concrete source instead of fixed pixels", async () => {
-  const schema = await readSchema();
-  const document = registryEnvelope("marketing", [validRecord()]);
-  const asset = document.components[0].asset_contracts[0];
-  asset.display_mode_id = "fill-image";
-  delete asset.pixel_dimensions;
-  delete asset.aspect_ratio;
-  asset.source_geometry = "concrete-instance-fill";
-  assert.deepEqual(validateComponentRegistryShape(document, schema), []);
-
-  asset.display_mode_id = "direct-image";
-  assert.notDeepEqual(validateComponentRegistryShape(document, schema), []);
-  asset.display_mode_id = "fill-image";
-  asset.pixel_dimensions = { width: 464, height: 296, unit: "px" };
-  assert.notDeepEqual(validateComponentRegistryShape(document, schema), []);
-});
 test("schema rejects unknown root and nested fields", async () => {
   const schema = await readSchema();
   const document = registryEnvelope("marketing", [validRecord()]);
@@ -685,17 +669,12 @@ test("marketing image contracts preserve responsive ratios and export boundaries
   );
   assert.equal(secondaryAsset.source_mode_id, "image-fill");
   assert.equal(secondaryAsset.display_mode_id, "fill-image");
-  assert.equal(secondaryAsset.source_geometry, "concrete-instance-fill");
-  assert.equal("pixel_dimensions" in secondaryAsset, false);
-  assert.equal("aspect_ratio" in secondaryAsset, false);
-  assert.equal("figma_raw_source_dimensions" in secondaryAsset, false);
-  for (const viewport of ["mobile", "desktop"]) {
-    const root = secondary.contracts[viewport].root;
-    assert.equal(
-      root.facts.find((fact) => fact.id === "vertical-sizing").value.value,
-      "hug",
-    );
-  }
+  assert.deepEqual(secondaryAsset.pixel_dimensions, {
+    width: 984,
+    height: 696,
+    unit: "px",
+  });
+  assert.deepEqual(secondaryAsset.aspect_ratio, { width: 41, height: 29 });
   const mobileSecondary = findAssetElement(
     secondary.contracts.mobile.root,
     "secondary-image",

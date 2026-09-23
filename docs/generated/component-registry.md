@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: component-registry -->
-<!-- source-digest: sha256:5c3be08dbb7e5ac115854dd04a5651e87762d4ca0bd1a6786bc213992ac4524f -->
+<!-- source-digest: sha256:d60e8475b19e3b2e8fc1f738ee470ca03be505b92796a8aa22a944f7eef855ca -->
 <!-- schema-versions: components=2.1.0, typography=1.0.0, spacing=1.0.0, assets=1.0.0 -->
 # CUPIS component registry
 
@@ -2587,7 +2587,9 @@ RENDER: HYBRID
   - Alpha: `none` — `no-alpha`
   - Clipping: `preserve-artwork`
   - Export boundary: `fill` `secondary-image @2x`
-  - Source geometry: `concrete-instance-fill`
+  - Pixel dimensions: 984×696px
+  - Raw Figma Fill dimensions: 984×696px
+  - Aspect ratio: 41:29
   - Crop: `none`; position `source-raster`
   - Background: own fill `preserve`; artificial matte `forbid`
 - Asset usage: `mobile` `/contracts/mobile/root/children/0/children/0` → `secondary-image` as `background-image`
