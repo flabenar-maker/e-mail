@@ -110,8 +110,9 @@ Effective visibility учитывает состояние свойства и �
 
 ## Передача и критерий достаточности
 
-В существующий handoff передаются `repoRoot, model, candidates, assetEvidence, assetRoot`. `assetRoot` — корень, относительно которого разрешается `images/...`. Contracts, repo SHA и source trace не вкладываются в JSON model. Проверки и публикация выполняются в порядке workflow.
+Перед handoff модель и временная трассировка проверяются по [стандарту соответствия источнику](email-source-fidelity-standard.md). В существующий handoff передаются `repoRoot, model, candidates, assetEvidence, assetRoot`. `assetRoot` — корень, относительно которого разрешается `images/...`. Contracts, repo SHA и source trace не вкладываются в JSON model. Проверки и публикация выполняются в порядке workflow.
 
 Модель достаточна для передачи, когда все выбранные contracts разрешены, структура и типизированные bindings валидны, каждому реализационно значимому значению соответствует подтверждённый источник, а все требуемые assets реально экспортированы и связаны с нужными экземплярами. Недостающие данные не заменяются библиотечными примерами.
 
-Структурная валидность, source correspondence, asset verification и visual acceptance — разные результаты. Этот стандарт задаёт требования к переносу, но сам по себе не добавляет автоматический source checker и не подтверждает внешний вид письма.
+Структурная валидность, source correspondence, asset verification и visual acceptance — разные результаты. Этот стандарт задаёт требования к переносу; отдельная проверка источника описана в `email-source-fidelity-standard`. Ни она, ни структурная проверка не подтверждают внешний вид письма.
+
