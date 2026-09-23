@@ -1,6 +1,8 @@
 import { buildContextBundle } from "./context-bundle.mjs";
+import { join } from "node:path";
 import { SystemValidationError } from "./diagnostics.mjs";
-import { loadSystemManifest } from "./system-manifest.mjs";
+import { loadSystemManifest, validateManifestSemantics } from "./system-manifest.mjs";
+import { readStrictYaml } from "./strict-yaml.mjs";
 import {
   loadWorkflowRegistry,
   resolveWorkflowSteps,
@@ -8,6 +10,52 @@ import {
 
 function diagnostic(code, path, message) {
   return { code, path, message };
+}
+
+const EMAIL_ROUTE_IDS = new Set(["email-new-build", "email-continue-fix"]);
+
+async function activeEmailRouteStatusBlocker({ repoRoot, manifest, route, profile }) {
+  if (!EMAIL_ROUTE_IDS.has(route.id)) return null;
+  const sources = new Map(manifest.sources.map((source) => [source.id, source]));
+  const sourcePath = (id) => sources.get(id)?.path;
+  const dependencies = [
+    ["workflow", "workflow-email-build", (document) => document.workflow?.status],
+    ["components-shared", "components-shared", (document) => document.registry?.status],
+    ["components-marketing", "components-marketing", (document) => document.registry?.status],
+    ["components-service", "components-service", (document) => document.registry?.status],
+    ["typography", "typography-foundation", (document) => document.foundation?.status],
+    ["spacing", "spacing-foundation", (document) => document.foundation?.status],
+    ["assets", "assets-foundation", (document) => document.foundation?.status],
+    ["rendering", "rendering-foundation", (document) => document.foundation?.status],
+    ["renderer-registry", "renderer-registry", (document) => document.registry?.status],
+  ];
+  const activeRouteCount = manifest.routes.filter(
+    ({ workflow_source_id }) => workflow_source_id !== "workflow-paused",
+  ).length;
+  const pausedRouteCount = manifest.routes.length - activeRouteCount;
+  const aggregateActive =
+    (manifest.structured_workflows.status === "partial" && activeRouteCount > 0 && pausedRouteCount > 0) ||
+    (manifest.structured_workflows.status === "active" && activeRouteCount === manifest.routes.length);
+  const profileActive = profile.generated_bundle.status === "structured-active";
+  if (!aggregateActive || !profileActive) {
+    return diagnostic(
+      "SKILL_ROUTE_STATUS_INACTIVE",
+      !aggregateActive ? "/structured_workflows/status" : "/generated_bundle/status",
+      `Email route ${route.id} requires explicit partial-or-active aggregate and structured-active profile status.`,
+    );
+  }
+  for (const [name, sourceId, selectStatus] of dependencies) {
+    const path = sourcePath(sourceId);
+    const document = path ? await readStrictYaml(join(repoRoot, path)) : null;
+    if (selectStatus(document) !== "active") {
+      return diagnostic(
+        "SKILL_ROUTE_STATUS_INACTIVE",
+        `/sources/${sourceId}/status`,
+        `Email route ${route.id} requires active ${name} status.`,
+      );
+    }
+  }
+  return null;
 }
 
 function compareDiagnostics(left, right) {
@@ -49,6 +97,27 @@ export async function resolveSkillContext({
   viewports = [],
   foundationIds = [],
 }) {
+  let manifest;
+  try {
+    manifest = await loadSystemManifest({ repoRoot });
+  } catch (error) {
+    return blocked(blockersFrom(error));
+  }
+  const semanticErrors = await validateManifestSemantics(manifest, repoRoot);
+  if (semanticErrors.length > 0) return blocked(semanticErrors);
+  const manifestRoute = manifest.routes.find(({ id }) => id === routeId);
+  const manifestProfile = manifest.bundle_profiles.find(
+    ({ id }) => id === manifestRoute?.bundle_profile_id,
+  );
+  const statusBlocker = manifestRoute
+    ? await activeEmailRouteStatusBlocker({
+      repoRoot,
+      manifest,
+      route: manifestRoute,
+      profile: manifestProfile,
+    })
+    : null;
+  if (statusBlocker) return blocked([statusBlocker]);
   const bundleResult = await buildContextBundle({
     repoRoot,
     routeId,
@@ -75,12 +144,6 @@ export async function resolveSkillContext({
     };
   }
 
-  let manifest;
-  try {
-    manifest = await loadSystemManifest({ repoRoot });
-  } catch (error) {
-    return blocked(blockersFrom(error));
-  }
   const entry = manifest.structured_workflows.entries.find(
     ({ source_id: sourceId }) => sourceId === route.workflow_source_id,
   );

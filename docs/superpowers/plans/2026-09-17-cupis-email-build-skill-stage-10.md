@@ -4,16 +4,24 @@
 
 **Goal:** Создать и установить repo-scoped навык сборки и точечного изменения конкретных CUPIS-писем, доказать его на двух реальных письмах и включить только два проверенных email routes для повседневной работы.
 
-**Architecture:** `building-cupis-emails` является тонким маршрутизатором: он классифицирует запрос, выбирает `email-new-build` или `email-continue-fix`, вызывает существующий `resolve:skill-context` и исполняет только возвращённый режим workflow. Точные component facts, HTML-правила, typography, spacing и asset profiles остаются в structured owners; локальная папка письма является только выходом конкретной задачи. После fixture shadow tests email-only cutover сначала готовится только в candidate branch. На её exact SHA из чистого контекста выполняются реальные marketing/service builds и versioned continue/fix; только затем branch может быть слита, а exact skill установлен. Остальные routes остаются paused до этапа 14.
+**Architecture:** `building-cupis-emails` является тонким маршрутизатором: он классифицирует запрос, выбирает `email-new-build` или `email-continue-fix`, вызывает существующий `resolve:skill-context` и исполняет только возвращённый режим workflow. Точные component facts, HTML-правила, typography, spacing и asset profiles остаются в structured owners; локальная папка письма является только выходом конкретной задачи. После fixture shadow tests email-only cutover сначала готовится только в candidate branch. На её exact SHA из чистого контекста выполняются реальные marketing/service builds и versioned continue/fix; только затем activation branch может быть слита, а exact skill установлен. По решению от 2026-09-23 завершённая подготовка может публиковаться раньше отдельным PR без включения маршрутов и установки навыка. Остальные routes остаются paused до этапа 14.
 
 **Tech Stack:** Markdown skill, YAML/JSON-compatible manifest и workflows, Node.js 24 ESM, `node:test`, существующие context resolver, renderer CLI и bootstrap verifier.
 
 **Spec:** `docs/superpowers/specs/2026-08-24-cupis-structured-email-system-design.md`
 
+## Уточнение продолжения от 2026-09-18
+
+Tasks 7–8 выполняются по [детальному плану заполнения модели и E2E](2026-09-18-cupis-email-model-assembly-and-e2e.md), с предварительными пакетами уточнения входного процесса и проверки переноса данных. Существующий `email-model` сохраняется единственным форматом композиции; отсутствие отдельного автоматического Figma-импортёра само по себе не является блокером. Этот план не объявляет Tasks 7–8 завершёнными и не меняет их итоговые acceptance gates.
+
+## Отдельная публикация подготовки — 2026-09-23
+
+Подготовительная реализация Tasks 1–5, защитные проверки будущей активации и пакеты 1–2 продолжения выделяются из candidate в отдельный PR от main. Production routes и все их статусы остаются остановленными; Task 6 activation, реальные Task 7 E2E и Task 8 install/acceptance не считаются завершёнными. Подробные зависимости и порядок продолжения после merge: [разделение публикации](2026-09-18-cupis-email-model-assembly-and-e2e.md#разделение-публикации-от-2026-09-23). Сохранённая старая candidate-ветка — источник истории, а не готовый PR для последующего слияния целиком.
+
 ## Global Constraints
 
 - Канонический репозиторий — `flabenar-maker/e-mail`; persistent edits выполняются через cloud GitHub branch и PR.
-- До реальных E2E-проверок все routes остаются `workflow-paused`. В конце Stage 10 активируются только `email-new-build` и `email-continue-fix`; остальные routes остаются paused до этапа 14.
+- До Task 6 routes в candidate остаются `workflow-paused`; Task 6 явно активирует только `email-new-build`, `email-continue-fix` и их зависимости в candidate для реальных E2E Task 7. До успешного Task 7 и разрешённого merge Task 8 маршруты `main` остаются paused. Остальные routes candidate и main остаются paused до этапа 14.
 - Готовые `email.html`, `images/`, Figma exports, screenshots и временные модели не добавляются в репозиторий.
 - Skill не содержит копий component contracts, foundation values, HTML/CSS recipes, export profiles, workflow steps или списка canonical paths.
 - Для нового письма и design-dependent изменения требуются проверенные Mobile/Desktop-инстансы конкретного письма. Technical continue/fix не требует Figma, если изменение действительно не зависит от дизайна.

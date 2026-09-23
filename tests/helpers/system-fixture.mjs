@@ -50,6 +50,7 @@ export const canonicalSystemFixtureFiles = [
   "bootstrap/config.portable.toml",
   "bootstrap/verify.ps1",
   ".agents/skills/maintaining-cupis-email-system/SKILL.md",
+  ".agents/skills/building-cupis-emails/SKILL.md",
 ];
 
 function fixturePath(root, relativePath) {

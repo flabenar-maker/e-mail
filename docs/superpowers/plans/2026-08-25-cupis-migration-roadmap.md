@@ -213,6 +213,8 @@ Draft PR [#87](https://github.com/flabenar-maker/e-mail/pull/87) содержи�
 
 Подробный implementation plan: [CUPIS Email Build Skill Stage 10](2026-09-17-cupis-email-build-skill-stage-10.md).
 
+Продолжение и текущие пакеты: [заполнение модели письма и E2E](2026-09-18-cupis-email-model-assembly-and-e2e.md). По решению от 2026-09-23 завершённая подготовка, включая пакеты 1–2, выделяется в отдельный PR без активации. Все маршруты main остаются paused; пакеты 3–6 проверяют перенос данных и реальные письма, пакет 7 завершает активацию и установку. Stage 10 остаётся незавершённым; старую candidate-ветку с активацией нельзя сливать целиком.
+
 Этот этап начинается после завершённого maintenance skill, prerequisite-пакета Figma Description и получения четырёх ссылок на два тестовых письма. Он использует готовые renderer, structured email workflow и machine resolver и не зависит от стандарта или навыка разработки новых блоков: письмо собирается только из уже зарегистрированных компонентов, а неизвестный компонент остаётся typed blocker. После успешных реальных E2E-сборок этап включает только email routes; остальные routes остаются остановленными до этапа 14.
 
 - [ ] Создать repo-scoped skill `building-cupis-emails` как тонкий маршрутизатор к `email-new-build` и `email-continue-fix`.
