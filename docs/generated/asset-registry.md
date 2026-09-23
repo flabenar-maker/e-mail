@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: asset-registry -->
-<!-- source-digest: sha256:6ae7404b9a8e8f92617c5a3bb779c950178305f0c4d7fedc57ee8efd9aae5085 -->
+<!-- source-digest: sha256:3a6aa5b31a7665b7eb7de9927606adb47ce53770852938622129a23e641aed8b -->
 <!-- schema-versions: components=2.1.0, assets=1.0.0 -->
 # CUPIS asset registry
 
@@ -551,9 +551,9 @@ General export definitions are listed first. Component-specific choices remain o
 - `banner-secondary` → `secondary-image @2x` → `image-fill` → `fill-image` → `jpeg-2x` → `none`
   - Asset contract ID: `secondary-image`
   - Export boundary: `fill` / `secondary-image @2x`
-  - Pixel dimensions: 592×376px
-  - Aspect ratio: 296:188
-  - Crop: `figma-fill`; position `concrete-desktop-instance`
+  - Pixel dimensions: 984×696px
+  - Aspect ratio: 41:29
+  - Crop: `none`; position `source-raster`
   - Background: own visible boundary fill `preserve`; artificial matte `forbid`
   - Clipping policy: `preserve-artwork`
 

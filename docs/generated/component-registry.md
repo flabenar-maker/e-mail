@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: component-registry -->
-<!-- source-digest: sha256:20fce1d2fda37bea0eb277dd5836f898eb992ea2b93ad8f9eb260bde629388aa -->
+<!-- source-digest: sha256:d60e8475b19e3b2e8fc1f738ee470ca03be505b92796a8aa22a944f7eef855ca -->
 <!-- schema-versions: components=2.1.0, typography=1.0.0, spacing=1.0.0, assets=1.0.0 -->
 # CUPIS component registry
 
@@ -2470,7 +2470,7 @@ RENDER: HYBRID
     - Fact `border-radius`: `22px`; provenance: `figma-literal` at `619:1843`
     - Fact `clip-content`: `true`; provenance: `figma-literal` at `619:1843`
     - Fact `layout-align`: `stretch`; provenance: `figma-literal` at `619:1843`
-    - `root-card-secondary-image` — role `secondary-image`; render `direct-image`; visibility `always`; asset `secondary-image`
+    - `root-card-secondary-image` — role `secondary-image`; render `background-image`; visibility `always`; asset `secondary-image`
       - Fact `reference-size`: `296×188px`; provenance: `figma-literal` at `11:1184`
       - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `11:1184`
       - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `11:1184`
@@ -2478,7 +2478,7 @@ RENDER: HYBRID
       - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `11:1184`
       - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `11:1184`
       - Fact `border-radius`: `0px`; provenance: `figma-literal` at `11:1184`
-      - Fact `height-behavior`: `auto`; provenance: `figma-description` at `337:4870`
+      - Fact `height-behavior`: `proportional-cover`; provenance: `figma-literal` at `11:1184`
       - Fact `clip-content`: `true`; provenance: `figma-literal` at `11:1184`
       - Fact `layout-align`: `stretch`; provenance: `figma-literal` at `11:1184`
     - `root-card-content-area` — role `content-area`; render `presentation-table`; visibility `always`
@@ -2587,12 +2587,12 @@ RENDER: HYBRID
   - Alpha: `none` — `no-alpha`
   - Clipping: `preserve-artwork`
   - Export boundary: `fill` `secondary-image @2x`
-  - Pixel dimensions: 592×376px
+  - Pixel dimensions: 984×696px
   - Raw Figma Fill dimensions: 984×696px
-  - Aspect ratio: 296:188
-  - Crop: `figma-fill`; position `concrete-desktop-instance`
+  - Aspect ratio: 41:29
+  - Crop: `none`; position `source-raster`
   - Background: own fill `preserve`; artificial matte `forbid`
-- Asset usage: `mobile` `/contracts/mobile/root/children/0/children/0` → `secondary-image` as `direct-image`
+- Asset usage: `mobile` `/contracts/mobile/root/children/0/children/0` → `secondary-image` as `background-image`
 - Asset usage: `desktop` `/contracts/desktop/root/children/0/children/1` → `secondary-image` as `background-image`
 
 ### Constraints and dependencies
