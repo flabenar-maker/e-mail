@@ -25,7 +25,7 @@ async function canonicalWorkflow(workflowId) {
   return loadWorkflowRegistry({ repoRoot, workflowId });
 }
 
-test("manifest declares structured workflows without switching paused routes", async () => {
+test("canonical manifest keeps structured workflows paused", async () => {
   const manifest = await loadSystemManifest({ repoRoot });
 
   assert.equal(manifest.schema_version, "1.2.0");
@@ -40,23 +40,14 @@ test("manifest declares structured workflows without switching paused routes", a
       { id: "email-build", source_id: "workflow-email-build" },
     ],
   });
-  assert.equal(
-    manifest.routes.every(
-      ({ workflow_source_id }) => workflow_source_id === "workflow-paused",
-    ),
-    true,
-  );
-  assert.equal(
-    manifest.bundle_profiles.every(
-      ({ generated_bundle }) =>
-        generated_bundle.status === "structured-shadow" &&
-        generated_bundle.static_source_ids.includes("workflow-paused") &&
-        !generated_bundle.static_source_ids.some((id) =>
-          id.startsWith("workflow-library-") || id === "workflow-email-build",
-        ),
-    ),
-    true,
-  );
+  const emailRoutes = manifest.routes.filter(({ id }) => id.startsWith("email-"));
+  assert.deepEqual(emailRoutes.map(({ id }) => id), ["email-new-build", "email-continue-fix"]);
+  assert.equal(manifest.routes.every(({ workflow_source_id }) => workflow_source_id === "workflow-paused"), true);
+  for (const profile of manifest.bundle_profiles) {
+    assert.equal(profile.generated_bundle.status, "structured-shadow");
+    assert.deepEqual(profile.generated_bundle.static_source_ids, profile.source_ids);
+    assert.equal(profile.source_ids.includes("workflow-paused"), true);
+  }
 });
 
 test("loads exact maintenance and email workflow registries", async () => {
@@ -66,6 +57,7 @@ test("loads exact maintenance and email workflow registries", async () => {
   assert.equal(maintenance.schema_version, "1.0.0");
   assert.equal(maintenance.workflow.id, "library-maintenance");
   assert.equal(maintenance.workflow.status, "shadow");
+  assert.equal(email.workflow.status, "shadow");
   assert.deepEqual(
     maintenance.workflow.modes.map(({ id }) => id),
     ["read-only", "write"],
@@ -175,4 +167,60 @@ test("context bundles use structured-shadow and block archived source paths", as
   assert.deepEqual(result.blockers.map(({ code }) => code), [
     "CONTEXT_BUNDLE_ARCHIVED_SOURCE_FORBIDDEN",
   ]);
+});
+test("email workflow declares mode-specific orchestration boundaries", async () => {
+  const email = await canonicalWorkflow("email-build");
+  const modes = new Map(email.workflow.modes.map((mode) => [mode.id, mode]));
+  const newBuild = modes.get("new-build");
+  const designFix = modes.get("continue-fix-design");
+  const technicalFix = modes.get("continue-fix-technical");
+  const clarify = modes.get("clarify");
+  const createVersion = newBuild.steps.find(
+    (step) => step.id === "create-version-folder",
+  );
+
+  assert.ok(newBuild.required_inputs.includes("email-purpose"));
+  assert.ok(createVersion.required_inputs.includes("email-purpose"));
+  assert.deepEqual(
+    newBuild.steps[0].blockers,
+    ["request-missing", "figma-source-missing", "viewport-role-ambiguous", "email-instances-mismatch"],
+  );
+  assert.ok(designFix.required_inputs.includes("exact-change-scope"));
+  assert.equal(technicalFix.required_inputs.includes("mobile-figma-instance"), false);
+  assert.equal(technicalFix.required_inputs.includes("desktop-figma-instance"), false);
+  assert.deepEqual(clarify.allowed_outputs, ["audit-findings", "clarification-request"]);
+});
+test("workflow semantics reject incomplete orchestration metadata", async () => {
+  const workflow = structuredClone(await canonicalWorkflow("email-build"));
+  const manifest = await loadSystemManifest({ repoRoot });
+  const mode = workflow.workflow.modes.find(({ id }) => id === "new-build");
+  const relation = mode.input_relations[0];
+
+  mode.input_blockers = mode.input_blockers.filter(
+    ({ input }) => input !== "request",
+  );
+  assert.ok(
+    validateWorkflowRegistrySemantics(workflow, manifest).some(
+      ({ code }) => code === "WORKFLOW_INPUT_BLOCKER_MISSING",
+    ),
+  );
+
+  mode.input_blockers.push({ input: "email-purpose", blocker: "version-folder-exists" });
+  assert.ok(
+    validateWorkflowRegistrySemantics(workflow, manifest).some(
+      ({ code }) => code === "WORKFLOW_INPUT_BLOCKER_DUPLICATE",
+    ),
+  );
+
+  mode.input_blockers.push({ input: "unknown-input", blocker: "version-path-unsafe" });
+  relation.inputs[0] = "unknown-input";
+  relation.values.pop();
+  relation.blocker = "unknown-blocker";
+  const codes = new Set(
+    validateWorkflowRegistrySemantics(workflow, manifest).map(({ code }) => code),
+  );
+  assert.ok(codes.has("WORKFLOW_INPUT_BLOCKER_INPUT_UNREQUIRED"));
+  assert.ok(codes.has("WORKFLOW_INPUT_RELATION_INPUT_UNREQUIRED"));
+  assert.ok(codes.has("WORKFLOW_INPUT_RELATION_VALUES_LENGTH"));
+  assert.ok(codes.has("WORKFLOW_INPUT_RELATION_BLOCKER_UNDECLARED"));
 });

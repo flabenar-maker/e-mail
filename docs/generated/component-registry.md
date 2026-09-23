@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: component-registry -->
-<!-- source-digest: sha256:5890bf7a7212ef5426fd3a701c427ffa2853679a771541404c8ad44fa212a2b8 -->
+<!-- source-digest: sha256:977ef111aae97770dc5097d4cf1a0bbed31aa21ef0df6aea7679c2dc2f968e32 -->
 <!-- schema-versions: components=2.1.0, typography=1.0.0, spacing=1.0.0, assets=1.0.0 -->
 # CUPIS component registry
 

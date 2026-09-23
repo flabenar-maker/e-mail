@@ -25,7 +25,7 @@
       "required": ["id", "status"],
       "properties": {
         "id": { "const": "rendering" },
-        "status": { "const": "shadow" }
+        "status": { "enum": ["shadow", "active"] }
       }
     },
     "shell": { "$ref": "#/$defs/shell" },

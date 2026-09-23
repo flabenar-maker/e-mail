@@ -24,6 +24,9 @@
         "id": {
           "const": "typography"
         },
+        "status": {
+          "enum": ["shadow", "active"]
+        },
         "source": {
           "$ref": "#/$defs/source"
         }

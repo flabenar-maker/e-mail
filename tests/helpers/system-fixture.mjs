@@ -41,6 +41,8 @@ export const canonicalSystemFixtureFiles = [
   "README.md",
   "bootstrap/README.md",
   "core/email-rendering-standard.md",
+  "core/email-model-assembly-standard.md",
+  "schemas/email-model.schema.json",
   "core/typography-standard.md",
   "core/asset-export-standard.md",
   "core/figma-library-standard.md",
@@ -50,6 +52,7 @@ export const canonicalSystemFixtureFiles = [
   "bootstrap/config.portable.toml",
   "bootstrap/verify.ps1",
   ".agents/skills/maintaining-cupis-email-system/SKILL.md",
+  ".agents/skills/building-cupis-emails/SKILL.md",
 ];
 
 function fixturePath(root, relativePath) {

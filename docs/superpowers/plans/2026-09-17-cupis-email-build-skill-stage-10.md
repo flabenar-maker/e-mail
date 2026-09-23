@@ -4,16 +4,24 @@
 
 **Goal:** Создать и установить repo-scoped навык сборки и точечного изменения конкретных CUPIS-писем, доказать его на двух реальных письмах и включить только два проверенных email routes для повседневной работы.
 
-**Architecture:** `building-cupis-emails` является тонким маршрутизатором: он классифицирует запрос, выбирает `email-new-build` или `email-continue-fix`, вызывает существующий `resolve:skill-context` и исполняет только возвращённый режим workflow. Точные component facts, HTML-правила, typography, spacing и asset profiles остаются в structured owners; локальная папка письма является только выходом конкретной задачи. После fixture shadow tests email-only cutover сначала готовится только в candidate branch. На её exact SHA из чистого контекста выполняются реальные marketing/service builds и versioned continue/fix; только затем branch может быть слита, а exact skill установлен. Остальные routes остаются paused до этапа 14.
+**Architecture:** `building-cupis-emails` является тонким маршрутизатором: он классифицирует запрос, выбирает `email-new-build` или `email-continue-fix`, вызывает существующий `resolve:skill-context` и исполняет только возвращённый режим workflow. Точные component facts, HTML-правила, typography, spacing и asset profiles остаются в structured owners; локальная папка письма является только выходом конкретной задачи. После fixture shadow tests email-only cutover сначала готовится только в candidate branch. На её exact SHA из чистого контекста выполняются реальные marketing/service builds и versioned continue/fix; только затем activation branch может быть слита, а exact skill установлен. По решению от 2026-09-23 завершённая подготовка может публиковаться раньше отдельным PR без включения маршрутов и установки навыка. Остальные routes остаются paused до этапа 14.
 
 **Tech Stack:** Markdown skill, YAML/JSON-compatible manifest и workflows, Node.js 24 ESM, `node:test`, существующие context resolver, renderer CLI и bootstrap verifier.
 
 **Spec:** `docs/superpowers/specs/2026-08-24-cupis-structured-email-system-design.md`
 
+## Уточнение продолжения от 2026-09-18
+
+Tasks 7–8 выполняются по [детальному плану заполнения модели и E2E](2026-09-18-cupis-email-model-assembly-and-e2e.md), с предварительными пакетами уточнения входного процесса и проверки переноса данных. Существующий `email-model` сохраняется единственным форматом композиции; отсутствие отдельного автоматического Figma-импортёра само по себе не является блокером. Этот план не объявляет Tasks 7–8 завершёнными и не меняет их итоговые acceptance gates.
+
+## Отдельная публикация подготовки — 2026-09-23
+
+Подготовительная реализация Tasks 1–5, защитные проверки будущей активации и пакеты 1–2 продолжения выделяются из candidate в отдельный PR от main. Production routes и все их статусы остаются остановленными; Task 6 activation, реальные Task 7 E2E и Task 8 install/acceptance не считаются завершёнными. Подробные зависимости и порядок продолжения после merge: [разделение публикации](2026-09-18-cupis-email-model-assembly-and-e2e.md#разделение-публикации-от-2026-09-23). Сохранённая старая candidate-ветка — источник истории, а не готовый PR для последующего слияния целиком.
+
 ## Global Constraints
 
 - Канонический репозиторий — `flabenar-maker/e-mail`; persistent edits выполняются через cloud GitHub branch и PR.
-- До реальных E2E-проверок все routes остаются `workflow-paused`. В конце Stage 10 активируются только `email-new-build` и `email-continue-fix`; остальные routes остаются paused до этапа 14.
+- До Task 6 routes в candidate остаются `workflow-paused`; Task 6 явно активирует только `email-new-build`, `email-continue-fix` и их зависимости в candidate для реальных E2E Task 7. До успешного Task 7 и разрешённого merge Task 8 маршруты `main` остаются paused. Остальные routes candidate и main остаются paused до этапа 14.
 - Готовые `email.html`, `images/`, Figma exports, screenshots и временные модели не добавляются в репозиторий.
 - Skill не содержит копий component contracts, foundation values, HTML/CSS recipes, export profiles, workflow steps или списка canonical paths.
 - Для нового письма и design-dependent изменения требуются проверенные Mobile/Desktop-инстансы конкретного письма. Technical continue/fix не требует Figma, если изменение действительно не зависит от дизайна.
@@ -95,7 +103,7 @@ Expected: FAIL, потому что `.agents/skills/building-cupis-emails/SKILL.
 
 **Interfaces:**
 - Consumes: `npm run resolve:skill-context -- --route <route-id> --mode <workflow-mode> ...`.
-- Produces: skill `building-cupis-emails`, зарегистрированный в `manifest.skills.required`.
+- Produces: подготовленный repo-scoped skill `building-cupis-emails` без обязательной установки. Регистрация в `manifest.skills.required` перенесена в Task 8 вместе с публикацией проверенной активации.
 
 - [ ] **Step 1: Добавить skill frontmatter и trigger**
 
@@ -119,13 +127,9 @@ Expected: FAIL, потому что `.agents/skills/building-cupis-emails/SKILL.
 
 До публикации cutover в Task 8 при `paused` разрешены только read-only navigation и реализация этого migration plan. Production build и изменение пользовательского письма не выполняются. После cutover при `resolved` skill исполняет только returned bundle и ordered workflow steps, не открывая источники по памяти или ручному списку.
 
-- [ ] **Step 4: Зарегистрировать skill**
+- [ ] **Step 4: Зафиксировать подготовленный, но не установленный skill**
 
-Добавить в `manifest.skills.required`:
-
-```yaml
-- { id: building-cupis-emails, path: .agents/skills/building-cupis-emails }
-```
+В подготовительном PR сохранить файл навыка, но не добавлять его в `manifest.skills.required`. Проверить, что наличие каталога не меняет поведение paused routes. Обязательная регистрация и установка выполняются только в Task 8 после реальных E2E.
 
 README должен сообщать, что skill становится рабочим только после успешного E2E-gate Task 7 и публикации email-only cutover в Task 8; наличие каталога skill до этого момента не разрешает production-сборку.
 
@@ -409,7 +413,9 @@ Skill wording не маскирует defect contract, renderer, asset foundatio
 - Consumes: final Stage 10 candidate SHA, real E2E evidence and two candidate active email routes.
 - Produces: reviewed PR, installed exact skill, clean-chat acceptance and exact Stage 10 status.
 
-- [ ] **Step 1: Выполнить changed-content и preserved-boundary checks**
+- [ ] **Step 1: Зарегистрировать проверенный skill и проверить границы финального PR**
+
+После успешного Task 7 добавить `building-cupis-emails` с путём `.agents/skills/building-cupis-emails` в `manifest.skills.required` вместе с email-only activation. Финальный PR строится от нового актуального main и не повторяет уже слитую подготовку; исходная candidate-ветка не сливается целиком.
 
 Проверить allowed-path diff, отсутствие Figma changes и concrete email outputs в репозитории, объяснённость каждого status change и сохранение всех non-email routes на `workflow-paused`.
 

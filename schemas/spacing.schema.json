@@ -28,7 +28,7 @@
           "const": "spacing"
         },
         "status": {
-          "const": "shadow"
+          "enum": ["shadow", "active"]
         }
       }
     },

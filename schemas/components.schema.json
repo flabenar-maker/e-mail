@@ -49,7 +49,7 @@
           ]
         },
         "status": {
-          "const": "shadow"
+          "enum": ["shadow", "active"]
         },
         "source": {
           "type": "object",
