@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: asset-registry -->
-<!-- source-digest: sha256:fcb1cf59c4414e8d96ce80cbf2824b167244f01d1db13162ea470961a37ab7e7 -->
+<!-- source-digest: sha256:544ec5be1bc70c4d107be0fb981d0121c86fe2de28b6789e4c5f69564bb2f940 -->
 <!-- schema-versions: components=2.1.0, assets=1.0.0 -->
 # CUPIS asset registry
 
@@ -11,7 +11,7 @@ General export definitions are listed first. Component-specific choices remain o
 ### IMAGE FILL
 
 - Stable ID: `image-fill`
-- Description: Export the original source raster from the Fill of the concrete contract-selected email instance without its container, nested graphics or live HTML.
+- Description: Read the original raster from the Fill of the concrete contract-selected email instance. Apply only the component-owned rectangular crop and exact output dimensions; exclude the container, nested graphics and live HTML.
 - Contract:
 
 ```json
@@ -89,7 +89,7 @@ General export definitions are listed first. Component-specific choices remain o
 ### JPEG @2x
 
 - Stable ID: `jpeg-2x`
-- Description: Export an sRGB JPEG at scale 2. Start at quality 82 and increase to 90 only when visible artifacts remain; rendered nodes use a lossless PNG intermediate before JPEG conversion.
+- Description: Export an sRGB JPEG to the component contract's exact @2x pixel dimensions, never by multiplying the raw Fill dimensions. Start at quality 82 and increase to 90 only for visible artifacts; rendered nodes use a lossless PNG intermediate before JPEG conversion.
 - Contract:
 
 ```json
