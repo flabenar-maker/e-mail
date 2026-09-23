@@ -58,6 +58,15 @@ export function assessAssetExport({ asset, evidence, lowResolutionDecision } = {
   if (!positiveSize(target) || !positiveSize(ratio)) {
     issues.push(issue("contract-geometry-invalid", "Target dimensions and aspect ratio must be positive."));
   }
+  if (positiveSize(target) && positiveSize(ratio) &&
+      Math.abs(target.width / target.height - ratio.width / ratio.height) > 0.000001) {
+    issues.push(issue("contract-ratio-mismatch", "The target pixel dimensions deform the declared aspect ratio."));
+  }
+  const expectedCropSource = asset.crop?.mode === "figma-fill"
+    ? `concrete-${asset.source_viewport}-instance` : "source-raster";
+  if (asset.crop?.position_source !== expectedCropSource) {
+    issues.push(issue("contract-crop-source-mismatch", "The crop position source disagrees with the selected viewport."));
+  }
   if (!evidence.emailId || !evidence.concreteInstanceId || !evidence.sourceHash) {
     issues.push(issue("concrete-source-missing", "The concrete email, instance ID and Fill hash must be recorded."));
   }
