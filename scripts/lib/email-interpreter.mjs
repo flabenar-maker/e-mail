@@ -444,11 +444,15 @@ function renderShell(element, viewport, path, childHtml, context) {
           : centeredImage;
         const fillHeight = node?.facts?.some(({ id, value }) =>
           id === "vertical-sizing" && value?.value === "fill");
+        const childRadius = nodeProps.style["border-radius"];
+        const roundedChild = childRadius && !["0", "0px", "0%"].includes(String(childRadius));
+        const paintCellBackground = axis === "horizontal" &&
+          nodeProps.style["background-color"] && !roundedChild;
         const cellStyle = {
           ...(axis === "vertical" && counterAlignment === "center"
             ? { "text-align": "center" }
             : {}),
-          ...(axis === "horizontal" && nodeProps.style["background-color"]
+          ...(paintCellBackground
             ? { "background-color": nodeProps.style["background-color"] }
             : {}),
           ...(node?.render_mode === "html-link" && nodeProps.style["text-align"] === "center"
@@ -459,7 +463,7 @@ function renderShell(element, viewport, path, childHtml, context) {
           width: spaceBetween ? node?.facts?.find(({ id }) => id === "reference-size")?.value?.width
             : nodeProps.width === "auto" ? undefined : nodeProps.width,
           valign: axis === "horizontal" && counterAlignment === "center" && !fillHeight ? "middle" : "top",
-          ...(axis === "horizontal" && nodeProps.style["background-color"]
+          ...(paintCellBackground
             ? { bgcolor: nodeProps.style["background-color"] }
             : {}),
           ...(Object.keys(cellStyle).length > 0 ? { style: cellStyle } : {}),
