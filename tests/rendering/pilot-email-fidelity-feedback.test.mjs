@@ -198,7 +198,7 @@ import test from "node:test";
 );
   test("Banner/App-Download renders the 50px desktop store radius without a square horizontal wrapper", () => {
    const result = render(node("store-button-row", [keyword("layout-axis", "horizontal"), measure("layout-gap", 0)], [
-     node("store-button", [dimensions("reference-size", 252, 44), color("background", "#1E60DD"), measure("border-radius", 50)], [
+     node("store-button", [dimensions("reference-size", 116, 56), color("background", "#1E60DD"), measure("border-radius", 50)], [
        node("store-button-content", [dimensions("reference-size", 228, 26)]),
      ]),
    ]));
