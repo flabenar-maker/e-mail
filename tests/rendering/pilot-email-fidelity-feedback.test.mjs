@@ -187,6 +187,26 @@ import test from "node:test";
    assert.doesNotMatch(result.html, /<tbody><\/tbody>/u);
  }
 );
+  test("Item/Bullet renders the 8px Figma ellipse without a square horizontal wrapper", () => {
+   const result = render(node("bullet-indicator", [keyword("layout-axis", "horizontal"), measure("layout-gap", 0)], [
+     node("bullet-dot", [dimensions("reference-size", 8, 8), color("background", "#18B037"), keyword("shape", "ellipse")]),
+   ]));
+   assert.deepEqual(result.diagnostics, []);
+   assert.match(result.html, /<table\b[^>]*width="8"[^>]*style="[^"]*background-color:#18B037[^"]*border-radius:50%/u);
+   assert.doesNotMatch(result.html, /<td\b(?=[^>]*bgcolor="#18B037")(?=[^>]*style="[^"]*background-color:#18B037)(?![^>]*style="[^"]*border-radius:50%)[^>]*>/u);
+  }
+);
+  test("Banner/App-Download renders the 50px desktop store radius without a square horizontal wrapper", () => {
+   const result = render(node("store-button-row", [keyword("layout-axis", "horizontal"), measure("layout-gap", 0)], [
+     node("store-button", [dimensions("reference-size", 252, 44), color("background", "#1E60DD"), measure("border-radius", 50)], [
+       node("store-button-content", [dimensions("reference-size", 228, 26)]),
+     ]),
+   ]));
+   assert.deepEqual(result.diagnostics, []);
+   assert.match(result.html, /<table\b[^>]*style="[^"]*background-color:#1E60DD[^"]*border-radius:50px/u);
+   assert.doesNotMatch(result.html, /<td\b(?=[^>]*bgcolor="#1E60DD")(?=[^>]*style="[^"]*background-color:#1E60DD)(?![^>]*style="[^"]*border-radius:50px)[^>]*>/u);
+  }
+);
   test("Mobile Secondary CTA applies nowrap only to its whole-button label", async () => {
    const secondary = await component("button-secondary");
    const label = element(secondary, "mobile", "root-label");
