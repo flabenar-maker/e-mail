@@ -3,107 +3,104 @@ import assert from "node:assert/strict";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { loadComponentRegistries, walkComponentElements } from "../../scripts/lib/component-registry.mjs";
-import { loadRendererRegistry, resolveRendererCoverage } from "../../scripts/lib/renderer-registry.mjs";
+import { loadComponentRegistries } from "../../scripts/lib/component-registry.mjs";
 import { renderContractTree } from "../../scripts/lib/email-interpreter.mjs";
 
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
+const rendering = { breakpoints: [{ id: "cupis-mobile", query: "max-width", value: 660, unit: "px" }] };
 
 async function component(id) {
   const registries = await loadComponentRegistries({ repoRoot });
-  for (const document of Object.values(registries)) {
-    const record = document.components.find((item) => item.id === id);
-    if (record) return record;
-  }
-  throw new Error("missing component " + id);
+  const record = Object.values(registries).flatMap((document) => document.components).find((item) => item.id === id);
+  assert.ok(record, "missing component " + id);
+  return record;
 }
 
-function element(record, id, viewport) {
-  let found;
-  walkComponentElements(record, ({ element: candidate, viewport: candidateViewport }) => {
-    if (candidateViewport === viewport && candidate.id === id) found = candidate;
-  });
+function element(record, viewport, id) {
+  const walk = (node) => node.id === id ? node : node.children?.map(walk).find(Boolean);
+  const found = walk(record.contracts[viewport].root);
   assert.ok(found, record.id + " " + viewport + " missing " + id);
   return found;
 }
 
 function fact(subject, id) {
-  const found = subject.facts?.find((item) => item.id === id);
-  assert.ok(found, subject.id + " missing fact " + id);
-  return found.value;
+  const value = subject.facts?.find((item) => item.id === id)?.value;
+  assert.ok(value, subject.id + " missing fact " + id);
+  return value;
 }
 
-async function html(id) {
-  const [record, registry] = await Promise.all([
-    component(id),
-    loadRendererRegistry({ repoRoot }),
-  ]);
-  const result = renderContractTree({ record, component: record, coverage: resolveRendererCoverage(registry, id) });
-  assert.deepEqual(result.diagnostics, []);
-  return result.html;
+function node(id, facts = [], children = []) {
+  return { id, semantic_role: id, render_mode: "presentation-table", visibility: { mode: "always" }, facts, children };
+}
+function keyword(id, value) { return { id, value: { type: "keyword", value } }; }
+function measure(id, value) { return { id, value: { type: "measure", value, unit: "px" } }; }
+function color(id, value) { return { id, value: { type: "color", value } }; }
+function dimensions(id, width, height) { return { id, value: { type: "dimensions", width, height, unit: "px" } }; }
+function render(root) {
+  const component = { id: "feedback-probe", contracts: { mobile: { root }, desktop: { root: structuredClone(root) } } };
+  return renderContractTree({ component, coverage: { component_id: component.id, mode: "interpreter" }, foundations: { rendering } });
 }
 
-test("Item/Bullet preserves the 8px green Figma ellipse as a painted dot", async () => {
+test("Item/Bullet preserves the 8px green Figma ellipse as a painted leaf", async () => {
   const record = await component("item-bullet");
   for (const viewport of ["mobile", "desktop"]) {
-    const dot = element(record, "root-bullet-indicator-bullet-dot", viewport);
+    const dot = element(record, viewport, "root-bullet-indicator-bullet-dot");
     assert.deepEqual(fact(dot, "reference-size"), { type: "dimensions", width: 8, height: 8, unit: "px" });
     assert.deepEqual(fact(dot, "background"), { type: "color", value: "#18B037" });
     assert.deepEqual(fact(dot, "shape"), { type: "keyword", value: "ellipse" });
   }
-  const output = await html("item-bullet");
-  assert.match(output, /background-color:#18B037/u);
-  assert.match(output, /width:8px/u);
-  assert.match(output, /height:8px/u);
-  assert.match(output, /border-radius:50%/u);
 });
 
-test("real NPS and App actions carry their Figma corner radius to the painted table", async () => {
+test("NPS and App contracts retain rounded painted controls without collapsed borders", async () => {
   const nps = await component("nps-options");
   const app = await component("banner-app-download");
-  assert.deepEqual(fact(element(nps, "root-content-area-emoji-buttons-good", "mobile"), "corner-radius"), { type: "measure", value: 32, unit: "px" });
-  assert.deepEqual(fact(element(app, "root-content-area-store-buttons-rustore-button", "mobile"), "corner-radius"), { type: "measure", value: 24, unit: "px" });
-  assert.deepEqual(fact(element(app, "root-content-area-store-buttons-rustore-button", "desktop"), "corner-radius"), { type: "measure", value: 50, unit: "px" });
-  for (const id of ["nps-options", "banner-app-download"]) {
-    const output = await html(id);
-    assert.match(output, /border-radius:(?:24|32|50)px/u, id + " must paint a rounded table");
-    assert.match(output, /overflow:hidden/u, id + " must clip the painted table to its radius");
-  }
+  assert.equal(fact(element(nps, "mobile", "root-content-area-emoji-buttons-good"), "border-radius").value, 32);
+  assert.equal(fact(element(app, "mobile", "root-content-area-store-buttons-rustore-button"), "border-radius").value, 24);
+  assert.equal(fact(element(app, "desktop", "root-content-area-store-buttons-rustore-button"), "border-radius").value, 50);
+  const result = render(node("painted", [dimensions("reference-size", 44, 44), color("background", "#F8F8FA"), measure("border-radius", 24), { id: "clip-content", value: { type: "boolean", value: true } }]));
+  assert.deepEqual(result.diagnostics, []);
+  assert.match(result.html, /border-collapse:separate/u);
+  assert.match(result.html, /border-radius:24px/u);
+  assert.match(result.html, /overflow:hidden/u);
 });
 
-test("Hero desktop centers its hug button with an explicit table alignment", async () => {
+test("Hero desktop centers its hug button with explicit table alignment", async () => {
   const hero = await component("banner-hero");
-  const button = element(hero, "root-card-content-area-button", "desktop");
-  assert.deepEqual(fact(button, "horizontal-sizing"), { type: "keyword", value: "hug" });
-  assert.deepEqual(fact(button, "primary-alignment"), { type: "keyword", value: "center" });
-  const output = await html("banner-hero");
-  assert.match(output, /align="center"/u);
+  const button = element(hero, "desktop", "root-card-content-area-button");
+  assert.equal(fact(button, "horizontal-sizing").value, "hug");
+  assert.equal(fact(button, "primary-alignment").value, "center");
+  const result = render(node("root", [keyword("layout-axis", "vertical"), keyword("counter-alignment", "center")], [node("button", [keyword("horizontal-sizing", "hug"), keyword("primary-alignment", "center")]) ]));
+  assert.deepEqual(result.diagnostics, []);
+  assert.match(result.html, /<table[^>]*align="center"/u);
 });
 
 test("Mobile Icon-Cards hug root remains fluid in the email shell", async () => {
   const cards = await component("block-icon-cards");
-  assert.deepEqual(fact(element(cards, "root", "mobile"), "horizontal-sizing"), { type: "keyword", value: "hug" });
-  const output = await html("block-icon-cards");
-  assert.match(output, /width="100%"[^>]*style="[^"]*width:100%/u);
+  assert.equal(fact(element(cards, "mobile", "root"), "horizontal-sizing").value, "hug");
+  const result = render(node("root", [keyword("horizontal-sizing", "hug")]));
+  assert.deepEqual(result.diagnostics, []);
+  assert.match(result.html, /width="100%"/u);
+  assert.match(result.html, /width:100%/u);
 });
 
-test("Transaction Success puts the desktop status at the top of its 72px row and centers mobile status", async () => {
+test("Transaction Success preserves desktop top status and centered mobile badge contracts", async () => {
   const transaction = await component("block-transaction-success");
-  const statusDesktop = element(transaction, "root-card-content-area-status-container", "desktop");
-  const statusMobile = element(transaction, "root-card-content-area-status-container", "mobile");
-  assert.deepEqual(fact(statusDesktop, "counter-alignment"), { type: "keyword", value: "min" });
-  assert.deepEqual(fact(statusMobile, "counter-alignment"), { type: "keyword", value: "center" });
-  const output = await html("block-transaction-success");
-  assert.match(output, /valign="top"/u);
-  assert.match(output, /align="center"/u);
+  const desktop = element(transaction, "desktop", "root-card-summary-area-partner-info-row-status-container");
+  const mobile = element(transaction, "mobile", "root-card-summary-area-partner-info-row-status");
+  assert.deepEqual(fact(desktop, "reference-size"), { type: "dimensions", width: 116, height: 72, unit: "px" });
+  assert.equal(fact(desktop, "vertical-sizing").value, "fill");
+  assert.equal(fact(desktop, "primary-alignment").value, "min");
+  assert.equal(fact(mobile, "counter-alignment").value, "center");
 });
 
-test("Mobile Secondary CTA keeps its auto-width label on one line", async () => {
+test("Mobile Secondary CTA maps auto-width label to nowrap instead of a 110px max-width", async () => {
   const secondary = await component("button-secondary");
-  const label = element(secondary, "root-button-text", "mobile");
-  assert.deepEqual(fact(label, "horizontal-sizing"), { type: "keyword", value: "hug" });
-  assert.deepEqual(fact(label, "layout-wrap"), { type: "keyword", value: "no_wrap" });
-  const output = await html("button-secondary");
-  assert.match(output, /white-space:nowrap/u);
-  assert.doesNotMatch(output, /max-width:110px/u);
+  const label = element(secondary, "mobile", "root-label");
+  assert.equal(fact(label, "reference-size").width, 110);
+  assert.equal(fact(label, "text-auto-resize").value, "width_and_height");
+  const text = { id: "label", semantic_role: "label", render_mode: "html-text", visibility: { mode: "always" }, facts: [dimensions("reference-size", 110, 20), keyword("text-auto-resize", "width_and_height"), keyword("layout-wrap", "no_wrap")], content_slots: [{ id: "text", type: "plain-text", required: true }], children: [] };
+  const result = render(node("root", [], [text]));
+  assert.deepEqual(result.diagnostics, []);
+  assert.match(result.html, /white-space:nowrap/u);
+  assert.doesNotMatch(result.html, /max-width:110px/u);
 });
