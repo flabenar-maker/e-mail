@@ -167,6 +167,7 @@ function propsFromFacts(facts = [], { viewport, mode, isRoot = false, parentAxis
     else if (id.endsWith("-height")) props.height = value.value;
   }
   if (mode === "presentation-table" && fact("vertical-sizing")?.value === "fill" && size?.height > 0) {
+    props.width = size.width;
     props.height = size.height;
   }
   if (fact("shape")?.value === "ellipse") {
@@ -435,7 +436,7 @@ function renderShell(element, viewport, path, childHtml, context) {
           ? html.replace(/(<img\b[^>]*\sstyle=")([^"]*)"/u, (_match, prefix, style) => `${prefix}${style};margin:0 auto"`)
           : html;
         const centeredTable = axis === "vertical" && counterAlignment === "center" &&
-          nodeProps.width === "auto" && centeredImage.startsWith("<table") &&
+          centeredImage.startsWith("<table") &&
           !/^<table[^>]*\salign=/u.test(centeredImage)
           ? centeredImage.replace(/^<table\b/u, '<table align="center"')
             .replace(/(<table[^>]*style=")([^"]*)"/u,
