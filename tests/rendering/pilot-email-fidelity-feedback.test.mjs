@@ -161,7 +161,7 @@ import test from "node:test";
     assert.equal(fact(element(cards, "mobile", "root"), "horizontal-sizing").value, "hug");
     const result = render(node("root", [keyword("horizontal-sizing", "hug")]));
     assert.deepEqual(result.diagnostics, []);
-    const mobileRoot = result.html.match(/^<table\\b[^>]*>/u)?.[0];
+    const mobileRoot = result.html.match(/^<table\b[^>]*>/u)?.[0];
     assert.ok(mobileRoot, "missing Mobile Icon-Cards root table");
     assert.match(mobileRoot, /width="100%"/u);
     assert.match(mobileRoot, /style="[^"]*width:100%/u);
