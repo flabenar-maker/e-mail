@@ -250,6 +250,7 @@ node --test tests/skills/email-build-handoff.test.mjs tests/rendering/email-mode
 **Зависимость:** пакеты 1–6 и закрытые scoped repairs. **Соответствие:** исходный Stage 10 Task 8.
 
 - [ ] Проверить diff относительно main: все правки объяснены; Figma не менялась; реальные письма/evidence не добавлены; активны только два email routes и их необходимые dependencies; unrelated routes остаются paused.
+- [ ] До активации email routes проверить, что обычный маршрут сборки не может вызвать рендер без успешного полного source comparison: отсутствующее, ошибочное или только selected-subtrees evidence останавливает сборку до renderer. Прямой низкоуровневый renderer остаётся доступным для изолированных тестов; он не является production-маршрутом.
 - [ ] Выполнить финальные команды локально через Terra на точном SHA:
 
 ```powershell
