@@ -400,8 +400,8 @@ test("handoff placement uses the model-selected variant contract", async (t) => 
   assert.ok(target);
   target.id = variantId;
   banner.contracts.variant_contracts = [
-    { axes: [{ name: "Viewport", value: "Mobile" }, { name: "Mode", value: "Alternate" }], root: mobileRoot },
-    { axes: [{ name: "Viewport", value: "Desktop" }, { name: "Mode", value: "Alternate" }], root: desktopRoot },
+    { variant_node_id: "999:1", axes: [{ name: "Viewport", value: "Mobile" }, { name: "Mode", value: "Alternate" }], root: mobileRoot },
+    { variant_node_id: "999:2", axes: [{ name: "Viewport", value: "Desktop" }, { name: "Mode", value: "Alternate" }], root: desktopRoot },
   ];
   banner.variants.push(
     { id: "mobile-alternate", node_id: "999:1", axes: [{ name: "Viewport", value: "Mobile" }, { name: "Mode", value: "Alternate" }] },
