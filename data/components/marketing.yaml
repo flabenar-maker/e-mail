@@ -76956,6 +76956,17 @@
                           "kind": "figma-literal",
                           "node_id": "222:698"
                         }
+                      },
+                      {
+                        "id": "shape",
+                        "value": {
+                          "type": "keyword",
+                          "value": "ellipse"
+                        },
+                        "provenance": {
+                          "kind": "figma-literal",
+                          "node_id": "222:698"
+                        }
                       }
                     ],
                     "children": []
@@ -78357,6 +78368,17 @@
                         "value": {
                           "type": "color",
                           "value": "#18B037"
+                        },
+                        "provenance": {
+                          "kind": "figma-literal",
+                          "node_id": "234:576"
+                        }
+                      },
+                      {
+                        "id": "shape",
+                        "value": {
+                          "type": "keyword",
+                          "value": "ellipse"
                         },
                         "provenance": {
                           "kind": "figma-literal",
@@ -80329,6 +80351,13 @@
           },
           {
             "variant_node_id": "222:702",
+            "node_id": "222:698",
+            "source_path": "/node_type",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/3/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "222:702",
             "node_id": "222:699",
             "source_path": "/reference_dimensions/width",
             "contract_path": "/contracts/mobile/root/children/1/facts/0/value/width",
@@ -80984,6 +81013,13 @@
             "source_path": "/fills/0/color",
             "contract_path": "/contracts/desktop/root/children/0/children/0/facts/2/value/value",
             "transform": "identity"
+          },
+          {
+            "variant_node_id": "234:580",
+            "node_id": "234:576",
+            "source_path": "/node_type",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/3/value/value",
+            "transform": "lowercase"
           },
           {
             "variant_node_id": "234:580",
