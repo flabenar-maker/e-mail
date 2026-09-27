@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: component-registry -->
-<!-- source-digest: sha256:6461196e0c957491a545c4da055501bad854a0d322d431031578eaac45680f8b -->
+<!-- source-digest: sha256:52197ced1862206484e481a017e53dc0d2a044c7e9bec3c3c8c9eee7447b76ef -->
 <!-- schema-versions: components=2.1.0, typography=1.0.0, spacing=1.0.0, assets=1.0.0 -->
 # CUPIS component registry
 
@@ -1178,6 +1178,10 @@ RENDER: HTML
     - Fact `border-radius`: `26px`; provenance: `figma-literal` at `230:1639`
     - Fact `background`: `#FFFFFF`; provenance: `figma-literal` at `230:1639`
     - Fact `layout-align`: `stretch`; provenance: `figma-literal` at `230:1639`
+    - Fact `email-render-size`: `552×274px`
+    - Fact `email-render-padding-top`: `28px`
+    - Fact `email-render-padding-right`: `28px`
+    - Fact `email-render-layout-gap`: `20px`
     - `root-content-area-text-qr` — role `text-qr`; render `presentation-table`; visibility `always`
       - Fact `reference-size`: `488×130px`; provenance: `figma-literal` at `961:37493`
       - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `961:37493`
@@ -1193,6 +1197,8 @@ RENDER: HTML
       - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `961:37493`
       - Fact `border-radius`: `0px`; provenance: `figma-literal` at `961:37493`
       - Fact `layout-align`: `stretch`; provenance: `figma-literal` at `961:37493`
+      - Fact `email-render-size`: `492×138px`
+      - Fact `email-render-layout-gap`: `20px`
       - `root-content-area-text-qr-header-row` — role `header-row`; render `presentation-table`; visibility `always`
         - Fact `reference-size`: `334×128px`; provenance: `figma-literal` at `961:37494`
         - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `961:37494`
@@ -1208,6 +1214,7 @@ RENDER: HTML
         - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `961:37494`
         - Fact `border-radius`: `0px`; provenance: `figma-literal` at `961:37494`
         - Fact `layout-grow`: `1`; provenance: `figma-literal` at `961:37494`
+        - Fact `email-cell-inset-top`: `4px`
         - `root-content-area-text-qr-header-row-app-logo` — role `app-logo`; render `direct-image`; visibility `always`; asset `app-logo`
           - Fact `reference-size`: `219×62px`; provenance: `figma-literal` at `961:37495`
           - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `961:37495`
@@ -1242,7 +1249,6 @@ RENDER: HTML
           - Fact `layout-align`: `stretch`; provenance: `figma-literal` at `961:37514`
       - `root-content-area-text-qr-qr-code` — role `qr-code`; render `direct-image`; visibility `always`; asset `qr-code`
         - Fact `reference-size`: `130×130px`; provenance: `figma-literal` at `961:37515`
-        - Fact `visible-artwork-size`: `138.38710021972656×138.38710021972656px`; provenance: `figma-literal` at `961:37516`
         - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `961:37515`
         - Fact `layout-gap`: `8.676355361938477px`; provenance: `figma-literal` at `961:37515`
         - Fact `padding-top`: `0px`; provenance: `figma-literal` at `961:37515`
@@ -1255,6 +1261,7 @@ RENDER: HTML
         - Fact `primary-alignment`: `center`; provenance: `figma-literal` at `961:37515`
         - Fact `counter-alignment`: `center`; provenance: `figma-literal` at `961:37515`
         - Fact `border-radius`: `0px`; provenance: `figma-literal` at `961:37515`
+        - Fact `email-render-size`: `138×138px`
     - `root-content-area-store-buttons` — role `store-buttons`; render `presentation-table`; visibility `always`
       - Fact `reference-size`: `488×56px`; provenance: `figma-literal` at `961:50810`
       - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `961:50810`
