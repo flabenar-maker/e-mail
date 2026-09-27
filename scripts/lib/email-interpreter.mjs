@@ -108,6 +108,8 @@ function propsFromFacts(facts = [], { viewport, mode, isRoot = false, parentAxis
       );
       if (expands) props.style.width = "100%";
       else props.style["max-width"] = `${size.width}px`;
+    } else if (isRoot && viewport === "mobile") {
+      props.width = "100%";
     } else if (mode === "presentation-table" && sizing === "hug") {
       props.width = "auto";
     } else if (isRoot && viewport === "desktop") {
@@ -163,6 +165,13 @@ function propsFromFacts(facts = [], { viewport, mode, isRoot = false, parentAxis
     } else if (mode !== "direct-image" && id.endsWith("-padding")) props.style.padding = resolved;
     else if (id.endsWith("-width")) props.width = value.value;
     else if (id.endsWith("-height")) props.height = value.value;
+  }
+  if (mode === "presentation-table" && fact("vertical-sizing")?.value === "fill" && size?.height > 0) {
+    props.width = size.width;
+    props.height = size.height;
+  }
+  if (fact("shape")?.value === "ellipse") {
+    props.style["border-radius"] = "50%";
   }
   const gradientStart = fact("background-gradient-start")?.value;
   const gradientEnd = fact("background-gradient-end")?.value;
@@ -263,21 +272,23 @@ function isWholeButtonAction(element) {
 function inlineActionParts(childHtml, childNodes, gap) {
   const parts = childHtml.flatMap((html, index) => {
     if (!html) return [];
-    const noWrap = html.includes("white-space:nowrap");
     const nodeFacts = childNodes?.[index]?.facts ?? [];
     const fact = (id) => nodeFacts.find((item) => item.id === id)?.value;
+    const hugText = fact("text-auto-resize")?.value === "width_and_height";
+    const noWrap = html.includes("white-space:nowrap") || hugText;
     const fixedWidth = fact("horizontal-sizing")?.value === "fixed"
       ? fact("reference-size")?.width
       : undefined;
     return [...html.matchAll(/<img\b[^>]*>|<p\b[^>]*>[\s\S]*?<\/p>/gu)].map((match) => ({
       html: match[0],
       noWrap,
+      hugText: match[0].startsWith("<p") && hugText,
       fixedWidth: match[0].startsWith("<p") ? fixedWidth : undefined,
     }));
   });
   if (parts.length === 0) return null;
 
-  return parts.map(({ html, noWrap, fixedWidth }, index) => {
+  return parts.map(({ html, noWrap, hugText, fixedWidth }, index) => {
     const offset = index > 0 && gap > 0 ? "margin-left:" + gap + "px;" : "";
     const whitespace = noWrap ? "white-space:nowrap;" : "";
     const column = Number.isFinite(fixedWidth) ? "width:" + fixedWidth + "px;" : "";
@@ -288,7 +299,7 @@ function inlineActionParts(childHtml, childNodes, gap) {
     }
     return html.replace(/^<p([^>]*)>([\s\S]*)<\/p>$/u, (_match, attrs, body) => {
       const style = attrs.match(/\sstyle="([^"]*)"/u);
-      const textStyle = Number.isFinite(fixedWidth)
+      const textStyle = Number.isFinite(fixedWidth) || hugText
         ? style?.[1].replace(/(?:^|;)max-width:[^;]*/u, "")
         : style?.[1];
       const nextAttrs = style
@@ -347,6 +358,29 @@ function renderShell(element, viewport, path, childHtml, context) {
         }, "&nbsp;");
         return { html: renderPrimitive("table", { width: "100%" }, `<tr>${cell}</tr>`), diagnostics: [] };
       }
+      if (children.length === 0 && dimensions?.width > 0 && dimensions?.height > 1 && factProps.style["background-color"]) {
+        const background = factProps.style["background-color"];
+        const radius = factProps.style["border-radius"];
+        const cell = renderPrimitive("cell", {
+          width: dimensions.width,
+          height: dimensions.height,
+          bgcolor: background,
+          style: {
+            "background-color": background,
+            ...(radius ? { "border-radius": radius } : {}),
+            "font-size": "0",
+            "line-height": "0",
+          },
+        }, "&nbsp;");
+        return {
+          html: renderPrimitive("table", {
+            ...factProps,
+            width: dimensions.width,
+            height: dimensions.height,
+          }, "<tr>" + cell + "</tr>"),
+          diagnostics: [],
+        };
+      }
       const axes = (element.facts ?? []).filter(({ id }) => id === "layout-axis" || id.endsWith("-layout-axis"));
       const gaps = (element.facts ?? []).filter(({ id }) => id === "layout-gap" || id.endsWith("-layout-gap"));
       if (children.length > 1 && (axes.length !== 1 || gaps.length !== 1)) {
@@ -391,11 +425,29 @@ function renderShell(element, viewport, path, childHtml, context) {
       const cellFor = ({ html, node }) => {
         if (node?.render_mode === "background-image") return html;
         const nodeProps = propsFromFacts(node?.facts, { viewport, mode: node?.render_mode });
+        const centeredImage = axis === "vertical" && counterAlignment === "center" &&
+          node?.render_mode === "direct-image" && !nodeProps.fluid
+          ? html.replace(/(<img\\b[^>]*\\sstyle=")([^"]*)"/u,
+            (_match, prefix, style) => prefix + style + ';margin:0 auto"')
+          : html;
+        const centeredTable = axis === "vertical" && counterAlignment === "center" &&
+          centeredImage.startsWith("<table") &&
+          !/^<table[^>]*\\salign=/u.test(centeredImage)
+          ? centeredImage.replace(/^<table\\b/u, '<table align="center"')
+            .replace(/(<table[^>]*style=")([^"]*)"/u,
+              (_match, prefix, style) => prefix + style + ';margin:0 auto"')
+          : centeredImage;
+        const fillHeight = node?.facts?.some(({ id, value }) =>
+          id === "vertical-sizing" && value?.value === "fill");
+        const childRadius = nodeProps.style["border-radius"];
+        const roundedChild = childRadius && !["0", "0px", "0%"].includes(String(childRadius));
+        const paintCellBackground = axis === "horizontal" &&
+          nodeProps.style["background-color"] && !roundedChild;
         const cellStyle = {
           ...(axis === "vertical" && counterAlignment === "center"
             ? { "text-align": "center" }
             : {}),
-          ...(axis === "horizontal" && nodeProps.style["background-color"]
+          ...(paintCellBackground
             ? { "background-color": nodeProps.style["background-color"] }
             : {}),
           ...(node?.render_mode === "html-link" && nodeProps.style["text-align"] === "center"
@@ -403,13 +455,14 @@ function renderShell(element, viewport, path, childHtml, context) {
             : {}),
         };
         return renderPrimitive("cell", {
-          width: spaceBetween ? node?.facts?.find(({ id }) => id === "reference-size")?.value?.width : nodeProps.width,
-          valign: axis === "horizontal" && counterAlignment === "center" ? "middle" : "top",
-          ...(axis === "horizontal" && nodeProps.style["background-color"]
+          width: spaceBetween ? node?.facts?.find(({ id }) => id === "reference-size")?.value?.width
+            : nodeProps.width === "auto" ? undefined : nodeProps.width,
+          valign: axis === "horizontal" && counterAlignment === "center" && !fillHeight ? "middle" : "top",
+          ...(paintCellBackground
             ? { bgcolor: nodeProps.style["background-color"] }
             : {}),
           ...(Object.keys(cellStyle).length > 0 ? { style: cellStyle } : {}),
-        }, groupedAction ? html : wrapAction(element, entry, html));
+        }, groupedAction ? centeredTable : wrapAction(element, entry, centeredTable));
       };
       const rawRows = axis === "horizontal"
         ? `<tr>${visible.map(cellFor).join(gap > 0
