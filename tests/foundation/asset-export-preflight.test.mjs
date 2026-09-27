@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 
 async function assess(input) {
   const module = await import("../../scripts/lib/asset-export-preflight.mjs").catch(() => ({}));
@@ -21,9 +22,9 @@ function evidence(overrides = {}) {
     emailId: "sample-email-1.0",
     assetId: "secondary-image",
     sourceViewport: "mobile",
-    concreteInstanceId: "1362:19151",
+    concreteInstanceId: "sample-instance",
     sourceNodeName: "secondary-image @2x",
-    sourceNodeId: "I1362:19151;1103:7;1362:19160",
+    sourceNodeId: "sample-secondary-node",
     sourceNodeDimensions: { width: 296, height: 188 },
     sourceHash: "source-hash-1",
     sourcePixelDimensions: { width: 984, height: 696 },
@@ -60,6 +61,27 @@ test("requires the concrete source node identity and dimensions", async () => {
   assert.ok(result?.issues.some((entry) => entry.code === "source-node-id-missing"));
   assert.ok(result?.issues.some((entry) => entry.code === "source-node-dimensions-missing"));
 });
+
+test("keeps Banner/Secondary export dimensions anchored to the current registry", async () => {
+  const registry = JSON.parse(readFileSync(new URL("../../data/components/marketing.yaml", import.meta.url), "utf8"));
+  const current = registry.components.find((component) => component.id === "banner-secondary")
+    ?.asset_contracts.find((entry) => entry.id === "secondary-image");
+  assert.ok(current);
+  assert.deepEqual(
+    { width: current.pixel_dimensions.width, height: current.pixel_dimensions.height },
+    { width: 592, height: 376 },
+  );
+  const result = await assess({
+    asset: current,
+    evidence: evidence({
+      sourceViewport: current.source_viewport,
+      outputPixelDimensions: { width: 814, height: 517 },
+    }),
+  });
+  assert.equal(result?.status, "blocked");
+  assert.ok(result?.issues.some((entry) => entry.code === "output-dimensions-mismatch"));
+});
+
 test("blocks a Desktop source or changed crop rather than silently substituting it", async () => {
   const wrongViewport = await assess({ asset, evidence: evidence({ sourceViewport: "desktop" }) });
   assert.equal(wrongViewport?.status, "blocked");
@@ -105,7 +127,7 @@ test("low source resolution pauses for a per-email, per-asset decision and recor
     assetId: "hero-image",
     sourceViewport: "desktop",
     sourceNodeName: "hero-image @2x",
-    sourceNodeId: "I1362:18159;hero-image",
+    sourceNodeId: "sample-hero-node",
     sourceNodeDimensions: { width: 552, height: 353 },
     cropRect: { x: 0, y: 33.3695652174, width: 984, height: 629.260869565 },
     outputPixelDimensions: { width: 1104, height: 706 },
@@ -182,7 +204,7 @@ test("accepts a rendered Card/Image composite with its own exact-node crop sourc
       assetId: "card-image",
       sourceViewport: "desktop",
       sourceNodeName: "card-image @2x",
-      sourceNodeId: "I1362:18159;card-image",
+      sourceNodeId: "sample-card-node",
       sourceNodeDimensions: { width: 232, height: 148 },
       outputPixelDimensions: { width: 464, height: 296 },
       effectiveSourcePixelDimensions: { width: 752, height: 480 },

@@ -71,6 +71,16 @@ export function assessAssetExport({ asset, evidence, lowResolutionDecision } = {
   if (!evidence.emailId || !evidence.concreteInstanceId || !evidence.sourceHash) {
     issues.push(issue("concrete-source-missing", "The concrete email, instance ID and Fill hash must be recorded."));
   }
+  if (typeof evidence.sourceNodeId !== "string" || evidence.sourceNodeId.trim() === "") {
+    issues.push(issue("source-node-id-missing", "The concrete source node ID must be recorded from Figma."));
+  }
+  if (!positiveSize(evidence.sourceNodeDimensions)) {
+    issues.push(issue("source-node-dimensions-missing", "The concrete source node dimensions must be recorded from Figma."));
+  } else if (positiveSize(ratio) &&
+      Math.abs(evidence.sourceNodeDimensions.width / evidence.sourceNodeDimensions.height -
+        ratio.width / ratio.height) > 0.000001) {
+    issues.push(issue("source-node-ratio-mismatch", "The concrete source node ratio differs from the contract export ratio."));
+  }
   if (evidence.assetId !== asset.id) {
     issues.push(issue("asset-id-mismatch", "The evidence belongs to a different asset."));
   }
@@ -98,8 +108,8 @@ export function assessAssetExport({ asset, evidence, lowResolutionDecision } = {
       if (evidence.fillScaleMode !== "FILL" ||
           !identityTransform(evidence.imageTransform)) {
         issues.push(issue("fill-transform-unresolved", "This preflight can derive only FILL with identity imageTransform; resolve other transforms separately."));
-      } else if (positiveSize(ratio)) {
-        const expected = centeredFillCrop(source, ratio.width / ratio.height);
+      } else if (positiveSize(ratio) && positiveSize(evidence.sourceNodeDimensions)) {
+        const expected = centeredFillCrop(source, evidence.sourceNodeDimensions.width / evidence.sourceNodeDimensions.height);
         if (!sameRect(evidence.cropRect, expected)) {
           issues.push(issue("crop-ratio-mismatch", "The recorded rectangular crop differs from the concrete Fill crop."));
         } else {
