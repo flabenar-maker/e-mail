@@ -427,13 +427,13 @@ function renderShell(element, viewport, path, childHtml, context) {
         const nodeProps = propsFromFacts(node?.facts, { viewport, mode: node?.render_mode });
         const centeredImage = axis === "vertical" && counterAlignment === "center" &&
           node?.render_mode === "direct-image" && !nodeProps.fluid
-          ? html.replace(/(<img\\b[^>]*\\sstyle=")([^"]*)"/u,
+          ? html.replace(/(<img\b[^>]*\sstyle=")([^"]*)"/u,
             (_match, prefix, style) => prefix + style + ';margin:0 auto"')
           : html;
         const centeredTable = axis === "vertical" && counterAlignment === "center" &&
           centeredImage.startsWith("<table") &&
-          !/^<table[^>]*\\salign=/u.test(centeredImage)
-          ? centeredImage.replace(/^<table\\b/u, '<table align="center"')
+          !/^<table[^>]*\salign=/u.test(centeredImage)
+          ? centeredImage.replace(/^<table\b/u, '<table align="center"')
             .replace(/(<table[^>]*style=")([^"]*)"/u,
               (_match, prefix, style) => prefix + style + ';margin:0 auto"')
           : centeredImage;
