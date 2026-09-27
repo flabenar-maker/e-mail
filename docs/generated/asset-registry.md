@@ -11,12 +11,12 @@ General export definitions are listed first. Component-specific choices remain o
 ### IMAGE FILL
 
 - Stable ID: `image-fill`
-- Description: Export the original source raster from the Fill of the concrete Desktop email instance without its container, nested graphics or live HTML.
+- Description: Export the original source raster from the Fill of the concrete contract-selected email instance without its container, nested graphics or live HTML.
 - Contract:
 
 ```json
 {
-  "concrete_desktop_instance_required": true,
+  "concrete_email_instance_required": true,
   "live_html_included": false,
   "own_visible_fill_included": true,
   "parent_fill_included": false,
@@ -29,12 +29,12 @@ General export definitions are listed first. Component-specific choices remain o
 ### RENDERED NODE
 
 - Stable ID: `rendered-node`
-- Description: Export the exact selected node from the concrete Desktop email instance after overrides, including its own visible Fill and visible nested graphics but excluding parent Fill and unrelated layout.
+- Description: Export the exact selected node from the concrete contract-selected email instance after overrides, including its own visible Fill and visible nested graphics but excluding parent Fill and unrelated layout.
 - Contract:
 
 ```json
 {
-  "concrete_desktop_instance_required": true,
+  "concrete_email_instance_required": true,
   "live_html_included": false,
   "own_visible_fill_included": true,
   "parent_fill_included": false,
@@ -331,7 +331,7 @@ General export definitions are listed first. Component-specific choices remain o
 
 ```json
 {
-  "statement": "Export uses the concrete Desktop email instance after its overrides."
+  "statement": "Export uses the concrete contract-selected email instance after its overrides."
 }
 ```
 
@@ -406,7 +406,7 @@ General export definitions are listed first. Component-specific choices remain o
 ```json
 {
   "base_name_source": "nearest-semantic-asset-owner",
-  "concrete_desktop_instance_required": true,
+  "concrete_email_instance_required": true,
   "main_component_export_forbidden": true,
   "placeholder_forbidden": true,
   "scale_suffix_required": true,
@@ -553,7 +553,7 @@ General export definitions are listed first. Component-specific choices remain o
   - Export boundary: `fill` / `secondary-image @2x`
   - Pixel dimensions: 592×376px
   - Aspect ratio: 296:188
-  - Crop: `figma-fill`; position `concrete-desktop-instance`
+  - Crop: `figma-fill`; position `concrete-mobile-instance`
   - Background: own visible boundary fill `preserve`; artificial matte `forbid`
   - Clipping policy: `preserve-artwork`
 

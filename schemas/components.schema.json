@@ -515,7 +515,7 @@
           "pattern": " @(?:2x|4x)$"
         },
         "source_viewport": {
-          "const": "desktop"
+          "enum": ["mobile", "desktop"]
         },
         "source_mode_id": {
           "type": "string",
