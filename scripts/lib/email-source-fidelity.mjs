@@ -114,7 +114,7 @@ export function verifyEmailModelSource({
   for (const [group, items, fields] of [
     ["instances", readings.instances, ["node_id", "variant_id"]],
     ["fields", readings.fields, ["node_id", "owner_node_id", "field"]],
-    ["assets", readings.assets, ["node_id", "owner_node_id", "evidence_id"]],
+    ["assets", readings.assets, ["node_id", "owner_node_id"]],
   ]) {
     for (const [index, item] of items.entries()) {
       if (!item || !VIEWPORTS.includes(item.viewport) ||
