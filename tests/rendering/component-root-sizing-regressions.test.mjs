@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { dirname, join } from "node:path";
+import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { loadComponentRegistries } from "../../scripts/lib/component-registry.mjs";
@@ -9,6 +9,30 @@ import { loadRendererRegistry, resolveRendererCoverage } from "../../scripts/lib
 import { renderContractTree } from "../../scripts/lib/email-interpreter.mjs";
 
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
+
+function requiredInputs(component) {
+  const content = { mobile: {}, desktop: {} };
+  const properties = { mobile: {}, desktop: {} };
+  for (const viewport of ["mobile", "desktop"]) {
+    const visit = (element) => {
+      const entry = content[viewport][element.id] ??= {};
+      const source = element.facts?.find(({ id }) => id === "source-text")?.value?.value;
+      for (const slot of element.content_slots ?? []) {
+        if (!slot.required) continue;
+        entry[slot.id] = source ?? (/(?:href|url)/u.test(slot.id)
+          ? "https://example.test/action"
+          : "Regression content");
+      }
+      if (element.visibility?.mode === "property") {
+        const property = component.properties?.find(({ id }) => id === element.visibility.property_id);
+        properties[viewport][element.visibility.property_id] = property?.default ?? true;
+      }
+      for (const child of element.children ?? []) visit(child);
+    };
+    visit(component.contracts[viewport].root);
+  }
+  return { content, properties };
+}
 
 async function renderActualComponent(componentId) {
   const [registries, rendererRegistry, rendering] = await Promise.all([
@@ -25,6 +49,7 @@ async function renderActualComponent(componentId) {
     component,
     coverage: resolveRendererCoverage(rendererRegistry, componentId),
     foundations: { rendering },
+    ...requiredInputs(component),
   });
   assert.deepEqual(result.diagnostics, []);
   return result.html;
