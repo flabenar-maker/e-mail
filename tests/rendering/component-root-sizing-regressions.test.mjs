@@ -12,7 +12,8 @@ const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 
 function requiredInputs(component) {
   const content = { mobile: {}, desktop: {} };
-  const properties = { mobile: {}, desktop: {} };`n  const assets = { mobile: {}, desktop: {} };
+  const properties = { mobile: {}, desktop: {} };
+  const assets = { mobile: {}, desktop: {} };
   for (const viewport of ["mobile", "desktop"]) {
     const visit = (element) => {
       const entry = content[viewport][element.id] ??= {};
@@ -23,7 +24,10 @@ function requiredInputs(component) {
           ? "https://example.test/action"
           : "Regression content");
       }
-      if (element.asset_contract_id) {`n        assets[viewport][element.asset_contract_id] = { src: "images/regression.png" };`n      }`n      if (element.visibility?.mode === "property") {
+      if (element.asset_contract_id) {
+        assets[viewport][element.asset_contract_id] = { src: "images/regression.png" };
+      }
+      if (element.visibility?.mode === "property") {
         const property = component.properties?.find(({ id }) => id === element.visibility.property_id);
         properties[viewport][element.visibility.property_id] = property?.default ?? true;
       }
