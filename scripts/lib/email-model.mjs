@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import { isAbsolute, posix, win32 } from "node:path";
 
 import { SystemValidationError } from "./diagnostics.mjs";
+import { selectVariantRoot } from "./email-interpreter.mjs";
 import { validateDocumentShape } from "./schema-validation.mjs";
 
 const SUPPORTED_VERSION = "1.1.0";
@@ -206,6 +207,9 @@ function propertyTypeMatches(value, expected) {
 }
 
 function visible(element, instance, viewport, errors, path) {
+  if (element.visibility?.mode === "instance") {
+    return element.visibility.default_visible;
+  }
   if (element.visibility?.mode !== "property") return true;
   const propertyId = element.visibility.property_id;
   const value = propertyValue(instance, propertyId, viewport);
@@ -328,6 +332,10 @@ function validateDeclaredBindings(instance, record, maps, errors, path) {
   });
 }
 
+function nestedElementId(item, viewport) {
+  return item.element_ids?.[viewport] ?? item.element_id;
+}
+
 function validateRequiredTree(element, instance, viewport, errors, path) {
   if (!visible(element, instance, viewport, errors, path)) return;
 
@@ -374,7 +382,7 @@ function validateRequiredTree(element, instance, viewport, errors, path) {
 
   if (element.render_mode === "nested-component") {
     const nested = (instance.nested_components ?? []).find(
-      (item) => item.element_id === element.id,
+      (item) => nestedElementId(item, viewport) === element.id,
     );
     if (!nested) {
       errors.push(
@@ -465,33 +473,73 @@ function validateInstance(instance, dependencies, errors, path, stack) {
     (item) => item.element_id,
     "slot",
   );
-  validateUniqueBindings(
-    errors,
-    instance.nested_components,
-    path + "/nested_components",
-    (item) => item.element_id,
-    "nested component",
-  );
-
-  const maps = Object.fromEntries(
-    VIEWPORTS.map((viewport) => [
-      viewport,
-      elementMap(record.contracts?.[viewport]?.root),
-    ]),
-  );
-  validateDeclaredBindings(instance, record, maps, errors, path);
   for (const viewport of VIEWPORTS) {
-    const root = record.contracts?.[viewport]?.root;
-    if (!root) {
-      errors.push(
-        diagnostic(
-          "EMAIL_MODEL_VIEWPORT_CONTRACT_MISSING",
-          path + "/variants/" + viewport,
-          "Component " + record.id + " has no " + viewport + " contract.",
-        ),
-      );
+    validateUniqueBindings(
+      errors,
+      instance.nested_components,
+      path + "/nested_components",
+      (item) => nestedElementId(item, viewport),
+      "nested component in " + viewport,
+    );
+  }
+
+  const selectedRoots = {};
+  for (const viewport of VIEWPORTS) {
+    if (!record.contracts?.[viewport]?.root) {
+      errors.push(diagnostic(
+        "EMAIL_MODEL_VIEWPORT_CONTRACT_MISSING",
+        path + "/variants/" + viewport,
+        "Component " + record.id + " has no " + viewport + " contract.",
+      ));
       continue;
     }
+    const axes = instance.variant_axes?.[viewport] ?? {};
+    if (Object.keys(axes).length > 0 && !(record.contracts?.variant_contracts?.length > 0)) {
+      errors.push(diagnostic(
+        "EMAIL_MODEL_VARIANT_UNRESOLVED",
+        path + "/variant_axes/" + viewport,
+        "Component " + record.id + " has no contract for additional variant axes.",
+      ));
+      continue;
+    }
+    const selected = selectVariantRoot(record, viewport, axes);
+    if (!selected.root || selected.diagnostics.length > 0) {
+      errors.push(diagnostic(
+        "EMAIL_MODEL_VARIANT_UNRESOLVED",
+        path + "/variant_axes/" + viewport,
+        "No exact " + viewport + " contract for " + JSON.stringify(axes) + ".",
+      ));
+      continue;
+    }
+    selectedRoots[viewport] = selected.root;
+  }
+  const maps = Object.fromEntries(
+    VIEWPORTS.map((viewport) => [viewport, elementMap(selectedRoots[viewport])]),
+  );
+  validateDeclaredBindings(instance, record, maps, errors, path);
+  (instance.nested_components ?? []).forEach((nested, index) => {
+    for (const viewport of VIEWPORTS) {
+      if (!selectedRoots[viewport]) continue;
+      const elementId = nestedElementId(nested, viewport);
+      const element = maps[viewport].get(elementId);
+      if (!element || element.render_mode !== "nested-component") {
+        errors.push(diagnostic(
+          "EMAIL_MODEL_NESTED_ELEMENT_UNKNOWN",
+          path + "/nested_components/" + index,
+          "Nested element " + elementId + " is not declared for " + viewport + ".",
+        ));
+      } else if (element.component_id !== nested.instance.component_id) {
+        errors.push(diagnostic(
+          "EMAIL_MODEL_NESTED_COMPONENT_MISMATCH",
+          path + "/nested_components/" + index,
+          "Expected nested component " + element.component_id + " for " + viewport + ".",
+        ));
+      }
+    }
+  });
+  for (const viewport of VIEWPORTS) {
+    const root = selectedRoots[viewport];
+    if (!root) continue;
     validateRequiredTree(
       root,
       instance,
