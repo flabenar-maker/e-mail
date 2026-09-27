@@ -368,10 +368,25 @@ test("a pinned derived email fact is audited by its evidence fixture, not as a d
     value: { type: "measure", value: 8, unit: "px" },
     provenance: { kind: "registry-literal", source_blob_sha: "39e7a05f3383baf0d2effd27cdf9976c970f7b81" },
   });
-  const report = auditFigmaContractFacts({ record, live: packet, mappings });
+  const derivedEvidence = [{
+    component_id: "sample",
+    contract_path: "/contracts/mobile/root/facts/2/value",
+    source_blob_sha: "39e7a05f3383baf0d2effd27cdf9976c970f7b81",
+    value: { type: "measure", value: 8, unit: "px" },
+  }];
+  const withoutProof = auditFigmaContractFacts({ record, live: packet, mappings });
+  assert.ok(withoutProof.issues.some((item) =>
+    item.code === "CONTRACT_FACT_UNMAPPED" &&
+    item.contract_path === "/contracts/mobile/root/facts/2/value/value"));
+  const report = auditFigmaContractFacts({ record, live: packet, mappings, derivedEvidence });
   assert.equal(report.issues.some((item) =>
     item.code === "CONTRACT_FACT_UNMAPPED" &&
     item.contract_path === "/contracts/mobile/root/facts/2/value/value"), false);
+  derivedEvidence[0].value.value = 9;
+  const wrongValue = auditFigmaContractFacts({ record, live: packet, mappings, derivedEvidence });
+  assert.ok(wrongValue.issues.some((item) =>
+    item.code === "CONTRACT_FACT_UNMAPPED" &&
+    item.contract_path === "/contracts/mobile/root/facts/2/value/value"));
 });
 test("a pinned registry literal without an email-only derivation remains unmapped", () => {
   const { record, packet, mappings } = fixture();
