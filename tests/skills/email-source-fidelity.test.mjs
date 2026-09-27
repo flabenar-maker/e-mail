@@ -260,10 +260,20 @@ test("alt purpose is part of the authorized value, not only its text", () => {
   delete target.field;
   input.authorizedInputs.push({ instance_id: "a", kind: "content", element_id: "mobile-title",
     slot_id: "text", viewport: "mobile", origin: "user",
-    value: { purpose: "informative", value: "A mobile" } });
+    value: { purpose: "informative", value: "A mobile" },
+    source_ref: { source_id: "user-message-1", field_path: "/alt" } });
   assert.deepEqual(codes(input), []);
   a.content_values[0].value.purpose = "decorative";
   assert.ok(codes(input).includes("EMAIL_SOURCE_VALUE_MISMATCH"));
+  a.content_values[0].value.purpose = "informative";
+  delete input.authorizedInputs[0].source_ref;
+  assert.ok(codes(input).includes("EMAIL_SOURCE_INPUT_PROVENANCE_MISSING"));
+  target.origin = "policy-derived";
+  input.authorizedInputs[0].origin = "policy-derived";
+  input.authorizedInputs[0].source_ref = { source_id: "email-alt-policy", field_path: "/alt" };
+  assert.ok(codes(input).includes("EMAIL_SOURCE_INPUT_PROVENANCE_MISSING"));
+  input.authorizedInputs[0].source_ref.version = "v1";
+  assert.deepEqual(codes(input), []);
 });
 
 test("contract-backed rich-text requires source inline runs", () => {
