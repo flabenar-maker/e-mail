@@ -176,6 +176,14 @@
       "live_figma": {
         "file_key": "8zka5bHkcrJVK9I9dKjnhC",
         "node_id": "11:1184",
+        "concrete_email_instance_example": {
+          "root_node_id": "I1362:19151;1103:7;1362:19160",
+          "image_layer_node_id": "I1362:19151;1103:7;1362:19160;11:1184",
+          "image_layer_geometry": { "width": 296, "height": 188 },
+          "image_layer_fill_type": "IMAGE",
+          "image_layer_scale_mode": "FILL",
+          "image_layer_corner_radius": 0
+        },
         "node_name": "secondary-image @2x",
         "variant": "Viewport=Mobile",
         "viewport": "mobile",
