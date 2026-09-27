@@ -1,5 +1,6 @@
 import { readFile } from "node:fs/promises";
-import { resolve } from "node:path";
+import { createHash } from "node:crypto";
+import { isAbsolute, relative, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
 import {
@@ -48,9 +49,38 @@ export async function main(args = process.argv.slice(2)) {
       }));
       return 1;
     }
+    const proofManifest = JSON.parse(await readFile(
+      resolve(parsed.repoRoot, "data/evidence/derived-email-geometry.json"), "utf8"));
+    const derivedEvidence = [];
+    for (const bundle of proofManifest.evidence ?? []) {
+      if (bundle.component_id !== parsed.componentId) continue;
+      const capturePath = resolve(parsed.repoRoot, bundle.capture_path);
+      const relation = relative(parsed.repoRoot, capturePath);
+      if (relation.startsWith("..") || isAbsolute(relation)) {
+        throw new Error("Derived evidence path escapes repository root.");
+      }
+      const captureText = (await readFile(capturePath, "utf8")).replace(/\r\n/gu, "\n");
+      const capture = JSON.parse(captureText);
+      if (capture.figma_file_key !== entry.record.figma.file_key) {
+        throw new Error("Derived evidence refers to a different Figma file.");
+      }
+      const actualSha = createHash("sha1")
+        .update(`blob ${Buffer.byteLength(captureText)}\0`)
+        .update(captureText).digest("hex");
+      if (actualSha !== bundle.source_blob_sha) {
+        throw new Error("Derived evidence capture SHA does not match its pinned blob.");
+      }
+      derivedEvidence.push(...bundle.facts.map((fact) => ({
+        component_id: bundle.component_id,
+        source_blob_sha: actualSha,
+        contract_path: fact.contract_path,
+        value: fact.value,
+      })));
+    }
     const report = auditFigmaContractFacts({
       record: entry.record,
       live,
+      derivedEvidence,
     });
     console.log(JSON.stringify(report, null, 2));
     return report.ok ? 0 : 1;
