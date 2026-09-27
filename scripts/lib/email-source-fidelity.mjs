@@ -124,6 +124,19 @@ export function verifyEmailModelSource({
     item.instance_id, item.kind, item.element_id ?? item.property_id, item.slot_id ?? "", item.viewport,
   ), "authorized-inputs", errors);
   const receipts = uniqueIndex(assetEvidence, (item) => key(item.instance_id, item.asset_contract_id, item.path), "asset-receipts", errors);
+  for (const [index, input] of authorizedInputs.entries()) {
+    if (!["user", "policy-derived"].includes(input.origin)) continue;
+    const reference = input.source_ref;
+    if (!reference || typeof reference !== "object" || Array.isArray(reference) ||
+        typeof reference.source_id !== "string" || !reference.source_id.trim() ||
+        typeof reference.field_path !== "string" || !reference.field_path.trim() ||
+        (input.origin === "policy-derived" &&
+          (typeof reference.version !== "string" || !reference.version.trim()))) {
+      errors.push(issue("EMAIL_SOURCE_INPUT_PROVENANCE_MISSING",
+        "/authorizedInputs/" + index + "/source_ref",
+        "Authorized input requires an exact user-input or versioned policy reference."));
+    }
+  }
   const claimedSourceInstances = new Set();
   const claimedSourceFields = new Set();
   const claimedSourceAssets = new Set();
