@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: component-registry -->
-<!-- source-digest: sha256:fdb9d6e25064900a2cf3247b180249045d948660c565bf17e9b3dd486553b85f -->
+<!-- source-digest: sha256:6461196e0c957491a545c4da055501bad854a0d322d431031578eaac45680f8b -->
 <!-- schema-versions: components=2.1.0, typography=1.0.0, spacing=1.0.0, assets=1.0.0 -->
 # CUPIS component registry
 
@@ -1242,6 +1242,7 @@ RENDER: HTML
           - Fact `layout-align`: `stretch`; provenance: `figma-literal` at `961:37514`
       - `root-content-area-text-qr-qr-code` — role `qr-code`; render `direct-image`; visibility `always`; asset `qr-code`
         - Fact `reference-size`: `130×130px`; provenance: `figma-literal` at `961:37515`
+        - Fact `visible-artwork-size`: `138.38710021972656×138.38710021972656px`; provenance: `figma-literal` at `961:37516`
         - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `961:37515`
         - Fact `layout-gap`: `8.676355361938477px`; provenance: `figma-literal` at `961:37515`
         - Fact `padding-top`: `0px`; provenance: `figma-literal` at `961:37515`
@@ -1658,7 +1659,7 @@ RENDER: HTML
   - Alpha: `opaque` — `fully-opaque`
   - Clipping: `preserve-artwork`
   - Export boundary: `node` `qr-code @4x`
-  - Pixel dimensions: 520×520px
+  - Pixel dimensions: 554×554px
   - Aspect ratio: 130:130
   - Crop: `none`; position `exact-node-after-overrides`
   - Background: own fill `preserve`; artificial matte `forbid`
