@@ -11,6 +11,8 @@ import { renderContractTree } from "../../scripts/lib/email-interpreter.mjs";
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const captureText = await readFile(new URL("./fixtures/qr-artwork-figma-capture.json", import.meta.url), "utf8");
 const capture = JSON.parse(captureText);
+const evidenceManifest = JSON.parse(await readFile(
+  new URL("../../data/evidence/derived-email-geometry.json", import.meta.url), "utf8"));
 const captureBlobSha = "39e7a05f3383baf0d2effd27cdf9976c970f7b81";
 const rendering = {
   breakpoints: [{ id: "cupis-mobile", query: "max-width", value: 659, unit: "px" }],
@@ -34,7 +36,9 @@ function literal(id, value) {
 }
 
 test("QR Figma capture traces the complete opaque export and exact email grid", async () => {
-  const actualBlobSha = createHash("sha1").update(`blob ${Buffer.byteLength(captureText)}\0`).update(captureText).digest("hex");
+  const normalizedCaptureText = captureText.replace(/\r\n/gu, "\n");
+  const actualBlobSha = createHash("sha1").update(`blob ${Buffer.byteLength(normalizedCaptureText)}\0`)
+    .update(normalizedCaptureText).digest("hex");
   assert.equal(actualBlobSha, captureBlobSha);
   const registries = await loadComponentRegistries({ repoRoot });
   const app = Object.values(registries).flatMap((registry) => registry.components)
@@ -83,10 +87,22 @@ test("QR Figma capture traces the complete opaque export and exact email grid", 
     [header, "email-cell-inset-top", { type: "measure", value: grid.header_cell_inset_top, unit: "px" }],
     [image, "email-render-size", { type: "dimensions", width: grid.artwork_size, height: grid.artwork_size, unit: "px" }],
   ];
+  const proof = evidenceManifest.evidence.find((item) => item.component_id === app.id);
+  assert.equal(proof.source_blob_sha, captureBlobSha);
+  assert.equal(proof.facts.length, expected.length);
+  const elementPaths = new Map([
+    [content, "/contracts/desktop/root/children/0"],
+    [row, "/contracts/desktop/root/children/0/children/0"],
+    [header, "/contracts/desktop/root/children/0/children/0/children/0"],
+    [image, "/contracts/desktop/root/children/0/children/0/children/1"],
+  ]);
   for (const [element, id, value] of expected) {
     const fact = findFact(element, id);
     assert.deepEqual(fact?.value, value, element.id + ":" + id);
     assert.deepEqual(fact?.provenance, { kind: "registry-literal", source_blob_sha: captureBlobSha });
+    const index = element.facts.findIndex((item) => item.id === id);
+    const path = `${elementPaths.get(element)}/facts/${index}/value`;
+    assert.deepEqual(proof.facts.find((item) => item.contract_path === path)?.value, value);
   }
 });
 
