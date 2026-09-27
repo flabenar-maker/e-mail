@@ -136,3 +136,20 @@ for (const [componentId, statusWidth] of [["block-transaction-success", 116], ["
     assert.match(mobile, /<img\b[^>]*width="72"[^>]*height="72"/u);
   });
 }
+test("actual banner-app-download Desktop store buttons paint rounded tables instead of square outer cells", async () => {
+  const desktop = viewportHtml(await renderActualComponent("banner-app-download"), "desktop");
+  const colorPattern = /background-color:#(?:1E60DD|F8F8FA)/u;
+  const paintedTables = [...desktop.matchAll(/<table\b[^>]*>/gu)]
+    .map(([tag]) => tag)
+    .filter((tag) => colorPattern.test(tag));
+  assert.equal(paintedTables.length, 4, "one painted table per real store action");
+  for (const table of paintedTables) {
+    assert.match(table, /border-radius:50px/u);
+    assert.match(table, /width="100%"/u);
+  }
+
+  const paintedCells = [...desktop.matchAll(/<td\b[^>]*>/gu)]
+    .map(([tag]) => tag)
+    .filter((tag) => colorPattern.test(tag));
+  assert.deepEqual(paintedCells, [], "store-button color must not create square painted outer cells");
+});
