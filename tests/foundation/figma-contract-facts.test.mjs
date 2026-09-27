@@ -361,3 +361,15 @@ test("a live Mobile Accent variant may certify its exact variant_contract root f
     (issue.code === "CONTRACT_TARGET_INVALID" || issue.code === "CONTRACT_FACT_UNMAPPED") &&
     issue.contract_path === contractPath), false, JSON.stringify(report.issues));
 });
+test("a pinned derived email fact is audited by its evidence fixture, not as a direct Figma literal", () => {
+  const { record, packet, mappings } = fixture();
+  record.contracts.mobile.root.facts.push({
+    id: "email-render-layout-gap",
+    value: { type: "measure", value: 8, unit: "px" },
+    provenance: { kind: "registry-literal", source_blob_sha: "39e7a05f3383baf0d2effd27cdf9976c970f7b81" },
+  });
+  const report = auditFigmaContractFacts({ record, live: packet, mappings });
+  assert.equal(report.issues.some((item) =>
+    item.code === "CONTRACT_FACT_UNMAPPED" &&
+    item.contract_path === "/contracts/mobile/root/facts/2/value/value"), false);
+});

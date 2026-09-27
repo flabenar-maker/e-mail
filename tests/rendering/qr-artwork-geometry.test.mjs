@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -8,7 +9,8 @@ import { loadComponentRegistries } from "../../scripts/lib/component-registry.mj
 import { renderContractTree } from "../../scripts/lib/email-interpreter.mjs";
 
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
-const capture = JSON.parse(await readFile(new URL("./fixtures/qr-artwork-figma-capture.json", import.meta.url), "utf8"));
+const captureText = await readFile(new URL("./fixtures/qr-artwork-figma-capture.json", import.meta.url), "utf8");
+const capture = JSON.parse(captureText);
 const captureBlobSha = "39e7a05f3383baf0d2effd27cdf9976c970f7b81";
 const rendering = {
   breakpoints: [{ id: "cupis-mobile", query: "max-width", value: 659, unit: "px" }],
@@ -32,6 +34,8 @@ function literal(id, value) {
 }
 
 test("QR Figma capture traces the complete opaque export and exact email grid", async () => {
+  const actualBlobSha = createHash("sha1").update(`blob ${Buffer.byteLength(captureText)}\0`).update(captureText).digest("hex");
+  assert.equal(actualBlobSha, captureBlobSha);
   const registries = await loadComponentRegistries({ repoRoot });
   const app = Object.values(registries).flatMap((registry) => registry.components)
     .find((component) => component.id === "banner-app-download");
@@ -68,7 +72,9 @@ test("QR Figma capture traces the complete opaque export and exact email grid", 
     { type: "dimensions", width: source.qr_owner.width, height: source.qr_owner.height, unit: "px" });
   assert.deepEqual(findFact(image, "visible-artwork-size")?.value,
     { type: "dimensions", width: source.qr_artwork.width, height: source.qr_artwork.height, unit: "px" });
-  assert.equal(findFact(image, "visible-artwork-size")?.provenance?.node_id, source.qr_artwork.node_id);
+  assert.deepEqual(findFact(image, "visible-artwork-size")?.provenance,
+    { kind: "registry-literal", source_blob_sha: captureBlobSha });
+  assert.equal(source.qr_artwork.node_id, "961:37516");
   const expected = [
     [content, "email-render-size", { type: "dimensions", width: source.content_area.width, height: source.content_area.height, unit: "px" }],
     [content, "email-render-padding-top", { type: "measure", value: grid.content_padding.top, unit: "px" }],

@@ -117,15 +117,11 @@ function propsFromFacts(facts = [], { viewport, mode, isRoot = false, parentAxis
       props.width = size.width;
     }
   }
-  const artworkSize = fact("visible-artwork-size");
-  if (mode === "direct-image" && size?.type === "dimensions" &&
-      artworkSize?.type === "dimensions" && size.width > 0 && size.height > 0) {
-    const scaleX = artworkSize.width / size.width;
-    const scaleY = artworkSize.height / size.height;
-    if (Math.abs(scaleX - scaleY) < 1e-6 && scaleX > 0) {
-      props.style.transform = `scale(${scaleX})`;
-      props.style["transform-origin"] = "center center";
-    }
+  // Email-only geometry keeps exported artwork at its actual displayed size.
+  const emailSize = fact("email-render-size");
+  if (emailSize?.type === "dimensions") {
+    props.width = emailSize.width;
+    props.height = emailSize.height;
   }
 
   for (const item of facts) {
@@ -177,6 +173,12 @@ function propsFromFacts(facts = [], { viewport, mode, isRoot = false, parentAxis
     } else if (mode !== "direct-image" && id.endsWith("-padding")) props.style.padding = resolved;
     else if (id.endsWith("-width")) props.width = value.value;
     else if (id.endsWith("-height")) props.height = value.value;
+  }
+  for (const side of ["top", "right", "bottom", "left"]) {
+    const override = fact(`email-render-padding-${side}`);
+    if (mode !== "direct-image" && override?.type === "measure") {
+      props.style[`padding-${side}`] = valueWithUnit(override);
+    }
   }
   if (mode === "presentation-table" && semanticRole === "status-container" && fact("vertical-sizing")?.value === "fill" && size?.height > 0) {
     props.width = size.width;
@@ -394,7 +396,8 @@ function renderShell(element, viewport, path, childHtml, context) {
         };
       }
       const axes = (element.facts ?? []).filter(({ id }) => id === "layout-axis" || id.endsWith("-layout-axis"));
-      const gaps = (element.facts ?? []).filter(({ id }) => id === "layout-gap" || id.endsWith("-layout-gap"));
+      const gaps = (element.facts ?? []).filter(({ id }) =>
+        id === "layout-gap" || (id.endsWith("-layout-gap") && !id.startsWith("email-render-")));
       if (children.length > 1 && (axes.length !== 1 || gaps.length !== 1)) {
         return {
           html: "",
@@ -406,7 +409,8 @@ function renderShell(element, viewport, path, childHtml, context) {
         };
       }
       const axis = axes[0]?.value?.value ?? "vertical";
-      const gap = gaps[0]?.value?.value ?? 0;
+      const emailGap = element.facts?.find(({ id }) => id === "email-render-layout-gap")?.value;
+      const gap = emailGap?.type === "measure" ? emailGap.value : (gaps[0]?.value?.value ?? 0);
       if (
         axes.length > 1 || gaps.length > 1 ||
         !["vertical", "horizontal"].includes(axis) ||
@@ -455,7 +459,11 @@ function renderShell(element, viewport, path, childHtml, context) {
         const roundedChild = childRadius && !["0", "0px", "0%"].includes(String(childRadius));
         const paintCellBackground = axis === "horizontal" &&
           nodeProps.style["background-color"] && !roundedChild;
+        const cellTopInset = node?.facts?.find(({ id }) => id === "email-cell-inset-top")?.value;
         const cellStyle = {
+          ...(cellTopInset?.type === "measure"
+            ? { "padding-top": valueWithUnit(cellTopInset) }
+            : {}),
           ...(axis === "vertical" && counterAlignment === "center"
             ? { "text-align": "center" }
             : {}),

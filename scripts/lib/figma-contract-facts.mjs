@@ -98,6 +98,10 @@ function contractFactPaths(record) {
   function walk(element, path) {
     if (!element || typeof element !== "object") return;
     (element.facts ?? []).forEach((fact, index) => {
+      // Derived email geometry is checked against its pinned capture separately;
+      // this audit maps only facts claimed to be direct Figma observations.
+      if (fact.provenance?.kind === "registry-literal" &&
+          /^[0-9a-f]{40}$/u.test(fact.provenance.source_blob_sha ?? "")) return;
       const base = `${path}/facts/${index}/value`;
       for (const [key, value] of Object.entries(fact.value ?? {})) {
         if (key === "type") continue;
