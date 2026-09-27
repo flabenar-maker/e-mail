@@ -376,6 +376,44 @@ test("viewport-specific nested element IDs require exact placement in both varia
   });
   assert.ok(wrong.blockers.includes("contract-ambiguous"));
 });
+test("handoff placement uses the model-selected variant contract", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "cupis-axis-placement-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const source = await fixture(root, ["banner-secondary"]);
+  const contractRepo = await contractRepoCopy(root, "axis-placement-repo");
+  const marketingPath = join(contractRepo, "data", "components", "marketing.yaml");
+  const marketing = JSON.parse(await readFile(marketingPath, "utf8"));
+  const banner = marketing.components.find(({ id }) => id === "banner-secondary");
+  const instance = source.model.root.slots[0].instances[0];
+  const nested = instance.nested_components[0];
+  const originalId = nested.element_id;
+  const variantId = `${originalId}-alternate`;
+  const mobileRoot = structuredClone(banner.contracts.mobile.root);
+  const desktopRoot = structuredClone(banner.contracts.desktop.root);
+  const stack = [desktopRoot];
+  let target;
+  while (stack.length) {
+    const element = stack.pop();
+    if (element.id === originalId) target = element;
+    stack.push(...(element.children ?? []));
+  }
+  assert.ok(target);
+  target.id = variantId;
+  banner.contracts.variant_contracts = [
+    { axes: [{ name: "Viewport", value: "Mobile" }, { name: "Mode", value: "Alternate" }], root: mobileRoot },
+    { axes: [{ name: "Viewport", value: "Desktop" }, { name: "Mode", value: "Alternate" }], root: desktopRoot },
+  ];
+  banner.variants.push(
+    { id: "mobile-alternate", node_id: "999:1", axes: [{ name: "Viewport", value: "Mobile" }, { name: "Mode", value: "Alternate" }] },
+    { id: "desktop-alternate", node_id: "999:2", axes: [{ name: "Viewport", value: "Desktop" }, { name: "Mode", value: "Alternate" }] },
+  );
+  instance.variant_axes = { mobile: { Mode: "Alternate" }, desktop: { Mode: "Alternate" } };
+  nested.element_ids = { mobile: originalId, desktop: variantId };
+  delete nested.element_id;
+  await writeFile(marketingPath, JSON.stringify(marketing), "utf8");
+  const result = await prepareEmailBuildHandoff({ ...source, repoRoot: contractRepo, assetRoot: root });
+  assert.deepEqual(result.blockers, []);
+});
 test("resolved dual-viewport placement rejects standalone nested-only components", async (t) => {
   const root = await mkdtemp(join(tmpdir(), "cupis-placement-"));
   t.after(() => rm(root, { recursive: true, force: true }));
