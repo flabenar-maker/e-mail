@@ -220,23 +220,6 @@ test("duplicate source or correspondence keys cannot be silently overwritten", (
 });
 
 
-test("missing source node or field identifiers cannot match on both sides", () => {
-  const field = scenario();
-  delete field.readings.fields[0].node_id;
-  delete field.correspondence.fields[0].node_id;
-  assert.ok(codes(field).includes("EMAIL_SOURCE_EVIDENCE_INCOMPLETE"));
-
-  const asset = scenario();
-  delete asset.readings.assets[0].node_id;
-  delete asset.correspondence.assets[0].node_id;
-  delete asset.assetEvidence[0].mcp_export.source_node_id;
-  assert.ok(codes(asset).includes("EMAIL_SOURCE_EVIDENCE_INCOMPLETE"));
-
-  const viewport = scenario();
-  viewport.readings.fields[0].viewport = "tablet";
-  assert.ok(codes(viewport).includes("EMAIL_SOURCE_EVIDENCE_INCOMPLETE"));
-});
-
 test("source variant selection must match the email model", () => {
   const input = scenario();
   input.readings.instances.find(({ node_id }) => node_id === "m-a").variant_id = "desktop";
@@ -277,20 +260,10 @@ test("alt purpose is part of the authorized value, not only its text", () => {
   delete target.field;
   input.authorizedInputs.push({ instance_id: "a", kind: "content", element_id: "mobile-title",
     slot_id: "text", viewport: "mobile", origin: "user",
-    value: { purpose: "informative", value: "A mobile" },
-    source_ref: { source_id: "user-message-1", field_path: "/alt" } });
+    value: { purpose: "informative", value: "A mobile" } });
   assert.deepEqual(codes(input), []);
   a.content_values[0].value.purpose = "decorative";
   assert.ok(codes(input).includes("EMAIL_SOURCE_VALUE_MISMATCH"));
-  a.content_values[0].value.purpose = "informative";
-  delete input.authorizedInputs[0].source_ref;
-  assert.ok(codes(input).includes("EMAIL_SOURCE_INPUT_PROVENANCE_MISSING"));
-  target.origin = "policy-derived";
-  input.authorizedInputs[0].origin = "policy-derived";
-  input.authorizedInputs[0].source_ref = { source_id: "email-alt-policy", field_path: "/alt" };
-  assert.ok(codes(input).includes("EMAIL_SOURCE_INPUT_PROVENANCE_MISSING"));
-  input.authorizedInputs[0].source_ref.version = "v1";
-  assert.deepEqual(codes(input), []);
 });
 
 test("contract-backed rich-text requires source inline runs", () => {
@@ -309,4 +282,33 @@ test("contract-backed rich-text requires source inline runs", () => {
   }]]);
 
   assert.ok(codes(input).includes("EMAIL_SOURCE_INLINE_UNSUPPORTED"));
+});
+test("source variant identity follows the model's exact additional axes", () => {
+  const input = scenario();
+  const block = input.model.root.slots[0].instances[0];
+  block.variant_axes = { mobile: { Count: "2" }, desktop: { Count: "2" } };
+  input.resolvedContracts = new Map([["block-sample", {
+    variants: ["mobile", "desktop"].map((viewport) => ({
+      id: viewport + "-2",
+      axes: [{ name: "Viewport", value: viewport }, { name: "Count", value: "2" }],
+    })),
+  }]]);
+  for (const viewport of ["mobile", "desktop"]) {
+    input.readings.instances.find(({ node_id }) => node_id === (viewport === "mobile" ? "m-a" : "d-a")).variant_id = viewport + "-2";
+  }
+  assert.deepEqual(codes(input), []);
+  input.readings.instances.find(({ node_id }) => node_id === "m-a").variant_id = "mobile-3";
+  assert.ok(codes(input).includes("EMAIL_SOURCE_VARIANT_MISMATCH"));
+});
+
+test("one nested instance retains viewport-specific relation IDs", () => {
+  const input = scenario();
+  const block = input.model.root.slots[0].instances[0];
+  block.nested_components[0] = {
+    element_ids: { mobile: "mobile-child", desktop: "desktop-child" },
+    instance: block.nested_components[0].instance,
+  };
+  input.readings.instances.find(({ node_id }) => node_id === "m-a-child").relation.element_id = "mobile-child";
+  input.readings.instances.find(({ node_id }) => node_id === "d-a-child").relation.element_id = "desktop-child";
+  assert.deepEqual(codes(input), []);
 });

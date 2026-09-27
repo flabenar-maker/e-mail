@@ -97,3 +97,32 @@ test("nested-component block reference resolves its Card/Image instance rather t
   assert.match(result.html, />Nested desktop</u);
   assert.match(result.html, /src="nested\.png"/u);
 });
+
+test("viewport-specific nested IDs render one logical child in each version", () => {
+  const nested = (id) => ({
+    id, semantic_role: "status", render_mode: "nested-component",
+    visibility: { mode: "always" }, facts: [], children: [], component_id: "status",
+  });
+  const block = record(
+    "block", root("root", [nested("mobile-status")]),
+    root("root", [nested("desktop-status")]),
+  );
+  const status = record("status", root("root", [text("label")]));
+  const child = instance("status-1", "status", {
+    content_values: [{
+      element_id: "label", slot_id: "text", scope: "all",
+      value: { type: "plain-text", value: "Pending status" },
+    }],
+  });
+  const parent = instance("block-1", "block", {
+    nested_components: [{
+      element_ids: { mobile: "mobile-status", desktop: "desktop-status" },
+      instance: child,
+    }],
+  });
+  const rendered = renderComponent({
+    componentId: "block", viewportData: parent, ...deps([block, status]),
+  });
+  assert.deepEqual(rendered.diagnostics, []);
+  assert.equal((rendered.html.match(/Pending status/gu) ?? []).length, 2);
+});
