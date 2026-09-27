@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "evidence": [
+    {
+      "component_id": "banner-app-download",
+      "capture_path": "tests/rendering/fixtures/qr-artwork-figma-capture.json",
+      "source_blob_sha": "39e7a05f3383baf0d2effd27cdf9976c970f7b81",
+      "facts": [
+        {
+          "contract_path": "/contracts/desktop/root/children/0/facts/15/value",
+          "value": {
+            "type": "dimensions",
+            "width": 552,
+            "height": 274,
+            "unit": "px"
+          }
+        },
+        {
+          "contract_path": "/contracts/desktop/root/children/0/facts/16/value",
+          "value": {
+            "type": "measure",
+            "value": 28,
+            "unit": "px"
+          }
+        },
+        {
+          "contract_path": "/contracts/desktop/root/children/0/facts/17/value",
+          "value": {
+            "type": "measure",
+            "value": 28,
+            "unit": "px"
+          }
+        },
+        {
+          "contract_path": "/contracts/desktop/root/children/0/facts/18/value",
+          "value": {
+            "type": "measure",
+            "value": 20,
+            "unit": "px"
+          }
+        },
+        {
+          "contract_path": "/contracts/desktop/root/children/0/children/0/facts/14/value",
+          "value": {
+            "type": "dimensions",
+            "width": 492,
+            "height": 138,
+            "unit": "px"
+          }
+        },
+        {
+          "contract_path": "/contracts/desktop/root/children/0/children/0/facts/15/value",
+          "value": {
+            "type": "measure",
+            "value": 20,
+            "unit": "px"
+          }
+        },
+        {
+          "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/facts/14/value",
+          "value": {
+            "type": "measure",
+            "value": 4,
+            "unit": "px"
+          }
+        },
+        {
+          "contract_path": "/contracts/desktop/root/children/0/children/0/children/1/facts/13/value",
+          "value": {
+            "type": "dimensions",
+            "width": 138,
+            "height": 138,
+            "unit": "px"
+          }
+        }
+      ]
+    }
+  ]
+}
