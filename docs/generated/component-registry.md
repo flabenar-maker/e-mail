@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: component-registry -->
-<!-- source-digest: sha256:31404de2eca9bd1a4f294881c8667b5f5f94a01756b23954867899db8ca8cbde -->
+<!-- source-digest: sha256:fdb9d6e25064900a2cf3247b180249045d948660c565bf17e9b3dd486553b85f -->
 <!-- schema-versions: components=2.1.0, typography=1.0.0, spacing=1.0.0, assets=1.0.0 -->
 # CUPIS component registry
 
@@ -2579,7 +2579,7 @@ RENDER: HYBRID
 
 - Asset contract: `secondary-image`
   - Owner layer: `secondary-image @2x`
-  - Source viewport: `desktop`
+  - Source viewport: `mobile`
   - Source mode: `image-fill`
   - Display mode: `fill-image`
   - Export profile: `jpeg-2x` — JPEG, `.jpg`, scale 2, suffix `@2x`, sRGB
@@ -2589,7 +2589,7 @@ RENDER: HYBRID
   - Pixel dimensions: 592×376px
   - Raw Figma Fill dimensions: 984×696px
   - Aspect ratio: 296:188
-  - Crop: `figma-fill`; position `concrete-desktop-instance`
+  - Crop: `figma-fill`; position `concrete-mobile-instance`
   - Background: own fill `preserve`; artificial matte `forbid`
 - Asset usage: `mobile` `/contracts/mobile/root/children/0/children/0` → `secondary-image` as `direct-image`
 - Asset usage: `desktop` `/contracts/desktop/root/children/0/children/1` → `secondary-image` as `background-image`
