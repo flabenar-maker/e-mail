@@ -299,7 +299,7 @@ export function validateAssetsSemantics(assets) {
       maps.source_modes.get("image-fill")?.contract,
       {
         source_content: "source-raster-only",
-        concrete_desktop_instance_required: true,
+        concrete_email_instance_required: true,
         own_visible_fill_included: true,
         visible_nested_graphics_included: false,
         parent_fill_included: false,
@@ -313,7 +313,7 @@ export function validateAssetsSemantics(assets) {
       maps.source_modes.get("rendered-node")?.contract,
       {
         source_content: "exact-node-after-overrides",
-        concrete_desktop_instance_required: true,
+        concrete_email_instance_required: true,
         own_visible_fill_included: true,
         visible_nested_graphics_included: true,
         parent_fill_included: false,
@@ -366,7 +366,7 @@ export function validateAssetsSemantics(assets) {
   }
 
   const identity = assets?.identity_policy;
-  if (!identity?.concrete_desktop_instance_required ||
+  if (!identity?.concrete_email_instance_required ||
       !identity?.shared_mobile_desktop_file ||
       !identity?.shared_mobile_desktop_src ||
       !identity?.placeholder_forbidden ||
@@ -374,7 +374,7 @@ export function validateAssetsSemantics(assets) {
     errors.push(diagnostic(
       "ASSETS_CONCRETE_INSTANCE_GATE_INVALID",
       "/identity_policy",
-      "Asset export must use the concrete Desktop instance and one shared file/src.",
+      "Asset export must use the concrete contract-selected email instance and one shared file/src.",
     ));
   }
   errors.push(...findBuildChoiceFields(assets));

@@ -667,6 +667,9 @@ test("marketing image contracts preserve responsive ratios and export boundaries
   const secondaryAsset = secondary.asset_contracts.find(
     (asset) => asset.id === "secondary-image",
   );
+  assert.equal(secondaryAsset.source_viewport, "mobile");
+  assert.deepEqual(secondaryAsset.pixel_dimensions, { width: 592, height: 376, unit: "px" });
+  assert.equal(secondaryAsset.crop.position_source, "concrete-mobile-instance");
   assert.equal(secondaryAsset.source_mode_id, "image-fill");
   assert.equal(secondaryAsset.display_mode_id, "fill-image");
   assert.deepEqual(secondaryAsset.aspect_ratio, { width: 296, height: 188 });

@@ -39,6 +39,11 @@ test("loads the canonical assets foundation through its strict shape contract", 
 
   assert.equal(assets.foundation.id, "assets");
   assert.equal(assets.foundation.status, "shadow");
+  assert.equal(assets.identity_policy.concrete_email_instance_required, true);
+  assert.equal(Object.hasOwn(assets.identity_policy, "concrete_desktop_instance_required"), false);
+  for (const sourceMode of assets.source_modes) {
+    assert.equal(sourceMode.contract.concrete_email_instance_required, true);
+  }
   assert.deepEqual(
     assets.source_modes.map((item) => item.id),
     ["image-fill", "rendered-node"],

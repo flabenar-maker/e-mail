@@ -63374,7 +63374,7 @@
         {
           "id": "secondary-image",
           "owner_layer_name": "secondary-image @2x",
-          "source_viewport": "desktop",
+          "source_viewport": "mobile",
           "source_mode_id": "image-fill",
           "display_mode_id": "fill-image",
           "export_profile_id": "jpeg-2x",
@@ -63395,7 +63395,7 @@
           },
           "crop": {
             "mode": "figma-fill",
-            "position_source": "concrete-desktop-instance"
+            "position_source": "concrete-mobile-instance"
           },
           "background": {
             "own_visible_boundary_fill": "preserve",

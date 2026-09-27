@@ -125,7 +125,7 @@
       "additionalProperties": false,
       "required": [
         "source_content",
-        "concrete_desktop_instance_required",
+        "concrete_email_instance_required",
         "own_visible_fill_included",
         "visible_nested_graphics_included",
         "parent_fill_included",
@@ -139,7 +139,7 @@
             "exact-node-after-overrides"
           ]
         },
-        "concrete_desktop_instance_required": {
+        "concrete_email_instance_required": {
           "type": "boolean"
         },
         "own_visible_fill_included": {
@@ -604,7 +604,7 @@
         "viewport_suffixes_forbidden",
         "shared_mobile_desktop_file",
         "shared_mobile_desktop_src",
-        "concrete_desktop_instance_required",
+        "concrete_email_instance_required",
         "placeholder_forbidden",
         "main_component_export_forbidden"
       ],
@@ -628,7 +628,7 @@
         "shared_mobile_desktop_src": {
           "const": true
         },
-        "concrete_desktop_instance_required": {
+        "concrete_email_instance_required": {
           "const": true
         },
         "placeholder_forbidden": {

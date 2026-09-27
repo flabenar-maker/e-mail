@@ -8,28 +8,29 @@ source_modes:
     label: IMAGE FILL
     contract:
       source_content: source-raster-only
-      concrete_desktop_instance_required: true
+      concrete_email_instance_required: true
       own_visible_fill_included: true
       visible_nested_graphics_included: false
       parent_fill_included: false
       unrelated_layout_included: false
       live_html_included: false
     description: >-
-      Export the original source raster from the Fill of the concrete Desktop
-      email instance without its container, nested graphics or live HTML.
+      Export the original source raster from the Fill of the concrete
+      contract-selected email instance without its container, nested graphics
+      or live HTML.
   - id: rendered-node
     label: RENDERED NODE
     contract:
       source_content: exact-node-after-overrides
-      concrete_desktop_instance_required: true
+      concrete_email_instance_required: true
       own_visible_fill_included: true
       visible_nested_graphics_included: true
       parent_fill_included: false
       unrelated_layout_included: false
       live_html_included: false
     description: >-
-      Export the exact selected node from the concrete Desktop email instance
-      after overrides, including its own visible Fill and visible nested
+      Export the exact selected node from the concrete contract-selected
+      email instance after overrides, including its own visible Fill and visible nested
       graphics but excluding parent Fill and unrelated layout.
 
 display_modes:
@@ -202,7 +203,7 @@ identity_policy:
     - Desktop
   shared_mobile_desktop_file: true
   shared_mobile_desktop_src: true
-  concrete_desktop_instance_required: true
+  concrete_email_instance_required: true
   placeholder_forbidden: true
   main_component_export_forbidden: true
 
@@ -226,7 +227,7 @@ global_invariants:
   - id: component-contract-owns-specifics
     statement: Component owners, boundaries, display sizes and exceptions remain component-owned.
   - id: concrete-instance-source
-    statement: Export uses the concrete Desktop email instance after its overrides.
+    statement: Export uses the concrete contract-selected email instance after its overrides.
   - id: artificial-background-forbidden
     statement: No matte or background absent from the owned export boundary may be added.
   - id: figma-export-setting-non-authoritative
