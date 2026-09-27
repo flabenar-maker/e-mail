@@ -1245,7 +1245,7 @@ for (const [sourceId, canonicalPath] of componentDocumentationStandardSources) {
     );
   });
 }
-test("declares the shadow rendering sources outside every active bundle", async () => {
+test("declares rendering foundation for email bundles while schemas stay out of context", async () => {
   const manifest = await canonicalManifest();
   const sources = new Map(
     manifest.sources.map((source) => [source.id, source]),
@@ -1263,7 +1263,8 @@ test("declares the shadow rendering sources outside every active bundle", async 
   });
 
   for (const profile of manifest.bundle_profiles) {
-    assert.equal(profile.source_ids.includes("rendering-foundation"), false);
+    const isEmail = profile.id.startsWith("email-");
+    assert.equal(profile.source_ids.includes("rendering-foundation"), isEmail);
     assert.equal(profile.source_ids.includes("rendering-schema"), false);
   }
 });
@@ -1362,7 +1363,7 @@ test("invalid rendering data blocks system validation", async (t) => {
   );
 });
 
-test("declares the shadow renderer registry outside every active bundle", async () => {
+test("declares renderer registry for email bundles while schemas stay out of context", async () => {
   const manifest = await canonicalManifest();
   const sources = new Map(
     manifest.sources.map((source) => [source.id, source]),
@@ -1380,7 +1381,8 @@ test("declares the shadow renderer registry outside every active bundle", async 
   });
 
   for (const profile of manifest.bundle_profiles) {
-    assert.equal(profile.source_ids.includes("renderer-registry"), false);
+    const isEmail = profile.id.startsWith("email-");
+    assert.equal(profile.source_ids.includes("renderer-registry"), isEmail);
     assert.equal(profile.source_ids.includes("renderer-registry-schema"), false);
   }
 });

@@ -42,6 +42,7 @@ export const canonicalSystemFixtureFiles = [
   "bootstrap/README.md",
   "core/email-rendering-standard.md",
   "core/email-model-assembly-standard.md",
+  "core/email-source-fidelity-standard.md",
   "schemas/email-model.schema.json",
   "core/typography-standard.md",
   "core/asset-export-standard.md",
