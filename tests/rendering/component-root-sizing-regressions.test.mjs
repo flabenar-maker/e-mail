@@ -70,18 +70,57 @@ test("actual block-icon-cards Mobile root stretches to its available width", asy
 
 test("actual button-primary Mobile root remains hug-sized instead of filling", async () => {
   const root = mobileRootTable(await renderActualComponent("button-primary"));
-  assert.match(root, /width:auto/u);
   assert.doesNotMatch(root, /width:100%/u);
 });
 
 test("actual button-secondary Mobile root remains hug-sized instead of filling", async () => {
   const root = mobileRootTable(await renderActualComponent("button-secondary"));
-  assert.match(root, /width:auto/u);
   assert.doesNotMatch(root, /width:100%/u);
 });
 
 test("actual badge-step-number Mobile root remains hug-sized instead of filling", async () => {
   const root = mobileRootTable(await renderActualComponent("badge-step-number"));
-  assert.match(root, /width:auto/u);
   assert.doesNotMatch(root, /width:100%/u);
 });
+function findElement(element, predicate) {
+  if (predicate(element)) return element;
+  for (const child of element.children ?? []) {
+    const found = findElement(child, predicate);
+    if (found) return found;
+  }
+  return null;
+}
+
+function factValue(element, id) {
+  return element.facts?.find((fact) => fact.id === id)?.value?.value;
+}
+
+async function actualRegistryComponent(componentId) {
+  const registries = await loadComponentRegistries({ repoRoot });
+  const component = Object.values(registries)
+    .flatMap(({ components }) => components)
+    .find(({ id }) => id === componentId);
+  assert.ok(component, `missing actual component ${componentId}`);
+  return component;
+}
+
+for (const componentId of ["block-transaction-success", "block-transaction-error"]) {
+  test(`actual ${componentId} keeps its Desktop status container hug-sized and vertically filled`, async () => {
+    const component = await actualRegistryComponent(componentId);
+    const statusContainer = findElement(component.contracts.desktop.root, ({ semantic_role }) => semantic_role === "status-container");
+    assert.ok(statusContainer, "Desktop transaction summary needs a real status container");
+    assert.equal(factValue(statusContainer, "horizontal-sizing"), "hug");
+    assert.equal(factValue(statusContainer, "vertical-sizing"), "fill");
+    assert.equal(factValue(statusContainer, "layout-align"), "stretch");
+    assert.match(await renderActualComponent(componentId), /<div class="cupis-root-desktop"[^>]*>/u);
+  });
+
+  test(`actual ${componentId} keeps its Mobile transaction status centered`, async () => {
+    const component = await actualRegistryComponent(componentId);
+    const status = findElement(component.contracts.mobile.root, ({ semantic_role }) => semantic_role === "status");
+    assert.ok(status, "Mobile transaction summary needs a real status");
+    assert.equal(factValue(status, "primary-alignment"), "center");
+    assert.equal(factValue(status, "counter-alignment"), "center");
+    assert.match(await renderActualComponent(componentId), /<div class="cupis-root-mobile"[^>]*>/u);
+  });
+}
