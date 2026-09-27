@@ -71,19 +71,17 @@ function nestedComponentIds(record, viewport, variantAxes = {}) {
 
 function nestedOnlyComponentIds(index) {
   const result = new Set();
+  const visit = (element) => {
+    if (!element) return;
+    if (element.render_mode === "nested-component") result.add(element.component_id);
+    for (const child of element.children ?? []) visit(child);
+  };
   for (const record of index.bySystemId.values()) {
-    for (const viewport of VIEWPORTS) {
-      const visit = (element) => {
-        if (!element) return;
-        if (element.render_mode === "nested-component") result.add(element.component_id);
-        for (const child of element.children ?? []) visit(child);
-      };
-      visit(record.contracts?.[viewport]?.root);
-    }
+    for (const viewport of VIEWPORTS) visit(record.contracts?.[viewport]?.root);
+    for (const variant of record.contracts?.variant_contracts ?? []) visit(variant.root);
   }
   return result;
 }
-
 function validateModelPlacement(model, index, resolvedContracts) {
   const blockers = new Set();
   const idsByViewport = new Map(VIEWPORTS.map((viewport) => [
