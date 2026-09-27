@@ -81,8 +81,11 @@ export async function loadDerivedEmailEvidence({ repoRoot, record }) {
   requireEqual(grid.header_cell_inset_top, bleed, "header inset");
   requireEqual(grid.content_padding.left + grid.text_qr_size.width + grid.content_padding.right,
     source.content_area.width, "outer width");
+  const stores = nodeAt(record.contracts.desktop.root, "root-content-area-store-buttons").node;
+  const storeSize = stores.facts.find((fact) => fact.id === "reference-size")?.value;
+  requireEqual(storeSize?.width, source.text_qr.width, "store button row width");
   requireEqual(grid.content_padding.top + grid.text_qr_size.height +
-    grid.content_layout_gap + 56 + grid.content_padding.bottom,
+    grid.content_layout_gap + storeSize.height + grid.content_padding.bottom,
     source.content_area.height, "outer height");
   requireEqual(source.header_row.width + grid.text_qr_layout_gap + artwork,
     grid.text_qr_size.width, "row column widths");
