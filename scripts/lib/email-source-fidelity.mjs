@@ -110,6 +110,38 @@ export function verifyEmailModelSource({
   }
   if (errors.length) return errors;
 
+  const nonempty = (value) => typeof value === "string" && value.trim().length > 0;
+  for (const [group, items, fields] of [
+    ["instances", readings.instances, ["node_id", "variant_id"]],
+    ["fields", readings.fields, ["node_id", "owner_node_id", "field"]],
+    ["assets", readings.assets, ["node_id", "owner_node_id", "evidence_id"]],
+  ]) {
+    for (const [index, item] of items.entries()) {
+      if (!item || !VIEWPORTS.includes(item.viewport) ||
+          fields.some((field) => !nonempty(item[field])) ||
+          (group === "fields" && !Object.hasOwn(item, "value"))) {
+        errors.push(issue("EMAIL_SOURCE_EVIDENCE_INCOMPLETE", "/readings/" + group + "/" + index,
+          "Observed Figma entry requires a viewport and exact nonempty source identifiers."));
+      }
+    }
+  }
+  for (const [group, items, fields] of [
+    ["instances", correspondence.instances ?? [], ["instance_id"]],
+    ["fields", correspondence.fields ?? [], ["instance_id"]],
+    ["assets", correspondence.assets ?? [], ["instance_id", "asset_contract_id", "node_id"]],
+  ]) {
+    for (const [index, item] of items.entries()) {
+      if (!item || fields.some((field) => !nonempty(item[field])) ||
+          (group === "instances" && VIEWPORTS.some((viewport) => !nonempty(item.nodes?.[viewport]))) ||
+          (group !== "instances" && !VIEWPORTS.includes(item.viewport)) ||
+          (group === "fields" && item.origin === "figma" &&
+            (!nonempty(item.node_id) || !nonempty(item.field)))) {
+        errors.push(issue("EMAIL_SOURCE_EVIDENCE_INCOMPLETE", "/correspondence/" + group + "/" + index,
+          "Source correspondence requires exact nonempty instance, viewport, node, and field identifiers."));
+      }
+    }
+  }
+  if (errors.length) return errors;
   const entries = instancesWithPaths(model.root);
   const byId = uniqueIndex(entries, (entry) => entry.instance.instance_id, "model-instances", errors);
   const sourceInstances = uniqueIndex(readings.instances, (item) => key(item.viewport, item.node_id), "instances", errors);
