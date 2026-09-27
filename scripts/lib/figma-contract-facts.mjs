@@ -93,12 +93,20 @@ function sourceFacts(variant, issues, record) {
   return result;
 }
 
-function contractFactPaths(record) {
+function contractFactPaths(record, derivedEvidence = []) {
   const result = [];
   function walk(element, path) {
     if (!element || typeof element !== "object") return;
     (element.facts ?? []).forEach((fact, index) => {
       const base = `${path}/facts/${index}/value`;
+      // Only separate evidence for this component/path/value may exempt a
+      // renderer-derived fact from direct Figma mapping.
+      if (fact.provenance?.kind === "registry-literal" &&
+          derivedEvidence.some((proof) =>
+            proof.component_id === record.id &&
+            proof.contract_path === base &&
+            proof.source_blob_sha === fact.provenance.source_blob_sha &&
+            equal(proof.value, fact.value))) return;
       for (const [key, value] of Object.entries(fact.value ?? {})) {
         if (key === "type") continue;
         leafValues(value, `${base}/${key}`, (contract_path) => {
@@ -132,7 +140,7 @@ function equal(left, right) {
   return JSON.stringify(left) === JSON.stringify(right);
 }
 
-export function auditFigmaContractFacts({ record, live, mappings } = {}) {
+export function auditFigmaContractFacts({ record, live, mappings, derivedEvidence = [] } = {}) {
   const issues = [];
   const ownedMappings = record?.contracts?.figma_fact_links;
   if (!Array.isArray(ownedMappings) ||
@@ -291,7 +299,7 @@ export function auditFigmaContractFacts({ record, live, mappings } = {}) {
       }));
     }
   }
-  for (const contract_path of contractFactPaths(record)) {
+  for (const contract_path of contractFactPaths(record, derivedEvidence)) {
     if (!coveredContract.has(contract_path)) {
       issues.push(issue("CONTRACT_FACT_UNMAPPED", { contract_path }));
     }
@@ -302,7 +310,7 @@ export function auditFigmaContractFacts({ record, live, mappings } = {}) {
     component_id: record?.id ?? null,
     source_fact_count: source.size,
     mapped_source_fact_count: coveredSource.size,
-    contract_fact_count: contractFactPaths(record).length,
+    contract_fact_count: contractFactPaths(record, derivedEvidence).length,
     mapped_contract_fact_count: coveredContract.size,
     issues,
   };

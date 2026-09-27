@@ -7,6 +7,7 @@ import {
   loadComponentRegistries,
 } from "./lib/component-registry.mjs";
 import { auditFigmaContractFacts } from "./lib/figma-contract-facts.mjs";
+import { loadDerivedEmailEvidence } from "./lib/derived-email-facts.mjs";
 
 function parseArguments(args) {
   if (args.length !== 6) return null;
@@ -48,9 +49,14 @@ export async function main(args = process.argv.slice(2)) {
       }));
       return 1;
     }
+    const derivedEvidence = await loadDerivedEmailEvidence({
+      repoRoot: parsed.repoRoot,
+      record: entry.record,
+    });
     const report = auditFigmaContractFacts({
       record: entry.record,
       live,
+      derivedEvidence,
     });
     console.log(JSON.stringify(report, null, 2));
     return report.ok ? 0 : 1;

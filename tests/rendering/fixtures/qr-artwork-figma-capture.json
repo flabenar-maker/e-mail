@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "figma_file_key": "8zka5bHkcrJVK9I9dKjnhC",
+  "observed_at": "2026-09-27",
+  "library": {
+    "content_area": {
+      "node_id": "230:1639",
+      "width": 552,
+      "height": 274,
+      "padding": {
+        "top": 32,
+        "right": 32,
+        "bottom": 32,
+        "left": 32
+      },
+      "layout_gap": 24
+    },
+    "text_qr": {
+      "node_id": "961:37493",
+      "x": 32,
+      "y": 32,
+      "width": 488,
+      "height": 130,
+      "layout_gap": 24
+    },
+    "header_row": {
+      "node_id": "961:37494",
+      "x": 0,
+      "y": 0,
+      "width": 334,
+      "height": 128
+    },
+    "qr_owner": {
+      "node_id": "961:37515",
+      "x": 358,
+      "y": 0,
+      "width": 130,
+      "height": 130,
+      "clips_content": false,
+      "corner_radius": 0
+    },
+    "qr_artwork": {
+      "node_id": "961:37516",
+      "x": -4.193548202514648,
+      "y": -4.193548202514648,
+      "width": 138.38710021972656,
+      "height": 138.38710021972656,
+      "clips_content": true,
+      "corner_radius": 0,
+      "own_visible_fill_type": "SOLID"
+    }
+  },
+  "concrete_service_email": {
+    "app_download_instance_id": "I1533:20380;1103:8;1533:21102",
+    "qr_owner_instance_id": "I1533:20380;1103:8;1533:21102;961:37515",
+    "qr_artwork_instance_id": "I1533:20380;1103:8;1533:21102;961:37516"
+  },
+  "mcp_export": {
+    "node_id": "961:37515",
+    "format": "PNG",
+    "scale": 4,
+    "pixel_width": 554,
+    "pixel_height": 554
+  },
+  "email_integer_grid": {
+    "rule": "Round artwork display size and centered bleed to integer pixels; compensate ancestors while preserving their visible positions and outer size.",
+    "artwork_size": 138,
+    "centered_bleed": 4,
+    "content_padding": {
+      "top": 28,
+      "right": 28,
+      "bottom": 32,
+      "left": 32
+    },
+    "content_layout_gap": 20,
+    "text_qr_size": {
+      "width": 492,
+      "height": 138
+    },
+    "text_qr_layout_gap": 20,
+    "header_cell_inset_top": 4
+  }
+}
