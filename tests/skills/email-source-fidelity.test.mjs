@@ -220,6 +220,23 @@ test("duplicate source or correspondence keys cannot be silently overwritten", (
 });
 
 
+test("missing source node or field identifiers cannot match on both sides", () => {
+  const field = scenario();
+  delete field.readings.fields[0].node_id;
+  delete field.correspondence.fields[0].node_id;
+  assert.ok(codes(field).includes("EMAIL_SOURCE_EVIDENCE_INCOMPLETE"));
+
+  const asset = scenario();
+  delete asset.readings.assets[0].node_id;
+  delete asset.correspondence.assets[0].node_id;
+  delete asset.assetEvidence[0].mcp_export.source_node_id;
+  assert.ok(codes(asset).includes("EMAIL_SOURCE_EVIDENCE_INCOMPLETE"));
+
+  const viewport = scenario();
+  viewport.readings.fields[0].viewport = "tablet";
+  assert.ok(codes(viewport).includes("EMAIL_SOURCE_EVIDENCE_INCOMPLETE"));
+});
+
 test("source variant selection must match the email model", () => {
   const input = scenario();
   input.readings.instances.find(({ node_id }) => node_id === "m-a").variant_id = "desktop";
