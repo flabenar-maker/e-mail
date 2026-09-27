@@ -88,7 +88,7 @@ function valueWithUnit(value) {
   return undefined;
 }
 
-function propsFromFacts(facts = [], { viewport, mode, isRoot = false, parentAxis } = {}) {
+function propsFromFacts(facts = [], { viewport, mode, isRoot = false, parentAxis, semanticRole } = {}) {
   const props = { style: {} };
   const fact = (id) => facts.find((item) => item.id === id)?.value;
   const size = fact("reference-size");
@@ -108,10 +108,11 @@ function propsFromFacts(facts = [], { viewport, mode, isRoot = false, parentAxis
       );
       if (expands) props.style.width = "100%";
       else props.style["max-width"] = `${size.width}px`;
+    } else if (mode === "presentation-table" && sizing === "hug" &&
+      !(isRoot && viewport === "mobile" && semanticRole === "block")) {
+      props.width = "auto";
     } else if (isRoot && viewport === "mobile") {
       props.width = "100%";
-    } else if (mode === "presentation-table" && sizing === "hug") {
-      props.width = "auto";
     } else if (isRoot && viewport === "desktop") {
       props.width = size.width;
     }
@@ -166,7 +167,7 @@ function propsFromFacts(facts = [], { viewport, mode, isRoot = false, parentAxis
     else if (id.endsWith("-width")) props.width = value.value;
     else if (id.endsWith("-height")) props.height = value.value;
   }
-  if (mode === "presentation-table" && fact("vertical-sizing")?.value === "fill" && size?.height > 0) {
+  if (mode === "presentation-table" && semanticRole === "status-container" && fact("vertical-sizing")?.value === "fill" && size?.height > 0) {
     props.width = size.width;
     props.height = size.height;
   }
@@ -338,7 +339,7 @@ function renderShell(element, viewport, path, childHtml, context) {
 
   const { entry, diagnostics } = contentFor({ ...context, path }, viewport, element);
   if (diagnostics.length > 0) return { html: "", diagnostics };
-  const factProps = propsFromFacts(element.facts, { viewport, mode: element.render_mode, isRoot: path === "root", parentAxis: context.parentLayoutAxis?.[viewport] });
+  const factProps = propsFromFacts(element.facts, { viewport, mode: element.render_mode, isRoot: path === "root", parentAxis: context.parentLayoutAxis?.[viewport], semanticRole: element.semantic_role });
   if (element.render_mode === "presentation-table" && element.semantic_role === "social-icons" && factProps.width === "auto") {
     factProps.align = "center";
   }
@@ -424,7 +425,7 @@ function renderShell(element, viewport, path, childHtml, context) {
       const counterAlignment = element.facts?.find(({ id }) => id === "counter-alignment")?.value?.value;
       const cellFor = ({ html, node }) => {
         if (node?.render_mode === "background-image") return html;
-        const nodeProps = propsFromFacts(node?.facts, { viewport, mode: node?.render_mode });
+        const nodeProps = propsFromFacts(node?.facts, { viewport, mode: node?.render_mode, semanticRole: node?.semantic_role });
         const centeredImage = axis === "vertical" && counterAlignment === "center" &&
           node?.render_mode === "direct-image" && !nodeProps.fluid
           ? html.replace(/(<img\b[^>]*\sstyle=")([^"]*)"/u,
