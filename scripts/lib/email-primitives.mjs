@@ -49,10 +49,12 @@ function pixels(value) {
 
 function renderTable(props, children) {
   const width = props.width ?? "100%";
+  const hasRadius = Boolean(props.style?.["border-radius"] && !["0", "0px"].includes(String(props.style["border-radius"])));
   const style = {
-    "border-collapse": "collapse",
+    "border-collapse": hasRadius ? "separate" : "collapse",
     "border-spacing": "0",
     ...(width === "100%" ? { width: "100%" } : {}),
+    ...(props.height === undefined ? {} : { height: pixels(props.height) }),
     ...(props.align === "center" ? { margin: "0 auto" } : {}),
     ...(props.style ?? {}),
   };
@@ -60,6 +62,7 @@ function renderTable(props, children) {
     [
       ["role", "presentation"],
       ["width", width === "auto" ? undefined : width],
+      ["height", props.height],
       ["cellpadding", "0"],
       ["cellspacing", "0"],
       ["border", "0"],

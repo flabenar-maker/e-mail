@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: component-registry -->
-<!-- source-digest: sha256:977ef111aae97770dc5097d4cf1a0bbed31aa21ef0df6aea7679c2dc2f968e32 -->
+<!-- source-digest: sha256:31404de2eca9bd1a4f294881c8667b5f5f94a01756b23954867899db8ca8cbde -->
 <!-- schema-versions: components=2.1.0, typography=1.0.0, spacing=1.0.0, assets=1.0.0 -->
 # CUPIS component registry
 
@@ -7705,6 +7705,7 @@ RENDER: HYBRID
       - Fact `reference-size`: `8×8px`; provenance: `figma-literal` at `234:576`
       - Fact `border-radius`: `0px`; provenance: `figma-literal` at `234:576`
       - Fact `background`: `#18B037`; provenance: `figma-literal` at `234:576`
+      - Fact `shape`: `ellipse`; provenance: `figma-literal` at `234:576`
   - `root-text-content` — role `text-content`; render `presentation-table`; visibility `always`
     - Fact `reference-size`: `468×109px`; provenance: `figma-literal` at `234:577`
     - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `234:577`
@@ -7827,6 +7828,7 @@ RENDER: HYBRID
       - Fact `reference-size`: `8×8px`; provenance: `figma-literal` at `222:698`
       - Fact `border-radius`: `0px`; provenance: `figma-literal` at `222:698`
       - Fact `background`: `#18B037`; provenance: `figma-literal` at `222:698`
+      - Fact `shape`: `ellipse`; provenance: `figma-literal` at `222:698`
   - `root-text-content` — role `text-content`; render `presentation-table`; visibility `always`
     - Fact `reference-size`: `236×106px`; provenance: `figma-literal` at `222:699`
     - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `222:699`
