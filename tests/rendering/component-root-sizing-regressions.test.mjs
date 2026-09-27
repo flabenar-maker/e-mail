@@ -56,7 +56,7 @@ async function renderActualComponent(componentId) {
 }
 
 function mobileRootTable(html) {
-  const mobile = html.match(/<div class="cupis-root-mobile">([\s\S]*?)<\/div>/u)?.[1];
+  const mobile = html.match(/<div class="cupis-root-mobile"[^>]*>([\s\S]*?)<\/div>/u)?.[1];
   assert.ok(mobile, "actual Mobile output must be isolated from Desktop output");
   const table = mobile.match(/<table\b[^>]*>/u)?.[0];
   assert.ok(table, "actual Mobile root must render as a presentation table");
