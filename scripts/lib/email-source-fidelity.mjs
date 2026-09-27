@@ -129,6 +129,38 @@ export function verifyEmailModelSource({
   }
   if (errors.length) return errors;
 
+  const nonempty = (value) => typeof value === "string" && value.trim().length > 0;
+  for (const [group, items, fields] of [
+    ["instances", readings.instances, ["node_id", "variant_id"]],
+    ["fields", readings.fields, ["node_id", "owner_node_id", "field"]],
+    ["assets", readings.assets, ["node_id", "owner_node_id"]],
+  ]) {
+    for (const [index, item] of items.entries()) {
+      if (!item || !VIEWPORTS.includes(item.viewport) ||
+          fields.some((field) => !nonempty(item[field])) ||
+          (group === "fields" && !Object.hasOwn(item, "value"))) {
+        errors.push(issue("EMAIL_SOURCE_EVIDENCE_INCOMPLETE", "/readings/" + group + "/" + index,
+          "Observed Figma entry requires a viewport and exact nonempty source identifiers."));
+      }
+    }
+  }
+  for (const [group, items, fields] of [
+    ["instances", correspondence.instances ?? [], ["instance_id"]],
+    ["fields", correspondence.fields ?? [], ["instance_id"]],
+    ["assets", correspondence.assets ?? [], ["instance_id", "asset_contract_id", "node_id"]],
+  ]) {
+    for (const [index, item] of items.entries()) {
+      if (!item || fields.some((field) => !nonempty(item[field])) ||
+          (group === "instances" && VIEWPORTS.some((viewport) => !nonempty(item.nodes?.[viewport]))) ||
+          (group !== "instances" && !VIEWPORTS.includes(item.viewport)) ||
+          (group === "fields" && item.origin === "figma" &&
+            (!nonempty(item.node_id) || !nonempty(item.field)))) {
+        errors.push(issue("EMAIL_SOURCE_EVIDENCE_INCOMPLETE", "/correspondence/" + group + "/" + index,
+          "Source correspondence requires exact nonempty instance, viewport, node, and field identifiers."));
+      }
+    }
+  }
+  if (errors.length) return errors;
   const entries = instancesWithPaths(model.root);
   const byId = uniqueIndex(entries, (entry) => entry.instance.instance_id, "model-instances", errors);
   const sourceInstances = uniqueIndex(readings.instances, (item) => key(item.viewport, item.node_id), "instances", errors);
@@ -143,6 +175,19 @@ export function verifyEmailModelSource({
     item.instance_id, item.kind, item.element_id ?? item.property_id, item.slot_id ?? "", item.viewport,
   ), "authorized-inputs", errors);
   const receipts = uniqueIndex(assetEvidence, (item) => key(item.instance_id, item.asset_contract_id, item.path), "asset-receipts", errors);
+  for (const [index, input] of authorizedInputs.entries()) {
+    if (!["user", "policy-derived"].includes(input.origin)) continue;
+    const reference = input.source_ref;
+    if (!reference || typeof reference !== "object" || Array.isArray(reference) ||
+        typeof reference.source_id !== "string" || !reference.source_id.trim() ||
+        typeof reference.field_path !== "string" || !reference.field_path.trim() ||
+        (input.origin === "policy-derived" &&
+          (typeof reference.version !== "string" || !reference.version.trim()))) {
+      errors.push(issue("EMAIL_SOURCE_INPUT_PROVENANCE_MISSING",
+        "/authorizedInputs/" + index + "/source_ref",
+        "Authorized input requires an exact user-input or versioned policy reference."));
+    }
+  }
   const claimedSourceInstances = new Set();
   const claimedSourceFields = new Set();
   const claimedSourceAssets = new Set();

@@ -220,6 +220,23 @@ test("duplicate source or correspondence keys cannot be silently overwritten", (
 });
 
 
+test("missing source node or field identifiers cannot match on both sides", () => {
+  const field = scenario();
+  delete field.readings.fields[0].node_id;
+  delete field.correspondence.fields[0].node_id;
+  assert.ok(codes(field).includes("EMAIL_SOURCE_EVIDENCE_INCOMPLETE"));
+
+  const asset = scenario();
+  delete asset.readings.assets[0].node_id;
+  delete asset.correspondence.assets[0].node_id;
+  delete asset.assetEvidence[0].mcp_export.source_node_id;
+  assert.ok(codes(asset).includes("EMAIL_SOURCE_EVIDENCE_INCOMPLETE"));
+
+  const viewport = scenario();
+  viewport.readings.fields[0].viewport = "tablet";
+  assert.ok(codes(viewport).includes("EMAIL_SOURCE_EVIDENCE_INCOMPLETE"));
+});
+
 test("source variant selection must match the email model", () => {
   const input = scenario();
   input.readings.instances.find(({ node_id }) => node_id === "m-a").variant_id = "desktop";
@@ -260,10 +277,20 @@ test("alt purpose is part of the authorized value, not only its text", () => {
   delete target.field;
   input.authorizedInputs.push({ instance_id: "a", kind: "content", element_id: "mobile-title",
     slot_id: "text", viewport: "mobile", origin: "user",
-    value: { purpose: "informative", value: "A mobile" } });
+    value: { purpose: "informative", value: "A mobile" },
+    source_ref: { source_id: "user-message-1", field_path: "/alt" } });
   assert.deepEqual(codes(input), []);
   a.content_values[0].value.purpose = "decorative";
   assert.ok(codes(input).includes("EMAIL_SOURCE_VALUE_MISMATCH"));
+  a.content_values[0].value.purpose = "informative";
+  delete input.authorizedInputs[0].source_ref;
+  assert.ok(codes(input).includes("EMAIL_SOURCE_INPUT_PROVENANCE_MISSING"));
+  target.origin = "policy-derived";
+  input.authorizedInputs[0].origin = "policy-derived";
+  input.authorizedInputs[0].source_ref = { source_id: "email-alt-policy", field_path: "/alt" };
+  assert.ok(codes(input).includes("EMAIL_SOURCE_INPUT_PROVENANCE_MISSING"));
+  input.authorizedInputs[0].source_ref.version = "v1";
+  assert.deepEqual(codes(input), []);
 });
 
 test("contract-backed rich-text requires source inline runs", () => {
