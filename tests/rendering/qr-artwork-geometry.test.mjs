@@ -7,12 +7,12 @@ import { fileURLToPath } from "node:url";
 
 import { loadComponentRegistries } from "../../scripts/lib/component-registry.mjs";
 import { renderContractTree } from "../../scripts/lib/email-interpreter.mjs";
+import { loadDerivedEmailEvidence } from "../../scripts/lib/derived-email-facts.mjs";
 
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const captureText = await readFile(new URL("./fixtures/qr-artwork-figma-capture.json", import.meta.url), "utf8");
 const capture = JSON.parse(captureText);
-const evidenceManifest = JSON.parse(await readFile(
-  new URL("../../data/evidence/derived-email-geometry.json", import.meta.url), "utf8"));
+
 const captureBlobSha = "39e7a05f3383baf0d2effd27cdf9976c970f7b81";
 const rendering = {
   breakpoints: [{ id: "cupis-mobile", query: "max-width", value: 659, unit: "px" }],
@@ -87,9 +87,9 @@ test("QR Figma capture traces the complete opaque export and exact email grid", 
     [header, "email-cell-inset-top", { type: "measure", value: grid.header_cell_inset_top, unit: "px" }],
     [image, "email-render-size", { type: "dimensions", width: grid.artwork_size, height: grid.artwork_size, unit: "px" }],
   ];
-  const proof = evidenceManifest.evidence.find((item) => item.component_id === app.id);
-  assert.equal(proof.source_blob_sha, captureBlobSha);
-  assert.equal(proof.facts.length, expected.length);
+  const proof = await loadDerivedEmailEvidence({ repoRoot, record: app });
+  assert.equal(proof.length, expected.length);
+  assert.ok(proof.every((item) => item.source_blob_sha === captureBlobSha));
   const elementPaths = new Map([
     [content, "/contracts/desktop/root/children/0"],
     [row, "/contracts/desktop/root/children/0/children/0"],
@@ -102,7 +102,7 @@ test("QR Figma capture traces the complete opaque export and exact email grid", 
     assert.deepEqual(fact?.provenance, { kind: "registry-literal", source_blob_sha: captureBlobSha });
     const index = element.facts.findIndex((item) => item.id === id);
     const path = `${elementPaths.get(element)}/facts/${index}/value`;
-    assert.deepEqual(proof.facts.find((item) => item.contract_path === path)?.value, value);
+    assert.deepEqual(proof.find((item) => item.contract_path === path)?.value, value);
   }
 });
 
