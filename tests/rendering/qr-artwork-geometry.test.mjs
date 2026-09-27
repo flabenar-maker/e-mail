@@ -70,10 +70,8 @@ test("QR Figma capture traces the complete opaque export and exact email grid", 
   for (const element of [content, row, header, image]) assert.ok(element);
   assert.deepEqual(findFact(image, "reference-size")?.value,
     { type: "dimensions", width: source.qr_owner.width, height: source.qr_owner.height, unit: "px" });
-  assert.deepEqual(findFact(image, "visible-artwork-size")?.value,
-    { type: "dimensions", width: source.qr_artwork.width, height: source.qr_artwork.height, unit: "px" });
-  assert.deepEqual(findFact(image, "visible-artwork-size")?.provenance,
-    { kind: "registry-literal", source_blob_sha: captureBlobSha });
+  assert.equal(findFact(image, "visible-artwork-size"), undefined);
+  assert.equal(source.qr_artwork.width, source.qr_artwork.height);
   assert.equal(source.qr_artwork.node_id, "961:37516");
   const expected = [
     [content, "email-render-size", { type: "dimensions", width: source.content_area.width, height: source.content_area.height, unit: "px" }],

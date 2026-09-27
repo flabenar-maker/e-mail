@@ -373,3 +373,15 @@ test("a pinned derived email fact is audited by its evidence fixture, not as a d
     item.code === "CONTRACT_FACT_UNMAPPED" &&
     item.contract_path === "/contracts/mobile/root/facts/2/value/value"), false);
 });
+test("a pinned registry literal without an email-only derivation remains unmapped", () => {
+  const { record, packet, mappings } = fixture();
+  record.contracts.mobile.root.facts.push({
+    id: "arbitrary-color",
+    value: { type: "color", value: "#123456" },
+    provenance: { kind: "registry-literal", source_blob_sha: "39e7a05f3383baf0d2effd27cdf9976c970f7b81" },
+  });
+  const report = auditFigmaContractFacts({ record, live: packet, mappings });
+  assert.ok(report.issues.some((item) =>
+    item.code === "CONTRACT_FACT_UNMAPPED" &&
+    item.contract_path === "/contracts/mobile/root/facts/2/value/value"));
+});

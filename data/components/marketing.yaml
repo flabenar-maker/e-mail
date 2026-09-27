@@ -96256,19 +96256,6 @@
                             }
                           },
                           {
-                            "id": "visible-artwork-size",
-                            "value": {
-                              "type": "dimensions",
-                              "width": 138.38710021972656,
-                              "height": 138.38710021972656,
-                              "unit": "px"
-                            },
-                            "provenance": {
-                              "kind": "registry-literal",
-                              "source_blob_sha": "39e7a05f3383baf0d2effd27cdf9976c970f7b81"
-                            }
-                          },
-                          {
                             "id": "email-render-size",
                             "value": {
                               "type": "dimensions",

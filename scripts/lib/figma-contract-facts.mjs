@@ -101,6 +101,7 @@ function contractFactPaths(record) {
       // Derived email geometry is checked against its pinned capture separately;
       // this audit maps only facts claimed to be direct Figma observations.
       if (fact.provenance?.kind === "registry-literal" &&
+          /^(?:email-render-|email-cell-)/u.test(fact.id) &&
           /^[0-9a-f]{40}$/u.test(fact.provenance.source_blob_sha ?? "")) return;
       const base = `${path}/facts/${index}/value`;
       for (const [key, value] of Object.entries(fact.value ?? {})) {
