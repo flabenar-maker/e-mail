@@ -43,15 +43,18 @@ Figma INSTANCE внутри границы изображения не стан�
 | `id`, `metadata` | ID письма, язык и направление текста из подтверждённых входов; это не component facts |
 | `root` | Корневой model instance |
 | `instance_id`, `component_id`, `variants` | ID конкретного экземпляра, зарегистрированный компонент и селекторы Mobile/Desktop в форме схемы |
+| `variant_axes` | При наличии дополнительных осей варианта — точные значения для Mobile и Desktop из конкретных инстансов (например, `Count: "2"` у NPS) |
 | `property_values` | Записи `property_id + scope + value` с разрешённым типом |
 | `content_values` | Записи `element_id + slot_id + scope + value`, где `value` имеет тип соответствующего content slot |
 | `asset_files` | `asset_contract_id + path` на файлы данного экземпляра |
 | `slots` | `element_id + instances` для упорядоченного наполнения слота |
-| `nested_components` | `element_id + instance` для каждой объявленной вложенной позиции |
+| `nested_components` | Один логический `instance` на вложенный компонент: общий `element_id` либо `element_ids.mobile/desktop`, если ID позиции различаются |
+
+Дополнительные оси варианта не кодируются в `variants` и не подменяются свойствами или внешним сходством. Если у выбранного инстанса есть оси помимо `Viewport`, заполняется `variant_axes.mobile` и `variant_axes.desktop` точными строковыми значениями из Figma; выбранный набор должен иметь соответствующий contract root. Для базового варианта без дополнительных осей поле не нужно.
 
 Обязательные массивы присутствуют даже когда пусты. Нельзя добавлять произвольные поля модели, HTML, Figma dumps, contracts, repo SHA, параметры экспорта или verification statuses. Эти данные передаются соответствующими источниками/окружением/handoff.
 
-Только content/property bindings имеют `scope`. `asset_files`, `slots` и `nested_components` не получают выдуманный viewport scope. Если зарегистрированные viewport-specific element IDs требуют отдельных nested bindings, сохраняются их точные позиции и независимые IDs; связь одной логической пары остаётся в evidence. Если валидное представление различия не найдено, оно не маскируется дублированием блоков или несуществующим полем.
+Только content/property bindings имеют `scope`. `asset_files`, `slots` и `nested_components` не получают выдуманный viewport scope. Если у одной логической вложенной позиции разные ID в Mobile и Desktop contracts, один `nested_components` binding задаёт `element_ids.mobile` и `element_ids.desktop` и один вложенный `instance`. Два экземпляра ради различия ID создавать нельзя. Оба ID подтверждаются конкретными Figma-узлами и выбранными contract roots.
 
 Для одного ключа content/property нельзя одновременно писать `all` и viewport bindings, а также дублировать один и тот же scope. Для остальных bindings нельзя дублировать ключи, объявленные уникальными семантической проверкой.
 

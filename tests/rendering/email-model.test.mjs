@@ -124,6 +124,24 @@ test("semantic validation accepts exact component, slot, property and asset IDs"
   assert.deepEqual(validateEmailModelSemantics(model(), dependencies()), []);
 });
 
+test("semantic validation ignores required bindings for default-hidden instance children", () => {
+  const component = record();
+  for (const viewport of ["mobile", "desktop"]) {
+    component.contracts[viewport].root.children.push({
+      id: "hidden-image", semantic_role: "image", render_mode: "direct-image",
+      visibility: { mode: "instance", default_visible: false }, facts: [],
+      content_slots: [{ id: "alt", type: "alt-text", required: true }],
+      asset_contract_id: "hidden-image", children: [],
+    });
+  }
+  const deps = {
+    componentIndex: { bySystemId: new Map([[component.id, component]]) },
+    rendererRegistry: { coverage: [{ component_id: component.id, mode: "interpreter" }] },
+  };
+
+  assert.deepEqual(validateEmailModelSemantics(model(), deps), []);
+});
+
 test("semantic validation rejects unknown IDs and missing required content", () => {
   const unknown = model();
   unknown.root.component_id = "unknown-component";
@@ -244,4 +262,73 @@ test("semantic validation rejects whitespace-only informative alt text", () => {
       "/root/content_values/1/value/value",
     ),
   );
+});
+
+test("model variant axes select the exact two-option contract instead of the base variant", async () => {
+  const value = model();
+  value.root.variant_axes = {
+    mobile: { Count: "2" },
+    desktop: { Count: "2" },
+  };
+  assert.deepEqual(await loadErrors(value), []);
+
+  const component = record();
+  for (const viewport of ["mobile", "desktop"]) {
+    component.contracts[viewport].root.children.push({
+      id: "neutral", semantic_role: "label", render_mode: "html-text",
+      visibility: { mode: "always" }, facts: [],
+      content_slots: [{ id: "text", type: "plain-text", required: true }],
+      children: [],
+    });
+  }
+  component.contracts.variant_contracts = ["mobile", "desktop"].map((viewport) => ({
+    axes: [{ name: "Viewport", value: viewport }, { name: "Count", value: "2" }],
+    root: structuredClone(record().contracts[viewport].root),
+  }));
+  const deps = {
+    componentIndex: { bySystemId: new Map([[component.id, component]]) },
+    rendererRegistry: { coverage: [{ component_id: component.id, mode: "interpreter" }] },
+  };
+  assert.deepEqual(validateEmailModelSemantics(value, deps), []);
+
+  value.root.variant_axes.mobile.Count = "4";
+  assert.ok(has(validateEmailModelSemantics(value, deps), "EMAIL_MODEL_VARIANT_UNRESOLVED"));
+});
+
+test("one nested model instance can map to different mobile and desktop element IDs", async () => {
+  const value = model();
+  value.root.nested_components = [{
+    element_ids: { mobile: "mobile-status", desktop: "desktop-status" },
+    instance: {
+      instance_id: "status-1", component_id: "test-status",
+      variants: { mobile: "mobile", desktop: "desktop" },
+      property_values: [], content_values: [], asset_files: [], slots: [],
+    },
+  }];
+  assert.deepEqual(await loadErrors(value), []);
+
+  const parent = record();
+  for (const viewport of ["mobile", "desktop"]) {
+    parent.contracts[viewport].root.children.push({
+      id: viewport + "-status", semantic_role: "status",
+      render_mode: "nested-component", component_id: "test-status",
+      visibility: { mode: "always" }, facts: [], children: [],
+    });
+  }
+  const childRoot = {
+    id: "root", semantic_role: "status", render_mode: "presentation-table",
+    visibility: { mode: "always" }, facts: [], children: [],
+  };
+  const status = {
+    id: "test-status", properties: [], asset_contracts: [],
+    contracts: { mobile: { root: structuredClone(childRoot) }, desktop: { root: structuredClone(childRoot) } },
+  };
+  const deps = {
+    componentIndex: { bySystemId: new Map([[parent.id, parent], [status.id, status]]) },
+    rendererRegistry: { coverage: [
+      { component_id: parent.id, mode: "interpreter" },
+      { component_id: status.id, mode: "interpreter" },
+    ] },
+  };
+  assert.deepEqual(validateEmailModelSemantics(value, deps), []);
 });

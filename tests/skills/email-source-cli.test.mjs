@@ -47,6 +47,29 @@ test("source CLI is a failing pre-render gate, not a manual passed flag", async 
   assert.ok(JSON.parse(fail.stdout).diagnostics.some(({ code }) => code === "EMAIL_SOURCE_VARIANT_MISMATCH"));
 });
 
+test("source CLI resolves concrete variant axes without inline text", async (t) => {
+  const dir = await mkdtemp(join(tmpdir(), "cupis-source-axis-"));
+  t.after(() => rm(dir, { recursive: true, force: true }));
+  const path = join(dir, "source.json");
+  const input = minimalInput();
+  const child = { instance_id: "nps-1", component_id: "nps-options",
+    variants: { mobile: "mobile", desktop: "desktop" },
+    variant_axes: { mobile: { Count: "2" }, desktop: { Count: "2" } },
+    property_values: [], content_values: [], asset_files: [], slots: [] };
+  input.model.root.slots = [{ element_id: "content", instances: [child] }];
+  for (const viewport of ["mobile", "desktop"]) {
+    input.readings.selection[viewport].expected_top_level_count = 1;
+    input.readings.instances.push({ viewport, node_id: `${viewport}-nps`,
+      parent_node_id: viewport === "mobile" ? "m-root" : "d-root", order: 0,
+      relation: { kind: "slot", element_id: "content" }, variant_id: `${viewport}-2` });
+  }
+  input.correspondence.instances.push({ instance_id: "nps-1",
+    nodes: { mobile: "mobile-nps", desktop: "desktop-nps" } });
+  await writeFile(path, JSON.stringify(input), "utf8");
+  const result = spawnSync(process.execPath, [fileURLToPath(command), path], { encoding: "utf8" });
+  assert.equal(result.status, 0, result.stdout || result.stderr);
+  assert.deepEqual(JSON.parse(result.stdout).diagnostics, []);
+});
 test("new-build workflow requires source correspondence after model assembly and before render", async () => {
   const data = JSON.parse(await readFile(workflow, "utf8"));
   const steps = data.workflow.modes.find(({ id }) => id === "new-build").steps;

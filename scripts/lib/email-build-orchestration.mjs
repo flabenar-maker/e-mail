@@ -12,6 +12,7 @@ import {
 import { loadAssetsFoundation, resolveAssetContract } from "./assets-foundation.mjs";
 import { loadRendererRegistry } from "./renderer-registry.mjs";
 import { validateEmailModelSemantics } from "./email-model.mjs";
+import { selectVariantRoot } from "./email-interpreter.mjs";
 
 function failure(code) {
   const error = new Error(code);
@@ -44,7 +45,7 @@ const TOP_LEVEL_ROLES = new Set(["email", "block", "banner", "nps"]);
 const FIGMA_NODE_ID = /^(?:I)?[0-9]+:[0-9]+(?:;[0-9]+:[0-9]+)*$/u;
 const SHA256 = /^[0-9a-f]{64}$/u;
 
-function contractElement(record, viewport, id) {
+function contractElement(record, viewport, id, variantAxes = {}) {
   const visit = (element) => {
     if (!element) return null;
     if (element.id === id) return element;
@@ -54,35 +55,33 @@ function contractElement(record, viewport, id) {
     }
     return null;
   };
-  return visit(record.contracts?.[viewport]?.root);
+  return visit(selectVariantRoot(record, viewport, variantAxes).root);
 }
 
-function nestedComponentIds(record, viewport) {
+function nestedComponentIds(record, viewport, variantAxes = {}) {
   const result = new Set();
   const visit = (element) => {
     if (!element) return;
     if (element.render_mode === "nested-component") result.add(element.component_id);
     for (const child of element.children ?? []) visit(child);
   };
-  visit(record.contracts?.[viewport]?.root);
+  visit(selectVariantRoot(record, viewport, variantAxes).root);
   return result;
 }
 
 function nestedOnlyComponentIds(index) {
   const result = new Set();
+  const visit = (element) => {
+    if (!element) return;
+    if (element.render_mode === "nested-component") result.add(element.component_id);
+    for (const child of element.children ?? []) visit(child);
+  };
   for (const record of index.bySystemId.values()) {
-    for (const viewport of VIEWPORTS) {
-      const visit = (element) => {
-        if (!element) return;
-        if (element.render_mode === "nested-component") result.add(element.component_id);
-        for (const child of element.children ?? []) visit(child);
-      };
-      visit(record.contracts?.[viewport]?.root);
-    }
+    for (const viewport of VIEWPORTS) visit(record.contracts?.[viewport]?.root);
+    for (const variant of record.contracts?.variant_contracts ?? []) visit(variant.root);
   }
   return result;
 }
-
 function validateModelPlacement(model, index, resolvedContracts) {
   const blockers = new Set();
   const idsByViewport = new Map(VIEWPORTS.map((viewport) => [
@@ -107,7 +106,9 @@ function validateModelPlacement(model, index, resolvedContracts) {
     if (relation?.kind === "nested") {
       let exactPlacementCount = 0;
       for (const viewport of VIEWPORTS) {
-        const element = contractElement(relation.parent, viewport, relation.elementId);
+        const elementId = relation.elementIds?.[viewport] ?? relation.elementId;
+        const axes = relation.parentInstance?.variant_axes?.[viewport] ?? {};
+        const element = contractElement(relation.parent, viewport, elementId, axes);
         if (element) {
           exactPlacementCount += 1;
           if (
@@ -116,7 +117,7 @@ function validateModelPlacement(model, index, resolvedContracts) {
           ) {
             blockers.add("contract-ambiguous");
           }
-        } else if (!nestedComponentIds(relation.parent, viewport).has(instance.component_id)) {
+        } else if (relation.elementIds || !nestedComponentIds(relation.parent, viewport, axes).has(instance.component_id)) {
           blockers.add("contract-ambiguous");
         }
       }
@@ -125,7 +126,7 @@ function validateModelPlacement(model, index, resolvedContracts) {
 
     for (const slot of instance.slots ?? []) {
       const slotElements = VIEWPORTS
-        .map((viewport) => contractElement(record, viewport, slot.element_id))
+        .map((viewport) => contractElement(record, viewport, slot.element_id, instance.variant_axes?.[viewport] ?? {}))
         .filter(Boolean);
       if (
         slotElements.length !== VIEWPORTS.length ||
@@ -157,6 +158,8 @@ function validateModelPlacement(model, index, resolvedContracts) {
         kind: "nested",
         parent: record,
         elementId: nested.element_id,
+        elementIds: nested.element_ids,
+        parentInstance: instance,
       });
     }
   };

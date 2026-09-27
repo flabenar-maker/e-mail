@@ -310,3 +310,32 @@ test("contract-backed rich-text requires source inline runs", () => {
 
   assert.ok(codes(input).includes("EMAIL_SOURCE_INLINE_UNSUPPORTED"));
 });
+test("source variant identity follows the model's exact additional axes", () => {
+  const input = scenario();
+  const block = input.model.root.slots[0].instances[0];
+  block.variant_axes = { mobile: { Count: "2" }, desktop: { Count: "2" } };
+  input.resolvedContracts = new Map([["block-sample", {
+    variants: ["mobile", "desktop"].map((viewport) => ({
+      id: viewport + "-2",
+      axes: [{ name: "Viewport", value: viewport }, { name: "Count", value: "2" }],
+    })),
+  }]]);
+  for (const viewport of ["mobile", "desktop"]) {
+    input.readings.instances.find(({ node_id }) => node_id === (viewport === "mobile" ? "m-a" : "d-a")).variant_id = viewport + "-2";
+  }
+  assert.deepEqual(codes(input), []);
+  input.readings.instances.find(({ node_id }) => node_id === "m-a").variant_id = "mobile-3";
+  assert.ok(codes(input).includes("EMAIL_SOURCE_VARIANT_MISMATCH"));
+});
+
+test("one nested instance retains viewport-specific relation IDs", () => {
+  const input = scenario();
+  const block = input.model.root.slots[0].instances[0];
+  block.nested_components[0] = {
+    element_ids: { mobile: "mobile-child", desktop: "desktop-child" },
+    instance: block.nested_components[0].instance,
+  };
+  input.readings.instances.find(({ node_id }) => node_id === "m-a-child").relation.element_id = "mobile-child";
+  input.readings.instances.find(({ node_id }) => node_id === "d-a-child").relation.element_id = "desktop-child";
+  assert.deepEqual(codes(input), []);
+});

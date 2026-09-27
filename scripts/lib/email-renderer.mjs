@@ -101,9 +101,9 @@ function slotValue(instance, elementId) {
   ) ?? null;
 }
 
-function nestedValue(instance, elementId) {
+function nestedValue(instance, elementId, viewport) {
   return (instance.nested_components ?? []).find(
-    ({ element_id: candidate }) => candidate === elementId,
+    (item) => (item.element_ids?.[viewport] ?? item.element_id) === elementId,
   ) ?? null;
 }
 
@@ -214,7 +214,7 @@ function prepareElement({
   }
 
   if (prepared.render_mode === "nested-component" && visible) {
-    const nested = nestedValue(instance, originalId);
+    const nested = nestedValue(instance, originalId, viewport);
     if (!nested?.instance) {
       accumulator.diagnostics.push(
         diagnostic(

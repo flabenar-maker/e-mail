@@ -4,6 +4,15 @@ import { fileURLToPath } from "node:url";
 import { indexComponentRegistries, loadComponentRegistries } from "./lib/component-registry.mjs";
 import { verifyEmailModelSource } from "./lib/email-source-fidelity.mjs";
 
+function hasAdditionalVariantAxes(instance) {
+  if (!instance) return false;
+  if (["mobile", "desktop"].some((viewport) =>
+    Object.keys(instance.variant_axes?.[viewport] ?? {}).length > 0)) return true;
+  return (instance.slots ?? []).some((slot) =>
+    (slot.instances ?? []).some(hasAdditionalVariantAxes)) ||
+    (instance.nested_components ?? []).some(({ instance: child }) => hasAdditionalVariantAxes(child));
+}
+
 const path = process.argv[2];
 const selectedTest = process.argv[3] === "--selected-test";
 if (!path || process.argv.length > 4 || (process.argv.length === 4 && !selectedTest)) {
@@ -13,7 +22,7 @@ if (!path || process.argv.length > 4 || (process.argv.length === 4 && !selectedT
   try {
     const input = JSON.parse(await readFile(path, "utf8"));
     const hasInlineRuns = input.readings?.fields?.some(({ inline_runs }) => inline_runs?.length);
-    const resolvedContracts = hasInlineRuns
+    const resolvedContracts = hasInlineRuns || hasAdditionalVariantAxes(input.model?.root)
       ? indexComponentRegistries(await loadComponentRegistries({ repoRoot: fileURLToPath(new URL("../", import.meta.url)) })).bySystemId
       : new Map();
     const diagnostics = verifyEmailModelSource({ ...input, resolvedContracts }).map(({ code, path: fieldPath, message }) =>

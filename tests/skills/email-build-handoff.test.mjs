@@ -134,12 +134,20 @@ function buildInstance(assets, componentId, instanceId, blueprint = null) {
 
   const nestedMap = new Map();
   for (const viewport of VIEWPORTS) {
+    const occurrences = new Map();
     for (const [elementId, nestedId] of byViewport.get(viewport).nested) {
-      nestedMap.set(elementId, nestedId);
+      const ordinal = occurrences.get(nestedId) ?? 0;
+      occurrences.set(nestedId, ordinal + 1);
+      const key = `${nestedId}\0${ordinal}`;
+      const entry = nestedMap.get(key) ?? { nestedId, elementIds: {} };
+      entry.elementIds[viewport] = elementId;
+      nestedMap.set(key, entry);
     }
   }
-  const nested_components = [...nestedMap].map(([element_id, nestedId], index) => ({
-    element_id,
+  const nested_components = [...nestedMap.values()].map(({ nestedId, elementIds }, index) => ({
+    ...(elementIds.mobile && elementIds.desktop && elementIds.mobile !== elementIds.desktop
+      ? { element_ids: elementIds }
+      : { element_id: elementIds.mobile ?? elementIds.desktop }),
     instance: buildInstance(assets, nestedId, `${instanceId}-nested-${index}`, blueprint),
   }));
 
@@ -333,6 +341,109 @@ test("marketing and service fixtures follow resolved contracts through the real 
   await executeFixture(serviceRoot, service);
 });
 
+test("viewport-specific nested element IDs require exact placement in both variants", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "cupis-viewport-nested-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const source = await fixture(root, ["banner-secondary"]);
+  const contractRepo = await contractRepoCopy(root, "viewport-nested-repo");
+  const marketingPath = join(contractRepo, "data", "components", "marketing.yaml");
+  const marketing = JSON.parse(await readFile(marketingPath, "utf8"));
+  const banner = marketing.components.find(({ id }) => id === "banner-secondary");
+  const mobileId = "root-card-content-area-button";
+  const desktopId = "root-card-content-area-desktop-button";
+  const stack = [banner.contracts.desktop.root];
+  let desktopElement;
+  while (stack.length) {
+    const element = stack.pop();
+    if (element.id === mobileId) desktopElement = element;
+    stack.push(...(element.children ?? []));
+  }
+  assert.ok(desktopElement);
+  desktopElement.id = desktopId;
+  await writeFile(marketingPath, JSON.stringify(marketing), "utf8");
+
+  const nested = source.model.root.slots[0].instances[0].nested_components[0];
+  delete nested.element_id;
+  nested.element_ids = { mobile: mobileId, desktop: desktopId };
+  const exact = await prepareEmailBuildHandoff({
+    ...source, repoRoot: contractRepo, assetRoot: root,
+  });
+  assert.deepEqual(exact.blockers, []);
+
+  nested.element_ids.desktop = "wrong-desktop-element";
+  const wrong = await prepareEmailBuildHandoff({
+    ...source, repoRoot: contractRepo, assetRoot: root,
+  });
+  assert.ok(wrong.blockers.includes("contract-ambiguous"));
+});
+test("handoff placement uses the model-selected variant contract", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "cupis-axis-placement-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const source = await fixture(root, ["banner-secondary"]);
+  const contractRepo = await contractRepoCopy(root, "axis-placement-repo");
+  const marketingPath = join(contractRepo, "data", "components", "marketing.yaml");
+  const marketing = JSON.parse(await readFile(marketingPath, "utf8"));
+  const banner = marketing.components.find(({ id }) => id === "banner-secondary");
+  const instance = source.model.root.slots[0].instances[0];
+  const nested = instance.nested_components[0];
+  const originalId = nested.element_id;
+  const variantId = `${originalId}-alternate`;
+  const mobileRoot = structuredClone(banner.contracts.mobile.root);
+  const desktopRoot = structuredClone(banner.contracts.desktop.root);
+  const stack = [desktopRoot];
+  let target;
+  while (stack.length) {
+    const element = stack.pop();
+    if (element.id === originalId) target = element;
+    stack.push(...(element.children ?? []));
+  }
+  assert.ok(target);
+  target.id = variantId;
+  banner.contracts.variant_contracts = [
+    { variant_node_id: "999:1", axes: [{ name: "Viewport", value: "Mobile" }, { name: "Mode", value: "Alternate" }], root: mobileRoot },
+    { variant_node_id: "999:2", axes: [{ name: "Viewport", value: "Desktop" }, { name: "Mode", value: "Alternate" }], root: desktopRoot },
+  ];
+  banner.variants.push(
+    { id: "mobile-alternate", node_id: "999:1", axes: [{ name: "Viewport", value: "Mobile" }, { name: "Mode", value: "Alternate" }] },
+    { id: "desktop-alternate", node_id: "999:2", axes: [{ name: "Viewport", value: "Desktop" }, { name: "Mode", value: "Alternate" }] },
+  );
+  instance.variant_axes = { mobile: { Mode: "Alternate" }, desktop: { Mode: "Alternate" } };
+  nested.element_ids = { mobile: originalId, desktop: variantId };
+  delete nested.element_id;
+  await writeFile(marketingPath, JSON.stringify(marketing), "utf8");
+  const result = await prepareEmailBuildHandoff({ ...source, repoRoot: contractRepo, assetRoot: root });
+  assert.deepEqual(result.blockers, []);
+});
+test("top-level promotion rejects components nested only in alternate variants", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "cupis-axis-nested-only-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const source = await fixture(root, ["banner-secondary", "banner-inline"]);
+  const contractRepo = await contractRepoCopy(root, "axis-nested-only-repo");
+  const marketingPath = join(contractRepo, "data", "components", "marketing.yaml");
+  const marketing = JSON.parse(await readFile(marketingPath, "utf8"));
+  const banner = marketing.components.find(({ id }) => id === "banner-secondary");
+  const mobileRoot = structuredClone(banner.contracts.mobile.root);
+  const desktopRoot = structuredClone(banner.contracts.desktop.root);
+  for (const variantRoot of [mobileRoot, desktopRoot]) {
+    variantRoot.children.push({ id: "variant-inline", semantic_role: "banner",
+      render_mode: "nested-component", component_id: "banner-inline",
+      visibility: { mode: "always" }, facts: [], children: [] });
+  }
+  banner.contracts.variant_contracts = [
+    { variant_node_id: "998:1", axes: [{ name: "Viewport", value: "Mobile" }, { name: "Mode", value: "Alternate" }], root: mobileRoot },
+    { variant_node_id: "998:2", axes: [{ name: "Viewport", value: "Desktop" }, { name: "Mode", value: "Alternate" }], root: desktopRoot },
+  ];
+  banner.variants.push(
+    { id: "mobile-alternate", node_id: "998:1", axes: [{ name: "Viewport", value: "Mobile" }, { name: "Mode", value: "Alternate" }] },
+    { id: "desktop-alternate", node_id: "998:2", axes: [{ name: "Viewport", value: "Desktop" }, { name: "Mode", value: "Alternate" }] },
+  );
+  source.model.root.slots[0].instances[0].variant_axes = {
+    mobile: { Mode: "Alternate" }, desktop: { Mode: "Alternate" },
+  };
+  await writeFile(marketingPath, JSON.stringify(marketing), "utf8");
+  const result = await prepareEmailBuildHandoff({ ...source, repoRoot: contractRepo, assetRoot: root });
+  assert.ok(result.blockers.includes("contract-ambiguous"), result.blockers.join(","));
+});
 test("resolved dual-viewport placement rejects standalone nested-only components", async (t) => {
   const root = await mkdtemp(join(tmpdir(), "cupis-placement-"));
   t.after(() => rm(root, { recursive: true, force: true }));
