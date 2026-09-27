@@ -78,7 +78,7 @@ function nestedOnlyComponentIds(index) {
         if (element.render_mode === "nested-component") result.add(element.component_id);
         for (const child of element.children ?? []) visit(child);
       };
-      visit(selectVariantRoot(record, viewport, variantAxes).root);
+      visit(record.contracts?.[viewport]?.root);
     }
   }
   return result;
@@ -110,6 +110,7 @@ function validateModelPlacement(model, index, resolvedContracts) {
       for (const viewport of VIEWPORTS) {
         const elementId = relation.elementIds?.[viewport] ?? relation.elementId;
         const axes = relation.parentInstance?.variant_axes?.[viewport] ?? {};
+        const element = contractElement(relation.parent, viewport, elementId, axes);
         if (element) {
           exactPlacementCount += 1;
           if (
@@ -160,6 +161,7 @@ function validateModelPlacement(model, index, resolvedContracts) {
         parent: record,
         elementId: nested.element_id,
         elementIds: nested.element_ids,
+        parentInstance: instance,
       });
     }
   };
