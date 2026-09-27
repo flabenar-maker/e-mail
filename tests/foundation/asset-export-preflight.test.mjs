@@ -23,6 +23,8 @@ function evidence(overrides = {}) {
     sourceViewport: "mobile",
     concreteInstanceId: "1362:19151",
     sourceNodeName: "secondary-image @2x",
+    sourceNodeId: "I1362:19151;1103:7;1362:19160",
+    sourceNodeDimensions: { width: 296, height: 188 },
     sourceHash: "source-hash-1",
     sourcePixelDimensions: { width: 984, height: 696 },
     fillScaleMode: "FILL",
@@ -40,6 +42,24 @@ test("accepts a rectangular Mobile Fill crop that covers both display variants",
   assert.deepEqual(result?.issues, []);
 });
 
+test("blocks a claimed crop when the concrete Figma Fill node has another aspect ratio", async () => {
+  const result = await assess({
+    asset,
+    evidence: evidence({ sourceNodeDimensions: { width: 296, height: 296 } }),
+  });
+  assert.equal(result?.status, "blocked");
+  assert.ok(result?.issues.some((entry) => entry.code === "source-node-ratio-mismatch"));
+});
+
+test("requires the concrete source node identity and dimensions", async () => {
+  const result = await assess({
+    asset,
+    evidence: evidence({ sourceNodeId: "", sourceNodeDimensions: null }),
+  });
+  assert.equal(result?.status, "blocked");
+  assert.ok(result?.issues.some((entry) => entry.code === "source-node-id-missing"));
+  assert.ok(result?.issues.some((entry) => entry.code === "source-node-dimensions-missing"));
+});
 test("blocks a Desktop source or changed crop rather than silently substituting it", async () => {
   const wrongViewport = await assess({ asset, evidence: evidence({ sourceViewport: "desktop" }) });
   assert.equal(wrongViewport?.status, "blocked");
@@ -85,6 +105,8 @@ test("low source resolution pauses for a per-email, per-asset decision and recor
     assetId: "hero-image",
     sourceViewport: "desktop",
     sourceNodeName: "hero-image @2x",
+    sourceNodeId: "I1362:18159;hero-image",
+    sourceNodeDimensions: { width: 552, height: 353 },
     cropRect: { x: 0, y: 33.3695652174, width: 984, height: 629.260869565 },
     outputPixelDimensions: { width: 1104, height: 706 },
   });
@@ -160,6 +182,8 @@ test("accepts a rendered Card/Image composite with its own exact-node crop sourc
       assetId: "card-image",
       sourceViewport: "desktop",
       sourceNodeName: "card-image @2x",
+      sourceNodeId: "I1362:18159;card-image",
+      sourceNodeDimensions: { width: 232, height: 148 },
       outputPixelDimensions: { width: 464, height: 296 },
       effectiveSourcePixelDimensions: { width: 752, height: 480 },
       outputHasBakedPresentationRadius: false,

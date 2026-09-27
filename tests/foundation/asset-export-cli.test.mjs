@@ -21,6 +21,8 @@ const evidence = {
   sourceViewport: "desktop",
   concreteInstanceId: "1362:18159",
   sourceNodeName: "hero-image @2x",
+  sourceNodeId: "I1362:18159;hero-image",
+  sourceNodeDimensions: { width: 552, height: 353 },
   sourceHash: "fill-a",
   sourcePixelDimensions: { width: 984, height: 696 },
   fillScaleMode: "FILL",
