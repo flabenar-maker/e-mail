@@ -117,6 +117,17 @@ function propsFromFacts(facts = [], { viewport, mode, isRoot = false, parentAxis
       props.width = size.width;
     }
   }
+  const artworkSize = fact("visible-artwork-size");
+  if (mode === "direct-image" && size?.type === "dimensions" &&
+      artworkSize?.type === "dimensions" && size.width > 0 && size.height > 0) {
+    const scaleX = artworkSize.width / size.width;
+    const scaleY = artworkSize.height / size.height;
+    if (Math.abs(scaleX - scaleY) < 1e-6 && scaleX > 0) {
+      props.style.transform = `scale(${scaleX})`;
+      props.style["transform-origin"] = "center center";
+    }
+  }
+
   for (const item of facts) {
     const id = item.id;
     const value = item.value;

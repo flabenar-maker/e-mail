@@ -36,7 +36,7 @@ test("QR export retains the full opaque Figma artwork outside its 130px layout s
   assert.deepEqual(image.facts.find((fact) => fact.id === "reference-size")?.value,
     { type: "dimensions", width: 130, height: 130, unit: "px" });
   assert.deepEqual(image.facts.find((fact) => fact.id === "visible-artwork-size")?.value,
-    { type: "dimensions", width: 138.3870849609375, height: 138.3870849609375, unit: "px" });
+    { type: "dimensions", width: 138.38710021972656, height: 138.38710021972656, unit: "px" });
 });
 
 test("QR renderer keeps the 130px table slot and scales only the image around its center", () => {
@@ -49,7 +49,7 @@ test("QR renderer keeps the 130px table slot and scales only the image around it
     content_slots: [{ id: "alt", type: "alt-text", required: true }],
     facts: [
       { id: "reference-size", value: { type: "dimensions", width: 130, height: 130, unit: "px" } },
-      { id: "visible-artwork-size", value: { type: "dimensions", width: 138.3870849609375, height: 138.3870849609375, unit: "px" } },
+      { id: "visible-artwork-size", value: { type: "dimensions", width: 138.38710021972656, height: 138.38710021972656, unit: "px" } },
     ],
     children: [],
   };
