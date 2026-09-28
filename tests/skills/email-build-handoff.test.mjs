@@ -263,28 +263,43 @@ function sourceValue(value) {
   return value?.value;
 }
 
-function sourceEvidenceFor(model, { scope = "full-email" } = {}) {
-  const root = model.root;
-  const child = root.slots.find(({ element_id }) => element_id === "content")?.instances[0];
-  assert.ok(child, "fixture must have one top-level content child");
+function sourceEvidenceFor(model, assetEvidence, { scope = "full-email" } = {}) {
+  const entries = [];
+  const visit = (instance, parent = null, relation = null) => {
+    entries.push({ instance, parent, relation });
+    for (const [slotIndex, slot] of (instance.slots ?? []).entries()) {
+      for (const [order, child] of slot.instances.entries()) {
+        visit(child, instance, { kind: "slot", element_id: slot.element_id, order, slotIndex });
+      }
+    }
+    for (const [order, nested] of (instance.nested_components ?? []).entries()) {
+      visit(nested.instance, instance, {
+        kind: "nested", element_id: nested.element_id, element_ids: nested.element_ids, order,
+      });
+    }
+  };
+  visit(model.root);
   const capture_id = "capture:source-gate";
   const file_key = "source-gate-file";
-  const instances = [root, child];
   const nodeId = (viewport, instance) => `source-${viewport}-${instance.instance_id}`;
   const readings = { instances: [], fields: [], assets: [] };
   const correspondence = { capture_id, file_key, instances: [], fields: [], assets: [] };
-  correspondence.instances = instances.map((instance) => ({
+  correspondence.instances = entries.map(({ instance }) => ({
     instance_id: instance.instance_id,
     nodes: Object.fromEntries(VIEWPORTS.map((viewport) => [viewport, nodeId(viewport, instance)])),
   }));
+  const receipts = structuredClone(assetEvidence);
   for (const viewport of VIEWPORTS) {
-    for (const [index, instance] of instances.entries()) {
+    for (const { instance, parent, relation } of entries) {
       const node_id = nodeId(viewport, instance);
       readings.instances.push({
         viewport, node_id, variant_id: instance.variants[viewport],
-        parent_node_id: index === 0 ? null : nodeId(viewport, root),
-        relation: index === 0 ? null : { kind: "slot", element_id: "content" },
-        order: index === 0 ? null : 0,
+        parent_node_id: parent ? nodeId(viewport, parent) : null,
+        relation: relation && {
+          kind: relation.kind,
+          element_id: relation.element_ids?.[viewport] ?? relation.element_id,
+        },
+        order: relation?.order ?? null,
       });
       for (const item of instance.property_values ?? []) {
         if (item.scope !== "all" && item.scope !== viewport) continue;
@@ -306,17 +321,40 @@ function sourceEvidenceFor(model, { scope = "full-email" } = {}) {
       }
     }
   }
+  for (const entry of entries) {
+    for (const asset of entry.instance.asset_files ?? []) {
+      const viewport = "mobile";
+      const node_id = nodeId(viewport, entry.instance);
+      const evidence_id = `export:${entry.instance.instance_id}:${asset.asset_contract_id}`;
+      readings.assets.push({ viewport, node_id, owner_node_id: node_id, evidence_id });
+      correspondence.assets.push({
+        instance_id: entry.instance.instance_id,
+        asset_contract_id: asset.asset_contract_id,
+        viewport,
+        node_id,
+      });
+      const receipt = receipts.find((item) =>
+        item.instance_id === entry.instance.instance_id && item.asset_contract_id === asset.asset_contract_id &&
+        item.path === asset.path);
+      assert.ok(receipt, `missing asset receipt for ${entry.instance.instance_id}/${asset.asset_contract_id}`);
+      receipt.mcp_export.capture_id = capture_id;
+      receipt.mcp_export.file_key = file_key;
+      receipt.mcp_export.source_node_id = node_id;
+      receipt.mcp_export.evidence_id = evidence_id;
+    }
+  }
   return {
     readings: {
       complete: true, capture_id, file_key, captured_at: "2026-09-28T00:00:00.000Z",
       ...readings,
       selection: Object.fromEntries(VIEWPORTS.map((viewport) => [viewport, {
-        scope, root_node_id: nodeId(viewport, root), expected_top_level_count: 1,
+        scope, root_node_id: nodeId(viewport, model.root), expected_top_level_count: 1,
         terminal: true, truncated: false, capture_id, file_key,
       }])),
     },
     correspondence,
     authorizedInputs: [],
+    assetEvidence: receipts,
   };
 }
 
@@ -638,6 +676,7 @@ test("new-build handoff renders when complete source observations match the mode
   const root = await mkdtemp(join(tmpdir(), "cupis-source-positive-"));
   t.after(() => rm(root, { recursive: true, force: true }));
   const source = await fixture(root, ["block-cards-images"]);
+  const evidence = sourceEvidenceFor(source.model, source.assetEvidence);
   let invocations = 0;
   const result = await executeEmailBuildHandoff({
     ...source,
@@ -645,10 +684,11 @@ test("new-build handoff renders when complete source observations match the mode
     assetRoot: root,
     outputDir: join(root, "new-build"),
     resolution: { mode: "new-build" },
-    sourceEvidence: sourceEvidenceFor(source.model),
+    sourceEvidence: evidence,
+    assetEvidence: evidence.assetEvidence,
     rendererRunner: async () => { invocations += 1; },
   });
-  assert.deepEqual(result.blockers, [], JSON.stringify(result.sourceDiagnostics));
+  assert.deepEqual(result.blockers, []);
   assert.equal(result.executed, true);
   assert.equal(invocations, 1);
 });
@@ -657,13 +697,15 @@ test("new-build handoff rejects selected-subtree proof and a passed claim withou
   const root = await mkdtemp(join(tmpdir(), "cupis-source-scope-"));
   t.after(() => rm(root, { recursive: true, force: true }));
   const source = await fixture(root, ["block-cards-images"]);
+  const selectedEvidence = sourceEvidenceFor(source.model, source.assetEvidence, { scope: "selected-subtree" });
   const selected = await executeEmailBuildHandoff({
     ...source,
     repoRoot,
     assetRoot: root,
     outputDir: join(root, "selected-subtree"),
     resolution: { mode: "new-build" },
-    sourceEvidence: sourceEvidenceFor(source.model, { scope: "selected-subtree" }),
+    sourceEvidence: selectedEvidence,
+    assetEvidence: selectedEvidence.assetEvidence,
     rendererRunner: async () => { throw new Error("renderer must stay gated"); },
   });
   assert.ok(selected.blockers.includes("source-evidence-mismatch"));
