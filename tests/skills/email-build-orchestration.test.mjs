@@ -105,3 +105,23 @@ test("versioning rejects unsafe paths and writes only allowed output artifacts",
   assert.deepEqual((await readdir(next.target)).sort(), ["email.html", "images"]);
   assert.deepEqual((await readdir(join(next.target, "images"))).sort(), ["logo.png"]);
 });
+test("versioning continues underscore service folders and rejects unsafe source names", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "service-versioning-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const emailWorkflow = await workflow();
+  const resolution = resolveEmailBuildRequest({ workflow: emailWorkflow, inputs: {
+    request: input(), "source-email-html": input(), "source-images-directory": input(), "exact-change-scope": input(),
+  } });
+  const source = join(root, "service_transaction_success_1.6");
+  await mkdir(join(source, "images"), { recursive: true });
+  await writeFile(join(source, "email.html"), "<html>source</html>");
+  await writeFile(join(source, "images", "asset.png"), "asset");
+  const before = await directoryHash(source);
+  const next = await createEmailVersion({ resolution, workspaceRoot: root, outputParent: root, sourceFolder: "service_transaction_success_1.6" });
+  assert.equal(next.folder, "service_transaction_success_1.7");
+  assert.equal(await directoryHash(source), before);
+  assert.deepEqual((await readdir(next.target)).sort(), ["email.html", "images"]);
+  for (const unsafe of ["../service_transaction_success_1.6", "C:/service_transaction_success_1.6", "service_transaction_success_1.6/escape", "service_transaction_success_1.x"]) {
+    await assert.rejects(createEmailVersion({ resolution, workspaceRoot: root, outputParent: root, sourceFolder: unsafe }), (error) => error.code === "version-path-unsafe");
+  }
+});
