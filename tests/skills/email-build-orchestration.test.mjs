@@ -157,3 +157,30 @@ test("versioning rejects junction source and output-parent escapes", async (t) =
     assert.equal(result.reason.code, "version-path-unsafe");
   }
 });
+test("versioning rejects linked image descendants before target creation", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "linked-image-versioning-"));
+  const outside = await mkdtemp(join(tmpdir(), "linked-image-outside-"));
+  t.after(() => Promise.all([rm(root, { recursive: true, force: true }), rm(outside, { recursive: true, force: true })]));
+  const emailWorkflow = await workflow();
+  const resolution = resolveEmailBuildRequest({ workflow: emailWorkflow, inputs: {
+    request: input(), "source-email-html": input(), "source-images-directory": input(), "exact-change-scope": input(),
+  } });
+  const sourceFolder = "service_transaction_success_1.6";
+  const source = join(root, sourceFolder);
+  await mkdir(join(source, "images"), { recursive: true });
+  await writeFile(join(source, "email.html"), "<html>source</html>");
+  const outsideImage = join(outside, "outside.png");
+  await writeFile(outsideImage, "outside");
+  try {
+    await symlink(outsideImage, join(source, "images", "linked.png"), "file");
+  } catch (error) {
+    if (["EPERM", "ENOTSUP"].includes(error.code)) return t.skip(`file symlink unavailable: ${error.code}`);
+    throw error;
+  }
+
+  await assert.rejects(
+    createEmailVersion({ resolution, workspaceRoot: root, outputParent: root, sourceFolder }),
+    (error) => error.code === "version-path-unsafe",
+  );
+  assert.deepEqual(await readdir(root), [sourceFolder]);
+});
