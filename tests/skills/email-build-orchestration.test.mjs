@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { mkdtemp, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdtemp, mkdir, readdir, readFile, rm, symlink, writeFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
@@ -124,4 +124,30 @@ test("versioning continues underscore service folders and rejects unsafe source 
   for (const unsafe of ["../service_transaction_success_1.6", "C:/service_transaction_success_1.6", "service_transaction_success_1.6/escape", "service_transaction_success_1.x"]) {
     await assert.rejects(createEmailVersion({ resolution, workspaceRoot: root, outputParent: root, sourceFolder: unsafe }), (error) => error.code === "version-path-unsafe");
   }
+});
+test("versioning rejects junction source and output-parent escapes", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "junction-versioning-"));
+  const outside = await mkdtemp(join(tmpdir(), "junction-outside-"));
+  t.after(() => Promise.all([rm(root, { recursive: true, force: true }), rm(outside, { recursive: true, force: true })]));
+  const emailWorkflow = await workflow();
+  const resolution = resolveEmailBuildRequest({ workflow: emailWorkflow, inputs: {
+    request: input(), "source-email-html": input(), "source-images-directory": input(), "exact-change-scope": input(),
+  } });
+  await mkdir(join(outside, "images"));
+  await writeFile(join(outside, "email.html"), "outside");
+  try {
+    await symlink(outside, join(root, "service_transaction_success_1.6"), "junction");
+  } catch (error) {
+    if (["EPERM", "ENOTSUP"].includes(error.code)) return t.skip(`junction unavailable: ${error.code}`);
+    throw error;
+  }
+  await assert.rejects(createEmailVersion({ resolution, workspaceRoot: root, outputParent: root, sourceFolder: "service_transaction_success_1.6" }), (error) => error.code === "version-path-unsafe");
+  const parentLink = join(root, "output-parent");
+  try {
+    await symlink(outside, parentLink, "junction");
+  } catch (error) {
+    if (["EPERM", "ENOTSUP"].includes(error.code)) return t.skip(`junction unavailable: ${error.code}`);
+    throw error;
+  }
+  await assert.rejects(createEmailVersion({ resolution, workspaceRoot: root, outputParent: parentLink, purpose: "safe purpose" }), (error) => error.code === "version-path-unsafe");
 });
