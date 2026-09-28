@@ -453,7 +453,7 @@ function suppliedValues(model) {
   return { text, urls };
 }
 
-async function executeFixture(root, source, { outputDir = join(root, "output_1.0"), resolution } = {}) {
+async function executeFixture(root, source, { outputDir = join(root, "output_1.0"), resolution = { workflow: { mode: "continue-fix-technical" } } } = {}) {
   const result = await executeEmailBuildHandoff({
     repoRoot,
     outputDir,
