@@ -566,7 +566,7 @@ function semanticSlug(purpose) {
 }
 
 function safeSourceFolder(folder) {
-  return typeof folder === "string" && /^[a-z0-9]+(?:-[a-z0-9]+)*_[0-9]+\.[0-9]+$/u.test(folder);
+  return typeof folder === "string" && /^[a-z0-9]+(?:[-_][a-z0-9]+)*_[0-9]+\.[0-9]+$/u.test(folder);
 }
 
 function assertOutputContract(resolution) {
