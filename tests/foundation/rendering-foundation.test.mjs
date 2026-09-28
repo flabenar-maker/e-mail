@@ -261,6 +261,7 @@ test("schema requires exact client resilience policies and rejects removed shell
 test("semantic validation rejects a viewport consumed by horizontal shell insets", async () => {
   const rendering = await canonicalRendering();
   delete rendering.shell.min_width_px;
+  rendering.shell.horizontal_inset_px = 15;
   rendering.shell.min_supported_viewport_px = 30;
 
   const errors = validateRenderingSemantics(rendering);
