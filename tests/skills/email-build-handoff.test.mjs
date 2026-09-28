@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
+import { deflateSync } from "node:zlib";
 import {
   mkdtemp,
   mkdir,
@@ -32,6 +33,45 @@ import { loadWorkflowRegistry } from "../../scripts/lib/workflow-registry.mjs";
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const VIEWPORTS = ["mobile", "desktop"];
 let registryIndex;
+
+function crc32(bytes) {
+  let value = 0xffffffff;
+  for (const byte of bytes) {
+    value ^= byte;
+    for (let bit = 0; bit < 8; bit += 1) {
+      value = (value >>> 1) ^ (value & 1 ? 0xedb88320 : 0);
+    }
+  }
+  return (value ^ 0xffffffff) >>> 0;
+}
+
+function pngChunk(type, data) {
+  const name = Buffer.from(type, "ascii");
+  const length = Buffer.alloc(4);
+  length.writeUInt32BE(data.length);
+  const checksum = Buffer.alloc(4);
+  checksum.writeUInt32BE(crc32(Buffer.concat([name, data])));
+  return Buffer.concat([length, name, data, checksum]);
+}
+
+function pngWithCornerAlpha(transparentCorner) {
+  const header = Buffer.alloc(13);
+  header.writeUInt32BE(2, 0);
+  header.writeUInt32BE(2, 4);
+  header[8] = 8;
+  header[9] = 6;
+  const alpha = transparentCorner ? 0 : 255;
+  const rows = Buffer.from([
+    0, 255, 255, 255, alpha, 255, 255, 255, 255,
+    0, 255, 255, 255, 255, 255, 255, 255, 255,
+  ]);
+  return Buffer.concat([
+    Buffer.from("89504e470d0a1a0a", "hex"),
+    pngChunk("IHDR", header),
+    pngChunk("IDAT", deflateSync(rows)),
+    pngChunk("IEND", Buffer.alloc(0)),
+  ]);
+}
 
 function everyInstance(instance, output = []) {
   output.push(instance);
@@ -255,6 +295,32 @@ async function fixture(root, topLevel, id = "fixture", blueprint = null) {
     rendererRegistry,
     assetsFoundation,
   };
+}
+
+async function bindHeaderAsset(root, source, path, bytes) {
+  const instance = everyInstance(source.model.root).find(({ component_id, asset_files }) =>
+    component_id === "email-header" && asset_files?.some(({ asset_contract_id }) => asset_contract_id === "header-logo"));
+  assert.ok(instance, "email header instance with header logo");
+  const asset = instance.asset_files.find(({ asset_contract_id }) => asset_contract_id === "header-logo");
+  const receipt = source.assetEvidence.find((item) =>
+    item.instance_id === instance.instance_id && item.asset_contract_id === asset.asset_contract_id &&
+    item.path === asset.path);
+  assert.ok(receipt, "header logo receipt");
+  asset.path = path;
+  receipt.path = path;
+  receipt.sha256 = createHash("sha256").update(bytes).digest("hex");
+  const target = join(root, ...path.split("/"));
+  await mkdir(dirname(target), { recursive: true });
+  await writeFile(target, bytes);
+}
+
+async function setHeaderAlphaMode(contractRepo, alphaModeId) {
+  const path = join(contractRepo, "data", "components", "marketing.yaml");
+  const marketing = JSON.parse(await readFile(path, "utf8"));
+  const header = marketing.components.find(({ id }) => id === "email-header");
+  assert.ok(header, "email header contract");
+  header.asset_contracts.find(({ id }) => id === "header-logo").alpha_mode_id = alphaModeId;
+  await writeFile(path, JSON.stringify(marketing), "utf8");
 }
 
 function sourceValue(value) {
@@ -764,6 +830,50 @@ test("asset evidence binds exact filename, digest, owner, Figma node, and physic
   } catch (error) {
     if (error?.code !== "EPERM") throw error;
   }
+});
+
+test("handoff requires the export-profile suffix in a header asset filename", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "cupis-header-profile-suffix-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const source = await fixture(root, ["email-header"]);
+  const image = pngWithCornerAlpha(false);
+
+  await bindHeaderAsset(root, source, "images/header-logo@4x.png", image);
+  const suffixed = await prepareEmailBuildHandoff({ ...source, repoRoot, assetRoot: root });
+  assert.deepEqual(suffixed.blockers, []);
+  assert.equal(suffixed.assetContracts[0].path, "images/header-logo@4x.png");
+
+  await bindHeaderAsset(root, source, "images/header-logo.png", image);
+  const unsuffixed = await prepareEmailBuildHandoff({ ...source, repoRoot, assetRoot: root });
+  assert.ok(unsuffixed.blockers.includes("asset-contract-missing"));
+});
+
+test("handoff enforces real PNG alpha pixels against the header alpha contract", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "cupis-header-alpha-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const contractRepo = await contractRepoCopy(root, "header-alpha-contract");
+  const source = await fixture(root, ["email-header"]);
+  const transparent = pngWithCornerAlpha(true);
+  const opaque = pngWithCornerAlpha(false);
+
+  await bindHeaderAsset(root, source, "images/header-logo@4x.png", transparent);
+  await setHeaderAlphaMode(contractRepo, "transparent");
+  const transparentPass = await prepareEmailBuildHandoff({
+    ...source, repoRoot: contractRepo, assetRoot: root,
+  });
+  assert.deepEqual(transparentPass.blockers, []);
+
+  await setHeaderAlphaMode(contractRepo, "opaque");
+  const transparentRejected = await prepareEmailBuildHandoff({
+    ...source, repoRoot: contractRepo, assetRoot: root,
+  });
+  assert.ok(transparentRejected.blockers.includes("asset-contract-missing"));
+
+  await bindHeaderAsset(root, source, "images/header-logo@4x.png", opaque);
+  const opaquePass = await prepareEmailBuildHandoff({
+    ...source, repoRoot: contractRepo, assetRoot: root,
+  });
+  assert.deepEqual(opaquePass.blockers, []);
 });
 
 async function treeDigest(root) {
