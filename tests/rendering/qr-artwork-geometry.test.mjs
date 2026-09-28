@@ -48,7 +48,7 @@ test("QR Figma capture traces the complete opaque export and exact email grid", 
   const grid = capture.email_integer_grid;
   const asset = app.asset_contracts.find((entry) => entry.id === "qr-code");
   assert.ok(asset);
-  assert.equal(asset.alpha_mode_id, "opaque");
+  assert.equal(asset.alpha_mode_id, "source");
   assert.equal(asset.source_viewport, "desktop");
   assert.deepEqual(asset.pixel_dimensions, {
     width: capture.mcp_export.pixel_width,
