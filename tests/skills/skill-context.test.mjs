@@ -660,4 +660,16 @@ test("active route blocks a workflow source absent from structured capability", 
     "structured-workflow-status-topology-invalid",
   ]);
 });
-
+test("canonical email routes resolve while maintenance remains paused", async () => {
+  for (const [routeId, workflowMode, candidates, viewports] of [
+    ["email-new-build", "new-build", [{ id: "banner-hero" }], ["mobile", "desktop"]],
+    ["email-continue-fix", "continue-fix-technical", [], []],
+  ]) {
+    const result = await resolveSkillContext({ repoRoot, routeId, workflowMode, candidates, viewports });
+    assert.equal(result.status, "resolved", routeId);
+    assert.ok(result.workflow.steps.length > 0, routeId);
+  }
+  const maintenance = await resolveSkillContext({ repoRoot, routeId: "migration-progress" });
+  assert.equal(maintenance.status, "paused");
+  assert.deepEqual(maintenance.blockers.map(({ code }) => code), ["SKILL_ROUTE_PAUSED"]);
+});
