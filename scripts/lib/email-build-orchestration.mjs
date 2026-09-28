@@ -3,6 +3,7 @@ import { createHash, randomUUID } from "node:crypto";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { isAbsolute, join, relative, resolve } from "node:path";
+import { tmpdir } from "node:os";
 
 import {
   indexComponentRegistries,
@@ -316,7 +317,7 @@ async function verifyNewBuildSource({ resolution, sourceEvidence, repoRoot, asse
     return { blockers: ["source-evidence-missing"], diagnostics: [] };
   }
 
-  const proofPath = join(assetRoot, ".temporary-email-source-" + randomUUID() + ".json");
+  const proofPath = join(tmpdir(), ".temporary-email-source-" + randomUUID() + ".json");
   try {
     await writeFile(proofPath, JSON.stringify({
       ...sourceEvidence,
@@ -346,6 +347,7 @@ async function verifyNewBuildSource({ resolution, sourceEvidence, repoRoot, asse
     await rm(proofPath, { force: true });
   }
 }
+
 function continueFixEvidenceBlockers(resolution, evidence) {
   if (resolution?.mode !== "continue-fix-design") return [];
   const blockers = new Set();
