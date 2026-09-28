@@ -581,10 +581,17 @@ export async function createEmailVersion({ resolution, workspaceRoot, outputPare
     throw failure("version-path-unsafe");
   }
   const base = sourceFolder ? sourceFolder.replace(/_[0-9]+\.[0-9]+$/u, "") : semanticSlug(purpose);
+  const version = sourceFolder?.match(/_([0-9]+)\.([0-9]+)$/u);
+  const major = version ? Number(version[1]) : 1;
+  let minor = version ? Number(version[2]) + 1 : 0;
+  if (!Number.isSafeInteger(major) || !Number.isSafeInteger(minor)) throw failure("version-path-unsafe");
   const entries = new Set(await readdir(outputParent));
-  let minor = 0;
-  let folder = `${base}_1.${minor}`;
-  while (entries.has(folder)) folder = `${base}_1.${++minor}`;
+  let folder = base + "_" + major + "." + minor;
+  while (entries.has(folder)) {
+    minor += 1;
+    if (!Number.isSafeInteger(minor)) throw failure("version-path-unsafe");
+    folder = base + "_" + major + "." + minor;
+  }
   const target = join(outputParent, folder);
   if (!inside(workspaceRoot, target)) throw failure("version-path-unsafe");
   await mkdir(target);
