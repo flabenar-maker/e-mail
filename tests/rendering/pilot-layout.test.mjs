@@ -71,7 +71,7 @@ test("Banner/App-Download Desktop puts all stores in one row and Mobile stacks t
   const qr = rowPathAt(result.html, 'src="images/qr-code.png"', true);
   assert.ok(logo.includes(qr.at(-1)), "Desktop logo and QR must share the header row");
 });
-test("pilot shell uses 270px inner minimum width for the 300px supported viewport", async () => {
+test("pilot shell preserves the full 300px supported viewport without a shell inset", async () => {
   const [model, registries, rendererRegistry, rendering] = await Promise.all([
     loadEmailModel({ modelPath: fixturePath, schemaPath }),
     loadComponentRegistries({ repoRoot }),
@@ -85,8 +85,8 @@ test("pilot shell uses 270px inner minimum width for the 300px supported viewpor
   });
 
   assert.deepEqual(result.diagnostics, []);
-  assert.match(result.html, /min-width:270px/u);
-  assert.doesNotMatch(result.html, /min-width:300px/u);
+  assert.match(result.html, /min-width:300px/u);
+  assert.doesNotMatch(result.html, /min-width:270px/u);
 });
 
 test("pilot renderer blocks an impossible minimum viewport instead of clamping", async () => {
@@ -96,6 +96,7 @@ test("pilot renderer blocks an impossible minimum viewport instead of clamping",
     loadRendererRegistry({ repoRoot }),
     loadRenderingFoundation({ repoRoot }),
   ]);
+  rendering.shell.horizontal_inset_px = 15;
   rendering.shell.min_supported_viewport_px = 30;
   const result = renderEmailDocument(model, {
     componentIndex: indexComponentRegistries(registries),

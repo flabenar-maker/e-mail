@@ -130,7 +130,8 @@ test("CLI renders the raw valid pilot model into the canonical responsive email 
     assert.match(html, /Небольшой заголовок/u);
     assert.match(html, /<body style="margin:0;padding:0">/u);
     assert.match(html, /background-color:#F3F3F5/u);
-    assert.match(html, /padding:0 15px/u);
+    assert.match(html, /padding:0 0px/u);
+    assert.match(html, /min-width:300px/u);
     assert.match(html, /max-width:600px/u);
     assert.match(html, /<!--\[if \(gte mso 9\)\|\(IE\)\]><table role="presentation" width="600" align="center"/u);
     assert.match(html, /@media only screen and \(max-width:659px\)/u);
