@@ -141,7 +141,6 @@ test("versioning rejects junction source and output-parent escapes", async (t) =
     if (["EPERM", "ENOTSUP"].includes(error.code)) return t.skip(`junction unavailable: ${error.code}`);
     throw error;
   }
-  await assert.rejects(createEmailVersion({ resolution, workspaceRoot: root, outputParent: root, sourceFolder: "service_transaction_success_1.6" }), (error) => error.code === "version-path-unsafe");
   const parentLink = join(root, "output-parent");
   try {
     await symlink(outside, parentLink, "junction");
@@ -149,5 +148,12 @@ test("versioning rejects junction source and output-parent escapes", async (t) =
     if (["EPERM", "ENOTSUP"].includes(error.code)) return t.skip(`junction unavailable: ${error.code}`);
     throw error;
   }
-  await assert.rejects(createEmailVersion({ resolution, workspaceRoot: root, outputParent: parentLink, purpose: "safe purpose" }), (error) => error.code === "version-path-unsafe");
+  const results = await Promise.allSettled([
+    createEmailVersion({ resolution, workspaceRoot: root, outputParent: root, sourceFolder: "service_transaction_success_1.6" }),
+    createEmailVersion({ resolution, workspaceRoot: root, outputParent: parentLink, purpose: "safe purpose" }),
+  ]);
+  for (const result of results) {
+    assert.equal(result.status, "rejected");
+    assert.equal(result.reason.code, "version-path-unsafe");
+  }
 });
