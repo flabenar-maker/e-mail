@@ -153,7 +153,8 @@ test("actual banner-app-download Desktop store buttons paint rounded tables inst
     .filter((tag) => colorPattern.test(tag));
   assert.deepEqual(paintedCells, [], "store-button color must not create square painted outer cells");
 });
-test("assembled Mobile Icon-Cards fill instance keeps the available column width", async () => {
+
+test("assembled Mobile Icon-Cards hug root fills the available column width", async () => {
   const [component, rendering] = await Promise.all([
     actualRegistryComponent("block-icon-cards"),
     loadRenderingFoundation({ repoRoot }),
