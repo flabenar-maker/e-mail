@@ -638,9 +638,6 @@ export async function createEmailVersion({ resolution, workspaceRoot, outputPare
   if (sourceFolder) {
     await cp(join(physicalSource, "email.html"), join(target, "email.html"));
     await cp(join(physicalSource, "images"), join(target, "images"), { recursive: true });
-  } else {
-    await writeFile(join(target, "email.html"), "");
-    await mkdir(join(target, "images"));
   }
   return { folder, target };
 }

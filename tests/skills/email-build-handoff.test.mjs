@@ -453,13 +453,13 @@ function suppliedValues(model) {
   return { text, urls };
 }
 
-async function executeFixture(root, source) {
-  const outputDir = join(root, "output_1.0");
+async function executeFixture(root, source, { outputDir = join(root, "output_1.0"), resolution } = {}) {
   const result = await executeEmailBuildHandoff({
     repoRoot,
     outputDir,
     assetRoot: root,
     ...source,
+    resolution: resolution ?? source.resolution,
   });
   assert.deepEqual(result.blockers, []);
   assert.equal(result.executed, true);
@@ -511,6 +511,22 @@ test("marketing and service fixtures follow resolved contracts through the real 
   assert.ok(suppliedValues(service.model).text.every((value) => !value.includes("service-")));
   await executeFixture(marketingRoot, marketing);
   await executeFixture(serviceRoot, service);
+});
+
+test("real handoff renders into an empty version folder", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "cupis-empty-version-handoff-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const source = await fixture(root, ["banner-secondary"]);
+  const version = await createEmailVersion({
+    resolution: { allowedOutputs: ["version-folder", "email-html", "images-directory"] },
+    workspaceRoot: root,
+    outputParent: root,
+    purpose: "empty version handoff",
+  });
+  await executeFixture(root, source, {
+    outputDir: version.target,
+    resolution: { workflow: { mode: "continue-fix-technical" } },
+  });
 });
 
 test("viewport-specific nested element IDs require exact placement in both variants", async (t) => {

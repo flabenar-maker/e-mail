@@ -152,7 +152,9 @@ test("versioning rejects unsafe paths and writes only allowed output artifacts",
 
   const first = await createEmailVersion({ workflow: emailWorkflow, resolution: resolved, workspaceRoot: root, outputParent: root, purpose: "Billing renewal notice" });
   assert.equal(first.folder, "billing-renewal-notice_1.0");
+  assert.deepEqual(await readdir(first.target), []);
   await writeFile(join(first.target, "email.html"), "<html>source</html>");
+  await mkdir(join(first.target, "images"));
   await writeFile(join(first.target, "images", "logo.png"), "image");
   await mkdir(join(root, "billing-renewal-notice_1.2"));
   const before = await directoryHash(first.target);
