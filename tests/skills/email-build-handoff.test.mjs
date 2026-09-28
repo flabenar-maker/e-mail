@@ -257,6 +257,66 @@ async function fixture(root, topLevel, id = "fixture", blueprint = null) {
   };
 }
 
+function sourceValue(value) {
+  if (value?.type === "rich-text") return value.segments.map(({ value: text }) => text).join("");
+  if (value?.type === "alt-text") return { purpose: value.purpose, value: value.value };
+  return value?.value;
+}
+
+function sourceEvidenceFor(model, { scope = "full-email" } = {}) {
+  const root = model.root;
+  const child = root.slots.find(({ element_id }) => element_id === "content")?.instances[0];
+  assert.ok(child, "fixture must have one top-level content child");
+  const capture_id = "capture:source-gate";
+  const file_key = "source-gate-file";
+  const instances = [root, child];
+  const nodeId = (viewport, instance) => `source-${viewport}-${instance.instance_id}`;
+  const readings = { instances: [], fields: [], assets: [] };
+  const correspondence = { capture_id, file_key, instances: [], fields: [], assets: [] };
+  for (const viewport of VIEWPORTS) {
+    for (const [index, instance] of instances.entries()) {
+      const node_id = nodeId(viewport, instance);
+      readings.instances.push({
+        viewport, node_id, variant_id: instance.variants[viewport],
+        parent_node_id: index === 0 ? null : nodeId(viewport, root),
+        relation: index === 0 ? null : { kind: "slot", element_id: "content" },
+        order: index === 0 ? null : 0,
+      });
+      correspondence.instances.push({ instance_id: instance.instance_id, nodes: { [viewport]: node_id } });
+      for (const item of instance.property_values ?? []) {
+        if (item.scope !== "all" && item.scope !== viewport) continue;
+        const field = `property:${item.property_id}`;
+        readings.fields.push({ viewport, node_id, owner_node_id: node_id, field, value: item.value });
+        correspondence.fields.push({
+          instance_id: instance.instance_id, kind: "property", property_id: item.property_id,
+          viewport, node_id, field, origin: "figma",
+        });
+      }
+      for (const item of instance.content_values ?? []) {
+        if (item.scope !== "all" && item.scope !== viewport) continue;
+        const field = `content:${item.element_id}:${item.slot_id}`;
+        readings.fields.push({ viewport, node_id, owner_node_id: node_id, field, value: sourceValue(item.value) });
+        correspondence.fields.push({
+          instance_id: instance.instance_id, kind: "content", element_id: item.element_id,
+          slot_id: item.slot_id, viewport, node_id, field, origin: "figma",
+        });
+      }
+    }
+  }
+  return {
+    readings: {
+      complete: true, capture_id, file_key, captured_at: "2026-09-28T00:00:00.000Z",
+      ...readings,
+      selection: Object.fromEntries(VIEWPORTS.map((viewport) => [viewport, {
+        scope, root_node_id: nodeId(viewport, root), expected_top_level_count: 1,
+        terminal: true, truncated: false, capture_id, file_key,
+      }])),
+    },
+    correspondence,
+    authorizedInputs: [],
+  };
+}
+
 async function contractRepoCopy(root, name) {
   const target = join(root, name);
   await cp(join(repoRoot, "data"), join(target, "data"), { recursive: true });
@@ -569,6 +629,53 @@ test("new-build handoff blocks rendering without full source comparison evidence
   });
   assert.ok(result.blockers.includes("source-evidence-missing"));
   assert.equal(invocations, 0);
+});
+
+test("new-build handoff renders when complete source observations match the model", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "cupis-source-positive-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const source = await fixture(root, ["block-cards-images"]);
+  let invocations = 0;
+  const result = await executeEmailBuildHandoff({
+    ...source,
+    repoRoot,
+    assetRoot: root,
+    outputDir: join(root, "new-build"),
+    resolution: { mode: "new-build" },
+    sourceEvidence: sourceEvidenceFor(source.model),
+    rendererRunner: async () => { invocations += 1; },
+  });
+  assert.deepEqual(result.blockers, []);
+  assert.equal(result.executed, true);
+  assert.equal(invocations, 1);
+});
+
+test("new-build handoff rejects selected-subtree proof and a passed claim without readings", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "cupis-source-scope-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const source = await fixture(root, ["block-cards-images"]);
+  const selected = await executeEmailBuildHandoff({
+    ...source,
+    repoRoot,
+    assetRoot: root,
+    outputDir: join(root, "selected-subtree"),
+    resolution: { mode: "new-build" },
+    sourceEvidence: sourceEvidenceFor(source.model, { scope: "selected-subtree" }),
+    rendererRunner: async () => { throw new Error("renderer must stay gated"); },
+  });
+  assert.ok(selected.blockers.includes("source-evidence-mismatch"));
+  assert.ok(selected.sourceDiagnostics.some(({ code }) => code === "EMAIL_SOURCE_SCOPE_INCOMPLETE"));
+
+  const claimed = await executeEmailBuildHandoff({
+    ...source,
+    repoRoot,
+    assetRoot: root,
+    outputDir: join(root, "claimed-pass"),
+    resolution: { mode: "new-build" },
+    sourceEvidence: { status: "passed" },
+    rendererRunner: async () => { throw new Error("renderer must stay gated"); },
+  });
+  assert.ok(claimed.blockers.includes("source-evidence-missing"));
 });
 
 test("asset evidence binds exact filename, digest, owner, Figma node, and physical root", async (t) => {
