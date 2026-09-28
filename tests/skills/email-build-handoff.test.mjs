@@ -648,7 +648,7 @@ test("new-build handoff renders when complete source observations match the mode
     sourceEvidence: sourceEvidenceFor(source.model),
     rendererRunner: async () => { invocations += 1; },
   });
-  assert.deepEqual(result.blockers, []);
+  assert.deepEqual(result.blockers, [], JSON.stringify(result.sourceDiagnostics));
   assert.equal(result.executed, true);
   assert.equal(invocations, 1);
 });
