@@ -35,7 +35,7 @@ test("loads the canonical rendering foundation", async () => {
   const rendering = await loadRenderingFoundation({ repoRoot });
 
   assert.equal(rendering.foundation.id, "rendering");
-  assert.equal(rendering.foundation.status, "shadow");
+  assert.equal(rendering.foundation.status, "active");
   assert.deepEqual(rendering.breakpoints, [
     { id: "cupis-mobile", query: "max-width", value: 659, unit: "px" },
   ]);
