@@ -10,6 +10,15 @@
 
 **Spec:** [master design](../specs/2026-08-24-cupis-structured-email-system-design.md), [HTML rendering design](../specs/2026-09-10-cupis-html-rendering-design.md). Уточнение границ заполняющего модель агента выполняется в пакете 1 до технических изменений.
 
+## Текущий результат — 2026-09-28
+
+- Подготовительная часть, real E2E repairs и email-only activation опубликованы; [PR №97](https://github.com/flabenar-maker/e-mail/pull/97) слит на `d149faf42252ca097c501f7f165a64d0d0b70a5b`. Пропущенная обязательная регистрация `building-cupis-emails` исправлена [PR №98](https://github.com/flabenar-maker/e-mail/pull/98), слитым на `bbd02d14e1d4d8dfa33fcd01b28fa30ba7e0ed73`.
+- Кодовый gate для №98: локальная system validation, 705/705 тестов и bootstrap verifier прошли на точном head bc52375b8084d7725f028f712f85ea2a1f881d40; дерево слитого коммита побайтно совпало с ним. Навык установлен из слитого источника и сверён по SHA-256.
+- Правка общего Mobile shell горизонтального inset 15→0 опубликована через [PR №99](https://github.com/flabenar-maker/e-mail/pull/99), merge commit 4feae86d44ae95b7070b79277a455fa8b297099d. Её точный head dc2f4e64a18c6cbfa7adf281059297b22d210071 прошёл 705/705 локальных тестов и bootstrap; merge tree совпал с проверенным head.
+- Post-merge independent service new-build создан локально в `service-email-e2e_1.0`; technical continue/fix создал `service-email-e2e_1.1` с изменением одной тестовой ссылки и идентичными image hashes. Состав из шести блоков совпадает с Figma; подозрение на дублирование оказалось артефактом склейки скриншота.
+- После PR №99 обе версии письма пересобраны в marketing_all_blocks_1.9 и service-email-e2e_1.2 без ручной правки HTML. Mobile shell занимает полные 328 px; сервисная карточка начинается на x=16 вместо x=31, горизонтального overflow нет при 300/328/600/660 px. Desktop shell по-прежнему 600 px по центру на viewport 660 px. Первое измерение +47 px оказалось артефактом полосы прокрутки; фактическая оставшаяся разница сервиса после корректной ширины — Figma 2223 px против локального 2138 px. Проверка фактических bounds Figma локализовала её главным образом в Transaction-Success (−42 px), Secondary (−24 px) и Footer (−17 px); высоты hug, поэтому нельзя маскировать разницу фиксированной высотой. Mobile visual acceptance и Stage 10 остаются открытыми до исправления или обоснованного принятия этих расхождений.
+- Исходный исторический раздел ниже описывает состояние на 2026-09-18 и не заменяет этот текущий статус. Реальные почтовые клиенты и Altcraft в данном E2E не проверялись.
+
 ## Место в общем плане и исходное состояние
 
 Этот документ детализирует продолжение [Stage 10](2026-09-17-cupis-email-build-skill-stage-10.md): уточнение передачи данных перед Task 7, сам Task 7 и прежний Task 8. Он не создаёт нового глобального этапа и не отменяет исходные E2E-критерии.

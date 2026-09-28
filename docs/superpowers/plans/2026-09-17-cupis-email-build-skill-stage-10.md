@@ -10,6 +10,14 @@
 
 **Spec:** `docs/superpowers/specs/2026-08-24-cupis-structured-email-system-design.md`
 
+## Фактический статус на 2026-09-28
+
+- Email-only activation слита через [PR №97](https://github.com/flabenar-maker/e-mail/pull/97), merge commit `d149faf42252ca097c501f7f165a64d0d0b70a5b`. Регистрация опубликованного навыка исправлена отдельным [PR №98](https://github.com/flabenar-maker/e-mail/pull/98), merge commit `bbd02d14e1d4d8dfa33fcd01b28fa30ba7e0ed73`.
+- `email-new-build` и `email-continue-fix` теперь active в `main`; прочие routes остаются paused. Локальный `building-cupis-emails` установлен из слитого источника и побайтно совпадает с ним.
+- На точном SHA PR №98 локально прошли system validation, 705/705 тестов и bootstrap verifier; GitHub Actions/PR Checks не использовались.
+- Двойной внешний мобильный отступ устранён через [PR №99](https://github.com/flabenar-maker/e-mail/pull/99), merge commit 4feae86d44ae95b7070b79277a455fa8b297099d. На точном head dc2f4e64a18c6cbfa7adf281059297b22d210071 заново прошли 705/705 локальных тестов и bootstrap; дерево merge commit совпадает с проверенным head.
+- Post-merge сервисное письмо и его техническое версионное изменение собраны; после коррекции shell пересобраны также маркетинговое и сервисное письма. Mobile ширина 328 px без внешнего inset и overflow, первая сервисная карточка x=16, Desktop остаётся 600 px по центру. Mobile visual acceptance ещё открыта: фактический сервисный инстанс Figma 2223 px против локального рендера 2138 px; основные расхождения в Transaction-Success (−42 px), Secondary (−24 px), Footer (−17 px). Высота определяется содержимым; не подгонять её фиксированным CSS без выяснения причин переноса текста и композиции. Этап 10 пока не отмечать завершённым. Подробный протокол — в [плане E2E](2026-09-18-cupis-email-model-assembly-and-e2e.md).
+
 ## Уточнение продолжения от 2026-09-18
 
 Tasks 7–8 выполняются по [детальному плану заполнения модели и E2E](2026-09-18-cupis-email-model-assembly-and-e2e.md), с предварительными пакетами уточнения входного процесса и проверки переноса данных. Существующий `email-model` сохраняется единственным форматом композиции; отсутствие отдельного автоматического Figma-импортёра само по себе не является блокером. Этот план не объявляет Tasks 7–8 завершёнными и не меняет их итоговые acceptance gates.
