@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: asset-registry -->
-<!-- source-digest: sha256:b6d485d49f90857ca0b48135f6ff8e47953e5b55b6d7a8150ac5e0099d4d4264 -->
+<!-- source-digest: sha256:9102751bf3515bd4ac4b9d9091b6093023bbb64869f47e9565dd411cad7e4813 -->
 <!-- schema-versions: components=2.1.0, assets=1.0.0 -->
 # CUPIS asset registry
 
@@ -434,7 +434,7 @@ General export definitions are listed first. Component-specific choices remain o
 
 ### asset-header-logo-4x
 
-- `asset-header-logo-4x` → `header-logo @4x` → `rendered-node` → `direct-image` → `png-4x` → `opaque`
+- `asset-header-logo-4x` → `header-logo @4x` → `rendered-node` → `direct-image` → `png-4x` → `transparent`
   - Asset contract ID: `header-logo`
   - Export boundary: `node` / `header-logo @4x`
   - Pixel dimensions: 1288×200px
@@ -499,7 +499,7 @@ General export definitions are listed first. Component-specific choices remain o
   - Crop: `none`; position `exact-node-after-overrides`
   - Background: own visible boundary fill `preserve`; artificial matte `forbid`
   - Clipping policy: `preserve-artwork`
-- `banner-app-download` → `qr-code @4x` → `rendered-node` → `direct-image` → `png-4x` → `opaque`
+- `banner-app-download` → `qr-code @4x` → `rendered-node` → `direct-image` → `png-4x` → `source`
   - Asset contract ID: `qr-code`
   - Export boundary: `node` / `qr-code @4x`
   - Pixel dimensions: 554×554px
@@ -622,7 +622,7 @@ General export definitions are listed first. Component-specific choices remain o
 
 ### email-header
 
-- `email-header` → `header-logo @4x` → `rendered-node` → `direct-image` → `png-4x` → `opaque`
+- `email-header` → `header-logo @4x` → `rendered-node` → `direct-image` → `png-4x` → `transparent`
   - Asset contract ID: `header-logo`
   - Export boundary: `node` / `header-logo @4x`
   - Pixel dimensions: 1288×200px
