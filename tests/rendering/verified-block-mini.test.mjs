@@ -160,6 +160,32 @@ test("Figma-verified Card/Image @2x keeps mobile fluid ratio and desktop exact d
   assert.doesNotMatch(output.html, /<img[^>]*width="232"[^>]*\sheight="/u);
   assert.doesNotMatch(output.html, /<img[^>]*height="322"/u);
 });
+
+test("Figma-verified Card/Icon desktop preserves a fill text child in its centered row", async () => {
+  const component = await record("marketing", "card-icon");
+  const content = contentFor(component);
+  for (const viewport of ["mobile", "desktop"]) {
+    content[viewport]["root-feature-icon"] = { alt: "Feature icon" };
+    content[viewport]["root-text-content-link"].href = "https://example.invalid/card-icon";
+  }
+  const output = renderContractTree({
+    component,
+    coverage: { component_id: component.id, mode: "interpreter" },
+    content,
+    assets: { "feature-icon": { src: svg } },
+    properties: { "show-description": true, "show-link": true },
+    foundations,
+  });
+
+  assert.deepEqual(output.diagnostics, []);
+  const centeredTables = [...output.html.matchAll(/<table\b[^>]*align="center"[^>]*>/gu)]
+    .map((match) => match[0]);
+  const centeredRow = centeredTables.find((table) => !table.includes("border-radius"));
+  assert.ok(centeredRow, "missing the centered Card/Icon content row");
+  assert.match(centeredRow, /width="100%"/u);
+  assert.match(output.html, /<td width="72"/u);
+  assert.match(output.html, /<td width="24"/u);
+});
 test("Figma-verified Block/Receipt-Info preserves exact paired corner radii", async () => {
   const component = await record("service", "block-receipt-info");
   const output = render(component);

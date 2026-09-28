@@ -437,6 +437,9 @@ function renderShell(element, viewport, path, childHtml, context) {
         .filter(({ html }) => Boolean(html));
       const primaryAlignment = element.facts?.find(({ id }) => id === "primary-alignment")?.value?.value;
       const centerGroup = axis === "horizontal" && primaryAlignment === "center";
+      const centerGroupHasFillChild = centerGroup && visible.some(({ node }) =>
+        node?.facts?.some(({ id, value }) => id === "horizontal-sizing" && value?.value === "fill"),
+      );
       const spaceBetween = axis === "horizontal" && primaryAlignment === "space_between";
       const groupedAction = centerGroup && element.action?.kind === "whole-element" && visible.length > 1;
       const counterAlignment = element.facts?.find(({ id }) => id === "counter-alignment")?.value?.value;
@@ -496,7 +499,7 @@ function renderShell(element, viewport, path, childHtml, context) {
       const rows = centerGroup
         ? `<tr>${renderPrimitive("cell", { style: { "text-align": "center" } },
             wrapAction(groupedAction ? element : {}, entry,
-              renderPrimitive("table", { width: "auto", align: "center" }, rawRows)))}</tr>`
+              renderPrimitive("table", { width: centerGroupHasFillChild ? "100%" : "auto", align: "center" }, rawRows)))}</tr>`
         : rawRows;
       const padding = Object.fromEntries(
         Object.entries(factProps.style).filter(([key, value]) =>
