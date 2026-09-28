@@ -153,3 +153,52 @@ test("actual banner-app-download Desktop store buttons paint rounded tables inst
     .filter((tag) => colorPattern.test(tag));
   assert.deepEqual(paintedCells, [], "store-button color must not create square painted outer cells");
 });
+
+test("assembled Mobile Icon-Cards hug root fills the available column width", async () => {
+  const [component, rendering] = await Promise.all([
+    actualRegistryComponent("block-icon-cards"),
+    loadRenderingFoundation({ repoRoot }),
+  ]);
+  assert.equal(factValue(component.contracts.mobile.root, "horizontal-sizing"), "hug");
+
+  // The email template nests this hug-sized contract under a wider Mobile slot.
+  const iconCards = structuredClone(component.contracts.mobile.root);
+  iconCards.id = "icon-cards-instance";
+  iconCards.children = [{
+    id: "card-content",
+    semantic_role: "content",
+    render_mode: "presentation-table",
+    visibility: { mode: "always" },
+    facts: [
+      { id: "reference-size", value: { type: "dimensions", width: 252, height: 20, unit: "px" } },
+      { id: "background", value: { type: "color", value: "#F8F8FA" } },
+    ],
+    children: [],
+  }];
+  const emailRoot = {
+    id: "root",
+    semantic_role: "email",
+    render_mode: "presentation-table",
+    visibility: { mode: "always" },
+    facts: [
+      { id: "reference-size", value: { type: "dimensions", width: 328, height: 1367, unit: "px" } },
+      { id: "layout-axis", value: { type: "keyword", value: "vertical" } },
+      { id: "layout-gap", value: { type: "measure", value: 0, unit: "px" } },
+    ],
+    children: [iconCards],
+  };
+  const result = renderContractTree({
+    component: {
+      id: "assembled-icon-cards-probe",
+      contracts: { mobile: { root: emailRoot }, desktop: { root: structuredClone(emailRoot) } },
+    },
+    coverage: { component_id: "assembled-icon-cards-probe", mode: "interpreter" },
+    foundations: { rendering },
+  });
+  assert.deepEqual(result.diagnostics, []);
+  const tables = [...viewportHtml(result.html, "mobile").matchAll(/<table\b[^>]*>/gu)]
+    .map(([tag]) => tag);
+  assert.ok(tables.length >= 2, "email root must contain the nested Icon-Cards table");
+  assert.match(tables[1], /width="100%"/u);
+  assert.match(tables[1], /width:100%/u);
+});
