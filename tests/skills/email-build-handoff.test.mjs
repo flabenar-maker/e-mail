@@ -869,6 +869,13 @@ test("handoff enforces real PNG alpha pixels against the header alpha contract",
   });
   assert.ok(transparentRejected.blockers.includes("asset-contract-missing"));
 
+  await setHeaderAlphaMode(contractRepo, "source");
+  const sourcePass = await prepareEmailBuildHandoff({
+    ...source, repoRoot: contractRepo, assetRoot: root,
+  });
+  assert.deepEqual(sourcePass.blockers, []);
+
+  await setHeaderAlphaMode(contractRepo, "opaque");
   await bindHeaderAsset(root, source, "images/header-logo@4x.png", opaque);
   const opaquePass = await prepareEmailBuildHandoff({
     ...source, repoRoot: contractRepo, assetRoot: root,
