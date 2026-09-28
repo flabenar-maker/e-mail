@@ -244,12 +244,22 @@ test("canonical repository activates only email routes while non-email routes re
     const email = route.id.startsWith("email-");
     const profile = manifest.bundle_profiles.find(({ id }) => id === route.bundle_profile_id);
     const bundle = profile.generated_bundle;
+    const request = email
+      ? {
+        routeId: route.id,
+        workflowMode: route.id === "email-new-build" ? "new-build" : "continue-fix-technical",
+        candidates: route.id === "email-new-build" ? [{ id: "banner-hero" }] : [],
+        viewports: route.id === "email-new-build" ? ["mobile", "desktop"] : [],
+      }
+      : {
+        routeId: route.id,
+        candidates: bundle.component_selection === "required" ? [{ id: "banner-hero" }] : [],
+        viewports: bundle.viewport_selection === "none" ? [] : ["mobile", "desktop"],
+        foundationIds: bundle.required_foundation_ids,
+      };
     const result = await resolveSkillContext({
       repoRoot,
-      routeId: route.id,
-      candidates: bundle.component_selection === "required" ? [{ id: "banner-hero" }] : [],
-      viewports: bundle.viewport_selection === "none" ? [] : ["mobile", "desktop"],
-      foundationIds: bundle.required_foundation_ids,
+      ...request,
     });
     assert.equal(route.workflow_source_id, email ? "workflow-email-build" : "workflow-paused", route.id);
     assert.equal(profile.generated_bundle.status, email ? "structured-active" : "structured-shadow", route.id);
