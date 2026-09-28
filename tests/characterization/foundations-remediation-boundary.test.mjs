@@ -118,7 +118,7 @@ test("remediation preserves paused routes and required current pilot coverage wi
 
   assert.ok(manifest.routes.length > 0);
   assert.equal(
-    manifest.routes.every(({ workflow_source_id }) => workflow_source_id === "workflow-paused"),
+    manifest.routes.every(({ id, workflow_source_id }) => ["email-new-build", "email-continue-fix"].includes(id) ? workflow_source_id === "workflow-email-build" : workflow_source_id === "workflow-paused"),
     true,
   );
   for (const componentId of [
