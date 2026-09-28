@@ -554,6 +554,23 @@ test("the actual handoff gate prevents renderer invocation for every required bl
   assert.equal(invocations, 1);
 });
 
+test("new-build handoff blocks rendering without full source comparison evidence", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "cupis-source-gate-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const source = await fixture(root, ["banner-secondary"]);
+  let invocations = 0;
+  const result = await executeEmailBuildHandoff({
+    ...source,
+    repoRoot,
+    assetRoot: root,
+    outputDir: join(root, "new-build"),
+    resolution: { mode: "new-build" },
+    rendererRunner: async () => { invocations += 1; },
+  });
+  assert.ok(result.blockers.includes("source-evidence-missing"));
+  assert.equal(invocations, 0);
+});
+
 test("asset evidence binds exact filename, digest, owner, Figma node, and physical root", async (t) => {
   const root = await mkdtemp(join(tmpdir(), "cupis-assets-"));
   const outside = await mkdtemp(join(tmpdir(), "cupis-assets-outside-"));
