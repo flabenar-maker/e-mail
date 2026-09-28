@@ -836,7 +836,7 @@ test("handoff requires the export-profile suffix in a header asset filename", as
   const root = await mkdtemp(join(tmpdir(), "cupis-header-profile-suffix-"));
   t.after(() => rm(root, { recursive: true, force: true }));
   const source = await fixture(root, ["email-header"]);
-  const image = pngWithCornerAlpha(false);
+  const image = pngWithCornerAlpha(true);
 
   await bindHeaderAsset(root, source, "images/header-logo@4x.png", image);
   const suffixed = await prepareEmailBuildHandoff({ ...source, repoRoot, assetRoot: root });
