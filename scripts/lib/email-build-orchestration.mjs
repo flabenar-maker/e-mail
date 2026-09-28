@@ -44,6 +44,7 @@ function assetKey(instanceId, componentId, assetContractId, path) {
 const execFileAsync = promisify(execFile);
 const VIEWPORTS = ["mobile", "desktop"];
 const TOP_LEVEL_ROLES = new Set(["email", "block", "banner", "nps"]);
+const EXECUTABLE_WORKFLOW_MODES = new Set(["new-build", "continue-fix-design", "continue-fix-technical"]);
 const FIGMA_NODE_ID = /^(?:I)?[0-9]+:[0-9]+(?:;[0-9]+:[0-9]+)*$/u;
 const SHA256 = /^[0-9a-f]{64}$/u;
 
@@ -401,8 +402,8 @@ async function defaultRendererRunner({ repoRoot, modelPath, outputDir }) {
   );
 }
 
-async function verifyNewBuildSource({ resolution, sourceEvidence, repoRoot, assetRoot, model, assetEvidence }) {
-  if (resolution?.mode !== "new-build") return { blockers: [], diagnostics: [] };
+async function verifyNewBuildSource({ workflowMode, sourceEvidence, repoRoot, assetRoot, model, assetEvidence }) {
+  if (workflowMode !== "new-build") return { blockers: [], diagnostics: [] };
   if (!sourceEvidence?.readings || !sourceEvidence?.correspondence) {
     return { blockers: ["source-evidence-missing"], diagnostics: [] };
   }
@@ -438,8 +439,8 @@ async function verifyNewBuildSource({ resolution, sourceEvidence, repoRoot, asse
   }
 }
 
-function continueFixEvidenceBlockers(resolution, evidence) {
-  if (resolution?.mode !== "continue-fix-design") return [];
+function continueFixEvidenceBlockers(workflowMode, evidence) {
+  if (workflowMode !== "continue-fix-design") return [];
   const blockers = new Set();
   const mobile = evidence?.figma_instances?.mobile;
   const desktop = evidence?.figma_instances?.desktop;
@@ -474,11 +475,15 @@ export async function executeEmailBuildHandoff({
   sourceEvidence,
   ...input
 }) {
+  const workflowMode = resolution?.workflow?.mode;
+  const workflowModeBlockers = EXECUTABLE_WORKFLOW_MODES.has(workflowMode)
+    ? []
+    : ["workflow-mode-invalid"];
   const handoff = await prepareEmailBuildHandoff(input);
-  const sourceGate = handoff.blockers.length
+  const sourceGate = workflowModeBlockers.length
     ? { blockers: [], diagnostics: [] }
     : await verifyNewBuildSource({
-      resolution,
+      workflowMode,
       sourceEvidence,
       repoRoot: input.repoRoot,
       assetRoot: input.assetRoot,
@@ -487,7 +492,8 @@ export async function executeEmailBuildHandoff({
     });
   const blockers = [...new Set([
     ...handoff.blockers,
-    ...continueFixEvidenceBlockers(resolution, continueFixEvidence),
+    ...workflowModeBlockers,
+    ...continueFixEvidenceBlockers(workflowMode, continueFixEvidence),
     ...sourceGate.blockers,
   ])].sort();
   if (blockers.length) return { ...handoff, blockers, sourceDiagnostics: sourceGate.diagnostics, executed: false };

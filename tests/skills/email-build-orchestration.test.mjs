@@ -6,7 +6,8 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { createEmailVersion, resolveEmailBuildRequest } from "../../scripts/lib/email-build-orchestration.mjs";
+import { createEmailVersion, executeEmailBuildHandoff, resolveEmailBuildRequest } from "../../scripts/lib/email-build-orchestration.mjs";
+import { resolveSkillContext } from "../../scripts/lib/skill-context.mjs";
 import { loadWorkflowRegistry } from "../../scripts/lib/workflow-registry.mjs";
 
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
@@ -69,6 +70,47 @@ test("resolved workflow classifies typed inputs and only exposes that mode's out
     resolveEmailBuildRequest({ workflow: emailWorkflow, inputs: { request: input(), "output-parent": input(), "mobile-figma-instance": input(), "desktop-figma-instance": input() } }),
     { mode: "new-build", blocker: "version-path-unsafe", allowedOutputs: [] },
   );
+});
+
+test("actual resolver workflow modes gate source proof and design continuation evidence", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "resolver-mode-gate-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const resolve = (routeId, workflowMode) => resolveSkillContext({
+    repoRoot,
+    routeId,
+    workflowMode,
+    candidates: routeId === "email-new-build" ? [{ id: "banner-hero" }] : [],
+    viewports: routeId === "email-new-build" ? ["mobile", "desktop"] : [],
+  });
+  const newBuild = await resolve("email-new-build", "new-build");
+  const designFix = await resolve("email-continue-fix", "continue-fix-design");
+  const technicalFix = await resolve("email-continue-fix", "continue-fix-technical");
+  assert.equal(newBuild.workflow.mode, "new-build");
+  assert.equal(designFix.workflow.mode, "continue-fix-design");
+  assert.equal(technicalFix.workflow.mode, "continue-fix-technical");
+
+  let invocations = 0;
+  const handoff = (resolution) => executeEmailBuildHandoff({
+    repoRoot,
+    assetRoot: root,
+    outputDir: join(root, "output"),
+    model: { root: { component_id: "unregistered", slots: [] } },
+    candidates: [],
+    assetEvidence: [],
+    resolution,
+    rendererRunner: async () => { invocations += 1; },
+  });
+  const missingSource = await handoff(newBuild);
+  assert.ok(missingSource.blockers.includes("source-evidence-missing"));
+  const missingDesignEvidence = await handoff(designFix);
+  assert.ok(missingDesignEvidence.blockers.includes("figma-source-missing"));
+  assert.ok(missingDesignEvidence.blockers.includes("visual-regression"));
+  const technical = await handoff(technicalFix);
+  assert.equal(technical.blockers.includes("figma-source-missing"), false);
+  assert.equal(technical.blockers.includes("visual-regression"), false);
+  const invalid = await handoff({ mode: "new-build" });
+  assert.ok(invalid.blockers.includes("workflow-mode-invalid"));
+  assert.equal(invocations, 0);
 });
 
 test("versioning rejects unsafe paths and writes only allowed output artifacts", async (t) => {
