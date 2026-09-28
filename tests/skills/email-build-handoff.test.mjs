@@ -168,8 +168,11 @@ function buildInstance(assets, componentId, instanceId, blueprint = null) {
   const profileById = new Map(assets.export_profiles.map((profile) => [profile.id, profile]));
   const asset_files = [...assetIds].map((assetId) => {
     const contract = record.asset_contracts.find(({ id }) => id === assetId);
-    const extension = profileById.get(contract.export_profile_id).contract.extension;
-    return { asset_contract_id: assetId, path: `images/${assetId}${extension}` };
+    const profile = profileById.get(contract.export_profile_id).contract;
+    return {
+      asset_contract_id: assetId,
+      path: `images/${assetId}${profile.suffix ?? ""}${profile.extension}`,
+    };
   });
 
   const nestedMap = new Map();
@@ -256,7 +259,9 @@ async function writeAssetsAndEvidence(root, model, index) {
     for (const asset of instance.asset_files ?? []) {
       const contract = record.asset_contracts.find(({ id }) => id === asset.asset_contract_id);
       const target = join(root, ...asset.path.split("/"));
-      const bytes = Buffer.from(`mcp-export:${asset.path}`, "utf8");
+      const bytes = asset.path.endsWith(".png")
+        ? pngWithCornerAlpha(contract.alpha_mode_id === "transparent")
+        : Buffer.from(`mcp-export:${asset.path}`, "utf8");
       await mkdir(dirname(target), { recursive: true });
       await writeFile(target, bytes);
       evidence.push({
