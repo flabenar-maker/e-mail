@@ -60,8 +60,8 @@ test("normal and no-style scenarios preserve safe shell and proportional direct 
   assert.match(result.html, /@media only screen and \(max-width:659px\)/u);
   assert.doesNotMatch(result.html, /@media only screen and \(max-width:(?!659px)[^)]+\)/u);
   assert.match(result.html, /max-width:600px/u);
-  assert.match(result.html, /min-width:270px/u);
-  assert.match(result.html, /padding:0 15px/u);
+  assert.match(result.html, /min-width:300px/u);
+  assert.match(result.html, /padding:0 0px/u);
   assert.equal(result.metrics.embedded_css_bytes < 16384, true);
 
   const images = [...result.html.matchAll(/<img\b[^>]*>/gu)].map((match) => match[0]);
