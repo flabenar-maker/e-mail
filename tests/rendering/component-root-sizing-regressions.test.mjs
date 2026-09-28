@@ -160,12 +160,9 @@ test("assembled Mobile Icon-Cards fill instance keeps the available column width
   ]);
   assert.equal(factValue(component.contracts.mobile.root, "horizontal-sizing"), "hug");
 
-  // The email template's fill slot overrides the component's standalone hug root.
+  // The email template nests this hug-sized contract under a wider Mobile slot.
   const iconCards = structuredClone(component.contracts.mobile.root);
   iconCards.id = "icon-cards-instance";
-  iconCards.facts = iconCards.facts.map((fact) => fact.id === "horizontal-sizing"
-    ? { ...fact, value: { ...fact.value, value: "fill" } }
-    : fact);
   iconCards.children = [{
     id: "card-content",
     semantic_role: "content",
