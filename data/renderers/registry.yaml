@@ -1,5 +1,5 @@
 schema_version: 1.0.0
-registry: { id: email-renderers, status: shadow }
+registry: { id: email-renderers, status: active }
 coverage:
   - { component_id: email-template, mode: interpreter }
   - { component_id: email-header, mode: interpreter }

@@ -44,7 +44,7 @@ sources:
   - { id: generated-asset-registry, kind: generated, path: docs/generated/asset-registry.md }
   - { id: generated-naming-reference, kind: generated, path: docs/generated/naming-reference.md }
 structured_workflows:
-  status: shadow
+  status: partial
   schema_source_id: workflows-schema
   entries:
     - { id: library-maintenance, source_id: workflow-library-maintenance }
@@ -118,20 +118,20 @@ bundle_profiles:
       allowed_foundation_ids: []
       required_foundation_ids: []
   - id: email-new-build
-    source_ids: [repository-readme, figma-library-standard, email-rendering-standard, email-model-assembly-standard, email-source-fidelity-standard, email-model-schema, component-contract-standard, typography-standard, asset-export-standard, rendering-foundation, renderer-registry, workflow-paused]
+    source_ids: [repository-readme, figma-library-standard, email-rendering-standard, email-model-assembly-standard, email-source-fidelity-standard, email-model-schema, component-contract-standard, typography-standard, asset-export-standard, rendering-foundation, renderer-registry, workflow-email-build]
     generated_bundle:
-      status: structured-shadow
-      static_source_ids: [repository-readme, figma-library-standard, email-rendering-standard, email-model-assembly-standard, email-source-fidelity-standard, email-model-schema, component-contract-standard, typography-standard, asset-export-standard, rendering-foundation, renderer-registry, workflow-paused]
+      status: structured-active
+      static_source_ids: [repository-readme, figma-library-standard, email-rendering-standard, email-model-assembly-standard, email-source-fidelity-standard, email-model-schema, component-contract-standard, typography-standard, asset-export-standard, rendering-foundation, renderer-registry, workflow-email-build]
       component_selection: required
       viewport_selection: both
       foundation_selection: referenced
       allowed_foundation_ids: [typography, spacing, assets]
       required_foundation_ids: []
   - id: email-continue-fix
-    source_ids: [repository-readme, figma-library-standard, email-rendering-standard, email-model-assembly-standard, email-source-fidelity-standard, email-model-schema, component-contract-standard, typography-standard, asset-export-standard, rendering-foundation, renderer-registry, workflow-paused]
+    source_ids: [repository-readme, figma-library-standard, email-rendering-standard, email-model-assembly-standard, email-source-fidelity-standard, email-model-schema, component-contract-standard, typography-standard, asset-export-standard, rendering-foundation, renderer-registry, workflow-email-build]
     generated_bundle:
-      status: structured-shadow
-      static_source_ids: [repository-readme, figma-library-standard, email-rendering-standard, email-model-assembly-standard, email-source-fidelity-standard, email-model-schema, component-contract-standard, typography-standard, asset-export-standard, rendering-foundation, renderer-registry, workflow-paused]
+      status: structured-active
+      static_source_ids: [repository-readme, figma-library-standard, email-rendering-standard, email-model-assembly-standard, email-source-fidelity-standard, email-model-schema, component-contract-standard, typography-standard, asset-export-standard, rendering-foundation, renderer-registry, workflow-email-build]
       component_selection: optional
       viewport_selection: both-when-components
       foundation_selection: referenced
@@ -143,8 +143,8 @@ routes:
   - { id: figma-description-sync, workflow_source_id: workflow-paused, bundle_profile_id: figma-description-sync }
   - { id: figma-naming-audit, workflow_source_id: workflow-paused, bundle_profile_id: figma-naming-audit }
   - { id: migration-progress, workflow_source_id: workflow-paused, bundle_profile_id: migration-progress }
-  - { id: email-new-build, workflow_source_id: workflow-paused, bundle_profile_id: email-new-build }
-  - { id: email-continue-fix, workflow_source_id: workflow-paused, bundle_profile_id: email-continue-fix }
+  - { id: email-new-build, workflow_source_id: workflow-email-build, bundle_profile_id: email-new-build }
+  - { id: email-continue-fix, workflow_source_id: workflow-email-build, bundle_profile_id: email-continue-fix }
 skills:
   required:
     - { id: maintaining-cupis-email-system, path: .agents/skills/maintaining-cupis-email-system }
