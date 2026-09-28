@@ -310,6 +310,42 @@ async function defaultRendererRunner({ repoRoot, modelPath, outputDir }) {
   );
 }
 
+async function verifyNewBuildSource({ resolution, sourceEvidence, repoRoot, assetRoot, model, assetEvidence }) {
+  if (resolution?.mode !== "new-build") return { blockers: [], diagnostics: [] };
+  if (!sourceEvidence?.readings || !sourceEvidence?.correspondence) {
+    return { blockers: ["source-evidence-missing"], diagnostics: [] };
+  }
+
+  const proofPath = join(assetRoot, ".temporary-email-source-" + randomUUID() + ".json");
+  try {
+    await writeFile(proofPath, JSON.stringify({
+      ...sourceEvidence,
+      model,
+      assetEvidence,
+    }), "utf8");
+    const { stdout } = await execFileAsync(
+      process.execPath,
+      [join(repoRoot, "scripts", "verify-email-source.mjs"), proofPath],
+      { cwd: repoRoot },
+    );
+    const report = JSON.parse(stdout);
+    if (report.status === "passed" && report.scope === "full-email" &&
+        Array.isArray(report.diagnostics) && report.diagnostics.length === 0) {
+      return { blockers: [], diagnostics: [] };
+    }
+    return { blockers: ["source-evidence-mismatch"], diagnostics: report.diagnostics ?? [] };
+  } catch (error) {
+    let report;
+    try {
+      report = JSON.parse(error.stdout);
+    } catch {
+      report = { diagnostics: [{ code: "EMAIL_SOURCE_VERIFY_FAILED", message: error.message }] };
+    }
+    return { blockers: ["source-evidence-mismatch"], diagnostics: report.diagnostics ?? [] };
+  } finally {
+    await rm(proofPath, { force: true });
+  }
+}
 function continueFixEvidenceBlockers(resolution, evidence) {
   if (resolution?.mode !== "continue-fix-design") return [];
   const blockers = new Set();
@@ -343,19 +379,31 @@ export async function executeEmailBuildHandoff({
   rendererRunner = defaultRendererRunner,
   resolution,
   continueFixEvidence,
+  sourceEvidence,
   ...input
 }) {
   const handoff = await prepareEmailBuildHandoff(input);
+  const sourceGate = handoff.blockers.length
+    ? { blockers: [], diagnostics: [] }
+    : await verifyNewBuildSource({
+      resolution,
+      sourceEvidence,
+      repoRoot: input.repoRoot,
+      assetRoot: input.assetRoot,
+      model: handoff.model,
+      assetEvidence: input.assetEvidence,
+    });
   const blockers = [...new Set([
     ...handoff.blockers,
     ...continueFixEvidenceBlockers(resolution, continueFixEvidence),
+    ...sourceGate.blockers,
   ])].sort();
-  if (blockers.length) return { ...handoff, blockers, executed: false };
+  if (blockers.length) return { ...handoff, blockers, sourceDiagnostics: sourceGate.diagnostics, executed: false };
   const modelPath = join(input.assetRoot, `.temporary-email-model-${randomUUID()}.json`);
   try {
     await writeFile(modelPath, JSON.stringify(handoff.model), "utf8");
     await rendererRunner({ repoRoot: input.repoRoot, modelPath, outputDir });
-    return { ...handoff, executed: true };
+    return { ...handoff, sourceDiagnostics: sourceGate.diagnostics, executed: true };
   } finally {
     await rm(modelPath, { force: true });
   }
