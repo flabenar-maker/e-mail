@@ -339,3 +339,21 @@ test("one nested instance retains viewport-specific relation IDs", () => {
   input.readings.instances.find(({ node_id }) => node_id === "d-a-child").relation.element_id = "desktop-child";
   assert.deepEqual(codes(input), []);
 });
+
+test("asset evidence using a viewport other than its resolved contract source viewport is rejected before rendering", () => {
+  const input = scenario();
+  input.resolvedContracts = new Map([["block-sample", {
+    asset_contracts: [{ id: "photo", source_viewport: "desktop" }],
+  }]]);
+  const target = input.correspondence.assets.find(({ instance_id }) => instance_id === "a");
+  target.viewport = "mobile";
+  target.node_id = "m-a-asset";
+  input.readings.assets.push({
+    viewport: "mobile", node_id: "m-a-asset", owner_node_id: "m-a", evidence_id: "export-a-mobile",
+  });
+  const receipt = input.assetEvidence.find(({ instance_id }) => instance_id === "a");
+  receipt.mcp_export.source_node_id = "m-a-asset";
+  receipt.mcp_export.evidence_id = "export-a-mobile";
+
+  assert.ok(codes(input).includes("EMAIL_SOURCE_ASSET_VIEWPORT_MISMATCH"));
+});
