@@ -207,30 +207,30 @@ Manifest-driven разрешение source paths было выполнено н
 - [x] Сгенерировать полный old → new preview и получить отдельное разрешение пользователя на Description-only Figma mutation.
 - [x] Записать только Description canonical component owners через MCP и выполнить отдельный read-back с проверкой фактических полей и неизменности дизайна.
 
-Draft PR [#87](https://github.com/flabenar-maker/e-mail/pull/87) содержит raw snapshot 156 Figma nodes, guards compact-формата и обновление 61 canonical Description. Все 61 owners сопоставлены active records, Description/name/Documentation links подтверждены read-back, а 272 contract-linked Figma facts повторно сверены без расхождений. Component contracts, foundations, HTML renderer/runtime, manifest и локальные письма не изменялись. Этап 10 не начинается до отдельного handoff этого prerequisite и получения четырёх ссылок на два тестовых письма.
+[PR №87](https://github.com/flabenar-maker/e-mail/pull/87) слит: raw snapshot 156 Figma nodes сохранён отдельно, guards compact-формата и Description 61 canonical owners опубликованы. Description/name/Documentation links подтверждены read-back, 272 contract-linked Figma facts повторно сверены без расхождений. Этот prerequisite завершён; четыре ссылки на два тестовых письма получены до сборки.
 
 ### 10. Навык HTML-вёрстки конкретных писем
 
 Подробный implementation plan: [CUPIS Email Build Skill Stage 10](2026-09-17-cupis-email-build-skill-stage-10.md).
 
-Текущий статус: [подробный E2E-план](2026-09-18-cupis-email-model-assembly-and-e2e.md). Email-only activation опубликована через [PR №97](https://github.com/flabenar-maker/e-mail/pull/97), регистрация навыка — через [PR №98](https://github.com/flabenar-maker/e-mail/pull/98), а устранение двойного мобильного внешнего отступа — через [PR №99](https://github.com/flabenar-maker/e-mail/pull/99). Два email routes active, остальные paused; локальный навык установлен из слитого источника. На точном SHA последней кодовой правки локально прошли 705/705 тестов и bootstrap. Оба тестовых письма пересобраны: мобильная область теперь занимает всю ширину, карточка сервисного письма начинается на x=16 без горизонтального переполнения, десктоп остаётся 600 px. Stage 10 ещё открыт: высоты отдельных сервисных блоков расходятся с Figma и требуют отдельной проверки; реальные почтовые клиенты этим тестом не проверялись.
+Статус на 2026-09-28: этап 10 завершён. Два email routes активированы [PR №97](https://github.com/flabenar-maker/e-mail/pull/97), навык зарегистрирован [PR №98](https://github.com/flabenar-maker/e-mail/pull/98), Mobile shell исправлен [PR №99](https://github.com/flabenar-maker/e-mail/pull/99), а [PR №101](https://github.com/flabenar-maker/e-mail/pull/101) синхронизировал статус активных маршрутов и добавил выбор доступного package runner. На точном head №101 локально прошли 705/705 тестов, validation, generate:check и bootstrap; установленный навык побайтно совпадает со слитым источником. Оба тестовых письма собраны и пересобраны, пользователь визуально принял результат. Ранее измеренная разница высот сервисного примера принята только для этих конкретных инстансов, а не как общее допустимое отклонение. Изолированный запуск после merge создал версию `service-email-e2e_1.4` с одними тестовыми href-правками и неизменными изображениями. Реальные почтовые клиенты и Altcraft в этих проверках не испытывались; остальные маршруты остаются paused. Подробные факты — в [E2E-плане](2026-09-18-cupis-email-model-assembly-and-e2e.md).
 
 Этот этап начинается после завершённого maintenance skill, prerequisite-пакета Figma Description и получения четырёх ссылок на два тестовых письма. Он использует готовые renderer, structured email workflow и machine resolver и не зависит от стандарта или навыка разработки новых блоков: письмо собирается только из уже зарегистрированных компонентов, а неизвестный компонент остаётся typed blocker. После успешных реальных E2E-сборок этап включает только email routes; остальные routes остаются остановленными до этапа 14.
 
-- [ ] Создать repo-scoped skill `building-cupis-emails` как тонкий маршрутизатор к `email-new-build` и `email-continue-fix`.
-- [ ] Не копировать в skill HTML-правила, component contracts, foundation values, asset profiles, workflow steps или список canonical paths.
-- [ ] Проверить однозначную классификацию нового письма, design-dependent изменения, technical изменения, read-only задачи и запроса, требующего уточнения.
-- [ ] Проверить обязательные Mobile/Desktop Figma-входы только для design-dependent режимов и запрет догадок при отсутствующей или перепутанной паре.
-- [ ] Проверить локальное версионирование без перезаписи источника: новое письмо начинает с `1.0`, каждое следующее изменение создаёт новую папку с шагом `0.1`, а итоговая папка содержит только `email.html` и `images/`.
-- [ ] Проверить, что новое письмо проходит через temporary email model и renderer CLI, а незарегистрированный компонент, неполный contract или asset contract останавливают сборку.
-- [ ] Проверить сборку от корневого Email/Template-инстанса без подъёма вложенных cards, items, buttons, badges или assets в самостоятельные блоки письма.
-- [ ] Проверить MCP-only экспорт ассетов, локальные `src`, отсутствие лишних файлов и применение точных значений только из resolved bundle.
-- [ ] Проверить локальные HTML-инварианты, Mobile/Desktop и visual regression на representative marketing/service сценариях без GitHub Actions.
-- [ ] Собрать из чистого контекста реальное маркетинговое и реальное сервисное письмо по предоставленным Mobile/Desktop-инстансам и устранить все неклассифицированные расхождения в источнике-владельце.
-- [ ] Выполнить одно реальное continue/fix изменение с созданием версии `1.1`, сохранив исходную `1.0` побайтово неизменной.
-- [ ] Активировать только `email-new-build` и `email-continue-fix`, их bundle/workflow dependencies и проверенный local skill; сохранить остальные routes на `workflow-paused`.
-- [ ] Проверить обычный пользовательский запрос в чистом новом чате без опоры на историю разработки.
-- [ ] Сохранить Figma-библиотеку, component-development standard и локальные исходные версии писем без изменений.
+- [x] Создать repo-scoped skill `building-cupis-emails` как тонкий маршрутизатор к `email-new-build` и `email-continue-fix`.
+- [x] Не копировать в skill HTML-правила, component contracts, foundation values, asset profiles, workflow steps или список canonical paths.
+- [x] Проверить однозначную классификацию нового письма, design-dependent изменения, technical изменения, read-only задачи и запроса, требующего уточнения.
+- [x] Проверить обязательные Mobile/Desktop Figma-входы только для design-dependent режимов и запрет догадок при отсутствующей или перепутанной паре.
+- [x] Проверить локальное версионирование без перезаписи источника: новое письмо начинает с `1.0`, каждое следующее изменение создаёт новую папку с шагом `0.1`, а итоговая папка содержит только `email.html` и `images/`.
+- [x] Проверить, что новое письмо проходит через temporary email model и renderer CLI, а незарегистрированный компонент, неполный contract или asset contract останавливают сборку.
+- [x] Проверить сборку от корневого Email/Template-инстанса без подъёма вложенных cards, items, buttons, badges или assets в самостоятельные блоки письма.
+- [x] Проверить MCP-only экспорт ассетов, локальные `src`, отсутствие лишних файлов и применение точных значений только из resolved bundle.
+- [x] Проверить локальные HTML-инварианты, Mobile/Desktop и visual regression на representative marketing/service сценариях без GitHub Actions.
+- [x] Собрать из чистого контекста реальное маркетинговое и реальное сервисное письмо по предоставленным Mobile/Desktop-инстансам и устранить все неклассифицированные расхождения в источнике-владельце.
+- [x] Выполнить одно реальное continue/fix изменение с созданием версии `1.1`, сохранив исходную `1.0` побайтово неизменной.
+- [x] Активировать только `email-new-build` и `email-continue-fix`, их bundle/workflow dependencies и проверенный local skill; сохранить остальные routes на `workflow-paused`.
+- [x] Проверить обычный пользовательский запрос из чистого контекста (изолированный исполнитель по E2E-плану) без опоры на историю разработки.
+- [x] Сохранить Figma-библиотеку, component-development standard и локальные исходные версии писем без изменений.
 
 ### 11. Стандарт и workflow разработки новых блоков
 
