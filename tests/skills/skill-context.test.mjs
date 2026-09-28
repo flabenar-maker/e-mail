@@ -264,7 +264,7 @@ test("canonical repository activates only email routes while non-email routes re
     assert.equal(route.workflow_source_id, email ? "workflow-email-build" : "workflow-paused", route.id);
     assert.equal(profile.generated_bundle.status, email ? "structured-active" : "structured-shadow", route.id);
     assert.equal(result.status, email ? "resolved" : "paused", route.id);
-    assert.deepEqual(result.blockers.map(({ code }) => code), email ? [] : ["SKILL_ROUTE_PAUSED"], route.id);
+    assert.deepEqual((result.blockers ?? []).map(({ code }) => code), email ? [] : ["SKILL_ROUTE_PAUSED"], route.id);
   }
 });
 
