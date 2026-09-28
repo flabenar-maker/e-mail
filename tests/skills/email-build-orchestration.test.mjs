@@ -108,9 +108,25 @@ test("actual resolver workflow modes gate source proof and design continuation e
   const technical = await handoff(technicalFix);
   assert.equal(technical.blockers.includes("figma-source-missing"), false);
   assert.equal(technical.blockers.includes("visual-regression"), false);
-  const invalid = await handoff({ mode: "new-build" });
-  assert.ok(invalid.blockers.includes("workflow-mode-invalid"));
   assert.equal(invocations, 0);
+});
+
+test("handoff fails closed without a recognized nested workflow mode", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "invalid-workflow-mode-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  for (const resolution of [{}, { mode: "new-build" }, { workflow: { mode: "unknown" } }]) {
+    const result = await executeEmailBuildHandoff({
+      repoRoot,
+      assetRoot: root,
+      outputDir: join(root, "output"),
+      model: { root: { component_id: "unregistered", slots: [] } },
+      candidates: [],
+      assetEvidence: [],
+      resolution,
+      rendererRunner: async () => { throw new Error("renderer must stay gated"); },
+    });
+    assert.ok(result.blockers.includes("workflow-mode-invalid"));
+  }
 });
 
 test("versioning rejects unsafe paths and writes only allowed output artifacts", async (t) => {
