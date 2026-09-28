@@ -714,7 +714,7 @@ test("the actual handoff gate prevents renderer invocation for every required bl
   malformed.root.component_id = "banner-secondary";
   assert.ok((await execute({ model: malformed })).blockers.includes("renderer-diagnostic"));
   const designWithoutVisualProof = await execute({
-    resolution: { mode: "continue-fix-design" },
+    resolution: { workflow: { mode: "continue-fix-design" } },
     continueFixEvidence: {
       figma_instances: {
         mobile: { role: "mobile", email_id: "same", file_key: "file", node_id: "1:1" },
@@ -725,7 +725,7 @@ test("the actual handoff gate prevents renderer invocation for every required bl
   assert.ok(designWithoutVisualProof.blockers.includes("visual-regression"));
   assert.equal(invocations, 0);
   const verifiedDesign = await execute({
-    resolution: { mode: "continue-fix-design" },
+    resolution: { workflow: { mode: "continue-fix-design" } },
     continueFixEvidence: {
       figma_instances: {
         mobile: { role: "mobile", email_id: "same", file_key: "file", node_id: "1:1" },
@@ -752,7 +752,7 @@ test("new-build handoff blocks rendering without full source comparison evidence
     repoRoot,
     assetRoot: root,
     outputDir: join(root, "new-build"),
-    resolution: { mode: "new-build" },
+    resolution: { workflow: { mode: "new-build" } },
     rendererRunner: async () => { invocations += 1; },
   });
   assert.ok(result.blockers.includes("source-evidence-missing"));
@@ -770,7 +770,7 @@ test("new-build handoff renders when complete source observations match the mode
     repoRoot,
     assetRoot: root,
     outputDir: join(root, "new-build"),
-    resolution: { mode: "new-build" },
+    resolution: { workflow: { mode: "new-build" } },
     sourceEvidence: evidence,
     assetEvidence: evidence.assetEvidence,
     rendererRunner: async () => { invocations += 1; },
@@ -790,7 +790,7 @@ test("new-build handoff rejects selected-subtree proof and a passed claim withou
     repoRoot,
     assetRoot: root,
     outputDir: join(root, "selected-subtree"),
-    resolution: { mode: "new-build" },
+    resolution: { workflow: { mode: "new-build" } },
     sourceEvidence: selectedEvidence,
     assetEvidence: selectedEvidence.assetEvidence,
     rendererRunner: async () => { throw new Error("renderer must stay gated"); },
@@ -803,7 +803,7 @@ test("new-build handoff rejects selected-subtree proof and a passed claim withou
     repoRoot,
     assetRoot: root,
     outputDir: join(root, "claimed-pass"),
-    resolution: { mode: "new-build" },
+    resolution: { workflow: { mode: "new-build" } },
     sourceEvidence: { status: "passed" },
     rendererRunner: async () => { throw new Error("renderer must stay gated"); },
   });
@@ -955,6 +955,7 @@ test("design fixes stay Figma-gated and technical siblings preserve the complete
     purpose: "Technical proof",
   });
   await writeFile(join(source.target, "email.html"), "<p>source</p>", "utf8");
+  await mkdir(join(source.target, "images"));
   await writeFile(join(source.target, "images", "proof.png"), "source-image", "utf8");
   const before = await treeDigest(source.target);
   const next = await createEmailVersion({
