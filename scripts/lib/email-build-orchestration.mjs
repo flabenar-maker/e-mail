@@ -1,4 +1,4 @@
-import { cp, mkdir, readdir, writeFile, realpath, readFile, rm } from "node:fs/promises";
+import { cp, lstat, mkdir, readdir, writeFile, realpath, readFile, rm } from "node:fs/promises";
 import { createHash, randomUUID } from "node:crypto";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
@@ -598,8 +598,13 @@ export async function createEmailVersion({ resolution, workspaceRoot, outputPare
     if (sourceFolder) {
       physicalSource = await realpath(join(physicalParent, sourceFolder));
       if (!inside(physicalParent, physicalSource)) throw failure("version-path-unsafe");
-      const emailFile = await realpath(join(physicalSource, "email.html"));
-      const imagesDirectory = await realpath(join(physicalSource, "images"));
+      const emailPath = join(physicalSource, "email.html");
+      const imagesPath = join(physicalSource, "images");
+      if ((await lstat(emailPath)).isSymbolicLink() || (await lstat(imagesPath)).isSymbolicLink()) {
+        throw failure("version-path-unsafe");
+      }
+      const emailFile = await realpath(emailPath);
+      const imagesDirectory = await realpath(imagesPath);
       if (!inside(physicalSource, emailFile) || !inside(physicalSource, imagesDirectory)) {
         throw failure("version-path-unsafe");
       }

@@ -184,3 +184,39 @@ test("versioning rejects linked image descendants before target creation", async
   );
   assert.deepEqual(await readdir(root), [sourceFolder]);
 });
+test("versioning rejects linked root email and images entries", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "linked-root-versioning-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const emailWorkflow = await workflow();
+  const resolution = resolveEmailBuildRequest({ workflow: emailWorkflow, inputs: {
+    request: input(), "source-email-html": input(), "source-images-directory": input(), "exact-change-scope": input(),
+  } });
+
+  const linkedImages = join(root, "service_transaction_success_1.6");
+  await mkdir(join(linkedImages, "actual-images"), { recursive: true });
+  await writeFile(join(linkedImages, "email.html"), "<html>source</html>");
+  try {
+    await symlink(join(linkedImages, "actual-images"), join(linkedImages, "images"), "junction");
+  } catch (error) {
+    if (["EPERM", "ENOTSUP"].includes(error.code)) return t.skip(`junction unavailable: ${error.code}`);
+    throw error;
+  }
+  await assert.rejects(
+    createEmailVersion({ resolution, workspaceRoot: root, outputParent: root, sourceFolder: "service_transaction_success_1.6" }),
+    (error) => error.code === "version-path-unsafe",
+  );
+
+  const linkedEmail = join(root, "service_transaction_success_1.7");
+  await mkdir(join(linkedEmail, "images"), { recursive: true });
+  await writeFile(join(linkedEmail, "actual.html"), "<html>source</html>");
+  try {
+    await symlink(join(linkedEmail, "actual.html"), join(linkedEmail, "email.html"), "file");
+  } catch (error) {
+    if (["EPERM", "ENOTSUP"].includes(error.code)) return t.skip(`file symlink unavailable: ${error.code}`);
+    throw error;
+  }
+  await assert.rejects(
+    createEmailVersion({ resolution, workspaceRoot: root, outputParent: root, sourceFolder: "service_transaction_success_1.7" }),
+    (error) => error.code === "version-path-unsafe",
+  );
+});
