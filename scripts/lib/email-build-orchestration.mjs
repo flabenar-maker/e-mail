@@ -580,26 +580,45 @@ export async function createEmailVersion({ resolution, workspaceRoot, outputPare
   if (!inside(workspaceRoot, outputParent) || (sourceFolder && !safeSourceFolder(sourceFolder))) {
     throw failure("version-path-unsafe");
   }
+
+  let physicalWorkspace;
+  let physicalParent;
+  let physicalSource;
+  try {
+    physicalWorkspace = await realpath(workspaceRoot);
+    physicalParent = await realpath(outputParent);
+    if (!inside(physicalWorkspace, physicalParent)) throw failure("version-path-unsafe");
+    if (sourceFolder) {
+      physicalSource = await realpath(join(physicalParent, sourceFolder));
+      if (!inside(physicalParent, physicalSource)) throw failure("version-path-unsafe");
+      const emailFile = await realpath(join(physicalSource, "email.html"));
+      const imagesDirectory = await realpath(join(physicalSource, "images"));
+      if (!inside(physicalSource, emailFile) || !inside(physicalSource, imagesDirectory)) {
+        throw failure("version-path-unsafe");
+      }
+    }
+  } catch {
+    throw failure("version-path-unsafe");
+  }
+
   const base = sourceFolder ? sourceFolder.replace(/_[0-9]+\.[0-9]+$/u, "") : semanticSlug(purpose);
   const version = sourceFolder?.match(/_([0-9]+)\.([0-9]+)$/u);
   const major = version ? Number(version[1]) : 1;
   let minor = version ? Number(version[2]) + 1 : 0;
   if (!Number.isSafeInteger(major) || !Number.isSafeInteger(minor)) throw failure("version-path-unsafe");
-  const entries = new Set(await readdir(outputParent));
+  const entries = new Set(await readdir(physicalParent));
   let folder = base + "_" + major + "." + minor;
   while (entries.has(folder)) {
     minor += 1;
     if (!Number.isSafeInteger(minor)) throw failure("version-path-unsafe");
     folder = base + "_" + major + "." + minor;
   }
-  const target = join(outputParent, folder);
-  if (!inside(workspaceRoot, target)) throw failure("version-path-unsafe");
+  const target = join(physicalParent, folder);
+  if (!inside(physicalWorkspace, target)) throw failure("version-path-unsafe");
   await mkdir(target);
   if (sourceFolder) {
-    const source = join(outputParent, sourceFolder);
-    if (!inside(workspaceRoot, source)) throw failure("version-path-unsafe");
-    await cp(join(source, "email.html"), join(target, "email.html"));
-    await cp(join(source, "images"), join(target, "images"), { recursive: true });
+    await cp(join(physicalSource, "email.html"), join(target, "email.html"));
+    await cp(join(physicalSource, "images"), join(target, "images"), { recursive: true });
   } else {
     await writeFile(join(target, "email.html"), "");
     await mkdir(join(target, "images"));
