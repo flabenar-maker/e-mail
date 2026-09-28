@@ -1454,3 +1454,15 @@ test("renderer coverage cannot reference an unknown component", async (t) => {
     ),
   );
 });
+test("reports a missing required email-build skill", async (t) => {
+  const root = await validFixture(t);
+  const { rm } = await import("node:fs/promises");
+  await rm(join(root, ".agents/skills/building-cupis-emails"), {
+    recursive: true,
+  });
+  const manifest = await loadSystemManifest({ repoRoot: root });
+
+  const errors = await validateManifestSemantics(manifest, root);
+
+  assert.ok(errors.some((error) => error.code === "missing-required-skill"));
+});
