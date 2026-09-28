@@ -108,8 +108,10 @@ function propsFromFacts(facts = [], { viewport, mode, isRoot = false, parentAxis
       );
       if (expands) props.style.width = "100%";
       else props.style["max-width"] = `${size.width}px`;
-    } else if (mode === "presentation-table" && sizing === "hug" &&
-      !(isRoot && viewport === "mobile" && semanticRole === "block")) {
+    } else if (mode === "presentation-table" && viewport === "mobile" && semanticRole === "block") {
+      // A block fills its email slot even when its standalone Figma root hugs content.
+      props.width = "100%";
+    } else if (mode === "presentation-table" && sizing === "hug") {
       props.width = "auto";
     } else if (isRoot && viewport === "mobile") {
       props.width = "100%";
