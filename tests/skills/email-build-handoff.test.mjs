@@ -273,6 +273,10 @@ function sourceEvidenceFor(model, { scope = "full-email" } = {}) {
   const nodeId = (viewport, instance) => `source-${viewport}-${instance.instance_id}`;
   const readings = { instances: [], fields: [], assets: [] };
   const correspondence = { capture_id, file_key, instances: [], fields: [], assets: [] };
+  correspondence.instances = instances.map((instance) => ({
+    instance_id: instance.instance_id,
+    nodes: Object.fromEntries(VIEWPORTS.map((viewport) => [viewport, nodeId(viewport, instance)])),
+  }));
   for (const viewport of VIEWPORTS) {
     for (const [index, instance] of instances.entries()) {
       const node_id = nodeId(viewport, instance);
@@ -282,7 +286,6 @@ function sourceEvidenceFor(model, { scope = "full-email" } = {}) {
         relation: index === 0 ? null : { kind: "slot", element_id: "content" },
         order: index === 0 ? null : 0,
       });
-      correspondence.instances.push({ instance_id: instance.instance_id, nodes: { [viewport]: node_id } });
       for (const item of instance.property_values ?? []) {
         if (item.scope !== "all" && item.scope !== viewport) continue;
         const field = `property:${item.property_id}`;
