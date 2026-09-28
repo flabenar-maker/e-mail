@@ -10,6 +10,12 @@
 
 **Spec:** `docs/superpowers/specs/2026-08-24-cupis-structured-email-system-design.md`
 
+## Фактический статус на 2026-09-28
+
+- Email-only activation слита через [PR №97](https://github.com/flabenar-maker/e-mail/pull/97), merge commit `d149faf42252ca097c501f7f165a64d0d0b70a5b`. Регистрация опубликованного навыка исправлена отдельным [PR №98](https://github.com/flabenar-maker/e-mail/pull/98), merge commit `bbd02d14e1d4d8dfa33fcd01b28fa30ba7e0ed73`.
+- `email-new-build` и `email-continue-fix` теперь active в `main`; прочие routes остаются paused. Локальный `building-cupis-emails` установлен из слитого источника и побайтно совпадает с ним.
+- На точном SHA PR №98 локально прошли system validation, 705/705 тестов и bootstrap verifier; GitHub Actions/PR Checks не использовались.
+- Post-merge clean-context сервисная сборка и техническое версионное изменение одной тестовой ссылки выполнены, но финальная Mobile visual acceptance ещё не закрыта: повторная проверка должна объяснить разницу высоты 47 px при ширине 328 px. Этап 10 пока не отмечать завершённым. Подробный протокол — в [плане E2E](2026-09-18-cupis-email-model-assembly-and-e2e.md).
 ## Уточнение продолжения от 2026-09-18
 
 Tasks 7–8 выполняются по [детальному плану заполнения модели и E2E](2026-09-18-cupis-email-model-assembly-and-e2e.md), с предварительными пакетами уточнения входного процесса и проверки переноса данных. Существующий `email-model` сохраняется единственным форматом композиции; отсутствие отдельного автоматического Figma-импортёра само по себе не является блокером. Этот план не объявляет Tasks 7–8 завершёнными и не меняет их итоговые acceptance gates.
