@@ -32,7 +32,7 @@ test("loads the canonical spacing foundation and resolves exact viewport values"
   });
 
   assert.equal(spacing.foundation.id, "spacing");
-  assert.equal(spacing.foundation.status, "shadow");
+  assert.equal(spacing.foundation.status, "active");
   assert.equal(spacing.roles.length, 15);
   assert.deepEqual(validateSpacingSemantics(spacing), []);
   assert.equal(

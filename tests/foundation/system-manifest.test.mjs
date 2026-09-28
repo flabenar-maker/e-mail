@@ -1046,14 +1046,22 @@ test("resolves immutable generated definitions and route policy", async () => {
 });
 
 
-test("canonical routes remain paused with shadow bundle policies", async () => {
+test("canonical routes activate email bundles while non-email bundles remain shadow", async () => {
   const manifest = await canonicalManifest();
-  assert.equal(manifest.structured_workflows.status, "shadow");
-  assert.equal(manifest.routes.every(({ workflow_source_id }) => workflow_source_id === "workflow-paused"), true);
+  assert.equal(manifest.structured_workflows.status, "partial");
   for (const profile of manifest.bundle_profiles) {
+    const email = profile.id.startsWith("email-");
     assert.deepEqual(profile.generated_bundle.static_source_ids, profile.source_ids);
-    assert.equal(profile.generated_bundle.status, "structured-shadow");
-    assert.equal(profile.generated_bundle.static_source_ids.includes("workflow-paused"), true);
+    assert.equal(profile.generated_bundle.status, email ? "structured-active" : "structured-shadow");
+    assert.equal(profile.generated_bundle.static_source_ids.includes("workflow-paused"), !email);
+    assert.equal(profile.generated_bundle.static_source_ids.includes("workflow-email-build"), email);
+  }
+  for (const route of manifest.routes) {
+    assert.equal(
+      route.workflow_source_id,
+      route.id.startsWith("email-") ? "workflow-email-build" : "workflow-paused",
+      route.id,
+    );
   }
   assert.deepEqual(
     manifest.generated_docs.map(({ id, output_source_id }) => ({

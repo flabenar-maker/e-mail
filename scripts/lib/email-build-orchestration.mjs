@@ -1,8 +1,10 @@
-import { cp, mkdir, readdir, writeFile, realpath, readFile, rm } from "node:fs/promises";
+import { cp, lstat, mkdir, readdir, writeFile, realpath, readFile, rm } from "node:fs/promises";
 import { createHash, randomUUID } from "node:crypto";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { isAbsolute, join, relative, resolve } from "node:path";
+import { tmpdir } from "node:os";
+import { inflateSync } from "node:zlib";
 
 import {
   indexComponentRegistries,
@@ -42,6 +44,7 @@ function assetKey(instanceId, componentId, assetContractId, path) {
 const execFileAsync = promisify(execFile);
 const VIEWPORTS = ["mobile", "desktop"];
 const TOP_LEVEL_ROLES = new Set(["email", "block", "banner", "nps"]);
+const EXECUTABLE_WORKFLOW_MODES = new Set(["new-build", "continue-fix-design", "continue-fix-technical"]);
 const FIGMA_NODE_ID = /^(?:I)?[0-9]+:[0-9]+(?:;[0-9]+:[0-9]+)*$/u;
 const SHA256 = /^[0-9a-f]{64}$/u;
 
@@ -178,14 +181,94 @@ function resolvedAssetSelection(assets, contract) {
   });
 }
 
-async function validateAssetEvidence({ assetRoot, instance, component, contract, asset, item, resolved }) {
-  const extension = resolved.export_profile.contract.extension;
-  const allowedPaths = new Set([
-    `images/${contract.id}${extension}`,
-    `images/${contract.id}-${instance.instance_id}${extension}`,
-  ]);
+const PNG_SIGNATURE = Buffer.from("89504e470d0a1a0a", "hex");
+
+function assetPathMatchesProfile(path, contract, profile) {
+  if (typeof path !== "string" || !path.startsWith("images/")) return false;
+  const filename = path.slice("images/".length);
+  const ending = profile.suffix + profile.extension;
+  if (!filename.endsWith(ending)) return false;
+  const base = filename.slice(0, -ending.length);
+  if (/(?:^|-)(?:mobile|desktop)(?:-|$)/iu.test(base)) return false;
+  return new RegExp("^(?:[a-z0-9]+-)*" + contract.id + "(?:-[0-9]+)?$", "u").test(base);
+}
+
+function pngAlphaBounds(bytes) {
+  if (!Buffer.isBuffer(bytes) || !bytes.subarray(0, 8).equals(PNG_SIGNATURE)) return null;
+  let offset = 8;
+  let width = 0;
+  let height = 0;
+  let validHeader = false;
+  let finished = false;
+  const compressed = [];
+  while (offset + 12 <= bytes.length) {
+    const size = bytes.readUInt32BE(offset);
+    if (size > bytes.length - offset - 12) return null;
+    const type = bytes.toString("ascii", offset + 4, offset + 8);
+    const chunk = bytes.subarray(offset + 8, offset + 8 + size);
+    offset += size + 12;
+    if (type === "IHDR") {
+      if (validHeader || size !== 13 || chunk[8] !== 8 || chunk[9] !== 6 ||
+          chunk[10] !== 0 || chunk[11] !== 0 || chunk[12] !== 0) return null;
+      width = chunk.readUInt32BE(0);
+      height = chunk.readUInt32BE(4);
+      validHeader = true;
+    } else if (type === "IDAT") {
+      compressed.push(chunk);
+    } else if (type === "IEND") {
+      finished = true;
+      break;
+    }
+  }
+  if (!validHeader || !finished || compressed.length === 0 || width === 0 || height === 0) return null;
+  const rowBytes = width * 4;
+  const expectedLength = height * (rowBytes + 1);
+  if (!Number.isSafeInteger(expectedLength) || expectedLength > 100_000_000) return null;
+  let raw;
+  try {
+    raw = inflateSync(Buffer.concat(compressed), { maxOutputLength: expectedLength });
+  } catch {
+    return null;
+  }
+  if (raw.length !== expectedLength) return null;
+  let previous = Buffer.alloc(rowBytes);
+  let current = Buffer.alloc(rowBytes);
+  let min = 255;
+  let max = 0;
+  let cursor = 0;
+  for (let y = 0; y < height; y += 1) {
+    const filter = raw[cursor++];
+    if (filter > 4) return null;
+    for (let x = 0; x < rowBytes; x += 1) {
+      const left = x >= 4 ? current[x - 4] : 0;
+      const up = previous[x];
+      const upperLeft = x >= 4 ? previous[x - 4] : 0;
+      let predictor = 0;
+      if (filter === 1) predictor = left;
+      else if (filter === 2) predictor = up;
+      else if (filter === 3) predictor = Math.floor((left + up) / 2);
+      else if (filter === 4) {
+        const p = left + up - upperLeft;
+        const a = Math.abs(p - left);
+        const b = Math.abs(p - up);
+        const c = Math.abs(p - upperLeft);
+        predictor = a <= b && a <= c ? left : b <= c ? up : upperLeft;
+      }
+      current[x] = (raw[cursor++] + predictor) & 255;
+    }
+    for (let x = 3; x < rowBytes; x += 4) {
+      min = Math.min(min, current[x]);
+      max = Math.max(max, current[x]);
+    }
+    [previous, current] = [current, previous];
+  }
+  return { min, max };
+}
+
+async function validateAssetEvidence({ assetRoot, component, contract, asset, item, resolved }) {
+  const profile = resolved.export_profile.contract;
   if (
-    !allowedPaths.has(asset.path) ||
+    !assetPathMatchesProfile(asset.path, contract, profile) ||
     item?.mcp_export?.source !== "figma-mcp" ||
     typeof item.mcp_export.evidence_id !== "string" ||
     item.mcp_export.evidence_id.trim() === "" ||
@@ -202,8 +285,17 @@ async function validateAssetEvidence({ assetRoot, instance, component, contract,
     const sourcePath = join(assetRoot, ...asset.path.split("/"));
     const physical = await realpath(sourcePath);
     if (!inside(physicalRoot, physical)) return false;
-    const digest = createHash("sha256").update(await readFile(physical)).digest("hex");
-    return item.sha256 === digest;
+    const bytes = await readFile(physical);
+    const digest = createHash("sha256").update(bytes).digest("hex");
+    if (item.sha256 !== digest) return false;
+    if (profile.format === "PNG" && (contract.alpha_mode_id === "opaque" ||
+        contract.alpha_mode_id === "transparent")) {
+      const alpha = pngAlphaBounds(bytes);
+      if (!alpha) return false;
+      if (contract.alpha_mode_id === "opaque") return alpha.min === 255;
+      return alpha.min === 0 && alpha.max > 0;
+    }
+    return true;
   } catch {
     return false;
   }
@@ -310,8 +402,45 @@ async function defaultRendererRunner({ repoRoot, modelPath, outputDir }) {
   );
 }
 
-function continueFixEvidenceBlockers(resolution, evidence) {
-  if (resolution?.mode !== "continue-fix-design") return [];
+async function verifyNewBuildSource({ workflowMode, sourceEvidence, repoRoot, assetRoot, model, assetEvidence }) {
+  if (workflowMode !== "new-build") return { blockers: [], diagnostics: [] };
+  if (!sourceEvidence?.readings || !sourceEvidence?.correspondence) {
+    return { blockers: ["source-evidence-missing"], diagnostics: [] };
+  }
+
+  const proofPath = join(tmpdir(), ".temporary-email-source-" + randomUUID() + ".json");
+  try {
+    await writeFile(proofPath, JSON.stringify({
+      ...sourceEvidence,
+      model,
+      assetEvidence,
+    }), "utf8");
+    const { stdout } = await execFileAsync(
+      process.execPath,
+      [join(repoRoot, "scripts", "verify-email-source.mjs"), proofPath],
+      { cwd: repoRoot },
+    );
+    const report = JSON.parse(stdout);
+    if (report.status === "passed" && report.scope === "full-email" &&
+        Array.isArray(report.diagnostics) && report.diagnostics.length === 0) {
+      return { blockers: [], diagnostics: [] };
+    }
+    return { blockers: ["source-evidence-mismatch"], diagnostics: report.diagnostics ?? [] };
+  } catch (error) {
+    let report;
+    try {
+      report = JSON.parse(error.stdout);
+    } catch {
+      report = { diagnostics: [{ code: "EMAIL_SOURCE_VERIFY_FAILED", message: error.message }] };
+    }
+    return { blockers: ["source-evidence-mismatch"], diagnostics: report.diagnostics ?? [] };
+  } finally {
+    await rm(proofPath, { force: true });
+  }
+}
+
+function continueFixEvidenceBlockers(workflowMode, evidence) {
+  if (workflowMode !== "continue-fix-design") return [];
   const blockers = new Set();
   const mobile = evidence?.figma_instances?.mobile;
   const desktop = evidence?.figma_instances?.desktop;
@@ -343,19 +472,36 @@ export async function executeEmailBuildHandoff({
   rendererRunner = defaultRendererRunner,
   resolution,
   continueFixEvidence,
+  sourceEvidence,
   ...input
 }) {
+  const workflowMode = resolution?.workflow?.mode;
+  const workflowModeBlockers = EXECUTABLE_WORKFLOW_MODES.has(workflowMode)
+    ? []
+    : ["workflow-mode-invalid"];
   const handoff = await prepareEmailBuildHandoff(input);
+  const sourceGate = workflowModeBlockers.length
+    ? { blockers: [], diagnostics: [] }
+    : await verifyNewBuildSource({
+      workflowMode,
+      sourceEvidence,
+      repoRoot: input.repoRoot,
+      assetRoot: input.assetRoot,
+      model: handoff.model,
+      assetEvidence: input.assetEvidence,
+    });
   const blockers = [...new Set([
     ...handoff.blockers,
-    ...continueFixEvidenceBlockers(resolution, continueFixEvidence),
+    ...workflowModeBlockers,
+    ...continueFixEvidenceBlockers(workflowMode, continueFixEvidence),
+    ...sourceGate.blockers,
   ])].sort();
-  if (blockers.length) return { ...handoff, blockers, executed: false };
+  if (blockers.length) return { ...handoff, blockers, sourceDiagnostics: sourceGate.diagnostics, executed: false };
   const modelPath = join(input.assetRoot, `.temporary-email-model-${randomUUID()}.json`);
   try {
     await writeFile(modelPath, JSON.stringify(handoff.model), "utf8");
     await rendererRunner({ repoRoot: input.repoRoot, modelPath, outputDir });
-    return { ...handoff, executed: true };
+    return { ...handoff, sourceDiagnostics: sourceGate.diagnostics, executed: true };
   } finally {
     await rm(modelPath, { force: true });
   }
@@ -426,7 +572,14 @@ function semanticSlug(purpose) {
 }
 
 function safeSourceFolder(folder) {
-  return typeof folder === "string" && /^[a-z0-9]+(?:-[a-z0-9]+)*_[0-9]+\.[0-9]+$/u.test(folder);
+  return typeof folder === "string" && /^[a-z0-9]+(?:[-_][a-z0-9]+)*_[0-9]+\.[0-9]+$/u.test(folder);
+}
+
+async function assertNoLinkedDescendants(directory) {
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    if (entry.isSymbolicLink()) throw failure("version-path-unsafe");
+    if (entry.isDirectory()) await assertNoLinkedDescendants(join(directory, entry.name));
+  }
 }
 
 function assertOutputContract(resolution) {
@@ -440,22 +593,51 @@ export async function createEmailVersion({ resolution, workspaceRoot, outputPare
   if (!inside(workspaceRoot, outputParent) || (sourceFolder && !safeSourceFolder(sourceFolder))) {
     throw failure("version-path-unsafe");
   }
+
+  let physicalWorkspace;
+  let physicalParent;
+  let physicalSource;
+  try {
+    physicalWorkspace = await realpath(workspaceRoot);
+    physicalParent = await realpath(outputParent);
+    if (!inside(physicalWorkspace, physicalParent)) throw failure("version-path-unsafe");
+    if (sourceFolder) {
+      physicalSource = await realpath(join(physicalParent, sourceFolder));
+      if (!inside(physicalParent, physicalSource)) throw failure("version-path-unsafe");
+      const emailPath = join(physicalSource, "email.html");
+      const imagesPath = join(physicalSource, "images");
+      if ((await lstat(emailPath)).isSymbolicLink() || (await lstat(imagesPath)).isSymbolicLink()) {
+        throw failure("version-path-unsafe");
+      }
+      const emailFile = await realpath(emailPath);
+      const imagesDirectory = await realpath(imagesPath);
+      if (!inside(physicalSource, emailFile) || !inside(physicalSource, imagesDirectory)) {
+        throw failure("version-path-unsafe");
+      }
+      await assertNoLinkedDescendants(imagesDirectory);
+    }
+  } catch {
+    throw failure("version-path-unsafe");
+  }
+
   const base = sourceFolder ? sourceFolder.replace(/_[0-9]+\.[0-9]+$/u, "") : semanticSlug(purpose);
-  const entries = new Set(await readdir(outputParent));
-  let minor = 0;
-  let folder = `${base}_1.${minor}`;
-  while (entries.has(folder)) folder = `${base}_1.${++minor}`;
-  const target = join(outputParent, folder);
-  if (!inside(workspaceRoot, target)) throw failure("version-path-unsafe");
+  const version = sourceFolder?.match(/_([0-9]+)\.([0-9]+)$/u);
+  const major = version ? Number(version[1]) : 1;
+  let minor = version ? Number(version[2]) + 1 : 0;
+  if (!Number.isSafeInteger(major) || !Number.isSafeInteger(minor)) throw failure("version-path-unsafe");
+  const entries = new Set(await readdir(physicalParent));
+  let folder = base + "_" + major + "." + minor;
+  while (entries.has(folder)) {
+    minor += 1;
+    if (!Number.isSafeInteger(minor)) throw failure("version-path-unsafe");
+    folder = base + "_" + major + "." + minor;
+  }
+  const target = join(physicalParent, folder);
+  if (!inside(physicalWorkspace, target)) throw failure("version-path-unsafe");
   await mkdir(target);
   if (sourceFolder) {
-    const source = join(outputParent, sourceFolder);
-    if (!inside(workspaceRoot, source)) throw failure("version-path-unsafe");
-    await cp(join(source, "email.html"), join(target, "email.html"));
-    await cp(join(source, "images"), join(target, "images"), { recursive: true });
-  } else {
-    await writeFile(join(target, "email.html"), "");
-    await mkdir(join(target, "images"));
+    await cp(join(physicalSource, "email.html"), join(target, "email.html"));
+    await cp(join(physicalSource, "images"), join(target, "images"), { recursive: true });
   }
   return { folder, target };
 }

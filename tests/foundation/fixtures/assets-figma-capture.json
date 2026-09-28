@@ -17,7 +17,7 @@
   ],
   "representatives": [
     {
-      "id": "header-logo-rendered-png-opaque",
+      "id": "header-logo-rendered-png-transparent",
       "selection": {
         "component_id": "email-header",
         "asset_contract_id": "header-logo"
@@ -26,7 +26,7 @@
         "sourceModeId": "rendered-node",
         "displayModeId": "direct-image",
         "exportProfileId": "png-4x",
-        "expectedAlphaId": "opaque",
+        "expectedAlphaId": "transparent",
         "clippingPolicyId": "preserve-artwork"
       },
       "foundation_source_paths": [

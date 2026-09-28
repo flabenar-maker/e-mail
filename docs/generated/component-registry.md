@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: component-registry -->
-<!-- source-digest: sha256:52197ced1862206484e481a017e53dc0d2a044c7e9bec3c3c8c9eee7447b76ef -->
+<!-- source-digest: sha256:766eaafce1d98aed5580a0e712f12d93584d52fac011fe9fde3dd7f96305312c -->
 <!-- schema-versions: components=2.1.0, typography=1.0.0, spacing=1.0.0, assets=1.0.0 -->
 # CUPIS component registry
 
@@ -63,7 +63,7 @@
   - Source mode: `rendered-node`
   - Display mode: `direct-image`
   - Export profile: `png-4x` — PNG, `.png`, scale 4, suffix `@4x`, sRGB
-  - Alpha: `opaque` — `fully-opaque`
+  - Alpha: `transparent` — `transparent-outside-visual`
   - Clipping: `preserve-artwork`
   - Export boundary: `node` `header-logo @4x`
   - Pixel dimensions: 1288×200px
@@ -1663,7 +1663,7 @@ RENDER: HTML
   - Source mode: `rendered-node`
   - Display mode: `direct-image`
   - Export profile: `png-4x` — PNG, `.png`, scale 4, suffix `@4x`, sRGB
-  - Alpha: `opaque` — `fully-opaque`
+  - Alpha: `source` — `preserve-source`
   - Clipping: `preserve-artwork`
   - Export boundary: `node` `qr-code @4x`
   - Pixel dimensions: 554×554px
@@ -7475,7 +7475,7 @@ RENDER: HTML
   - Source mode: `rendered-node`
   - Display mode: `direct-image`
   - Export profile: `png-4x` — PNG, `.png`, scale 4, suffix `@4x`, sRGB
-  - Alpha: `opaque` — `fully-opaque`
+  - Alpha: `transparent` — `transparent-outside-visual`
   - Clipping: `preserve-artwork`
   - Export boundary: `node` `header-logo @4x`
   - Pixel dimensions: 1288×200px

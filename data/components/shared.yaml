@@ -3,7 +3,7 @@
   "registry": {
     "id": "components-shared",
     "library": "shared",
-    "status": "shadow",
+    "status": "active",
     "source": {
       "figma_file_key": "8zka5bHkcrJVK9I9dKjnhC",
       "roots": [
@@ -306,7 +306,7 @@
           "source_mode_id": "rendered-node",
           "display_mode_id": "direct-image",
           "export_profile_id": "png-4x",
-          "alpha_mode_id": "opaque",
+          "alpha_mode_id": "transparent",
           "clipping_policy_id": "preserve-artwork",
           "export_boundary": {
             "kind": "node",

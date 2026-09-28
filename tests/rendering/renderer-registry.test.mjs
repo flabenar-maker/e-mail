@@ -44,7 +44,7 @@ test("preserves exact interpreter coverage for the eight pilot components", asyn
   const registry = await loadRendererRegistry({ repoRoot });
 
   assert.equal(registry.registry.id, "email-renderers");
-  assert.equal(registry.registry.status, "shadow");
+  assert.equal(registry.registry.status, "active");
   const interpreterCoverage = registry.coverage.filter(
     ({ mode }) => mode === "interpreter",
   );

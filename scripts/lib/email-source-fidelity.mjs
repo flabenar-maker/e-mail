@@ -292,6 +292,13 @@ export function verifyEmailModelSource({
         errors.push(issue("EMAIL_SOURCE_TARGET_MISSING", assetPath, `${instance.instance_id}/${asset.asset_contract_id}: source owner is missing.`));
         continue;
       }
+      const contract = resolvedContracts.get(instance.component_id);
+      const assetContract = contract?.asset_contracts?.find(({ id }) => id === asset.asset_contract_id);
+      if (Array.isArray(contract?.asset_contracts) && !assetContract) {
+        errors.push(issue("EMAIL_SOURCE_ASSET_CONTRACT_MISSING", assetPath, `${instance.instance_id}/${asset.asset_contract_id}: asset contract is missing.`));
+      } else if (assetContract?.source_viewport && target.viewport !== assetContract.source_viewport) {
+        errors.push(issue("EMAIL_SOURCE_ASSET_VIEWPORT_MISMATCH", assetPath, `${instance.instance_id}/${asset.asset_contract_id}: ${target.viewport} evidence does not match the ${assetContract.source_viewport} asset contract source viewport.`));
+      }
       claimedSourceAssets.add(key(target.viewport, target.node_id));
       const source = sourceAssets.get(key(target.viewport, target.node_id));
       if (source.owner_node_id !== mapped?.nodes?.[target.viewport]) {

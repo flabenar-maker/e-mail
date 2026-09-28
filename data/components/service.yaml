@@ -3,7 +3,7 @@
   "registry": {
     "id": "components-service",
     "library": "service",
-    "status": "shadow",
+    "status": "active",
     "source": {
       "figma_file_key": "8zka5bHkcrJVK9I9dKjnhC",
       "roots": [

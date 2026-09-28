@@ -27,4 +27,6 @@ node scripts/verify-email-source.mjs <source-evidence.json>
 
 Код 0 означает отсутствие найденных расхождений в полном охвате; 1 — typed diagnostics; 2 — невалидный вызов или нечитаемый вход. Шаг `verify-model-source` выдаёт `source-comparison`; `render-email-cli` не начинается при диагностике или неполном evidence. Для теста поддерева добавляется `--selected-test`, но его результат нельзя передавать вместо production `source-comparison`.
 
+Для new-build вызов executeEmailBuildHandoff получает sourceEvidence с теми же readings, correspondence и authorizedInputs, которые использовал шаг verify-model-source. Вместе с фактическими model и assetEvidence он повторно выполняет production-проверку до запуска renderer. Один готовый флаг status: "passed" без исходных данных, а также результат --selected-test, не открывают путь к рендеру. Временный proof-файл создаётся вне папки готового письма и удаляется после проверки.
+
 Проверка не доказывает сама себя: metadata полноты и нормализация получены от читающего агента, а hash подтверждает байты, не выбор правильного слоя. Спорные узлы повторно читаются непосредственно через Figma MCP, а после рендера выполняется отдельное визуальное сравнение. Исходные MCP-ответы и временные таблицы не коммитятся и не кладутся в папку письма.

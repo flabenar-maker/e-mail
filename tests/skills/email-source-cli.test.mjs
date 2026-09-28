@@ -118,3 +118,48 @@ test("production scope checks the Figma slot child count independently", async (
   assert.ok(JSON.parse(result.stdout).diagnostics.some(({ code }) => code === "EMAIL_SOURCE_SCOPE_INCOMPLETE"));
 });
 
+
+function assetOnlyInput(assetContractId = "header-logo") {
+  const input = minimalInput();
+  const asset = {
+    instance_id: "header-asset", component_id: "asset-header-logo-4x",
+    variants: { mobile: "mobile", desktop: "desktop" },
+    property_values: [], content_values: [],
+    asset_files: [{ asset_contract_id: assetContractId, path: "images/header-logo.png" }], slots: [],
+  };
+  input.model.root.slots = [{ element_id: "content", instances: [asset] }];
+  for (const viewport of ["mobile", "desktop"]) {
+    input.readings.selection[viewport].expected_top_level_count = 1;
+    input.readings.instances.push({ viewport, node_id: `${viewport}-header`,
+      parent_node_id: viewport === "mobile" ? "m-root" : "d-root", order: 0,
+      relation: { kind: "slot", element_id: "content" }, variant_id: viewport });
+  }
+  input.correspondence.instances.push({ instance_id: "header-asset",
+    nodes: { mobile: "mobile-header", desktop: "desktop-header" } });
+  input.readings.assets.push({ viewport: "mobile", node_id: "mobile-logo",
+    owner_node_id: "mobile-header", evidence_id: "mobile-logo-export" });
+  input.correspondence.assets.push({ instance_id: "header-asset", asset_contract_id: assetContractId,
+    viewport: "mobile", node_id: "mobile-logo" });
+  input.assetEvidence.push({ instance_id: "header-asset", asset_contract_id: assetContractId,
+    path: "images/header-logo.png", mcp_export: { source_node_id: "mobile-logo", evidence_id: "mobile-logo-export",
+      capture_id: "capture-1", file_key: "file" } });
+  return input;
+}
+
+test("source CLI loads asset contracts for an asset-only model before renderer handoff", async (t) => {
+  const dir = await mkdtemp(join(tmpdir(), "cupis-source-asset-"));
+  t.after(() => rm(dir, { recursive: true, force: true }));
+  const path = join(dir, "source.json");
+
+  await writeFile(path, JSON.stringify(assetOnlyInput()), "utf8");
+  const wrongViewport = spawnSync(process.execPath, [fileURLToPath(command), path], { encoding: "utf8" });
+  assert.equal(wrongViewport.status, 1, wrongViewport.stdout || wrongViewport.stderr);
+  assert.ok(JSON.parse(wrongViewport.stdout).diagnostics
+    .some(({ code }) => code === "EMAIL_SOURCE_ASSET_VIEWPORT_MISMATCH"));
+
+  await writeFile(path, JSON.stringify(assetOnlyInput("unknown-logo")), "utf8");
+  const missingContract = spawnSync(process.execPath, [fileURLToPath(command), path], { encoding: "utf8" });
+  assert.equal(missingContract.status, 1, missingContract.stdout || missingContract.stderr);
+  assert.ok(JSON.parse(missingContract.stdout).diagnostics
+    .some(({ code }) => code === "EMAIL_SOURCE_ASSET_CONTRACT_MISSING"));
+});

@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
+import { deflateSync } from "node:zlib";
 import {
   mkdtemp,
   mkdir,
@@ -32,6 +33,45 @@ import { loadWorkflowRegistry } from "../../scripts/lib/workflow-registry.mjs";
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const VIEWPORTS = ["mobile", "desktop"];
 let registryIndex;
+
+function crc32(bytes) {
+  let value = 0xffffffff;
+  for (const byte of bytes) {
+    value ^= byte;
+    for (let bit = 0; bit < 8; bit += 1) {
+      value = (value >>> 1) ^ (value & 1 ? 0xedb88320 : 0);
+    }
+  }
+  return (value ^ 0xffffffff) >>> 0;
+}
+
+function pngChunk(type, data) {
+  const name = Buffer.from(type, "ascii");
+  const length = Buffer.alloc(4);
+  length.writeUInt32BE(data.length);
+  const checksum = Buffer.alloc(4);
+  checksum.writeUInt32BE(crc32(Buffer.concat([name, data])));
+  return Buffer.concat([length, name, data, checksum]);
+}
+
+function pngWithCornerAlpha(transparentCorner) {
+  const header = Buffer.alloc(13);
+  header.writeUInt32BE(2, 0);
+  header.writeUInt32BE(2, 4);
+  header[8] = 8;
+  header[9] = 6;
+  const alpha = transparentCorner ? 0 : 255;
+  const rows = Buffer.from([
+    0, 255, 255, 255, alpha, 255, 255, 255, 255,
+    0, 255, 255, 255, 255, 255, 255, 255, 255,
+  ]);
+  return Buffer.concat([
+    Buffer.from("89504e470d0a1a0a", "hex"),
+    pngChunk("IHDR", header),
+    pngChunk("IDAT", deflateSync(rows)),
+    pngChunk("IEND", Buffer.alloc(0)),
+  ]);
+}
 
 function everyInstance(instance, output = []) {
   output.push(instance);
@@ -128,8 +168,11 @@ function buildInstance(assets, componentId, instanceId, blueprint = null) {
   const profileById = new Map(assets.export_profiles.map((profile) => [profile.id, profile]));
   const asset_files = [...assetIds].map((assetId) => {
     const contract = record.asset_contracts.find(({ id }) => id === assetId);
-    const extension = profileById.get(contract.export_profile_id).contract.extension;
-    return { asset_contract_id: assetId, path: `images/${assetId}${extension}` };
+    const profile = profileById.get(contract.export_profile_id).contract;
+    return {
+      asset_contract_id: assetId,
+      path: `images/${assetId}${profile.suffix ?? ""}${profile.extension}`,
+    };
   });
 
   const nestedMap = new Map();
@@ -216,7 +259,9 @@ async function writeAssetsAndEvidence(root, model, index) {
     for (const asset of instance.asset_files ?? []) {
       const contract = record.asset_contracts.find(({ id }) => id === asset.asset_contract_id);
       const target = join(root, ...asset.path.split("/"));
-      const bytes = Buffer.from(`mcp-export:${asset.path}`, "utf8");
+      const bytes = asset.path.endsWith(".png")
+        ? pngWithCornerAlpha(contract.alpha_mode_id === "transparent")
+        : Buffer.from(`mcp-export:${asset.path}`, "utf8");
       await mkdir(dirname(target), { recursive: true });
       await writeFile(target, bytes);
       evidence.push({
@@ -257,6 +302,133 @@ async function fixture(root, topLevel, id = "fixture", blueprint = null) {
   };
 }
 
+async function bindHeaderAsset(root, source, path, bytes) {
+  const instance = everyInstance(source.model.root).find(({ component_id, asset_files }) =>
+    component_id === "email-header" && asset_files?.some(({ asset_contract_id }) => asset_contract_id === "header-logo"));
+  assert.ok(instance, "email header instance with header logo");
+  const asset = instance.asset_files.find(({ asset_contract_id }) => asset_contract_id === "header-logo");
+  const receipt = source.assetEvidence.find((item) =>
+    item.instance_id === instance.instance_id && item.asset_contract_id === asset.asset_contract_id &&
+    item.path === asset.path);
+  assert.ok(receipt, "header logo receipt");
+  asset.path = path;
+  receipt.path = path;
+  receipt.sha256 = createHash("sha256").update(bytes).digest("hex");
+  const target = join(root, ...path.split("/"));
+  await mkdir(dirname(target), { recursive: true });
+  await writeFile(target, bytes);
+}
+
+async function setHeaderAlphaMode(contractRepo, alphaModeId) {
+  const path = join(contractRepo, "data", "components", "marketing.yaml");
+  const marketing = JSON.parse(await readFile(path, "utf8"));
+  const header = marketing.components.find(({ id }) => id === "email-header");
+  assert.ok(header, "email header contract");
+  header.asset_contracts.find(({ id }) => id === "header-logo").alpha_mode_id = alphaModeId;
+  await writeFile(path, JSON.stringify(marketing), "utf8");
+}
+
+function sourceValue(value) {
+  if (value?.type === "rich-text") return value.segments.map(({ value: text }) => text).join("");
+  if (value?.type === "alt-text") return { purpose: value.purpose, value: value.value };
+  return value?.value;
+}
+
+function sourceEvidenceFor(model, assetEvidence, { scope = "full-email" } = {}) {
+  const entries = [];
+  const visit = (instance, parent = null, relation = null) => {
+    entries.push({ instance, parent, relation });
+    for (const [slotIndex, slot] of (instance.slots ?? []).entries()) {
+      for (const [order, child] of slot.instances.entries()) {
+        visit(child, instance, { kind: "slot", element_id: slot.element_id, order, slotIndex });
+      }
+    }
+    for (const [order, nested] of (instance.nested_components ?? []).entries()) {
+      visit(nested.instance, instance, {
+        kind: "nested", element_id: nested.element_id, element_ids: nested.element_ids, order,
+      });
+    }
+  };
+  visit(model.root);
+  const capture_id = "capture:source-gate";
+  const file_key = "source-gate-file";
+  const nodeId = (viewport, instance) => `source-${viewport}-${instance.instance_id}`;
+  const readings = { instances: [], fields: [], assets: [] };
+  const correspondence = { capture_id, file_key, instances: [], fields: [], assets: [] };
+  correspondence.instances = entries.map(({ instance }) => ({
+    instance_id: instance.instance_id,
+    nodes: Object.fromEntries(VIEWPORTS.map((viewport) => [viewport, nodeId(viewport, instance)])),
+  }));
+  const receipts = structuredClone(assetEvidence);
+  for (const viewport of VIEWPORTS) {
+    for (const { instance, parent, relation } of entries) {
+      const node_id = nodeId(viewport, instance);
+      readings.instances.push({
+        viewport, node_id, variant_id: instance.variants[viewport],
+        parent_node_id: parent ? nodeId(viewport, parent) : null,
+        relation: relation && {
+          kind: relation.kind,
+          element_id: relation.element_ids?.[viewport] ?? relation.element_id,
+        },
+        order: relation?.order ?? null,
+      });
+      for (const item of instance.property_values ?? []) {
+        if (item.scope !== "all" && item.scope !== viewport) continue;
+        const field = `property:${item.property_id}`;
+        readings.fields.push({ viewport, node_id, owner_node_id: node_id, field, value: item.value });
+        correspondence.fields.push({
+          instance_id: instance.instance_id, kind: "property", property_id: item.property_id,
+          viewport, node_id, field, origin: "figma",
+        });
+      }
+      for (const item of instance.content_values ?? []) {
+        if (item.scope !== "all" && item.scope !== viewport) continue;
+        const field = `content:${item.element_id}:${item.slot_id}`;
+        readings.fields.push({ viewport, node_id, owner_node_id: node_id, field, value: sourceValue(item.value) });
+        correspondence.fields.push({
+          instance_id: instance.instance_id, kind: "content", element_id: item.element_id,
+          slot_id: item.slot_id, viewport, node_id, field, origin: "figma",
+        });
+      }
+    }
+  }
+  for (const entry of entries) {
+    for (const asset of entry.instance.asset_files ?? []) {
+      const viewport = "mobile";
+      const node_id = nodeId(viewport, entry.instance);
+      const evidence_id = `export:${entry.instance.instance_id}:${asset.asset_contract_id}`;
+      readings.assets.push({ viewport, node_id, owner_node_id: node_id, evidence_id });
+      correspondence.assets.push({
+        instance_id: entry.instance.instance_id,
+        asset_contract_id: asset.asset_contract_id,
+        viewport,
+        node_id,
+      });
+      const receipt = receipts.find((item) =>
+        item.instance_id === entry.instance.instance_id && item.asset_contract_id === asset.asset_contract_id &&
+        item.path === asset.path);
+      assert.ok(receipt, `missing asset receipt for ${entry.instance.instance_id}/${asset.asset_contract_id}`);
+      receipt.mcp_export.capture_id = capture_id;
+      receipt.mcp_export.file_key = file_key;
+      receipt.mcp_export.source_node_id = node_id;
+      receipt.mcp_export.evidence_id = evidence_id;
+    }
+  }
+  return {
+    readings: {
+      complete: true, capture_id, file_key, captured_at: "2026-09-28T00:00:00.000Z",
+      ...readings,
+      selection: Object.fromEntries(VIEWPORTS.map((viewport) => [viewport, {
+        scope, root_node_id: nodeId(viewport, model.root), expected_top_level_count: 1,
+        terminal: true, truncated: false, capture_id, file_key,
+      }])),
+    },
+    correspondence,
+    authorizedInputs: [],
+    assetEvidence: receipts,
+  };
+}
+
 async function contractRepoCopy(root, name) {
   const target = join(root, name);
   await cp(join(repoRoot, "data"), join(target, "data"), { recursive: true });
@@ -281,13 +453,13 @@ function suppliedValues(model) {
   return { text, urls };
 }
 
-async function executeFixture(root, source) {
-  const outputDir = join(root, "output_1.0");
+async function executeFixture(root, source, { outputDir = join(root, "output_1.0"), resolution = { workflow: { mode: "continue-fix-technical" } } } = {}) {
   const result = await executeEmailBuildHandoff({
     repoRoot,
     outputDir,
     assetRoot: root,
     ...source,
+    resolution: resolution ?? source.resolution,
   });
   assert.deepEqual(result.blockers, []);
   assert.equal(result.executed, true);
@@ -339,6 +511,22 @@ test("marketing and service fixtures follow resolved contracts through the real 
   assert.ok(suppliedValues(service.model).text.every((value) => !value.includes("service-")));
   await executeFixture(marketingRoot, marketing);
   await executeFixture(serviceRoot, service);
+});
+
+test("real handoff renders into an empty version folder", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "cupis-empty-version-handoff-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const source = await fixture(root, ["banner-secondary"]);
+  const version = await createEmailVersion({
+    resolution: { allowedOutputs: ["version-folder", "email-html", "images-directory"] },
+    workspaceRoot: root,
+    outputParent: root,
+    purpose: "empty version handoff",
+  });
+  await executeFixture(root, source, {
+    outputDir: version.target,
+    resolution: { workflow: { mode: "continue-fix-technical" } },
+  });
 });
 
 test("viewport-specific nested element IDs require exact placement in both variants", async (t) => {
@@ -526,7 +714,7 @@ test("the actual handoff gate prevents renderer invocation for every required bl
   malformed.root.component_id = "banner-secondary";
   assert.ok((await execute({ model: malformed })).blockers.includes("renderer-diagnostic"));
   const designWithoutVisualProof = await execute({
-    resolution: { mode: "continue-fix-design" },
+    resolution: { workflow: { mode: "continue-fix-design" } },
     continueFixEvidence: {
       figma_instances: {
         mobile: { role: "mobile", email_id: "same", file_key: "file", node_id: "1:1" },
@@ -537,7 +725,7 @@ test("the actual handoff gate prevents renderer invocation for every required bl
   assert.ok(designWithoutVisualProof.blockers.includes("visual-regression"));
   assert.equal(invocations, 0);
   const verifiedDesign = await execute({
-    resolution: { mode: "continue-fix-design" },
+    resolution: { workflow: { mode: "continue-fix-design" } },
     continueFixEvidence: {
       figma_instances: {
         mobile: { role: "mobile", email_id: "same", file_key: "file", node_id: "1:1" },
@@ -552,6 +740,74 @@ test("the actual handoff gate prevents renderer invocation for every required bl
   });
   assert.equal(verifiedDesign.executed, true);
   assert.equal(invocations, 1);
+});
+
+test("new-build handoff blocks rendering without full source comparison evidence", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "cupis-source-gate-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const source = await fixture(root, ["banner-secondary"]);
+  let invocations = 0;
+  const result = await executeEmailBuildHandoff({
+    ...source,
+    repoRoot,
+    assetRoot: root,
+    outputDir: join(root, "new-build"),
+    resolution: { workflow: { mode: "new-build" } },
+    rendererRunner: async () => { invocations += 1; },
+  });
+  assert.ok(result.blockers.includes("source-evidence-missing"));
+  assert.equal(invocations, 0);
+});
+
+test("new-build handoff renders when complete source observations match the model", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "cupis-source-positive-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const source = await fixture(root, ["email-footer-legal"]);
+  const evidence = sourceEvidenceFor(source.model, source.assetEvidence);
+  let invocations = 0;
+  const result = await executeEmailBuildHandoff({
+    ...source,
+    repoRoot,
+    assetRoot: root,
+    outputDir: join(root, "new-build"),
+    resolution: { workflow: { mode: "new-build" } },
+    sourceEvidence: evidence,
+    assetEvidence: evidence.assetEvidence,
+    rendererRunner: async () => { invocations += 1; },
+  });
+  assert.deepEqual(result.blockers, []);
+  assert.equal(result.executed, true);
+  assert.equal(invocations, 1);
+});
+
+test("new-build handoff rejects selected-subtree proof and a passed claim without readings", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "cupis-source-scope-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const source = await fixture(root, ["email-footer-legal"]);
+  const selectedEvidence = sourceEvidenceFor(source.model, source.assetEvidence, { scope: "selected-subtree" });
+  const selected = await executeEmailBuildHandoff({
+    ...source,
+    repoRoot,
+    assetRoot: root,
+    outputDir: join(root, "selected-subtree"),
+    resolution: { workflow: { mode: "new-build" } },
+    sourceEvidence: selectedEvidence,
+    assetEvidence: selectedEvidence.assetEvidence,
+    rendererRunner: async () => { throw new Error("renderer must stay gated"); },
+  });
+  assert.ok(selected.blockers.includes("source-evidence-mismatch"));
+  assert.ok(selected.sourceDiagnostics.some(({ code }) => code === "EMAIL_SOURCE_SCOPE_INCOMPLETE"));
+
+  const claimed = await executeEmailBuildHandoff({
+    ...source,
+    repoRoot,
+    assetRoot: root,
+    outputDir: join(root, "claimed-pass"),
+    resolution: { workflow: { mode: "new-build" } },
+    sourceEvidence: { status: "passed" },
+    rendererRunner: async () => { throw new Error("renderer must stay gated"); },
+  });
+  assert.ok(claimed.blockers.includes("source-evidence-missing"));
 });
 
 test("asset evidence binds exact filename, digest, owner, Figma node, and physical root", async (t) => {
@@ -595,6 +851,57 @@ test("asset evidence binds exact filename, digest, owner, Figma node, and physic
   } catch (error) {
     if (error?.code !== "EPERM") throw error;
   }
+});
+
+test("handoff requires the export-profile suffix in a header asset filename", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "cupis-header-profile-suffix-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const source = await fixture(root, ["email-header"]);
+  const image = pngWithCornerAlpha(true);
+
+  await bindHeaderAsset(root, source, "images/header-logo@4x.png", image);
+  const suffixed = await prepareEmailBuildHandoff({ ...source, repoRoot, assetRoot: root });
+  assert.deepEqual(suffixed.blockers, []);
+  assert.equal(suffixed.assetContracts[0].path, "images/header-logo@4x.png");
+
+  await bindHeaderAsset(root, source, "images/header-logo.png", image);
+  const unsuffixed = await prepareEmailBuildHandoff({ ...source, repoRoot, assetRoot: root });
+  assert.ok(unsuffixed.blockers.includes("asset-contract-missing"));
+});
+
+test("handoff enforces real PNG alpha pixels against the header alpha contract", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "cupis-header-alpha-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const contractRepo = await contractRepoCopy(root, "header-alpha-contract");
+  const source = await fixture(root, ["email-header"]);
+  const transparent = pngWithCornerAlpha(true);
+  const opaque = pngWithCornerAlpha(false);
+
+  await bindHeaderAsset(root, source, "images/header-logo@4x.png", transparent);
+  await setHeaderAlphaMode(contractRepo, "transparent");
+  const transparentPass = await prepareEmailBuildHandoff({
+    ...source, repoRoot: contractRepo, assetRoot: root,
+  });
+  assert.deepEqual(transparentPass.blockers, []);
+
+  await setHeaderAlphaMode(contractRepo, "opaque");
+  const transparentRejected = await prepareEmailBuildHandoff({
+    ...source, repoRoot: contractRepo, assetRoot: root,
+  });
+  assert.ok(transparentRejected.blockers.includes("asset-contract-missing"));
+
+  await setHeaderAlphaMode(contractRepo, "source");
+  const sourcePass = await prepareEmailBuildHandoff({
+    ...source, repoRoot: contractRepo, assetRoot: root,
+  });
+  assert.deepEqual(sourcePass.blockers, []);
+
+  await setHeaderAlphaMode(contractRepo, "opaque");
+  await bindHeaderAsset(root, source, "images/header-logo@4x.png", opaque);
+  const opaquePass = await prepareEmailBuildHandoff({
+    ...source, repoRoot: contractRepo, assetRoot: root,
+  });
+  assert.deepEqual(opaquePass.blockers, []);
 });
 
 async function treeDigest(root) {
@@ -648,6 +955,7 @@ test("design fixes stay Figma-gated and technical siblings preserve the complete
     purpose: "Technical proof",
   });
   await writeFile(join(source.target, "email.html"), "<p>source</p>", "utf8");
+  await mkdir(join(source.target, "images"));
   await writeFile(join(source.target, "images", "proof.png"), "source-image", "utf8");
   const before = await treeDigest(source.target);
   const next = await createEmailVersion({

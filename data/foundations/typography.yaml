@@ -1,6 +1,7 @@
 schema_version: 1.0.0
 foundation:
   id: typography
+  status: active
   source:
     figma_file_key: 8zka5bHkcrJVK9I9dKjnhC
     page_node_id: 5:6
