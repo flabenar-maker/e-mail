@@ -19,7 +19,7 @@ const expectedGate = {
 const expectedUnresolved = [];
 
 const expectedChildren = {
-  "header-logo-rendered-png-opaque": ["Asset/Product-Logo"],
+  "header-logo-rendered-png-transparent": ["Asset/Product-Logo"],
   "hero-image-fill-jpeg-direct": [],
   "secondary-image-fill-jpeg-wrapper-crop": [],
   "card-image-rendered-jpeg-neutralized": ["Number"],
@@ -28,9 +28,9 @@ const expectedChildren = {
   "nps-face-image-fill-png-source-alpha": ["happy-face-icon @4x"],
 };
 const expectedRepresentatives = {
-  "header-logo-rendered-png-opaque": {
+  "header-logo-rendered-png-transparent": {
     selection: { component_id: "email-header", asset_contract_id: "header-logo" },
-    foundation_selection: { sourceModeId: "rendered-node", displayModeId: "direct-image", exportProfileId: "png-4x", expectedAlphaId: "opaque", clippingPolicyId: "preserve-artwork" },
+    foundation_selection: { sourceModeId: "rendered-node", displayModeId: "direct-image", exportProfileId: "png-4x", expectedAlphaId: "transparent", clippingPolicyId: "preserve-artwork" },
     component_asset: { owner_layer_name: "header-logo @4x", source_viewport: "desktop", export_boundary: { kind: "node", semantic_node_name: "header-logo @4x" } },
     source_boundary: { source_content: "exact-node-after-overrides", concrete_email_instance_required: true, own_visible_fill_included: true, visible_nested_graphics_included: true, parent_fill_included: false, unrelated_layout_included: false, live_html_included: false },
     live_figma: { file_key: "8zka5bHkcrJVK9I9dKjnhC", node_id: "1008:1823", node_name: "header-logo @4x", variant: "Viewport=Desktop", viewport: "desktop", geometry: { width: 322, height: 50 }, own_visible_fill: true, visible_nested_graphics: true, parent_fill_included: false, presentation: { clips_content: false, corner_radius: 55 }, export_settings: [] },
