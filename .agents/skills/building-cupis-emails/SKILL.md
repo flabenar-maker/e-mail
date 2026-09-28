@@ -33,10 +33,12 @@ This preparation reads identity and routing data only; it does not authorize ass
 
 The resolver and handoff read execution files from repoRoot; they do not automatically fetch the pinned cloud commit. Before invoking either, verify that those files match the pinned cloud commit. Candidate tests use an authorized disposable exact-SHA verification snapshot, never a local authoring copy. If a matching execution environment cannot be verified, stop and report it; do not use an arbitrary checkout. This is an execution prerequisite, not a claim of an implemented runtime SHA gate.
 
-The command requires the chosen route and mode:
+Use an available package runner for the same repository script. Prefer `npm`; if `npm` is unavailable but `pnpm` is available, use `pnpm`. If neither runner is available, stop and report the missing execution prerequisite. The command requires the chosen route and mode:
 
 ```text
 npm run resolve:skill-context -- --route ROUTE --mode MODE
+# Or, when npm is unavailable:
+pnpm run resolve:skill-context --route ROUTE --mode MODE
 ```
 
 Replace ROUTE and MODE with the classified values. For design-dependent work append `--viewport both` and repeat `--component ID` for each confirmed stable component ID, including the root. For other modes, component and viewport arguments must match the selected profile and available evidence.
