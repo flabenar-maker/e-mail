@@ -569,6 +569,13 @@ function safeSourceFolder(folder) {
   return typeof folder === "string" && /^[a-z0-9]+(?:[-_][a-z0-9]+)*_[0-9]+\.[0-9]+$/u.test(folder);
 }
 
+async function assertNoLinkedDescendants(directory) {
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    if (entry.isSymbolicLink()) throw failure("version-path-unsafe");
+    if (entry.isDirectory()) await assertNoLinkedDescendants(join(directory, entry.name));
+  }
+}
+
 function assertOutputContract(resolution) {
   for (const output of ["version-folder", "email-html", "images-directory"]) {
     if (!resolution.allowedOutputs.includes(output)) throw failure("version-path-unsafe");
@@ -596,6 +603,7 @@ export async function createEmailVersion({ resolution, workspaceRoot, outputPare
       if (!inside(physicalSource, emailFile) || !inside(physicalSource, imagesDirectory)) {
         throw failure("version-path-unsafe");
       }
+      await assertNoLinkedDescendants(imagesDirectory);
     }
   } catch {
     throw failure("version-path-unsafe");
