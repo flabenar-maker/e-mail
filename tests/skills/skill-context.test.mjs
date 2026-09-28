@@ -237,10 +237,11 @@ test("canonical maintenance routes resolve one paused shadow context", async () 
   ]);
 });
 
-test("canonical repository keeps every route paused until activation", async () => {
+test("canonical repository activates only email routes while non-email routes remain paused", async () => {
   const manifest = await loadSystemManifest({ repoRoot });
-  assert.equal(manifest.structured_workflows.status, "shadow");
+  assert.equal(manifest.structured_workflows.status, "partial");
   for (const route of manifest.routes) {
+    const email = route.id.startsWith("email-");
     const profile = manifest.bundle_profiles.find(({ id }) => id === route.bundle_profile_id);
     const bundle = profile.generated_bundle;
     const result = await resolveSkillContext({
@@ -250,16 +251,19 @@ test("canonical repository keeps every route paused until activation", async () 
       viewports: bundle.viewport_selection === "none" ? [] : ["mobile", "desktop"],
       foundationIds: bundle.required_foundation_ids,
     });
-    assert.equal(route.workflow_source_id, "workflow-paused", route.id);
-    assert.equal(profile.generated_bundle.status, "structured-shadow", route.id);
-    assert.equal(result.status, "paused", route.id);
-    assert.deepEqual(result.blockers.map(({ code }) => code), ["SKILL_ROUTE_PAUSED"], route.id);
+    assert.equal(route.workflow_source_id, email ? "workflow-email-build" : "workflow-paused", route.id);
+    assert.equal(profile.generated_bundle.status, email ? "structured-active" : "structured-shadow", route.id);
+    assert.equal(result.status, email ? "resolved" : "paused", route.id);
+    assert.deepEqual(result.blockers.map(({ code }) => code), email ? [] : ["SKILL_ROUTE_PAUSED"], route.id);
   }
 });
 
 test("explicit email activation still blocks when typography status is absent", async (t) => {
   const fixture = await systemFixture(t);
   const manifest = await loadSystemManifest({ repoRoot: fixture.root });
+  await writeStatusFixture(fixture.root, "data/foundations/typography.yaml", (document) => {
+    document.foundation.status = "shadow";
+  });
   await activateEmailRoutesExceptTypography(fixture.root, manifest);
   await writeManifest(fixture.root, manifest);
   const result = await resolveSkillContext({ repoRoot: fixture.root, ...activeEmailRequest("email-new-build") });
