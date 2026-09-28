@@ -89,6 +89,7 @@
 - [ ] **Step 3: Внести минимальные entrypoint-правки.** Одна строка в `AGENTS.md` для CUPIS-запросов; README объясняет назначение трёх навыков без дублирования маршрутов; bootstrap использует manifest как каталог.
 - [ ] **Step 4: Проверить сценарии в чистом контексте.** Новый email, existing-email fix, read-only письмо, library/contract, migration status, новый компонент, неоднозначный запрос, смешанный запрос. Записать фактически выбранный skill/блокер в PR; если модель неверно выбирает, исправлять только метаданные/границу router, не технические правила.
 - [ ] **Step 5: Запустить targeted tests и Windows bootstrap; commit.** `node --test tests/skills/*.test.mjs tests/foundation/system-manifest.test.mjs`; `pwsh -NoProfile -File bootstrap/verify.ps1` (или Windows PowerShell). `docs: expose CUPIS task router across Codex entrypoints`.
+- [ ] **Step 6: Закрыть пакет A отдельным gate.** На точном финальном cloud SHA пакета A прогнать локальные `npm run verify`, `npm run generate:check` и bootstrap, открыть draft PR A и получить отдельное разрешение на merge. Пакет B начинается только после слияния A; если Web-среда недоступна, завершённый A остаётся полезным самостоятельным результатом.
 
 ### Task 4: Реальный capability-gate для Codex Web (начало пакета B)
 
