@@ -675,7 +675,7 @@ test("new-build handoff blocks rendering without full source comparison evidence
 test("new-build handoff renders when complete source observations match the model", async (t) => {
   const root = await mkdtemp(join(tmpdir(), "cupis-source-positive-"));
   t.after(() => rm(root, { recursive: true, force: true }));
-  const source = await fixture(root, ["block-cards-images"]);
+  const source = await fixture(root, ["block-content"]);
   const evidence = sourceEvidenceFor(source.model, source.assetEvidence);
   let invocations = 0;
   const result = await executeEmailBuildHandoff({
@@ -696,7 +696,7 @@ test("new-build handoff renders when complete source observations match the mode
 test("new-build handoff rejects selected-subtree proof and a passed claim without readings", async (t) => {
   const root = await mkdtemp(join(tmpdir(), "cupis-source-scope-"));
   t.after(() => rm(root, { recursive: true, force: true }));
-  const source = await fixture(root, ["block-cards-images"]);
+  const source = await fixture(root, ["block-content"]);
   const selectedEvidence = sourceEvidenceFor(source.model, source.assetEvidence, { scope: "selected-subtree" });
   const selected = await executeEmailBuildHandoff({
     ...source,
