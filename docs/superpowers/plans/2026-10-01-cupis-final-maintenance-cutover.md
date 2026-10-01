@@ -53,6 +53,26 @@
 - [ ] Оформить F7 decision и exact producer/schema/manifest/output/test map для generated workflow checkpoints до начала P3. Генератор ещё не реализуется.
 - [ ] После closure выполнить полный локальный gate точного финального SHA и независимое review перед отдельно разрешённым merge кода. P3 и cutover не начинать по факту одного успешного сбора.
 
+### Согласованный bounded repair P2 — единицы и standalone icons (02.10.2026)
+
+Пользователь разрешил исправить механизм сверки единиц и обработки отдельных иконок, сохранив дизайн и значения контрактов. Base: `1bef4ac90b148801e0c9ffcaeb58f63ea9debd8d`; main: `618d124df0a664c84d23a724ba50ef2b324e9b97`. Область записи: `scripts/lib/figma-contract-facts.mjs`, отдельный regression-файл `tests/foundation/figma-contract-facts-units-icons.test.mjs`, этот журнал и roadmap. Source-only topology не означает подтверждение artwork или достаточность links.
+
+**Точный контракт ремонта:**
+- `measure.unit` подтверждается только через успешный owned mapping числового sibling. Для `dimensions.unit` нужны оба успешных mappings width/height одного node/variant. Значение, provenance, identity-transform, capture profile и Figma identity должны совпасть; конфликтующие mappings не являются доказательством.
+- Для reference dimensions используется явный `reference_dimensions.unit`; для line-height/letter-spacing — явные `PIXELS`/`PERCENT`. Неявные px допустимы только для закрытого списка полей существующего capture v1: corner radius/четыре угла, item spacing, четыре padding, font size, minimum width, stroke weight. Это семантика конкретных Figma API/capture полей, не догадка по числу или суффиксу. Неизвестная, отсутствующая или несовпавшая единица остаётся diagnostic.
+- Source-only icon допускает общий источник для обоих contract roots только при role `icon`, kind `component`, обоих `figma-source-only` roots, пустом declared variants, одном live COMPONENT с пустыми axes и совпадающими owner/root IDs. Это не новый export boundary; отсутствующие links, uncovered leaves и capture errors сохраняются.
+- Публичный формат отчёта, canonical facts/links, alias deduplication, nested artwork policy, F2 widths, PR #109, Figma, HTML, письма, routes и skills не меняются. P2 остаётся незавершённым; merge и P3 не разрешены.
+
+**Evidence и рабочая последовательность:**
+- Прочитан один explicit write/both bundle всех 61 owners; `SKILL_ROUTE_PAUSED` сохранён, работа разрешена только этой migration-областью. Canonical taxonomy читалась из raw records, не из resolver projection, которая не содержит evidence links.
+- Новый read-only Figma metadata probe `1009:2505` подтвердил standalone `Icon/Bank-Card-2-Line` 62×62 с vector child. Полный repeat comparison использует уже сохранённые MCP packets 02.10, а не выдаётся за новый полный Figma audit.
+- [ ] RED: additive regression tests в облачной ветке, локальный прогон точного SHA через GPT-5.6 Terra Medium.
+- [ ] GREEN: bounded auditor implementation, targeted regressions и сравнение всех 61 сохранённых packets; реальные mismatches/missing links/capture errors не должны исчезнуть.
+- [ ] Независимое review и итоговые результаты в этом журнале/roadmap.
+- [ ] Полный локальный gate точного финального SHA; без GitHub Actions/Checks, без merge.
+
+**Execution ruling:** cloud-only repo остаётся источником и местом изменений; disposable snapshots используются только для запуска. Этот журнал заменяет local-worktree ledger для согласованной области. Тесты и review делегированы Terra Medium по AGENTS; координатор не читает полные test logs.
+
 ### Разбор причин P2 — 02.10.2026
 
 **Граница продолжения:** read-only разбор на candidate `23c02336e578a38730ab57ebaf0f8faf2763e67f`, без нового MCP-сбора и без ремонта кода/контрактов. Использованы полные packets и локальные audits предыдущего продолжения, а не новое доказательство состояния Figma на эту минуту. Canonical capture/auditor/component blobs кандидата не изменились относительно comparison SHA `51da5756777acacbd04ea1380568c93577456380`. Результат этого продолжения — классификация причин и предложение точечной области ремонта, не приёмка P2.
