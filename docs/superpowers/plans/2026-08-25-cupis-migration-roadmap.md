@@ -1,6 +1,6 @@
 # CUPIS Structured System Migration Roadmap
 
-Актуальность: 2026-09-28.
+Актуальность: 2026-10-01.
 
 ## Назначение
 
@@ -242,7 +242,7 @@ Manifest-driven разрешение source paths было выполнено н
 - [ ] Подтвердить реальную доступность Figma MCP, Node 24 и скачиваемого результата в Codex Web; при отсутствии обязательной возможности сообщать blocker.
 - [ ] Проверить локальную и веб-сборку, версионирование существующего письма и отсутствие регрессии действующего рендера. Все тесты — локально на точном cloud commit.
 
-[Согласованное решение](../specs/2026-09-28-cupis-codex-routing-web-delivery-design.md) и [implementation plan](2026-09-28-cupis-skill-router-web-delivery.md) подготовлены для review. План и документация не означают, что маршрутизатор или Web-выдача уже реализованы. Этап 11 не начат.
+[Решение](../specs/2026-09-28-cupis-codex-routing-web-delivery-design.md) и [implementation plan](2026-09-28-cupis-skill-router-web-delivery.md) одобрены. Пакет A реализован в candidate branch `codex/cupis-task-router` поверх plan PR #103; пока он не слит, отметки этого этапа остаются открытыми. Локальные проверки и независимые behavior-probes записываются в plan/implementation PR на точном SHA. Пакеты B/C (реальная Codex Web capability-проверка, ZIP-выдача и её приёмка) не начаты и зависят от слияния A. Наличие repo-scoped навыка не означает его автоматическую загрузку в произвольном чате. Этап 11 не начат.
 
 ### 11. Стандарт и workflow разработки новых блоков
 
