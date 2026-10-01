@@ -20,9 +20,9 @@
 
 После принятого пакета 5, до отдельно разрешённого пакета 6, предусмотрен [follow-up карточных блоков, draft PR #109](https://github.com/flabenar-maker/e-mail/pull/109). Полная актуальная очередь, ссылки на его план и границы интеграции документов находятся в [roadmap](2026-08-25-cupis-migration-roadmap.md#единый-актуальный-список). Организация папки plans и удаление ручного checkpoint не являются выполнением пакета 6.
 
-### Текущая точка возврата P2 — 02.10.2026, 01:31 МСК
+### Текущая точка возврата P2 — 02.10.2026
 
-**Сбор завершён: 61/61 полных packets; пакет 2 НЕ принят.** В этом продолжении получены все оставшиеся 24, затем выполнен локальный аудит всех 61. Нового quota error не было. Повторное чтение прежней очереди из 24 не является следующим шагом. Ниже сохранена историческая остановка, а не текущая команда повторить сбор.
+**Сбор завершён: 61/61 полных packets; пакет 2 НЕ принят.** Дополнительный read-only разбор на candidate `23c02336e578a38730ab57ebaf0f8faf2763e67f` классифицировал причины diagnostics и определил точечные предложения ремонта; детали в разделе «Разбор причин P2» ниже. Этот разбор не менял code/contracts/Figma и не заменяет unresolved semantic checks. В этом продолжении получены все оставшиеся 24, затем выполнен локальный аудит всех 61. Нового quota error не было. Повторное чтение прежней очереди из 24 не является следующим шагом. Ниже сохранена историческая остановка, а не текущая команда повторить сбор.
 
 Основание: `main@618d124df0a664c84d23a724ba50ef2b324e9b97`; comparison candidate `51da5756777acacbd04ea1380568c93577456380`, оба его родителя — прежний PR #110 и слитая организация plans из PR #111. Пять P2 repair/test/generated blobs сохранены побайтово. Использован один candidate bundle `library-maintenance / read-only / both`: 61 record, четыре foundations, пять static sources; `paused / SKILL_ROUTE_PAUSED` разрешает только область этого миграционного плана, не production maintenance.
 
@@ -38,19 +38,82 @@
 | Локальная целостность кандидата | `validate-system`, `generate-docs --check`, targeted capture/fact/CLI/generated-doc tests: 46/46 PASS; main-docs organization и прежние пять P2 blobs сохранены |
 | Граница результата | Нет новой HTML-сборки/HTML visual regression или real-client gate; нет Figma/contract/foundation/skill/route/letter mutations; PR остаётся draft, не слит |
 
-**Coverage — не список визуальных дефектов.** Audit увидел 38 300 source facts / 15 046 mapped и 19 956 contract facts / 15 115 mapped. Открыты 23 254 `FIGMA_FACT_UNCOVERED`, 4 863 `CONTRACT_FACT_UNMAPPED`, 20 `FIGMA_SOURCE_PATH_MISSING` (все у deferred `block-icon-list`, обычных owners — 0), 18 unsupported diagnostics, 17 evidence-links-not-contract и topology diagnostics. Raw capture содержит 207 diagnostics: 160 `ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW` и 47 `MIXED_VALUE`. Это требует классификации значимости и exact mapping; blanket exclusions или переутверждения контрактов ради GREEN нет. Не использовать несуществующий diagnostic `SOURCE_PATH_MISSING` и не вычислять unmapped как разность агрегатов: raw fact paths и Set успешных mapping targets — разные множества.
+**Coverage — не список визуальных дефектов.** Audit увидел 38 300 source facts / 15 046 mapped и 19 956 contract facts / 15 115 mapped. Открыты 23 254 `FIGMA_FACT_UNCOVERED`, 4 863 `CONTRACT_FACT_UNMAPPED`, 20 `FIGMA_SOURCE_PATH_MISSING` (все у deferred `block-icon-list`, обычных owners — 0), 18 unsupported diagnostics, 17 evidence-links-not-contract и topology diagnostics. Raw capture содержит 207 diagnostics: 160 `ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW` и 47 `MIXED_VALUE`. Это требует классификации значимости и exact mapping; blanket exclusions или переутверждения контрактов ради GREEN нет. Не использовать несуществующий diagnostic `SOURCE_PATH_MISSING` и не вычислять unmapped как разность агрегатов: raw atomic fact paths и Set разрешившихся mapping targets — разные множества; target попадает в Set до проверки provenance и совпадения значения.
 
 **P2-F2 — уточнённая причина без автоматической правки.** В Desktop `text-details` 459:27425 — FILL 251 вместо reference 252; `status-container` 459:27428 и `status` 459:29356 — HUG 117 вместо 116. Сумма строки: 72 + 24 + 251 + 24 + 117 = 488. В Mobile `status` 459:29376 — HUG 94 вместо 93; x=79 в строке 252 подтверждает центрирование. Это сильное evidence устаревших измеренных ширин, зависящих от содержимого, а не доказательство поломки HTML. Причина изменения метрик текста во времени отдельно не установлена. Числа и правила адаптивности не переписываются; согласовать судьбу четырёх reference facts и затем выполнить отдельный scoped correction/read-back.
 
 **Что foundation-сравнение не доказывает:** не проверены все text-style case/decoration/paragraph/description/variation settings, все места применения component bindings, asset/naming semantics и визуальный HTML output. Совпадение definition не заменяет сравнение каждого назначения в component contract. Наличие полей исправленного capture (609 text_geometry/font_weight/figma_style_name occurrences, 2 568 minimum_width_px, 53 gradient_stops) доказывает получение полей, но не их полное semantic mapping.
 
 **Следующие действия, всё ещё в P2:**
-- [ ] Разобрать coverage/mapping/topology/unsupported diagnostics по конкретному owner/node/path: implementation-significant факт, производное измерение, служебное поле или отложенный drift #109. Не менять auditor/contract автоматически.
+- [x] Разделить diagnostics по подтверждённым причинам: units, source-only topology, missing owned links, nested artwork boundaries, derived behavior и deferred #109; записать точные примеры и карту дальнейшего ремонта.
+- [ ] Согласовать область ремонта и закрыть каждый значимый owner/node/path: первичная группировка всех diagnostics не доказывает достаточность mapping и не разрешает blanket exclusions. Auditor/contract автоматически не менять.
 - [ ] Принять решение по четырём F2 reference widths; HTML/layout strategy не менять по одному числовому снимку.
 - [ ] Дозакрыть нужное foundation/binding и visual evidence для выбранных значимых обязанностей.
 - [ ] Завершить сопоставление архивных обязательств с текущими владельцами; P2-F3 recorded association projection уже исправлен, но не доказывает live usage.
 - [ ] Оформить F7 decision и exact producer/schema/manifest/output/test map для generated workflow checkpoints до начала P3. Генератор ещё не реализуется.
 - [ ] После closure выполнить полный локальный gate точного финального SHA и независимое review перед отдельно разрешённым merge кода. P3 и cutover не начинать по факту одного успешного сбора.
+
+### Разбор причин P2 — 02.10.2026
+
+**Граница продолжения:** read-only разбор на candidate `23c02336e578a38730ab57ebaf0f8faf2763e67f`, без нового MCP-сбора и без ремонта кода/контрактов. Использованы полные packets и локальные audits предыдущего продолжения, а не новое доказательство состояния Figma на эту минуту. Canonical capture/auditor/component blobs кандидата не изменились относительно comparison SHA `51da5756777acacbd04ea1380568c93577456380`. Результат этого продолжения — классификация причин и предложение точечной области ремонта, не приёмка P2.
+
+**Resolver:** принятый candidate bundle `library-maintenance / read-only / both` содержит явно выбранные 61 component IDs, четыре `foundation_definitions` и пять static sources; результат `paused / SKILL_ROUTE_PAUSED`. Первый диагностический запуск без повторяемых `--component` дал пустой selection: это ошибка аргументов, а не поведение paused-policy. Он не использован как доказательство отсутствия компонентов. Paused-route сохраняет явный selection и не разрешает production maintenance.
+
+#### Что именно не закрыто
+
+| Группа | Фактическая причина | Что исправлять и что сохранять |
+| --- | --- | --- |
+| 4 828 из 4 863 `CONTRACT_FACT_UNMAPPED` | Все эти paths заканчиваются на `/value/unit`. В источнике есть число/размер, в typed value контракта — отдельная единица; auditor перечисляет обе части, links часто покрывают только число | Сначала определить проверяемую семантику единиц для конкретных capture paths. Не исключать все `unit` и не признавать число проверенным без доказательства px/percent. Значения размеров и шрифтов не менять |
+| Оставшиеся 35 unmapped paths | 20 у deferred `block-icon-list`, остальные 15 требуют раздельного решения по asset/reference/derived фактам | Подробности ниже; это не 35 дополнительных визуальных ошибок |
+| 13 standalone icons | Identity role — `icon`, оба корня — `figma-source-only`, реальный component не имеет Viewport axis. Код допускает viewportless только для role `asset`, поэтому выдаёт отсутствующие Mobile/Desktop, unknown/undeclared variant | Нужен отдельный проверяемый путь для source-only dependencies, а не переименование role в asset и не изготовление фиктивных вариантов. Связи с экспортирующими родителями и свойства artwork остаются предметом проверки |
+| 17 owners без `figma_fact_links` | Все 13 icons, `asset-header-logo-4x`, `asset-header-logo-compact-4x`, `asset-product-logo`, `email-template` действительно не имеют owned evidence links. Это не результат потери поля capture | Для source-only artwork определить собственную границу доказательства; для корня письма и применимых logo facts добавить точные links/provenance только после согласования области. Пустой список links не закрывает проверку |
+| 18 `FIGMA_CAPTURE_UNSUPPORTED` reports | По предыдущим audits это absolute-child diagnostics: 13 icons и `block-content`, `block-bullet-list`, `block-steps`, `email-header`, deferred `block-icon-cards` | Разделить экспортируемый artwork, внутренности INSTANCE и настоящий HTML layout. Текущий capture не снимает относительные x/y. Нельзя снимать blocker для любого `layoutMode=NONE` или всех INSTANCE descendants |
+| 23 254 `FIGMA_FACT_UNCOVERED` | Auditor превращает каждое оставшееся leaf-поле capture в обязанность mapping, включая новые значимые поля, дубли и неиспользуемые настройки | Требуется узкая классификация по field/node role и объяснение каждого исключения. Новые font weight/alignment/bindings не исключать как «служебные» |
+| 28 value mismatches и 20 missing source paths | 4 F2 reference widths + 24 mismatches и все 20 missing paths у отложенных owners #109 | F2 решается отдельно; #109 не переносится в P2 под видом починки аудита |
+
+Распределение `CONTRACT_FACT_UNMAPPED`: у 15 owners их нет; у 40 — только units (4 314); у шести — units и другие (549 = 514 + 35). Шесть owners: `asset-header-logo-4x` 9 (2 units + 7 других), `asset-header-logo-compact-4x` 4 (1 + 3), `banner-hero` 92 (91 + 1), `banner-secondary` 93 (91 + 2), `block-icon-list` 326 (306 + 20), `button-primary` 25 (23 + 2). Нулевой unmapped счётчик не означает достаточность record: у `email-template` вообще нет atomic facts, но есть 167 uncovered source facts.
+
+**Оставшиеся 15 non-unit facts вне #109:**
+
+| Owner | Факты без прямого mapping | Почему нельзя исправить простой подстановкой из capture |
+| --- | --- | --- |
+| `asset-header-logo-4x` | 7 leaves: `#F3F3F5`, asset reference `header-logo`, `@4x`, Desktop `322×50`, Mobile `212×33` | В facts отсутствует доказательная связь с узлом. Это параметры назначения/экспорта вместе с геометрией, а не семь одинаковых source properties |
+| `asset-header-logo-compact-4x` | 3 leaves: `212×33`, `@4x` | Размер и export suffix требуют собственных exact источников и links; нельзя брать их из похожего логотипа |
+| `banner-hero` | `height-behavior: auto` | Provenance ссылается на Description `337:4460`; raw HUG sizing не является полем с ключевым словом `auto` |
+| `banner-secondary` | `content-driven-cover`, `auto` | Это поведение HTML/изображения из Description `337:4870`, а не прямое значение одного Figma-поля; требуется явное доказательство интерпретации |
+| `button-primary` | Два факта CSS angle `25` | Provenance — Description `337:4713`; capture содержит gradient transform/stops, но не CSS angle. Число 25 не менять; отдельно определить проверяемый перевод или авторизованное нормативное основание |
+
+Для этих случаев не создавать фиктивный `figma-literal`. Уже существующий `scripts/lib/derived-email-facts.mjs` подтверждает только восемь конкретных QR email-grid facts для `banner-app-download` через pinned capture blob и вычисления; он не подтверждает другие derived facts автоматически.
+
+**Почему обычные блоки получили unsupported:** точные примеры из сохранённых packets:
+
+| Owner | Node и имя | Причина |
+| --- | --- | --- |
+| `block-content` | `I1024:19304;1024:19279`, `feature-icon @4x`, INSTANCE | NONE + children; у родительского record нет собственного asset owner для этого вложенного artwork |
+| `block-bullet-list` | `I1024:19267;1024:19221`, `alert-icon @4x`, FRAME | NONE + children внутри вложенной структуры; не сопоставлен с export boundary родительского record |
+| `block-steps` | `I1024:19328;1024:19279`, `feature-icon @4x`, INSTANCE | Та же неподтверждённая граница вложенного artwork |
+| `email-header` | `I1008:1709;1008:1347`, `Asset/Product-Logo`, INSTANCE | Exact owner string `header-logo @4x` не разрешает этот узел как artwork boundary |
+
+Это аргумент в пользу проверки вложенных зависимостей и их export boundaries по подтверждённой identity/main-component связи. Само имя с `@4x` или тип INSTANCE не разрешают скрыть ошибку. До такой проверки нельзя считать layout подтверждённым, но эти diagnostics сами по себе не доказывают поломку HTML.
+
+**Проверенные примеры причин, не разрешения на исключение:**
+
+- `block-content`: `/contracts/mobile/root/facts/0/value` содержит dimensions `328 × 635 px`. Link из `/reference_dimensions/width` проверяет width, соседний `unit: px` остаётся unmapped. В этом случае сам capture также содержит `reference_dimensions.unit`; для gap/font fields единица задаётся capture/API-семантикой и требует отдельного строгого правила, а не той же автоматической подстановки.
+- `block-contact-support`, текстовые nodes `459:27586` (Desktop) и `459:27607` (Mobile): исправленный capture уже снимает `/text_style/font_weight` и `/text_style/figma_style_name`, но эти source paths не имеют semantic links. Нужно проверить существующего владельца факта и local overrides; имя стиля не заменяет фактическую типографику узла.
+- Capture намеренно сохраняет gradient alias `stops = gradient_stops` для совместимости v1. У `banner-app-download` эти массивы совпадают. Повтор поля можно дедуплицировать только после проверки равенства; несовпавший alias должен оставаться diagnostic. Это не разрешение исключать другие fills/gradients.
+- Export boundary уже существует в auditor: корень role `asset` или layer с exact `asset_contract.owner_layer_name`. Он не обходит внутренние vectors и не требует отдельного HTML-CSS mapping для их геометрии. Нельзя «внедрять» эту уже работающую функцию повторно.
+- `sourceFacts` не обходит детей INSTANCE, но capture-error обработка индексирует их и отдельно проверяет unsupported. Эти две границы различаются; отключение ошибок во всех дочерних узлах скрывало бы неподтверждённую семантику вложенных компонентов.
+
+**Счётчики:** `mapped_contract_fact_count` — число уникальных target paths, для которых найдены source и target, **до** проверки provenance/transform/value. `contract_fact_count` считает leaves atomic facts, тогда как mapping targets могут вести также в properties/variants/identity и другие допустимые поля. Это разные множества, не «проверено / всего» и не процент готовности. Аналогично source count не означает успешное сравнение значений. Изменение названий/формы CLI-отчёта — отдельный небольшой repair с tests, не средство уменьшить diagnostics.
+
+#### Предложенная последовательность ремонта — ещё не разрешение на запись
+
+1. **Механизм доказательства:** согласовать узкую область units, доказанных alias duplicates и source-only dependencies; затем RED/GREEN на `tests/foundation/figma-contract-facts.test.mjs`, при изменении публичного отчёта — `tests/foundation/figma-contract-facts-cli.test.mjs`. Возможные владельцы кода: `scripts/lib/figma-contract-facts.mjs`, `scripts/audit-figma-contract-facts.mjs`; capture менять только для показанного отсутствующего значимого поля. Уникальные значения и provenance не подгонять.
+2. **Canonical mappings:** после подтверждения модели единиц и source-only owner подготовить отдельный exact node/path → fact/link diff в `data/components/{shared,marketing,service}.yaml`. Только разрешённые links/provenance и недостающие значимые факты; существующие числа/цвета/поведение сохранить. Любое обнаруженное противоречие Figma остановить для решения пользователя. Generated docs пересобирать только от согласованного canonical diff.
+3. **Необычные факты:** отдельно решить подтверждение derived значений и unsupported layout, F2 reference widths; не превращать HUG/FILL измерение в фиксированную HTML-ширину. Для изменяемых записей повторить точечное MCP-чтение и нужное визуальное evidence.
+4. Повторить affected audits; только после объяснения оставшихся обязанностей завершать foundation/binding/visual evidence и F7. Полный local suite — один раз на финальном code/contract SHA перед отдельным разрешением merge. Пакет 3 не начат.
+
+**Что изменено этим продолжением:** только этот журнал и текущая точка roadmap. Ни один диагностический код не подавлен, контракт не переутверждён; PR #109, Figma, renderer, письма, routes, schemas, skills и активные инструкции сохранены. Scope следующих исправлений сначала согласуется по этой карте.
 
 ### Журнал продолжения P2 — 02.10.2026, 01:15–01:31 МСК
 
