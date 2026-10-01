@@ -426,7 +426,7 @@ test("snapshot-only, detached, and empty style IDs do not become typography cons
   badge.contracts.mobile.root.facts.push({
     id: "detached-empty-style-id",
     value: { type: "string", value: "" },
-    provenance: { kind: "figma-literal", node_id: "snapshot-only" },
+    provenance: { kind: "figma-literal", node_id: "18:2942" },
   });
   const content = renderTypography(model);
   assert.doesNotMatch(content, /snapshot-only/u);
