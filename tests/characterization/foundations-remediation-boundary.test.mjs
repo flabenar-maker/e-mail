@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 import { readStrictYaml } from "../../scripts/lib/strict-yaml.mjs";
 
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
-const remediationPlanPath = "docs/superpowers/plans/2026-09-15-cupis-foundations-figma-verified-remediation.md";
+const remediationPlanPath = "docs/superpowers/plans/archive/2026-09-15-cupis-foundations-figma-verified-remediation.md";
 const roadmapPath = "docs/superpowers/plans/2026-08-25-cupis-migration-roadmap.md";
 
 async function exists(relativePath) {

@@ -1,5 +1,7 @@
 # CUPIS: заполнение модели письма и завершение Stage 10
 
+> **Архив завершённого этапа.** Этот документ сохраняет исходные решения, команды, пути, чекбоксы и промежуточные статусы; они не являются текущей очередью или разрешением выполнять старые шаги. Часть работ могла быть отменена или передана в последующие этапы. Актуальный порядок и открытые обязательства находятся в [едином roadmap](../2026-08-25-cupis-migration-roadmap.md).
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking. Routine local tests and visual regression must be delegated to `gpt-5.6-terra` with `medium` reasoning and bounded context.
 
 **Goal:** Собрать два предоставленных пользователем письма существующим renderer из проверенных данных конкретных Figma-инстансов, проверить версионное изменение и завершить Stage 10 без зависимости от истории чата.
@@ -8,7 +10,7 @@
 
 **Tech Stack:** Node.js 24, JSON Schema, YAML/JSON-compatible contracts/workflow, существующий resolver и renderer CLI, Figma MCP, локальная браузерная проверка.
 
-**Spec:** [master design](../specs/2026-08-24-cupis-structured-email-system-design.md), [HTML rendering design](../specs/2026-09-10-cupis-html-rendering-design.md). Уточнение границ заполняющего модель агента выполняется в пакете 1 до технических изменений.
+**Spec:** [master design](../../specs/2026-08-24-cupis-structured-email-system-design.md), [HTML rendering design](../../specs/2026-09-10-cupis-html-rendering-design.md). Уточнение границ заполняющего модель агента выполняется в пакете 1 до технических изменений.
 
 ## Текущий результат — 2026-09-28
 
@@ -147,7 +149,7 @@ Figma file key: `8zka5bHkcrJVK9I9dKjnhC`.
 
 **Результат пакета 2 — 2026-09-21:** реализован и проверен в candidate; не слит в main, Stage 10 остаётся незавершённым.
 
-- Добавлен [Core-стандарт заполнения модели](../../../core/email-model-assembly-standard.md). Он описывает pairing, root/nested/slot placement, точные content/property bindings, scope, visibility, связь assets и временную field-to-source трассировку; component facts и workflow sequence не дублирует.
+- Добавлен [Core-стандарт заполнения модели](../../../../core/email-model-assembly-standard.md). Он описывает pairing, root/nested/slot placement, точные content/property bindings, scope, visibility, связь assets и временную field-to-source трассировку; component facts и workflow sequence не дублирует.
 - Стандарт подключён через manifest и шесть design-related workflow шагов. Вместе с ним зарегистрирована и доставляется уже существующая `email-model-schema`: без формата исполнитель не получил бы всех входов из одного bundle. Содержимое схемы не изменялось. Технические/read-only шаги не получили Figma prerequisite; skill, runtime, component records и foundations сохранены.
 - Test-only RED: `994aeacb6803a62e9527e3bf90b194d95bac1dea`; проверка выявила отсутствие нового source в фактическом bundle. Source/integration commit: `91934b6fd24150b10a5ce59d1b6102f14a7ee706`.
 - Локальные проверки Terra на exact source SHA: resolver assertions 2/2, thin-skill boundary 3/3, relevant manifest/workflow tests 3/3; system validation и generated-docs check успешны. Проверено, что оба source приходят по одному разу с содержимым соответствующего файла. Full suite/Actions не запускались.

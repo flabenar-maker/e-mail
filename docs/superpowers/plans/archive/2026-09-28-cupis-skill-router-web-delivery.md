@@ -1,5 +1,7 @@
 # CUPIS Local Task Router Closure Implementation Plan
 
+> **Архив завершённого этапа.** Этот документ сохраняет исходные решения, команды, пути, чекбоксы и промежуточные статусы; они не являются текущей очередью или разрешением выполнять старые шаги. Часть работ могла быть отменена или передана в последующие этапы. Актуальный порядок и открытые обязательства находятся в [едином roadmap](../2026-08-25-cupis-migration-roadmap.md).
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Закрыть локальный маршрутизатор и привести глобальный маршрут к двум специализациям и финальному cutover, без Web-выдачи или проектирования новых блоков.
@@ -8,7 +10,7 @@
 
 **Tech Stack:** Repo skills, Markdown, manifest-driven resolver, Node.js 24, локальный Node test runner, PowerShell bootstrap, GitHub CLI.
 
-**Spec:** [Локальная маршрутизация](../specs/2026-09-28-cupis-codex-routing-web-delivery-design.md), [master-spec](../specs/2026-08-24-cupis-structured-email-system-design.md), [roadmap](2026-08-25-cupis-migration-roadmap.md).
+**Spec:** [Локальная маршрутизация](../../specs/2026-09-28-cupis-codex-routing-web-delivery-design.md), [master-spec](../../specs/2026-08-24-cupis-structured-email-system-design.md), [roadmap](../2026-08-25-cupis-migration-roadmap.md).
 
 ## Global Constraints
 
@@ -80,7 +82,7 @@ Task 1 выполнен и слит через [PR #105](https://github.com/flab
 - Targeted gate на `bc7040adf3ed99eaef51ea63cb5e9e83cf08b716`: 10/10 Node boundary tests, validation, generate:check, Windows bootstrap и bootstrap contract PASS. Это результат skill-only коммита, не финального пакета с новым планом; final verification записывается в PR #106 на его точном head.
 - **Ruling:** cloud-only требование пользователя исключает локальную authoring-worktree/ledger. Изменения делаются cloud branch/PR, журнал — здесь и в PR, exact-SHA snapshot используется лишь для исполнения; это сохраняет облачное владение источником.
 - PR #106 слит отдельным разрешением в `09537effc89daadacaed1d05497a1e75beb18152`; tree `a133f5453a7bc3d7aa05ce6bf0aa645391922a73` совпадает с проверенным head `c1ad82d32770524b2bb2d6ff9f85df71c00620c8` (708/708, validator, generated и Windows gates PASS). Тот же пользовательский шаг разрешил обновить локальный router; это не разрешение Stage 11.
-- [План финального cutover](2026-10-01-cupis-final-maintenance-cutover.md) подготовлен по master-spec, reviewed и слит в PR #106. Его пакеты ещё не выполнялись.
+- [План финального cutover](../2026-10-01-cupis-final-maintenance-cutover.md) подготовлен по master-spec, reviewed и слит в PR #106. Его пакеты ещё не выполнялись.
 - Post-install на exact `09537effc89daadacaed1d05497a1e75beb18152`: installed router `SKILL.md` — 2734 B, blob `79d64bdc465489742c67138f5f7ff13655cb512e`, точно совпадает с canonical source. Старая копия 2771 B / `d3c804b18a0c8b86b16953a5a763753a5fa4255c` побайтово сохранена вне discovery root; два specialty skills и config unchanged. Текущий каталог содержит все три навыка, frontmatter и реальные local files проверены. Это доказательство файлов/catalog, не заявление об автоматическом триггере в том же ходе; уже выполненные cold-context probes относятся к тому же canonical router blob.
 - Local post-install gates PASS: validation, generate:check, 10/10 router/email/maintenance boundary tests, Windows bootstrap и contract. Fresh `migration-progress/read-only` — `paused/SKILL_ROUTE_PAUSED`; пять maintenance routes paused и два email routes active. Full 708 не повторён на неизменном дереве. Task 2 фактически завершён; статусная публикация не начинает пакет 1 или cutover.
 
