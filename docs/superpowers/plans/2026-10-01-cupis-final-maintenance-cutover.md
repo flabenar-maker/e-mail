@@ -352,7 +352,7 @@ Foundation evidence проверен через существующий `compar
 
 Это reference geometry узлов с зависимостью от текста/доступной ширины, а не доказательство необходимости задать фиксированную ширину в HTML. Повторное чтение исключает разовый испорченный transport, но не устанавливает причину изменения метрики. Не округлять и не менять числа автоматически. После сверки текстового содержимого, font metrics и роли reference dimensions отдельно решить, обновляется ли факт снимка или требуется уточнить его трактовку; дизайн и responsive behavior сохраняются.
 
-**P2-F3 — карта потребителей типографики неполна (blocker impact analysis).** `docs/generated/typography-registry.md` выводит `Consumers: none` у всех 15 стилей. `typographyConsumers` в `scripts/lib/generated-docs.mjs` учитывает только collected typed foundation references; таких typography references в текущих records нет. При этом в component source snapshots и `figma_fact_links` есть `figma_style_id`: например, raw exact-SHA `marketing.yaml` содержит 309 вхождений поля/пути; Hero Desktop nodes `230:3637` и `230:3644` также подтверждены live как Body/Large и Action. Наличие snapshot ID **не превращает его автоматически в authoritative typed consumer link**. Поэтому «none» нельзя использовать для удаления стиля или оценки отсутствия влияния.
+**P2-F3 — карта потребителей типографики неполна (blocker impact analysis).** `docs/generated/typography-registry.md` выводит `Consumers: none` у всех 15 стилей. `typographyConsumers` в `scripts/lib/generated-docs.mjs` учитывает только collected typed foundation references; таких typography references в текущих records нет. При этом в component source snapshots и `figma_fact_links` есть `figma_style_id`: например, raw exact-SHA `marketing.yaml` содержит 309 вхождений поля/пути. Уточнение при последующей проверке: Hero Desktop node `230:3637` соответствует Desktop/Display; прежний пример Body/Large для этого узла был неточным. Семантические atomic facts и их owned links дополнительно разобраны в продолжении журнала ниже. Наличие snapshot ID **не превращает его автоматически в authoritative typed consumer link**. Поэтому «none» нельзя использовать для удаления стиля или оценки отсутствия влияния.
 
 Это gap связки данных и generated projection, а не доказанная ошибка шрифта в HTML. До реализации нужно определить и review-нуть авторитетную связь style → component и способ подтверждения её свежими live facts. Затем RED-test воспроизводит потерянный usage на current-record/live-evidence case; GREEN требует согласованную модель и корректную generated карту. Не назначать заранее nonempty consumer старому snapshot как нормативу, не копировать архивные списки вручную и не угадывать стиль по размеру. Изменение модели/контрактов, если оно понадобится, требует отдельной области; при удалении стиля всё равно необходимо доказательство отсутствия фактического использования.
 
@@ -389,3 +389,44 @@ Foundation evidence проверен через существующий `compar
 5. Только после review этих gates возвращаться к пакетам 3–6. Ни один route не включён; PR #109 остаётся отложенным и не подмешивается.
 
 Этот PR — только документация результатов. Для его финального cloud SHA выполняются scoped local validation/generated checks, разрешённый diff и независимое review; SHA и результаты фиксируются в PR body, без self-referential commit в документе. Полный code suite/HTML regeneration и GitHub Actions не запускаются. Merge не выполняется без отдельной команды.
+
+### 2026-10-01 — Пакет 2: расширенная статическая проверка, MCP-сверка приостановлена
+
+Пользователь разрешил продолжить ремонт P2 и проверить остальные компоненты, не включая ранее отложенные изменения карточек. Main повторно закреплён на `6c0bf7d0d3b1ca7909b692541883d2b0e9788709`; PR #109 остаётся отдельным draft. В этом продолжении изменён только журнал: production code, component/foundation values, Figma, письма и ручной context не менялись.
+
+**Граница исключений.** Отложенные изменения `block-cards-images`, `block-icon-cards`, `block-icon-list` и затронутых child owners `card-image`, `card-icon` не классифицируются как неожиданное расхождение. Их raw records не удалены из инвентаризации и не объявлены прошедшими свежую сверку. Общие зависимости, в том числе `button-secondary`, не исключаются целиком. Реальное отделение изменённых полей от остальных требует живого чтения; статический анализ ниже его не заменяет.
+
+**Свежий MCP недоступен.** Два read-only `use_figma` запроса к странице `5:6` завершились transport send error до получения данных. Поэтому на этом продолжении нет нового Figma evidence ни для одного компонента. Пять прежних packets остаются доказательством только ранее записанной выборки и времени. Проверку остальных компонентов по текущей Figma, локальных текстовых overrides, variable bindings и причин четырёх width differences не считать выполненной.
+
+#### Статическая совместимость по всей зарегистрированной библиотеке
+
+Terra Medium проверила точный canonical-byte архив указанного main: **61 record** (shared 17, marketing 26, service 18), **15 135 figma_fact_links**. Это проверка формы кода capture и путей mapping, не сравнение живых значений.
+
+| Mapping path, который capture v1 не выдаёт в ожидаемой форме | Links | Records | Причина |
+| --- | ---: | ---: | --- |
+| `/text_geometry/*` | 728 | 36 | Resize/alignment размещены в `text_style`, а links ожидают отдельный `text_geometry` |
+| `/text_style/font_weight` | 352 | 36 | Capture не снимает числовой font weight |
+| `/text_style/figma_style_name` | 348 | 34 | Capture не получает имя связанного стиля |
+| `/minimum_width_px` | 8 | 8 | Capture не снимает minWidth |
+| `/fills/*/stops/*/color` | 6 | 1 | Capture выдаёт `gradient_stops`, а links ожидают `stops` |
+
+Итого **1 442 заведомых несовпадения формы источника и mapping**. Это не 1 442 дефекта дизайна или неправильных числовых значения. Остальные 13 693 links лишь совместимы с формой capture: наличие нужного поля на конкретном узле и его значение ещё должны быть проверены через MCP. Counts records между строками пересекаются и не суммируются.
+
+В статических counts сохранены пять связанных с PR #109 records: Cards-Images — 340 links / 16 gaps, Icon-Cards — 364 / 16, Icon-List — 807 / 65, Card/Image — 186 / 24, Card/Icon — 187 / 24. Здесь gaps означают только несовместимость capture-path, не оценку отложенного дизайна.
+
+Полный локальный diagnostic inventory: `C:/Users/flabe/AppData/Local/Temp/codex-package2-6c0bf7/evidence/package2-capture-coverage-inventory.json`. В нём сохраняются точные owners и paths; файл временный, не runtime source.
+
+#### Уточнение P2-F3: связь стилей уже есть в semantic facts
+
+Во всех records найдены **364** links с source path `/text_style/figma_style_id`. Каждый указывает на atomic fact `figma-style-id` внутри `contracts`, с `value.type: string`, `figma-literal` provenance и совпадающим node ID. Все 364 значения разрешаются по точному ID в 15 canonical typography definitions. У 348 дополнительно есть согласованный sibling `figma-style-name`; отсутствие такого sibling у остальных 16 не означает mismatch.
+
+Следовательно, сведения существуют не только в `source_variants`: версия P2-F3, которая сводила их к snapshot evidence, была неполной. Генератор действительно пропускает существующую форму atomic facts, учитывая лишь typed `foundation-reference`. Исправление можно прорабатывать как bounded projection repair с проверкой точного style ID, ownership/provenance и viewport; необходимость новой модели контрактов этими данными не доказана. Сопоставление по имени, похожим размерам и архивному списку потребителей не допускается. Semantic association не является доказательством актуального live usage или отсутствия локальных font overrides; перед изменением/удалением стиля требуется MCP-сверка.
+
+Дополнительно исправлена неточность примера в журнале: Hero node `230:3637` соответствует **Desktop/Display**, `desktop-display`, Bold 32 px; точный style ID совпадает между semantic fact, canonical typography и прежним MCP packet. Ранее указанное Body/Large для этого узла неверно. Контракт и макет ради исправления текста отчёта не меняются.
+
+#### Маршрутизация и следующий gate
+
+Получен один расширенный `library-maintenance / read-only / both` bundle: все 61 component ID, четыре foundations, пять static sources. Resolver: exit 0, `paused`, `SKILL_ROUTE_PAUSED`. Это навигационный результат, не включение поддержки. Для byte-sensitive анализа использован canonical archive; EOL-normalized execution snapshot не принят за точный источник байтов.
+
+Новые code/test fixes и полная тестовая серия в этом продолжении не выполнялись. Этот docs-only candidate проходит отдельный scoped local gate; точный head и результаты фиксируются в PR body. Приемка пакета 2 остаётся открытой. После восстановления MCP: снять остальные факты, классифицировать расхождения, определить точный repair diff capture/mapping/projection и выполнить его локальные regression checks; не уменьшать coverage и не менять значения ради PASS. Пакет 3 и cutover не начаты, PR #109 не подмешивается.
+
