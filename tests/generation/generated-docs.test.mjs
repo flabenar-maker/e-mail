@@ -323,10 +323,11 @@ function typographyDefinition() {
 }
 
 async function typographyModel() {
-  return structuredClone(await loadGeneratedDocModel({
+  const canonical = await loadGeneratedDocModel({
     repoRoot,
     manifest: await manifestWithGeneratedDocs(),
-  }));
+  });
+  return { registries: structuredClone(canonical.registries), typography: structuredClone(canonical.typography) };
 }
 
 function renderTypography(model) {
@@ -424,4 +425,35 @@ test("snapshot-only, detached, and empty style IDs do not become typography cons
   const content = renderTypography(model);
   assert.doesNotMatch(content, /snapshot-only/u);
   assert.match(styleSection(content, "Mobile/Body/Large"), /Component `badge-step-number`/u);
+});
+test("typography consumer projection rejects missing ownership and ambiguous exact style identities", async () => {
+  const cases = [
+    (model, record, link) => { record.contracts.figma_fact_links = record.contracts.figma_fact_links.filter((item) => item !== link); },
+    (model) => { model.typography.styles[1].figma_style_id = model.typography.styles[0].figma_style_id; },
+  ];
+  for (const mutate of cases) {
+    const model = await typographyModel();
+    const record = recordAt(model, "badge-step-number");
+    mutate(model, record, semanticStyleLink(record));
+    assert.throws(() => renderTypography(model), (error) => error?.code === "GENERATED_TYPOGRAPHY_CONSUMER_INVALID");
+  }
+});
+
+test("snapshot-only record and detached empty ID do not create a typography consumer", async () => {
+  const model = await typographyModel();
+  const snapshot = structuredClone(recordAt(model, "badge-step-number"));
+  snapshot.id = "snapshot-only-consumer";
+  snapshot.contracts.figma_fact_links = [];
+  snapshot.contracts.source_variants = [{ variant_node_id: "snapshot-only", source_node: { node_id: "snapshot-only", text_style: { figma_style_id: "S:a3c66207faa33c3c4f22e054bd4d177b33d616c8," } } }];
+  snapshot.contracts.mobile.root.facts.push({ id: "detached-empty-style-id", value: { type: "string", value: "" }, provenance: { kind: "figma-literal", node_id: "snapshot-only" } });
+  model.registries.shared.components.push(snapshot);
+  assert.doesNotMatch(renderTypography(model), /snapshot-only-consumer|snapshot-only/u);
+});
+
+test("typography consumer association preserves a local numeric override without metric matching", async () => {
+  const model = await typographyModel();
+  const badge = recordAt(model, "badge-step-number");
+  badge.contracts.mobile.root.children[0].facts.push({ id: "local-font-weight-override", value: { type: "number", value: 900 }, provenance: { kind: "figma-literal", node_id: "18:2941" } });
+  assert.match(styleSection(renderTypography(model), "Mobile/Body/Large"), /Component `badge-step-number`; viewport `mobile`; variant `mobile-neutral`; element `root-label`/u);
+  assert.equal(badge.contracts.mobile.root.children[0].facts.at(-1).value.value, 900);
 });
