@@ -1,5 +1,7 @@
 # CUPIS Email Client Resilience Implementation Plan
 
+> **Архив завершённого этапа.** Этот документ сохраняет исходные решения, команды, пути, чекбоксы и промежуточные статусы; они не являются текущей очередью или разрешением выполнять старые шаги. Часть работ могла быть отменена или передана в последующие этапы. Актуальный порядок и открытые обязательства находятся в [едином roadmap](../2026-08-25-cupis-migration-roadmap.md).
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Сделать client-resilience свойства CUPIS renderer точными, машинно-проверяемыми и доказанными локальными и целевыми клиентскими проверками до расширения renderer coverage на всю библиотеку.
@@ -566,7 +568,7 @@ git commit -m "docs: record target client fallback decision"
 **Files:**
 - Modify: `core/email-rendering-standard.md`
 - Modify: `docs/superpowers/specs/2026-09-10-cupis-html-rendering-design.md`
-- Modify: `docs/superpowers/plans/2026-09-10-cupis-html-rendering-stage-8.md`
+- Modify: `docs/superpowers/plans/archive/2026-09-10-cupis-html-rendering-stage-8.md`
 - Modify: `docs/superpowers/plans/2026-08-25-cupis-migration-roadmap.md`
 - Modify later with Package 12: structured email-build workflow files created by Package 12
 

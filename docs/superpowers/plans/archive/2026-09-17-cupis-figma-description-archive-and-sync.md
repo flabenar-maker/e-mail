@@ -1,5 +1,7 @@
 # CUPIS Figma Description Archive and Compact Sync Implementation Plan
 
+> **Архив завершённого этапа.** Этот документ сохраняет исходные решения, команды, пути, чекбоксы и промежуточные статусы; они не являются текущей очередью или разрешением выполнять старые шаги. Часть работ могла быть отменена или передана в последующие этапы. Актуальный порядок и открытые обязательства находятся в [едином roadmap](../2026-08-25-cupis-migration-roadmap.md).
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Сохранить все текущие Figma component descriptions как независимый raw archive, подтвердить единую компактную generated-логику и опубликовать короткие Description у каждого canonical component owner без изменения дизайна.

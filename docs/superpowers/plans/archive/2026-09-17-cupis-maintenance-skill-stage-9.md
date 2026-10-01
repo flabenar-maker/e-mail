@@ -1,5 +1,7 @@
 # CUPIS Maintenance Skill Stage 9 Implementation Plan
 
+> **Архив завершённого этапа.** Этот документ сохраняет исходные решения, команды, пути, чекбоксы и промежуточные статусы; они не являются текущей очередью или разрешением выполнять старые шаги. Часть работ могла быть отменена или передана в последующие этапы. Актуальный порядок и открытые обязательства находятся в [едином roadmap](../2026-08-25-cupis-migration-roadmap.md).
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Подготовить maintenance skill к единственному машинно-разрешённому route-specific bundle и structured workflow, не включая остановленные маршруты и не создавая второй список правил или путей.
@@ -26,7 +28,7 @@
 
 **Files:**
 - Modify: `docs/superpowers/plans/2026-08-25-cupis-migration-roadmap.md`
-- Create: `docs/superpowers/plans/2026-09-17-cupis-maintenance-skill-stage-9.md`
+- Create: `docs/superpowers/plans/archive/2026-09-17-cupis-maintenance-skill-stage-9.md`
 
 **Interfaces:**
 - Consumes: merged PR #81–84 and main SHA after Package 12.

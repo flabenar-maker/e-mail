@@ -1,5 +1,7 @@
 # CUPIS HTML Rendering Stage 8 Implementation Plan
 
+> **Архив завершённого этапа.** Этот документ сохраняет исходные решения, команды, пути, чекбоксы и промежуточные статусы; они не являются текущей очередью или разрешением выполнять старые шаги. Часть работ могла быть отменена или передана в последующие этапы. Актуальный порядок и открытые обязательства находятся в [едином roadmap](../2026-08-25-cupis-migration-roadmap.md).
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Реализовать contract-driven HTML-рендеринг CUPIS-писем, доказать его на representative-пилоте, подготовить все активные component contracts и структурированные workflows без скрытого переключения maintenance skill, Figma или production-писем.
@@ -504,7 +506,7 @@ git commit -m "test: enforce rendered email invariants"
 
 ### Package 10: Client resilience и Mobile/Desktop visual scenarios
 
-Архитектура client resilience закреплена в [CUPIS Email Client Resilience Design](../specs/2026-09-16-cupis-email-client-resilience-design.md). Пошаговая реализация находится в [отдельном implementation plan](2026-09-16-cupis-email-client-resilience.md). Подпакеты 10A–10C выполнены последовательно. Package 10D был внешним client-evidence gate, но исключён из текущего маршрута 17.09.2026 из-за отсутствия доступа; это не подтверждает fallback. По прямому решению пользователя Package 11 начинается после слияния Package 10C и доступного normal visual gate.
+Архитектура client resilience закреплена в [CUPIS Email Client Resilience Design](../../specs/2026-09-16-cupis-email-client-resilience-design.md). Пошаговая реализация находится в [отдельном implementation plan](2026-09-16-cupis-email-client-resilience.md). Подпакеты 10A–10C выполнены последовательно. Package 10D был внешним client-evidence gate, но исключён из текущего маршрута 17.09.2026 из-за отсутствия доступа; это не подтверждает fallback. По прямому решению пользователя Package 11 начинается после слияния Package 10C и доступного normal visual gate.
 
 #### Package 10A: Exact policy and email model
 
