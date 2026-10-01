@@ -777,15 +777,18 @@ Email workflow не получает design-time authoring standard, Figma Descr
 
 Skill остаётся thin router и не копирует section names, constraints, source paths или component contracts. Он выбирает manifest route, требует impact gate, получает generated bundle и выполняет handoff. Локальная установка обновляется только из merged GitHub state.
 
-### E. Будущие component-development и HTML-build skills
+### E. Две специализации и тонкий маршрутизатор — актуальный downstream
 
-- developing-cupis-email-components использует design standard; после одобрения production component передаёт его в component-onboarding.
-- будущий HTML-build skill использует только email-new-build/email-continue-fix bundles с selected resolved contracts.
-- ни один из навыков не хранит собственную копию component contract или Figma Description rules.
+По решению от 01.10.2026 отдельные design standard/workflow и skill проектирования новых блоков отменены. Это не отменяет уже реализованные contract/description standards или onboarding готового одобренного компонента.
+
+- `maintaining-cupis-email-system` обслуживает существующую систему и регистрирует готовый одобренный компонент через component-onboarding после проверенного cutover.
+- `building-cupis-emails` использует только email-new-build/email-continue-fix bundles с selected resolved contracts; навык и два email routes уже активны после этапа 10.
+- `cupis-email-task-router` выбирает между двумя специализациями, не является третьим владельцем component facts.
+- навыки не хранят копии component contract или Figma Description rules.
 
 ### F. Shadow comparison, cutover и cleanup
 
-На этапах 13–15:
+На финальном этапе 11 по актуальному [roadmap](2026-08-25-cupis-migration-roadmap.md):
 
 - сравнить legacy и generated registry по всем component IDs и high-risk cases;
 - проверить minimality/closure maintenance, onboarding, Figma sync и email bundles;

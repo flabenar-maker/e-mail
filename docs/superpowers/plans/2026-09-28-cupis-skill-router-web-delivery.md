@@ -1,186 +1,93 @@
-# CUPIS Codex Task Router and Web Email Delivery Implementation Plan
+# CUPIS Local Task Router Closure Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Codex автоматически направляет CUPIS-запрос к нужному существующему навыку, а подтверждённое письмо из Codex Web отдаёт скачиваемым пакетом `email.html + images/`.
+**Goal:** Закрыть локальный маршрутизатор и привести глобальный маршрут к двум специализациям и финальному cutover, без Web-выдачи или проектирования новых блоков.
 
-**Architecture:** Верхнеуровневый repo-scoped навык выбирает между двумя существующими навыками и не копирует их правила. Сборка в вебе проходит тот же resolver, workflow, renderer и проверку, что локальная; отдельный delivery-адаптер после проверки упаковывает чистую версию в ZIP. Система остаётся облачной в GitHub, конкретные письма остаются вне репозитория.
+**Architecture:** Слитый thin router выбирает существующий email или maintenance skill и передаёт один pinned SHA. Система остаётся в cloud GitHub, письма — локально. Этот план закрывает документацию/установку 10A; финальный cutover имеет собственный последующий implementation plan.
 
-**Tech Stack:** Codex repo skills, `AGENTS.md`, Node.js 24 ESM, действующие YAML manifest/workflow и resolver, Figma MCP, `fflate@0.8.3` с точной записью в `package-lock.json`, Node test runner, PowerShell bootstrap.
+**Tech Stack:** Repo skills, Markdown, manifest-driven resolver, Node.js 24, локальный Node test runner, PowerShell bootstrap, GitHub CLI.
 
-**Spec:** [CUPIS Codex routing and Web delivery design](../specs/2026-09-28-cupis-codex-routing-web-delivery-design.md). Исходные архитектурные ограничения: [master-spec](../specs/2026-08-24-cupis-structured-email-system-design.md), [roadmap](2026-08-25-cupis-migration-roadmap.md).
+**Spec:** [Локальная маршрутизация](../specs/2026-09-28-cupis-codex-routing-web-delivery-design.md), [master-spec](../specs/2026-08-24-cupis-structured-email-system-design.md), [roadmap](2026-08-25-cupis-migration-roadmap.md).
 
 ## Global Constraints
 
-- Это отдельный пакет **после этапа 10 и до этапа 11**. Этапы 11–12, Figma и paused routes не включать.
-- Область продукта: Codex локально и Codex Web, не обычный ChatGPT.
-- Не добавлять HTML/CSS/Figma/component/asset факты в маршрутизатор, не менять structured contracts, foundations или renderer ради выдачи.
-- `system/manifest.yaml` — единственный каталог routes и skills; специализация использует один resolved bundle и возвращённые `workflow.steps`.
-- Локальный результат — версионная папка с `email.html` и `images/`. Веб-результат — ZIP с теми же двумя корневыми объектами, после полного gate. Никаких готовых писем/ZIP в GitHub.
-- Cloud GitHub — постоянный источник. Для выполнения скриптов и тестов разрешён только временный exact-SHA snapshot, не рабочая копия; PR публикуется через облачный GitHub.
-- Не запускать, читать или использовать GitHub Actions/PR Checks. После каждой задачи запускать узкие локальные проверки, полный `npm run verify` и `npm run generate:check` — один раз на точном финальном commit перед merge.
-- Обычные тесты, failures/fixes и visual regression поручать `gpt-5.6-terra` с `medium`; координатор получает краткий итог, а не полный лог. Веб-готовность требует фактического smoke в Codex Web.
-- Нельзя объединять локальную и веб-ветви «примерной» реализацией. Если Web не предоставляет Figma MCP, Node 24 или скачиваемые артефакты, вернуть проверенный blocker.
+- Только локальный Codex. Постоянный источник — cloud GitHub; snapshot — только exact-SHA execution/verification, не авторинг.
+- Сохранить пакет A, уже слитый PR #103/#104. Отмена Web и design-time частей не является откатом router.
+- Не менять Figma, component contracts, foundations, renderer, route/profile статусы или конкретные письма в документационном пакете.
+- Три зарегистрированных skill entries — две специализации и один thin router. Не создавать `developing-cupis-email-components`, design-time workflow/standard/route.
+- Существующий onboarding готового одобренного компонента сохранить как maintenance. Email-build не проектирует и не регистрирует неизвестный компонент скрытно.
+- Все проверки локально через Terra Medium, без Actions/PR Checks. Для docs-only пакета scoped gate; полный suite не повторять без изменения кода/контрактов.
+- Локальную установку/обновление навыков и merge выполнять только по отдельным разрешениям. Ручной context checkpoint не обновлять без прямого запроса.
 
 ## Review Focus
 
-1. Запрос «исправь письмо и контракт» может затронуть два навыка: тест маршрутизатора должен потребовать разделения и не дать записи в чужой области.
-2. Веб-задача без Figma MCP/Node/канала скачивания: capability-smoke должен зафиксировать blocker, а не ложный «готовый ZIP».
-3. Входной ZIP для continue/fix с `../`, абсолютным путём, symlink, повторным или лишним файлом: importer должен отклонить его до записи версии.
-4. HTML с отсутствующим/выходящим за `images/` локальным `src`: packager должен отказать, даже если предыдущая проверка была заявлена как пройденная.
-5. Неудачная упаковка или уже существующий ZIP: тест должен доказать неизменность исходной папки и невозможность частичного либо перезаписанного результата.
+1. Отмена будущего design-time контура не удаляет onboarding, naming generator или validators уже существующей библиотеки.
+2. Старые номера этапов 13–15 в истории не создают обязательство разработать отменённые этапы 11–12.
+3. Repo registration и merged tests не доказывают, что router установлен и обнаруживается в локальном Codex.
+4. Документальная корректировка не переключает paused route и не выдаёт status label за доказательство фактических Figma/contract данных.
+5. Web-сценарии и ZIP код не возвращаются в будущие задачи через journal, README, master-spec или критерий приёмки.
 
 ---
 
-## Карта файлов и порядок пакетов
+## Завершённый пакет A
 
-**Пакет A — маршрутизатор:** `.agents/skills/cupis-email-task-router/SKILL.md`, `AGENTS.md`, `system/manifest.yaml`, `README.md`, `bootstrap/README.md`, новые интеграционные тесты `tests/skills/cupis-email-task-router.test.mjs` и синхронизация `tests/helpers/system-fixture.mjs`. Существующие `bootstrap/verify.ps1` и `tests/foundation/system-manifest.test.mjs` проверяются без дублирующих изменений. Это только выбор специализации. Независимое review выявило доказанную потребность в узкой синхронизации `.agents/skills/building-cupis-emails/SKILL.md` и `.agents/skills/maintaining-cupis-email-system/SKILL.md`: сохранить переданный pinned SHA вместо повторного выбора `main`. Остальные инструкции и их технические правила не переписываются.
+- [x] Тонкий `cupis-email-task-router`, registration и integration/negative fixtures.
+- [x] Project entrypoint и bootstrap discovery; clean-context behavior probes.
+- [x] SHA handoff исправлен в существующих специализациях без копии правил.
+- [x] Exact-head local gate и merge [#103](https://github.com/flabenar-maker/e-mail/pull/103), [#104](https://github.com/flabenar-maker/e-mail/pull/104).
 
-**Пакет B — веб-выдача:** новый `scripts/lib/email-delivery-bundle.mjs` отвечает только за проверку, импорт безопасного входного пакета и упаковку готовой версии; `scripts/package-email-version.mjs` — CLI-обёртка. `data/workflows/email-build.yaml` и `.agents/skills/building-cupis-emails/SKILL.md` объявляют Web как тип итоговой выдачи существующего `handoff`. `package.json` / `package-lock.json` фиксируют переносимую ZIP-зависимость. Тесты — `tests/workflows/email-delivery-bundle.test.mjs` и существующие workflow/skill tests. Никакой второй renderer, Web-only component contract или копии workflow.
+Локально проверенный head #104 — `51d6791c72f3f31298766087c6c560524a1664db`. Merge `main@03606db5319a94327dd6713ae529f40e4c068e7a` и этот head имеют одинаковый tree SHA `3f17c40506d0443cea35351b0c5b897df59de5f6`. Системная валидация, полный Node-набор (67 test files, exit 0), generate:check и Windows bootstrap выполнены до merge. Это доказательство исходного пакета A, не новых документов или локальной установки.
 
-**Пакет C — интеграция и приёмка:** `README.md` и bootstrap объясняют, как использовать тот же repo skill в локальном/Web Codex; локальные и реальные Web smoke фиксируются в implementation PR. После приёмки обновляются master-spec и roadmap статусы. Пакеты A и B публикуются разными implementation PR; B опирается на слитый A. Этот PR содержит только дизайн и план.
-
-### Task 1: Зафиксировать архитектурные границы перед кодом
+### Task 1: Документальная синхронизация нового объёма
 
 **Files:**
-- Modify: `docs/superpowers/specs/2026-08-24-cupis-structured-email-system-design.md`
 - Modify: `docs/superpowers/plans/2026-08-25-cupis-migration-roadmap.md`
-- Test: `tests/foundation/system-manifest.test.mjs` (сохранить текущие routes/status)
-
-**Interfaces:**
-- Consumes: согласованный spec этого плана и фактический `main`.
-- Produces: явная граница «верхний выбор навыка / специализированный route / surface delivery» без нового владельца технических правил.
-
-- [x] **Step 1: Дополнить master-spec.** Добавить ровно два решения: верхний выбор между специализированными навыками и surface-specific delivery после verified email output; не менять описание владельцев Figma/контрактов/renderer. В roadmap сохранить пакет 10A запланированным, этап 11 оставить незатронутым.
-- [x] **Step 2: Проверить документационный diff.** Ручной review: ни одного утверждения о готовой Web-поддержке до smoke; `git diff --check` и `npm run validate` на exact-SHA snapshot должны пройти.
-- [x] **Step 3: Зафиксировать отдельный commit.** `docs: define Codex task routing and Web delivery boundary`.
-
-### Task 2: Тонкий skill выбора задачи (пакет A)
-
-**Files:**
-- Create: `.agents/skills/cupis-email-task-router/SKILL.md`
-- Create: `tests/skills/cupis-email-task-router.test.mjs`
-- Modify: `system/manifest.yaml`
-- Modify: `tests/helpers/system-fixture.mjs` (добавить обязательный skill в существующий набор fixtures)
-- Test: `tests/foundation/system-manifest.test.mjs`
-
-**Interfaces:**
-- Consumes: `skills.required` в manifest; только имена `building-cupis-emails` и `maintaining-cupis-email-system`.
-- Produces: repo skill `cupis-email-task-router` с исходом `email`, `maintenance`, `clarify` или `not-ready`; выбранный специализированный навык сам разрешает route/mode.
-
-- [x] **Step 1: Написать RED-тесты.** Интеграционные Node-тесты проверяют manifest registration, discoverable frontmatter и реальный отказ validator при отсутствующем/переименованном skill. Выбор направления, явный выбор, неоднозначность и смешанная область проверяются независимыми поведенческими probes модели без текстовых grep/assertions. До SKILL выполнить baseline без router; «новый блок» не должен подменяться onboarding, смешанный запрос не разрешает cross-scope write.
-- [x] **Step 2: Запустить узкие тесты.** `node --test tests/skills/cupis-email-task-router.test.mjs tests/foundation/system-manifest.test.mjs` → ожидаемый FAIL до появления skill.
-- [x] **Step 3: Добавить минимальный SKILL и manifest entry.** Текст skill содержит только критерии выбора и handoff, использует два существующих идентификатора навыков и не угадывает paused route. В `skills.required` добавить `cupis-email-task-router` с repo path; `routes` и `bundle_profiles` не менять.
-- [x] **Step 4: Повторить те же тесты.** Ожидаемый PASS, затем `npm run validate` и `npm run generate:check` без новых generated-doc diffs.
-- [x] **Step 5: Commit.** `feat: add top-level CUPIS task router skill`.
-
-### Task 3: Обнаружение навыка и clean-context маршрутизация (пакет A)
-
-**Files:**
-- Modify: `AGENTS.md`, `README.md`, `bootstrap/README.md`
-- Test: `bootstrap/verify.ps1` и `tests/skills/cupis-email-task-router.test.mjs`
-- Test: `tests/skills/email-build-skill-boundary.test.mjs`, `tests/skills/maintenance-skill-boundary.test.mjs`
-
-**Interfaces:**
-- Consumes: `cupis-email-task-router` из Task 2.
-- Produces: один короткий entrypoint в `AGENTS.md`, при этом bootstrap READ ONLY/RESTORE и существующие специализированные навыки сохраняются.
-
-- [x] **Step 1: Добавить RED-тесты обнаружения.** Проверить потребляющей моделью переход от `AGENTS.md` к выбранному навыку, явный выбор и однозначную область без загрузки обоих specialized skills. Убедиться реальным negative fixture, что существующий manifest-driven `bootstrap/verify.ps1` блокирует отсутствующий router наравне с другими required skills; второй hardcoded каталог не добавлять.
-- [x] **Step 2: Запустить targeted tests/bootstrap до изменения.** До записи pointer зафиксировать baseline обнаружения; RED регистрационной интеграции уже зафиксирован в Task 2. Если bootstrap уже покрывает новый required skill через validator, сохранить его код.
-- [x] **Step 3: Внести минимальные entrypoint-правки.** Одна строка в `AGENTS.md` для CUPIS-запросов; README объясняет назначение трёх навыков без дублирования маршрутов; bootstrap использует manifest как каталог.
-- [x] **Step 4: Проверить сценарии в чистом контексте.** Новый email, existing-email fix, read-only письмо, library/contract, migration status, новый компонент, неоднозначный запрос, смешанный запрос. Записать фактически выбранный skill/блокер в PR; если модель неверно выбирает, исправлять только метаданные/границу router, не технические правила.
-- [x] **Step 5: Запустить targeted tests и Windows bootstrap; commit.** `node --test tests/skills/*.test.mjs tests/foundation/system-manifest.test.mjs`; `pwsh -NoProfile -File bootstrap/verify.ps1` (или Windows PowerShell). `docs: expose CUPIS task router across Codex entrypoints`.
-- [x] **Step 6: Закрыть пакет A отдельным gate.** На точном финальном cloud SHA пакета A прогнать локальные `npm run verify`, `npm run generate:check` и bootstrap, открыть draft PR A и получить отдельное разрешение на merge. Пакет B начинается только после слияния A; если Web-среда недоступна, завершённый A остаётся полезным самостоятельным результатом.
-
-### Task 4: Реальный capability-gate для Codex Web (начало пакета B)
-
-**Files:**
-- Modify: implementation PR description only; продуктовые файлы не меняются, пока не подтверждены возможности среды.
-
-**Interfaces:**
-- Consumes: проверенный пакет A и тот же cloud `main`/candidate SHA.
-- Produces: протокол фактической доступности repo skill, GitHub read, Figma MCP read, Node 24 + npm, временной среды и скачиваемого файла в **реальной Codex Web задаче**.
-
-- [ ] **Step 1: В уже доступной Codex Web-задаче этого репозитория, открытой пользователем, проверить все шесть возможностей read-only; если такой задачи нет, попросить пользователя её открыть.** Нельзя выводить поддержку из desktop или документации API.
-- [ ] **Step 2: Зафиксировать точный результат и blocker.** Если хотя бы одна обязательная возможность отсутствует, не обещать Web-ready и не переходить к интеграции как к «успешной»; локальный router остаётся отдельным готовым результатом.
-- [ ] **Step 3: Привязать delivery-решение к реально доступному механизму скачивания.** Никаких промежуточных писем в GitHub или неподтверждённых ссылок на временный файловый путь.
-
-### Task 5: Самодостаточный ZIP проверенной версии (пакет B)
-
-**Files:**
-- Create: `scripts/lib/email-delivery-bundle.mjs`
-- Create: `scripts/package-email-version.mjs`
-- Create: `tests/workflows/email-delivery-bundle.test.mjs`
-- Modify: `package.json`, `package-lock.json`
-
-**Interfaces:**
-- Produces: `packageEmailVersion({ versionDir, outputZip }): Promise<{ outputZip: string, files: string[], sha256: string }>`. CLI: `npm run package:email -- --source <versionDir> --output <zip>`. ZIP-root: `email.html`, `images/`.
-- Consumes: только уже проверенную версионную папку; не принимает temporary model и не запускает renderer.
-
-- [ ] **Step 1: RED-тесты пакета.** Успешный ZIP распаковывается стандартным читателем и содержит только `email.html` + `images/*`; каждый локальный `src` существует. Отрицательные случаи: отсутствующий asset, путь наружу, лишний файл, symlink, пустой HTML, существующий output ZIP, сбой записи. Исходные байты до/после совпадают.
-- [ ] **Step 2: Запустить `node --test tests/workflows/email-delivery-bundle.test.mjs`.** Ожидаемый FAIL из-за отсутствующих интерфейсов.
-- [ ] **Step 3: Реализовать проверку и атомарную упаковку.** Использовать одну закреплённую portable ZIP-зависимость и lockfile; список файлов нормализован, ZIP создаётся рядом с версионной папкой во временном имени и переименовывается только после read-back; существующий ZIP не перезаписывается. Формат изображения и HTML не переписывать.
-- [ ] **Step 4: Повторить targeted tests и CLI round-trip.** PASS; распакованное `email.html` и каждый image-файл побайтово совпадают с input; неуспех не оставляет частичный ZIP.
-- [ ] **Step 5: Commit.** `feat: package verified email versions for download`.
-
-### Task 6: Безопасный Web continue/fix без перезаписи источника (пакет B)
-
-**Files:**
-- Modify: `scripts/lib/email-delivery-bundle.mjs`
-- Create: `scripts/import-email-source.mjs`
-- Modify: `package.json`
-- Modify: `tests/workflows/email-delivery-bundle.test.mjs`
-- Test: `tests/skills/email-build-handoff.test.mjs`
-
-**Interfaces:**
-- Produces: `importEmailSourceBundle({ sourceZip, workspaceRoot }): Promise<{ sourceFolder: string, sourceDir: string }>`. CLI: `npm run import:email -- --source <zip> --workspace <temporary-root>`. Имя входа `<slug>_<major>.<minor>.zip` задаёт существующую версию; импортирует её в новую временную рабочую область.
-- Consumes: `createEmailVersion` из `scripts/lib/email-build-orchestration.mjs` для следующего номера, не изменяя импортированный источник.
-
-- [ ] **Step 1: RED-тесты входного архива.** Принять валидный пакет Task 5; отклонить произвольное имя без версии, дубли, `../`, абсолютные/Windows-пути, symlink, лишние root entries и несуществующие локальные `src` до создания новой версии.
-- [ ] **Step 2: Запустить targeted tests.** Ожидаемый FAIL по отсутствующему importer.
-- [ ] **Step 3: Реализовать безопасное чтение в отдельной временной папке.** Preflight читает metadata центрального каталога ZIP и отклоняет symlink; распаковка не использует входное имя как путь до проверки. Затем вызвать действующий механизм `createEmailVersion`; на сбое убрать только свою staging-папку, не источник.
-- [ ] **Step 4: Повторить тесты.** Исходный ZIP и импортированная версия `1.0` побайтово сохранены, `continue/fix` создаёт `1.1`; при design-dependent изменении Figma-пара остаётся обязательной.
-- [ ] **Step 5: Commit.** `feat: import versioned email bundle for Web fixes`.
-
-### Task 7: Подключить surface delivery к действующему email handoff (пакет B)
-
-**Files:**
-- Modify: `data/workflows/email-build.yaml`
-- Modify: `.agents/skills/building-cupis-emails/SKILL.md`
+- Modify: `docs/superpowers/specs/2026-08-24-cupis-structured-email-system-design.md`
+- Modify: этот plan и его routing spec
 - Modify: `README.md`
-- Modify: `tests/workflows/structured-workflows.test.mjs`
-- Modify: `tests/skills/email-build-skill-boundary.test.mjs`
-- Modify: `tests/skills/email-build-handoff.test.mjs`
+- Modify: downstream/navigation разделы plans component documentation, generated bundles, Stage 8, foundation remediation, Stage 9 и Stage 10
+- Preserve: historical execution steps, raw context checkpoint, runtime/data/code и Figma
 
-**Interfaces:**
-- Consumes: verified `version-folder` и `packageEmailVersion` / `importEmailSourceBundle`.
-- Produces: существующий `handoff` возвращает локальную папку на desktop или скачиваемый ZIP на Web. Новый route, alternate renderer и новая component schema не создаются.
+**Interfaces:** Consumes: merged A и прямые решения пользователя от 01.10.2026. Produces: согласованные архитектура, порядок 10A → 11A/11B/11C и отсутствие будущих Web/design-time обязательств.
 
-- [ ] **Step 1: RED-тесты выбора поверхности.** Проверить, что `new-build` и оба `continue-fix` объявляют разрешённый `download-archive` только как итог `handoff`; `read-only`/`clarify` не создают ZIP. Desktop output не меняется; Web handoff запрещён до `verify-rendered-email` и `clean-output-folder`.
-- [ ] **Step 2: Запустить targeted workflow/skill tests.** Ожидаемый FAIL по отсутствующему разрешённому выходу.
-- [ ] **Step 3: Расширить только финальный handoff.** В workflow разрешить `download-archive` в build/fix modes и `handoff`; в email skill кратко указать surface selection и CLI без копии правил ZIP. При недостатке Web-инструментов вернуть blocker. README описывает получение файла без обещания API-специфического механизма.
-- [ ] **Step 4: Повторить targeted tests.** Проверить неизменность списка routes, paused statuses, renderer outputs и исходных локальных писем.
-- [ ] **Step 5: Commit.** `feat: expose Web download at verified email handoff`.
+- [ ] **Step 1: Обновить только архитектурные и навигационные части.** Две специализации, локальный output, отмена B/C и прежних design-time этапов; прежние proof/switch/cleanup перенести в финальный cutover. Не сбрасывать завершённые этапы.
+- [ ] **Step 2: Проверить точный финальный cloud SHA локально.** `git diff --check`, `node scripts/validate-system.mjs`, `node scripts/generate-docs.mjs --check`, локальные Markdown links, allowed-path и preserved-blob checks. Отдельно проверить отсутствие новых активных Web/design-time tasks и сохранность cutover gates. При docs-only diff полный suite не нужен.
+- [ ] **Step 3: Обновить существующий draft PR #105.** В title/body указать новый объём, отменённые части, exact SHA и scoped результаты. Слияние отдельно, не автоматически.
 
-### Task 8: Приёмка и публикация реализации (пакет C)
+### Task 2: Синхронизация навыков и локальное закрытие 10A
 
-**Files:** только исправления, прямо вытекающие из обнаруженного defect в файлах Tasks 1–7; документация статуса — master-spec и roadmap после подтверждённой приёмки.
+**Files:**
+- Review/modify only if authorized: `.agents/skills/cupis-email-task-router/SKILL.md` (отменённые surface/ожидание design-time handoff)
+- Verify: existing `.agents/skills/building-cupis-emails/SKILL.md`, `.agents/skills/maintaining-cupis-email-system/SKILL.md`, manifest registrations
+- Local install: только manifest-declared навыки из одного слитого SHA после отдельного разрешения
+- Test: `tests/skills/cupis-email-task-router.test.mjs`, `tests/skills/email-build-skill-boundary.test.mjs`, `tests/skills/maintenance-skill-boundary.test.mjs`, bootstrap verifier и independent clean-context probes
 
-**Interfaces:** исполняемый пакет A+B на точном cloud commit.
+**Interfaces:** Consumes: merged Task 1, current manifest и bootstrap. Produces: фактически обнаруженные локальные навыки с подтверждённым SHA/handoff; никаких component facts в skill.
 
-- [ ] **Step 1: На финальном cloud commit создать изолированный exact-SHA snapshot и запустить узкие проверки затронутой области.** Node 24, `npm ci --ignore-scripts`, `npm run validate`, `npm run generate:check`, skill/workflow/package tests, Windows bootstrap. Тесты/логи — Terra Medium.
-- [ ] **Step 2: Выполнить один полный локальный `npm run verify` на том же финальном SHA.** При правке кода/контрактов закрепить новый SHA и повторить финальную проверку; не обращаться к Actions/PR Checks.
-- [ ] **Step 3: Проверить визуальную регрессию маркетингового и сервисного писем.** Terra Medium сравнивает Mobile/Desktop с принятыми референсами; упаковка не должна менять байты HTML/images или layout. Не подменять браузерную проверку почтовыми клиентами.
-- [ ] **Step 4: Реальный clean-context smoke в доступной пользователю Codex Web-задаче.** Новое письмо по валидной Mobile/Desktop-паре, скачивание и повторное открытие ZIP; затем технический continue/fix из этого ZIP с новой версией. Если Figma/артефакты недоступны, отметить Web blocked и не заявлять полную готовность.
-- [ ] **Step 5: Проверить allowed-path diff.** Нет новых готовых писем в GitHub, изменений Figma/контрактов/renderer, случайных файлов или повторных правил. Обновить roadmap фактами только после слияния соответствующего implementation PR.
-- [ ] **Step 6: Handoff.** Предъявить пользователю PR, локальные результаты и ограничения. Слияние — только по отдельной команде; этап 11 не начинать.
+- [ ] **Step 1: Перед разрешённой skill-правкой прочитать skill-creator/writing-skills и снять конкретный handoff diff.** Убрать только устаревшие surface/будущую design-time специализацию; сохранить email/maintenance/clarify/not-ready, явный выбор, mixed scope, pinned SHA и gates. Не превращать отмену проектирования в разрешение onboarding по догадке.
+- [ ] **Step 2: Проверить изменённую границу targeted tests и независимыми probes.** Новый email, existing technical fix, read-only письмо, maintenance, migration status, mixed/ambiguous request и новый дизайн вне scope. Если skill code/behavior изменён, перед merge выполнить финальный полный локальный gate на точном commit.
+- [ ] **Step 3: После merge и отдельного разрешения синхронизировать локальные навыки по bootstrap.** Не перезаписать глобальный конфликт без разрешения; проверить byte/source соответствие, discovery и clean-context handoff. Не создавать письмо ради теста выбора.
+- [ ] **Step 4: Обновить roadmap фактами.** Закрыть только подтверждённые пункты 10A. Затем подготовить detailed plan финального этапа 11; не переключать маршруты в этом пакете.
 
-## Self-review перед исполнением
+## Отменённые части — не очередь выполнения
 
-- Все решения spec имеют владельца: router (Tasks 2–3), Web capability (Task 4), выдача/import (Tasks 5–6), workflow handoff (Task 7), приёмка (Task 8).
-- Технические компоненты, значения контрактов, HTML и Figma остаются у прежних владельцев.
-- Пакет A можно принять отдельно; пакет B не считается завершённым без реального Codex Web smoke.
-- План не делает GitHub Actions gate и не меняет статус этапов 11–12.
+01.10.2026 отменены прежние Tasks 4–8 Web-ветви: capability-smoke, ZIP packager/import, Web handoff и Web acceptance. Продуктовый код не написан; удалять/откатывать нечего. Исходная версия плана доступна в Git history на `03606db5319a94327dd6713ae529f40e4c068e7a`.
+
+Также отменены глобальные этапы design standard/workflow и design skill новых блоков. Onboarding готового компонента не отменён. Прежние глобальные 13–15 сохранены как проверки, включение и очистка финального cutover, не как дополнительные направления разработки.
+
+## Self-review
+
+- В каждом документе два владельца предметных задач и один thin entrypoint.
+- Переключение paused routes, очистка архива и обновление установленной среды имеют отдельные gates.
+- Завершённый A не спутан с локальной установкой; отменённые задачи не помечены выполненными.
+- Финальный cutover не зависит от Web или design-time контура.
+- Sources/data/code/Figma сохраняются; docs-only gate не превращается в повторный full suite.
+
+## Исторический журнал исходного пакета A
+
+Записи ниже описывают последовательность на момент выполнения; актуальный объём и следующие задачи находятся выше. Web-пробы являются историческими отрицательными проверками, не новой Web-приёмкой.
+
 ## Журнал выполнения пакета A — 2026-10-01
 
 - План и решение одобрены командой пользователя «Делай». Реализация — отдельная branch `codex/cupis-task-router` поверх неслитого plan PR #103; его merge и merge реализации требуют отдельных команд.
@@ -216,14 +123,8 @@
 | Явно выбран building для контракта | конфликт области объясняется; нет молчаливого переключения |
 | Web ZIP с fallback-коммитом письма | нет ложной Web-ready; commit письма в GitHub запрещён |
 
-Дополнительный неоднозначный запрос «Сделай письмо» без исходников даёт `clarify`: новое письмо или изменение существующего, без предположения о типе. Эти probes проверяют исполнение инструкций моделью; они не заменяют реальную Codex Web capability-проверку пакета B.
+Дополнительный неоднозначный запрос «Сделай письмо» без исходников даёт `clarify`: новое письмо или изменение существующего, без предположения о типе. Эти probes проверяли исполнение инструкций моделью, а не фактическую Web-среду. Пакет B отменён 01.10.2026 и не является следующим шагом.
 
+## Переход после пакета A — решение 01.10.2026
 
-## Переход A → B — 2026-10-01
-
-- По отдельному разрешению пользователя слиты plan PR [#103](https://github.com/flabenar-maker/e-mail/pull/103), затем implementation PR [#104](https://github.com/flabenar-maker/e-mail/pull/104). Merge commits: `af333ed882de9bc65a7dcc02c26a300702b7094f` и `03606db5319a94327dd6713ae529f40e4c068e7a`. Последний — закреплённый `main` после пакета A.
-- Дерево `main@03606db5319a94327dd6713ae529f40e4c068e7a` и дерево локально проверенного head #104 `51d6791c72f3f31298766087c6c560524a1664db` имеют одинаковый tree SHA `3f17c40506d0443cea35351b0c5b897df59de5f6`. Пакет A находится в `main`; зависимость B от merge A снята. Приёмка Web и код ZIP этим не считаются завершёнными.
-- Предварительные сведения получены из пользовательского чата «Ознакомление с репозиторием» (`6abe2544-2c8c-83eb-8c03-3b94e92f56a3`). Его ответ сообщает ChatGPT Work Mode с облачной Codex-средой, GitHub read, ручное чтение двух прежних skills, реальный Figma MCP metadata read, Node 24.19.0, npm 11.9.0, временную папку и скачиваемый ZIP. Это протокол ответа той среды, не доступ координатора к её терминалу. Проверенный там SHA `189deb50904128f84601b5cfbcf607b247d5d5bb` предшествует пакету A. Автоматическое обнаружение repo skills не подтверждено; Work Mode не переименовывается в native Codex Web по предположению.
-- Скачанный пользователем `cupis-environment-check.zip` независимо проверен локально: 146 bytes, единственный читаемый `check.txt`, без дополнительных файлов и опасных путей. Это подтверждает получение файла, а не запуск resolver или экспорт Figma.
-- Task 4 остаётся открытой. Следующая фактическая проверка в той же пользовательской Web-среде должна закрепить текущий `main` с пакетом A, загрузить новый entrypoint/router и выбранную специализацию без повторного pin, подтвердить механизм загрузки, установить зависимости только во временном exact-SHA snapshot, получить один resolved email bundle и сохранить один реально экспортированный через Figma MCP asset в доступный скачиваемый файл. Не выполнять сборку письма, полные тесты или изменения GitHub/Figma/существующих писем. Отсутствие обязательного инструмента фиксируется как blocker, без обхода.
-- Протокол Task 4 хранится в description implementation PR пакета B; этот журнал содержит только предварительные сведения и точку продолжения. Продуктовые файлы B/C не изменяются до подтверждения среды. Этап 11 и ручной context checkpoint не затронуты.
+Пакет A слит; пакеты B/C отменены. Предварительные ответы двух пользовательских облачных сред не доказали полный путь snapshot → resolver → Figma export и не являются условием локального cutover. Проверки Web не продолжаются. Ручной context checkpoint и продуктовые файлы в этой корректировке не меняются.
