@@ -327,7 +327,11 @@ async function typographyModel() {
     repoRoot,
     manifest: await manifestWithGeneratedDocs(),
   });
-  return { registries: structuredClone(canonical.registries), typography: structuredClone(canonical.typography) };
+  return {
+    ...canonical,
+    registries: structuredClone(canonical.registries),
+    typography: structuredClone(canonical.typography),
+  };
 }
 
 function renderTypography(model) {
@@ -368,6 +372,8 @@ test("typography registry records exact semantic consumers with base and variant
   assert.match(section, /  - Component `badge-step-number`; viewport `mobile`; variant `mobile-accent`; element `root-label`/u);
   assert.match(section, /Figma style ID: `S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,`/u);
   assert.deepEqual(model, before, "projection must not rewrite local contract facts");
+  assert.equal((content.match(/^  - Component /gmu) ?? []).length, 364);
+  assert.equal((content.match(/^- Consumers: `[^`]+`$/gmu) ?? []).length, 15);
 });
 
 test("typography registry deduplicates an identical semantic link but retains typed references and distinct tuple identity", async () => {
@@ -379,14 +385,14 @@ test("typography registry deduplicates an identical semantic link but retains ty
     id: "typed-typography-reference",
     value: {
       type: "foundation-reference", foundation_id: "typography",
-      definition_group: "styles", definition_id: "desktop-display",
+      definition_group: "styles", definition_id: "mobile-display",
     },
   });
   const content = renderTypography(model);
   const mobile = styleSection(content, "Mobile/Body/Large");
   const detail = "Component `badge-step-number`; viewport `mobile`; variant `mobile-neutral`; element `root-label`";
   assert.equal(mobile.split(detail).length - 1, 1);
-  const desktop = styleSection(content, "Desktop/Display");
+  const desktop = styleSection(content, "Mobile/Display");
   assert.match(desktop, /- Consumers: `badge-step-number`/u);
   assert.match(desktop, /  - Component `badge-step-number`; viewport `mobile`; variant `default`; element `root`/u);
 });
@@ -444,6 +450,12 @@ test("snapshot-only record and detached empty ID do not create a typography cons
   const snapshot = structuredClone(recordAt(model, "badge-step-number"));
   snapshot.id = "snapshot-only-consumer";
   snapshot.contracts.figma_fact_links = [];
+  const stripSemanticStyleFacts = (node) => {
+    if (!node || typeof node !== "object") return;
+    if (Array.isArray(node.facts)) node.facts = node.facts.filter(({ id }) => id !== "figma-style-id");
+    for (const child of node.children ?? []) stripSemanticStyleFacts(child);
+  };
+  for (const contract of [...Object.values(snapshot.contracts).filter((value) => value?.root), ...(snapshot.contracts.variant_contracts ?? [])]) stripSemanticStyleFacts(contract.root);
   snapshot.contracts.source_variants = [{ variant_node_id: "snapshot-only", source_node: { node_id: "snapshot-only", text_style: { figma_style_id: "S:a3c66207faa33c3c4f22e054bd4d177b33d616c8," } } }];
   snapshot.contracts.mobile.root.facts.push({ id: "detached-empty-style-id", value: { type: "string", value: "" }, provenance: { kind: "figma-literal", node_id: "snapshot-only" } });
   model.registries.shared.components.push(snapshot);
