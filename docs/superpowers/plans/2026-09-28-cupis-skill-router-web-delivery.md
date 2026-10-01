@@ -67,10 +67,10 @@ Task 1 выполнен и слит через [PR #105](https://github.com/flab
 
 **Interfaces:** Consumes: merged Task 1, current manifest и bootstrap. Produces: фактически обнаруженные локальные навыки с подтверждённым SHA/handoff; никаких component facts в skill.
 
-- [ ] **Step 1: Перед разрешённой skill-правкой прочитать skill-creator/writing-skills и снять конкретный handoff diff.** Убрать только устаревшие surface/будущую design-time специализацию; сохранить email/maintenance/clarify/not-ready, явный выбор, mixed scope, pinned SHA и gates. Не превращать отмену проектирования в разрешение onboarding по догадке.
-- [ ] **Step 2: Проверить изменённую границу targeted tests и независимыми probes.** Новый email, existing technical fix, read-only письмо, maintenance, migration status, mixed/ambiguous request и новый дизайн вне scope. Если skill code/behavior изменён, перед merge выполнить финальный полный локальный gate на точном commit.
-- [ ] **Step 3: После merge и отдельного разрешения синхронизировать локальные навыки по bootstrap.** Не перезаписать глобальный конфликт без разрешения; проверить byte/source соответствие, discovery и clean-context handoff. Не создавать письмо ради теста выбора.
-- [ ] **Step 4: Обновить roadmap фактами.** Закрыть только подтверждённые пункты 10A. Затем подготовить detailed plan финального этапа 11; не переключать маршруты в этом пакете.
+- [x] **Step 1: Перед разрешённой skill-правкой прочитать skill-creator/writing-skills и снять конкретный handoff diff.** Убрать только устаревшие surface/будущую design-time специализацию; сохранить email/maintenance/clarify/not-ready, явный выбор, mixed scope, pinned SHA и gates. Не превращать отмену проектирования в разрешение onboarding по догадке.
+- [x] **Step 2: Проверить изменённую границу targeted tests и независимыми probes.** Новый email, existing technical fix, read-only письмо, maintenance, migration status, mixed/ambiguous request и новый дизайн вне scope. Если skill code/behavior изменён, перед merge выполнить финальный полный локальный gate на точном commit.
+- [x] **Step 3: После merge и отдельного разрешения синхронизировать локальные навыки по bootstrap.** Не перезаписать глобальный конфликт без разрешения; проверить byte/source соответствие, discovery и clean-context handoff. Не создавать письмо ради теста выбора.
+- [x] **Step 4: Обновить roadmap фактами.** Закрыть только подтверждённые пункты 10A. Затем подготовить detailed plan финального этапа 11; не переключать маршруты в этом пакете.
 
 ## Проверенные результаты локального закрытия — 01.10.2026
 
@@ -79,8 +79,10 @@ Task 1 выполнен и слит через [PR #105](https://github.com/flab
 - В PR #106 подготовлена разрешённая точечная правка: только локальная среда и out-of-scope вместо ожидания будущего design skill. Baseline прямо называл `local Codex or Codex Web` и `specialization is not active`; новая независимая probe читает только local Codex и возвращает not-ready для проектирования. Остальные девять сценариев сохраняют email/maintenance/clarify, явный выбор, mixed dependency и paused gates.
 - Targeted gate на `bc7040adf3ed99eaef51ea63cb5e9e83cf08b716`: 10/10 Node boundary tests, validation, generate:check, Windows bootstrap и bootstrap contract PASS. Это результат skill-only коммита, не финального пакета с новым планом; final verification записывается в PR #106 на его точном head.
 - **Ruling:** cloud-only требование пользователя исключает локальную authoring-worktree/ledger. Изменения делаются cloud branch/PR, журнал — здесь и в PR, exact-SHA snapshot используется лишь для исполнения; это сохраняет облачное владение источником.
-- Итоговая правка ещё требует merge и отдельно разрешённой синхронизации установленной копии. 10A не объявляется завершённым только по подготовленному diff.
-- [План финального cutover](2026-10-01-cupis-final-maintenance-cutover.md) подготовлен по master-spec и roadmap. Его пакеты ещё не выполнялись; старые unchecked задачи Task 2 закрываются только после фактических соответствующих gates.
+- PR #106 слит отдельным разрешением в `09537effc89daadacaed1d05497a1e75beb18152`; tree `a133f5453a7bc3d7aa05ce6bf0aa645391922a73` совпадает с проверенным head `c1ad82d32770524b2bb2d6ff9f85df71c00620c8` (708/708, validator, generated и Windows gates PASS). Тот же пользовательский шаг разрешил обновить локальный router; это не разрешение Stage 11.
+- [План финального cutover](2026-10-01-cupis-final-maintenance-cutover.md) подготовлен по master-spec, reviewed и слит в PR #106. Его пакеты ещё не выполнялись.
+- Post-install на exact `09537effc89daadacaed1d05497a1e75beb18152`: installed router `SKILL.md` — 2734 B, blob `79d64bdc465489742c67138f5f7ff13655cb512e`, точно совпадает с canonical source. Старая копия 2771 B / `d3c804b18a0c8b86b16953a5a763753a5fa4255c` побайтово сохранена вне discovery root; два specialty skills и config unchanged. Текущий каталог содержит все три навыка, frontmatter и реальные local files проверены. Это доказательство файлов/catalog, не заявление об автоматическом триггере в том же ходе; уже выполненные cold-context probes относятся к тому же canonical router blob.
+- Local post-install gates PASS: validation, generate:check, 10/10 router/email/maintenance boundary tests, Windows bootstrap и contract. Fresh `migration-progress/read-only` — `paused/SKILL_ROUTE_PAUSED`; пять maintenance routes paused и два email routes active. Full 708 не повторён на неизменном дереве. Task 2 фактически завершён; статусная публикация не начинает пакет 1 или cutover.
 
 ## Отменённые части — не очередь выполнения
 
