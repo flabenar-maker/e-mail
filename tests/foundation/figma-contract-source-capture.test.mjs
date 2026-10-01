@@ -8,6 +8,8 @@ import { auditFigmaContractFacts } from "../../scripts/lib/figma-contract-facts.
 const STYLE_ID = "S:780f997658bfc56dc4db512b20c92d16c415c3f3,";
 const CAPTURE_PATH = new URL("../../scripts/figma/capture-contract-source.js", import.meta.url);
 
+// Synthetic Plugin API inputs use selected previously observed literals; they are not a live ButtonPrimary capture or Figma certification.
+
 async function captureWith(figma) {
   const source = await readFile(CAPTURE_PATH, "utf8");
   const context = vm.createContext({ figma });
