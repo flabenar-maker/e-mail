@@ -525,4 +525,3 @@ Generated typography registry пересобран каноническим ге
 **Граница результата:** исправлена recorded consumer projection, а не доказано текущее live usage в Figma. Пустой recorded список не даёт разрешения удалить стиль. P2-F1 live gate, очередь 39, четыре P2-F2 width differences и F7 остаются открытыми. Пакет 2 не принят, PR #110 не слит, пакет 3/cutover не начаты. PR #109 и ручной context не затронуты.
 
 **Дальше без MCP:** согласованная подготовка F7 — карта producer/schema/manifest/output/tests для generated workflow checkpoints. После восстановления квоты — обязательная точка возврата P2 выше; offline GREEN не отменяет ни одного её пункта.
-
