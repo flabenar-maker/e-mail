@@ -11,6 +11,7 @@ import {
 import {
   compareGeneratedDocs,
   loadGeneratedDocModel,
+  renderGeneratedDoc,
   renderAllGeneratedDocs,
 } from "../../scripts/lib/generated-docs.mjs";
 import { readStrictYaml } from "../../scripts/lib/strict-yaml.mjs";
@@ -248,7 +249,6 @@ test("typography registry derives the Figma description from semantic text and f
   delete style.figma_description;
   style.figma_description_semantics =
     "Главный выразительный текст Desktop для Hero-заголовка и крупного результата операции. Не использовать как обычный заголовок блока или карточки. Пара: Mobile/Display.";
-  style.figma_style_id = "S:testdisplay,";
   style.font_size_px = 33;
   style.font.figma_style = "Medium";
   style.line_height = { unit: "px", value: 30 };
@@ -316,4 +316,112 @@ test("generated comparison reports missing and stale files by exact path", async
     ),
     [["GENERATED_DOC_STALE", `/${stalePath}`]],
   );
+});
+
+function typographyDefinition() {
+  return generatedDefinitions.find(({ id }) => id === "typography-registry");
+}
+
+async function typographyModel() {
+  return structuredClone(await loadGeneratedDocModel({
+    repoRoot,
+    manifest: await manifestWithGeneratedDocs(),
+  }));
+}
+
+function renderTypography(model) {
+  return renderGeneratedDoc({ definition: typographyDefinition(), model });
+}
+
+function styleSection(content, name) {
+  const start = content.indexOf(`### ${name}\n`);
+  assert.notEqual(start, -1, name);
+  const next = content.indexOf("\n### ", start + 1);
+  return content.slice(start, next === -1 ? undefined : next);
+}
+
+function recordAt(model, id) {
+  return listComponentRecords(model.registries).find(({ record }) => record.id === id)?.record;
+}
+
+function pointer(root, path) {
+  return path.slice(1).split("/").reduce((value, key) => value?.[key], root);
+}
+
+function semanticStyleLink(record) {
+  const link = record.contracts.figma_fact_links.find(
+    ({ source_path }) => source_path === "/text_style/figma_style_id",
+  );
+  assert.ok(link);
+  return link;
+}
+
+test("typography registry records exact semantic consumers with base and variant ownership", async () => {
+  const model = await typographyModel();
+  const before = structuredClone(model);
+  const content = renderTypography(model);
+  const section = styleSection(content, "Mobile/Body/Large");
+
+  assert.match(section, /- Consumers: `badge-step-number`/u);
+  assert.match(section, /  - Component `badge-step-number`; viewport `mobile`; variant `mobile-neutral`; element `root-label`/u);
+  assert.match(section, /  - Component `badge-step-number`; viewport `mobile`; variant `mobile-accent`; element `root-label`/u);
+  assert.match(section, /Figma style ID: `S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,`/u);
+  assert.deepEqual(model, before, "projection must not rewrite local contract facts");
+});
+
+test("typography registry deduplicates an identical semantic link but retains typed references and distinct tuple identity", async () => {
+  const model = await typographyModel();
+  const badge = recordAt(model, "badge-step-number");
+  const link = semanticStyleLink(badge);
+  badge.contracts.figma_fact_links.push(structuredClone(link));
+  badge.contracts.mobile.root.facts.push({
+    id: "typed-typography-reference",
+    value: {
+      type: "foundation-reference", foundation_id: "typography",
+      definition_group: "styles", definition_id: "desktop-display",
+    },
+  });
+  const content = renderTypography(model);
+  const mobile = styleSection(content, "Mobile/Body/Large");
+  const detail = "Component `badge-step-number`; viewport `mobile`; variant `mobile-neutral`; element `root-label`";
+  assert.equal(mobile.split(detail).length - 1, 1);
+  const desktop = styleSection(content, "Desktop/Display");
+  assert.match(desktop, /- Consumers: `badge-step-number`/u);
+  assert.match(desktop, /  - Component `badge-step-number`; viewport `mobile`; variant `default`; element `root`/u);
+});
+
+test("typography registry rejects malformed advertised semantic links instead of rendering them unused", async () => {
+  const mutations = [
+    (record, link) => { pointer(record, link.contract_path.replace(/\/value\/value$/u, "")).value.value = "S:unknown,"; },
+    (record, link) => { pointer(record, link.contract_path.replace(/\/value\/value$/u, "")).provenance.node_id = "18:2947"; },
+    (_record, link) => { link.variant_node_id = "18:2947"; },
+    (_record, link) => { link.contract_path = link.contract_path.replace(/\/value\/value$/u, "/value/not-value"); },
+  ];
+  for (const mutate of mutations) {
+    const model = await typographyModel();
+    const badge = recordAt(model, "badge-step-number");
+    mutate(badge, semanticStyleLink(badge));
+    assert.throws(
+      () => renderTypography(model),
+      (error) => error?.code === "GENERATED_TYPOGRAPHY_CONSUMER_INVALID",
+    );
+  }
+});
+
+test("snapshot-only, detached, and empty style IDs do not become typography consumers", async () => {
+  const model = await typographyModel();
+  const badge = recordAt(model, "badge-step-number");
+  badge.contracts.source_variants = [{
+    variant_node_id: "snapshot-only", source_node: {
+      node_id: "snapshot-only", text_style: { figma_style_id: "S:a3c66207faa33c3c4f22e054bd4d177b33d616c8," },
+    },
+  }];
+  badge.contracts.mobile.root.facts.push({
+    id: "detached-empty-style-id",
+    value: { type: "string", value: "" },
+    provenance: { kind: "figma-literal", node_id: "snapshot-only" },
+  });
+  const content = renderTypography(model);
+  assert.doesNotMatch(content, /snapshot-only/u);
+  assert.match(styleSection(content, "Mobile/Body/Large"), /Component `badge-step-number`/u);
 });
