@@ -457,7 +457,7 @@ test("snapshot-only record and detached empty ID do not create a typography cons
   };
   for (const contract of [...Object.values(snapshot.contracts).filter((value) => value?.root), ...(snapshot.contracts.variant_contracts ?? [])]) stripSemanticStyleFacts(contract.root);
   snapshot.contracts.source_variants = [{ variant_node_id: "snapshot-only", source_node: { node_id: "snapshot-only", text_style: { figma_style_id: "S:a3c66207faa33c3c4f22e054bd4d177b33d616c8," } } }];
-  snapshot.contracts.mobile.root.facts.push({ id: "detached-empty-style-id", value: { type: "string", value: "" }, provenance: { kind: "figma-literal", node_id: "snapshot-only" } });
+  snapshot.contracts.mobile.root.facts.push({ id: "detached-empty-style-id", value: { type: "string", value: "" }, provenance: { kind: "figma-literal", node_id: "18:2942" } });
   model.registries.shared.components.push(snapshot);
   assert.doesNotMatch(renderTypography(model), /snapshot-only-consumer|snapshot-only/u);
 });
