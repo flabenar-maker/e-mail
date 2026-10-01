@@ -51,6 +51,25 @@ Baseline проверки: `main@6c0bf7d0d3b1ca7909b692541883d2b0e9788709`. [PR 
 
 **Отложенная область PR #109 (5 owners):** `card-image`, `block-cards-images`, `card-icon`, `block-icon-cards`, `block-icon-list`. Общие компоненты вроде `button-secondary` не исключаются.
 
+### P2-F1 — разрешённый локально проверяемый ремонт capture (01.10.2026)
+
+Пользователь разрешил начать первый пункт работы во время лимита. Это bounded repository-only исправление уже существующего сборщика, не новый этап и не исправление фактов компонентов.
+
+**Allowed paths:** `scripts/figma/capture-contract-source.js`, новый `tests/foundation/figma-contract-source-capture.test.mjs`, журнал этого плана. PR #110 продолжает пакет 2: после прежних docs-only commits в него добавляется этот узкий repair. PR #109 не включается.
+
+**Причина и решение:** canonical capture пропускает реальные поля или выдаёт их не по уже используемым mapping paths. Добавить `text_geometry.auto_resize/vertical_alignment`, числовой `text_style.font_weight` непосредственно с TextNode, `text_style.figma_style_name` через точный `textStyleId → getStyleByIdAsync`, `minimum_width_px` из minWidth и `fills/strokes[*].stops` из фактических gradientStops. Существующие v1 поля сохранить; не переписывать packets, не менять mapping links, auditor, schema, числовые значения, renderer или generated docs. Дополнительные поля могут выявить новые uncovered facts; такие сообщения не скрывать.
+
+**Границы неизвестных значений:** не выводить вес по строке Medium/Bold, имя — по размеру/семейству; detached style не подменять foundation. Пустой style ID означает отсутствие связи; неразрешённый/ошибочный ID и mixed значения остаются явными diagnostics и не превращаются в «проверено». Локальные font overrides читать с узла, а не из definition стиля.
+
+**Шаги и критерии:**
+- [ ] Выполнить реальный capture-код в локальном mock Figma API и получить RED для пяти групп полей; использовать hand-checked fixture values из сохранённого read-only evidence, не новую live-верификацию.
+- [ ] Исправить capture минимально; вернуть точные значения и ожидаемые source paths, сохранить прежние данные и порядок дерева.
+- [ ] Получить GREEN для новых cases, проверить unlinked/unresolved/mixed/override ветви и интеграцию с неизменным auditor: реальные mismatches и недостающие факты всё ещё блокируют.
+- [ ] Проверить exact cloud SHA локально, generated equivalence и preserved blobs; одно независимое review. Полный финальный gate нужен перед последующим merge кода, не после каждой мелкой правки.
+- [ ] После восстановления MCP отдельно подтвердить этот код живым чтением и продолжить очередь из точки возврата выше. Только это закрывает Figma-зависимую часть; локальные tests её не заменяют.
+
+**Решение об исполнении:** постоянные изменения публикуются через облачный GitHub; локальная копия остаётся одноразовым exact-SHA test snapshot. Поэтому локальные worktree/SDD authoring scripts не применяются, а ledger ведётся здесь. Routine tests и regression выполняет существующий Terra Medium; coordinator получает компактный отчёт. P2-F3 (карта шрифтов), F7, четыре width differences и вся активация остаются вне этой правки.
+
 ## Global Constraints
 
 - Cloud GitHub — постоянный источник; локальный exact-SHA snapshot — только исполнение/проверка, не рабочая копия для правок.
