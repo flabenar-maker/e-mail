@@ -99,12 +99,12 @@ test("units stay unmapped for closed-rule negatives", () => {
     ["unknown *_px source", (input) => { input.mappings[1].source_path = "/unknown_px"; set(input.live.variants[0].source_node, "/unknown_px", 12); }],
     ["missing explicit line-height unit", (input) => { delete input.live.variants[0].source_node.text_style.line_height.unit; }],
     ["mismatched explicit line-height unit", (input) => { input.live.variants[0].source_node.text_style.line_height.unit = "PIXELS"; }],
-    ["unknown explicit unit", (input) => { input.live.variants[0].source_node.text_style.line_height.unit = "AUTO"; }],
+    ["unknown explicit line-height unit", (input) => { input.live.variants[0].source_node.text_style.line_height.unit = "AUTO"; }],
     ["numeric drift", (input) => { input.live.variants[0].source_node.layout.item_spacing = 13; }],
     ["wrong provenance node", (input) => { input.record.contracts.mobile.root.facts[0].provenance.node_id = "other:1"; }],
     ["registry literal provenance", (input) => { input.record.contracts.mobile.root.facts[0].provenance = { kind: "registry-literal", source_path: "/data/example" }; }],
     ["missing dimensions height mapping", (input) => { input.mappings.splice(2, 1); }],
-    ["dimensions from different nodes", (input) => { input.mappings[2].node_id = "other:1"; }],
+    ["dimensions from different nodes", (input) => { input.live.variants[0].source_node.children = [{ node_id: "other:1", node_type: "FRAME", reference_dimensions: { height: input.live.variants[0].source_node.reference_dimensions.height } }]; input.mappings[2].node_id = "other:1"; }],
     ["external-only mapping", (input) => { input.record.contracts.figma_fact_links = []; }],
     ["non-identity transform", (input) => { input.mappings[1].transform = "lowercase"; }],
     ["invalid capture profile", (input) => { input.live.capture_version = "0.0.0"; }],
@@ -175,7 +175,7 @@ test("a standalone source-only icon does not hide a vector child or its capture 
   live.capture_errors.push({ node_id: "vector:1", code: "ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW" });
   const report = auditFigmaContractFacts({ record, live });
   assert.ok(report.issues.some((issue) => issue.code === "FIGMA_FACT_UNCOVERED" && issue.node_id === "vector:1"));
-  assert.ok(report.issues.some((issue) => issue.code === "FIGMA_CAPTURE_UNSUPPORTED" && issue.node_id === "vector:1"));
+  assert.ok(report.issues.some((issue) => issue.code === "FIGMA_CAPTURE_UNSUPPORTED" && issue.details.some((detail) => detail.node_id === "vector:1")));
 });
 
 test("source-only icon topology rejects invalid role, render roots, identity, type, and variants", () => {

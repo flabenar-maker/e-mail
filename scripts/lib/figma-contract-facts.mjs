@@ -140,6 +140,74 @@ function equal(left, right) {
   return JSON.stringify(left) === JSON.stringify(right);
 }
 
+// Capture v1 numeric fields whose Figma API meaning is pixels. Deliberately
+// closed: an arbitrary number or a name ending in "_px" is not unit evidence.
+const PIXEL_SOURCE_PATHS = new Set([
+  "/corner_radius",
+  "/corner_radii/top_left", "/corner_radii/top_right",
+  "/corner_radii/bottom_left", "/corner_radii/bottom_right",
+  "/layout/item_spacing",
+  "/layout/padding/top", "/layout/padding/right",
+  "/layout/padding/bottom", "/layout/padding/left",
+  "/text_style/font_size_px", "/minimum_width_px", "/stroke_weight",
+]);
+
+function sourceUnitEvidence(fact, source) {
+  let unitPath;
+  let normalize;
+  if (/^\/reference_dimensions\/(?:width|height)$/u.test(fact.source_path)) {
+    unitPath = "/reference_dimensions/unit";
+    normalize = (unit) => unit === "px" ? "px" : undefined;
+  } else if (/^\/text_style\/(?:line_height|letter_spacing)\/value$/u.test(fact.source_path)) {
+    unitPath = fact.source_path.replace(/\/value$/u, "/unit");
+    normalize = (unit) => unit === "PIXELS" ? "px" : unit === "PERCENT" ? "percent" : undefined;
+  } else {
+    return PIXEL_SOURCE_PATHS.has(fact.source_path) ? { unit: "px" } : undefined;
+  }
+  const sourceKey = `${fact.variant_node_id}|^@${fact.node_id}|^@${unitPath}`;
+  const unit = normalize(source.get(sourceKey)?.actual);
+  return unit === undefined ? undefined : { unit, sourceKey };
+}
+
+function coverVerifiedUnits(record, source, numericProofs, targetCounts, paths, coveredSource, coveredContract) {
+  for (const contractPath of paths) {
+    if (!/\/facts\/\d+\/value\/unit$/u.test(contractPath) || coveredContract.has(contractPath)) continue;
+    const valuePath = contractPath.slice(0, -"/unit".length);
+    const value = pointerValue(record, valuePath);
+    const keys = value?.type === "measure" ? ["value"]
+      : value?.type === "dimensions" ? ["width", "height"] : [];
+    if (keys.length === 0) continue;
+    const proofs = keys.map((key) => {
+      const target = `${valuePath}/${key}`;
+      return targetCounts.get(target) === 1 ? numericProofs.get(target) : undefined;
+    });
+    if (proofs.some((proof) => !proof)) continue;
+    // A size is one node's pair, not two coincidentally matching measurements.
+    if (proofs.some((proof) => proof.variant_node_id !== proofs[0].variant_node_id ||
+        proof.node_id !== proofs[0].node_id)) continue;
+    const units = proofs.map((proof) => sourceUnitEvidence(proof, source));
+    if (units.some((proof) => !proof || proof.unit !== value.unit)) continue;
+    coveredContract.add(contractPath);
+    for (const proof of units) if (proof.sourceKey) coveredSource.add(proof.sourceKey);
+  }
+}
+
+function isStandaloneSourceOnlyIcon(record, live) {
+  const variant = live.variants[0];
+  const owner = record?.figma?.node_id;
+  return record?.identity?.semantic_role === "icon" &&
+    record?.identity?.node_kind === "component" &&
+    VIEWPORTS.every((viewport) => record?.contracts?.[viewport]?.root?.render_mode === "figma-source-only") &&
+    Array.isArray(record?.variants) && record.variants.length === 0 &&
+    live.variants.length === 1 &&
+    Array.isArray(variant?.axes) && variant.axes.length === 0 &&
+    live.file_key === record?.figma?.file_key &&
+    live.component_node_id === owner &&
+    variant.variant_node_id === owner &&
+    variant.source_node?.node_id === owner &&
+    variant.source_node?.node_type === "COMPONENT";
+}
+
 export function auditFigmaContractFacts({ record, live, mappings, derivedEvidence = [] } = {}) {
   const issues = [];
   const ownedMappings = record?.contracts?.figma_fact_links;
@@ -183,6 +251,7 @@ export function auditFigmaContractFacts({ record, live, mappings, derivedEvidenc
     live.variants.length > 0 &&
     live.variants.every((variant) =>
       !variant.axes?.some((axis) => axis.name === "Viewport"));
+  const sharedSource = sharedAsset || isStandaloneSourceOnlyIcon(record, live);
   const byViewport = new Map(VIEWPORTS.map((viewport) => [viewport, []]));
   const liveVariantIds = new Set();
   const variantViewport = new Map();
@@ -196,8 +265,8 @@ export function auditFigmaContractFacts({ record, live, mappings, derivedEvidenc
     const viewportAxis = variant.axes?.find((axis) => axis.name === "Viewport");
     const viewport = viewportAxis?.value?.toLowerCase();
     variantViewport.set(variant.variant_node_id, viewport);
-    if (sharedAsset) {
-      // One exported artwork source is shared by both viewport presentations.
+    if (sharedSource) {
+      // Shared artwork/source-only dependencies do not invent viewport variants.
     } else if (!byViewport.has(viewport)) {
       issues.push(issue("FIGMA_VIEWPORT_UNKNOWN", { variant_node_id: variant.variant_node_id }));
     } else {
@@ -220,14 +289,14 @@ export function auditFigmaContractFacts({ record, live, mappings, derivedEvidenc
     if (!record?.contracts?.[viewport]?.root) {
       issues.push(issue("CONTRACT_VIEWPORT_MISSING", { viewport }));
     }
-    if (!sharedAsset && byViewport.get(viewport).length === 0) {
+    if (!sharedSource && byViewport.get(viewport).length === 0) {
       issues.push(issue("FIGMA_VARIANT_MISSING", { viewport }));
     }
   }
   if (Array.isArray(record?.variants)) {
     const declared = new Set(record.variants.map((variant) => variant.node_id));
     for (const id of liveVariantIds) {
-      if (!declared.has(id) && !(sharedAsset && id === live.component_node_id)) issues.push(issue("FIGMA_VARIANT_UNDECLARED", { variant_node_id: id }));
+      if (!declared.has(id) && !(sharedSource && id === live.component_node_id)) issues.push(issue("FIGMA_VARIANT_UNDECLARED", { variant_node_id: id }));
     }
     for (const id of declared) {
       if (!liveVariantIds.has(id)) issues.push(issue("CONTRACT_VARIANT_NOT_IN_FIGMA", { variant_node_id: id }));
@@ -237,6 +306,12 @@ export function auditFigmaContractFacts({ record, live, mappings, derivedEvidenc
   const coveredSource = new Set();
   const coveredContract = new Set();
   const seenMappings = new Set();
+  const numericProofs = new Map();
+  const targetCounts = new Map();
+  for (const mapping of Array.isArray(ownedMappings) ? ownedMappings : []) {
+    const target = mapping?.contract_path;
+    targetCounts.set(target, (targetCounts.get(target) ?? 0) + 1);
+  }
   for (const mapping of Array.isArray(ownedMappings) ? ownedMappings : []) {
     const { variant_node_id, node_id, source_path, contract_path, transform = "identity" } = mapping ?? {};
     const key = `${variant_node_id}|^@${node_id}|^@${source_path}`;
@@ -255,7 +330,7 @@ export function auditFigmaContractFacts({ record, live, mappings, derivedEvidenc
       ? contract_path.match(/^\/contracts\/(mobile|desktop)\//u)?.[1]
       : record?.contracts?.variant_contracts?.[Number(variantIndex)]?.axes
         ?.find(({ name }) => name === "Viewport")?.value?.toLowerCase();
-    if (targetViewport && !sharedAsset && targetViewport !== variantViewport.get(variant_node_id)) {
+    if (targetViewport && !sharedSource && targetViewport !== variantViewport.get(variant_node_id)) {
       issues.push(issue("CONTRACT_VIEWPORT_MISMATCH", { variant_node_id, node_id, source_path, contract_path }));
       continue;
     }
@@ -272,10 +347,12 @@ export function auditFigmaContractFacts({ record, live, mappings, derivedEvidenc
     }
     coveredContract.add(contract_path);
     const atomicFactPath = contract_path.match(/^(.*\/facts\/\d+)\/value(?:\/.*)?$/u)?.[1];
+    let provenanceValid = false;
     if (atomicFactPath) {
       const provenance = pointerValue(record, `${atomicFactPath}/provenance`);
-      if (!["figma-literal", "figma-binding"].includes(provenance?.kind) ||
-          provenance?.node_id !== node_id) {
+      provenanceValid = ["figma-literal", "figma-binding"].includes(provenance?.kind) &&
+        provenance?.node_id === node_id;
+      if (!provenanceValid) {
         issues.push(issue("CONTRACT_FACT_NOT_FIGMA_VERIFIED", {
           variant_node_id, node_id, source_path, contract_path,
           provenance: provenance ?? null,
@@ -287,7 +364,23 @@ export function auditFigmaContractFacts({ record, live, mappings, derivedEvidenc
       issues.push(issue("FIGMA_TRANSFORM_UNSUPPORTED", { variant_node_id, node_id, source_path, contract_path, transform }));
     } else if (!equal(actual, expected)) {
       issues.push(issue("FIGMA_CONTRACT_MISMATCH", { variant_node_id, node_id, source_path, contract_path, figma_value: actual, contract_value: expected }));
+    } else if (provenanceValid && transform === "identity" &&
+        Number.isFinite(sourceFact.actual) && Number.isFinite(expected)) {
+      numericProofs.set(contract_path, sourceFact);
     }
+  }
+
+  const requiredContractPaths = contractFactPaths(record, derivedEvidence);
+  // Unit inference is evidence, not a blanket /unit exemption. A malformed
+  // packet or external-only correspondence cannot certify it.
+  const invalidUnitEvidence = new Set([
+    "EVIDENCE_LINKS_NOT_IN_CONTRACT", "FIGMA_CAPTURE_VERSION_UNSUPPORTED",
+    "FIGMA_IDENTITY_MISMATCH", "FIGMA_VARIANT_INVALID",
+    "FIGMA_VARIANT_ROOT_MISMATCH", "FIGMA_SOURCE_NODE_INVALID",
+  ]);
+  if (!issues.some(({ code }) => invalidUnitEvidence.has(code))) {
+    coverVerifiedUnits(record, source, numericProofs, targetCounts,
+      requiredContractPaths, coveredSource, coveredContract);
   }
 
   for (const [key, fact] of source) {
@@ -299,7 +392,7 @@ export function auditFigmaContractFacts({ record, live, mappings, derivedEvidenc
       }));
     }
   }
-  for (const contract_path of contractFactPaths(record, derivedEvidence)) {
+  for (const contract_path of requiredContractPaths) {
     if (!coveredContract.has(contract_path)) {
       issues.push(issue("CONTRACT_FACT_UNMAPPED", { contract_path }));
     }
@@ -310,7 +403,7 @@ export function auditFigmaContractFacts({ record, live, mappings, derivedEvidenc
     component_id: record?.id ?? null,
     source_fact_count: source.size,
     mapped_source_fact_count: coveredSource.size,
-    contract_fact_count: contractFactPaths(record, derivedEvidence).length,
+    contract_fact_count: requiredContractPaths.length,
     mapped_contract_fact_count: coveredContract.size,
     issues,
   };
