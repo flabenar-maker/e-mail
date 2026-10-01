@@ -134,7 +134,7 @@ test("remediation preserves paused routes and required current pilot coverage wi
   }
 });
 
-test("roadmap records completed Stage 8 while retaining stages 13 and 14 as incomplete", async () => {
+test("roadmap records completed Stage 8 and retains incomplete 11A–11C cutover gates", async () => {
   const [roadmap, remediationPlan] = await Promise.all([
     readFile(join(repoRoot, roadmapPath), "utf8"),
     readFile(join(repoRoot, remediationPlanPath), "utf8"),
@@ -142,11 +142,26 @@ test("roadmap records completed Stage 8 while retaining stages 13 and 14 as inco
 
   assert.doesNotMatch(numberedStage(roadmap, 8), /- \[ \] /u);
   assert.match(numberedStage(roadmap, 8), /- \[x\] /u);
-  for (const stageNumber of [13, 14]) {
-    assert.match(numberedStage(roadmap, stageNumber), /- \[ \] /u);
+  const stage11 = numberedStage(roadmap, 11);
+  for (const phase of ["11A", "11B", "11C"]) {
+    const headings = [...stage11.matchAll(new RegExp(`^#### ${phase}\\..*$`, "gmu"))];
+    assert.equal(headings.length, 1, `Expected exactly one ${phase} heading`);
+    assert.match(
+      stage11,
+      new RegExp(
+        `^#### ${phase}\\..*\\n(?:(?!^#### 11[A-C]\\.)[\\s\\S])*?^- \\[ \\] `,
+        "mu",
+      ),
+      `${phase} must retain an unchecked gate`,
+    );
   }
+  assert.match(stage11, /Web-часть 10A отменена/u);
+  assert.match(
+    stage11,
+    /новый `component-development` route, design standard\/workflow и третий специализированный навык не создаются/u,
+  );
   assert.match(
     remediationPlan,
-    /не завершает этап 8, не заменяет полное shadow comparison этапа 13 и не включает paused routes до этапа 14/u,
+    /Актуальная очередь после завершённых этапов 8–10 — proof-gate 11A и cutover 11B/u,
   );
 });
