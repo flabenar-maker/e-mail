@@ -25,7 +25,7 @@ If the task type or Mobile/Desktop roles are unknown, ask only for that missing 
 
 ## Resolve and operate
 
-Pin the current main SHA in flabenar-maker/e-mail through authenticated gh CLI, or GitHub MCP if CLI is unavailable. An explicitly authorized candidate test uses its exact cloud SHA instead. Read system/manifest.yaml at that SHA; resolve the selected route, profile and workflow through its source references. Missing sources stop the request.
+Reuse the pinned cloud SHA supplied by a trusted CUPIS task-router or bootstrap handoff for this task; do not repin main during that handoff. For a standalone invocation, pin the current main SHA in flabenar-maker/e-mail through authenticated gh CLI, or GitHub MCP if CLI is unavailable. An explicitly authorized candidate test uses its exact cloud SHA instead. The specialization and task sources must match the selected SHA; on mismatch stop rather than silently switching versions. Read system/manifest.yaml at that SHA; resolve the selected route, profile and workflow through its source references. Missing sources stop the request.
 
 Before a full bundle, prepare resolver inputs read-only. For design-dependent work, use Figma MCP to identify the pair's roles, email root and components in the model tree, including nested components declared by their parent's contract. Match registered owner/variant identities in the workflow's component records. Asset wrappers and internal graphics belong to their registered export owner, not separate resolver candidates. Names, visual similarity and Description are not identity proof. Unknown or ambiguous required component or asset-owner matches require the affected node ID and a diagnostic.
 

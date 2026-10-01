@@ -34,7 +34,7 @@
 
 ## Карта файлов и порядок пакетов
 
-**Пакет A — маршрутизатор:** `.agents/skills/cupis-email-task-router/SKILL.md`, `AGENTS.md`, `system/manifest.yaml`, `README.md`, `bootstrap/README.md`, `bootstrap/verify.ps1` и тесты `tests/skills/cupis-email-task-router.test.mjs` / `tests/foundation/system-manifest.test.mjs`. Это только выбор специализации; существующие два навыка не переписываются без доказанной потребности.
+**Пакет A — маршрутизатор:** `.agents/skills/cupis-email-task-router/SKILL.md`, `AGENTS.md`, `system/manifest.yaml`, `README.md`, `bootstrap/README.md`, новые интеграционные тесты `tests/skills/cupis-email-task-router.test.mjs` и синхронизация `tests/helpers/system-fixture.mjs`. Существующие `bootstrap/verify.ps1` и `tests/foundation/system-manifest.test.mjs` проверяются без дублирующих изменений. Это только выбор специализации. Независимое review выявило доказанную потребность в узкой синхронизации `.agents/skills/building-cupis-emails/SKILL.md` и `.agents/skills/maintaining-cupis-email-system/SKILL.md`: сохранить переданный pinned SHA вместо повторного выбора `main`. Остальные инструкции и их технические правила не переписываются.
 
 **Пакет B — веб-выдача:** новый `scripts/lib/email-delivery-bundle.mjs` отвечает только за проверку, импорт безопасного входного пакета и упаковку готовой версии; `scripts/package-email-version.mjs` — CLI-обёртка. `data/workflows/email-build.yaml` и `.agents/skills/building-cupis-emails/SKILL.md` объявляют Web как тип итоговой выдачи существующего `handoff`. `package.json` / `package-lock.json` фиксируют переносимую ZIP-зависимость. Тесты — `tests/workflows/email-delivery-bundle.test.mjs` и существующие workflow/skill tests. Никакой второй renderer, Web-only component contract или копии workflow.
 
@@ -51,9 +51,9 @@
 - Consumes: согласованный spec этого плана и фактический `main`.
 - Produces: явная граница «верхний выбор навыка / специализированный route / surface delivery» без нового владельца технических правил.
 
-- [ ] **Step 1: Дополнить master-spec.** Добавить ровно два решения: верхний выбор между специализированными навыками и surface-specific delivery после verified email output; не менять описание владельцев Figma/контрактов/renderer. В roadmap сохранить пакет 10A запланированным, этап 11 оставить незатронутым.
-- [ ] **Step 2: Проверить документационный diff.** Ручной review: ни одного утверждения о готовой Web-поддержке до smoke; `git diff --check` и `npm run validate` на exact-SHA snapshot должны пройти.
-- [ ] **Step 3: Зафиксировать отдельный commit.** `docs: define Codex task routing and Web delivery boundary`.
+- [x] **Step 1: Дополнить master-spec.** Добавить ровно два решения: верхний выбор между специализированными навыками и surface-specific delivery после verified email output; не менять описание владельцев Figma/контрактов/renderer. В roadmap сохранить пакет 10A запланированным, этап 11 оставить незатронутым.
+- [x] **Step 2: Проверить документационный diff.** Ручной review: ни одного утверждения о готовой Web-поддержке до smoke; `git diff --check` и `npm run validate` на exact-SHA snapshot должны пройти.
+- [x] **Step 3: Зафиксировать отдельный commit.** `docs: define Codex task routing and Web delivery boundary`.
 
 ### Task 2: Тонкий skill выбора задачи (пакет A)
 
@@ -61,34 +61,35 @@
 - Create: `.agents/skills/cupis-email-task-router/SKILL.md`
 - Create: `tests/skills/cupis-email-task-router.test.mjs`
 - Modify: `system/manifest.yaml`
-- Modify: `tests/foundation/system-manifest.test.mjs`
+- Modify: `tests/helpers/system-fixture.mjs` (добавить обязательный skill в существующий набор fixtures)
+- Test: `tests/foundation/system-manifest.test.mjs`
 
 **Interfaces:**
 - Consumes: `skills.required` в manifest; только имена `building-cupis-emails` и `maintaining-cupis-email-system`.
 - Produces: repo skill `cupis-email-task-router` с исходом `email`, `maintenance`, `clarify` или `not-ready`; выбранный специализированный навык сам разрешает route/mode.
 
-- [ ] **Step 1: Написать RED-тесты.** Проверить frontmatter/регистрацию router skill, четыре исхода из таблицы spec, сохранение явного выбора пользователя, отсутствие HTML/CSS, точных компонентных значений и копий `workflow.steps`. Добавить негативные fixtures: «новое или готовое письмо?» → `clarify`; «новый блок» → `not-ready`; совместная запись письма и контракта → разделение областей без автоматического действия.
-- [ ] **Step 2: Запустить узкие тесты.** `node --test tests/skills/cupis-email-task-router.test.mjs tests/foundation/system-manifest.test.mjs` → ожидаемый FAIL до появления skill.
-- [ ] **Step 3: Добавить минимальный SKILL и manifest entry.** Текст skill содержит только критерии выбора и handoff, использует два существующих идентификатора навыков и не угадывает paused route. В `skills.required` добавить `cupis-email-task-router` с repo path; `routes` и `bundle_profiles` не менять.
-- [ ] **Step 4: Повторить те же тесты.** Ожидаемый PASS, затем `npm run validate` и `npm run generate:check` без новых generated-doc diffs.
-- [ ] **Step 5: Commit.** `feat: add top-level CUPIS task router skill`.
+- [x] **Step 1: Написать RED-тесты.** Интеграционные Node-тесты проверяют manifest registration, discoverable frontmatter и реальный отказ validator при отсутствующем/переименованном skill. Выбор направления, явный выбор, неоднозначность и смешанная область проверяются независимыми поведенческими probes модели без текстовых grep/assertions. До SKILL выполнить baseline без router; «новый блок» не должен подменяться onboarding, смешанный запрос не разрешает cross-scope write.
+- [x] **Step 2: Запустить узкие тесты.** `node --test tests/skills/cupis-email-task-router.test.mjs tests/foundation/system-manifest.test.mjs` → ожидаемый FAIL до появления skill.
+- [x] **Step 3: Добавить минимальный SKILL и manifest entry.** Текст skill содержит только критерии выбора и handoff, использует два существующих идентификатора навыков и не угадывает paused route. В `skills.required` добавить `cupis-email-task-router` с repo path; `routes` и `bundle_profiles` не менять.
+- [x] **Step 4: Повторить те же тесты.** Ожидаемый PASS, затем `npm run validate` и `npm run generate:check` без новых generated-doc diffs.
+- [x] **Step 5: Commit.** `feat: add top-level CUPIS task router skill`.
 
 ### Task 3: Обнаружение навыка и clean-context маршрутизация (пакет A)
 
 **Files:**
-- Modify: `AGENTS.md`, `README.md`, `bootstrap/README.md`, `bootstrap/verify.ps1`
-- Modify: `tests/skills/cupis-email-task-router.test.mjs`
+- Modify: `AGENTS.md`, `README.md`, `bootstrap/README.md`
+- Test: `bootstrap/verify.ps1` и `tests/skills/cupis-email-task-router.test.mjs`
 - Test: `tests/skills/email-build-skill-boundary.test.mjs`, `tests/skills/maintenance-skill-boundary.test.mjs`
 
 **Interfaces:**
 - Consumes: `cupis-email-task-router` из Task 2.
 - Produces: один короткий entrypoint в `AGENTS.md`, при этом bootstrap READ ONLY/RESTORE и существующие специализированные навыки сохраняются.
 
-- [ ] **Step 1: Добавить RED-тесты обнаружения.** Проверить pointer из `AGENTS.md`, уникальные frontmatter names и отсутствие требований «читать все три skill для каждого запроса». `bootstrap/verify.ps1` должен проверять наличие router так же, как остальных required skills.
-- [ ] **Step 2: Запустить targeted tests/bootstrap до изменения.** Ожидаемый FAIL по отсутствующему pointer/verify requirement.
-- [ ] **Step 3: Внести минимальные entrypoint-правки.** Одна строка в `AGENTS.md` для CUPIS-запросов; README объясняет назначение трёх навыков без дублирования маршрутов; bootstrap использует manifest как каталог.
-- [ ] **Step 4: Проверить сценарии в чистом контексте.** Новый email, existing-email fix, read-only письмо, library/contract, migration status, новый компонент, неоднозначный запрос, смешанный запрос. Записать фактически выбранный skill/блокер в PR; если модель неверно выбирает, исправлять только метаданные/границу router, не технические правила.
-- [ ] **Step 5: Запустить targeted tests и Windows bootstrap; commit.** `node --test tests/skills/*.test.mjs tests/foundation/system-manifest.test.mjs`; `pwsh -NoProfile -File bootstrap/verify.ps1` (или Windows PowerShell). `docs: expose CUPIS task router across Codex entrypoints`.
+- [x] **Step 1: Добавить RED-тесты обнаружения.** Проверить потребляющей моделью переход от `AGENTS.md` к выбранному навыку, явный выбор и однозначную область без загрузки обоих specialized skills. Убедиться реальным negative fixture, что существующий manifest-driven `bootstrap/verify.ps1` блокирует отсутствующий router наравне с другими required skills; второй hardcoded каталог не добавлять.
+- [x] **Step 2: Запустить targeted tests/bootstrap до изменения.** До записи pointer зафиксировать baseline обнаружения; RED регистрационной интеграции уже зафиксирован в Task 2. Если bootstrap уже покрывает новый required skill через validator, сохранить его код.
+- [x] **Step 3: Внести минимальные entrypoint-правки.** Одна строка в `AGENTS.md` для CUPIS-запросов; README объясняет назначение трёх навыков без дублирования маршрутов; bootstrap использует manifest как каталог.
+- [x] **Step 4: Проверить сценарии в чистом контексте.** Новый email, existing-email fix, read-only письмо, library/contract, migration status, новый компонент, неоднозначный запрос, смешанный запрос. Записать фактически выбранный skill/блокер в PR; если модель неверно выбирает, исправлять только метаданные/границу router, не технические правила.
+- [x] **Step 5: Запустить targeted tests и Windows bootstrap; commit.** `node --test tests/skills/*.test.mjs tests/foundation/system-manifest.test.mjs`; `pwsh -NoProfile -File bootstrap/verify.ps1` (или Windows PowerShell). `docs: expose CUPIS task router across Codex entrypoints`.
 - [ ] **Step 6: Закрыть пакет A отдельным gate.** На точном финальном cloud SHA пакета A прогнать локальные `npm run verify`, `npm run generate:check` и bootstrap, открыть draft PR A и получить отдельное разрешение на merge. Пакет B начинается только после слияния A; если Web-среда недоступна, завершённый A остаётся полезным самостоятельным результатом.
 
 ### Task 4: Реальный capability-gate для Codex Web (начало пакета B)
@@ -180,3 +181,39 @@
 - Технические компоненты, значения контрактов, HTML и Figma остаются у прежних владельцев.
 - Пакет A можно принять отдельно; пакет B не считается завершённым без реального Codex Web smoke.
 - План не делает GitHub Actions gate и не меняет статус этапов 11–12.
+## Журнал выполнения пакета A — 2026-10-01
+
+- План и решение одобрены командой пользователя «Делай». Реализация — отдельная branch `codex/cupis-task-router` поверх неслитого plan PR #103; его merge и merge реализации требуют отдельных команд.
+- Baseline без router: новый дизайн блока был выбран как maintenance/component-onboarding. Это неверная подмена назначения; router должен вернуть `not-ready` для отдельного design-time маршрута.
+- RED на `e32922e960ea930b0caf722b7243437d70807400`: 106 тестов, 103 PASS, 3 ожидаемых router-registration FAIL; validation и generate:check PASS локально.
+- Интеграция проверяется действующим validator, выбор и границы — поведением независимой модели, не совпадением слов в SKILL. Это уточняет способ тестирования, а не продуктовые правила.
+- В fixture helper добавляется новый обязательный skill: без этого имеющиеся системные fixtures стали бы неполными.
+- Verifier уже вызывает manifest-driven validator для всех required skills; отдельный hardcoded router-check или второй каталог не нужен. Его реальный negative case проверяется локально.
+- В двух существующих specialized skills меняется только выбор источника при handoff: они повторно не выбирают `main`, а сохраняют доверенный переданный SHA; standalone self-pin остаётся. Потребность подтверждена RED behavior-probe и независимым review. Routes/profiles/statuses, Figma, component contracts/foundations, renderer, generated docs и локальные письма сохраняются.
+- GREEN Task 2 на `d024403c9f84afef62558fc69dfd38dcc3708b70`: 106/106 targeted tests, validation и generate:check PASS; оба negative fixtures дают path-specific diagnostics.
+- Discovery candidate `6be4935f2274d341d41c4d7fd10e2c9340b14f11`: targeted skill/manifest tests и Windows bootstrap PASS. Удалённый из отдельного fixture router даёт ровно один `missing-required-skill` blocker; production snapshot не редактировался.
+- Независимый обзор обнаружил handoff A→B: router закреплял A, а специализации выбирали новый `main` B. RED воспроизведён без записей. На `9ee5a39015d58d1a9add4f8dc354ac1bdf0bf317` оба навыка сохраняют A; standalone выбирает текущий B; явно разрешённый candidate использует его SHA; source mismatch останавливает работу. Повторный независимый review не нашёл блокирующих замечаний.
+- Уточнена граница обнаружения: repo entrypoint или сам skill должен быть загружен. Remote `AGENTS.md` не устанавливает/активирует навык в projectless-чате. Candidate не устанавливается глобально до публикации.
+- После handoff-правки на `9ee5a39015d58d1a9add4f8dc354ac1bdf0bf317`: все targeted skill/manifest tests, validation, generate:check и Windows bootstrap PASS; тесты не правились.
+- Финальный package-A gate и публикация candidate PR фиксируются локальными результатами на его точном SHA в PR. До merge пакет A не считается находящимся в `main`; пакет B/C и этап 11 не начаты.
+
+### Независимая поведенческая проверка
+
+На `6be4935f2274d341d41c4d7fd10e2c9340b14f11` Terra Medium из отдельного контекста читала project entrypoint, manifest и только выбранные навыки, не design/plan для угадывания ответа. Никаких Figma-операций или записей. Последующая handoff-проверка выполнена на `9ee5a39015d58d1a9add4f8dc354ac1bdf0bf317`.
+
+| Запрос | Наблюдаемый выбор/граница |
+| --- | --- |
+| Новое письмо по точной паре | email → building |
+| Только alt в готовом письме | email → building; technical, исходная версия сохраняется |
+| Read-only проверка готового письма | email → building; без записи |
+| Изменение контракта/реестра | maintenance → maintaining; paused не обходится |
+| Статус миграции | maintenance → maintaining; read-only |
+| Дизайн нового блока | not-ready; не onboarding и не email-build |
+| Недостаточно данных о правке | clarify; до записи нужна конкретизация |
+| Письмо + изменение контракта | раздельные области; stopped dependency не обходится |
+| Явно выбран maintaining | выбор сохраняется, router не загружается повторно |
+| Ознакомиться с проектом | bootstrap READ ONLY, без предметного skill |
+| Явно выбран building для контракта | конфликт области объясняется; нет молчаливого переключения |
+| Web ZIP с fallback-коммитом письма | нет ложной Web-ready; commit письма в GitHub запрещён |
+
+Дополнительный неоднозначный запрос «Сделай письмо» без исходников даёт `clarify`: новое письмо или изменение существующего, без предположения о типе. Эти probes проверяют исполнение инструкций моделью; они не заменяют реальную Codex Web capability-проверку пакета B.

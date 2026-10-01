@@ -54,6 +54,7 @@ export const canonicalSystemFixtureFiles = [
   "bootstrap/verify.ps1",
   ".agents/skills/maintaining-cupis-email-system/SKILL.md",
   ".agents/skills/building-cupis-emails/SKILL.md",
+  ".agents/skills/cupis-email-task-router/SKILL.md",
 ];
 
 function fixturePath(root, relativePath) {

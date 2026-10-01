@@ -12,7 +12,7 @@ Act as a thin router over one machine-resolved CUPIS context. GitHub owns persis
 ## Resolve the task context
 
 1. Prefer the authenticated `gh CLI` for cloud GitHub reads and writes. If it is unavailable or unauthenticated, use the GitHub MCP connector. Never expose credentials.
-2. Pin the current `main` SHA of `flabenar-maker/e-mail` and read `system/manifest.yaml` at that SHA. The manifest is the only route catalog.
+2. Reuse the pinned cloud SHA supplied by a trusted CUPIS task-router or bootstrap handoff for this task; do not repin `main` during that handoff. For a standalone invocation, pin the current `main` SHA of `flabenar-maker/e-mail`. An explicitly authorized scoped candidate test uses its exact cloud SHA. Read `system/manifest.yaml` at the selected SHA; the specialization and task sources must match it. On mismatch stop rather than silently switching versions. The manifest is the only route catalog.
 3. Select the route from the request. For migration status or next-step questions, select `migration-progress`, list `docs/superpowers/plans/` at the pinned SHA and re-read the roadmap before answering.
 4. Materialize a disposable exact-SHA snapshot of the pinned cloud commit. Verify that the snapshot HEAD equals the pinned SHA, run `npm ci --ignore-scripts`, then invoke:
 
