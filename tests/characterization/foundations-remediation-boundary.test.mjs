@@ -149,7 +149,7 @@ test("roadmap records completed Stage 8 and retains incomplete 11A–11C cutover
     assert.match(
       stage11,
       new RegExp(
-        `^#### ${phase}\\..*\\n(?:(?!^#### 11[A-C]\\.)[\\s\\S])*?^- \\[ \\] `,
+        `^#### ${phase}\\..*\\r?\\n(?:(?!^#### 11[A-C]\\.)[\\s\\S])*?^- \\[ \\] `,
         "mu",
       ),
       `${phase} must retain an unchecked gate`,
