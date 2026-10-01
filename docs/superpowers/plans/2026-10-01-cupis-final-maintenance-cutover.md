@@ -18,38 +18,47 @@
 
 Исходный `backup/pre-structured-migration-2026-08-24` сохранить. Каждый пакет начинает с нового pinned main и собственной облачной ветки; merge и следующий пакет — только после успешных проверок и отдельной команды.
 
-### Точка возврата P2: исчерпана квота Figma MCP
+### Точка возврата P2: повторно исчерпана квота Figma MCP
 
-**Статус на 01.10.2026: `BLOCKED_FIGMA_MCP_QUOTA`; пакет 2 не принят.** Это отметка хода проверки, не статус компонентов и не новое правило runtime. После переподключения успешный read-only вызов выполнен в 19:38:46 UTC (22:38:46 МСК). В 19:43:11–19:45:13 UTC сохранены полные по передаче canonical packets для **22 из 61** records и отдельные supplementary direct reads. Затем Figma MCP сообщил о лимите вызовов Full seat / Professional plan. Время восстановления квоты неизвестно; прежний transport error больше не описывает последнюю причину остановки. Исторические записи ниже сохраняют состояние на момент каждой проверки.
+**Актуальный статус на 02.10.2026, 00:24:45 МСК: `BLOCKED_FIGMA_MCP_QUOTA`; пакет 2 не принят.** После подтверждённого восстановления MCP сбор возобновлён. Первый повторный quota error получен 01.10.2026 в 21:24:45 UTC (02.10, 00:24:45 МСК) при чтении `block-icon-cards`. Все дальнейшие MCP-вызовы, включая screenshots, остановлены; обходов и повторных попыток после ошибки не было. Время сброса неизвестно.
 
-«Полный packet» означает целостность передачи, а не полноту фактов: все 22 локальных fact audits завершились exit 1 из-за coverage/mapping/variant/unsupported diagnostics (в сумме 4 148). Среди доступных сопоставленных фактов `FIGMA_CONTRACT_MISMATCH = 0`; Description совпадают 22/22. Это **не** подтверждение всех контрактов. Supplementary facts не подставлялись в canonical audit ради PASS. Свежие screenshots не сняты; визуальная приёмка не выполнена.
+**Основание:** main по-прежнему `6c0bf7d0d3b1ca7909b692541883d2b0e9788709`; проверяемый кандидат [PR #110](https://github.com/flabenar-maker/e-mail/pull/110) — `212cb6d6dc7e7dac11177701bd71009e00dba8d2`. Исполнен именно исправленный `scripts/figma/capture-contract-source.js`, Git blob `18e2ef8c8498629d8a54cf98cc46e0601fa2537d`. Component/foundation records относительно main не менялись. Один candidate `library-maintenance / read-only / both` bundle содержит 61 record, четыре foundations и пять static sources; результат `paused / SKILL_ROUTE_PAUSED` использован только в границе этого миграционного плана.
 
-Baseline проверки: `main@6c0bf7d0d3b1ca7909b692541883d2b0e9788709`. [PR #110](https://github.com/flabenar-maker/e-mail/pull/110) хранит журнал и разрешённые bounded repairs capture и typography projection; факты компонентов не меняются. Локальные evidence и `capture-manifest.json`: `C:/Users/flabe/AppData/Local/Temp/codex-package2-6c0bf7/evidence/full-library-20261001`. Эти временные файлы не являются источником контрактов; при их утрате данные надо снять заново, а не восстанавливать по этому тексту.
+| Область | Фактический результат этой сессии |
+| --- | --- |
+| 34 обычных records из прежней очереди | Полные свежие canonical packets сохранены для всех 34; это получение данных, не 34 успешных contract audit |
+| 5 owners отложенного PR #109 | Полные packets: `card-image`, `block-cards-images`, `card-icon`. `block-icon-cards` прерван, `block-icon-list` не читался |
+| Прежние 22 records | Старые packets сохранены отдельно; повторное чтение исправленным capture ещё не начато |
+| Итого исправленным capture | **37/61 полных packets; 24/61 без полного свежего packet этим capture** |
+| Полные packets в двух сессиях суммарно | 59 уникальных records, но разных дат/версий capture: не считать их единой завершённой свежей сверкой |
+| Стили Figma | Отдельный предыдущий read-only запрос: ровно 15 локальных text styles, имена/ID совпали с реестром. Это не проверка параметров и всех мест применения |
+| Визуальная приёмка | Свежих screenshots в этом продолжении нет; не выполнена |
 
-#### Что можно продолжать без Figma
+Новые receipts, canonical JSON и отдельные metadata находятся в `C:/Users/flabe/AppData/Local/Temp/codex-package2-6c0bf7/evidence/full-library-20261002`. `capture-manifest.json` содержит SHA, список завершённых/незавершённых owners, время, полную длину и FNV-32 serialized payload. Для каждого chunk совпали размер/hash, после сборки проверены итоговая длина/hash и JSON parse. Незавершённые 28 000 символов `block-icon-cards` не опубликованы как packet и не идут в audit. Старые evidence `full-library-20261001` не перезаписаны. Raw evidence остаётся временным материалом, не источником контрактов.
 
-- [ ] **P2-F1 — подготовить точечный ремонт сборщика и сопоставления фактов.** Использовать 22 сохранённых packets, отдельные прямые чтения и статическую инвентаризацию 61 record; разделить пропущенные поля, несовместимые paths, варианты и действительно лишние факты. Определить точные code paths и локальные regression cases. Не уменьшать coverage, не добавлять blanket exclusions и не считать diagnostics дефектами дизайна. Реализация — в явно ограниченной области; итоговая приёмка требует нового живого MCP-чтения исправленным сборщиком.
-- [x] **P2-F3 — локально исправить generated-карту использования шрифтов.** Основа — 364 существующие semantic style-ID links и 15 canonical styles, с проверкой точного ID, ownership/provenance и viewport. Проверить отрицательные случаи: snapshot-only связь, неизвестный ID, локальное переопределение параметров. Не менять текстовые значения контрактов/HTML и не выдавать recorded association за доказательство текущего использования в Figma.
-- [ ] **F7 — уточнить решение по generated workflow checkpoints и границы пакета 3.** Проверить producer/schema/manifest/output/test map по существующим файлам. Это подготовка решения, не начало реализации пакета 3 и не разрешение активировать routes.
+**Результаты сравнения 37 packets:** см. датированный журнал ниже. Ни отсутствие value mismatch в покрытой части, ни совпадение Description не закрывают coverage/unsupported diagnostics и визуальную проверку.
 
-По следующей команде пользователя начат P2-F1: ошибки самого механизма сверки мешают доказать корректность библиотеки. Первоначальная фиксация лимита была docs-only; последующий разрешённый repair включает capture-код и его тест. Локальные проверки поручаются Terra Medium; зелёные unit tests не снимают Figma-блокер.
+#### Остаток и обязательный порядок возобновления
 
-#### Что остаётся на паузе
+- [ ] Снова закрепить main/head PR и проверить изменения источников относительно указанных SHA. Одним маленьким read-only MCP-вызовом проверить доступ; при новом quota error сразу остановить всю очередь, без обходов.
+- [ ] Снять **два оставшихся owners**: `block-icon-cards` (`326:6342`) заново целиком, затем `block-icon-list` (`946:26516`). Перед вызовом ID перепроверить по актуальным canonical contracts. Не склеивать новый packet с частичным старым чтением.
+- [ ] Выполнить необходимое повторное чтение прежних **22 owners** исправленным capture: `asset-bank-badge-4x`, `asset-card-image-2x`, `asset-feature-icon-4x`, `asset-header-logo-4x`, `asset-header-logo-compact-4x`, `asset-icon-badge-4x`, `asset-partner-badge-4x`, `asset-product-logo`, `asset-status-badge-negative-4x`, `asset-status-badge-positive-4x`, `badge-operation-status`, `badge-step-number`, `banner-fiscal-check-link`, `button-primary`, `banner-hero`, `banner-inline`, `button-secondary`, `banner-secondary`, `item-alert`, `icon-gift-2-line`, `icon-receipt-fill`, `icon-user-forbid-fill`. Старые supplementary reads не превращать в новый canonical packet задним числом.
+- [ ] По всем свежим packets завершить проверку значимых фактов, bindings и локальных text overrides; сопоставить оставшиеся coverage/mapping/variant/unsupported diagnostics. Не уменьшать покрытие и не подменять exact значения ради PASS.
+- [ ] Для P2-F2 отдельно разобраться с четырьмя width observations и ролью reference geometry; сохранённые packets позволяют локальный анализ, но любое недостающее live evidence ждёт MCP. Никаких автоматических числовых исправлений.
+- [ ] Получить необходимые screenshots и поручить визуальную сверку Terra Medium. Успешный числовой audit не заменяет визуального результата.
+- [ ] Обновить журнал и статус PR по фактическому результату. Полный локальный gate точного финального SHA — перед отдельно разрешённым merge кода. Пакет 3/cutover не начинать, пока остаются предусмотренные gates. Ручной `cupis-active-work-context.md` не обновлять автоматически.
 
-Нельзя закрывать full-library audit, разрешать четыре P2-F2 width differences догадкой, принимать визуальный результат, менять реальные component/foundation values или Figma Description/design без необходимой живой сверки. Пакет 3, переключение и cleanup не начинаются. [PR #109](https://github.com/flabenar-maker/e-mail/pull/109) остаётся отдельно: известный refresh карточек не включается в P2 и не объявляется неожиданным drift.
+**34 обычных records, для которых новые packets уже получены:** `banner-app-download`, `item-bullet`, `block-bullet-list`, `block-contact-support`, `item-notification`, `block-content`, `block-info-alert`, `block-instruction-steps`, `details-operation-plain`, `details-suspicious-operation`, `block-personal-data-update`, `details-receipt`, `block-receipt-info`, `item-step`, `block-steps`, `block-transaction-error`, `details-operation`, `block-transaction-success`, `details-transfer`, `email-footer`, `email-footer-legal`, `email-header`, `email-template`, `icon-bank-card-2-line`, `icon-fingerprint-2-line`, `icon-global-line`, `icon-lock-password-fill`, `icon-mail-fill`, `icon-mir-logo`, `icon-shopping-basket-2-line`, `icon-smartphone-fill`, `icon-user-follow-fill`, `icon-user-unfollow-fill`, `nps-options`.
 
-#### Обязательный возврат после восстановления квоты
+**Граница PR #109:** все пять связанных owners остаются в инвентаризации. Известные изменения кнопок, link FILL и icon wrapper/alignment рассматриваются как отложенный refresh, не как неожиданная поломка. Остальные поля и общие зависимости не исключаются вместе с владельцем. Никакие изменения этого PR не перенесены.
 
-- [ ] Повторно закрепить актуальный main и head PR; определить изменения проверяемых файлов относительно baseline. Не переносить выводы между SHA без проверки затронутой области.
-- [ ] Одним небольшим read-only MCP-вызовом подтвердить восстановление. При новом quota error остановить всю очередь; не повторять вызовы для следующих компонентов и не использовать обходы. Дату сброса не угадывать.
-- [ ] Продолжить с **39 records без полного нового packet**: 34 обычных и 5 связанных с отложенным refresh, список ниже. Node IDs брать из актуальных contracts. Для deferred owners проверять только неотложенные поля/зависимости; изменения PR #109 не переносить и не исключать владельца целиком.
-- [ ] Сохранять receipts со временем, SHA и целостностью передачи; частичные packets не использовать. Для прежних 22 повторить чтение полей/owners, которых касается ремонт capture или последующие изменения Figma/источников. Не превращать старые supplementary reads в новый canonical packet задним числом.
-- [ ] Повторить canonical fact audits, проверить фактические bindings и локальные text overrides, выяснить причину четырёх P2-F2 width differences. Получить необходимые screenshots; визуальную сверку поручить Terra Medium.
-- [ ] Снять blocker только после успешного MCP и завершения требуемой сверки. Отдельно оценить остальные blockers P2 и F7: доступ к Figma сам по себе не закрывает пакет. Обновить журнал/статус PR; при согласованном слиянии синхронизировать roadmap с фактически завершённой работой. Ручной `cupis-active-work-context.md` автоматически не обновлять.
+#### Что остаётся открытым вне сбора
 
-**Очередь обычной сверки (34):** `banner-app-download`, `item-bullet`, `block-bullet-list`, `block-contact-support`, `item-notification`, `block-content`, `block-info-alert`, `block-instruction-steps`, `details-operation-plain`, `details-suspicious-operation`, `block-personal-data-update`, `details-receipt`, `block-receipt-info`, `item-step`, `block-steps`, `block-transaction-error`, `details-operation`, `block-transaction-success`, `details-transfer`, `email-footer`, `email-footer-legal`, `email-header`, `email-template`, `icon-bank-card-2-line`, `icon-fingerprint-2-line`, `icon-global-line`, `icon-lock-password-fill`, `icon-mail-fill`, `icon-mir-logo`, `icon-shopping-basket-2-line`, `icon-smartphone-fill`, `icon-user-follow-fill`, `icon-user-unfollow-fill`, `nps-options`.
+- [ ] **P2-F1:** bounded capture repair реализован и работает на новых live reads, но оставшееся покрытие/сопоставление ещё не доказано. Значимые поля, несовместимые paths, variant ownership и непокрытые факты требуют точной классификации, без blanket exclusions.
+- [x] **P2-F3:** generated-карта 364 записанных semantic associations / 15 стилей исправлена и локально проверена; это не доказательство текущего live usage и не разрешение удалять стили.
+- [ ] **F7:** решение по generated workflow checkpoints и exact producer/schema/manifest/output/test map остаётся открытым. В этом продолжении не выполнялось; пакет 3 не начат.
 
-**Отложенная область PR #109 (5 owners):** `card-image`, `block-cards-images`, `card-icon`, `block-icon-cards`, `block-icon-list`. Общие компоненты вроде `button-secondary` не исключаются.
+После повторного лимита выполняются только локальное сравнение уже полученных данных, фиксация журнала и scoped проверка документационной правки. Дизайн, Descriptions, component/foundation values, HTML, навыки, routes и письма не изменяются.
 
 ### P2-F1 — разрешённый локально проверяемый ремонт capture (01.10.2026)
 
@@ -85,7 +94,7 @@ Baseline проверки: `main@6c0bf7d0d3b1ca7909b692541883d2b0e9788709`. [PR 
 - [x] Независимое code review и targeted local tests (результаты в журнале ниже). Final artifact review и scoped exact-SHA gate фиксируются в PR body после journal commit.
 - [ ] Перед будущим merge: полный локальный gate точного финального SHA; сейчас PR не сливается.
 
-Generated usage отражает записанные контракты, не свежую живую Figma. Отсутствие recorded consumers не разрешает удалить стиль. Квота MCP, очередь 39, четыре P2-F2 width differences и F7 остаются открытыми; пакет 2 целиком не закрывается, пакет 3 не начинается. Ручной active-work-context не обновляется.
+Generated usage отражает записанные контракты, не свежую живую Figma. Отсутствие recorded consumers не разрешает удалить стиль. Квота MCP, актуальный остаток из точки возврата выше, четыре P2-F2 width differences и F7 остаются открытыми; пакет 2 целиком не закрывается, пакет 3 не начинается. Ручной active-work-context не обновляется.
 
 
 ## Global Constraints
@@ -525,3 +534,92 @@ Generated typography registry пересобран каноническим ге
 **Граница результата:** исправлена recorded consumer projection, а не доказано текущее live usage в Figma. Пустой recorded список не даёт разрешения удалить стиль. P2-F1 live gate, очередь 39, четыре P2-F2 width differences и F7 остаются открытыми. Пакет 2 не принят, PR #110 не слит, пакет 3/cutover не начаты. PR #109 и ручной context не затронуты.
 
 **Дальше без MCP:** согласованная подготовка F7 — карта producer/schema/manifest/output/tests для generated workflow checkpoints. После восстановления квоты — обязательная точка возврата P2 выше; offline GREEN не отменяет ни одного её пункта.
+
+### 2026-10-02 — P2: 37 новых canonical packets, повторная остановка по лимиту
+
+**Разрешение и границы.** Пользователь разрешил продолжить свежую сверку исправленным сборщиком и потребовал остановиться при повторном лимите с фиксацией результата в плане. Main повторно подтверждён на `6c0bf7d0d3b1ca7909b692541883d2b0e9788709`; candidate PR #110 закреплён на `212cb6d6dc7e7dac11177701bd71009e00dba8d2`. Его diff к main — прежние шесть paths; component/foundation contracts не менялись. В этом продолжении постоянная запись — **только этот план и описание PR**; никакие fixes фактов, кода или Figma не выполнялись.
+
+**Ход чтения.** Один `library-maintenance / read-only / both` bundle для 61 record и четырёх foundations получен на exact candidate, `paused / SKILL_ROUTE_PAUSED`; это scoped migration audit, не включение production maintenance. Canonical capture выполнен через MCP с `5:6`; данные передавались chunks по 14 000 символов. Длина/hash полного payload совпали между частями; полные packets отдельно проверены перед JSON parse и сохранением. Первое чтение: **01.10.2026 21:20:44 UTC**, последнее полное: **21:24:41 UTC**. В **21:24:45 UTC / 02.10.2026 00:24:45 МСК** MCP вернул «You've reached the Figma MCP tool call limit for your Full seat on the Professional plan». С этого момента MCP больше не вызывался.
+
+Ниже именно **полученные полные packets**, а не компоненты с успешной приемкой. `capture_errors` — ограничения/смешанные значения сборщика, не автоматически дефекты дизайна.
+
+| CUPIS ID | Figma owner | Variants | Raw capture errors |
+| --- | --- | ---: | ---: |
+| `banner-app-download` | `337:6569` | 2 | 11 |
+| `item-bullet` | `337:4958` | 2 | 0 |
+| `block-bullet-list` | `337:4898` | 2 | 2 |
+| `block-contact-support` | `472:16999` | 2 | 8 |
+| `item-notification` | `1024:19285` | 2 | 4 |
+| `block-content` | `337:4766` | 2 | 6 |
+| `block-info-alert` | `337:5041` | 2 | 2 |
+| `block-instruction-steps` | `510:16701` | 2 | 8 |
+| `details-operation-plain` | `497:26103` | 2 | 0 |
+| `details-suspicious-operation` | `497:25955` | 2 | 0 |
+| `block-personal-data-update` | `497:26055` | 2 | 10 |
+| `details-receipt` | `502:24640` | 2 | 0 |
+| `block-receipt-info` | `502:24695` | 2 | 10 |
+| `item-step` | `337:5039` | 2 | 0 |
+| `block-steps` | `337:4491` | 2 | 6 |
+| `block-transaction-error` | `459:30151` | 2 | 10 |
+| `details-operation` | `477:21327` | 2 | 0 |
+| `block-transaction-success` | `459:29177` | 2 | 10 |
+| `details-transfer` | `484:20761` | 2 | 0 |
+| `email-footer` | `333:7477` | 2 | 10 |
+| `email-footer-legal` | `499:2431` | 2 | 0 |
+| `email-header` | `326:5159` | 2 | 2 |
+| `email-template` | `1102:8` | 2 | 0 |
+| `icon-bank-card-2-line` | `1009:2505` | 1 | 1 |
+| `icon-fingerprint-2-line` | `491:22370` | 1 | 1 |
+| `icon-global-line` | `1009:2506` | 1 | 1 |
+| `icon-lock-password-fill` | `491:22369` | 1 | 1 |
+| `icon-mail-fill` | `491:22372` | 1 | 1 |
+| `icon-mir-logo` | `946:25485` | 1 | 1 |
+| `icon-shopping-basket-2-line` | `946:25480` | 1 | 1 |
+| `icon-smartphone-fill` | `491:22371` | 1 | 1 |
+| `icon-user-follow-fill` | `491:22375` | 1 | 1 |
+| `icon-user-unfollow-fill` | `491:22376` | 1 | 1 |
+| `nps-options` | `1084:16995` | 4 | 0 |
+| `card-image` | `911:4132` | 2 | 0 |
+| `block-cards-images` | `326:5806` | 2 | 0 |
+| `card-icon` | `326:5580` | 2 | 4 |
+
+Итого 37 records = 34 обычных + 3 связанных с PR #109. `block-icon-cards` прерван на offset 28 000: partial не сохранён как canonical packet и не аудирован. `block-icon-list` ещё не читался. Повторное чтение прежних 22 не начато. Таким образом, 59 разных owners имеют packets двух сессий, но только 37 сняты исправленным capture; **24 остаются без такого свежего packet**. Это не 59/61 успешно проверенных контрактов.
+
+#### Локальное сравнение полученного
+
+Terra Medium выполнила canonical `audit-figma-contract-facts` на exact snapshot `212cb6…` для всех 37 полных packets и сравнение metadata Description с текущим renderer. Первые 15 не прогонялись повторно без изменения их файлов; остальные 22 добавлены к итоговой сводке. GitHub Actions/PR Checks, полный test suite, сборка HTML и Figma writes не выполнялись.
+
+| Область | Source facts / linked | Contract facts / linked | Exact mismatches |
+| --- | ---: | ---: | ---: |
+| 34 обычных records | 27 644 / 11 644 | 15 239 / 11 644 | 4 |
+| 3 deferred owners PR #109 | 1 943 / 713 | 960 / 713 | 8 |
+| Всего 37 | 29 587 / 12 357 | 16 199 / 12 357 | 12 |
+
+`linked` — покрытие связями, а не число всех совпавших значений. **Description 37/37 совпадают** с renderer; это отдельно от contract acceptance.
+
+Сохраняются diagnostics: `FIGMA_FACT_UNCOVERED` **17 230**, `CONTRACT_FACT_UNMAPPED` **3 864**, `FIGMA_CAPTURE_UNSUPPORTED` **14**, `EVIDENCE_LINKS_NOT_IN_CONTRACT` **11**, `FIGMA_VARIANT_MISSING` **20**, `FIGMA_VARIANT_UNDECLARED` **10**, `FIGMA_VIEWPORT_UNKNOWN` **10**, exact value mismatches **12**. Эти счётчики отражают неполноту покрытия и неоднозначное владение вариантами, не десятки тысяч ошибок дизайна. Без устранения/обоснованной классификации покрытия пакет не имеет PASS. Raw capture_errors отдельно: **113 = 67 ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW + 46 MIXED_VALUE**; они не выброшены из evidence.
+
+**Что подтвердилось в ремонте capture:** на этих 37 packets `SOURCE_PATH_MISSING = 0`. `text_geometry` получена для 514 TEXT nodes; числовой `font_weight` и exact linked style name — для 514/514 (null 0). `minimum_width_px` получен на 1 866 узлах, применимый non-null — на 5. Сняты 14 gradient paints / 30 stop entries. Это наблюдения полей, включая вложенные повторения, не 514 независимых стилей и не полная приемка P2-F1. Ремонт чтения заработал; оставшиеся проблемы покрытия/variant ownership им не решены.
+
+#### Точные расхождения: ожидаемое в контракте → полученное в Figma
+
+| Owner / viewport | Node | Source path | Контракт → Figma | Граница решения |
+| --- | --- | --- | --- | --- |
+| block-transaction-success / Desktop | `459:27425` | `/reference_dimensions/width` | 252 → 251 px | P2-F2; FILL horizontal / HUG vertical, не назначать фиксированную HTML-ширину |
+| block-transaction-success / Desktop | `459:27428` | `/reference_dimensions/width` | 116 → 117 px | P2-F2; HUG horizontal |
+| block-transaction-success / Desktop | `459:29356` | `/reference_dimensions/width` | 116 → 117 px | P2-F2; HUG horizontal |
+| block-transaction-success / Mobile | `459:29376` | `/reference_dimensions/width` | 93 → 94 px | P2-F2; HUG horizontal |
+| block-cards-images / Desktop | `398:7570` | `/reference_dimensions/height` | 1242 → 1320 px | Deferred PR #109 |
+| block-cards-images / Desktop | `398:7571` | `/reference_dimensions/height` | 1218 → 1296 px | Deferred PR #109 |
+| block-cards-images / Mobile | `398:7598` | `/reference_dimensions/height` | 2021 → 2087 px | Deferred PR #109 |
+| block-cards-images / Mobile | `398:7599` | `/reference_dimensions/height` | 2005 → 2071 px | Deferred PR #109 |
+| card-icon / Desktop | `260:662` | `/layout/counter_axis_alignment` | min → center | Deferred PR #109 |
+| card-icon / Desktop | `260:662` | `/layout/primary_axis_alignment` | center → min | Deferred PR #109 |
+| card-image / Mobile | `1015:18459` | `/reference_dimensions/width` | 236 → 252 px | Deferred PR #109; link FILL не разрешает автоматическое принятие любого размера |
+| card-image / Desktop | `1015:18276` | `/reference_dimensions/width` | 176 → 232 px | Deferred PR #109; тот же принцип |
+
+Четыре P2-F2 differences повторно видны на свежем packet. Их причина/решение остаются открытыми: reference geometry при HUG/FILL не равнозначна требованию fixed width в письме. Числа не исправлялись. Восемь differences внутри deferred owners сохранены для будущего scoped refresh; новые Show Button, link FILL и icon wrapper/alignment не подмешиваются в P2. Владельцы целиком не исключались, остальные их факты также прошли текущий audit. Новых typography value mismatch в сопоставленной части не выявлено; это не утверждение о всех непокрытых текстовых фактах.
+
+**Локальные evidence:** `C:/Users/flabe/AppData/Local/Temp/codex-package2-6c0bf7/evidence/full-library-20261002/` — `capture-manifest.json`, 37 canonical packets + 37 metadata; `audit-212-final-37-summary.json`, `audit-212-final-37-exact-mismatches.json`, `audit-212-final-37-description-summary.json`, `audit-212-final-37-technical-classification.json`, `audit-212-final-37-coverage-supplement.json`. Полные logs остаются там же и в GitHub не попадают. При потере временных данных нужно повторное MCP-чтение.
+
+**Следующее действие:** после восстановления лимита продолжить актуальную точку возврата в начале плана: два недочитанных owners → повторное чтение прежних 22 → завершение coverage/foundation/visual evidence и отдельное решение P2-F2/F7. В этом продолжении F7 и пакет 3 не начинались. PR #110 остаётся draft, merge не разрешён этой командой. Ручной context, PR #109, Figma, контракты и письма сохранены. Scoped validation и review документационного продолжения фиксируются в PR body на его точном final SHA, без заявления о полном release gate.
