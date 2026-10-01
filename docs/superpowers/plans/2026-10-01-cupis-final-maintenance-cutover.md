@@ -20,14 +20,74 @@
 
 После принятого пакета 5, до отдельно разрешённого пакета 6, предусмотрен [follow-up карточных блоков, draft PR #109](https://github.com/flabenar-maker/e-mail/pull/109). Полная актуальная очередь, ссылки на его план и границы интеграции документов находятся в [roadmap](2026-08-25-cupis-migration-roadmap.md#единый-актуальный-список). Организация папки plans и удаление ручного checkpoint не являются выполнением пакета 6.
 
-### Продолжение после PR #111 — 02.10.2026
+### Текущая точка возврата P2 — 02.10.2026, 01:31 МСК
 
-- Ветка PR #110 согласована с main@618d124df0a664c84d23a724ba50ef2b324e9b97 после организации plans. Все прежние исходные файлы ремонта и generated typography сохранены; полный журнал P2 не заменён. Ручной context-файл не возвращается.
-- Read-only MCP probe 01.10.2026 22:15:36 UTC / 02.10.2026 01:15:36 МСК снова получил Block/Icon-Cards (326:6342, COMPONENT_SET). Доступ восстановился для одного запроса; это не гарантия остатка квоты и не новый полный packet.
-- Очередь возобновляется с block-icon-cards целиком, затем block-icon-list и прежних 22 owners. Пока итог остаётся 37/61 полных свежих packets, 24 требуют завершения. При первом новом quota error все дальнейшие Figma calls останавливаются.
-- Граница остаётся P2: read-only Figma, доказательства и журнал. Контракты, foundations, дизайн, Descriptions, HTML, навыки и routes не изменяются. PR #109 не переносится, пакет 3/cutover/merge не запускаются.
+**Сбор завершён: 61/61 полных packets; пакет 2 НЕ принят.** В этом продолжении получены все оставшиеся 24, затем выполнен локальный аудит всех 61. Нового quota error не было. Повторное чтение прежней очереди из 24 не является следующим шагом. Ниже сохранена историческая остановка, а не текущая команда повторить сбор.
 
-### Предыдущая точка возврата P2: повторно исчерпана квота Figma MCP
+Основание: `main@618d124df0a664c84d23a724ba50ef2b324e9b97`; comparison candidate `51da5756777acacbd04ea1380568c93577456380`, оба его родителя — прежний PR #110 и слитая организация plans из PR #111. Пять P2 repair/test/generated blobs сохранены побайтово. Использован один candidate bundle `library-maintenance / read-only / both`: 61 record, четыре foundations, пять static sources; `paused / SKILL_ROUTE_PAUSED` разрешает только область этого миграционного плана, не production maintenance.
+
+| Проверка | Результат |
+| --- | --- |
+| Capture | 37 полных packets предыдущего чтения + 24 новых одним исправленным capture blob `18e2ef8c8498629d8a54cf98cc46e0601fa2537d`; все 61 audited |
+| Точные сравнения значений | 28 mismatches: 4 у обычного `block-transaction-success`; 24 у пяти owners отложенного PR #109 |
+| Deferred #109 | `block-cards-images` 4; `card-image` 2; `card-icon` 2; `block-icon-cards` 16; `block-icon-list` 0 value mismatches, но 20 missing source paths. Владельцы не исключались целиком |
+| Description | 61/61 совпали с canonical renderer; запись в Figma не нужна и не выполнялась |
+| Typography definition | 15 live text styles; 75/75 сравнений family, Figma font style, size, line-height, letter-spacing прошли существующую числовую нормализацию |
+| Spacing definition | Прочитаны 22 FLOAT variables и одна collection; 30/30 role×viewport assertions сопоставлены по value и точным variable id/name/type |
+| F2 read-back | Четыре ширины подтверждены отдельным MCP read-back; свежие Desktop/Mobile Figma screenshots рассмотрены Terra |
+| Локальная целостность кандидата | `validate-system`, `generate-docs --check`, targeted capture/fact/CLI/generated-doc tests: 46/46 PASS; main-docs organization и прежние пять P2 blobs сохранены |
+| Граница результата | Нет новой HTML-сборки/HTML visual regression или real-client gate; нет Figma/contract/foundation/skill/route/letter mutations; PR остаётся draft, не слит |
+
+**Coverage — не список визуальных дефектов.** Audit увидел 38 300 source facts / 15 046 mapped и 19 956 contract facts / 15 115 mapped. Открыты 23 254 `FIGMA_FACT_UNCOVERED`, 4 863 `CONTRACT_FACT_UNMAPPED`, 20 `FIGMA_SOURCE_PATH_MISSING` (все у deferred `block-icon-list`, обычных owners — 0), 18 unsupported diagnostics, 17 evidence-links-not-contract и topology diagnostics. Raw capture содержит 207 diagnostics: 160 `ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW` и 47 `MIXED_VALUE`. Это требует классификации значимости и exact mapping; blanket exclusions или переутверждения контрактов ради GREEN нет. Не использовать несуществующий diagnostic `SOURCE_PATH_MISSING` и не вычислять unmapped как разность агрегатов: raw fact paths и Set успешных mapping targets — разные множества.
+
+**P2-F2 — уточнённая причина без автоматической правки.** В Desktop `text-details` 459:27425 — FILL 251 вместо reference 252; `status-container` 459:27428 и `status` 459:29356 — HUG 117 вместо 116. Сумма строки: 72 + 24 + 251 + 24 + 117 = 488. В Mobile `status` 459:29376 — HUG 94 вместо 93; x=79 в строке 252 подтверждает центрирование. Это сильное evidence устаревших измеренных ширин, зависящих от содержимого, а не доказательство поломки HTML. Причина изменения метрик текста во времени отдельно не установлена. Числа и правила адаптивности не переписываются; согласовать судьбу четырёх reference facts и затем выполнить отдельный scoped correction/read-back.
+
+**Что foundation-сравнение не доказывает:** не проверены все text-style case/decoration/paragraph/description/variation settings, все места применения component bindings, asset/naming semantics и визуальный HTML output. Совпадение definition не заменяет сравнение каждого назначения в component contract. Наличие полей исправленного capture (609 text_geometry/font_weight/figma_style_name occurrences, 2 568 minimum_width_px, 53 gradient_stops) доказывает получение полей, но не их полное semantic mapping.
+
+**Следующие действия, всё ещё в P2:**
+- [ ] Разобрать coverage/mapping/topology/unsupported diagnostics по конкретному owner/node/path: implementation-significant факт, производное измерение, служебное поле или отложенный drift #109. Не менять auditor/contract автоматически.
+- [ ] Принять решение по четырём F2 reference widths; HTML/layout strategy не менять по одному числовому снимку.
+- [ ] Дозакрыть нужное foundation/binding и visual evidence для выбранных значимых обязанностей.
+- [ ] Завершить сопоставление архивных обязательств с текущими владельцами; P2-F3 recorded association projection уже исправлен, но не доказывает live usage.
+- [ ] Оформить F7 decision и exact producer/schema/manifest/output/test map для generated workflow checkpoints до начала P3. Генератор ещё не реализуется.
+- [ ] После closure выполнить полный локальный gate точного финального SHA и независимое review перед отдельно разрешённым merge кода. P3 и cutover не начинать по факту одного успешного сбора.
+
+### Журнал продолжения P2 — 02.10.2026, 01:15–01:31 МСК
+
+Read-only probe 22:15:36 UTC восстановил доступ; все 24 недостающих owners сняты до повторной сверки foundations/F2. Первую попытку ответа 28 000 символов MCP обрезал до 20 KB: она отброшена целиком и не участвовала в аудите. Далее chunks по 8 000 символов проверялись по длине и FNV-32, целый packet — по total/hash и JSON parse. Текущий FNV в таблице — hex transport checksum, не статус проверенности контракта.
+
+| CUPIS ID | Figma owner | Variants | Raw diagnostics | Serialized chars | FNV-32 |
+| --- | --- | --- | --- | --- | --- |
+| `block-icon-cards` | `326:6342` | 2 | 24 | 122508 | `34fb0377` |
+| `block-icon-list` | `946:26516` | 2 | 24 | 97447 | `c5907e68` |
+| `asset-bank-badge-4x` | `481:19664` | 1 | 2 | 3764 | `54023847` |
+| `asset-card-image-2x` | `911:3992` | 2 | 1 | 4522 | `e0016722` |
+| `asset-feature-icon-4x` | `946:25769` | 1 | 2 | 3535 | `f027de6a` |
+| `asset-header-logo-4x` | `1008:1476` | 3 | 3 | 38136 | `4e005035` |
+| `asset-header-logo-compact-4x` | `1008:1708` | 3 | 3 | 38381 | `eb0c4386` |
+| `asset-icon-badge-4x` | `484:20039` | 1 | 2 | 15199 | `4b69a836` |
+| `asset-partner-badge-4x` | `481:19665` | 1 | 2 | 2591 | `432b161f` |
+| `asset-product-logo` | `1008:874` | 3 | 3 | 34378 | `e18da014` |
+| `asset-status-badge-negative-4x` | `491:22178` | 1 | 2 | 3046 | `074dca7a` |
+| `asset-status-badge-positive-4x` | `491:22074` | 1 | 2 | 3187 | `d0ad5748` |
+| `badge-operation-status` | `1084:16996` | 6 | 0 | 12398 | `46435db4` |
+| `badge-step-number` | `18:2948` | 4 | 0 | 8711 | `4928f642` |
+| `banner-fiscal-check-link` | `502:25048` | 2 | 12 | 58068 | `a7e56877` |
+| `button-primary` | `337:4713` | 2 | 0 | 5140 | `2b0fe867` |
+| `banner-hero` | `337:4460` | 2 | 0 | 19655 | `4eb59d3a` |
+| `banner-inline` | `337:5040` | 2 | 6 | 16730 | `3f40203c` |
+| `button-secondary` | `337:4710` | 2 | 0 | 4521 | `0efbf3bb` |
+| `banner-secondary` | `337:4870` | 2 | 0 | 19003 | `a9540684` |
+| `item-alert` | `1024:19226` | 2 | 2 | 7961 | `90f4436b` |
+| `icon-gift-2-line` | `946:25576` | 1 | 1 | 1575 | `a8286fc8` |
+| `icon-receipt-fill` | `491:22374` | 1 | 2 | 4140 | `ce3e06cc` |
+| `icon-user-forbid-fill` | `491:22373` | 1 | 1 | 1655 | `df687c69` |
+
+Новые временные evidence находятся в `C:/Users/flabe/AppData/Local/Temp/codex-package2-6c0bf7/evidence/resume-20261002-0115`: `capture-manifest.json`, canonical packets/metadata/receipts, `audit-51da-all61-summary.json`, `audit-51da-all61-exact-mismatches.json`, `audit-51da-all61-targeted-findings.json`, `audit-51da-repaired-field-presence.json`, `foundation-comparison-51da.json`, `f2-transaction-width-readback.json` и два PNG reference. Предыдущие 37 evidence и весь прежний журнал сохранены. Эти временные данные не входят в runtime; при их недоступности нужный evidence воспроизводится через MCP, не по статусу таблицы.
+
+### История остановки P2: повторно исчерпана квота Figma MCP
+
+> Историческая запись 00:24:45 МСК. Очередь из 24 ниже уже выполнена; текущая точка возврата и результаты 61/61 находятся выше. Не исполнять этот старый resume checklist заново.
 
 **Историческая остановка на 02.10.2026, 00:24:45 МСК: `BLOCKED_FIGMA_MCP_QUOTA`; пакет 2 не принят.** После подтверждённого восстановления MCP сбор возобновлён. Первый повторный quota error получен 01.10.2026 в 21:24:45 UTC (02.10, 00:24:45 МСК) при чтении `block-icon-cards`. Все дальнейшие MCP-вызовы, включая screenshots, остановлены; обходов и повторных попыток после ошибки не было. Время сброса неизвестно.
 
@@ -84,7 +144,7 @@
 - [x] Исправить capture минимально; вернуть точные значения и ожидаемые source paths, сохранить прежние данные и порядок дерева.
 - [x] Получить GREEN для новых cases, проверить unlinked/unresolved/mixed/override ветви и интеграцию с неизменным auditor: реальные mismatches и недостающие факты всё ещё блокируют.
 - [ ] Проверить exact cloud SHA локально, generated equivalence и preserved blobs; одно независимое review. Полный финальный gate нужен перед последующим merge кода, не после каждой мелкой правки.
-- [ ] После восстановления MCP отдельно подтвердить этот код живым чтением и продолжить очередь из точки возврата выше. Только это закрывает Figma-зависимую часть; локальные tests её не заменяют.
+- [x] Исправленный capture подтверждён живым чтением всех 61 owners; очередь чтений завершена 02.10.2026. Это закрывает получение packets, но не semantic coverage/приёмку P2-F1: diagnostics и отсутствующее evidence остаются открытыми.
 
 **Решение об исполнении:** постоянные изменения публикуются через облачный GitHub; локальная копия остаётся одноразовым exact-SHA test snapshot. Поэтому локальные worktree/SDD authoring scripts не применяются, а ledger ведётся здесь. Routine tests и regression выполняет существующий Terra Medium; coordinator получает компактный отчёт. P2-F3 (карта шрифтов), F7, четыре width differences и вся активация остаются вне этой правки.
 
@@ -164,7 +224,7 @@ Generated usage отражает записанные контракты, не �
 - [ ] **Step 4:** Сравнить relevant archived obligations с нынешними Core/workflow/contract/generated outputs. Для каждой существенной разницы указать текущего владельца и подтверждённую причину. Утраченное characterization-утверждение восстановить активным тестом того же поведения; не закреплять obsolete baseline как новый норматив.
 - [x] **Step 5:** Сообщить расхождения и недостающее evidence. Не править contract/Figma автоматически; расширить проверку только по найденной причине. Raw MCP-пакеты, screenshots и полные logs остаются локальными; краткие проверяемые выводы — в журнале/PR.
 
-**Статус выполнения:** отмеченные steps означают проведённые чтения/сравнения и опубликованные выводы, а не успешную приемку. Live audits завершились exit 1; step 4 не закрыт из-за P2-F3. Blockers и точные границы приведены в журнале ниже.
+**Статус выполнения:** отмеченные steps означают проведённые чтения/сравнения и опубликованные выводы, а не успешную приемку. Live audits выявили открытые diagnostics; step 4 остаётся незавершённым из-за неразрешённых semantic obligations/F7, а не из-за P2-F3: recorded association projection исправлен. После продолжения 02.10 полный сбор 61/61 и сравнительные результаты описаны в текущей точке возврата выше. F2, coverage и недостающее evidence сохраняют P2 открытым.
 
 **Acceptance:** Все выбранные значимые факты подтверждены; различия классифицированы и разрешены пользователем либо остаются явными blockers. Onboarding проверяется на готовом компоненте или fixture, не создаётся новый дизайн.
 
