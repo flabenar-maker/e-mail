@@ -5,9 +5,9 @@ description: Use when a CUPIS email or email-system request needs a task entrypo
 
 # CUPIS Email Task Router
 
-Select a specialization, not a rendering strategy or workflow. This entrypoint applies to local Codex and Codex Web.
+Select a specialization, not a rendering strategy or workflow. Use this entrypoint after the repository's project context or this skill is loaded in local Codex or Codex Web. A remote AGENTS pointer does not autoactivate it in an unrelated/projectless chat.
 
-Read the skill registrations in `system/manifest.yaml` from the current pinned cloud commit of `flabenar-maker/e-mail` (authenticated gh CLI first, GitHub MCP fallback). Use their registered paths at that commit. A missing manifest, registration or skill gives `not-ready`; do not substitute a remembered or installed copy.
+Through authenticated gh CLI (GitHub MCP fallback), resolve and pin current `main` of `flabenar-maker/e-mail`; an explicitly authorized candidate test pins its specified cloud SHA instead. Read skill registrations in `system/manifest.yaml` and the selected skill at that exact SHA. A missing manifest, registration or skill gives `not-ready`; do not substitute a remembered or installed copy.
 
 ## Decide before writing
 
@@ -24,6 +24,6 @@ For a mixed email/library request, identify separate scopes and their dependency
 
 ## Hand off once
 
-Briefly name the outcome and selected specialization (or the one missing fact/blocker). **REQUIRED SUB-SKILL:** Read and use only the selected specialization from its manifest registration; pass the request, pinned SHA, evidence and scope boundary. It owns route/mode selection, resolver invocation and execution. Do not load both specializations for a single-scope task, fetch a bundle here, or bypass their stopped routes.
+Briefly name the outcome and selected specialization (or the one missing fact/blocker). **REQUIRED SUB-SKILL:** Read and use only the selected specialization from its manifest registration; pass the request, pinned SHA, evidence and scope boundary. It retains the handed-off SHA without repinning and owns route/mode selection, resolver invocation and execution. If the skill or task sources do not match that SHA, stop and report the mismatch. Do not load both specializations for a single-scope task, fetch a bundle here, or bypass their stopped routes.
 
 Bootstrap/setup requests follow the project bootstrap entrypoint instead. This router does not claim Web delivery readiness.
