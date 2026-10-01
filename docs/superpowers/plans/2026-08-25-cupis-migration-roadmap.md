@@ -232,15 +232,15 @@ Manifest-driven разрешение source paths было выполнено н
 - [x] Проверить обычный пользовательский запрос из чистого контекста (изолированный исполнитель по E2E-плану) без опоры на историю разработки.
 - [x] Сохранить Figma-библиотеку и локальные исходные версии писем без изменений; не включать проектирование новых блоков в email-build.
 
-### 10A. Локальный маршрутизатор задач Codex — завершающая синхронизация
+### 10A. Локальный маршрутизатор задач Codex — завершён
 
 - [x] Добавить тонкий repo-scoped навык выбора между сборкой письма и поддержкой системы, без копий технических правил.
 - [x] Проверить локальную интеграцию, clean-context выбор специализации, явный выбор, неоднозначный и смешанный запросы, сохранение pinned SHA и отказ на остановленной зависимости.
 - [x] Слить пакет A через [PR #103](https://github.com/flabenar-maker/e-mail/pull/103) и [PR #104](https://github.com/flabenar-maker/e-mail/pull/104). `main@03606db5319a94327dd6713ae529f40e4c068e7a` имеет то же дерево, что локально проверенный head #104.
 - [x] Слить корректировку глобального маршрута и документации — [PR #105](https://github.com/flabenar-maker/e-mail/pull/105), `main@e08b5099f72b9ac3aa7aff33df6a3a3526868232`; отмену Web и разработки новых блоков не считать их успешной реализацией.
 - [x] После отдельного разрешения установить маршрутизатор и обновить два существующих локальных навыка из одного слитого SHA `e08b5099f72b9ac3aa7aff33df6a3a3526868232`. Terra подтвердила точное совпадение четырёх файлов с Git blobs и сохранность резервных копий; независимые read-only routing probes выполнены. На следующем пользовательском ходе router присутствует в каталоге доступных навыков и прочитан; repo registration не выдаётся за discovery.
-- [ ] Слить отдельно проверенную правку устаревших Web/design-time формулировок — [PR #106](https://github.com/flabenar-maker/e-mail/pull/106). Не менять email/maintenance, явный выбор, уточнение, pinned SHA или mutation gates.
-- [ ] После этого merge и отдельного разрешения синхронизировать итоговый локальный router с новым слитым SHA и подтвердить handoff; только затем закрыть 10A.
+- [x] Слить отдельно проверенную правку устаревших Web/design-time формулировок — [PR #106](https://github.com/flabenar-maker/e-mail/pull/106), `main@09537effc89daadacaed1d05497a1e75beb18152`. Проверенный head `c1ad82d32770524b2bb2d6ff9f85df71c00620c8` и merge имеют одинаковое дерево; полный локальный gate — 708/708. Правила выбора и mutation gates сохранены.
+- [x] После merge и отдельного разрешения синхронизировать итоговый локальный router с `09537effc89daadacaed1d05497a1e75beb18152`. Terra подтвердила byte-match канонического blob, сохранность старой копии и двух специализаций/config, текущие manifest/frontmatter/catalog registrations, 10/10 targeted tests, validator, generated check и Windows bootstrap/contract. Fresh `migration-progress/read-only` остаётся `paused/SKILL_ROUTE_PAUSED`; независимые cold-context probes применимы к тому же неизменному router blob. 10A закрыт, этап 11 не начат.
 
 [Решение](../specs/2026-09-28-cupis-codex-routing-web-delivery-design.md) и [план завершения локального маршрутизатора](2026-09-28-cupis-skill-router-web-delivery.md) сохраняют существующие пути. По решению от 01.10.2026 пакеты Web capability, ZIP/import и Web-приёмки отменены до написания продуктового кода. Рабочий результат — локальная версионная папка `email.html + images/`; постоянный источник системы — облачный GitHub. Финальные письма в репозиторий не попадают.
 
@@ -250,11 +250,11 @@ Manifest-driven разрешение source paths было выполнено н
 
 Итоговые специализации — `maintaining-cupis-email-system` и `building-cupis-emails`; `cupis-email-task-router` остаётся тонким входом, не третьим предметным навыком. Onboarding уже созданного и одобренного компонента остаётся частью поддержки, не проектированием нового блока. Неизвестный компонент по-прежнему блокирует email-build до регистрации.
 
-Подробный [implementation plan этапа 11](2026-10-01-cupis-final-maintenance-cutover.md) подготовлен в PR #106; он ожидает review/merge. Публикация плана не запускает ни проверочные пакеты 11A, ни переключение 11B, ни очистку 11C.
+Подробный [implementation plan этапа 11](2026-10-01-cupis-final-maintenance-cutover.md) прошёл review и слит в PR #106. Публикация плана не запускает ни проверочные пакеты 11A, ни переключение 11B, ни очистку 11C.
 
 #### 11A. Проверки готовности до переключения
 
-- [ ] Подготовить отдельный подробный implementation plan финального cutover на актуальном SHA; перечислить точные записи manifest/workflow/profile, проверки, allowed paths, rollback point и порядок PR. Этот roadmap не разрешает включение маршрутов сам по себе.
+- [x] Подготовить и слить отдельный подробный implementation plan финального cutover — PR #106: точные области проверки manifest/workflow/profile, gates, allowed paths, rollback и порядок PR. Подготовка плана завершена, но ни один его исполнительный пакет ещё не начат; включение маршрутов не разрешено.
 - [ ] Проверить каждый текущий остановленный маршрут: `library-maintenance`, `component-onboarding`, `figma-description-sync`, `figma-naming-audit`, `migration-progress`. Для каждого явно определить и доказать его workflow/modes, минимальный bundle, source closure, gates и handoff. Не создавать новый design-time маршрут.
 - [ ] Сравнить generated docs, bundles и обязательства maintenance-сценариев с read-only архивным baseline; объяснить значимые отличия. Нужные characterization assertions восстановить или заменить активными проверками с тем же смыслом. Архив не подключать к runtime.
 - [ ] Подтвердить contract-significant факты representative maintenance-сценариев свежими точечными Figma MCP reads там, где результат зависит от Figma. Migration status и перенесённый Markdown не являются доказательством. Найденные расхождения сообщать; не менять дизайн или точные component facts без разрешённой области.
