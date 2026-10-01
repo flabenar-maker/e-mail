@@ -1,5 +1,7 @@
 # Исследование внешних практик HTML-писем для CUPIS
 
+> **Архив завершённого этапа.** Этот документ сохраняет исходные решения, команды, пути, чекбоксы и промежуточные статусы; они не являются текущей очередью или разрешением выполнять старые шаги. Часть работ могла быть отменена или передана в последующие этапы. Актуальный порядок и открытые обязательства находятся в [едином roadmap](../2026-08-25-cupis-migration-roadmap.md).
+
 Статус: исследование завершено. Первичный анализ проведён 14.09.2026, повторная сверка актуальных GitHub-источников и CUPIS-системы выполнена 16.09.2026. Системные решения отдельно согласованы и зафиксированы в `main` через PR #77; реальная проверка письма в целевых приложениях остаётся обязательным Package 10D, но не является условием хранения этого исследовательского документа.
 
 ## Передача в реализацию
@@ -8,10 +10,10 @@
 
 Реализацию определяют:
 
-- [CUPIS Email Client Resilience Design](../specs/2026-09-16-cupis-email-client-resilience-design.md);
+- [CUPIS Email Client Resilience Design](../../specs/2026-09-16-cupis-email-client-resilience-design.md);
 - [CUPIS Email Client Resilience Implementation Plan](2026-09-16-cupis-email-client-resilience.md);
 - [Stage 8 HTML Rendering Plan](2026-09-10-cupis-html-rendering-stage-8.md);
-- [глобальный migration roadmap](2026-08-25-cupis-migration-roadmap.md).
+- [глобальный migration roadmap](../2026-08-25-cupis-migration-roadmap.md).
 
 Результат Package 10D будет записан отдельно в `docs/qa/cupis-client-resilience-evidence.md`. Он не дописывается в исследование задним числом и не превращает внешнюю рекомендацию в component fact.
 

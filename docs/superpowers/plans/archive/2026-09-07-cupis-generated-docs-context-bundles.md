@@ -1,5 +1,7 @@
 # CUPIS Generated Docs and Context Bundles Implementation Plan
 
+> **Архив завершённого этапа.** Этот документ сохраняет исходные решения, команды, пути, чекбоксы и промежуточные статусы; они не являются текущей очередью или разрешением выполнять старые шаги. Часть работ могла быть отменена или передана в последующие этапы. Актуальный порядок и открытые обязательства находятся в [едином roadmap](../2026-08-25-cupis-migration-roadmap.md).
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Реализовать этап 7 миграции: детерминированно генерировать человекочитаемые справочники из структурированных источников и собирать по каждому route временный, минимальный и полностью разрешимый context bundle без переключения действующих workflows и skills.
@@ -12,7 +14,7 @@
 
 **Исторический план.** Этап 7B был реализован, но PR #69 временно перенёс полный generated component registry в `Legacy/` вместе со старым контуром. [PR #71](https://github.com/flabenar-maker/e-mail/pull/71) вернул `docs/generated/component-registry.md` в `main`, manifest и blocking-проверки; старые active source lists и пути `registry/**` в шагах ниже описывают состояние на момент первоначального выполнения, а не нынешний маршрут. Актуальные статусы и дальнейший cutover определяются roadmap и manifest. Перенесённые в `Legacy/tests/characterization/` проверки не входят в активный `npm test`; нужные assertions должны быть явно восстановлены или заменены до proof-gate 11A финального cutover по актуальному roadmap.
 
-**Prerequisite:** `docs/superpowers/plans/2026-09-07-cupis-component-documentation-contracts.md` должен быть реализован и слит до Task 4. Tasks 1–3 этого плана сохраняют смысл и могут существовать в draft PR до prerequisite, но generated component documentation по старой `description.blocks` модели запрещена.
+**Prerequisite:** `docs/superpowers/plans/archive/2026-09-07-cupis-component-documentation-contracts.md` должен быть реализован и слит до Task 4. Tasks 1–3 этого плана сохраняют смысл и могут существовать в draft PR до prerequisite, но generated component documentation по старой `description.blocks` модели запрещена.
 
 ## Global Constraints
 

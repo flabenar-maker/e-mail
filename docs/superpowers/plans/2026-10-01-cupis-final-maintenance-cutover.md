@@ -12,15 +12,24 @@
 
 ## Статус и основание
 
-План подготовлен 01.10.2026 на `main@e08b5099f72b9ac3aa7aff33df6a3a3526868232` и после review слит через PR #106 в `09537effc89daadacaed1d05497a1e75beb18152`. Prerequisite 10A выполнен: итоговый router синхронизирован после отдельного разрешения; canonical byte-match, catalog/frontmatter, сохранность специализаций/config и локальные handoff/boundary gates подтверждены. По следующей команде начат пакет 1 на main@ace7725d6e88dce0b9b130cd5610f4bcade4feb9; его source-closure findings записаны ниже. 11A ещё не завершён. В текущей ветке выполнены read-only проверки пакета 2 и выполнены локально проверяемые bounded repairs сборщика и generated-карты типографики; его приемка остаётся открытой из-за выявленных blockers и лимита Figma (журнал ниже). Пакеты 3–6 и production cutover не выполнены.
+План подготовлен 01.10.2026 на `main@e08b5099f72b9ac3aa7aff33df6a3a3526868232` и после review слит через PR #106 в `09537effc89daadacaed1d05497a1e75beb18152`. Prerequisite 10A выполнен: итоговый router синхронизирован после отдельного разрешения; canonical byte-match, catalog/frontmatter, сохранность специализаций/config и локальные handoff/boundary gates подтверждены. По следующей команде начат пакет 1 на main@ace7725d6e88dce0b9b130cd5610f4bcade4feb9; его source-closure findings записаны ниже. Пакет 1 слит через PR #108 на `6c0bf7d0d3b1ca7909b692541883d2b0e9788709`. Пакет 2 продолжается отдельно в [draft PR #110](https://github.com/flabenar-maker/e-mail/pull/110); свежая точка возврата и весь неслитый журнал находятся ниже в этом плане. Bounded repairs capture и generated-карты типографики реализованы; это не приёмка пакета 2. 11A ещё не завершён; пакеты 3–6 и production cutover не выполнены.
 
 Два email routes уже активны; пять маршрутов поддержки пока указывают на `workflow-paused`. `data/workflows/library-maintenance.yaml` существует со статусом `shadow`, но сам этот файл не доказывает достаточность каждого профиля. В частности, его общие steps ссылаются на component/naming sources; профиль `migration-progress` содержит README, roadmap и paused boundary. До переключения надо проверить фактическую совместимость, а не назначать общий workflow всем маршрутам.
 
 Исходный `backup/pre-structured-migration-2026-08-24` сохранить. Каждый пакет начинает с нового pinned main и собственной облачной ветки; merge и следующий пакет — только после успешных проверок и отдельной команды.
 
-### Точка возврата P2: повторно исчерпана квота Figma MCP
+После принятого пакета 5, до отдельно разрешённого пакета 6, предусмотрен [follow-up карточных блоков, draft PR #109](https://github.com/flabenar-maker/e-mail/pull/109). Полная актуальная очередь, ссылки на его план и границы интеграции документов находятся в [roadmap](2026-08-25-cupis-migration-roadmap.md#единый-актуальный-список). Организация папки plans и удаление ручного checkpoint не являются выполнением пакета 6.
 
-**Актуальный статус на 02.10.2026, 00:24:45 МСК: `BLOCKED_FIGMA_MCP_QUOTA`; пакет 2 не принят.** После подтверждённого восстановления MCP сбор возобновлён. Первый повторный quota error получен 01.10.2026 в 21:24:45 UTC (02.10, 00:24:45 МСК) при чтении `block-icon-cards`. Все дальнейшие MCP-вызовы, включая screenshots, остановлены; обходов и повторных попыток после ошибки не было. Время сброса неизвестно.
+### Продолжение после PR #111 — 02.10.2026
+
+- Ветка PR #110 согласована с main@618d124df0a664c84d23a724ba50ef2b324e9b97 после организации plans. Все прежние исходные файлы ремонта и generated typography сохранены; полный журнал P2 не заменён. Ручной context-файл не возвращается.
+- Read-only MCP probe 01.10.2026 22:15:36 UTC / 02.10.2026 01:15:36 МСК снова получил Block/Icon-Cards (326:6342, COMPONENT_SET). Доступ восстановился для одного запроса; это не гарантия остатка квоты и не новый полный packet.
+- Очередь возобновляется с block-icon-cards целиком, затем block-icon-list и прежних 22 owners. Пока итог остаётся 37/61 полных свежих packets, 24 требуют завершения. При первом новом quota error все дальнейшие Figma calls останавливаются.
+- Граница остаётся P2: read-only Figma, доказательства и журнал. Контракты, foundations, дизайн, Descriptions, HTML, навыки и routes не изменяются. PR #109 не переносится, пакет 3/cutover/merge не запускаются.
+
+### Предыдущая точка возврата P2: повторно исчерпана квота Figma MCP
+
+**Историческая остановка на 02.10.2026, 00:24:45 МСК: `BLOCKED_FIGMA_MCP_QUOTA`; пакет 2 не принят.** После подтверждённого восстановления MCP сбор возобновлён. Первый повторный quota error получен 01.10.2026 в 21:24:45 UTC (02.10, 00:24:45 МСК) при чтении `block-icon-cards`. Все дальнейшие MCP-вызовы, включая screenshots, остановлены; обходов и повторных попыток после ошибки не было. Время сброса неизвестно.
 
 **Основание:** main по-прежнему `6c0bf7d0d3b1ca7909b692541883d2b0e9788709`; проверяемый кандидат [PR #110](https://github.com/flabenar-maker/e-mail/pull/110) — `212cb6d6dc7e7dac11177701bd71009e00dba8d2`. Исполнен именно исправленный `scripts/figma/capture-contract-source.js`, Git blob `18e2ef8c8498629d8a54cf98cc46e0601fa2537d`. Component/foundation records относительно main не менялись. Один candidate `library-maintenance / read-only / both` bundle содержит 61 record, четыре foundations и пять static sources; результат `paused / SKILL_ROUTE_PAUSED` использован только в границе этого миграционного плана.
 
@@ -46,7 +55,7 @@
 - [ ] По всем свежим packets завершить проверку значимых фактов, bindings и локальных text overrides; сопоставить оставшиеся coverage/mapping/variant/unsupported diagnostics. Не уменьшать покрытие и не подменять exact значения ради PASS.
 - [ ] Для P2-F2 отдельно разобраться с четырьмя width observations и ролью reference geometry; сохранённые packets позволяют локальный анализ, но любое недостающее live evidence ждёт MCP. Никаких автоматических числовых исправлений.
 - [ ] Получить необходимые screenshots и поручить визуальную сверку Terra Medium. Успешный числовой audit не заменяет визуального результата.
-- [ ] Обновить журнал и статус PR по фактическому результату. Полный локальный gate точного финального SHA — перед отдельно разрешённым merge кода. Пакет 3/cutover не начинать, пока остаются предусмотренные gates. Ручной `cupis-active-work-context.md` не обновлять автоматически.
+- [ ] Обновить журнал и статус PR по фактическому результату. Полный локальный gate точного финального SHA — перед отдельно разрешённым merge кода. Пакет 3/cutover не начинать, пока остаются предусмотренные gates.
 
 **34 обычных records, для которых новые packets уже получены:** `banner-app-download`, `item-bullet`, `block-bullet-list`, `block-contact-support`, `item-notification`, `block-content`, `block-info-alert`, `block-instruction-steps`, `details-operation-plain`, `details-suspicious-operation`, `block-personal-data-update`, `details-receipt`, `block-receipt-info`, `item-step`, `block-steps`, `block-transaction-error`, `details-operation`, `block-transaction-success`, `details-transfer`, `email-footer`, `email-footer-legal`, `email-header`, `email-template`, `icon-bank-card-2-line`, `icon-fingerprint-2-line`, `icon-global-line`, `icon-lock-password-fill`, `icon-mail-fill`, `icon-mir-logo`, `icon-shopping-basket-2-line`, `icon-smartphone-fill`, `icon-user-follow-fill`, `icon-user-unfollow-fill`, `nps-options`.
 
@@ -106,7 +115,7 @@ Generated usage отражает записанные контракты, не �
 - Figma write требует impact report и отдельного разрешения точных полей; read-back выполняется отдельным вызовом. Нельзя расширять allowlist ради исправления неожиданных изменений.
 - Не выполнять или использовать Actions/PR Checks. Terra Medium делает локальные tests/validation/visual comparisons; coordinator получает компактный итог.
 - В ходе пакета — targeted проверки. Перед merge кода/контрактов/активации — один полный gate точного финального commit; новый commit отменяет прежний финальный результат. Docs-only пакет — scoped gate.
-- Архив — только comparison baseline. Не подключать его к runtime и не удалять автоматически. Ручной context checkpoint обновляется только по отдельной просьбе.
+- Архив — только comparison baseline. Не подключать его к runtime и не удалять автоматически. Текущий статус хранится в roadmap, факты и точка возврата пакета — в его implementation plan.
 - Фактическое переключение, Figma mutation, локальная установка и очистка не разрешены публикацией этого плана.
 
 ## Review Focus
@@ -215,7 +224,7 @@ Generated usage отражает записанные контракты, не �
 - [ ] **Step 2:** Принять отдельное remove/preserve решение с причиной. Связанные assertions сначала перенести/заменить проверкой действующей системы; удалить baseline только после подтверждённой замены. Не удалять весь Legacy одной командой.
 - [ ] **Step 3:** Показать список удалений, зависимые links/tests и reversible rollback. Получить отдельное разрешение; разрешение cutover не является разрешением очистки.
 - [ ] **Step 4:** Применить минимальный cloud diff и проверить отсутствие runtime paths в архив/удалённые источники. Сохранённые historical sources не становятся активными owners.
-- [ ] **Step 5:** Выполнить scoped или full local gate по фактическому типу diff, merge отдельно. Только после выполненных решений и итоговой source/route проверки закрыть этап 11 в roadmap. Ручной context checkpoint — только по просьбе.
+- [ ] **Step 5:** Выполнить scoped или full local gate по фактическому типу diff, merge отдельно. Только после выполненных решений и итоговой source/route проверки закрыть этап 11 в roadmap.
 
 **Acceptance:** Каждый архивный/временный объект имеет выполненное решение; постоянная система самодостаточна; нет неразрешённых route или потребителей удалённых paths.
 
@@ -233,7 +242,7 @@ Generated usage отражает записанные контракты, не �
 
 **Область и основание.** По команде пользователя «Давай дальше» сначала слит статусный PR #107: `main@ace7725d6e88dce0b9b130cd5610f4bcade4feb9`, дерево `1eb7567b30e84a79ec9a7fb989a32c50d71f3e69` совпадает с проверенным head #107. Это новый pinned base пакета 1; router/специализация и источники прочитаны на этой версии. Prerequisite 10A выполнен. Пакет 1 исследует источники и сохраняет findings, а не реализует пакет 3 и не включает маршруты.
 
-**Impact boundary текущего PR:** меняется только этот implementation plan: статус текущего пакета, чекбоксы пакета 1 и проверяемый журнал. Не меняются manifest, workflows, schemas, модули, structured contracts, foundations, generated docs, skills/bootstrap, Figma или локальные письма. Ручной `cupis-active-work-context.md` не обновляется. Глобальный roadmap в main ещё не отмечает исполнительные gates 11A выполненными; результаты этого кандидата попадают в его статус после отдельного merge, а не заранее.
+**Impact boundary текущего PR:** меняется только этот implementation plan: статус текущего пакета, чекбоксы пакета 1 и проверяемый журнал. Не меняются manifest, workflows, schemas, модули, structured contracts, foundations, generated docs, skills/bootstrap, Figma или локальные письма. Глобальный roadmap в main ещё не отмечает исполнительные gates 11A выполненными; результаты этого кандидата попадают в его статус после отдельного merge, а не заранее.
 
 **Pre-flight / Rulings.**
 
@@ -360,7 +369,7 @@ Conditions общего workflow: `figma-evidence-required`, `figma-in-scope`, `
 
 **Основание:** `main@6c0bf7d0d3b1ca7909b692541883d2b0e9788709`. Повторная проверка main перед публикацией подтвердила тот же SHA. Пакет 1 слит через PR #108. [PR #109](https://github.com/flabenar-maker/e-mail/pull/109) остаётся отдельным draft для изменений карточек после cutover; его ветка и изменения не включены в этот пакет.
 
-**Граница:** read-only Figma MCP, фактическое сравнение и журнал. Ни Figma, ни component/foundation facts, renderer, workflows, skills, письма и архив не изменяются. Облачная ветка создаётся от указанного main. Как в пакете 1, isolated exact-SHA snapshot используется только для проверки; этот журнал заменяет локальный рабочий ledger. Ручной `cupis-active-work-context.md` не обновляется. Пакеты 3–6 не начаты.
+**Граница:** read-only Figma MCP, фактическое сравнение и журнал. Ни Figma, ни component/foundation facts, renderer, workflows, skills, письма и архив не изменяются. Облачная ветка создаётся от указанного main. Как в пакете 1, isolated exact-SHA snapshot используется только для проверки; этот журнал заменяет локальный рабочий ledger. Пакеты 3–6 не начаты.
 
 #### 1. Выборка и метод
 

@@ -1,6 +1,29 @@
 # CUPIS Structured System Migration Roadmap
 
-Актуальность: 2026-10-01. Текущий объём: локальный Codex, поддержка системы и сборка писем. Отдельные стандарт, workflow и навык проектирования новых блоков, а также Web-выдача отменены по решению пользователя.
+Актуальность: 2026-10-02. Сверено с `main@6c0bf7d0d3b1ca7909b692541883d2b0e9788709`; незавершённая работа в PR отмечена отдельно и не считается слитой. Текущий объём: локальный Codex, поддержка системы и сборка писем. Отдельные стандарт, workflow и навык проектирования новых блоков, а также Web-выдача отменены по решению пользователя.
+
+## Единый актуальный список
+
+Этот roadmap — единственная глобальная очередь. В корне `plans/` остаются он и подробный план текущего cutover; завершённые implementation plans находятся в [archive/](archive). Исторические чекбоксы не создают новых задач. Для восстановления работы достаточно свежих manifest, этого roadmap и подробного плана текущего пакета; отдельный ручной context-файл больше не используется.
+
+| Работа | Фактический статус | Зависимость и подробности |
+| --- | --- | --- |
+| Этапы 1–10 и 10A: foundations, контракты, документация, renderer, навыки и локальный router | Завершены в `main`; история и результаты — ниже | Поддержка ещё не активирована; готовность сборки не подменяет её cutover |
+| 11A / пакет 1: карта источников и переключения | Слит [PR #108](https://github.com/flabenar-maker/e-mail/pull/108) | [План cutover](2026-10-01-cupis-final-maintenance-cutover.md), журнал пакета 1 |
+| 11A / пакет 2: Figma-backed доказательство и сопоставление обязательств | В работе, draft [PR #110](https://github.com/flabenar-maker/e-mail/pull/110); не принят и не слит | [Журнал на проверенном head](https://github.com/flabenar-maker/e-mail/blob/fbf428ab25bd6bdb33bb4429d24bf0a0acc1241a/docs/superpowers/plans/2026-10-01-cupis-final-maintenance-cutover.md); остановка по квоте Figma MCP |
+| 11A / пакет 3: workflow, authorization и handoff | Не начат | После пакета 2 и решения F7 по generated workflow checkpoints с точной картой producer/schema/manifest/output/tests |
+| 11A / пакет 4: regression сборки писем и итоговая приёмка | Не начат | После пакета 3; локально доказать сохранность двух активных email routes |
+| 11B / пакет 5: включение готовых маршрутов поддержки | Не начат; отдельное разрешение | После успешного 11A; rollback, merge, разрешённая локальная синхронизация навыков и clean-context приёмка |
+| Обновлённые карточные блоки | Отложены; план только в draft [PR #109](https://github.com/flabenar-maker/e-mail/pull/109), не в `main` | [Точный план](https://github.com/flabenar-maker/e-mail/blob/bdb51edbac918255ac941f16f2c37645a15f3190/docs/superpowers/plans/2026-10-01-cupis-marketing-cards-post-cutover-sync.md); после слитого и принятого пакета 5, по отдельному разрешению, до пакета 6 |
+| 11C / пакет 6: итоговая очистка переходных артефактов | Не начат; отдельное разрешение | После стабильного cutover и согласованного follow-up карточек; не равен текущей организации папки plans |
+
+**Ближайшая точка возврата:** после восстановления квоты Figma продолжить пакет 2 с `block-icon-cards` и `block-icon-list`, затем повторно снять прежние 22 owners исправленным capture. На head PR #110 выше свежие полные packets есть для 37 из 61 records, ещё 24 требуют чтения; это не 37 успешно принятых контрактов. Coverage, foundation/visual evidence, четыре наблюдения ширины Transaction-Success (F2) и решение F7 остаются открытыми. Известные изменения пяти owners из PR #109 учитываются как отложенный drift, но не исключают проверку остальных их полей. Полный журнал и точные значения принадлежат плану пакета 2, а не этому краткому списку.
+
+**Открытые PR:** #110 — текущая работа; #109 — отложенный follow-up; [#90](https://github.com/flabenar-maker/e-mail/pull/90) помечен do-not-merge/superseded и не входит в очередь. [#60](https://github.com/flabenar-maker/e-mail/pull/60) уже слит 16.09.2026 (`acff87ac684ef502df1f2d70318c8f9ef0a62333`); исследование не является ожидающим слияния gate.
+
+**Не входит в очередь:** Web-выдача и проектирование новых блоков отменены, а не завершены. Проверка реальных почтовых приложений/Altcraft (8 / Package 10D) исключена по отсутствию доступа, не выполнена и не возвращается автоматически. Её ограничения и результаты исследований сохранены в исторических планах; браузерная приёмка не доказывает real-client совместимость.
+
+**Порядок интеграции документов:** после слияния этой организации повторно сверить ветки #110 и #109 с новым roadmap, сохранив весь свежий журнал #110 и полный follow-up #109. Не возвращать старые статусы, корневые пути архивных планов или удалённый ручной checkpoint при разрешении конфликтов. Не переносить их код/контракты в этот документационный PR; слияние любого PR требует отдельной команды.
 
 ## Назначение
 
@@ -26,11 +49,9 @@ Master-спецификация владеет архитектурными ре
 4. сверить отмеченный статус с фактически слитыми в `main` артефактами;
 5. не восстанавливать статус только по памяти чата.
 
-Исторические пункты завершённых этапов описывают состояние на момент их реализации. После [PR #69](https://github.com/flabenar-maker/e-mail/pull/69) старый контур находится в `Legacy/`, все маршруты временно указывают на `workflow-paused`, а [PR #70](https://github.com/flabenar-maker/e-mail/pull/70) привёл тесты к этой изоляции. Это не cutover и не завершение миграции. Старые формулировки «действующий Markdown-источник» в завершённых этапах не описывают текущий рабочий путь.
+Исторические пункты ниже описывают состояние на момент реализации. PR #69/#70 временно изолировали прежний контур и остановили маршруты; позднее этап 10 включил два email routes. Сейчас сборка и изменение писем активны, пять маршрутов поддержки остановлены. Старые формулировки «действующий Markdown-источник», «все маршруты остановлены» или «shadow» в завершённых этапах не описывают текущий рабочий путь. Архивные планы сохраняют решения, но не используются как команды продолжения.
 
 Этап отмечается завершённым только после его слияния в `main`. После слияния в roadmap добавляются фактическая ссылка на implementation plan или PR и новый статус. Если подробный plan ещё не создан, следующим действием является его создание и review, а не начало реализации.
-
-Для восстановления расширенного контекста в новом чате используй [ручной checkpoint текущей работы](cupis-active-work-context.md). Он является навигацией, не владельцем статуса, и обновляется только по прямой команде пользователя; его сведения всегда перепроверяются по актуальному `main`, manifest, этому roadmap и папке plans.
 
 ## Последовательность
 
@@ -42,7 +63,7 @@ Master-спецификация владеет архитектурными ре
 Результаты:
 
 - [master-спецификация](../specs/2026-08-24-cupis-structured-email-system-design.md);
-- [foundation implementation plan](2026-08-24-cupis-structured-system-foundation.md).
+- [foundation implementation plan](archive/2026-08-24-cupis-structured-system-foundation.md).
 
 ### 2. Системный foundation
 
@@ -57,7 +78,7 @@ Master-спецификация владеет архитектурными ре
 - [x] Создать и проверить shadow-источник типографики.
 - [x] Сохранить Markdown-реестр текущим рабочим источником до общего cutover.
 
-Подробный план: [typography foundation pilot](2026-08-25-cupis-typography-foundation-pilot.md).
+Подробный план: [typography foundation pilot](archive/2026-08-25-cupis-typography-foundation-pilot.md).
 
 ### 4. Spacing foundation
 
@@ -65,7 +86,7 @@ Master-спецификация владеет архитектурными ре
 - [x] Добавить exact-only resolver и проверки.
 - [x] Не подключать spacing foundation к HTML-вёрстке конкретного письма.
 
-Подробный план: [spacing foundation](2026-08-25-cupis-spacing-foundation.md).
+Подробный план: [spacing foundation](archive/2026-08-25-cupis-spacing-foundation.md).
 
 ### 5. Остальные foundations — завершён
 
@@ -83,7 +104,7 @@ Master-спецификация владеет архитектурными ре
 
 Уточнение export contract, слитое в PR #28, является актуальным baseline для этого подэтапа, а не окончательным местом хранения правил.
 
-Подробный план: [assets foundation](2026-08-26-cupis-assets-foundation.md). Реализация слита в [PR #33](https://github.com/flabenar-maker/e-mail/pull/33), итоговый commit: `fe1a0e37b4d40533706c88d73f5c293c8860b3ee`.
+Подробный план: [assets foundation](archive/2026-08-26-cupis-assets-foundation.md). Реализация слита в [PR #33](https://github.com/flabenar-maker/e-mail/pull/33), итоговый commit: `fe1a0e37b4d40533706c88d73f5c293c8860b3ee`.
 
 #### 5Б. Figma naming foundation — завершён
 
@@ -99,7 +120,7 @@ Master-спецификация владеет архитектурными ре
 - [x] Завершить общий этап 5 только после слияния обоих подэтапов и проверки отсутствия изменений Figma и component contracts.
 
 
-Подробный план: [Figma naming foundation](2026-08-27-cupis-figma-naming-foundation.md). Реализация слита в [PR #37](https://github.com/flabenar-maker/e-mail/pull/37), итоговый commit: `edacb9376c66fe850a9418e57fe6e311b49bc00c`.
+Подробный план: [Figma naming foundation](archive/2026-08-27-cupis-figma-naming-foundation.md). Реализация слита в [PR #37](https://github.com/flabenar-maker/e-mail/pull/37), итоговый commit: `edacb9376c66fe850a9418e57fe6e311b49bc00c`.
 
 Общий этап 5 завершён: assets foundation и Figma naming foundation находятся в `main`; технические реализации не изменяли Figma и component contracts.
 
@@ -110,15 +131,15 @@ Master-спецификация владеет архитектурными ре
 - [x] Сохранить Figma provenance, variants, properties и ссылки на foundations.
 - [x] Добавить unregistered-component blocker и проверки синхронизации.
 
-Подробный план: [structured component registry](2026-09-05-cupis-structured-component-registry.md). Реализация слита в [PR #40](https://github.com/flabenar-maker/e-mail/pull/40), итоговый commit: `90f1e01365c80b7553b520e8d47c2e5bb7f88660`.
+Подробный план: [structured component registry](archive/2026-09-05-cupis-structured-component-registry.md). Реализация слита в [PR #40](https://github.com/flabenar-maker/e-mail/pull/40), итоговый commit: `90f1e01365c80b7553b520e8d47c2e5bb7f88660`.
 
 Structured records остаются shadow-источником до generated bundles и общего cutover. Figma и действующие рабочие bundle profiles этим этапом не изменялись.
 
 ### 7. Generated docs и context bundles — завершён
 
-Подробный план: [generated docs и context bundles](2026-09-07-cupis-generated-docs-context-bundles.md).
+Подробный план: [generated docs и context bundles](archive/2026-09-07-cupis-generated-docs-context-bundles.md).
 
-До завершения generated layer был выполнен обязательный архитектурный prerequisite: [component documentation contracts](2026-09-07-cupis-component-documentation-contracts.md). Он не дал закрепить старую модель с повторением component facts в сохранённом prose Description.
+До завершения generated layer был выполнен обязательный архитектурный prerequisite: [component documentation contracts](archive/2026-09-07-cupis-component-documentation-contracts.md). Он не дал закрепить старую модель с повторением component facts в сохранённом prose Description.
 
 #### 7A. Component documentation contracts — завершён
 
@@ -129,7 +150,7 @@ Structured records остаются shadow-источником до generated b
 - [x] Доказать semantic equivalence со старым registry без Figma mutation.
 - [x] Объявить standards и validation в shadow-режиме.
 
-Подробный план: [component documentation contracts](2026-09-07-cupis-component-documentation-contracts.md). Реализация слита в [PR #45](https://github.com/flabenar-maker/e-mail/pull/45), итоговый commit: `0eb8cfd4d2ff3401a6a7e91a80e8740435f7ab0e`. Figma, рабочие routes, workflows, skills и legacy registry этим подэтапом не изменялись.
+Подробный план: [component documentation contracts](archive/2026-09-07-cupis-component-documentation-contracts.md). Реализация слита в [PR #45](https://github.com/flabenar-maker/e-mail/pull/45), итоговый commit: `0eb8cfd4d2ff3401a6a7e91a80e8740435f7ab0e`. Figma, рабочие routes, workflows, skills и legacy registry этим подэтапом не изменялись.
 
 #### 7B. Generated docs и route-specific context bundles — завершён
 
@@ -148,7 +169,7 @@ Structured records остаются shadow-источником до generated b
 
 Архитектурное основание: [CUPIS HTML Rendering Design](../specs/2026-09-10-cupis-html-rendering-design.md).
 
-Подробный implementation plan: [CUPIS HTML Rendering Stage 8](2026-09-10-cupis-html-rendering-stage-8.md).
+Подробный implementation plan: [CUPIS HTML Rendering Stage 8](archive/2026-09-10-cupis-html-rendering-stage-8.md).
 
 Этап 8 готовит renderer и структурированные workflows, но не переключает остановленные маршруты. Оставшийся cutover выполняется на финальном этапе 11 после его собственного сквозного gate.
 
@@ -156,8 +177,8 @@ Structured records остаются shadow-источником до generated b
 
 После неудачной попытки получить убедительный пилотный результат обнаружилась недостаточная точность части мигрированных component contracts. [PR #61](https://github.com/flabenar-maker/e-mail/pull/61), [#62](https://github.com/flabenar-maker/e-mail/pull/62), [#63](https://github.com/flabenar-maker/e-mail/pull/63) и [#64](https://github.com/flabenar-maker/e-mail/pull/64) выполнили прямую сверку с Figma, добавили проверку фактических данных и уточнили маркетинговые и сервисные контракты. Это корректирующая работа внутри этапа 8, а не завершение пакетов 10–12.
 
-[Корректирующий план для foundations этапов 2–5](2026-09-15-cupis-foundations-figma-verified-remediation.md) реализован и слит через [PR #75](https://github.com/flabenar-maker/e-mail/pull/75), merge commit `c8c485bde0d69316dac83925c40e4f6b2fc0037c`. Он усилил Figma-backed проверку typography, spacing, assets и naming, но не завершил Package 10–12, этап 8, проверки готовности и переключение маршрутов финального этапа 11.
-[PR #60](https://github.com/flabenar-maker/e-mail/pull/60) остаётся открытым исследовательским черновиком: он не меняет active rules, component contracts или renderer. Результаты исследования преобразованы в согласованную [client-resilience спецификацию](../specs/2026-09-16-cupis-email-client-resilience-design.md) и [implementation plan](2026-09-16-cupis-email-client-resilience.md). Проверка через Altcraft была запланирована как Package 10D, но 17.09.2026 исключена из текущего маршрута по прямому решению пользователя из-за отсутствия доступа. Она не считается выполненной, а responsive fallback остаётся неподтверждённым (`required-before-change`).
+[Корректирующий план для foundations этапов 2–5](archive/2026-09-15-cupis-foundations-figma-verified-remediation.md) реализован и слит через [PR #75](https://github.com/flabenar-maker/e-mail/pull/75), merge commit `c8c485bde0d69316dac83925c40e4f6b2fc0037c`. Он усилил Figma-backed проверку typography, spacing, assets и naming, но не завершил Package 10–12, этап 8, проверки готовности и переключение маршрутов финального этапа 11.
+[PR #60](https://github.com/flabenar-maker/e-mail/pull/60) слит 16.09.2026 как read-only исследование без изменения active rules, component contracts или renderer; [исследовательский план](archive/2026-09-14-cupis-email-practices-research.md) сохранён как история. Результаты исследования преобразованы в согласованную [client-resilience спецификацию](../specs/2026-09-16-cupis-email-client-resilience-design.md) и [implementation plan](archive/2026-09-16-cupis-email-client-resilience.md). Проверка через Altcraft была запланирована как Package 10D, но 17.09.2026 исключена из текущего маршрута по прямому решению пользователя из-за отсутствия доступа. Она не считается выполненной, а responsive fallback остаётся неподтверждённым (`required-before-change`).
 
 - [x] Зафиксировать characterization baseline и владельцев renderer-impacting данных — PR #50.
 - [x] Создать rendering foundation и renderer-ready schema без дублирования существующих foundations и contracts — PR #51–52.
@@ -179,11 +200,11 @@ Structured records остаются shadow-источником до generated b
 - [x] Не подавать архивный и structured наборы правил одновременно в рабочий bundle — PR #84 возвращает `CONTEXT_BUNDLE_ARCHIVED_SOURCE_FORBIDDEN` для архивного path.
 - [x] Завершить проверки этапа 8 — на финальном SHA PR #84 локально прошли rendering audit, generated-doc check, полный `npm run verify` и Windows bootstrap; GitHub Actions не использовались.
 
-[PR #66](https://github.com/flabenar-maker/e-mail/pull/66) исправил оболочку пилотного письма и границу Mobile/Desktop. [PR #67](https://github.com/flabenar-maker/e-mail/pull/67) и [#68](https://github.com/flabenar-maker/e-mail/pull/68) закрепили локальные проверки без GitHub Actions; [PR #69](https://github.com/flabenar-maker/e-mail/pull/69) и [#70](https://github.com/flabenar-maker/e-mail/pull/70) изолировали Legacy и адаптировали тесты. Маршруты сейчас остановлены; восстановленный полный generated component registry не означает завершения пакетов 10–12 или возобновления production-сборки.
+[PR #66](https://github.com/flabenar-maker/e-mail/pull/66) исправил оболочку пилотного письма и границу Mobile/Desktop. [PR #67](https://github.com/flabenar-maker/e-mail/pull/67) и [#68](https://github.com/flabenar-maker/e-mail/pull/68) закрепили локальные проверки без GitHub Actions; [PR #69](https://github.com/flabenar-maker/e-mail/pull/69) и [#70](https://github.com/flabenar-maker/e-mail/pull/70) изолировали Legacy и адаптировали тесты. На том историческом этапе маршруты были остановлены; восстановление registry само по себе не включало сборку. Пакеты 10–12 затем завершены в описанном выше объёме, а email routes включены на этапе 10.
 
 ### 9. Подготовка maintenance skill — завершён
 
-Подробный implementation plan: [CUPIS Maintenance Skill Stage 9](2026-09-17-cupis-maintenance-skill-stage-9.md).
+Подробный implementation plan: [CUPIS Maintenance Skill Stage 9](archive/2026-09-17-cupis-maintenance-skill-stage-9.md).
 
 Manifest-driven разрешение source paths было выполнено на этапе 2. Этот этап не повторяет первоначальный переход на manifest: он подготовил навык к итоговым generated context bundles, но не запустил временно остановленные маршруты. Каждый route включается только после собственного проверенного cutover: email routes — на этапе 10, остальные — на финальном этапе 11 после его проверок готовности.
 
@@ -196,7 +217,7 @@ Manifest-driven разрешение source paths было выполнено н
 
 ### Prerequisite этапа 10: архив и публикация Figma Description
 
-Подробный implementation plan: [CUPIS Figma Description Archive and Compact Sync](2026-09-17-cupis-figma-description-archive-and-sync.md).
+Подробный implementation plan: [CUPIS Figma Description Archive and Compact Sync](archive/2026-09-17-cupis-figma-description-archive-and-sync.md).
 
 Это отдельный завершающий пакет component documentation, а не часть HTML-rendering runtime. До его выполнения пользователь предоставляет четыре ссылки на тестовые письма для этапа 10: Mobile/Desktop маркетингового и Mobile/Desktop сервисного письма.
 
@@ -211,9 +232,9 @@ Manifest-driven разрешение source paths было выполнено н
 
 ### 10. Навык HTML-вёрстки конкретных писем
 
-Подробный implementation plan: [CUPIS Email Build Skill Stage 10](2026-09-17-cupis-email-build-skill-stage-10.md).
+Подробный implementation plan: [CUPIS Email Build Skill Stage 10](archive/2026-09-17-cupis-email-build-skill-stage-10.md).
 
-Статус на 2026-09-28: этап 10 завершён. Два email routes активированы [PR №97](https://github.com/flabenar-maker/e-mail/pull/97), навык зарегистрирован [PR №98](https://github.com/flabenar-maker/e-mail/pull/98), Mobile shell исправлен [PR №99](https://github.com/flabenar-maker/e-mail/pull/99), а [PR №101](https://github.com/flabenar-maker/e-mail/pull/101) синхронизировал статус активных маршрутов и добавил выбор доступного package runner. На точном head №101 локально прошли 705/705 тестов, validation, generate:check и bootstrap; установленный навык побайтно совпадает со слитым источником. Оба тестовых письма собраны и пересобраны, пользователь визуально принял результат. Ранее измеренная разница высот сервисного примера принята только для этих конкретных инстансов, а не как общее допустимое отклонение. Изолированный запуск после merge создал версию `service-email-e2e_1.4` с одними тестовыми href-правками и неизменными изображениями. Реальные почтовые клиенты и Altcraft в этих проверках не испытывались; остальные маршруты остаются paused. Подробные факты — в [E2E-плане](2026-09-18-cupis-email-model-assembly-and-e2e.md).
+Статус на 2026-09-28: этап 10 завершён. Два email routes активированы [PR №97](https://github.com/flabenar-maker/e-mail/pull/97), навык зарегистрирован [PR №98](https://github.com/flabenar-maker/e-mail/pull/98), Mobile shell исправлен [PR №99](https://github.com/flabenar-maker/e-mail/pull/99), а [PR №101](https://github.com/flabenar-maker/e-mail/pull/101) синхронизировал статус активных маршрутов и добавил выбор доступного package runner. На точном head №101 локально прошли 705/705 тестов, validation, generate:check и bootstrap; установленный навык побайтно совпадает со слитым источником. Оба тестовых письма собраны и пересобраны, пользователь визуально принял результат. Ранее измеренная разница высот сервисного примера принята только для этих конкретных инстансов, а не как общее допустимое отклонение. Изолированный запуск после merge создал версию `service-email-e2e_1.4` с одними тестовыми href-правками и неизменными изображениями. Реальные почтовые клиенты и Altcraft в этих проверках не испытывались; остальные маршруты остаются paused. Подробные факты — в [E2E-плане](archive/2026-09-18-cupis-email-model-assembly-and-e2e.md).
 
 Этот этап начинается после завершённого maintenance skill, prerequisite-пакета Figma Description и получения четырёх ссылок на два тестовых письма. Он использует готовые renderer, structured email workflow и machine resolver и не зависит от стандарта или навыка разработки новых блоков: письмо собирается только из уже зарегистрированных компонентов, а неизвестный компонент остаётся typed blocker. После успешных реальных E2E-сборок этап включает только email routes; остальные routes остаются остановленными до финального этапа 11.
 
@@ -240,21 +261,26 @@ Manifest-driven разрешение source paths было выполнено н
 - [x] Слить корректировку глобального маршрута и документации — [PR #105](https://github.com/flabenar-maker/e-mail/pull/105), `main@e08b5099f72b9ac3aa7aff33df6a3a3526868232`; отмену Web и разработки новых блоков не считать их успешной реализацией.
 - [x] После отдельного разрешения установить маршрутизатор и обновить два существующих локальных навыка из одного слитого SHA `e08b5099f72b9ac3aa7aff33df6a3a3526868232`. Terra подтвердила точное совпадение четырёх файлов с Git blobs и сохранность резервных копий; независимые read-only routing probes выполнены. На следующем пользовательском ходе router присутствует в каталоге доступных навыков и прочитан; repo registration не выдаётся за discovery.
 - [x] Слить отдельно проверенную правку устаревших Web/design-time формулировок — [PR #106](https://github.com/flabenar-maker/e-mail/pull/106), `main@09537effc89daadacaed1d05497a1e75beb18152`. Проверенный head `c1ad82d32770524b2bb2d6ff9f85df71c00620c8` и merge имеют одинаковое дерево; полный локальный gate — 708/708. Правила выбора и mutation gates сохранены.
-- [x] После merge и отдельного разрешения синхронизировать итоговый локальный router с `09537effc89daadacaed1d05497a1e75beb18152`. Terra подтвердила byte-match канонического blob, сохранность старой копии и двух специализаций/config, текущие manifest/frontmatter/catalog registrations, 10/10 targeted tests, validator, generated check и Windows bootstrap/contract. Fresh `migration-progress/read-only` остаётся `paused/SKILL_ROUTE_PAUSED`; независимые cold-context probes применимы к тому же неизменному router blob. 10A закрыт, этап 11 не начат.
+- [x] После merge и отдельного разрешения синхронизировать итоговый локальный router с `09537effc89daadacaed1d05497a1e75beb18152`. Terra подтвердила byte-match канонического blob, сохранность старой копии и двух специализаций/config, текущие manifest/frontmatter/catalog registrations, 10/10 targeted tests, validator, generated check и Windows bootstrap/contract. Fresh `migration-progress/read-only` остаётся `paused/SKILL_ROUTE_PAUSED`; независимые cold-context probes применимы к тому же неизменному router blob. 10A закрыт; дальнейший текущий статус этапа 11 указан ниже.
 
-[Решение](../specs/2026-09-28-cupis-codex-routing-web-delivery-design.md) и [план завершения локального маршрутизатора](2026-09-28-cupis-skill-router-web-delivery.md) сохраняют существующие пути. По решению от 01.10.2026 пакеты Web capability, ZIP/import и Web-приёмки отменены до написания продуктового кода. Рабочий результат — локальная версионная папка `email.html + images/`; постоянный источник системы — облачный GitHub. Финальные письма в репозиторий не попадают.
+[Решение](../specs/2026-09-28-cupis-codex-routing-web-delivery-design.md) и [план завершения локального маршрутизатора](archive/2026-09-28-cupis-skill-router-web-delivery.md) сохраняют существующие пути. По решению от 01.10.2026 пакеты Web capability, ZIP/import и Web-приёмки отменены до написания продуктового кода. Рабочий результат — локальная версионная папка `email.html + images/`; постоянный источник системы — облачный GitHub. Финальные письма в репозиторий не попадают.
 
-### 11. Финальный cutover поддержки системы и завершение миграции — не начат
+<a id="stage-11"></a>
+
+### 11. Финальный cutover поддержки системы и завершение миграции — в работе
 
 Это единственный оставшийся глобальный технический этап после закрытия 10A. Он объединяет прежние проверки этапа 13, переключение этапа 14 и итоговую ревизию этапа 15 в последовательные подэтапы с самостоятельными gates и PR. Прежние этапы 11–12 по проектированию новых блоков отменены, а не завершены; новый `component-development` route, design standard/workflow и третий специализированный навык не создаются.
 
 Итоговые специализации — `maintaining-cupis-email-system` и `building-cupis-emails`; `cupis-email-task-router` остаётся тонким входом, не третьим предметным навыком. Onboarding уже созданного и одобренного компонента остаётся частью поддержки, не проектированием нового блока. Неизвестный компонент по-прежнему блокирует email-build до регистрации.
 
-Подробный [implementation plan этапа 11](2026-10-01-cupis-final-maintenance-cutover.md) прошёл review и слит в PR #106. Публикация плана не запускает ни проверочные пакеты 11A, ни переключение 11B, ни очистку 11C.
+Подробный [implementation plan этапа 11](2026-10-01-cupis-final-maintenance-cutover.md) слит в PR #106, пакет 1 — в PR #108. Пакет 2 выполняется в draft PR #110; 11A ещё не принят. Пакеты 3–6 и отложенный follow-up карточек не начаты; поддержка не включена.
 
 #### 11A. Проверки готовности до переключения
 
-- [x] Подготовить и слить отдельный подробный implementation plan финального cutover — PR #106: точные области проверки manifest/workflow/profile, gates, allowed paths, rollback и порядок PR. Подготовка плана завершена, но ни один его исполнительный пакет ещё не начат; включение маршрутов не разрешено.
+- [x] Подготовить и слить отдельный подробный implementation plan финального cutover — PR #106: точные области проверки manifest/workflow/profile, gates, allowed paths, rollback и порядок PR. План не является разрешением включить маршруты.
+- [x] Завершить пакет 1: source closure и точная карта переключения — PR #108. Findings F1–F7 переданы в следующие пакеты; факт их обнаружения не означает устранение.
+- [ ] Завершить пакет 2 в PR #110: свежие Figma facts, покрытие и архивное сравнение. Не принимать старые capture packets за результат исправленного capture.
+- [ ] До пакета 3 решить F7: generated workflow checkpoints должны получить producer/schema/manifest/output/test map либо отдельно согласованное изменение master-spec. Не заменять генерацию ручной копией и не терять это обязательство при архивировании этапа 7.
 - [ ] Проверить каждый текущий остановленный маршрут: `library-maintenance`, `component-onboarding`, `figma-description-sync`, `figma-naming-audit`, `migration-progress`. Для каждого явно определить и доказать его workflow/modes, минимальный bundle, source closure, gates и handoff. Не создавать новый design-time маршрут.
 - [ ] Сравнить generated docs, bundles и обязательства maintenance-сценариев с read-only архивным baseline; объяснить значимые отличия. Нужные characterization assertions восстановить или заменить активными проверками с тем же смыслом. Архив не подключать к runtime.
 - [ ] Подтвердить contract-significant факты representative maintenance-сценариев свежими точечными Figma MCP reads там, где результат зависит от Figma. Migration status и перенесённый Markdown не являются доказательством. Найденные расхождения сообщать; не менять дизайн или точные component facts без разрешённой области.
@@ -267,6 +293,8 @@ Manifest-driven разрешение source paths было выполнено н
 - [ ] Перевести только прошедшие gate workflow/profile/foundation статусы из временных shadow-состояний в итоговые; не делать массовую замену статусов без проверки потребителей.
 - [ ] Проверить validation, generated-doc equivalence, route closure, skill/bootstrap boundaries и один полный локальный прогон на точном финальном cloud commit. Рутинные тесты и visual regression — Terra Medium; GitHub Actions и PR Checks не использовать.
 - [ ] Зафиксировать rollback point и изменения зависимостей; получить отдельное разрешение на merge. После слияния синхронизировать локальные навыки из слитого SHA с отдельным разрешением и подтвердить clean-context работу.
+
+Между принятым и слитым пакетом 5 и отдельно разрешённой очисткой выполняется согласованный follow-up обновлённых карточек из PR #109. Этот порядок не позволяет обходить текущие paused gates или принимать известный drift за совпадение контрактов.
 
 #### 11C. Итоговая очистка после стабильного cutover
 
@@ -281,7 +309,7 @@ Manifest-driven разрешение source paths было выполнено н
 - Прежние этапы 11–12 отменены: не создаются стандарт, workflow или навык проектирования новых блоков.
 - Прежние этапы 13–15 стали подэтапами 11A–11C финального cutover. Проверки, rollback и обоснованная очистка сохранены, зависимость от отменённого design-time контура снята.
 - Завершённые этапы и исходные журналы не переписываются как будто выполнялись по новому маршруту. Старые номера в исторических шагах не создают будущих задач; актуальный порядок задаёт этот раздел.
-- Ручной `cupis-active-work-context.md` не обновляется этой корректировкой: он хранит предыдущий явно запрошенный снимок и не заменяет актуальные manifest и roadmap.
+- По решению от 02.10.2026 отдельный ручной context-файл удалён. Глобальная очередь остаётся в этом roadmap, факты текущего пакета — в его implementation plan; удалённый документ восстанавливается только из истории Git, а не как рабочий источник.
 
 ## Правило обновления roadmap
 
