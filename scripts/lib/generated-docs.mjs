@@ -3,7 +3,6 @@ import { isAbsolute, join, relative, resolve } from "node:path";
 
 import { loadAssetsFoundation } from "./assets-foundation.mjs";
 import {
-  collectComponentReferences,
   indexComponentRegistries,
   listComponentRecords,
   loadComponentRegistries,
@@ -236,21 +235,124 @@ function renderComponentRegistry(model) {
 }
 
 function typographyConsumers(model) {
-  const consumers = new Map(
-    (model.typography.styles ?? []).map((style) => [style.id, new Set()]),
-  );
+  const consumers = new Map();
+  const byId = new Map();
+  const byFigmaId = new Map();
+  function invalid(path, message) {
+    throw diagnostic("GENERATED_TYPOGRAPHY_CONSUMER_INVALID", path, message);
+  }
+  for (const style of model.typography.styles ?? []) {
+    if (byId.has(style.id) || byFigmaId.has(style.figma_style_id)) {
+      invalid("/typography/styles", "Typography consumer identity is ambiguous.");
+    }
+    byId.set(style.id, style);
+    byFigmaId.set(style.figma_style_id, style);
+    consumers.set(style.id, new Map());
+  }
+
   for (const { record } of listComponentRecords(model.registries)) {
-    for (const reference of collectComponentReferences(record).foundations) {
-      if (
-        reference.foundationId === "typography" &&
-        reference.group === "styles" &&
-        consumers.has(reference.id)
-      ) {
-        consumers.get(reference.id).add(record.id);
+    const targets = new Map();
+    const linkedTargets = new Set();
+    const contexts = ["mobile", "desktop"].map((viewport) => ({
+      viewport,
+      root: record.contracts?.[viewport]?.root,
+      path: `/contracts/${viewport}/root`,
+      variant: null,
+    }));
+    (record.contracts?.variant_contracts ?? []).forEach((variant, index) => {
+      const axes = (variant.axes ?? []).filter(({ name }) => name === "Viewport");
+      contexts.push({
+        viewport: axes.length === 1 ? axes[0].value?.toLowerCase() : null,
+        root: variant.root,
+        path: `/contracts/variant_contracts/${index}/root`,
+        variant,
+      });
+    });
+
+    function fail(path, message) {
+      invalid(`/components/${record.id}${path}`, message);
+    }
+    function variantOwner(context, nodeId, path) {
+      const matches = (record.variants ?? []).filter((variant) => variant.node_id === nodeId);
+      const owner = matches.length === 1 ? matches[0] : null;
+      const axes = (owner?.axes ?? []).filter(({ name }) => name === "Viewport");
+      if (!owner?.id || axes.length !== 1 ||
+          axes[0].value?.toLowerCase() !== context.viewport ||
+          !["mobile", "desktop"].includes(context.viewport)) {
+        fail(path, "Typography consumer has no unambiguous variant/viewport owner.");
+      }
+      return owner.id;
+    }
+    function add(style, context, variant, element, path) {
+      if (!style || !element.id) {
+        fail(path, "Typography consumer has an unknown style or element identity.");
+      }
+      const consumer = {
+        component: record.id,
+        viewport: context.viewport,
+        variant,
+        element: element.id,
+      };
+      const key = JSON.stringify([consumer.component, consumer.viewport, consumer.variant, consumer.element]);
+      consumers.get(style.id).set(key, consumer);
+    }
+    function walk(element, path, context) {
+      if (!element) return;
+      (element.facts ?? []).forEach((fact, index) => {
+        const target = `${path}/facts/${index}/value/value`;
+        targets.set(target, { fact, element, context });
+        const value = fact.value;
+        if (value?.type === "foundation-reference" && value.foundation_id === "typography") {
+          const variant = context.variant
+            ? variantOwner(context, context.variant.variant_node_id, target)
+            : "default";
+          const style = value.definition_group === "styles" ? byId.get(value.definition_id) : null;
+          add(style, context, variant, element, target);
+        }
+      });
+      (element.children ?? []).forEach((child, index) =>
+        walk(child, `${path}/children/${index}`, context));
+    }
+    for (const context of contexts) walk(context.root, context.path, context);
+
+    for (const link of record.contracts?.figma_fact_links ?? []) {
+      if (link.source_path !== "/text_style/figma_style_id") continue;
+      const target = targets.get(link.contract_path);
+      const fact = target?.fact;
+      if (!target || fact.id !== "figma-style-id" || fact.value?.type !== "string" ||
+          typeof fact.value.value !== "string" || !fact.value.value ||
+          fact.provenance?.kind !== "figma-literal" ||
+          !link.node_id || fact.provenance.node_id !== link.node_id ||
+          (link.transform ?? "identity") !== "identity") {
+        fail(link.contract_path ?? "/contracts/figma_fact_links",
+          "Typography style link must target an exact owned figma-style-id fact with matching node provenance.");
+      }
+      const { context, element } = target;
+      // The root's provenance identifies the base variant; a variant contract
+      // declares it explicitly. Never infer ownership from source snapshots.
+      const rootNodes = new Set((context.root.facts ?? [])
+        .filter(({ provenance }) => ["figma-literal", "figma-binding"].includes(provenance?.kind))
+        .map(({ provenance }) => provenance.node_id));
+      const expectedNode = context.variant?.variant_node_id ??
+        (rootNodes.size === 1 ? [...rootNodes][0] : null);
+      if (!expectedNode || link.variant_node_id !== expectedNode) {
+        fail(link.contract_path, "Typography style link does not belong to its contract root variant.");
+      }
+      const variant = variantOwner(context, link.variant_node_id, link.contract_path);
+      add(byFigmaId.get(fact.value.value), context, variant, element, link.contract_path);
+      linkedTargets.add(link.contract_path);
+    }
+    for (const [path, { fact }] of targets) {
+      if (fact.id === "figma-style-id" && fact.value?.value !== "" &&
+          fact.value?.value != null && !linkedTargets.has(path)) {
+        fail(path, "Semantic style identity has no owned Figma style link.");
       }
     }
   }
-  return consumers;
+  return new Map([...consumers].map(([id, entries]) => [
+    id,
+    [...entries].sort(([left], [right]) => left.localeCompare(right)).map(([, entry]) => entry),
+  ]));
 }
 
 function renderTypographyRegistry(model) {
@@ -258,6 +360,7 @@ function renderTypographyRegistry(model) {
     "# CUPIS typography registry",
     "",
     "Typography definitions come from the structured foundation. Consumers are computed from component contracts.",
+    "These are recorded associations, not a fresh Figma usage audit or proof that a style is unused. Node-local values remain in their component contracts. Variant default denotes a typed reference in the base viewport contract.",
     "",
     "## Responsive pairs",
     "",
@@ -281,7 +384,8 @@ function renderTypographyRegistry(model) {
       (item) =>
         item.desktop_style_id === style.id || item.mobile_style_id === style.id,
     );
-    const usedBy = [...(consumers.get(style.id) ?? [])].sort();
+    const usages = consumers.get(style.id) ?? [];
+    const usedBy = [...new Set(usages.map(({ component }) => component))].sort();
     lines.push(
       `### ${style.figma_name}`,
       "",
@@ -295,7 +399,9 @@ function renderTypographyRegistry(model) {
       `- Line-height: ${inlineCode(formatMeasure(style.line_height))}`,
       `- Letter-spacing: ${inlineCode(formatMeasure(style.letter_spacing))}`,
       `- Responsive pair: ${pair ? inlineCode(pair.id) : "none"}`,
-      `- Consumers: ${usedBy.length > 0 ? usedBy.map(inlineCode).join(", ") : "none"}`,
+      `- Consumers: ${usedBy.length > 0 ? usedBy.map(inlineCode).join(", ") : "none recorded"}`,
+      ...usages.map((usage) =>
+        `  - Component ${inlineCode(usage.component)}; viewport ${inlineCode(usage.viewport)}; variant ${inlineCode(usage.variant)}; element ${inlineCode(usage.element)}`),
       `- Figma description: ${oneLine(renderFigmaTypographyDescription(style))}`,
       "",
     );
