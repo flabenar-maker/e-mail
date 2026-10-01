@@ -22,7 +22,7 @@
 
 ### Текущая точка возврата P2 — 02.10.2026
 
-**Сбор завершён: 61/61 полных packets; пакет 2 НЕ принят.** Дополнительный read-only разбор на candidate `23c02336e578a38730ab57ebaf0f8faf2763e67f` классифицировал причины diagnostics и определил точечные предложения ремонта; детали в разделе «Разбор причин P2» ниже. Этот разбор не менял code/contracts/Figma и не заменяет unresolved semantic checks. В этом продолжении получены все оставшиеся 24, затем выполнен локальный аудит всех 61. Нового quota error не было. Повторное чтение прежней очереди из 24 не является следующим шагом. Ниже сохранена историческая остановка, а не текущая команда повторить сбор.
+**Сбор завершён: 61/61 полных packets; пакет 2 НЕ принят.** Согласованный bounded repair единиц и standalone-icon topology выполнен на code candidate `78aaf0b9`; подробные результаты и ограничения записаны ниже. Следующий участок — отдельно согласованное закрытие canonical mappings и оставшихся значимых фактов, не P3. Ранее дополнительный read-only разбор на candidate `23c02336e578a38730ab57ebaf0f8faf2763e67f` классифицировал причины diagnostics и определил точечные предложения ремонта; детали в разделе «Разбор причин P2» ниже. Этот разбор не менял code/contracts/Figma и не заменяет unresolved semantic checks. В предыдущем продолжении получены все оставшиеся 24, затем выполнен локальный аудит всех 61. Нового quota error не было. Повторное чтение прежней очереди из 24 не является следующим шагом. Ниже сохранена историческая остановка, а не текущая команда повторить сбор.
 
 Основание: `main@618d124df0a664c84d23a724ba50ef2b324e9b97`; comparison candidate `51da5756777acacbd04ea1380568c93577456380`, оба его родителя — прежний PR #110 и слитая организация plans из PR #111. Пять P2 repair/test/generated blobs сохранены побайтово. Использован один candidate bundle `library-maintenance / read-only / both`: 61 record, четыре foundations, пять static sources; `paused / SKILL_ROUTE_PAUSED` разрешает только область этого миграционного плана, не production maintenance.
 
@@ -38,7 +38,7 @@
 | Локальная целостность кандидата | `validate-system`, `generate-docs --check`, targeted capture/fact/CLI/generated-doc tests: 46/46 PASS; main-docs organization и прежние пять P2 blobs сохранены |
 | Граница результата | Нет новой HTML-сборки/HTML visual regression или real-client gate; нет Figma/contract/foundation/skill/route/letter mutations; PR остаётся draft, не слит |
 
-**Coverage — не список визуальных дефектов.** Audit увидел 38 300 source facts / 15 046 mapped и 19 956 contract facts / 15 115 mapped. Открыты 23 254 `FIGMA_FACT_UNCOVERED`, 4 863 `CONTRACT_FACT_UNMAPPED`, 20 `FIGMA_SOURCE_PATH_MISSING` (все у deferred `block-icon-list`, обычных owners — 0), 18 unsupported diagnostics, 17 evidence-links-not-contract и topology diagnostics. Raw capture содержит 207 diagnostics: 160 `ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW` и 47 `MIXED_VALUE`. Это требует классификации значимости и exact mapping; blanket exclusions или переутверждения контрактов ради GREEN нет. Не использовать несуществующий diagnostic `SOURCE_PATH_MISSING` и не вычислять unmapped как разность агрегатов: raw atomic fact paths и Set разрешившихся mapping targets — разные множества; target попадает в Set до проверки provenance и совпадения значения.
+**Baseline coverage до bounded unit/icon repair — не список визуальных дефектов.** Audit увидел 38 300 source facts / 15 046 mapped и 19 956 contract facts / 15 115 mapped. Открыты 23 254 `FIGMA_FACT_UNCOVERED`, 4 863 `CONTRACT_FACT_UNMAPPED`, 20 `FIGMA_SOURCE_PATH_MISSING` (все у deferred `block-icon-list`, обычных owners — 0), 18 unsupported diagnostics, 17 evidence-links-not-contract и topology diagnostics. Raw capture содержит 207 diagnostics: 160 `ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW` и 47 `MIXED_VALUE`. Это требует классификации значимости и exact mapping; blanket exclusions или переутверждения контрактов ради GREEN нет. Не использовать несуществующий diagnostic `SOURCE_PATH_MISSING` и не вычислять unmapped как разность агрегатов: raw atomic fact paths и Set разрешившихся mapping targets — разные множества; target попадает в Set до проверки provenance и совпадения значения.
 
 **P2-F2 — уточнённая причина без автоматической правки.** В Desktop `text-details` 459:27425 — FILL 251 вместо reference 252; `status-container` 459:27428 и `status` 459:29356 — HUG 117 вместо 116. Сумма строки: 72 + 24 + 251 + 24 + 117 = 488. В Mobile `status` 459:29376 — HUG 94 вместо 93; x=79 в строке 252 подтверждает центрирование. Это сильное evidence устаревших измеренных ширин, зависящих от содержимого, а не доказательство поломки HTML. Причина изменения метрик текста во времени отдельно не установлена. Числа и правила адаптивности не переписываются; согласовать судьбу четырёх reference facts и затем выполнить отдельный scoped correction/read-back.
 
@@ -46,12 +46,40 @@
 
 **Следующие действия, всё ещё в P2:**
 - [x] Разделить diagnostics по подтверждённым причинам: units, source-only topology, missing owned links, nested artwork boundaries, derived behavior и deferred #109; записать точные примеры и карту дальнейшего ремонта.
-- [ ] Согласовать область ремонта и закрыть каждый значимый owner/node/path: первичная группировка всех diagnostics не доказывает достаточность mapping и не разрешает blanket exclusions. Auditor/contract автоматически не менять.
+- [ ] Закрыть оставшиеся значимые owner/node/path в отдельно согласованной области. Bounded unit/icon repair выполнен по разрешению; он не закрывает missing owned links и не разрешает следующие изменения canonical facts, alias/nested-artwork policy или blanket exclusions.
 - [ ] Принять решение по четырём F2 reference widths; HTML/layout strategy не менять по одному числовому снимку.
 - [ ] Дозакрыть нужное foundation/binding и visual evidence для выбранных значимых обязанностей.
 - [ ] Завершить сопоставление архивных обязательств с текущими владельцами; P2-F3 recorded association projection уже исправлен, но не доказывает live usage.
 - [ ] Оформить F7 decision и exact producer/schema/manifest/output/test map для generated workflow checkpoints до начала P3. Генератор ещё не реализуется.
 - [ ] После closure выполнить полный локальный gate точного финального SHA и независимое review перед отдельно разрешённым merge кода. P3 и cutover не начинать по факту одного успешного сбора.
+
+### Результат bounded repair P2 — 02.10.2026
+
+**Исправлен механизм, не переутверждены контракты.** Code candidate `78aaf0b99277eb953f560a9c7c061eb5b99ed8ed`; test-first commit `3b39a87b84eaa6d2b29b1f279279533170bc3aa5`. Изменения относительно base `1bef4ac9`: auditor, один новый regression-файл и два текущих плана. Ни значения/links canonical components, ни foundations, capture, renderer, Figma, письма, навыки или routes этим ремонтом не изменены.
+
+Локальный RED: 18 unit-family positive cases и два icon-topology cases воспроизвели старый дефект. Две ошибки новых fixtures (selector и вложенный capture diagnostic) исправлены в самих тестах, не подменой production API; mixed-node negative усилен реальным дочерним node. Targeted GREEN: **55/55**, validator и generated check PASS.
+
+**Повторный audit сохранённых 61 MCP packets** сравнен с baseline `51da5756` полными diagnostic objects, а не только агрегатами. Это regression механизма по сохранённым source data 02.10, не новое утверждение всей библиотеки на текущую минуту.
+
+| Диагностика | Изменение и доказательная граница |
+| --- | --- |
+| `CONTRACT_FACT_UNMAPPED` | Удалены 4 801, все и только `/value/unit`, подтверждённые успешными owned numeric mappings и unit evidence |
+| `FIGMA_FACT_UNCOVERED` | Удалены 1 614 explicit unit leaves: reference dimensions 886, line-height 364, letter-spacing 364; других source paths не снято |
+| Source-only icon topology | Удалены 52 ложных findings у 13 icons: missing 26, undeclared 13, unknown viewport 13 |
+| Реальные blockers | Пообъектно сохранены 28 value mismatches, 20 missing source paths, 17 missing owned links и 18 unsupported capture reports; новых diagnostics 0 |
+| Текущий остаток | 21 640 source facts uncovered; 62 contract paths unmapped = 27 units + 35 non-unit. Эти числа не являются количеством визуальных ошибок |
+
+Оставшиеся **27 units** не исключены: `block-icon-list` 10, `block-cards-images` 4, `block-icon-cards` 4, `block-transaction-success` 4, `asset-header-logo-4x` 2, `card-image` 2, `asset-header-logo-compact-4x` 1. Причины — соответствующие отсутствующие/несовпавшие numeric evidence или отсутствующие owned mappings. **35 non-unit** не изменились: IconList 20, HeaderLogo 7, CompactLogo 3, Secondary 2, Primary 2, Hero 1. Работа #109 и F2 по-прежнему отложена отдельно.
+
+Счётчики `mapped_*` сохраняют прежнюю форму. В mapped contract paths теперь также входят unit leaves, доказанные этим bounded механизмом; explicit mapped targets по-прежнему учитываются до проверки provenance/value. Ни один из счётчиков не равен числу успешно проверенных контрактов или проценту готовности.
+
+**Независимое review:** Critical 0, Important 0. Minor отложен: три admission guards иконки (непустой declared variants, несовпадающие variant/owner и source-root/owner IDs) реализованы, но не имеют трёх отдельных негативных regression cases. Это небольшой долг тестового покрытия, не разрешение ослабить guards.
+
+**Review rulings:** результаты тестов закрываются отдельным локальным gate Terra; актуальность всей Figma-библиотеки этим code review не устанавливается; расширение unit/source-only policy за пределами закрытого списка и согласованной топологии не выполняется. Цена границы — такие будущие случаи останутся непроверенными, а не будут молча приняты.
+
+**Локальные проверки exact code SHA `78aaf0b99277eb953f560a9c7c061eb5b99ed8ed`:** полный Node-набор **744/744 PASS**, 0 failures, 346,505 ms; запущен прямой Node-эквивалент команды `npm test`, поскольку npm в test environment недоступен. Windows bootstrap verifier и `bootstrap-contract.Tests.ps1` PASS. Все проверки выполняла GPT-5.6 Terra Medium локально; Actions/PR Checks не использовались. Между base `1bef4ac9` и code candidate изменены только четыре разрешённых пути; остальные tree blobs сохранены. После записи этого docs-only результата требуется короткая проверка точного documentation SHA и сохранности code/data blobs; повтор полного Node-набора ради двух планов не нужен. Receipt точного docs SHA фиксируется в PR #110.
+
+**Дальше:** остаёмся в P2. Отдельно согласовать canonical mappings значимых фактов и 17 owners без links, правила nested artwork/derived evidence, F2 reference widths; затем foundation/binding/visual obligations и F7. Alias deduplication не выполнялась. Пакет 3, PR #109, cutover и merge не начинались.
 
 ### Согласованный bounded repair P2 — единицы и standalone icons (02.10.2026)
 
@@ -66,10 +94,10 @@
 **Evidence и рабочая последовательность:**
 - Прочитан один explicit write/both bundle всех 61 owners; `SKILL_ROUTE_PAUSED` сохранён, работа разрешена только этой migration-областью. Canonical taxonomy читалась из raw records, не из resolver projection, которая не содержит evidence links.
 - Новый read-only Figma metadata probe `1009:2505` подтвердил standalone `Icon/Bank-Card-2-Line` 62×62 с vector child. Полный repeat comparison использует уже сохранённые MCP packets 02.10, а не выдаётся за новый полный Figma audit.
-- [ ] RED: additive regression tests в облачной ветке, локальный прогон точного SHA через GPT-5.6 Terra Medium.
-- [ ] GREEN: bounded auditor implementation, targeted regressions и сравнение всех 61 сохранённых packets; реальные mismatches/missing links/capture errors не должны исчезнуть.
-- [ ] Независимое review и итоговые результаты в этом журнале/roadmap.
-- [ ] Полный локальный gate точного финального SHA; без GitHub Actions/Checks, без merge.
+- [x] RED: additive regression tests в облачной ветке, локальный прогон точного SHA через GPT-5.6 Terra Medium.
+- [x] GREEN: bounded auditor implementation, targeted regressions и сравнение всех 61 сохранённых packets; реальные mismatches/missing links/capture errors сохранены.
+- [x] Независимое review и итоговые результаты в этом журнале/roadmap; Minor по трём negative cases записан отдельно.
+- [x] Полный локальный gate точного code SHA `78aaf0b9`; после docs-only фиксации — отдельный короткий exact-SHA gate с проверкой неизменности кода. Без GitHub Actions/Checks, без merge.
 
 **Execution ruling:** cloud-only repo остаётся источником и местом изменений; disposable snapshots используются только для запуска. Этот журнал заменяет local-worktree ledger для согласованной области. Тесты и review делегированы Terra Medium по AGENTS; координатор не читает полные test logs.
 
