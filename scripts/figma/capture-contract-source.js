@@ -37,6 +37,8 @@ async function captureFigmaContractFacts(componentNodeId) {
         position: stop.position,
         ...rgba(stop.color),
       }));
+      // Existing fact links use stops; keep the original v1 field too.
+      result.stops = result.gradient_stops;
       result.gradient_transform = paint.gradientTransform;
     } else if (paint.type === "IMAGE") {
       result.image_hash = paint.imageHash;
@@ -59,7 +61,34 @@ async function captureFigmaContractFacts(componentNodeId) {
     return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, binding(item)]));
   };
 
-  function serialize(node) {
+  const textStyles = new Map();
+  async function textStyleName(styleId, nodeId) {
+    // Empty means unlinked; null comes from an explicitly reported mixed ID.
+    if (styleId === "" || styleId === null) return null;
+    if (typeof styleId !== "string") {
+      errors.push({ node_id: nodeId, code: "TEXT_STYLE_UNRESOLVED" });
+      return null;
+    }
+    if (!textStyles.has(styleId)) {
+      try {
+        const style = await figma.getStyleByIdAsync(styleId);
+        textStyles.set(styleId, style?.type === "TEXT" &&
+          style.id === styleId && typeof style.name === "string"
+          ? { name: style.name }
+          : { error: "TEXT_STYLE_UNRESOLVED" });
+      } catch {
+        textStyles.set(styleId, { error: "TEXT_STYLE_LOOKUP_FAILED" });
+      }
+    }
+    const result = textStyles.get(styleId);
+    if (result.error) {
+      errors.push({ node_id: nodeId, code: result.error, style_id: styleId });
+      return null;
+    }
+    return result.name;
+  }
+
+  async function serialize(node) {
     const result = {
       node_id: node.id,
       name: node.name,
@@ -89,6 +118,7 @@ async function captureFigmaContractFacts(componentNodeId) {
         errors.push({ node_id: node.id, code: "ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW" });
       }
     }
+    if ("minWidth" in node) result.minimum_width_px = node.minWidth;
     if ("layoutAlign" in node) result.layout_align = node.layoutAlign;
     if ("layoutGrow" in node) result.layout_grow = node.layoutGrow;
     if ("layoutPositioning" in node) result.layout_positioning = node.layoutPositioning;
@@ -116,10 +146,20 @@ async function captureFigmaContractFacts(componentNodeId) {
     }
     if (node.type === "TEXT") {
       result.characters = node.characters;
+      const styleId = mixed(node.textStyleId, node.id, "textStyleId");
+      const weight = mixed(node.fontWeight, node.id, "fontWeight");
+      if (node.fontWeight !== figma.mixed && !Number.isFinite(weight)) {
+        errors.push({ node_id: node.id, code: "FONT_WEIGHT_UNAVAILABLE", field: "fontWeight" });
+      }
+      result.text_geometry = {
+        auto_resize: node.textAutoResize,
+        vertical_alignment: node.textAlignVertical,
+      };
       result.text_style = {
         font_family: mixed(node.fontName, node.id, "fontName")?.family ?? null,
         font_style: mixed(node.fontName, node.id, "fontName")?.style ?? null,
         font_size_px: mixed(node.fontSize, node.id, "fontSize"),
+        font_weight: Number.isFinite(weight) ? weight : null,
         line_height: mixed(node.lineHeight, node.id, "lineHeight"),
         letter_spacing: mixed(node.letterSpacing, node.id, "letterSpacing"),
         horizontal_alignment: node.textAlignHorizontal,
@@ -127,7 +167,8 @@ async function captureFigmaContractFacts(componentNodeId) {
         text_case: mixed(node.textCase, node.id, "textCase"),
         text_decoration: mixed(node.textDecoration, node.id, "textDecoration"),
         text_auto_resize: node.textAutoResize,
-        figma_style_id: node.textStyleId,
+        figma_style_id: styleId ?? null,
+        figma_style_name: await textStyleName(styleId, node.id),
       };
       if (["fontName", "fontSize", "lineHeight", "fills", "textDecoration"].some(
         (field) => node[field] === figma.mixed
@@ -162,23 +203,27 @@ async function captureFigmaContractFacts(componentNodeId) {
         return captured;
       });
     }
-    if ("children" in node) result.children = node.children.map(serialize);
+    if ("children" in node) {
+      result.children = [];
+      for (const child of node.children) result.children.push(await serialize(child));
+    }
     return result;
   }
 
   const variantNodes = component.type === "COMPONENT_SET"
     ? component.children.filter((child) => child.type === "COMPONENT")
     : [component];
-  const variants = variantNodes.map((variant) => {
+  const variants = [];
+  for (const variant of variantNodes) {
     const axes = variant.type === "COMPONENT" && variant.parent?.type === "COMPONENT_SET"
       ? Object.entries(variant.variantProperties ?? {}).map(([name, value]) => ({ name, value }))
       : [];
-    return {
+    variants.push({
       variant_node_id: variant.id,
       axes,
-      source_node: serialize(variant),
-    };
-  });
+      source_node: await serialize(variant),
+    });
+  }
   const owner = component.type === "COMPONENT_SET" ? component : component.parent?.type === "COMPONENT_SET" ? component.parent : component;
   const componentProperties = Object.entries(owner.componentPropertyDefinitions ?? {})
     .map(([name, definition]) => ({
