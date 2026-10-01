@@ -70,6 +70,23 @@ Baseline проверки: `main@6c0bf7d0d3b1ca7909b692541883d2b0e9788709`. [PR 
 
 **Решение об исполнении:** постоянные изменения публикуются через облачный GitHub; локальная копия остаётся одноразовым exact-SHA test snapshot. Поэтому локальные worktree/SDD authoring scripts не применяются, а ledger ведётся здесь. Routine tests и regression выполняет существующий Terra Medium; coordinator получает компактный отчёт. P2-F3 (карта шрифтов), F7, четыре width differences и вся активация остаются вне этой правки.
 
+### P2-F3 — разрешённый ремонт generated-карты типографики (01.10.2026)
+
+Пользователь разрешил следующий offline шаг. Исправляется потеря уже существующих semantic associations при генерации документации; новые факты Figma не устанавливаются.
+
+**Allowed paths:** `scripts/lib/generated-docs.mjs`, `tests/generation/generated-docs.test.mjs`, автоматически созданный `docs/generated/typography-registry.md` и журнал этого плана. Ранее разрешённые capture-изменения PR #110 сохраняются без расширения. Контракты, foundations, schemas, HTML-рендерер, навыки, manifest, Figma и локальные письма не меняются.
+
+**Решение:** сохранять поддержку typed foundation references; дополнительно разрешать exact `figma-style-id` atomic facts через принадлежащие компоненту `figma_fact_links`, совпадающий node/provenance, viewport и вариант. Не брать связи из `source_variants`, имён стилей, размеров или архивных списков. Генерировать компонентный summary и точные позиции component/viewport/variant/element. Одинаковые ссылки дедуплицировать, разные элементы и варианты не сливать. Неразрешимый, неоднозначный или повреждённый semantic link даёт явную typed diagnostic, а не «нет потребителей». Числовые local overrides остаются фактическими значениями узла; association не подменяет их definition стиля.
+
+**Критерии и последовательность:**
+- [ ] Сначала regression RED: Mobile/Desktop + variant ownership; точный style ID; typed references; local overrides; неизвестные/неоднозначные IDs и повреждённые ссылки; snapshot-only не является consumer.
+- [ ] Минимально исправить projection и получить GREEN. Проверить детерминизм, 364 существующих associations / 15 стилей и неизменность входных facts.
+- [ ] Пересобрать typography registry каноническим генератором; другие generated outputs должны остаться побайтово прежними.
+- [ ] Независимое review; targeted local tests, validator, generated check, allowed diff и preserved blobs на финальном cloud SHA. Перед будущим merge потребуется отдельный полный gate; сейчас PR не сливается.
+
+Generated usage отражает записанные контракты, не свежую живую Figma. Отсутствие recorded consumers не разрешает удалить стиль. Квота MCP, очередь 39, четыре P2-F2 width differences и F7 остаются открытыми; пакет 2 целиком не закрывается, пакет 3 не начинается. Ручной active-work-context не обновляется.
+
+
 ## Global Constraints
 
 - Cloud GitHub — постоянный источник; локальный exact-SHA snapshot — только исполнение/проверка, не рабочая копия для правок.
