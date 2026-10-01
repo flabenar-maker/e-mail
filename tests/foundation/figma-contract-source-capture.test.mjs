@@ -30,6 +30,8 @@ function textNode(overrides = {}) {
 function component(children = [textNode()], overrides = {}) {
   return {
     type: "COMPONENT", id: "1:1", name: "Button/Primary", visible: true,
+    variantProperties: { Viewport: "Mobile" },
+    parent: { type: "COMPONENT_SET", componentPropertyDefinitions: {} },
     width: 230, height: 44, minWidth: 230,
     fills: [{
       type: "GRADIENT_LINEAR", visible: true, opacity: 1,
@@ -51,10 +53,13 @@ function componentSet() {
   const desktop = component([textNode({ id: "2:desktop" })], {
     id: "1:desktop", name: "Viewport=Desktop", variantProperties: { Viewport: "Desktop" }, minWidth: 0,
   });
-  return {
+  const set = {
     type: "COMPONENT_SET", id: "1:1", name: "Button/Primary", visible: true,
     width: 230, height: 44, children: [mobile, desktop], componentPropertyDefinitions: {},
   };
+  mobile.parent = set;
+  desktop.parent = set;
+  return set;
 }
 
 function fakeFigma({
@@ -123,6 +128,7 @@ test("capture preserves v1 fields while adding exact geometry, local weight, sty
 test("capture preserves both variants in Figma order and distinguishes min-width zero, null, and absent", async () => {
   const paired = await captureWith(fakeFigma({ node: componentSet() }).figma);
   assert.deepEqual(paired.variants.map(({ variant_node_id }) => variant_node_id), ["1:mobile", "1:desktop"]);
+  assert.deepEqual(paired.variants.map(({ axes }) => axes), [[{ name: "Viewport", value: "Mobile" }], [{ name: "Viewport", value: "Desktop" }]]);
   assert.equal(paired.variants[0].source_node.minimum_width_px, 230);
   assert.equal(paired.variants[1].source_node.minimum_width_px, 0);
   const nullable = await captureWith(fakeFigma({ node: component([], { minWidth: null }) }).figma);
