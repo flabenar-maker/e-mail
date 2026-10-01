@@ -244,17 +244,18 @@ Manifest-driven разрешение source paths было выполнено н
 
 [Решение](../specs/2026-09-28-cupis-codex-routing-web-delivery-design.md) и [план завершения локального маршрутизатора](2026-09-28-cupis-skill-router-web-delivery.md) сохраняют существующие пути. По решению от 01.10.2026 пакеты Web capability, ZIP/import и Web-приёмки отменены до написания продуктового кода. Рабочий результат — локальная версионная папка `email.html + images/`; постоянный источник системы — облачный GitHub. Финальные письма в репозиторий не попадают.
 
-### 11. Финальный cutover поддержки системы и завершение миграции — не начат
+### 11. Финальный cutover поддержки системы и завершение миграции — 11A в работе
 
 Это единственный оставшийся глобальный технический этап после закрытия 10A. Он объединяет прежние проверки этапа 13, переключение этапа 14 и итоговую ревизию этапа 15 в последовательные подэтапы с самостоятельными gates и PR. Прежние этапы 11–12 по проектированию новых блоков отменены, а не завершены; новый `component-development` route, design standard/workflow и третий специализированный навык не создаются.
 
 Итоговые специализации — `maintaining-cupis-email-system` и `building-cupis-emails`; `cupis-email-task-router` остаётся тонким входом, не третьим предметным навыком. Onboarding уже созданного и одобренного компонента остаётся частью поддержки, не проектированием нового блока. Неизвестный компонент по-прежнему блокирует email-build до регистрации.
 
-Подробный [implementation plan этапа 11](2026-10-01-cupis-final-maintenance-cutover.md) прошёл review и слит в PR #106. Публикация плана не запускает ни проверочные пакеты 11A, ни переключение 11B, ни очистку 11C.
+Подробный [implementation plan этапа 11](2026-10-01-cupis-final-maintenance-cutover.md) слит в PR #106. Пакет 1 source closure завершён и слит через [PR #108](https://github.com/flabenar-maker/e-mail/pull/108), main@6c0bf7d0d3b1ca7909b692541883d2b0e9788709. Пакеты 2–6 ещё не выполнены, maintenance routes остаются paused. Следующий исполнительный шаг — пакет 2, не production cutover.
 
 #### 11A. Проверки готовности до переключения
 
-- [x] Подготовить и слить отдельный подробный implementation plan финального cutover — PR #106: точные области проверки manifest/workflow/profile, gates, allowed paths, rollback и порядок PR. Подготовка плана завершена, но ни один его исполнительный пакет ещё не начат; включение маршрутов не разрешено.
+- [x] Подготовить и слить отдельный подробный implementation plan финального cutover — PR #106: точные области проверки manifest/workflow/profile, gates, allowed paths, rollback и порядок PR.
+- [x] Выполнить пакет 1: source closure, карта пяти маршрутов и воспроизводимые findings — PR #108. Это исследовательский результат, не исправление всех findings и не разрешение включения маршрутов.
 - [ ] Проверить каждый текущий остановленный маршрут: `library-maintenance`, `component-onboarding`, `figma-description-sync`, `figma-naming-audit`, `migration-progress`. Для каждого явно определить и доказать его workflow/modes, минимальный bundle, source closure, gates и handoff. Не создавать новый design-time маршрут.
 - [ ] Сравнить generated docs, bundles и обязательства maintenance-сценариев с read-only архивным baseline; объяснить значимые отличия. Нужные characterization assertions восстановить или заменить активными проверками с тем же смыслом. Архив не подключать к runtime.
 - [ ] Подтвердить contract-significant факты representative maintenance-сценариев свежими точечными Figma MCP reads там, где результат зависит от Figma. Migration status и перенесённый Markdown не являются доказательством. Найденные расхождения сообщать; не менять дизайн или точные component facts без разрешённой области.
@@ -267,6 +268,12 @@ Manifest-driven разрешение source paths было выполнено н
 - [ ] Перевести только прошедшие gate workflow/profile/foundation статусы из временных shadow-состояний в итоговые; не делать массовую замену статусов без проверки потребителей.
 - [ ] Проверить validation, generated-doc equivalence, route closure, skill/bootstrap boundaries и один полный локальный прогон на точном финальном cloud commit. Рутинные тесты и visual regression — Terra Medium; GitHub Actions и PR Checks не использовать.
 - [ ] Зафиксировать rollback point и изменения зависимостей; получить отдельное разрешение на merge. После слияния синхронизировать локальные навыки из слитого SHA с отдельным разрешением и подтвердить clean-context работу.
+
+#### Follow-up после 11B: обновлённые маркетинговые карточные блоки
+
+- [ ] После слитого и локально принятого пакета 5 выполнить [отдельный план синхронизации](2026-10-01-cupis-marketing-cards-post-cutover-sync.md): Cards-Images, Icon-Cards и Icon-List, связанные Card/Image и Card/Icon, новые кнопки и точное alignment/sizing. Сначала свежие Figma facts и impact preview; рискованные изменения — после отдельного согласования.
+- [ ] До этого не менять контракты/renderer/Figma в обход pause. В 11A учитывать известный design drift отдельно, не объявлять старые owners эквивалентными изменённым макетам; общий blocker capture/mapping требует явного решения в gate cutover.
+- [ ] После локальной проверки и разрешённого merge follow-up перейти к отдельно разрешённой 11C. Публикация данного плана не запускает ни один его пакет.
 
 #### 11C. Итоговая очистка после стабильного cutover
 
