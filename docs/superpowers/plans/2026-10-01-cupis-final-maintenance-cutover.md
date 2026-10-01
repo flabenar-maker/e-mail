@@ -12,7 +12,7 @@
 
 ## Статус и основание
 
-План подготовлен 01.10.2026 на `main@e08b5099f72b9ac3aa7aff33df6a3a3526868232` и после review слит через PR #106 в `09537effc89daadacaed1d05497a1e75beb18152`. Prerequisite 10A выполнен: итоговый router синхронизирован после отдельного разрешения; canonical byte-match, catalog/frontmatter, сохранность специализаций/config и локальные handoff/boundary gates подтверждены. По следующей команде начат пакет 1 на main@ace7725d6e88dce0b9b130cd5610f4bcade4feb9; его source-closure findings записаны ниже. 11A ещё не завершён. В текущей ветке выполнены read-only проверки пакета 2; его приемка остаётся открытой из-за выявленных blockers (журнал ниже). Пакеты 3–6 и production cutover не выполнены.
+План подготовлен 01.10.2026 на `main@e08b5099f72b9ac3aa7aff33df6a3a3526868232` и после review слит через PR #106 в `09537effc89daadacaed1d05497a1e75beb18152`. Prerequisite 10A выполнен: итоговый router синхронизирован после отдельного разрешения; canonical byte-match, catalog/frontmatter, сохранность специализаций/config и локальные handoff/boundary gates подтверждены. По следующей команде начат пакет 1 на main@ace7725d6e88dce0b9b130cd5610f4bcade4feb9; его source-closure findings записаны ниже. 11A ещё не завершён. В текущей ветке выполнены read-only проверки пакета 2 и начат разрешённый bounded repair сборщика; его приемка остаётся открытой из-за выявленных blockers и лимита Figma (журнал ниже). Пакеты 3–6 и production cutover не выполнены.
 
 Два email routes уже активны; пять маршрутов поддержки пока указывают на `workflow-paused`. `data/workflows/library-maintenance.yaml` существует со статусом `shadow`, но сам этот файл не доказывает достаточность каждого профиля. В частности, его общие steps ссылаются на component/naming sources; профиль `migration-progress` содержит README, roadmap и paused boundary. До переключения надо проверить фактическую совместимость, а не назначать общий workflow всем маршрутам.
 
@@ -24,7 +24,7 @@
 
 «Полный packet» означает целостность передачи, а не полноту фактов: все 22 локальных fact audits завершились exit 1 из-за coverage/mapping/variant/unsupported diagnostics (в сумме 4 148). Среди доступных сопоставленных фактов `FIGMA_CONTRACT_MISMATCH = 0`; Description совпадают 22/22. Это **не** подтверждение всех контрактов. Supplementary facts не подставлялись в canonical audit ради PASS. Свежие screenshots не сняты; визуальная приёмка не выполнена.
 
-Baseline проверки: `main@6c0bf7d0d3b1ca7909b692541883d2b0e9788709`. [PR #110](https://github.com/flabenar-maker/e-mail/pull/110) хранит журнал, не исправления продукта. Локальные evidence и `capture-manifest.json`: `C:/Users/flabe/AppData/Local/Temp/codex-package2-6c0bf7/evidence/full-library-20261001`. Эти временные файлы не являются источником контрактов; при их утрате данные надо снять заново, а не восстанавливать по этому тексту.
+Baseline проверки: `main@6c0bf7d0d3b1ca7909b692541883d2b0e9788709`. [PR #110](https://github.com/flabenar-maker/e-mail/pull/110) хранит журнал и последующий разрешённый bounded capture-repair; факты компонентов не меняются. Локальные evidence и `capture-manifest.json`: `C:/Users/flabe/AppData/Local/Temp/codex-package2-6c0bf7/evidence/full-library-20261001`. Эти временные файлы не являются источником контрактов; при их утрате данные надо снять заново, а не восстанавливать по этому тексту.
 
 #### Что можно продолжать без Figma
 
@@ -32,7 +32,7 @@ Baseline проверки: `main@6c0bf7d0d3b1ca7909b692541883d2b0e9788709`. [PR 
 - [ ] **P2-F3 — подготовить исправление generated-карты использования шрифтов.** Основа — 364 существующие semantic style-ID links и 15 canonical styles, с проверкой точного ID, ownership/provenance и viewport. Проверить отрицательные случаи: snapshot-only связь, неизвестный ID, локальное переопределение параметров. Не менять текстовые значения контрактов/HTML и не выдавать recorded association за доказательство текущего использования в Figma.
 - [ ] **F7 — уточнить решение по generated workflow checkpoints и границы пакета 3.** Проверить producer/schema/manifest/output/test map по существующим файлам. Это подготовка решения, не начало реализации пакета 3 и не разрешение активировать routes.
 
-Начать разумно с P2-F1: ошибки самого механизма сверки мешают доказать корректность библиотеки. Локальные проверки поручаются Terra Medium; зелёные unit tests не снимают Figma-блокер. В этой фиксации меняются только план и состояние PR, код пока не исправляется.
+По следующей команде пользователя начат P2-F1: ошибки самого механизма сверки мешают доказать корректность библиотеки. Первоначальная фиксация лимита была docs-only; последующий разрешённый repair включает capture-код и его тест. Локальные проверки поручаются Terra Medium; зелёные unit tests не снимают Figma-блокер.
 
 #### Что остаётся на паузе
 
@@ -62,9 +62,9 @@ Baseline проверки: `main@6c0bf7d0d3b1ca7909b692541883d2b0e9788709`. [PR 
 **Границы неизвестных значений:** не выводить вес по строке Medium/Bold, имя — по размеру/семейству; detached style не подменять foundation. Пустой style ID означает отсутствие связи; неразрешённый/ошибочный ID и mixed значения остаются явными diagnostics и не превращаются в «проверено». Локальные font overrides читать с узла, а не из definition стиля.
 
 **Шаги и критерии:**
-- [ ] Выполнить реальный capture-код в локальном mock Figma API и получить RED для пяти групп полей; использовать hand-checked fixture values из сохранённого read-only evidence, не новую live-верификацию.
-- [ ] Исправить capture минимально; вернуть точные значения и ожидаемые source paths, сохранить прежние данные и порядок дерева.
-- [ ] Получить GREEN для новых cases, проверить unlinked/unresolved/mixed/override ветви и интеграцию с неизменным auditor: реальные mismatches и недостающие факты всё ещё блокируют.
+- [x] Выполнить реальный capture-код в локальном mock Figma API и получить RED для пяти групп полей; использовать hand-checked fixture values из сохранённого read-only evidence, не новую live-верификацию.
+- [x] Исправить capture минимально; вернуть точные значения и ожидаемые source paths, сохранить прежние данные и порядок дерева.
+- [x] Получить GREEN для новых cases, проверить unlinked/unresolved/mixed/override ветви и интеграцию с неизменным auditor: реальные mismatches и недостающие факты всё ещё блокируют.
 - [ ] Проверить exact cloud SHA локально, generated equivalence и preserved blobs; одно независимое review. Полный финальный gate нужен перед последующим merge кода, не после каждой мелкой правки.
 - [ ] После восстановления MCP отдельно подтвердить этот код живым чтением и продолжить очередь из точки возврата выше. Только это закрывает Figma-зависимую часть; локальные tests её не заменяют.
 
@@ -481,3 +481,15 @@ Terra Medium проверила точный canonical-byte архив указ�
 Получен один расширенный `library-maintenance / read-only / both` bundle: все 61 component ID, четыре foundations, пять static sources. Resolver: exit 0, `paused`, `SKILL_ROUTE_PAUSED`. Это навигационный результат, не включение поддержки. Для byte-sensitive анализа использован canonical archive; EOL-normalized execution snapshot не принят за точный источник байтов.
 
 Новые code/test fixes и полная тестовая серия в этом продолжении не выполнялись. Этот docs-only candidate проходит отдельный scoped local gate; точный head и результаты фиксируются в PR body. Приемка пакета 2 остаётся открытой. После восстановления MCP: снять остальные факты, классифицировать расхождения, определить точный repair diff capture/mapping/projection и выполнить его локальные regression checks; не уменьшать coverage и не менять значения ради PASS. Пакет 3 и cutover не начаты, PR #109 не подмешивается.
+
+### 2026-10-01 — P2-F1: bounded capture-repair, локальный GREEN; живой gate открыт
+
+Разрешённый repair реализован в `621d2c3c1e24f633badc2aec55db461e26d56559`. Добавлены пять групп ранее пропущенных/недоступных mapping-полей: text geometry, числовой вес шрифта с узла, имя по точному style ID, minWidth, stops градиента. Прежние v1 поля сохранены; дочерние слои и варианты обходятся в прежнем порядке. Ошибки style lookup, неизвестные связи и mixed значения не превращаются в guessed defaults; фактические локальные font overrides не подменяются definition стиля.
+
+TDD: после исправления ошибок тестовой обвязки `e1c731d5944c4e1450d376f0779eaa412e12b44b` дал 6/6 ожидаемых RED именно по отсутствию нужных данных. На code candidate `621d2c3` новые cases стали GREEN 6/6. Terra Medium выполнила локально validator, generated-doc check и targeted capture/fact/CLI набор: 46/46 PASS, exit 0. Уже запущенный набор включал дополнительный validator-cli; его повтор не требуется для следующего docs-only шага. Полная test suite и GitHub Actions не запускались; merge не выполнялся.
+
+Независимое review: критических проблем кода нет; Important по устаревшей фразе «код пока не исправляется» исправлен в текущем статусе плана. Minor отложен: отдельный тест счётчика cache lookup для повторного style ID и diagnostics каждого затронутого узла; текущие ошибки/значения и структура уже проверяются, отсутствие этого дополнительного теста не выдаётся за live evidence.
+
+**Сохранность и приёмка:** component/foundation records, auditor, renderer, generated outputs, Figma и письма не изменены. Figma MCP во время ремонта не вызывался. Tests используют синтетический Plugin API fixture с ранее наблюдёнными literals, не подменяют живой packet. Полный Figma gate P2-F1 и пакет 2 остаются открытыми; очередь 39 и ограничения PR #109 сохранены. Новые capture-поля могут добавить честные uncovered diagnostics — их нельзя скрывать ради PASS.
+
+Следующий шаг без Figma: P2-F3 (карта использования шрифтов) только в собственной ограниченной области; автоматически в эту правку не включён. После восстановления квоты выполнить точку возврата выше. Финальный SHA PR и scoped results после этого journal edit фиксируются в PR body.
