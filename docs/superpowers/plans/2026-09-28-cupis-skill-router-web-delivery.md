@@ -51,9 +51,11 @@
 
 **Interfaces:** Consumes: merged A и прямые решения пользователя от 01.10.2026. Produces: согласованные архитектура, порядок 10A → 11A/11B/11C и отсутствие будущих Web/design-time обязательств.
 
-- [ ] **Step 1: Обновить только архитектурные и навигационные части.** Две специализации, локальный output, отмена B/C и прежних design-time этапов; прежние proof/switch/cleanup перенести в финальный cutover. Не сбрасывать завершённые этапы.
-- [ ] **Step 2: Проверить точный финальный cloud SHA локально.** `git diff --check`, `node scripts/validate-system.mjs`, `node scripts/generate-docs.mjs --check`, локальные Markdown links, allowed-path и preserved-blob checks. Отдельно проверить отсутствие новых активных Web/design-time tasks и сохранность cutover gates. При docs-only diff полный suite не нужен.
-- [ ] **Step 3: Обновить существующий draft PR #105.** В title/body указать новый объём, отменённые части, exact SHA и scoped результаты. Слияние отдельно, не автоматически.
+- [x] **Step 1: Обновить только архитектурные и навигационные части.** Две специализации, локальный output, отмена B/C и прежних design-time этапов; прежние proof/switch/cleanup перенести в финальный cutover. Не сбрасывать завершённые этапы.
+- [x] **Step 2: Проверить точный финальный cloud SHA локально.** `git diff --check`, `node scripts/validate-system.mjs`, `node scripts/generate-docs.mjs --check`, локальные Markdown links, allowed-path и preserved-blob checks. Отдельно проверить отсутствие новых активных Web/design-time tasks и сохранность cutover gates. При docs-only diff полный suite не нужен.
+- [x] **Step 3: Обновить существующий draft PR #105.** В title/body указать новый объём, отменённые части, exact SHA и scoped результаты. Слияние отдельно, не автоматически.
+
+Task 1 выполнен и слит через [PR #105](https://github.com/flabenar-maker/e-mail/pull/105). Проверенный head `284fdc658201ceacead1ef6cdd7592c91e7789f1` и merge `e08b5099f72b9ac3aa7aff33df6a3a3526868232` имеют одинаковый tree `fa68fb8dd241c0ffb45781378feaead4f84a0ca2`; scoped local gate и независимый review прошли.
 
 ### Task 2: Синхронизация навыков и локальное закрытие 10A
 
@@ -69,6 +71,16 @@
 - [ ] **Step 2: Проверить изменённую границу targeted tests и независимыми probes.** Новый email, existing technical fix, read-only письмо, maintenance, migration status, mixed/ambiguous request и новый дизайн вне scope. Если skill code/behavior изменён, перед merge выполнить финальный полный локальный gate на точном commit.
 - [ ] **Step 3: После merge и отдельного разрешения синхронизировать локальные навыки по bootstrap.** Не перезаписать глобальный конфликт без разрешения; проверить byte/source соответствие, discovery и clean-context handoff. Не создавать письмо ради теста выбора.
 - [ ] **Step 4: Обновить roadmap фактами.** Закрыть только подтверждённые пункты 10A. Затем подготовить detailed plan финального этапа 11; не переключать маршруты в этом пакете.
+
+## Проверенные результаты локального закрытия — 01.10.2026
+
+- Отдельным разрешением пользователь подтвердил merge #105 и установку/обновление. Три навыка установлены из `e08b5099`; четыре файла точно совпадают с canonical Git blobs, две прежние копии сохранены побайтово в резервной папке вне discovery root. Другие навыки/config/письма не менялись.
+- На следующем пользовательском ходе `cupis-email-task-router` появился в реально предоставленном каталоге навыков Codex. Router прочитан и передал `e08b5099` навыку поддержки; fresh resolver `migration-progress/read-only` вернул `paused/SKILL_ROUTE_PAUSED`, без обхода границы.
+- В PR #106 подготовлена разрешённая точечная правка: только локальная среда и out-of-scope вместо ожидания будущего design skill. Baseline прямо называл `local Codex or Codex Web` и `specialization is not active`; новая независимая probe читает только local Codex и возвращает not-ready для проектирования. Остальные девять сценариев сохраняют email/maintenance/clarify, явный выбор, mixed dependency и paused gates.
+- Targeted gate на `bc7040adf3ed99eaef51ea63cb5e9e83cf08b716`: 10/10 Node boundary tests, validation, generate:check, Windows bootstrap и bootstrap contract PASS. Это результат skill-only коммита, не финального пакета с новым планом; final verification записывается в PR #106 на его точном head.
+- **Ruling:** cloud-only требование пользователя исключает локальную authoring-worktree/ledger. Изменения делаются cloud branch/PR, журнал — здесь и в PR, exact-SHA snapshot используется лишь для исполнения; это сохраняет облачное владение источником.
+- Итоговая правка ещё требует merge и отдельно разрешённой синхронизации установленной копии. 10A не объявляется завершённым только по подготовленному diff.
+- [План финального cutover](2026-10-01-cupis-final-maintenance-cutover.md) подготовлен по master-spec и roadmap. Его пакеты ещё не выполнялись; старые unchecked задачи Task 2 закрываются только после фактических соответствующих gates.
 
 ## Отменённые части — не очередь выполнения
 
