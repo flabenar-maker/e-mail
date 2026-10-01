@@ -4,7 +4,7 @@
 
 **Goal:** Создать и установить repo-scoped навык сборки и точечного изменения конкретных CUPIS-писем, доказать его на двух реальных письмах и включить только два проверенных email routes для повседневной работы.
 
-**Architecture:** `building-cupis-emails` является тонким маршрутизатором: он классифицирует запрос, выбирает `email-new-build` или `email-continue-fix`, вызывает существующий `resolve:skill-context` и исполняет только возвращённый режим workflow. Точные component facts, HTML-правила, typography, spacing и asset profiles остаются в structured owners; локальная папка письма является только выходом конкретной задачи. После fixture shadow tests email-only cutover сначала готовится только в candidate branch. На её exact SHA из чистого контекста выполняются реальные marketing/service builds и versioned continue/fix; только затем activation branch может быть слита, а exact skill установлен. По решению от 2026-09-23 завершённая подготовка может публиковаться раньше отдельным PR без включения маршрутов и установки навыка. Остальные routes остаются paused до этапа 14.
+**Architecture:** `building-cupis-emails` является тонким маршрутизатором: он классифицирует запрос, выбирает `email-new-build` или `email-continue-fix`, вызывает существующий `resolve:skill-context` и исполняет только возвращённый режим workflow. Точные component facts, HTML-правила, typography, spacing и asset profiles остаются в structured owners; локальная папка письма является только выходом конкретной задачи. После fixture shadow tests email-only cutover сначала готовится только в candidate branch. На её exact SHA из чистого контекста выполняются реальные marketing/service builds и versioned continue/fix; только затем activation branch может быть слита, а exact skill установлен. По решению от 2026-09-23 завершённая подготовка может публиковаться раньше отдельным PR без включения маршрутов и установки навыка. Остальные routes остаются paused до финального cutover 11B.
 
 **Tech Stack:** Markdown skill, YAML/JSON-compatible manifest и workflows, Node.js 24 ESM, `node:test`, существующие context resolver, renderer CLI и bootstrap verifier.
 
@@ -18,7 +18,7 @@
 - Двойной внешний мобильный отступ устранён через [PR №99](https://github.com/flabenar-maker/e-mail/pull/99), merge commit 4feae86d44ae95b7070b79277a455fa8b297099d. На точном head dc2f4e64a18c6cbfa7adf281059297b22d210071 заново прошли 705/705 локальных тестов и bootstrap; дерево merge commit совпадает с проверенным head.
 - После PR №99 маркетинговое и сервисное письма пересобраны без ручной правки HTML; Mobile 328 px без лишнего shell inset и overflow, Desktop 600 px. Пользователь 2026-09-28 визуально принял оба тестовых письма. Измеренная ранее разница общей высоты сервисного примера (Figma 2223 px, локальный рендер 2138 px) остаётся зафиксированным наблюдением, но для этих конкретных инстансов принята; она не задаёт общей допустимой погрешности для новых писем.
 - [PR №101](https://github.com/flabenar-maker/e-mail/pull/101) уточнил статус маршрутов и добавил в тонкий навык запуск resolver через доступный package runner. На точном head `e0b9171f0df00f317bb06ff07726a1371d78973d` локально прошли 705/705 тестов, validation, generate:check и bootstrap; дерево merge `b9dac6b1b429e0b8c2eccc2e6c1aa4c0b4bbf521` идентично. Установленный навык побайтно совпадает с cloud source. После merge из чистого контекста он разрешил technical continue/fix и создал `service-email-e2e_1.4`: изменены только 22 тестовых href, девять изображений побайтно прежние, версия `1.3` сохранена.
-- Этап 10 завершён; остальные маршруты остаются paused. Реальные Yandex Mail, Mail.ru, Gmail и Altcraft в этом E2E не проверялись. Этап 11 не начат.
+- Этап 10 завершён; остальные маршруты остаются paused. Реальные Yandex Mail, Mail.ru, Gmail и Altcraft в этом E2E не проверялись. Следующая глобальная задача — финальный cutover этапа 11 после закрытия локального router 10A; стандарт/workflow/skill новых блоков и Web-выдача отменены решением от 01.10.2026.
 
 ## Уточнение продолжения от 2026-09-18
 
@@ -31,7 +31,7 @@ Tasks 7–8 выполнены по [детальному E2E-плану](2026-0
 ## Global Constraints
 
 - Канонический репозиторий — `flabenar-maker/e-mail`; persistent edits выполняются через cloud GitHub branch и PR.
-- До Task 6 routes в candidate остаются `workflow-paused`; Task 6 явно активирует только `email-new-build`, `email-continue-fix` и их зависимости в candidate для реальных E2E Task 7. До успешного Task 7 и разрешённого merge Task 8 маршруты `main` остаются paused. Остальные routes candidate и main остаются paused до этапа 14.
+- До Task 6 routes в candidate остаются `workflow-paused`; Task 6 явно активирует только `email-new-build`, `email-continue-fix` и их зависимости в candidate для реальных E2E Task 7. До успешного Task 7 и разрешённого merge Task 8 маршруты `main` остаются paused. Остальные routes candidate и main остаются paused до финального cutover 11B.
 - Готовые `email.html`, `images/`, Figma exports, screenshots и временные модели не добавляются в репозиторий.
 - Skill не содержит копий component contracts, foundation values, HTML/CSS recipes, export profiles, workflow steps или списка canonical paths.
 - Для нового письма и design-dependent изменения требуются проверенные Mobile/Desktop-инстансы конкретного письма. Technical continue/fix не требует Figma, если изменение действительно не зависит от дизайна.
@@ -76,7 +76,7 @@ Tasks 7–8 выполнены по [детальному E2E-плану](2026-0
 - выбирает только `email-new-build` или `email-continue-fix`;
 - использует ровно один resolved bundle и только возвращённые `workflow.steps`;
 - останавливается на `SKILL_ROUTE_PAUSED` без ручного fallback;
-- не вызывает maintenance или component-development route.
+- не исполняет maintenance-задачи внутри email-build и не проектирует новый компонент.
 
 - [ ] **Step 2: Написать RED-тест отсутствия дублирования**
 
@@ -274,7 +274,7 @@ Expected: orchestration boundary проходит; component, foundation и rend
 
 - [ ] **Step 3: Проверить минимальный контекст**
 
-Убедиться, что email bundle содержит выбранные resolved contracts и referenced foundations, но не содержит maintenance rules, Figma Description, component-development standard/workflow или generated Markdown registry как runtime input.
+Убедиться, что email bundle содержит выбранные resolved contracts и referenced foundations, но не содержит maintenance rules, Figma Description, authoring/design-time rules или generated Markdown registry как runtime input.
 
 - [ ] **Step 4: Проверить paused canonical behavior**
 

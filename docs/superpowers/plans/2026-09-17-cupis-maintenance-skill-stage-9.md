@@ -13,7 +13,7 @@
 ## Global Constraints
 
 - `flabenar-maker/e-mail` в облачном GitHub остаётся единственным persistent source; изменения публикуются через branch и PR.
-- Все семь `routes[].workflow_source_id` остаются `workflow-paused` до этапа 14; Stage 9 не выполняет cutover.
+- Stage 9 сохранял все семь routes остановленными на момент своей реализации и не выполнял cutover. После Stage 10 два email routes активны; оставшиеся maintenance-маршруты включаются только после gate 11A в финальном cutover 11B по актуальному roadmap.
 - Resolver не читает `Legacy/`, не принимает fallback source list и не содержит component, typography, spacing, asset или naming facts.
 - Skill остаётся тонким маршрутизатором: route selection, cloud pinning, resolver invocation, mutation gates и handoff.
 - Figma, component contracts, foundations, generated docs, конкретные письма и локальные папки писем не изменяются.

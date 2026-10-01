@@ -60,7 +60,7 @@ PR #61–64 — корректирующая Figma-сверка и уточне�
 | 9 | Автоматическая проверка | Property branches и HTML invariants покрыты | Слит: [PR #58](https://github.com/flabenar-maker/e-mail/pull/58) |
 | 10 | Visual scenarios, включая Email/Header и Email/Footer | Фактический HTML и Mobile/Desktop geometry подтверждены; Header добавлен в pilot coverage | Package 10A–10B слиты PR #78–79; Package 10C реализован в PR #80. Normal-preview прошёл, no-style Desktop fallback на 300–360px зафиксирован как неподтверждённый; Package 10D исключён из текущего маршрута без имитации client evidence |
   | 11 | Остальные активные компоненты | Readiness/coverage blockers равны нулю после пакета 10 | Shared слит в [PR #81](https://github.com/flabenar-maker/e-mail/pull/81), Marketing — в [PR #82](https://github.com/flabenar-maker/e-mail/pull/82), Service реализован в [PR #83](https://github.com/flabenar-maker/e-mail/pull/83): все 61 active records покрыты, из них 38 interpreter и 23 `source-only` |
-| 12 | Structured workflows и workflow-level comparison | Workflows готовы к Stage 9 без двойного контекста; сквозное сравнение остаётся этапу 13 | Реализован в [PR #84](https://github.com/flabenar-maker/e-mail/pull/84): schema/loader, maintenance и email workflows, `structured-shadow`, archive-path blocker и characterization tests; hidden cutover отсутствует |
+| 12 | Structured workflows и workflow-level comparison | Workflows готовы к Stage 9 без двойного контекста; сквозное сравнение входит в финальный gate 11A | Реализован в [PR #84](https://github.com/flabenar-maker/e-mail/pull/84): schema/loader, maintenance и email workflows, `structured-shadow`, archive-path blocker и characterization tests; hidden cutover отсутствует |
 
 ## Целевая карта файлов
 
@@ -600,7 +600,7 @@ Gate: no generic facts/unregistered active records/unexplained value changes; Fi
 - [x] **Step 2: Maintenance workflow** — impact report, cloud GitHub, Figma gate/readback и stop conditions.
 - [x] **Step 3: Email workflow** — NEW BUILD/CONTINUE/FIX, link validation, local versions, MCP asset export, temp model, CLI, final `email.html` + `images/`.
 - [x] **Step 4: Structured shadow bundle** — архивные paths не допускаются в bundle; попытка смешать их со structured sources возвращает `CONTEXT_BUNDLE_ARCHIVED_SOURCE_FORBIDDEN`.
-- [x] **Step 5: Workflow-level semantic comparison** — обязательства archived maintenance/email workflows покрыты структурированными owner-steps; сквозные rendered outputs, generated docs и все маршруты остаются этапу 13.
+- [x] **Step 5: Workflow-level semantic comparison** — обязательства archived maintenance/email workflows покрыты структурированными owner-steps; сквозная проверка оставшихся maintenance-маршрутов, generated docs и regression активного email-build входят в финальный gate 11A.
 - [x] **Step 6: No hidden cutover** — paused route lists и skill не переключены; `Legacy/`, Figma и письма не изменены.
 - [x] **Step 7: Verify and publish cloud commit** — целевые тесты 8/8, `npm run generate:check` и `npm run verify` 572/572 прошли локально на `df8f9fb257210568ca3e6e2dd8b14b2f7860d2bd`; GitHub Actions не использовались.
 
@@ -609,7 +609,7 @@ node --test tests/workflows/structured-workflows.test.mjs tests/characterization
 npm run verify
 ```
 
-Gate: Stage 8 готовит workflows; Stage 9 подготавливает maintenance skill без включения paused routes. Сквозное shadow comparison выполняется на этапе 13, фактический cutover — на этапе 14.
+Gate (актуальная навигация от 01.10.2026): Stage 8 подготовил workflows, Stage 9 — maintenance skill, Stage 10 активировал два email routes. Финальный этап 11A проверяет оставшиеся maintenance-маршруты и email regression, 11B включает доказанно готовые маршруты, 11C завершает очистку. Отдельный design-time контур и Web не создаются; исходные completed steps сохраняют историю.
 
 ---
 

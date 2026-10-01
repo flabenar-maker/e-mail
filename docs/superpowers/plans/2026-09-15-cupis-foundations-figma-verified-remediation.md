@@ -25,7 +25,7 @@
 - HTML конкретного письма, images, локальные рабочие папки, production routes, Legacy/ и generated docs как ручной источник не меняются. Generated docs изменяются только генератором после изменения их structured inputs.
 - GitHub — единственный постоянный источник. Правки через branch и PR от закреплённого SHA; локальный изолированный снимок точного commit допускается только для проверки. GitHub Actions и PR Checks не запускать и не использовать как gate.
 - Рутинные тесты, test-fix loops и visual regression делегировать GPT-5.6 Terra Medium согласно AGENTS.md. Перед merge кода или контрактов выполнить свежий локальный полный прогон на точном финальном commit. Merge — только по отдельной команде пользователя.
-- Галочки исторических этапов 2–5 не сбрасывать. Этот план не завершает этап 8, не заменяет полное shadow comparison этапа 13 и не включает paused routes до этапа 14.
+- Галочки исторических этапов 2–5 не сбрасывать. Этот корректирующий план не подменяет последующие renderer/workflow gates. Актуальная очередь после завершённых этапов 8–10 — proof-gate 11A и cutover 11B по roadmap; design-time development не является зависимостью.
 
 ## File Responsibility Map
 
@@ -136,7 +136,7 @@
 - [x] Проверить, что active npm test включает эти assertions, а не только наличие архивных файлов.
 - [x] Выполнить targeted tests после каждого изменения; на точном final commit — npm run verify, generate:check, bootstrap-contract под обеими PowerShell-оболочками и проверки bundle границы.
 - [x] Выполнить финальный Figma Gate и allowed-path diff. Отдельно проверить, что не менялись HTML-письма, images, Figma, Legacy, stage 8 renderer coverage и статусы 8/13/14.
-- [ ] После слияния draft PR обновить roadmap только фактическим статусом корректирующего маршрута и ссылкой на merge commit. До слияния этот пункт не закрыт; этап 13 по-прежнему позже проверяет полные maintenance, development и email-build маршруты.
+- [ ] После слияния draft PR обновить roadmap только фактическим статусом корректирующего маршрута и ссылкой на merge commit. Исходная отметка этого шага сохраняет состояние на момент исполнения; фактическое слияние PR #75 зафиксировано в roadmap. По решению от 01.10.2026 последующий gate 11A проверяет maintenance и regression активного email-build, без отменённого development контура.
 
 ## Порядок публикации и критерий успеха
 

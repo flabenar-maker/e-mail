@@ -1,6 +1,6 @@
 # CUPIS Structured System Migration Roadmap
 
-Актуальность: 2026-10-01.
+Актуальность: 2026-10-01. Текущий объём: локальный Codex, поддержка системы и сборка писем. Отдельные стандарт, workflow и навык проектирования новых блоков, а также Web-выдача отменены по решению пользователя.
 
 ## Назначение
 
@@ -150,13 +150,13 @@ Structured records остаются shadow-источником до generated b
 
 Подробный implementation plan: [CUPIS HTML Rendering Stage 8](2026-09-10-cupis-html-rendering-stage-8.md).
 
-Этап 8 готовит renderer и структурированные workflows, но не переключает остановленные маршруты. Фактический cutover выполняется только на этапе 14 после сквозного сравнения этапа 13.
+Этап 8 готовит renderer и структурированные workflows, но не переключает остановленные маршруты. Оставшийся cutover выполняется на финальном этапе 11 после его собственного сквозного gate.
 
 Фактический статус на 2026-09-17: пакеты 1–9 слиты в main через PR #50–58; [PR #59](https://github.com/flabenar-maker/e-mail/pull/59) исправил пилотные Mobile/Desktop layout contracts. Package 10A–10C слиты через PR #78–80; Package 10D исключён из текущего маршрута без имитации client evidence. Package 11 завершил coverage всех 61 active component records через PR #81–83. Package 12 добавил structured workflows, `structured-shadow` bundle mode и archive-path blocker в [PR #84](https://github.com/flabenar-maker/e-mail/pull/84). Все семь routes остаются `workflow-paused`; это завершение подготовки Stage 8, а не production cutover.
 
 После неудачной попытки получить убедительный пилотный результат обнаружилась недостаточная точность части мигрированных component contracts. [PR #61](https://github.com/flabenar-maker/e-mail/pull/61), [#62](https://github.com/flabenar-maker/e-mail/pull/62), [#63](https://github.com/flabenar-maker/e-mail/pull/63) и [#64](https://github.com/flabenar-maker/e-mail/pull/64) выполнили прямую сверку с Figma, добавили проверку фактических данных и уточнили маркетинговые и сервисные контракты. Это корректирующая работа внутри этапа 8, а не завершение пакетов 10–12.
 
-[Корректирующий план для foundations этапов 2–5](2026-09-15-cupis-foundations-figma-verified-remediation.md) реализован и слит через [PR #75](https://github.com/flabenar-maker/e-mail/pull/75), merge commit `c8c485bde0d69316dac83925c40e4f6b2fc0037c`. Он усилил Figma-backed проверку typography, spacing, assets и naming, но не завершил Package 10–12, этап 8, сквозное сравнение этапа 13 или cutover этапа 14.
+[Корректирующий план для foundations этапов 2–5](2026-09-15-cupis-foundations-figma-verified-remediation.md) реализован и слит через [PR #75](https://github.com/flabenar-maker/e-mail/pull/75), merge commit `c8c485bde0d69316dac83925c40e4f6b2fc0037c`. Он усилил Figma-backed проверку typography, spacing, assets и naming, но не завершил Package 10–12, этап 8, проверки готовности и переключение маршрутов финального этапа 11.
 [PR #60](https://github.com/flabenar-maker/e-mail/pull/60) остаётся открытым исследовательским черновиком: он не меняет active rules, component contracts или renderer. Результаты исследования преобразованы в согласованную [client-resilience спецификацию](../specs/2026-09-16-cupis-email-client-resilience-design.md) и [implementation plan](2026-09-16-cupis-email-client-resilience.md). Проверка через Altcraft была запланирована как Package 10D, но 17.09.2026 исключена из текущего маршрута по прямому решению пользователя из-за отсутствия доступа. Она не считается выполненной, а responsive fallback остаётся неподтверждённым (`required-before-change`).
 
 - [x] Зафиксировать characterization baseline и владельцев renderer-impacting данных — PR #50.
@@ -174,7 +174,7 @@ Structured records остаются shadow-источником до generated b
 - [x] Package 10D исключён из текущего маршрута по решению пользователя из-за отсутствия доступа к Altcraft и целевым приложениям. Проверка не выполнена; `responsive_fallback.validation` остаётся `required-before-change`.
 - [x] Доступные representative Mobile/Desktop visual scenarios для Header, Footer и пилотных блоков выполнены в Package 10C; real-client evidence не заявляется.
 - [x] Мигрировать renderer coverage остальных активных компонентов после успешного пилота — PR #81–83: 61 active/covered, 38 interpreter-ready и 23 source-only, zero missing coverage.
-- [x] Перевести maintenance и email-build workflows в структурированный формат и сравнить их обязательства с read-only архивным baseline без двойного контекста — PR #84. Полное сквозное сравнение маршрутов остаётся этапу 13.
+- [x] Перевести maintenance и email-build workflows в структурированный формат и сравнить их обязательства с read-only архивным baseline без двойного контекста — PR #84. Полное сквозное сравнение оставшихся маршрутов входит в gate финального этапа 11.
 - [x] Подтвердить, что HTML зависит от фактического инстанса и component contract, а не design-time золотых правил — contract-tree interpreter и renderer coverage защищены локальными tests этапа 8.
 - [x] Не подавать архивный и structured наборы правил одновременно в рабочий bundle — PR #84 возвращает `CONTEXT_BUNDLE_ARCHIVED_SOURCE_FORBIDDEN` для архивного path.
 - [x] Завершить проверки этапа 8 — на финальном SHA PR #84 локально прошли rendering audit, generated-doc check, полный `npm run verify` и Windows bootstrap; GitHub Actions не использовались.
@@ -185,7 +185,7 @@ Structured records остаются shadow-источником до generated b
 
 Подробный implementation plan: [CUPIS Maintenance Skill Stage 9](2026-09-17-cupis-maintenance-skill-stage-9.md).
 
-Manifest-driven разрешение source paths было выполнено на этапе 2. Этот этап не повторяет первоначальный переход на manifest: он подготовил навык к итоговым generated context bundles, но не запустил временно остановленные маршруты. Каждый route включается только после собственного проверенного cutover: email routes — на этапе 10, остальные — на этапе 14 после этапа 13.
+Manifest-driven разрешение source paths было выполнено на этапе 2. Этот этап не повторяет первоначальный переход на manifest: он подготовил навык к итоговым generated context bundles, но не запустил временно остановленные маршруты. Каждый route включается только после собственного проверенного cutover: email routes — на этапе 10, остальные — на финальном этапе 11 после его проверок готовности.
 
 - [x] Подготовить `maintaining-cupis-email-system` к итоговым route-specific context bundles, сохранив остановленные маршруты до отдельного проверенного cutover.
 - [x] Сохранить навык тонким маршрутизатором без копий правил и жёсткого списка путей.
@@ -215,7 +215,7 @@ Manifest-driven разрешение source paths было выполнено н
 
 Статус на 2026-09-28: этап 10 завершён. Два email routes активированы [PR №97](https://github.com/flabenar-maker/e-mail/pull/97), навык зарегистрирован [PR №98](https://github.com/flabenar-maker/e-mail/pull/98), Mobile shell исправлен [PR №99](https://github.com/flabenar-maker/e-mail/pull/99), а [PR №101](https://github.com/flabenar-maker/e-mail/pull/101) синхронизировал статус активных маршрутов и добавил выбор доступного package runner. На точном head №101 локально прошли 705/705 тестов, validation, generate:check и bootstrap; установленный навык побайтно совпадает со слитым источником. Оба тестовых письма собраны и пересобраны, пользователь визуально принял результат. Ранее измеренная разница высот сервисного примера принята только для этих конкретных инстансов, а не как общее допустимое отклонение. Изолированный запуск после merge создал версию `service-email-e2e_1.4` с одними тестовыми href-правками и неизменными изображениями. Реальные почтовые клиенты и Altcraft в этих проверках не испытывались; остальные маршруты остаются paused. Подробные факты — в [E2E-плане](2026-09-18-cupis-email-model-assembly-and-e2e.md).
 
-Этот этап начинается после завершённого maintenance skill, prerequisite-пакета Figma Description и получения четырёх ссылок на два тестовых письма. Он использует готовые renderer, structured email workflow и machine resolver и не зависит от стандарта или навыка разработки новых блоков: письмо собирается только из уже зарегистрированных компонентов, а неизвестный компонент остаётся typed blocker. После успешных реальных E2E-сборок этап включает только email routes; остальные routes остаются остановленными до этапа 14.
+Этот этап начинается после завершённого maintenance skill, prerequisite-пакета Figma Description и получения четырёх ссылок на два тестовых письма. Он использует готовые renderer, structured email workflow и machine resolver и не зависит от стандарта или навыка разработки новых блоков: письмо собирается только из уже зарегистрированных компонентов, а неизвестный компонент остаётся typed blocker. После успешных реальных E2E-сборок этап включает только email routes; остальные routes остаются остановленными до финального этапа 11.
 
 - [x] Создать repo-scoped skill `building-cupis-emails` как тонкий маршрутизатор к `email-new-build` и `email-continue-fix`.
 - [x] Не копировать в skill HTML-правила, component contracts, foundation values, asset profiles, workflow steps или список canonical paths.
@@ -230,66 +230,55 @@ Manifest-driven разрешение source paths было выполнено н
 - [x] Выполнить одно реальное continue/fix изменение с созданием версии `1.1`, сохранив исходную `1.0` побайтово неизменной.
 - [x] Активировать только `email-new-build` и `email-continue-fix`, их bundle/workflow dependencies и проверенный local skill; сохранить остальные routes на `workflow-paused`.
 - [x] Проверить обычный пользовательский запрос из чистого контекста (изолированный исполнитель по E2E-плану) без опоры на историю разработки.
-- [x] Сохранить Figma-библиотеку, component-development standard и локальные исходные версии писем без изменений.
+- [x] Сохранить Figma-библиотеку и локальные исходные версии писем без изменений; не включать проектирование новых блоков в email-build.
 
-### 10A. Маршрутизатор задач Codex и веб-выдача письма — запланирован
+### 10A. Локальный маршрутизатор задач Codex — код слит, установка и документальное закрытие ожидаются
 
-Отдельный пакет после завершённого этапа 10, до начала этапа 11. Он не меняет Figma, компонентные контракты или HTML-ядро.
+- [x] Добавить тонкий repo-scoped навык выбора между сборкой письма и поддержкой системы, без копий технических правил.
+- [x] Проверить локальную интеграцию, clean-context выбор специализации, явный выбор, неоднозначный и смешанный запросы, сохранение pinned SHA и отказ на остановленной зависимости.
+- [x] Слить пакет A через [PR #103](https://github.com/flabenar-maker/e-mail/pull/103) и [PR #104](https://github.com/flabenar-maker/e-mail/pull/104). `main@03606db5319a94327dd6713ae529f40e4c068e7a` имеет то же дерево, что локально проверенный head #104.
+- [ ] Слить корректировку глобального маршрута и документации; отмену Web и разработки новых блоков не считать их успешной реализацией.
+- [ ] Установить маршрутизатор и синхронизировать существующие локальные навыки из одного закреплённого слитого SHA после отдельного разрешения на установку/обновление. Проверить обнаружение и clean-context handoff локально; не объявлять repo registration доказательством локальной установки.
+- [ ] Убрать устаревшие Web-оговорки и обещания будущей design-time специализации из skill handoff в отдельной проверенной правке перед финальным cutover. Не менять правила выбора email/maintenance, явного выбора, уточнения, pinned SHA или mutation gates.
 
-- [ ] Добавить тонкий repo-scoped навык, который выбирает между действующими навыками сборки писем и обслуживания системы, не дублируя их правила.
-- [ ] Проверить выбор навыка из чистого контекста в локальном Codex и Codex Web; не обходить paused routes.
-- [ ] Добавить выдачу уже проверенного письма из Codex Web скачиваемым пакетом `email.html + images/`, не сохраняя письмо в системном репозитории.
-- [ ] Подтвердить реальную доступность Figma MCP, Node 24 и скачиваемого результата в Codex Web; при отсутствии обязательной возможности сообщать blocker.
-- [ ] Проверить локальную и веб-сборку, версионирование существующего письма и отсутствие регрессии действующего рендера. Все тесты — локально на точном cloud commit.
+[Решение](../specs/2026-09-28-cupis-codex-routing-web-delivery-design.md) и [план завершения локального маршрутизатора](2026-09-28-cupis-skill-router-web-delivery.md) сохраняют существующие пути. По решению от 01.10.2026 пакеты Web capability, ZIP/import и Web-приёмки отменены до написания продуктового кода. Рабочий результат — локальная версионная папка `email.html + images/`; постоянный источник системы — облачный GitHub. Финальные письма в репозиторий не попадают.
 
-[Решение](../specs/2026-09-28-cupis-codex-routing-web-delivery-design.md) и [implementation plan](2026-09-28-cupis-skill-router-web-delivery.md) одобрены. Пакет A реализован в candidate branch `codex/cupis-task-router` поверх plan PR #103; пока он не слит, отметки этого этапа остаются открытыми. Локальные проверки и независимые behavior-probes записываются в plan/implementation PR на точном SHA. Пакеты B/C (реальная Codex Web capability-проверка, ZIP-выдача и её приёмка) не начаты и зависят от слияния A. Наличие repo-scoped навыка не означает его автоматическую загрузку в произвольном чате. Этап 11 не начат.
+### 11. Финальный cutover поддержки системы и завершение миграции — не начат
 
-### 11. Стандарт и workflow разработки новых блоков
+Это единственный оставшийся глобальный технический этап после закрытия 10A. Он объединяет прежние проверки этапа 13, переключение этапа 14 и итоговую ревизию этапа 15 в последовательные подэтапы с самостоятельными gates и PR. Прежние этапы 11–12 по проектированию новых блоков отменены, а не завершены; новый `component-development` route, design standard/workflow и третий специализированный навык не создаются.
 
-Этот этап выполняется после подготовки навыка сборки писем. Он создаёт отдельный design-time маршрут и не расширяет email-build skill правилами проектирования новых компонентов.
+Итоговые специализации — `maintaining-cupis-email-system` и `building-cupis-emails`; `cupis-email-task-router` остаётся тонким входом, не третьим предметным навыком. Onboarding уже созданного и одобренного компонента остаётся частью поддержки, не проектированием нового блока. Неизвестный компонент по-прежнему блокирует email-build до регистрации.
 
-- [ ] Обновить master-спецификацию и зафиксировать отдельный route разработки новых email-блоков.
-- [ ] Создать отдельный стандарт проектирования email-компонентов; не добавлять эти design-time правила в HTML-rendering instruction.
-- [ ] Зафиксировать в стандарте иерархию CTA, допустимое размещение `Button/Primary`, непрерывность линии чтения, роль изображения, Mobile/Desktop reading order и недопустимые композиционные разрывы.
-- [ ] Создать отдельный component-development workflow: brief → анализ библиотеки → композиционная схема → wireframe → согласование → детальный дизайн → визуальная проверка → возможная productionization.
-- [ ] Требовать промежуточное согласование wireframe для нового блока без готового референсного макета.
-- [ ] Оставлять прототип example/frame без Component и Description, пока пользователь отдельно не разрешит productionization.
-- [ ] Добавить route и bundle в manifest, не подключая design-time standard к `email-new-build` и `email-continue-fix`.
+#### 11A. Проверки готовности до переключения
 
-### 12. Навык разработки новых блоков
+- [ ] Подготовить отдельный подробный implementation plan финального cutover на актуальном SHA; перечислить точные записи manifest/workflow/profile, проверки, allowed paths, rollback point и порядок PR. Этот roadmap не разрешает включение маршрутов сам по себе.
+- [ ] Проверить каждый текущий остановленный маршрут: `library-maintenance`, `component-onboarding`, `figma-description-sync`, `figma-naming-audit`, `migration-progress`. Для каждого явно определить и доказать его workflow/modes, минимальный bundle, source closure, gates и handoff. Не создавать новый design-time маршрут.
+- [ ] Сравнить generated docs, bundles и обязательства maintenance-сценариев с read-only архивным baseline; объяснить значимые отличия. Нужные characterization assertions восстановить или заменить активными проверками с тем же смыслом. Архив не подключать к runtime.
+- [ ] Подтвердить contract-significant факты representative maintenance-сценариев свежими точечными Figma MCP reads там, где результат зависит от Figma. Migration status и перенесённый Markdown не являются доказательством. Найденные расхождения сообщать; не менять дизайн или точные component facts без разрешённой области.
+- [ ] Проверить read-only audit, contract/description impact preview, naming recommendation, onboarding готового одобренного компонента и отрицательные mutation cases; отдельно доказать запрет записи вне allowlist и отказ при неполном контексте. Фактическая Figma-запись требует собственной точной авторизации.
+- [ ] Проверить regression уже активных `email-new-build` и `email-continue-fix`, сохранность исходной версии и границы двух специализаций. Не начинать заново разработку HTML-ядра или дизайн библиотеки.
 
-- [ ] Создать repo-scoped skill `developing-cupis-email-components`.
-- [ ] Использовать skill только как маршрутизатор к component-development route, standard и workflow.
-- [ ] Не дублировать в skill CTA rules, композиционные правила, naming constants, spacing values или component contracts.
-- [ ] Разделить ответственность:
-  - новый skill — проектирование и проверка новых прототипов;
-  - component onboarding — регистрация уже одобренного компонента;
-  - maintenance skill — поддержка существующей production-библиотеки.
-- [ ] Проверить безопасный переход от одобренного прототипа к отдельной productionization-задаче.
+#### 11B. Переключение доказанно готовых маршрутов
 
-### 13. Сквозное shadow comparison
+- [ ] Только после успешного 11A направить оставшиеся готовые маршруты на проверенные structured workflows и bundles; для каждого записать доказанный результат resolver. Сохранить активные email routes без изменений, кроме отдельно подтверждённого regression defect.
+- [ ] Перевести только прошедшие gate workflow/profile/foundation статусы из временных shadow-состояний в итоговые; не делать массовую замену статусов без проверки потребителей.
+- [ ] Проверить validation, generated-doc equivalence, route closure, skill/bootstrap boundaries и один полный локальный прогон на точном финальном cloud commit. Рутинные тесты и visual regression — Terra Medium; GitHub Actions и PR Checks не использовать.
+- [ ] Зафиксировать rollback point и изменения зависимостей; получить отдельное разрешение на merge. После слияния синхронизировать локальные навыки из слитого SHA с отдельным разрешением и подтвердить clean-context работу.
 
-Этап начинается после подготовки workflows, навыков и renderer coverage на этапах 8–12. Email-build к этому моменту уже активирован собственным E2E-gate этапа 10. Здесь проверяется результат оставшихся maintenance и component-development маршрутов до их включения, а также выполняется regression уже активного email-build.
+#### 11C. Итоговая очистка после стабильного cutover
 
-- [ ] Сравнить generated docs, resolved context bundles и representative результаты maintenance и component development с сохранёнными read-only источниками в `Legacy/`; не подключать архив к действующим маршрутам и не считать перенос доказательством equivalence.
-- [ ] Перенести необходимые characterization assertions из архивного baseline в активные проверки или заменить их проверками с тем же смыслом; тесты, лежащие в `Legacy/`, не считаются частью текущего `npm test`.
-- [ ] Повторить representative email new-build и continue/fix regression без возврата к архивным runtime-источникам.
-- [ ] Устранить semantic drift до cutover оставшихся routes и подтвердить, что три типа задач получают разные минимальные наборы контекста.
+- [ ] Для каждого файла `Legacy/` и временного migration/shadow-артефакта установить фактических потребителей, подтверждённую замену и решение `remove`/`preserve`.
+- [ ] Удалять только доказанно ненужные дубли отдельным разрешённым PR; полезные исторические baselines сохранять с объяснением роли. Автоматического удаления всего архива нет.
+- [ ] Удалить временные переходные указания из активных источников, сохранив постоянные schemas, validators/resolvers и regression tests. Для снятия каждой временной границы подтвердить её замену; документация не должна просто объявить paused-маршрут активным.
+- [ ] Подтвердить, что manifest, workflows, bundles, skills и bootstrap не используют удалённые пути или архив как активного владельца правил. Выполнить финальные локальные проверки и зафиксировать завершение миграции в roadmap.
 
-### 14. Cutover оставшихся маршрутов
+## Изменение маршрута от 01.10.2026
 
-- [ ] Только после успешного этапа 13 переключить оставшиеся maintenance/component-development routes и подготовленные навыки на проверенные structured workflows, источники и generated bundles. Не изменять уже активные email routes без доказанного regression defect и не возвращать `Legacy/` как промежуточный рабочий путь.
-- [ ] Перевести оставшиеся foundations, прошедшие shadow comparison, из временного `shadow`-режима в итоговый рабочий статус.
-- [ ] Подтвердить validation, bootstrap, skills и GitHub/Figma workflows.
-- [ ] Зафиксировать rollback point и полный список временных migration/shadow-артефактов перед очисткой.
-
-### 15. Ревизия `Legacy/` и временных migration-артефактов
-
-- [ ] Выполнить отдельной задачей после успешного cutover.
-- [ ] Для каждого migration/shadow-артефакта зафиксировать решение `remove` или `preserve` и его фактических потребителей.
-- [ ] Для каждого файла `Legacy/` подтвердить structured replacement и отсутствие активных потребителей; только после этого удалить действительно ненужные дубли отдельным PR. Нужные исторические baseline и characterization-тесты сохранить с объяснением роли.
-- [ ] Сохранить постоянные schemas, semantic validators/resolvers, локальные проверки и регрессионные тесты, которые защищают действующие правила после cutover.
-- [ ] Подтвердить, что manifest, routes, bundles, skills и bootstrap не ссылаются на удалённые источники или временные механизмы; сохранённый архив не является активным владельцем правил.
+- Web-часть 10A отменена; локальный пакет A сохранён и уже слит.
+- Прежние этапы 11–12 отменены: не создаются стандарт, workflow или навык проектирования новых блоков.
+- Прежние этапы 13–15 стали подэтапами 11A–11C финального cutover. Проверки, rollback и обоснованная очистка сохранены, зависимость от отменённого design-time контура снята.
+- Завершённые этапы и исходные журналы не переписываются как будто выполнялись по новому маршруту. Старые номера в исторических шагах не создают будущих задач; актуальный порядок задаёт этот раздел.
+- Ручной `cupis-active-work-context.md` не обновляется этой корректировкой: он хранит предыдущий явно запрошенный снимок и не заменяет актуальные manifest и roadmap.
 
 ## Правило обновления roadmap
 
