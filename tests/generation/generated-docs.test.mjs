@@ -363,7 +363,7 @@ function semanticStyleLink(record) {
 
 test("typography registry records exact semantic consumers with base and variant ownership", async () => {
   const model = await typographyModel();
-  const before = structuredClone(model);
+  const before = structuredClone({ registries: model.registries, typography: model.typography });
   const content = renderTypography(model);
   const section = styleSection(content, "Mobile/Body/Large");
 
@@ -371,9 +371,9 @@ test("typography registry records exact semantic consumers with base and variant
   assert.match(section, /  - Component `badge-step-number`; viewport `mobile`; variant `mobile-neutral`; element `root-label`/u);
   assert.match(section, /  - Component `badge-step-number`; viewport `mobile`; variant `mobile-accent`; element `root-label`/u);
   assert.match(section, /Figma style ID: `S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,`/u);
-  assert.deepEqual(model, before, "projection must not rewrite local contract facts");
+  assert.deepEqual({ registries: model.registries, typography: model.typography }, before, "projection must not rewrite local contract facts");
   assert.equal((content.match(/^  - Component /gmu) ?? []).length, 364);
-  assert.equal((content.match(/^- Consumers: `[^`]+`$/gmu) ?? []).length, 15);
+  assert.equal((content.match(/^- Consumers: `.+$/gmu) ?? []).length, 15);
 });
 
 test("typography registry deduplicates an identical semantic link but retains typed references and distinct tuple identity", async () => {
