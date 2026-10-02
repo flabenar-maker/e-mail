@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: component-registry -->
-<!-- source-digest: sha256:683f111f49c44305d31b7908e0338b57ce2371878e3d5c7a9de26faf859a6098 -->
+<!-- source-digest: sha256:6f31672924a6f176b03c1839f029f1e2c06ddb848cf1789bf13a4c00de27e4b4 -->
 <!-- schema-versions: components=2.2.0, typography=1.0.0, spacing=1.0.0, assets=1.0.0 -->
 # CUPIS component registry
 
@@ -7507,6 +7507,8 @@ RENDER: HTML
 
 - Evidence link (source): `desktop-header-logo-source` — source variant `230:3679`, instance `1008:1823` → component `asset-header-logo-4x` (`Asset/Header-Logo @4x`); target variant `product-cupis`; asset owner `1008:1823`; asset `header-logo`
 - Evidence link (source): `desktop-product-logo-source` — source variant `230:3679`, instance `I1008:1823;1008:1309` → component `asset-product-logo` (`Asset/Product-Logo`); target variant `product-cupis`; asset owner `1008:1823`; asset `header-logo`
+- Evidence link (source): `mobile-header-logo-source` — source variant `15:2037`, instance `1008:1709` → component `asset-header-logo-compact-4x` (`Asset/Header-Logo-Compact @4x`); target variant `product-cupis`; asset owner `1008:1709`; asset `header-logo`
+- Evidence link (source): `mobile-product-logo-source` — source variant `15:2037`, instance `I1008:1709;1008:1347` → component `asset-product-logo` (`Asset/Product-Logo`); target variant `product-cupis`; asset owner `1008:1709`; asset `header-logo`
 
 ### Output contract classification
 
