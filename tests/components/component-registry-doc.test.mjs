@@ -210,3 +210,15 @@ test("exported traversal preserves viewport and tree order", async () => {
     "desktop:/contracts/desktop/root/children/0:content",
   ]);
 });
+
+test("evidence links are projected only in dependencies with canonical source and foundation forms", async () => {
+  const { index } = await loadContext();
+  const source = structuredClone(record(index, "email-template"));
+  source.evidence_links = [
+    { id: "template-padding", kind: "foundation", source_variant: "Mobile", node: "1:2", field: "padding", foundation: { source_id: "spacing", pointer: "/roles/outer-flow" }, comparison: "exact" },
+    { id: "template-logo", kind: "source", source_variant: "Desktop", instance: "header", component_id: "asset-header-logo-4x", component_name: "Asset/Header-Logo @4x", target_variant: "Desktop", asset_owner: "email-template", asset: "header-logo" },
+  ];
+  const output = renderComponentRegistrySection(source, index);
+  assert.match(output, /- Evidence link \(foundation\): `template-padding` — source variant `Mobile`, node `1:2`, field `padding` → foundation `spacing` `\/roles\/outer-flow`; comparison `exact`/u);
+  assert.match(output, /- Evidence link \(source\):/u);
+});

@@ -269,3 +269,10 @@ test("comparison reports one exact drift and otherwise ignores no content", () =
   assert.equal(errors[0].code, "FIGMA_COMPONENT_DESCRIPTION_DRIFT");
   assert.equal(errors[0].path, "/description");
 });
+
+test("evidence metadata never changes compact descriptions", async () => {
+  const record = structuredClone(await byId("email-template"));
+  const before = renderFigmaComponentDescription(record);
+  record.evidence_links = [{ id: "synthetic", kind: "foundation", source_variant: "Mobile", node: "1:2", field: "padding" }];
+  assert.equal(renderFigmaComponentDescription(record), before);
+});
