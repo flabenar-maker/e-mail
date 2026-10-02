@@ -64,12 +64,15 @@ test("CLI refuses an externally supplied fact map", async () => {
 
 // Controlled synthetic capture. Real library records are read, never rewritten.
 const TEST_SHA = "a".repeat(40);
+const nonce = value => value.toString(16).padStart(64, "0");
+const SESSION_NONCE = nonce(1);
+const REQUEST_NONCE = nonce(2);
 async function evidenceCliFixture(t) {
   const dir = await createSystemFixture(); t.after(()=>dir.cleanup());
   const registry = await readStrictYaml(join(repoRoot,"data/components/shared.yaml"));
   const record = registry.components.find(r=>r.id==="email-template");
-  const packet={capture_version:"1.1.0",file_key:record.figma.file_key,component_node_id:record.figma.node_id,component_properties:[],capture_errors:[],
-    capture_meta:{started_at:"2026-10-02T09:00:01.000Z",completed_at:"2026-10-02T09:00:02.000Z",tree_complete:true,node_count:record.variants.length*2},
+  const packet={capture_version:"1.2.0",file_key:record.figma.file_key,component_node_id:record.figma.node_id,component_properties:[],capture_errors:[],
+    capture_meta:{started_at:"2040-01-01T09:00:01.000Z",completed_at:"2040-01-01T09:00:02.000Z",request:{session_nonce:SESSION_NONCE,request_nonce:REQUEST_NONCE,canonical_git_sha:TEST_SHA},tree_complete:true,node_count:record.variants.length*2},
     variants:record.variants.map((v,i)=>{
       const width=v.axes.some(a=>a.value==="Desktop")?600:328;
       const n=(id,type)=>({node_id:id,node_type:type,visible:true,opacity:1,reference_dimensions:{width,height:1000,unit:"px"},
@@ -78,8 +81,8 @@ async function evidenceCliFixture(t) {
       return{variant_node_id:v.node_id,axes:v.axes,source_node:root};
     })};
   const bytes=JSON.stringify(packet), livePath=await writeFixtureFile(dir.root,"packet.json",bytes);
-  const session={schema_version:"1.0.0",canonical_git_sha:TEST_SHA,started_at:"2026-10-02T09:00:00.000Z",completed_at:"2026-10-02T09:00:04.000Z",component_ids:[record.id],
-    captures:[{component_id:record.id,receipt_id:"synthetic-cli",tool:"use_figma",received_at:"2026-10-02T09:00:03.000Z",packet_path:"packet.json",packet_sha256:createHash("sha256").update(bytes).digest("hex")}]};
+  const session={schema_version:"1.1.0",canonical_git_sha:TEST_SHA,session_nonce:SESSION_NONCE,started_at:"2026-10-02T09:00:00.000Z",completed_at:"2026-10-02T09:00:04.000Z",component_ids:[record.id],
+    captures:[{component_id:record.id,receipt_id:"synthetic-cli",tool:"use_figma",request_nonce:REQUEST_NONCE,requested_at:"2026-10-02T09:00:01.000Z",received_at:"2026-10-02T09:00:03.000Z",packet_path:"packet.json",packet_sha256:createHash("sha256").update(bytes).digest("hex")}]};
   const sessionPath=await writeFixtureFile(dir.root,"session.json",JSON.stringify(session));
   return {root:dir.root,packet,session,livePath,sessionPath,args:["--repo-root",repoRoot,"--component-id",record.id,"--live",livePath,"--canonical-sha",TEST_SHA,"--evidence-session",sessionPath]};
 }
