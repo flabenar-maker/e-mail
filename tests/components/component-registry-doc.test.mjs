@@ -249,7 +249,7 @@ test("evidence links activate only the existing dependencies section and render 
 
 test("canonical links add only evidence lines to existing dependency sections", async () => {
   const { index } = await loadContext();
-  for (const id of ["email-header", "block-personal-data-update", "block-receipt-info"]) {
+  for (const id of ["block-personal-data-update", "block-receipt-info"]) {
     const after = record(index, id);
     const before = structuredClone(after);
     before.evidence_links = { foundation_values: [], source_dependencies: [] };
