@@ -14,6 +14,10 @@
         {
           "role": "templates",
           "node_id": "1084:34055"
+        },
+        {
+          "role": "remote-reference",
+          "node_id": "1331:1646"
         }
       ],
       "baseline_commit": "397e13a916e9af1c2dfd8af663de730bcc2e1874",
@@ -1526,6 +1530,161 @@
       },
       "documentation": {
         "purpose": "Исходный векторный знак удаления пользователя для вложенного использования в визуальных ассетах.",
+        "critical_constraint_ids": []
+      },
+      "constraints": []
+    },
+    {
+      "id": "icon-account-circle-line-remote",
+      "status": "active",
+      "identity": {
+        "figma_name": "account-circle-line",
+        "node_kind": "component",
+        "library": "shared",
+        "semantic_role": "icon",
+        "category": "account-circle-line"
+      },
+      "figma": {
+        "file_key": "8zka5bHkcrJVK9I9dKjnhC",
+        "node_id": "1331:1646",
+        "source_root_node_id": "1331:1646",
+        "remote_source": {
+          "component_key": "8ea141edd5ec0679825e7fde633e211282b2405b"
+        },
+        "verified_at": "2026-10-02",
+        "structure_fingerprint": "sha256:3c7d7fd79ea14320975cf2723156f115587a1d21bf6f1ea5a853dd88e68784a2"
+      },
+      "variants": [],
+      "properties": [],
+      "asset_contracts": [],
+      "contracts": {
+        "mobile": {
+          "root": {
+            "id": "root",
+            "semantic_role": "icon",
+            "render_mode": "figma-source-only",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": []
+          }
+        },
+        "desktop": {
+          "root": {
+            "id": "root",
+            "semantic_role": "icon",
+            "render_mode": "figma-source-only",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": []
+          }
+        },
+        "figma_fact_links": [],
+        "source_variants": [
+          {
+            "variant_node_id": "1331:1646",
+            "axes": [],
+            "source_node": {
+              "node_id": "1331:1646",
+              "name": "account-circle-line",
+              "node_type": "COMPONENT",
+              "visible": true,
+              "reference_dimensions": {
+                "width": 24,
+                "height": 24,
+                "unit": "px"
+              },
+              "layout": {
+                "mode": "NONE",
+                "horizontal_sizing": "FIXED",
+                "vertical_sizing": "FIXED",
+                "primary_axis_sizing": "AUTO",
+                "counter_axis_sizing": "FIXED",
+                "item_spacing": 0,
+                "counter_axis_spacing": 0,
+                "wrap": "NO_WRAP",
+                "primary_axis_alignment": "MIN",
+                "counter_axis_alignment": "MIN",
+                "padding": {
+                  "top": 0,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 0
+                }
+              },
+              "minimum_width_px": null,
+              "layout_align": "INHERIT",
+              "layout_grow": 0,
+              "layout_positioning": "AUTO",
+              "clips_content": true,
+              "corner_radius": 0,
+              "corner_radii": {
+                "top_left": 0,
+                "top_right": 0,
+                "bottom_right": 0,
+                "bottom_left": 0
+              },
+              "fills": [
+                {
+                  "type": "solid",
+                  "visible": false,
+                  "opacity": 1,
+                  "color": "#FFFFFF"
+                }
+              ],
+              "strokes": [],
+              "opacity": 1,
+              "rotation": 0,
+              "variable_bindings": {},
+              "component_property_references": {},
+              "children": [
+                {
+                  "node_id": "1331:1647",
+                  "name": "Vector",
+                  "node_type": "VECTOR",
+                  "visible": true,
+                  "reference_dimensions": {
+                    "width": 20,
+                    "height": 20,
+                    "unit": "px"
+                  },
+                  "minimum_width_px": null,
+                  "layout_align": "INHERIT",
+                  "layout_grow": 0,
+                  "layout_positioning": "AUTO",
+                  "corner_radius": 0,
+                  "fills": [
+                    {
+                      "type": "solid",
+                      "visible": true,
+                      "opacity": 1,
+                      "color": "#000000"
+                    }
+                  ],
+                  "strokes": [],
+                  "opacity": 1,
+                  "rotation": 0,
+                  "variable_bindings": {},
+                  "component_property_references": {}
+                }
+              ],
+              "remote_source": {
+                "remote": true,
+                "component_key": "8ea141edd5ec0679825e7fde633e211282b2405b"
+              }
+            }
+          }
+        ]
+      },
+      "provenance": {
+        "node_id": "1331:1646",
+        "captured_at": "2026-10-02T21:50:14Z"
+      },
+      "documentation": {
+        "purpose": "Внешний исходный знак пользователя внутри Feature-Icon. Только источник для сверки вложенной графики; не самостоятельный блок или экспорт.",
         "critical_constraint_ids": []
       },
       "constraints": []

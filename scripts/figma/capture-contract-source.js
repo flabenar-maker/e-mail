@@ -143,6 +143,17 @@ async function captureFigmaContractFactsBody(componentNodeId) {
       reference_dimensions: { width: node.width, height: node.height, unit: "px" },
     };
 
+    // Remote publication identity is evidence metadata, never export geometry.
+    if (node.type === "COMPONENT") {
+      try {
+        if (node.remote === true) {
+          const key = node.key;
+          if (typeof key === "string" && key.trim()) result.remote_source = { remote: true, component_key: key };
+          else errors.push({ node_id: node.id, code: "REMOTE_SOURCE_UNRESOLVED" });
+        }
+      } catch { errors.push({ node_id: node.id, code: "REMOTE_SOURCE_UNRESOLVED" }); }
+    }
+
     if ("layoutMode" in node) {
       result.layout = {
         mode: node.layoutMode,

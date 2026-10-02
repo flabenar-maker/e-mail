@@ -20,6 +20,16 @@ function closedObject(value, required, optional = []) {
     Object.keys(value).every(key => required.includes(key) || optional.includes(key));
 }
 
+// Native current-file IDs identify the lookup; publication key identifies its remote source.
+export function matchesRemoteSourceIdentity(record, sourceNode) {
+  const expected = record?.figma?.remote_source;
+  if (expected === undefined) return true;
+  const actual = sourceNode?.remote_source;
+  return sourceNode?.node_type === "COMPONENT" &&
+    closedObject(expected, ["component_key"]) && typeof expected.component_key === "string" && !!expected.component_key.trim() &&
+    closedObject(actual, ["remote", "component_key"]) && actual.remote === true && actual.component_key === expected.component_key;
+}
+
 function issue(issues, code, path, message) {
   issues.push({code, path, message});
 }
@@ -269,7 +279,7 @@ export function collectEvidenceConsumers({ model, session, sourceComponentId, re
           !report.receipt_ids.includes(targetCapture.receipt_id) || !session.component_ids.includes(edge.target.component_id) ||
           item.asset_owner?.node_id !== edge.asset_owner.node_id || item.asset_owner?.asset_id !== edge.asset_owner.asset_id ||
           item.expected !== edge.target.node_id || item.actual !== edge.target.node_id || actualNode?.node_type !== "INSTANCE" || actualNode.main_component_id !== edge.target.node_id ||
-          targetNode?.node_type !== "COMPONENT" || capture.packet.file_key !== owner.figma.file_key || capture.packet.component_node_id !== owner.figma.node_id ||
+          targetNode?.node_type !== "COMPONENT" || !matchesRemoteSourceIdentity(byId.get(edge.target.component_id), targetNode) || capture.packet.file_key !== owner.figma.file_key || capture.packet.component_node_id !== owner.figma.node_id ||
           targetCapture.packet.file_key !== edge.target.file_key || targetCapture.packet.component_node_id !== byId.get(edge.target.component_id).figma.node_id) {
         mismatch(`${path}/${item.link_id}`, "Verified assertion must retain its exact canonical source/target/owner and current source/target packet receipts."); continue;
       }

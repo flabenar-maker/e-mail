@@ -751,6 +751,30 @@ export function validateComponentRegistrySemantics({
         );
       }
 
+      // A remote lookup root is not local ancestry or an HTML/export owner.
+      const matchingRoots = (document.registry.source.roots ?? []).filter(
+        (root) => root.node_id === record?.figma?.source_root_node_id,
+      );
+      const remote = record?.figma?.remote_source;
+      const sourceOnly = VIEWPORTS.every((viewport) => {
+        const root = record?.contracts?.[viewport]?.root;
+        return root?.render_mode === "figma-source-only" &&
+          Array.isArray(root.facts) && root.facts.length === 0 &&
+          Array.isArray(root.children) && root.children.length === 0 &&
+          Object.keys(root).every((key) => ["id", "semantic_role", "render_mode", "visibility", "facts", "children"].includes(key));
+      });
+      const remoteRoot = matchingRoots.some((root) => root.role === "remote-reference");
+      if (remote !== undefined || remoteRoot) {
+        if (!remote || typeof remote.component_key !== "string" || !remote.component_key.trim() ||
+            Object.keys(remote).length !== 1 || matchingRoots.length !== 1 || !remoteRoot ||
+            record.figma.source_root_node_id !== record.figma.node_id || library !== "shared" ||
+            record.identity.node_kind !== "component" || !["icon", "asset"].includes(record.identity.semantic_role) ||
+            record.variants.length !== 0 || record.properties.length !== 0 || record.asset_contracts.length !== 0 || !sourceOnly) {
+          errors.push(diagnostic("COMPONENT_REGISTRY_REMOTE_SOURCE_INVALID", `${rootPath}/figma/remote_source`,
+            "Remote reference requires a standalone Shared source-only helper, exact key and self lookup root; no local ancestry, HTML or independent export."));
+        }
+      }
+
       if (!FINGERPRINT.test(record?.figma?.structure_fingerprint ?? "")) {
         errors.push(
           diagnostic(

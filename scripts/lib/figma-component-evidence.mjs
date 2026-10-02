@@ -1,7 +1,7 @@
 import { isDeepStrictEqual } from "node:util";
 import { validateCaptureFreshness } from "./component-evidence-freshness.mjs";
 import { auditFigmaContractFacts } from "./figma-contract-facts.mjs";
-import { resolveEvidenceTargets } from "./component-evidence-links.mjs";
+import { matchesRemoteSourceIdentity, resolveEvidenceTargets } from "./component-evidence-links.mjs";
 import { compareFoundationObservation } from "./foundation-evidence.mjs";
 
 // Pure checker over Model/Session from component-evidence-inputs. Those loaders
@@ -255,6 +255,9 @@ function inspectArtworkTree(record, live) {
     if (registered.length !== 1 || axesKey(variant.axes) === null || axesKey(variant.axes) !== axesKey(registered[0].axes) ||
         variant.source_node?.node_id !== variant.variant_node_id || variant.source_node.node_type !== "COMPONENT") {
       fail("EVIDENCE_CAPTURE_IDENTITY_MISMATCH", `/capture/variants/${variant.variant_node_id}`, "Variant axes, COMPONENT root and exact root ID must match registration.");
+    }
+    if (!matchesRemoteSourceIdentity(record, variant.source_node)) {
+      fail("EVIDENCE_REMOTE_SOURCE_IDENTITY_MISMATCH", `/capture/variants/${variant.variant_node_id}/remote_source`, "Fresh remote status and publication key must exactly match the registered lookup source.");
     }
     variants.set(variant.variant_node_id, variant.source_node);
     walk(variant.source_node, variant.variant_node_id, []);

@@ -133639,7 +133639,26 @@
         "purpose": "Составной прозрачный графический ассет функциональной иконки.",
         "critical_constraint_ids": []
       },
-      "constraints": []
+      "constraints": [],
+      "evidence_links": {
+        "foundation_values": [],
+        "source_dependencies": [
+          {
+            "id": "feature-glyph-source",
+            "source": {
+              "variant_node_id": "946:25769",
+              "node_id": "1331:1355"
+            },
+            "target": {
+              "component_id": "icon-account-circle-line-remote"
+            },
+            "asset_owner": {
+              "node_id": "946:25769",
+              "asset_id": "feature-icon"
+            }
+          }
+        ]
+      }
     },
     {
       "id": "item-alert",
@@ -137831,7 +137850,68 @@
         "purpose": "Вложенный информационный элемент с живым текстом.",
         "critical_constraint_ids": []
       },
-      "constraints": []
+      "constraints": [],
+      "evidence_links": {
+        "foundation_values": [],
+        "source_dependencies": [
+          {
+            "id": "mobile-feature-source",
+            "source": {
+              "variant_node_id": "1024:19283",
+              "node_id": "1024:19279"
+            },
+            "target": {
+              "component_id": "asset-feature-icon-4x"
+            },
+            "asset_owner": {
+              "node_id": "1024:19279",
+              "asset_id": "feature-icon"
+            }
+          },
+          {
+            "id": "mobile-feature-glyph-source",
+            "source": {
+              "variant_node_id": "1024:19283",
+              "node_id": "I1024:19279;1331:1355"
+            },
+            "target": {
+              "component_id": "icon-account-circle-line-remote"
+            },
+            "asset_owner": {
+              "node_id": "1024:19279",
+              "asset_id": "feature-icon"
+            }
+          },
+          {
+            "id": "desktop-feature-source",
+            "source": {
+              "variant_node_id": "1024:19284",
+              "node_id": "1024:19273"
+            },
+            "target": {
+              "component_id": "asset-feature-icon-4x"
+            },
+            "asset_owner": {
+              "node_id": "1024:19273",
+              "asset_id": "feature-icon"
+            }
+          },
+          {
+            "id": "desktop-feature-glyph-source",
+            "source": {
+              "variant_node_id": "1024:19284",
+              "node_id": "I1024:19273;1331:1355"
+            },
+            "target": {
+              "component_id": "icon-account-circle-line-remote"
+            },
+            "asset_owner": {
+              "node_id": "1024:19273",
+              "asset_id": "feature-icon"
+            }
+          }
+        ]
+      }
     },
     {
       "id": "nps-options",
