@@ -20,7 +20,7 @@ function instance(component, index, ancestry = []) {
         const key = viewport + ":" + element.id + ":" + slot.id;
         if (seen.has(key)) continue;
         seen.add(key);
-        const value = slot.type === "url" ? { type: "url", value: "https://example.test/evidence" } : slot.type === "alt-text" ? { type: "alt-text", purpose: "informative", value: "Evidence" } : slot.type === "rich-text" ? { type: "rich-text", segments: [{ type: "text", value: "Evidence" }] } : { type: "plain-text", value: "Evidence" };
+        const value = slot.type === "url" ? { type: "url", value: "https://example.test/evidence" } : slot.type === "alt-text" ? { type: "alt-text", purpose: "informative", value: "Evidence" } : { type: "plain-text", value: "Evidence" };
         content.push({ element_id: element.id, slot_id: slot.id, scope: viewport, value });
       }
       for (const child of element.children ?? []) walk(child);
