@@ -1,33 +1,144 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import * as m from "../../scripts/lib/figma-component-evidence.mjs";
+import * as evidence from "../../scripts/lib/figma-component-evidence.mjs";
+import { validateEvidenceLinkReferences } from "../../scripts/lib/component-evidence-links.mjs";
 import { auditFigmaContractFacts } from "../../scripts/lib/figma-contract-facts.mjs";
-const SHA="a".repeat(40), n=i=>i.toString(16).padStart(64,"0"), SN=n(1), api=m.auditNestedArtworkEvidence;
-test("nested artwork public auditor is exported",()=>assert.equal(typeof api,"function"));
-const axes=v=>v?[{name:"Viewport",value:v}]:[];
-const node=(id,type,children=[],name=id)=>({node_id:id,node_type:type,name,visible:true,opacity:1,reference_dimensions:{width:24,height:24,unit:"px"},children});
-function packet(id,root,request,variantAxes=axes("Desktop")){const count=x=>1+(x.children??[]).reduce((s,c)=>s+count(c),0);return{capture_version:"1.2.0",file_key:"synthetic",component_node_id:id,component_properties:[],capture_errors:[],capture_meta:{started_at:"2040-01-01T00:00:00.000Z",completed_at:"2040-01-01T00:00:01.000Z",request:{session_nonce:SN,request_nonce:request,canonical_git_sha:SHA},tree_complete:true,node_count:count(root)},variants:[{variant_node_id:id,axes:variantAxes,source_node:root}]};}
-function fixture({frame=false,hidden=false,multilevel=false}={}){
- const glyph=node("500:1","COMPONENT",[],"glyph @4x"), artwork=frame?node("I300:1;I400:1;400:9","FRAME",[node("I300:1;I400:1;400:10","VECTOR",[],"artwork vector")],"artwork @4x"):{...node("I300:1;I400:1;500:1","INSTANCE",[],"artwork @4x"),main_component_id:"500:1"};artwork.visible=!hidden;
- const itemRoot=node("400:1","COMPONENT",[artwork],"Item/Desktop"), itemMobile=node("400:2","COMPONENT",[],"Item/Mobile"), itemInstance={...node(multilevel?"I300:1;350:1;400:1":"I300:1;400:1","INSTANCE",[artwork],"Item"),main_component_id:"400:1"}, parentRoot=node("300:1","COMPONENT",[multilevel?node("I300:1;350:1","FRAME",[itemInstance],"wrapper"):itemInstance],"Parent/Desktop");
- const parent={id:"parent",identity:{semantic_role:"block",node_kind:"component-set"},figma:{file_key:"synthetic",node_id:"300:1"},variants:[{node_id:"300:1",axes:axes("Desktop")},{node_id:"300:2",axes:axes("Mobile")}],asset_contracts:[],evidence_links:{foundation_values:[],source_dependencies:[]},contracts:{desktop:{root:{render_mode:"html",children:[{component_id:"item",facts:[{id:"reference-size",value:{type:"dimensions",width:24,height:24,unit:"px"},provenance:{kind:"figma-literal",node_id:artwork.node_id}}]}]}},mobile:{root:{render_mode:"html",children:[]}},figma_fact_links:[{variant_node_id:"300:1",node_id:artwork.node_id,source_path:"/reference_dimensions/width",contract_path:"/contracts/desktop/root/children/0/facts/0/value/width",transform:"identity"},{variant_node_id:"300:1",node_id:artwork.node_id,source_path:"/reference_dimensions/height",contract_path:"/contracts/desktop/root/children/0/facts/0/value/height",transform:"identity"}]}};
- const item={id:"item",identity:{semantic_role:"item",node_kind:"component-set"},figma:{file_key:"synthetic",node_id:"400:1"},variants:[{node_id:"400:1",axes:axes("Desktop")},{node_id:"400:2",axes:axes("Mobile")}],asset_contracts:[{id:"item-artwork",owner_layer_name:"artwork @4x",export_boundary:{kind:"node",semantic_node_name:"artwork @4x"}}],evidence_links:{foundation_values:[],source_dependencies:frame?[]:[{id:"glyph-main",source:{variant_node_id:"400:1",node_id:"I300:1;I400:1;500:1",field_path:"/main_component_id"},asset_owner:{component_id:"item",node_id:artwork.node_id,asset_id:"item-artwork"},target:{component_id:"glyph",variant_id:"500:1"}}]},contracts:{desktop:{root:{render_mode:"html",children:[]}},mobile:{root:{render_mode:"html",children:[]}},figma_fact_links:[]}};
- const child={id:"glyph",identity:{semantic_role:"asset",node_kind:"component"},figma:{file_key:"synthetic",node_id:"500:1"},variants:[],asset_contracts:[{id:"glyph-export",owner_layer_name:"glyph @4x",export_boundary:{kind:"node",semantic_node_name:"glyph @4x"}}],evidence_links:{foundation_values:[],source_dependencies:[]},contracts:{desktop:{root:{render_mode:"figma-source-only",children:[]}},mobile:{root:{render_mode:"figma-source-only",children:[]}},figma_fact_links:[]}};
- const pp=packet("300:1",parentRoot,n(2)),ip=packet("400:1",itemRoot,n(3)),gp=packet("500:1",glyph,n(4),[]), captures=[["parent",pp,n(2)],["item",ip,n(3)],["glyph",gp,n(4)]].map(([component_id,packet,request_nonce],i)=>({component_id,receipt_id:`${component_id}-receipt`,tool:"use_figma",request_nonce,requested_at:`2026-10-02T00:00:0${i}.000Z`,received_at:`2026-10-02T00:00:0${i+1}.000Z`,packet_path:`${component_id}.json`,packet_sha256:String(i+1).repeat(64),packet}));
- return{parent,item,child,artwork,pp,ip,gp,model:{canonical_sha:SHA,records:[parent,item,child],manifest:{sources:[]},source_documents:new Map(),targets:new Map()},session:{schema_version:"1.1.0",canonical_git_sha:SHA,session_nonce:SN,started_at:"2026-10-02T00:00:00.000Z",completed_at:"2026-10-02T00:00:05.000Z",component_ids:["parent","item","glyph"],captures}};
+
+// Synthetic contract/capture model, not a stored or real Figma observation.
+const SHA = "a".repeat(40), nonce = n => n.toString(16).padStart(64, "0"), SN = nonce(1);
+const axes = viewport => [{ name: "Viewport", value: viewport }];
+const node = (id, type, children = [], name = id) => ({ node_id: id, node_type: type, name,
+  visible: true, opacity: 1, reference_dimensions: { width: 24, height: 24, unit: "px" }, children });
+const record = (id, owner, role, variants) => ({ id, identity: { semantic_role: role, node_kind: variants.length ? "component-set" : "component" },
+  figma: { file_key: "synthetic-nesting", node_id: owner }, variants, asset_contracts: [],
+  contracts: { mobile: { root: { render_mode: "presentation-table", facts: [], children: [] } },
+    desktop: { root: { render_mode: "presentation-table", facts: [], children: [] } }, figma_fact_links: [] } });
+const variants = (mobile, desktop) => [{ id: "mobile", node_id: mobile, axes: axes("Mobile") }, { id: "desktop", node_id: desktop, axes: axes("Desktop") }];
+function element(owner, viewport, variantId, id, mode, target) {
+  const value = { id: "owned-child", render_mode: mode, ...target, children: [], facts: [{ id: "reference-size",
+    value: { type: "dimensions", width: 24, height: 24, unit: "px" }, provenance: { kind: "figma-literal", node_id: id } }] };
+  owner.contracts[viewport].root.children.push(value);
+  for (const dimension of ["width", "height"]) owner.contracts.figma_fact_links.push({ variant_node_id: variantId, node_id: id,
+    source_path: "/reference_dimensions/" + dimension, contract_path: `/contracts/${viewport}/root/children/0/facts/0/value/${dimension}`, transform: "identity" });
+  return value;
 }
-const run=f=>api({recordId:"parent",model:f.model,session:f.session}), has=(r,c)=>r.issues.some(x=>x.code===c);
-function rejects(name,expected,change){test(name,{skip:typeof api!=="function"},()=>{const f=fixture();change(f);const r=run(f);assert.equal(r.ok,false);assert.ok(has(r,expected),JSON.stringify(r));});}
-test("FRAME+VECTOR child artwork is a valid zero-INSTANCE boundary",{skip:typeof api!=="function"},()=>{const r=run(fixture({frame:true}));assert.equal(r.ok,true);assert.deepEqual(r.dependencies,[]);});
-test("INSTANCE artwork qualifies Item ownership and preserves child identity",{skip:typeof api!=="function"},()=>{const r=run(fixture());assert.equal(r.ok,true);assert.equal(r.dependencies[0].asset_owner.component_id,"item");});
-test("hidden and multilevel artwork remain positive",{skip:typeof api!=="function"},()=>{assert.equal(run(fixture({hidden:true})).ok,true);assert.equal(run(fixture({multilevel:true})).ok,true);});
-test("combined keeps scalar facts exact and exposes nested result",{skip:typeof api!=="function"},()=>{const f=fixture(),s=auditFigmaContractFacts({record:f.parent,live:f.pp}),r=m.auditFigmaComponentEvidence({record:f.parent,live:f.pp,model:f.model,session:f.session});assert.deepEqual(r.facts,s);assert.ok(r.nested_artwork);});
-rejects("wrong selector is typed","EVIDENCE_NESTED_SELECTOR_UNVERIFIED",f=>f.item.asset_contracts[0].export_boundary.semantic_node_name="wrong");
-rejects("missing or duplicate owned geometry is typed","EVIDENCE_NESTED_GEOMETRY_UNVERIFIED",f=>f.parent.contracts.figma_fact_links.pop());
-rejects("wrong placement main is typed","EVIDENCE_NESTED_PLACEMENT_UNVERIFIED",f=>f.artwork.main_component_id="500:9");
-rejects("stale source is typed","EVIDENCE_REQUEST_IDENTITY_MISMATCH",f=>f.ip.capture_meta.request.request_nonce=n(9));
-rejects("missing child packet is typed","EVIDENCE_CAPTURE_MISSING",f=>f.session.captures.pop());
-rejects("unknown glyph remains typed without a source record","EVIDENCE_NESTED_TARGET_UNKNOWN",f=>f.item.evidence_links.source_dependencies[0].target.component_id="unknown-glyph");
-rejects("stripped alias and wrong ancestry are typed","EVIDENCE_NESTED_ANCESTRY_UNVERIFIED",f=>f.artwork.node_id="500:1");
-rejects("overridden actual glyph main is compared","EVIDENCE_NESTED_PLACEMENT_UNVERIFIED",f=>f.artwork.main_component_id="500:2");
-test("ordinary HTML has no added artwork scope and inputs are immutable",{skip:typeof api!=="function"},()=>{const f=fixture({frame:true}),before=structuredClone({model:f.model,session:f.session});f.item.asset_contracts=[];const r=run(f);assert.equal(r.ok,true);assert.deepEqual(r.dependencies,[]);assert.deepEqual({model:f.model,session:f.session},before);});
+function packet(owner, trees, requestNonce) {
+  const count = n => 1 + (n.children ?? []).reduce((sum, child) => sum + count(child), 0);
+  return { capture_version: "1.2.0", file_key: owner.figma.file_key, component_node_id: owner.figma.node_id,
+    component_properties: [], capture_errors: [], capture_meta: { started_at: "2040-01-01T00:00:01.000Z", completed_at: "2040-01-01T00:00:02.000Z",
+      request: { session_nonce: SN, request_nonce: requestNonce, canonical_git_sha: SHA }, tree_complete: true,
+      node_count: trees.reduce((sum, root) => sum + count(root), 0) },
+    variants: trees.map((root, index) => ({ variant_node_id: root.node_id, axes: owner.variants[index]?.axes ?? [], source_node: root })) };
+}
+function fixture(frame = false) {
+  const parent = record("parent", "300:0", "block", variants("301:1", "301:2"));
+  const item = record("item", "400:0", "item", variants("401:1", "401:2"));
+  const glyph = record("glyph", "500:1", "icon", []);
+  for (const viewport of ["mobile", "desktop"]) glyph.contracts[viewport].root.render_mode = "figma-source-only";
+  item.asset_contracts = [{ id: "item-artwork", owner_layer_name: "artwork @4x", source_viewport: "desktop", source_mode_id: "rendered-node",
+    export_boundary: { kind: "node", semantic_node_name: "artwork @4x" } }];
+  item.evidence_links = { foundation_values: [], source_dependencies: [] };
+  const parentTrees = [], itemTrees = [];
+  for (const [viewport, rootId, itemRoot, placementId, artworkId, vectorId] of [
+    ["mobile", "301:1", "401:1", "301:10", "401:10", "401:11"],
+    ["desktop", "301:2", "401:2", "301:20", "401:20", "401:21"],
+  ]) {
+    const graphic = frame ? node(artworkId, "FRAME", [node(vectorId, "VECTOR")], "artwork @4x") :
+      { ...node(artworkId, "INSTANCE", [node(`I${artworkId};500:2`, "VECTOR")], "artwork @4x"), main_component_id: "500:1" };
+    const actualGraphic = frame ? node(`I${placementId};${artworkId}`, "FRAME", [node(`I${placementId};${vectorId}`, "VECTOR")], "artwork @4x") :
+      { ...node(`I${placementId};${artworkId}`, "INSTANCE", [node(`I${placementId};${artworkId};500:2`, "VECTOR")], "artwork @4x"), main_component_id: "500:1" };
+    const actualItem = { ...node(placementId, "INSTANCE", [node(`I${placementId};402:1`, "TEXT", [], "body"), actualGraphic], "item"), main_component_id: itemRoot };
+    parentTrees.push(node(rootId, "COMPONENT", [actualItem]));
+    itemTrees.push(node(itemRoot, "COMPONENT", [node("402:" + (viewport === "mobile" ? 1 : 2), "TEXT", [], "body"), graphic]));
+    // Desktop parent's body identity is not used for artwork matching.
+    if (viewport === "desktop") actualItem.children[0].node_id = `I${placementId};402:2`;
+    element(parent, viewport, rootId, placementId, "nested-component", { component_id: "item" });
+    element(item, viewport, itemRoot, artworkId, "direct-image", { asset_contract_id: "item-artwork" });
+    if (!frame) item.evidence_links.source_dependencies.push({ id: viewport + "-glyph", source: { variant_node_id: itemRoot, node_id: artworkId },
+      target: { component_id: "glyph" }, asset_owner: { node_id: artworkId, asset_id: "item-artwork" } });
+  }
+  const model = { canonical_sha: SHA, records: [parent, item, glyph], manifest: { sources: [] }, source_documents: new Map(), targets: new Map() };
+  const session = { schema_version: "1.1.0", canonical_git_sha: SHA, session_nonce: SN,
+    started_at: "2026-10-02T00:00:00.000Z", completed_at: "2026-10-02T00:00:10.000Z", component_ids: ["parent", "item", "glyph"], captures: [] };
+  const add = (owner, roots) => {
+    const i = session.captures.length, requestNonce = nonce(i + 10), p = packet(owner, roots, requestNonce);
+    session.captures.push({ component_id: owner.id, receipt_id: owner.id + "-receipt", tool: "use_figma", request_nonce: requestNonce,
+      requested_at: `2026-10-02T00:00:0${i}.000Z`, received_at: `2026-10-02T00:00:0${i+1}.000Z`, packet: p }); return p;
+  };
+  const pp = add(parent, parentTrees), ip = add(item, itemTrees), gp = add(glyph, [node("500:1", "COMPONENT", [node("500:2", "VECTOR")])]);
+  return { parent, item, glyph, model, session, pp, ip, gp, add };
+}
+const run = f => {
+  assert.equal(typeof evidence.auditNestedArtworkEvidence, "function", "nested ownership auditor is missing");
+  return evidence.auditNestedArtworkEvidence({ recordId: "parent", model: f.model, session: f.session });
+};
+const has = (r, c) => r.issues.some(i => i.code === c);
+function reject(name, expected, mutate) {
+  test(name, () => { const f = fixture(); mutate(f); const r = run(f); assert.equal(r.ok, false); assert.ok(has(r, expected), JSON.stringify(r)); });
+}
+test("synthetic source link shapes and independently collected Item artwork are valid", () => {
+  const f = fixture(); assert.deepEqual(validateEvidenceLinkReferences({ records: f.model.records }), []);
+  assert.deepEqual(evidence.collectRequiredComponentEvidence({ record: f.item, live: f.ip }).issues, []);
+  assert.deepEqual(evidence.collectRequiredComponentEvidence({ record: f.item, live: f.ip }).required_sources.map(s => s.node_id), ["401:10", "401:20"]);
+});
+test("nested FRAME+VECTOR retains two child-owned boundaries without fabricated INSTANCE targets", () => {
+  const f = fixture(true), r = run(f); assert.equal(r.ok, true, JSON.stringify(r.issues)); assert.equal(r.boundaries.length, 2);
+  assert.deepEqual(r.dependencies, []); assert.deepEqual(r.boundaries.map(b => [b.owner_component_id, b.asset_id, b.consumer_node_id]),
+    [["item", "item-artwork", "I301:10;401:10"], ["item", "item-artwork", "I301:20;401:20"]]);
+});
+test("nested INSTANCE proves its Item-owned glyph from current source and target receipts", () => {
+  const r = run(fixture()); assert.equal(r.ok, true, JSON.stringify(r.issues)); assert.equal(r.dependencies.length, 2);
+  assert.deepEqual(r.receipt_ids, ["glyph-receipt", "item-receipt", "parent-receipt"]);
+  assert.ok(r.dependencies.every(d => d.asset_owner.component_id === "item" && d.target.component_id === "glyph" && d.expected === "500:1" && d.actual === "500:1" && d.status === "verified"));
+});
+test("hidden artwork remains required and missing source links cannot opt it out", () => {
+  const f = fixture(); f.pp.variants[0].source_node.children[0].children[1].visible = false;
+  assert.equal(run(f).dependencies.length, 2); assert.equal(run(f).ok, true);
+  f.item.evidence_links.source_dependencies.shift(); assert.ok(has(run(f), "EVIDENCE_REQUIRED_LINK_MISSING"));
+});
+test("compound identities propagate through a second real nested-component reference", () => {
+  const f = fixture(true), middle = record("middle", "600:0", "item", variants("601:1", "601:2")), trees = [];
+  for (const [viewport, variantId, placement, innerId] of [["mobile", "601:1", "301:10", "601:10"], ["desktop", "601:2", "301:20", "601:20"]]) {
+    const index = viewport === "mobile" ? 0 : 1, actual = f.pp.variants[index].source_node.children[0], original = structuredClone(actual);
+    actual.main_component_id = variantId; actual.children = [{ ...node(`I${placement};${innerId}`, "INSTANCE", [
+      node(`I${placement};${innerId};402:${index+1}`, "TEXT", [], "body"),
+      node(`I${placement};${innerId};401:${index?20:10}`, "FRAME", [node(`I${placement};${innerId};401:${index?21:11}`, "VECTOR")], "artwork @4x"),
+    ], "item"), main_component_id: index ? "401:2" : "401:1" }];
+    trees.push(node(variantId, "COMPONENT", [{ ...node(innerId, "INSTANCE", original.children.map(c => ({ ...c, node_id: c.node_type === "TEXT" ? `I${innerId};402:${index+1}` : `I${innerId};401:${index?20:10}`, children: c.node_type === "TEXT" ? [] : [node(`I${innerId};401:${index?21:11}`, "VECTOR")] })), "item"), main_component_id: index ? "401:2" : "401:1" }]));
+    element(middle, viewport, variantId, innerId, "nested-component", { component_id: "item" }); f.parent.contracts[viewport].root.children[0].component_id = "middle";
+  }
+  f.model.records.push(middle); f.session.component_ids.push("middle"); f.add(middle, trees);
+  const count = n => 1 + (n.children ?? []).reduce((s,c) => s + count(c), 0); f.pp.capture_meta.node_count = f.pp.variants.reduce((s,v) => s + count(v.source_node), 0);
+  const r = run(f); assert.equal(r.ok, true, JSON.stringify(r.issues));
+  assert.deepEqual(r.boundaries.map(b => b.consumer_node_id), ["I301:10;601:10;401:10", "I301:20;601:20;401:20"]);
+});
+test("combined audit retains all scalar and capture diagnostics while adding nested proof", () => {
+  const f = fixture(), before = auditFigmaContractFacts({ record: f.parent, live: f.pp });
+  const r = evidence.auditFigmaComponentEvidence({ record: f.parent, live: f.pp, model: f.model, session: f.session });
+  assert.deepEqual(r.facts, before); assert.ok(r.nested_artwork); assert.equal(r.nested_artwork.ok, true); assert.equal(r.ok, false);
+});
+for (const [label, mutate] of [
+  ["missing", f => f.parent.contracts.figma_fact_links.pop()],
+  ["duplicate", f => f.parent.contracts.figma_fact_links.push(structuredClone(f.parent.contracts.figma_fact_links[0]))],
+  ["wrong node", f => { f.parent.contracts.figma_fact_links[0].node_id = "301:1"; }],
+  ["wrong units", f => { f.parent.contracts.desktop.root.children[0].facts[0].value.unit = "%"; }],
+]) reject("nested placement rejects " + label + " owned geometry proof", "EVIDENCE_NESTED_GEOMETRY_UNVERIFIED", mutate);
+reject("wrong Item placement main is unverified", "EVIDENCE_NESTED_PLACEMENT_UNVERIFIED", f => { f.pp.variants[0].source_node.children[0].main_component_id = "401:2"; });
+reject("native source selector cannot be replaced by a similar boundary", "EVIDENCE_NESTED_SELECTOR_UNVERIFIED", f => { f.item.asset_contracts[0].export_boundary.semantic_node_name = "missing @4x"; });
+reject("stale child source capture is not accepted", "EVIDENCE_REQUEST_IDENTITY_MISMATCH", f => { f.ip.capture_meta.request.request_nonce = nonce(99); });
+reject("missing glyph target receipt blocks actual dependency", "EVIDENCE_CAPTURE_MISSING", f => { f.session.captures.pop(); });
+reject("incomplete child source tree blocks scope propagation", "EVIDENCE_CAPTURE_INCOMPLETE", f => { f.ip.capture_meta.tree_complete = false; });
+reject("wrong target owner cannot prove an equal main ID", "EVIDENCE_CAPTURE_IDENTITY_MISMATCH", f => { f.gp.component_node_id = "500:9"; });
+reject("unknown glyph source is explicitly unverified without inventing a record", "EVIDENCE_NESTED_TARGET_UNKNOWN", f => { f.item.evidence_links.source_dependencies[0].target.component_id = "unregistered-glyph"; });
+reject("ancestor HTML wrapper cannot become the asset owner", "EVIDENCE_ASSET_OWNER_MISMATCH", f => { f.item.evidence_links.source_dependencies[0].asset_owner.node_id = "401:1"; });
+reject("stripped master ID cannot substitute actual compound ancestry", "EVIDENCE_NESTED_ANCESTRY_UNVERIFIED", f => { f.pp.variants[0].source_node.children[0].children[1].node_id = "401:10"; });
+reject("actual overridden glyph main is compared instead of inheriting its default", "EVIDENCE_NESTED_PLACEMENT_UNVERIFIED", f => { f.pp.variants[0].source_node.children[0].children[1].main_component_id = "500:99"; });
+test("ordinary HTML is outside this extra scope and caller inputs are immutable", () => {
+  const f = fixture(true); f.item.asset_contracts = []; const before = structuredClone({ model: f.model, session: f.session });
+  const r = run(f); assert.equal(r.ok, true); assert.deepEqual(r.boundaries, []); assert.deepEqual(r.dependencies, []);
+  assert.deepEqual({ model: f.model, session: f.session }, before);
+});
+test("nested child capture errors stay visible and never certify whole artwork", () => {
+  const f = fixture(true); f.ip.capture_errors.push({ code: "MIXED_VALUE", node_id: "401:10", field: "fills" });
+  const r = run(f); assert.equal(r.ok, false); assert.ok(has(r, "EVIDENCE_CAPTURE_ERROR"));
+});
