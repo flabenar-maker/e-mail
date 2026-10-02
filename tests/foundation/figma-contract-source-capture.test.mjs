@@ -184,3 +184,113 @@ test("capture does not guess mixed font weight or mixed style ID", async () => {
   }
   assert.doesNotThrow(() => JSON.stringify(packet));
 });
+function instanceNode(overrides = {}) {
+  return {
+    type: "INSTANCE", id: "I5:1;6:2;7:3", name: "Artwork", visible: true,
+    width: 62, height: 62, componentProperties: {}, children: [],
+    get mainComponent() { throw new Error("Synchronous access unavailable"); },
+    async getMainComponentAsync() { return { id: "8:1", type: "COMPONENT" }; },
+    ...overrides,
+  };
+}
+
+test("fresh capture uses async main lookup and preserves full compound instance identity", async () => {
+  const packet = await captureWith(fakeFigma({ node: component([instanceNode()]) }).figma);
+  const instance = packet.variants[0].source_node.children[0];
+  assert.equal(instance.node_id, "I5:1;6:2;7:3");
+  assert.equal(instance.main_component_id, "8:1");
+  assert.deepEqual(packet.capture_errors, []);
+});
+
+for (const [label, lookup] of [
+  ["rejection", async () => { throw new Error("Unavailable"); }],
+  ["null", async () => null],
+  ["wrong type", async () => ({ id: "8:1", type: "FRAME" })],
+]) {
+  test(`capture retains unresolved instance after async ${label}`, async () => {
+    const packet = await captureWith(fakeFigma({ node: component([instanceNode({ getMainComponentAsync: lookup })]) }).figma);
+    const instance = packet.variants[0].source_node.children[0];
+    assert.equal(instance.main_component_id, null);
+    assert.equal(instance.node_id, "I5:1;6:2;7:3");
+    assert.deepEqual(packet.capture_errors, [{ node_id: instance.node_id, code: "MAIN_COMPONENT_UNRESOLVED" }]);
+    assert.equal(packet.capture_meta.tree_complete, true);
+    assert.equal(packet.capture_meta.node_count, 2);
+  });
+}
+
+test("capture metadata brackets traversal including hidden instance children and restores the API flag", async () => {
+  const fake = fakeFigma();
+  fake.figma.skipInvisibleInstanceChildren = true;
+  const hidden = textNode({ id: "I5:1;6:2;2:1", visible: false });
+  const instance = instanceNode();
+  Object.defineProperty(instance, "children", { get: () => fake.figma.skipInvisibleInstanceChildren ? [] : [hidden] });
+  fake.figma.getNodeByIdAsync = async () => component([instance]);
+  const before = Date.now();
+  const packet = await captureWith(fake.figma);
+  const after = Date.now();
+  assert.equal(packet.capture_version, "1.1.0");
+  assert.equal(packet.capture_meta.tree_complete, true);
+  assert.equal(packet.capture_meta.node_count, 3);
+  assert.ok(before <= Date.parse(packet.capture_meta.started_at));
+  assert.ok(Date.parse(packet.capture_meta.started_at) <= Date.parse(packet.capture_meta.completed_at));
+  assert.ok(Date.parse(packet.capture_meta.completed_at) <= after);
+  assert.equal(new Date(packet.capture_meta.started_at).toISOString(), packet.capture_meta.started_at);
+  assert.equal(new Date(packet.capture_meta.completed_at).toISOString(), packet.capture_meta.completed_at);
+  assert.equal(packet.variants[0].source_node.children[0].children[0].visible, false);
+  assert.equal(fake.figma.skipInvisibleInstanceChildren, true);
+});
+
+test("capture restores traversal settings on failure and never certifies a missing component", async () => {
+  const fake = fakeFigma({ node: null });
+  fake.figma.skipInvisibleInstanceChildren = true;
+  const packet = await captureWith(fake.figma);
+  assert.equal(packet.capture_version, "1.1.0");
+  assert.equal(packet.capture_meta.tree_complete, false);
+  assert.equal(packet.capture_meta.node_count, 0);
+  assert.deepEqual(packet.capture_errors, [{ node_id: "1:1", code: "COMPONENT_NOT_FOUND" }]);
+  assert.equal(fake.figma.skipInvisibleInstanceChildren, true);
+  fake.figma.getNodeByIdAsync = async () => { throw new Error("Traversal unavailable"); };
+  await assert.rejects(captureWith(fake.figma), /Traversal unavailable/);
+  assert.equal(fake.figma.skipInvisibleInstanceChildren, true);
+});
+
+test("fresh metadata does not alter prior text, layout, paints, bindings or geometry facts", async () => {
+  const layout = { layoutMode: "VERTICAL", layoutSizingHorizontal: "FIXED", layoutSizingVertical: "HUG",
+    primaryAxisSizingMode: "AUTO", counterAxisSizingMode: "FIXED", itemSpacing: 8, counterAxisSpacing: 0,
+    layoutWrap: "NO_WRAP", primaryAxisAlignItems: "CENTER", counterAxisAlignItems: "MIN",
+    paddingTop: 1, paddingRight: 2, paddingBottom: 3, paddingLeft: 4, cornerRadius: 12,
+    boundVariables: { itemSpacing: { type: "VARIABLE_ALIAS", id: "VariableID:1:1" } } };
+  const packet = await captureWith(fakeFigma({ node: component([textNode()], layout) }).figma);
+  const { capture_meta, capture_version, ...facts } = packet;
+  const stops = [{ position: 0, color: "#18B037", alpha: 1 }, { position: 1, color: "#3DD55C", alpha: 1 }];
+  assert.deepEqual(facts, {
+    file_key: "test-file", component_node_id: "1:1", component_properties: [], capture_errors: [],
+    variants: [{ variant_node_id: "1:1", axes: [{ name: "Viewport", value: "Mobile" }], source_node: {
+      node_id: "1:1", name: "Button/Primary", node_type: "COMPONENT", visible: true,
+      reference_dimensions: { width: 230, height: 44, unit: "px" }, minimum_width_px: 230,
+      layout: { mode: "VERTICAL", horizontal_sizing: "FIXED", vertical_sizing: "HUG", primary_axis_sizing: "AUTO",
+        counter_axis_sizing: "FIXED", item_spacing: 8, counter_axis_spacing: 0, wrap: "NO_WRAP",
+        primary_axis_alignment: "CENTER", counter_axis_alignment: "MIN", padding: { top: 1, right: 2, bottom: 3, left: 4 } },
+      corner_radius: 12, variable_bindings: { itemSpacing: { id: "VariableID:1:1" } },
+      fills: [{ type: "gradient_linear", visible: true, opacity: 1, gradient_stops: stops, stops, gradient_transform: [[1, 0, 0], [0, 1, 0]] }],
+      strokes: [], opacity: 1, rotation: 0,
+      children: [{ node_id: "2:1", name: "Label", node_type: "TEXT", visible: true,
+        reference_dimensions: { width: 110, height: 20, unit: "px" }, fills: [], strokes: [], opacity: 1, rotation: 0,
+        characters: "Какая-то кнопка", text_geometry: { auto_resize: "HEIGHT", vertical_alignment: "TOP" },
+        text_style: { font_family: "Roboto", font_style: "Medium", font_size_px: 14, font_weight: 500,
+          line_height: { unit: "PERCENT", value: 140 }, letter_spacing: { unit: "PERCENT", value: 0 },
+          horizontal_alignment: "CENTER", vertical_alignment: "TOP", text_case: "ORIGINAL", text_decoration: "NONE",
+          text_auto_resize: "HEIGHT", figma_style_id: STYLE_ID, figma_style_name: "Mobile/Action" } }],
+    } }],
+  });
+});
+
+test("scalar audit accepts both capture versions without suppressing other issues", async () => {
+  const packet = await captureWith(fakeFigma().figma);
+  const record = mappedRecord();
+  const reports = ["1.0.0", "1.1.0"].map((capture_version) => auditFigmaContractFacts({ record, live: { ...packet, capture_version } }));
+  assert.deepEqual(reports[0], reports[1]);
+  assert.equal(reports[1].issues.some(({ code }) => code === "FIGMA_CAPTURE_VERSION_UNSUPPORTED"), false);
+  const unknown = auditFigmaContractFacts({ record, live: { ...packet, capture_version: "9.0.0" } });
+  assert.ok(unknown.issues.some(({ code }) => code === "FIGMA_CAPTURE_VERSION_UNSUPPORTED"));
+});
