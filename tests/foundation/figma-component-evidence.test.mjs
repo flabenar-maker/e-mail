@@ -336,16 +336,19 @@ test("S1 resolves a renamed non-source mobile direct-image boundary from its loc
 });
 test("S1 refuses missing, conflicting, duplicate, or unproven mobile direct-image identity facts", () => {
   const changes = [
-    fixture => { fixture.header.contracts.mobile.root.children[0].asset_contract_id = "other-asset"; },
-    fixture => { fixture.header.contracts.mobile.root.children[0].facts[0].provenance.node_id = "804:wrong"; },
-    fixture => { fixture.header.contracts.mobile.root.children[0].facts[0].provenance.kind = "derived"; },
-    fixture => { fixture.header.contracts.figma_fact_links[0].variant_node_id = "804:2"; },
-    fixture => { fixture.header.contracts.figma_fact_links[0].source_path = "/reference_dimensions/height"; },
-    fixture => { fixture.header.contracts.figma_fact_links.pop(); },
-    fixture => { fixture.header.contracts.figma_fact_links.push(structuredClone(fixture.header.contracts.figma_fact_links[0])); },
-    fixture => { fixture.f.roots.get(fixture.header.id)[1].node_id = "804:missing"; },
+    [fixture => { fixture.header.contracts.mobile.root.children[0].asset_contract_id = "other-asset"; }, "EVIDENCE_ASSET_BOUNDARY_UNVERIFIED"],
+    [fixture => { fixture.header.contracts.mobile.root.children[0].facts[0].provenance.node_id = "804:wrong"; }, "EVIDENCE_ASSET_BOUNDARY_UNVERIFIED"],
+    [fixture => { fixture.header.contracts.mobile.root.children[0].facts[0].provenance.kind = "derived"; }, "EVIDENCE_ASSET_BOUNDARY_UNVERIFIED"],
+    [fixture => { fixture.header.contracts.figma_fact_links[0].variant_node_id = "804:2"; }, "EVIDENCE_ASSET_BOUNDARY_UNVERIFIED"],
+    [fixture => { fixture.header.contracts.figma_fact_links[0].source_path = "/reference_dimensions/height"; }, "EVIDENCE_ASSET_BOUNDARY_UNVERIFIED"],
+    [fixture => { fixture.header.contracts.figma_fact_links.pop(); }, "EVIDENCE_ASSET_BOUNDARY_UNVERIFIED"],
+    [fixture => { fixture.header.contracts.figma_fact_links.push(structuredClone(fixture.header.contracts.figma_fact_links[0])); }, "EVIDENCE_ASSET_BOUNDARY_UNVERIFIED"],
+    [fixture => { fixture.f.roots.get(fixture.header.id)[1].node_id = "804:missing"; }, "EVIDENCE_CAPTURE_IDENTITY_MISMATCH"],
   ];
-  for (const change of changes) { const fixture = mobileDirectImageFixture(); change(fixture); s1Count(fixture.f, fixture.header); assert.equal(boundaryCode(mobileScope(fixture)), true); }
+  for (const [change, expectedCode] of changes) {
+    const fixture = mobileDirectImageFixture(); change(fixture); s1Count(fixture.f, fixture.header);
+    assert.ok(mobileScope(fixture).issues.some(issue => issue.code === expectedCode));
+  }
 });
 test("S1 does not let a desktop-named sibling hijack mobile selection", () => {
   const fixture = mobileDirectImageFixture();
