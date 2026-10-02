@@ -56,6 +56,7 @@ test("section model has one fixed order and skips empty optional sections", asyn
   minimal.properties = [];
   minimal.constraints = [];
   minimal.documentation.critical_constraint_ids = [];
+  minimal.evidence_links = { foundation_values: [], source_dependencies: [] };
   assert.deepEqual(
     listComponentDocumentationSections(minimal).map(({ id }) => id),
     [
