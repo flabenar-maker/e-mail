@@ -268,6 +268,19 @@ function renderConstraintsAndDependencies(record, index) {
       `- Dependency: ${inlineCode(reference.path)} → component ${componentLabel(index, reference.id)}`,
     );
   }
+  for (const link of record.evidence_links?.foundation_values ?? []) {
+    lines.push(
+      `- Evidence link (foundation): ${inlineCode(link.id)} — source variant ${inlineCode(link.source.variant_node_id)}, node ${inlineCode(link.source.node_id)}, field ${inlineCode(link.source.field_path)} → foundation ${inlineCode(link.target.source_id)} ${inlineCode(link.target.pointer)}; comparison ${inlineCode(link.comparison)}`,
+    );
+  }
+  for (const link of record.evidence_links?.source_dependencies ?? []) {
+    lines.push(
+      `- Evidence link (source): ${inlineCode(link.id)} — source variant ${inlineCode(link.source.variant_node_id)}, instance ${inlineCode(link.source.node_id)} → component ${componentLabel(index, link.target.component_id)}` +
+        (link.target.variant_id ? `; target variant ${inlineCode(link.target.variant_id)}` : "") +
+        `; asset owner ${inlineCode(link.asset_owner.node_id)}` +
+        (link.asset_owner.asset_id ? `; asset ${inlineCode(link.asset_owner.asset_id)}` : ""),
+    );
+  }
   return lines;
 }
 
@@ -287,7 +300,9 @@ function hasAssetsOrInteraction(record) {
 function hasConstraintsOrDependencies(record) {
   return (
     (record.constraints ?? []).length > 0 ||
-    collectComponentReferences(record).components.length > 0
+    collectComponentReferences(record).components.length > 0 ||
+    (record.evidence_links?.foundation_values ?? []).length > 0 ||
+    (record.evidence_links?.source_dependencies ?? []).length > 0
   );
 }
 

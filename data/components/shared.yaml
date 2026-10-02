@@ -23,6 +23,128 @@
   "components": [
     {
       "id": "email-template",
+      "evidence_links": {
+        "foundation_values": [
+          {
+            "id": "mobile-shell-background",
+            "source": {
+              "variant_node_id": "1102:6",
+              "node_id": "1102:6",
+              "field_path": "/fills/0/color"
+            },
+            "target": {
+              "source_id": "rendering-foundation",
+              "pointer": "/shell/background_color"
+            },
+            "comparison": "opaque-solid-color"
+          },
+          {
+            "id": "mobile-slot-background",
+            "source": {
+              "variant_node_id": "1102:6",
+              "node_id": "1103:7",
+              "field_path": "/fills/0/color"
+            },
+            "target": {
+              "source_id": "rendering-foundation",
+              "pointer": "/shell/background_color"
+            },
+            "comparison": "opaque-solid-color"
+          },
+          {
+            "id": "mobile-shell-left-inset",
+            "source": {
+              "variant_node_id": "1102:6",
+              "node_id": "1102:6",
+              "field_path": "/layout/padding/left"
+            },
+            "target": {
+              "source_id": "rendering-foundation",
+              "pointer": "/shell/horizontal_inset_px"
+            },
+            "comparison": "pixel-number"
+          },
+          {
+            "id": "mobile-shell-right-inset",
+            "source": {
+              "variant_node_id": "1102:6",
+              "node_id": "1102:6",
+              "field_path": "/layout/padding/right"
+            },
+            "target": {
+              "source_id": "rendering-foundation",
+              "pointer": "/shell/horizontal_inset_px"
+            },
+            "comparison": "pixel-number"
+          },
+          {
+            "id": "desktop-shell-background",
+            "source": {
+              "variant_node_id": "1102:7",
+              "node_id": "1102:7",
+              "field_path": "/fills/0/color"
+            },
+            "target": {
+              "source_id": "rendering-foundation",
+              "pointer": "/shell/background_color"
+            },
+            "comparison": "opaque-solid-color"
+          },
+          {
+            "id": "desktop-slot-background",
+            "source": {
+              "variant_node_id": "1102:7",
+              "node_id": "1103:8",
+              "field_path": "/fills/0/color"
+            },
+            "target": {
+              "source_id": "rendering-foundation",
+              "pointer": "/shell/background_color"
+            },
+            "comparison": "opaque-solid-color"
+          },
+          {
+            "id": "desktop-shell-left-inset",
+            "source": {
+              "variant_node_id": "1102:7",
+              "node_id": "1102:7",
+              "field_path": "/layout/padding/left"
+            },
+            "target": {
+              "source_id": "rendering-foundation",
+              "pointer": "/shell/horizontal_inset_px"
+            },
+            "comparison": "pixel-number"
+          },
+          {
+            "id": "desktop-shell-right-inset",
+            "source": {
+              "variant_node_id": "1102:7",
+              "node_id": "1102:7",
+              "field_path": "/layout/padding/right"
+            },
+            "target": {
+              "source_id": "rendering-foundation",
+              "pointer": "/shell/horizontal_inset_px"
+            },
+            "comparison": "pixel-number"
+          },
+          {
+            "id": "desktop-shell-width",
+            "source": {
+              "variant_node_id": "1102:7",
+              "node_id": "1102:7",
+              "field_path": "/reference_dimensions/width"
+            },
+            "target": {
+              "source_id": "rendering-foundation",
+              "pointer": "/shell/max_width_px"
+            },
+            "comparison": "pixel-number"
+          }
+        ],
+        "source_dependencies": []
+      },
       "status": "active",
       "identity": {
         "figma_name": "Email/Template",
@@ -250,6 +372,56 @@
     },
     {
       "id": "asset-header-logo-4x",
+      "evidence_links": {
+        "foundation_values": [],
+        "source_dependencies": [
+          {
+            "id": "cupis-product-logo-source",
+            "source": {
+              "variant_node_id": "1008:1473",
+              "node_id": "1008:1309"
+            },
+            "target": {
+              "component_id": "asset-product-logo",
+              "variant_id": "product-cupis"
+            },
+            "asset_owner": {
+              "node_id": "1008:1473",
+              "asset_id": "header-logo"
+            }
+          },
+          {
+            "id": "card-product-logo-source",
+            "source": {
+              "variant_node_id": "1008:1474",
+              "node_id": "1008:1422"
+            },
+            "target": {
+              "component_id": "asset-product-logo",
+              "variant_id": "product-card"
+            },
+            "asset_owner": {
+              "node_id": "1008:1474",
+              "asset_id": "header-logo"
+            }
+          },
+          {
+            "id": "wallet-product-logo-source",
+            "source": {
+              "variant_node_id": "1008:1475",
+              "node_id": "1008:1455"
+            },
+            "target": {
+              "component_id": "asset-product-logo",
+              "variant_id": "product-wallet"
+            },
+            "asset_owner": {
+              "node_id": "1008:1475",
+              "asset_id": "header-logo"
+            }
+          }
+        ]
+      },
       "status": "active",
       "identity": {
         "figma_name": "Asset/Header-Logo @4x",
@@ -463,6 +635,53 @@
     },
     {
       "id": "asset-header-logo-compact-4x",
+      "evidence_links": {
+        "foundation_values": [],
+        "source_dependencies": [
+          {
+            "id": "cupis-product-logo-source",
+            "source": {
+              "variant_node_id": "1008:1686",
+              "node_id": "1008:1347"
+            },
+            "target": {
+              "component_id": "asset-product-logo",
+              "variant_id": "product-cupis"
+            },
+            "asset_owner": {
+              "node_id": "1008:1686"
+            }
+          },
+          {
+            "id": "card-product-logo-source",
+            "source": {
+              "variant_node_id": "1008:1687",
+              "node_id": "1008:1635"
+            },
+            "target": {
+              "component_id": "asset-product-logo",
+              "variant_id": "product-card"
+            },
+            "asset_owner": {
+              "node_id": "1008:1687"
+            }
+          },
+          {
+            "id": "wallet-product-logo-source",
+            "source": {
+              "variant_node_id": "1008:1688",
+              "node_id": "1008:1668"
+            },
+            "target": {
+              "component_id": "asset-product-logo",
+              "variant_id": "product-wallet"
+            },
+            "asset_owner": {
+              "node_id": "1008:1688"
+            }
+          }
+        ]
+      },
       "status": "active",
       "identity": {
         "figma_name": "Asset/Header-Logo-Compact @4x",

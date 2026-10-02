@@ -59005,6 +59005,25 @@
     },
     {
       "id": "asset-status-badge-positive-4x",
+      "evidence_links": {
+        "foundation_values": [],
+        "source_dependencies": [
+          {
+            "id": "default-glyph-source",
+            "source": {
+              "variant_node_id": "491:22074",
+              "node_id": "491:22378"
+            },
+            "target": {
+              "component_id": "icon-lock-password-fill"
+            },
+            "asset_owner": {
+              "node_id": "491:22074",
+              "asset_id": "status-badge-positive"
+            }
+          }
+        ]
+      },
       "status": "active",
       "identity": {
         "figma_name": "Asset/Status-Badge-Positive @4x",
@@ -59575,6 +59594,25 @@
     },
     {
       "id": "asset-status-badge-negative-4x",
+      "evidence_links": {
+        "foundation_values": [],
+        "source_dependencies": [
+          {
+            "id": "default-glyph-source",
+            "source": {
+              "variant_node_id": "491:22178",
+              "node_id": "491:22481"
+            },
+            "target": {
+              "component_id": "icon-user-forbid-fill"
+            },
+            "asset_owner": {
+              "node_id": "491:22178",
+              "asset_id": "status-badge-negative"
+            }
+          }
+        ]
+      },
       "status": "active",
       "identity": {
         "figma_name": "Asset/Status-Badge-Negative @4x",
@@ -62679,6 +62717,67 @@
     },
     {
       "id": "block-personal-data-update",
+      "evidence_links": {
+        "foundation_values": [],
+        "source_dependencies": [
+          {
+            "id": "desktop-status-badge-positive-source",
+            "source": {
+              "variant_node_id": "491:22454",
+              "node_id": "491:22406"
+            },
+            "target": {
+              "component_id": "asset-status-badge-positive-4x"
+            },
+            "asset_owner": {
+              "node_id": "491:22406",
+              "asset_id": "status-badge-positive"
+            }
+          },
+          {
+            "id": "desktop-glyph-source",
+            "source": {
+              "variant_node_id": "491:22454",
+              "node_id": "I491:22406;491:22378"
+            },
+            "target": {
+              "component_id": "icon-lock-password-fill"
+            },
+            "asset_owner": {
+              "node_id": "491:22406",
+              "asset_id": "status-badge-positive"
+            }
+          },
+          {
+            "id": "mobile-status-badge-positive-source",
+            "source": {
+              "variant_node_id": "497:26054",
+              "node_id": "497:25809"
+            },
+            "target": {
+              "component_id": "asset-status-badge-positive-4x"
+            },
+            "asset_owner": {
+              "node_id": "497:25809",
+              "asset_id": "status-badge-positive"
+            }
+          },
+          {
+            "id": "mobile-glyph-source",
+            "source": {
+              "variant_node_id": "497:26054",
+              "node_id": "I497:25809;491:22378"
+            },
+            "target": {
+              "component_id": "icon-lock-password-fill"
+            },
+            "asset_owner": {
+              "node_id": "497:25809",
+              "asset_id": "status-badge-positive"
+            }
+          }
+        ]
+      },
       "status": "active",
       "identity": {
         "figma_name": "Block/Personal-Data-Update",
@@ -105850,6 +105949,67 @@
     },
     {
       "id": "block-receipt-info",
+      "evidence_links": {
+        "foundation_values": [],
+        "source_dependencies": [
+          {
+            "id": "desktop-status-badge-positive-source",
+            "source": {
+              "variant_node_id": "502:24693",
+              "node_id": "502:24255"
+            },
+            "target": {
+              "component_id": "asset-status-badge-positive-4x"
+            },
+            "asset_owner": {
+              "node_id": "502:24255",
+              "asset_id": "status-badge-positive"
+            }
+          },
+          {
+            "id": "desktop-glyph-source",
+            "source": {
+              "variant_node_id": "502:24693",
+              "node_id": "I502:24255;491:22378"
+            },
+            "target": {
+              "component_id": "icon-receipt-fill"
+            },
+            "asset_owner": {
+              "node_id": "502:24255",
+              "asset_id": "status-badge-positive"
+            }
+          },
+          {
+            "id": "mobile-status-badge-positive-source",
+            "source": {
+              "variant_node_id": "502:24694",
+              "node_id": "502:24533"
+            },
+            "target": {
+              "component_id": "asset-status-badge-positive-4x"
+            },
+            "asset_owner": {
+              "node_id": "502:24533",
+              "asset_id": "status-badge-positive"
+            }
+          },
+          {
+            "id": "mobile-glyph-source",
+            "source": {
+              "variant_node_id": "502:24694",
+              "node_id": "I502:24533;491:22378"
+            },
+            "target": {
+              "component_id": "icon-receipt-fill"
+            },
+            "asset_owner": {
+              "node_id": "502:24533",
+              "asset_id": "status-badge-positive"
+            }
+          }
+        ]
+      },
       "status": "active",
       "identity": {
         "figma_name": "Block/Receipt-Info",

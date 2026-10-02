@@ -2985,6 +2985,41 @@
     },
     {
       "id": "email-header",
+      "evidence_links": {
+        "foundation_values": [],
+        "source_dependencies": [
+          {
+            "id": "desktop-header-logo-source",
+            "source": {
+              "variant_node_id": "230:3679",
+              "node_id": "1008:1823"
+            },
+            "target": {
+              "component_id": "asset-header-logo-4x",
+              "variant_id": "product-cupis"
+            },
+            "asset_owner": {
+              "node_id": "1008:1823",
+              "asset_id": "header-logo"
+            }
+          },
+          {
+            "id": "desktop-product-logo-source",
+            "source": {
+              "variant_node_id": "230:3679",
+              "node_id": "I1008:1823;1008:1309"
+            },
+            "target": {
+              "component_id": "asset-product-logo",
+              "variant_id": "product-cupis"
+            },
+            "asset_owner": {
+              "node_id": "1008:1823",
+              "asset_id": "header-logo"
+            }
+          }
+        ]
+      },
       "status": "active",
       "identity": {
         "figma_name": "Email/Header",
