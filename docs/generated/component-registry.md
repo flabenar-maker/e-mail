@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: component-registry -->
-<!-- source-digest: sha256:2d008563dfbf117b91061ba1bf7e2d598153bbe51110a921b6db66f6f04b3c28 -->
+<!-- source-digest: sha256:683f111f49c44305d31b7908e0338b57ce2371878e3d5c7a9de26faf859a6098 -->
 <!-- schema-versions: components=2.2.0, typography=1.0.0, spacing=1.0.0, assets=1.0.0 -->
 # CUPIS component registry
 
@@ -73,6 +73,12 @@
 - Asset usage: `mobile` `/contracts/mobile/root/children/0` → `header-logo` as `direct-image`
 - Asset usage: `desktop` `/contracts/desktop/root/children/0` → `header-logo` as `direct-image`
 
+### Constraints and dependencies
+
+- Evidence link (source): `cupis-product-logo-source` — source variant `1008:1473`, instance `1008:1309` → component `asset-product-logo` (`Asset/Product-Logo`); target variant `product-cupis`; asset owner `1008:1473`; asset `header-logo`
+- Evidence link (source): `card-product-logo-source` — source variant `1008:1474`, instance `1008:1422` → component `asset-product-logo` (`Asset/Product-Logo`); target variant `product-card`; asset owner `1008:1474`; asset `header-logo`
+- Evidence link (source): `wallet-product-logo-source` — source variant `1008:1475`, instance `1008:1455` → component `asset-product-logo` (`Asset/Product-Logo`); target variant `product-wallet`; asset owner `1008:1475`; asset `header-logo`
+
 ### Output contract classification
 
 - Standalone output is defined by the Mobile and Desktop contracts above.
@@ -128,6 +134,9 @@ RENDER: ASSET
 ### Constraints and dependencies
 
 - Constraint `compact-source-is-not-separate-export` — scope `mobile`; kind `asset-export`; severity `critical`; Description critical: Компактный мобильный источник используется только для раскладки и не создаёт отдельный файл письма.
+- Evidence link (source): `cupis-product-logo-source` — source variant `1008:1686`, instance `1008:1347` → component `asset-product-logo` (`Asset/Product-Logo`); target variant `product-cupis`; asset owner `1008:1686`
+- Evidence link (source): `card-product-logo-source` — source variant `1008:1687`, instance `1008:1635` → component `asset-product-logo` (`Asset/Product-Logo`); target variant `product-card`; asset owner `1008:1687`
+- Evidence link (source): `wallet-product-logo-source` — source variant `1008:1688`, instance `1008:1668` → component `asset-product-logo` (`Asset/Product-Logo`); target variant `product-wallet`; asset owner `1008:1688`
 
 ### Output contract classification
 
@@ -244,6 +253,15 @@ CRITICAL
 ### Constraints and dependencies
 
 - Constraint `slot-does-not-create-visual-geometry` — scope `all`; kind `dependency`; severity `critical`; Description critical: Слот задаёт только состав и порядок верхнеуровневых компонентов и не создаёт собственные padding, gap, background или визуальные слои.
+- Evidence link (foundation): `mobile-shell-background` — source variant `1102:6`, node `1102:6`, field `/fills/0/color` → foundation `rendering-foundation` `/shell/background_color`; comparison `opaque-solid-color`
+- Evidence link (foundation): `mobile-slot-background` — source variant `1102:6`, node `1103:7`, field `/fills/0/color` → foundation `rendering-foundation` `/shell/background_color`; comparison `opaque-solid-color`
+- Evidence link (foundation): `mobile-shell-left-inset` — source variant `1102:6`, node `1102:6`, field `/layout/padding/left` → foundation `rendering-foundation` `/shell/horizontal_inset_px`; comparison `pixel-number`
+- Evidence link (foundation): `mobile-shell-right-inset` — source variant `1102:6`, node `1102:6`, field `/layout/padding/right` → foundation `rendering-foundation` `/shell/horizontal_inset_px`; comparison `pixel-number`
+- Evidence link (foundation): `desktop-shell-background` — source variant `1102:7`, node `1102:7`, field `/fills/0/color` → foundation `rendering-foundation` `/shell/background_color`; comparison `opaque-solid-color`
+- Evidence link (foundation): `desktop-slot-background` — source variant `1102:7`, node `1103:8`, field `/fills/0/color` → foundation `rendering-foundation` `/shell/background_color`; comparison `opaque-solid-color`
+- Evidence link (foundation): `desktop-shell-left-inset` — source variant `1102:7`, node `1102:7`, field `/layout/padding/left` → foundation `rendering-foundation` `/shell/horizontal_inset_px`; comparison `pixel-number`
+- Evidence link (foundation): `desktop-shell-right-inset` — source variant `1102:7`, node `1102:7`, field `/layout/padding/right` → foundation `rendering-foundation` `/shell/horizontal_inset_px`; comparison `pixel-number`
+- Evidence link (foundation): `desktop-shell-width` — source variant `1102:7`, node `1102:7`, field `/reference_dimensions/width` → foundation `rendering-foundation` `/shell/max_width_px`; comparison `pixel-number`
 
 ### Output contract classification
 
@@ -7485,6 +7503,11 @@ RENDER: HTML
 - Asset usage: `mobile` `/contracts/mobile/root/children/0` → `header-logo` as `direct-image`
 - Asset usage: `desktop` `/contracts/desktop/root/children/0` → `header-logo` as `direct-image`
 
+### Constraints and dependencies
+
+- Evidence link (source): `desktop-header-logo-source` — source variant `230:3679`, instance `1008:1823` → component `asset-header-logo-4x` (`Asset/Header-Logo @4x`); target variant `product-cupis`; asset owner `1008:1823`; asset `header-logo`
+- Evidence link (source): `desktop-product-logo-source` — source variant `230:3679`, instance `I1008:1823;1008:1309` → component `asset-product-logo` (`Asset/Product-Logo`); target variant `product-cupis`; asset owner `1008:1823`; asset `header-logo`
+
 ### Output contract classification
 
 - Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
@@ -9003,6 +9026,10 @@ RENDER: ASSET
 - Asset usage: `mobile` `/contracts/mobile/root` → `status-badge-negative` as `direct-image`
 - Asset usage: `desktop` `/contracts/desktop/root` → `status-badge-negative` as `direct-image`
 
+### Constraints and dependencies
+
+- Evidence link (source): `default-glyph-source` — source variant `491:22178`, instance `491:22481` → component `icon-user-forbid-fill` (`Icon/User-Forbid-Fill`); asset owner `491:22178`; asset `status-badge-negative`
+
 ### Output contract classification
 
 - Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
@@ -9082,6 +9109,10 @@ RENDER: ASSET
   - Background: own fill `preserve`; artificial matte `forbid`
 - Asset usage: `mobile` `/contracts/mobile/root` → `status-badge-positive` as `direct-image`
 - Asset usage: `desktop` `/contracts/desktop/root` → `status-badge-positive` as `direct-image`
+
+### Constraints and dependencies
+
+- Evidence link (source): `default-glyph-source` — source variant `491:22074`, instance `491:22378` → component `icon-lock-password-fill` (`Icon/Lock-Password-Fill`); asset owner `491:22074`; asset `status-badge-positive`
 
 ### Output contract classification
 
@@ -13146,6 +13177,10 @@ CRITICAL
 - Constraint `operation-description-toggles-entire-details` — scope `all`; kind `property-behavior`; severity `critical`; Description critical: Show Operation Description управляет видимостью всего вложенного инстанса Details/Suspicious-Operation, а не отдельной строки его текста.
 - Dependency: `/contracts/mobile/root/children/0/children/2/children/1/component_id` → component `details-suspicious-operation` (`Details/Suspicious-Operation`)
 - Dependency: `/contracts/desktop/root/children/0/children/2/children/1/component_id` → component `details-suspicious-operation` (`Details/Suspicious-Operation`)
+- Evidence link (source): `desktop-status-badge-positive-source` — source variant `491:22454`, instance `491:22406` → component `asset-status-badge-positive-4x` (`Asset/Status-Badge-Positive @4x`); asset owner `491:22406`; asset `status-badge-positive`
+- Evidence link (source): `desktop-glyph-source` — source variant `491:22454`, instance `I491:22406;491:22378` → component `icon-lock-password-fill` (`Icon/Lock-Password-Fill`); asset owner `491:22406`; asset `status-badge-positive`
+- Evidence link (source): `mobile-status-badge-positive-source` — source variant `497:26054`, instance `497:25809` → component `asset-status-badge-positive-4x` (`Asset/Status-Badge-Positive @4x`); asset owner `497:25809`; asset `status-badge-positive`
+- Evidence link (source): `mobile-glyph-source` — source variant `497:26054`, instance `I497:25809;491:22378` → component `icon-lock-password-fill` (`Icon/Lock-Password-Fill`); asset owner `497:25809`; asset `status-badge-positive`
 
 ### Output contract classification
 
@@ -13496,6 +13531,10 @@ CRITICAL
 - Constraint `split-corner-radii` — scope `all`; kind `layout`; severity `critical`; Description critical: Нет внешнего белого card: status-area скруглена только сверху, receipt-area только снизу; величина видимых углов 22px Mobile / 26px Desktop, промежуточные углы 0px.
 - Dependency: `/contracts/mobile/root/children/2/children/0/component_id` → component `details-receipt` (`Details/Receipt`)
 - Dependency: `/contracts/desktop/root/children/2/children/0/component_id` → component `details-receipt` (`Details/Receipt`)
+- Evidence link (source): `desktop-status-badge-positive-source` — source variant `502:24693`, instance `502:24255` → component `asset-status-badge-positive-4x` (`Asset/Status-Badge-Positive @4x`); asset owner `502:24255`; asset `status-badge-positive`
+- Evidence link (source): `desktop-glyph-source` — source variant `502:24693`, instance `I502:24255;491:22378` → component `icon-receipt-fill` (`Icon/Receipt-Fill`); asset owner `502:24255`; asset `status-badge-positive`
+- Evidence link (source): `mobile-status-badge-positive-source` — source variant `502:24694`, instance `502:24533` → component `asset-status-badge-positive-4x` (`Asset/Status-Badge-Positive @4x`); asset owner `502:24533`; asset `status-badge-positive`
+- Evidence link (source): `mobile-glyph-source` — source variant `502:24694`, instance `I502:24533;491:22378` → component `icon-receipt-fill` (`Icon/Receipt-Fill`); asset owner `502:24533`; asset `status-badge-positive`
 
 ### Output contract classification
 
