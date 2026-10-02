@@ -270,16 +270,18 @@ test("comparison reports one exact drift and otherwise ignores no content", () =
   assert.equal(errors[0].path, "/description");
 });
 
-test("evidence metadata never changes compact descriptions", async () => {
-  const record = structuredClone(await byId("email-template"));
-  const before = renderFigmaComponentDescription(record);
-  record.evidence_links = [{ id: "synthetic", kind: "foundation", source_variant: "Mobile", node: "1:2", field: "padding" }];
-  assert.equal(renderFigmaComponentDescription(record), before);
-});
 
-test("evidence metadata never changes compact descriptions", async () => {
-  const record = structuredClone(await byId("email-template"));
-  const before = renderFigmaComponentDescription(record);
-  record.evidence_links = { foundation_values: [], source_dependencies: [] };
-  assert.equal(renderFigmaComponentDescription(record), before);
+test("evidence metadata is excluded from every compact Description", async () => {
+  const registries = await loadComponentRegistries({ repoRoot });
+  const records = Object.values(registries).flatMap(({ components }) => components);
+  assert.equal(records.length, 61);
+  for (const source of records) {
+    const before = renderFigmaComponentDescription(source);
+    const copy = structuredClone(source);
+    copy.evidence_links = {
+      foundation_values: [{ id: "synthetic-foundation", source: { variant_node_id: "1:1", node_id: "1:1", field_path: "/fills/0/color" }, target: { source_id: "rendering-foundation", pointer: "/shell/background_color" }, comparison: "opaque-solid-color" }],
+      source_dependencies: [{ id: "synthetic-source", source: { variant_node_id: "1:1", node_id: "1:2" }, target: { component_id: "asset-product-logo" }, asset_owner: { node_id: "1:2" } }],
+    };
+    assert.equal(renderFigmaComponentDescription(copy), before, source.id);
+  }
 });

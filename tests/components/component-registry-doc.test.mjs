@@ -211,23 +211,33 @@ test("exported traversal preserves viewport and tree order", async () => {
   ]);
 });
 
-test("evidence links are projected only in dependencies with canonical source and foundation forms", async () => {
-  const { index } = await loadContext();
-  const source = structuredClone(record(index, "email-template"));
-  source.evidence_links = [
-    { id: "template-padding", kind: "foundation", source_variant: "Mobile", node: "1:2", field: "padding", foundation: { source_id: "spacing", pointer: "/roles/outer-flow" }, comparison: "exact" },
-    { id: "template-logo", kind: "source", source_variant: "Desktop", instance: "header", component_id: "asset-header-logo-4x", component_name: "Asset/Header-Logo @4x", target_variant: "Desktop", asset_owner: "email-template", asset: "header-logo" },
-  ];
-  const output = renderComponentRegistrySection(source, index);
-  assert.match(output, /- Evidence link \(foundation\): `template-padding` — source variant `Mobile`, node `1:2`, field `padding` → foundation `spacing` `\/roles\/outer-flow`; comparison `exact`/u);
-  assert.match(output, /- Evidence link \(source\):/u);
-});
 
-test("evidence links are projected only in dependencies with canonical source and foundation forms", async () => {
+test("evidence links activate only the existing dependencies section and render canonical forms", async () => {
   const { index } = await loadContext();
+  const empty = structuredClone(record(index, "email-template"));
+  const before = listComponentDocumentationSections(empty);
+  empty.evidence_links = { foundation_values: [], source_dependencies: [] };
+  assert.deepEqual(listComponentDocumentationSections(empty), before);
+
   const source = structuredClone(record(index, "email-template"));
-  source.evidence_links = { foundation_values: [{ id: "template-padding", source: { variant_node_id: "1102:6", node_id: "1102:6", field_path: "/layout/padding/left" }, target: { source_id: "rendering-foundation", pointer: "/shell/horizontal_inset_px" }, comparison: "pixel-number" }], source_dependencies: [{ id: "template-logo", source: { variant_node_id: "1102:7", node_id: "1103:8" }, target: { component_id: "asset-header-logo-4x" }, asset_owner: { node_id: "1102:7", asset_id: "header-logo" } }] };
+  source.evidence_links = {
+    foundation_values: [{
+      id: "mobile-shell-left-inset",
+      source: { variant_node_id: "1102:6", node_id: "1102:6", field_path: "/layout/padding/left" },
+      target: { source_id: "rendering-foundation", pointer: "/shell/horizontal_inset_px" },
+      comparison: "pixel-number",
+    }],
+    source_dependencies: [{
+      id: "desktop-header-logo-source",
+      source: { variant_node_id: "230:3679", node_id: "1008:1823" },
+      target: { component_id: "asset-header-logo-4x", variant_id: "product-cupis" },
+      asset_owner: { node_id: "1008:1823", asset_id: "header-logo" },
+    }],
+  };
+  const sections = listComponentDocumentationSections(source);
+  assert.deepEqual(sections.map(({ id }) => id), [...before.map(({ id }) => id), "constraints-and-dependencies"]);
   const output = renderComponentRegistrySection(source, index);
-  assert.match(output, /- Evidence link \(foundation\): `template-padding` — source variant `Mobile`, node `1:2`, field `padding` → foundation `spacing` `\/roles\/outer-flow`; comparison `exact`/u);
-  assert.match(output, /- Evidence link \(source\):/u);
+  assert.match(output, /- Evidence link \(foundation\): \`mobile-shell-left-inset\` — source variant \`1102:6\`, node \`1102:6\`, field \`\/layout\/padding\/left\` → foundation \`rendering-foundation\` \`\/shell\/horizontal_inset_px\`; comparison \`pixel-number\`/u);
+  assert.match(output, /- Evidence link \(source\): \`desktop-header-logo-source\` — source variant \`230:3679\`, instance \`1008:1823\` → component \`asset-header-logo-4x\` \(\`Asset\/Header-Logo @4x\`\); target variant \`product-cupis\`; asset owner \`1008:1823\`; asset \`header-logo\`/u);
+  assert.doesNotMatch(output, /Evidence link.*(?:#(?:[0-9A-F]{3}|[0-9A-F]{6})|verified)/iu);
 });
