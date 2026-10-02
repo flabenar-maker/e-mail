@@ -64,6 +64,7 @@ test("optional typed evidence metadata accepts exact compound instance IDs witho
 for (const [label, change, expectedCode] of [
   ["duplicate link ID across kinds", r => {r[0].evidence_links.source_dependencies[0].id = "desktop-width";}, "EVIDENCE_LINK_ID_DUPLICATE"],
   ["foreign source variant", r => {r[0].evidence_links.foundation_values[0].source.variant_node_id = "99:1";}, "EVIDENCE_SOURCE_VARIANT_INVALID"],
+  ["node ID with trailing line break", r => {r[0].evidence_links.foundation_values[0].source.node_id = "10:2\n";}, "EVIDENCE_LINK_SHAPE_INVALID"],
   ["unknown target component", r => {r[0].evidence_links.source_dependencies[0].target.component_id = "absent";}, "EVIDENCE_TARGET_COMPONENT_UNKNOWN"],
   ["variant on standalone target", r => {r[0].evidence_links.source_dependencies[0].target.variant_id = "desktop";}, "EVIDENCE_TARGET_VARIANT_INVALID"],
   ["missing target variant", r => {r[1].identity.node_kind = "component-set"; r[1].variants = [{id: "product", node_id: "20:2", axes: []}];}, "EVIDENCE_TARGET_VARIANT_INVALID"],
@@ -106,6 +107,9 @@ for (const [label, change] of [
   ["unknown owner field", l => {l.source_dependencies[0].asset_owner.filename = "logo.png";}],
   ["malformed variant ID", l => {l.foundation_values[0].source.variant_node_id = "I10:2;20:1";}],
   ["malformed node ID", l => {l.foundation_values[0].source.node_id = "10-2";}],
+  ["node ID with trailing line break", l => {l.foundation_values[0].source.node_id = "10:2\n";}],
+  ["link ID with trailing line break", l => {l.foundation_values[0].id = "desktop-width\n";}],
+  ["owner ID with trailing line break", l => {l.source_dependencies[0].asset_owner.node_id = "10:4\n";}],
   ["incomplete compound owner", l => {l.source_dependencies[0].asset_owner.node_id = "I10:4;";}],
   ["non-kebab link ID", l => {l.foundation_values[0].id = "Desktop Width";}],
   ["unknown comparison", l => {l.foundation_values[0].comparison = "approximately";}],
@@ -164,6 +168,20 @@ test("no links require no foundation documents; invalid references cannot produc
   const result = resolve(invalid);
   assert.ok(result.issues.some(i => i.code === "EVIDENCE_TARGET_COMPONENT_UNKNOWN"));
   assert.equal(result.targets.size, 0);
+});
+
+test("offline checks preserve optional owner metadata and return deterministic independent results", () => {
+  const items = records();
+  delete items[0].evidence_links.source_dependencies[0].asset_owner.asset_id;
+  assert.deepEqual(validate(items), []);
+  const first = resolve(items); const second = resolve(items);
+  assert.deepEqual([...first.targets], [...second.targets]);
+  first.targets.get("test-consumer/artwork-source").source.node_id = "99:99";
+  first.targets.get("test-consumer/artwork-source").asset_owner.node_id = "99:99";
+  assert.equal(items[0].evidence_links.source_dependencies[0].source.node_id, "I10:4;20:2;20:3");
+  assert.equal(second.targets.get("test-consumer/artwork-source").asset_owner.node_id, "10:4");
+  items[0].evidence_links.source_dependencies[0].target.component_id = "absent";
+  assert.deepEqual(validate(items), validate(items));
 });
 
 test("evidence semantic diagnostics are integrated without changing HTML dependency collection", () => {
