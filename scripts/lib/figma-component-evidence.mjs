@@ -298,6 +298,7 @@ function consumerArtworkNode(record, asset, viewport, variantId, entries) {
 function artworkScope(record, live) {
   const scope = inspectArtworkTree(record, live);
   scope.obligations = [];
+  scope.boundaries = [];
   if (!scope.identityValid) return scope;
   const assets = record.asset_contracts;
   const sourceOnly = ["asset", "icon"].includes(record.identity.semantic_role) &&
@@ -335,6 +336,7 @@ function artworkScope(record, live) {
       }
       boundaries.push({ node, asset_id: asset.id });
     }
+    scope.boundaries.push(...boundaries.map(boundary => ({ ...boundary, variant_node_id: variantId })));
     for (const entry of entries.filter(entry => entry.node.node_type === "INSTANCE")) {
       const owners = boundaries.filter(boundary => entry.node.node_id === boundary.node.node_id || entry.ancestors.some(ancestor => ancestor.node_id === boundary.node.node_id));
       if (owners.length === 0) continue; // HTML nested components outside artwork.
@@ -417,15 +419,201 @@ export function auditComponentEvidenceLinks(input = {}) {
   return record?.identity?.semantic_role === "template" ? auditTemplateEvidence(input) : auditArtworkEvidence(input);
 }
 
+function nestedReferences(record, viewport) {
+  const result = [];
+  function walk(element, path) {
+    if (!element) return;
+    if (element.render_mode === "nested-component") result.push({ element, path });
+    for (const [index, child] of (element.children ?? []).entries()) walk(child, `${path}/children/${index}`);
+  }
+  for (const value of viewport ? [viewport] : ["mobile", "desktop"]) walk(record.contracts?.[value]?.root, `/contracts/${value}/root`);
+  return result;
+}
+
+// Resolve nested HTML placement independently of the graphic's own export
+// selector. Width/height are native facts in THIS owner's current packet, not
+// dimensions borrowed from the child master or its exported file.
+function nestedPlacement(record, reference, variantId, tree) {
+  const sizes = (reference.element.facts ?? []).map((fact, index) => ({ fact, index })).filter(({ fact }) => fact.id === "reference-size");
+  if (sizes.length !== 1) return null;
+  const { fact, index } = sizes[0], size = fact.value, id = fact.provenance?.node_id;
+  if (fact.provenance?.kind !== "figma-literal" || size?.type !== "dimensions" || size.unit !== "px" ||
+      !finite(size.width) || size.width <= 0 || !finite(size.height) || size.height <= 0) return null;
+  const entry = tree.nodes.get(id);
+  if (!entry || entry.variantId !== variantId || entry.ancestors.length === 0 || entry.node.node_type !== "INSTANCE" || entry.node.reference_dimensions?.unit !== "px") return null;
+  for (const dimension of ["width", "height"]) {
+    const path = `${reference.path}/facts/${index}/value/${dimension}`;
+    const links = (record.contracts.figma_fact_links ?? []).filter(link => link.contract_path === path);
+    if (links.length !== 1 || links[0].variant_node_id !== variantId || links[0].node_id !== id ||
+        links[0].source_path !== `/reference_dimensions/${dimension}` || links[0].transform !== "identity") return null;
+    const actual = entry.node.reference_dimensions[dimension];
+    if (!finite(actual) || (Math.abs(actual - Math.round(actual)) < 0.0001 ? Math.round(actual) : actual) !== size[dimension]) return null;
+  }
+  return entry.node;
+}
+
+// A full compound ID is constructed from the proven actual instance and the
+// exact native descendant identity, then looked up in the complete parent tree.
+// No lookup by a stripped suffix, label, position or matching geometry.
+function projectedNodeId(nativeId, nativeRoot, actualRoot) {
+  if (nativeId === nativeRoot) return actualRoot;
+  const valid = /^(?:[0-9]+:[0-9]+|I[0-9]+:[0-9]+(?:;[0-9]+:[0-9]+)+)$/u;
+  if (!valid.test(nativeId) || !valid.test(actualRoot)) return null;
+  return "I" + actualRoot.replace(/^I/u, "") + ";" + nativeId.replace(/^I/u, "");
+}
+
+// Qualified, ephemeral proof over existing contracts and fresh packets. The
+// parent never acquires the child's assets. This report does NOT waive any
+// scalar fact, capture diagnostic or the source-only graphic's own audit.
+export function auditNestedArtworkEvidence({ recordId, model, session } = {}) {
+  const issues = [], boundaries = [], dependencies = [], receipts = new Set();
+  const report = { ok: false, component_id: recordId, canonical_git_sha: model?.canonical_sha ?? null,
+    session_started_at: session?.started_at ?? null, receipt_ids: [], boundaries, dependencies, issues };
+  const fail = (code, path, message, extra = {}) => issues.push(issue(code, path, message, extra));
+  const owners = model?.records?.filter(record => record.id === recordId);
+  if (owners?.length !== 1) { fail("EVIDENCE_RECORD_ID_AMBIGUOUS", "/records", "Exactly one canonical parent is required."); return report; }
+  const byId = new Map(), duplicates = new Set();
+  for (const record of model.records) {
+    if (byId.has(record.id)) duplicates.add(record.id);
+    else byId.set(record.id, record);
+  }
+  const owner = owners[0], trees = new Map(), scopes = new Map(), reachable = new Map();
+  function hasArtwork(id, visiting = new Set()) {
+    if (visiting.has(id)) { fail("EVIDENCE_DEPENDENCY_CYCLE", "/contracts", "Nested component dependency cycle.", { component_id: id }); return false; }
+    if (reachable.has(id)) return reachable.get(id);
+    const record = byId.get(id);
+    if (!record || duplicates.has(id)) { fail("EVIDENCE_NESTED_TARGET_UNKNOWN", "/contracts", "Nested component must name one registered canonical record.", { component_id: id }); return false; }
+    const path = new Set([...visiting, id]);
+    const own = (record.asset_contracts?.length ?? 0) > 0 || ["asset", "icon"].includes(record.identity?.semantic_role);
+    // Do not short-circuit the graph: an unknown/cyclic nested child is still a
+    // diagnostic even if this component already has its own graphic.
+    const children = nestedReferences(record).map(reference => hasArtwork(reference.element.component_id, path));
+    const result = own || children.some(Boolean); reachable.set(id, result); return result;
+  }
+  function treeFor(id) {
+    if (!trees.has(id)) {
+      const record = byId.get(id);
+      if (!record || duplicates.has(id)) { fail("EVIDENCE_NESTED_TARGET_UNKNOWN", "/records", "A unique registered source is required.", { component_id: id }); return null; }
+      const capture = selectCapture(id, model, session, issues);
+      if (!capture) { trees.set(id, null); return null; }
+      receipts.add(capture.receipt_id);
+      const tree = inspectArtworkTree(record, capture.packet); issues.push(...tree.issues);
+      trees.set(id, { record, capture, tree });
+    }
+    return trees.get(id);
+  }
+  function scopeFor(id) {
+    if (!scopes.has(id)) {
+      const current = treeFor(id);
+      if (!current || !current.tree.identityValid) { scopes.set(id, null); return null; }
+      const scope = (current.record.asset_contracts.length || ["asset", "icon"].includes(current.record.identity.semantic_role))
+        ? artworkScope(current.record, current.capture.packet) : { ...current.tree, boundaries: [], obligations: [] };
+      // treeFor already retained original diagnostics; scope adds only its
+      // selector/ownership diagnostics, not duplicate raw capture errors.
+      for (const diagnostic of scope.issues) if (!current.tree.issues.some(existing => isDeepStrictEqual(existing, diagnostic))) issues.push(diagnostic);
+      if (scope.issues.some(diagnostic => ["EVIDENCE_ASSET_BOUNDARY_UNVERIFIED", "EVIDENCE_SCOPE_AMBIGUOUS"].includes(diagnostic.code))) {
+        fail("EVIDENCE_NESTED_SELECTOR_UNVERIFIED", `/records/${id}/asset_contracts`, "Child export scope is not unambiguous.");
+      }
+      scopes.set(id, scope);
+    }
+    return scopes.get(id);
+  }
+  const relevant = nestedReferences(owner).filter(reference => hasArtwork(reference.element.component_id));
+  if (!relevant.length) { report.ok = issues.length === 0; orderedIssues(issues); return report; }
+  const parent = treeFor(recordId);
+  if (!parent || !parent.tree.identityValid) return report;
+  const resolved = resolveEvidenceTargets({ records: model.records, manifest: model.manifest, sourceDocuments: model.source_documents });
+  issues.push(...resolved.issues);
+  function actualNode(nativeNode, context, actualVariantId) {
+    const id = context ? projectedNodeId(nativeNode.node_id, context.nativeRoot, context.actualRoot) : nativeNode.node_id;
+    const entry = id && parent.tree.nodes.get(id);
+    if (!entry || entry.variantId !== actualVariantId || (context && entry.node.node_id !== context.actualRoot &&
+        !entry.ancestors.some(ancestor => ancestor.node_id === context.actualRoot))) return null;
+    return entry;
+  }
+  function visit(currentId, nativeVariantId, viewport, context, actualVariantId, trail) {
+    const current = treeFor(currentId);
+    if (!current || !current.tree.identityValid) return;
+    for (const reference of nestedReferences(current.record, viewport)) {
+      const targetId = reference.element.component_id;
+      if (!hasArtwork(targetId)) continue;
+      if (trail.has(targetId)) { fail("EVIDENCE_DEPENDENCY_CYCLE", reference.path, "Nested component cycle."); continue; }
+      const placement = nestedPlacement(current.record, reference, nativeVariantId, current.tree);
+      if (!placement) { fail("EVIDENCE_NESTED_GEOMETRY_UNVERIFIED", reference.path, "Exact owned placement size/provenance and both identity mappings are required."); continue; }
+      const actual = actualNode(placement, context, actualVariantId);
+      if (!actual || actual.node.node_type !== "INSTANCE") { fail("EVIDENCE_NESTED_ANCESTRY_UNVERIFIED", reference.path, "Actual placement must retain its complete compound identity and ancestry."); continue; }
+      const target = byId.get(targetId), viewportFacts = (reference.element.facts ?? []).filter(fact => fact.id === "instance-viewport");
+      const targetViewport = viewportFacts.length ? viewportFacts.length === 1 && viewportFacts[0].value?.type === "keyword" ? viewportFacts[0].value.value : null : viewport;
+      const variants = target.variants.filter(variant => variant.axes?.some(axis => axis.name === "Viewport" && axis.value.toLowerCase() === targetViewport));
+      if (!["mobile", "desktop"].includes(targetViewport) || variants.length !== 1 ||
+          placement.main_component_id !== variants[0].node_id || actual.node.main_component_id !== variants[0].node_id || current.record.figma.file_key !== target.figma.file_key) {
+        fail("EVIDENCE_NESTED_PLACEMENT_UNVERIFIED", reference.path, "Current placement main, viewport and exact canonical child variant must agree."); continue;
+      }
+      const targetVariant = variants[0].node_id, child = scopeFor(targetId);
+      if (!child || !child.identityValid || !child.variants.has(targetVariant)) continue;
+      const nextContext = { nativeRoot: targetVariant, actualRoot: actual.node.node_id };
+      const childBoundaries = (child.boundaries ?? []).filter(boundary => boundary.variant_node_id === targetVariant);
+      for (const boundary of childBoundaries) {
+        const entry = actualNode(boundary.node, nextContext, actualVariantId);
+        const expectedType = boundary.node.node_id === targetVariant ? "INSTANCE" : boundary.node.node_type;
+        if (!entry || entry.node.node_type !== expectedType) { fail("EVIDENCE_NESTED_ANCESTRY_UNVERIFIED", reference.path, "Exact child-owned artwork boundary is missing from the current consumer."); continue; }
+        boundaries.push({ owner_component_id: targetId, ...(boundary.asset_id === undefined ? {} : { asset_id: boundary.asset_id }),
+          source_variant_node_id: targetVariant, source_node_id: boundary.node.node_id,
+          consumer_variant_node_id: actualVariantId, consumer_instance_node_id: actual.node.node_id, consumer_node_id: entry.node.node_id, contract_path: reference.path });
+        for (const obligation of child.obligations.filter(value => value.source.variant_node_id === targetVariant && value.asset_owner.node_id === boundary.node.node_id)) {
+          const native = child.nodes.get(obligation.source.node_id)?.node, sourceEntry = native && actualNode(native, nextContext, actualVariantId);
+          const links = (target.evidence_links?.source_dependencies ?? []).filter(link => link.source.variant_node_id === targetVariant && link.source.node_id === obligation.source.node_id);
+          const link = links.length === 1 ? links[0] : null;
+          const item = { owner_component_id: targetId, link_id: link?.id ?? null,
+            source: { variant_node_id: actualVariantId, node_id: projectedNodeId(obligation.source.node_id, targetVariant, actual.node.node_id), field_path: "/main_component_id" },
+            asset_owner: { component_id: targetId, node_id: entry.node.node_id, ...(boundary.asset_id === undefined ? {} : { asset_id: boundary.asset_id }) },
+            target: link ? { ...link.target } : {}, status: "unverified", reason: "EVIDENCE_REQUIRED_LINK_MISSING" };
+          if (!sourceEntry || sourceEntry.node.node_type !== "INSTANCE" || !sourceEntry.ancestors.some(ancestor => ancestor.node_id === entry.node.node_id) && sourceEntry.node.node_id !== entry.node.node_id) item.reason = "EVIDENCE_NESTED_ANCESTRY_UNVERIFIED";
+          else if (!link) {
+            if (!model.records.some(record => record.figma.node_id === sourceEntry.node.main_component_id || record.variants.some(variant => variant.node_id === sourceEntry.node.main_component_id))) item.reason = "EVIDENCE_NESTED_TARGET_UNKNOWN";
+          } else if (link.asset_owner.node_id !== obligation.asset_owner.node_id || link.asset_owner.asset_id !== obligation.asset_owner.asset_id) item.reason = "EVIDENCE_ASSET_OWNER_MISMATCH";
+          else if (!byId.has(link.target.component_id)) item.reason = "EVIDENCE_NESTED_TARGET_UNKNOWN";
+          else {
+            const canonical = resolved.targets.get(`${targetId}/${link.id}`), graphic = treeFor(link.target.component_id);
+            if (canonical) { item.target = { ...canonical.target }; item.expected = canonical.target.node_id; }
+            if (!canonical || resolved.issues.length) item.reason = "EVIDENCE_INPUT_UNVERIFIED";
+            else if (!graphic?.tree.identityValid || !graphic.tree.variants.has(canonical.target.node_id)) item.reason = "EVIDENCE_TARGET_IDENTITY_UNVERIFIED";
+            else {
+              item.actual = sourceEntry.node.main_component_id;
+              item.status = item.actual === item.expected ? "verified" : "mismatch";
+              item.reason = item.status === "verified" ? "EVIDENCE_MAIN_COMPONENT_MATCH" : "EVIDENCE_NESTED_PLACEMENT_UNVERIFIED";
+            }
+          }
+          dependencies.push(item);
+          if (item.status !== "verified") fail(item.reason, reference.path, "Actual nested artwork dependency remains unverified.", { component_id: targetId, source: item.source });
+        }
+      }
+      visit(targetId, targetVariant, targetViewport, nextContext, actualVariantId, new Set([...trail, targetId]));
+    }
+  }
+  for (const variant of owner.variants) {
+    const viewport = variant.axes?.find(axis => axis.name === "Viewport")?.value.toLowerCase();
+    if (!["mobile", "desktop"].includes(viewport)) { fail("EVIDENCE_SCOPE_AMBIGUOUS", "/variants", "Nested HTML proof requires one exact viewport variant."); continue; }
+    visit(recordId, variant.node_id, viewport, null, variant.node_id, new Set([recordId]));
+  }
+  report.receipt_ids = [...receipts].sort(order); orderedIssues(issues);
+  report.ok = issues.length === 0 && dependencies.every(item => item.status === "verified");
+  return report;
+}
+
 // Orchestration only: neither link proof nor successful identity verification
 // waives a scalar fact. Keep the old report intact for comparison and handoff.
 export function auditFigmaComponentEvidence({ record, live, model, session, derivedEvidence = [] } = {}) {
   const facts = auditFigmaContractFacts({ record, live, derivedEvidence });
   let evidence = { ok: false, component_id: record?.id ?? null, canonical_git_sha: null,
     session_started_at: null, receipt_ids: [], results: [], issues: [], required_sources: [], verified_sources: [] };
-  const finish = () => ({ ok: facts.ok && evidence.ok, facts, evidence_links: evidence,
-    issues: [...facts.issues, ...evidence.issues] });
+  let nested = { ok: true, component_id: record?.id ?? null, canonical_git_sha: model?.canonical_sha ?? null, session_started_at: session?.started_at ?? null, receipt_ids: [], boundaries: [], dependencies: [], issues: [] };
+  const finish = () => ({ ok: facts.ok && evidence.ok && nested.ok, facts, evidence_links: evidence, nested_artwork: nested,
+    issues: [...facts.issues, ...evidence.issues, ...nested.issues] });
   if (!model || !session) {
+    if (nestedReferences(record ?? {}).length) {
+      nested.ok = false; nested.issues.push(issue("EVIDENCE_SESSION_REQUIRED", "/session", "Nested artwork needs canonical sources and a fresh complete MCP session."));
+    }
     const scope = collectRequiredComponentEvidence({ record, live });
     evidence.required_sources = scope.required_sources;
     evidence.issues.push(...scope.issues);
@@ -453,5 +641,6 @@ export function auditFigmaComponentEvidence({ record, live, model, session, deri
     evidence.receipt_ids = [capture.receipt_id];
     evidence.ok = true;
   } else evidence = auditComponentEvidenceLinks({ recordId: record.id, model, session });
+  if (nestedReferences(record).length) nested = auditNestedArtworkEvidence({ recordId: record.id, model, session });
   return finish();
 }
