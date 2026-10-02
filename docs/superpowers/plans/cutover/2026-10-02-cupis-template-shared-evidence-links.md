@@ -10,7 +10,7 @@
 
 **Spec:** [Согласованная спецификация T1/S1](../../specs/2026-10-02-cupis-template-shared-evidence-links-design.md). Владелец архитектуры — [master-spec](../../specs/2026-08-24-cupis-structured-email-system-design.md); родитель и общий журнал — [P2 cutover plan](../2026-10-01-cupis-final-maintenance-cutover.md). [Roadmap](../2026-08-25-cupis-migration-roadmap.md) остаётся единственной глобальной очередью.
 
-Дата: 02.10.2026. Письменная спецификация одобрена пользователем. Этот implementation plan ожидает review; код T1/S1 не начат. База: `main@618d124df0a664c84d23a724ba50ef2b324e9b97`, candidate `c076b4e1f365d3c59f115590f35ef65485f7a9bf`, draft PR #110 / `codex/maintenance-cutover-p2-evidence`. Это ограниченный ремонт внутри P2, не новый этап и не приёмка P2 целиком.
+Дата: 02.10.2026. Письменная спецификация одобрена пользователем. Implementation plan подтверждён пользователем; задача 1 выполнена в кандидате PR #110, задачи 2–7 ещё не начаты. База: `main@618d124df0a664c84d23a724ba50ef2b324e9b97`, candidate `c076b4e1f365d3c59f115590f35ef65485f7a9bf`, draft PR #110 / `codex/maintenance-cutover-p2-evidence`. Это ограниченный ремонт внутри P2, не новый этап и не приёмка P2 целиком.
 
 ## Global Constraints
 
@@ -68,7 +68,7 @@
 
 **Interfaces:** Produces `validateEvidenceLinkReferences`, `resolveEvidenceTargets`; остальные exports из общей таблицы ещё не используются. `validateComponentRegistrySemantics` вызывает первую функцию; `collectComponentReferences` и HTML dependency closure не менять.
 
-- [ ] Написать RED cases с точными assertions:
+- [x] Написать RED cases с точными assertions:
 
 ```js
 assert.deepEqual(validateEvidenceLinkReferences({records: validRecords}), []);
@@ -80,13 +80,17 @@ assert.ok(codes(withCycle).includes('EVIDENCE_DEPENDENCY_CYCLE'));
 ```
 
   `codes` — локальный helper, вызывающий `validateEvidenceLinkReferences` над указанным fixture. Дополнительно schema cases: оба массива обязательны, поля закрыты, link IDs уникальны между массивами; `source.variant_node_id` обычный Figma ID, node/owner могут быть полными `I...;...`; malformed ID, неизвестный comparison, wildcard, `expected_value` и произвольный file path отвергаются. Роль source/target определяется canonical записью, не названием.
-- [ ] Terra: `node --test tests/foundation/component-evidence-links.test.mjs` → RED на отсутствии нового API/поля; не считать ошибку fixture доказательством дефекта.
-- [ ] Реализовать optional top-level раздел по spec. Добавление поля — minor schema change: `2.1.0 → 2.2.0` атомарно в schema const, loader supported-version и трёх envelope headers. Старый format не объявлять новым без смены версии; глобальный schema validator не переделывать. В раннем коммите реальных links ещё нет.
-- [ ] Reference validation: exact source variant принадлежит owner (standalone root допускается вместо variants); target component/variant существует, source/target file key совпадает; asset ID принадлежит потребителю; ссылки не содержат дубликат одного source assertion или конфликтующих targets. Проверять циклы только нового dependency graph, не смешивать с HTML graph.
-- [ ] `resolveEvidenceTargets`: manifest source должен существовать; source ID/JSON Pointer — только разрешённые spec домены; background target — точный HEX, width/inset — конечные числа. Не использовать fallback-файл, native size или guessed default. Неиспользуемые metadata не заставляют загружать произвольные sources.
-- [ ] Поднять версии в synthetic current-format fixtures. Историческую `migrateComponentDocument` не переписывать: её результат остаётся 2.1.0; compatibility assertion сравнивает все record fields с текущими данными, отдельно нормализовав только envelope version. Новые evidence metadata не вырезать из сравнения и не удалять существующие assertions.
-- [ ] Terra GREEN: новый test плюс три изменённых test-файла; `node scripts/validate-system.mjs`; `node scripts/generate-docs.mjs --check`. Generated output получать отдельно как derivation, публиковать через cloud, не редактировать snapshot/source вручную. Отличия body типографики/ассетов запрещены.
-- [ ] Cloud commit: `feat: add typed non-rendering evidence link metadata`. В журнале записать SHA/RED/GREEN; следующий шаг — capture/context, не data mappings.
+- [x] Terra: `node --test tests/foundation/component-evidence-links.test.mjs` → RED на отсутствии нового API/поля; не считать ошибку fixture доказательством дефекта.
+- [x] Реализовать optional top-level раздел по spec. Добавление поля — minor schema change: `2.1.0 → 2.2.0` атомарно в schema const, loader supported-version и трёх envelope headers. Старый format не объявлять новым без смены версии; глобальный schema validator не переделывать. В раннем коммите реальных links ещё нет.
+- [x] Reference validation: exact source variant принадлежит owner (standalone root допускается вместо variants); target component/variant существует, source/target file key совпадает; asset ID принадлежит потребителю; ссылки не содержат дубликат одного source assertion или конфликтующих targets. Проверять циклы только нового dependency graph, не смешивать с HTML graph.
+- [x] `resolveEvidenceTargets`: manifest source должен существовать; source ID/JSON Pointer — только разрешённые spec домены; background target — точный HEX, width/inset — конечные числа. Не использовать fallback-файл, native size или guessed default. Неиспользуемые metadata не заставляют загружать произвольные sources.
+- [x] Поднять версии в synthetic current-format fixtures. Историческую `migrateComponentDocument` не переписывать: её результат остаётся 2.1.0; compatibility assertion сравнивает все record fields с текущими данными, отдельно нормализовав только envelope version. Новые evidence metadata не вырезать из сравнения и не удалять существующие assertions.
+- [x] Terra GREEN: новый test плюс три изменённых test-файла; `node scripts/validate-system.mjs`; `node scripts/generate-docs.mjs --check`. Generated output получать отдельно как derivation, публиковать через cloud, не редактировать snapshot/source вручную. Отличия body типографики/ассетов запрещены.
+- [x] Cloud commit: `feat: add typed non-rendering evidence link metadata`. В журнале записать SHA/RED/GREEN; следующий шаг — capture/context, не data mappings.
+
+### Задача 1 — контрольная точка 02.10.2026
+
+Выполнена в кандидате `e71f138dee71293b177e4b68a9c71104a19dce4f`: 94/94 targeted tests, validator и generated check PASS через Terra Medium. Test-first RED и полный перечень сохранённых областей — в [журнале P2](../2026-10-01-cupis-final-maintenance-cutover.md). Реальные links не записаны; полного merge gate ещё нет. Следующая задача — 2; в этом продолжении она не начата.
 
 ## Задача 2. Свежий capture и проверяемые входы
 
@@ -187,4 +191,4 @@ assert.ok(codes(withCycle).includes('EVIDENCE_DEPENDENCY_CYCLE'));
 - Spec §§2–4 → задачи 1, 3, 4; §5 → задачи 2–5; §6 → задачи 5–6 и сохранённый P3 handoff; §§7–9 → задачи 6–7.
 - Входные/выходные функции заданы выше один раз; implementation не начинается с выдумывания второго API или реестра.
 - Пять Review Focus cases имеют конкретные negative assertions; source digests не перепутаны с rendering equality.
-- Все runtime writes и live mappings остаются невыполненными до review этого плана.
+- План подтверждён; задача 1 реализовала формат и offline validation без реальных links. Fresh capture, live проверки, mappings и общий gate остаются задачами 2–7.

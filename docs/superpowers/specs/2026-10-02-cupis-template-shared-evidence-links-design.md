@@ -1,6 +1,6 @@
 # CUPIS: служебные связи Template и Shared — дизайн T1/S1
 
-Дата: 02.10.2026. Статус: направление и письменная спецификация одобрены пользователем. Подготовлен [implementation plan T1/S1](../plans/cutover/2026-10-02-cupis-template-shared-evidence-links.md), ожидающий review. Реализация не начата.
+Дата: 02.10.2026. Статус: направление и письменная спецификация одобрены пользователем. [Implementation plan T1/S1](../plans/cutover/2026-10-02-cupis-template-shared-evidence-links.md) подтверждён; задача 1 выполнена в кандидате PR #110 (формат и offline references). Задачи 2–7 и реальные mappings ещё не начаты.
 
 Основание: `main@618d124df0a664c84d23a724ba50ef2b324e9b97`, кандидат [PR #110](https://github.com/flabenar-maker/e-mail/pull/110) `e544e303f7d5ebf3e7b3ea01f87a7c19234a95d2`. Это дочернее уточнение [master-spec](2026-08-24-cupis-structured-email-system-design.md), а не второй глобальный план. Последовательность остаётся в [roadmap](../plans/2026-08-25-cupis-migration-roadmap.md), исходные факты и карта владельцев — в [журнале P2](../plans/2026-10-01-cupis-final-maintenance-cutover.md).
 
@@ -153,7 +153,7 @@ P2 реализует schema, проверку и разрешённые mapping
 
 ## 8. Область реализации по согласованной спецификации
 
-Это карта ответственности для будущего implementation plan, не разрешение начать код:
+Карта ответственности утверждённого implementation plan; Task1 реализует только форму и offline references, остальные области остаются следующими задачами:
 
 | Область | Владелец изменения |
 | --- | --- |
@@ -165,7 +165,7 @@ P2 реализует schema, проверку и разрешённые mapping
 | Проверки | Schema/semantic, fact audit/CLI, capture, generated projection, сохранность email bundles/render-impact/HTML и export inputs |
 | Дальнейшее подключение | Карта P3 в текущем cutover plan; не изменение статуса маршрутов или навыков в P2 |
 
-Точные имена функций, новые файлы и тестовые команды определены в связанном implementation plan, который ожидает review. Он встраивается в текущий P2, не создаёт новый глобальный этап или параллельный список задач.
+Точные имена функций, новые файлы и тестовые команды определены в связанном implementation plan, подтверждённом пользователем. Он встраивается в текущий P2, не создаёт новый глобальный этап или параллельный список задач.
 
 ## 9. Критерии приёмки реализации
 
@@ -181,6 +181,6 @@ P2 реализует schema, проверку и разрешённые mapping
 
 ## 10. Текущее состояние и следующий шаг
 
-Сейчас опубликован только документ дизайна и его связи с master-spec/планами. Он опирается на записанный audit и адресное MCP-чтение 02.10.2026 08:47:15 UTC, которое подтвердило Template/Slots, Header sources и badge overrides без мутаций. Это не новый полный аудит библиотеки и не результат ещё не реализованного checker.
+Задача 1 реализована в кандидате PR #110: components schema 2.2.0, optional evidence metadata, pure reference validation/canonical target resolver и интеграция local references в registry semantics. Exact code/generated SHA — `e71f138dee71293b177e4b68a9c71104a19dce4f`; локальные scoped проверки и сохранность данных записаны в implementation plan/журнале P2. Это не доказательство полноты live-связей и не приёмка всего ремонта.
 
-Письменная спецификация получила review пользователя. Следующий gate — review implementation plan с RED/GREEN и preserved-output gates. До его подтверждения не добавлять поля в действующие records/schema, не менять production-код, Figma или письма. P2 остаётся открытым; merge отдельно.
+Факты компонентов, foundation values и HTML/export policy не менялись; реальные evidence links ещё не добавлены. Следующая задача 2 — fresh capture metadata и canonical/session inputs. Последующая запись links требует нового адресного MCP-чтения согласно §§5–7; ранее полученный audit не выдаётся за fresh acceptance нового механизма. P2 остаётся открытым, P3 и merge отдельно.
