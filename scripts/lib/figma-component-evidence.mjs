@@ -277,6 +277,36 @@ function inspectArtworkTree(record, live) {
   return { issues, nodes, variants, identityValid };
 }
 
+// The export selector belongs to source_viewport. A different viewport's
+// artwork consumer is identified by its existing contract fact links, not by
+// substituting the export layer name or a Shared master's name.
+function consumerArtworkNode(record, asset, viewport, variantId, entries) {
+  const matches = [];
+  function visit(element, path) {
+    if (!element) return;
+    if (element.asset_contract_id === asset.id) matches.push({ element, path });
+    for (const [index, child] of (element.children ?? []).entries()) visit(child, path + '/children/' + index);
+  }
+  visit(record.contracts?.[viewport]?.root, '/contracts/' + viewport + '/root');
+  if (matches.length !== 1 || matches[0].element.render_mode !== 'direct-image') return undefined;
+  const { element, path } = matches[0];
+  const facts = (element.facts ?? []).map((fact, index) => ({ fact, index })).filter(({ fact }) => fact.id === 'reference-size');
+  if (facts.length !== 1) return undefined;
+  const { fact, index } = facts[0];
+  if (fact.value?.type !== 'dimensions' || fact.value.unit !== 'px' ||
+      !finite(fact.value.width) || fact.value.width <= 0 || !finite(fact.value.height) || fact.value.height <= 0 ||
+      fact.provenance?.kind !== 'figma-literal' || typeof fact.provenance.node_id !== 'string') return undefined;
+  for (const dimension of ['width', 'height']) {
+    const pointer = path + '/facts/' + index + '/value/' + dimension;
+    const links = (record.contracts.figma_fact_links ?? []).filter(link => link.contract_path === pointer);
+    if (links.length !== 1 || links[0].variant_node_id !== variantId ||
+        links[0].node_id !== fact.provenance.node_id || links[0].transform !== 'identity' ||
+        links[0].source_path !== '/reference_dimensions/' + dimension) return undefined;
+  }
+  const selected = entries.filter(entry => entry.node.node_id === fact.provenance.node_id && entry.ancestors.length > 0);
+  return selected.length === 1 ? selected[0].node : undefined;
+}
+
 function artworkScope(record, live) {
   const scope = inspectArtworkTree(record, live);
   scope.obligations = [];
@@ -296,15 +326,24 @@ function artworkScope(record, live) {
       if (!["node", "fill"].includes(boundary?.kind) || typeof boundary.semantic_node_name !== "string" || !boundary.semantic_node_name || typeof asset.owner_layer_name !== "string" || !asset.owner_layer_name) {
         scope.issues.push(issue("EVIDENCE_ASSET_BOUNDARY_UNVERIFIED", `/asset_contracts/${asset.id}`, "Existing export boundary and owner selector are required.")); continue;
       }
-      const selected = entries.filter(({ node }) => node.name === boundary.semantic_node_name);
-      const owners = entries.filter(({ node }) => node.name === asset.owner_layer_name);
+      const variant = record.variants.find(candidate => candidate.node_id === variantId);
+      const viewport = variant?.axes.find(axis => axis.name === 'Viewport')?.value.toLowerCase();
+      const localConsumer = !sourceOnly && boundary.kind === 'node' && asset.source_mode_id === 'rendered-node' &&
+        ['mobile', 'desktop'].includes(viewport) && ['mobile', 'desktop'].includes(asset.source_viewport) && viewport !== asset.source_viewport;
       let node;
-      if (selected.length === 1 && owners.length === 1 && selected[0].node.node_id === owners[0].node.node_id) node = selected[0].node;
-      // A sole node-export of an asset-role record may be its canonical root.
-      // Never use this allowance to resolve duplicate or conflicting selectors.
-      else if (selected.length === 0 && owners.length === 0 && record.identity.semantic_role === "asset" && assets.length === 1 && boundary.kind === "node") node = root;
+      if (localConsumer) {
+        const sameViewport = record.variants.filter(candidate => candidate.axes.some(axis => axis.name === 'Viewport' && axis.value.toLowerCase() === viewport));
+        if (sameViewport.length === 1) node = consumerArtworkNode(record, asset, viewport, variantId, entries);
+      } else {
+        const selected = entries.filter(({ node }) => node.name === boundary.semantic_node_name);
+        const owners = entries.filter(({ node }) => node.name === asset.owner_layer_name);
+        if (selected.length === 1 && owners.length === 1 && selected[0].node.node_id === owners[0].node.node_id) node = selected[0].node;
+        // A sole node-export of an asset-role record may be its canonical root.
+        // Never use this allowance to resolve duplicate or conflicting selectors.
+        else if (selected.length === 0 && owners.length === 0 && record.identity.semantic_role === "asset" && assets.length === 1 && boundary.kind === "node") node = root;
+      }
       if (!node) {
-        scope.issues.push(issue("EVIDENCE_ASSET_BOUNDARY_UNVERIFIED", `/asset_contracts/${asset.id}/${variantId}`, "Export and owner selectors must resolve unambiguously to one existing boundary.")); continue;
+        scope.issues.push(issue("EVIDENCE_ASSET_BOUNDARY_UNVERIFIED", `/asset_contracts/${asset.id}/${variantId}`, "The export selector or exact viewport consumer links must resolve unambiguously to one existing boundary.")); continue;
       }
       boundaries.push({ node, asset_id: asset.id });
     }

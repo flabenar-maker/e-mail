@@ -205,6 +205,14 @@ Reverse impact разделяет `confirmed` actual edges и `possible` default
 - [ ] Publish data/projection candidate, получить новый exact-SHA snapshot, создать новый session и адресно перечитать source/target/owner уже для этого SHA. Запустить настоящий canonical CLI по всем восьми owners. Сверить successful/missing/mismatch пообъектно; отдельно сохранить прежние scalar issues. Не ставить всему компоненту PASS только по секции links.
 - [x] Terra GREEN targeted tests + `tests/components/figma-component-description.test.mjs`, validator/generate-check. Сравнить компоненты с базой c076: кроме schema_version и восьми `evidence_links` никаких различий. Generated typography/asset body неизменны, naming reference побайтово прежний. Cloud commit(s): `feat: bind verified Template and Shared evidence sources` / `docs: project service evidence links without render changes`. Следующий шаг — итоговый gate этого ремонта.
 
+### Узкое дополнение задачи 6: Mobile Header boundary, согласовано 02.10.2026
+
+Пользователь разрешил исправить проверку: использовать фактический слой внутри соответствующего Header, не имя Shared/master и не selector другой версии. Дополнительный allowlist: scripts/lib/figma-component-evidence.mjs и tests/foundation/figma-component-evidence.test.mjs. Вход — уже существующие canonical contract fact links и provenance; новый справочник исключений или asset alias не вводится.
+
+Для non-source viewport rendered-node проверка разрешает единственный direct-image consumer по точной паре width/height fact links, provenance node и текущему variant. Отсутствующая, чужая или неоднозначная связь остаётся unverified; имя Desktop не служит fallback. Export-viewport selector и source-only проверки не меняются. Удаление evidence link не снимает обязанность проверки вложенного instance; scalar/capture diagnostics сохраняются.
+
+Последовательность: regression RED → исправление checker → два подтверждённых Mobile Header evidence links → свежий MCP/canonical CLI и scoped local GREEN → generated/status sync. Сохраняются numeric contracts, asset contracts, Figma, имена, экспорт, renderer/HTML, письма и компактные descriptions. Задача 7/full-suite/merge не запускается этим дополнением.
+
 ### Результат задачи 6 — частично, 02.10.2026
 
 Задача 6 выполнена частично: 27 фактических evidence links опубликованы и подтверждены новым canonical MCP-сеансом; generated projection и локальная изоляция проверены. Mobile Email/Header остаётся unverified из-за границы asset owner. Задача 7 не начата; T1/S1 и P2 не приняты.
