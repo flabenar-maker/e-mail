@@ -102,23 +102,26 @@ function fixture() {
     ["mobile", "1024:19279", "946:25769", "1024:19279"],
     ["desktop", "1024:19273", "946:25770", "1024:19273"],
   ]) {
+    // Each Feature variant gets a unique master-node identity. The repeated
+    // remote target is intentional; repeated identities in one packet are not.
+    const sourceNodeId = viewport === "mobile" ? "1331:1355" : "1331:1356";
     const remoteMaster = node("1331:1646", "COMPONENT", [], { remote_source: { remote: true, component_key: KEY } });
-    const remoteInstance = node(`I${placement};1331:1355`, "INSTANCE", [], {
+    const remoteInstance = node(`I${placement};${sourceNodeId}`, "INSTANCE", [], {
       main_component_id: "1331:1646",
       remote_source: { remote: true, component_key: KEY },
     });
-    const featureMaster = node(featureRoot, "COMPONENT", [node("1331:1355", "INSTANCE", [], {
+    const featureMaster = node(featureRoot, "COMPONENT", [node(sourceNodeId, "INSTANCE", [], {
       main_component_id: "1331:1646", remote_source: { remote: true, component_key: KEY },
     })]);
     const featureInstance = node(`I${placement};946:25769`, "INSTANCE", [remoteInstance], { main_component_id: featureRoot });
     parentTrees.push(node(parentRoot, "COMPONENT", [featureInstance]));
     featureTrees.push(featureMaster);
     addPlacement(notification, viewport, parentRoot, featureInstance.node_id, { component_id: "feature" });
-    addPlacement(feature, viewport, featureRoot, "1331:1355", { asset_contract_id: "feature-artwork" });
+    addPlacement(feature, viewport, featureRoot, sourceNodeId, { asset_contract_id: "feature-artwork" });
     feature.evidence_links.source_dependencies.push({
       id: `remote-${viewport}`,
-      source: { variant_node_id: featureRoot, node_id: "1331:1355", field_path: "/main_component_id" },
-      asset_owner: { component_id: "feature", node_id: "1331:1355", asset_id: "feature-artwork" },
+      source: { variant_node_id: featureRoot, node_id: sourceNodeId },
+      asset_owner: { component_id: "feature", node_id: sourceNodeId, asset_id: "feature-artwork" },
       target: { component_id: "remote-glyph" },
     });
     // The standalone remote root has no parent and no local alias or HTML export.
