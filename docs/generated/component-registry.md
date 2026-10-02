@@ -1,7 +1,7 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: component-registry -->
-<!-- source-digest: sha256:766eaafce1d98aed5580a0e712f12d93584d52fac011fe9fde3dd7f96305312c -->
-<!-- schema-versions: components=2.1.0, typography=1.0.0, spacing=1.0.0, assets=1.0.0 -->
+<!-- source-digest: sha256:2d008563dfbf117b91061ba1bf7e2d598153bbe51110a921b6db66f6f04b3c28 -->
+<!-- schema-versions: components=2.2.0, typography=1.0.0, spacing=1.0.0, assets=1.0.0 -->
 # CUPIS component registry
 
 61 component records.
