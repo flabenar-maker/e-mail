@@ -96,3 +96,21 @@ test("registry documentation renders a remote publication key only for remote so
   const localOutput = renderComponentRegistrySection(local, localIndex);
   assert.doesNotMatch(localOutput, /- Remote publication key:/);
 });
+
+
+test("schema permits null native minimum width without permitting other null or string dimensions", async () => {
+  const schema = JSON.parse(await readFile(new URL("../../schemas/components.schema.json", import.meta.url), "utf8"));
+  const f = fixture();
+  const document = envelope(f.glyph);
+  const sourceNode = structuredClone(f.gp.variants[0].source_node);
+  sourceNode.minimum_width_px = null;
+  sourceNode.children[0].minimum_width_px = null;
+  document.components[0].contracts.source_variants = [{ variant_node_id: "500:1", axes: [], source_node: sourceNode }];
+  assert.deepEqual(validateComponentRegistryShape(document, schema), []);
+  const stringMinimum = structuredClone(document);
+  stringMinimum.components[0].contracts.source_variants[0].source_node.minimum_width_px = "24";
+  assert.ok(validateComponentRegistryShape(stringMinimum, schema).length > 0);
+  const nullWidth = structuredClone(document);
+  nullWidth.components[0].contracts.source_variants[0].source_node.reference_dimensions.width = null;
+  assert.ok(validateComponentRegistryShape(nullWidth, schema).length > 0);
+});
