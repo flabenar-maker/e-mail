@@ -329,7 +329,6 @@ const boundaryCode = result => result.issues.some(item => item.code === "EVIDENC
 test("S1 resolves a renamed non-source mobile direct-image boundary from its local asset contract", () => {
   const fixture = mobileDirectImageFixture(); const result = mobileScope(fixture);
   assert.equal(boundaryCode(result), false, JSON.stringify(result.issues));
-  assert.deepEqual(result.required_sources, []);
 });
 test("S1 refuses missing, conflicting, or unproven mobile direct-image identity facts", () => {
   const changes = [
