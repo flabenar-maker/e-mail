@@ -347,6 +347,10 @@ function renderSection(record, index, sectionId) {
         `- Category: ${inlineCode(record.identity.category)}`,
         `- Figma: ${inlineCode(`${record.figma.file_key}#${record.figma.node_id}`)} (${inlineCode(record.identity.node_kind)})`,
         `- Source root: ${inlineCode(record.figma.source_root_node_id)}`,
+        ...(record.figma.remote_source ? [
+          `- Remote publication key: ${inlineCode(record.figma.remote_source.component_key)}`,
+          "- Remote lookup: the current Figma file is capture context, not the original publication file.",
+        ] : []),
         `- Verified: ${inlineCode(record.figma.verified_at)}`,
         ...(record.figma.verification ? [`- Figma source check: ${inlineCode(record.figma.verification.status)} on ${inlineCode(record.figma.verification.checked_at)}; ${oneLine(record.figma.verification.reason)}`] : []),
         `- Structure fingerprint: ${inlineCode(record.figma.structure_fingerprint)}`,
