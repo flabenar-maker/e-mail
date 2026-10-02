@@ -4,6 +4,9 @@ import { auditComponentEvidenceLinks, collectRequiredComponentEvidence } from ".
 
 // Synthetic model/session, never evidence of a real Figma reading.
 const SHA = "a".repeat(40);
+const nonce = value => value.toString(16).padStart(64, "0");
+const SESSION_NONCE = nonce(1);
+const REQUEST_NONCE = nonce(2);
 const color = () => ({ type: "solid", visible: true, opacity: 1, color: "#F3F3F5" });
 function node(id, type, width) {
   return { node_id: id, name: "arbitrary label", node_type: type, visible: true, opacity: 1,
@@ -28,12 +31,12 @@ function fixture() {
     if (viewport === "desktop") add("width", root, "/reference_dimensions/width", "/shell/max_width_px", "pixel-number");
     for (const side of ["left", "right"]) add(side, root, `/layout/padding/${side}`, "/shell/horizontal_inset_px", "pixel-number");
   }
-  const packet = { capture_version: "1.1.0", file_key: record.figma.file_key, component_node_id: record.figma.node_id,
-    component_properties: [], capture_errors: [], capture_meta: { started_at: "2026-10-02T09:00:01.000Z", completed_at: "2026-10-02T09:00:02.000Z", tree_complete: true, node_count: 4 },
+  const packet = { capture_version: "1.2.0", file_key: record.figma.file_key, component_node_id: record.figma.node_id,
+    component_properties: [], capture_errors: [], capture_meta: { started_at: "2040-01-01T09:00:01.000Z", completed_at: "2040-01-01T09:00:02.000Z", request: { session_nonce: SESSION_NONCE, request_nonce: REQUEST_NONCE, canonical_git_sha: SHA }, tree_complete: true, node_count: 4 },
     variants: record.variants.map((variant, i) => ({ variant_node_id: variant.node_id, axes: structuredClone(variant.axes), source_node: i ? mobile : desktop })) };
   const foundation = { shell: { background_color: "#F3F3F5", max_width_px: 600, horizontal_inset_px: 0 } };
   const model = { canonical_sha: SHA, records: [record], manifest: { sources: [{ id: "rendering-foundation", kind: "registry", path: "data/foundations/rendering.yaml" }] }, source_documents: new Map([["rendering-foundation", foundation]]), targets: new Map() };
-  const session = { schema_version: "1.0.0", canonical_git_sha: SHA, started_at: "2026-10-02T09:00:00.000Z", completed_at: "2026-10-02T09:00:04.000Z", component_ids: [record.id], captures: [{ component_id: record.id, receipt_id: "synthetic-receipt", tool: "use_figma", received_at: "2026-10-02T09:00:03.000Z", packet_path: "packet.json", packet_sha256: "0".repeat(64), packet }] };
+  const session = { schema_version: "1.1.0", canonical_git_sha: SHA, session_nonce: SESSION_NONCE, started_at: "2026-10-02T09:00:00.000Z", completed_at: "2026-10-02T09:00:04.000Z", component_ids: [record.id], captures: [{ component_id: record.id, receipt_id: "synthetic-receipt", tool: "use_figma", request_nonce: REQUEST_NONCE, requested_at: "2026-10-02T09:00:01.000Z", received_at: "2026-10-02T09:00:03.000Z", packet_path: "packet.json", packet_sha256: "0".repeat(64), packet }] };
   return { record, packet, model, session, desktop, mobile, foundation };
 }
 const audit = f => auditComponentEvidenceLinks({ recordId: f.record.id, model: f.model, session: f.session });
@@ -109,7 +112,7 @@ const unverified = [
   ["missing padding", "mobile-left", f => { delete f.mobile.layout.padding.left; }],
   ["wrong target pairing", "desktop-width", f => { link(f, "desktop-width").target.pointer = "/shell/horizontal_inset_px"; f.desktop.reference_dimensions.width = 0; }],
   ["session SHA", "desktop-width", f => { f.session.canonical_git_sha = "b".repeat(40); }],
-  ["capture before session", "desktop-width", f => { f.packet.capture_meta.started_at = "2026-10-02T08:00:00.000Z"; }],
+  ["request before session", "desktop-width", f => { f.session.captures[0].requested_at = "2026-10-02T08:00:00.000Z"; }],
   ["incomplete tree", "desktop-width", f => { f.packet.capture_meta.tree_complete = false; }],
   ["missing receipt", "desktop-width", f => { f.session.captures[0].receipt_id = ""; }],
   ["duplicate node identity", "desktop-width", f => { f.desktop.children.push(node("77:2", "FRAME", 600)); recount(f); }],
@@ -211,13 +214,14 @@ function s1Fixture() {
   add(badge, "default-glyph", "807:1", "807:2", { component_id: lock.id }, "807:1", "badge");
   add(block, "badge", "808:1", "502:24255", { component_id: badge.id }, "502:24255", "status");
   add(block, "override-glyph", "808:1", "I502:24255;491:22378", { component_id: receipt.id }, "502:24255", "status");
-  const session = { schema_version: "1.0.0", canonical_git_sha: SHA, started_at: "2026-10-02T09:00:00.000Z", completed_at: "2026-10-02T09:00:04.000Z", component_ids: records.map(r => r.id), captures: [] };
+  const session = { schema_version: "1.1.0", canonical_git_sha: SHA, session_nonce: SESSION_NONCE, started_at: "2026-10-02T09:00:00.000Z", completed_at: "2026-10-02T09:00:04.000Z", component_ids: records.map(r => r.id), captures: [] };
   for (const owner of records) {
     const trees = roots.get(owner.id), count = n => 1 + n.children.reduce((sum, child) => sum + count(child), 0);
-    const packet = { capture_version: "1.1.0", file_key: owner.figma.file_key, component_node_id: owner.figma.node_id, component_properties: [], capture_errors: [],
-      capture_meta: { started_at: "2026-10-02T09:00:01.000Z", completed_at: "2026-10-02T09:00:02.000Z", tree_complete: true, node_count: trees.reduce((sum, tree) => sum + count(tree), 0) },
+    const requestNonce = nonce(session.captures.length + 10);
+    const packet = { capture_version: "1.2.0", file_key: owner.figma.file_key, component_node_id: owner.figma.node_id, component_properties: [], capture_errors: [],
+      capture_meta: { started_at: "2040-01-01T09:00:01.000Z", completed_at: "2040-01-01T09:00:02.000Z", request: { session_nonce: SESSION_NONCE, request_nonce: requestNonce, canonical_git_sha: SHA }, tree_complete: true, node_count: trees.reduce((sum, tree) => sum + count(tree), 0) },
       variants: trees.map((tree, i) => ({ variant_node_id: tree.node_id, axes: structuredClone(owner.variants[i]?.axes ?? []), source_node: tree })) };
-    session.captures.push({ component_id: owner.id, receipt_id: `synthetic-${owner.id}`, tool: "use_figma", received_at: "2026-10-02T09:00:03.000Z", packet_path: `${owner.id}.json`, packet_sha256: "0".repeat(64), packet });
+    session.captures.push({ component_id: owner.id, receipt_id: `synthetic-${owner.id}`, tool: "use_figma", request_nonce: requestNonce, requested_at: "2026-10-02T09:00:01.000Z", received_at: "2026-10-02T09:00:03.000Z", packet_path: `${owner.id}.json`, packet_sha256: "0".repeat(64), packet });
   }
   const model = { canonical_sha: SHA, records, manifest: { sources: [] }, source_documents: new Map(), targets: new Map() };
   return { model, session, product, big, compact, header, lock, receipt, badge, block, roots, instance };
@@ -269,7 +273,7 @@ const s1Invalid = [
   ["target duplicate variant", f => { const p = s1Packet(f, f.product); p.variants.push(structuredClone(p.variants[0])); s1Count(f, f.product); }, "header"],
   ["target duplicate node", f => { f.roots.get(f.receipt.id)[0].children.push({ node_id: "806:1", node_type: "VECTOR" }); s1Count(f, f.receipt); }],
   ["target incomplete capture", f => { s1Packet(f, f.receipt).capture_meta.tree_complete = false; }],
-  ["target older session", f => { s1Packet(f, f.receipt).capture_meta.started_at = "2026-10-01T09:00:00.000Z"; }],
+  ["target older session", f => { s1Packet(f, f.receipt).capture_meta.request.request_nonce = nonce(63); }],
   ["target missing receipt", f => { f.session.captures.find(c => c.component_id === f.receipt.id).receipt_id = ""; }],
   ["owner outside ancestry", f => { f.block.evidence_links.source_dependencies[1].asset_owner.node_id = "808:99"; }],
   ["ancestor outside boundary", f => { f.block.evidence_links.source_dependencies[1].asset_owner.node_id = "808:1"; }],

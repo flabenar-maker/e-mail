@@ -5,6 +5,9 @@ import { auditFigmaContractFacts } from "../../scripts/lib/figma-contract-facts.
 
 // Synthetic inputs, not real MCP evidence or new canonical library mappings.
 const SHA = "a".repeat(40);
+const nonce = value => value.toString(16).padStart(64, "0");
+const SESSION_NONCE = nonce(1);
+const REQUEST_NONCE = nonce(2);
 function fixture() {
   const record = { id: "synthetic-template", identity: { semantic_role: "template", node_kind: "component-set" },
     figma: { file_key: "synthetic", node_id: "71:1" }, asset_contracts: [],
@@ -25,12 +28,12 @@ function fixture() {
     for(const side of ["left","right"])add(side,root,`/layout/padding/${side}`,"/shell/horizontal_inset_px","pixel-number");
     return {variant_node_id:root.node_id,axes:variant.axes,source_node:root};
   });
-  const live={capture_version:"1.1.0",file_key:"synthetic",component_node_id:"71:1",component_properties:[],capture_errors:[],variants,
-    capture_meta:{started_at:"2026-10-02T09:00:01.000Z",completed_at:"2026-10-02T09:00:02.000Z",tree_complete:true,node_count:4}};
+  const live={capture_version:"1.2.0",file_key:"synthetic",component_node_id:"71:1",component_properties:[],capture_errors:[],variants,
+    capture_meta:{started_at:"2040-01-01T09:00:01.000Z",completed_at:"2040-01-01T09:00:02.000Z",request:{session_nonce:SESSION_NONCE,request_nonce:REQUEST_NONCE,canonical_git_sha:SHA},tree_complete:true,node_count:4}};
   const model={canonical_sha:SHA,records:[record],manifest:{sources:[{id:"rendering-foundation",kind:"registry",path:"data/foundations/rendering.yaml"}]},
     source_documents:new Map([["rendering-foundation",{shell:{background_color:"#F3F3F5",max_width_px:600,horizontal_inset_px:0}}]])};
-  const session={schema_version:"1.0.0",canonical_git_sha:SHA,started_at:"2026-10-02T09:00:00.000Z",completed_at:"2026-10-02T09:00:04.000Z",component_ids:[record.id],
-    captures:[{component_id:record.id,receipt_id:"synthetic",tool:"use_figma",received_at:"2026-10-02T09:00:03.000Z",packet:live}]};
+  const session={schema_version:"1.1.0",canonical_git_sha:SHA,session_nonce:SESSION_NONCE,started_at:"2026-10-02T09:00:00.000Z",completed_at:"2026-10-02T09:00:04.000Z",component_ids:[record.id],
+    captures:[{component_id:record.id,receipt_id:"synthetic",tool:"use_figma",request_nonce:REQUEST_NONCE,requested_at:"2026-10-02T09:00:01.000Z",received_at:"2026-10-02T09:00:03.000Z",packet:live}]};
   return {record,live,model,session};
 }
 const audit = input => combined.auditFigmaComponentEvidence(input);

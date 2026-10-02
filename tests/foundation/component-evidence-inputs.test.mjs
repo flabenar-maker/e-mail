@@ -11,15 +11,18 @@ import { loadComponentEvidenceModel, loadComponentEvidenceSession } from "../../
 
 const REPO = fileURLToPath(new URL("../../", import.meta.url));
 const SHA = "a".repeat(40);
+const nonce = value => value.toString(16).padStart(64, "0");
+const SESSION_NONCE = nonce(1);
+const REQUEST_NONCE = nonce(2);
 const digest = (bytes) => createHash("sha256").update(bytes).digest("hex");
 const hasCode = (code) => (error) => error.code === code || error.errors?.some((entry) => entry.code === code);
 
 // All packets, timestamps and receipt IDs here are synthetic, not live MCP proof.
 function packetFixture() {
   return {
-    capture_version: "1.1.0", file_key: "synthetic-file", component_node_id: "1:1",
+    capture_version: "1.2.0", file_key: "synthetic-file", component_node_id: "1:1",
     component_properties: [], capture_errors: [],
-    capture_meta: { started_at: "2026-10-02T09:00:01.000Z", completed_at: "2026-10-02T09:00:02.000Z", tree_complete: true, node_count: 2 },
+    capture_meta: { started_at: "2040-01-01T09:00:01.000Z", completed_at: "2040-01-01T09:00:02.000Z", request: { session_nonce: SESSION_NONCE, request_nonce: REQUEST_NONCE, canonical_git_sha: SHA }, tree_complete: true, node_count: 2 },
     variants: [{ variant_node_id: "1:1", axes: [], source_node: {
       node_id: "1:1", node_type: "COMPONENT", children: [{ node_id: "I1:1;2:1", node_type: "INSTANCE", main_component_id: "3:1", children: [] }],
     } }],
@@ -31,10 +34,10 @@ async function sessionFixture(t, change = () => {}) {
   t.after(() => fixture.cleanup());
   const packet = packetFixture();
   const session = {
-    schema_version: "1.0.0", canonical_git_sha: SHA,
+    schema_version: "1.1.0", canonical_git_sha: SHA, session_nonce: SESSION_NONCE,
     started_at: "2026-10-02T09:00:00.000Z", completed_at: "2026-10-02T09:00:04.000Z",
     component_ids: ["synthetic-owner"], captures: [{ component_id: "synthetic-owner", receipt_id: "synthetic-receipt-1",
-      tool: "use_figma", received_at: "2026-10-02T09:00:03.000Z", packet_path: "packets/owner.json", packet_sha256: "" }],
+      tool: "use_figma", request_nonce: REQUEST_NONCE, requested_at: "2026-10-02T09:00:01.000Z", received_at: "2026-10-02T09:00:03.000Z", packet_path: "packets/owner.json", packet_sha256: "" }],
   };
   change({ session, packet });
   const bytes = JSON.stringify(packet);
@@ -71,11 +74,11 @@ const invalidSessions = [
   ["non-UTC timestamp", "EVIDENCE_TIMESTAMP_INVALID", ({ session }) => { session.started_at = "2026-10-02T12:00:00.000+03:00"; }],
   ["infinite date", "EVIDENCE_TIMESTAMP_INVALID", ({ session }) => { session.started_at = "Infinity"; }],
   ["timestamp suffix", "EVIDENCE_TIMESTAMP_INVALID", ({ session }) => { session.started_at += "\n"; }],
-  ["capture before session", "EVIDENCE_CAPTURE_TIME_INVALID", ({ packet }) => { packet.capture_meta.started_at = "2026-10-02T08:59:59.000Z"; }],
-  ["capture after session", "EVIDENCE_CAPTURE_TIME_INVALID", ({ packet }) => { packet.capture_meta.completed_at = "2026-10-02T09:00:05.000Z"; }],
-  ["receipt before completion", "EVIDENCE_CAPTURE_TIME_INVALID", ({ session }) => { session.captures[0].received_at = "2026-10-02T09:00:01.000Z"; }],
+  ["request before session", "EVIDENCE_CAPTURE_TIME_INVALID", ({ session }) => { session.captures[0].requested_at = "2026-10-02T08:59:59.000Z"; }],
+  ["request after receipt", "EVIDENCE_CAPTURE_TIME_INVALID", ({ session }) => { session.captures[0].requested_at = "2026-10-02T09:00:04.000Z"; }],
+  ["request replay", "EVIDENCE_REQUEST_IDENTITY_MISMATCH", ({ packet }) => { packet.capture_meta.request.request_nonce = nonce(3); }],
   ["receipt after session", "EVIDENCE_CAPTURE_TIME_INVALID", ({ session }) => { session.captures[0].received_at = "2026-10-02T09:00:05.000Z"; }],
-  ["reversed capture", "EVIDENCE_CAPTURE_TIME_INVALID", ({ packet }) => { packet.capture_meta.started_at = "2026-10-02T09:00:03.000Z"; }],
+  ["reversed capture", "EVIDENCE_CAPTURE_TIME_INVALID", ({ packet }) => { packet.capture_meta.started_at = "2040-01-01T09:00:03.000Z"; }],
   ["reversed session", "EVIDENCE_CAPTURE_TIME_INVALID", ({ session }) => { session.completed_at = "2026-10-02T08:59:59.000Z"; }],
   ["old capture", "EVIDENCE_CAPTURE_VERSION_UNSUPPORTED", ({ packet }) => { packet.capture_version = "1.0.0"; }],
   ["unknown capture", "EVIDENCE_CAPTURE_VERSION_UNSUPPORTED", ({ packet }) => { packet.capture_version = "2.0.0"; }],
@@ -136,6 +139,7 @@ test("session hashes exact file bytes, not parsed-and-reserialized JSON", async 
 test("session accepts equal timestamps and retains explicit main lookup errors", async (t) => {
   const fixture = await sessionFixture(t, ({ session, packet }) => {
     session.completed_at = session.started_at;
+    session.captures[0].requested_at = session.started_at;
     session.captures[0].received_at = session.started_at;
     packet.capture_meta.started_at = session.started_at;
     packet.capture_meta.completed_at = session.started_at;
