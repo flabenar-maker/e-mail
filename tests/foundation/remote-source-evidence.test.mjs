@@ -15,7 +15,7 @@ const record=(id,owner,role,variants)=>({id,status:'active',identity:{figma_name
   figma:{file_key:'synthetic-current-file',node_id:owner,source_root_node_id:owner,verified_at:'2026-10-02',structure_fingerprint:'sha256:'+'0'.repeat(64)},variants,properties:[],asset_contracts:[],
   contracts:{mobile:{root:{id:'root',semantic_role:role,render_mode:'presentation-table',visibility:{mode:'always'},facts:[],children:[]}},
     desktop:{root:{id:'root',semantic_role:role,render_mode:'presentation-table',visibility:{mode:'always'},facts:[],children:[]}},figma_fact_links:[]},
-  provenance:{node_id:owner,captured_at:'2026-10-02T00:00:00.000Z'},documentation:{purpose:'Synthetic source for mechanism regression.',critical_constraint_ids:[]},constraints:[]});
+  provenance:{node_id:owner,captured_at:'2026-10-02T00:00:00Z'},documentation:{purpose:'Synthetic source for mechanism regression.',critical_constraint_ids:[]},constraints:[]});
 const variants=(m,d)=>[{id:'mobile',node_id:m,axes:axes('Mobile')},{id:'desktop',node_id:d,axes:axes('Desktop')}];
 function addElement(owner,viewport,variantId,id,mode,target) {
   const value={id:'owned-child',semantic_role:'graphic',render_mode:mode,...target,visibility:{mode:'always'},children:[],facts:[{id:'reference-size',value:{type:'dimensions',width:24,height:24,unit:'px'},provenance:{kind:'figma-literal',node_id:id}}]};
@@ -73,6 +73,7 @@ for(const [label,mutate] of [
   ['asset export',d=>d.components[0].asset_contracts.push({id:'fabricated-export'})],['child structure',d=>d.components[0].contracts.desktop.root.children.push({id:'child',render_mode:'figma-source-only',facts:[],children:[]})],
 ]) test('registry rejects remote '+label,()=>{const d=envelope(fixture().glyph);mutate(d);assert.ok(semantics(d).some(e=>e.code==='COMPONENT_REGISTRY_REMOTE_SOURCE_INVALID'));});
 test('schema preserves remote status and key in captured source nodes',async()=>{const doc=envelope(fixture().glyph),schema=JSON.parse(await readFile(new URL('../../schemas/components.schema.json',import.meta.url),'utf8'));doc.components[0].contracts.source_variants=[{variant_node_id:'500:1',axes:[],source_node:fixture().gp.variants[0].source_node}];assert.deepEqual(validateComponentRegistryShape(doc,schema),[]);});
+test('local names still require the CUPIS namespace when no remote source is registered',async()=>{const doc=envelope(fixture().glyph),schema=JSON.parse(await readFile(new URL('../../schemas/components.schema.json',import.meta.url),'utf8'));delete doc.components[0].figma.remote_source;doc.registry.source.roots[0].role='library';assert.ok(validateComponentRegistryShape(doc,schema).some(e=>e.path==='/components/0/identity/figma_name'));doc.components[0].identity.figma_name='Icon/Glyph';assert.deepEqual(validateComponentRegistryShape(doc,schema),[]);});
 
 async function captured(remote,key=KEY) {const component={id:'700:1',type:'COMPONENT',name:'synthetic-source',width:24,height:24,visible:true,remote,key,children:[],componentPropertyDefinitions:{}};
   const api={fileKey:'synthetic-current-file',skipInvisibleInstanceChildren:true,mixed:Symbol('mixed'),getNodeByIdAsync:async()=>component};const script=await readFile(new URL('../../scripts/figma/capture-contract-source.js',import.meta.url),'utf8');
