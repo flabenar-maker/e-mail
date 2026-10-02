@@ -104,7 +104,7 @@
       }
     },
     "component": {
-      "allOf": [{"if":{"properties":{"figma":{"type":"object","required":["remote_source"]}}},"else":{"properties":{"identity":{"type":"object","properties":{"figma_name":{"type":"string","pattern":"^[A-Za-z0-9]+(?:/[A-Za-z0-9 @-]+)+$"}}}}}}],
+      "allOf": [{"if":{"properties":{"figma":{"type":"object","properties":{"remote_source":{}},"required":["remote_source"]}}},"else":{"properties":{"identity":{"type":"object","properties":{"figma_name":{"type":"string","pattern":"^[A-Za-z0-9]+(?:/[A-Za-z0-9 @-]+)+$"}}}}}}],
       "type": "object",
       "additionalProperties": false,
       "required": [
