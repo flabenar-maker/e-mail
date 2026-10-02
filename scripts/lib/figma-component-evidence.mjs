@@ -1,3 +1,5 @@
+import { isDeepStrictEqual } from "node:util";
+import { auditFigmaContractFacts } from "./figma-contract-facts.mjs";
 import { resolveEvidenceTargets } from "./component-evidence-links.mjs";
 import { compareFoundationObservation } from "./foundation-evidence.mjs";
 
@@ -108,9 +110,18 @@ function templateScope(record, live) {
   return { issues, obligations, nodes, identityValid };
 }
 
+// No artwork means no new T1/S1 duty for an ordinary HTML component. A
+// declared evidence section or artwork role cannot opt out through empty links.
+function requiresEvidenceScope(record) {
+  return ["template", "asset", "icon"].includes(record?.identity?.semantic_role) ||
+    (record?.asset_contracts?.length ?? 0) > 0 ||
+    (record != null && Object.hasOwn(record, "evidence_links"));
+}
+
 // Independently determined requirements: removing links cannot remove duties.
 // No claim about the entire Template or about a future email instance.
 export function collectRequiredComponentEvidence({ record, live } = {}) {
+  if (!requiresEvidenceScope(record)) return { required_sources: [], issues: [] };
   const scope = record?.identity?.semantic_role === "template" ? templateScope(record, live) : artworkScope(record, live);
   return { required_sources: orderedSources(scope.obligations.map(o => o.source)), issues: orderedIssues(scope.issues) };
 }
@@ -377,4 +388,43 @@ function auditArtworkEvidence({ recordId, model, session }) {
 export function auditComponentEvidenceLinks(input = {}) {
   const record = input.model?.records?.find(candidate => candidate.id === input.recordId);
   return record?.identity?.semantic_role === "template" ? auditTemplateEvidence(input) : auditArtworkEvidence(input);
+}
+
+// Orchestration only: neither link proof nor successful identity verification
+// waives a scalar fact. Keep the old report intact for comparison and handoff.
+export function auditFigmaComponentEvidence({ record, live, model, session, derivedEvidence = [] } = {}) {
+  const facts = auditFigmaContractFacts({ record, live, derivedEvidence });
+  let evidence = { ok: false, component_id: record?.id ?? null, canonical_git_sha: null,
+    session_started_at: null, receipt_ids: [], results: [], issues: [], required_sources: [], verified_sources: [] };
+  const finish = () => ({ ok: facts.ok && evidence.ok, facts, evidence_links: evidence,
+    issues: [...facts.issues, ...evidence.issues] });
+  if (!model || !session) {
+    const scope = collectRequiredComponentEvidence({ record, live });
+    evidence.required_sources = scope.required_sources;
+    evidence.issues.push(...scope.issues);
+    if (requiresEvidenceScope(record) || model || session) {
+      evidence.issues.push(issue("EVIDENCE_SESSION_REQUIRED", "/session", "Evidence scope requires both a pinned canonical model and a validated fresh MCP session."));
+    }
+    evidence.ok = evidence.issues.length === 0;
+    return finish();
+  }
+
+  evidence.canonical_git_sha = model.canonical_sha ?? null;
+  evidence.session_started_at = session.started_at ?? null;
+  const records = model.records?.filter(candidate => candidate.id === record?.id);
+  if (records?.length !== 1 || !isDeepStrictEqual(records[0], record)) {
+    evidence.issues.push(issue("EVIDENCE_CANONICAL_RECORD_MISMATCH", "/record", "The supplied record must equal the one canonical record in the loaded model."));
+    return finish();
+  }
+  const capture = selectCapture(record.id, model, session, evidence.issues);
+  if (!capture) return finish();
+  if (!isDeepStrictEqual(capture.packet, live)) {
+    evidence.issues.push(issue("EVIDENCE_LIVE_PACKET_MISMATCH", "/live", "The fact audit and link audit must use the same session packet."));
+    return finish();
+  }
+  if (!requiresEvidenceScope(record)) {
+    evidence.receipt_ids = [capture.receipt_id];
+    evidence.ok = true;
+  } else evidence = auditComponentEvidenceLinks({ recordId: record.id, model, session });
+  return finish();
 }

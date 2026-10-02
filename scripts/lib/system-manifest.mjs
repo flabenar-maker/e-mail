@@ -2,6 +2,7 @@ import { access, readFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 
 import { SystemValidationError } from "./diagnostics.mjs";
+import { resolveEvidenceTargets } from "./component-evidence-links.mjs";
 import { validateDocumentShape } from "./schema-validation.mjs";
 import { readStrictYaml } from "./strict-yaml.mjs";
 import { validateTypographyFoundation } from "./typography-foundation.mjs";
@@ -1226,6 +1227,30 @@ export async function validateSystem({
         manifest,
         errors: sortDiagnostics(componentResult.errors),
       };
+    }
+
+    // Reuse the already validated canonical documents; do not add runtime
+    // sources, a second loader path, or evidence metadata to email bundles.
+    const evidenceEntries = listComponentRecords(componentResult.registries);
+    const evidenceTargets = resolveEvidenceTargets({
+      records: evidenceEntries.map(({ record }) => record),
+      manifest,
+      sourceDocuments: new Map([
+        ...Object.entries(componentResult.registries).map(([library, document]) => [`components-${library}`, document]),
+        ["rendering-foundation", renderingResult.rendering],
+      ]),
+    });
+    if (evidenceTargets.issues.length > 0) {
+      const errors = evidenceTargets.issues.map(item => {
+        const path = item.path.replace(/^\/records\/(\d+)(?=\/|$)/u, (prefix, ordinal) => {
+          const entry = evidenceEntries[Number(ordinal)];
+          if (!entry) return prefix;
+          const index = componentResult.registries[entry.library].components.findIndex(record => record.id === entry.record.id);
+          return `/registries/${entry.library}/components/${index}`;
+        });
+        return diagnostic(item.code, path, item.message);
+      });
+      return { manifest, errors: sortDiagnostics(errors) };
     }
 
     const rendererReferenceErrors = validateRendererCoverageReferences(
