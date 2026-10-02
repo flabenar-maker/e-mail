@@ -111,7 +111,7 @@ function templateScope(record, live) {
 // Independently determined requirements: removing links cannot remove duties.
 // No claim about the entire Template or about a future email instance.
 export function collectRequiredComponentEvidence({ record, live } = {}) {
-  const scope = templateScope(record, live);
+  const scope = record?.identity?.semantic_role === "template" ? templateScope(record, live) : artworkScope(record, live);
   return { required_sources: orderedSources(scope.obligations.map(o => o.source)), issues: orderedIssues(scope.issues) };
 }
 
@@ -161,7 +161,7 @@ function selectCapture(recordId, model, session, issues) {
   return capture;
 }
 
-export function auditComponentEvidenceLinks({ recordId, model, session } = {}) {
+function auditTemplateEvidence({ recordId, model, session } = {}) {
   const issues = [], results = [], verified = [];
   const report = { ok: false, component_id: recordId, canonical_git_sha: model?.canonical_sha ?? null,
     session_started_at: session?.started_at ?? null, receipt_ids: [], results, issues, required_sources: [], verified_sources: [] };
@@ -221,4 +221,160 @@ export function auditComponentEvidenceLinks({ recordId, model, session } = {}) {
   report.verified_sources = orderedSources(verified);
   report.ok = issues.length === 0 && report.required_sources.length > 0 && report.verified_sources.length === report.required_sources.length;
   return report;
+}
+
+// Generic identity proof for artwork owners and targets (not Template policy).
+// Only loaded, complete packets are inputs; no saved source_variants fallback.
+function inspectArtworkTree(record, live) {
+  const issues = [], nodes = new Map(), variants = new Map();
+  let identityValid = true, count = 0;
+  const fail = (code, path, message) => { identityValid = false; issues.push(issue(code, path, message, { component_id: record.id })); };
+  let expected;
+  if (record.identity.node_kind === "component" && record.variants.length === 0) expected = [{ node_id: record.figma.node_id, axes: [] }];
+  else if (record.identity.node_kind === "component-set" && record.variants.length > 0) expected = record.variants;
+  else expected = [];
+  if (!expected.length || new Set(expected.map(v => v.node_id)).size !== expected.length) fail("EVIDENCE_SCOPE_AMBIGUOUS", "/variants", "Canonical root/variant identities are ambiguous.");
+  if (!live || live.capture_version !== "1.1.0" || live.capture_meta?.tree_complete !== true || !Array.isArray(live.variants)) {
+    fail("EVIDENCE_CAPTURE_INCOMPLETE", "/capture", "A complete capture 1.1.0 is required."); return { issues, nodes, variants, identityValid };
+  }
+  if (live.file_key !== record.figma.file_key || live.component_node_id !== record.figma.node_id) fail("EVIDENCE_CAPTURE_IDENTITY_MISMATCH", "/capture", "Exact canonical file and component owner are required.");
+  if (live.variants.length !== expected.length || new Set(live.variants.map(v => v.variant_node_id)).size !== live.variants.length) fail("EVIDENCE_CAPTURE_IDENTITY_MISMATCH", "/capture/variants", "Captured variants must exactly match all canonical variants.");
+  const seen = new Set();
+  function walk(node, variantId, ancestors) {
+    if (!node || typeof node !== "object" || seen.has(node) || typeof node.node_id !== "string" ||
+        (Object.hasOwn(node, "children") && !Array.isArray(node.children)) ||
+        (["COMPONENT", "COMPONENT_SET", "FRAME", "GROUP", "INSTANCE", "SECTION", "SLOT"].includes(node.node_type) && !Array.isArray(node.children))) {
+      fail("EVIDENCE_CAPTURE_INCOMPLETE", "/capture/variants", "Source tree must include complete container children and exact identities."); return;
+    }
+    seen.add(node); count++;
+    if (nodes.has(node.node_id)) fail("EVIDENCE_SOURCE_ID_AMBIGUOUS", `/capture/${node.node_id}`, "Node identity occurs more than once in the owner packet.");
+    else nodes.set(node.node_id, { node, variantId, ancestors });
+    for (const child of node.children ?? []) walk(child, variantId, [...ancestors, node]);
+  }
+  for (const variant of live.variants) {
+    const registered = expected.filter(v => v.node_id === variant.variant_node_id);
+    if (registered.length !== 1 || axesKey(variant.axes) === null || axesKey(variant.axes) !== axesKey(registered[0].axes) ||
+        variant.source_node?.node_id !== variant.variant_node_id || variant.source_node.node_type !== "COMPONENT") {
+      fail("EVIDENCE_CAPTURE_IDENTITY_MISMATCH", `/capture/variants/${variant.variant_node_id}`, "Variant axes, COMPONENT root and exact root ID must match registration.");
+    }
+    variants.set(variant.variant_node_id, variant.source_node);
+    walk(variant.source_node, variant.variant_node_id, []);
+  }
+  if (!Number.isSafeInteger(live.capture_meta.node_count) || live.capture_meta.node_count !== count) fail("EVIDENCE_CAPTURE_INCOMPLETE", "/capture/capture_meta/node_count", "Serialized node count must match complete capture metadata.");
+  if (!Array.isArray(live.capture_errors) || !Array.isArray(live.component_properties)) fail("EVIDENCE_CAPTURE_INCOMPLETE", "/capture", "Capture fact fields and diagnostics are required.");
+  for (const error of live.capture_errors ?? []) issues.push(issue("EVIDENCE_CAPTURE_ERROR", `/capture/${error.node_id ?? ""}/${error.field ?? ""}`, "Original capture diagnostic remains unresolved.", { component_id: record.id, capture_error: error }));
+  return { issues, nodes, variants, identityValid };
+}
+
+function artworkScope(record, live) {
+  const scope = inspectArtworkTree(record, live);
+  scope.obligations = [];
+  if (!scope.identityValid) return scope;
+  const assets = record.asset_contracts;
+  const sourceOnly = ["asset", "icon"].includes(record.identity.semantic_role) &&
+    ["mobile", "desktop"].every(viewport => record.contracts?.[viewport]?.root?.render_mode === "figma-source-only");
+  if (!sourceOnly && assets.length === 0) {
+    scope.issues.push(issue("EVIDENCE_SCOPE_UNSUPPORTED", "/asset_contracts", "No declared artwork boundary or source-only artwork role is available.")); return scope;
+  }
+  for (const [variantId, root] of scope.variants) {
+    const entries = [...scope.nodes.values()].filter(entry => entry.variantId === variantId);
+    const boundaries = [];
+    if (sourceOnly && assets.length === 0) boundaries.push({ node: root });
+    for (const asset of assets) {
+      const boundary = asset.export_boundary;
+      if (!["node", "fill"].includes(boundary?.kind) || typeof boundary.semantic_node_name !== "string" || !boundary.semantic_node_name || typeof asset.owner_layer_name !== "string" || !asset.owner_layer_name) {
+        scope.issues.push(issue("EVIDENCE_ASSET_BOUNDARY_UNVERIFIED", `/asset_contracts/${asset.id}`, "Existing export boundary and owner selector are required.")); continue;
+      }
+      const selected = entries.filter(({ node }) => node.name === boundary.semantic_node_name);
+      const owners = entries.filter(({ node }) => node.name === asset.owner_layer_name);
+      let node;
+      if (selected.length === 1 && owners.length === 1 && selected[0].node.node_id === owners[0].node.node_id) node = selected[0].node;
+      // A sole node-export of an asset-role record may be its canonical root.
+      // Never use this allowance to resolve duplicate or conflicting selectors.
+      else if (selected.length === 0 && owners.length === 0 && record.identity.semantic_role === "asset" && assets.length === 1 && boundary.kind === "node") node = root;
+      if (!node) {
+        scope.issues.push(issue("EVIDENCE_ASSET_BOUNDARY_UNVERIFIED", `/asset_contracts/${asset.id}/${variantId}`, "Export and owner selectors must resolve unambiguously to one existing boundary.")); continue;
+      }
+      boundaries.push({ node, asset_id: asset.id });
+    }
+    for (const entry of entries.filter(entry => entry.node.node_type === "INSTANCE")) {
+      const owners = boundaries.filter(boundary => entry.node.node_id === boundary.node.node_id || entry.ancestors.some(ancestor => ancestor.node_id === boundary.node.node_id));
+      if (owners.length === 0) continue; // HTML nested components outside artwork.
+      if (owners.length !== 1) {
+        scope.issues.push(issue("EVIDENCE_SCOPE_AMBIGUOUS", `/capture/${entry.node.node_id}`, "Instance belongs to overlapping or duplicate asset boundaries.")); continue;
+      }
+      const owner = owners[0];
+      scope.obligations.push({ source: { variant_node_id: variantId, node_id: entry.node.node_id, field_path: "/main_component_id" },
+        asset_owner: { node_id: owner.node.node_id, ...(owner.asset_id === undefined ? {} : { asset_id: owner.asset_id }) } });
+    }
+  }
+  return scope;
+}
+
+function auditArtworkEvidence({ recordId, model, session }) {
+  const issues = [], results = [], verified = [], receipts = new Set();
+  const report = { ok: false, component_id: recordId, canonical_git_sha: model?.canonical_sha ?? null,
+    session_started_at: session?.started_at ?? null, receipt_ids: [], results, issues, required_sources: [], verified_sources: [] };
+  const records = model?.records?.filter(record => record.id === recordId);
+  if (records?.length !== 1) { issues.push(issue("EVIDENCE_RECORD_ID_AMBIGUOUS", "/records", "Exactly one canonical owner is required.")); return report; }
+  const record = records[0], capture = selectCapture(recordId, model, session, issues);
+  if (capture) receipts.add(capture.receipt_id);
+  const scope = artworkScope(record, capture?.packet);
+  issues.push(...scope.issues);
+  report.required_sources = orderedSources(scope.obligations.map(o => o.source));
+  const resolved = resolveEvidenceTargets({ records: model.records, manifest: model.manifest, sourceDocuments: model.source_documents });
+  issues.push(...resolved.issues);
+  const links = record.evidence_links?.source_dependencies ?? [];
+  const source = link => ({ ...link.source, field_path: "/main_component_id" });
+  const obligations = new Map(scope.obligations.map(o => [sourceKey(o.source), o]));
+  for (const obligation of scope.obligations) {
+    if (links.filter(link => sourceKey(source(link)) === sourceKey(obligation.source)).length !== 1) issues.push(issue("EVIDENCE_REQUIRED_LINK_MISSING", `/evidence_links/${sourceKey(obligation.source)}`, "Every actual INSTANCE in artwork requires its own dependency link.", { source: { ...obligation.source } }));
+  }
+  const targets = new Map();
+  function targetTree(id) {
+    if (!targets.has(id)) {
+      const targetRecord = model.records.find(candidate => candidate.id === id);
+      const targetCapture = selectCapture(id, model, session, issues);
+      if (targetCapture) receipts.add(targetCapture.receipt_id);
+      const tree = inspectArtworkTree(targetRecord, targetCapture?.packet);
+      issues.push(...tree.issues); targets.set(id, tree);
+    }
+    return targets.get(id);
+  }
+  for (const link of links) {
+    const target = resolved.targets.get(`${recordId}/${link.id}`), obligation = obligations.get(sourceKey(source(link)));
+    const item = { link_id: link.id, kind: "source-dependency", status: "unverified", source: { file_key: record.figma.file_key, ...link.source },
+      target: target ? { ...target.target } : { ...link.target }, asset_owner: { ...link.asset_owner }, reason: "EVIDENCE_INPUT_UNVERIFIED" };
+    if (target) item.expected = target.target.node_id;
+    if (!capture || !scope.identityValid || resolved.issues.length) { /* identity precedes values */ }
+    else if (!obligation) item.reason = "EVIDENCE_SOURCE_OUTSIDE_REQUIRED_SCOPE";
+    else if (link.asset_owner.node_id !== obligation.asset_owner.node_id || link.asset_owner.asset_id !== obligation.asset_owner.asset_id) item.reason = "EVIDENCE_ASSET_OWNER_MISMATCH";
+    else if (target) {
+      const tree = targetTree(link.target.component_id), actual = scope.nodes.get(link.source.node_id)?.node;
+      if (!tree.identityValid || !tree.variants.has(target.target.node_id)) item.reason = "EVIDENCE_TARGET_IDENTITY_UNVERIFIED";
+      else if (actual?.node_type !== "INSTANCE" || typeof actual.main_component_id !== "string" || !actual.main_component_id) item.reason = "EVIDENCE_MAIN_COMPONENT_UNVERIFIED";
+      else {
+        item.actual = actual.main_component_id;
+        item.status = item.actual === item.expected ? "verified" : "mismatch";
+        item.reason = item.status === "verified" ? "EVIDENCE_MAIN_COMPONENT_MATCH" : "EVIDENCE_MAIN_COMPONENT_MISMATCH";
+      }
+    }
+    if (item.status === "verified") verified.push(source(link));
+    else issues.push(issue(item.reason, `/evidence_links/${link.id}`, `Source dependency is ${item.status}.`, { link_id: link.id }));
+    results.push(item);
+  }
+  for (const link of record.evidence_links?.foundation_values ?? []) {
+    results.push({ link_id: link.id, kind: "foundation-value", status: "unverified", source: { file_key: record.figma.file_key, ...link.source }, target: { ...link.target }, reason: "EVIDENCE_SCOPE_UNSUPPORTED" });
+    issues.push(issue("EVIDENCE_SCOPE_UNSUPPORTED", `/evidence_links/${link.id}`, "Shell assertions require Template role."));
+  }
+  report.receipt_ids = [...receipts].sort(order);
+  report.verified_sources = orderedSources(verified);
+  results.sort((a, b) => order(a.link_id, b.link_id)); orderedIssues(issues);
+  report.ok = issues.length === 0 && verified.length === scope.obligations.length;
+  return report;
+}
+
+export function auditComponentEvidenceLinks(input = {}) {
+  const record = input.model?.records?.find(candidate => candidate.id === input.recordId);
+  return record?.identity?.semantic_role === "template" ? auditTemplateEvidence(input) : auditArtworkEvidence(input);
 }

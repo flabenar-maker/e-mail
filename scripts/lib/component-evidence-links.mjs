@@ -206,3 +206,86 @@ export function resolveEvidenceTargets({records, manifest, sourceDocuments}) {
   }
   return {targets, issues: sorted(issues)};
 }
+
+// Read-only projection. Default transitive paths are review candidates, never
+// evidence that an overridden glyph is used by a particular instance.
+export function collectEvidenceConsumers({ model, session, sourceComponentId, reports = [] } = {}) {
+  const issues = [], confirmed = new Map(), possible = new Map();
+  const compare = (a, b) => a < b ? -1 : a > b ? 1 : 0;
+  const resultKey = edge => JSON.stringify([edge.component_id, edge.asset_owner_node_id, edge.asset_id ?? null]);
+  const stepKey = step => `${step.component_id}/${step.link_id}`;
+  if (!model?.records || model.records.filter(record => record.id === sourceComponentId).length !== 1) {
+    return { confirmed: [], possible: [], issues: [{ code: "EVIDENCE_TARGET_COMPONENT_UNKNOWN", path: "/sourceComponentId", message: "One canonical source component is required." }] };
+  }
+  const resolved = resolveEvidenceTargets({ records: model.records, manifest: model.manifest, sourceDocuments: model.source_documents });
+  issues.push(...resolved.issues);
+  if (issues.length) return { confirmed: [], possible: [], issues: sorted(issues) };
+  const edges = [...resolved.targets.values()].filter(target => target.kind === "source-dependency");
+  const byId = new Map(model.records.map(record => [record.id, record]));
+  const captures = new Map();
+  for (const capture of session?.captures ?? []) {
+    if (!captures.has(capture.component_id)) captures.set(capture.component_id, []);
+    captures.get(capture.component_id).push(capture);
+  }
+  const oneCapture = id => captures.get(id)?.length === 1 ? captures.get(id)[0] : null;
+  function add(map, edge, via) {
+    const item = { component_id: edge.component_id, asset_owner_node_id: edge.asset_owner.node_id,
+      ...(edge.asset_owner.asset_id === undefined ? {} : { asset_id: edge.asset_owner.asset_id }), via: [] };
+    const key = resultKey(item), current = map.get(key) ?? item;
+    const steps = new Map([...current.via, ...via].map(step => [stepKey(step), step]));
+    current.via = [...steps.values()].sort((a, b) => compare(stepKey(a), stepKey(b))); map.set(key, current);
+  }
+  const allReceipts = new Set((session?.captures ?? []).map(capture => capture.receipt_id));
+  const seenReports = new Set();
+  function mismatch(path, message) { issue(issues, "EVIDENCE_REPORT_CONTEXT_MISMATCH", path, message); }
+  function nodeFrom(capture, variantId, nodeId) {
+    const variants = capture?.packet?.variants?.filter(variant => variant.variant_node_id === variantId);
+    if (variants?.length !== 1) return null;
+    const queue = [variants[0].source_node], nodes = [], visited = new Set();
+    while (queue.length) {
+      const node = queue.pop(); if (!node || visited.has(node)) return null;
+      visited.add(node); if (node.node_id === nodeId) nodes.push(node); queue.push(...(node.children ?? []));
+    }
+    return nodes.length === 1 ? nodes[0] : null;
+  }
+  for (const report of reports) {
+    const path = `/reports/${report.component_id}`, owner = byId.get(report.component_id), capture = oneCapture(report.component_id);
+    if (seenReports.has(report.component_id) || !owner || !capture || session?.canonical_git_sha !== model.canonical_sha ||
+        report.canonical_git_sha !== model.canonical_sha || report.session_started_at !== session.started_at ||
+        !Array.isArray(report.receipt_ids) || report.receipt_ids.length === 0 ||
+        report.receipt_ids.some(id => !allReceipts.has(id)) || !report.receipt_ids.includes(capture.receipt_id) ||
+        !session.component_ids?.includes(report.component_id) || !Array.isArray(report.results) || !Array.isArray(report.verified_sources)) {
+      mismatch(path, "Report must match the canonical SHA, selected owner, current session and its actual receipts."); continue;
+    }
+    seenReports.add(report.component_id);
+    for (const item of report.results.filter(item => item.kind === "source-dependency" && item.status === "verified")) {
+      const edge = resolved.targets.get(`${report.component_id}/${item.link_id}`), targetCapture = edge && oneCapture(edge.target.component_id);
+      const sameSource = edge && ["file_key", "variant_node_id", "node_id"].every(key => item.source?.[key] === edge.source[key]);
+      const sameTarget = edge && ["component_id", "variant_id", "file_key", "node_id"].every(key => item.target?.[key] === edge.target[key]);
+      const covered = edge && report.verified_sources.some(source => source.variant_node_id === edge.source.variant_node_id && source.node_id === edge.source.node_id && source.field_path === "/main_component_id");
+      const actualNode = edge && nodeFrom(capture, edge.source.variant_node_id, edge.source.node_id);
+      const targetNode = edge && nodeFrom(targetCapture, edge.target.node_id, edge.target.node_id);
+      if (!edge || edge.kind !== "source-dependency" || !sameSource || !sameTarget || !covered || !targetCapture ||
+          !report.receipt_ids.includes(targetCapture.receipt_id) || !session.component_ids.includes(edge.target.component_id) ||
+          item.asset_owner?.node_id !== edge.asset_owner.node_id || item.asset_owner?.asset_id !== edge.asset_owner.asset_id ||
+          item.expected !== edge.target.node_id || item.actual !== edge.target.node_id || actualNode?.node_type !== "INSTANCE" || actualNode.main_component_id !== edge.target.node_id ||
+          targetNode?.node_type !== "COMPONENT" || capture.packet.file_key !== owner.figma.file_key || capture.packet.component_node_id !== owner.figma.node_id ||
+          targetCapture.packet.file_key !== edge.target.file_key || targetCapture.packet.component_node_id !== byId.get(edge.target.component_id).figma.node_id) {
+        mismatch(`${path}/${item.link_id}`, "Verified assertion must retain its exact canonical source/target/owner and current source/target packet receipts."); continue;
+      }
+      if (edge.target.component_id === sourceComponentId) add(confirmed, edge, [{ component_id: edge.component_id, link_id: edge.link_id }]);
+    }
+  }
+  function reverse(id, via, visited) {
+    for (const edge of edges.filter(edge => edge.target.component_id === id)) {
+      if (visited.has(edge.component_id)) continue;
+      const next = [...via, { component_id: edge.component_id, link_id: edge.link_id }];
+      add(possible, edge, next);
+      reverse(edge.component_id, next, new Set([...visited, edge.component_id]));
+    }
+  }
+  reverse(sourceComponentId, [], new Set([sourceComponentId]));
+  for (const key of confirmed.keys()) possible.delete(key);
+  const output = map => [...map.values()].sort((a, b) => compare(resultKey(a), resultKey(b)));
+  return { confirmed: output(confirmed), possible: output(possible), issues: sorted(issues) };
+}
