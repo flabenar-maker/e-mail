@@ -64,7 +64,7 @@
 
 ## Задача 1. Typed metadata и offline reference validation
 
-**Files:** Modify schema/component-registry; Create `scripts/lib/component-evidence-links.mjs`, `tests/foundation/component-evidence-links.test.mjs`; Modify version headers трёх data-файлов, `tests/foundation/component-registry.test.mjs`, `tests/components/component-documentation-model.test.mjs`, `tests/components/component-documentation-migration.test.mjs`; regenerate три документа из таблицы при изменении headers.
+**Files:** Modify schema/component-registry; Create `scripts/lib/component-evidence-links.mjs`, `tests/foundation/component-evidence-links.test.mjs`; Modify version headers трёх data-файлов, `tests/foundation/component-registry.test.mjs`, `tests/components/component-documentation-model.test.mjs`, `tests/components/component-documentation-migration.test.mjs`, `tests/generation/generated-docs.test.mjs`; regenerate три документа из таблицы при изменении headers.
 
 **Interfaces:** Produces `validateEvidenceLinkReferences`, `resolveEvidenceTargets`; остальные exports из общей таблицы ещё не используются. `validateComponentRegistrySemantics` вызывает первую функцию; `collectComponentReferences` и HTML dependency closure не менять.
 
@@ -85,12 +85,12 @@ assert.ok(codes(withCycle).includes('EVIDENCE_DEPENDENCY_CYCLE'));
 - [x] Reference validation: exact source variant принадлежит owner (standalone root допускается вместо variants); target component/variant существует, source/target file key совпадает; asset ID принадлежит потребителю; ссылки не содержат дубликат одного source assertion или конфликтующих targets. Проверять циклы только нового dependency graph, не смешивать с HTML graph.
 - [x] `resolveEvidenceTargets`: manifest source должен существовать; source ID/JSON Pointer — только разрешённые spec домены; background target — точный HEX, width/inset — конечные числа. Не использовать fallback-файл, native size или guessed default. Неиспользуемые metadata не заставляют загружать произвольные sources.
 - [x] Поднять версии в synthetic current-format fixtures. Историческую `migrateComponentDocument` не переписывать: её результат остаётся 2.1.0; compatibility assertion сравнивает все record fields с текущими данными, отдельно нормализовав только envelope version. Новые evidence metadata не вырезать из сравнения и не удалять существующие assertions.
-- [x] Terra GREEN: новый test плюс три изменённых test-файла; `node scripts/validate-system.mjs`; `node scripts/generate-docs.mjs --check`. Generated output получать отдельно как derivation, публиковать через cloud, не редактировать snapshot/source вручную. Отличия body типографики/ассетов запрещены.
+- [x] Terra GREEN: новый test плюс четыре изменённых test-файла (включая current-format consumer генератора); `node scripts/validate-system.mjs`; `node scripts/generate-docs.mjs --check`. Generated output получать отдельно как derivation, публиковать через cloud, не редактировать snapshot/source вручную. Отличия body типографики/ассетов запрещены.
 - [x] Cloud commit: `feat: add typed non-rendering evidence link metadata`. В журнале записать SHA/RED/GREEN; следующий шаг — capture/context, не data mappings.
 
 ### Задача 1 — контрольная точка 02.10.2026
 
-Выполнена в кандидате `e71f138dee71293b177e4b68a9c71104a19dce4f`: 94/94 targeted tests, validator и generated check PASS через Terra Medium. Test-first RED и полный перечень сохранённых областей — в [журнале P2](../2026-10-01-cupis-final-maintenance-cutover.md). Реальные links не записаны; полного merge gate ещё нет. Следующая задача — 2; в этом продолжении она не начата.
+Выполнена в кандидате `7adff9c75d6f0fb319f9ab5cb8e8499177a58ccb`: 108/108 targeted tests в пяти файлах, validator и generated check PASS через Terra Medium. Source-consumer scan дополнительно выявил старое ожидание версии в generated-docs test: RED подтвердил actual 2.2.0 против stale 2.1.0; изменено только это ожидание. Поэтому test allowlist задачи расширен на данный файл, без расширения production scope. Test-first RED и полный перечень сохранённых областей — в [журнале P2](../2026-10-01-cupis-final-maintenance-cutover.md). Реальные links не записаны; полного merge gate ещё нет. Следующая задача — 2; в этом продолжении она не начата.
 
 ## Задача 2. Свежий capture и проверяемые входы
 

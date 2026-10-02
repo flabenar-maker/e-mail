@@ -156,6 +156,8 @@ Terra Medium на неизменном exact-SHA snapshot проверила т�
 
 ### Задача 1 T1/S1 — выполнена в кандидате 02.10.2026
 
+**Расширенный локальный gate:** `7adff9c75d6f0fb319f9ab5cb8e8499177a58ccb`, пять test files — 108/108 PASS; validator и generated check PASS. Дополнительно найден один current-format consumer: `tests/generation/generated-docs.test.mjs:285`. Terra воспроизвела старое ожидание 2.1.0 при фактическом 2.2.0; commit 7ad изменил только эту строку. Content assertions/эталоны не обновлялись. Test allowlist под-плана уточнён; production allowlist прежний. Финальный docs-only SHA и подтверждение сохранности code blobs фиксируются в PR receipt. Следующая задача 2 не начата.
+
 - Scope: только typed metadata и offline reference validation; следующий шаг — задача 2 (fresh capture и canonical/session inputs). Задачи 2–7, реальные mappings, P3, #109 и merge не начаты.
 - BASE исполнения: `949c81eaeacd862790b30d4fc22617db01439213`. Test-first commit `9da75e16047b9ec33ee31df5103768da7d83ce79`: Terra воспроизвела 44 ожидаемых failures отсутствующего API/schema/integration, без fixture/syntax ошибок. Реализация: `09c9d8ffa771c84d5fe9d6442f5a6aba64ccd9a9`; дополнительные boundary/immutability controls: `6da244739083417595c326e0e190965f4d0b6048`; generated headers: `e71f138dee71293b177e4b68a9c71104a19dce4f`.
 - На exact code/generated SHA `e71f138dee71293b177e4b68a9c71104a19dce4f` локально через GPT-5.6 Terra Medium: 4 targeted test files — 94/94 PASS, `node scripts/validate-system.mjs` и `node scripts/generate-docs.mjs --check` PASS. Raw Git blobs сверены до/после. Это scoped Task1 gate, не полный merge gate PR; полный набор оставлен задаче 7/отдельно разрешённому merge. Actions/PR Checks не использовались.
