@@ -237,7 +237,7 @@ test("evidence links activate only the existing dependencies section and render 
   const sections = listComponentDocumentationSections(source);
   assert.deepEqual(sections.map(({ id }) => id), [...before.map(({ id }) => id), "constraints-and-dependencies"]);
   const output = renderComponentRegistrySection(source, index);
-  assert.match(output, /- Evidence link \(foundation\): \`mobile-shell-left-inset\` — source variant \`1102:6\`, node \`1102:6\`, field \`\/layout\/padding\/left\` → foundation \`rendering-foundation\` \`\/shell\/horizontal_inset_px\`; comparison \`pixel-number\`/u);
-  assert.match(output, /- Evidence link \(source\): \`desktop-header-logo-source\` — source variant \`230:3679\`, instance \`1008:1823\` → component \`asset-header-logo-4x\` \(\`Asset\/Header-Logo @4x\`\); target variant \`product-cupis\`; asset owner \`1008:1823\`; asset \`header-logo\`/u);
+  assert.match(output, /- Evidence link \(foundation\): \x60mobile-shell-left-inset\x60 — source variant \x601102:6\x60, node \x601102:6\x60, field \x60\/layout\/padding\/left\x60 → foundation \x60rendering-foundation\x60 \x60\/shell\/horizontal_inset_px\x60; comparison \x60pixel-number\x60/u);
+  assert.match(output, /- Evidence link \(source\): \x60desktop-header-logo-source\x60 — source variant \x60230:3679\x60, instance \x601008:1823\x60 → component \x60asset-header-logo-4x\x60 \(\x60Asset\/Header-Logo @4x\x60\); target variant \x60product-cupis\x60; asset owner \x601008:1823\x60; asset \x60header-logo\x60/u);
   assert.doesNotMatch(output, /Evidence link.*(?:#(?:[0-9A-F]{3}|[0-9A-F]{6})|verified)/iu);
 });
