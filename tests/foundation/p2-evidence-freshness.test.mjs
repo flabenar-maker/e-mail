@@ -113,7 +113,7 @@ test("rejects inverted host and capture timelines independently", async (t) => {
 
 // Production mutation caught: breaking the allowed one-request/one-receipt multi-owner batch.
 test("accepts two complete distinct owners under one exact request and receipt envelope", async (t) => {
-  const fixture = await session12(t, async ({ session, packet }) => {
+  const fixture = await session12(t, async ({ session, packet, fixture: system }) => {
     const other = structuredClone(packet);
     other.component_node_id = "2:1";
     other.variants[0].variant_node_id = "2:1";
@@ -121,14 +121,14 @@ test("accepts two complete distinct owners under one exact request and receipt e
     const bytes = JSON.stringify(other);
     session.component_ids.push("synthetic-other");
     session.captures.push({ ...session.captures[0], component_id: "synthetic-other", packet_path: "packets/other.json", packet_sha256: digest(bytes) });
-    await writeFixtureFile(fixture.root, "packets/other.json", bytes);
+    await writeFixtureFile(system.root, "packets/other.json", bytes);
   });
   await assert.doesNotReject(loadComponentEvidenceSession({ sessionPath: fixture.sessionPath, canonicalSha: SHA }));
 });
 
 // Production mutation caught: accepting one receipt ID with incompatible request nonces.
 test("rejects one receipt reused under distinct request nonces", async (t) => {
-  const fixture = await session12(t, async ({ session, packet }) => {
+  const fixture = await session12(t, async ({ session, packet, fixture: system }) => {
     const other = structuredClone(packet);
     other.component_node_id = "2:1";
     other.variants[0].variant_node_id = "2:1";
@@ -137,7 +137,16 @@ test("rejects one receipt reused under distinct request nonces", async (t) => {
     const bytes = JSON.stringify(other);
     session.component_ids.push("synthetic-other");
     session.captures.push({ ...session.captures[0], component_id: "synthetic-other", request_nonce: "5".repeat(64), packet_path: "packets/other.json", packet_sha256: digest(bytes) });
-    await writeFixtureFile(fixture.root, "packets/other.json", bytes);
+    await writeFixtureFile(system.root, "packets/other.json", bytes);
+  });
+  await assert.rejects(loadComponentEvidenceSession({ sessionPath: fixture.sessionPath, canonicalSha: SHA }), hasCode("EVIDENCE_RECEIPT_REQUEST_AMBIGUOUS"));
+});
+
+// Production mutation caught: changing capture wrapper behavior for scalar callers or failing to echo requested identity.
+test("rejects one request nonce with incompatible receipt envelopes before reading packets", async (t) => {
+  const fixture = await session12(t, ({ session }) => {
+    session.component_ids.push("synthetic-other");
+    session.captures.push({ ...session.captures[0], component_id: "synthetic-other", receipt_id: "receipt-other", packet_path: "missing.json" });
   });
   await assert.rejects(loadComponentEvidenceSession({ sessionPath: fixture.sessionPath, canonicalSha: SHA }), hasCode("EVIDENCE_RECEIPT_REQUEST_AMBIGUOUS"));
 });
@@ -155,6 +164,7 @@ test("VM capture keeps no-argument 1.1 scalar compatibility and emits exact 1.2 
   const request = { session_nonce: SESSION_NONCE, request_nonce: REQUEST_NONCE, canonical_git_sha: SHA };
   const evidence = await context.__capture("1:1", request);
   assert.equal(scalar.capture_version, "1.1.0");
+  assert.ok(evidence.capture_meta.request, "request-mode capture must expose capture_meta.request");
   assert.deepEqual(JSON.parse(JSON.stringify(evidence.capture_meta.request)), request);
   assert.equal(evidence.capture_version, "1.2.0");
   traversed = false;
