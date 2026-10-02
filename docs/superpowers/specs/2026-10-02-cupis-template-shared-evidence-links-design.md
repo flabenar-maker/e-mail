@@ -1,6 +1,6 @@
 # CUPIS: служебные связи Template и Shared — дизайн T1/S1
 
-Дата: 02.10.2026. Статус: направление и письменная спецификация одобрены пользователем. [Implementation plan T1/S1](../plans/cutover/2026-10-02-cupis-template-shared-evidence-links.md) подтверждён; задачи 1–2 выполнены в кандидате PR #110 (формат/offline references и capture/canonical-session inputs). Задачи 3–7 и реальные mappings ещё не начаты.
+Дата: 02.10.2026. Статус: направление и письменная спецификация одобрены пользователем. [Implementation plan T1/S1](../plans/cutover/2026-10-02-cupis-template-shared-evidence-links.md) подтверждён; задачи 1–3 выполнены в кандидате PR #110 (формат/offline references, capture/canonical-session inputs и T1 checker). Задачи 4–7 и реальные mappings ещё не начаты.
 
 Основание: `main@618d124df0a664c84d23a724ba50ef2b324e9b97`, кандидат [PR #110](https://github.com/flabenar-maker/e-mail/pull/110) `e544e303f7d5ebf3e7b3ea01f87a7c19234a95d2`. Это дочернее уточнение [master-spec](2026-08-24-cupis-structured-email-system-design.md), а не второй глобальный план. Последовательность остаётся в [roadmap](../plans/2026-08-25-cupis-migration-roadmap.md), исходные факты и карта владельцев — в [журнале P2](../plans/2026-10-01-cupis-final-maintenance-cutover.md).
 
@@ -153,7 +153,7 @@ P2 реализует schema, проверку и разрешённые mapping
 
 ## 8. Область реализации по согласованной спецификации
 
-Карта ответственности утверждённого implementation plan; задачи 1–2 реализуют форму/offline references и capture/canonical-session inputs; live checker, его интеграция и mappings остаются следующими задачами:
+Карта ответственности утверждённого implementation plan; задачи 1–3 реализуют форму/offline references, capture/canonical-session inputs и T1 checker; S1, общая интеграция и mappings остаются следующими задачами:
 
 | Область | Владелец изменения |
 | --- | --- |
@@ -181,6 +181,8 @@ P2 реализует schema, проверку и разрешённые mapping
 
 ## 10. Текущее состояние и следующий шаг
 
-Задачи 1–2 реализованы в кандидате PR #110: schema 2.2.0/typed metadata/offline references, capture 1.1.0 с async main lookup и metadata, manifest-resolved canonical model и проверяемый временный session. Code/test SHA задачи 2 — `98b8b7633d689badc21ecf15241fdd54a9cbc30d`; 161/161 scoped tests, validator/generated check PASS. Проверки, уточнения test fixtures и ограничения записаны в implementation plan/журнале P2. Это не подтверждение live-связей и не приёмка всего ремонта.
+Задачи 1–3 реализованы в кандидате PR #110: schema 2.2.0/typed metadata/offline references, capture 1.1.0 с async main lookup и metadata, manifest-resolved canonical model и проверяемый временный session. Code/test SHA задачи 2 — `98b8b7633d689badc21ecf15241fdd54a9cbc30d`; 161/161 scoped tests, validator/generated check PASS. Проверки, уточнения test fixtures и ограничения записаны в implementation plan/журнале P2. Это не подтверждение live-связей и не приёмка всего ремонта.
 
-Факты компонентов, foundation values и HTML/export policy не менялись; реальные evidence links ещё не добавлены. Следующая задача 3 — проверка Template → shell, затем S1 и общая интеграция. Запись links требует нового адресного MCP-чтения согласно §§5–7; ранее полученный audit не выдаётся за fresh acceptance нового механизма. P2 открыт; P3 и merge отдельно.
+T1 checker задачи 3 реализован на `f0237a32727a54a8c5b503918cdd8bcc40e435ee`: девять обязательств независимо от links, exact identity/paint/sizing и canonical targets; 152/152 scoped tests, validator/generated check PASS через Terra Medium. Это synthetic gate механизма, не подтверждение фактических библиотечных links.
+
+Факты компонентов, foundation values и HTML/export policy не менялись; реальные evidence links ещё не добавлены. Следующая задача 4 — S1 dependencies/impact, затем общая интеграция. Запись links требует нового адресного MCP-чтения согласно §§5–7; ранее полученный audit не выдаётся за fresh acceptance нового механизма. P2 открыт; P3 и merge отдельно.
