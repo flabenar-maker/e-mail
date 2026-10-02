@@ -276,3 +276,10 @@ test("evidence metadata never changes compact descriptions", async () => {
   record.evidence_links = [{ id: "synthetic", kind: "foundation", source_variant: "Mobile", node: "1:2", field: "padding" }];
   assert.equal(renderFigmaComponentDescription(record), before);
 });
+
+test("evidence metadata never changes compact descriptions", async () => {
+  const record = structuredClone(await byId("email-template"));
+  const before = renderFigmaComponentDescription(record);
+  record.evidence_links = { foundation_values: [], source_dependencies: [] };
+  assert.equal(renderFigmaComponentDescription(record), before);
+});

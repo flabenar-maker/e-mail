@@ -222,3 +222,12 @@ test("evidence links are projected only in dependencies with canonical source an
   assert.match(output, /- Evidence link \(foundation\): `template-padding` — source variant `Mobile`, node `1:2`, field `padding` → foundation `spacing` `\/roles\/outer-flow`; comparison `exact`/u);
   assert.match(output, /- Evidence link \(source\):/u);
 });
+
+test("evidence links are projected only in dependencies with canonical source and foundation forms", async () => {
+  const { index } = await loadContext();
+  const source = structuredClone(record(index, "email-template"));
+  source.evidence_links = { foundation_values: [{ id: "template-padding", source: { variant_node_id: "1102:6", node_id: "1102:6", field_path: "/layout/padding/left" }, target: { source_id: "rendering-foundation", pointer: "/shell/horizontal_inset_px" }, comparison: "pixel-number" }], source_dependencies: [{ id: "template-logo", source: { variant_node_id: "1102:7", node_id: "1103:8" }, target: { component_id: "asset-header-logo-4x" }, asset_owner: { node_id: "1102:7", asset_id: "header-logo" } }] };
+  const output = renderComponentRegistrySection(source, index);
+  assert.match(output, /- Evidence link \(foundation\): `template-padding` — source variant `Mobile`, node `1:2`, field `padding` → foundation `spacing` `\/roles\/outer-flow`; comparison `exact`/u);
+  assert.match(output, /- Evidence link \(source\):/u);
+});

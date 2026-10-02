@@ -11,7 +11,7 @@ test("synthetic evidence metadata preserves all compact descriptions", async () 
   assert.equal(records.length, 61);
   for (const record of records) {
     const copy = structuredClone(record); const before = renderFigmaComponentDescription(copy);
-    copy.evidence_links = [{ id: "synthetic", kind: "source", source_variant: "Mobile", instance: "root" }];
+    copy.evidence_links = { foundation_values: [], source_dependencies: [] };
     assert.equal(renderFigmaComponentDescription(copy), before, record.id);
   }
 });
