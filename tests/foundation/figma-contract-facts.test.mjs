@@ -400,3 +400,13 @@ test("a pinned registry literal without an email-only derivation remains unmappe
     item.code === "CONTRACT_FACT_UNMAPPED" &&
     item.contract_path === "/contracts/mobile/root/facts/2/value/value"));
 });
+for (const version of ["1.0.0", "1.1.0"]) test(`scalar audit still reads ${version} without inventing evidence metadata`, () => {
+  const { record, packet }=fixture();packet.capture_version=version;
+  const r=auditFigmaContractFacts({record,live:packet});
+  assert.equal(r.issues.some(i=>i.code==="FIGMA_CAPTURE_VERSION_UNSUPPORTED"),false);
+  assert.ok(r.issues.some(i=>i.code==="FIGMA_FACT_UNCOVERED"));
+});
+test("scalar audit rejects an unknown capture version",()=>{
+  const {record,packet}=fixture();packet.capture_version="9.0.0";
+  assert.ok(auditFigmaContractFacts({record,live:packet}).issues.some(i=>i.code==="FIGMA_CAPTURE_VERSION_UNSUPPORTED"));
+});
