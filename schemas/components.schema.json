@@ -11,7 +11,7 @@
   ],
   "properties": {
     "schema_version": {
-      "const": "2.1.0"
+      "const": "2.2.0"
     },
     "registry": {
       "$ref": "#/$defs/registry"
@@ -256,6 +256,9 @@
             "$ref": "#/$defs/assetContract"
           }
         },
+        "evidence_links": {
+          "$ref": "#/$defs/evidenceLinks"
+        },
         "contracts": {
           "type": "object",
           "additionalProperties": false,
@@ -330,6 +333,161 @@
           "type": "array",
           "items": {
             "$ref": "#/$defs/constraint"
+          }
+        }
+      }
+    },
+    "evidenceLinks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "foundation_values",
+        "source_dependencies"
+      ],
+      "properties": {
+        "foundation_values": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/foundationEvidenceLink"
+          }
+        },
+        "source_dependencies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sourceEvidenceLink"
+          }
+        }
+      }
+    },
+    "foundationEvidenceLink": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "source",
+        "target",
+        "comparison"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "variant_node_id",
+            "node_id",
+            "field_path"
+          ],
+          "properties": {
+            "variant_node_id": {
+              "type": "string",
+              "pattern": "^[0-9]+:[0-9]+$"
+            },
+            "node_id": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+:[0-9]+|I[0-9]+:[0-9]+(?:;[0-9]+:[0-9]+)+)$"
+            },
+            "field_path": {
+              "type": "string",
+              "pattern": "^(?:/(?:[^~/*]|~[01])*)+$"
+            }
+          }
+        },
+        "target": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "source_id",
+            "pointer"
+          ],
+          "properties": {
+            "source_id": {
+              "const": "rendering-foundation"
+            },
+            "pointer": {
+              "enum": [
+                "/shell/background_color",
+                "/shell/max_width_px",
+                "/shell/horizontal_inset_px"
+              ]
+            }
+          }
+        },
+        "comparison": {
+          "enum": [
+            "pixel-number",
+            "opaque-solid-color"
+          ]
+        }
+      }
+    },
+    "sourceEvidenceLink": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "source",
+        "target",
+        "asset_owner"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "variant_node_id",
+            "node_id"
+          ],
+          "properties": {
+            "variant_node_id": {
+              "type": "string",
+              "pattern": "^[0-9]+:[0-9]+$"
+            },
+            "node_id": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+:[0-9]+|I[0-9]+:[0-9]+(?:;[0-9]+:[0-9]+)+)$"
+            }
+          }
+        },
+        "target": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "component_id"
+          ],
+          "properties": {
+            "component_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "variant_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            }
+          }
+        },
+        "asset_owner": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "node_id"
+          ],
+          "properties": {
+            "node_id": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+:[0-9]+|I[0-9]+:[0-9]+(?:;[0-9]+:[0-9]+)+)$"
+            },
+            "asset_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            }
           }
         }
       }

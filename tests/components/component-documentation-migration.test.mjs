@@ -219,7 +219,7 @@ test("reviewed mapping reproduces all 61 canonical schema 2 records", async () =
 
     assert.deepEqual(
       migrateComponentDocument(source, mappingDocument),
-      target,
+      {...target, schema_version: "2.1.0"},
       `Reviewed mapping drift for ${library}.`,
     );
     total += target.components.length;

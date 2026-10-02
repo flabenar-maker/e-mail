@@ -18,7 +18,7 @@ async function canonicalV2Document() {
   const document = await readStrictYaml(
     join(repoRoot, "data/components/marketing.yaml"),
   );
-  document.schema_version = "2.1.0";
+  document.schema_version = "2.2.0";
   for (const record of document.components) {
     delete record.description;
     record.documentation = {

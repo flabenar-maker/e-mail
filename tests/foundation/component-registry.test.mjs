@@ -30,7 +30,7 @@ async function readSchema() {
 
 function registryEnvelope(library, components = []) {
   return {
-    schema_version: "2.1.0",
+    schema_version: "2.2.0",
     registry: {
       id: `components-${library}`,
       library,
