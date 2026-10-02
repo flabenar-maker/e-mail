@@ -219,25 +219,28 @@ test("evidence links activate only the existing dependencies section and render 
   empty.evidence_links = { foundation_values: [], source_dependencies: [] };
   assert.deepEqual(listComponentDocumentationSections(empty), before);
 
-  const source = structuredClone(record(index, "email-template"));
-  source.evidence_links = {
+  const template = structuredClone(record(index, "email-template"));
+  template.evidence_links = {
     foundation_values: [{
       id: "mobile-shell-left-inset",
       source: { variant_node_id: "1102:6", node_id: "1102:6", field_path: "/layout/padding/left" },
       target: { source_id: "rendering-foundation", pointer: "/shell/horizontal_inset_px" },
       comparison: "pixel-number",
     }],
-    source_dependencies: [{
-      id: "desktop-header-logo-source",
-      source: { variant_node_id: "230:3679", node_id: "1008:1823" },
-      target: { component_id: "asset-header-logo-4x", variant_id: "product-cupis" },
-      asset_owner: { node_id: "1008:1823", asset_id: "header-logo" },
-    }],
+    source_dependencies: [],
   };
-  const sections = listComponentDocumentationSections(source);
-  assert.deepEqual(sections.map(({ id }) => id), [...before.map(({ id }) => id), "constraints-and-dependencies"]);
-  const output = renderComponentRegistrySection(source, index);
+  const activation = structuredClone(template);
+  activation.variants = [];
+  activation.properties = [];
+  activation.constraints = [];
+  activation.documentation.critical_constraint_ids = [];
+  const inactiveSections = listComponentDocumentationSections({ ...activation, evidence_links: { foundation_values: [], source_dependencies: [] } });
+  assert.deepEqual(listComponentDocumentationSections(activation).map(({ id }) => id), [...inactiveSections.map(({ id }) => id), "constraints-and-dependencies"]);
+  const output = renderComponentRegistrySection(template, index);
   assert.match(output, /- Evidence link \(foundation\): \x60mobile-shell-left-inset\x60 — source variant \x601102:6\x60, node \x601102:6\x60, field \x60\/layout\/padding\/left\x60 → foundation \x60rendering-foundation\x60 \x60\/shell\/horizontal_inset_px\x60; comparison \x60pixel-number\x60/u);
-  assert.match(output, /- Evidence link \(source\): \x60desktop-header-logo-source\x60 — source variant \x60230:3679\x60, instance \x601008:1823\x60 → component \x60asset-header-logo-4x\x60 \(\x60Asset\/Header-Logo @4x\x60\); target variant \x60product-cupis\x60; asset owner \x601008:1823\x60; asset \x60header-logo\x60/u);
+  const header = structuredClone(record(index, "email-header"));
+  header.evidence_links = { foundation_values: [], source_dependencies: [{ id: "desktop-header-logo-source", source: { variant_node_id: "230:3679", node_id: "1008:1823" }, target: { component_id: "asset-header-logo-4x", variant_id: "product-cupis" }, asset_owner: { node_id: "1008:1823", asset_id: "header-logo" } }] };
+  const sourceOutput = renderComponentRegistrySection(header, index);
+  assert.match(sourceOutput, /- Evidence link \(source\): \x60desktop-header-logo-source\x60 — source variant \x60230:3679\x60, instance \x601008:1823\x60 → component \x60asset-header-logo-4x\x60 \(\x60Asset\/Header-Logo @4x\x60\); target variant \x60product-cupis\x60; asset owner \x601008:1823\x60; asset \x60header-logo\x60/u);
   assert.doesNotMatch(output, /Evidence link.*(?:#(?:[0-9A-F]{3}|[0-9A-F]{6})|verified)/iu);
 });

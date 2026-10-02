@@ -9,7 +9,7 @@ import { buildRenderImpactProjection } from "../../scripts/lib/render-impact.mjs
 import { renderEmailDocument } from "../../scripts/lib/email-renderer.mjs";
 
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
-const evidence = { foundation_values: [{ id: "synthetic-foundation", source: { variant_node_id: "1:1", node_id: "1:1", field_path: "/fills/0/color" }, target: { source_id: "rendering-foundation", pointer: "/shell/background_color" }, comparison: "opaque-solid-color" }], source_dependencies: [{ id: "synthetic-source", source: { variant_node_id: "1:1", node_id: "1:2" }, target: { component_id: "asset-product-logo" }, asset_owner: { node_id: "1:2" } }] };
+const evidence = { foundation_values: [], source_dependencies: [{ id: "desktop-header-logo-source", source: { variant_node_id: "230:3679", node_id: "1008:1823" }, target: { component_id: "asset-header-logo-4x", variant_id: "product-cupis" }, asset_owner: { node_id: "1008:1823", asset_id: "header-logo" } }] };
 
 function instance(component) {
   const content = [];
