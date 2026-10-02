@@ -20,7 +20,10 @@ function instance(component, index, ancestry = []) {
         const key = viewport + ":" + element.id + ":" + slot.id;
         if (seen.has(key)) continue;
         seen.add(key);
-        const value = slot.type === "url" ? { type: "url", value: "https://example.test/evidence" } : slot.type === "alt-text" ? { type: "alt-text", purpose: "informative", value: "Evidence" } : { type: "plain-text", value: "Evidence" };
+        const sourceText = element.facts?.find(({ id }) => id === "source-text")?.value?.value;
+        const styled = (element.facts ?? []).some(({ id }) => id === "styled-text-segments");
+        if (slot.id === "text" && styled) assert.equal(typeof sourceText, "string", element.id);
+        const value = slot.type === "url" ? { type: "url", value: "https://example.test/evidence" } : slot.type === "alt-text" ? { type: "alt-text", purpose: "informative", value: "Evidence" } : { type: "plain-text", value: slot.id === "text" && styled ? sourceText : "Evidence" };
         content.push({ element_id: element.id, slot_id: slot.id, scope: viewport, value });
       }
       for (const child of element.children ?? []) walk(child);
@@ -37,13 +40,14 @@ function instance(component, index, ancestry = []) {
 
 test("metadata leaves render impact, asset contracts, and representative document bytes unchanged", async () => {
   const [registries, rendererRegistry, rendering] = await Promise.all([loadComponentRegistries({ repoRoot }), loadRendererRegistry({ repoRoot }), loadRenderingFoundation({ repoRoot })]);
-  const beforeIndex = indexComponentRegistries(registries);
+  const actualIndex = indexComponentRegistries(registries);
+  const baseline = structuredClone(registries);
+  for (const document of Object.values(baseline)) for (const component of document.components) delete component.evidence_links;
+  const beforeIndex = indexComponentRegistries(baseline);
   const records = ["email-header", "block-personal-data-update", "block-receipt-info"].map((id) => beforeIndex.bySystemId.get(id));
   assert.ok(records.every(Boolean));
   const before = records.map((component) => buildRenderImpactProjection({ component, coverage: resolveRendererCoverage(rendererRegistry, component.id), foundations: { rendering } }));
-  const altered = structuredClone(registries);
-  for (const document of Object.values(altered)) for (const component of document.components) component.evidence_links = records.some(({ id }) => id === component.id) ? structuredClone(evidence) : { foundation_values: [], source_dependencies: [] };
-  const afterIndex = indexComponentRegistries(altered);
+  const afterIndex = actualIndex;
   const after = records.map(({ id }) => { const component = afterIndex.bySystemId.get(id); return buildRenderImpactProjection({ component, coverage: resolveRendererCoverage(rendererRegistry, id), foundations: { rendering } }); });
   assert.deepEqual(after, before);
   for (const component of records) assert.deepEqual(afterIndex.bySystemId.get(component.id).asset_contracts, component.asset_contracts, component.id);
