@@ -300,3 +300,59 @@ test("S1 hidden instances stay in full dependency coverage", () => {
   const f = s1Fixture(); f.roots.get(f.block.id)[0].children[0].children[0].visible = false;
   assert.equal(s1Audit(f).ok, true); assert.equal(s1Audit(f).required_sources.length, 2);
 });
+
+// This remains synthetic: it specifies the resolver boundary and is not a Figma capture.
+function mobileDirectImageFixture() {
+  const f = s1Fixture(), header = f.header;
+  const mobileRoot = f.roots.get(header.id)[1];
+  const mobileImage = { node_id: "804:mobile-image", name: "renamed-live-mobile-layer", node_type: "FRAME", visible: true, opacity: 1, children: [] };
+  mobileRoot.children = [mobileImage];
+  header.asset_contracts[0] = {
+    ...header.asset_contracts[0], source_mode_id: "rendered-node", display_mode_id: "direct-image", source_viewport: "desktop",
+    owner_layer_name: "desktop-export-label", export_boundary: { kind: "node", semantic_node_name: "desktop-export-label" },
+  };
+  f.roots.get(header.id)[0].children[0].name = "desktop-export-label";
+  header.contracts.mobile.root = { render_mode: "presentation-table", children: [{
+    id: "mobile-direct-image", semantic_role: "brand", render_mode: "direct-image", asset_contract_id: "header-logo", children: [],
+    facts: [{ id: "reference-size", value: { type: "dimensions", width: 322, height: 50, unit: "px" }, provenance: { kind: "figma-literal", node_id: mobileImage.node_id } }],
+  }] };
+  header.figma_fact_links = [
+    { variant_node_id: "804:3", node_id: mobileImage.node_id, source_path: "/reference_dimensions/width", contract_path: "/contracts/mobile/root/children/0/facts/0/value/width", transform: "identity" },
+    { variant_node_id: "804:3", node_id: mobileImage.node_id, source_path: "/reference_dimensions/height", contract_path: "/contracts/mobile/root/children/0/facts/0/value/height", transform: "identity" },
+  ];
+  s1Count(f, header);
+  return { f, header, mobileImage };
+}
+const mobileScope = ({ f, header }) => collectRequiredComponentEvidence({ record: header, live: s1Packet(f, header) });
+const boundaryCode = result => result.issues.some(item => item.code === "EVIDENCE_ASSET_BOUNDARY_UNVERIFIED");
+
+test("S1 resolves a renamed non-source mobile direct-image boundary from its local asset contract", () => {
+  const fixture = mobileDirectImageFixture(); const result = mobileScope(fixture);
+  assert.equal(boundaryCode(result), false, JSON.stringify(result.issues));
+  assert.deepEqual(result.required_sources, []);
+});
+test("S1 refuses missing, conflicting, or unproven mobile direct-image identity facts", () => {
+  const changes = [
+    fixture => { fixture.header.contracts.mobile.root.children[0].asset_contract_id = "other-asset"; },
+    fixture => { fixture.header.contracts.mobile.root.children[0].facts[0].provenance.node_id = "804:wrong"; },
+    fixture => { fixture.header.figma_fact_links[0].variant_node_id = "804:2"; },
+    fixture => { fixture.header.figma_fact_links.pop(); },
+    fixture => { fixture.header.figma_fact_links[1].node_id = "804:wrong"; },
+  ];
+  for (const change of changes) { const fixture = mobileDirectImageFixture(); change(fixture); s1Count(fixture.f, fixture.header); assert.equal(boundaryCode(mobileScope(fixture)), true); }
+});
+test("S1 does not let a desktop-named sibling or duplicate direct-image consumer hijack mobile selection", () => {
+  for (const change of [
+    fixture => fixture.f.roots.get(fixture.header.id)[1].children.push({ node_id: "804:desktop-name", name: "desktop-export-label", node_type: "FRAME", visible: true, opacity: 1, children: [] }),
+    fixture => fixture.header.contracts.mobile.root.children.push(structuredClone(fixture.header.contracts.mobile.root.children[0])),
+  ]) { const fixture = mobileDirectImageFixture(); change(fixture); s1Count(fixture.f, fixture.header); assert.equal(boundaryCode(mobileScope(fixture)), true); }
+});
+test("S1 retains source export-selector, nested-main-component, capture, and scalar diagnostics", () => {
+  const fixture = mobileDirectImageFixture(); fixture.header.asset_contracts[0].export_boundary.semantic_node_name = "missing-desktop-export";
+  assert.equal(boundaryCode(mobileScope(fixture)), true);
+  const nested = s1Fixture(); nested.roots.get(nested.block.id)[0].children[0].children[0].main_component_id = "wrong-main";
+  assert.equal(s1Audit(nested).ok, false);
+  nested.roots.get(nested.block.id)[0].children[0].children[0].main_component_id = "806:1";
+  s1Packet(nested, nested.block).capture_errors.push({ code: "MIXED_VALUE", node_id: "502:24255", field: "fills" });
+  assert.equal(s1Audit(nested).ok, false);
+});
