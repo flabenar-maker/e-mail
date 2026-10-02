@@ -81,3 +81,18 @@ async function captured(remote,key=KEY) {const component={id:'700:1',type:'COMPO
 test('capture records actual remote publication identity without changing numeric facts',async()=>{const p=await captured(true);assert.deepEqual(p.variants[0].source_node.remote_source,{remote:true,component_key:KEY});assert.deepEqual(p.variants[0].source_node.reference_dimensions,{width:24,height:24,unit:'px'});assert.equal(p.capture_version,'1.2.0');assert.equal(p.capture_meta.request.canonical_git_sha,SHA);});
 test('capture does not invent remote identity for a local source',async()=>{const p=await captured(false);assert.equal(Object.hasOwn(p.variants[0].source_node,'remote_source'),false);});
 test('capture keeps an unresolved remote key as a diagnostic',async()=>{const p=await captured(true,'');assert.ok(p.capture_errors.some(e=>e.code==='REMOTE_SOURCE_UNRESOLVED'));assert.equal(Object.hasOwn(p.variants[0].source_node,'remote_source'),false);});
+
+
+test("registry documentation renders a remote publication key only for remote sources", async () => {
+  const { renderComponentRegistrySection } = await import("../../scripts/lib/component-registry-doc.mjs");
+  const { indexComponentRegistries } = await import("../../scripts/lib/component-registry.mjs");
+  const remote = fixture().glyph;
+  const remoteIndex = indexComponentRegistries({ shared: envelope(remote) });
+  const remoteOutput = renderComponentRegistrySection(remote, remoteIndex);
+  assert.match(remoteOutput, /- Remote publication key: `synthetic-publication-key`/);
+  const local = structuredClone(remote);
+  delete local.figma.remote_source;
+  const localIndex = indexComponentRegistries({ shared: envelope(local) });
+  const localOutput = renderComponentRegistrySection(local, localIndex);
+  assert.doesNotMatch(localOutput, /- Remote publication key:/);
+});
