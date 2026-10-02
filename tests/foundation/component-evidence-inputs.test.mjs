@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { readFile, mkdir, symlink } from "node:fs/promises";
+import { readFile, symlink } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
@@ -92,12 +92,27 @@ for (const [label, code, change] of invalidSessions) {
   });
 }
 
-test("session rejects duplicate receipts shared between owners", async (t) => {
+test("session permits two selected owners with distinct packets from one synthetic receipt", async (t) => {
   const fixture = await sessionFixture(t);
+  const otherPacket = packetFixture();
+  otherPacket.component_node_id = "2:1";
+  otherPacket.variants[0].variant_node_id = "2:1";
+  otherPacket.variants[0].source_node.node_id = "2:1";
+  const otherBytes = JSON.stringify(otherPacket);
   fixture.session.component_ids.push("synthetic-other");
-  fixture.session.captures.push({ ...fixture.session.captures[0], component_id: "synthetic-other" });
+  fixture.session.captures.push({
+    ...fixture.session.captures[0],
+    component_id: "synthetic-other",
+    packet_path: "packets/other.json",
+    packet_sha256: digest(otherBytes),
+  });
   await writeFixtureFile(fixture.root, "session.json", JSON.stringify(fixture.session));
-  await assert.rejects(loadComponentEvidenceSession({ sessionPath: fixture.sessionPath, canonicalSha: SHA }), hasCode("EVIDENCE_RECEIPT_DUPLICATE"));
+  await writeFixtureFile(fixture.root, "packets/other.json", otherBytes);
+  const result = await loadComponentEvidenceSession({ sessionPath: fixture.sessionPath, canonicalSha: SHA });
+  assert.deepEqual(result.captures.map(({ component_id, receipt_id, packet }) => ({ component_id, receipt_id, component_node_id: packet.component_node_id })), [
+    { component_id: "synthetic-owner", receipt_id: "synthetic-receipt-1", component_node_id: "1:1" },
+    { component_id: "synthetic-other", receipt_id: "synthetic-receipt-1", component_node_id: "2:1" },
+  ]);
 });
 
 test("session rejects a directory symlink escaping its root even when bytes and hash match", async (t) => {
@@ -182,11 +197,12 @@ for (const sourceId of ["rendering-foundation", "rendering-schema", "components-
   });
 }
 
-test("model propagates invalid evidence target references rather than returning a partial model", async (t) => {
+test("model propagates a schema-valid semantic target mismatch rather than returning a partial model", async (t) => {
   const fixture = await modelFixture(t);
-  fixture.shared.components.find(({ id }) => id === "email-template").evidence_links.foundation_values[0].target.pointer = "/shell/unknown";
+  fixture.shared.components.find(({ id }) => id === "email-template").evidence_links.foundation_values[0].comparison = "pixel-number";
+  fixture.shared.components.find(({ id }) => id === "email-template").evidence_links.foundation_values[0].target.pointer = "/shell/background_color";
   await writeFixtureFile(fixture.root, "data/components/shared.yaml", JSON.stringify(fixture.shared));
-  await assert.rejects(loadComponentEvidenceModel({ repoRoot: fixture.root, canonicalSha: SHA }), hasCode("EVIDENCE_TARGET_DOMAIN_INVALID"));
+  await assert.rejects(loadComponentEvidenceModel({ repoRoot: fixture.root, canonicalSha: SHA }), hasCode("EVIDENCE_COMPARISON_INVALID"));
 });
 
 for (const canonicalSha of [undefined, "main", "A".repeat(40), `${SHA}\n`]) {
