@@ -1,6 +1,6 @@
 # CUPIS: служебные связи Template и Shared — дизайн T1/S1
 
-Дата: 02.10.2026. Статус: направление и письменная спецификация одобрены пользователем. [Implementation plan T1/S1](../plans/cutover/2026-10-02-cupis-template-shared-evidence-links.md) подтверждён; задача 1 выполнена в кандидате PR #110 (формат и offline references). Задачи 2–7 и реальные mappings ещё не начаты.
+Дата: 02.10.2026. Статус: направление и письменная спецификация одобрены пользователем. [Implementation plan T1/S1](../plans/cutover/2026-10-02-cupis-template-shared-evidence-links.md) подтверждён; задачи 1–2 выполнены в кандидате PR #110 (формат/offline references и capture/canonical-session inputs). Задачи 3–7 и реальные mappings ещё не начаты.
 
 Основание: `main@618d124df0a664c84d23a724ba50ef2b324e9b97`, кандидат [PR #110](https://github.com/flabenar-maker/e-mail/pull/110) `e544e303f7d5ebf3e7b3ea01f87a7c19234a95d2`. Это дочернее уточнение [master-spec](2026-08-24-cupis-structured-email-system-design.md), а не второй глобальный план. Последовательность остаётся в [roadmap](../plans/2026-08-25-cupis-migration-roadmap.md), исходные факты и карта владельцев — в [журнале P2](../plans/2026-10-01-cupis-final-maintenance-cutover.md).
 
@@ -108,7 +108,7 @@ Default glyph принадлежит записи исходного badge. Фа
 
 Live checker получает канонические записи/manifest/foundations одного SHA и отдельно пакеты текущего read-only MCP-сеанса. Ожидаемые targets разрешает сам из canonical metadata: caller не может передать произвольные «ожидаемые значения» как замену каноническим.
 
-Для сеанса явно фиксируются SHA, выбранные owners, время начала и receipts фактических вызовов; пакет имеет время capture и точные file/component identities. Пакет до начала сеанса, с отсутствующим временем, неполным/усечённым деревом или без требуемого source не подтверждает связь. Capture текущего формата не содержит timestamp: реализации потребуется явное capture metadata, а не дата, придуманная аудитором после чтения старого файла. Чтение main component использует поддерживаемый асинхронный API.
+Для сеанса явно фиксируются SHA, выбранные owners, время начала и receipts фактических вызовов; пакет имеет время capture и точные file/component identities. Пакет до начала сеанса, с отсутствующим временем, неполным/усечённым деревом или без требуемого source не подтверждает связь. Capture 1.1.0 фиксирует timestamps внутри вызова, полноту дерева и число сериализованных узлов. Старый capture 1.0.0 остаётся допустимым для прежнего scalar audit, но не подтверждает новые evidence links; добавление даты к старому файлу не заменяет новое чтение. Чтение main component использует поддерживаемый асинхронный API.
 
 Формат JSON сам по себе не доказывает происхождение данных: время и ID не являются криптографической аттестацией MCP. Ответственность агента — реальный вызов и сохранение receipt; автоматическая проверка проверяет согласованность этого входа и не обещает распознать намеренно подделанный пакет.
 
@@ -153,7 +153,7 @@ P2 реализует schema, проверку и разрешённые mapping
 
 ## 8. Область реализации по согласованной спецификации
 
-Карта ответственности утверждённого implementation plan; Task1 реализует только форму и offline references, остальные области остаются следующими задачами:
+Карта ответственности утверждённого implementation plan; задачи 1–2 реализуют форму/offline references и capture/canonical-session inputs; live checker, его интеграция и mappings остаются следующими задачами:
 
 | Область | Владелец изменения |
 | --- | --- |
@@ -181,6 +181,6 @@ P2 реализует schema, проверку и разрешённые mapping
 
 ## 10. Текущее состояние и следующий шаг
 
-Задача 1 реализована в кандидате PR #110: components schema 2.2.0, optional evidence metadata, pure reference validation/canonical target resolver и интеграция local references в registry semantics. Exact code/generated SHA — `e71f138dee71293b177e4b68a9c71104a19dce4f`; локальные scoped проверки и сохранность данных записаны в implementation plan/журнале P2. Это не доказательство полноты live-связей и не приёмка всего ремонта.
+Задачи 1–2 реализованы в кандидате PR #110: schema 2.2.0/typed metadata/offline references, capture 1.1.0 с async main lookup и metadata, manifest-resolved canonical model и проверяемый временный session. Code/test SHA задачи 2 — `98b8b7633d689badc21ecf15241fdd54a9cbc30d`; 161/161 scoped tests, validator/generated check PASS. Проверки, уточнения test fixtures и ограничения записаны в implementation plan/журнале P2. Это не подтверждение live-связей и не приёмка всего ремонта.
 
-Факты компонентов, foundation values и HTML/export policy не менялись; реальные evidence links ещё не добавлены. Следующая задача 2 — fresh capture metadata и canonical/session inputs. Последующая запись links требует нового адресного MCP-чтения согласно §§5–7; ранее полученный audit не выдаётся за fresh acceptance нового механизма. P2 остаётся открытым, P3 и merge отдельно.
+Факты компонентов, foundation values и HTML/export policy не менялись; реальные evidence links ещё не добавлены. Следующая задача 3 — проверка Template → shell, затем S1 и общая интеграция. Запись links требует нового адресного MCP-чтения согласно §§5–7; ранее полученный audit не выдаётся за fresh acceptance нового механизма. P2 открыт; P3 и merge отдельно.

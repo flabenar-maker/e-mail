@@ -99,7 +99,7 @@ Skill определяет тип задачи, выбирает workflow, за�
 
 ### 3.5. Уточнение evidence-связей Template и Shared — кандидат P2
 
-Направление и письменная [спецификация T1/S1](2026-10-02-cupis-template-shared-evidence-links-design.md) согласованы 02.10.2026. [Implementation plan внутри P2](../plans/cutover/2026-10-02-cupis-template-shared-evidence-links.md) подтверждён; задача 1 реализована в кандидате PR #110, далее задача 2: fresh capture/canonical session. Это дочернее уточнение данной master-спецификации, не новый владелец архитектуры или отдельный глобальный этап.
+Направление и письменная [спецификация T1/S1](2026-10-02-cupis-template-shared-evidence-links-design.md) согласованы 02.10.2026. [Implementation plan внутри P2](../plans/cutover/2026-10-02-cupis-template-shared-evidence-links.md) подтверждён; задачи 1–2 реализованы в кандидате PR #110 (typed references и fresh capture/canonical session), далее задача 3: Template → shell. Это дочернее уточнение данной master-спецификации, не новый владелец архитектуры или отдельный глобальный этап.
 
 Предлагается хранить типизированные служебные связи рядом с component contracts: Template → существующие shell values и Shared source → фактическое использование → asset owner. Значения остаются у прежних владельцев; связи не добавляют HTML-узлы, не меняют export policy и не заменяют свежую проверку Figma. Формат, ownership, coverage и границы интеграции определены в дочерней спецификации. Schema 2.2.0 и offline-проверки реализованы; records получили только новую envelope version, без фактических links или изменений значений. Live proof и интеграция ещё впереди; P2 и P3 не объявляются завершёнными.
 
