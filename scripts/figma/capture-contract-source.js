@@ -1,10 +1,39 @@
 // Run through Figma MCP use_figma, not through Node or the Figma web UI.
 // Append: return await captureFigmaContractFacts("exact-component-node-id");
 async function captureFigmaContractFacts(componentNodeId) {
+  const startedAt = new Date().toISOString();
+  const previousSkip = figma.skipInvisibleInstanceChildren;
+  try {
+    // Dev Mode may hide invisible instance descendants from children entirely.
+    // This is an API traversal setting, not a mutation of the design.
+    figma.skipInvisibleInstanceChildren = false;
+    const packet = await captureFigmaContractFactsBody(componentNodeId);
+    const pending = packet.variants.map((variant) => variant.source_node);
+    let nodeCount = 0;
+    while (pending.length) {
+      const node = pending.pop();
+      nodeCount += 1;
+      for (const child of node.children ?? []) pending.push(child);
+    }
+    return {
+      ...packet,
+      capture_meta: {
+        started_at: startedAt, completed_at: new Date().toISOString(),
+        tree_complete: packet.variants.length > 0, node_count: nodeCount,
+      },
+    };
+  } finally {
+    figma.skipInvisibleInstanceChildren = previousSkip;
+  }
+}
+
+// A failed traversal throws, so no partially collected tree gets certified.
+// node_count counts serialized variant roots and descendants, not the set wrapper.
+async function captureFigmaContractFactsBody(componentNodeId) {
   const component = await figma.getNodeByIdAsync(componentNodeId);
   if (!component || !["COMPONENT_SET", "COMPONENT"].includes(component.type)) {
     return {
-      capture_version: "1.0.0",
+      capture_version: "1.1.0",
       file_key: figma.fileKey,
       component_node_id: componentNodeId,
       variants: [],
@@ -142,7 +171,18 @@ async function captureFigmaContractFacts(componentNodeId) {
     }
     if (node.type === "INSTANCE") {
       result.instance_properties = binding(node.componentProperties);
-      result.main_component_id = node.mainComponent?.id ?? null;
+      result.main_component_id = null;
+      try {
+        const main = await node.getMainComponentAsync();
+        if (main?.type === "COMPONENT" && typeof main.id === "string" && main.id) {
+          result.main_component_id = main.id;
+        }
+      } catch {
+        // Keep the instance and its actual children; never guess its source.
+      }
+      if (result.main_component_id === null) {
+        errors.push({ node_id: node.id, code: "MAIN_COMPONENT_UNRESOLVED" });
+      }
     }
     if (node.type === "TEXT") {
       result.characters = node.characters;
@@ -233,7 +273,7 @@ async function captureFigmaContractFacts(componentNodeId) {
       variant_options: definition.variantOptions ?? null,
     }));
   return {
-    capture_version: "1.0.0",
+    capture_version: "1.1.0",
     file_key: figma.fileKey,
     component_node_id: component.id,
     component_properties: componentProperties,

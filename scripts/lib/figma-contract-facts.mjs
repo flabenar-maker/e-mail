@@ -218,7 +218,7 @@ export function auditFigmaContractFacts({ record, live, mappings, derivedEvidenc
   if (!live || !Array.isArray(live.variants)) {
     return { ok: false, issues: [issue("LIVE_FIGMA_REQUIRED", { component_id: record?.id ?? null })] };
   }
-  if (live.capture_version !== "1.0.0" || !Array.isArray(live.capture_errors) || !Array.isArray(live.component_properties)) {
+  if (!["1.0.0", "1.1.0"].includes(live.capture_version) || !Array.isArray(live.capture_errors) || !Array.isArray(live.component_properties)) {
     issues.push(issue("FIGMA_CAPTURE_VERSION_UNSUPPORTED", { capture_version: live.capture_version ?? null }));
   }
   const artworkIds = new Set((live.variants ?? []).flatMap((variant) =>
