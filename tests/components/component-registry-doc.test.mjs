@@ -245,3 +245,15 @@ test("evidence links activate only the existing dependencies section and render 
   assert.match(sourceOutput, /- Evidence link \(source\): \x60desktop-header-logo-source\x60 — source variant \x60230:3679\x60, instance \x601008:1823\x60 → component \x60asset-header-logo-4x\x60 \(\x60Asset\/Header-Logo @4x\x60\); target variant \x60product-cupis\x60; asset owner \x601008:1823\x60; asset \x60header-logo\x60/u);
   assert.doesNotMatch(output, /Evidence link.*(?:#(?:[0-9A-F]{3}|[0-9A-F]{6})|verified)/iu);
 });
+
+
+test("canonical links add only evidence lines to existing dependency sections", async () => {
+  const { index } = await loadContext();
+  for (const id of ["email-header", "block-personal-data-update", "block-receipt-info"]) {
+    const after = record(index, id);
+    const before = structuredClone(after);
+    before.evidence_links = { foundation_values: [], source_dependencies: [] };
+    const strip = (value) => value.split("\n").filter((line) => !line.startsWith("- Evidence link ")).join("\n");
+    assert.equal(strip(renderComponentRegistrySection(after, index)), renderComponentRegistrySection(before, index), id);
+  }
+});

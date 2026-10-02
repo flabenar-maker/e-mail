@@ -18,3 +18,19 @@ test("email-route bundles exclude evidence metadata and change only source/versi
   await writeFixtureFile(root.root, "data/components/marketing.yaml", JSON.stringify(document, null, 2) + "\n");
   for (const routeId of Object.keys(before)) { const result = await buildContextBundle({ repoRoot: root.root, routeId, ...options }); assert.equal(result.status, "resolved"); assert.deepEqual(result.bundle.components, before[routeId].components); assert.deepEqual(comparable(result.bundle), comparable(before[routeId])); }
 });
+
+
+test("canonical evidence metadata is absent from both email-route component bundles", async (t) => {
+  const root = await fixture(t);
+  const paths = ["data/components/shared.yaml", "data/components/marketing.yaml", "data/components/service.yaml"];
+  for (const path of paths) {
+    const document = await readStrictYaml(join(root.root, path));
+    for (const component of document.components) delete component.evidence_links;
+    await writeFixtureFile(root.root, path, JSON.stringify(document, null, 2) + "\n");
+  }
+  const options = { candidates: [{ id: "email-header" }, { id: "block-personal-data-update" }, { id: "block-receipt-info" }], viewports: ["mobile", "desktop"] };
+  const before = {};
+  for (const routeId of ["email-new-build", "email-continue-fix"]) { const result = await buildContextBundle({ repoRoot: root.root, routeId, ...options }); assert.equal(result.status, "resolved"); before[routeId] = result.bundle; }
+  await Promise.all(paths.map((path) => copyFixtureFile(process.cwd(), root.root, path)));
+  for (const routeId of Object.keys(before)) { const result = await buildContextBundle({ repoRoot: root.root, routeId, ...options }); assert.equal(result.status, "resolved"); assert.deepEqual(result.bundle.components, before[routeId].components); assert.deepEqual(comparable(result.bundle), comparable(before[routeId])); }
+});
