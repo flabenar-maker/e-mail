@@ -2135,7 +2135,7 @@
           "type": "number"
         },
         "minimum_width_px": {
-          "type": "number"
+          "type": ["number", "null"]
         },
         "maximum_width_px": {
           "type": "number"
