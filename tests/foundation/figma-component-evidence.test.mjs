@@ -167,3 +167,133 @@ test("deterministic sorted results and no input mutation or label selectors", ()
   f.desktop.children[0].name = "not Content";
   assert.deepEqual(audit(f), a);
 });
+
+// S1 fixtures deliberately use synthetic geometry-free data, not saved Figma facts.
+function s1Fixture() {
+  const asset = (id, name) => ({ id, owner_layer_name: name, export_boundary: { kind: "node", semantic_node_name: name }, source_viewport: "desktop" });
+  const record = (id, rootId, role, variants = []) => ({ id, identity: { semantic_role: role, node_kind: variants.length ? "component-set" : "component" },
+    figma: { file_key: "synthetic-s1", node_id: rootId }, variants, asset_contracts: [],
+    contracts: { mobile: { root: { render_mode: role === "asset" || role === "icon" ? "figma-source-only" : "presentation-table", children: [] } }, desktop: { root: { render_mode: role === "asset" || role === "icon" ? "figma-source-only" : "presentation-table", children: [] } } },
+    evidence_links: { foundation_values: [], source_dependencies: [] } });
+  const variant = (id, nodeId, name, value) => ({ id, node_id: nodeId, axes: [{ name, value }] });
+  const root = (id, name = "component") => ({ node_id: id, node_type: "COMPONENT", name, children: [] });
+  const instance = (id, name, main, children = []) => ({ node_id: id, node_type: "INSTANCE", name, main_component_id: main, children });
+  const product = record("synthetic-product", "801:1", "asset", [variant("brand", "801:2", "Product", "Brand")]);
+  const big = record("synthetic-big-logo", "802:1", "asset", [variant("brand", "802:2", "Product", "Brand")]);
+  big.asset_contracts = [asset("logo", "logo @4x")];
+  for (const viewport of ["mobile", "desktop"]) big.contracts[viewport].root = { render_mode: "presentation-table", children: [{ render_mode: "direct-image", asset_contract_id: "logo", children: [] }] };
+  const compact = record("synthetic-compact", "803:1", "asset", [variant("brand", "803:2", "Product", "Brand")]);
+  const header = record("synthetic-header", "804:1", "email", [variant("desktop", "804:2", "Viewport", "Desktop"), variant("mobile", "804:3", "Viewport", "Mobile")]);
+  header.asset_contracts = [asset("header-logo", "header-logo @4x")];
+  const lock = record("synthetic-lock", "805:1", "icon"), receipt = record("synthetic-receipt", "806:1", "icon");
+  const badge = record("synthetic-badge", "807:1", "asset"); badge.asset_contracts = [asset("badge", "Badge @4x")];
+  const block = record("synthetic-receipt-block", "808:1", "block"); block.asset_contracts = [asset("status", "status @4x")];
+  const records = [product, big, compact, header, lock, receipt, badge, block];
+  const roots = new Map([
+    [product.id, [root("801:2")]],
+    [big.id, [{ ...root("802:2", "Product=Brand"), children: [instance("802:3", "product", "801:2")] }]],
+    [compact.id, [{ ...root("803:2"), children: [instance("803:3", "product", "801:2")] }]],
+    [header.id, [{ ...root("804:2"), children: [instance("804:4", "header-logo @4x", "802:2", [instance("I804:4;802:3", "product", "801:2")])] },
+      { ...root("804:3"), children: [instance("804:5", "header-logo @4x", "803:2", [instance("I804:5;803:3", "product", "801:2")])] }]],
+    [lock.id, [root("805:1")]], [receipt.id, [root("806:1")]],
+    [badge.id, [{ ...root("807:1", "Badge @4x"), children: [instance("807:2", "glyph", "805:1")] }]],
+    [block.id, [{ ...root("808:1"), children: [instance("502:24255", "status @4x", "807:1", [instance("I502:24255;491:22378", "glyph", "806:1")])] }]],
+  ]);
+  const add = (owner, id, variantId, nodeId, target, ownerId, assetId) => owner.evidence_links.source_dependencies.push({ id,
+    source: { variant_node_id: variantId, node_id: nodeId }, target,
+    asset_owner: { node_id: ownerId, ...(assetId ? { asset_id: assetId } : {}) } });
+  add(big, "product", "802:2", "802:3", { component_id: product.id, variant_id: "brand" }, "802:2", "logo");
+  add(compact, "product", "803:2", "803:3", { component_id: product.id, variant_id: "brand" }, "803:2");
+  add(header, "desktop-logo", "804:2", "804:4", { component_id: big.id, variant_id: "brand" }, "804:4", "header-logo");
+  add(header, "desktop-product", "804:2", "I804:4;802:3", { component_id: product.id, variant_id: "brand" }, "804:4", "header-logo");
+  add(header, "mobile-logo", "804:3", "804:5", { component_id: compact.id, variant_id: "brand" }, "804:5", "header-logo");
+  add(header, "mobile-product", "804:3", "I804:5;803:3", { component_id: product.id, variant_id: "brand" }, "804:5", "header-logo");
+  add(badge, "default-glyph", "807:1", "807:2", { component_id: lock.id }, "807:1", "badge");
+  add(block, "badge", "808:1", "502:24255", { component_id: badge.id }, "502:24255", "status");
+  add(block, "override-glyph", "808:1", "I502:24255;491:22378", { component_id: receipt.id }, "502:24255", "status");
+  const session = { schema_version: "1.0.0", canonical_git_sha: SHA, started_at: "2026-10-02T09:00:00.000Z", completed_at: "2026-10-02T09:00:04.000Z", component_ids: records.map(r => r.id), captures: [] };
+  for (const owner of records) {
+    const trees = roots.get(owner.id), count = n => 1 + n.children.reduce((sum, child) => sum + count(child), 0);
+    const packet = { capture_version: "1.1.0", file_key: owner.figma.file_key, component_node_id: owner.figma.node_id, component_properties: [], capture_errors: [],
+      capture_meta: { started_at: "2026-10-02T09:00:01.000Z", completed_at: "2026-10-02T09:00:02.000Z", tree_complete: true, node_count: trees.reduce((sum, tree) => sum + count(tree), 0) },
+      variants: trees.map((tree, i) => ({ variant_node_id: tree.node_id, axes: structuredClone(owner.variants[i]?.axes ?? []), source_node: tree })) };
+    session.captures.push({ component_id: owner.id, receipt_id: `synthetic-${owner.id}`, tool: "use_figma", received_at: "2026-10-02T09:00:03.000Z", packet_path: `${owner.id}.json`, packet_sha256: "0".repeat(64), packet });
+  }
+  const model = { canonical_sha: SHA, records, manifest: { sources: [] }, source_documents: new Map(), targets: new Map() };
+  return { model, session, product, big, compact, header, lock, receipt, badge, block, roots, instance };
+}
+const s1Audit = (f, record = f.block) => auditComponentEvidenceLinks({ recordId: record.id, model: f.model, session: f.session });
+const s1Packet = (f, record) => f.session.captures.find(c => c.component_id === record.id).packet;
+function s1Count(f, record) { const p = s1Packet(f, record), count = n => 1 + (n.children ?? []).reduce((s, c) => s + count(c), 0); p.capture_meta.node_count = p.variants.reduce((s, v) => s + count(v.source_node), 0); }
+
+test("S1 verifies whole actual chains, source-only Compact and compound override without changing assets", () => {
+  const f = s1Fixture(), before = structuredClone(f);
+  for (const owner of [f.big, f.compact, f.header, f.badge, f.block]) {
+    const r = s1Audit(f, owner); assert.equal(r.ok, true, JSON.stringify(r.issues));
+    assert.ok(r.results.every(i => i.status === "verified" && i.kind === "source-dependency"));
+  }
+  const r = s1Audit(f); assert.equal(r.required_sources.length, 2);
+  assert.deepEqual(r.verified_sources, [
+    { variant_node_id: "808:1", node_id: "502:24255", field_path: "/main_component_id" },
+    { variant_node_id: "808:1", node_id: "I502:24255;491:22378", field_path: "/main_component_id" },
+  ]);
+  assert.equal(result(r, "override-glyph").actual, "806:1");
+  assert.equal(result(r, "override-glyph").asset_owner.node_id, "502:24255");
+  assert.ok(r.receipt_ids.includes("synthetic-synthetic-receipt"));
+  assert.deepEqual(f, before); assert.equal(f.compact.asset_contracts.length, 0);
+});
+test("S1 actual override does not inherit target default glyph", () => {
+  const f = s1Fixture(); f.roots.get(f.block.id)[0].children[0].children[0].main_component_id = "805:1";
+  const r = s1Audit(f); assert.equal(result(r, "override-glyph").status, "mismatch");
+  assert.ok(code(r, "EVIDENCE_MAIN_COMPONENT_MISMATCH")); assert.equal(r.ok, false);
+});
+for (const mode of ["nested", "all"]) test(`S1 missing ${mode} links cannot hide actual instances`, () => {
+  const f = s1Fixture(); if (mode === "nested") f.block.evidence_links.source_dependencies.pop(); else delete f.block.evidence_links;
+  const r = s1Audit(f); assert.equal(r.ok, false); assert.equal(r.required_sources.length, 2);
+  assert.equal(r.issues.filter(i => i.code === "EVIDENCE_REQUIRED_LINK_MISSING").length, mode === "nested" ? 1 : 2);
+});
+const s1Invalid = [
+  ["neighbor variant", f => { f.header.evidence_links.source_dependencies[0].source.variant_node_id = "804:3"; }, "header"],
+  ["master suffix without instance prefix", f => { f.block.evidence_links.source_dependencies[1].source.node_id = "491:22378"; }],
+  ["detached node", f => { f.roots.get(f.block.id)[0].children[0].children[0].node_type = "FRAME"; }],
+  ["null main", f => { f.roots.get(f.block.id)[0].children[0].main_component_id = null; }],
+  ["target absent", f => { f.session.captures = f.session.captures.filter(c => c.component_id !== f.receipt.id); }],
+  ["target wrong file", f => { s1Packet(f, f.receipt).file_key = "foreign"; }],
+  ["target wrong owner", f => { s1Packet(f, f.receipt).component_node_id = "999:1"; }],
+  ["target wrong root", f => { f.roots.get(f.receipt.id)[0].node_id = "999:2"; }],
+  ["target missing variant", f => { s1Packet(f, f.product).variants = []; }, "header"],
+  ["target wrong axes", f => { s1Packet(f, f.product).variants[0].axes[0].value = "other"; }, "header"],
+  ["target duplicate variant", f => { const p = s1Packet(f, f.product); p.variants.push(structuredClone(p.variants[0])); s1Count(f, f.product); }, "header"],
+  ["target duplicate node", f => { f.roots.get(f.receipt.id)[0].children.push({ node_id: "806:1", node_type: "VECTOR" }); s1Count(f, f.receipt); }],
+  ["target incomplete capture", f => { s1Packet(f, f.receipt).capture_meta.tree_complete = false; }],
+  ["target older session", f => { s1Packet(f, f.receipt).capture_meta.started_at = "2026-10-01T09:00:00.000Z"; }],
+  ["target missing receipt", f => { f.session.captures.find(c => c.component_id === f.receipt.id).receipt_id = ""; }],
+  ["owner outside ancestry", f => { f.block.evidence_links.source_dependencies[1].asset_owner.node_id = "808:99"; }],
+  ["ancestor outside boundary", f => { f.block.evidence_links.source_dependencies[1].asset_owner.node_id = "808:1"; }],
+  ["two named export owners", f => { f.roots.get(f.block.id)[0].children.push(f.instance("808:99", "status @4x", "807:1")); s1Count(f, f.block); }],
+  ["unknown asset", f => { f.block.evidence_links.source_dependencies[1].asset_owner.asset_id = "missing"; }],
+  ["omitted owned asset", f => { delete f.block.evidence_links.source_dependencies[1].asset_owner.asset_id; }],
+  ["missing export selector", f => { f.block.asset_contracts[0].export_boundary.semantic_node_name = "not-found @4x"; }],
+  ["missing full children", f => { delete f.roots.get(f.block.id)[0].children[0].children; }],
+  ["duplicate source IDs", f => { f.roots.get(f.block.id)[0].children.push(f.instance("502:24255", "other", "807:1")); s1Count(f, f.block); }],
+];
+for (const [label, change, owner = "block"] of s1Invalid) test(`S1 refuses ${label}`, () => {
+  const f = s1Fixture(); change(f); const r = s1Audit(f, f[owner]); assert.equal(r.ok, false); assert.ok(r.issues.length);
+});
+test("S1 coverage is independent of links and excludes ordinary HTML nested components", () => {
+  const f = s1Fixture(); f.roots.get(f.block.id)[0].children.push(f.instance("808:99", "HTML button", "999:1")); s1Count(f, f.block);
+  delete f.block.evidence_links;
+  const r = collectRequiredComponentEvidence({ record: f.block, live: s1Packet(f, f.block) });
+  assert.deepEqual(r.issues, []); assert.deepEqual(r.required_sources.map(v => v.node_id), ["502:24255", "I502:24255;491:22378"]);
+});
+test("S1 source-only leaf has a genuinely complete empty scope", () => {
+  const f = s1Fixture(); const r = s1Audit(f, f.lock); assert.equal(r.ok, true); assert.deepEqual(r.required_sources, []);
+});
+test("S1 target capture errors remain visible even when main identity matches", () => {
+  const f = s1Fixture(); s1Packet(f, f.receipt).capture_errors.push({ code: "MIXED_VALUE", node_id: "806:1", field: "fills" });
+  const r = s1Audit(f); assert.equal(r.ok, false); assert.ok(code(r, "EVIDENCE_CAPTURE_ERROR"));
+});
+test("S1 hidden instances stay in full dependency coverage", () => {
+  const f = s1Fixture(); f.roots.get(f.block.id)[0].children[0].children[0].visible = false;
+  assert.equal(s1Audit(f).ok, true); assert.equal(s1Audit(f).required_sources.length, 2);
+});

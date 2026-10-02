@@ -1,3 +1,4 @@
+import * as evidenceApi from "../../scripts/lib/component-evidence-links.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
@@ -192,4 +193,71 @@ test("evidence semantic diagnostics are integrated without changing HTML depende
   const errors = validateComponentRegistrySemantics({registries, ...foundationDocs});
   assert.ok(errors.some(e => e.code === "EVIDENCE_TARGET_COMPONENT_UNKNOWN" && e.path.startsWith("/registries/marketing/components/")));
   assert.deepEqual(collectComponentReferences(record), before);
+});
+
+// Hand-built canonical graph and same-session reports; not MCP provenance.
+function impactFixture() {
+  const sha = "a".repeat(40), start = "2026-10-02T09:00:00.000Z";
+  const record = (id, node) => ({ id, identity: { node_kind: "component", semantic_role: "asset" }, figma: { file_key: "synthetic", node_id: node }, variants: [], asset_contracts: [{ id: "whole", owner_layer_name: "whole @4x", export_boundary: { kind: "node", semantic_node_name: "whole @4x" }, source_viewport: "desktop" }], evidence_links: { foundation_values: [], source_dependencies: [] } });
+  const lock = record("lock", "1:1"), receipt = record("receipt", "2:1"), badge = record("badge", "3:1"), block = record("block", "4:1");
+  const link = (id, root, node, target) => ({ id, source: { variant_node_id: root, node_id: node }, target: { component_id: target }, asset_owner: { node_id: root, asset_id: "whole" } });
+  badge.evidence_links.source_dependencies = [link("glyph", "3:1", "3:2", "lock")];
+  block.evidence_links.source_dependencies = [link("badge", "4:1", "4:2", "badge"), link("override", "4:1", "I4:2;3:2", "receipt")];
+  const records = [lock, receipt, badge, block];
+  const session = { canonical_git_sha: sha, started_at: start, component_ids: records.map(r => r.id), captures: records.map(r => ({ component_id: r.id, receipt_id: `receipt-${r.id}`, packet: { file_key: "synthetic", component_node_id: r.figma.node_id,
+    variants: [{ variant_node_id: r.figma.node_id, source_node: { node_id: r.figma.node_id, node_type: "COMPONENT", children: r.evidence_links.source_dependencies.map(l => ({ node_id: l.source.node_id, node_type: "INSTANCE", main_component_id: records.find(t => t.id === l.target.component_id).figma.node_id, children: [] })) } }] } })) };
+  const reports = [badge, block].map(r => ({ ok: true, component_id: r.id, canonical_git_sha: sha, session_started_at: start,
+    receipt_ids: [r.id, ...r.evidence_links.source_dependencies.map(l => l.target.component_id)].map(id => `receipt-${id}`).sort(),
+    verified_sources: r.evidence_links.source_dependencies.map(l => ({ ...l.source, field_path: "/main_component_id" })),
+    results: r.evidence_links.source_dependencies.map(l => ({ kind: "source-dependency", link_id: l.id, status: "verified", source: { file_key: "synthetic", ...l.source }, target: { ...l.target, file_key: "synthetic", node_id: records.find(t => t.id === l.target.component_id).figma.node_id }, asset_owner: { ...l.asset_owner }, expected: records.find(t => t.id === l.target.component_id).figma.node_id, actual: records.find(t => t.id === l.target.component_id).figma.node_id })) }));
+  session.schema_version = "1.0.0"; session.completed_at = "2026-10-02T09:00:04.000Z";
+  for (const c of session.captures) {
+    Object.assign(c, { tool: "use_figma", received_at: "2026-10-02T09:00:03.000Z", packet_path: `${c.component_id}.json`, packet_sha256: "0".repeat(64) });
+    const root = c.packet.variants[0].source_node;
+    if (c.component_id === "block") { const glyph = root.children.pop(); root.children[0].children.push(glyph); }
+    const count = node => 1 + node.children.reduce((s, child) => s + count(child), 0);
+    Object.assign(c.packet, { capture_version: "1.1.0", component_properties: [], capture_errors: [], capture_meta: { started_at: "2026-10-02T09:00:01.000Z", completed_at: "2026-10-02T09:00:02.000Z", tree_complete: true, node_count: count(root) } });
+    c.packet.variants[0].axes = [];
+  }
+  return { model: { canonical_sha: sha, records, manifest: { sources: [] }, source_documents: new Map() }, session, reports };
+}
+test("reverse impact separates badge default from block actual override", () => {
+  const f = impactFixture();
+  const lock = evidenceApi.collectEvidenceConsumers({ ...f, sourceComponentId: "lock" });
+  assert.deepEqual(lock.issues, []);
+  assert.deepEqual(lock.confirmed.map(e => [e.component_id, e.asset_owner_node_id, e.asset_id]), [["badge", "3:1", "whole"]]);
+  assert.deepEqual(lock.possible.map(e => e.component_id), ["block"]);
+  const receipt = evidenceApi.collectEvidenceConsumers({ ...f, sourceComponentId: "receipt" });
+  assert.deepEqual(receipt.confirmed.map(e => [e.component_id, e.asset_owner_node_id, e.asset_id]), [["block", "4:1", "whole"]]);
+  assert.deepEqual(receipt.possible, []);
+});
+for (const [label, change] of [
+  ["SHA", r => { r.canonical_git_sha = "b".repeat(40); }],
+  ["session", r => { r.session_started_at = "2026-10-01T09:00:00.000Z"; }],
+  ["foreign receipt", r => { r.receipt_ids.push("foreign"); }],
+  ["missing target receipt", r => { r.receipt_ids = ["receipt-block"]; }],
+]) test(`reverse rejects report from wrong ${label}`, () => {
+  const f = impactFixture(); change(f.reports[1]);
+  const r = evidenceApi.collectEvidenceConsumers({ ...f, sourceComponentId: "receipt" });
+  assert.deepEqual(r.confirmed, []); assert.ok(r.issues.some(i => i.code === "EVIDENCE_REPORT_CONTEXT_MISMATCH"));
+});
+test("reverse never promotes a failed assertion or missing report", () => {
+  const f = impactFixture(); f.reports[1].results[1].status = "unverified";
+  const r = evidenceApi.collectEvidenceConsumers({ ...f, sourceComponentId: "receipt" }); assert.deepEqual(r.confirmed, []); assert.equal(r.possible.length, 1);
+  assert.deepEqual(evidenceApi.collectEvidenceConsumers({ ...f, reports: [], sourceComponentId: "lock" }).confirmed, []);
+});
+test("reverse checks exact report source, target, owner and covered source triple", () => {
+  for (const mutate of [r => { r.results[1].source.node_id = "3:2"; }, r => { r.results[1].asset_owner.node_id = "9:9"; }, r => { r.results[1].actual = "1:1"; }, r => { r.verified_sources = []; }]) {
+    const f = impactFixture(); mutate(f.reports[1]);
+    assert.deepEqual(evidenceApi.collectEvidenceConsumers({ ...f, sourceComponentId: "receipt" }).confirmed, []);
+  }
+});
+test("reverse deduplicates consumer-owner-asset and remains deterministic without mutation", () => {
+  const f = impactFixture(), block = f.model.records.find(r => r.id === "block");
+  block.evidence_links.source_dependencies.push({ ...structuredClone(block.evidence_links.source_dependencies[1]), id: "another", source: { variant_node_id: "4:1", node_id: "4:99" } });
+  const before = structuredClone(f);
+  const r = evidenceApi.collectEvidenceConsumers({ ...f, reports: [], sourceComponentId: "receipt" });
+  assert.equal(r.possible.length, 1); assert.deepEqual(f, before);
+  f.model.records.reverse(); block.evidence_links.source_dependencies.reverse();
+  assert.deepEqual(evidenceApi.collectEvidenceConsumers({ ...f, reports: [], sourceComponentId: "receipt" }), r);
 });
