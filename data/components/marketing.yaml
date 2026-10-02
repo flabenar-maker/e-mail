@@ -3017,6 +3017,36 @@
               "node_id": "1008:1823",
               "asset_id": "header-logo"
             }
+          },
+          {
+            "id": "mobile-header-logo-source",
+            "source": {
+              "variant_node_id": "15:2037",
+              "node_id": "1008:1709"
+            },
+            "target": {
+              "component_id": "asset-header-logo-compact-4x",
+              "variant_id": "product-cupis"
+            },
+            "asset_owner": {
+              "node_id": "1008:1709",
+              "asset_id": "header-logo"
+            }
+          },
+          {
+            "id": "mobile-product-logo-source",
+            "source": {
+              "variant_node_id": "15:2037",
+              "node_id": "I1008:1709;1008:1347"
+            },
+            "target": {
+              "component_id": "asset-product-logo",
+              "variant_id": "product-cupis"
+            },
+            "asset_owner": {
+              "node_id": "1008:1709",
+              "asset_id": "header-logo"
+            }
           }
         ]
       },
