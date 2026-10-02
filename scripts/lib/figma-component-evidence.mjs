@@ -1,4 +1,5 @@
 import { isDeepStrictEqual } from "node:util";
+import { validateCaptureFreshness } from "./component-evidence-freshness.mjs";
 import { auditFigmaContractFacts } from "./figma-contract-facts.mjs";
 import { resolveEvidenceTargets } from "./component-evidence-links.mjs";
 import { compareFoundationObservation } from "./foundation-evidence.mjs";
@@ -40,8 +41,8 @@ function templateScope(record, live) {
     invalid("EVIDENCE_SCOPE_AMBIGUOUS", "/variants", "Template requires canonical Desktop and Mobile variants.");
     return { issues, obligations, nodes, identityValid };
   }
-  if (!live || live.capture_version !== "1.1.0" || live.capture_meta?.tree_complete !== true || !Array.isArray(live.variants)) {
-    invalid("EVIDENCE_CAPTURE_INCOMPLETE", "/capture", "A complete capture 1.1.0 tree is required.");
+  if (!live || !["1.1.0", "1.2.0"].includes(live.capture_version) || live.capture_meta?.tree_complete !== true || !Array.isArray(live.variants)) {
+    invalid("EVIDENCE_CAPTURE_INCOMPLETE", "/capture", "A complete capture 1.1.0 or 1.2.0 tree is required.");
     return { issues, obligations, nodes, identityValid };
   }
   if (live.file_key !== record.figma.file_key || live.component_node_id !== record.figma.node_id) {
@@ -148,27 +149,14 @@ function sourceValue(obligation, scope) {
   return { value: node.layout.padding[side] };
 }
 
-function validTime(value) {
-  if (typeof value !== "string" || !/^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]{3})?Z$/u.test(value)) return NaN;
-  const parsed = Date.parse(value), normalized = value.includes(".") ? value : value.replace("Z", ".000Z");
-  return Number.isFinite(parsed) && new Date(parsed).toISOString() === normalized ? parsed : NaN;
-}
-
 function selectCapture(recordId, model, session, issues) {
-  if (!/^[a-f0-9]{40}$/u.test(model.canonical_sha ?? "") || session?.schema_version !== "1.0.0" ||
-      session.canonical_git_sha !== model.canonical_sha) {
-    issues.push(issue("EVIDENCE_SESSION_SHA_MISMATCH", "/session", "A validated session and model must share one pinned canonical SHA.")); return null;
-  }
-  const selected = session.component_ids?.filter(id => id === recordId), captures = session.captures?.filter(c => c.component_id === recordId);
+  const selected = session?.component_ids?.filter(id => id === recordId), captures = session?.captures?.filter(c => c.component_id === recordId);
   if (selected?.length !== 1 || captures?.length !== 1) {
     issues.push(issue("EVIDENCE_CAPTURE_MISSING", "/session/captures", "Exactly one selected owner and capture receipt are required.")); return null;
   }
   const capture = captures[0];
-  const times = [session.started_at, capture.packet?.capture_meta?.started_at, capture.packet?.capture_meta?.completed_at, capture.received_at, session.completed_at].map(validTime);
-  if (capture.tool !== "use_figma" || typeof capture.receipt_id !== "string" || !capture.receipt_id.trim() ||
-      times.some((time, i) => !Number.isFinite(time) || (i > 0 && time < times[i - 1]))) {
-    issues.push(issue("EVIDENCE_CAPTURE_TIME_INVALID", "/session/captures", "A receipt from this MCP session and ordered capture timestamps are required.")); return null;
-  }
+  const freshnessIssues = validateCaptureFreshness({ session, capture, canonicalSha: model?.canonical_sha, path: "/session/captures" });
+  if (freshnessIssues.length) { issues.push(...freshnessIssues); return null; }
   return capture;
 }
 
@@ -245,8 +233,8 @@ function inspectArtworkTree(record, live) {
   else if (record.identity.node_kind === "component-set" && record.variants.length > 0) expected = record.variants;
   else expected = [];
   if (!expected.length || new Set(expected.map(v => v.node_id)).size !== expected.length) fail("EVIDENCE_SCOPE_AMBIGUOUS", "/variants", "Canonical root/variant identities are ambiguous.");
-  if (!live || live.capture_version !== "1.1.0" || live.capture_meta?.tree_complete !== true || !Array.isArray(live.variants)) {
-    fail("EVIDENCE_CAPTURE_INCOMPLETE", "/capture", "A complete capture 1.1.0 is required."); return { issues, nodes, variants, identityValid };
+  if (!live || !["1.1.0", "1.2.0"].includes(live.capture_version) || live.capture_meta?.tree_complete !== true || !Array.isArray(live.variants)) {
+    fail("EVIDENCE_CAPTURE_INCOMPLETE", "/capture", "A complete capture 1.1.0 or 1.2.0 is required."); return { issues, nodes, variants, identityValid };
   }
   if (live.file_key !== record.figma.file_key || live.component_node_id !== record.figma.node_id) fail("EVIDENCE_CAPTURE_IDENTITY_MISMATCH", "/capture", "Exact canonical file and component owner are required.");
   if (live.variants.length !== expected.length || new Set(live.variants.map(v => v.variant_node_id)).size !== live.variants.length) fail("EVIDENCE_CAPTURE_IDENTITY_MISMATCH", "/capture/variants", "Captured variants must exactly match all canonical variants.");

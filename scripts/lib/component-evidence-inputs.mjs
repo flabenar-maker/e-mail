@@ -3,6 +3,7 @@ import { readFile, realpath } from "node:fs/promises";
 import { dirname, isAbsolute, relative, resolve, win32 } from "node:path";
 
 import { SystemValidationError } from "./diagnostics.mjs";
+import { validateEvidenceSessionFreshness, validateCaptureFreshness } from "./component-evidence-freshness.mjs";
 import { loadSystemManifest } from "./system-manifest.mjs";
 import { listComponentRecords, loadComponentRegistries } from "./component-registry.mjs";
 import { loadRenderingFoundation, validateRenderingSemantics } from "./rendering-foundation.mjs";
@@ -16,7 +17,6 @@ const SHA256 = /^[a-f0-9]{64}$/u;
 const ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
 const ROOT_ID = /^[0-9]+:[0-9]+$/u;
 const NODE_ID = /^(?:[0-9]+:[0-9]+|I[0-9]+:[0-9]+(?:;[0-9]+:[0-9]+)+)$/u;
-const UTC = /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]{3})?Z$/u;
 const CONTAINERS = new Set(["COMPONENT", "COMPONENT_SET", "FRAME", "GROUP", "INSTANCE", "SECTION", "SLOT"]);
 
 function fail(code, path, message) {
@@ -38,16 +38,6 @@ function closed(value, keys) {
 
 function requireSha(value) {
   if (!matches(SHA, value)) fail("EVIDENCE_CANONICAL_SHA_INVALID", "/canonical_sha", "Canonical SHA must be exactly 40 lowercase hexadecimal characters.");
-}
-
-function timestamp(value, path) {
-  const parsed = matches(UTC, value) ? Date.parse(value) : NaN;
-  // Date.parse normalizes impossible calendar dates; round-trip rejects them.
-  const normalized = typeof value === "string" && !value.includes(".") ? value.replace("Z", ".000Z") : value;
-  if (!Number.isFinite(parsed) || new Date(parsed).toISOString() !== normalized) {
-    fail("EVIDENCE_TIMESTAMP_INVALID", path, "Timestamp must be a real UTC date, with seconds or millisecond precision and a Z suffix.");
-  }
-  return parsed;
 }
 
 function inside(root, target) {
@@ -119,13 +109,15 @@ async function readJson(path, diagnosticPath, code) {
 
 function validatePacket(packet, path) {
   if (!object(packet)) fail("EVIDENCE_PACKET_SHAPE_INVALID", path, "Capture packet must be an object.");
-  if (packet.capture_version !== "1.1.0") {
-    fail("EVIDENCE_CAPTURE_VERSION_UNSUPPORTED", `${path}/capture_version`, "Component evidence requires capture version 1.1.0.");
+  if (packet.capture_version !== "1.2.0") {
+    fail("EVIDENCE_CAPTURE_VERSION_UNSUPPORTED", `${path}/capture_version`, "Component evidence requires request-bound capture version 1.2.0.");
   }
   if (typeof packet.file_key !== "string" || !packet.file_key.trim() || !matches(ROOT_ID, packet.component_node_id) ||
       !Array.isArray(packet.component_properties) || !Array.isArray(packet.capture_errors) ||
       !Array.isArray(packet.variants) || packet.variants.length === 0 ||
-      !closed(packet.capture_meta, ["started_at", "completed_at", "tree_complete", "node_count"])) {
+      !object(packet.capture_meta) ||
+      ["started_at", "completed_at", "tree_complete", "node_count"].some(key => !Object.hasOwn(packet.capture_meta, key)) ||
+      Object.keys(packet.capture_meta).some(key => !["started_at", "completed_at", "tree_complete", "node_count", "request"].includes(key))) {
     fail("EVIDENCE_PACKET_SHAPE_INVALID", path, "Capture identity, variants, prior fact fields and complete metadata are required.");
   }
   if (packet.capture_meta.tree_complete !== true) {
@@ -160,10 +152,10 @@ export async function loadComponentEvidenceSession({ sessionPath, canonicalSha }
   catch { fail("EVIDENCE_SESSION_READ", "/session", "Session file could not be resolved."); }
   const root = dirname(actualSessionPath);
   const session = await readJson(actualSessionPath, "/session", "EVIDENCE_SESSION_READ");
-  if (!object(session) || session.schema_version !== "1.0.0") {
-    fail("EVIDENCE_SESSION_VERSION_UNSUPPORTED", "/schema_version", "Component evidence session requires schema version 1.0.0.");
+  if (!object(session) || session.schema_version !== "1.1.0") {
+    fail("EVIDENCE_SESSION_VERSION_UNSUPPORTED", "/schema_version", "Component evidence session requires schema version 1.1.0.");
   }
-  if (!closed(session, ["schema_version", "canonical_git_sha", "started_at", "completed_at", "component_ids", "captures"]) ||
+  if (!closed(session, ["schema_version", "canonical_git_sha", "session_nonce", "started_at", "completed_at", "component_ids", "captures"]) ||
       !Array.isArray(session.component_ids) || session.component_ids.length === 0 ||
       session.component_ids.some((id) => !matches(ID, id)) || new Set(session.component_ids).size !== session.component_ids.length ||
       !Array.isArray(session.captures)) {
@@ -172,16 +164,13 @@ export async function loadComponentEvidenceSession({ sessionPath, canonicalSha }
   if (session.canonical_git_sha !== canonicalSha) {
     fail("EVIDENCE_SESSION_SHA_MISMATCH", "/canonical_git_sha", "Session and canonical model must use the same pinned SHA.");
   }
-  const start = timestamp(session.started_at, "/started_at");
-  const end = timestamp(session.completed_at, "/completed_at");
-  if (start > end) fail("EVIDENCE_CAPTURE_TIME_INVALID", "/completed_at", "Session completion precedes its start.");
   const selected = new Set(session.component_ids);
   const seen = new Set();
   // Validate selection/duplicates before reading any packet, so duplicate
   // receipts cannot be hidden by an unrelated missing or malformed file.
   for (const [index, entry] of session.captures.entries()) {
     const path = `/captures/${index}`;
-    if (!closed(entry, ["component_id", "receipt_id", "tool", "received_at", "packet_path", "packet_sha256"]) ||
+    if (!closed(entry, ["component_id", "receipt_id", "tool", "request_nonce", "requested_at", "received_at", "packet_path", "packet_sha256"]) ||
         !matches(ID, entry.component_id) || entry.tool !== "use_figma" ||
         typeof entry.receipt_id !== "string" || !entry.receipt_id.trim() ||
         typeof entry.packet_sha256 !== "string") {
@@ -192,6 +181,9 @@ export async function loadComponentEvidenceSession({ sessionPath, canonicalSha }
     seen.add(entry.component_id);
   }
   if (selected.size !== seen.size) fail("EVIDENCE_CAPTURE_MISSING", "/captures", "Every selected owner requires one capture packet.");
+
+  const sessionIssues = validateEvidenceSessionFreshness({ session, canonicalSha });
+  if (sessionIssues.length) { const error = sessionIssues[0]; fail(error.code, error.path, error.message); }
 
   const captures = [];
   for (const [index, entry] of session.captures.entries()) {
@@ -208,12 +200,8 @@ export async function loadComponentEvidenceSession({ sessionPath, canonicalSha }
     try { packet = JSON.parse(bytes.toString("utf8")); }
     catch { fail("EVIDENCE_PACKET_READ", `${path}/packet_path`, "Capture packet is not valid JSON."); }
     validatePacket(packet, `${path}/packet`);
-    const captureStart = timestamp(packet.capture_meta.started_at, `${path}/packet/capture_meta/started_at`);
-    const captureEnd = timestamp(packet.capture_meta.completed_at, `${path}/packet/capture_meta/completed_at`);
-    const received = timestamp(entry.received_at, `${path}/received_at`);
-    if (!(start <= captureStart && captureStart <= captureEnd && captureEnd <= received && received <= end)) {
-      fail("EVIDENCE_CAPTURE_TIME_INVALID", path, "Required ordering: session start <= capture start <= capture end <= receipt <= session end.");
-    }
+    const freshnessIssues = validateCaptureFreshness({ session, capture: { ...entry, packet }, canonicalSha, path });
+    if (freshnessIssues.length) { const error = freshnessIssues[0]; fail(error.code, error.path, error.message); }
     captures.push({ ...entry, packet });
   }
   return { ...session, captures };

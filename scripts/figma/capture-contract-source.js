@@ -1,6 +1,21 @@
 // Run through Figma MCP use_figma, not through Node or the Figma web UI.
-// Append: return await captureFigmaContractFacts("exact-component-node-id");
-async function captureFigmaContractFacts(componentNodeId) {
+// Scalar diagnostics: captureFigmaContractFacts("exact-component-node-id").
+// Fresh evidence: supply { session_nonce, request_nonce, canonical_git_sha } from the host request.
+async function captureFigmaContractFacts(componentNodeId, request) {
+  // Validate and copy the host challenge BEFORE reading nodes or API settings.
+  const keys = ["session_nonce", "request_nonce", "canonical_git_sha"];
+  let requestContext = null;
+  if (request !== undefined) {
+    const validHex = (value, length) => typeof value === "string" && value.length === length && /^[a-f0-9]+$/u.test(value);
+    if (!request || typeof request !== "object" || Array.isArray(request) || keys.some(key => !Object.hasOwn(request, key)) ||
+        Object.keys(request).some(key => !keys.includes(key)) || !validHex(request.session_nonce, 64) ||
+        !validHex(request.request_nonce, 64) || !validHex(request.canonical_git_sha, 40)) {
+      const error = new Error("Evidence request requires exact session/request nonces and canonical SHA.");
+      error.code = "EVIDENCE_REQUEST_IDENTITY_MISMATCH";
+      throw error;
+    }
+    requestContext = { session_nonce: request.session_nonce, request_nonce: request.request_nonce, canonical_git_sha: request.canonical_git_sha };
+  }
   const startedAt = new Date().toISOString();
   const previousSkip = figma.skipInvisibleInstanceChildren;
   try {
@@ -17,9 +32,11 @@ async function captureFigmaContractFacts(componentNodeId) {
     }
     return {
       ...packet,
+      capture_version: requestContext ? "1.2.0" : packet.capture_version,
       capture_meta: {
         started_at: startedAt, completed_at: new Date().toISOString(),
         tree_complete: packet.variants.length > 0, node_count: nodeCount,
+        ...(requestContext ? { request: requestContext } : {}),
       },
     };
   } finally {
