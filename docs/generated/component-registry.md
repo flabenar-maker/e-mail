@@ -1,14 +1,14 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: component-registry -->
-<!-- source-digest: sha256:6f31672924a6f176b03c1839f029f1e2c06ddb848cf1789bf13a4c00de27e4b4 -->
+<!-- source-digest: sha256:215e09e7113c581961a3514686956e9b678415b69f4c1da2b156ad6b2581e786 -->
 <!-- schema-versions: components=2.2.0, typography=1.0.0, spacing=1.0.0, assets=1.0.0 -->
 # CUPIS component registry
 
-61 component records.
+62 component records.
 
 | Library | Records |
 |---|---:|
-| shared | 17 |
+| shared | 18 |
 | marketing | 26 |
 | service | 18 |
 
@@ -278,6 +278,52 @@ RENDER: HTML
 
 CRITICAL
 - Слот задаёт только состав и порядок верхнеуровневых компонентов и не создаёт собственные padding, gap, background или визуальные слои.
+```
+
+<!-- library: shared; component-id: icon-account-circle-line-remote -->
+## account-circle-line
+
+### Identity and purpose
+
+- CUPIS ID: `icon-account-circle-line-remote`
+- Status: `active`
+- Library: `shared`
+- Semantic role: `icon`
+- Category: `account-circle-line`
+- Figma: `8zka5bHkcrJVK9I9dKjnhC#1331:1646` (`component`)
+- Source root: `1331:1646`
+- Remote publication key: `8ea141edd5ec0679825e7fde633e211282b2405b`
+- Remote lookup: the current Figma file is capture context, not the original publication file.
+- Verified: `2026-10-02`
+- Structure fingerprint: `sha256:3c7d7fd79ea14320975cf2723156f115587a1d21bf6f1ea5a853dd88e68784a2`
+- Purpose: Внешний исходный знак пользователя внутри Feature-Icon. Только источник для сверки вложенной графики; не самостоятельный блок или экспорт.
+
+### Structure and rendering
+
+- Render type: `ASSET`
+- Desktop root: `root` — `figma-source-only`
+- Mobile root: `root` — `figma-source-only`
+
+### Desktop
+
+- `root` — role `icon`; render `figma-source-only`; visibility `always`
+
+### Mobile
+
+- `root` — role `icon`; render `figma-source-only`; visibility `always`
+
+### Output contract classification
+
+- No standalone output contract: `figma-source-only` component used inside a parent rendered asset.
+
+### Auxiliary Figma Description
+
+This compact projection is metadata only and is not an HTML-build input.
+
+```text
+CUPIS ID: icon-account-circle-line-remote
+PURPOSE: Внешний исходный знак пользователя внутри Feature-Icon. Только источник для сверки вложенной графики; не самостоятельный блок или экспорт.
+RENDER: ASSET
 ```
 
 <!-- library: shared; component-id: icon-bank-card-2-line -->
@@ -1005,6 +1051,10 @@ RENDER: ASSET
   - Background: own fill `preserve`; artificial matte `forbid`
 - Asset usage: `mobile` `/contracts/mobile/root` → `feature-icon` as `direct-image`
 - Asset usage: `desktop` `/contracts/desktop/root` → `feature-icon` as `direct-image`
+
+### Constraints and dependencies
+
+- Evidence link (source): `feature-glyph-source` — source variant `946:25769`, instance `1331:1355` → component `icon-account-circle-line-remote` (`account-circle-line`); asset owner `946:25769`; asset `feature-icon`
 
 ### Output contract classification
 
@@ -8121,6 +8171,13 @@ RENDER: HTML
   - Background: own fill `preserve`; artificial matte `forbid`
 - Asset usage: `mobile` `/contracts/mobile/root/children/1` → `feature-icon` as `direct-image`
 - Asset usage: `desktop` `/contracts/desktop/root/children/1` → `feature-icon` as `direct-image`
+
+### Constraints and dependencies
+
+- Evidence link (source): `mobile-feature-source` — source variant `1024:19283`, instance `1024:19279` → component `asset-feature-icon-4x` (`Asset/Feature-Icon @4x`); asset owner `1024:19279`; asset `feature-icon`
+- Evidence link (source): `mobile-feature-glyph-source` — source variant `1024:19283`, instance `I1024:19279;1331:1355` → component `icon-account-circle-line-remote` (`account-circle-line`); asset owner `1024:19279`; asset `feature-icon`
+- Evidence link (source): `desktop-feature-source` — source variant `1024:19284`, instance `1024:19273` → component `asset-feature-icon-4x` (`Asset/Feature-Icon @4x`); asset owner `1024:19273`; asset `feature-icon`
+- Evidence link (source): `desktop-feature-glyph-source` — source variant `1024:19284`, instance `I1024:19273;1331:1355` → component `icon-account-circle-line-remote` (`account-circle-line`); asset owner `1024:19273`; asset `feature-icon`
 
 ### Output contract classification
 
