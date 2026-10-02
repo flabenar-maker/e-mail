@@ -41,7 +41,7 @@
 
 Внешний опубликованный main component регистрируется как Shared source-only reference с собственным lookup-root `remote-reference` и точным `figma.remote_source.component_key`. `figma.file_key` обозначает контекст текущего чтения, а не неподтверждённый исходный файл публикации; фактическое опубликованное имя сохраняется. Такая запись не создаёт HTML-блок, независимый экспорт или display-размер потребителя. Свежий capture обязан подтвердить и точный node ID, и `remote: true` с тем же publication key; отсутствие или несовпадение metadata оставляет identity непроверенной.
 
-Эти metadata не меняют HTML-контракт, границу экспорта или компактную Description. Полный generated registry показывает их только в разделе зависимостей, без подстановки значений из внешних источников.
+Эти metadata не меняют HTML-контракт, границу экспорта или компактную Description. Полный generated registry показывает evidence links в разделе зависимостей, а publication key и lookup-контекст remote reference — в её identity; значения из внешних источников не подставляются в HTML-контракт.
 
 ## Что означает «полный»
 
