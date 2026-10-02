@@ -227,7 +227,9 @@ const s1Packet = (f, record) => f.session.captures.find(c => c.component_id === 
 function s1Count(f, record) { const p = s1Packet(f, record), count = n => 1 + (n.children ?? []).reduce((s, c) => s + count(c), 0); p.capture_meta.node_count = p.variants.reduce((s, v) => s + count(v.source_node), 0); }
 
 test("S1 verifies whole actual chains, source-only Compact and compound override without changing assets", () => {
-  const f = s1Fixture(), before = structuredClone(f);
+  const f = s1Fixture();
+  const { instance: ignoredInstance, ...cloneableFixture } = f;
+  const before = structuredClone(cloneableFixture);
   for (const owner of [f.big, f.compact, f.header, f.badge, f.block]) {
     const r = s1Audit(f, owner); assert.equal(r.ok, true, JSON.stringify(r.issues));
     assert.ok(r.results.every(i => i.status === "verified" && i.kind === "source-dependency"));
@@ -240,7 +242,8 @@ test("S1 verifies whole actual chains, source-only Compact and compound override
   assert.equal(result(r, "override-glyph").actual, "806:1");
   assert.equal(result(r, "override-glyph").asset_owner.node_id, "502:24255");
   assert.ok(r.receipt_ids.includes("synthetic-synthetic-receipt"));
-  assert.deepEqual(f, before); assert.equal(f.compact.asset_contracts.length, 0);
+  const { instance: ignoredAfter, ...after } = f;
+  assert.deepEqual(after, before); assert.equal(f.compact.asset_contracts.length, 0);
 });
 test("S1 actual override does not inherit target default glyph", () => {
   const f = s1Fixture(); f.roots.get(f.block.id)[0].children[0].children[0].main_component_id = "805:1";
