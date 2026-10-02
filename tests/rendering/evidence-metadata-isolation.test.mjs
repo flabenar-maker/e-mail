@@ -11,7 +11,7 @@ import { renderEmailDocument } from "../../scripts/lib/email-renderer.mjs";
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const evidence = { foundation_values: [], source_dependencies: [{ id: "desktop-header-logo-source", source: { variant_node_id: "230:3679", node_id: "1008:1823" }, target: { component_id: "asset-header-logo-4x", variant_id: "product-cupis" }, asset_owner: { node_id: "1008:1823", asset_id: "header-logo" } }] };
 
-function instance(component) {
+function instance(component, index, ancestry = []) {
   const content = [];
   const seen = new Set();
   for (const viewport of ["mobile", "desktop"]) {
@@ -27,7 +27,12 @@ function instance(component) {
     };
     walk(component.contracts[viewport].root);
   }
-  return { instance_id: "evidence-" + component.id, component_id: component.id, variants: { mobile: "mobile", desktop: "desktop" }, property_values: (component.properties ?? []).map(({ id, default: value }) => ({ property_id: id, scope: "all", value })), content_values: content, asset_files: (component.asset_contracts ?? []).map(({ id }) => ({ asset_contract_id: id, path: "images/" + id + ".png" })), slots: [] };
+  const nested = new Map();
+  for (const viewport of ["mobile", "desktop"]) {
+    const walk = (element) => { if (element.render_mode === "nested-component" && !nested.has(element.id) && !ancestry.includes(element.component_id)) nested.set(element.id, element.component_id); for (const child of element.children ?? []) walk(child); };
+    walk(component.contracts[viewport].root);
+  }
+  return { instance_id: "evidence-" + component.id, component_id: component.id, variants: { mobile: "mobile", desktop: "desktop" }, property_values: (component.properties ?? []).map(({ id, default: value }) => ({ property_id: id, scope: "all", value })), content_values: content, asset_files: (component.asset_contracts ?? []).map(({ id }) => ({ asset_contract_id: id, path: "images/" + id + ".png" })), slots: [], nested_components: [...nested].map(([element_id, component_id]) => ({ element_id, instance: instance(index.bySystemId.get(component_id), index, [...ancestry, component.id]) })) };
 }
 
 test("metadata leaves render impact, asset contracts, and representative document bytes unchanged", async () => {
@@ -43,7 +48,7 @@ test("metadata leaves render impact, asset contracts, and representative documen
   assert.deepEqual(after, before);
   for (const component of records) assert.deepEqual(afterIndex.bySystemId.get(component.id).asset_contracts, component.asset_contracts, component.id);
   const template = beforeIndex.bySystemId.get("email-template");
-  const model = { schema_version: "1.1.0", metadata: { language: "ru", direction: "ltr" }, root: { ...instance(template), slots: [{ element_id: "content", instances: records.map(instance) }] } };
+  const model = { schema_version: "1.1.0", metadata: { language: "ru", direction: "ltr" }, root: { ...instance(template, beforeIndex), slots: [{ element_id: "content", instances: records.map((component) => instance(component, beforeIndex)) }] } };
   const dependencies = { rendererRegistry, foundations: { rendering } };
   const beforeResult = renderEmailDocument(model, { ...dependencies, componentIndex: beforeIndex });
   const afterResult = renderEmailDocument(model, { ...dependencies, componentIndex: afterIndex });
