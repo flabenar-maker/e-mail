@@ -90,12 +90,13 @@ async function runEvidenceCli(args) {
   finally{console.log=oldLog;console.error=oldError;}
 }
 const reportHas=(r,c)=>r.issues.some(i=>i.code===c);
-test("CLI session binds canonical record and reports all missing Template links rather than PASS",async t=>{
+test("CLI session binds canonical record and reports its two synthetic missing Template links rather than PASS",async t=>{
   const f=await evidenceCliFixture(t),r=await runEvidenceCli(f.args);
   assert.equal(r.code,1);assert.equal(r.report.ok,false);assert.ok(r.report.facts);
   assert.equal(r.report.evidence_links.canonical_git_sha,TEST_SHA);
   assert.equal(r.report.evidence_links.required_sources.length,9);
-  assert.equal(r.report.evidence_links.issues.filter(i=>i.code==="EVIDENCE_REQUIRED_LINK_MISSING").length,9);
+  assert.deepEqual(r.report.evidence_links.issues.filter(i=>i.code==="EVIDENCE_REQUIRED_LINK_MISSING").map(i=>i.source.node_id).sort(),["99001:1","99001:2"]);
+  assert.deepEqual(r.report.evidence_links.issues.filter(i=>i.code==="EVIDENCE_SOURCE_OUTSIDE_REQUIRED_SCOPE").map(i=>i.link_id).sort(),["desktop-slot-background","mobile-slot-background"]);
   assert.ok(reportHas(r.report,"FIGMA_FACT_UNCOVERED"));
 });
 test("CLI old arguments retain scalar diagnostics and request a session for shell evidence",async t=>{
