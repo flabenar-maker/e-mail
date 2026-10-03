@@ -152,7 +152,9 @@ test("session accepts equal timestamps and retains explicit main lookup errors",
 
 const MODEL_FILES = ["system/manifest.yaml", "schemas/manifest.schema.json", "schemas/components.schema.json",
   "data/components/shared.yaml", "data/components/marketing.yaml", "data/components/service.yaml",
-  "data/foundations/rendering.yaml", "schemas/rendering.schema.json"];
+  "data/foundations/rendering.yaml", "schemas/rendering.schema.json",
+  "data/foundations/assets.yaml", "schemas/assets.schema.json",
+  "data/foundations/typography.yaml", "schemas/typography.schema.json"];
 async function modelFixture(t) {
   const fixture = await createSystemFixture();
   t.after(() => fixture.cleanup());

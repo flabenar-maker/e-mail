@@ -424,6 +424,87 @@
               "asset_id": "header-logo"
             }
           }
+        ],
+        "fact_proofs": [
+          {
+            "id": "protective-background-source",
+            "kind": "source-value-set",
+            "contract_path": "/contracts/mobile/root/facts/0/value",
+            "sources": [
+              {
+                "component_id": "asset-header-logo-4x",
+                "variant_node_id": "1008:1473",
+                "node_id": "1008:1473"
+              },
+              {
+                "component_id": "asset-header-logo-4x",
+                "variant_node_id": "1008:1474",
+                "node_id": "1008:1474"
+              },
+              {
+                "component_id": "asset-header-logo-4x",
+                "variant_node_id": "1008:1475",
+                "node_id": "1008:1475"
+              }
+            ],
+            "field": "color"
+          },
+          {
+            "id": "shared-asset-profile",
+            "kind": "asset-profile",
+            "contract_path": "/contracts/mobile/root/facts/1/value",
+            "asset_owner_id": "asset-header-logo-4x",
+            "asset_contract_id": "header-logo"
+          },
+          {
+            "id": "export-profile-suffix",
+            "kind": "asset-profile",
+            "contract_path": "/contracts/mobile/root/facts/2/value",
+            "asset_owner_id": "asset-header-logo-4x",
+            "asset_contract_id": "header-logo"
+          },
+          {
+            "id": "desktop-source-dimensions",
+            "kind": "source-value-set",
+            "contract_path": "/contracts/mobile/root/facts/3/value",
+            "sources": [
+              {
+                "component_id": "asset-header-logo-4x",
+                "variant_node_id": "1008:1473",
+                "node_id": "1008:1473"
+              },
+              {
+                "component_id": "asset-header-logo-4x",
+                "variant_node_id": "1008:1474",
+                "node_id": "1008:1474"
+              },
+              {
+                "component_id": "asset-header-logo-4x",
+                "variant_node_id": "1008:1475",
+                "node_id": "1008:1475"
+              }
+            ],
+            "field": "dimensions"
+          },
+          {
+            "id": "mobile-consumer-dimensions",
+            "kind": "consumer-geometry",
+            "contract_path": "/contracts/mobile/root/facts/4/value",
+            "consumer_component_id": "email-header",
+            "asset_contract_id": "header-logo",
+            "placements": {
+              "mobile": {
+                "component_id": "email-header",
+                "variant_node_id": "15:2037",
+                "node_id": "1008:1709"
+              },
+              "desktop": {
+                "component_id": "email-header",
+                "variant_node_id": "230:3679",
+                "node_id": "1008:1823"
+              }
+            }
+          }
         ]
       },
       "status": "active",
@@ -524,8 +605,8 @@
                   "value": "#F3F3F5"
                 },
                 "provenance": {
-                  "kind": "registry-literal",
-                  "source_blob_sha": "be2203aef82db093fca37857f060d552b254c579"
+                  "kind": "contract-proof",
+                  "proof_id": "protective-background-source"
                 }
               },
               {
@@ -542,8 +623,8 @@
                   "value": "@4x"
                 },
                 "provenance": {
-                  "kind": "registry-literal",
-                  "source_blob_sha": "be2203aef82db093fca37857f060d552b254c579"
+                  "kind": "contract-proof",
+                  "proof_id": "export-profile-suffix"
                 }
               },
               {
@@ -555,8 +636,8 @@
                   "unit": "px"
                 },
                 "provenance": {
-                  "kind": "registry-literal",
-                  "source_blob_sha": "be2203aef82db093fca37857f060d552b254c579"
+                  "kind": "contract-proof",
+                  "proof_id": "desktop-source-dimensions"
                 }
               },
               {
@@ -568,8 +649,8 @@
                   "unit": "px"
                 },
                 "provenance": {
-                  "kind": "registry-literal",
-                  "source_blob_sha": "be2203aef82db093fca37857f060d552b254c579"
+                  "kind": "contract-proof",
+                  "proof_id": "mobile-consumer-dimensions"
                 }
               }
             ],
@@ -684,6 +765,38 @@
               "node_id": "1008:1688"
             }
           }
+        ],
+        "fact_proofs": [
+          {
+            "id": "compact-source-dimensions",
+            "kind": "source-value-set",
+            "contract_path": "/contracts/mobile/root/facts/0/value",
+            "sources": [
+              {
+                "component_id": "asset-header-logo-compact-4x",
+                "variant_node_id": "1008:1686",
+                "node_id": "1008:1686"
+              },
+              {
+                "component_id": "asset-header-logo-compact-4x",
+                "variant_node_id": "1008:1687",
+                "node_id": "1008:1687"
+              },
+              {
+                "component_id": "asset-header-logo-compact-4x",
+                "variant_node_id": "1008:1688",
+                "node_id": "1008:1688"
+              }
+            ],
+            "field": "dimensions"
+          },
+          {
+            "id": "compact-export-profile-suffix",
+            "kind": "asset-profile",
+            "contract_path": "/contracts/mobile/root/facts/1/value",
+            "asset_owner_id": "email-header",
+            "asset_contract_id": "header-logo"
+          }
         ]
       },
       "status": "active",
@@ -754,8 +867,8 @@
                   "unit": "px"
                 },
                 "provenance": {
-                  "kind": "registry-literal",
-                  "source_blob_sha": "be2203aef82db093fca37857f060d552b254c579"
+                  "kind": "contract-proof",
+                  "proof_id": "compact-source-dimensions"
                 }
               },
               {
@@ -765,8 +878,8 @@
                   "value": "@4x"
                 },
                 "provenance": {
-                  "kind": "registry-literal",
-                  "source_blob_sha": "be2203aef82db093fca37857f060d552b254c579"
+                  "kind": "contract-proof",
+                  "proof_id": "compact-export-profile-suffix"
                 }
               }
             ],

@@ -34856,9 +34856,8 @@
                           "value": "auto"
                         },
                         "provenance": {
-                          "kind": "figma-description",
-                          "node_id": "337:4460",
-                          "section": "IMAGE @2x"
+                          "kind": "contract-proof",
+                          "proof_id": "mobile-proportional-auto"
                         }
                       },
                       {
@@ -40111,7 +40110,24 @@
         "purpose": "Главный промобаннер с изображением, живым текстом и необязательным основным CTA.",
         "critical_constraint_ids": []
       },
-      "constraints": []
+      "constraints": [],
+      "evidence_links": {
+        "foundation_values": [],
+        "source_dependencies": [],
+        "fact_proofs": [
+          {
+            "id": "mobile-proportional-auto",
+            "kind": "mobile-image-auto",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/7/value",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "337:4348"
+            },
+            "asset_contract_id": "hero-image"
+          }
+        ]
+      }
     },
     {
       "id": "block-steps",
@@ -51797,9 +51813,8 @@
                   "value": 25
                 },
                 "provenance": {
-                  "kind": "figma-description",
-                  "node_id": "337:4713",
-                  "section": "BACKGROUND"
+                  "kind": "contract-proof",
+                  "proof_id": "mobile-css-gradient-angle"
                 }
               },
               {
@@ -52240,9 +52255,8 @@
                   "value": 25
                 },
                 "provenance": {
-                  "kind": "figma-description",
-                  "node_id": "337:4713",
-                  "section": "BACKGROUND"
+                  "kind": "contract-proof",
+                  "proof_id": "desktop-css-gradient-angle"
                 }
               },
               {
@@ -53288,7 +53302,88 @@
         "purpose": "Основная градиентная HTML-кнопка для главного действия письма.",
         "critical_constraint_ids": []
       },
-      "constraints": []
+      "constraints": [],
+      "evidence_links": {
+        "foundation_values": [],
+        "source_dependencies": [],
+        "fact_proofs": [
+          {
+            "id": "mobile-css-gradient-angle",
+            "kind": "approved-css-gradient-angle",
+            "contract_path": "/contracts/mobile/root/facts/16/value",
+            "source": {
+              "component_id": "button-primary",
+              "variant_node_id": "337:4691",
+              "node_id": "337:4691"
+            },
+            "paint_index": 0,
+            "decision_id": "html-gradient-angle"
+          },
+          {
+            "id": "desktop-css-gradient-angle",
+            "kind": "approved-css-gradient-angle",
+            "contract_path": "/contracts/desktop/root/facts/16/value",
+            "source": {
+              "component_id": "button-primary",
+              "variant_node_id": "337:4694",
+              "node_id": "337:4694"
+            },
+            "paint_index": 0,
+            "decision_id": "html-gradient-angle"
+          }
+        ],
+        "normative_decisions": [
+          {
+            "id": "html-gradient-angle",
+            "kind": "css-linear-gradient-angle",
+            "owner_id": "button-primary",
+            "targets": [
+              {
+                "viewport": "mobile",
+                "element_id": "root",
+                "fact_id": "background-gradient-css-angle-degrees",
+                "contract_path": "/contracts/mobile/root/facts/16/value",
+                "value_sha256": "e6b1d9f9432f495cad9124df5536182891a1a982f691f1112a10d150446d7a7f",
+                "context_sha256": "14057ea9437eae8a6967525ec35db63ddb19fcbb029f46c5ebafad5dcfee0d6d",
+                "source": {
+                  "component_id": "button-primary",
+                  "variant_node_id": "337:4691",
+                  "node_id": "337:4691"
+                },
+                "paint_index": 0
+              },
+              {
+                "viewport": "desktop",
+                "element_id": "root",
+                "fact_id": "background-gradient-css-angle-degrees",
+                "contract_path": "/contracts/desktop/root/facts/16/value",
+                "value_sha256": "24d152b443922bf693ce00a4f4397313dd9cf5ffdea961cca8a736cdac54c5ae",
+                "context_sha256": "03d79eb4d754929c12b6d79e7299884af93627a35f8b270a1231d5a2734d7c57",
+                "source": {
+                  "component_id": "button-primary",
+                  "variant_node_id": "337:4694",
+                  "node_id": "337:4694"
+                },
+                "paint_index": 0
+              }
+            ],
+            "authorization": {
+              "user_instruction": "По кнопке: делай 25 градусов точным значением",
+              "scope": {
+                "owner_id": "button-primary",
+                "contract_paths": [
+                  "/contracts/mobile/root/facts/16/value",
+                  "/contracts/desktop/root/facts/16/value"
+                ]
+              },
+              "approved_spec": {
+                "path": "docs/superpowers/specs/2026-10-03-cupis-contract-fact-proof-design.md",
+                "git_sha": "5431e8b61920d3eed6e9d59d6cd23c0932deae6c"
+              }
+            }
+          }
+        ]
+      }
     },
     {
       "id": "block-content",
@@ -63914,9 +64009,8 @@
                           "value": "auto"
                         },
                         "provenance": {
-                          "kind": "figma-description",
-                          "node_id": "337:4870",
-                          "section": "IMAGE ASSET"
+                          "kind": "contract-proof",
+                          "proof_id": "mobile-proportional-auto"
                         }
                       },
                       {
@@ -66363,9 +66457,8 @@
                           "value": "content-driven-cover"
                         },
                         "provenance": {
-                          "kind": "figma-description",
-                          "node_id": "337:4870",
-                          "section": "IMAGE ASSET"
+                          "kind": "contract-proof",
+                          "proof_id": "desktop-content-height-cover"
                         }
                       },
                       {
@@ -69077,7 +69170,45 @@
         "purpose": "Вторичный промобаннер с текстовой и визуальной областями.",
         "critical_constraint_ids": []
       },
-      "constraints": []
+      "constraints": [],
+      "evidence_links": {
+        "foundation_values": [],
+        "source_dependencies": [],
+        "fact_proofs": [
+          {
+            "id": "mobile-proportional-auto",
+            "kind": "mobile-image-auto",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/7/value",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "11:1184"
+            },
+            "asset_contract_id": "secondary-image"
+          },
+          {
+            "id": "desktop-content-height-cover",
+            "kind": "content-height-cover",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/7/value",
+            "card": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "619:19662"
+            },
+            "content": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "326:6612"
+            },
+            "image": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "326:6618"
+            },
+            "asset_contract_id": "secondary-image"
+          }
+        ]
+      }
     },
     {
       "id": "block-bullet-list",

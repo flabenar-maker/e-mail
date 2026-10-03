@@ -12,6 +12,7 @@ const NODE = /^(?:[0-9]+:[0-9]+|I[0-9]+:[0-9]+(?:;[0-9]+:[0-9]+)+)$/u;
 const SHA = /^[a-f0-9]{40}$/u;
 const DIGEST = /^[a-f0-9]{64}$/u;
 const VALUE_PATH = /^\/contracts\/(?:mobile|desktop|variant_contracts\/\d+)\/root(?:\/children\/\d+)*\/facts\/\d+\/value$/u;
+const computedCoverage = new WeakMap();
 const KINDS = {
   'source-value-set': ['sources', 'field'],
   'consumer-geometry': ['consumer_component_id', 'asset_contract_id', 'placements'],
@@ -135,9 +136,11 @@ export function validateContractFactProofReferences({ records = [] } = {}) {
 
 function environment(model, session) {
   const issues = validateEvidenceSessionFreshness({ session, canonicalSha: model?.canonical_sha }), cache = new Map(), receipts = new Set();
+  let usedOwners = new Set(), usedSelectors = new Map();
   const lookup = id => { const matches = model?.records?.filter(r => r.id === id); if (matches?.length !== 1) throw Error('canonical owner identity ambiguous'); return matches[0]; };
   if (!Array.isArray(session?.component_ids) || new Set(session.component_ids).size !== session.component_ids.length || !Array.isArray(session?.captures) || session.captures.length !== session.component_ids.length || session.captures.some(c => session.component_ids.filter(id => id === c.component_id).length !== 1) || new Set(session.captures.map(c => c.component_id)).size !== session.captures.length) issues.push(diagnostic('CONTRACT_PROOF_SESSION_INVALID', '/session', 'Exact unique selected capture owners are required.'));
   function tree(id) {
+    usedOwners.add(id);
     if (cache.has(id)) return cache.get(id);
     if (issues.length) throw Error('session SHA/receipt/request identity unverified');
     const record = lookup(id), captures = session.captures.filter(c => c.component_id === id);
@@ -169,6 +172,7 @@ function environment(model, session) {
     if (!selectorShape(s)) throw Error('selector malformed');
     const t = tree(s.component_id), entry = t.nodes.get(s.node_id);
     if (!entry || entry.variantId !== s.variant_node_id) throw Error('exact node/variant identity missing');
+    usedSelectors.set(JSON.stringify(s), { ...s });
     return { ...entry, ...t, selector: s };
   }
   function dependencies(id, trail = new Set()) {
@@ -185,7 +189,10 @@ function environment(model, session) {
     if (['asset', 'icon'].includes(t.record.identity.semantic_role)) for (const e of t.nodes.values()) if (e.node.node_type === 'INSTANCE' && (t.record.evidence_links?.source_dependencies ?? []).filter(l => l.source.node_id === e.node.node_id && l.source.variant_node_id === e.variantId).length !== 1) throw Error('required source dependency link missing');
     return t;
   }
-  return { issues, lookup, tree, selected, dependencies, receipts };
+  return { issues, lookup, tree, selected, dependencies, receipts,
+    beginProof() { usedOwners = new Set(); usedSelectors = new Map(); },
+    proofTrace() { return { source_selectors: [...usedSelectors.values()], receipt_ids: [...usedOwners].map(id => cache.get(id)?.capture.receipt_id).filter(Boolean).sort() }; }
+  };
 }
 function visible(entry) { return [entry.node, ...entry.ancestors].every(n => n.visible === true && n.opacity === 1); }
 function dimensions(node) {
@@ -268,12 +275,16 @@ export function auditContractFactProofs({ record, model, session } = {}) {
   for (const p of Array.isArray(proofs) ? proofs : []) {
     const localSources = [], item = { proof_id: p.id, kind: p.kind, contract_path: p.contract_path, status: 'unverified' }, t = target(record, p.contract_path);
     const source = (s, path) => localSources.push({ component_id: s.component_id, variant_node_id: s.variant_node_id, node_id: s.node_id, source_path: path });
+    item.owner_id = record.id;
+    item.category = ['mobile-image-auto', 'content-height-cover'].includes(p.kind) ? 'derived-html-rule' : p.kind === 'approved-css-gradient-angle' ? 'approved-normative-decision' : p.kind === 'source-value-set' ? 'own-native-values' : 'verified-relation';
+    item.foundation_paths = [];
+    env.beginProof();
     try {
       if (validation.length || env.issues.length || !compatible(p, t)) throw Error('proof reference/type/session unverified');
       env.tree(record.id);
       switch (p.kind) {
         case 'source-value-set': {
-          if (!['asset', 'icon'].includes(record.identity.semantic_role) || !['mobile', 'desktop'].every(v => record.contracts?.[v]?.root?.render_mode === 'figma-source-only') || p.sources.length !== variants(record).length || new Set(p.sources.map(s => s.variant_node_id)).size !== p.sources.length || p.sources.some(s => s.component_id !== record.id || s.node_id !== s.variant_node_id)) throw Error('complete own source-only variant roots required');
+          if (!['asset', 'icon'].includes(record.identity.semantic_role) || record.identity.library !== 'shared' || variants(record).some(v => v.axes.some(a => a.name === 'Viewport')) || p.sources.length !== variants(record).length || new Set(p.sources.map(s => s.variant_node_id)).size !== p.sources.length || p.sources.some(s => s.component_id !== record.id || s.node_id !== s.variant_node_id)) throw Error('complete own source-only variant roots required');
           env.dependencies(record.id);
           for (const s of p.sources) { const e = env.selected(s); if (p.field === 'color') { const c = nativeColor(e); if (!equal(c.value, t.value)) throw Error('source color mismatch'); source(s, `/fills/${c.paintIndex}/color`); } else { if (!equal(dimensions(e.node), t.value)) throw Error('source dimensions mismatch'); source(s, '/reference_dimensions/width'); source(s, '/reference_dimensions/height'); source(s, '/reference_dimensions/unit'); } }
           break;
@@ -291,6 +302,7 @@ export function auditContractFactProofs({ record, model, session } = {}) {
             consumerOwnership(env, record, r.id, a.id, placements);
           } else env.dependencies(record.id);
           const owner = env.tree(record.id).packet.owner_identity, suffix = / @(2x|4x)$/u.exec(owner.name)?.[1], profile = model.source_documents?.get('assets-foundation')?.export_profiles?.filter(e => e.id === a.export_profile_id);
+          item.foundation_paths.push({ source_id: 'assets-foundation', target_id: a.export_profile_id });
           if (owner.name !== record.identity.figma_name || !suffix || profile?.length !== 1 || profile[0].contract?.suffix !== `@${suffix}` || profile[0].contract?.scale !== Number(suffix[0]) || !a.owner_layer_name.endsWith(` @${suffix}`)) throw Error('owner suffix/registered asset export profile mismatch');
           if (t.value.type === 'asset-reference' ? t.value.asset_contract_id !== a.id || r.id !== record.id : t.value.value !== `@${suffix}`) throw Error('asset reference/suffix target mismatch'); break;
         }
@@ -299,7 +311,8 @@ export function auditContractFactProofs({ record, model, session } = {}) {
           const styles = model.source_documents?.get('typography-foundation')?.styles?.filter(s => s.figma_style_id === style?.figma_style_id);
           if (n.node_type !== 'TEXT' || t.fact.provenance.node_id !== n.node_id || viewportOf(record, p.source.variant_node_id) !== t.viewport || styles?.length !== 1) throw Error('text style identity/viewport ambiguous');
           const s = styles[0], line = (a, b) => a?.unit?.toLowerCase() === (b?.unit === 'percent' ? 'percent' : b?.unit === 'px' ? 'pixels' : b?.unit) && number(a.value) === b?.value;
-          if (s.viewport !== t.viewport || s.figma_name !== style.figma_style_name || t.value.value !== s.figma_style_id || number(style.font_size_px) !== s.font_size_px || style.font_weight !== s.font.css_weight || !line(style.line_height, s.line_height) || (record.contracts.figma_fact_links ?? []).filter(l => l.node_id === n.node_id && l.variant_node_id === p.source.variant_node_id && l.source_path === '/text_style/figma_style_id' && l.contract_path === `${p.contract_path}/value` && l.transform === 'identity').length !== 1) throw Error('style ID/name/native parameters/direct mapping mismatch');
+          item.foundation_paths.push({ source_id: 'typography-foundation', target_id: s.id });
+          if (s.viewport !== t.viewport || s.figma_name !== style.figma_style_name || t.value.value !== s.figma_style_id || number(style.font_size_px) !== s.font_size_px || style.font_weight !== s.font.css_weight || !line(style.line_height, s.line_height) || !line(style.letter_spacing, s.letter_spacing) || (record.contracts.figma_fact_links ?? []).filter(l => l.node_id === n.node_id && l.variant_node_id === p.source.variant_node_id && l.source_path === '/text_style/figma_style_id' && l.contract_path === `${p.contract_path}/value` && l.transform === 'identity').length !== 1) throw Error('style ID/name/native parameters/direct mapping mismatch');
           const segments = n.styled_text_segments;
           if (segments) {
             let start = 0;
@@ -315,11 +328,13 @@ export function auditContractFactProofs({ record, model, session } = {}) {
         case 'mobile-image-auto': {
           const e = env.selected(p.source), a = asset(record, p.asset_contract_id), element = referenceElement(record, p.source, a.id), policy = model.source_documents?.get('assets-foundation')?.display_modes?.filter(d => d.id === a.display_mode_id);
           if (viewportOf(record, p.source.variant_node_id) !== 'mobile' || element !== t.element || element.render_mode !== 'direct-image' || policy?.length !== 1 || policy[0].contract?.mobile_height_behavior !== 'auto' || policy[0].contract?.intrinsic_ratio_required !== true || policy[0].contract?.deformation_forbidden !== true) throw Error('owned Mobile direct-image auto/proportional policy required');
+          item.foundation_paths.push({ source_id: 'assets-foundation', target_id: a.display_mode_id });
           nativeImage(e); verifyReferenceDimensions(record, element, e.node, p.source.variant_node_id); break;
         }
         case 'content-height-cover': {
           const card = env.selected(p.card), content = env.selected(p.content), image = env.selected(p.image), a = asset(record, p.asset_contract_id), element = referenceElement(record, p.image, a.id), policy = model.source_documents?.get('assets-foundation')?.display_modes?.filter(d => d.id === a.display_mode_id);
           if (new Set([p.card.variant_node_id, p.content.variant_node_id, p.image.variant_node_id]).size !== 1 || viewportOf(record, p.card.variant_node_id) !== 'desktop' || card.node.layout?.mode !== 'HORIZONTAL' || card.node.layout?.vertical_sizing !== 'HUG' || content.node.layout?.horizontal_sizing !== 'FIXED' || content.node.layout?.vertical_sizing !== 'HUG' || image.node.layout?.vertical_sizing !== 'FILL' || !equal(card.node.children?.map(n => n.node_id), [content.node.node_id, image.node.node_id]) || content.ancestors.at(-1)?.node_id !== card.node.node_id || image.ancestors.at(-1)?.node_id !== card.node.node_id || element !== t.element || a.display_mode_id !== 'fill-image' || policy?.length !== 1 || policy[0].contract?.crop_owner !== 'html-wrapper') throw Error('exact content-height HUG/FILL sibling topology and wrapper policy required');
+          item.foundation_paths.push({ source_id: 'assets-foundation', target_id: a.display_mode_id });
           nativeImage(image); verifyReferenceDimensions(record, element, image.node, p.image.variant_node_id); break;
         }
         case 'approved-css-gradient-angle': {
@@ -331,16 +346,23 @@ export function auditContractFactProofs({ record, model, session } = {}) {
         }
       }
       item.status = 'verified'; verified.push(...leaves(t.value, p.contract_path).map(v => v.path)); sources.push(...localSources);
-    } catch (error) { item.reason = error.message; issues.push(diagnostic('CONTRACT_PROOF_UNVERIFIED', `/evidence_links/fact_proofs/${p.id}`, error.message, { proof_id: p.id })); }
+    } catch (error) { item.reason = error.message; item.status = /mismatch/u.test(error.message) ? 'mismatch' : 'unverified'; issues.push(diagnostic(item.status === 'mismatch' ? 'CONTRACT_PROOF_MISMATCH' : 'CONTRACT_PROOF_UNVERIFIED', `/evidence_links/fact_proofs/${p.id}`, error.message, { proof_id: p.id })); }
+    Object.assign(item, env.proofTrace(), { source_paths: localSources.map(s => ({ ...s })) });
     results.push(item);
   }
   for (const receipt of env.receipts) receipts.add(receipt);
   report.receipt_ids = [...receipts].sort(); report.verified_contract_paths = [...new Set(verified)].sort();
   report.verified_sources = [...new Map(sources.map(s => [key(s), s])).values()].sort((a, b) => key(a).localeCompare(key(b)));
-  ordered(issues); report.ok = issues.length === 0 && results.every(r => r.status === 'verified'); return report;
+  ordered(issues); report.ok = issues.length === 0 && results.every(r => r.status === 'verified');
+  computedCoverage.set(report, { component_id: record.id, paths: [...report.verified_contract_paths], sources: report.verified_sources.map(s => ({ ...s })) });
+  return report;
 }
 export function applyContractFactProofCoverage({ facts, proofs } = {}) {
-  const paths = new Set(proofs?.verified_contract_paths ?? []), sources = proofs?.verified_sources ?? [];
+  // Only this module's computed result may close gaps. Caller flags, copied JSON
+  // reports and mutations of the public report never establish coverage.
+  const computed = computedCoverage.get(proofs);
+  if (!computed || computed.component_id !== facts?.component_id) return facts;
+  const paths = new Set(computed.paths), sources = computed.sources;
   if (!paths.size && !sources.length) return facts;
   const issues = facts.issues.filter(i => !(i.code === 'CONTRACT_FACT_UNMAPPED' && paths.has(i.contract_path)) && !(i.code === 'FIGMA_FACT_UNCOVERED' && sources.some(s => s.component_id === facts.component_id && s.variant_node_id === i.variant_node_id && s.node_id === i.node_id && s.source_path === i.source_path)));
   const removed = facts.issues.filter(i => !issues.includes(i));

@@ -264,7 +264,7 @@ test("fresh metadata does not alter prior text, layout, paints, bindings or geom
   const { capture_meta, capture_version, ...facts } = packet;
   const stops = [{ position: 0, color: "#18B037", alpha: 1 }, { position: 1, color: "#3DD55C", alpha: 1 }];
   assert.deepEqual(facts, {
-    file_key: "test-file", component_node_id: "1:1", component_properties: [], capture_errors: [],
+    file_key: "test-file", component_node_id: "1:1", owner_identity: { node_id: "1:1", node_type: "COMPONENT", name: "Button/Primary" }, component_properties: [], capture_errors: [],
     variants: [{ variant_node_id: "1:1", axes: [{ name: "Viewport", value: "Mobile" }], source_node: {
       node_id: "1:1", name: "Button/Primary", node_type: "COMPONENT", visible: true,
       reference_dimensions: { width: 230, height: 44, unit: "px" }, minimum_width_px: 230,

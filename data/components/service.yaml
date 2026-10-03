@@ -35015,7 +35015,73 @@
           "severity": "critical",
           "statement": "Номер +7 (495) 122-20-88 — HTML-ссылка tel:+74951222088 в обеих версиях; href не придумывать и не заменять URL сайта."
         }
-      ]
+      ],
+      "evidence_links": {
+        "foundation_values": [],
+        "source_dependencies": [],
+        "fact_proofs": [
+          {
+            "id": "mobile-heading-style-usage",
+            "kind": "style-usage",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/facts/8/value",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27604"
+            }
+          },
+          {
+            "id": "mobile-phone-style-usage",
+            "kind": "style-usage",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/1/facts/8/value",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27605"
+            }
+          },
+          {
+            "id": "mobile-help-style-usage",
+            "kind": "style-usage",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/4/value",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27607"
+            }
+          },
+          {
+            "id": "desktop-heading-style-usage",
+            "kind": "style-usage",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/facts/8/value",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27583"
+            }
+          },
+          {
+            "id": "desktop-phone-style-usage",
+            "kind": "style-usage",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/1/facts/8/value",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27584"
+            }
+          },
+          {
+            "id": "desktop-help-style-usage",
+            "kind": "style-usage",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/4/value",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27586"
+            }
+          }
+        ]
+      }
     },
     {
       "id": "asset-bank-badge-4x",

@@ -62,7 +62,7 @@ function entries(records, issues) {
     const path = `/records/${index}/evidence_links`;
     if (!closedObject(links, ["foundation_values", "source_dependencies"], ["fact_proofs", "normative_decisions"]) ||
         !Array.isArray(links.foundation_values) || !Array.isArray(links.source_dependencies)) {
-      issue(issues, "EVIDENCE_LINK_SHAPE_INVALID", path, "Evidence links require exactly two arrays: foundation_values and source_dependencies.");
+      issue(issues, "EVIDENCE_LINK_SHAPE_INVALID", path, "Evidence links require foundation_values and source_dependencies arrays; fact_proofs and normative_decisions are optional closed arrays.");
       return;
     }
     const ids = new Set();
