@@ -121,4 +121,4 @@ Fresh final9978/8: сначала host receipt без обязательного
 
 ## Следующая граница
 
-Согласованный дочерний repair выполнен и отражён в родительском плане/roadmap. F2 reference widths, required native/binding/visual evidence и F7 остаются в P2; overall P2 не принят. Нет merge, P3, #109, activation, cutover, Figma writes или изменений email/images/skills. PR #110 draft/open. Docs-only publication не разрешает эти действия.
+Согласованный дочерний repair выполнен и отражён в родительском плане/roadmap. В последующем отдельно разрешённом F2 follow-up четыре reference widths исправлены и fresh-verified на894; его факты/проверки — в текущей точке родительского плана, не часть прежнего preservation claim этого repair. Required native/binding/visual evidence и F7 остаются в P2; overall P2 не принят. Нет merge, P3, #109, activation, cutover, Figma writes или изменений email/images/skills. PR #110 draft/open. Docs-only publication не разрешает эти действия.

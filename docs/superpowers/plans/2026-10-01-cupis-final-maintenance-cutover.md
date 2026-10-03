@@ -20,7 +20,34 @@
 
 После принятого пакета 5, до отдельно разрешённого пакета 6, предусмотрен [follow-up карточных блоков, draft PR #109](https://github.com/flabenar-maker/e-mail/pull/109). Полная актуальная очередь, ссылки на его план и границы интеграции документов находятся в [roadmap](2026-08-25-cupis-migration-roadmap.md#единый-актуальный-список). Организация папки plans и удаление ручного checkpoint не являются выполнением пакета 6.
 
-### Текущая точка возврата P2 — 03.10.2026
+### Текущая точка возврата P2 — F2 исправлен в кандидате, 03.10.2026
+
+После двух явных разрешений пользователя исправлены только четыре reference-width facts `block-transaction-success`. Первый запрос разрешил точные измерения, второй — подтверждённое Desktop HTML следствие 116→117 px. Коррекция выполнена в draft PR #110, не слита и не означает приёмку всего P2.
+
+| Viewport / узел Figma | Измерение до → после | Сохранённое native sizing |
+| --- | --- | --- |
+| Desktop / `459:27425`, text-details | 252 → 251 px | FILL / HUG |
+| Desktop / `459:27428`, status-container | 116 → 117 px | HUG / FILL |
+| Desktop / `459:29356`, status | 116 → 117 px | HUG / HUG |
+| Mobile / `459:29376`, status | 93 → 94 px | HUG / HUG |
+
+Baseline `1a2a4f08da7bae05f772cda22f6fc33a3318d420`; RED test commit `ba824767fe0df352fab077d0d25babcb2725252d` (чистый expected FAIL:252≠251); исправленный product `894129eeceabb4a69f5be4dccc85cb8a70c62be4`, tree `df06cb1f3b0ef12fbd9bfc593a616e630281d162`.
+
+Changed-path scope — ровно пять файлов: `data/components/service.yaml` (четыре width lines), `tests/foundation/block-transaction-success-reference-sizes.test.mjs` (portable regression по четырём фактам и sizing), три generated registries. Component registry поменял только source digest и эти четыре факта; typography/asset registries — только source-digest headers. Остальные records, heights/trees/props/assets/Description, foundations, renderer/interpreter, skills/routes/workflows и naming output byte-preserved. Figma и локальные письма не изменены.
+
+Clean-render сравнение реальных old/new records с полными test-only inputs: diagnostics[] на обеих сторонах; Mobile HTML и CSS byte-identical. Desktop отличается только width projection status-container116→117. Это existing renderer specialization, не новая fixed-width policy для HUG/FILL. Предварительное предположение, что Desktop HTML также останется byte-identical, опровергнуто тестом и не используется как evidence.
+
+Локально на exact894 выполнены новый regression test и 14-file related selection, exit0; `validate-system` exit0 (24.7s), `generate-docs --check` exit0 (3.4s), raw250/250 до/после без mismatch. Полный suite на этом шаге не запускался; прошлые1075/1075 на997 не приписываются894. Точный individual-test count из truncated console не восстановлен; подтверждены состав14files и process exit0, не выдуманный счётчик. Compact verification receipt SHA256 `1f369a9953bf9b7209b24d855b51a70e84156b1c53f6bea29b92d89d55091d8d`.
+
+Свежая read-only request-bound MCP session на894: host UTC `2026-10-03T16:34:34.475Z`–`2026-10-03T16:35:42Z`, capture1.3/session1.1, принято3/3 packets (Transaction-Success, Badge/Operation-Status, Details/Operation). Session SHA256 `fd7dc4bf2e08362c3187d76de64672f460457f5a1f8da8cc49732f6f134801bc`. Packet fingerprints соответственно `35bacab9664b234bc006e1daecf966fb2fc1294639827804bb99aafa483fbfcc`, `baa67d183603d8ac2234667ea85bbc4356e11b2e37c072a1747455a53586740d`, `deb3d7f299d1f1a11f287c62b551f39500b5f4d40c0bf3a478658c4fd8eb7410`. Raw packets прежних SHA не перепинивались; неполные transport attempts не засчитаны.
+
+На этой fresh session четыре прежних width mismatches исчезли; `FIGMA_CONTRACT_MISMATCH`, `CONTRACT_FACT_UNMAPPED` и admission/source-identity/native-proof errors —0 в узкой области. Combined audit остаётся nonaccepting: Transaction-Success имеет capture errors10, required-links-missing4, uncovered737; Badge uncovered251; Details uncovered780. CLI audits exit1 по этим сохранённым обязанностям — не FAIL контрольного теста и не разрешение удалить diagnostics. F2 widths закрыты; полное доказательство этих компонентов не заявляется.
+
+Evidence вне репозитория/писем: `C:/Users/flabe/AppData/Local/Temp/cupis-p2-rolemap-20261002/F2-1a2a4f-resolver/` (RED/clean comparison/receipt) и `F2-894129-final/` (fresh raw packets/session/audits). Disposable exact snapshots не стали рабочими копиями.
+
+**Следующее действие:** required native/foundation/binding и visual evidence для выбранных значимых обязанностей, завершение архивного сопоставления; затем F7 decision и exact producer/schema/manifest/output/test map до P3. F2 повторно не начинать. P3, отложенный #109, activation/cutover и merge не разрешены этим шагом. Финальная docs-only публикация проверяется отдельно на её SHA; 894 packets не перепиниваются на документационный commit.
+
+### Предыдущий bounded fact-proof repair — завершён в кандидате, 03.10.2026
 
 Bounded fact-proof repair завершён в кандидате PR #110, не в main и не как приёмка всего P2.
 
@@ -64,14 +91,14 @@ Compact receipts SHA256: full `4166a495b0712af483071674976b93cf7a649e9fd78a43a33
 
 **Baseline coverage до bounded unit/icon repair — не список визуальных дефектов.** Audit увидел 38 300 source facts / 15 046 mapped и 19 956 contract facts / 15 115 mapped. Открыты 23 254 `FIGMA_FACT_UNCOVERED`, 4 863 `CONTRACT_FACT_UNMAPPED`, 20 `FIGMA_SOURCE_PATH_MISSING` (все у deferred `block-icon-list`, обычных owners — 0), 18 unsupported diagnostics, 17 evidence-links-not-contract и topology diagnostics. Raw capture содержит 207 diagnostics: 160 `ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW` и 47 `MIXED_VALUE`. Это требует классификации значимости и exact mapping; blanket exclusions или переутверждения контрактов ради GREEN нет. Не использовать несуществующий diagnostic `SOURCE_PATH_MISSING` и не вычислять unmapped как разность агрегатов: raw atomic fact paths и Set разрешившихся mapping targets — разные множества; target попадает в Set до проверки provenance и совпадения значения.
 
-**P2-F2 — уточнённая причина без автоматической правки.** В Desktop `text-details` 459:27425 — FILL 251 вместо reference 252; `status-container` 459:27428 и `status` 459:29356 — HUG 117 вместо 116. Сумма строки: 72 + 24 + 251 + 24 + 117 = 488. В Mobile `status` 459:29376 — HUG 94 вместо 93; x=79 в строке 252 подтверждает центрирование. Это сильное evidence устаревших измеренных ширин, зависящих от содержимого, а не доказательство поломки HTML. Причина изменения метрик текста во времени отдельно не установлена. Числа и правила адаптивности не переписываются; согласовать судьбу четырёх reference facts и затем выполнить отдельный scoped correction/read-back.
+**P2-F2 — исходная диагностика до разрешённой коррекции 03.10.2026 (история).** В Desktop `text-details` 459:27425 — FILL 251 вместо reference 252; `status-container` 459:27428 и `status` 459:29356 — HUG 117 вместо 116. Сумма строки: 72 + 24 + 251 + 24 + 117 = 488. В Mobile `status` 459:29376 — HUG 94 вместо 93; x=79 в строке 252 подтверждает центрирование. Это сильное evidence устаревших измеренных ширин, зависящих от содержимого, а не доказательство поломки HTML. Причина изменения метрик текста во времени отдельно не установлена. В этой исходной диагностике числа и правила адаптивности не переписывались. Отдельное решение и последующая scoped correction/read-back выполнены позднее и записаны в текущей точке возврата F2 в начале плана.
 
 **Что foundation-сравнение не доказывает:** не проверены все text-style case/decoration/paragraph/description/variation settings, все места применения component bindings, asset/naming semantics и визуальный HTML output. Совпадение definition не заменяет сравнение каждого назначения в component contract. Наличие полей исправленного capture (609 text_geometry/font_weight/figma_style_name occurrences, 2 568 minimum_width_px, 53 gradient_stops) доказывает получение полей, но не их полное semantic mapping.
 
 **Следующие действия, всё ещё в P2:**
 - [x] Разделить diagnostics по подтверждённым причинам: units, source-only topology, missing owned links, nested artwork boundaries, derived behavior и deferred #109; записать точные примеры и карту дальнейшего ремонта.
 - [ ] Закрыть оставшиеся значимые owner/node/path в отдельно согласованной области. Bounded unit/icon repair выполнен по разрешению; он не закрывает missing owned links и не разрешает следующие изменения canonical facts, alias/nested-artwork policy или blanket exclusions.
-- [ ] Принять решение по четырём F2 reference widths; HTML/layout strategy не менять по одному числовому снимку.
+- [x] Решение по четырём F2 reference widths принято; точечная коррекция и fresh read-back выполнены в894. Desktop projection116→117 отдельно разрешён; native HUG/FILL и HTML/layout strategy не менялись.
 - [ ] Дозакрыть нужное foundation/binding и visual evidence для выбранных значимых обязанностей.
 - [ ] Завершить сопоставление архивных обязательств с текущими владельцами; P2-F3 recorded association projection уже исправлен, но не доказывает live usage.
 - [ ] Оформить F7 decision и exact producer/schema/manifest/output/test map для generated workflow checkpoints до начала P3. Генератор ещё не реализуется.
