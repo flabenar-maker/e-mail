@@ -8,7 +8,7 @@ import { readStrictYaml } from "../../scripts/lib/strict-yaml.mjs";
 import { migrateComponentDocument } from "../../system/migrations/components-1-to-2.mjs";
 
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
-const REMOTE_IDS = ["asset-partner-mark-remote", "icon-account-circle-line-remote"];
+const REMOTE_IDS = ["icon-account-circle-line-remote", "asset-partner-mark-remote"];
 
 function legacyRecord(id) {
   return {
@@ -221,7 +221,7 @@ test("reviewed mapping reproduces all 61 historical canonical schema 2 records",
       .map(({ id }) => id)
       .filter((id) => !mappingIds.includes(id))
       .toSorted();
-    assert.deepEqual(missingFromMapping, library === "shared" ? REMOTE_IDS : []);
+    assert.deepEqual(missingFromMapping, library === "shared" ? REMOTE_IDS.toSorted() : []);
     const preservedRemote = structuredClone(excluded);
     const source = structuredClone(localTarget);
     source.schema_version = "1.0.0";
