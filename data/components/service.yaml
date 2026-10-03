@@ -13408,7 +13408,68 @@
           "severity": "required",
           "statement": "Корневой card прозрачен и обрезает по radius 22px Mobile / 26px Desktop; белый Fill #FFFFFF принадлежит двум вложенным секциям, разделённым divider 1px #DFDFE0."
         }
-      ]
+      ],
+      "evidence_links": {
+        "foundation_values": [],
+        "source_dependencies": [
+          {
+            "id": "desktop-partner-badge-source",
+            "source": {
+              "variant_node_id": "459:29175",
+              "node_id": "481:19700"
+            },
+            "target": {
+              "component_id": "asset-partner-badge-4x"
+            },
+            "asset_owner": {
+              "node_id": "481:19700",
+              "asset_id": "partner-badge"
+            }
+          },
+          {
+            "id": "desktop-partner-mark-source",
+            "source": {
+              "variant_node_id": "459:29175",
+              "node_id": "I481:19700;481:19655"
+            },
+            "target": {
+              "component_id": "asset-partner-mark-remote"
+            },
+            "asset_owner": {
+              "node_id": "481:19700",
+              "asset_id": "partner-badge"
+            }
+          },
+          {
+            "id": "mobile-partner-badge-source",
+            "source": {
+              "variant_node_id": "459:29176",
+              "node_id": "484:19677"
+            },
+            "target": {
+              "component_id": "asset-partner-badge-4x"
+            },
+            "asset_owner": {
+              "node_id": "484:19677",
+              "asset_id": "partner-badge"
+            }
+          },
+          {
+            "id": "mobile-partner-mark-source",
+            "source": {
+              "variant_node_id": "459:29176",
+              "node_id": "I484:19677;481:19655"
+            },
+            "target": {
+              "component_id": "asset-partner-mark-remote"
+            },
+            "asset_owner": {
+              "node_id": "484:19677",
+              "asset_id": "partner-badge"
+            }
+          }
+        ]
+      }
     },
     {
       "id": "block-transaction-error",
@@ -36271,7 +36332,26 @@
         "purpose": "Составной графический бейдж партнёра для использования в сервисных блоках.",
         "critical_constraint_ids": []
       },
-      "constraints": []
+      "constraints": [],
+      "evidence_links": {
+        "foundation_values": [],
+        "source_dependencies": [
+          {
+            "id": "partner-mark-source",
+            "source": {
+              "variant_node_id": "481:19665",
+              "node_id": "481:19655"
+            },
+            "target": {
+              "component_id": "asset-partner-mark-remote"
+            },
+            "asset_owner": {
+              "node_id": "481:19665",
+              "asset_id": "partner-badge"
+            }
+          }
+        ]
+      }
     },
     {
       "id": "asset-icon-badge-4x",

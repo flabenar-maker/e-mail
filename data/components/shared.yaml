@@ -18,6 +18,10 @@
         {
           "role": "remote-reference",
           "node_id": "1331:1646"
+        },
+        {
+          "role": "remote-reference",
+          "node_id": "439:4098"
         }
       ],
       "baseline_commit": "397e13a916e9af1c2dfd8af663de730bcc2e1874",
@@ -1798,6 +1802,161 @@
       },
       "documentation": {
         "purpose": "Внешний исходный знак пользователя внутри Feature-Icon. Только источник для сверки вложенной графики; не самостоятельный блок или экспорт.",
+        "critical_constraint_ids": []
+      },
+      "constraints": []
+    },
+    {
+      "id": "asset-partner-mark-remote",
+      "status": "active",
+      "identity": {
+        "figma_name": "marafon",
+        "node_kind": "component",
+        "library": "shared",
+        "semantic_role": "asset",
+        "category": "partner-mark-remote"
+      },
+      "figma": {
+        "file_key": "8zka5bHkcrJVK9I9dKjnhC",
+        "node_id": "439:4098",
+        "source_root_node_id": "439:4098",
+        "remote_source": {
+          "component_key": "be6c194606af9516b3cc07847f52d6db0c8cb6d7"
+        },
+        "verified_at": "2026-10-03",
+        "structure_fingerprint": "sha256:25aa5a099038345b81c06cc77d446b76c9a5915028eb796324d9ce5b9cb700e3"
+      },
+      "variants": [],
+      "properties": [],
+      "asset_contracts": [],
+      "contracts": {
+        "mobile": {
+          "root": {
+            "id": "root",
+            "semantic_role": "asset",
+            "render_mode": "figma-source-only",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": []
+          }
+        },
+        "desktop": {
+          "root": {
+            "id": "root",
+            "semantic_role": "asset",
+            "render_mode": "figma-source-only",
+            "visibility": {
+              "mode": "always"
+            },
+            "facts": [],
+            "children": []
+          }
+        },
+        "figma_fact_links": [],
+        "source_variants": [
+          {
+            "variant_node_id": "439:4098",
+            "axes": [],
+            "source_node": {
+              "node_id": "439:4098",
+              "name": "marafon",
+              "node_type": "COMPONENT",
+              "visible": true,
+              "reference_dimensions": {
+                "width": 44,
+                "height": 44,
+                "unit": "px"
+              },
+              "remote_source": {
+                "remote": true,
+                "component_key": "be6c194606af9516b3cc07847f52d6db0c8cb6d7"
+              },
+              "layout": {
+                "mode": "NONE",
+                "horizontal_sizing": "FIXED",
+                "vertical_sizing": "FIXED",
+                "primary_axis_sizing": "AUTO",
+                "counter_axis_sizing": "FIXED",
+                "item_spacing": 0,
+                "counter_axis_spacing": 0,
+                "wrap": "NO_WRAP",
+                "primary_axis_alignment": "MIN",
+                "counter_axis_alignment": "MIN",
+                "padding": {
+                  "top": 0,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 0
+                }
+              },
+              "minimum_width_px": null,
+              "layout_align": "INHERIT",
+              "layout_grow": 0,
+              "layout_positioning": "AUTO",
+              "clips_content": true,
+              "corner_radius": 0,
+              "corner_radii": {
+                "top_left": 0,
+                "top_right": 0,
+                "bottom_right": 0,
+                "bottom_left": 0
+              },
+              "fills": [
+                {
+                  "type": "solid",
+                  "visible": true,
+                  "opacity": 1,
+                  "color": "#FF0C56"
+                }
+              ],
+              "strokes": [],
+              "opacity": 1,
+              "rotation": 0,
+              "variable_bindings": {},
+              "component_property_references": {},
+              "children": [
+                {
+                  "node_id": "439:4099",
+                  "name": "Vector",
+                  "node_type": "VECTOR",
+                  "visible": true,
+                  "reference_dimensions": {
+                    "width": 38.43474197387695,
+                    "height": 22.087017059326172,
+                    "unit": "px"
+                  },
+                  "minimum_width_px": null,
+                  "layout_align": "INHERIT",
+                  "layout_grow": 0,
+                  "layout_positioning": "AUTO",
+                  "corner_radius": 0,
+                  "fills": [
+                    {
+                      "type": "solid",
+                      "visible": true,
+                      "opacity": 1,
+                      "color": "#FFFFFF"
+                    }
+                  ],
+                  "strokes": [],
+                  "opacity": 1,
+                  "rotation": 0,
+                  "variable_bindings": {},
+                  "component_property_references": {}
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "provenance": {
+        "node_id": "439:4098",
+        "captured_at": "2026-10-03T18:56:05Z"
+      },
+      "documentation": {
+        "purpose": "Внешний исходный знак внутри Partner-Badge. Только источник для сверки вложенной графики; не самостоятельный блок или экспорт.",
         "critical_constraint_ids": []
       },
       "constraints": []

@@ -63,3 +63,4 @@ coverage:
   - { component_id: details-receipt, mode: interpreter }
   - { component_id: details-suspicious-operation, mode: interpreter }
   - { component_id: details-transfer, mode: interpreter }
+  - { component_id: asset-partner-mark-remote, mode: source-only, reason: "Remote artwork lookup source; display and export belong to the existing partner badge." }

@@ -1,6 +1,6 @@
 import { isDeepStrictEqual } from "node:util";
 import { validateCaptureFreshness } from "./component-evidence-freshness.mjs";
-import { auditFigmaContractFacts } from "./figma-contract-facts.mjs";
+import { auditFigmaContractFacts, hasCompleteMixedTextRuns } from "./figma-contract-facts.mjs";
 import { auditContractFactProofs, applyContractFactProofCoverage } from "./contract-fact-proofs.mjs";
 import { matchesRemoteSourceIdentity, resolveEvidenceTargets } from "./component-evidence-links.mjs";
 import { compareFoundationObservation } from "./foundation-evidence.mjs";
@@ -164,7 +164,7 @@ function selectCapture(recordId, model, session, issues) {
 function auditTemplateEvidence({ recordId, model, session } = {}) {
   const issues = [], results = [], verified = [];
   const report = { ok: false, component_id: recordId, canonical_git_sha: model?.canonical_sha ?? null,
-    session_started_at: session?.started_at ?? null, receipt_ids: [], results, issues, required_sources: [], verified_sources: [] };
+    session_started_at: session?.started_at ?? null, receipt_ids: [], results, issues, capture_diagnostics: [], required_sources: [], verified_sources: [] };
   const records = model?.records?.filter(record => record.id === recordId);
   if (records?.length !== 1) {
     issues.push(issue("EVIDENCE_RECORD_ID_AMBIGUOUS", "/records", "Exactly one canonical owner must be selected.")); return report;
@@ -219,6 +219,8 @@ function auditTemplateEvidence({ recordId, model, session } = {}) {
   }
   results.sort((a, b) => order(a.link_id, b.link_id)); orderedIssues(issues);
   report.verified_sources = orderedSources(verified);
+  classifyEvidenceCaptureDiagnostics(report, { recordId, model, session });
+  orderedIssues(issues);
   report.ok = issues.length === 0 && report.required_sources.length > 0 && report.verified_sources.length === report.required_sources.length;
   return report;
 }
@@ -355,10 +357,108 @@ function artworkScope(record, live) {
   return scope;
 }
 
+// Ephemeral diagnostic disposition, never a fact-coverage exemption. Keep raw
+// errors in the packet and in the report; only the unresolved errors block this
+// branch. Layout inside a proven raster boundary is not separate HTML layout.
+function classifyEvidenceCaptureDiagnostics(report, { recordId, model, session }, inherited = []) {
+  report.capture_diagnostics = [];
+  const resolved = resolveEvidenceTargets({ records: model.records, manifest: model.manifest, sourceDocuments: model.source_documents });
+  const loaded = new Map(), complete = new Map();
+  function load(id) {
+    if (!loaded.has(id)) {
+      const records = model.records.filter(record => record.id === id), errors = [];
+      const capture = records.length === 1 ? selectCapture(id, model, session, errors) : null;
+      const record = records[0];
+      const tree = capture && record ? inspectArtworkTree(record, capture.packet) : null;
+      const scope = tree?.identityValid && record.identity.semantic_role !== "template" &&
+        (record.asset_contracts.length || ["asset", "icon"].includes(record.identity.semantic_role))
+        ? artworkScope(record, capture.packet) : tree;
+      loaded.set(id, { record, capture, scope, valid: !!scope?.identityValid && !errors.length });
+      if (capture) report.receipt_ids = [...new Set([...report.receipt_ids, capture.receipt_id])].sort(order);
+    }
+    return loaded.get(id);
+  }
+  function eligible(record, boundary) {
+    if (boundary.asset_id === undefined) return ["asset", "icon"].includes(record.identity.semantic_role) &&
+      record.asset_contracts.length === 0 && ["mobile", "desktop"].every(viewport =>
+        record.contracts[viewport].root.render_mode === "figma-source-only" && record.contracts[viewport].root.children.length === 0);
+    const assets = record.asset_contracts.filter(asset => asset.id === boundary.asset_id);
+    if (assets.length !== 1 || assets[0].source_mode_id !== "rendered-node" || assets[0].export_boundary.kind !== "node") return false;
+    const variant = record.variants.find(variant => variant.node_id === boundary.variant_node_id);
+    const viewport = variant?.axes?.find(axis => axis.name === "Viewport")?.value.toLowerCase();
+    const viewports = ["mobile", "desktop"].includes(viewport) ? [viewport] : ["mobile", "desktop"];
+    return viewports.every(viewport => {
+      const elements = [];
+      function visit(element) { if (element.asset_contract_id === boundary.asset_id) elements.push(element); (element.children ?? []).forEach(visit); }
+      visit(record.contracts[viewport].root);
+      return elements.length === 1 && elements[0].render_mode === "direct-image" && elements[0].children.length === 0;
+    });
+  }
+  const contains = (entry, id) => entry?.node.node_id === id || entry?.ancestors.some(node => node.node_id === id);
+  function ownBoundary(current, entry) {
+    const boundaries = (current.scope?.boundaries ?? []).filter(boundary => boundary.variant_node_id === entry?.variantId && contains(entry, boundary.node.node_id));
+    return boundaries.length === 1 && eligible(current.record, boundaries[0]) ? boundaries[0] : null;
+  }
+  const nativeAbsolute = entry => entry?.node.layout?.mode === "NONE" && Array.isArray(entry.node.children) && entry.node.children.length > 0;
+  function closure(id, trail = new Set()) {
+    if (trail.has(id) || resolved.issues.length) return false;
+    if (complete.has(id)) return complete.get(id);
+    const current = load(id), scope = current.scope;
+    let ok = current.valid && Array.isArray(scope?.boundaries) &&
+      !scope.issues.some(value => value.code !== "EVIDENCE_CAPTURE_ERROR");
+    if (ok) for (const error of current.capture.packet.capture_errors) {
+      const entry = scope.nodes.get(error.node_id);
+      if (error.code === "MIXED_VALUE" && hasCompleteMixedTextRuns(entry?.node, error.field)) continue;
+      if (error.code === "ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW" && nativeAbsolute(entry) && ownBoundary(current, entry)) continue;
+      ok = false; break;
+    }
+    if (ok) for (const obligation of scope.obligations ?? []) {
+      const links = (current.record.evidence_links?.source_dependencies ?? []).filter(link =>
+        link.source.variant_node_id === obligation.source.variant_node_id && link.source.node_id === obligation.source.node_id);
+      const link = links.length === 1 ? links[0] : null, target = link && resolved.targets.get(`${id}/${link.id}`);
+      const actual = scope.nodes.get(obligation.source.node_id)?.node;
+      if (!link || !target || link.asset_owner.node_id !== obligation.asset_owner.node_id || link.asset_owner.asset_id !== obligation.asset_owner.asset_id ||
+          actual?.node_type !== "INSTANCE" || actual.main_component_id !== target.target.node_id ||
+          !load(target.target.component_id).scope?.variants.has(target.target.node_id) || !closure(target.target.component_id, new Set([...trail, id]))) { ok = false; break; }
+    }
+    complete.set(id, !!ok); return !!ok;
+  }
+  const rawIssues = report.issues.filter(value => value.code === "EVIDENCE_CAPTURE_ERROR");
+  const unresolved = [];
+  for (const diagnostic of rawIssues) {
+    const componentId = diagnostic.component_id ?? recordId, current = load(componentId), raw = diagnostic.capture_error;
+    const entry = current.scope?.nodes.get(raw.node_id);
+    let verified = false, reason = "EVIDENCE_CAPTURE_DIAGNOSTIC_UNVERIFIED";
+    if (current.valid && raw.code === "MIXED_VALUE" && hasCompleteMixedTextRuns(entry?.node, raw.field)) {
+      verified = true; reason = "EVIDENCE_COMPLETE_MIXED_TEXT_RUNS";
+    } else if (current.valid && raw.code === "ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW" && nativeAbsolute(entry)) {
+      const own = ownBoundary(current, entry);
+      if (own && closure(componentId)) { verified = true; reason = "EVIDENCE_NODE_ARTWORK_LAYOUT"; }
+      else {
+        const boundaries = inherited.filter(boundary => componentId === recordId && boundary.consumer_variant_node_id === entry.variantId && contains(entry, boundary.consumer_node_id));
+        // A projected boundary is usable only after every placement/dependency
+        // check passed. It never relaxes an unrelated parent HTML layout.
+        if (boundaries.length === 1 && !report.issues.some(value => value.code !== "EVIDENCE_CAPTURE_ERROR") &&
+            report.dependencies?.every(value => value.status === "verified")) {
+          const boundary = boundaries[0], child = load(boundary.owner_component_id);
+          const native = (child.scope?.boundaries ?? []).filter(value => value.variant_node_id === boundary.source_variant_node_id &&
+            value.node.node_id === boundary.source_node_id && value.asset_id === boundary.asset_id);
+          if (native.length === 1 && eligible(child.record, native[0]) && closure(boundary.owner_component_id)) {
+            verified = true; reason = "EVIDENCE_PROJECTED_NODE_ARTWORK_LAYOUT";
+          }
+        }
+      }
+    }
+    report.capture_diagnostics.push({ component_id: componentId, raw: structuredClone(raw), status: verified ? "verified" : "unverified", reason });
+    if (!verified) unresolved.push(diagnostic);
+  }
+  report.issues.splice(0, report.issues.length, ...report.issues.filter(value => value.code !== "EVIDENCE_CAPTURE_ERROR"), ...unresolved);
+}
+
 function auditArtworkEvidence({ recordId, model, session }) {
   const issues = [], results = [], verified = [], receipts = new Set();
   const report = { ok: false, component_id: recordId, canonical_git_sha: model?.canonical_sha ?? null,
-    session_started_at: session?.started_at ?? null, receipt_ids: [], results, issues, required_sources: [], verified_sources: [] };
+    session_started_at: session?.started_at ?? null, receipt_ids: [], results, issues, capture_diagnostics: [], required_sources: [], verified_sources: [] };
   const records = model?.records?.filter(record => record.id === recordId);
   if (records?.length !== 1) { issues.push(issue("EVIDENCE_RECORD_ID_AMBIGUOUS", "/records", "Exactly one canonical owner is required.")); return report; }
   const record = records[0], capture = selectCapture(recordId, model, session, issues);
@@ -413,6 +513,7 @@ function auditArtworkEvidence({ recordId, model, session }) {
   }
   report.receipt_ids = [...receipts].sort(order);
   report.verified_sources = orderedSources(verified);
+  classifyEvidenceCaptureDiagnostics(report, { recordId, model, session });
   results.sort((a, b) => order(a.link_id, b.link_id)); orderedIssues(issues);
   report.ok = issues.length === 0 && verified.length === scope.obligations.length;
   return report;
@@ -467,12 +568,13 @@ function projectedNodeId(nativeId, nativeRoot, actualRoot) {
 }
 
 // Qualified, ephemeral proof over existing contracts and fresh packets. The
-// parent never acquires the child's assets. This report does NOT waive any
-// scalar fact, capture diagnostic or the source-only graphic's own audit.
+// parent never acquires the child's assets. Scalar facts stay independent;
+// original capture diagnostics receive only the narrow ephemeral disposition
+// below. The source-only graphic still requires its own audit.
 export function auditNestedArtworkEvidence({ recordId, model, session } = {}) {
   const issues = [], boundaries = [], dependencies = [], receipts = new Set();
   const report = { ok: false, component_id: recordId, canonical_git_sha: model?.canonical_sha ?? null,
-    session_started_at: session?.started_at ?? null, receipt_ids: [], boundaries, dependencies, issues };
+    session_started_at: session?.started_at ?? null, receipt_ids: [], boundaries, dependencies, issues, capture_diagnostics: [] };
   const fail = (code, path, message, extra = {}) => issues.push(issue(code, path, message, extra));
   const owners = model?.records?.filter(record => record.id === recordId);
   if (owners?.length !== 1) { fail("EVIDENCE_RECORD_ID_AMBIGUOUS", "/records", "Exactly one canonical parent is required."); return report; }
@@ -600,7 +702,9 @@ export function auditNestedArtworkEvidence({ recordId, model, session } = {}) {
     if (!["mobile", "desktop"].includes(viewport)) { fail("EVIDENCE_SCOPE_AMBIGUOUS", "/variants", "Nested HTML proof requires one exact viewport variant."); continue; }
     visit(recordId, variant.node_id, viewport, null, variant.node_id, new Set([recordId]));
   }
-  report.receipt_ids = [...receipts].sort(order); orderedIssues(issues);
+  report.receipt_ids = [...receipts].sort(order);
+  classifyEvidenceCaptureDiagnostics(report, { recordId, model, session }, boundaries);
+  orderedIssues(issues);
   report.ok = issues.length === 0 && dependencies.every(item => item.status === "verified");
   return report;
 }

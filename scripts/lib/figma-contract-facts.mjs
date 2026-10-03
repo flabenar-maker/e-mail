@@ -219,6 +219,41 @@ function isStandaloneSourceOnlyIcon(record, live) {
     variant.source_node?.node_type === "COMPONENT";
 }
 
+// An aggregate MIXED_VALUE is resolved only by the complete fields actually
+// serialized per range by the capture producer. Weight/style-ID/tracking are
+// not range-captured by this profile and must never inherit an aggregate.
+export function hasCompleteMixedTextRuns(node, field) {
+  if (node?.node_type !== "TEXT" || !["fontName", "fontSize", "lineHeight", "fills", "textDecoration"].includes(field) ||
+      typeof node.characters !== "string" || !node.characters.length || !Array.isArray(node.styled_text_segments) || !node.styled_text_segments.length) return false;
+  const finite = value => typeof value === "number" && Number.isFinite(value);
+  const nonempty = value => typeof value === "string" && value.trim().length > 0;
+  const hex = value => typeof value === "string" && /^#[0-9a-fA-F]{6}$/u.test(value);
+  const fraction = value => finite(value) && value >= 0 && value <= 1;
+  const height = value => value?.unit === "AUTO" ? !Object.hasOwn(value, "value") :
+    ["PIXELS", "PERCENT"].includes(value?.unit) && finite(value.value) && value.value > 0;
+  const paint = value => {
+    if (!value || typeof value.visible !== "boolean" || !fraction(value.opacity)) return false;
+    if (value.type === "solid") return hex(value.color);
+    if (["gradient_linear", "gradient_radial", "gradient_angular", "gradient_diamond"].includes(value.type)) {
+      return Array.isArray(value.gradient_stops) && value.gradient_stops.length >= 2 &&
+        value.gradient_stops.every(stop => fraction(stop.position) && hex(stop.color) && fraction(stop.alpha)) &&
+        Array.isArray(value.gradient_transform) && value.gradient_transform.length === 2 &&
+        value.gradient_transform.every(row => Array.isArray(row) && row.length === 3 && row.every(finite));
+    }
+    return value.type === "image" && nonempty(value.image_hash) && ["FILL", "FIT", "CROP", "TILE"].includes(value.scale_mode);
+  };
+  let end = 0;
+  for (const run of node.styled_text_segments) {
+    if (!Number.isSafeInteger(run?.start) || !Number.isSafeInteger(run.end) || run.start !== end || run.end <= run.start ||
+        run.end > node.characters.length || run.characters !== node.characters.slice(run.start, run.end) ||
+        !nonempty(run.font_family) || !nonempty(run.font_style) || !finite(run.font_size_px) || run.font_size_px <= 0 ||
+        !height(run.line_height) || !Array.isArray(run.fills) || !run.fills.every(paint) ||
+        !["NONE", "UNDERLINE", "STRIKETHROUGH"].includes(run.text_decoration)) return false;
+    end = run.end;
+  }
+  return end === node.characters.length;
+}
+
 export function auditFigmaContractFacts({ record, live, mappings, derivedEvidence = [] } = {}) {
   const issues = [];
   const ownedMappings = record?.contracts?.figma_fact_links;
@@ -234,23 +269,24 @@ export function auditFigmaContractFacts({ record, live, mappings, derivedEvidenc
   }
   const artworkIds = new Set((live.variants ?? []).flatMap((variant) =>
     [...exportedArtworkIds(variant, record)]));
-  const capturedNodes = new Map();
+  const capturedNodes = new Map(), ambiguousCaptureNodes = new Set();
   function indexNode(node) {
+    if (capturedNodes.has(node.node_id)) ambiguousCaptureNodes.add(node.node_id);
     capturedNodes.set(node.node_id, node);
     for (const child of node.children ?? []) indexNode(child);
   }
   for (const variant of live.variants) indexNode(variant.source_node);
-  const unsupportedCapture = (live.capture_errors ?? []).filter((error) => {
-    if (artworkIds.has(error.node_id)) return false;
-    const node = capturedNodes.get(error.node_id);
-    if (error.code === "MIXED_VALUE" && node?.node_type === "TEXT" &&
-        ["fontName", "fontSize", "lineHeight", "fills", "textDecoration"].includes(error.field) &&
-        node.styled_text_segments?.length >= 2) return false;
-    if (error.code === "MIXED_VALUE" && error.field === "cornerRadius" &&
-        node?.corner_radii &&
-        Object.values(node.corner_radii).every(Number.isFinite)) return false;
-    return true;
+  const capture_diagnostics = (live.capture_errors ?? []).map(raw => {
+    const node = capturedNodes.get(raw.node_id);
+    const mixed = raw.code === "MIXED_VALUE" && !ambiguousCaptureNodes.has(raw.node_id) && hasCompleteMixedTextRuns(node, raw.field);
+    const corners = raw.code === "MIXED_VALUE" && raw.field === "cornerRadius" && node?.corner_radii &&
+      ["top_left", "top_right", "bottom_right", "bottom_left"].every(key => Number.isFinite(node.corner_radii[key]));
+    const delegated = raw.code === "ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW" && artworkIds.has(raw.node_id);
+    return { raw: structuredClone(raw), status: mixed || corners ? "verified" : "unverified",
+      reason: mixed ? "COMPLETE_MIXED_TEXT_RUNS" : corners ? "COMPLETE_NATIVE_CORNER_RADII" :
+        delegated ? "ARTWORK_DIAGNOSTIC_REQUIRES_EVIDENCE" : "FIGMA_CAPTURE_DIAGNOSTIC_UNVERIFIED", ...(delegated ? { delegated: true } : {}) };
   });
+  const unsupportedCapture = capture_diagnostics.filter(value => value.status !== "verified" && !value.delegated).map(value => value.raw);
   if (unsupportedCapture.length > 0) {
     issues.push(issue("FIGMA_CAPTURE_UNSUPPORTED", { details: unsupportedCapture }));
   }
@@ -412,6 +448,7 @@ export function auditFigmaContractFacts({ record, live, mappings, derivedEvidenc
   const report = {
     ok: issues.length === 0,
     component_id: record?.id ?? null,
+    capture_diagnostics,
     source_fact_count: source.size,
     mapped_source_fact_count: coveredSource.size,
     contract_fact_count: requiredContractPaths.length,

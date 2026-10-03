@@ -432,7 +432,7 @@ test("contract-fact audit reports complete mixed runs as verified while preservi
   assert.ok(Array.isArray(report.capture_diagnostics), "fact audit must expose raw diagnostic dispositions");
   const disposition = report.capture_diagnostics.find(value => value.raw?.node_id === raw.node_id && value.raw?.field === raw.field);
   assert.deepEqual(disposition?.raw, raw); assert.equal(disposition?.status, "verified"); assert.ok(disposition?.reason);
-  assert.ok(!report.issues.some(issue => issue.code === "FIGMA_CAPTURE_UNSUPPORTED" && issue.node_id === raw.node_id));
+  assert.ok(!report.issues.some(issue => issue.code === "FIGMA_CAPTURE_UNSUPPORTED" && issue.details?.some(detail => detail.node_id === raw.node_id && detail.field === raw.field)));
   assert.deepEqual(packet.capture_errors, before);
 });
 
@@ -453,5 +453,5 @@ for (const [label, mutate] of [
   mutate(text); const raw = { code: "MIXED_VALUE", node_id: "3:1", field: text._mixedField ?? "textDecoration" }; packet.capture_errors.push(raw);
   const report = auditFigmaContractFacts({ record, live: packet, mappings }), disposition = report.capture_diagnostics?.find(value => value.raw?.field === raw.field);
   assert.equal(disposition?.status, "unverified"); assert.ok(disposition?.reason);
-  assert.ok(report.issues.some(issue => issue.code === "FIGMA_CAPTURE_UNSUPPORTED" && issue.node_id === raw.node_id));
+  assert.ok(report.issues.some(issue => issue.code === "FIGMA_CAPTURE_UNSUPPORTED" && issue.details?.some(detail => detail.node_id === raw.node_id && detail.field === raw.field)));
 });
