@@ -213,6 +213,15 @@ test("reviewed mapping reproduces all 61 historical canonical schema 2 records",
       components: target.components.filter(({ id }) => id !== REMOTE_ID),
     };
     assert.deepEqual(excluded.map(({ id }) => id), library === "shared" ? [REMOTE_ID] : []);
+    const mappingIds = mappingDocument.libraries[library].map(({ id }) => id).toSorted();
+    const localTargetIds = localTarget.components.map(({ id }) => id).toSorted();
+    assert.deepEqual(mappingIds, localTargetIds, `Reviewed mapping IDs drift for ${library}.`);
+    assert.equal(mappingIds.includes(REMOTE_ID), false, `Remote ID must not enter historical mapping for ${library}.`);
+    const missingFromMapping = target.components
+      .map(({ id }) => id)
+      .filter((id) => !mappingIds.includes(id))
+      .toSorted();
+    assert.deepEqual(missingFromMapping, library === "shared" ? [REMOTE_ID] : []);
     const preservedRemote = structuredClone(excluded);
     const source = structuredClone(localTarget);
     source.schema_version = "1.0.0";

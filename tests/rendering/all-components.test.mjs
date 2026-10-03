@@ -111,15 +111,16 @@ test("Package 11 Shared classifies every non-HTML source explicitly", async () =
 test("source-only Shared records fail standalone rendering without guessed HTML", async () => {
   const registries = await loadComponentRegistries({ repoRoot });
   const rendererRegistry = await loadRendererRegistry({ repoRoot });
-  const component = componentById(registries, "icon-mail-fill");
-  const coverage = resolveRendererCoverage(rendererRegistry, component.id);
+  for (const componentId of ["icon-mail-fill", "icon-account-circle-line-remote"]) {
+    const component = componentById(registries, componentId);
+    const coverage = resolveRendererCoverage(rendererRegistry, component.id);
+    const result = renderContractTree({ component, coverage });
 
-  const result = renderContractTree({ component, coverage });
-
-  assert.equal(result.html, "");
-  assert.deepEqual(result.diagnostics.map(({ code }) => code), [
-    "RENDER_INTERPRETER_COVERAGE_REQUIRED",
-  ]);
+    assert.equal(result.html, "", componentId);
+    assert.deepEqual(result.diagnostics.map(({ code }) => code), [
+      "RENDER_INTERPRETER_COVERAGE_REQUIRED",
+    ], componentId);
+  }
 });
 
 test("Package 11 Marketing gives every active record exact coverage", async () => {
