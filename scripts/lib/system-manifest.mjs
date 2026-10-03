@@ -23,7 +23,9 @@ import {
   renderAllGeneratedDocs,
 } from "./generated-docs.mjs";
 
-const SUPPORTED_MANIFEST_VERSION = "1.2.0";
+import { validateWorkflowCheckpointDefinition } from "./workflow-checkpoint.mjs";
+
+const SUPPORTED_MANIFEST_VERSION = "1.3.0";
 
 export function validateManifestShape(manifest, schema) {
   return validateDocumentShape({
@@ -444,6 +446,7 @@ export async function validateManifestSemantics(manifest, repoRoot) {
   );
 
   generatedDocs.forEach((definition, definitionIndex) => {
+    errors.push(...validateWorkflowCheckpointDefinition(manifest, definition, definitionIndex));
     const outputSource = sourceById.get(definition.output_source_id);
     if (!outputSource) {
       errors.push(

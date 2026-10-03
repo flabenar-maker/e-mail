@@ -19,6 +19,8 @@ import {
   renderFigmaTypographyDescription,
 } from "./typography-foundation.mjs";
 
+import { loadWorkflowCheckpointModels, renderWorkflowCheckpoint } from "./workflow-checkpoint.mjs";
+
 const LIBRARY_ORDER = ["shared", "marketing", "service"];
 const SCHEMA_ORDER = [
   "components",
@@ -153,6 +155,10 @@ function renderHeader(definition, model) {
     if (families[family].some((id) => usedIds.has(id))) {
       versionParts.push(`${family}=${model.schemaVersions[family]}`);
     }
+  }
+
+  if (definition.renderer === "workflow-checkpoint") {
+    versionParts.push(`manifest=${model.manifest.schema_version}`, `workflows=${model.workflowCheckpoints.get(definition.workflow_source_id).schema_version}`);
   }
 
   return [
@@ -524,6 +530,7 @@ const RENDERERS = Object.freeze({
   "typography-registry": renderTypographyRegistry,
   "asset-registry": renderAssetRegistry,
   "naming-reference": renderNamingReference,
+  "workflow-checkpoint": renderWorkflowCheckpoint,
 });
 
 export async function loadGeneratedDocModel({ repoRoot, manifest }) {
@@ -595,9 +602,13 @@ export async function loadGeneratedDocModel({ repoRoot, manifest }) {
   ]);
 
   const foundations = { typography, spacing, assets };
+  const sourceTexts = new Map(sourceTextEntries);
+  const workflowCheckpoints = await loadWorkflowCheckpointModels({ repoRoot, manifest, sourceTexts });
   return {
     sources,
-    sourceTexts: new Map(sourceTextEntries),
+    sourceTexts,
+    manifest,
+    workflowCheckpoints,
     registries,
     typography,
     spacing,
@@ -623,7 +634,7 @@ export function renderGeneratedDoc({ definition, model }) {
       `Unknown generated documentation renderer: ${String(definition?.renderer)}.`,
     );
   }
-  return `${renderHeader(definition, model).join("\n")}${renderer(model)}`;
+  return `${renderHeader(definition, model).join("\n")}${renderer(model, definition)}`;
 }
 
 export async function renderAllGeneratedDocs({ repoRoot, manifest }) {

@@ -1,4 +1,4 @@
-schema_version: 1.2.0
+schema_version: 1.3.0
 system:
   id: cupis-email-system
   repository: flabenar-maker/e-mail
@@ -6,6 +6,7 @@ entrypoints:
   repository: README.md
   bootstrap: bootstrap/README.md
 sources:
+  - { id: system-manifest, kind: entrypoint, path: system/manifest.yaml }
   - { id: repository-readme, kind: entrypoint, path: README.md }
   - { id: bootstrap-readme, kind: entrypoint, path: bootstrap/README.md }
   - { id: migration-roadmap, kind: entrypoint, path: docs/superpowers/plans/2026-08-25-cupis-migration-roadmap.md }
@@ -43,6 +44,8 @@ sources:
   - { id: generated-typography-registry, kind: generated, path: docs/generated/typography-registry.md }
   - { id: generated-asset-registry, kind: generated, path: docs/generated/asset-registry.md }
   - { id: generated-naming-reference, kind: generated, path: docs/generated/naming-reference.md }
+  - { id: generated-library-maintenance-checkpoint, kind: generated, path: docs/generated/library-maintenance-checkpoint.md }
+  - { id: generated-email-build-checkpoint, kind: generated, path: docs/generated/email-build-checkpoint.md }
 structured_workflows:
   status: partial
   schema_source_id: workflows-schema
@@ -66,6 +69,16 @@ generated_docs:
     output_source_id: generated-naming-reference
     renderer: naming-reference
     input_source_ids: [figma-naming-foundation, figma-naming-schema]
+  - id: library-maintenance-checkpoint
+    output_source_id: generated-library-maintenance-checkpoint
+    renderer: workflow-checkpoint
+    workflow_source_id: workflow-library-maintenance
+    input_source_ids: [workflow-library-maintenance, workflows-schema, manifest-schema, system-manifest]
+  - id: email-build-checkpoint
+    output_source_id: generated-email-build-checkpoint
+    renderer: workflow-checkpoint
+    workflow_source_id: workflow-email-build
+    input_source_ids: [workflow-email-build, workflows-schema, manifest-schema, system-manifest]
 bundle_profiles:
   - id: library-maintenance
     source_ids: [repository-readme, figma-library-standard, component-contract-standard, figma-component-description-standard, workflow-paused]
