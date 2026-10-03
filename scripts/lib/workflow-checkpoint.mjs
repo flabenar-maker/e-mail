@@ -62,10 +62,21 @@ function sourceLink(model,definition,id){
   const path=posix.relative(posix.dirname(output.path),source.path).split('/').map(p=>encodeURIComponent(p).replace(/[!'()*]/gu,c=>`%${c.charCodeAt(0).toString(16).toUpperCase()}`)).join('/');
   return `[${id}](${path})`;
 }
+function typedRelationKinds(value){
+  return [...new Set((Array.isArray(value)?value:[])
+    .map(relation=>relation?.kind)
+    .filter(kind=>typeof kind==='string'))];
+}
 function jsonSection(lines,title,value){
   lines.push(`### ${title}`,'');
   if(value===undefined)lines.push('Not declared.','');
-  else lines.push('```json',JSON.stringify(JSON.parse(canonicalize(value)),null,2),'```','');
+  else {
+    lines.push('```json',JSON.stringify(JSON.parse(canonicalize(value)),null,2),'```','');
+    if(title==='Input relations'){
+      const kinds=typedRelationKinds(value);
+      if(kinds.length)lines.push(`- Relation kinds: ${kinds.map(code).join(', ')}`,'');
+    }
+  }
 }
 
 export function renderWorkflowCheckpoint(model,definition){

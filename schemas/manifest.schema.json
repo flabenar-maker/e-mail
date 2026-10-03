@@ -359,6 +359,9 @@
             }
           },
           "then": {
+            "properties": {
+              "workflow_source_id": {}
+            },
             "required": [
               "workflow_source_id"
             ]
