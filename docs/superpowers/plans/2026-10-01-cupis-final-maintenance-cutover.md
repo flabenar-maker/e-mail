@@ -20,7 +20,66 @@
 
 После принятого пакета 5, до отдельно разрешённого пакета 6, предусмотрен [follow-up карточных блоков, draft PR #109](https://github.com/flabenar-maker/e-mail/pull/109). Полная актуальная очередь, ссылки на его план и границы интеграции документов находятся в [roadmap](2026-08-25-cupis-migration-roadmap.md#единый-актуальный-список). Организация папки plans и удаление ручного checkpoint не являются выполнением пакета 6.
 
-### Текущая точка возврата P2 — bounded native/binding и архивная сверка, 03.10.2026
+### Текущая точка возврата P2 — точная карта remaining proof и F7, 03.10.2026
+
+На candidate `ae88749a6c17b4942270b7af7d3816409bc257ab` выполнен следующий read-only пункт: локализованы причины remaining link/capture diagnostics и подготовлена минимальная карта ремонта и generated checkpoints. Единственный полностью полученный bundle: library-maintenance/read-only/both, explicit Transaction-Success и Asset/Partner-Badge; его текущая resolver closure — четыре records: asset-partner-badge-4x, badge-operation-status, details-operation, block-transaction-success. Это не будущая трёх-owner native capture closure ремонта. Digest `sha256:cb455721381fb5b97c13abfe5b85c1a96afe2a1b585718bd183d7c3d5accc390`. Первый resolver stdout был усечён и не потреблялся; тот же вызов повторён с перенаправлением в файл. Полный bundle SHA256 `5bbf1cb438478a24a51ca4a9bb5a786622853ef6233ce18e6e3532faa5b12378`. Resolver вернул paused/SKILL_ROUTE_PAUSED; bundle использован только для read-only навигации и диагностики, не как разрешение ремонта.
+
+Свежий MCP diagnostic read на этой точке подтвердил все четыре actual main identities, оба main components и оба text runs. Это диагностические observations, не request-bound canonical packets, не новый accepted fact-proof и не перенос свежести сеанса9c3 наae887. Исторические audits и их counts ниже относятся только к9c3.
+
+#### Остаточные связи: данные отдельно от политики capture
+
+| Owner / instance в Figma | Actual target | Предлагаемая запись / export boundary |
+| --- | --- | --- |
+| Transaction Desktop459:29175 /481:19700 | local481:19665, Asset/Partner-Badge @4x | source dependency на существующий `asset-partner-badge-4x`; asset owner481:19700, partner-badge |
+| Transaction Mobile459:29176 /484:19677 | тот же local481:19665 | тот же target; asset owner484:19677, partner-badge |
+| Desktop459:29175 /I481:19700;481:19655 | remote439:4098 | source dependency на отдельно зарегистрированный source-only helper; boundary481:19700, partner-badge |
+| Mobile459:29176 /I484:19677;481:19655 | тот же remote439:4098 | тот же helper; boundary484:19677, partner-badge |
+| Сам Asset/Partner-Badge481:19665 /481:19655 | тот же remote439:4098 | собственная source dependency; asset owner481:19665, partner-badge |
+
+Remote main сейчас имеет точное имя `marafon`, `remote:true` и publication key `be6c194606af9516b3cc07847f52d6db0c8cb6d7`; root44×44px. Это источник графики внутри бейджа, не новый HTML-блок, не новый экспорт и не предлагаемое переименование Figma. Идентификатор предлагаемого helper `asset-partner-mark-remote` пока не существует; его роль asset/source-only должна быть явно принята, а не выведена только из имени marafon. Инстанс artwork в каждом бейдже имеет собственные71.99999237060547×71.99999237060547px, внешняя export boundary остаётся72×72px/@4x288×288px. Не подменять consumer geometry размером remote master44×44.
+
+Read-only анализ artworkScope подтвердил пятое minimum dependency obligation самого local target481:19665. Минимальная известная closure — пять links в двух существующих owners и один новый remote helper; четыре missing links исторического Transaction audit не включают собственный target audit. Fresh target packets могут добавить свои raw diagnostics/obligations; их количество до capture не заявляется. Регистрация remote reference сама по себе не очищает capture diagnostics ни parent, ни targets.
+
+#### Классификация десяти исходных capture diagnostics
+
+- Шесть `MIXED_VALUE`: Desktop459:38532 и Mobile459:38537, в каждом fontName два раза и textDecoration. Нативные segments0..93 NONE,93..102 UNDERLINE; Roboto Regular400, Desktop14px/Caption, Mobile12px/Body-Medium, lineHeight139.9999976158142%. Стили/текст/подчёркивание менять не нужно. `figma-contract-facts.mjs` уже распознаёт narrow mixed TEXT segments, но `figma-component-evidence.mjs` безусловно оставляет raw errors unresolved. Предлагается единая строгая классификация: только полный непрерывный диапазон runs с фактическими полями может разрешить конкретную mixed aggregate diagnostic. Сырой packet/error остаётся; gaps, overlap, отсутствующие поля или другой unsupported case по-прежнему блокируют. Нельзя обнулять capture_errors или принимать один агрегированный стиль вместо runs.
+- Четыре `ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW`:481:19700,484:19677 и оба I…;481:19655. Это NONE artwork containers внутри declared raster export boundary, не layout текста/таблиц письма. Нынешний nested-artwork auditor намеренно не снимает эти diagnostics. Для приёмки нужна отдельная подтверждаемая политика: source tree полный, принадлежность объявленной границе и вложенные main identities проверены, нет самостоятельных HTML children; изменённая или неразрешённая boundary/identity и любые absolute HTML-layout nodes остаются blockers. Простые links не решают это, blanket ignore или список разрешённых node IDs запрещены. Raw diagnostics должны оставаться видимыми с отдельным проверяемым disposition; отсутствие координат/transform facts нельзя выдавать за их подтверждение.
+
+#### Exact impact proposed bounded repair (не выполнен)
+
+| Файлы | Разрешённое содержание будущего ремонта / сохранность |
+| --- | --- |
+| `data/components/service.yaml` | Только metadata evidence_links Transaction-Success и подтверждённая target closure Asset/Partner-Badge; существующие numerical facts, source snapshot scalar values, properties, asset contract, content и viewport trees не переписывать |
+| `data/components/shared.yaml` | Одна новая remote source-only reference, fresh captured identity/key; без экспортного профиля, content slots или standalone HTML. Не заменять старые Shared records |
+| `data/renderers/registry.yaml` | Одна source-only coverage row для нового helper; это HTML coverage registry, не docs producer. Interpreter38 и прежние записи сохранить |
+| `scripts/lib/figma-component-evidence.mjs`; при необходимости shared classifier в `scripts/lib/figma-contract-facts.mjs` | Narrow mixed-run handling; absolute-artwork disposition только после отдельного решения. Не менять capture факты, scalar comparator или покрытие layout вне export boundary |
+| `tests/foundation/component-evidence-links.test.mjs`, `remote-source-evidence.test.mjs`, `figma-component-evidence.test.mjs`, `nested-artwork-evidence.test.mjs`, `figma-contract-facts.test.mjs` | Сначала реальные RED cases, затем минимальный repair. Negative cases: missing target/key, stale/incomplete packet, wrong boundary, non-artwork absolute layout, missing/gapped/overlapping mixed runs. Существующие fail-closed cases сохранить |
+| `docs/generated/component-registry.md` | Только механический output добавленной source reference / links, если generator их выводит. Никакого ручного изменения описаний |
+
+Перед repair получить missing decision по remote helper role и artwork diagnostic policy. Затем один exact cloud commit, новый request-bound MCP session для Transaction, local partner-badge и remote target, числовая и dependency сверка; current packets не repin. Проверить metadata-only allowlist и byte-preservation всех прежних contract/foundation values; HTML/CSS должен быть прежним. Локальные tests/validator/generated checks выполняет Terra Medium. До merge отдельной командой — финальный exact-SHA full gate; старый1075/1075 с997 не становится новым результатом.
+
+#### F7: proposed producer/schema/manifest/output/test map (не реализована)
+
+Решение-кандидат: один общий `workflow-checkpoint` docs renderer, две generated проекции существующих structured workflows. Это не возвращение ручных checkpoint и не второй workflow, не новый источник component facts. Названия выходов предлагаются: `docs/generated/library-maintenance-checkpoint.md` и `docs/generated/email-build-checkpoint.md`.
+
+| Слой | Proposed точная область |
+| --- | --- |
+| Canonical inputs | Уже существующие `data/workflows/library-maintenance.yaml` и `data/workflows/email-build.yaml`; workflow schema и manifest registrations/routes. Никаких копий правил из Core, contracts или архивных документов |
+| Producer | `scripts/lib/generated-docs.mjs`: validated workflow loading, единый renderer с явным workflow selector, deterministic ordering, escaping; existing `scripts/generate-docs.mjs` остаётся общим CLI, новый CLI не нужен |
+| Schemas | `schemas/manifest.schema.json`: новый renderer discriminator и условно обязательный workflow source selector, проверяемый по registered source; `schemas/workflows.schema.json` сохраняется, если достаточно существующих typed fields. Новый manifest schema version определяется при реализации, не подменяется молча старым incompatible discriminator |
+| Manifest и semantic validation | `system/manifest.yaml`: два generated output sources + две generated_docs definitions; существующие routes/profiles не переключать. `scripts/lib/system-manifest.mjs`: renderer-specific input/selector pairing validation; producer использует ту же карту, не hardcoded paths/второй catalog |
+| Projection contents | Для каждого mode: его ID, status, required inputs/relations/blockers, ordered step ID/condition/source IDs, allowed outputs и success/blocked handoff. Write/read-only и stop boundaries не сокращать до общего счастливого пути. Ссылки на sources разрешать через manifest; не копировать конкретные component contracts/числа |
+| Provenance и readiness | Source digest обязан покрывать workflow/schema и все реально используемые control-plane manifest inputs. Изменение workflow/selector/routes должно обнаруживаться check. Current maintenance shadow/paused не выдавать за активность; generated checkpoint не включается в runtime bundle как дополнительная инструкция. Если выводятся route availability/status, получать их из manifest и включать в digest; не выводить availability только из workflow.status |
+| Проверки | `tests/generation/generated-docs.test.mjs` / `generated-docs-cli.test.mjs`: exact deterministic projection, two outputs, escaping, mode completeness, stale detection, missing/invalid pairing, manifest control-plane digest. `tests/foundation/system-manifest.test.mjs` и `tests/workflows/structured-workflows.test.mjs`: validated selector/schema linkage. `tests/skills/skill-context.test.mjs` / `skill-context-cli.test.mjs`: новые outputs не добавляются в runtime context и не включают paused routes |
+| Preserved boundary | Четыре существующих generated docs, contracts/foundations, renderer HTML, email workflow semantics/skills, Figma и письма без изменений. Если требуется менять workflow semantics — это отдельныйP3 scope, не ремонтF7 |
+
+Перед реализацией F7: согласовать направление/selector/provenance, затем RED→minimal producer/schema/manifest→generated outputs→exact local gates/review. Нынешняя карта закрывает research/path-map обязанность, не F7 production implementation или P2 acceptance.
+
+**Фактически изменяется в этом продолжении только этот план и roadmap.** Figma read-only; contract/code/schema/generated/runtime/skills/письма не изменены. P2 остаётся открытым. Ближайший следующий шаг — согласовать и реализовать bounded remaining-proof repair; затем реализовать F7 доP3. P3, #109, activation, cutover и merge не начинать.
+
+<a id="текущая-точка-возврата-p2--bounded-nativebinding-и-архивная-сверка-03102026"></a>
+
+### Предыдущая точка P2 — bounded native/binding и архивная сверка, 03.10.2026
 
 Продолжение выполнено read-only на candidate `9c3b91e8f722685c199a6f4266eabb92cad86007`. Main по-прежнему `618d124df0a664c84d23a724ba50ef2b324e9b97`; PR #110 draft/open, без merge. F2 закрыт в предыдущем product894 и не повторяется. В этом продолжении меняются только этот журнал и roadmap; component/foundation values, evidence metadata, code/tests/generated outputs, Figma и готовые письма не изменяются. Единственный resolver bundle прочитан на9c3: library-maintenance/read-only/both, выбранные Transaction-Success, Badge/Operation-Status, Details/Operation и четыре foundations; paused status не превращается в разрешение mutation.
 
