@@ -152,7 +152,7 @@ test("rejects one request nonce with incompatible receipt envelopes before readi
 });
 
 // Production mutation caught: changing capture wrapper behavior for scalar callers or failing to echo requested identity.
-test("VM capture keeps no-argument 1.1 scalar compatibility and emits exact 1.2 request echo", async () => {
+test("VM capture keeps no-argument 1.1 scalar compatibility and emits exact 1.3 request echo", async () => {
   const source = await readFile(CAPTURE_PATH, "utf8");
   let traversed = false;
   const figma = { fileKey: "synthetic-file", skipInvisibleInstanceChildren: true,
@@ -166,7 +166,7 @@ test("VM capture keeps no-argument 1.1 scalar compatibility and emits exact 1.2 
   assert.equal(scalar.capture_version, "1.1.0");
   assert.ok(evidence.capture_meta.request, "request-mode capture must expose capture_meta.request");
   assert.deepEqual(JSON.parse(JSON.stringify(evidence.capture_meta.request)), request);
-  assert.equal(evidence.capture_version, "1.2.0");
+  assert.equal(evidence.capture_version, "1.3.0");
   traversed = false;
   await assert.rejects(context.__capture("1:1", { ...request, request_nonce: "not-hex" }), hasCode("EVIDENCE_REQUEST_IDENTITY_MISMATCH"));
   assert.equal(traversed, false);

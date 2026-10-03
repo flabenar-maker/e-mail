@@ -20,12 +20,21 @@ test("email-route bundles exclude evidence metadata and change only source/versi
 });
 
 
-test("canonical evidence metadata is absent from both email-route component bundles", async (t) => {
+test("canonical non-proof evidence metadata is absent from both email-route component bundles", async (t) => {
   const root = await fixture(t);
   const paths = ["data/components/shared.yaml", "data/components/marketing.yaml", "data/components/service.yaml"];
   for (const path of paths) {
     const document = await readStrictYaml(join(root.root, path));
-    for (const component of document.components) delete component.evidence_links;
+    for (const component of document.components) {
+      const proofs = component.evidence_links?.fact_proofs;
+      const decisions = component.evidence_links?.normative_decisions;
+      component.evidence_links = {
+        foundation_values: [],
+        source_dependencies: [],
+        ...(proofs?.length ? { fact_proofs: proofs } : {}),
+        ...(decisions?.length ? { normative_decisions: decisions } : {}),
+      };
+    }
     await writeFixtureFile(root.root, path, JSON.stringify(document, null, 2) + "\n");
   }
   const options = { candidates: [{ id: "email-header" }, { id: "block-personal-data-update" }, { id: "block-receipt-info" }], viewports: ["mobile", "desktop"] };
