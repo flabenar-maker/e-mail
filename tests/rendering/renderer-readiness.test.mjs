@@ -38,13 +38,15 @@ test("uncovered components report coverage only without speculative interpretati
 
   const report = auditRendererReadiness(registries);
 
-  assert.equal(report.summary.components, 61);
-  assert.equal(report.summary.active_components, 61);
+  assert.equal(report.summary.components, 62);
+  assert.equal(report.summary.active_components, 62);
   assert.equal(report.summary.components_with_properties, 16);
   assert.equal(report.summary.components_with_assets, 27);
-  assert.equal(report.summary.missing_coverage, 61);
+  assert.equal(report.summary.missing_coverage, 62);
   assert.deepEqual(registries, before);
 
+  const remote = report.components.find(({ id }) => id === "icon-account-circle-line-remote");
+  assert.deepEqual(remote.issues.map(({ code }) => code), ["RENDER_COVERAGE_MISSING"]);
   const cardImage = report.components.find(({ id }) => id === "card-image");
   assert.equal(cardImage.ready, false);
   assert.deepEqual(cardImage.issues.map(({ code }) => code), [
@@ -65,7 +67,7 @@ test("all declared interpreter contracts are renderer-ready", async () => {
   }
 
   const report = auditRendererReadiness(registries, rendererRegistry);
-  assert.equal(report.summary.covered_active_components, 61);
+  assert.equal(report.summary.covered_active_components, 62);
   assert.equal(report.summary.ready_components, 38);
   assert.equal(report.summary.missing_coverage, 0);
 });

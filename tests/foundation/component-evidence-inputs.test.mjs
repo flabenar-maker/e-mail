@@ -172,7 +172,14 @@ test("model loads complete records and resolves expected values only from regist
   const model = await loadComponentEvidenceModel({ repoRoot: fixture.root, canonicalSha: SHA });
   const expected = parseStrictYaml(await readFile(join(fixture.root, "data/foundations/rendering.yaml"), "utf8"));
   assert.equal(model.canonical_sha, SHA);
-  assert.equal(model.records.length, 61);
+  const remote = model.records.filter(({ id }) => id === "icon-account-circle-line-remote");
+  assert.equal(model.records.length, 62);
+  assert.equal(model.records.filter(({ id }) => id !== "icon-account-circle-line-remote").length, 61);
+  assert.deepEqual(remote.map(({ id, figma, contracts }) => ({
+    id,
+    component_key: figma.remote_source?.component_key,
+    root_modes: Object.values(contracts).map(({ root }) => root.render_mode),
+  })), [{ id: "icon-account-circle-line-remote", component_key: "8ea141edd5ec0679825e7fde633e211282b2405b", root_modes: ["figma-source-only", "figma-source-only"] }]);
   assert.ok(model.records.every((record) => Object.hasOwn(record, "contracts")));
   assert.deepEqual(model.manifest, fixture.manifest);
   assert.deepEqual(model.source_documents.get("rendering-foundation"), expected);

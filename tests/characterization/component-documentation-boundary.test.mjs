@@ -107,27 +107,48 @@ test("direct Figma source capture preserves shared and service registries and ma
       document.components.map(projectMigrationSignificantFields),
     ]),
   );
+  const remoteShared = projected.shared.filter(({ id }) => id === "icon-account-circle-line-remote");
+  const localProjected = {
+    ...projected,
+    shared: projected.shared.filter(({ id }) => id !== "icon-account-circle-line-remote"),
+  };
+  const localRecords = Object.values(localProjected).flat();
   const allRecords = Object.values(projected).flat();
-  const systemIds = allRecords.map((record) => record.id);
-  const figmaIdentities = allRecords.map(
+  const systemIds = localRecords.map((record) => record.id);
+  const figmaIdentities = localRecords.map(
     (record) => `${record.figma.file_key}#${record.figma.node_id}`,
   );
 
   assert.deepEqual(
     Object.fromEntries(
-      Object.entries(projected).map(([library, records]) => [
+      Object.entries(localProjected).map(([library, records]) => [
         library,
         records.length,
       ]),
     ),
     { shared: 17, marketing: 26, service: 18 },
   );
-  assert.equal(allRecords.length, 61);
+  assert.equal(localRecords.length, 61);
   assert.equal(new Set(systemIds).size, 61);
   assert.equal(new Set(figmaIdentities).size, 61);
+  assert.equal(allRecords.length, 62);
+  assert.equal(new Set(allRecords.map(({ id }) => id)).size, 62);
+  assert.deepEqual(remoteShared.map((record) => ({
+    id: record.id,
+    component_key: record.figma.remote_source?.component_key,
+    source_root_node_id: record.figma.source_root_node_id,
+    node_id: record.figma.node_id,
+    root_modes: Object.values(record.contracts).map(({ root }) => root.render_mode),
+  })), [{
+    id: "icon-account-circle-line-remote",
+    component_key: "8ea141edd5ec0679825e7fde633e211282b2405b",
+    source_root_node_id: "1331:1646",
+    node_id: "1331:1646",
+    root_modes: ["figma-source-only", "figma-source-only"],
+  }]);
 
   assert.equal(
-    digest(projected.shared),
+    digest(localProjected.shared),
     "sha256:f6dc075fcce35b96304fd09c939fce5ba455cc23f6ee05dcee88508a9e6255aa",
   );
   assert.equal(

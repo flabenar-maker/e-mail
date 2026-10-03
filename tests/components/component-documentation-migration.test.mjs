@@ -8,6 +8,7 @@ import { readStrictYaml } from "../../scripts/lib/strict-yaml.mjs";
 import { migrateComponentDocument } from "../../system/migrations/components-1-to-2.mjs";
 
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
+const REMOTE_ID = "icon-account-circle-line-remote";
 
 function legacyRecord(id) {
   return {
@@ -196,7 +197,7 @@ test("migration blocks duplicate reviewed mapping IDs", () => {
   );
 });
 
-test("reviewed mapping reproduces all 61 canonical schema 2 records", async () => {
+test("reviewed mapping reproduces all 61 historical canonical schema 2 records", async () => {
   const mappingDocument = await readStrictYaml(
     join(repoRoot, "system/migrations/components-1-to-2.yaml"),
   );
@@ -206,7 +207,14 @@ test("reviewed mapping reproduces all 61 canonical schema 2 records", async () =
     const target = await readStrictYaml(
       join(repoRoot, `data/components/${library}.yaml`),
     );
-    const source = structuredClone(target);
+    const excluded = target.components.filter(({ id }) => id === REMOTE_ID);
+    const localTarget = {
+      ...target,
+      components: target.components.filter(({ id }) => id !== REMOTE_ID),
+    };
+    assert.deepEqual(excluded.map(({ id }) => id), library === "shared" ? [REMOTE_ID] : []);
+    const preservedRemote = structuredClone(excluded);
+    const source = structuredClone(localTarget);
     source.schema_version = "1.0.0";
     for (const record of source.components) {
       delete record.documentation;
@@ -219,10 +227,11 @@ test("reviewed mapping reproduces all 61 canonical schema 2 records", async () =
 
     assert.deepEqual(
       migrateComponentDocument(source, mappingDocument),
-      {...target, schema_version: "2.1.0"},
+      {...localTarget, schema_version: "2.1.0"},
       `Reviewed mapping drift for ${library}.`,
     );
-    total += target.components.length;
+    assert.deepEqual(excluded, preservedRemote, `Remote record must remain outside historical migration for ${library}.`);
+    total += localTarget.components.length;
   }
 
   assert.equal(total, 61);

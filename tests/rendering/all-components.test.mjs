@@ -30,6 +30,7 @@ const sharedSourceOnlyIds = [
   "icon-user-follow-fill",
   "icon-user-forbid-fill",
   "icon-user-unfollow-fill",
+  "icon-account-circle-line-remote",
 ];
 
 const marketingInterpreterIds = [
