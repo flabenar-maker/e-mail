@@ -74,6 +74,10 @@
 
 **Evidence и сохранность:** `C:/Users/flabe/AppData/Local/Temp/cupis-p2-rolemap-20261002/fresh-remaining-facts-9af5fad/` хранит семь native responses/packets/receipts/session и два supplemental raw reads; компактный локальный отчёт `task7-fresh-remaining-facts-9af5fad-report.json`. Исходные timestamps/hash не переписаны. При потере этой временной evidence нужен новый MCP-вызов, не реконструкция результата из журнала. В GitHub публикуются только этот журнал и текущая точка roadmap; schemas, canonical values/mappings, runtime, generated docs, skills, Figma и письма не меняются. Нет visual regression, полной suite или GitHub Actions/Checks в этом read-only шаге. Docs-only gate относится к его точному final cloud SHA; прежний 9af full gate остаётся историческим результатом именно9af, не новым full gate следующего коммита.
 
+### Ремонт fact proof: одобрен весь bounded scope — 03.10.2026
+
+Пользователь одобрил всю спецификацию командой «Делай сразу весь». Реализация — [дочерний план](cutover/2026-10-03-cupis-contract-fact-proof-repair.md), без повторных промежуточных разрешений, но без merge/P3/cutover. Остальные обязанности P2 сохраняются.
+
 ### Способ ремонта fact proof: письменное согласование — 03.10.2026
 
 По следующему разрешению пользователя исследована фактическая граница проверяющего кода на cloud candidate ae71f358a8360e8c087021dba0847195dbaf60e5. Использован один library-maintenance/read-only/both bundle: requested8/resolved9, assets+typography, paused/SKILL_ROUTE_PAUSED; SHA-256 48F4A3847491CF8D2A937ABC4F5C6EBA239443B8D91F1DA34F010D7ACBB3F022. Существующие T1/S1 подтверждают shell values и main-component dependencies; QR-only derivation не является общей моделью остальных HTML facts.
