@@ -1,5 +1,16 @@
+import { createHash } from 'node:crypto';
+
 // Compare an independently supplied Figma MCP source packet with the semantic
 // component contract. Stored source_variants and verification status are never inputs.
+// Internal identity only; no field is added to the independently visible raw report.
+const authenticRawReports = new WeakMap();
+const inputDigest = value => createHash("sha256").update(JSON.stringify(value) ?? "undefined").digest("hex");
+export function isFigmaContractFactReportFor({ facts, record, live } = {}) {
+  const identity = authenticRawReports.get(facts);
+  if (!identity) return false;
+  try { return identity.record === inputDigest(record) && identity.live === inputDigest(live) && identity.report === inputDigest(facts); }
+  catch { return false; }
+}
 const VIEWPORTS = ["mobile", "desktop"];
 const TARGET_PREFIX = /^\/(?:contracts\/(?:mobile|desktop|variant_contracts\/\d+)\/|asset_contracts\/|variants\/|properties\/|identity\/)/u;
 
@@ -398,7 +409,7 @@ export function auditFigmaContractFacts({ record, live, mappings, derivedEvidenc
     }
   }
   issues.sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b)));
-  return {
+  const report = {
     ok: issues.length === 0,
     component_id: record?.id ?? null,
     source_fact_count: source.size,
@@ -407,4 +418,7 @@ export function auditFigmaContractFacts({ record, live, mappings, derivedEvidenc
     mapped_contract_fact_count: coveredContract.size,
     issues,
   };
+  try { authenticRawReports.set(report, { record: inputDigest(record), live: inputDigest(live), report: inputDigest(report) }); }
+  catch { /* Non-serializable inputs cannot establish a coverage identity. */ }
+  return report;
 }

@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
 import { validateCaptureFreshness, validateEvidenceSessionFreshness } from './component-evidence-freshness.mjs';
 import { matchesRemoteSourceIdentity } from './component-evidence-links.mjs';
+import { isFigmaContractFactReportFor } from './figma-contract-facts.mjs';
 
 // Proof metadata is authoring evidence, never an HTML value override. Every
 // success is qualified by an exact canonical owner, request-bound complete
@@ -354,14 +355,14 @@ export function auditContractFactProofs({ record, model, session } = {}) {
   report.receipt_ids = [...receipts].sort(); report.verified_contract_paths = [...new Set(verified)].sort();
   report.verified_sources = [...new Map(sources.map(s => [key(s), s])).values()].sort((a, b) => key(a).localeCompare(key(b)));
   ordered(issues); report.ok = issues.length === 0 && results.every(r => r.status === 'verified');
-  computedCoverage.set(report, { component_id: record.id, paths: [...report.verified_contract_paths], sources: report.verified_sources.map(s => ({ ...s })) });
+  if (verified.length || sources.length) computedCoverage.set(report, { component_id: record.id, record: structuredClone(record), live: structuredClone(env.tree(record.id).packet), paths: [...report.verified_contract_paths], sources: report.verified_sources.map(s => ({ ...s })) });
   return report;
 }
 export function applyContractFactProofCoverage({ facts, proofs } = {}) {
   // Only this module's computed result may close gaps. Caller flags, copied JSON
   // reports and mutations of the public report never establish coverage.
   const computed = computedCoverage.get(proofs);
-  if (!computed || computed.component_id !== facts?.component_id) return facts;
+  if (!computed || computed.component_id !== facts?.component_id || !isFigmaContractFactReportFor({ facts, record: computed.record, live: computed.live })) return facts;
   const paths = new Set(computed.paths), sources = computed.sources;
   if (!paths.size && !sources.length) return facts;
   const issues = facts.issues.filter(i => !(i.code === 'CONTRACT_FACT_UNMAPPED' && paths.has(i.contract_path)) && !(i.code === 'FIGMA_FACT_UNCOVERED' && sources.some(s => s.component_id === facts.component_id && s.variant_node_id === i.variant_node_id && s.node_id === i.node_id && s.source_path === i.source_path)));
