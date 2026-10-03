@@ -383,3 +383,43 @@ test("S1 retains source export-selector, nested-main-component, capture, and sca
   s1Packet(nested, nested.block).capture_errors.push({ code: "MIXED_VALUE", node_id: "502:24255", field: "fills" });
   assert.equal(s1Audit(nested).ok, false);
 });
+
+
+function completeMixedText(id = "77:90") {
+  return Object.assign(node(id, "TEXT", 10), {
+    characters: "go!",
+    styled_text_segments: [
+      { start: 0, end: 2, characters: "go", font_family: "Roboto", font_style: "Regular", font_size_px: 14, line_height: { unit: "PERCENT", value: 140 }, fills: [color()], text_decoration: "NONE" },
+      { start: 2, end: 3, characters: "!", font_family: "Roboto", font_style: "Regular", font_size_px: 14, line_height: { unit: "PERCENT", value: 140 }, fills: [color()], text_decoration: "UNDERLINE" },
+    ],
+  });
+}
+
+test("complete mixed TEXT runs are a verified disposition without erasing the raw capture error", () => {
+  const f = fixture(), text = completeMixedText();
+  f.desktop.children.push(text); recount(f);
+  const raw = { code: "MIXED_VALUE", node_id: text.node_id, field: "textDecoration" };
+  f.packet.capture_errors.push(raw);
+  const before = structuredClone(f.packet.capture_errors), report = audit(f);
+  assert.ok(Array.isArray(report.capture_diagnostics), "component evidence must expose raw diagnostic dispositions");
+  const disposition = report.capture_diagnostics.find(value => value.raw?.node_id === text.node_id && value.raw?.field === raw.field);
+  assert.deepEqual(disposition?.raw, raw); assert.equal(disposition?.status, "verified"); assert.ok(disposition?.reason);
+  assert.ok(!report.issues.some(issue => issue.code === "EVIDENCE_CAPTURE_ERROR" && issue.capture_error?.node_id === text.node_id));
+  assert.deepEqual(f.packet.capture_errors, before, "audit must not rewrite captured diagnostics");
+});
+
+for (const [label, mutate] of [
+  ["gap", text => { text.styled_text_segments[0].end = 1; text.styled_text_segments[0].characters = "g"; }],
+  ["overlap", text => { text.styled_text_segments[1].start = 1; }],
+  ["foreign substring", text => { text.styled_text_segments[1].characters = "x"; }],
+  ["missing family", text => { text.styled_text_segments[0].font_family = ""; }],
+  ["invalid line height", text => { text.styled_text_segments[0].line_height = { unit: "AUTO", value: 0 }; }],
+  ["unsupported mixed field", text => { text._mixedField = "fontWeight"; }],
+]) test("mixed TEXT " + label + " remains an unresolved raw capture error", () => {
+  const f = fixture(), text = completeMixedText(); f.desktop.children.push(text); recount(f); mutate(text);
+  const field = text._mixedField ?? "textDecoration";
+  f.packet.capture_errors.push({ code: "MIXED_VALUE", node_id: text.node_id, field });
+  const report = audit(f), disposition = report.capture_diagnostics?.find(value => value.raw?.node_id === text.node_id && value.raw?.field === field);
+  assert.equal(disposition?.status, "unverified"); assert.ok(disposition?.reason);
+  assert.ok(report.issues.some(issue => issue.code === "EVIDENCE_CAPTURE_ERROR" && issue.capture_error?.node_id === text.node_id && issue.capture_error?.field === field));
+});

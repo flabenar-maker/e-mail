@@ -1167,3 +1167,30 @@ test("marketing Figma-source variants keep exact high-risk visual and compositio
   assert.equal(radial.type, "radial-gradient");
   assert.deepEqual(radial.stops.map((stop) => stop.color), ["#3DD55C", "#18B037"]);
 });
+
+
+test("Transaction artwork closure registers five exact dependencies and one source-only remote mark", async () => {
+  const service = await loadComponentRegistry({ repoRoot, dataPath: "data/components/service.yaml" });
+  const shared = await loadComponentRegistry({ repoRoot, dataPath: "data/components/shared.yaml" });
+  const transaction = service.components.find(record => record.id === "block-transaction-success");
+  const ordered = rows => rows.sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b)));
+  const dependencies = ordered(transaction.evidence_links.source_dependencies.map(link => [
+    link.source.variant_node_id, link.source.node_id, link.target.component_id, link.asset_owner.node_id, link.asset_owner.asset_id,
+  ]));
+  assert.deepEqual(dependencies, ordered([
+    ["459:29175", "481:19700", "asset-partner-badge-4x", "481:19700", "partner-badge"],
+    ["459:29175", "I481:19700;481:19655", "asset-partner-mark-remote", "481:19700", "partner-badge"],
+    ["459:29176", "484:19677", "asset-partner-badge-4x", "484:19677", "partner-badge"],
+    ["459:29176", "I484:19677;481:19655", "asset-partner-mark-remote", "484:19677", "partner-badge"],
+  ]));
+  const badge = service.components.find(record => record.id === "asset-partner-badge-4x");
+  assert.deepEqual(badge.evidence_links.source_dependencies.map(link => [link.source.variant_node_id, link.source.node_id, link.target.component_id, link.asset_owner.node_id, link.asset_owner.asset_id]), [
+    ["481:19665", "481:19655", "asset-partner-mark-remote", "481:19665", "partner-badge"],
+  ]);
+  const remote = shared.components.find(record => record.id === "asset-partner-mark-remote");
+  assert.deepEqual({ node_id: remote?.figma.node_id, source_root: remote?.figma.source_root_node_id, key: remote?.figma.remote_source?.component_key, library: remote?.identity.library, role: remote?.identity.semantic_role, variants: remote?.variants, properties: remote?.properties, assets: remote?.asset_contracts, modes: [remote?.contracts.mobile.root.render_mode, remote?.contracts.desktop.root.render_mode] }, {
+    node_id: "439:4098", source_root: "439:4098", key: "be6c194606af9516b3cc07847f52d6db0c8cb6d7", library: "shared", role: "asset", variants: [], properties: [], assets: [], modes: ["figma-source-only", "figma-source-only"],
+  });
+  const renderer = await readStrictYaml(join(repoRoot, "data/renderers/registry.yaml"));
+  assert.ok(renderer.coverage.some(row => row.component_id === "asset-partner-mark-remote" && row.mode === "source-only"));
+});

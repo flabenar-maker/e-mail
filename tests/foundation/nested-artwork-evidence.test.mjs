@@ -142,3 +142,78 @@ test("nested child capture errors stay visible and never certify whole artwork",
   const f = fixture(true); f.ip.capture_errors.push({ code: "MIXED_VALUE", node_id: "401:10", field: "fills" });
   const r = run(f); assert.equal(r.ok, false); assert.ok(has(r, "EVIDENCE_CAPTURE_ERROR"));
 });
+
+
+test("validated nested direct-image boundary gives its raw absolute warning a separate verified disposition", () => {
+  const f = fixture();
+  const artwork = f.ip.variants[0].source_node.children.find(child => child.node_id === "401:10");
+  artwork.layout = { mode: "NONE", horizontal_sizing: "FIXED", vertical_sizing: "FIXED", padding: { top: 0, right: 0, bottom: 0, left: 0 } };
+  const raw = { code: "ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW", node_id: "401:10" };
+  f.ip.capture_errors.push(raw);
+  const before = structuredClone(f.ip.capture_errors), report = run(f);
+  assert.ok(Array.isArray(report.capture_diagnostics), "nested report must expose target raw diagnostic dispositions");
+  const disposition = report.capture_diagnostics.find(value => value.raw?.node_id === raw.node_id);
+  assert.deepEqual(disposition?.raw, raw); assert.equal(disposition?.status, "verified"); assert.ok(disposition?.reason);
+  assert.ok(!report.issues.some(issue => issue.code === "EVIDENCE_CAPTURE_ERROR" && issue.capture_error?.node_id === raw.node_id));
+  assert.deepEqual(f.ip.capture_errors, before);
+});
+
+test("absolute warning outside an exact node-export boundary remains unresolved", () => {
+  const f = fixture();
+  const artwork = f.ip.variants[0].source_node.children.find(child => child.node_id === "401:10");
+  artwork.layout = { mode: "NONE", horizontal_sizing: "FIXED", vertical_sizing: "FIXED", padding: { top: 0, right: 0, bottom: 0, left: 0 } };
+  f.item.asset_contracts[0].export_boundary.kind = "fill";
+  const raw = { code: "ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW", node_id: "401:10" };
+  f.ip.capture_errors.push(raw);
+  const report = run(f), disposition = report.capture_diagnostics?.find(value => value.raw?.node_id === raw.node_id);
+  assert.equal(disposition?.status, "unverified"); assert.ok(disposition?.reason);
+  assert.ok(report.issues.some(issue => issue.code === "EVIDENCE_CAPTURE_ERROR" && issue.capture_error?.node_id === raw.node_id));
+});
+
+for (const [label, mutate] of [
+  ["missing native NONE layout", f => { delete f.ip.variants[0].source_node.children.find(child => child.node_id === "401:10").layout; }],
+  ["non-NONE native layout", f => { f.ip.variants[0].source_node.children.find(child => child.node_id === "401:10").layout.mode = "VERTICAL"; }],
+  ["incomplete artwork children", f => { f.ip.variants[0].source_node.children.find(child => child.node_id === "401:10").children = []; }],
+  ["missing source dependency", f => { f.item.evidence_links.source_dependencies = []; }],
+  ["unknown canonical target", f => { f.item.evidence_links.source_dependencies[0].target.component_id = "missing-remote-target"; }],
+]) test("absolute warning is unresolved with " + label, () => {
+  const f = fixture();
+  const artwork = f.ip.variants[0].source_node.children.find(child => child.node_id === "401:10");
+  artwork.layout = { mode: "NONE", horizontal_sizing: "FIXED", vertical_sizing: "FIXED", padding: { top: 0, right: 0, bottom: 0, left: 0 } };
+  mutate(f); const raw = { code: "ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW", node_id: "401:10" }; f.ip.capture_errors.push(raw);
+  const report = run(f), disposition = report.capture_diagnostics?.find(value => value.raw?.node_id === raw.node_id);
+  assert.equal(disposition?.status, "unverified"); assert.ok(disposition?.reason);
+  assert.ok(report.issues.some(issue => issue.code === "EVIDENCE_CAPTURE_ERROR" && issue.capture_error?.node_id === raw.node_id));
+});
+
+test("remote source-only root lacking NONE layout remains unresolved when artificially warned", () => {
+  const f = fixture();
+  f.glyph.identity.library = "shared"; f.glyph.figma.remote_source = { component_key: "remote-key" };
+  const root = f.gp.variants[0].source_node;
+  root.remote_source = { remote: true, component_key: "remote-key" };
+  const raw = { code: "ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW", node_id: root.node_id };
+  f.gp.capture_errors.push(raw);
+  const report = run(f), disposition = report.capture_diagnostics?.find(value => value.raw?.node_id === raw.node_id);
+  assert.equal(disposition?.status, "unverified"); assert.ok(disposition?.reason);
+  assert.ok(report.issues.some(issue => issue.code === "EVIDENCE_CAPTURE_ERROR" && issue.capture_error?.node_id === raw.node_id));
+});
+
+test("remote key mismatch leaves an otherwise-NONE source-only warning unresolved", () => {
+  const f = fixture(); f.glyph.identity.library = "shared"; f.glyph.figma.remote_source = { component_key: "remote-key" };
+  const root = f.gp.variants[0].source_node;
+  root.remote_source = { remote: true, component_key: "wrong-key" };
+  root.layout = { mode: "NONE", horizontal_sizing: "FIXED", vertical_sizing: "FIXED", padding: { top: 0, right: 0, bottom: 0, left: 0 } };
+  const raw = { code: "ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW", node_id: root.node_id }; f.gp.capture_errors.push(raw);
+  const report = run(f), disposition = report.capture_diagnostics?.find(value => value.raw?.node_id === raw.node_id);
+  assert.equal(disposition?.status, "unverified"); assert.ok(disposition?.reason);
+  assert.ok(report.issues.some(issue => issue.code === "EVIDENCE_CAPTURE_ERROR" && issue.capture_error?.node_id === raw.node_id));
+});
+
+test("unsupported paint diagnostic inside declared artwork remains unresolved", () => {
+  const f = fixture();
+  const artwork = f.ip.variants[0].source_node.children.find(child => child.node_id === "401:10");
+  artwork.layout = { mode: "NONE", horizontal_sizing: "FIXED", vertical_sizing: "FIXED", padding: { top: 0, right: 0, bottom: 0, left: 0 } };
+  const raw = { code: "UNSUPPORTED_FIELD", node_id: artwork.node_id, field: "fills" }; f.ip.capture_errors.push(raw);
+  const report = run(f), disposition = report.capture_diagnostics?.find(value => value.raw?.node_id === raw.node_id && value.raw?.field === raw.field);
+  assert.equal(disposition?.status, "unverified"); assert.ok(report.issues.some(issue => issue.code === "EVIDENCE_CAPTURE_ERROR" && issue.capture_error?.field === "fills"));
+});
