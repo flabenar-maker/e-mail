@@ -38,6 +38,8 @@ export const canonicalSystemFixtureFiles = [
   "docs/generated/typography-registry.md",
   "docs/generated/asset-registry.md",
   "docs/generated/naming-reference.md",
+  "docs/generated/library-maintenance-checkpoint.md",
+  "docs/generated/email-build-checkpoint.md",
   "README.md",
   "bootstrap/README.md",
   "core/email-rendering-standard.md",
