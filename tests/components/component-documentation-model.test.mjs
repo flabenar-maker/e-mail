@@ -18,7 +18,7 @@ async function canonicalV2Document() {
   const document = await readStrictYaml(
     join(repoRoot, "data/components/marketing.yaml"),
   );
-  document.schema_version = "2.2.0";
+  document.schema_version = "2.3.0";
   for (const record of document.components) {
     delete record.description;
     record.documentation = {
@@ -68,7 +68,7 @@ function diagnosticCodes(errors) {
   return errors.map((error) => error.code);
 }
 
-test("schema 2.0 accepts typed component documentation", async () => {
+test("schema 2.3 accepts typed component documentation", async () => {
   const schema = JSON.parse(await readFile(schemaPath, "utf8"));
   const document = await canonicalV2Document();
   const record = document.components[0];
@@ -140,7 +140,7 @@ for (const [name, mutate] of [
     },
   ],
 ]) {
-  test(`schema 2.0 rejects ${name}`, async () => {
+  test(`schema 2.3 rejects ${name}`, async () => {
     const schema = JSON.parse(await readFile(schemaPath, "utf8"));
     const document = await canonicalV2Document();
     mutate(document.components[0]);
@@ -148,7 +148,7 @@ for (const [name, mutate] of [
   });
 }
 
-test("schema 2.1 rejects compact-description bounds at exact documentation paths", async () => {
+test("schema 2.3 rejects compact-description bounds at exact documentation paths", async () => {
   const schema = JSON.parse(await readFile(schemaPath, "utf8"));
   const cases = [
     {
