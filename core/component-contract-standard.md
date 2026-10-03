@@ -186,9 +186,21 @@ Generated registry не редактируется вручную и не ста
 
 Проверяется не только визуальный снимок, но и фактические данные Mobile и Desktop: дерево и порядок слоёв, тексты, типографика, размеры, padding, gaps, alignment, цвета, fills, bindings, видимость, значения и эффекты component properties, границы ассетов. Снимок служит дополнительной визуальной проверкой, а не заменяет сравнение данных. Число, цвет или текст проверяются по конкретному Figma node, source path, viewport и точному значению.
 
-Связь `Figma variant + node + source path → contract path` хранится в `contracts.figma_fact_links` самого component record. Внешняя карта соответствий, сохранённый `source_variants` или статус не могут подтвердить запись. Аудит проверяет обе стороны: изменённый либо неучтённый факт Figma, несовпадение значения, а также contract fact без прямого Figma-источника. Для атомарных facts нужен `figma-literal` или `figma-binding` provenance того же node; `registry-literal` не становится подтверждением только из-за совпадения числа.
+Связь `Figma variant + node + source path → contract path` хранится в `contracts.figma_fact_links` самого component record. Внешняя карта соответствий, сохранённый `source_variants` или статус не могут подтвердить запись. Аудит проверяет обе стороны: изменённый либо неучтённый факт Figma, несовпадение значения, а также contract fact без прямого Figma-источника. Для прямых атомарных facts нужен `figma-literal` или `figma-binding` provenance того же node. Значение, которое требует cross-source, policy-derived или normative proof, ссылается на один owner-local typed `contract-proof`; совпадение числа или статус не заменяют этот proof.
 
 Если Figma MCP не дал значение, тип или paint не поддержан capture-профилем, либо непонятно, влияет ли поле на реализацию, результат остаётся непроверенным. Исключать факты можно только по узкой и обоснованной классификации незначимых полей, а не ради прохождения аудита. Нельзя заявлять о полной сверке компонента, пока этот факт-аудит не прошёл на свежих данных и не проверено визуальное соответствие.
+
+## Typed fact proof: границы доказательства
+
+Optional `evidence_links.fact_proofs` и `normative_decisions` — служебные authoring metadata. Старые evidence arrays остаются обязательными; удаление proof не отменяет fact coverage. Каждый proof адресует один собственный typed `/facts/N/value`; покрываемые scalar leaves определяет тип самого значения, не пользовательская маска. IDs уникальны во всех evidence arrays. Exact selectors сохраняют component/variant/full compound node identity.
+
+Механизм различает native source values всех source-only variants, consumer geometry через фактическую dependency/asset цепочку, suffix/export-profile ownership, existing typography style usage, Mobile proportional-auto policy, Desktop HUG/FILL content-height topology и отдельно согласованный CSS linear-gradient angle. Размер source и consumer не приравнивается по одному числу. Native sizing само по себе не доказывает HTML auto; native gradient transform не выдаётся за согласованный CSS angle.
+
+Style usage сохраняет direct native style-ID provenance и проверяет unique foundation ID/name/viewport, параметры и полные mixed-text runs с их локальным оформлением. Normative decision хранит фактическую инструкцию пользователя и согласованный spec reference; owner/viewport/element/fact/value и native paint/ancestor context связаны digests. Hash подтверждает неизменность контекста, но сам не является разрешением пользователя.
+
+Request-bound capture 1.3 добавляет actual selected `owner_identity`; прежний 1.2 не повышается до нового proof. Canonical SHA, receipts, request echo, полный variant-set/tree и точные packet bytes проверяются независимо. Raw scalar report сохраняется; effective report закрывает только exact unmapped/uncovered obligations успешных proofs. Value mismatch, identity, capture и остальные diagnostics не скрываются. Combined acceptance требует всех независимых ветвей audit.
+
+Metadata не поступают в email bundle, HTML, export policy или compact Description. Ни один proof не подставляет новое rendering value и не превращает вспомогательный source в блок письма.
 
 ## Onboarding нового компонента
 

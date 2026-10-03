@@ -1,6 +1,7 @@
 import { isDeepStrictEqual } from "node:util";
 import { validateCaptureFreshness } from "./component-evidence-freshness.mjs";
 import { auditFigmaContractFacts } from "./figma-contract-facts.mjs";
+import { auditContractFactProofs, applyContractFactProofCoverage } from "./contract-fact-proofs.mjs";
 import { matchesRemoteSourceIdentity, resolveEvidenceTargets } from "./component-evidence-links.mjs";
 import { compareFoundationObservation } from "./foundation-evidence.mjs";
 
@@ -41,7 +42,7 @@ function templateScope(record, live) {
     invalid("EVIDENCE_SCOPE_AMBIGUOUS", "/variants", "Template requires canonical Desktop and Mobile variants.");
     return { issues, obligations, nodes, identityValid };
   }
-  if (!live || !["1.1.0", "1.2.0"].includes(live.capture_version) || live.capture_meta?.tree_complete !== true || !Array.isArray(live.variants)) {
+  if (!live || !["1.1.0", "1.2.0", "1.3.0"].includes(live.capture_version) || live.capture_meta?.tree_complete !== true || !Array.isArray(live.variants)) {
     invalid("EVIDENCE_CAPTURE_INCOMPLETE", "/capture", "A complete capture 1.1.0 or 1.2.0 tree is required.");
     return { issues, obligations, nodes, identityValid };
   }
@@ -233,7 +234,7 @@ function inspectArtworkTree(record, live) {
   else if (record.identity.node_kind === "component-set" && record.variants.length > 0) expected = record.variants;
   else expected = [];
   if (!expected.length || new Set(expected.map(v => v.node_id)).size !== expected.length) fail("EVIDENCE_SCOPE_AMBIGUOUS", "/variants", "Canonical root/variant identities are ambiguous.");
-  if (!live || !["1.1.0", "1.2.0"].includes(live.capture_version) || live.capture_meta?.tree_complete !== true || !Array.isArray(live.variants)) {
+  if (!live || !["1.1.0", "1.2.0", "1.3.0"].includes(live.capture_version) || live.capture_meta?.tree_complete !== true || !Array.isArray(live.variants)) {
     fail("EVIDENCE_CAPTURE_INCOMPLETE", "/capture", "A complete capture 1.1.0 or 1.2.0 is required."); return { issues, nodes, variants, identityValid };
   }
   if (live.file_key !== record.figma.file_key || live.component_node_id !== record.figma.node_id) fail("EVIDENCE_CAPTURE_IDENTITY_MISMATCH", "/capture", "Exact canonical file and component owner are required.");
@@ -611,8 +612,13 @@ export function auditFigmaComponentEvidence({ record, live, model, session, deri
   let evidence = { ok: false, component_id: record?.id ?? null, canonical_git_sha: null,
     session_started_at: null, receipt_ids: [], results: [], issues: [], required_sources: [], verified_sources: [] };
   let nested = { ok: true, component_id: record?.id ?? null, canonical_git_sha: model?.canonical_sha ?? null, session_started_at: session?.started_at ?? null, receipt_ids: [], boundaries: [], dependencies: [], issues: [] };
-  const finish = () => ({ ok: facts.ok && evidence.ok && nested.ok, facts, evidence_links: evidence, nested_artwork: nested,
-    issues: [...facts.issues, ...evidence.issues, ...nested.issues] });
+  const requiredProofs = (record?.evidence_links?.fact_proofs?.length ?? 0) > 0 || (record?.evidence_links?.normative_decisions?.length ?? 0) > 0;
+  let factProofs = {ok: !requiredProofs, results: [], verified_contract_paths: [], verified_sources: [], issues: requiredProofs ? [issue("CONTRACT_PROOF_INPUT_UNVERIFIED", "/session", "Typed proofs require the same canonical record and actual live session packet.")] : []};
+  const finish = () => {
+    const effective = applyContractFactProofCoverage({facts, proofs: factProofs});
+    return {ok: effective.ok && evidence.ok && nested.ok && factProofs.ok, facts, effective_facts: effective, fact_proofs: factProofs, evidence_links: evidence, nested_artwork: nested,
+      issues: [...effective.issues, ...evidence.issues, ...nested.issues, ...factProofs.issues]};
+  };
   if (!model || !session) {
     if (nestedReferences(record ?? {}).length) {
       nested.ok = false; nested.issues.push(issue("EVIDENCE_SESSION_REQUIRED", "/session", "Nested artwork needs canonical sources and a fresh complete MCP session."));
@@ -640,6 +646,7 @@ export function auditFigmaComponentEvidence({ record, live, model, session, deri
     evidence.issues.push(issue("EVIDENCE_LIVE_PACKET_MISMATCH", "/live", "The fact audit and link audit must use the same session packet."));
     return finish();
   }
+  factProofs = auditContractFactProofs({record, model, session});
   if (!requiresEvidenceScope(record)) {
     evidence.receipt_ids = [capture.receipt_id];
     evidence.ok = true;

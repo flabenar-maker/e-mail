@@ -60,7 +60,7 @@ function entries(records, issues) {
     if (!Object.hasOwn(record, "evidence_links")) return;
     const links = record.evidence_links;
     const path = `/records/${index}/evidence_links`;
-    if (!closedObject(links, ["foundation_values", "source_dependencies"]) ||
+    if (!closedObject(links, ["foundation_values", "source_dependencies"], ["fact_proofs", "normative_decisions"]) ||
         !Array.isArray(links.foundation_values) || !Array.isArray(links.source_dependencies)) {
       issue(issues, "EVIDENCE_LINK_SHAPE_INVALID", path, "Evidence links require exactly two arrays: foundation_values and source_dependencies.");
       return;

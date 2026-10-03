@@ -47,6 +47,7 @@ function formatProvenance(provenance) {
   if (provenance.kind === "registry-literal") {
     return "";
   }
+  if (provenance.kind === "contract-proof") return `typed proof ${inlineCode(provenance.proof_id)}`;
   if (provenance.kind === "figma-literal") {
     return `${inlineCode(provenance.kind)} at ${inlineCode(provenance.node_id)}`;
   }
@@ -281,6 +282,8 @@ function renderConstraintsAndDependencies(record, index) {
         (link.asset_owner.asset_id ? `; asset ${inlineCode(link.asset_owner.asset_id)}` : ""),
     );
   }
+  for (const proof of record.evidence_links?.fact_proofs ?? []) lines.push(`- Fact proof: ${inlineCode(proof.id)} — ${inlineCode(proof.kind)} → ${inlineCode(proof.contract_path)}`);
+  for (const decision of record.evidence_links?.normative_decisions ?? []) lines.push(`- Normative decision: ${inlineCode(decision.id)} — ${inlineCode(decision.kind)}; owned typed targets ${decision.targets.map(t => inlineCode(t.contract_path)).join(", ")}; user authorization ${inlineCode(decision.authorization.approved_spec.path)} at ${inlineCode(decision.authorization.approved_spec.git_sha)}`);
   return lines;
 }
 
@@ -302,7 +305,9 @@ function hasConstraintsOrDependencies(record) {
     (record.constraints ?? []).length > 0 ||
     collectComponentReferences(record).components.length > 0 ||
     (record.evidence_links?.foundation_values ?? []).length > 0 ||
-    (record.evidence_links?.source_dependencies ?? []).length > 0
+    (record.evidence_links?.source_dependencies ?? []).length > 0 ||
+    (record.evidence_links?.fact_proofs ?? []).length > 0 ||
+    (record.evidence_links?.normative_decisions ?? []).length > 0
   );
 }
 

@@ -71,8 +71,8 @@ export function validateEvidenceSessionFreshness({ session, canonicalSha, path =
 export function validateCaptureFreshness({ session, capture, canonicalSha, path = "/capture" } = {}) {
   const issues = validateEvidenceSessionFreshness({ session, canonicalSha });
   const packet = capture?.packet;
-  if (!object(packet) || packet.capture_version !== "1.2.0") {
-    issues.push(issue("EVIDENCE_CAPTURE_VERSION_UNSUPPORTED", `${path}/packet/capture_version`, "Fresh evidence requires request-bound capture version 1.2.0."));
+  if (!object(packet) || !["1.2.0", "1.3.0"].includes(packet.capture_version)) {
+    issues.push(issue("EVIDENCE_CAPTURE_VERSION_UNSUPPORTED", `${path}/packet/capture_version`, "Fresh evidence requires request-bound capture version 1.2.0 or 1.3.0."));
     return issues;
   }
   const request = packet.capture_meta?.request;

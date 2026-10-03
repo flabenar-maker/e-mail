@@ -32,7 +32,7 @@ async function captureFigmaContractFacts(componentNodeId, request) {
     }
     return {
       ...packet,
-      capture_version: requestContext ? "1.2.0" : packet.capture_version,
+      capture_version: requestContext ? "1.3.0" : packet.capture_version,
       capture_meta: {
         started_at: startedAt, completed_at: new Date().toISOString(),
         tree_complete: packet.variants.length > 0, node_count: nodeCount,
@@ -304,6 +304,7 @@ async function captureFigmaContractFactsBody(componentNodeId) {
     capture_version: "1.1.0",
     file_key: figma.fileKey,
     component_node_id: component.id,
+    owner_identity: { node_id: component.id, node_type: component.type, name: component.name },
     component_properties: componentProperties,
     variants,
     capture_errors: errors,

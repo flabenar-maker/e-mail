@@ -8,6 +8,8 @@ import { loadSystemManifest } from "./system-manifest.mjs";
 import { listComponentRecords, loadComponentRegistries } from "./component-registry.mjs";
 import { loadRenderingFoundation, validateRenderingSemantics } from "./rendering-foundation.mjs";
 import { resolveEvidenceTargets } from "./component-evidence-links.mjs";
+import { loadAssetsFoundation, validateAssetsSemantics } from "./assets-foundation.mjs";
+import { loadTypographyFoundation, validateTypographySemantics } from "./typography-foundation.mjs";
 
 // This loader proves input consistency, not MCP origin or a cloud commit's
 // identity. The executing agent must verify raw snapshot bytes against the
@@ -78,9 +80,10 @@ export async function loadComponentEvidenceModel({ repoRoot, canonicalSha } = {}
   for (const [id, kind] of [
     ["components-shared", "registry"], ["components-marketing", "registry"], ["components-service", "registry"],
     ["components-schema", "schema"], ["rendering-foundation", "registry"], ["rendering-schema", "schema"],
+    ["assets-foundation", "registry"], ["assets-schema", "schema"], ["typography-foundation", "registry"], ["typography-schema", "schema"],
   ]) sources.set(id, await requiredSource(manifest, root, id, kind));
 
-  const [registries, rendering] = await Promise.all([
+  const [registries, rendering, assets, typography] = await Promise.all([
     loadComponentRegistries({ repoRoot: root,
       sources: Object.fromEntries(["shared", "marketing", "service"].map((library) => [library, sources.get(`components-${library}`).path])),
       schemaPath: sources.get("components-schema").path,
@@ -88,16 +91,18 @@ export async function loadComponentEvidenceModel({ repoRoot, canonicalSha } = {}
     loadRenderingFoundation({ repoRoot: root,
       dataPath: sources.get("rendering-foundation").path, schemaPath: sources.get("rendering-schema").path,
     }),
+    loadAssetsFoundation({repoRoot: root, dataPath: sources.get("assets-foundation").path, schemaPath: sources.get("assets-schema").path}),
+    loadTypographyFoundation({repoRoot: root, dataPath: sources.get("typography-foundation").path, schemaPath: sources.get("typography-schema").path}),
   ]);
   const records = listComponentRecords(registries).map(({ record }) => record);
   const sourceDocuments = new Map([
     ...Object.entries(registries).map(([library, document]) => [`components-${library}`, document]),
-    ["rendering-foundation", rendering],
+    ["rendering-foundation", rendering], ["assets-foundation", assets], ["typography-foundation", typography],
   ]);
   // resolveEvidenceTargets includes pure reference validation; no second copy
   // of identity/target rules and no recursive full-system validator invocation.
   const { targets, issues } = resolveEvidenceTargets({ records, manifest, sourceDocuments });
-  const errors = [...validateRenderingSemantics(rendering), ...issues];
+  const errors = [...validateRenderingSemantics(rendering), ...validateAssetsSemantics(assets), ...validateTypographySemantics(typography), ...issues];
   if (errors.length) throw new AggregateError(errors, "Component evidence model validation failed.");
   return { canonical_sha: canonicalSha, manifest, records, source_documents: sourceDocuments, targets };
 }
@@ -109,7 +114,7 @@ async function readJson(path, diagnosticPath, code) {
 
 function validatePacket(packet, path) {
   if (!object(packet)) fail("EVIDENCE_PACKET_SHAPE_INVALID", path, "Capture packet must be an object.");
-  if (packet.capture_version !== "1.2.0") {
+  if (!["1.2.0", "1.3.0"].includes(packet.capture_version)) {
     fail("EVIDENCE_CAPTURE_VERSION_UNSUPPORTED", `${path}/capture_version`, "Component evidence requires request-bound capture version 1.2.0.");
   }
   if (typeof packet.file_key !== "string" || !packet.file_key.trim() || !matches(ROOT_ID, packet.component_node_id) ||
@@ -123,6 +128,7 @@ function validatePacket(packet, path) {
   if (packet.capture_meta.tree_complete !== true) {
     fail("EVIDENCE_CAPTURE_INCOMPLETE", `${path}/capture_meta/tree_complete`, "A partial capture cannot prove component evidence.");
   }
+  if (packet.capture_version === "1.3.0" && (!closed(packet.owner_identity, ["node_id", "node_type", "name"]) || packet.owner_identity.node_id !== packet.component_node_id || !["COMPONENT", "COMPONENT_SET"].includes(packet.owner_identity.node_type) || typeof packet.owner_identity.name !== "string" || !packet.owner_identity.name.trim())) fail("EVIDENCE_OWNER_IDENTITY_INVALID", `${path}/owner_identity`, "Capture 1.3 requires exact selected owner identity.");
   const queue = [];
   for (const [index, variant] of packet.variants.entries()) {
     if (!object(variant) || !matches(ROOT_ID, variant.variant_node_id) || !Array.isArray(variant.axes) || !object(variant.source_node)) {

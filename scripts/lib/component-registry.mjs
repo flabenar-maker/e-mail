@@ -3,12 +3,13 @@ import { join } from "node:path";
 
 import { resolveAssetContract } from "./assets-foundation.mjs";
 import { validateEvidenceLinkReferences } from "./component-evidence-links.mjs";
+import { validateContractFactProofReferences } from "./contract-fact-proofs.mjs";
 import { resolveDesignSpacing } from "./spacing-foundation.mjs";
 import { SystemValidationError } from "./diagnostics.mjs";
 import { validateDocumentShape } from "./schema-validation.mjs";
 import { readStrictYaml } from "./strict-yaml.mjs";
 
-const SUPPORTED_COMPONENTS_VERSION = "2.2.0";
+const SUPPORTED_COMPONENTS_VERSION = "2.3.0";
 const LIBRARIES = ["shared", "marketing", "service"];
 const VIEWPORTS = ["mobile", "desktop"];
 const FOUNDATION_SOURCES = {
@@ -885,7 +886,7 @@ export function validateComponentRegistrySemantics({
   }
 
   const evidenceRecords = recordsIn(registries);
-  for (const error of validateEvidenceLinkReferences({records: evidenceRecords.map(entry => entry.record)})) {
+  for (const error of [...validateEvidenceLinkReferences({records: evidenceRecords.map(entry => entry.record)}), ...validateContractFactProofReferences({records: evidenceRecords.map(entry => entry.record)})]) {
     const match = /^\/records\/(\d+)(.*)$/u.exec(error.path);
     const path = match ? evidenceRecords[Number(match[1])].path + match[2] : error.path;
     errors.push(diagnostic(error.code, path, error.message));
