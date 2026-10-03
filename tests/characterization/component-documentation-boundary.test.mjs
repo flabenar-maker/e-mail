@@ -138,7 +138,7 @@ test("direct Figma source capture preserves shared and service registries and ma
     component_key: record.figma.remote_source?.component_key,
     source_root_node_id: record.figma.source_root_node_id,
     node_id: record.figma.node_id,
-    root_modes: Object.values(record.contracts).map(({ root }) => root.render_mode),
+    root_modes: ["mobile", "desktop"].map((viewport) => record.contracts[viewport].root.render_mode),
   })), [{
     id: "icon-account-circle-line-remote",
     component_key: "8ea141edd5ec0679825e7fde633e211282b2405b",

@@ -178,7 +178,7 @@ test("model loads complete records and resolves expected values only from regist
   assert.deepEqual(remote.map(({ id, figma, contracts }) => ({
     id,
     component_key: figma.remote_source?.component_key,
-    root_modes: Object.values(contracts).map(({ root }) => root.render_mode),
+    root_modes: ["mobile", "desktop"].map((viewport) => contracts[viewport].root.render_mode),
   })), [{ id: "icon-account-circle-line-remote", component_key: "8ea141edd5ec0679825e7fde633e211282b2405b", root_modes: ["figma-source-only", "figma-source-only"] }]);
   assert.ok(model.records.every((record) => Object.hasOwn(record, "contracts")));
   assert.deepEqual(model.manifest, fixture.manifest);
