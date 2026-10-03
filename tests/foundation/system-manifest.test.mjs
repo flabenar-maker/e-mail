@@ -67,7 +67,7 @@ function activateEmailCutover(manifest) {
 
 test("loads the repository canonical manifest", async () => {
   const manifest = await canonicalManifest();
-  assert.equal(manifest.schema_version, "1.2.0");
+  assert.equal(manifest.schema_version, "1.3.0");
   assert.equal(manifest.system.id, "cupis-email-system");
 });
 
@@ -769,7 +769,7 @@ const testGeneratedBundle = {
 };
 
 function addGeneratedCapability(manifest) {
-  manifest.schema_version = "1.2.0";
+  manifest.schema_version = "1.3.0";
   manifest.sources = manifest.sources.filter(
     (source) => source.kind !== "generated",
   );
@@ -1084,6 +1084,14 @@ test("canonical routes activate email bundles while non-email bundles remain sha
       {
         id: "naming-reference",
         output_source_id: "generated-naming-reference",
+      },
+      {
+        id: "library-maintenance-checkpoint",
+        output_source_id: "generated-library-maintenance-checkpoint",
+      },
+      {
+        id: "email-build-checkpoint",
+        output_source_id: "generated-email-build-checkpoint",
       },
     ],
   );

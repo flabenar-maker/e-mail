@@ -166,12 +166,12 @@ test("all generated references share a deterministic provenance header", async (
   const second = await renderCanonical();
 
   assert.deepEqual(first, second);
-  assert.equal(first.size, 4);
+  assert.equal(first.size, 6);
 
   for (const [path, content] of first) {
     assert.match(
       content,
-      /^<!-- GENERATED FILE — DO NOT EDIT MANUALLY\. -->\n<!-- renderer: (component-registry|typography-registry|asset-registry|naming-reference) -->\n<!-- source-digest: sha256:[0-9a-f]{64} -->\n<!-- schema-versions: [^\n]+ -->\n/u,
+      /^<!-- GENERATED FILE — DO NOT EDIT MANUALLY\. -->\n<!-- renderer: (component-registry|typography-registry|asset-registry|naming-reference|workflow-checkpoint) -->\n<!-- source-digest: sha256:[0-9a-f]{64} -->\n<!-- schema-versions: [^\n]+ -->\n/u,
       path,
     );
     assert.doesNotMatch(content.slice(0, 300), /generated-at|timestamp/iu);

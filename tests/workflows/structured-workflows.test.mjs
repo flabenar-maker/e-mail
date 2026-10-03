@@ -28,7 +28,7 @@ async function canonicalWorkflow(workflowId) {
 test("canonical manifest activates only email structured workflows", async () => {
   const manifest = await loadSystemManifest({ repoRoot });
 
-  assert.equal(manifest.schema_version, "1.2.0");
+  assert.equal(manifest.schema_version, "1.3.0");
   assert.deepEqual(manifest.structured_workflows, {
     status: "partial",
     schema_source_id: "workflows-schema",
