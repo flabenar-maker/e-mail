@@ -174,14 +174,15 @@ test("model loads complete records and resolves expected values only from regist
   const model = await loadComponentEvidenceModel({ repoRoot: fixture.root, canonicalSha: SHA });
   const expected = parseStrictYaml(await readFile(join(fixture.root, "data/foundations/rendering.yaml"), "utf8"));
   assert.equal(model.canonical_sha, SHA);
-  const remote = model.records.filter(({ id }) => id === "icon-account-circle-line-remote");
-  assert.equal(model.records.length, 62);
-  assert.equal(model.records.filter(({ id }) => id !== "icon-account-circle-line-remote").length, 61);
+  const remoteIds = new Set(["icon-account-circle-line-remote", "asset-partner-mark-remote"]);
+  const remote = model.records.filter(({ id }) => remoteIds.has(id));
+  assert.equal(model.records.length, 63);
+  assert.equal(model.records.filter(({ id }) => !remoteIds.has(id)).length, 61);
   assert.deepEqual(remote.map(({ id, figma, contracts }) => ({
     id,
     component_key: figma.remote_source?.component_key,
     root_modes: ["mobile", "desktop"].map((viewport) => contracts[viewport].root.render_mode),
-  })), [{ id: "icon-account-circle-line-remote", component_key: "8ea141edd5ec0679825e7fde633e211282b2405b", root_modes: ["figma-source-only", "figma-source-only"] }]);
+  })), [{ id: "icon-account-circle-line-remote", component_key: "8ea141edd5ec0679825e7fde633e211282b2405b", root_modes: ["figma-source-only", "figma-source-only"] }, { id: "asset-partner-mark-remote", component_key: "be6c194606af9516b3cc07847f52d6db0c8cb6d7", root_modes: ["figma-source-only", "figma-source-only"] }]);
   assert.ok(model.records.every((record) => Object.hasOwn(record, "contracts")));
   assert.deepEqual(model.manifest, fixture.manifest);
   assert.deepEqual(model.source_documents.get("rendering-foundation"), expected);

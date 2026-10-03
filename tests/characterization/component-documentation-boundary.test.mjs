@@ -107,10 +107,11 @@ test("direct Figma source capture preserves shared and service registries and ma
       document.components.map(projectMigrationSignificantFields),
     ]),
   );
-  const remoteShared = projected.shared.filter(({ id }) => id === "icon-account-circle-line-remote");
+  const remoteIds = new Set(["icon-account-circle-line-remote", "asset-partner-mark-remote"]);
+  const remoteShared = projected.shared.filter(({ id }) => remoteIds.has(id));
   const localProjected = {
     ...projected,
-    shared: projected.shared.filter(({ id }) => id !== "icon-account-circle-line-remote"),
+    shared: projected.shared.filter(({ id }) => !remoteIds.has(id)),
   };
   const localRecords = Object.values(localProjected).flat();
   const allRecords = Object.values(projected).flat();
@@ -131,8 +132,8 @@ test("direct Figma source capture preserves shared and service registries and ma
   assert.equal(localRecords.length, 61);
   assert.equal(new Set(systemIds).size, 61);
   assert.equal(new Set(figmaIdentities).size, 61);
-  assert.equal(allRecords.length, 62);
-  assert.equal(new Set(allRecords.map(({ id }) => id)).size, 62);
+  assert.equal(allRecords.length, 63);
+  assert.equal(new Set(allRecords.map(({ id }) => id)).size, 63);
   assert.deepEqual(remoteShared.map((record) => ({
     id: record.id,
     component_key: record.figma.remote_source?.component_key,
@@ -144,6 +145,12 @@ test("direct Figma source capture preserves shared and service registries and ma
     component_key: "8ea141edd5ec0679825e7fde633e211282b2405b",
     source_root_node_id: "1331:1646",
     node_id: "1331:1646",
+    root_modes: ["figma-source-only", "figma-source-only"],
+  }, {
+    id: "asset-partner-mark-remote",
+    component_key: "be6c194606af9516b3cc07847f52d6db0c8cb6d7",
+    source_root_node_id: "439:4098",
+    node_id: "439:4098",
     root_modes: ["figma-source-only", "figma-source-only"],
   }]);
 

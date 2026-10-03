@@ -31,6 +31,7 @@ const sharedSourceOnlyIds = [
   "icon-user-forbid-fill",
   "icon-user-unfollow-fill",
   "icon-account-circle-line-remote",
+  "asset-partner-mark-remote",
 ];
 
 const marketingInterpreterIds = [
@@ -111,7 +112,7 @@ test("Package 11 Shared classifies every non-HTML source explicitly", async () =
 test("source-only Shared records fail standalone rendering without guessed HTML", async () => {
   const registries = await loadComponentRegistries({ repoRoot });
   const rendererRegistry = await loadRendererRegistry({ repoRoot });
-  for (const componentId of ["icon-mail-fill", "icon-account-circle-line-remote"]) {
+  for (const componentId of ["icon-mail-fill", "icon-account-circle-line-remote", "asset-partner-mark-remote"]) {
     const component = componentById(registries, componentId);
     const coverage = resolveRendererCoverage(rendererRegistry, component.id);
     const result = renderContractTree({ component, coverage });
@@ -170,7 +171,7 @@ test("Package 11 Service closes exact coverage for every active component", asyn
     assert.equal(audited.ready, false, componentId);
   }
 
-  assert.equal(report.summary.covered_active_components, 62);
+  assert.equal(report.summary.covered_active_components, 63);
   assert.equal(report.summary.ready_components, 38);
   assert.equal(report.summary.missing_coverage, 0);
   assert.equal(report.summary.generic_description_facts, 0);

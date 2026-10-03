@@ -22,41 +22,42 @@
 
 ### Текущая точка возврата P2 — точная карта remaining proof и F7, 03.10.2026
 
-На candidate `ae88749a6c17b4942270b7af7d3816409bc257ab` выполнен следующий read-only пункт: локализованы причины remaining link/capture diagnostics и подготовлена минимальная карта ремонта и generated checkpoints. Единственный полностью полученный bundle: library-maintenance/read-only/both, explicit Transaction-Success и Asset/Partner-Badge; его текущая resolver closure — четыре records: asset-partner-badge-4x, badge-operation-status, details-operation, block-transaction-success. Это не будущая трёх-owner native capture closure ремонта. Digest `sha256:cb455721381fb5b97c13abfe5b85c1a96afe2a1b585718bd183d7c3d5accc390`. Первый resolver stdout был усечён и не потреблялся; тот же вызов повторён с перенаправлением в файл. Полный bundle SHA256 `5bbf1cb438478a24a51ca4a9bb5a786622853ef6233ce18e6e3532faa5b12378`. Resolver вернул paused/SKILL_ROUTE_PAUSED; bundle использован только для read-only навигации и диагностики, не как разрешение ремонта.
+На `main@618d124df0a664c84d23a724ba50ef2b324e9b97` изменений нет; [PR #110](https://github.com/flabenar-maker/e-mail/pull/110) остаётся draft/open. Пользователь разрешил продолжить bounded repair пяти artwork source dependencies, принять helper как source-only и подтверждать только полные mixed runs / доказанную raster boundary. Это не разрешение изменения Figma, визуальных параметров, экспорта, HTML, запуска P3, deferred #109 или merge.
 
-Свежий MCP diagnostic read на этой точке подтвердил все четыре actual main identities, оба main components и оба text runs. Это диагностические observations, не request-bound canonical packets, не новый accepted fact-proof и не перенос свежести сеанса9c3 наae887. Исторические audits и их counts ниже относятся только к9c3.
+Единственный использованный resolver bundle получен целиком на `53d80d25b9324de12633ab78ac64fd17c445f3ac`: library-maintenance/read-only/both, explicit Transaction-Success и Asset/Partner-Badge, closure из четырёх records. Digest `sha256:f55e78445e0be029d573365307bc6419a78853adc09974b24da7aded69c7f09d`; SHA256 полного bundle `e8d8a1b2c8ce5329db06c1d5de7a9ad0546aa49cfac9275e479db3bde0a3b0f0`. Paused/SKILL_ROUTE_PAUSED сохранён; основание repository repair — отдельная команда пользователя, не статус bundle.
 
-#### Остаточные связи: данные отдельно от политики capture
+#### Выполненный bounded repair
 
-| Owner / instance в Figma | Actual target | Предлагаемая запись / export boundary |
-| --- | --- | --- |
-| Transaction Desktop459:29175 /481:19700 | local481:19665, Asset/Partner-Badge @4x | source dependency на существующий `asset-partner-badge-4x`; asset owner481:19700, partner-badge |
-| Transaction Mobile459:29176 /484:19677 | тот же local481:19665 | тот же target; asset owner484:19677, partner-badge |
-| Desktop459:29175 /I481:19700;481:19655 | remote439:4098 | source dependency на отдельно зарегистрированный source-only helper; boundary481:19700, partner-badge |
-| Mobile459:29176 /I484:19677;481:19655 | тот же remote439:4098 | тот же helper; boundary484:19677, partner-badge |
-| Сам Asset/Partner-Badge481:19665 /481:19655 | тот же remote439:4098 | собственная source dependency; asset owner481:19665, partner-badge |
-
-Remote main сейчас имеет точное имя `marafon`, `remote:true` и publication key `be6c194606af9516b3cc07847f52d6db0c8cb6d7`; root44×44px. Это источник графики внутри бейджа, не новый HTML-блок, не новый экспорт и не предлагаемое переименование Figma. Идентификатор предлагаемого helper `asset-partner-mark-remote` пока не существует; его роль asset/source-only должна быть явно принята, а не выведена только из имени marafon. Инстанс artwork в каждом бейдже имеет собственные71.99999237060547×71.99999237060547px, внешняя export boundary остаётся72×72px/@4x288×288px. Не подменять consumer geometry размером remote master44×44.
-
-Read-only анализ artworkScope подтвердил пятое minimum dependency obligation самого local target481:19665. Минимальная известная closure — пять links в двух существующих owners и один новый remote helper; четыре missing links исторического Transaction audit не включают собственный target audit. Fresh target packets могут добавить свои raw diagnostics/obligations; их количество до capture не заявляется. Регистрация remote reference сама по себе не очищает capture diagnostics ни parent, ни targets.
-
-#### Классификация десяти исходных capture diagnostics
-
-- Шесть `MIXED_VALUE`: Desktop459:38532 и Mobile459:38537, в каждом fontName два раза и textDecoration. Нативные segments0..93 NONE,93..102 UNDERLINE; Roboto Regular400, Desktop14px/Caption, Mobile12px/Body-Medium, lineHeight139.9999976158142%. Стили/текст/подчёркивание менять не нужно. `figma-contract-facts.mjs` уже распознаёт narrow mixed TEXT segments, но `figma-component-evidence.mjs` безусловно оставляет raw errors unresolved. Предлагается единая строгая классификация: только полный непрерывный диапазон runs с фактическими полями может разрешить конкретную mixed aggregate diagnostic. Сырой packet/error остаётся; gaps, overlap, отсутствующие поля или другой unsupported case по-прежнему блокируют. Нельзя обнулять capture_errors или принимать один агрегированный стиль вместо runs.
-- Четыре `ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW`:481:19700,484:19677 и оба I…;481:19655. Это NONE artwork containers внутри declared raster export boundary, не layout текста/таблиц письма. Нынешний nested-artwork auditor намеренно не снимает эти diagnostics. Для приёмки нужна отдельная подтверждаемая политика: source tree полный, принадлежность объявленной границе и вложенные main identities проверены, нет самостоятельных HTML children; изменённая или неразрешённая boundary/identity и любые absolute HTML-layout nodes остаются blockers. Простые links не решают это, blanket ignore или список разрешённых node IDs запрещены. Raw diagnostics должны оставаться видимыми с отдельным проверяемым disposition; отсутствие координат/transform facts нельзя выдавать за их подтверждение.
-
-#### Exact impact proposed bounded repair (не выполнен)
-
-| Файлы | Разрешённое содержание будущего ремонта / сохранность |
+| Owner / instance в Figma | Зарегистрированный target / export boundary |
 | --- | --- |
-| `data/components/service.yaml` | Только metadata evidence_links Transaction-Success и подтверждённая target closure Asset/Partner-Badge; существующие numerical facts, source snapshot scalar values, properties, asset contract, content и viewport trees не переписывать |
-| `data/components/shared.yaml` | Одна новая remote source-only reference, fresh captured identity/key; без экспортного профиля, content slots или standalone HTML. Не заменять старые Shared records |
-| `data/renderers/registry.yaml` | Одна source-only coverage row для нового helper; это HTML coverage registry, не docs producer. Interpreter38 и прежние записи сохранить |
-| `scripts/lib/figma-component-evidence.mjs`; при необходимости shared classifier в `scripts/lib/figma-contract-facts.mjs` | Narrow mixed-run handling; absolute-artwork disposition только после отдельного решения. Не менять capture факты, scalar comparator или покрытие layout вне export boundary |
-| `tests/foundation/component-evidence-links.test.mjs`, `remote-source-evidence.test.mjs`, `figma-component-evidence.test.mjs`, `nested-artwork-evidence.test.mjs`, `figma-contract-facts.test.mjs` | Сначала реальные RED cases, затем минимальный repair. Negative cases: missing target/key, stale/incomplete packet, wrong boundary, non-artwork absolute layout, missing/gapped/overlapping mixed runs. Существующие fail-closed cases сохранить |
-| `docs/generated/component-registry.md` | Только механический output добавленной source reference / links, если generator их выводит. Никакого ручного изменения описаний |
+| Transaction Desktop459:29175 /481:19700 | существующий `asset-partner-badge-4x`, local481:19665; asset owner481:19700, partner-badge |
+| Transaction Mobile459:29176 /484:19677 | тот же local target; asset owner484:19677, partner-badge |
+| Desktop459:29175 /I481:19700;481:19655 | новый `asset-partner-mark-remote`, remote439:4098; boundary481:19700, partner-badge |
+| Mobile459:29176 /I484:19677;481:19655 | тот же remote helper; boundary484:19677, partner-badge |
+| Asset/Partner-Badge481:19665 /481:19655 | тот же remote helper; собственная boundary481:19665, partner-badge |
 
-Перед repair получить missing decision по remote helper role и artwork diagnostic policy. Затем один exact cloud commit, новый request-bound MCP session для Transaction, local partner-badge и remote target, числовая и dependency сверка; current packets не repin. Проверить metadata-only allowlist и byte-preservation всех прежних contract/foundation values; HTML/CSS должен быть прежним. Локальные tests/validator/generated checks выполняет Terra Medium. До merge отдельной командой — финальный exact-SHA full gate; старый1075/1075 с997 не становится новым результатом.
+Remote publication key `be6c194606af9516b3cc07847f52d6db0c8cb6d7`, имя `marafon`, root44×44px получены fresh через MCP на53d80. Это источник графики, не самостоятельный HTML-блок и не новый экспорт. Обе существующие consumer reference dimensions71.99999237060547×71.99999237060547px и asset boundary72×72px/@4x288×288px сохранены; master44×44 не подставляется вместо consumer geometry. Добавлена одна Shared reference и одна source-only coverage row; interpreter38 сохранён.
+
+RED commit [`0e86b6b`](https://github.com/flabenar-maker/e-mail/commit/0e86b6b61a9b386f71a9633408c6415378097096): Terra Medium локально получила188tests /161PASS /27 ожидаемых failures. Product commit [`7e7fd22`](https://github.com/flabenar-maker/e-mail/commit/7e7fd22fea1847301084d9476b5b96a8d590efb9) меняет только две evidence functions, metadata двух service owners, одну Shared reference / coverage row и test-shape correction. Scoped check321tests /320PASS обнаружила единственный устаревший expected remote-source список; его исправление и механические generated outputs вошли в [`2d78a28`](https://github.com/flabenar-maker/e-mail/commit/2d78a28293c7e906abfef84473b14bc5a08d5b0f). Diagnostic wording теперь корректно перечисляет capture1.1/1.2/1.3. Asset/typography generated outputs изменили только source-digest, component registry — helper/пять links; naming output сохранён.
+
+Mixed-value policy теперь подтверждает только exact непрерывные runs0..characters.length с фактическими символами, font family/style/size, line-height, paints и decoration. Gaps/overlaps/неполные поля/неподдержанные aggregate fields остаются errors. Absolute-artwork policy требует native NONE, непустое полное дерево внутри единственной declared direct-image raster boundary, exact source/target/publication key и fresh recursive dependency closure без HTML children. Scalar facts и недоказанные coordinates/transforms этим не подтверждаются. Оба checker reports сохраняют исходный raw diagnostic плюс отдельный disposition; raw packet capture_errors не очищаются. Unknown warnings не маскируются принадлежностью artwork.
+
+#### Свежий exact-SHA evidence и локальные проверки
+
+После product/generation зафиксирован новый canonical request-bound MCP session на `2d78a28293c7e906abfef84473b14bc5a08d5b0f` для пяти owners: Transaction-Success, Asset/Partner-Badge, remote mark, Badge/Operation-Status, Details/Operation. Host requests сформированы до MCP calls; actual packet byte-length/checksum, SHA256 и request/session/canonical echoes проверены. Старые packets53d80/9c3 не repin и не retimestamp. В fresh raw packets сохранены13capture diagnostics: Transaction10, partner-badge2, remote1; Badge/Details0.
+
+Terra Medium загрузила canonical model/session и выполнила фактические fact/link/nested/combined APIs. Admission5/5 PASS; session SHA256 `cf5e0141d7b00dd7323458dd49f7abb0ed9feccea6cb0378527af5c79289bf4d`. Все5source dependencies verified. Шесть MIXED_VALUE подтверждены строгими runs; семь ABSOLUTE остались unverified на scalar уровне и получили verified только в независимой narrow artwork-evidence проверке. Все13raw diagnostics сохранены с отдельными dispositions. FIGMA_CONTRACT_MISMATCH0, CONTRACT_FACT_UNMAPPED0.
+
+Combined audit **не PASS** у всех пяти owners: FIGMA_FACT_UNCOVERED остаётся Transaction737, partner-badge29, remote41, Badge251, Details780. Это очередь классификации implementation-significant фактов, не доказательство нарушения дизайна и не разрешение blanket ignore. Проверенный linkage/capture repair не закрывает эту очередь.
+
+На exact2d78 Terra Medium локально получила validator PASS (24.274s), generated check PASS (2.919s), четыре первоначальных targeted files PASS. Полный Node gate:1102tests,1092PASS,10FAIL,379.413s — этот FAIL остаётся историческим результатом, не переименовывается в PASS. Причины: устаревшие characterization counts после source-only helper и два прежних expected status width116 вместо уже согласованного117. Windows gate на этом failed candidate не запускался.
+
+Следующее test-only исправление должно читать точные canonical contracts, сохранять historical mapping61 отдельно от нового catalog63 и не менять production values. Финальные scoped/full/Windows результаты и raw-byte receipt для окончательного head публикуются в [PR #110](https://github.com/flabenar-maker/e-mail/pull/110) с exact SHA, а не приписываются2d78. Ни Actions, ни PR Checks не используются. До merge по отдельной команде требуется fresh exact-SHA local proof.
+
+Independent review product53d80→7e7 не нашла critical/important дефектов; единственное minor diagnostic wording исправлено в2d78. Локальная сохранность: все старые Shared records и прежние renderer rows сохранены; service меняет только evidence_links двух owners; numerical facts, properties, source scalar values, asset contracts, контент и viewport trees прежние; Foundations/Core/HTML/Figma и локальные письма не менялись. Raw snapshot2d78 pre/post250/250 без mismatches. Generated projection: catalog62→63, Shared18→19, interpreter38→38.
+
+**P2 не принят и не слит.** Далее вP2 — определить/доказать значимое native coverage без blanket исключений, затем F7 producer в отмеченных ниже границах. F2 уже завершён и не повторяется; deferred #109 не примешивается. P3, activation, cutover и merge автоматически не начинаются.
+
 
 #### F7: proposed producer/schema/manifest/output/test map (не реализована)
 
@@ -75,7 +76,11 @@ Read-only анализ artworkScope подтвердил пятое minimum depe
 
 Перед реализацией F7: согласовать направление/selector/provenance, затем RED→minimal producer/schema/manifest→generated outputs→exact local gates/review. Нынешняя карта закрывает research/path-map обязанность, не F7 production implementation или P2 acceptance.
 
-**Фактически изменяется в этом продолжении только этот план и roadmap.** Figma read-only; contract/code/schema/generated/runtime/skills/письма не изменены. P2 остаётся открытым. Ближайший следующий шаг — согласовать и реализовать bounded remaining-proof repair; затем реализовать F7 доP3. P3, #109, activation, cutover и merge не начинать.
+**Отдельная согласованная очередь после этапа2:** только после завершенияP2 подготовить подробный implementation plan со ссылками для правила URL/подчёркиваний. Actual Figma URL означает HTML-ссылку и без подчёркивания; подчёркнутый диапазон без URL требует вопроса пользователю; anchor охватывает только точный диапазон, оформление сохраняется. URL относится к inputs конкретного письма, не становится постоянным значением компонентного контракта; `#`/тестовый адрес без разрешения запрещён.
+
+Будущий owner правила — [email-model-assembly-standard](../../../core/email-model-assembly-standard.md#текст-ссылки-и-alt), tracing — [email-source-fidelity-standard](../../../core/email-source-fidelity-standard.md); технические точки для будущего плана: [schema](../../../schemas/email-model.schema.json), [normalizer](../../../scripts/lib/email-model.mjs), [interpreter](../../../scripts/lib/email-interpreter.mjs), [source-fidelity checker](../../../scripts/lib/email-source-fidelity.mjs), [email workflow](../../../data/workflows/email-build.yaml), [building skill](../../../.agents/skills/building-cupis-emails/SKILL.md). Сейчас это **только запись будущего планирования**, не реализация/активное правило; rich-text ограничения текущей схемы не скрывать. Не начинать этот follow-up доP2 и не менять из-за него порядок cutover/#109.
+
+В этом продолжении выполнен описанный bounded linkage/diagnostic repair и mechanical generated refresh; финальные test-only поправки/локальный gate завершаются в том же draft PR. Figma read-only, existing contract values/export/HTML сохранены. P2 остаётся открытым по coverage/F7. P3, #109, activation, cutover и merge не начинать.
 
 <a id="текущая-точка-возврата-p2--bounded-nativebinding-и-архивная-сверка-03102026"></a>
 

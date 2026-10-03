@@ -130,10 +130,11 @@ test("component traversal uses library order and stable ids", async () => {
   const registries = await loadComponentRegistries({ repoRoot });
   const records = listComponentRecords(registries);
 
-  assert.equal(records.length, 62);
-  const remote = records.find(({ record }) => record.id === "icon-account-circle-line-remote");
-  assert.deepEqual([remote.library, remote.record.id, remote.record.identity.figma_name, remote.record.figma.node_id, remote.record.figma.remote_source.component_key], ["shared", "icon-account-circle-line-remote", "account-circle-line", "1331:1646", "8ea141edd5ec0679825e7fde633e211282b2405b"]);
-  assert.equal(records.filter(({ record }) => record.id !== "icon-account-circle-line-remote").length, 61);
+  assert.equal(records.length, 63);
+  const remoteIds = new Set(["icon-account-circle-line-remote", "asset-partner-mark-remote"]);
+  const remote = records.filter(({ record }) => remoteIds.has(record.id));
+  assert.deepEqual(remote.map(({ library, record }) => [library, record.id, record.identity.figma_name, record.figma.node_id, record.figma.remote_source.component_key]), [["shared", "icon-account-circle-line-remote", "account-circle-line", "1331:1646", "8ea141edd5ec0679825e7fde633e211282b2405b"], ["shared", "asset-partner-mark-remote", "marafon", "439:4098", "be6c194606af9516b3cc07847f52d6db0c8cb6d7"]]);
+  assert.equal(records.filter(({ record }) => !remoteIds.has(record.id)).length, 61);
   assert.deepEqual(
     [...new Set(records.map(({ library }) => library))],
     ["shared", "marketing", "service"],
