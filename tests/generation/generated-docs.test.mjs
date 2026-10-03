@@ -278,13 +278,14 @@ test("generated comparison reports missing and stale files by exact path", async
       copyFixtureFile(repoRoot, fixture.root, path),
     ),
   );
+  const manifest = await manifestWithGeneratedDocs(fixture.root);
   await Promise.all(
-    generatedSources.map(({ path }) =>
-      rm(join(fixture.root, path), { force: true }),
-    ),
+    manifest.generated_docs.map(({ output_source_id }) => {
+      const output = manifest.sources.find(({ id }) => id === output_source_id);
+      return rm(join(fixture.root, output.path), { force: true });
+    }),
   );
 
-  const manifest = await manifestWithGeneratedDocs(fixture.root);
   const model = await loadGeneratedDocModel({ repoRoot: fixture.root, manifest });
   assert.equal(model.schemaVersions.components, "2.3.0");
 
