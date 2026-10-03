@@ -20,7 +20,54 @@
 
 После принятого пакета 5, до отдельно разрешённого пакета 6, предусмотрен [follow-up карточных блоков, draft PR #109](https://github.com/flabenar-maker/e-mail/pull/109). Полная актуальная очередь, ссылки на его план и границы интеграции документов находятся в [roadmap](2026-08-25-cupis-migration-roadmap.md#единый-актуальный-список). Организация папки plans и удаление ручного checkpoint не являются выполнением пакета 6.
 
-### Текущая точка возврата P2 — F2 исправлен в кандидате, 03.10.2026
+### Текущая точка возврата P2 — bounded native/binding и архивная сверка, 03.10.2026
+
+Продолжение выполнено read-only на candidate `9c3b91e8f722685c199a6f4266eabb92cad86007`. Main по-прежнему `618d124df0a664c84d23a724ba50ef2b324e9b97`; PR #110 draft/open, без merge. F2 закрыт в предыдущем product894 и не повторяется. В этом продолжении меняются только этот журнал и roadmap; component/foundation values, evidence metadata, code/tests/generated outputs, Figma и готовые письма не изменяются. Единственный resolver bundle прочитан на9c3: library-maintenance/read-only/both, выбранные Transaction-Success, Badge/Operation-Status, Details/Operation и четыре foundations; paused status не превращается в разрешение mutation.
+
+#### Что фактически проверено
+
+| Область | Результат и граница доказательства |
+| --- | --- |
+| Fresh request-bound native packets | Capture1.3/session1.1,3/3 complete packets admitted на9c3. Host start `2026-10-03T17:33:28.295Z`, receipts до `17:34:07.570Z`. Старые894 packets не repin. |
+| Числа и существующие mappings | Новых value mismatches нет; четыре F2 widths сохраняют исправленные значения. Combined audits по-прежнему exit1: Transaction capture10, required-links-missing4, uncovered737; Badge uncovered251; Details uncovered780. Это открытые proof/coverage обязанности, не новые дефекты дизайна и не test-suite FAIL. |
+| Typography definitions | Supplement подтвердил15/15 exact style identities и75/75 сравнений family, Figma font style, size, line height, letter spacing существующим foundation comparator. Это definitions, не доказательство всех overrides/всех usages на страницах. |
+| Spacing definitions и bindings |22/22 FLOAT definitions совпали с известной provenance. Отдельный полный native response проверил24/24 owner-field bindings по ID/name/type, значению и resolved mode11:0; mismatches0/0/0.20 rows вне deferred #109;4 rows Block/Cards-Images (398:7573,398:7599,398:7571,398:7599) отмечены deferred и не входят в текущую приёмку карточек. Наличие definition не подменяет binding; бывшие4 definition probes теперь имеют реальные owner observations. |
+| Collection reference |VariableID:510:30986 существует как Red_500, тип COLOR. Отсутствие в FLOAT выборке объяснено типом; это не missing variable, не основание удалять/переносить её. |
+| Mixed text |459:38532 Desktop Caption14px и459:38537 Mobile Body/Medium12px: только финальный link run имеет UNDERLINE. Range facts сняты отдельно; исходные aggregate MIXED_VALUE/capture errors не удалены и packets не переписаны. Supplement не является новым canonical fact-proof. |
+| Source screenshots |Terra сравнила3/3 Figma source screenshots: Transaction459:29177, Badge1084:16996, Details477:21327. Видимых geometry/layout/spacing/visibility/image/text отклонений не найдено. Нового HTML/client regression здесь нет: письмо не собиралось; screenshots не заменяют числовой proof. |
+
+Четыре missing-required-links локализованы точно: Desktop481:19700 и Mobile484:19677 указывают на local481:19665 (зарегистрированный `asset-partner-badge-4x`, Asset/Partner-Badge @4x); nested I481:19700;481:19655 и I484:19677;481:19655 указывают на remote439:4098, main name marafon, publication key `be6c194606af9516b3cc07847f52d6db0c8cb6d7`. Это artwork внутри экспортного бейджа, не самостоятельный HTML-блок. Добавление двух local evidence links и проверяемой source-only identity для двух remote links требует отдельной exact impact/path карты; ни новые records/links, ни asset geometry/export policy сейчас не менялись. Истинные main names получены из getMainComponentAsync, не выведены из имён инстансов.
+
+#### Архивное сопоставление Step4
+
+Baseline прочитан для сравнения обязанностей, не возвращён в рабочий контур. Сверены стандарт нейминга, реестр типографики, оба checkpoint, component registry и characterization assertions.
+
+| Обязательство | Нынешний владелец / итог |
+| --- | --- |
+| Naming scopes/properties/Viewport/@2x/@4x |figma-naming foundation/schema, validator/generator, naming-reference и foundation tests; определения сохранены. Live rename/mutation не доказаны этим read-only шагом. |
+| Typography definitions и consumers |typography foundation/Core/generated registry + exact semantic consumer tests. P2-F3 recorded association projection исправлен ранее; его live usage/removal proof не заявляется.15 definitions подтверждены свежей Figma. |
+| Maintenance checkpoint boundaries |Core, maintenance skill и structured workflow сохраняют scope/impact/permission/no-HTML. Route-specific dependent-write stop и allowlist/preservation/read-back остаются P3 F1/F3/P2-F4, не считаются пройденными по digest/screenshot. |
+| Email checkpoint |Активные email workflow/skill/Core владеют new/fix/read-only, D/M sources, immutable versions, QA/handoff. Прежний prose fallback, общий Desktop-only export и Web/new-block советы намеренно не возвращаются. |
+| Component registry/characterization |Полные facts принадлежат typed records, component-registry — производный output, compact Figma Description отдельный output. Проверяются актуальные behavioral assertions, frozen Markdown baseline не восстановлен. |
+| Оба читаемых generated checkpoints |F7 подтверждён: master-spec §11.1 требует output, но manifest/producer имеют только4 других renderer IDs. Producer/schema/manifest/output/test map ещё не определена/reviewed; Step4 остаётся открытым именно по этому решению и незакрытым proof обязанностям. |
+
+Сопоставление завершено как анализ. Оно не означает принятие всех обязательств или P2 PASS. Не добавлен новый общий checklist или второй реестр component facts.
+
+#### Evidence и проверочные ограничения
+
+Temporary execution evidence, вне repo/писем: `C:/Users/flabe/AppData/Local/Temp/cupis-p2-rolemap-20261002/P2-9c3b91-native-bounded/`, screenshots/visual receipt в `P2-9c3b91-native/`, archive matrix и single bundle в `P2-9c3b91-resolver/`.
+
+Fresh session SHA256 `b63b35ca826a5dc337687768267ca019701778cbb41902f719b82729d13d9ed9`; packet hashes Transaction/Badge/Details: `3ee8a85468ac82872d4c96a95db2abe6d22ed3edc35ed8ef5b48c90066fdd851`, `58c61013e2485a2c7391f0f0144045bb00e2d07fa8423ae61c20409d0bb9af04`, `9f667a72b3cdd3e4c06fd5f39fb5a71c6a3bbdc7ed90278bf2626750198dcfad`.
+
+Supplement definition audit SHA256 `1753ea989516d84eb59f23e38a3eef12315b71dfea27a86b1429511b4259287a`. Spacing raw response `2956c25bed1761d427418611460e92b2e9255c940ecb0385aa19025091dc626e`; spacing audit `f74a64fed77e05b08918bff0c4f55e13d733a07aa95f8cf09d0432ecb984a940`; visual report `76c59990a637d34a0d4277e492fb56912a1a4c176d7491c9615dcd8d54adb686`; archive matrix `2c5af232e6c946a446cb60a4cbfe12ee0486e3057e5fe275512354cdbdb8d6f5`.
+
+Первый combined native transport и первый подробный spacing response обрезаны сервером на20KB и не засчитаны. Повторные bounded responses полные, JSON/decompression/length/FNV проверены; supplemental observations не дописаны в canonical packets. Ошибочное сообщение о250 raw mismatches отозвано: причиной был NUL-header checker; после исправления временного checker точный snapshot9c3 подтвердил250/250 raw blobs. Ошибка checker не была изменением cloud source.
+
+Final docs-only commit проверяется локально отдельно: allowed diff ровно2plan files, validator/generated check, raw integrity250/250 и byte preservation остальных248 tracked files относительно9c3. Exact head/receipts публикуются в PR body; native packets остаются pinned9c3, не документационному SHA. Полный suite не повторяется для docs-only публикации; прошлый1075/1075 относится к997, не является full final-P2 gate.
+
+**Следующий шаг:** exact impact/map для четырёх missing links и оставшихся mixed/absolute-artwork proof обязанностей без изменения rendering facts; затем F7 decision с producer/schema/manifest/output/tests до P3. После согласования выполняется только соответствующий bounded ремонт с новой fresh проверкой. F2 не повторять; #109, P3, activation/cutover и merge этим продолжением не разрешены.
+
+### Предыдущая точка P2 — F2 исправлен в кандидате, 03.10.2026
 
 После двух явных разрешений пользователя исправлены только четыре reference-width facts `block-transaction-success`. Первый запрос разрешил точные измерения, второй — подтверждённое Desktop HTML следствие 116→117 px. Коррекция выполнена в draft PR #110, не слита и не означает приёмку всего P2.
 
@@ -682,7 +729,7 @@ Generated usage отражает записанные контракты, не �
 - [ ] **Step 4:** Сравнить relevant archived obligations с нынешними Core/workflow/contract/generated outputs. Для каждой существенной разницы указать текущего владельца и подтверждённую причину. Утраченное characterization-утверждение восстановить активным тестом того же поведения; не закреплять obsolete baseline как новый норматив.
 - [x] **Step 5:** Сообщить расхождения и недостающее evidence. Не править contract/Figma автоматически; расширить проверку только по найденной причине. Raw MCP-пакеты, screenshots и полные logs остаются локальными; краткие проверяемые выводы — в журнале/PR.
 
-**Статус выполнения:** отмеченные steps означают проведённые чтения/сравнения и опубликованные выводы, а не успешную приемку. Live audits выявили открытые diagnostics; step 4 остаётся незавершённым из-за неразрешённых semantic obligations/F7, а не из-за P2-F3: recorded association projection исправлен. После продолжения 02.10 полный сбор 61/61 и сравнительные результаты описаны в текущей точке возврата выше. F2, coverage и недостающее evidence сохраняют P2 открытым.
+**Статус выполнения:** отмеченные steps означают проведённые чтения/сравнения и опубликованные выводы, а не успешную приёмку. F2 исправлен ранее; bounded native/definition/binding и архивное сопоставление завершены как анализ03.10 на9c3. Step4 остаётся открытым из-за неразрешённых proof obligations/F7, а не P2-F3 recorded association projection. Свежие20 nondeferred bindings и15 definitions подтверждены;4 карточных observations deferred #109. Capture/coverage/required-link diagnostics сохраняют P2 открытым; P3 не начат.
 
 **Acceptance:** Все выбранные значимые факты подтверждены; различия классифицированы и разрешены пользователем либо остаются явными blockers. Onboarding проверяется на готовом компоненте или fixture, не создаётся новый дизайн.
 
