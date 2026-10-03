@@ -170,7 +170,7 @@ test("Package 11 Service closes exact coverage for every active component", asyn
     assert.equal(audited.ready, false, componentId);
   }
 
-  assert.equal(report.summary.covered_active_components, 61);
+  assert.equal(report.summary.covered_active_components, 62);
   assert.equal(report.summary.ready_components, 38);
   assert.equal(report.summary.missing_coverage, 0);
   assert.equal(report.summary.generic_description_facts, 0);
