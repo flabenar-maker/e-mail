@@ -182,7 +182,7 @@ test("model loads complete records and resolves expected values only from regist
     id,
     component_key: figma.remote_source?.component_key,
     root_modes: ["mobile", "desktop"].map((viewport) => contracts[viewport].root.render_mode),
-  })), [{ id: "icon-account-circle-line-remote", component_key: "8ea141edd5ec0679825e7fde633e211282b2405b", root_modes: ["figma-source-only", "figma-source-only"] }, { id: "asset-partner-mark-remote", component_key: "be6c194606af9516b3cc07847f52d6db0c8cb6d7", root_modes: ["figma-source-only", "figma-source-only"] }]);
+  })), [{ id: "asset-partner-mark-remote", component_key: "be6c194606af9516b3cc07847f52d6db0c8cb6d7", root_modes: ["figma-source-only", "figma-source-only"] }, { id: "icon-account-circle-line-remote", component_key: "8ea141edd5ec0679825e7fde633e211282b2405b", root_modes: ["figma-source-only", "figma-source-only"] }]);
   assert.ok(model.records.every((record) => Object.hasOwn(record, "contracts")));
   assert.deepEqual(model.manifest, fixture.manifest);
   assert.deepEqual(model.source_documents.get("rendering-foundation"), expected);

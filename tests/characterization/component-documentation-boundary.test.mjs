@@ -141,16 +141,16 @@ test("direct Figma source capture preserves shared and service registries and ma
     node_id: record.figma.node_id,
     root_modes: ["mobile", "desktop"].map((viewport) => record.contracts[viewport].root.render_mode),
   })), [{
-    id: "icon-account-circle-line-remote",
-    component_key: "8ea141edd5ec0679825e7fde633e211282b2405b",
-    source_root_node_id: "1331:1646",
-    node_id: "1331:1646",
-    root_modes: ["figma-source-only", "figma-source-only"],
-  }, {
     id: "asset-partner-mark-remote",
     component_key: "be6c194606af9516b3cc07847f52d6db0c8cb6d7",
     source_root_node_id: "439:4098",
     node_id: "439:4098",
+    root_modes: ["figma-source-only", "figma-source-only"],
+  }, {
+    id: "icon-account-circle-line-remote",
+    component_key: "8ea141edd5ec0679825e7fde633e211282b2405b",
+    source_root_node_id: "1331:1646",
+    node_id: "1331:1646",
     root_modes: ["figma-source-only", "figma-source-only"],
   }]);
 
@@ -160,7 +160,7 @@ test("direct Figma source capture preserves shared and service registries and ma
   );
   assert.equal(
     digest(projected.service),
-    "sha256:a85eee27bb2b1bbc13b4e19dfa21c23e382ef9a676e4eb0b4c94326f905f98ba",
+    "sha256:cecd2a37ca2c0e3565d3116d146e91c21fb398f06bc9f9ab5fbe2c03421f3b34",
   );
 
   const blocked = projected.marketing

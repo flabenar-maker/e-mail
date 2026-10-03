@@ -8,7 +8,7 @@ import { readStrictYaml } from "../../scripts/lib/strict-yaml.mjs";
 import { migrateComponentDocument } from "../../system/migrations/components-1-to-2.mjs";
 
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
-const REMOTE_IDS = ["icon-account-circle-line-remote", "asset-partner-mark-remote"];
+const REMOTE_IDS = ["asset-partner-mark-remote", "icon-account-circle-line-remote"];
 
 function legacyRecord(id) {
   return {

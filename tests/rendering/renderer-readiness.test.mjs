@@ -46,7 +46,7 @@ test("uncovered components report coverage only without speculative interpretati
   assert.deepEqual(registries, before);
 
   const remote = report.components.filter(({ id }) => ["icon-account-circle-line-remote", "asset-partner-mark-remote"].includes(id));
-  assert.deepEqual(remote.map(({ id, issues }) => [id, issues.map(({ code }) => code)]), [["icon-account-circle-line-remote", ["RENDER_COVERAGE_MISSING"]], ["asset-partner-mark-remote", ["RENDER_COVERAGE_MISSING"]]]);
+  assert.deepEqual(remote.map(({ id, issues }) => [id, issues.map(({ code }) => code)]), [["asset-partner-mark-remote", ["RENDER_COVERAGE_MISSING"]], ["icon-account-circle-line-remote", ["RENDER_COVERAGE_MISSING"]]]);
   const cardImage = report.components.find(({ id }) => id === "card-image");
   assert.equal(cardImage.ready, false);
   assert.deepEqual(cardImage.issues.map(({ code }) => code), [
