@@ -59,6 +59,14 @@ Independent review product53d80→7e7 не нашла critical/important деф�
 **P2 не принят и не слит.** Далее вP2 — определить/доказать значимое native coverage без blanket исключений, затем F7 producer в отмеченных ниже границах. F2 уже завершён и не повторяется; deferred #109 не примешивается. P3, activation, cutover и merge автоматически не начинаются.
 
 
+#### Отдельно обнаруженное влияние прежнего F2 — не часть текущего metadata repair
+
+Read-only source witness main618d→3d2 подтвердил: Desktop Transaction-Success element `root-card-summary-area-partner-info-row-status-container`, fact `reference-size.value.width`, provenance node459:27428 изменён116→117. [Contract fact](https://github.com/flabenar-maker/e-mail/blob/3d2d372cc6fe19c845a1ebaf0547acc291cb3433/data/components/service.yaml#L5096); nested status также116→117 на[строке5290](https://github.com/flabenar-maker/e-mail/blob/3d2d372cc6fe19c845a1ebaf0547acc291cb3433/data/components/service.yaml#L5290). В[propsFromFacts](https://github.com/flabenar-maker/e-mail/blob/3d2d372cc6fe19c845a1ebaf0547acc291cb3433/scripts/lib/email-interpreter.mjs#L185) presentation-table/status-container с vertical-sizing:fill получает `props.width=size.width`; [renderShell](https://github.com/flabenar-maker/e-mail/blob/3d2d372cc6fe19c845a1ebaf0547acc291cb3433/scripts/lib/email-interpreter.mjs#L510) передаёт его table primitive. Это реальное HTML-влияние116→117, а не только synthetic test. Прежнее утверждение «все четыре reference widths не меняют HTML» для этой ширины **не подтверждено и неверно**.
+
+Текущий bounded repair53d80→3d2 не менял эти values/renderer/HTML; baseline-preservation нельзя расширять на весь PR относительно main. Свежая Figma подтверждает117, поэтому в этом продолжении ни контракт, ни production rendering не откатываются и не исправляются. Перед полной приёмкойP2 отдельно сообщить пользователю влияние и получить решение: принять117px как фактический HTML-результат либо отдельно согласовать разделение reference/render width. Не повторять весь F2 и не делать скрытый revert. Эта запись — finding/граница решения, не новое правило в active instructions.
+
+Stable3d2 scoped tests13files305/305PASS,87.619s. Предшествующие fixture-order failures ab458300/305 и602303/305 сохранены в итоговом PR receipt. После этой docs-only записи final exact local gate выполняется и публикуется в PR body; source/contract/code значения не меняются.
+
 #### F7: proposed producer/schema/manifest/output/test map (не реализована)
 
 Решение-кандидат: один общий `workflow-checkpoint` docs renderer, две generated проекции существующих structured workflows. Это не возвращение ручных checkpoint и не второй workflow, не новый источник component facts. Названия выходов предлагаются: `docs/generated/library-maintenance-checkpoint.md` и `docs/generated/email-build-checkpoint.md`.
