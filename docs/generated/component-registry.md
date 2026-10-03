@@ -1,7 +1,7 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: component-registry -->
-<!-- source-digest: sha256:215e09e7113c581961a3514686956e9b678415b69f4c1da2b156ad6b2581e786 -->
-<!-- schema-versions: components=2.2.0, typography=1.0.0, spacing=1.0.0, assets=1.0.0 -->
+<!-- source-digest: sha256:ae39f7cd782ec9783c60d701616293c3ab529f67d32e27e57232911095ae1b26 -->
+<!-- schema-versions: components=2.3.0, typography=1.0.0, spacing=1.0.0, assets=1.0.0 -->
 # CUPIS component registry
 
 62 component records.
@@ -42,11 +42,11 @@
 ### Mobile
 
 - `root` — role `asset`; render `presentation-table`; visibility `always`
-  - Fact `protective-background-color`: `#F3F3F5`
+  - Fact `protective-background-color`: `#F3F3F5`; provenance: typed proof `protective-background-source`
   - Fact `export-asset-reference`: asset `header-logo`
-  - Fact `export-scale-suffix`: `@4x`
-  - Fact `desktop-display-size`: `322×50px`
-  - Fact `mobile-display-size`: `212×33px`
+  - Fact `export-scale-suffix`: `@4x`; provenance: typed proof `export-profile-suffix`
+  - Fact `desktop-display-size`: `322×50px`; provenance: typed proof `desktop-source-dimensions`
+  - Fact `mobile-display-size`: `212×33px`; provenance: typed proof `mobile-consumer-dimensions`
   - `header-logo` — role `image`; render `direct-image`; visibility `always`; asset `header-logo`
 
 ### Properties and variants
@@ -78,6 +78,11 @@
 - Evidence link (source): `cupis-product-logo-source` — source variant `1008:1473`, instance `1008:1309` → component `asset-product-logo` (`Asset/Product-Logo`); target variant `product-cupis`; asset owner `1008:1473`; asset `header-logo`
 - Evidence link (source): `card-product-logo-source` — source variant `1008:1474`, instance `1008:1422` → component `asset-product-logo` (`Asset/Product-Logo`); target variant `product-card`; asset owner `1008:1474`; asset `header-logo`
 - Evidence link (source): `wallet-product-logo-source` — source variant `1008:1475`, instance `1008:1455` → component `asset-product-logo` (`Asset/Product-Logo`); target variant `product-wallet`; asset owner `1008:1475`; asset `header-logo`
+- Fact proof: `protective-background-source` — `source-value-set` → `/contracts/mobile/root/facts/0/value`
+- Fact proof: `shared-asset-profile` — `asset-profile` → `/contracts/mobile/root/facts/1/value`
+- Fact proof: `export-profile-suffix` — `asset-profile` → `/contracts/mobile/root/facts/2/value`
+- Fact proof: `desktop-source-dimensions` — `source-value-set` → `/contracts/mobile/root/facts/3/value`
+- Fact proof: `mobile-consumer-dimensions` — `consumer-geometry` → `/contracts/mobile/root/facts/4/value`
 
 ### Output contract classification
 
@@ -122,8 +127,8 @@ RENDER: ASSET
 ### Mobile
 
 - `root` — role `asset`; render `figma-source-only`; visibility `always`
-  - Fact `mobile-display-size`: `212×33px`
-  - Fact `export-scale-suffix`: `@4x`
+  - Fact `mobile-display-size`: `212×33px`; provenance: typed proof `compact-source-dimensions`
+  - Fact `export-scale-suffix`: `@4x`; provenance: typed proof `compact-export-profile-suffix`
 
 ### Properties and variants
 
@@ -137,6 +142,8 @@ RENDER: ASSET
 - Evidence link (source): `cupis-product-logo-source` — source variant `1008:1686`, instance `1008:1347` → component `asset-product-logo` (`Asset/Product-Logo`); target variant `product-cupis`; asset owner `1008:1686`
 - Evidence link (source): `card-product-logo-source` — source variant `1008:1687`, instance `1008:1635` → component `asset-product-logo` (`Asset/Product-Logo`); target variant `product-card`; asset owner `1008:1687`
 - Evidence link (source): `wallet-product-logo-source` — source variant `1008:1688`, instance `1008:1668` → component `asset-product-logo` (`Asset/Product-Logo`); target variant `product-wallet`; asset owner `1008:1688`
+- Fact proof: `compact-source-dimensions` — `source-value-set` → `/contracts/mobile/root/facts/0/value`
+- Fact proof: `compact-export-profile-suffix` — `asset-profile` → `/contracts/mobile/root/facts/1/value`
 
 ### Output contract classification
 
@@ -2007,7 +2014,7 @@ RENDER: HYBRID
       - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `337:4348`
       - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `337:4348`
       - Fact `border-radius`: `0px`; provenance: `figma-literal` at `337:4348`
-      - Fact `height-behavior`: `auto`; provenance: `figma-description` at `337:4460`
+      - Fact `height-behavior`: `auto`; provenance: typed proof `mobile-proportional-auto`
       - Fact `clip-content`: `true`; provenance: `figma-literal` at `337:4348`
       - Fact `layout-align`: `stretch`; provenance: `figma-literal` at `337:4348`
     - `root-card-content-area` — role `content-area`; render `presentation-table`; visibility `always`
@@ -2127,6 +2134,7 @@ RENDER: HYBRID
 
 - Dependency: `/contracts/mobile/root/children/0/children/1/children/1/component_id` → component `button-primary` (`Button/Primary`)
 - Dependency: `/contracts/desktop/root/children/0/children/1/children/1/component_id` → component `button-primary` (`Button/Primary`)
+- Fact proof: `mobile-proportional-auto` — `mobile-image-auto` → `/contracts/mobile/root/children/0/children/0/facts/7/value`
 
 ### Output contract classification
 
@@ -2508,7 +2516,7 @@ RENDER: HYBRID
       - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `326:6618`
       - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `326:6618`
       - Fact `border-radius`: `0px`; provenance: `figma-literal` at `326:6618`
-      - Fact `height-behavior`: `content-driven-cover`; provenance: `figma-description` at `337:4870`
+      - Fact `height-behavior`: `content-driven-cover`; provenance: typed proof `desktop-content-height-cover`
       - Fact `clip-content`: `true`; provenance: `figma-literal` at `326:6618`
       - Fact `layout-align`: `stretch`; provenance: `figma-literal` at `326:6618`
       - Fact `layout-grow`: `1`; provenance: `figma-literal` at `326:6618`
@@ -2553,7 +2561,7 @@ RENDER: HYBRID
       - Fact `primary-alignment`: `min`; provenance: `figma-literal` at `11:1184`
       - Fact `counter-alignment`: `min`; provenance: `figma-literal` at `11:1184`
       - Fact `border-radius`: `0px`; provenance: `figma-literal` at `11:1184`
-      - Fact `height-behavior`: `auto`; provenance: `figma-description` at `337:4870`
+      - Fact `height-behavior`: `auto`; provenance: typed proof `mobile-proportional-auto`
       - Fact `clip-content`: `true`; provenance: `figma-literal` at `11:1184`
       - Fact `layout-align`: `stretch`; provenance: `figma-literal` at `11:1184`
     - `root-card-content-area` — role `content-area`; render `presentation-table`; visibility `always`
@@ -2674,6 +2682,8 @@ RENDER: HYBRID
 
 - Dependency: `/contracts/mobile/root/children/0/children/1/children/1/component_id` → component `button-secondary` (`Button/Secondary`)
 - Dependency: `/contracts/desktop/root/children/0/children/0/children/1/component_id` → component `button-secondary` (`Button/Secondary`)
+- Fact proof: `mobile-proportional-auto` — `mobile-image-auto` → `/contracts/mobile/root/children/0/children/0/facts/7/value`
+- Fact proof: `desktop-content-height-cover` — `content-height-cover` → `/contracts/desktop/root/children/0/children/1/facts/7/value`
 
 ### Output contract classification
 
@@ -6066,7 +6076,7 @@ RENDER: HTML
   - Fact `background-fallback`: `#18B037`; provenance: `figma-literal` at `337:4694`
   - Fact `background-gradient-start`: `#18B037`; provenance: `figma-literal` at `337:4694`
   - Fact `background-gradient-end`: `#3DD55C`; provenance: `figma-literal` at `337:4694`
-  - Fact `background-gradient-css-angle-degrees`: `25`; provenance: `figma-description` at `337:4713`
+  - Fact `background-gradient-css-angle-degrees`: `25`; provenance: typed proof `desktop-css-gradient-angle`
   - Fact `clip-content`: `true`; provenance: `figma-literal` at `337:4694`
   - Fact `minimum-width`: `230px`; provenance: `figma-literal` at `337:4694`
   - `root-label` — role `label`; render `html-text`; visibility `always`
@@ -6107,7 +6117,7 @@ RENDER: HTML
   - Fact `background-fallback`: `#18B037`; provenance: `figma-literal` at `337:4691`
   - Fact `background-gradient-start`: `#18B037`; provenance: `figma-literal` at `337:4691`
   - Fact `background-gradient-end`: `#3DD55C`; provenance: `figma-literal` at `337:4691`
-  - Fact `background-gradient-css-angle-degrees`: `25`; provenance: `figma-description` at `337:4713`
+  - Fact `background-gradient-css-angle-degrees`: `25`; provenance: typed proof `mobile-css-gradient-angle`
   - Fact `clip-content`: `true`; provenance: `figma-literal` at `337:4691`
   - Fact `layout-align`: `stretch`; provenance: `figma-literal` at `337:4691`
   - `root-label` — role `label`; render `html-text`; visibility `always`
@@ -6134,6 +6144,12 @@ RENDER: HTML
 - Variant `mobile` — Figma node `337:4691`; axes: `Viewport=Mobile`
 - Direct Figma source: `337:4694`; `Viewport=Desktop`; reference frame 230×54px
 - Direct Figma source: `337:4691`; `Viewport=Mobile`; reference frame 158×44px
+
+### Constraints and dependencies
+
+- Fact proof: `mobile-css-gradient-angle` — `approved-css-gradient-angle` → `/contracts/mobile/root/facts/16/value`
+- Fact proof: `desktop-css-gradient-angle` — `approved-css-gradient-angle` → `/contracts/desktop/root/facts/16/value`
+- Normative decision: `html-gradient-angle` — `css-linear-gradient-angle`; owned typed targets `/contracts/mobile/root/facts/16/value`, `/contracts/desktop/root/facts/16/value`; user authorization `docs/superpowers/specs/2026-10-03-cupis-contract-fact-proof-design.md` at `5431e8b61920d3eed6e9d59d6cd23c0932deae6c`
 
 ### Output contract classification
 
@@ -9981,6 +9997,12 @@ CRITICAL
 
 - Constraint `inline-help-link` — scope `all`; kind `interaction`; severity `critical`; Description critical: Ссылка «Помощь» находится внутри одного help-text: базовый цвет #757678, встроенная ссылка #00991F с underline; URL поступает из данных письма.
 - Constraint `phone-link` — scope `all`; kind `interaction`; severity `critical`: Номер +7 (495) 122-20-88 — HTML-ссылка tel:+74951222088 в обеих версиях; href не придумывать и не заменять URL сайта.
+- Fact proof: `mobile-heading-style-usage` — `style-usage` → `/contracts/mobile/root/children/0/children/0/children/0/facts/8/value`
+- Fact proof: `mobile-phone-style-usage` — `style-usage` → `/contracts/mobile/root/children/0/children/0/children/1/facts/8/value`
+- Fact proof: `mobile-help-style-usage` — `style-usage` → `/contracts/mobile/root/children/0/children/1/children/0/facts/4/value`
+- Fact proof: `desktop-heading-style-usage` — `style-usage` → `/contracts/desktop/root/children/0/children/0/children/0/facts/8/value`
+- Fact proof: `desktop-phone-style-usage` — `style-usage` → `/contracts/desktop/root/children/0/children/0/children/1/facts/8/value`
+- Fact proof: `desktop-help-style-usage` — `style-usage` → `/contracts/desktop/root/children/0/children/1/children/0/facts/4/value`
 
 ### Output contract classification
 
