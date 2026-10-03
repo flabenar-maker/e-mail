@@ -1875,7 +1875,7 @@
                                 "id": "reference-size",
                                 "value": {
                                   "type": "dimensions",
-                                  "width": 93,
+                                  "width": 94,
                                   "height": 25,
                                   "unit": "px"
                                 },
@@ -4458,7 +4458,7 @@
                                 "id": "reference-size",
                                 "value": {
                                   "type": "dimensions",
-                                  "width": 252,
+                                  "width": 251,
                                   "height": 68,
                                   "unit": "px"
                                 },
@@ -5096,7 +5096,7 @@
                                 "id": "reference-size",
                                 "value": {
                                   "type": "dimensions",
-                                  "width": 116,
+                                  "width": 117,
                                   "height": 72,
                                   "unit": "px"
                                 },
@@ -5290,7 +5290,7 @@
                                     "id": "reference-size",
                                     "value": {
                                       "type": "dimensions",
-                                      "width": 116,
+                                      "width": 117,
                                       "height": 30,
                                       "unit": "px"
                                     },

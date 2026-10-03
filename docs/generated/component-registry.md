@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: component-registry -->
-<!-- source-digest: sha256:ae39f7cd782ec9783c60d701616293c3ab529f67d32e27e57232911095ae1b26 -->
+<!-- source-digest: sha256:f01f629f79e75d4cd06401daf97a526064e24b5deedb4bd0d0a3d013d992917d -->
 <!-- schema-versions: components=2.3.0, typography=1.0.0, spacing=1.0.0, assets=1.0.0 -->
 # CUPIS component registry
 
@@ -14506,7 +14506,7 @@ RENDER: HYBRID
           - Fact `layout-align`: `inherit`; provenance: `figma-literal` at `481:19700`
           - Fact `layout-grow`: `0`; provenance: `figma-literal` at `481:19700`
         - `root-card-summary-area-partner-info-row-text-details` — role `text-details`; render `presentation-table`; visibility `always`
-          - Fact `reference-size`: `252×68px`; provenance: `figma-literal` at `459:27425`
+          - Fact `reference-size`: `251×68px`; provenance: `figma-literal` at `459:27425`
           - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `459:27425`
           - Fact `layout-gap`: `6px`; provenance: `figma-literal` at `459:27425`
           - Fact `padding-top`: `0px`; provenance: `figma-literal` at `459:27425`
@@ -14561,7 +14561,7 @@ RENDER: HYBRID
             - Fact `layout-align`: `inherit`; provenance: `figma-literal` at `459:27427`
             - Fact `layout-grow`: `0`; provenance: `figma-literal` at `459:27427`
         - `root-card-summary-area-partner-info-row-status-container` — role `status-container`; render `presentation-table`; visibility `always`
-          - Fact `reference-size`: `116×72px`; provenance: `figma-literal` at `459:27428`
+          - Fact `reference-size`: `117×72px`; provenance: `figma-literal` at `459:27428`
           - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `459:27428`
           - Fact `layout-gap`: `10px`; provenance: `figma-literal` at `459:27428`
           - Fact `padding-top`: `0px`; provenance: `figma-literal` at `459:27428`
@@ -14578,7 +14578,7 @@ RENDER: HYBRID
           - Fact `layout-align`: `stretch`; provenance: `figma-literal` at `459:27428`
           - Fact `layout-grow`: `0`; provenance: `figma-literal` at `459:27428`
           - `root-card-summary-area-partner-info-row-status-container-status` — role `status`; render `nested-component`; visibility `always`; component `badge-operation-status` (`Badge/Operation-Status`)
-            - Fact `reference-size`: `116×30px`; provenance: `figma-literal` at `459:29356`
+            - Fact `reference-size`: `117×30px`; provenance: `figma-literal` at `459:29356`
             - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `459:29356`
             - Fact `layout-gap`: `10px`; provenance: `figma-literal` at `459:29356`
             - Fact `padding-top`: `4px`; provenance: `figma-literal` at `459:29356`
@@ -14872,7 +14872,7 @@ RENDER: HYBRID
               - Fact `layout-align`: `stretch`; provenance: `figma-literal` at `459:28008`
               - Fact `layout-grow`: `0`; provenance: `figma-literal` at `459:28008`
         - `root-card-summary-area-partner-info-row-status` — role `status`; render `nested-component`; visibility `always`; component `badge-operation-status` (`Badge/Operation-Status`)
-          - Fact `reference-size`: `93×25px`; provenance: `figma-literal` at `459:29376`
+          - Fact `reference-size`: `94×25px`; provenance: `figma-literal` at `459:29376`
           - Fact `layout-axis`: `horizontal`; provenance: `figma-literal` at `459:29376`
           - Fact `layout-gap`: `10px`; provenance: `figma-literal` at `459:29376`
           - Fact `padding-top`: `4px`; provenance: `figma-literal` at `459:29376`
