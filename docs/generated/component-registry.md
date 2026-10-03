@@ -1,14 +1,14 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: component-registry -->
-<!-- source-digest: sha256:f01f629f79e75d4cd06401daf97a526064e24b5deedb4bd0d0a3d013d992917d -->
+<!-- source-digest: sha256:00851b5e6c10cc0ac12eabc6cdee5d33ed77e33914981bdeeea1a08bb99fef71 -->
 <!-- schema-versions: components=2.3.0, typography=1.0.0, spacing=1.0.0, assets=1.0.0 -->
 # CUPIS component registry
 
-62 component records.
+63 component records.
 
 | Library | Records |
 |---|---:|
-| shared | 18 |
+| shared | 19 |
 | marketing | 26 |
 | service | 18 |
 
@@ -160,6 +160,52 @@ RENDER: ASSET
 
 CRITICAL
 - Компактный мобильный источник используется только для раскладки и не создаёт отдельный файл письма.
+```
+
+<!-- library: shared; component-id: asset-partner-mark-remote -->
+## marafon
+
+### Identity and purpose
+
+- CUPIS ID: `asset-partner-mark-remote`
+- Status: `active`
+- Library: `shared`
+- Semantic role: `asset`
+- Category: `partner-mark-remote`
+- Figma: `8zka5bHkcrJVK9I9dKjnhC#439:4098` (`component`)
+- Source root: `439:4098`
+- Remote publication key: `be6c194606af9516b3cc07847f52d6db0c8cb6d7`
+- Remote lookup: the current Figma file is capture context, not the original publication file.
+- Verified: `2026-10-03`
+- Structure fingerprint: `sha256:25aa5a099038345b81c06cc77d446b76c9a5915028eb796324d9ce5b9cb700e3`
+- Purpose: Внешний исходный знак внутри Partner-Badge. Только источник для сверки вложенной графики; не самостоятельный блок или экспорт.
+
+### Structure and rendering
+
+- Render type: `ASSET`
+- Desktop root: `root` — `figma-source-only`
+- Mobile root: `root` — `figma-source-only`
+
+### Desktop
+
+- `root` — role `asset`; render `figma-source-only`; visibility `always`
+
+### Mobile
+
+- `root` — role `asset`; render `figma-source-only`; visibility `always`
+
+### Output contract classification
+
+- No standalone output contract: `figma-source-only` component used inside a parent rendered asset.
+
+### Auxiliary Figma Description
+
+This compact projection is metadata only and is not an HTML-build input.
+
+```text
+CUPIS ID: asset-partner-mark-remote
+PURPOSE: Внешний исходный знак внутри Partner-Badge. Только источник для сверки вложенной графики; не самостоятельный блок или экспорт.
+RENDER: ASSET
 ```
 
 <!-- library: shared; component-id: asset-product-logo -->
@@ -9021,6 +9067,10 @@ RENDER: ASSET
 - Asset usage: `mobile` `/contracts/mobile/root` → `partner-badge` as `direct-image`
 - Asset usage: `desktop` `/contracts/desktop/root` → `partner-badge` as `direct-image`
 
+### Constraints and dependencies
+
+- Evidence link (source): `partner-mark-source` — source variant `481:19665`, instance `481:19655` → component `asset-partner-mark-remote` (`marafon`); asset owner `481:19665`; asset `partner-badge`
+
 ### Output contract classification
 
 - Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
@@ -15045,6 +15095,10 @@ RENDER: HYBRID
 - Dependency: `/contracts/mobile/root/children/0/children/2/children/0/component_id` → component `details-operation` (`Details/Operation`)
 - Dependency: `/contracts/desktop/root/children/0/children/0/children/0/children/2/children/0/component_id` → component `badge-operation-status` (`Badge/Operation-Status`)
 - Dependency: `/contracts/desktop/root/children/0/children/2/children/0/component_id` → component `details-operation` (`Details/Operation`)
+- Evidence link (source): `desktop-partner-badge-source` — source variant `459:29175`, instance `481:19700` → component `asset-partner-badge-4x` (`Asset/Partner-Badge @4x`); asset owner `481:19700`; asset `partner-badge`
+- Evidence link (source): `desktop-partner-mark-source` — source variant `459:29175`, instance `I481:19700;481:19655` → component `asset-partner-mark-remote` (`marafon`); asset owner `481:19700`; asset `partner-badge`
+- Evidence link (source): `mobile-partner-badge-source` — source variant `459:29176`, instance `484:19677` → component `asset-partner-badge-4x` (`Asset/Partner-Badge @4x`); asset owner `484:19677`; asset `partner-badge`
+- Evidence link (source): `mobile-partner-mark-source` — source variant `459:29176`, instance `I484:19677;481:19655` → component `asset-partner-mark-remote` (`marafon`); asset owner `484:19677`; asset `partner-badge`
 
 ### Output contract classification
 

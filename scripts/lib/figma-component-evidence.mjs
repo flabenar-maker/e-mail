@@ -237,7 +237,7 @@ function inspectArtworkTree(record, live) {
   else expected = [];
   if (!expected.length || new Set(expected.map(v => v.node_id)).size !== expected.length) fail("EVIDENCE_SCOPE_AMBIGUOUS", "/variants", "Canonical root/variant identities are ambiguous.");
   if (!live || !["1.1.0", "1.2.0", "1.3.0"].includes(live.capture_version) || live.capture_meta?.tree_complete !== true || !Array.isArray(live.variants)) {
-    fail("EVIDENCE_CAPTURE_INCOMPLETE", "/capture", "A complete capture 1.1.0 or 1.2.0 is required."); return { issues, nodes, variants, identityValid };
+    fail("EVIDENCE_CAPTURE_INCOMPLETE", "/capture", "A complete capture 1.1.0, 1.2.0, or 1.3.0 is required."); return { issues, nodes, variants, identityValid };
   }
   if (live.file_key !== record.figma.file_key || live.component_node_id !== record.figma.node_id) fail("EVIDENCE_CAPTURE_IDENTITY_MISMATCH", "/capture", "Exact canonical file and component owner are required.");
   if (live.variants.length !== expected.length || new Set(live.variants.map(v => v.variant_node_id)).size !== live.variants.length) fail("EVIDENCE_CAPTURE_IDENTITY_MISMATCH", "/capture/variants", "Captured variants must exactly match all canonical variants.");

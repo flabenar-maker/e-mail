@@ -852,7 +852,7 @@ test("shared registry contains the root template, three assets, and 13 glyph sou
     shared.components.filter((record) => !record.figma.remote_source && record.identity.semantic_role === "icon").length,
     13,
   );
-  assert.deepEqual(shared.components.filter((record) => record.figma.remote_source).map((record) => [record.id, record.identity.figma_name, record.figma.node_id, record.figma.remote_source.component_key, record.asset_contracts.length, record.figma.source_root_node_id]), [["icon-account-circle-line-remote", "account-circle-line", "1331:1646", "8ea141edd5ec0679825e7fde633e211282b2405b", 0, "1331:1646"]]);
+  assert.deepEqual(shared.components.filter((record) => record.figma.remote_source).map((record) => [record.id, record.identity.figma_name, record.figma.node_id, record.figma.remote_source.component_key, record.asset_contracts.length, record.figma.source_root_node_id]), [["icon-account-circle-line-remote", "account-circle-line", "1331:1646", "8ea141edd5ec0679825e7fde633e211282b2405b", 0, "1331:1646"], ["asset-partner-mark-remote", "marafon", "439:4098", "be6c194606af9516b3cc07847f52d6db0c8cb6d7", 0, "439:4098"]]);
   for (const record of shared.components) {
     assert.ok(record.documentation.purpose.trim().length > 0);
     assert.equal(Object.hasOwn(record, "description"), false);
