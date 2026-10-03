@@ -97,6 +97,12 @@ Skill определяет тип задачи, выбирает workflow, за�
 
 Временная модель конкретного письма описывает композицию, контент, свойства и пути assets. Точные component/foundation contracts остаются отдельными зависимостями рендера; raw Figma evidence, correspondence и сведения о сборке не превращаются в поля модели без изменения её schema. Формат и границы существующего handoff описаны в [HTML rendering design](2026-09-10-cupis-html-rendering-design.md#6-временная-модель-письма). Агент может заполнять эту модель по проверенным MCP-данным; отдельный универсальный импортёр Figma не требуется.
 
+### 3.5. Уточнение evidence-связей Template и Shared — кандидат P2
+
+Направление и письменная [спецификация T1/S1](2026-10-02-cupis-template-shared-evidence-links-design.md) согласованы 02.10.2026. [Implementation plan внутри P2](../plans/cutover/2026-10-02-cupis-template-shared-evidence-links.md) подтверждён; задачи 1–5 реализованы в кандидате PR #110 (typed references, fresh capture/canonical session, T1/S1 checkers и общий auditor/CLI), задача 6 выполнена в кандидате: 29 свежих canonical links и generated projection без изменения визуальных фактов. Mobile Header boundary подтверждена по его собственному contract-local слою; итоговый локальный gate задачи 7 выполнен в границах этого ремонта. Scalar/capture diagnostics и остальные P2 obligations не закрыты. Это дочернее уточнение данной master-спецификации, не новый владелец архитектуры или отдельный глобальный этап.
+
+Предлагается хранить типизированные служебные связи рядом с component contracts: Template → существующие shell values и Shared source → фактическое использование → asset owner. Значения остаются у прежних владельцев; связи не добавляют HTML-узлы, не меняют export policy и не заменяют свежую проверку Figma. Формат, ownership, coverage и границы интеграции определены в дочерней спецификации. Schema 2.2.0 и offline-проверки реализованы; records получили только новую envelope version, без фактических links или изменений значений. Live proof и интеграция ещё впереди; P2 и P3 не объявляются завершёнными.
+
 ## 4. Единый manifest
 
 `system/manifest.yaml` является единственной картой системы. Он содержит:

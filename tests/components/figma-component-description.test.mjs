@@ -269,3 +269,23 @@ test("comparison reports one exact drift and otherwise ignores no content", () =
   assert.equal(errors[0].code, "FIGMA_COMPONENT_DESCRIPTION_DRIFT");
   assert.equal(errors[0].path, "/description");
 });
+
+
+test("evidence metadata is excluded from every compact Description", async () => {
+  const registries = await loadComponentRegistries({ repoRoot });
+  const records = Object.values(registries).flatMap(({ components }) => components);
+  const remoteIds = new Set(["icon-account-circle-line-remote", "asset-partner-mark-remote"]);
+  const remote = records.filter(({ id }) => remoteIds.has(id));
+  assert.equal(records.length, 63);
+  assert.equal(records.filter(({ id }) => !remoteIds.has(id)).length, 61);
+  assert.deepEqual(remote.map(({ id, figma }) => [id, figma.remote_source?.component_key]), [["icon-account-circle-line-remote", "8ea141edd5ec0679825e7fde633e211282b2405b"], ["asset-partner-mark-remote", "be6c194606af9516b3cc07847f52d6db0c8cb6d7"]]);
+  for (const source of records) {
+    const before = renderFigmaComponentDescription(source);
+    const copy = structuredClone(source);
+    copy.evidence_links = {
+      foundation_values: [{ id: "synthetic-foundation", source: { variant_node_id: "1:1", node_id: "1:1", field_path: "/fills/0/color" }, target: { source_id: "rendering-foundation", pointer: "/shell/background_color" }, comparison: "opaque-solid-color" }],
+      source_dependencies: [{ id: "synthetic-source", source: { variant_node_id: "1:1", node_id: "1:2" }, target: { component_id: "asset-product-logo" }, asset_owner: { node_id: "1:2" } }],
+    };
+    assert.equal(renderFigmaComponentDescription(copy), before, source.id);
+  }
+});

@@ -47,6 +47,7 @@ function formatProvenance(provenance) {
   if (provenance.kind === "registry-literal") {
     return "";
   }
+  if (provenance.kind === "contract-proof") return `typed proof ${inlineCode(provenance.proof_id)}`;
   if (provenance.kind === "figma-literal") {
     return `${inlineCode(provenance.kind)} at ${inlineCode(provenance.node_id)}`;
   }
@@ -268,6 +269,21 @@ function renderConstraintsAndDependencies(record, index) {
       `- Dependency: ${inlineCode(reference.path)} → component ${componentLabel(index, reference.id)}`,
     );
   }
+  for (const link of record.evidence_links?.foundation_values ?? []) {
+    lines.push(
+      `- Evidence link (foundation): ${inlineCode(link.id)} — source variant ${inlineCode(link.source.variant_node_id)}, node ${inlineCode(link.source.node_id)}, field ${inlineCode(link.source.field_path)} → foundation ${inlineCode(link.target.source_id)} ${inlineCode(link.target.pointer)}; comparison ${inlineCode(link.comparison)}`,
+    );
+  }
+  for (const link of record.evidence_links?.source_dependencies ?? []) {
+    lines.push(
+      `- Evidence link (source): ${inlineCode(link.id)} — source variant ${inlineCode(link.source.variant_node_id)}, instance ${inlineCode(link.source.node_id)} → component ${componentLabel(index, link.target.component_id)}` +
+        (link.target.variant_id ? `; target variant ${inlineCode(link.target.variant_id)}` : "") +
+        `; asset owner ${inlineCode(link.asset_owner.node_id)}` +
+        (link.asset_owner.asset_id ? `; asset ${inlineCode(link.asset_owner.asset_id)}` : ""),
+    );
+  }
+  for (const proof of record.evidence_links?.fact_proofs ?? []) lines.push(`- Fact proof: ${inlineCode(proof.id)} — ${inlineCode(proof.kind)} → ${inlineCode(proof.contract_path)}`);
+  for (const decision of record.evidence_links?.normative_decisions ?? []) lines.push(`- Normative decision: ${inlineCode(decision.id)} — ${inlineCode(decision.kind)}; owned typed targets ${decision.targets.map(t => inlineCode(t.contract_path)).join(", ")}; user authorization ${inlineCode(decision.authorization.approved_spec.path)} at ${inlineCode(decision.authorization.approved_spec.git_sha)}`);
   return lines;
 }
 
@@ -287,7 +303,11 @@ function hasAssetsOrInteraction(record) {
 function hasConstraintsOrDependencies(record) {
   return (
     (record.constraints ?? []).length > 0 ||
-    collectComponentReferences(record).components.length > 0
+    collectComponentReferences(record).components.length > 0 ||
+    (record.evidence_links?.foundation_values ?? []).length > 0 ||
+    (record.evidence_links?.source_dependencies ?? []).length > 0 ||
+    (record.evidence_links?.fact_proofs ?? []).length > 0 ||
+    (record.evidence_links?.normative_decisions ?? []).length > 0
   );
 }
 
@@ -332,6 +352,10 @@ function renderSection(record, index, sectionId) {
         `- Category: ${inlineCode(record.identity.category)}`,
         `- Figma: ${inlineCode(`${record.figma.file_key}#${record.figma.node_id}`)} (${inlineCode(record.identity.node_kind)})`,
         `- Source root: ${inlineCode(record.figma.source_root_node_id)}`,
+        ...(record.figma.remote_source ? [
+          `- Remote publication key: ${inlineCode(record.figma.remote_source.component_key)}`,
+          "- Remote lookup: the current Figma file is capture context, not the original publication file.",
+        ] : []),
         `- Verified: ${inlineCode(record.figma.verified_at)}`,
         ...(record.figma.verification ? [`- Figma source check: ${inlineCode(record.figma.verification.status)} on ${inlineCode(record.figma.verification.checked_at)}; ${oneLine(record.figma.verification.reason)}`] : []),
         `- Structure fingerprint: ${inlineCode(record.figma.structure_fingerprint)}`,

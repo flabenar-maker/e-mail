@@ -1,5 +1,5 @@
 {
-  "schema_version": "2.1.0",
+  "schema_version": "2.3.0",
   "registry": {
     "id": "components-service",
     "library": "service",
@@ -1875,7 +1875,7 @@
                                 "id": "reference-size",
                                 "value": {
                                   "type": "dimensions",
-                                  "width": 93,
+                                  "width": 94,
                                   "height": 25,
                                   "unit": "px"
                                 },
@@ -4458,7 +4458,7 @@
                                 "id": "reference-size",
                                 "value": {
                                   "type": "dimensions",
-                                  "width": 252,
+                                  "width": 251,
                                   "height": 68,
                                   "unit": "px"
                                 },
@@ -5096,7 +5096,7 @@
                                 "id": "reference-size",
                                 "value": {
                                   "type": "dimensions",
-                                  "width": 116,
+                                  "width": 117,
                                   "height": 72,
                                   "unit": "px"
                                 },
@@ -5290,7 +5290,7 @@
                                     "id": "reference-size",
                                     "value": {
                                       "type": "dimensions",
-                                      "width": 116,
+                                      "width": 117,
                                       "height": 30,
                                       "unit": "px"
                                     },
@@ -13408,7 +13408,68 @@
           "severity": "required",
           "statement": "Корневой card прозрачен и обрезает по radius 22px Mobile / 26px Desktop; белый Fill #FFFFFF принадлежит двум вложенным секциям, разделённым divider 1px #DFDFE0."
         }
-      ]
+      ],
+      "evidence_links": {
+        "foundation_values": [],
+        "source_dependencies": [
+          {
+            "id": "desktop-partner-badge-source",
+            "source": {
+              "variant_node_id": "459:29175",
+              "node_id": "481:19700"
+            },
+            "target": {
+              "component_id": "asset-partner-badge-4x"
+            },
+            "asset_owner": {
+              "node_id": "481:19700",
+              "asset_id": "partner-badge"
+            }
+          },
+          {
+            "id": "desktop-partner-mark-source",
+            "source": {
+              "variant_node_id": "459:29175",
+              "node_id": "I481:19700;481:19655"
+            },
+            "target": {
+              "component_id": "asset-partner-mark-remote"
+            },
+            "asset_owner": {
+              "node_id": "481:19700",
+              "asset_id": "partner-badge"
+            }
+          },
+          {
+            "id": "mobile-partner-badge-source",
+            "source": {
+              "variant_node_id": "459:29176",
+              "node_id": "484:19677"
+            },
+            "target": {
+              "component_id": "asset-partner-badge-4x"
+            },
+            "asset_owner": {
+              "node_id": "484:19677",
+              "asset_id": "partner-badge"
+            }
+          },
+          {
+            "id": "mobile-partner-mark-source",
+            "source": {
+              "variant_node_id": "459:29176",
+              "node_id": "I484:19677;481:19655"
+            },
+            "target": {
+              "component_id": "asset-partner-mark-remote"
+            },
+            "asset_owner": {
+              "node_id": "484:19677",
+              "asset_id": "partner-badge"
+            }
+          }
+        ]
+      }
     },
     {
       "id": "block-transaction-error",
@@ -35015,7 +35076,73 @@
           "severity": "critical",
           "statement": "Номер +7 (495) 122-20-88 — HTML-ссылка tel:+74951222088 в обеих версиях; href не придумывать и не заменять URL сайта."
         }
-      ]
+      ],
+      "evidence_links": {
+        "foundation_values": [],
+        "source_dependencies": [],
+        "fact_proofs": [
+          {
+            "id": "mobile-heading-style-usage",
+            "kind": "style-usage",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/facts/8/value",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27604"
+            }
+          },
+          {
+            "id": "mobile-phone-style-usage",
+            "kind": "style-usage",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/1/facts/8/value",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27605"
+            }
+          },
+          {
+            "id": "mobile-help-style-usage",
+            "kind": "style-usage",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/4/value",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27607"
+            }
+          },
+          {
+            "id": "desktop-heading-style-usage",
+            "kind": "style-usage",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/facts/8/value",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27583"
+            }
+          },
+          {
+            "id": "desktop-phone-style-usage",
+            "kind": "style-usage",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/1/facts/8/value",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27584"
+            }
+          },
+          {
+            "id": "desktop-help-style-usage",
+            "kind": "style-usage",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/4/value",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27586"
+            }
+          }
+        ]
+      }
     },
     {
       "id": "asset-bank-badge-4x",
@@ -36205,7 +36332,26 @@
         "purpose": "Составной графический бейдж партнёра для использования в сервисных блоках.",
         "critical_constraint_ids": []
       },
-      "constraints": []
+      "constraints": [],
+      "evidence_links": {
+        "foundation_values": [],
+        "source_dependencies": [
+          {
+            "id": "partner-mark-source",
+            "source": {
+              "variant_node_id": "481:19665",
+              "node_id": "481:19655"
+            },
+            "target": {
+              "component_id": "asset-partner-mark-remote"
+            },
+            "asset_owner": {
+              "node_id": "481:19665",
+              "asset_id": "partner-badge"
+            }
+          }
+        ]
+      }
     },
     {
       "id": "asset-icon-badge-4x",
@@ -59005,6 +59151,25 @@
     },
     {
       "id": "asset-status-badge-positive-4x",
+      "evidence_links": {
+        "foundation_values": [],
+        "source_dependencies": [
+          {
+            "id": "default-glyph-source",
+            "source": {
+              "variant_node_id": "491:22074",
+              "node_id": "491:22378"
+            },
+            "target": {
+              "component_id": "icon-lock-password-fill"
+            },
+            "asset_owner": {
+              "node_id": "491:22074",
+              "asset_id": "status-badge-positive"
+            }
+          }
+        ]
+      },
       "status": "active",
       "identity": {
         "figma_name": "Asset/Status-Badge-Positive @4x",
@@ -59575,6 +59740,25 @@
     },
     {
       "id": "asset-status-badge-negative-4x",
+      "evidence_links": {
+        "foundation_values": [],
+        "source_dependencies": [
+          {
+            "id": "default-glyph-source",
+            "source": {
+              "variant_node_id": "491:22178",
+              "node_id": "491:22481"
+            },
+            "target": {
+              "component_id": "icon-user-forbid-fill"
+            },
+            "asset_owner": {
+              "node_id": "491:22178",
+              "asset_id": "status-badge-negative"
+            }
+          }
+        ]
+      },
       "status": "active",
       "identity": {
         "figma_name": "Asset/Status-Badge-Negative @4x",
@@ -62679,6 +62863,67 @@
     },
     {
       "id": "block-personal-data-update",
+      "evidence_links": {
+        "foundation_values": [],
+        "source_dependencies": [
+          {
+            "id": "desktop-status-badge-positive-source",
+            "source": {
+              "variant_node_id": "491:22454",
+              "node_id": "491:22406"
+            },
+            "target": {
+              "component_id": "asset-status-badge-positive-4x"
+            },
+            "asset_owner": {
+              "node_id": "491:22406",
+              "asset_id": "status-badge-positive"
+            }
+          },
+          {
+            "id": "desktop-glyph-source",
+            "source": {
+              "variant_node_id": "491:22454",
+              "node_id": "I491:22406;491:22378"
+            },
+            "target": {
+              "component_id": "icon-lock-password-fill"
+            },
+            "asset_owner": {
+              "node_id": "491:22406",
+              "asset_id": "status-badge-positive"
+            }
+          },
+          {
+            "id": "mobile-status-badge-positive-source",
+            "source": {
+              "variant_node_id": "497:26054",
+              "node_id": "497:25809"
+            },
+            "target": {
+              "component_id": "asset-status-badge-positive-4x"
+            },
+            "asset_owner": {
+              "node_id": "497:25809",
+              "asset_id": "status-badge-positive"
+            }
+          },
+          {
+            "id": "mobile-glyph-source",
+            "source": {
+              "variant_node_id": "497:26054",
+              "node_id": "I497:25809;491:22378"
+            },
+            "target": {
+              "component_id": "icon-lock-password-fill"
+            },
+            "asset_owner": {
+              "node_id": "497:25809",
+              "asset_id": "status-badge-positive"
+            }
+          }
+        ]
+      },
       "status": "active",
       "identity": {
         "figma_name": "Block/Personal-Data-Update",
@@ -105850,6 +106095,67 @@
     },
     {
       "id": "block-receipt-info",
+      "evidence_links": {
+        "foundation_values": [],
+        "source_dependencies": [
+          {
+            "id": "desktop-status-badge-positive-source",
+            "source": {
+              "variant_node_id": "502:24693",
+              "node_id": "502:24255"
+            },
+            "target": {
+              "component_id": "asset-status-badge-positive-4x"
+            },
+            "asset_owner": {
+              "node_id": "502:24255",
+              "asset_id": "status-badge-positive"
+            }
+          },
+          {
+            "id": "desktop-glyph-source",
+            "source": {
+              "variant_node_id": "502:24693",
+              "node_id": "I502:24255;491:22378"
+            },
+            "target": {
+              "component_id": "icon-receipt-fill"
+            },
+            "asset_owner": {
+              "node_id": "502:24255",
+              "asset_id": "status-badge-positive"
+            }
+          },
+          {
+            "id": "mobile-status-badge-positive-source",
+            "source": {
+              "variant_node_id": "502:24694",
+              "node_id": "502:24533"
+            },
+            "target": {
+              "component_id": "asset-status-badge-positive-4x"
+            },
+            "asset_owner": {
+              "node_id": "502:24533",
+              "asset_id": "status-badge-positive"
+            }
+          },
+          {
+            "id": "mobile-glyph-source",
+            "source": {
+              "variant_node_id": "502:24694",
+              "node_id": "I502:24533;491:22378"
+            },
+            "target": {
+              "component_id": "icon-receipt-fill"
+            },
+            "asset_owner": {
+              "node_id": "502:24533",
+              "asset_id": "status-badge-positive"
+            }
+          }
+        ]
+      },
       "status": "active",
       "identity": {
         "figma_name": "Block/Receipt-Info",

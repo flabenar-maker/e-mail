@@ -67,6 +67,14 @@ function Invoke-Verify {
     [pscustomobject]@{ ExitCode = $LASTEXITCODE; Output = $output }
 }
 
+function Refresh-GeneratedDocs {
+    param([string]$Root)
+    $node = Get-Command node -ErrorAction Stop
+    $generator = Join-Path $repoRoot 'scripts/generate-docs.mjs'
+    $output = & $node.Source $generator --write --repo-root $Root 2>&1 | Out-String
+    Assert-True ($LASTEXITCODE -eq 0) ('Fixture generated docs must refresh after a valid manifest change:' + [Environment]::NewLine + $output)
+}
+
 function Copy-ContractFixture {
     param([string]$Source, [string]$Destination)
     New-Item -ItemType Directory -Path $Destination | Out-Null
@@ -193,7 +201,9 @@ try {
 
     $missingRequired = Join-Path $tempRoot 'missing-required-skill'
     Copy-ContractFixture -Source $repoRoot -Destination $missingRequired
-    Add-RequiredSkill -Root $missingRequired -Name 'future-email-skill' -CreateFile $false
+    Add-RequiredSkill -Root $missingRequired -Name 'future-email-skill' -CreateFile $true
+    Refresh-GeneratedDocs $missingRequired
+    Remove-Item -LiteralPath (Join-Path $missingRequired '.agents/skills/future-email-skill/SKILL.md')
     $missingRequiredResult = Invoke-Verify $missingRequired
     Assert-True ($missingRequiredResult.ExitCode -ne 0) 'Verifier must reject a missing required skill.'
     Assert-True ($missingRequiredResult.Output.Contains('missing-required-skill')) 'Missing skill error must expose its diagnostic code.'
@@ -201,6 +211,7 @@ try {
     $presentRequired = Join-Path $tempRoot 'present-required-skill'
     Copy-ContractFixture -Source $repoRoot -Destination $presentRequired
     Add-RequiredSkill -Root $presentRequired -Name 'future-email-skill' -CreateFile $true
+    Refresh-GeneratedDocs $presentRequired
     $presentRequiredResult = Invoke-Verify $presentRequired
     Assert-True ($presentRequiredResult.ExitCode -eq 0) "Verifier must accept a valid required skill:`n$($presentRequiredResult.Output)"
 
@@ -214,12 +225,15 @@ try {
             '  optional: [{ id: optional-email-skill, path: .agents/skills/optional-email-skill }]'
         )
     )
+    Refresh-GeneratedDocs $missingOptional
     $missingOptionalResult = Invoke-Verify $missingOptional
     Assert-True ($missingOptionalResult.ExitCode -eq 0) "Verifier must allow a missing optional skill:`n$($missingOptionalResult.Output)"
 
     $mismatchedSkill = Join-Path $tempRoot 'mismatched-skill'
     Copy-ContractFixture -Source $repoRoot -Destination $mismatchedSkill
-    Add-RequiredSkill -Root $mismatchedSkill -Name 'future-email-skill' -CreateFile $true -FrontmatterName 'wrong-skill-name'
+    Add-RequiredSkill -Root $mismatchedSkill -Name 'future-email-skill' -CreateFile $true
+    Refresh-GeneratedDocs $mismatchedSkill
+    Set-Content -LiteralPath (Join-Path $mismatchedSkill '.agents/skills/future-email-skill/SKILL.md') -Value @('---', 'name: wrong-skill-name', '---')
     $mismatchedResult = Invoke-Verify $mismatchedSkill
     Assert-True ($mismatchedResult.ExitCode -ne 0) 'Verifier must reject a mismatched skill name.'
     Assert-True ($mismatchedResult.Output.Contains('skill-name-mismatch')) 'Mismatch must expose its diagnostic code.'

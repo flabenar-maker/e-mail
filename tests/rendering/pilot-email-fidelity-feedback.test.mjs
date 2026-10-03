@@ -149,7 +149,7 @@ import test from "node:test";
     const desktop = element(transaction, "desktop", "root-card-summary-area-partner-info-row-status-container");
     const mobile = element(transaction, "mobile", "root-card-summary-area-partner-info-row-status");
     assert.deepEqual(fact(desktop, "reference-size"), {
- type: "dimensions", width: 116, height: 72, unit: "px" }
+ type: "dimensions", width: 117, height: 72, unit: "px" }
 );
     assert.equal(fact(desktop, "vertical-sizing").value, "fill");
     assert.equal(fact(desktop, "primary-alignment").value, "min");

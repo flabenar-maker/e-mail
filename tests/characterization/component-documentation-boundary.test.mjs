@@ -107,32 +107,60 @@ test("direct Figma source capture preserves shared and service registries and ma
       document.components.map(projectMigrationSignificantFields),
     ]),
   );
+  const remoteIds = new Set(["icon-account-circle-line-remote", "asset-partner-mark-remote"]);
+  const remoteShared = projected.shared.filter(({ id }) => remoteIds.has(id));
+  const localProjected = {
+    ...projected,
+    shared: projected.shared.filter(({ id }) => !remoteIds.has(id)),
+  };
+  const localRecords = Object.values(localProjected).flat();
   const allRecords = Object.values(projected).flat();
-  const systemIds = allRecords.map((record) => record.id);
-  const figmaIdentities = allRecords.map(
+  const systemIds = localRecords.map((record) => record.id);
+  const figmaIdentities = localRecords.map(
     (record) => `${record.figma.file_key}#${record.figma.node_id}`,
   );
 
   assert.deepEqual(
     Object.fromEntries(
-      Object.entries(projected).map(([library, records]) => [
+      Object.entries(localProjected).map(([library, records]) => [
         library,
         records.length,
       ]),
     ),
     { shared: 17, marketing: 26, service: 18 },
   );
-  assert.equal(allRecords.length, 61);
+  assert.equal(localRecords.length, 61);
   assert.equal(new Set(systemIds).size, 61);
   assert.equal(new Set(figmaIdentities).size, 61);
+  assert.equal(allRecords.length, 63);
+  assert.equal(new Set(allRecords.map(({ id }) => id)).size, 63);
+  assert.deepEqual(remoteShared.map((record) => ({
+    id: record.id,
+    component_key: record.figma.remote_source?.component_key,
+    source_root_node_id: record.figma.source_root_node_id,
+    node_id: record.figma.node_id,
+    root_modes: ["mobile", "desktop"].map((viewport) => record.contracts[viewport].root.render_mode),
+  })), [{
+    id: "icon-account-circle-line-remote",
+    component_key: "8ea141edd5ec0679825e7fde633e211282b2405b",
+    source_root_node_id: "1331:1646",
+    node_id: "1331:1646",
+    root_modes: ["figma-source-only", "figma-source-only"],
+  }, {
+    id: "asset-partner-mark-remote",
+    component_key: "be6c194606af9516b3cc07847f52d6db0c8cb6d7",
+    source_root_node_id: "439:4098",
+    node_id: "439:4098",
+    root_modes: ["figma-source-only", "figma-source-only"],
+  }]);
 
   assert.equal(
-    digest(projected.shared),
-    "sha256:f6dc075fcce35b96304fd09c939fce5ba455cc23f6ee05dcee88508a9e6255aa",
+    digest(localProjected.shared),
+    "sha256:f5b811bad670e4cab8106ce26dbabb92644cc3fe5559f9ccdab22ea619555a1b",
   );
   assert.equal(
     digest(projected.service),
-    "sha256:a85eee27bb2b1bbc13b4e19dfa21c23e382ef9a676e4eb0b4c94326f905f98ba",
+    "sha256:cecd2a37ca2c0e3565d3116d146e91c21fb398f06bc9f9ab5fbe2c03421f3b34",
   );
 
   const blocked = projected.marketing

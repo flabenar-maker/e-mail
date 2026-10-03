@@ -1,10 +1,56 @@
 // Run through Figma MCP use_figma, not through Node or the Figma web UI.
-// Append: return await captureFigmaContractFacts("exact-component-node-id");
-async function captureFigmaContractFacts(componentNodeId) {
+// Scalar diagnostics: captureFigmaContractFacts("exact-component-node-id").
+// Fresh evidence: supply { session_nonce, request_nonce, canonical_git_sha } from the host request.
+async function captureFigmaContractFacts(componentNodeId, request) {
+  // Validate and copy the host challenge BEFORE reading nodes or API settings.
+  const keys = ["session_nonce", "request_nonce", "canonical_git_sha"];
+  let requestContext = null;
+  if (request !== undefined) {
+    const validHex = (value, length) => typeof value === "string" && value.length === length && /^[a-f0-9]+$/u.test(value);
+    if (!request || typeof request !== "object" || Array.isArray(request) || keys.some(key => !Object.hasOwn(request, key)) ||
+        Object.keys(request).some(key => !keys.includes(key)) || !validHex(request.session_nonce, 64) ||
+        !validHex(request.request_nonce, 64) || !validHex(request.canonical_git_sha, 40)) {
+      const error = new Error("Evidence request requires exact session/request nonces and canonical SHA.");
+      error.code = "EVIDENCE_REQUEST_IDENTITY_MISMATCH";
+      throw error;
+    }
+    requestContext = { session_nonce: request.session_nonce, request_nonce: request.request_nonce, canonical_git_sha: request.canonical_git_sha };
+  }
+  const startedAt = new Date().toISOString();
+  const previousSkip = figma.skipInvisibleInstanceChildren;
+  try {
+    // Dev Mode may hide invisible instance descendants from children entirely.
+    // This is an API traversal setting, not a mutation of the design.
+    figma.skipInvisibleInstanceChildren = false;
+    const packet = await captureFigmaContractFactsBody(componentNodeId);
+    const pending = packet.variants.map((variant) => variant.source_node);
+    let nodeCount = 0;
+    while (pending.length) {
+      const node = pending.pop();
+      nodeCount += 1;
+      for (const child of node.children ?? []) pending.push(child);
+    }
+    return {
+      ...packet,
+      capture_version: requestContext ? "1.3.0" : packet.capture_version,
+      capture_meta: {
+        started_at: startedAt, completed_at: new Date().toISOString(),
+        tree_complete: packet.variants.length > 0, node_count: nodeCount,
+        ...(requestContext ? { request: requestContext } : {}),
+      },
+    };
+  } finally {
+    figma.skipInvisibleInstanceChildren = previousSkip;
+  }
+}
+
+// A failed traversal throws, so no partially collected tree gets certified.
+// node_count counts serialized variant roots and descendants, not the set wrapper.
+async function captureFigmaContractFactsBody(componentNodeId) {
   const component = await figma.getNodeByIdAsync(componentNodeId);
   if (!component || !["COMPONENT_SET", "COMPONENT"].includes(component.type)) {
     return {
-      capture_version: "1.0.0",
+      capture_version: "1.1.0",
       file_key: figma.fileKey,
       component_node_id: componentNodeId,
       variants: [],
@@ -37,6 +83,8 @@ async function captureFigmaContractFacts(componentNodeId) {
         position: stop.position,
         ...rgba(stop.color),
       }));
+      // Existing fact links use stops; keep the original v1 field too.
+      result.stops = result.gradient_stops;
       result.gradient_transform = paint.gradientTransform;
     } else if (paint.type === "IMAGE") {
       result.image_hash = paint.imageHash;
@@ -59,7 +107,34 @@ async function captureFigmaContractFacts(componentNodeId) {
     return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, binding(item)]));
   };
 
-  function serialize(node) {
+  const textStyles = new Map();
+  async function textStyleName(styleId, nodeId) {
+    // Empty means unlinked; null comes from an explicitly reported mixed ID.
+    if (styleId === "" || styleId === null) return null;
+    if (typeof styleId !== "string") {
+      errors.push({ node_id: nodeId, code: "TEXT_STYLE_UNRESOLVED" });
+      return null;
+    }
+    if (!textStyles.has(styleId)) {
+      try {
+        const style = await figma.getStyleByIdAsync(styleId);
+        textStyles.set(styleId, style?.type === "TEXT" &&
+          style.id === styleId && typeof style.name === "string"
+          ? { name: style.name }
+          : { error: "TEXT_STYLE_UNRESOLVED" });
+      } catch {
+        textStyles.set(styleId, { error: "TEXT_STYLE_LOOKUP_FAILED" });
+      }
+    }
+    const result = textStyles.get(styleId);
+    if (result.error) {
+      errors.push({ node_id: nodeId, code: result.error, style_id: styleId });
+      return null;
+    }
+    return result.name;
+  }
+
+  async function serialize(node) {
     const result = {
       node_id: node.id,
       name: node.name,
@@ -67,6 +142,17 @@ async function captureFigmaContractFacts(componentNodeId) {
       visible: node.visible,
       reference_dimensions: { width: node.width, height: node.height, unit: "px" },
     };
+
+    // Remote publication identity is evidence metadata, never export geometry.
+    if (node.type === "COMPONENT") {
+      try {
+        if (node.remote === true) {
+          const key = node.key;
+          if (typeof key === "string" && key.trim()) result.remote_source = { remote: true, component_key: key };
+          else errors.push({ node_id: node.id, code: "REMOTE_SOURCE_UNRESOLVED" });
+        }
+      } catch { errors.push({ node_id: node.id, code: "REMOTE_SOURCE_UNRESOLVED" }); }
+    }
 
     if ("layoutMode" in node) {
       result.layout = {
@@ -89,6 +175,7 @@ async function captureFigmaContractFacts(componentNodeId) {
         errors.push({ node_id: node.id, code: "ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW" });
       }
     }
+    if ("minWidth" in node) result.minimum_width_px = node.minWidth;
     if ("layoutAlign" in node) result.layout_align = node.layoutAlign;
     if ("layoutGrow" in node) result.layout_grow = node.layoutGrow;
     if ("layoutPositioning" in node) result.layout_positioning = node.layoutPositioning;
@@ -112,14 +199,35 @@ async function captureFigmaContractFacts(componentNodeId) {
     }
     if (node.type === "INSTANCE") {
       result.instance_properties = binding(node.componentProperties);
-      result.main_component_id = node.mainComponent?.id ?? null;
+      result.main_component_id = null;
+      try {
+        const main = await node.getMainComponentAsync();
+        if (main?.type === "COMPONENT" && typeof main.id === "string" && main.id) {
+          result.main_component_id = main.id;
+        }
+      } catch {
+        // Keep the instance and its actual children; never guess its source.
+      }
+      if (result.main_component_id === null) {
+        errors.push({ node_id: node.id, code: "MAIN_COMPONENT_UNRESOLVED" });
+      }
     }
     if (node.type === "TEXT") {
       result.characters = node.characters;
+      const styleId = mixed(node.textStyleId, node.id, "textStyleId");
+      const weight = mixed(node.fontWeight, node.id, "fontWeight");
+      if (node.fontWeight !== figma.mixed && !Number.isFinite(weight)) {
+        errors.push({ node_id: node.id, code: "FONT_WEIGHT_UNAVAILABLE", field: "fontWeight" });
+      }
+      result.text_geometry = {
+        auto_resize: node.textAutoResize,
+        vertical_alignment: node.textAlignVertical,
+      };
       result.text_style = {
         font_family: mixed(node.fontName, node.id, "fontName")?.family ?? null,
         font_style: mixed(node.fontName, node.id, "fontName")?.style ?? null,
         font_size_px: mixed(node.fontSize, node.id, "fontSize"),
+        font_weight: Number.isFinite(weight) ? weight : null,
         line_height: mixed(node.lineHeight, node.id, "lineHeight"),
         letter_spacing: mixed(node.letterSpacing, node.id, "letterSpacing"),
         horizontal_alignment: node.textAlignHorizontal,
@@ -127,7 +235,8 @@ async function captureFigmaContractFacts(componentNodeId) {
         text_case: mixed(node.textCase, node.id, "textCase"),
         text_decoration: mixed(node.textDecoration, node.id, "textDecoration"),
         text_auto_resize: node.textAutoResize,
-        figma_style_id: node.textStyleId,
+        figma_style_id: styleId ?? null,
+        figma_style_name: await textStyleName(styleId, node.id),
       };
       if (["fontName", "fontSize", "lineHeight", "fills", "textDecoration"].some(
         (field) => node[field] === figma.mixed
@@ -162,23 +271,27 @@ async function captureFigmaContractFacts(componentNodeId) {
         return captured;
       });
     }
-    if ("children" in node) result.children = node.children.map(serialize);
+    if ("children" in node) {
+      result.children = [];
+      for (const child of node.children) result.children.push(await serialize(child));
+    }
     return result;
   }
 
   const variantNodes = component.type === "COMPONENT_SET"
     ? component.children.filter((child) => child.type === "COMPONENT")
     : [component];
-  const variants = variantNodes.map((variant) => {
+  const variants = [];
+  for (const variant of variantNodes) {
     const axes = variant.type === "COMPONENT" && variant.parent?.type === "COMPONENT_SET"
       ? Object.entries(variant.variantProperties ?? {}).map(([name, value]) => ({ name, value }))
       : [];
-    return {
+    variants.push({
       variant_node_id: variant.id,
       axes,
-      source_node: serialize(variant),
-    };
-  });
+      source_node: await serialize(variant),
+    });
+  }
   const owner = component.type === "COMPONENT_SET" ? component : component.parent?.type === "COMPONENT_SET" ? component.parent : component;
   const componentProperties = Object.entries(owner.componentPropertyDefinitions ?? {})
     .map(([name, definition]) => ({
@@ -188,9 +301,10 @@ async function captureFigmaContractFacts(componentNodeId) {
       variant_options: definition.variantOptions ?? null,
     }));
   return {
-    capture_version: "1.0.0",
+    capture_version: "1.1.0",
     file_key: figma.fileKey,
     component_node_id: component.id,
+    owner_identity: { node_id: component.id, node_type: component.type, name: component.name },
     component_properties: componentProperties,
     variants,
     capture_errors: errors,

@@ -6,6 +6,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { readStrictYaml } from "../../scripts/lib/strict-yaml.mjs";
+import { renderAllGeneratedDocs } from "../../scripts/lib/generated-docs.mjs";
 import {
   canonicalSystemFixtureFiles,
   copyFixtureFile,
@@ -115,6 +116,13 @@ test("invalid generated bundle closure blocks the system validator", async (t) =
     "system/manifest.yaml",
     `${JSON.stringify(manifest, null, 2)}\n`,
   );
+  const generated = await renderAllGeneratedDocs({ repoRoot: root, manifest });
+  for (const path of [
+    "docs/generated/library-maintenance-checkpoint.md",
+    "docs/generated/email-build-checkpoint.md",
+  ]) {
+    await writeFixtureFile(root, path, generated.get(path));
+  }
 
   const result = await runValidator(root);
 

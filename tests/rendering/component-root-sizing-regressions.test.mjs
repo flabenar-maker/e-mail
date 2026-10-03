@@ -113,7 +113,7 @@ async function actualRegistryComponent(componentId) {
   return component;
 }
 
-for (const [componentId, statusWidth] of [["block-transaction-success", 116], ["block-transaction-error", 106]]) {
+for (const [componentId, statusWidth] of [["block-transaction-success", 117], ["block-transaction-error", 106]]) {
   test(`actual ${componentId} keeps its Desktop status container hug-sized and vertically filled`, async () => {
     const component = await actualRegistryComponent(componentId);
     const statusContainer = findElement(component.contracts.desktop.root, ({ semantic_role }) => semantic_role === "status-container");
