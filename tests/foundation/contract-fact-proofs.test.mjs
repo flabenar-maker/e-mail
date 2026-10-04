@@ -196,6 +196,7 @@ function recount(fixture) {
 function consumerChainFixture() {
   const f = baseFixture();
   const source = f.record, asset = f.record.asset_contracts[0];
+  source.properties = [];
   source.contracts.mobile.root.facts[1] = fact('consumer-display-size', { type: 'dimensions', width: 212, height: 33, unit: 'px' });
   source.variants.forEach(v => v.axes = [{ name: 'Product', value: v.id === 'product-one' ? 'One' : 'Two' }]);
   const product = { id: 'synthetic-product', identity: { library: 'shared', semantic_role: 'asset', node_kind: 'component-set', figma_name: 'Synthetic Product' }, figma: { file_key: 'synthetic-file', node_id: '600:1' }, properties: [], variants: [{ id: 'product-one', node_id: '601:1', axes: [{ name: 'Product', value: 'One' }] }, { id: 'product-two', node_id: '601:2', axes: [{ name: 'Product', value: 'Two' }] }], asset_contracts: [], contracts: { mobile: { root: { render_mode: 'figma-source-only', facts: [], children: [] } }, desktop: { root: { render_mode: 'figma-source-only', facts: [], children: [] } }, figma_fact_links: [] }, evidence_links: { foundation_values: [], source_dependencies: [], fact_proofs: [], normative_decisions: [] } };
