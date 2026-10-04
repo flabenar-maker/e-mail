@@ -32,3 +32,29 @@ test('mobile root context accepts default leaf paths and vertical no-wrap direct
 for(const [name,mutate] of [['opacity',f=>f.node.opacity=.5],['rotation',f=>f.node.rotation=1],['strokes',f=>f.node.strokes=[{}]],['effects',f=>f.node.effects=[{type:'DROP_SHADOW'}]],['minimum width',f=>f.node.minimum_width_px=20],['spacing',f=>f.node.layout.counter_axis_spacing=1],['absolute positioning',f=>f.node.layout_positioning='ABSOLUTE']])test(`rejects ${name} context drift`,()=>{const f=fixture();mutate(f);assert.equal(api().auditNativeContextProofs(f).ok,false);});
 test('rejects a missing structure proof or wrong mobile root node',()=>{const f=fixture();f.record.evidence_links.native_context_proofs[0].structure_proof_id='missing';assert.equal(api().auditNativeContextProofs(f).ok,false);});
 test('copied coverage cannot filter actual raw facts and future fields stay uncovered',()=>{const f=fixture(),coverage=api().auditNativeContextProofs(f),future=structuredClone(f.packet);future.variants[0].source_node.future_field=true;const raw=auditFigmaContractFacts({record:f.record,live:future});assert.equal(api().applyNativeContextCoverage({facts:raw,coverage:structuredClone(coverage)}),raw);});
+
+
+test('html-link receives ordinary HTML context only through its own structure proof', () => {
+  const f = fixture(), element = f.record.contracts.mobile.root.children[1], node = f.packet.variants[0].source_node.children[1];
+  element.render_mode = 'html-link'; element.semantic_role = 'help-link'; node.node_type = 'TEXT'; node.name = 'help-link';
+  f.record.evidence_links.native_context_proofs = [{id: 'link-context', kind: 'html-element-context', structure_proof_id: 'detail-structure'}];
+  assert.equal(api().auditNativeContextProofs(f).ok, true);
+});
+
+test('ordinary false clips_content is semantic absence, while true needs an exact typed Boolean map', () => {
+  const f = fixture(); f.node.clips_content = false;
+  assert.equal(api().auditNativeContextProofs(f).ok, true);
+  f.node.clips_content = true;
+  assert.equal(api().auditNativeContextProofs(f).ok, false);
+  f.record.contracts.mobile.root.facts.push({id: 'clip-content', value: {type: 'boolean', value: true}, provenance: {kind: 'figma-literal', node_id: f.node.node_id}});
+  f.record.contracts.figma_fact_links.push({variant_node_id: '101:1', node_id: f.node.node_id, source_path: '/clips_content', contract_path: `/contracts/mobile/root/facts/${f.record.contracts.mobile.root.facts.length - 1}/value/value`, transform: 'identity'});
+  assert.equal(api().auditNativeContextProofs(f).ok, true);
+});
+
+test('non-null minimum width needs a same-node mapped px measure', () => {
+  const f = fixture(); f.node.minimum_width_px = 24;
+  assert.equal(api().auditNativeContextProofs(f).ok, false);
+  f.record.contracts.mobile.root.facts.push({id: 'minimum-width', value: {type: 'measure', value: 24, unit: 'px'}, provenance: {kind: 'figma-literal', node_id: f.node.node_id}});
+  f.record.contracts.figma_fact_links.push({variant_node_id: '101:1', node_id: f.node.node_id, source_path: '/minimum_width_px', contract_path: `/contracts/mobile/root/facts/${f.record.contracts.mobile.root.facts.length - 1}/value/value`, transform: 'identity'});
+  assert.equal(api().auditNativeContextProofs(f).ok, true);
+});
