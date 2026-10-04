@@ -30,7 +30,9 @@ function target(record, path) {
   const value = pointer(record, path);
   const scope = /^\/contracts\/(mobile|desktop)(?:\/|$)/u.exec(path)?.[1];
   const index = /^\/contracts\/variant_contracts\/(\d+)\//u.exec(path)?.[1];
-  return object(value) && object(fact) ? {fact, value, viewport: scope ?? record.contracts?.variant_contracts?.[index]?.viewport} : null;
+  const variantContract = record.contracts?.variant_contracts?.[index];
+  const variantViewport = variantContract?.axes?.find(axis => axis.name === 'Viewport')?.value?.toLowerCase();
+  return object(value) && object(fact) ? {fact, value, viewport: scope ?? variantViewport} : null;
 }
 function shape(p) {
   return KINDS.includes(p?.kind) && closed(p, ['id', 'kind', 'source', 'contract_path', ...(p.kind === 'axis-sizing-alias' ? ['axis'] : [])]) &&
