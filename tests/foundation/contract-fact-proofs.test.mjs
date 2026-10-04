@@ -198,9 +198,9 @@ function consumerChainFixture() {
   const source = f.record, asset = f.record.asset_contracts[0];
   source.contracts.mobile.root.facts[1] = fact('consumer-display-size', { type: 'dimensions', width: 212, height: 33, unit: 'px' });
   source.variants.forEach(v => v.axes = [{ name: 'Product', value: v.id === 'product-one' ? 'One' : 'Two' }]);
-  const product = { id: 'synthetic-product', identity: { library: 'shared', semantic_role: 'asset', node_kind: 'component-set', figma_name: 'Synthetic Product' }, figma: { file_key: 'synthetic-file', node_id: '600:1' }, variants: [{ id: 'product-one', node_id: '601:1', axes: [{ name: 'Product', value: 'One' }] }, { id: 'product-two', node_id: '601:2', axes: [{ name: 'Product', value: 'Two' }] }], asset_contracts: [], contracts: { mobile: { root: { render_mode: 'figma-source-only', facts: [], children: [] } }, desktop: { root: { render_mode: 'figma-source-only', facts: [], children: [] } }, figma_fact_links: [] }, evidence_links: { foundation_values: [], source_dependencies: [], fact_proofs: [], normative_decisions: [] } };
+  const product = { id: 'synthetic-product', identity: { library: 'shared', semantic_role: 'asset', node_kind: 'component-set', figma_name: 'Synthetic Product' }, figma: { file_key: 'synthetic-file', node_id: '600:1' }, properties: [], variants: [{ id: 'product-one', node_id: '601:1', axes: [{ name: 'Product', value: 'One' }] }, { id: 'product-two', node_id: '601:2', axes: [{ name: 'Product', value: 'Two' }] }], asset_contracts: [], contracts: { mobile: { root: { render_mode: 'figma-source-only', facts: [], children: [] } }, desktop: { root: { render_mode: 'figma-source-only', facts: [], children: [] } }, figma_fact_links: [] }, evidence_links: { foundation_values: [], source_dependencies: [], fact_proofs: [], normative_decisions: [] } };
   const compact = {
-    id: 'synthetic-compact', identity: { library: 'shared', semantic_role: 'asset', node_kind: 'component-set', figma_name: 'Synthetic Compact' }, figma: { file_key: 'synthetic-file', node_id: '400:1' },
+    id: 'synthetic-compact', identity: { library: 'shared', semantic_role: 'asset', node_kind: 'component-set', figma_name: 'Synthetic Compact' }, figma: { file_key: 'synthetic-file', node_id: '400:1' }, properties: [],
     variants: [{ id: 'product-one', node_id: '401:1', axes: [{ name: 'Product', value: 'One' }] }, { id: 'product-two', node_id: '401:2', axes: [{ name: 'Product', value: 'Two' }] }], asset_contracts: [],
     contracts: { mobile: { root: { render_mode: 'figma-source-only', facts: [], children: [] } }, desktop: { root: { render_mode: 'figma-source-only', facts: [], children: [] } }, figma_fact_links: [] },
     evidence_links: { foundation_values: [], source_dependencies: [{ id: 'compact-product-one', source: { variant_node_id: '401:1', node_id: '401:10' }, target: { component_id: product.id, variant_id: 'product-one' }, asset_owner: { node_id: '401:1' } }, { id: 'compact-product-two', source: { variant_node_id: '401:2', node_id: '401:20' }, target: { component_id: product.id, variant_id: 'product-two' }, asset_owner: { node_id: '401:2' } }], fact_proofs: [], normative_decisions: [] }
@@ -284,9 +284,13 @@ test('source-value-set rejects altered request/receipt and incomplete-tree packe
 test('consumer-geometry requires the full source-to-consumer dependency and exact owned asset placement', () => {
   const f = consumerChainFixture(); setProof(f, { id: 'proof-consumer', kind: 'consumer-geometry', contract_path: '/contracts/mobile/root/facts/1/value', consumer_component_id: 'synthetic-header', asset_contract_id: 'synthetic-image', placements: { mobile: { component_id: 'synthetic-header', variant_node_id: '501:1', node_id: '501:3' }, desktop: { component_id: 'synthetic-header', variant_node_id: '501:2', node_id: '501:4' } } }); assertVerified(f, 'proof-consumer');
 });
-test('consumer-geometry rejects missing Product evidence, canonical variants, instance identity, and asset ownership', () => {
+test('consumer-geometry permits owner-only evidence when Shared identity packets are absent', () => {
+  const { f } = verifiedConsumerProofFixture();
+  f.session.captures = f.session.captures.filter((capture) => !['synthetic-product', 'synthetic-compact'].includes(capture.component_id));
+  assertVerified(f, 'proof-consumer');
+});
+test('consumer-geometry rejects invalid Product variant, actual instance identity, and asset ownership', () => {
   for (const change of [
-    (f) => { f.session.captures = f.session.captures.filter((capture) => capture.component_id !== 'synthetic-product'); },
     (f) => { f.model.records.find((record) => record.id === 'synthetic-product').variants.pop(); },
     (f) => { f.session.captures.find((capture) => capture.component_id === 'synthetic-header').packet.variants[0].source_node.children[0].children[0].main_component_id = '601:2'; },
     (f) => { f.model.records.find((record) => record.id === 'synthetic-header').evidence_links.source_dependencies.find((link) => link.id === 'mobile-compact').asset_owner.node_id = '501:4'; }
