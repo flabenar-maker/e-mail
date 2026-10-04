@@ -22,7 +22,7 @@
 
 <a id="текущая-точка-возврата-p2--точная-карта-remaining-proof-и-f7-03102026"></a>
 
-### Текущая точка возврата P2 — native repair проверен; приёмка пакета впереди, 04.10.2026
+### Текущая точка возврата P2 — native repair и отдельная восьми-owner сверка выполнены; пакет открыт, 04.10.2026
 
 Обновлено 04.10.2026. `main@618d124df0a664c84d23a724ba50ef2b324e9b97` не менялся; [PR #110](https://github.com/flabenar-maker/e-mail/pull/110) остаётся draft/open. Продолжено разрешённое исправление P2, без Figma writes, изменения export/rendering values, готовых писем, P3, deferred #109, activation или merge. **P2 целиком не принят.**
 
@@ -191,30 +191,60 @@ Independent bounded F7 review04e→df527:0 новых Critical/Important/Minor; 
 
 **Граница результата:** N1–N4 завершены в PR, но весь пакет 2 ещё не объявлен принятым. Следующее — свести Acceptance/Step 4 с уже выполненным архивным сопоставлением и representative/foundation evidence, не повторяя F2. Финальный коммит только с планами проходит свою проверку содержания, ссылок, сохранности остальных blobs, validator и generated; результаты полного прогона и MCP остаются привязанными к 75e6f86. GitHub Actions и PR Checks не использованы. PR остаётся draft/open; main 618d124 не изменён. Merge, P3, #109, реализация ссылок, cutover и синхронизация локальных навыков не выполнялись.
 
-#### Итоговая сверка P2: точный оставшийся вход
+<a id="p2-eight-owner-read-only-2026-10-04"></a>
 
-После N4 отдельно перечитаны прежний архивный matrix и реальные компактные receipts восьми owners на `997077f0a3182653dbcf71ab861d84aacfeae357`. Это **исторический результат 997**, не новый аудит текущего SHA и не восемь новых дефектов дизайна. Там все восемь combined audits были nonaccepting; закрытие 18 unmapped leaves не закрывало остальной native inventory. Свежий результат 75e6f86 подтверждает только пять других выбранных owners и не заменяет эту область.
+#### Итоговая read-only сверка восьми owners, 04.10.2026
 
-| Owner старого аудита | Исторические effective fact issues |
-| --- | ---: |
-| `asset-header-logo-4x` | 112 |
-| `asset-header-logo-compact-4x` | 115 |
-| `asset-product-logo` | 115 |
-| `email-header` | 103 |
-| `banner-hero` | 443 |
-| `banner-secondary` | 411 |
-| `button-primary` | 116 |
-| `block-contact-support` | 303 |
+**Точный вход:** candidate `557a45ee75e8366966377f43ea33d91ba573ac2a`, tree `6500161f6165e4813eac764f395d5109058a6548`; main по-прежнему `618d124df0a664c84d23a724ba50ef2b324e9b97`, PR #110 draft/open. Это отдельные восемь owners прежнего аудита997, а не пять owners N1–N4. Ровно один успешный scoped bundle: library-maintenance/read-only/both, восемь выбранных IDs, зависимость button-secondary и четыре foundations; status paused/SKILL_ROUTE_PAUSED не разрешает production writes. Первая попытка resolver из корня Mails дала SKILL_CONTEXT_FAILED; причина — process.cwd() вместо папки exact snapshot. Исправлено только место запуска; failed attempt сохранён отдельно, bundle вручную не собирался. Успешный bundle SHA256 `563546f7d7d2169338febc8d11cba5cc28190cf826ae0845ca2e14df0fcd056d`.
 
-Исторический итог: 1718 effective fact issues, из них 1714 uncovered, 3 links-not-contract и 1 unsupported; отдельно 34 capture/evidence errors и 2 scope-unsupported. Нулевые value/missing-path/identity mismatches и подтверждённые 18 proofs остаются результатом своей области, не отменяются. Квитанции: `fresh-fact-proof-997077f/inmemory-audit-receipt.json`, SHA256 `0e9f6332a5f773367dda05bc0f11d64ca23fc1702b284dd28dbe9f7165fc59ec`; `final-audit-receipt.json`, SHA256 `8b5020367280bdefa6d8919dfc5a1e91c5f5414a0457540d5dbd7e7578d91d61`. Это временные execution artifacts вне репозитория, не новый реестр.
+Получены восемь новых request-bound MCP packets посредством точного cloud capture producer1.3.0: новые session/request challenges, SHA echo, реальные host receipts и полный native tree. Admission8/8; исходные responses, packet bytes и raw auditor reports сохранены. Пакеты997 не перепинивались. Session SHA256 `382784e446795468f25534db5453e5ef04d1f0ca02d04f5282bde1620a0c4fac`; producer SHA256 `6c8c5d0e936a55dc89896b9bb8dc1df087cf803126441948ba98358c5cb869d0`. Компонентные значения, evidence metadata, код, Figma, HTML и изображения не менялись.
 
-**Архивная часть сопоставления:** прежний пробел F3 закрыт активными semantic typography-consumer tests; прежний F7 — двумя зарегистрированными generated checkpoints и проверяемым producer. Naming, typography, maintenance/email boundaries и component facts имеют нынешних владельцев из уже записанной matrix. Controlled write, dependent-write stop и preservation/read-back относятся к P3 и не выдаются за выполненные в P2. Прежняя matrix сохраняется как история своего SHA.
+| Owner | Effective issues997 →557 | Uncovered557 | Отдельный retained факт-аудит blocker |
+| --- | ---: | ---: | --- |
+| asset-header-logo-4x |112→112|111|EVIDENCE_LINKS_NOT_IN_CONTRACT1; source artwork/варианты |
+| asset-header-logo-compact-4x |115→115|114|EVIDENCE_LINKS_NOT_IN_CONTRACT1; source artwork/варианты |
+| asset-product-logo |115→115|114|EVIDENCE_LINKS_NOT_IN_CONTRACT1; nested source, не отдельный экспорт |
+| email-header |103→103|102|FIGMA_CAPTURE_UNSUPPORTED1: Mobile15:2037, I1008:1709;1008:1347, ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW |
+| banner-hero |443→443|443|Остаток native/Fill/nested HTML coverage |
+| banner-secondary |411→411|411|Остаток native/Fill/background-image/nested HTML coverage |
+| button-primary |116→116|116|Остаток native/gradient coverage; CSS25° отдельно verified |
+| block-contact-support |303→297|297|Шесть aggregate mixed-text leaves закрыты, остальные native obligations сохранены |
 
-**Следующий шаг без нового implementation-плана:** read-only сопоставить каждый из этих восьми owners и оставшиеся owner/node/path с нынешним доказательным механизмом. Для каждого оставить точный итог: подтверждён свежим чтением / покрыт узким доказательством / требует ремонта с конкретной причиной. Если прежняя ошибка уже устранена, показать superseding evidence, не поставить статус по аналогии с пятью owners. Неприменимая ветвь аудита не требует добавлять фиктивный asset contract; исходные diagnostics сохраняются. При необходимости получить новые request-bound MCP packets на текущем exact SHA, не перепинивать 997 packets. Значения, Figma, HTML и согласованные 25° не менять. Новый ремонт за пределами одобренных пяти owners сначала представить с impact/allowed-path картой. До этой сверки Step 4 и общая Acceptance P2 остаются открытыми; повторять N1–N4, F2 или закрытые 18 proofs не требуется. P3, #109, activation, merge и синхронизацию навыков не начинать.
+**Итог:** raw fact issues1765 (из них uncovered1743); effective fact issues1712 = uncovered1708 +3links-not-contract +1unsupported. Исторический997: effective issues1718 = uncovered1714 +те же4других findings. Закрыты **ровно6** uncovered tuples, не10; новых uncovered tuples нет. Это font_family/font_style/text_decoration на TEXT459:27586 в Desktop472:16997 и TEXT459:27607 в Mobile472:16998: complete styled ranges и существующие style-usage proofs. Value/missing-source-path/identity mismatches0 относятся только к проверенным mappings, не доказывают остальные1708полей.
+
+Все18 прежних непустых typed fact proofs verified: Header source/consumer geometry и profiles7, Hero auto1, Secondary auto/cover2, Primary approved25°2, Contact style usage6. Это fresh superseding evidence их exact области. Native fact/relation/variable/context arrays у этих восьми owners **пустые**: ok на пустой ветви не закрывает coverage. У всех8combined acceptance=false. Original raw capture diagnostics сохранены:11absolute-artwork warnings остаются unverified (9Shared,2Header),8MIXED_VALUE Contact verified по complete ranges. Independent links branch по-прежнему возвращает EVIDENCE_SCOPE_UNSUPPORTED2 (Primary/Contact); в combined этой неприменимой ветви0, но это **не** закрытие двух independent diagnostics. Фиктивные asset contracts для прохождения ветви не добавляются.
+
+**Полное сопоставление остатка:** для каждого из1708tuples сохранены owner/variant/full node/source path, native value и предложенное disposition с exact existing target, где он есть. Диагностическая группировка — не simulated PASS и не новая coverage mask:
+
+| Группа | Tuples | Значение результата |
+| --- | ---: | --- |
+| Existing relation prerequisites |192|Есть reference-size/native class; полный structure/visibility/children/dependency proof ещё обязателен |
+| Existing same-node corner/axis/text aliases |204|116corners +56axis +16resize +16text alignment; все target/provenance того же node; NONE не трактуется как directional Auto Layout |
+| Existing variable prerequisites |63|Есть exact mapped scalar; variable ID/key/mode/alias chain/consumer result ещё проверяются |
+| Existing paint/context prerequisites |334|66solid paint +268guarded context; active/unknown/nonempty bindings не принимаются по совпадению соседнего числа |
+| Source/owned artwork capability gaps |525|Фактическая boundary/Shared source; текущий nonvariant artwork profile не универсален для этих variants/Fill |
+| Nested HTML boundary gaps |140|Button INSTANCE не является картинкой лишь потому, что у баннера есть asset; children/overrides проверяются у своего владельца |
+| Relation class/capability gaps |12|html-link→TEXT и background-image→FRAME не выражены текущей узкой relation ветвью; это ограничение checker, не изменение класса в Figma |
+| Active/unknown unmodelled context |238|Нужно точное решение по значимости/владельцу; без нового доказательства остаётся open |
+
+793tuples имеют prerequisites в существующем механизме; **они ещё не закрыты**. Оставшиеся915также не получают automatic ignore. Например Hero230:3680/TEXT230:3637 /text_style/text_auto_resize указывает на /contracts/desktop/root/children/0/children/1/children/0/children/0/facts/11/value/value; Contact472:16997/459:27581 /variable_bindings/itemSpacing/id — на /contracts/desktop/root/children/0/facts/2/value/value. Наличие target не отменяет full proof guards.
+
+**Воспроизводимые artifacts вне репозитория:** `P2-eight-owner-557a45ee/` в существующей временной execution-папке. Summary SHA256 `78ae36e8df4f350db5490a2b940b22d6f6a590d3014b068732394c6c20a25181`; full report `2ea3d8b11c9868069cc6d29a27a81421341686ca6d0bfef8f67bd90ee2cb3379`; original raw report objects digest `1764710bb446d90fa806ac5faa4ab0190066a9f967803ee9a81ee6b5fa3e7666`; raw remaining inventory `277d1cfc22d90bff68638e09002a46733aa61375c91b2475673039f99287441b`; corrected suggested-disposition inventory `7279f0df06b5927df170505cf739aaa59eaeeba50934a341e752d99afe8fee96`. Старый classifier retained как v1, SHA256 `ab22936b9c409bda833677c2815d2122f10e047ba4a0ac5ab1440f03589cecde`; ошибки mixing total/uncovered, NONE axis fallback и INSTANCE≠artwork исправлены только в temporary diagnostic projections, не в authentic audit. Historical997 receipts сохранены: inmemory SHA256 `0e9f6332a5f773367dda05bc0f11d64ca23fc1702b284dd28dbe9f7165fc59ec`, final SHA256 `8b5020367280bdefa6d8919dfc5a1e91c5f5414a0457540d5dbd7e7578d91d61`. При утрате artifacts нужен новый MCP session, а не восстановление PASS из этого журнала.
+
+**Архивное сопоставление:** F3 semantic typography-consumer tests и F7 два generated checkpoints с producer реализованы. Naming, typography, maintenance/email boundaries и component facts имеют текущих owners прежней matrix. Controlled write, dependent-write stop, preservation/read-back принадлежат будущему P3, не считаются выполненными в P2.
+
+**Следующий шаг — сначала отдельное разрешение на bounded repair вне прежних пяти owners.** Предлагаемая impact-карта, не authorization:
+
+- В data/components/shared.yaml, marketing.yaml и service.yaml — только evidence metadata восьми указанных records для independently mapped facts/owners; existing facts, provenance, variant/property/asset definitions и все другие records сохраняются. Для dependent button-secondary допускается необходимое fresh read, не автоматическая правка его record.
+- Где existing profile достаточен — применить нынешние native fact/relation/variable/context proofs и проверять actual полный результат, не grandfathered status. Пустые arrays и classifier prerequisites не являются доказательством.
+- Где профиль недостаточен — сначала специфицировать exact shared-variant/export-owner, image-Fill, nested HTML, html-link/background-image и поддержанный native paint/context scope; затем отдельное узкое расширение schemas/components.schema.json, scripts/lib/native-{fact,relationship,variable,context}-coverage.mjs, native-artwork-context.mjs и связанных figma-contract-facts/figma-component-evidence/component-evidence-inputs/component-evidence-links/contract-fact-proofs consumers только по реально необходимым зависимостям. Blanket source-only exemption, arbitrary field masks и подмена CSS25° native transform запрещены. Для238unknownfields сначала определить owner/значимость; если требуется новое rendering значение, сообщить пользователю, не менять его в этом ремонте.
+- При разрешённом ремонте — соответствующие foundation/CLI/evidence-isolation tests, schema/semantic validation и mechanical generated registry/description outputs; core/component-contract-standard.md меняется только при новом proof shape. Foundations, renderer, routes, workflows, skills, HTML/export policy и Figma не входят в write scope. Changed paths/records перечисляются точно до первой записи; свежий MCP аудит и один полный локальный gate — на финальном product SHA. GitHub Actions/PR Checks не используются.
+
+В этом read-only продолжении публикуются только этот план и roadmap; их exact final commit получает docs-only content/link/allowed-path/preserved-blob, validator и generated checks. Полный1345/1345 и пять-owner MCP остаются proof75e6f86, восьми-owner audit — proof557a45ee, не proof последующего docs commit. Step4 и общая Acceptance P2 **остаются open**; N1–N4/F2 и закрытые18proofs не повторяются. P3, #109, URL/underline implementation, activation, merge и локальная синхронизация навыков не начинаются.
 
 #### Следующий пункт и границы
 
-F7 и согласованный ремонт N1–N4 закрыты в кандидате: свежий аудит пяти owners на 75e6f86 (raw 1838 / effective 0), полный прогон 1345/1345, validator, generated и Windows — PASS; сохранность данных и независимое review подтверждены. **Следующий пункт P2:** свести Acceptance и Step 4 с архивным сопоставлением и foundation/representative evidence, явно перечислив оставшиеся приёмочные обязательства. Это не повторная проверка всей библиотеки и не автоматическое закрытие P2 или merge. F2 не повторять; P3, реализацию ссылок, deferred #109 и activation не начинать автоматически.
+F7 и согласованный ремонт N1–N4 закрыты в кандидате: свежий аудит пяти owners на 75e6f86 (raw 1838 / effective 0), полный прогон 1345/1345, validator, generated и Windows — PASS; сохранность данных и независимое review подтверждены. **Следующий пункт P2:** после свежей отдельной восьми-owner сверки согласовать bounded metadata/capability repair её остатка1712issues; архивные F3/F7 реализованы, но Step4 и Acceptance не закрыты. Это не повторная проверка всей библиотеки и не автоматическое закрытие P2 или merge. F2 не повторять; P3, реализацию ссылок, deferred #109 и activation не начинать автоматически.
 
 **Отдельная согласованная очередь после завершения этапа2:** подготовить подробный implementation plan со ссылками для URL/подчёркиваний. Actual Figma URL означает HTML-ссылку и без подчёркивания; подчёркнутый диапазон без URL требует вопроса; anchor охватывает только точный диапазон и сохраняет оформление. URL — input конкретного письма, не постоянное значение component contract; `#`/тестовый адрес без разрешения запрещён. Будущий owner — [email-model-assembly-standard](../../../core/email-model-assembly-standard.md#текст-ссылки-и-alt), tracing — [email-source-fidelity-standard](../../../core/email-source-fidelity-standard.md). Точки будущего плана: [schema](../../../schemas/email-model.schema.json), [normalizer](../../../scripts/lib/email-model.mjs), [interpreter](../../../scripts/lib/email-interpreter.mjs), [fidelity checker](../../../scripts/lib/email-source-fidelity.mjs), [workflow](../../../data/workflows/email-build.yaml), [skill](../../../.agents/skills/building-cupis-emails/SKILL.md). Сейчас это только очередь будущего планирования; ограничение rich-text текущей схемы не скрывается.
 
