@@ -124,6 +124,23 @@ Independent bounded F7 review04e→df527:0 новых Critical/Important/Minor; 
 
 **Проверки данного шага.** Read-only анализ и контроль полноты выполнены локально GPT-5.6 Terra Medium; Actions/PR Checks не использованы. Full 1111/1111, validator/generated и Windows receipts остаются привязаны к code candidate a106, где они реально запускались в F7. Для нового docs-only journal проводится собственный exact-commit allowed-path/preserved-blob/link/content check; старый full run не переименовывается в прогон нового SHA. Fresh native session, canonical owner audit inputs и полный 1838-row review сохранены только во временной evidence-папке, не в репозитории; на другом компьютере повторять fresh capture, не считать доступность этой папки обязательной. Ни одна строка не исключена из покрытия.
 
+<a id="p2-native-proof-repair-2026-10-04"></a>
+
+#### Согласованный native proof/guard ремонт — 04.10.2026
+
+Пользователь уточнил происхождение рекомендации и затем разрешил: «Окей, делай с рекомендацией». Это разрешение ограниченного authoring/audit ремонта внутри P2, не нового HTML-движка, дизайна, activation, P3 или merge. Исходный head: `9f6c18bb306e220ceaf9c698b73a33eb064bda03`.
+
+- [ ] N1: same-node native reductions — uniform corners, text resize/alignment aliases и primary/counter axis sizing. Новый узкий helper, optional closed owner-local metadata, validation и composition с действующим fact-proof механизмом; исходный raw report неизменен. RED→GREEN: unequal/missing corners, другой node/type/viewport, неверный sizing, отсутствующий/дублированный mapping, чужой/поддельный/изменённый report, неподтверждённая session и unknown fields.
+- [ ] N2: ordered structure/control, variable и style ownership — использовать точных существующих владельцев; не выбирать foundation по одному числовому совпадению и не копировать definition в runtime contract.
+- [ ] N3: узкие HTML capability/absence guards и source-only artwork boundaries — не общий ignore-list defaults; exact role/context и change-sensitive counterexamples обязательны.
+- [ ] N4: owner-local metadata только для пяти выбранных записей, свежий exact-SHA MCP audit, локальная regression/полный финальный gate и независимое review. P2 не принимается одним уменьшением счётчика.
+
+**Точная область N1:** `schemas/components.schema.json`, `scripts/lib/native-fact-coverage.mjs`, существующий shared capture environment в `scripts/lib/contract-fact-proofs.mjs`, интеграция `scripts/lib/figma-component-evidence.mjs` и reference validation в `scripts/lib/component-registry.mjs`, `tests/foundation/native-fact-coverage.test.mjs`, Core component-contract-standard и эти текущие plan journals. Служебные metadata позже допускаются только в пяти owners shared/service; generated outputs — только через реальный producer. Renderer, component values/trees/provenance, asset contracts, foundations, descriptions, Figma, готовые письма и local skills сохраняются.
+
+**Pre-flight / ruling:** существующий request-bound environment остаётся единственным исполнителем capture identity/freshness; helper его переиспользует, не создаёт второй протокол. Effective composition получает подлинный raw report и вычисленные proof objects, не caller masks/status. Cloud branch — authoring authority; disposable snapshots только выполняют проверки. Поэтому локальные worktree/task-commit scripts заменяются guarded cloud Git API и этим журналом, а рутинные проверки делегируются Terra Medium по AGENTS. Цена ошибочной composition — ложное закрытие obligations; negative tests проверяют чужие/copy/mutated inputs и сохранность raw diagnostics.
+
+**N1 RED:** следующий test-only commit добавляет публичные поведенческие проверки до реализации. Expected: отсутствующий native coverage API / интеграция, не import/fixture/harness error. Actual result публикуется после локального запуска на точном SHA; ожидание не считается результатом.
+
 #### Следующий пункт и границы
 
 F7 закрывает собственный producer/output gap в кандидате, не весь P2. Полный read-only native inventory теперь разобран на a106: exact tuple sets и значения подтверждены, но 1838 obligations ещё не приняты. **Следующий пункт P2:** получить решение по точной карте proof/guard impact выше, затем реализовать только согласованный authoring/audit scope и выполнить свежую exact-SHA проверку. Не заменять её простым удалением диагностик. F2 не повторять; P3, URL implementation plan, deferred #109, activation и merge не начинать автоматически. URL plan остаётся отдельной очередью после завершения всего этапа 2.
