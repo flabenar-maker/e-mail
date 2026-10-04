@@ -102,7 +102,7 @@ function inertNoneContext(record, relation, node, e, add) {
   if (!closed(layout.padding, ['top', 'right', 'bottom', 'left']) || Object.values(layout.padding).some(value => value !== 0)) throw Error('inert NONE padding must be explicitly zero');
   for (const side of ['top', 'right', 'bottom', 'left']) add(`/layout/padding/${side}`);
 }
-function verifyContext(record, relation, node, packet, add) {
+function verifyContext(record, relation, node, packet, add, ordinaryHtml) {
   const e = pointer(record, relation.element_path);
   // These are semantic absence conditions for ordinary HTML, not a global
   // list of fields to ignore. Any active unsupported appearance fails proof.
@@ -113,8 +113,13 @@ function verifyContext(record, relation, node, packet, add) {
   if (node.minimum_width_px === null) add('/minimum_width_px');
   else if (!directFact(record, relation, node, 'minimum-width', '/minimum_width_px')) throw Error('minimum width requires an independently mapped exact px measure');
   if (Object.hasOwn(node, 'clips_content')) {
-    if (node.clips_content === false) add('/clips_content');
-    else if (!directFact(record, relation, node, 'clip-content', '/clips_content')) throw Error('active clipping requires an independently mapped exact Boolean');
+    if (ordinaryHtml) {
+      if (node.clips_content === false) add('/clips_content');
+      else if (!directFact(record, relation, node, 'clip-content', '/clips_content')) throw Error('active clipping requires an independently mapped exact Boolean');
+    } else if (typeof node.clips_content !== 'boolean') throw Error('complete rendered artwork clipping qualifier required');
+    // The other admitted path already passed the owned PNG/rendered-node
+    // preserve-artwork boundary verifier. Its native clipping is not an HTML
+    // scalar. Do not remove that raw obligation as ordinary HTML coverage.
   }
   if (Object.hasOwn(node, 'effects')) {
     if (!equal(node.effects, [])) throw Error('active effects require their own supported implementation');
@@ -162,7 +167,7 @@ export function auditNativeContextProofs({record, model, session} = {}) {
       const entry = boundary ? verifyArtworkDependency({record, proof: p, boundary, env}) : env.selected(relation.source);
       const source = entry.selector, add = path => local.push({...source, source_path: path});
       if (p.kind === 'source-artwork-context') verifySourceArtworkContext({record, entry, add});
-      else verifyContext(record, relation, entry.node, entry.packet, add);
+      else verifyContext(record, relation, entry.node, entry.packet, add, p.kind === 'html-element-context');
       item.status = 'verified'; report.verified_sources.push(...local);
     } catch (error) {
       item.reason = error.message; report.issues.push(issue('NATIVE_CONTEXT_UNVERIFIED', `/evidence_links/native_context_proofs/${p?.id ?? 'invalid'}`, error.message));
