@@ -16075,6 +16075,178 @@
               "node_id": "459:38537"
             }
           }
+        ],
+        "native_context_proofs": [
+          {
+            "id": "context-459-29175-459-27422",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29175-459-27422"
+          },
+          {
+            "id": "context-459-29175-459-27423",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29175-459-27423"
+          },
+          {
+            "id": "context-459-29175-459-27425",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29175-459-27425"
+          },
+          {
+            "id": "context-459-29175-459-27426",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29175-459-27426"
+          },
+          {
+            "id": "context-459-29175-459-27427",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29175-459-27427"
+          },
+          {
+            "id": "context-459-29175-459-27428",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29175-459-27428"
+          },
+          {
+            "id": "context-459-29175-459-27431",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29175-459-27431"
+          },
+          {
+            "id": "context-459-29175-459-29175",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29175-459-29175"
+          },
+          {
+            "id": "context-459-29175-459-29356",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29175-459-29356"
+          },
+          {
+            "id": "context-459-29175-459-38136",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29175-459-38136"
+          },
+          {
+            "id": "context-459-29175-459-38174",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29175-459-38174"
+          },
+          {
+            "id": "context-459-29175-459-38175",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29175-459-38175"
+          },
+          {
+            "id": "context-459-29175-459-38314",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29175-459-38314"
+          },
+          {
+            "id": "context-459-29175-459-38532",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29175-459-38532"
+          },
+          {
+            "id": "context-459-29175-477-21328",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29175-477-21328"
+          },
+          {
+            "id": "context-459-29175-481-19700",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29175-481-19700"
+          },
+          {
+            "id": "context-459-29175-619-21427",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29175-619-21427"
+          },
+          {
+            "id": "context-459-29176-459-28002",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29176-459-28002"
+          },
+          {
+            "id": "context-459-29176-459-28003",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29176-459-28003"
+          },
+          {
+            "id": "context-459-29176-459-28004",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29176-459-28004"
+          },
+          {
+            "id": "context-459-29176-459-28006",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29176-459-28006"
+          },
+          {
+            "id": "context-459-29176-459-28007",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29176-459-28007"
+          },
+          {
+            "id": "context-459-29176-459-28008",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29176-459-28008"
+          },
+          {
+            "id": "context-459-29176-459-28011",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29176-459-28011"
+          },
+          {
+            "id": "context-459-29176-459-29176",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29176-459-29176"
+          },
+          {
+            "id": "context-459-29176-459-29376",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29176-459-29376"
+          },
+          {
+            "id": "context-459-29176-459-38319",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29176-459-38319"
+          },
+          {
+            "id": "context-459-29176-459-38357",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29176-459-38357"
+          },
+          {
+            "id": "context-459-29176-459-38358",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29176-459-38358"
+          },
+          {
+            "id": "context-459-29176-459-38449",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29176-459-38449"
+          },
+          {
+            "id": "context-459-29176-459-38537",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29176-459-38537"
+          },
+          {
+            "id": "context-459-29176-484-19677",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29176-484-19677"
+          },
+          {
+            "id": "context-459-29176-484-20069",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29176-484-20069"
+          },
+          {
+            "id": "context-459-29176-619-21428",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29176-619-21428"
+          }
         ]
       }
     },
@@ -191097,6 +191269,228 @@
               "resolved_type": "COLOR"
             }
           }
+        ],
+        "native_context_proofs": [
+          {
+            "id": "context-477-21325-477-21213",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-477-21325-477-21213"
+          },
+          {
+            "id": "context-477-21325-477-21214",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-477-21325-477-21214"
+          },
+          {
+            "id": "context-477-21325-477-21215",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-477-21325-477-21215"
+          },
+          {
+            "id": "context-477-21325-477-21217",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-477-21325-477-21217"
+          },
+          {
+            "id": "context-477-21325-477-21218",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-477-21325-477-21218"
+          },
+          {
+            "id": "context-477-21325-477-21219",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-477-21325-477-21219"
+          },
+          {
+            "id": "context-477-21325-477-21221",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-477-21325-477-21221"
+          },
+          {
+            "id": "context-477-21325-477-21222",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-477-21325-477-21222"
+          },
+          {
+            "id": "context-477-21325-477-21223",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-477-21325-477-21223"
+          },
+          {
+            "id": "context-477-21325-477-21225",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-477-21325-477-21225"
+          },
+          {
+            "id": "context-477-21325-477-21226",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-477-21325-477-21226"
+          },
+          {
+            "id": "context-477-21325-477-21227",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-477-21325-477-21227"
+          },
+          {
+            "id": "context-477-21325-477-21229",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-477-21325-477-21229"
+          },
+          {
+            "id": "context-477-21325-477-21230",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-477-21325-477-21230"
+          },
+          {
+            "id": "context-477-21325-477-21231",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-477-21325-477-21231"
+          },
+          {
+            "id": "context-477-21325-477-21233",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-477-21325-477-21233"
+          },
+          {
+            "id": "context-477-21325-477-21234",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-477-21325-477-21234"
+          },
+          {
+            "id": "context-477-21325-477-21235",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-477-21325-477-21235"
+          },
+          {
+            "id": "context-477-21325-477-21237",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-477-21325-477-21237"
+          },
+          {
+            "id": "context-477-21325-477-21238",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-477-21325-477-21238"
+          },
+          {
+            "id": "context-477-21325-477-21239",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-477-21325-477-21239"
+          },
+          {
+            "id": "context-477-21325-477-21325",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-477-21325-477-21325"
+          },
+          {
+            "id": "context-484-20068-484-20041",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-484-20068-484-20041"
+          },
+          {
+            "id": "context-484-20068-484-20042",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-484-20068-484-20042"
+          },
+          {
+            "id": "context-484-20068-484-20043",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-484-20068-484-20043"
+          },
+          {
+            "id": "context-484-20068-484-20045",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-484-20068-484-20045"
+          },
+          {
+            "id": "context-484-20068-484-20046",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-484-20068-484-20046"
+          },
+          {
+            "id": "context-484-20068-484-20047",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-484-20068-484-20047"
+          },
+          {
+            "id": "context-484-20068-484-20049",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-484-20068-484-20049"
+          },
+          {
+            "id": "context-484-20068-484-20050",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-484-20068-484-20050"
+          },
+          {
+            "id": "context-484-20068-484-20051",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-484-20068-484-20051"
+          },
+          {
+            "id": "context-484-20068-484-20053",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-484-20068-484-20053"
+          },
+          {
+            "id": "context-484-20068-484-20054",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-484-20068-484-20054"
+          },
+          {
+            "id": "context-484-20068-484-20055",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-484-20068-484-20055"
+          },
+          {
+            "id": "context-484-20068-484-20057",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-484-20068-484-20057"
+          },
+          {
+            "id": "context-484-20068-484-20058",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-484-20068-484-20058"
+          },
+          {
+            "id": "context-484-20068-484-20059",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-484-20068-484-20059"
+          },
+          {
+            "id": "context-484-20068-484-20061",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-484-20068-484-20061"
+          },
+          {
+            "id": "context-484-20068-484-20062",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-484-20068-484-20062"
+          },
+          {
+            "id": "context-484-20068-484-20063",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-484-20068-484-20063"
+          },
+          {
+            "id": "context-484-20068-484-20065",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-484-20068-484-20065"
+          },
+          {
+            "id": "context-484-20068-484-20066",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-484-20068-484-20066"
+          },
+          {
+            "id": "context-484-20068-484-20067",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-484-20068-484-20067"
+          },
+          {
+            "id": "context-484-20068-484-20068",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-484-20068-484-20068"
+          }
         ]
       }
     },
@@ -196106,6 +196500,68 @@
               "collection_name": "Brand Core Colors",
               "resolved_type": "COLOR"
             }
+          }
+        ],
+        "native_context_proofs": [
+          {
+            "id": "context-459-29367-459-29367",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29367-459-29367"
+          },
+          {
+            "id": "context-459-29367-459-29368",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29367-459-29368"
+          },
+          {
+            "id": "context-459-29369-459-29369",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29369-459-29369"
+          },
+          {
+            "id": "context-459-29369-459-29370",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29369-459-29370"
+          },
+          {
+            "id": "context-459-29371-459-29371",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29371-459-29371"
+          },
+          {
+            "id": "context-459-29371-459-29372",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-459-29371-459-29372"
+          },
+          {
+            "id": "context-466-13290-466-13290",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-466-13290-466-13290"
+          },
+          {
+            "id": "context-466-13290-466-13291",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-466-13290-466-13291"
+          },
+          {
+            "id": "context-466-13292-466-13292",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-466-13292-466-13292"
+          },
+          {
+            "id": "context-466-13292-466-13293",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-466-13292-466-13293"
+          },
+          {
+            "id": "context-466-13294-466-13294",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-466-13294-466-13294"
+          },
+          {
+            "id": "context-466-13294-466-13295",
+            "kind": "html-element-context",
+            "structure_proof_id": "structure-466-13294-466-13295"
           }
         ]
       }
