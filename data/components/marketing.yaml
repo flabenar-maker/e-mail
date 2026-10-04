@@ -72191,6 +72191,11 @@
             "id": "native-image-fill-mobile-secondary-image",
             "kind": "image-fill-paint-context",
             "structure_proof_id": "native-mobile-root-card-secondary-image-structure"
+          },
+          {
+            "id": "native-image-fill-mobile-secondary-image-inert-axis",
+            "kind": "image-fill-inert-axis-context",
+            "structure_proof_id": "native-mobile-root-card-secondary-image-structure"
           }
         ]
       }

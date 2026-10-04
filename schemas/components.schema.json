@@ -3163,7 +3163,8 @@
               "enum": [
                 "html-element-context",
                 "rendered-artwork-context",
-                "image-fill-paint-context"
+                "image-fill-paint-context",
+                "image-fill-inert-axis-context"
               ]
             },
             "structure_proof_id": {

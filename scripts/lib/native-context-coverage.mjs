@@ -6,6 +6,7 @@ import {applyNativeVariableCoverage} from './native-variable-coverage.mjs';
 import {isFigmaContractFactReportFor} from './figma-contract-facts.mjs';
 import {ownedContextStructure, resolveArtworkContextReference, verifyArtworkDependency, verifySourceArtworkContext} from './native-artwork-context.mjs';
 import {resolveImageFillContextReference, verifyImageFillPaintContext} from './native-image-fill-context.mjs';
+import {resolveImageFillInertAxisContextReference, verifyImageFillInertAxisContext} from './native-image-fill-inert-axis-context.mjs';
 
 // Context proofs reference an independently verified semantic element. They
 // never accept field masks, duplicated defaults, or caller-provided success.
@@ -22,7 +23,7 @@ const issue = (code, path, message) => ({code, path, message});
 const ordered = a => a.sort((x, y) => x.path.localeCompare(y.path) || x.code.localeCompare(y.code));
 function shape(p) {
   if (!match(ID, p?.id) || !match(ID, p?.structure_proof_id)) return false;
-  if (['html-element-context', 'rendered-artwork-context', 'image-fill-paint-context'].includes(p.kind)) return closed(p, ['id', 'kind', 'structure_proof_id']);
+  if (['html-element-context', 'rendered-artwork-context', 'image-fill-paint-context', 'image-fill-inert-axis-context'].includes(p.kind)) return closed(p, ['id', 'kind', 'structure_proof_id']);
   return p.kind === 'source-artwork-context' && closed(p, ['id', 'kind', 'structure_proof_id', 'owner_component_id', 'dependency_link_id']) && match(ID, p.owner_component_id) && match(ID, p.dependency_link_id);
 }
 const structure = ownedContextStructure;
@@ -34,7 +35,7 @@ export function validateNativeContextProofReferences({records = []} = {}) {
     const links = r.evidence_links ?? {}, proofs = links.native_context_proofs ?? [], base = `/records/${i}/evidence_links`;
     if (!Array.isArray(proofs)) {issues.push(issue('NATIVE_CONTEXT_SHAPE_INVALID', base, 'Context proofs must be an optional closed array.')); continue;}
     if (!proofs.length) continue;
-    const ids = new Set(), references = new Set();
+    const ids = new Set(), references = new Map();
     for (const group of groups) for (const [j, p] of (Array.isArray(links[group]) ? links[group] : []).entries()) {
       if (ids.has(p?.id)) issues.push(issue('NATIVE_CONTEXT_ID_DUPLICATE', `${base}/${group}/${j}`, 'IDs are unique across owned evidence arrays.'));
       ids.add(p?.id);
@@ -47,11 +48,14 @@ export function validateNativeContextProofReferences({records = []} = {}) {
           const relation = structure(r, p), e = pointer(r, relation.element_path);
           if (['asset', 'icon', 'template'].includes(r.identity?.semantic_role) || !['presentation-table', 'html-text', 'html-link', 'nested-component', 'direct-image'].includes(e?.render_mode)) throw Error('ordinary HTML element capability required; source artwork is a separate boundary');
         } else if (p.kind === 'image-fill-paint-context') resolveImageFillContextReference({record: r, proof: p});
+        else if (p.kind === 'image-fill-inert-axis-context') resolveImageFillInertAxisContextReference({record: r, proof: p});
         else resolveArtworkContextReference({record: r, proof: p, records});
       } catch (error) {issues.push(issue('NATIVE_CONTEXT_TARGET_INVALID', at, error.message));}
       const reference = JSON.stringify([p.owner_component_id ?? r.id, p.structure_proof_id, p.dependency_link_id ?? null]);
-      if (references.has(reference)) issues.push(issue('NATIVE_CONTEXT_SOURCE_DUPLICATE', at, 'One context per independently verified element/dependency.'));
-      references.add(reference);
+      const prior = references.get(reference) ?? [];
+      const independentPair = prior.length === 1 && ((p.kind === 'image-fill-inert-axis-context' && prior[0] === 'image-fill-paint-context') || (p.kind === 'image-fill-paint-context' && prior[0] === 'image-fill-inert-axis-context'));
+      if (prior.length && !independentPair) issues.push(issue('NATIVE_CONTEXT_SOURCE_DUPLICATE', at, 'One context per element/dependency, except the distinct image Fill paint/inert-axis pair.'));
+      references.set(reference, [...prior, p.kind]);
     }
   }
   return ordered(issues);
@@ -162,7 +166,7 @@ export function auditNativeContextProofs({record, model, session} = {}) {
     env.beginProof();
     try {
       if (validation.length || env.issues.length) throw Error('context metadata/session unverified');
-      const boundary = ['html-element-context', 'image-fill-paint-context'].includes(p.kind) ? null : resolveArtworkContextReference({record, proof: p, records: model.records});
+      const boundary = ['html-element-context', 'image-fill-paint-context', 'image-fill-inert-axis-context'].includes(p.kind) ? null : resolveArtworkContextReference({record, proof: p, records: model.records});
       const owner = boundary?.owner ?? record, relation = boundary?.relation ?? structure(record, p);
       const result = relationsFor(owner).results.filter(r => r.proof_id === relation.id);
       if (result.length !== 1 || result[0].status !== 'verified') throw Error('independent ordered element structure is unverified');
@@ -170,6 +174,7 @@ export function auditNativeContextProofs({record, model, session} = {}) {
       const source = entry.selector, add = path => local.push({...source, source_path: path});
       if (p.kind === 'source-artwork-context') verifySourceArtworkContext({record, entry, add});
       else if (p.kind === 'image-fill-paint-context') item.foundation_paths = verifyImageFillPaintContext({record, proof: p, entry, model, add});
+      else if (p.kind === 'image-fill-inert-axis-context') verifyImageFillInertAxisContext({record, proof: p, entry, add});
       else verifyContext(record, relation, entry.node, entry.packet, add, p.kind === 'html-element-context');
       item.status = 'verified'; report.verified_sources.push(...local);
     } catch (error) {

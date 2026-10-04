@@ -250,6 +250,14 @@ The narrow captured-paint profile requires one complete visible opaque IMAGE Fil
 
 Coverage closes only the 20 captured paint leaves after exact request-bound identity and independent structure validation. It does not cover axis sizing, node clipping, unknown context, raster resolution, actual crop/output bytes, JPEG quality/sRGB or uncaptured paint properties. A library paint proof does not replace concrete-instance export preflight or claim an exported file is ready. Runtime values, crop/export policy and raw audit diagnostics remain unchanged.
 
+### Native image Fill inert-axis reference
+
+`image-fill-inert-axis-context` is a separate closed `{id, kind, structure_proof_id}` authoring reference. It requires an independently verified own flat direct-image structure and its existing exact source-viewport image-fill asset, boundary and mapped reference geometry. The actual source must be a fully visible empty-child FRAME in ordinary flow, with a complete closed NONE layout: primary AUTO, counter FIXED, zero padding/gaps, MIN/MIN alignment and NO_WRAP. Both directional sizing facts and wrap require unique direct same-node keyword mappings/provenance; only FILL/FIXED sizing is admitted.
+
+NONE has no active own Auto Layout axes. Coverage closes only the two native primary/counter sizing leaves as inert context, not as aliases of directional FILL/FIXED or as an HTML height rule. One inert-axis reference may coexist only with the distinct existing image-fill paint reference on the same structure; all other duplicate-context protection remains. Existing paint coverage stays paint-only.
+
+Missing/ambiguous mappings, active or unknown layout, children, unsupported qualifiers or incomplete source remain unverified. Paint, clipping, unknown node fields, runtime sizing, crop/export/output bytes and other diagnostics are not covered. Original authenticated raw reports and request-bound identity stay mandatory. This changes evidence only, not component values, rendering or export policy.
+
 ## Onboarding нового компонента
 
 Если в библиотеке появился неизвестный компонент:
