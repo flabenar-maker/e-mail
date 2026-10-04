@@ -1,7 +1,8 @@
 import { isDeepStrictEqual } from "node:util";
 import { validateCaptureFreshness } from "./component-evidence-freshness.mjs";
 import { auditFigmaContractFacts, hasCompleteMixedTextRuns } from "./figma-contract-facts.mjs";
-import { auditContractFactProofs, applyContractFactProofCoverage } from "./contract-fact-proofs.mjs";
+import { auditContractFactProofs } from "./contract-fact-proofs.mjs";
+import { auditNativeFactProofs, applyNativeFactCoverage } from "./native-fact-coverage.mjs";
 import { matchesRemoteSourceIdentity, resolveEvidenceTargets } from "./component-evidence-links.mjs";
 import { compareFoundationObservation } from "./foundation-evidence.mjs";
 
@@ -718,10 +719,12 @@ export function auditFigmaComponentEvidence({ record, live, model, session, deri
   let nested = { ok: true, component_id: record?.id ?? null, canonical_git_sha: model?.canonical_sha ?? null, session_started_at: session?.started_at ?? null, receipt_ids: [], boundaries: [], dependencies: [], issues: [] };
   const requiredProofs = (record?.evidence_links?.fact_proofs?.length ?? 0) > 0 || (record?.evidence_links?.normative_decisions?.length ?? 0) > 0;
   let factProofs = {ok: !requiredProofs, results: [], verified_contract_paths: [], verified_sources: [], issues: requiredProofs ? [issue("CONTRACT_PROOF_INPUT_UNVERIFIED", "/session", "Typed proofs require the same canonical record and actual live session packet.")] : []};
+  const requiredNativeProofs = (record?.evidence_links?.native_fact_proofs?.length ?? 0) > 0;
+  let nativeProofs = {ok: !requiredNativeProofs, results: [], verified_sources: [], issues: requiredNativeProofs ? [issue("NATIVE_PROOF_INPUT_UNVERIFIED", "/session", "Native reductions require the same canonical record and actual live session packet.")] : []};
   const finish = () => {
-    const effective = applyContractFactProofCoverage({facts, proofs: factProofs});
-    return {ok: effective.ok && evidence.ok && nested.ok && factProofs.ok, facts, effective_facts: effective, fact_proofs: factProofs, evidence_links: evidence, nested_artwork: nested,
-      issues: [...effective.issues, ...evidence.issues, ...nested.issues, ...factProofs.issues]};
+    const effective = applyNativeFactCoverage({facts, coverage: nativeProofs, contractProofs: factProofs});
+    return {ok: effective.ok && evidence.ok && nested.ok && factProofs.ok && nativeProofs.ok, facts, effective_facts: effective, fact_proofs: factProofs, native_fact_proofs: nativeProofs, evidence_links: evidence, nested_artwork: nested,
+      issues: [...effective.issues, ...evidence.issues, ...nested.issues, ...factProofs.issues, ...nativeProofs.issues]};
   };
   if (!model || !session) {
     if (nestedReferences(record ?? {}).length) {
@@ -751,6 +754,7 @@ export function auditFigmaComponentEvidence({ record, live, model, session, deri
     return finish();
   }
   factProofs = auditContractFactProofs({record, model, session});
+  nativeProofs = auditNativeFactProofs({record, model, session});
   if (!requiresEvidenceScope(record)) {
     evidence.receipt_ids = [capture.receipt_id];
     evidence.ok = true;

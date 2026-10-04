@@ -202,6 +202,16 @@ Request-bound capture 1.3 добавляет actual selected `owner_identity`; �
 
 Metadata не поступают в email bundle, HTML, export policy или compact Description. Ни один proof не подставляет новое rendering value и не превращает вспомогательный source в блок письма.
 
+## Same-node native reductions
+
+Optional `evidence_links.native_fact_proofs` содержит только supplementary authoring proof: `uniform-corners`, `text-resize-alias`, `text-alignment-alias`, `axis-sizing-alias`. Каждая запись адресует собственный typed fact и exact selector того же node/variant; direct `figma-literal`/`figma-binding` provenance и единственный `figma_fact_link` сохраняются. Это additive metadata в schema 2.3.0: runtime values, provenance и обязательные evidence arrays не меняются.
+
+Радиус подтверждается только при четырёх присутствующих числовых углах, в точности равных scalar radius с independently mapped pixel measure. TEXT alias требует совпадения style/geometry на одном TEXT node с известным enum и прямым lowercase mapping. Axis reduction требует известной HORIZONTAL/VERTICAL orientation: primary/counter определяет directional axis, HUG соответствует AUTO, FILL/FIXED — FIXED; режим NONE не сворачивается в этот proof. Ни один reduction не принимает числовое совпадение без независимого mapping.
+
+Capture identity/freshness остаётся у общего request-bound proof environment. Native coverage вычисляется по полному свежему packet и закрывает только exact source tuples. Original raw report и computed proof object должны быть подлинными, неизменёнными и от одного record/packet; copied или caller-made reports не принимаются. Composition с typed fact proofs начинается от original raw report, а не от изготовленного effective clone. Value mismatch, неизвестный native field, capture failure и остальные obligations сохраняются.
+
+У этих metadata нет общего ignore-list, rendering fallback или stored PASS. Неиспользованный/удалённый proof оставляет исходные obligations открытыми. Owner-local IDs уникальны во всех evidence arrays; один source/kind/axis имеет один reduction. Метаданные не меняют HTML, export boundary, compact Description или роль source-only artwork.
+
 ## Onboarding нового компонента
 
 Если в библиотеке появился неизвестный компонент:

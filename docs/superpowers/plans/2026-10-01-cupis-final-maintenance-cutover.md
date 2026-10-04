@@ -141,6 +141,10 @@ Independent bounded F7 review04e→df527:0 новых Critical/Important/Minor; 
 
 **N1 RED:** следующий test-only commit добавляет публичные поведенческие проверки до реализации. Expected: отсутствующий native coverage API / интеграция, не import/fixture/harness error. Actual result публикуется после локального запуска на точном SHA; ожидание не считается результатом.
 
+**N1 RED — факт:** cloud `77689eb2a32924b771b43f4ad2b2bf67f361339a`, tree `46651d37eb5acf01a4d5849c68e2383b5d30dc9f`; Terra Medium проверила 255/255 blobs и exact lock. `node --test tests/foundation/native-fact-coverage.test.mjs`: exit 1, 25 assertion diagnostics с одной причиной — отсутствующий native coverage API. Import/setup errors отсутствуют. Receipt SHA256 `091cf4f2ea136814f5f48efbb0557153c19a76299d2161b431705fc96f6bad3f`, полный log вне репозитория SHA256 `f142610a8298109b160c89413f13e1309203cad3f3b593dcecec6a5557e87bab`.
+
+**N1 implementation candidate:** новый same-node helper переиспользует существующий request-bound environment; direct target mapping и provenance сохраняются. Optional closed schema metadata подключены к reference validator и orchestration. Scope N2–N4 и owner metadata пока не реализованы; счётчик 1838 не пересчитывается до свежего exact-SHA audit. Product candidate ожидает targeted GREEN, не считается проверенным по RED receipt.
+
 #### Следующий пункт и границы
 
 F7 закрывает собственный producer/output gap в кандидате, не весь P2. Полный read-only native inventory теперь разобран на a106: exact tuple sets и значения подтверждены, но 1838 obligations ещё не приняты. **Следующий пункт P2:** получить решение по точной карте proof/guard impact выше, затем реализовать только согласованный authoring/audit scope и выполнить свежую exact-SHA проверку. Не заменять её простым удалением диагностик. F2 не повторять; P3, URL implementation plan, deferred #109, activation и merge не начинать автоматически. URL plan остаётся отдельной очередью после завершения всего этапа 2.

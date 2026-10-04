@@ -135,7 +135,7 @@ export function validateContractFactProofReferences({ records = [] } = {}) {
   return ordered(issues);
 }
 
-function environment(model, session) {
+export function createContractProofEnvironment(model, session) {
   const issues = validateEvidenceSessionFreshness({ session, canonicalSha: model?.canonical_sha }), cache = new Map(), receipts = new Set();
   let usedOwners = new Set(), usedSelectors = new Map();
   const lookup = id => { const matches = model?.records?.filter(r => r.id === id); if (matches?.length !== 1) throw Error('canonical owner identity ambiguous'); return matches[0]; };
@@ -260,7 +260,7 @@ export function contractDecisionValueDigest({ record, contractPath } = {}) {
   return digest({ owner_id: record.id, viewport: t.viewport, element_id: t.element.id, fact_id: t.fact.id, value: t.value });
 }
 export function contractDecisionContextDigest({ selector, paintIndex, model, session } = {}) {
-  const e = environment(model, session).selected(selector), paint = e.node.fills?.[paintIndex];
+  const e = createContractProofEnvironment(model, session).selected(selector), paint = e.node.fills?.[paintIndex];
   if (!Number.isSafeInteger(paintIndex) || paintIndex < 0 || !visible(e) || paint?.type !== 'gradient_linear' || paint.visible !== true || paint.opacity !== 1 || !Array.isArray(paint.gradient_stops) || paint.gradient_stops.length < 2 || paint.gradient_stops.some(s => !finite(s.position) || typeof s.color !== 'string' || !finite(s.alpha)) || !Array.isArray(paint.gradient_transform) || paint.gradient_transform.length !== 2 || paint.gradient_transform.some(row => !Array.isArray(row) || row.length !== 3 || row.some(v => !finite(v)))) throw Error('native linear-gradient paint/context unverified');
   return digest({ file_key: e.record.figma.file_key, variant_node_id: selector.variant_node_id, node_id: selector.node_id, paint_index: paintIndex, paint: { type: paint.type, visible: paint.visible, opacity: paint.opacity, gradient_stops: paint.gradient_stops, gradient_transform: paint.gradient_transform }, visibility: [e.node, ...e.ancestors].map(n => ({ node_id: n.node_id, visible: n.visible, opacity: n.opacity })) });
 }
@@ -272,7 +272,7 @@ export function auditContractFactProofs({ record, model, session } = {}) {
   const canonical = model?.records?.filter(r => r.id === record?.id);
   if (canonical?.length !== 1 || !equal(canonical[0], record)) { issues.push(diagnostic('CONTRACT_PROOF_CANONICAL_MISMATCH', '/record', 'Exact canonical record required.')); return report; }
   const validation = validateContractFactProofReferences({ records: model.records }); issues.push(...validation);
-  const env = environment(model, session); issues.push(...env.issues);
+  const env = createContractProofEnvironment(model, session); issues.push(...env.issues);
   for (const p of Array.isArray(proofs) ? proofs : []) {
     const localSources = [], item = { proof_id: p.id, kind: p.kind, contract_path: p.contract_path, status: 'unverified' }, t = target(record, p.contract_path);
     const source = (s, path) => localSources.push({ component_id: s.component_id, variant_node_id: s.variant_node_id, node_id: s.node_id, source_path: path });

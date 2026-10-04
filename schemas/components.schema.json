@@ -415,6 +415,12 @@
           "items": {
             "$ref": "#/$defs/normativeDecision"
           }
+        },
+        "native_fact_proofs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nativeFactProof"
+          }
         }
       }
     },
@@ -2876,6 +2882,121 @@
           }
         }
       }
+    },
+    "nativeFactProof": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "source",
+            "contract_path"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "kind": {
+              "const": "uniform-corners"
+            },
+            "source": {
+              "$ref": "#/$defs/factProofSelector"
+            },
+            "contract_path": {
+              "type": "string",
+              "pattern": "^/contracts/(?:mobile|desktop|variant_contracts/[0-9]+)/root(?:/children/[0-9]+)*/facts/[0-9]+/value$"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "source",
+            "contract_path"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "kind": {
+              "const": "text-resize-alias"
+            },
+            "source": {
+              "$ref": "#/$defs/factProofSelector"
+            },
+            "contract_path": {
+              "type": "string",
+              "pattern": "^/contracts/(?:mobile|desktop|variant_contracts/[0-9]+)/root(?:/children/[0-9]+)*/facts/[0-9]+/value$"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "source",
+            "contract_path"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "kind": {
+              "const": "text-alignment-alias"
+            },
+            "source": {
+              "$ref": "#/$defs/factProofSelector"
+            },
+            "contract_path": {
+              "type": "string",
+              "pattern": "^/contracts/(?:mobile|desktop|variant_contracts/[0-9]+)/root(?:/children/[0-9]+)*/facts/[0-9]+/value$"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "source",
+            "contract_path",
+            "axis"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "kind": {
+              "const": "axis-sizing-alias"
+            },
+            "source": {
+              "$ref": "#/$defs/factProofSelector"
+            },
+            "contract_path": {
+              "type": "string",
+              "pattern": "^/contracts/(?:mobile|desktop|variant_contracts/[0-9]+)/root(?:/children/[0-9]+)*/facts/[0-9]+/value$"
+            },
+            "axis": {
+              "enum": [
+                "primary",
+                "counter"
+              ]
+            }
+          }
+        }
+      ]
     }
   }
 }
