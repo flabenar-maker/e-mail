@@ -62,6 +62,7 @@ test('authenticated coverage rejects copied, fake, and cross-packet reports', ()
 test('authenticated coverage rejects a report mutated after audit', () => { const f = fixture(), facts = assertFixture(f), coverage = audit(f); coverage.verified_sources?.push?.(selector('101:1')); assert.equal(api().applyNativeRelationCoverage({facts, coverage, nativeFactProofs: {}, contractProofs: {}}), facts); assert.equal(typeof nativeFactProofs.applyNativeFactCoverage, 'function'); });
 
 
+
 test('html-link structure accepts only a same-node native TEXT element', () => {
   const f = fixture(), element = f.record.contracts.mobile.root.children[1], node = f.packet.variants[0].source_node.children[1];
   element.render_mode = 'html-link'; element.semantic_role = 'help-link'; node.node_type = 'TEXT'; node.name = 'help-link';
@@ -74,11 +75,11 @@ test('html-link structure rejects a FRAME masquerading as a link', () => {
   assert.equal(audit(f).ok, false);
 });
 
-function imageFillFixture() {
+function imageFillFixture(display_mode_id = 'direct-image') {
   const f = fixture(), element = f.record.contracts.mobile.root.children[1], node = f.packet.variants[0].source_node.children[1];
   element.render_mode = 'direct-image'; element.semantic_role = 'hero-image'; element.asset_contract_id = 'hero-image'; element.children = [];
-  node.node_type = 'FRAME'; node.name = 'hero-image @2x'; node.children = []; node.fills = [{type: 'image', visible: true, opacity: 1, image_hash: 'actual-test-hash'}];
-  f.record.asset_contracts = [{id: 'hero-image', source_mode_id: 'image-fill', display_mode_id: 'direct-image', owner_layer_name: 'hero-image @2x', export_profile_id: 'jpeg-2x', export_boundary: {kind: 'fill', semantic_node_name: 'hero-image @2x'}}];
+  node.node_type = 'FRAME'; node.name = 'hero-image @2x'; node.children = []; node.fills = [{type: 'image', visible: true, opacity: 1, image_hash: 'actual-test-hash', scale_mode: 'FILL'}];
+  f.record.asset_contracts = [{id: 'hero-image', source_mode_id: 'image-fill', display_mode_id, owner_layer_name: 'hero-image @2x', export_profile_id: 'jpeg-2x', export_boundary: {kind: 'fill', semantic_node_name: 'hero-image @2x'}}];
   return f;
 }
 test('owned image-fill direct-image accepts only its flat native FRAME boundary', () => {
@@ -86,18 +87,24 @@ test('owned image-fill direct-image accepts only its flat native FRAME boundary'
   assert.equal(audit(f).ok, true);
 });
 test('owned image-fill background-image accepts the same exact flat FRAME boundary', () => {
-  const f = imageFillFixture(); f.record.contracts.mobile.root.children[1].render_mode = 'background-image';
+  const f = imageFillFixture('fill-image'); f.record.contracts.mobile.root.children[1].render_mode = 'background-image';
   assert.equal(audit(f).ok, true);
 });
 for (const [label, mutate] of [
   ['wrong asset', f => { f.record.contracts.mobile.root.children[1].asset_contract_id = 'other-image'; }],
+  ['duplicate asset ID', f => { f.record.asset_contracts.push(structuredClone(f.record.asset_contracts[0])); }],
+  ['background element with direct-image asset mode', f => { f.record.contracts.mobile.root.children[1].render_mode = 'background-image'; }],
   ['wrong source mode', f => { f.record.asset_contracts[0].source_mode_id = 'rendered-node'; }],
   ['wrong boundary', f => { f.record.asset_contracts[0].export_boundary.kind = 'node'; }],
   ['wrong fill semantic name', f => { f.record.asset_contracts[0].export_boundary.semantic_node_name = 'other @2x'; }],
+  ['extra boundary key', f => { f.record.asset_contracts[0].export_boundary.extra = true; }],
   ['wrong owner name', f => { f.packet.variants[0].source_node.children[1].name = 'hero-image'; }],
   ['native child', f => { f.packet.variants[0].source_node.children[1].children = [{node_id: '101:99'}]; }],
   ['canonical child', f => { f.record.contracts.mobile.root.children[1].children = [{id: 'unexpected'}]; }],
-  ['unknown asset', f => { f.packet.variants[0].source_node.children[1].fills = [{type: 'image', visible: true, opacity: 1, image_hash: ''}]; }],
+  ['missing native children', f => { delete f.packet.variants[0].source_node.children[1].children; }],
+  ['malformed image hash', f => { f.packet.variants[0].source_node.children[1].fills[0].image_hash = ''; }],
+  ['malformed scale mode', f => { f.packet.variants[0].source_node.children[1].fills[0].scale_mode = 'FIT'; }],
+  ['unknown paint key', f => { f.packet.variants[0].source_node.children[1].fills[0].unknown = true; }],
 ]) test(`owned image-fill direct-image rejects ${label}`, () => { const f = imageFillFixture(); mutate(f); assert.equal(audit(f).ok, false); });
 
 export {fixture};
