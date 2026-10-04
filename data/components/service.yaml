@@ -16053,6 +16053,28 @@
               "resolved_type": "FLOAT"
             }
           }
+        ],
+        "fact_proofs": [
+          {
+            "id": "native-mixed-style-459-38532",
+            "kind": "style-usage",
+            "contract_path": "/contracts/desktop/root/children/0/children/2/children/1/children/1/facts/5/value",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:38532"
+            }
+          },
+          {
+            "id": "native-mixed-style-459-38537",
+            "kind": "style-usage",
+            "contract_path": "/contracts/mobile/root/children/0/children/2/children/1/children/1/facts/5/value",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:38537"
+            }
+          }
         ]
       }
     },

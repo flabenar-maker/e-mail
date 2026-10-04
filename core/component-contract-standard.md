@@ -228,6 +228,10 @@ Request-bound capture 1.3.0 дополнительно возвращает `bin
 
 Profile допускает exact Auto Layout padding/item spacing, uniform four-corner aliases и one visible opaque SOLID fill. Coverage снимает только подтверждённый binding ID из списка raw obligations, не скрывает native scalar mismatch или новый paint/layout context. Private internally computed report связан с тем же canonical record/packet; raw report сохраняется.
 
+### Mixed styled text ownership
+
+Existing `style-usage` proof проверяет единственный foundation style ID/name/viewport и фактические size/weight/line-height/tracking. Aggregate family/style/decoration `null` не является CSS значением. Их redundant native obligations закрываются только при complete producer-shaped ranges, точном typed `styled-text-segments` того же element/node, полном независимом primitive mapping всех ranges и сохранённых local underline/paint. Не наследовать weight/style ID/tracking из ranges; отсутствие/подмена local paint, новый field или неполные ranges остаются unverified.
+
 ## Onboarding нового компонента
 
 Если в библиотеке появился неизвестный компонент:
