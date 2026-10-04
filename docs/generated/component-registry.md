@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: component-registry -->
-<!-- source-digest: sha256:b8316b3751da9aefaa692504f5e870847a597ecd7b5628694da3e50ee54357c5 -->
+<!-- source-digest: sha256:f5ae5fd1be470798fd4361f6344978f0cd8cd2264fca178f4c2041b9ed775c4c -->
 <!-- schema-versions: components=2.3.0, typography=1.0.0, spacing=1.0.0, assets=1.0.0 -->
 # CUPIS component registry
 
@@ -15099,6 +15099,8 @@ RENDER: HYBRID
 - Evidence link (source): `desktop-partner-mark-source` — source variant `459:29175`, instance `I481:19700;481:19655` → component `asset-partner-mark-remote` (`marafon`); asset owner `481:19700`; asset `partner-badge`
 - Evidence link (source): `mobile-partner-badge-source` — source variant `459:29176`, instance `484:19677` → component `asset-partner-badge-4x` (`Asset/Partner-Badge @4x`); asset owner `484:19677`; asset `partner-badge`
 - Evidence link (source): `mobile-partner-mark-source` — source variant `459:29176`, instance `I484:19677;481:19655` → component `asset-partner-mark-remote` (`marafon`); asset owner `484:19677`; asset `partner-badge`
+- Fact proof: `native-mixed-style-459-38532` — `style-usage` → `/contracts/desktop/root/children/0/children/2/children/1/children/1/facts/5/value`
+- Fact proof: `native-mixed-style-459-38537` — `style-usage` → `/contracts/mobile/root/children/0/children/2/children/1/children/1/facts/5/value`
 
 ### Output contract classification
 
