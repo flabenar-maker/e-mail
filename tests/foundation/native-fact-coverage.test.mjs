@@ -202,6 +202,17 @@ test('mobile native selector cannot reduce a desktop target', () => {
   assert.ok(api().validateNativeFactProofReferences({records: [f.record]}).some(i => i.code === 'NATIVE_PROOF_SELECTOR_INVALID'));
   assert.equal(audit(f).ok, false);
 });
+test('variant-contract selector derives its viewport from the exact contract axes', () => {
+  const f = fixture(), proof = f.record.evidence_links.native_fact_proofs[0];
+  f.record.contracts.variant_contracts = [{variant_node_id: '101:1', axes: [{name: 'Viewport', value: 'Mobile'}], root: structuredClone(f.record.contracts.mobile.root)}];
+  proof.contract_path = '/contracts/variant_contracts/0/root/facts/0/value';
+  f.record.contracts.figma_fact_links[0].contract_path = `${proof.contract_path}/value`;
+  assert.deepEqual(api().validateNativeFactProofReferences({records: [f.record]}), []);
+  assert.equal(audit(f).ok, true);
+  f.record.contracts.variant_contracts[0].axes[0].value = 'Desktop';
+  assert.ok(api().validateNativeFactProofReferences({records: [f.record]}).some(i => i.code === 'NATIVE_PROOF_SELECTOR_INVALID'));
+});
+
 test('authenticated native and contract proof branches compose from one original raw report', () => {
   const f = fixture();
   f.record.identity.library = 'shared'; f.record.identity.semantic_role = 'asset';

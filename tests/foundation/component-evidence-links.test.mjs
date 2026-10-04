@@ -62,6 +62,15 @@ test("optional typed evidence metadata accepts exact compound instance IDs witho
   assert.deepEqual(shape({foundation_values: [], source_dependencies: []}), []);
 });
 
+test("native fact proofs are an optional closed evidence section", () => {
+  const items = records();
+  items[0].evidence_links.native_fact_proofs = [];
+  assert.deepEqual(validate(items), []);
+  assert.deepEqual(shape(items[0].evidence_links), []);
+  items[0].evidence_links.future_proofs = [];
+  assert.ok(shape(items[0].evidence_links).some(e => e.path.startsWith("/components/0/evidence_links")));
+});
+
 for (const [label, change, expectedCode] of [
   ["duplicate link ID across kinds", r => {r[0].evidence_links.source_dependencies[0].id = "desktop-width";}, "EVIDENCE_LINK_ID_DUPLICATE"],
   ["foreign source variant", r => {r[0].evidence_links.foundation_values[0].source.variant_node_id = "99:1";}, "EVIDENCE_SOURCE_VARIANT_INVALID"],
