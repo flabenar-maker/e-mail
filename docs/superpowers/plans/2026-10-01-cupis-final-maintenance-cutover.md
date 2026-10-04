@@ -191,6 +191,27 @@ Independent bounded F7 review04e→df527:0 новых Critical/Important/Minor; 
 
 **Граница результата:** N1–N4 завершены в PR, но весь пакет 2 ещё не объявлен принятым. Следующее — свести Acceptance/Step 4 с уже выполненным архивным сопоставлением и representative/foundation evidence, не повторяя F2. Финальный коммит только с планами проходит свою проверку содержания, ссылок, сохранности остальных blobs, validator и generated; результаты полного прогона и MCP остаются привязанными к 75e6f86. GitHub Actions и PR Checks не использованы. PR остаётся draft/open; main 618d124 не изменён. Merge, P3, #109, реализация ссылок, cutover и синхронизация локальных навыков не выполнялись.
 
+#### Итоговая сверка P2: точный оставшийся вход
+
+После N4 отдельно перечитаны прежний архивный matrix и реальные компактные receipts восьми owners на `997077f0a3182653dbcf71ab861d84aacfeae357`. Это **исторический результат 997**, не новый аудит текущего SHA и не восемь новых дефектов дизайна. Там все восемь combined audits были nonaccepting; закрытие 18 unmapped leaves не закрывало остальной native inventory. Свежий результат 75e6f86 подтверждает только пять других выбранных owners и не заменяет эту область.
+
+| Owner старого аудита | Исторические effective fact issues |
+| --- | ---: |
+| `asset-header-logo-4x` | 112 |
+| `asset-header-logo-compact-4x` | 115 |
+| `asset-product-logo` | 115 |
+| `email-header` | 103 |
+| `banner-hero` | 443 |
+| `banner-secondary` | 411 |
+| `button-primary` | 116 |
+| `block-contact-support` | 303 |
+
+Исторический итог: 1718 effective fact issues, из них 1714 uncovered, 3 links-not-contract и 1 unsupported; отдельно 34 capture/evidence errors и 2 scope-unsupported. Нулевые value/missing-path/identity mismatches и подтверждённые 18 proofs остаются результатом своей области, не отменяются. Квитанции: `fresh-fact-proof-997077f/inmemory-audit-receipt.json`, SHA256 `0e9f6332a5f773367dda05bc0f11d64ca23fc1702b284dd28dbe9f7165fc59ec`; `final-audit-receipt.json`, SHA256 `8b5020367280bdefa6d8919dfc5a1e91c5f5414a0457540d5dbd7e7578d91d61`. Это временные execution artifacts вне репозитория, не новый реестр.
+
+**Архивная часть сопоставления:** прежний пробел F3 закрыт активными semantic typography-consumer tests; прежний F7 — двумя зарегистрированными generated checkpoints и проверяемым producer. Naming, typography, maintenance/email boundaries и component facts имеют нынешних владельцев из уже записанной matrix. Controlled write, dependent-write stop и preservation/read-back относятся к P3 и не выдаются за выполненные в P2. Прежняя matrix сохраняется как история своего SHA.
+
+**Следующий шаг без нового implementation-плана:** read-only сопоставить каждый из этих восьми owners и оставшиеся owner/node/path с нынешним доказательным механизмом. Для каждого оставить точный итог: подтверждён свежим чтением / покрыт узким доказательством / требует ремонта с конкретной причиной. Если прежняя ошибка уже устранена, показать superseding evidence, не поставить статус по аналогии с пятью owners. Неприменимая ветвь аудита не требует добавлять фиктивный asset contract; исходные diagnostics сохраняются. При необходимости получить новые request-bound MCP packets на текущем exact SHA, не перепинивать 997 packets. Значения, Figma, HTML и согласованные 25° не менять. Новый ремонт за пределами одобренных пяти owners сначала представить с impact/allowed-path картой. До этой сверки Step 4 и общая Acceptance P2 остаются открытыми; повторять N1–N4, F2 или закрытые 18 proofs не требуется. P3, #109, activation, merge и синхронизацию навыков не начинать.
+
 #### Следующий пункт и границы
 
 F7 и согласованный ремонт N1–N4 закрыты в кандидате: свежий аудит пяти owners на 75e6f86 (raw 1838 / effective 0), полный прогон 1345/1345, validator, generated и Windows — PASS; сохранность данных и независимое review подтверждены. **Следующий пункт P2:** свести Acceptance и Step 4 с архивным сопоставлением и foundation/representative evidence, явно перечислив оставшиеся приёмочные обязательства. Это не повторная проверка всей библиотеки и не автоматическое закрытие P2 или merge. F2 не повторять; P3, реализацию ссылок, deferred #109 и activation не начинать автоматически.
