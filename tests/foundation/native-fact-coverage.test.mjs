@@ -1,5 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import {readFileSync} from 'node:fs';
+import Ajv2020 from 'ajv/dist/2020.js';
+import {auditContractFactProofs} from '../../scripts/lib/contract-fact-proofs.mjs';
 import { auditFigmaContractFacts } from '../../scripts/lib/figma-contract-facts.mjs';
 import { auditFigmaComponentEvidence } from '../../scripts/lib/figma-component-evidence.mjs';
 
@@ -157,4 +160,62 @@ test('orchestrator exposes raw and native proof reports without waiving unrelate
   assert.equal(result.facts.issues.filter(i => i.source_path?.startsWith('/corner_radii/')).length, 4);
   assert.equal(result.effective_facts.issues.filter(i => i.source_path?.startsWith('/corner_radii/')).length, 0);
   assert.equal(result.ok, false); assert.ok(result.effective_facts.issues.some(i => i.source_path === '/opacity'));
+});
+
+test('uniform corners require an actual corner-capable node type', () => {
+  const f = fixture();
+  const child = f.node; child.node_id = '101:2'; child.node_type = 'TEXT';
+  const root = {node_id: '101:1', node_type: 'COMPONENT', name: 'Root', visible: true, opacity: 1, children: [child]};
+  f.packet.variants[0].source_node = root; f.packet.capture_meta.node_count = 2;
+  f.record.contracts.mobile.root.facts[0].provenance.node_id = child.node_id;
+  f.record.contracts.figma_fact_links[0].node_id = child.node_id;
+  f.record.evidence_links.native_fact_proofs[0].source.node_id = child.node_id;
+  assert.equal(audit(f).ok, false);
+});
+test('axis sizing requires an actual Auto Layout capable node type', () => {
+  const f = fixture('axis-sizing-alias');
+  const child = f.node; child.node_id = '101:2'; child.node_type = 'RECTANGLE';
+  const root = {node_id: '101:1', node_type: 'COMPONENT', name: 'Root', visible: true, opacity: 1, children: [child]};
+  f.packet.variants[0].source_node = root; f.packet.capture_meta.node_count = 2;
+  f.record.contracts.mobile.root.facts[0].provenance.node_id = child.node_id;
+  f.record.contracts.figma_fact_links[0].node_id = child.node_id;
+  f.record.evidence_links.native_fact_proofs[0].source.node_id = child.node_id;
+  assert.equal(audit(f).ok, false);
+});
+test('native proof schema is closed and discriminates axis metadata', () => {
+  const schema = JSON.parse(readFileSync(new URL('../../schemas/components.schema.json', import.meta.url), 'utf8'));
+  const ajv = new Ajv2020({strict: true, allErrors: true}); ajv.addSchema(schema);
+  const validate = ajv.compile({$ref: `${schema.$id}#/$defs/nativeFactProof`});
+  for (const kind of ['uniform-corners', 'text-resize-alias', 'text-alignment-alias', 'axis-sizing-alias']) {
+    const p = fixture(kind).record.evidence_links.native_fact_proofs[0]; assert.equal(validate(p), true);
+    assert.equal(validate({...clone(p), ignore_paths: ['/opacity']}), false);
+    assert.equal(validate({...clone(p), kind: 'future-ignore'}), false);
+  }
+  const axis = fixture('axis-sizing-alias').record.evidence_links.native_fact_proofs[0];
+  assert.equal(validate({...clone(axis), axis: 'diagonal'}), false);
+  const missing = clone(axis); delete missing.axis; assert.equal(validate(missing), false);
+  assert.equal(validate({...fixture().record.evidence_links.native_fact_proofs[0], axis: 'primary'}), false);
+});
+test('mobile native selector cannot reduce a desktop target', () => {
+  const f = fixture(); f.record.contracts.desktop.root.facts = f.record.contracts.mobile.root.facts;
+  f.record.evidence_links.native_fact_proofs[0].contract_path = '/contracts/desktop/root/facts/0/value';
+  assert.ok(api().validateNativeFactProofReferences({records: [f.record]}).some(i => i.code === 'NATIVE_PROOF_SELECTOR_INVALID'));
+  assert.equal(audit(f).ok, false);
+});
+test('authenticated native and contract proof branches compose from one original raw report', () => {
+  const f = fixture();
+  f.record.identity.library = 'shared'; f.record.identity.semantic_role = 'asset';
+  f.record.variants[0].axes = []; f.packet.variants[0].axes = [];
+  f.record.contracts.mobile.root.facts.push({id: 'source-dimensions', value: {type: 'dimensions', width: 120, height: 40, unit: 'px'}, provenance: {kind: 'contract-proof', proof_id: 'source-dimensions-proof'}});
+  f.record.evidence_links.fact_proofs = [{id: 'source-dimensions-proof', kind: 'source-value-set', sources: [{component_id: f.record.id, variant_node_id: '101:1', node_id: '101:1'}], field: 'dimensions', contract_path: '/contracts/mobile/root/facts/1/value'}];
+  const facts = auditFigmaContractFacts({record: f.record, live: f.packet}), coverage = audit(f);
+  const contractProofs = auditContractFactProofs({record: f.record, model: f.model, session: f.session});
+  assert.equal(coverage.ok, true); assert.equal(contractProofs.ok, true);
+  const result = api().applyNativeFactCoverage({facts, coverage, contractProofs});
+  assert.ok(facts.issues.some(i => i.code === 'CONTRACT_FACT_UNMAPPED' && i.contract_path.startsWith('/contracts/mobile/root/facts/1/')));
+  assert.equal(result.issues.some(i => i.code === 'CONTRACT_FACT_UNMAPPED' && i.contract_path.startsWith('/contracts/mobile/root/facts/1/')), false);
+  assert.equal(result.issues.some(i => i.source_path?.startsWith('/corner_radii/')), false);
+  assert.equal(result.issues.some(i => i.source_path?.startsWith('/reference_dimensions/')), false);
+  assert.ok(result.issues.some(i => i.source_path === '/opacity'));
+  const composedAgain = api().applyNativeFactCoverage({facts: result, coverage, contractProofs}); assert.equal(composedAgain, result);
 });
