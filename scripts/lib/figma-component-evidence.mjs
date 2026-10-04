@@ -3,7 +3,8 @@ import { validateCaptureFreshness } from "./component-evidence-freshness.mjs";
 import { auditFigmaContractFacts, hasCompleteMixedTextRuns } from "./figma-contract-facts.mjs";
 import { auditContractFactProofs } from "./contract-fact-proofs.mjs";
 import { auditNativeFactProofs } from "./native-fact-coverage.mjs";
-import { auditNativeRelationProofs, applyNativeRelationCoverage } from "./native-relationship-coverage.mjs";
+import { auditNativeRelationProofs } from "./native-relationship-coverage.mjs";
+import { auditNativeVariableProofs, applyNativeVariableCoverage } from "./native-variable-coverage.mjs";
 import { matchesRemoteSourceIdentity, resolveEvidenceTargets } from "./component-evidence-links.mjs";
 import { compareFoundationObservation } from "./foundation-evidence.mjs";
 
@@ -724,10 +725,12 @@ export function auditFigmaComponentEvidence({ record, live, model, session, deri
   let nativeProofs = {ok: !requiredNativeProofs, results: [], verified_sources: [], issues: requiredNativeProofs ? [issue("NATIVE_PROOF_INPUT_UNVERIFIED", "/session", "Native reductions require the same canonical record and actual live session packet.")] : []};
   const requiredRelations = (record?.evidence_links?.native_relation_proofs?.length ?? 0) > 0;
   let relations = {ok: !requiredRelations, results: [], verified_sources: [], issues: requiredRelations ? [issue("NATIVE_RELATION_INPUT_UNVERIFIED", "/session", "Relations require the exact canonical record and actual live session packet.")] : []};
+  const requiredVariables = (record?.evidence_links?.native_variable_proofs?.length ?? 0) > 0;
+  let variableProofs = {ok: !requiredVariables, results: [], verified_sources: [], issues: requiredVariables ? [issue("NATIVE_VARIABLE_INPUT_UNVERIFIED", "/session", "Bindings require actual definitions, consumer resolution and an exact live session packet.")] : []};
   const finish = () => {
-    const effective = applyNativeRelationCoverage({facts, coverage: relations, nativeFactProofs: nativeProofs, contractProofs: factProofs});
-    return {ok: effective.ok && evidence.ok && nested.ok && factProofs.ok && nativeProofs.ok && relations.ok, facts, effective_facts: effective, fact_proofs: factProofs, native_fact_proofs: nativeProofs, native_relation_proofs: relations, evidence_links: evidence, nested_artwork: nested,
-      issues: [...effective.issues, ...evidence.issues, ...nested.issues, ...factProofs.issues, ...nativeProofs.issues, ...relations.issues]};
+    const effective = applyNativeVariableCoverage({facts, coverage: variableProofs, nativeRelationProofs: relations, nativeFactProofs: nativeProofs, contractProofs: factProofs});
+    return {ok: effective.ok && evidence.ok && nested.ok && factProofs.ok && nativeProofs.ok && relations.ok && variableProofs.ok, facts, effective_facts: effective, fact_proofs: factProofs, native_fact_proofs: nativeProofs, native_relation_proofs: relations, native_variable_proofs: variableProofs, evidence_links: evidence, nested_artwork: nested,
+      issues: [...effective.issues, ...evidence.issues, ...nested.issues, ...factProofs.issues, ...nativeProofs.issues, ...relations.issues, ...variableProofs.issues]};
   };
   if (!model || !session) {
     if (nestedReferences(record ?? {}).length) {
@@ -759,6 +762,7 @@ export function auditFigmaComponentEvidence({ record, live, model, session, deri
   factProofs = auditContractFactProofs({record, model, session});
   nativeProofs = auditNativeFactProofs({record, model, session});
   relations = auditNativeRelationProofs({record, model, session});
+  variableProofs = auditNativeVariableProofs({record, model, session});
   if (!requiresEvidenceScope(record)) {
     evidence.receipt_ids = [capture.receipt_id];
     evidence.ok = true;

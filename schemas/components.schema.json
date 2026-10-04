@@ -427,6 +427,12 @@
           "items": {
             "$ref": "#/$defs/nativeRelationProof"
           }
+        },
+        "native_variable_proofs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nativeVariableProof"
+          }
         }
       }
     },
@@ -3059,6 +3065,78 @@
           }
         }
       ]
+    },
+    "nativeVariableProof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "source",
+        "contract_path",
+        "binding_path",
+        "variable"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "kind": {
+          "const": "variable-binding"
+        },
+        "source": {
+          "$ref": "#/$defs/factProofSelector"
+        },
+        "contract_path": {
+          "type": "string",
+          "pattern": "^/contracts/(?:mobile|desktop|variant_contracts/[0-9]+)/root(?:/children/[0-9]+)*/facts/[0-9]+/value$"
+        },
+        "binding_path": {
+          "type": "string",
+          "pattern": "^/variable_bindings/(?:(?:paddingLeft|paddingTop|paddingRight|paddingBottom|itemSpacing|topLeftRadius|topRightRadius|bottomLeftRadius|bottomRightRadius)/id|fills/0/id)$"
+        },
+        "variable": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "name",
+            "key",
+            "collection_id",
+            "collection_name",
+            "resolved_type"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "key": {
+              "type": "string",
+              "minLength": 1
+            },
+            "collection_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "collection_name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "resolved_type": {
+              "enum": [
+                "FLOAT",
+                "COLOR"
+              ]
+            }
+          }
+        }
+      }
     }
   }
 }

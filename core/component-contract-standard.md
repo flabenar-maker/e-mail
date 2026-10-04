@@ -220,6 +220,14 @@ Boolean reference проверяет native property name (нормализуе�
 
 Nested-component INSTANCE требует registered main variant, complete VARIANT properties и независимые direct mappings значений каждой оси. Rendered-node image INSTANCE требует точную собственную asset boundary/dependency цепочку; его native children не становятся HTML. Структурный proof не скрывает artwork/capability diagnostics, scalar mismatch, неизвестные поля или непроверенные bindings. Дополнительные controls/неподдерживаемые modes остаются unverified. Raw report сохраняется; coverage принимается только от internally computed неизменённого proof для того же exact record/packet.
 
+## Native variable binding references
+
+Optional `evidence_links.native_variable_proofs` ссылается на существующий same-node typed px/color fact, точный native binding leaf и variable identity (ID/key/name/type/collection). Равное число или цвет не доказывают правильную переменную. Existing fact value/provenance не заменяются копией variable definition.
+
+Request-bound capture 1.3.0 дополнительно возвращает `binding_evidence`: фактические Variable/VariableCollection definitions, mode selections из consumer и `resolveForConsumer` result. Alias chain разрешается по реально выбранному mode каждой collection; default mode никогда не используется как fallback. Terminal, consumer result, native scalar и независимо mapped typed fact должны совпасть. Unknown fields, missing mode, wrong identity/type/alpha, duplicate usage и alias cycles остаются unverified.
+
+Profile допускает exact Auto Layout padding/item spacing, uniform four-corner aliases и one visible opaque SOLID fill. Coverage снимает только подтверждённый binding ID из списка raw obligations, не скрывает native scalar mismatch или новый paint/layout context. Private internally computed report связан с тем же canonical record/packet; raw report сохраняется.
+
 ## Onboarding нового компонента
 
 Если в библиотеке появился неизвестный компонент:

@@ -22,7 +22,7 @@ async function captureFigmaContractFacts(componentNodeId, request) {
     // Dev Mode may hide invisible instance descendants from children entirely.
     // This is an API traversal setting, not a mutation of the design.
     figma.skipInvisibleInstanceChildren = false;
-    const packet = await captureFigmaContractFactsBody(componentNodeId);
+    const packet = await captureFigmaContractFactsBody(componentNodeId, requestContext !== null);
     const pending = packet.variants.map((variant) => variant.source_node);
     let nodeCount = 0;
     while (pending.length) {
@@ -46,7 +46,7 @@ async function captureFigmaContractFacts(componentNodeId, request) {
 
 // A failed traversal throws, so no partially collected tree gets certified.
 // node_count counts serialized variant roots and descendants, not the set wrapper.
-async function captureFigmaContractFactsBody(componentNodeId) {
+async function captureFigmaContractFactsBody(componentNodeId, captureBindings = false) {
   const component = await figma.getNodeByIdAsync(componentNodeId);
   if (!component || !["COMPONENT_SET", "COMPONENT"].includes(component.type)) {
     return {
@@ -106,6 +106,63 @@ async function captureFigmaContractFactsBody(componentNodeId) {
     }
     return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, binding(item)]));
   };
+
+  // Request-bound evidence includes actual definitions and resolveForConsumer;
+  // an equal scalar is not evidence of variable ownership or selected mode.
+  const actualVariables = new Map(), actualCollections = new Map(), bindingUsages = [];
+  const variablesSeen = new Set(), collectionsSeen = new Set();
+  const actualValue = value => JSON.parse(JSON.stringify(value));
+  async function collectCollection(id, nodeId) {
+    if (collectionsSeen.has(id)) return;
+    collectionsSeen.add(id);
+    try {
+      const c = await figma.variables.getVariableCollectionByIdAsync(id);
+      if (!c || c.id !== id) throw new Error('actual collection unavailable');
+      actualCollections.set(id, { id: c.id, name: c.name, default_mode: c.defaultModeId,
+        modes: c.modes.map(m => ({ id: m.modeId, name: m.name })) });
+    } catch {
+      errors.push({ node_id: nodeId, code: 'VARIABLE_COLLECTION_UNRESOLVED', collection_id: id });
+    }
+  }
+  async function collectVariable(id, nodeId) {
+    if (variablesSeen.has(id)) return actualVariables.get(id)?.api ?? null;
+    variablesSeen.add(id);
+    try {
+      const v = await figma.variables.getVariableByIdAsync(id);
+      if (!v || v.id !== id) throw new Error('actual variable unavailable');
+      const definition = { id: v.id, name: v.name, key: v.key, remote: v.remote,
+        collection_id: v.variableCollectionId, resolved_type: v.resolvedType,
+        values_by_mode: actualValue(v.valuesByMode) };
+      actualVariables.set(id, { api: v, definition });
+      await collectCollection(v.variableCollectionId, nodeId);
+      for (const value of Object.values(v.valuesByMode)) {
+        if (value && value.type === 'VARIABLE_ALIAS' && typeof value.id === 'string') await collectVariable(value.id, nodeId);
+      }
+      return v;
+    } catch {
+      errors.push({ node_id: nodeId, code: 'VARIABLE_DEFINITION_UNRESOLVED', variable_id: id });
+      return null;
+    }
+  }
+  async function collectBindingUsage(node, raw, path = '/variable_bindings') {
+    if (!raw || typeof raw !== 'object') return;
+    if (!Array.isArray(raw) && raw.type === 'VARIABLE_ALIAS' && typeof raw.id === 'string') {
+      const variable = await collectVariable(raw.id, node.id);
+      if (!variable) return;
+      try {
+        const selections = Object.entries(node.resolvedVariableModes ?? {}).map(([collection_id, mode_id]) => ({ collection_id, mode_id }));
+        for (const selection of selections) await collectCollection(selection.collection_id, node.id);
+        const resolved = await variable.resolveForConsumer(node);
+        if (!resolved || !Object.hasOwn(resolved, 'value') || typeof resolved.resolvedType !== 'string') throw new Error('actual consumer resolution unavailable');
+        bindingUsages.push({ node_id: node.id, binding_path: path, variable_id: raw.id,
+          resolved_type: resolved.resolvedType, resolved_value: actualValue(resolved.value), mode_selections: selections });
+      } catch {
+        errors.push({ node_id: node.id, code: 'VARIABLE_CONSUMER_UNRESOLVED', binding_path: path, variable_id: raw.id });
+      }
+      return;
+    }
+    for (const [key, value] of Object.entries(raw)) await collectBindingUsage(node, value, `${path}/${key}`);
+  }
 
   const textStyles = new Map();
   async function textStyleName(styleId, nodeId) {
@@ -193,6 +250,7 @@ async function captureFigmaContractFactsBody(componentNodeId) {
     if ("rotation" in node) result.rotation = node.rotation;
     if ("boundVariables" in node && node.boundVariables) {
       result.variable_bindings = binding(node.boundVariables);
+      if (captureBindings) await collectBindingUsage(node, node.boundVariables);
     }
     if ("componentPropertyReferences" in node && node.componentPropertyReferences) {
       result.component_property_references = node.componentPropertyReferences;
@@ -308,5 +366,6 @@ async function captureFigmaContractFactsBody(componentNodeId) {
     component_properties: componentProperties,
     variants,
     capture_errors: errors,
+    ...(captureBindings ? { binding_evidence: { variables: [...actualVariables.values()].map(v => v.definition), collections: [...actualCollections.values()], usages: bindingUsages } } : {}),
   };
 }

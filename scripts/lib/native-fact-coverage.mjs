@@ -52,7 +52,7 @@ export function validateNativeFactProofReferences({records = []} = {}) {
     if (!Array.isArray(proofs)) {issues.push(issue('NATIVE_PROOF_SHAPE_INVALID', `${base}/native_fact_proofs`, 'Native proofs must be an array.')); continue;}
     if (!proofs.length) continue;
     const ids = new Set(), obligations = new Set();
-    for (const group of ['foundation_values', 'source_dependencies', 'fact_proofs', 'normative_decisions', 'native_fact_proofs', 'native_relation_proofs']) {
+    for (const group of ['foundation_values', 'source_dependencies', 'fact_proofs', 'normative_decisions', 'native_fact_proofs', 'native_relation_proofs', 'native_variable_proofs']) {
       for (const [j, item] of (Array.isArray(links[group]) ? links[group] : []).entries()) {
         if (ids.has(item.id)) issues.push(issue('NATIVE_PROOF_ID_DUPLICATE', `${base}/${group}/${j}/id`, 'IDs are unique across all owned evidence arrays.'));
         ids.add(item.id);
