@@ -39153,6 +39153,13 @@
             },
             "element_path": "/contracts/desktop/root"
           }
+        ],
+        "native_context_proofs": [
+          {
+            "id": "rendered-context-481-19665",
+            "kind": "rendered-artwork-context",
+            "structure_proof_id": "structure-481-19665-481-19665"
+          }
         ]
       }
     },

@@ -1959,7 +1959,20 @@
         "purpose": "Внешний исходный знак внутри Partner-Badge. Только источник для сверки вложенной графики; не самостоятельный блок или экспорт.",
         "critical_constraint_ids": []
       },
-      "constraints": []
+      "constraints": [],
+      "evidence_links": {
+        "foundation_values": [],
+        "source_dependencies": [],
+        "native_context_proofs": [
+          {
+            "id": "source-context-439-4098",
+            "kind": "source-artwork-context",
+            "owner_component_id": "asset-partner-badge-4x",
+            "structure_proof_id": "structure-481-19665-481-19665",
+            "dependency_link_id": "partner-mark-source"
+          }
+        ]
+      }
     }
   ]
 }
