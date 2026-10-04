@@ -288,6 +288,7 @@ test('consumer-geometry requires the full source-to-consumer dependency and exac
 test('consumer-geometry permits owner-only evidence when Shared identity packets are absent', () => {
   const { f } = verifiedConsumerProofFixture();
   f.session.captures = f.session.captures.filter((capture) => !['synthetic-product', 'synthetic-compact'].includes(capture.component_id));
+  f.session.component_ids = f.session.captures.map((capture) => capture.component_id);
   assertVerified(f, 'proof-consumer');
 });
 test('consumer-geometry rejects invalid Product variant, actual instance identity, and asset ownership', () => {
