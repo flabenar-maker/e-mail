@@ -13468,6 +13468,888 @@
               "asset_id": "partner-badge"
             }
           }
+        ],
+        "native_fact_proofs": [
+          {
+            "id": "native-axis-sizing-alias-counter-459-29175-459-27422",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:27422"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-459-29175-459-27423",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:27423"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/facts/8/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-459-29175-459-27425",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:27425"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/children/1/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-459-29175-459-27428",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:27428"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/children/2/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-459-29175-459-29175",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:29175"
+            },
+            "contract_path": "/contracts/desktop/root/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-459-29175-459-29356",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:29356"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/children/2/children/0/facts/8/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-459-29175-459-38136",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:38136"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/2/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-459-29175-459-38174",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:38174"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/2/children/1/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-459-29175-477-21328",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "477:21328"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/2/children/0/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-459-29175-619-21427",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "619:21427"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-459-29176-459-28002",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:28002"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-459-29176-459-28003",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:28003"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-459-29176-459-28004",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:28004"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/children/0/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-459-29176-459-28006",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:28006"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/children/0/children/1/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-459-29176-459-29176",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:29176"
+            },
+            "contract_path": "/contracts/mobile/root/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-459-29176-459-29376",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:29376"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/children/1/facts/8/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-459-29176-459-38319",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:38319"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/2/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-459-29176-459-38357",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:38357"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/2/children/1/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-459-29176-484-20069",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "484:20069"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/2/children/0/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-459-29176-619-21428",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "619:21428"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-459-29175-459-27422",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:27422"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-459-29175-459-27423",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:27423"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/facts/7/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-459-29175-459-27425",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:27425"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/children/1/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-459-29175-459-27428",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:27428"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/children/2/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-459-29175-459-29175",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:29175"
+            },
+            "contract_path": "/contracts/desktop/root/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-459-29175-459-29356",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:29356"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/children/2/children/0/facts/7/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-459-29175-459-38136",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:38136"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/2/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-459-29175-459-38174",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:38174"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/2/children/1/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-459-29175-477-21328",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "477:21328"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/2/children/0/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-459-29175-619-21427",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "619:21427"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-459-29176-459-28002",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:28002"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-459-29176-459-28003",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:28003"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-459-29176-459-28004",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:28004"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/children/0/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-459-29176-459-28006",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:28006"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/children/0/children/1/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-459-29176-459-29176",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:29176"
+            },
+            "contract_path": "/contracts/mobile/root/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-459-29176-459-29376",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:29376"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/children/1/facts/7/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-459-29176-459-38319",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:38319"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/2/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-459-29176-459-38357",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:38357"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/2/children/1/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-459-29176-484-20069",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "484:20069"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/2/children/0/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-459-29176-619-21428",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "619:21428"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-text-alignment-alias-459-29175-459-27426",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:27426"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/children/1/children/0/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-459-29175-459-27427",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:27427"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/children/1/children/1/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-459-29175-459-27431",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:27431"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/1/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-459-29175-459-38175",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:38175"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/2/children/1/children/0/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-459-29175-459-38532",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:38532"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/2/children/1/children/1/facts/10/value"
+          },
+          {
+            "id": "native-text-alignment-alias-459-29176-459-28007",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:28007"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/children/0/children/1/children/0/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-459-29176-459-28008",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:28008"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/children/0/children/1/children/1/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-459-29176-459-28011",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:28011"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/1/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-459-29176-459-38358",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:38358"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/2/children/1/children/0/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-459-29176-459-38537",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:38537"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/2/children/1/children/1/facts/10/value"
+          },
+          {
+            "id": "native-text-resize-alias-459-29175-459-27426",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:27426"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/children/1/children/0/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-459-29175-459-27427",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:27427"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/children/1/children/1/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-459-29175-459-27431",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:27431"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/1/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-459-29175-459-38175",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:38175"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/2/children/1/children/0/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-459-29175-459-38532",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:38532"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/2/children/1/children/1/facts/9/value"
+          },
+          {
+            "id": "native-text-resize-alias-459-29176-459-28007",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:28007"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/children/0/children/1/children/0/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-459-29176-459-28008",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:28008"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/children/0/children/1/children/1/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-459-29176-459-28011",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:28011"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/1/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-459-29176-459-38358",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:38358"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/2/children/1/children/0/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-459-29176-459-38537",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:38537"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/2/children/1/children/1/facts/9/value"
+          },
+          {
+            "id": "native-uniform-corners-459-29175-459-27422",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:27422"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-459-29175-459-27423",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:27423"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-459-29175-459-27425",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:27425"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/children/1/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-459-29175-459-27428",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:27428"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/children/2/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-459-29175-459-29175",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:29175"
+            },
+            "contract_path": "/contracts/desktop/root/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-459-29175-459-29356",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:29356"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/children/2/children/0/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-459-29175-459-38136",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:38136"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/2/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-459-29175-459-38174",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:38174"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/2/children/1/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-459-29175-459-38314",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:38314"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/6/value"
+          },
+          {
+            "id": "native-uniform-corners-459-29175-477-21328",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "477:21328"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/2/children/0/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-459-29175-481-19700",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "481:19700"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/children/0/facts/6/value"
+          },
+          {
+            "id": "native-uniform-corners-459-29175-619-21427",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "619:21427"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-459-29176-459-28002",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:28002"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-459-29176-459-28003",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:28003"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-459-29176-459-28004",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:28004"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/children/0/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-459-29176-459-28006",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:28006"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/children/0/children/1/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-459-29176-459-29176",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:29176"
+            },
+            "contract_path": "/contracts/mobile/root/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-459-29176-459-29376",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:29376"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/children/1/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-459-29176-459-38319",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:38319"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/2/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-459-29176-459-38357",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:38357"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/2/children/1/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-459-29176-459-38449",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:38449"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/6/value"
+          },
+          {
+            "id": "native-uniform-corners-459-29176-484-19677",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "484:19677"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/children/0/children/0/facts/6/value"
+          },
+          {
+            "id": "native-uniform-corners-459-29176-484-20069",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "484:20069"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/2/children/0/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-459-29176-619-21428",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "619:21428"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/12/value"
+          }
         ]
       }
     },
@@ -36349,6 +37231,18 @@
               "node_id": "481:19665",
               "asset_id": "partner-badge"
             }
+          }
+        ],
+        "native_fact_proofs": [
+          {
+            "id": "native-uniform-corners-481-19665-481-19665",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "asset-partner-badge-4x",
+              "variant_node_id": "481:19665",
+              "node_id": "481:19665"
+            },
+            "contract_path": "/contracts/desktop/root/facts/6/value"
           }
         ]
       }
@@ -186232,7 +187126,1085 @@
         "purpose": "Вложенная таблица реквизитов операции.",
         "critical_constraint_ids": []
       },
-      "constraints": []
+      "constraints": [],
+      "evidence_links": {
+        "foundation_values": [],
+        "source_dependencies": [],
+        "native_fact_proofs": [
+          {
+            "id": "native-axis-sizing-alias-counter-477-21325-477-21213",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21213"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/8/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-477-21325-477-21217",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21217"
+            },
+            "contract_path": "/contracts/desktop/root/children/1/facts/8/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-477-21325-477-21221",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21221"
+            },
+            "contract_path": "/contracts/desktop/root/children/2/facts/8/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-477-21325-477-21225",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21225"
+            },
+            "contract_path": "/contracts/desktop/root/children/3/facts/8/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-477-21325-477-21229",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21229"
+            },
+            "contract_path": "/contracts/desktop/root/children/4/facts/8/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-477-21325-477-21233",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21233"
+            },
+            "contract_path": "/contracts/desktop/root/children/5/facts/8/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-477-21325-477-21237",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21237"
+            },
+            "contract_path": "/contracts/desktop/root/children/6/facts/8/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-477-21325-477-21325",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21325"
+            },
+            "contract_path": "/contracts/desktop/root/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-484-20068-484-20041",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20041"
+            },
+            "contract_path": "/contracts/mobile/root/children/2/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-484-20068-484-20045",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20045"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-484-20068-484-20049",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20049"
+            },
+            "contract_path": "/contracts/mobile/root/children/1/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-484-20068-484-20053",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20053"
+            },
+            "contract_path": "/contracts/mobile/root/children/3/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-484-20068-484-20057",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20057"
+            },
+            "contract_path": "/contracts/mobile/root/children/4/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-484-20068-484-20061",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20061"
+            },
+            "contract_path": "/contracts/mobile/root/children/5/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-484-20068-484-20065",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20065"
+            },
+            "contract_path": "/contracts/mobile/root/children/6/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-484-20068-484-20068",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20068"
+            },
+            "contract_path": "/contracts/mobile/root/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-477-21325-477-21213",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21213"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/7/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-477-21325-477-21217",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21217"
+            },
+            "contract_path": "/contracts/desktop/root/children/1/facts/7/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-477-21325-477-21221",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21221"
+            },
+            "contract_path": "/contracts/desktop/root/children/2/facts/7/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-477-21325-477-21225",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21225"
+            },
+            "contract_path": "/contracts/desktop/root/children/3/facts/7/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-477-21325-477-21229",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21229"
+            },
+            "contract_path": "/contracts/desktop/root/children/4/facts/7/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-477-21325-477-21233",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21233"
+            },
+            "contract_path": "/contracts/desktop/root/children/5/facts/7/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-477-21325-477-21237",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21237"
+            },
+            "contract_path": "/contracts/desktop/root/children/6/facts/7/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-477-21325-477-21325",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21325"
+            },
+            "contract_path": "/contracts/desktop/root/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-484-20068-484-20041",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20041"
+            },
+            "contract_path": "/contracts/mobile/root/children/2/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-484-20068-484-20045",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20045"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-484-20068-484-20049",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20049"
+            },
+            "contract_path": "/contracts/mobile/root/children/1/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-484-20068-484-20053",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20053"
+            },
+            "contract_path": "/contracts/mobile/root/children/3/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-484-20068-484-20057",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20057"
+            },
+            "contract_path": "/contracts/mobile/root/children/4/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-484-20068-484-20061",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20061"
+            },
+            "contract_path": "/contracts/mobile/root/children/5/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-484-20068-484-20065",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20065"
+            },
+            "contract_path": "/contracts/mobile/root/children/6/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-484-20068-484-20068",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20068"
+            },
+            "contract_path": "/contracts/mobile/root/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-text-alignment-alias-477-21325-477-21214",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21214"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-477-21325-477-21215",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21215"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-477-21325-477-21218",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21218"
+            },
+            "contract_path": "/contracts/desktop/root/children/1/children/0/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-477-21325-477-21219",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21219"
+            },
+            "contract_path": "/contracts/desktop/root/children/1/children/1/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-477-21325-477-21222",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21222"
+            },
+            "contract_path": "/contracts/desktop/root/children/2/children/0/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-477-21325-477-21223",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21223"
+            },
+            "contract_path": "/contracts/desktop/root/children/2/children/1/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-477-21325-477-21226",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21226"
+            },
+            "contract_path": "/contracts/desktop/root/children/3/children/0/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-477-21325-477-21227",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21227"
+            },
+            "contract_path": "/contracts/desktop/root/children/3/children/1/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-477-21325-477-21230",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21230"
+            },
+            "contract_path": "/contracts/desktop/root/children/4/children/0/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-477-21325-477-21231",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21231"
+            },
+            "contract_path": "/contracts/desktop/root/children/4/children/1/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-477-21325-477-21234",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21234"
+            },
+            "contract_path": "/contracts/desktop/root/children/5/children/0/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-477-21325-477-21235",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21235"
+            },
+            "contract_path": "/contracts/desktop/root/children/5/children/1/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-477-21325-477-21238",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21238"
+            },
+            "contract_path": "/contracts/desktop/root/children/6/children/0/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-477-21325-477-21239",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21239"
+            },
+            "contract_path": "/contracts/desktop/root/children/6/children/1/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-484-20068-484-20042",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20042"
+            },
+            "contract_path": "/contracts/mobile/root/children/2/children/0/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-484-20068-484-20043",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20043"
+            },
+            "contract_path": "/contracts/mobile/root/children/2/children/1/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-484-20068-484-20046",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20046"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-484-20068-484-20047",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20047"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-484-20068-484-20050",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20050"
+            },
+            "contract_path": "/contracts/mobile/root/children/1/children/0/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-484-20068-484-20051",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20051"
+            },
+            "contract_path": "/contracts/mobile/root/children/1/children/1/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-484-20068-484-20054",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20054"
+            },
+            "contract_path": "/contracts/mobile/root/children/3/children/0/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-484-20068-484-20055",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20055"
+            },
+            "contract_path": "/contracts/mobile/root/children/3/children/1/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-484-20068-484-20058",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20058"
+            },
+            "contract_path": "/contracts/mobile/root/children/4/children/0/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-484-20068-484-20059",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20059"
+            },
+            "contract_path": "/contracts/mobile/root/children/4/children/1/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-484-20068-484-20062",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20062"
+            },
+            "contract_path": "/contracts/mobile/root/children/5/children/0/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-484-20068-484-20063",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20063"
+            },
+            "contract_path": "/contracts/mobile/root/children/5/children/1/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-484-20068-484-20066",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20066"
+            },
+            "contract_path": "/contracts/mobile/root/children/6/children/0/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-484-20068-484-20067",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20067"
+            },
+            "contract_path": "/contracts/mobile/root/children/6/children/1/facts/12/value"
+          },
+          {
+            "id": "native-text-resize-alias-477-21325-477-21214",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21214"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-477-21325-477-21215",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21215"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-477-21325-477-21218",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21218"
+            },
+            "contract_path": "/contracts/desktop/root/children/1/children/0/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-477-21325-477-21219",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21219"
+            },
+            "contract_path": "/contracts/desktop/root/children/1/children/1/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-477-21325-477-21222",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21222"
+            },
+            "contract_path": "/contracts/desktop/root/children/2/children/0/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-477-21325-477-21223",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21223"
+            },
+            "contract_path": "/contracts/desktop/root/children/2/children/1/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-477-21325-477-21226",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21226"
+            },
+            "contract_path": "/contracts/desktop/root/children/3/children/0/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-477-21325-477-21227",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21227"
+            },
+            "contract_path": "/contracts/desktop/root/children/3/children/1/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-477-21325-477-21230",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21230"
+            },
+            "contract_path": "/contracts/desktop/root/children/4/children/0/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-477-21325-477-21231",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21231"
+            },
+            "contract_path": "/contracts/desktop/root/children/4/children/1/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-477-21325-477-21234",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21234"
+            },
+            "contract_path": "/contracts/desktop/root/children/5/children/0/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-477-21325-477-21235",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21235"
+            },
+            "contract_path": "/contracts/desktop/root/children/5/children/1/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-477-21325-477-21238",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21238"
+            },
+            "contract_path": "/contracts/desktop/root/children/6/children/0/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-477-21325-477-21239",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21239"
+            },
+            "contract_path": "/contracts/desktop/root/children/6/children/1/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-484-20068-484-20042",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20042"
+            },
+            "contract_path": "/contracts/mobile/root/children/2/children/0/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-484-20068-484-20043",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20043"
+            },
+            "contract_path": "/contracts/mobile/root/children/2/children/1/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-484-20068-484-20046",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20046"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-484-20068-484-20047",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20047"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-484-20068-484-20050",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20050"
+            },
+            "contract_path": "/contracts/mobile/root/children/1/children/0/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-484-20068-484-20051",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20051"
+            },
+            "contract_path": "/contracts/mobile/root/children/1/children/1/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-484-20068-484-20054",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20054"
+            },
+            "contract_path": "/contracts/mobile/root/children/3/children/0/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-484-20068-484-20055",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20055"
+            },
+            "contract_path": "/contracts/mobile/root/children/3/children/1/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-484-20068-484-20058",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20058"
+            },
+            "contract_path": "/contracts/mobile/root/children/4/children/0/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-484-20068-484-20059",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20059"
+            },
+            "contract_path": "/contracts/mobile/root/children/4/children/1/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-484-20068-484-20062",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20062"
+            },
+            "contract_path": "/contracts/mobile/root/children/5/children/0/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-484-20068-484-20063",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20063"
+            },
+            "contract_path": "/contracts/mobile/root/children/5/children/1/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-484-20068-484-20066",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20066"
+            },
+            "contract_path": "/contracts/mobile/root/children/6/children/0/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-484-20068-484-20067",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20067"
+            },
+            "contract_path": "/contracts/mobile/root/children/6/children/1/facts/11/value"
+          },
+          {
+            "id": "native-uniform-corners-477-21325-477-21213",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21213"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-477-21325-477-21217",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21217"
+            },
+            "contract_path": "/contracts/desktop/root/children/1/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-477-21325-477-21221",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21221"
+            },
+            "contract_path": "/contracts/desktop/root/children/2/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-477-21325-477-21225",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21225"
+            },
+            "contract_path": "/contracts/desktop/root/children/3/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-477-21325-477-21229",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21229"
+            },
+            "contract_path": "/contracts/desktop/root/children/4/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-477-21325-477-21233",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21233"
+            },
+            "contract_path": "/contracts/desktop/root/children/5/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-477-21325-477-21237",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21237"
+            },
+            "contract_path": "/contracts/desktop/root/children/6/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-477-21325-477-21325",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21325"
+            },
+            "contract_path": "/contracts/desktop/root/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-484-20068-484-20041",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20041"
+            },
+            "contract_path": "/contracts/mobile/root/children/2/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-484-20068-484-20045",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20045"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-484-20068-484-20049",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20049"
+            },
+            "contract_path": "/contracts/mobile/root/children/1/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-484-20068-484-20053",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20053"
+            },
+            "contract_path": "/contracts/mobile/root/children/3/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-484-20068-484-20057",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20057"
+            },
+            "contract_path": "/contracts/mobile/root/children/4/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-484-20068-484-20061",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20061"
+            },
+            "contract_path": "/contracts/mobile/root/children/5/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-484-20068-484-20065",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20065"
+            },
+            "contract_path": "/contracts/mobile/root/children/6/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-484-20068-484-20068",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20068"
+            },
+            "contract_path": "/contracts/mobile/root/facts/12/value"
+          }
+        ]
+      }
     },
     {
       "id": "badge-operation-status",
@@ -190714,7 +192686,325 @@
         "purpose": "Живой HTML-бейдж состояния операции.",
         "critical_constraint_ids": []
       },
-      "constraints": []
+      "constraints": [],
+      "evidence_links": {
+        "foundation_values": [],
+        "source_dependencies": [],
+        "native_fact_proofs": [
+          {
+            "id": "native-axis-sizing-alias-counter-459-29367-459-29367",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "badge-operation-status",
+              "variant_node_id": "459:29367",
+              "node_id": "459:29367"
+            },
+            "contract_path": "/contracts/mobile/root/facts/8/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-459-29369-459-29369",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "badge-operation-status",
+              "variant_node_id": "459:29369",
+              "node_id": "459:29369"
+            },
+            "contract_path": "/contracts/variant_contracts/0/root/facts/8/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-459-29371-459-29371",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "badge-operation-status",
+              "variant_node_id": "459:29371",
+              "node_id": "459:29371"
+            },
+            "contract_path": "/contracts/variant_contracts/1/root/facts/8/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-466-13290-466-13290",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "badge-operation-status",
+              "variant_node_id": "466:13290",
+              "node_id": "466:13290"
+            },
+            "contract_path": "/contracts/desktop/root/facts/8/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-466-13292-466-13292",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "badge-operation-status",
+              "variant_node_id": "466:13292",
+              "node_id": "466:13292"
+            },
+            "contract_path": "/contracts/variant_contracts/2/root/facts/8/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-counter-466-13294-466-13294",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "badge-operation-status",
+              "variant_node_id": "466:13294",
+              "node_id": "466:13294"
+            },
+            "contract_path": "/contracts/variant_contracts/3/root/facts/8/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-459-29367-459-29367",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "badge-operation-status",
+              "variant_node_id": "459:29367",
+              "node_id": "459:29367"
+            },
+            "contract_path": "/contracts/mobile/root/facts/7/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-459-29369-459-29369",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "badge-operation-status",
+              "variant_node_id": "459:29369",
+              "node_id": "459:29369"
+            },
+            "contract_path": "/contracts/variant_contracts/0/root/facts/7/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-459-29371-459-29371",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "badge-operation-status",
+              "variant_node_id": "459:29371",
+              "node_id": "459:29371"
+            },
+            "contract_path": "/contracts/variant_contracts/1/root/facts/7/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-466-13290-466-13290",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "badge-operation-status",
+              "variant_node_id": "466:13290",
+              "node_id": "466:13290"
+            },
+            "contract_path": "/contracts/desktop/root/facts/7/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-466-13292-466-13292",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "badge-operation-status",
+              "variant_node_id": "466:13292",
+              "node_id": "466:13292"
+            },
+            "contract_path": "/contracts/variant_contracts/2/root/facts/7/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-axis-sizing-alias-primary-466-13294-466-13294",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "badge-operation-status",
+              "variant_node_id": "466:13294",
+              "node_id": "466:13294"
+            },
+            "contract_path": "/contracts/variant_contracts/3/root/facts/7/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-text-alignment-alias-459-29367-459-29368",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "badge-operation-status",
+              "variant_node_id": "459:29367",
+              "node_id": "459:29368"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-459-29369-459-29370",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "badge-operation-status",
+              "variant_node_id": "459:29369",
+              "node_id": "459:29370"
+            },
+            "contract_path": "/contracts/variant_contracts/0/root/children/0/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-459-29371-459-29372",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "badge-operation-status",
+              "variant_node_id": "459:29371",
+              "node_id": "459:29372"
+            },
+            "contract_path": "/contracts/variant_contracts/1/root/children/0/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-466-13290-466-13291",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "badge-operation-status",
+              "variant_node_id": "466:13290",
+              "node_id": "466:13291"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-466-13292-466-13293",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "badge-operation-status",
+              "variant_node_id": "466:13292",
+              "node_id": "466:13293"
+            },
+            "contract_path": "/contracts/variant_contracts/2/root/children/0/facts/12/value"
+          },
+          {
+            "id": "native-text-alignment-alias-466-13294-466-13295",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "badge-operation-status",
+              "variant_node_id": "466:13294",
+              "node_id": "466:13295"
+            },
+            "contract_path": "/contracts/variant_contracts/3/root/children/0/facts/12/value"
+          },
+          {
+            "id": "native-text-resize-alias-459-29367-459-29368",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "badge-operation-status",
+              "variant_node_id": "459:29367",
+              "node_id": "459:29368"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-459-29369-459-29370",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "badge-operation-status",
+              "variant_node_id": "459:29369",
+              "node_id": "459:29370"
+            },
+            "contract_path": "/contracts/variant_contracts/0/root/children/0/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-459-29371-459-29372",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "badge-operation-status",
+              "variant_node_id": "459:29371",
+              "node_id": "459:29372"
+            },
+            "contract_path": "/contracts/variant_contracts/1/root/children/0/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-466-13290-466-13291",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "badge-operation-status",
+              "variant_node_id": "466:13290",
+              "node_id": "466:13291"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-466-13292-466-13293",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "badge-operation-status",
+              "variant_node_id": "466:13292",
+              "node_id": "466:13293"
+            },
+            "contract_path": "/contracts/variant_contracts/2/root/children/0/facts/11/value"
+          },
+          {
+            "id": "native-text-resize-alias-466-13294-466-13295",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "badge-operation-status",
+              "variant_node_id": "466:13294",
+              "node_id": "466:13295"
+            },
+            "contract_path": "/contracts/variant_contracts/3/root/children/0/facts/11/value"
+          },
+          {
+            "id": "native-uniform-corners-459-29367-459-29367",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "badge-operation-status",
+              "variant_node_id": "459:29367",
+              "node_id": "459:29367"
+            },
+            "contract_path": "/contracts/mobile/root/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-459-29369-459-29369",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "badge-operation-status",
+              "variant_node_id": "459:29369",
+              "node_id": "459:29369"
+            },
+            "contract_path": "/contracts/variant_contracts/0/root/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-459-29371-459-29371",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "badge-operation-status",
+              "variant_node_id": "459:29371",
+              "node_id": "459:29371"
+            },
+            "contract_path": "/contracts/variant_contracts/1/root/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-466-13290-466-13290",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "badge-operation-status",
+              "variant_node_id": "466:13290",
+              "node_id": "466:13290"
+            },
+            "contract_path": "/contracts/desktop/root/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-466-13292-466-13292",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "badge-operation-status",
+              "variant_node_id": "466:13292",
+              "node_id": "466:13292"
+            },
+            "contract_path": "/contracts/variant_contracts/2/root/facts/12/value"
+          },
+          {
+            "id": "native-uniform-corners-466-13294-466-13294",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "badge-operation-status",
+              "variant_node_id": "466:13294",
+              "node_id": "466:13294"
+            },
+            "contract_path": "/contracts/variant_contracts/3/root/facts/12/value"
+          }
+        ]
+      }
     }
   ]
 }

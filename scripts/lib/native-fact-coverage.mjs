@@ -97,6 +97,7 @@ export function auditNativeFactProofs({record, model, session} = {}) {
       const t = target(record, p.contract_path), e = env.selected(p.source), n = e.node;
       const add = path => local.push({...p.source, source_path: path});
       if (p.kind === 'uniform-corners') {
+        if (!['COMPONENT', 'FRAME', 'INSTANCE', 'RECTANGLE'].includes(n.node_type)) throw Error('corner-capable native node type required');
         const radius = direct(record, p, t, n, '/corner_radius', 'identity');
         const corners = ['top_left', 'top_right', 'bottom_left', 'bottom_right'];
         if (!finite(radius) || radius < 0 || !closed(n.corner_radii, corners) || corners.some(c => !finite(n.corner_radii[c]) || n.corner_radii[c] !== radius)) throw Error('four complete finite corners/scalar radius mismatch');
@@ -109,6 +110,7 @@ export function auditNativeFactProofs({record, model, session} = {}) {
         if (!allowed.includes(raw) || n.text_style?.[style] !== raw) throw Error('same TEXT style/geometry alias mismatch');
         add(`/text_style/${style}`);
       } else {
+        if (!['COMPONENT', 'FRAME', 'INSTANCE'].includes(n.node_type)) throw Error('Auto Layout capable native node type required');
         const mode = n.layout?.mode;
         if (!['HORIZONTAL', 'VERTICAL'].includes(mode)) throw Error('known Auto Layout orientation required');
         const direction = (mode === 'HORIZONTAL') === (p.axis === 'primary') ? 'horizontal' : 'vertical';
