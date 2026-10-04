@@ -42,6 +42,11 @@ test('capture MIXED paint error is not proof of an absent background', () => {
   f.packet.capture_errors.push({node_id: f.node.node_id, field: 'fills', code: 'MIXED_VALUE'});
   assert.equal(auditNativeContextProofs(f).ok, false);
 });
+test('existing layout-axis fact proves orientation without rewriting canonical facts', () => {
+  const f = fixture({paint: false});
+  f.e.facts.find(fact => fact.id === 'layout-orientation').id = 'layout-axis';
+  assert.equal(auditNativeContextProofs(f).ok, true);
+});
 for (const [name, change] of [
   ['paint alpha', f => {f.node.fills[0].opacity = 0.5;}],
   ['paint visibility', f => {f.node.fills[0].visible = false;}],
