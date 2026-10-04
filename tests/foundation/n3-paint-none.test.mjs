@@ -11,7 +11,7 @@ function fixture({divider = false, paint = true} = {}) {
   const path = divider ? '/contracts/mobile/root/children/1' : '/contracts/mobile/root';
   const relation = divider ? 'detail-structure' : 'root-structure';
   Object.assign(node, {layout_positioning: 'AUTO', layout_grow: 0, minimum_width_px: null, opacity: 1, rotation: 0, strokes: [], variable_bindings: {}, effects: []});
-  node.layout = divider ? {mode: 'NONE', wrap: 'NO_WRAP', horizontal_sizing: 'FILL', vertical_sizing: 'FIXED', primary_axis_sizing: 'AUTO', counter_axis_sizing: 'FIXED', primary_alignment: 'MIN', counter_alignment: 'MIN', item_spacing: 0, counter_axis_spacing: 0, padding: {left: 0, right: 0, top: 0, bottom: 0}} : {mode: 'VERTICAL', wrap: 'NO_WRAP', counter_axis_spacing: 0};
+  node.layout = divider ? {mode: 'NONE', wrap: 'NO_WRAP', horizontal_sizing: 'FILL', vertical_sizing: 'FIXED', primary_axis_sizing: 'AUTO', counter_axis_sizing: 'FIXED', primary_axis_alignment: 'MIN', counter_axis_alignment: 'MIN', item_spacing: 0, counter_axis_spacing: 0, padding: {left: 0, right: 0, top: 0, bottom: 0}} : {mode: 'VERTICAL', wrap: 'NO_WRAP', counter_axis_spacing: 0};
   if (divider) {node.name = 'divider'; e.semantic_role = 'divider'; node.reference_dimensions.height = 1; e.facts[0].value.height = 1;}
   function fact(id, value, source_path, transform = 'identity') {
     const i = e.facts.length;
