@@ -137,12 +137,32 @@ function instance(record, e, source, node, env, add) {
   }
   add('/main_component_id');
 }
+// Admission of a flat owned IMAGE boundary proves structure only. Paint
+// values, crop, filters, source resolution and export geometry remain separate
+// raw obligations; this is not artwork/export coverage.
+function imagePaintShape(paint) {
+  const required = ['type', 'visible', 'opacity', 'image_hash', 'scale_mode'];
+  const optional = ['image_transform', 'scaling_factor', 'rotation', 'filters'];
+  if (!object(paint) || required.some(k => !Object.hasOwn(paint, k)) || Object.keys(paint).some(k => ![...required, ...optional].includes(k)) ||
+      paint.type !== 'image' || paint.visible !== true || paint.opacity !== 1 || typeof paint.image_hash !== 'string' || !paint.image_hash.trim() ||
+      !['FILL', 'FIT', 'CROP', 'TILE'].includes(paint.scale_mode)) return false;
+  if (Object.hasOwn(paint, 'image_transform') && (!Array.isArray(paint.image_transform) || paint.image_transform.length !== 2 || paint.image_transform.some(row => !Array.isArray(row) || row.length !== 3 || row.some(n => !finite(n))))) return false;
+  if (Object.hasOwn(paint, 'scaling_factor') && (!finite(paint.scaling_factor) || paint.scaling_factor <= 0)) return false;
+  if (Object.hasOwn(paint, 'rotation') && !finite(paint.rotation)) return false;
+  if (Object.hasOwn(paint, 'filters') && (!closed(paint.filters, ['exposure', 'contrast', 'saturation', 'temperature', 'tint', 'highlights', 'shadows']) || Object.values(paint.filters).some(n => !finite(n)))) return false;
+  return true;
+}
 function structure(record, p, env, add) {
   const entry = env.selected(p.source), node = entry.node;
   const e = verifyDimensions(record, p.element_path, p.source, node);
   const root = p.source.node_id === p.source.variant_node_id;
-  const ownAsset = ['direct-image', 'background-image'].includes(e.render_mode) ? record.asset_contracts?.find(a => a.id === e.asset_contract_id) : null;
+  const assetElement = ['direct-image', 'background-image'].includes(e.render_mode);
+  const candidates = assetElement ? record.asset_contracts?.filter(a => a.id === e.asset_contract_id) : [];
+  if (assetElement && candidates?.length !== 1) throw Error('one unambiguous own asset contract required');
+  const ownAsset = candidates?.[0] ?? null;
   const fillBoundary = ownAsset?.source_mode_id === 'image-fill' && ownAsset.export_boundary?.kind === 'fill';
+  if (fillBoundary && (!closed(ownAsset.export_boundary, ['kind', 'semantic_node_name']) ||
+      !(ownAsset.display_mode_id === 'direct-image' && e.render_mode === 'direct-image' || ownAsset.display_mode_id === 'fill-image' && ['direct-image', 'background-image'].includes(e.render_mode)))) throw Error('declared image-fill display capability/boundary mismatch');
   const type = root ? 'COMPONENT' : ({'presentation-table': 'FRAME', 'html-text': 'TEXT', 'html-link': 'TEXT', 'nested-component': 'INSTANCE', 'direct-image': fillBoundary ? 'FRAME' : 'INSTANCE', 'background-image': fillBoundary ? 'FRAME' : undefined})[e.render_mode];
   if (!type || node.node_type !== type) throw Error('canonical element/native class mismatch');
   const variant = variants(record).find(v => v.node_id === p.source.variant_node_id);
@@ -154,9 +174,8 @@ function structure(record, p, env, add) {
     if (e.children?.length !== 0) throw Error('HTML children cannot flatten an asset/nested boundary');
     if (node.node_type === 'INSTANCE') instance(record, e, p.source, node, env, add);
     else if (fillBoundary) {
-      if (asset.owner_layer_name !== node.name || (node.children ?? []).length !== 0 || asset.export_boundary.semantic_node_name !== node.name ||
-          !Array.isArray(node.fills) || node.fills.length !== 1 || node.fills[0].type !== 'image' || node.fills[0].visible !== true ||
-          node.fills[0].opacity !== 1 || typeof node.fills[0].image_hash !== 'string' || !node.fills[0].image_hash) throw Error('exact flat owned image-fill boundary required');
+      if (asset.owner_layer_name !== node.name || !Array.isArray(node.children) || node.children.length !== 0 || asset.export_boundary.semantic_node_name !== node.name ||
+          !Array.isArray(node.fills) || node.fills.length !== 1 || !imagePaintShape(node.fills[0])) throw Error('exact flat owned image-fill boundary required');
     } else if (e.render_mode !== 'direct-image' || record.identity.semantic_role !== 'asset' || !asset || asset.owner_layer_name !== node.name || asset.source_mode_id !== 'rendered-node') throw Error('own source asset boundary required');
   } else {
     if (!Array.isArray(e.children) || (node.children !== undefined && !Array.isArray(node.children))) throw Error('complete canonical/native child arrays required');
