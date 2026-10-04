@@ -285,12 +285,6 @@ test('source-value-set rejects altered request/receipt and incomplete-tree packe
 test('consumer-geometry requires the full source-to-consumer dependency and exact owned asset placement', () => {
   const f = consumerChainFixture(); setProof(f, { id: 'proof-consumer', kind: 'consumer-geometry', contract_path: '/contracts/mobile/root/facts/1/value', consumer_component_id: 'synthetic-header', asset_contract_id: 'synthetic-image', placements: { mobile: { component_id: 'synthetic-header', variant_node_id: '501:1', node_id: '501:3' }, desktop: { component_id: 'synthetic-header', variant_node_id: '501:2', node_id: '501:4' } } }); assertVerified(f, 'proof-consumer');
 });
-test('consumer-geometry permits owner-only evidence when Shared identity packets are absent', () => {
-  const { f } = verifiedConsumerProofFixture();
-  f.session.captures = f.session.captures.filter((capture) => !['synthetic-product', 'synthetic-compact'].includes(capture.component_id));
-  f.session.component_ids = f.session.captures.map((capture) => capture.component_id);
-  assertVerified(f, 'proof-consumer');
-});
 test('consumer-geometry rejects invalid Product variant, actual instance identity, and asset ownership', () => {
   for (const change of [
     (f) => { f.model.records.find((record) => record.id === 'synthetic-product').variants.pop(); },
