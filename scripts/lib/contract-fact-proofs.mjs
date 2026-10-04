@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
 import { validateCaptureFreshness, validateEvidenceSessionFreshness } from './component-evidence-freshness.mjs';
 import { matchesRemoteSourceIdentity } from './component-evidence-links.mjs';
-import { isFigmaContractFactReportFor } from './figma-contract-facts.mjs';
+import { isFigmaContractFactReportFor, hasCompleteMixedTextRuns } from './figma-contract-facts.mjs';
 
 // Proof metadata is authoring evidence, never an HTML value override. Every
 // success is qualified by an exact canonical owner, request-bound complete
@@ -323,6 +323,31 @@ export function auditContractFactProofs({ record, model, session } = {}) {
             // Local underline/link paint is retained by its independent fact.
             const runFacts = factsIn(record).filter(f => f.fact.id === 'styled-text-segments' && f.fact.provenance?.node_id === n.node_id);
             if (runFacts.length !== 1 || !equal(sortedJson(runFacts[0].fact.value.items), sortedJson(segments.map(segment => ({ ...segment, font_size_px: number(segment.font_size_px), line_height: { ...segment.line_height, value: number(segment.line_height.value) } }))))) throw Error('canonical complete styled segments must retain local decoration/paint');
+            // MIXED aggregate fields are not CSS defaults. Only the complete,
+            // independently mapped run facts retain actual local underline/paint.
+            const runs = runFacts[0], keys = ['start', 'end', 'characters', 'font_family', 'font_style', 'font_size_px', 'line_height', 'text_decoration', 'fills'];
+            const exactRuns = hasCompleteMixedTextRuns(n, 'fontName') && hasCompleteMixedTextRuns(n, 'textDecoration') &&
+              runs.element === t.element && runs.fact.provenance.node_id === n.node_id && ['figma-literal', 'figma-binding'].includes(runs.fact.provenance.kind) &&
+              segments.every(run => closed(run, keys) && closed(run.line_height, ['unit', 'value']) && run.fills.every(paint =>
+                closed(paint, ['type', 'visible', 'opacity', 'color']) && paint.type === 'solid' && paint.visible === true && paint.opacity === 1 && /^#[A-Fa-f0-9]{6}$/u.test(paint.color)));
+            if (exactRuns) {
+              const primitiveLeaves = [];
+              const collect = (value, path) => {
+                if (value && typeof value === 'object') { for (const [k, v] of Object.entries(value)) collect(v, `${path}/${k}`); }
+                else primitiveLeaves.push({ path, value });
+              };
+              segments.forEach((run, index) => collect(run, `/${index}`));
+              const mappings = record.contracts.figma_fact_links ?? [];
+              const independentlyMapped = primitiveLeaves.every(leaf => {
+                const path = `${runs.path}/items${leaf.path}`, links = mappings.filter(link => link.contract_path === path);
+                return links.length === 1 && links[0].variant_node_id === p.source.variant_node_id && links[0].node_id === n.node_id &&
+                  links[0].source_path === `/styled_text_segments${leaf.path}` && links[0].transform === 'identity' && equal(number(leaf.value), pointer(record, path));
+              });
+              if (independentlyMapped) for (const field of ['font_family', 'font_style', 'text_decoration']) {
+                if (style[field] === null) source(p.source, `/text_style/${field}`);
+              }
+            }
+
           } else if (style.font_family !== s.font.family || style.font_style !== s.font.figma_style) throw Error('native unmixed style required');
           source(p.source, '/text_style/figma_style_id'); source(p.source, '/text_style/figma_style_name'); source(p.source, '/text_style/font_weight'); break;
         }
