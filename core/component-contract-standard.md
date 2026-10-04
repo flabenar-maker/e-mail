@@ -232,6 +232,14 @@ Profile допускает exact Auto Layout padding/item spacing, uniform four-
 
 Existing `style-usage` proof проверяет единственный foundation style ID/name/viewport и фактические size/weight/line-height/tracking. Aggregate family/style/decoration `null` не является CSS значением. Их redundant native obligations закрываются только при complete producer-shaped ranges, точном typed `styled-text-segments` того же element/node, полном независимом primitive mapping всех ranges и сохранённых local underline/paint. Не наследовать weight/style ID/tracking из ranges; отсутствие/подмена local paint, новый field или неполные ranges остаются unverified.
 
+## Native HTML context references
+
+Optional `evidence_links.native_context_proofs` references one owned, independently verified `element-structure` proof. It carries no copied native values or caller field mask. Only ordinary HTML capabilities are eligible; source-only artwork and Templates require their own boundaries.
+
+The narrow absence profile requires AUTO positioning, null minimum width, opacity 1, rotation 0 and empty strokes; present effects must be empty. Nonzero grow and explicit alignment require independent exact same-node mappings. Empty bindings are proved as empty; nonempty aliases remain the variable checker’s responsibility. Auto Layout orientation/wrap require their own direct facts, NO_WRAP and zero counter-axis spacing. Active unsupported values are not silently approximated.
+
+Successful internally computed coverage is paired with the exact canonical record and live raw packet. Unknown fields remain uncovered; mismatches and capture errors remain. The profile changes audit evidence only, never HTML defaults, rendering values or the semantic tree.
+
 ## Onboarding нового компонента
 
 Если в библиотеке появился неизвестный компонент:

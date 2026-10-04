@@ -10,7 +10,7 @@ const ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
 const ROOT = /^[0-9]+:[0-9]+$/u;
 const NODE = /^(?:[0-9]+:[0-9]+|I[0-9]+:[0-9]+(?:;[0-9]+:[0-9]+)+)$/u;
 const PATH = /^\/contracts\/(?:mobile|desktop|variant_contracts\/\d+)\/root(?:\/children\/\d+)*$/u;
-const groups = ['foundation_values', 'source_dependencies', 'fact_proofs', 'normative_decisions', 'native_fact_proofs', 'native_relation_proofs', 'native_variable_proofs'];
+const groups = ['foundation_values', 'source_dependencies', 'fact_proofs', 'normative_decisions', 'native_fact_proofs', 'native_relation_proofs', 'native_variable_proofs', 'native_context_proofs'];
 const computed = new WeakMap();
 const object = v => v !== null && typeof v === 'object' && !Array.isArray(v);
 const closed = (v, keys) => object(v) && keys.every(k => Object.hasOwn(v, k)) && Object.keys(v).every(k => keys.includes(k));

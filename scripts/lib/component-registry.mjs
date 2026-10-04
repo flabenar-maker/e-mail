@@ -7,6 +7,7 @@ import { validateContractFactProofReferences } from "./contract-fact-proofs.mjs"
 import { validateNativeFactProofReferences } from "./native-fact-coverage.mjs";
 import { validateNativeRelationProofReferences } from "./native-relationship-coverage.mjs";
 import { validateNativeVariableProofReferences } from "./native-variable-coverage.mjs";
+import { validateNativeContextProofReferences } from "./native-context-coverage.mjs";
 import { resolveDesignSpacing } from "./spacing-foundation.mjs";
 import { SystemValidationError } from "./diagnostics.mjs";
 import { validateDocumentShape } from "./schema-validation.mjs";
@@ -889,7 +890,7 @@ export function validateComponentRegistrySemantics({
   }
 
   const evidenceRecords = recordsIn(registries);
-  for (const error of [...validateEvidenceLinkReferences({records: evidenceRecords.map(entry => entry.record)}), ...validateContractFactProofReferences({records: evidenceRecords.map(entry => entry.record)}), ...validateNativeFactProofReferences({records: evidenceRecords.map(entry => entry.record)}), ...validateNativeRelationProofReferences({records: evidenceRecords.map(entry => entry.record)}), ...validateNativeVariableProofReferences({records: evidenceRecords.map(entry => entry.record)})]) {
+  for (const error of [...validateEvidenceLinkReferences({records: evidenceRecords.map(entry => entry.record)}), ...validateContractFactProofReferences({records: evidenceRecords.map(entry => entry.record)}), ...validateNativeFactProofReferences({records: evidenceRecords.map(entry => entry.record)}), ...validateNativeRelationProofReferences({records: evidenceRecords.map(entry => entry.record)}), ...validateNativeVariableProofReferences({records: evidenceRecords.map(entry => entry.record)}), ...validateNativeContextProofReferences({records: evidenceRecords.map(entry => entry.record)})]) {
     const match = /^\/records\/(\d+)(.*)$/u.exec(error.path);
     const path = match ? evidenceRecords[Number(match[1])].path + match[2] : error.path;
     errors.push(diagnostic(error.code, path, error.message));

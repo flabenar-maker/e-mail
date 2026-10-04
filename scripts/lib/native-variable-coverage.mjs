@@ -10,7 +10,7 @@ const NODE=/^(?:[0-9]+:[0-9]+|I[0-9]+:[0-9]+(?:;[0-9]+:[0-9]+)+)$/u;
 const PATH=/^\/contracts\/(?:mobile|desktop|variant_contracts\/\d+)\/root(?:\/children\/\d+)*\/facts\/\d+\/value$/u;
 const FIELDS={paddingLeft:'/layout/padding/left',paddingTop:'/layout/padding/top',paddingRight:'/layout/padding/right',paddingBottom:'/layout/padding/bottom',itemSpacing:'/layout/item_spacing',topLeftRadius:'/corner_radius',topRightRadius:'/corner_radius',bottomLeftRadius:'/corner_radius',bottomRightRadius:'/corner_radius'};
 const CORNERS=['topLeftRadius','topRightRadius','bottomLeftRadius','bottomRightRadius'];
-const groups=['foundation_values','source_dependencies','fact_proofs','normative_decisions','native_fact_proofs','native_relation_proofs','native_variable_proofs'];
+const groups=['foundation_values','source_dependencies','fact_proofs','normative_decisions','native_fact_proofs','native_relation_proofs','native_variable_proofs', 'native_context_proofs'];
 const object=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);
 const closed=(v,keys)=>object(v)&&keys.every(k=>Object.hasOwn(v,k))&&Object.keys(v).every(k=>keys.includes(k));
 const text=v=>typeof v==='string'&&!!v.trim()&&!/[\r\n]/u.test(v);
