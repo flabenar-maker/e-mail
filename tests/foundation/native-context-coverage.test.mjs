@@ -40,13 +40,13 @@ test('html-link receives ordinary HTML context only through its own structure pr
   element.render_mode = 'html-link'; element.semantic_role = 'help-link'; node.node_type = 'TEXT'; node.name = 'help-link';
   Object.assign(node, {layout_positioning: 'AUTO', layout_grow: 0, minimum_width_px: null, opacity: 1, rotation: 0, strokes: [], variable_bindings: {}, fills: []});
   f.record.evidence_links.native_context_proofs = [{id: 'link-context', kind: 'html-element-context', structure_proof_id: 'detail-structure'}];
-  const coverage = api().auditNativeContextProofs(f); assert.equal(coverage.ok, true);
-  assert.ok(coverage.verified_sources.some(source => source.source_path === '/clips_content'));
+  assert.equal(api().auditNativeContextProofs(f).ok, true);
 });
 
 test('ordinary false clips_content is semantic absence, while true needs an exact typed Boolean map', () => {
   const f = fixture(); f.node.clips_content = false;
-  assert.equal(api().auditNativeContextProofs(f).ok, true);
+  const coverage = api().auditNativeContextProofs(f); assert.equal(coverage.ok, true);
+  assert.ok(coverage.verified_sources.some(source => source.source_path === '/clips_content'));
   f.node.clips_content = true;
   assert.equal(api().auditNativeContextProofs(f).ok, false);
   f.record.contracts.mobile.root.facts.push({id: 'clip-content', value: {type: 'boolean', value: true}, provenance: {kind: 'figma-literal', node_id: f.node.node_id}});
