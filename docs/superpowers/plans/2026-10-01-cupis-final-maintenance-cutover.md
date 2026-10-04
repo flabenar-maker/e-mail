@@ -20,7 +20,9 @@
 
 После принятого пакета 5, до отдельно разрешённого пакета 6, предусмотрен [follow-up карточных блоков, draft PR #109](https://github.com/flabenar-maker/e-mail/pull/109). Полная актуальная очередь, ссылки на его план и границы интеграции документов находятся в [roadmap](2026-08-25-cupis-migration-roadmap.md#единый-актуальный-список). Организация папки plans и удаление ручного checkpoint не являются выполнением пакета 6.
 
-### Текущая точка возврата P2 — точная карта remaining proof и F7, 03.10.2026
+<a id="текущая-точка-возврата-p2--точная-карта-remaining-proof-и-f7-03102026"></a>
+
+### Текущая точка возврата P2 — native классификация и F7, 04.10.2026
 
 Обновлено 04.10.2026. `main@618d124df0a664c84d23a724ba50ef2b324e9b97` не менялся; [PR #110](https://github.com/flabenar-maker/e-mail/pull/110) остаётся draft/open. Продолжено разрешённое исправление P2, без Figma writes, изменения export/rendering values, готовых писем, P3, deferred #109, activation или merge. **P2 целиком не принят.**
 
@@ -85,9 +87,46 @@ Independent bounded F7 review04e→df527:0 новых Critical/Important/Minor; 
 
 Финальный cloud SHA и fresh local validator/generated/full Node/Windows/preserved-blob receipts публикуются в PR body после проверки точного коммита с этим журналом. Старые04e или517f результаты не выдаются за final gate. No Actions/PR Checks. Рендерер, component/foundation facts, export rules, workflow semantics, skills, route/profile records, Figma и локальные письма вF7 сохранены.
 
+<a id="p2-native-classification-2026-10-04"></a>
+
+#### Read-only разбор оставшихся native obligations, 04.10.2026
+
+Выполнен следующий диагностический пункт P2 на точном candidate `a106c4710e39aaff4bff1969e74dba65ab20052e`, tree `19b5d7264e6703e6520068a802bc1d2e8431b52c`. Main остаётся `618d124df0a664c84d23a724ba50ef2b324e9b97`; PR #110 draft/open. Это классификация и карта влияния, **не приёмка coverage/P2 и не разрешение нового policy scope**. Только этот журнал и roadmap обновляются; component/foundation values, proof metadata, code/tests/generated outputs, skills, Figma и локальные письма сохраняются.
+
+**Восстановление входов.** В прежнем снимке CRLF-переносы изменили байты 10 tracked files, поэтому его raw bytes не использованы как новый exact input. Новый disposable API snapshot содержит 254/254 blobs с самостоятельно проверенными Git blob identities; использован проверенный exact-lock dependency junction (lock SHA256 `C73027E0083F1BD6681E20A59367110DB0F0BE292B51F6FFDB4ECFF2F5D63919`). Первый resolver отказал из-за неверного CWD; единственный успешно полученный и потреблённый bundle — `library-maintenance/read-only/both`, пять owners и четыре foundations, paused/SKILL_ROUTE_PAUSED, digest `sha256:191fa8fa0b80d45f5bb637cd4a196fae1ca7084dbae252f9af60d058aab73c42`. Paused не подменён другим workflow.
+
+**Свежая Figma.** Через MCP независимо получены 5 новых request-bound capture 1.3/session 1.1 packets: Transaction-Success, локальный Partner-Badge, remote Partner-Mark, Operation-Status и Operation details. Admission 5/5; nested-artwork 5/5; применимые artwork/source dependency checks 3/3. Два отдельных EVIDENCE_SCOPE_UNSUPPORTED на чисто HTML `badge-operation-status`/`details-operation` сохранены: для них был вызван неприменимый artwork branch, а не обнаружена отсутствующая export boundary. Не добавлять им asset contracts ради устранения этой диагностики. Capture diagnostics: 13, сохранены. Existing value mismatches: 0, unmapped contract leaves: 0; raw uncovered остаются 1838.
+
+**Полнота списка.** В прежнем временном inventory отсутствовали actual values у 67 синтетических строк: 38 children_order и 29 component-property leaves. Причина — чтение синтетического порядка как отсутствующего node field и верхнеуровневых definitions из node, а не packet. Новый read-only анализ восстанавливает их из настоящих current packets; старые files/receipts не переписаны. 1771 ранее записанное значение не изменилось. Независимо сравнен полный набор current raw tuples с 04e inventory и анализом: intersection 1838, added 0, missing 0; SHA256 sorted `owner|variant|node|source_path` + LF — `e5fda595cfea233032f8f4e56e35ab2eaec669fafe176378c1d810fd7aa6c667`. 3676 в промежуточной сводке были двойным счётом raw+combined, не числом уникальных проблем.
+
+| Диагностическая группа | Tuples | Что доказано сейчас / что остаётся |
+| --- | ---: | --- |
+| Точные соответствия существующим typed facts |360|276 rows: uniform corners → same-node scalar radius и text_style aliases → text_geometry; 84 rows: axis sizing при HORIZONTAL/VERTICAL соответствует HUG→AUTO либо FILL/FIXED→FIXED. 364 link occurrences проверены на тот же node, JSON type, актуальный target и context anchor; это **candidates**, не принятая policy и не waiver. |
+| Значимая структура, identity и controls |447| Owners находятся в ordered contract tree, identity/variants, component references и visibility/property metadata. Нужен typed semantic proof для порядка/полного control graph, а не только сравнение числа или нормализованного имени. |
+| Variable bindings |136| Эти rows вне двух artwork source roots. Supplemental MCP lookup нашёл 24/24 точных variable IDs, names, types, values и двух collections; 112 непустых alias leaves требуют явного authoring ownership, пустые containers также не исключены. Supplemental lookup не выдан за request-bound coverage proof. Числовое совпадение не доказывает выбор foundation role. |
+| Mixed text / style metadata |10| Два notice-link nodes: aggregate family/style/decoration null, при этом 102 chars представлены полными runs 0–93 NONE и 93–102 UNDERLINE. Numeric weight 400 и имена Desktop/Caption, Mobile/Body/Medium требуют точного direct либо existing-foundation proof. Null не означает отсутствующее оформление или разрешение опустить проверку. |
+| Native appearance/layout guard obligations |819| В том числе opacity, rotation, strokes/fill qualifiers, minWidth, positioning, grow и неразрешённые layout поля. Их возможный default не доказан одной величиной0/1/null: нужен узкий role/capability guard либо недостающий exact fact. Все rows сохраняются открытыми. |
+| Artwork source-root obligations |66|25 у локального Partner-Badge, 41 у remote Partner-Mark. Это параметры графики, не самостоятельный HTML и не размеры потребителя. Source-only роль и успешная dependency identity не покрывают scalar fields автоматически. |
+
+| Owner | Tuples |
+| --- | ---: |
+| block-transaction-success |737|
+| asset-partner-badge-4x |29|
+| asset-partner-mark-remote |41|
+| badge-operation-status |251|
+| details-operation |780|
+
+**Проверенные частные случаи.** Show Description и Show Limit Alert имеют default true и корректные canonical property visibility на обеих версиях; исправление их значений/дизайна не требуется. Белый #FFFFFF Fill локального Partner-Badge и двух consumer instances имеет visible:false: не превращать его в HTML background или искусственную подложку. Remote source 44×44 не заменяет consumer 72×72 / export 288×288. Принятый Desktop status-container 117px сохраняется.
+
+**Карта следующего ремонта — до реализации.** Потребуется отдельное согласование расширения доказательного механизма. Предпочтительный scope: Core component-contract-standard; schema authoring evidence; отдельный узкий native-coverage helper рядом с contract-fact-proofs, интеграция в figma-component-evidence и scoped локальные negative/regression tests. Owner-local metadata затрагивают только эти пять записей в shared/service; generated component-registry меняется лишь при реально изменившейся authoring-проекции. Canonical rendering values не менять. Не добавлять копии defaults или arbitrary masks в runtime contracts; не объявлять 819 guards безвредными; не использовать сохранённый source_variants как единственное доказательство. Если точный required value действительно отсутствует и без него нельзя доказать реализацию, сначала предъявить отдельный fact/consumer/impact пользователю, а не выбирать approximate value.
+
+Последовательность после разрешения: (1) точные same-node reductions: 360; (2) ordered structural/control и variable/style ownership; (3) закрытые native capability/absence guards и source-only boundaries; (4) свежий exact-SHA audit обеих сторон плюс локальные counterexamples для unequal corners, изменённого resize/alignment, reordered children, broken property binding, opacity/stroke/paint override, minWidth и неизвестных native fields. Raw findings сохранять; effective coverage может закрывать только узко доказанное обязательство того же record/packet. Любое mismatch, неизвестный field или failed proof продолжает блокировать свою область. Это не начало P3 и не финальная приёмка всего корпуса.
+
+**Проверки данного шага.** Read-only анализ и контроль полноты выполнены локально GPT-5.6 Terra Medium; Actions/PR Checks не использованы. Full 1111/1111, validator/generated и Windows receipts остаются привязаны к code candidate a106, где они реально запускались в F7. Для нового docs-only journal проводится собственный exact-commit allowed-path/preserved-blob/link/content check; старый full run не переименовывается в прогон нового SHA. Fresh native session, canonical owner audit inputs и полный 1838-row review сохранены только во временной evidence-папке, не в репозитории; на другом компьютере повторять fresh capture, не считать доступность этой папки обязательной. Ни одна строка не исключена из покрытия.
+
 #### Следующий пункт и границы
 
-F7 закрывает собственный producer/output gap в кандидате, не весьP2. **Дальше внутриP2:** по полному inventory доказать область implementation-significant native fields, найти точного текущего owner/evidence каждого, отделить доказанную редундантность от действительно отсутствующих facts/links. Unknown fields не исключать; если потребуется изменение contract values/proofs или нового policy scope, сначала сообщить точную карту влияния и получить необходимое решение. После нужного ремонта — свежий exact-SHA MCP audit. F2 не повторять; P3, deferred #109, activation и merge не начинать автоматически.
+F7 закрывает собственный producer/output gap в кандидате, не весь P2. Полный read-only native inventory теперь разобран на a106: exact tuple sets и значения подтверждены, но 1838 obligations ещё не приняты. **Следующий пункт P2:** получить решение по точной карте proof/guard impact выше, затем реализовать только согласованный authoring/audit scope и выполнить свежую exact-SHA проверку. Не заменять её простым удалением диагностик. F2 не повторять; P3, URL implementation plan, deferred #109, activation и merge не начинать автоматически. URL plan остаётся отдельной очередью после завершения всего этапа 2.
 
 **Отдельная согласованная очередь после завершения этапа2:** подготовить подробный implementation plan со ссылками для URL/подчёркиваний. Actual Figma URL означает HTML-ссылку и без подчёркивания; подчёркнутый диапазон без URL требует вопроса; anchor охватывает только точный диапазон и сохраняет оформление. URL — input конкретного письма, не постоянное значение component contract; `#`/тестовый адрес без разрешения запрещён. Будущий owner — [email-model-assembly-standard](../../../core/email-model-assembly-standard.md#текст-ссылки-и-alt), tracing — [email-source-fidelity-standard](../../../core/email-source-fidelity-standard.md). Точки будущего плана: [schema](../../../schemas/email-model.schema.json), [normalizer](../../../scripts/lib/email-model.mjs), [interpreter](../../../scripts/lib/email-interpreter.mjs), [fidelity checker](../../../scripts/lib/email-source-fidelity.mjs), [workflow](../../../data/workflows/email-build.yaml), [skill](../../../.agents/skills/building-cupis-emails/SKILL.md). Сейчас это только очередь будущего планирования; ограничение rich-text текущей схемы не скрывается.
 
