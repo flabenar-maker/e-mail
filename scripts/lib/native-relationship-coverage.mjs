@@ -141,17 +141,23 @@ function structure(record, p, env, add) {
   const entry = env.selected(p.source), node = entry.node;
   const e = verifyDimensions(record, p.element_path, p.source, node);
   const root = p.source.node_id === p.source.variant_node_id;
-  const type = root ? 'COMPONENT' : ({'presentation-table': 'FRAME', 'html-text': 'TEXT', 'nested-component': 'INSTANCE', 'direct-image': 'INSTANCE'})[e.render_mode];
+  const ownAsset = ['direct-image', 'background-image'].includes(e.render_mode) ? record.asset_contracts?.find(a => a.id === e.asset_contract_id) : null;
+  const fillBoundary = ownAsset?.source_mode_id === 'image-fill' && ownAsset.export_boundary?.kind === 'fill';
+  const type = root ? 'COMPONENT' : ({'presentation-table': 'FRAME', 'html-text': 'TEXT', 'html-link': 'TEXT', 'nested-component': 'INSTANCE', 'direct-image': fillBoundary ? 'FRAME' : 'INSTANCE', 'background-image': fillBoundary ? 'FRAME' : undefined})[e.render_mode];
   if (!type || node.node_type !== type) throw Error('canonical element/native class mismatch');
   const variant = variants(record).find(v => v.node_id === p.source.variant_node_id);
-  const asset = e.render_mode === 'direct-image' ? record.asset_contracts?.find(a => a.id === e.asset_contract_id) : null;
+  const asset = ownAsset;
   const name = root ? variant.axes.length ? variant.axes.map(a => `${a.name}=${a.value}`).join(', ') : record.identity.figma_name : asset?.owner_layer_name ?? e.semantic_role;
   if (typeof name !== 'string' || node.name !== name) throw Error('canonical semantic/variant name mismatch');
   visibility(record, e, node, entry.packet, add);
-  if (e.render_mode === 'direct-image' || e.render_mode === 'nested-component') {
+  if (e.render_mode === 'direct-image' || e.render_mode === 'background-image' || e.render_mode === 'nested-component') {
     if (e.children?.length !== 0) throw Error('HTML children cannot flatten an asset/nested boundary');
     if (node.node_type === 'INSTANCE') instance(record, e, p.source, node, env, add);
-    else if (e.render_mode !== 'direct-image' || record.identity.semantic_role !== 'asset' || !asset || asset.owner_layer_name !== node.name || asset.source_mode_id !== 'rendered-node') throw Error('own source asset boundary required');
+    else if (fillBoundary) {
+      if (asset.owner_layer_name !== node.name || (node.children ?? []).length !== 0 || asset.export_boundary.semantic_node_name !== node.name ||
+          !Array.isArray(node.fills) || node.fills.length !== 1 || node.fills[0].type !== 'image' || node.fills[0].visible !== true ||
+          node.fills[0].opacity !== 1 || typeof node.fills[0].image_hash !== 'string' || !node.fills[0].image_hash) throw Error('exact flat owned image-fill boundary required');
+    } else if (e.render_mode !== 'direct-image' || record.identity.semantic_role !== 'asset' || !asset || asset.owner_layer_name !== node.name || asset.source_mode_id !== 'rendered-node') throw Error('own source asset boundary required');
   } else {
     if (!Array.isArray(e.children) || (node.children !== undefined && !Array.isArray(node.children))) throw Error('complete canonical/native child arrays required');
     const expected = e.children.map((_, i) => childSelector(record, `${p.element_path}/children/${i}`, p.source.variant_node_id).node_id);

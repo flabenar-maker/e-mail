@@ -44,7 +44,7 @@ export function validateNativeContextProofReferences({records = []} = {}) {
       try {
         if (p.kind === 'html-element-context') {
           const relation = structure(r, p), e = pointer(r, relation.element_path);
-          if (['asset', 'icon', 'template'].includes(r.identity?.semantic_role) || !['presentation-table', 'html-text', 'nested-component', 'direct-image'].includes(e?.render_mode)) throw Error('ordinary HTML element capability required; source artwork is a separate boundary');
+          if (['asset', 'icon', 'template'].includes(r.identity?.semantic_role) || !['presentation-table', 'html-text', 'html-link', 'nested-component', 'direct-image'].includes(e?.render_mode)) throw Error('ordinary HTML element capability required; source artwork is a separate boundary');
         } else resolveArtworkContextReference({record: r, proof: p, records});
       } catch (error) {issues.push(issue('NATIVE_CONTEXT_TARGET_INVALID', at, error.message));}
       const reference = JSON.stringify([p.owner_component_id ?? r.id, p.structure_proof_id, p.dependency_link_id ?? null]);
@@ -59,7 +59,8 @@ function directFact(record, relation, node, factId, sourcePath) {
   if (fs.length !== 1) return false;
   const {f, i} = fs[0], links = (record.contracts.figma_fact_links ?? []).filter(l => l.contract_path === `${relation.element_path}/facts/${i}/value/value`);
   if (!['figma-literal', 'figma-binding'].includes(f.provenance?.kind) || f.provenance.node_id !== node.node_id || links.length !== 1 ||
-      f.value?.type !== (sourcePath === '/layout_grow' ? 'number' : 'keyword')) return false;
+      f.value?.type !== ({'/layout_grow': 'number', '/minimum_width_px': 'measure', '/clips_content': 'boolean'}[sourcePath] ?? 'keyword') ||
+      (sourcePath === '/minimum_width_px' && (f.value.unit !== 'px' || !Number.isFinite(f.value.value) || f.value.value < 0))) return false;
   const l = links[0], value = pointer(node, sourcePath);
   return l.variant_node_id === relation.source.variant_node_id && l.node_id === node.node_id && l.source_path === sourcePath &&
     (l.transform === 'identity' ? equal(f.value.value, value) : l.transform === 'lowercase' && typeof value === 'string' && f.value.value === value.toLowerCase());
@@ -105,9 +106,15 @@ function verifyContext(record, relation, node, packet, add) {
   const e = pointer(record, relation.element_path);
   // These are semantic absence conditions for ordinary HTML, not a global
   // list of fields to ignore. Any active unsupported appearance fails proof.
-  for (const [path, wanted] of [['/layout_positioning', 'AUTO'], ['/minimum_width_px', null], ['/opacity', 1], ['/rotation', 0], ['/strokes', []]]) {
+  for (const [path, wanted] of [['/layout_positioning', 'AUTO'], ['/opacity', 1], ['/rotation', 0], ['/strokes', []]]) {
     if (!equal(pointer(node, path), wanted)) throw Error(`unsupported HTML context at ${path}`);
     add(path);
+  }
+  if (node.minimum_width_px === null) add('/minimum_width_px');
+  else if (!directFact(record, relation, node, 'minimum-width', '/minimum_width_px')) throw Error('minimum width requires an independently mapped exact px measure');
+  if (Object.hasOwn(node, 'clips_content')) {
+    if (node.clips_content === false) add('/clips_content');
+    else if (!directFact(record, relation, node, 'clip-content', '/clips_content')) throw Error('active clipping requires an independently mapped exact Boolean');
   }
   if (Object.hasOwn(node, 'effects')) {
     if (!equal(node.effects, [])) throw Error('active effects require their own supported implementation');

@@ -376,7 +376,23 @@
           "severity": "critical",
           "statement": "Этот вложенный источник нельзя экспортировать отдельно, когда родительский компонент задаёт внешний составной asset owner."
         }
-      ]
+      ],
+      "evidence_links": {
+        "foundation_values": [],
+        "source_dependencies": [],
+        "native_relation_proofs": [
+          {
+            "id": "native-owner-controls",
+            "kind": "owner-controls",
+            "source": {
+              "component_id": "asset-product-logo",
+              "variant_node_id": "1008:871",
+              "node_id": "1008:871"
+            },
+            "default_variant_id": "product-cupis"
+          }
+        ]
+      }
     },
     {
       "id": "asset-header-logo-4x",
@@ -508,6 +524,18 @@
                 "node_id": "1008:1823"
               }
             }
+          }
+        ],
+        "native_relation_proofs": [
+          {
+            "id": "native-owner-controls",
+            "kind": "owner-controls",
+            "source": {
+              "component_id": "asset-header-logo-4x",
+              "variant_node_id": "1008:1473",
+              "node_id": "1008:1473"
+            },
+            "default_variant_id": "product-cupis"
           }
         ]
       },
@@ -800,6 +828,18 @@
             "contract_path": "/contracts/mobile/root/facts/1/value",
             "asset_owner_id": "email-header",
             "asset_contract_id": "header-logo"
+          }
+        ],
+        "native_relation_proofs": [
+          {
+            "id": "native-owner-controls",
+            "kind": "owner-controls",
+            "source": {
+              "component_id": "asset-header-logo-compact-4x",
+              "variant_node_id": "1008:1686",
+              "node_id": "1008:1686"
+            },
+            "default_variant_id": "product-cupis"
           }
         ]
       },

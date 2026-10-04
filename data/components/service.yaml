@@ -37920,6 +37920,1512 @@
               "node_id": "459:27586"
             }
           }
+        ],
+        "native_fact_proofs": [
+          {
+            "id": "native-mobile-root-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "472:16998"
+            },
+            "contract_path": "/contracts/mobile/root/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-mobile-root-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "472:16998"
+            },
+            "contract_path": "/contracts/mobile/root/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-mobile-root-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "472:16998"
+            },
+            "contract_path": "/contracts/mobile/root/facts/12/value"
+          },
+          {
+            "id": "native-mobile-root-content-area-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27602"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-mobile-root-content-area-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27602"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-mobile-root-content-area-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27602"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/12/value"
+          },
+          {
+            "id": "native-mobile-root-content-area-phone-cta-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27603"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-mobile-root-content-area-phone-cta-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27603"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-mobile-root-content-area-phone-cta-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27603"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/12/value"
+          },
+          {
+            "id": "native-mobile-root-content-area-phone-cta-heading-text-resize-alias",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27604"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/facts/11/value"
+          },
+          {
+            "id": "native-mobile-root-content-area-phone-cta-heading-text-alignment-alias",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27604"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/facts/12/value"
+          },
+          {
+            "id": "native-mobile-root-content-area-phone-cta-phone-number-text-resize-alias",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27605"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/1/facts/11/value"
+          },
+          {
+            "id": "native-mobile-root-content-area-phone-cta-phone-number-text-alignment-alias",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27605"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/1/facts/12/value"
+          },
+          {
+            "id": "native-mobile-root-content-area-help-notice-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27606"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-mobile-root-content-area-help-notice-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27606"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-mobile-root-content-area-help-notice-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27606"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/12/value"
+          },
+          {
+            "id": "native-mobile-root-content-area-help-notice-help-text-text-resize-alias",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27607"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/8/value"
+          },
+          {
+            "id": "native-mobile-root-content-area-help-notice-help-text-text-alignment-alias",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27607"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/9/value"
+          },
+          {
+            "id": "native-desktop-root-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "472:16997"
+            },
+            "contract_path": "/contracts/desktop/root/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-desktop-root-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "472:16997"
+            },
+            "contract_path": "/contracts/desktop/root/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-desktop-root-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "472:16997"
+            },
+            "contract_path": "/contracts/desktop/root/facts/12/value"
+          },
+          {
+            "id": "native-desktop-root-content-area-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27581"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-desktop-root-content-area-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27581"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-desktop-root-content-area-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27581"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/12/value"
+          },
+          {
+            "id": "native-desktop-root-content-area-phone-cta-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27582"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-desktop-root-content-area-phone-cta-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27582"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-desktop-root-content-area-phone-cta-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27582"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/12/value"
+          },
+          {
+            "id": "native-desktop-root-content-area-phone-cta-heading-text-resize-alias",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27583"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/facts/11/value"
+          },
+          {
+            "id": "native-desktop-root-content-area-phone-cta-heading-text-alignment-alias",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27583"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/facts/12/value"
+          },
+          {
+            "id": "native-desktop-root-content-area-phone-cta-phone-number-text-resize-alias",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27584"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/1/facts/11/value"
+          },
+          {
+            "id": "native-desktop-root-content-area-phone-cta-phone-number-text-alignment-alias",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27584"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/1/facts/12/value"
+          },
+          {
+            "id": "native-desktop-root-content-area-help-notice-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27585"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-desktop-root-content-area-help-notice-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27585"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-desktop-root-content-area-help-notice-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27585"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/12/value"
+          },
+          {
+            "id": "native-desktop-root-content-area-help-notice-help-text-text-resize-alias",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27586"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/8/value"
+          },
+          {
+            "id": "native-desktop-root-content-area-help-notice-help-text-text-alignment-alias",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27586"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/9/value"
+          }
+        ],
+        "native_relation_proofs": [
+          {
+            "id": "native-owner-controls",
+            "kind": "owner-controls",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "472:16997"
+            },
+            "default_variant_id": "desktop"
+          },
+          {
+            "id": "native-mobile-root-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "472:16998"
+            },
+            "element_path": "/contracts/mobile/root"
+          },
+          {
+            "id": "native-mobile-root-content-area-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27602"
+            },
+            "element_path": "/contracts/mobile/root/children/0"
+          },
+          {
+            "id": "native-mobile-root-content-area-phone-cta-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27603"
+            },
+            "element_path": "/contracts/mobile/root/children/0/children/0"
+          },
+          {
+            "id": "native-mobile-root-content-area-phone-cta-heading-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27604"
+            },
+            "element_path": "/contracts/mobile/root/children/0/children/0/children/0"
+          },
+          {
+            "id": "native-mobile-root-content-area-phone-cta-phone-number-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27605"
+            },
+            "element_path": "/contracts/mobile/root/children/0/children/0/children/1"
+          },
+          {
+            "id": "native-mobile-root-content-area-help-notice-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27606"
+            },
+            "element_path": "/contracts/mobile/root/children/0/children/1"
+          },
+          {
+            "id": "native-mobile-root-content-area-help-notice-help-text-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27607"
+            },
+            "element_path": "/contracts/mobile/root/children/0/children/1/children/0"
+          },
+          {
+            "id": "native-desktop-root-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "472:16997"
+            },
+            "element_path": "/contracts/desktop/root"
+          },
+          {
+            "id": "native-desktop-root-content-area-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27581"
+            },
+            "element_path": "/contracts/desktop/root/children/0"
+          },
+          {
+            "id": "native-desktop-root-content-area-phone-cta-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27582"
+            },
+            "element_path": "/contracts/desktop/root/children/0/children/0"
+          },
+          {
+            "id": "native-desktop-root-content-area-phone-cta-heading-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27583"
+            },
+            "element_path": "/contracts/desktop/root/children/0/children/0/children/0"
+          },
+          {
+            "id": "native-desktop-root-content-area-phone-cta-phone-number-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27584"
+            },
+            "element_path": "/contracts/desktop/root/children/0/children/0/children/1"
+          },
+          {
+            "id": "native-desktop-root-content-area-help-notice-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27585"
+            },
+            "element_path": "/contracts/desktop/root/children/0/children/1"
+          },
+          {
+            "id": "native-desktop-root-content-area-help-notice-help-text-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27586"
+            },
+            "element_path": "/contracts/desktop/root/children/0/children/1/children/0"
+          }
+        ],
+        "native_variable_proofs": [
+          {
+            "id": "native-mobile-root-binding-padding-left",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "472:16998"
+            },
+            "contract_path": "/contracts/mobile/root/facts/6/value",
+            "binding_path": "/variable_bindings/paddingLeft/id",
+            "variable": {
+              "id": "VariableID:11:326",
+              "name": "mobile/block-margin",
+              "key": "1d1bbc87f87ab1bea5fafd0fe81eabdc9ba7166e",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-binding-padding-top",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "472:16998"
+            },
+            "contract_path": "/contracts/mobile/root/facts/3/value",
+            "binding_path": "/variable_bindings/paddingTop/id",
+            "variable": {
+              "id": "VariableID:11:326",
+              "name": "mobile/block-margin",
+              "key": "1d1bbc87f87ab1bea5fafd0fe81eabdc9ba7166e",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-binding-padding-right",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "472:16998"
+            },
+            "contract_path": "/contracts/mobile/root/facts/4/value",
+            "binding_path": "/variable_bindings/paddingRight/id",
+            "variable": {
+              "id": "VariableID:11:326",
+              "name": "mobile/block-margin",
+              "key": "1d1bbc87f87ab1bea5fafd0fe81eabdc9ba7166e",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-content-area-binding-padding-left",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27602"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/6/value",
+            "binding_path": "/variable_bindings/paddingLeft/id",
+            "variable": {
+              "id": "VariableID:11:807",
+              "name": "mobile/content-padding",
+              "key": "d8423ca4573203a2d8c720209d8e0382064861de",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-content-area-binding-padding-top",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27602"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/3/value",
+            "binding_path": "/variable_bindings/paddingTop/id",
+            "variable": {
+              "id": "VariableID:11:807",
+              "name": "mobile/content-padding",
+              "key": "d8423ca4573203a2d8c720209d8e0382064861de",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-content-area-binding-padding-right",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27602"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/4/value",
+            "binding_path": "/variable_bindings/paddingRight/id",
+            "variable": {
+              "id": "VariableID:11:807",
+              "name": "mobile/content-padding",
+              "key": "d8423ca4573203a2d8c720209d8e0382064861de",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-content-area-binding-padding-bottom",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27602"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/5/value",
+            "binding_path": "/variable_bindings/paddingBottom/id",
+            "variable": {
+              "id": "VariableID:11:807",
+              "name": "mobile/content-padding",
+              "key": "d8423ca4573203a2d8c720209d8e0382064861de",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-content-area-binding-item-spacing",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27602"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/2/value",
+            "binding_path": "/variable_bindings/itemSpacing/id",
+            "variable": {
+              "id": "VariableID:11:809",
+              "name": "mobile/content-gap",
+              "key": "30fc0eb41947d64598dde4e1a3fb0d4967d135eb",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-content-area-binding-top-left-radius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27602"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/12/value",
+            "binding_path": "/variable_bindings/topLeftRadius/id",
+            "variable": {
+              "id": "VariableID:564:1840",
+              "name": "mobile/block-radius",
+              "key": "f333ca538325d34ff1c16b237f044021a43b7db1",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-content-area-binding-top-right-radius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27602"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/12/value",
+            "binding_path": "/variable_bindings/topRightRadius/id",
+            "variable": {
+              "id": "VariableID:564:1840",
+              "name": "mobile/block-radius",
+              "key": "f333ca538325d34ff1c16b237f044021a43b7db1",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-content-area-binding-bottom-left-radius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27602"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/12/value",
+            "binding_path": "/variable_bindings/bottomLeftRadius/id",
+            "variable": {
+              "id": "VariableID:564:1840",
+              "name": "mobile/block-radius",
+              "key": "f333ca538325d34ff1c16b237f044021a43b7db1",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-content-area-binding-bottom-right-radius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27602"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/12/value",
+            "binding_path": "/variable_bindings/bottomRightRadius/id",
+            "variable": {
+              "id": "VariableID:564:1840",
+              "name": "mobile/block-radius",
+              "key": "f333ca538325d34ff1c16b237f044021a43b7db1",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-content-area-binding-fills",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27602"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/13/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:dd9ec21777b96b29256fb926ca8ad8d55b8d726f/22:17",
+              "name": "Grey/White",
+              "key": "dd9ec21777b96b29256fb926ca8ad8d55b8d726f",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-mobile-root-content-area-phone-cta-binding-item-spacing",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27603"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/2/value",
+            "binding_path": "/variable_bindings/itemSpacing/id",
+            "variable": {
+              "id": "VariableID:222:2302",
+              "name": "desktop/text-gap",
+              "key": "dbd9684e7847f6779e9a4107dabed8c533120a7d",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-content-area-phone-cta-heading-binding-fills",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27604"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:c5d8cf956aea528fb50c7a73d1cacb256f6a2c8c/17:139",
+              "name": "Grey/500",
+              "key": "c5d8cf956aea528fb50c7a73d1cacb256f6a2c8c",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-mobile-root-content-area-phone-cta-phone-number-binding-fills",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27605"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/1/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:9ca87e868c2b5c348498f505a95a6049f5ac9df2/22:3",
+              "name": "Green/500",
+              "key": "9ca87e868c2b5c348498f505a95a6049f5ac9df2",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-mobile-root-content-area-help-notice-binding-padding-left",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27606"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/6/value",
+            "binding_path": "/variable_bindings/paddingLeft/id",
+            "variable": {
+              "id": "VariableID:11:805",
+              "name": "mobile/content-padding-sm",
+              "key": "5886d3fe482a9ccf5db6ea2d48bc7991fab1cfab",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-content-area-help-notice-binding-padding-top",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27606"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/3/value",
+            "binding_path": "/variable_bindings/paddingTop/id",
+            "variable": {
+              "id": "VariableID:11:805",
+              "name": "mobile/content-padding-sm",
+              "key": "5886d3fe482a9ccf5db6ea2d48bc7991fab1cfab",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-content-area-help-notice-binding-padding-right",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27606"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/4/value",
+            "binding_path": "/variable_bindings/paddingRight/id",
+            "variable": {
+              "id": "VariableID:11:805",
+              "name": "mobile/content-padding-sm",
+              "key": "5886d3fe482a9ccf5db6ea2d48bc7991fab1cfab",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-content-area-help-notice-binding-padding-bottom",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27606"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/5/value",
+            "binding_path": "/variable_bindings/paddingBottom/id",
+            "variable": {
+              "id": "VariableID:11:805",
+              "name": "mobile/content-padding-sm",
+              "key": "5886d3fe482a9ccf5db6ea2d48bc7991fab1cfab",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-content-area-help-notice-binding-top-left-radius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27606"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/12/value",
+            "binding_path": "/variable_bindings/topLeftRadius/id",
+            "variable": {
+              "id": "VariableID:564:1842",
+              "name": "mobile/nested-block-radius",
+              "key": "323853c1bee50ae6350f3b0179f7800b47307d12",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-content-area-help-notice-binding-top-right-radius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27606"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/12/value",
+            "binding_path": "/variable_bindings/topRightRadius/id",
+            "variable": {
+              "id": "VariableID:564:1842",
+              "name": "mobile/nested-block-radius",
+              "key": "323853c1bee50ae6350f3b0179f7800b47307d12",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-content-area-help-notice-binding-bottom-left-radius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27606"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/12/value",
+            "binding_path": "/variable_bindings/bottomLeftRadius/id",
+            "variable": {
+              "id": "VariableID:564:1842",
+              "name": "mobile/nested-block-radius",
+              "key": "323853c1bee50ae6350f3b0179f7800b47307d12",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-content-area-help-notice-binding-bottom-right-radius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27606"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/12/value",
+            "binding_path": "/variable_bindings/bottomRightRadius/id",
+            "variable": {
+              "id": "VariableID:564:1842",
+              "name": "mobile/nested-block-radius",
+              "key": "323853c1bee50ae6350f3b0179f7800b47307d12",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-binding-padding-left",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "472:16997"
+            },
+            "contract_path": "/contracts/desktop/root/facts/6/value",
+            "binding_path": "/variable_bindings/paddingLeft/id",
+            "variable": {
+              "id": "VariableID:510:20764",
+              "name": "desktop/block-margin",
+              "key": "de56f2e92a0beca776631c3fd0eb1c1b704f338b",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-binding-padding-top",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "472:16997"
+            },
+            "contract_path": "/contracts/desktop/root/facts/3/value",
+            "binding_path": "/variable_bindings/paddingTop/id",
+            "variable": {
+              "id": "VariableID:510:20764",
+              "name": "desktop/block-margin",
+              "key": "de56f2e92a0beca776631c3fd0eb1c1b704f338b",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-binding-padding-right",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "472:16997"
+            },
+            "contract_path": "/contracts/desktop/root/facts/4/value",
+            "binding_path": "/variable_bindings/paddingRight/id",
+            "variable": {
+              "id": "VariableID:510:20764",
+              "name": "desktop/block-margin",
+              "key": "de56f2e92a0beca776631c3fd0eb1c1b704f338b",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-content-area-binding-padding-left",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27581"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/6/value",
+            "binding_path": "/variable_bindings/paddingLeft/id",
+            "variable": {
+              "id": "VariableID:222:2307",
+              "name": "desktop/content-padding",
+              "key": "fdfb84a738e359717a0f380fd016fa103189d1b8",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-content-area-binding-padding-top",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27581"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/3/value",
+            "binding_path": "/variable_bindings/paddingTop/id",
+            "variable": {
+              "id": "VariableID:222:2307",
+              "name": "desktop/content-padding",
+              "key": "fdfb84a738e359717a0f380fd016fa103189d1b8",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-content-area-binding-padding-right",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27581"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/4/value",
+            "binding_path": "/variable_bindings/paddingRight/id",
+            "variable": {
+              "id": "VariableID:222:2307",
+              "name": "desktop/content-padding",
+              "key": "fdfb84a738e359717a0f380fd016fa103189d1b8",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-content-area-binding-padding-bottom",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27581"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/5/value",
+            "binding_path": "/variable_bindings/paddingBottom/id",
+            "variable": {
+              "id": "VariableID:222:2307",
+              "name": "desktop/content-padding",
+              "key": "fdfb84a738e359717a0f380fd016fa103189d1b8",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-content-area-binding-item-spacing",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27581"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/2/value",
+            "binding_path": "/variable_bindings/itemSpacing/id",
+            "variable": {
+              "id": "VariableID:222:2304",
+              "name": "desktop/content-gap",
+              "key": "6107273315777c321a1088de2e5da9e0be2be809",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-content-area-binding-top-left-radius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27581"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/12/value",
+            "binding_path": "/variable_bindings/topLeftRadius/id",
+            "variable": {
+              "id": "VariableID:564:1839",
+              "name": "desktop/block-radius",
+              "key": "aad6ad3fce3f817c6a6733fc9ca071e70aa8e849",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-content-area-binding-top-right-radius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27581"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/12/value",
+            "binding_path": "/variable_bindings/topRightRadius/id",
+            "variable": {
+              "id": "VariableID:564:1839",
+              "name": "desktop/block-radius",
+              "key": "aad6ad3fce3f817c6a6733fc9ca071e70aa8e849",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-content-area-binding-bottom-left-radius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27581"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/12/value",
+            "binding_path": "/variable_bindings/bottomLeftRadius/id",
+            "variable": {
+              "id": "VariableID:564:1839",
+              "name": "desktop/block-radius",
+              "key": "aad6ad3fce3f817c6a6733fc9ca071e70aa8e849",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-content-area-binding-bottom-right-radius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27581"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/12/value",
+            "binding_path": "/variable_bindings/bottomRightRadius/id",
+            "variable": {
+              "id": "VariableID:564:1839",
+              "name": "desktop/block-radius",
+              "key": "aad6ad3fce3f817c6a6733fc9ca071e70aa8e849",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-content-area-binding-fills",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27581"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/13/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:dd9ec21777b96b29256fb926ca8ad8d55b8d726f/22:17",
+              "name": "Grey/White",
+              "key": "dd9ec21777b96b29256fb926ca8ad8d55b8d726f",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-desktop-root-content-area-phone-cta-binding-item-spacing",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27582"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/2/value",
+            "binding_path": "/variable_bindings/itemSpacing/id",
+            "variable": {
+              "id": "VariableID:222:2302",
+              "name": "desktop/text-gap",
+              "key": "dbd9684e7847f6779e9a4107dabed8c533120a7d",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-content-area-phone-cta-heading-binding-fills",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27583"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:c5d8cf956aea528fb50c7a73d1cacb256f6a2c8c/17:139",
+              "name": "Grey/500",
+              "key": "c5d8cf956aea528fb50c7a73d1cacb256f6a2c8c",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-desktop-root-content-area-phone-cta-phone-number-binding-fills",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27584"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/1/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:9ca87e868c2b5c348498f505a95a6049f5ac9df2/22:3",
+              "name": "Green/500",
+              "key": "9ca87e868c2b5c348498f505a95a6049f5ac9df2",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-desktop-root-content-area-help-notice-binding-padding-left",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27585"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/6/value",
+            "binding_path": "/variable_bindings/paddingLeft/id",
+            "variable": {
+              "id": "VariableID:222:2306",
+              "name": "desktop/content-padding-sm",
+              "key": "fcd0d8d949e8996c07f1b545ec4481ea09b98b0a",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-content-area-help-notice-binding-padding-top",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27585"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/3/value",
+            "binding_path": "/variable_bindings/paddingTop/id",
+            "variable": {
+              "id": "VariableID:222:2306",
+              "name": "desktop/content-padding-sm",
+              "key": "fcd0d8d949e8996c07f1b545ec4481ea09b98b0a",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-content-area-help-notice-binding-padding-right",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27585"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/4/value",
+            "binding_path": "/variable_bindings/paddingRight/id",
+            "variable": {
+              "id": "VariableID:222:2306",
+              "name": "desktop/content-padding-sm",
+              "key": "fcd0d8d949e8996c07f1b545ec4481ea09b98b0a",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-content-area-help-notice-binding-padding-bottom",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27585"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/5/value",
+            "binding_path": "/variable_bindings/paddingBottom/id",
+            "variable": {
+              "id": "VariableID:222:2306",
+              "name": "desktop/content-padding-sm",
+              "key": "fcd0d8d949e8996c07f1b545ec4481ea09b98b0a",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-content-area-help-notice-binding-top-left-radius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27585"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/12/value",
+            "binding_path": "/variable_bindings/topLeftRadius/id",
+            "variable": {
+              "id": "VariableID:564:1841",
+              "name": "desktop/nested-block-radius",
+              "key": "4ea695c20e556732e4f29314bebe0d9207ff1ae6",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-content-area-help-notice-binding-top-right-radius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27585"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/12/value",
+            "binding_path": "/variable_bindings/topRightRadius/id",
+            "variable": {
+              "id": "VariableID:564:1841",
+              "name": "desktop/nested-block-radius",
+              "key": "4ea695c20e556732e4f29314bebe0d9207ff1ae6",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-content-area-help-notice-binding-bottom-left-radius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27585"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/12/value",
+            "binding_path": "/variable_bindings/bottomLeftRadius/id",
+            "variable": {
+              "id": "VariableID:564:1841",
+              "name": "desktop/nested-block-radius",
+              "key": "4ea695c20e556732e4f29314bebe0d9207ff1ae6",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-content-area-help-notice-binding-bottom-right-radius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27585"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/12/value",
+            "binding_path": "/variable_bindings/bottomRightRadius/id",
+            "variable": {
+              "id": "VariableID:564:1841",
+              "name": "desktop/nested-block-radius",
+              "key": "4ea695c20e556732e4f29314bebe0d9207ff1ae6",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          }
+        ],
+        "native_context_proofs": [
+          {
+            "id": "native-mobile-root-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-mobile-root-structure"
+          },
+          {
+            "id": "native-mobile-root-content-area-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-mobile-root-content-area-structure"
+          },
+          {
+            "id": "native-mobile-root-content-area-phone-cta-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-mobile-root-content-area-phone-cta-structure"
+          },
+          {
+            "id": "native-mobile-root-content-area-phone-cta-heading-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-mobile-root-content-area-phone-cta-heading-structure"
+          },
+          {
+            "id": "native-mobile-root-content-area-phone-cta-phone-number-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-mobile-root-content-area-phone-cta-phone-number-structure"
+          },
+          {
+            "id": "native-mobile-root-content-area-help-notice-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-mobile-root-content-area-help-notice-structure"
+          },
+          {
+            "id": "native-desktop-root-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-desktop-root-structure"
+          },
+          {
+            "id": "native-desktop-root-content-area-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-desktop-root-content-area-structure"
+          },
+          {
+            "id": "native-desktop-root-content-area-phone-cta-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-desktop-root-content-area-phone-cta-structure"
+          },
+          {
+            "id": "native-desktop-root-content-area-phone-cta-heading-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-desktop-root-content-area-phone-cta-heading-structure"
+          },
+          {
+            "id": "native-desktop-root-content-area-phone-cta-phone-number-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-desktop-root-content-area-phone-cta-phone-number-structure"
+          },
+          {
+            "id": "native-desktop-root-content-area-help-notice-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-desktop-root-content-area-help-notice-structure"
+          }
         ]
       }
     },

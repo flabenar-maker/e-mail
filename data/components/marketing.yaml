@@ -3048,6 +3048,220 @@
               "asset_id": "header-logo"
             }
           }
+        ],
+        "native_fact_proofs": [
+          {
+            "id": "native-mobile-root-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "email-header",
+              "variant_node_id": "15:2037",
+              "node_id": "15:2037"
+            },
+            "contract_path": "/contracts/mobile/root/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-mobile-root-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "email-header",
+              "variant_node_id": "15:2037",
+              "node_id": "15:2037"
+            },
+            "contract_path": "/contracts/mobile/root/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-mobile-root-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "email-header",
+              "variant_node_id": "15:2037",
+              "node_id": "15:2037"
+            },
+            "contract_path": "/contracts/mobile/root/facts/12/value"
+          },
+          {
+            "id": "native-mobile-root-header-logo-compact-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "email-header",
+              "variant_node_id": "15:2037",
+              "node_id": "1008:1709"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-mobile-root-header-logo-compact-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "email-header",
+              "variant_node_id": "15:2037",
+              "node_id": "1008:1709"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-mobile-root-header-logo-compact-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "email-header",
+              "variant_node_id": "15:2037",
+              "node_id": "1008:1709"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/12/value"
+          },
+          {
+            "id": "native-desktop-root-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "email-header",
+              "variant_node_id": "230:3679",
+              "node_id": "230:3679"
+            },
+            "contract_path": "/contracts/desktop/root/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-desktop-root-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "email-header",
+              "variant_node_id": "230:3679",
+              "node_id": "230:3679"
+            },
+            "contract_path": "/contracts/desktop/root/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-desktop-root-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "email-header",
+              "variant_node_id": "230:3679",
+              "node_id": "230:3679"
+            },
+            "contract_path": "/contracts/desktop/root/facts/12/value"
+          },
+          {
+            "id": "native-desktop-root-header-logo-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "email-header",
+              "variant_node_id": "230:3679",
+              "node_id": "1008:1823"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-desktop-root-header-logo-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "email-header",
+              "variant_node_id": "230:3679",
+              "node_id": "1008:1823"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-desktop-root-header-logo-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "email-header",
+              "variant_node_id": "230:3679",
+              "node_id": "1008:1823"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/12/value"
+          }
+        ],
+        "native_relation_proofs": [
+          {
+            "id": "native-owner-controls",
+            "kind": "owner-controls",
+            "source": {
+              "component_id": "email-header",
+              "variant_node_id": "15:2037",
+              "node_id": "15:2037"
+            },
+            "default_variant_id": "mobile"
+          },
+          {
+            "id": "native-mobile-root-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "email-header",
+              "variant_node_id": "15:2037",
+              "node_id": "15:2037"
+            },
+            "element_path": "/contracts/mobile/root"
+          },
+          {
+            "id": "native-desktop-root-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "email-header",
+              "variant_node_id": "230:3679",
+              "node_id": "230:3679"
+            },
+            "element_path": "/contracts/desktop/root"
+          }
+        ],
+        "native_variable_proofs": [
+          {
+            "id": "native-mobile-root-binding-padding-top",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "email-header",
+              "variant_node_id": "15:2037",
+              "node_id": "15:2037"
+            },
+            "contract_path": "/contracts/mobile/root/facts/3/value",
+            "binding_path": "/variable_bindings/paddingTop/id",
+            "variable": {
+              "id": "VariableID:11:326",
+              "name": "mobile/block-margin",
+              "key": "1d1bbc87f87ab1bea5fafd0fe81eabdc9ba7166e",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-binding-padding-top",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "email-header",
+              "variant_node_id": "230:3679",
+              "node_id": "230:3679"
+            },
+            "contract_path": "/contracts/desktop/root/facts/3/value",
+            "binding_path": "/variable_bindings/paddingTop/id",
+            "variable": {
+              "id": "VariableID:510:20764",
+              "name": "desktop/block-margin",
+              "key": "de56f2e92a0beca776631c3fd0eb1c1b704f338b",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          }
+        ],
+        "native_context_proofs": [
+          {
+            "id": "native-mobile-root-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-mobile-root-structure"
+          },
+          {
+            "id": "native-desktop-root-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-desktop-root-structure"
+          }
         ]
       },
       "status": "active",
@@ -40126,6 +40340,1272 @@
             },
             "asset_contract_id": "hero-image"
           }
+        ],
+        "native_fact_proofs": [
+          {
+            "id": "native-mobile-root-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "337:4359"
+            },
+            "contract_path": "/contracts/mobile/root/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-mobile-root-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "337:4359"
+            },
+            "contract_path": "/contracts/mobile/root/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-mobile-root-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "337:4359"
+            },
+            "contract_path": "/contracts/mobile/root/facts/12/value"
+          },
+          {
+            "id": "native-mobile-root-card-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "619:20205"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-mobile-root-card-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "619:20205"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-mobile-root-card-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "619:20205"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/12/value"
+          },
+          {
+            "id": "native-mobile-root-card-hero-image-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "337:4348"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/6/value"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "337:4349"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "337:4349"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "337:4349"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/12/value"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-text-content-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "337:4350"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-text-content-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "337:4350"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-text-content-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "337:4350"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/12/value"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-text-content-heading-text-resize-alias",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "337:4351"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/children/0/facts/11/value"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-text-content-heading-text-alignment-alias",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "337:4351"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/children/0/facts/12/value"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-text-content-body-text-resize-alias",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "337:4352"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/children/1/facts/11/value"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-text-content-body-text-alignment-alias",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "337:4352"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/children/1/facts/12/value"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-button-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "1045:18180"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/1/facts/7/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-button-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "1045:18180"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/1/facts/8/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-button-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "1045:18180"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/1/facts/12/value"
+          },
+          {
+            "id": "native-desktop-root-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "230:3680"
+            },
+            "contract_path": "/contracts/desktop/root/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-desktop-root-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "230:3680"
+            },
+            "contract_path": "/contracts/desktop/root/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-desktop-root-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "230:3680"
+            },
+            "contract_path": "/contracts/desktop/root/facts/12/value"
+          },
+          {
+            "id": "native-desktop-root-card-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "619:20206"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-desktop-root-card-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "619:20206"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-desktop-root-card-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "619:20206"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/12/value"
+          },
+          {
+            "id": "native-desktop-root-card-hero-image-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "230:3689"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/6/value"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "230:3635"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "230:3635"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "230:3635"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/12/value"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-text-content-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "230:3636"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-text-content-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "230:3636"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-text-content-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "230:3636"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/12/value"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-text-content-heading-text-resize-alias",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "230:3637"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/children/0/facts/11/value"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-text-content-heading-text-alignment-alias",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "230:3637"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/children/0/facts/12/value"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-text-content-body-text-resize-alias",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "230:3638"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/children/1/facts/11/value"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-text-content-body-text-alignment-alias",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "230:3638"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/children/1/facts/12/value"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-button-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "1045:18176"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/1/facts/7/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-button-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "1045:18176"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/1/facts/8/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-button-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "1045:18176"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/1/facts/12/value"
+          }
+        ],
+        "native_relation_proofs": [
+          {
+            "id": "native-owner-controls",
+            "kind": "owner-controls",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "337:4359"
+            },
+            "default_variant_id": "mobile"
+          },
+          {
+            "id": "native-mobile-root-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "337:4359"
+            },
+            "element_path": "/contracts/mobile/root"
+          },
+          {
+            "id": "native-mobile-root-card-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "619:20205"
+            },
+            "element_path": "/contracts/mobile/root/children/0"
+          },
+          {
+            "id": "native-mobile-root-card-hero-image-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "337:4348"
+            },
+            "element_path": "/contracts/mobile/root/children/0/children/0"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "337:4349"
+            },
+            "element_path": "/contracts/mobile/root/children/0/children/1"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-text-content-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "337:4350"
+            },
+            "element_path": "/contracts/mobile/root/children/0/children/1/children/0"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-text-content-heading-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "337:4351"
+            },
+            "element_path": "/contracts/mobile/root/children/0/children/1/children/0/children/0"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-text-content-body-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "337:4352"
+            },
+            "element_path": "/contracts/mobile/root/children/0/children/1/children/0/children/1"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-button-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "1045:18180"
+            },
+            "element_path": "/contracts/mobile/root/children/0/children/1/children/1"
+          },
+          {
+            "id": "native-desktop-root-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "230:3680"
+            },
+            "element_path": "/contracts/desktop/root"
+          },
+          {
+            "id": "native-desktop-root-card-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "619:20206"
+            },
+            "element_path": "/contracts/desktop/root/children/0"
+          },
+          {
+            "id": "native-desktop-root-card-hero-image-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "230:3689"
+            },
+            "element_path": "/contracts/desktop/root/children/0/children/0"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "230:3635"
+            },
+            "element_path": "/contracts/desktop/root/children/0/children/1"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-text-content-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "230:3636"
+            },
+            "element_path": "/contracts/desktop/root/children/0/children/1/children/0"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-text-content-heading-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "230:3637"
+            },
+            "element_path": "/contracts/desktop/root/children/0/children/1/children/0/children/0"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-text-content-body-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "230:3638"
+            },
+            "element_path": "/contracts/desktop/root/children/0/children/1/children/0/children/1"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-button-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "1045:18176"
+            },
+            "element_path": "/contracts/desktop/root/children/0/children/1/children/1"
+          }
+        ],
+        "native_variable_proofs": [
+          {
+            "id": "native-mobile-root-binding-padding-left",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "337:4359"
+            },
+            "contract_path": "/contracts/mobile/root/facts/6/value",
+            "binding_path": "/variable_bindings/paddingLeft/id",
+            "variable": {
+              "id": "VariableID:11:326",
+              "name": "mobile/block-margin",
+              "key": "1d1bbc87f87ab1bea5fafd0fe81eabdc9ba7166e",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-binding-padding-top",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "337:4359"
+            },
+            "contract_path": "/contracts/mobile/root/facts/3/value",
+            "binding_path": "/variable_bindings/paddingTop/id",
+            "variable": {
+              "id": "VariableID:11:326",
+              "name": "mobile/block-margin",
+              "key": "1d1bbc87f87ab1bea5fafd0fe81eabdc9ba7166e",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-binding-padding-right",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "337:4359"
+            },
+            "contract_path": "/contracts/mobile/root/facts/4/value",
+            "binding_path": "/variable_bindings/paddingRight/id",
+            "variable": {
+              "id": "VariableID:11:326",
+              "name": "mobile/block-margin",
+              "key": "1d1bbc87f87ab1bea5fafd0fe81eabdc9ba7166e",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-card-binding-top-left-radius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "619:20205"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/12/value",
+            "binding_path": "/variable_bindings/topLeftRadius/id",
+            "variable": {
+              "id": "VariableID:564:1840",
+              "name": "mobile/block-radius",
+              "key": "f333ca538325d34ff1c16b237f044021a43b7db1",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-card-binding-top-right-radius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "619:20205"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/12/value",
+            "binding_path": "/variable_bindings/topRightRadius/id",
+            "variable": {
+              "id": "VariableID:564:1840",
+              "name": "mobile/block-radius",
+              "key": "f333ca538325d34ff1c16b237f044021a43b7db1",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-card-binding-bottom-left-radius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "619:20205"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/12/value",
+            "binding_path": "/variable_bindings/bottomLeftRadius/id",
+            "variable": {
+              "id": "VariableID:564:1840",
+              "name": "mobile/block-radius",
+              "key": "f333ca538325d34ff1c16b237f044021a43b7db1",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-card-binding-bottom-right-radius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "619:20205"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/12/value",
+            "binding_path": "/variable_bindings/bottomRightRadius/id",
+            "variable": {
+              "id": "VariableID:564:1840",
+              "name": "mobile/block-radius",
+              "key": "f333ca538325d34ff1c16b237f044021a43b7db1",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-card-content-area-binding-padding-left",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "337:4349"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/6/value",
+            "binding_path": "/variable_bindings/paddingLeft/id",
+            "variable": {
+              "id": "VariableID:11:807",
+              "name": "mobile/content-padding",
+              "key": "d8423ca4573203a2d8c720209d8e0382064861de",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-card-content-area-binding-padding-top",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "337:4349"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/3/value",
+            "binding_path": "/variable_bindings/paddingTop/id",
+            "variable": {
+              "id": "VariableID:11:807",
+              "name": "mobile/content-padding",
+              "key": "d8423ca4573203a2d8c720209d8e0382064861de",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-card-content-area-binding-padding-right",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "337:4349"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/4/value",
+            "binding_path": "/variable_bindings/paddingRight/id",
+            "variable": {
+              "id": "VariableID:11:807",
+              "name": "mobile/content-padding",
+              "key": "d8423ca4573203a2d8c720209d8e0382064861de",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-card-content-area-binding-padding-bottom",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "337:4349"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/5/value",
+            "binding_path": "/variable_bindings/paddingBottom/id",
+            "variable": {
+              "id": "VariableID:11:807",
+              "name": "mobile/content-padding",
+              "key": "d8423ca4573203a2d8c720209d8e0382064861de",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-card-content-area-binding-item-spacing",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "337:4349"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/2/value",
+            "binding_path": "/variable_bindings/itemSpacing/id",
+            "variable": {
+              "id": "VariableID:11:809",
+              "name": "mobile/content-gap",
+              "key": "30fc0eb41947d64598dde4e1a3fb0d4967d135eb",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-card-content-area-binding-fills",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "337:4349"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/13/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:dd9ec21777b96b29256fb926ca8ad8d55b8d726f/22:17",
+              "name": "Grey/White",
+              "key": "dd9ec21777b96b29256fb926ca8ad8d55b8d726f",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-mobile-root-card-content-area-text-content-binding-item-spacing",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "337:4350"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/2/value",
+            "binding_path": "/variable_bindings/itemSpacing/id",
+            "variable": {
+              "id": "VariableID:556:1863",
+              "name": "mobile/text-gap-lg",
+              "key": "1e21787688328f22fce6b405dc5cddde23cb3dd8",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-card-content-area-text-content-heading-binding-fills",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "337:4351"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/children/0/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:19d93a58b6262b6219b051ff77d19d246421b40e/22:16",
+              "name": "Grey/Black",
+              "key": "19d93a58b6262b6219b051ff77d19d246421b40e",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-mobile-root-card-content-area-text-content-body-binding-fills",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "337:4359",
+              "node_id": "337:4352"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/children/1/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:c5d8cf956aea528fb50c7a73d1cacb256f6a2c8c/17:139",
+              "name": "Grey/500",
+              "key": "c5d8cf956aea528fb50c7a73d1cacb256f6a2c8c",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-desktop-root-binding-padding-left",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "230:3680"
+            },
+            "contract_path": "/contracts/desktop/root/facts/6/value",
+            "binding_path": "/variable_bindings/paddingLeft/id",
+            "variable": {
+              "id": "VariableID:510:20764",
+              "name": "desktop/block-margin",
+              "key": "de56f2e92a0beca776631c3fd0eb1c1b704f338b",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-binding-padding-top",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "230:3680"
+            },
+            "contract_path": "/contracts/desktop/root/facts/3/value",
+            "binding_path": "/variable_bindings/paddingTop/id",
+            "variable": {
+              "id": "VariableID:510:20764",
+              "name": "desktop/block-margin",
+              "key": "de56f2e92a0beca776631c3fd0eb1c1b704f338b",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-binding-padding-right",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "230:3680"
+            },
+            "contract_path": "/contracts/desktop/root/facts/4/value",
+            "binding_path": "/variable_bindings/paddingRight/id",
+            "variable": {
+              "id": "VariableID:510:20764",
+              "name": "desktop/block-margin",
+              "key": "de56f2e92a0beca776631c3fd0eb1c1b704f338b",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-card-binding-top-left-radius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "619:20206"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/12/value",
+            "binding_path": "/variable_bindings/topLeftRadius/id",
+            "variable": {
+              "id": "VariableID:564:1839",
+              "name": "desktop/block-radius",
+              "key": "aad6ad3fce3f817c6a6733fc9ca071e70aa8e849",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-card-binding-top-right-radius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "619:20206"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/12/value",
+            "binding_path": "/variable_bindings/topRightRadius/id",
+            "variable": {
+              "id": "VariableID:564:1839",
+              "name": "desktop/block-radius",
+              "key": "aad6ad3fce3f817c6a6733fc9ca071e70aa8e849",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-card-binding-bottom-left-radius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "619:20206"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/12/value",
+            "binding_path": "/variable_bindings/bottomLeftRadius/id",
+            "variable": {
+              "id": "VariableID:564:1839",
+              "name": "desktop/block-radius",
+              "key": "aad6ad3fce3f817c6a6733fc9ca071e70aa8e849",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-card-binding-bottom-right-radius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "619:20206"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/12/value",
+            "binding_path": "/variable_bindings/bottomRightRadius/id",
+            "variable": {
+              "id": "VariableID:564:1839",
+              "name": "desktop/block-radius",
+              "key": "aad6ad3fce3f817c6a6733fc9ca071e70aa8e849",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-card-content-area-binding-padding-left",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "230:3635"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/6/value",
+            "binding_path": "/variable_bindings/paddingLeft/id",
+            "variable": {
+              "id": "VariableID:222:2307",
+              "name": "desktop/content-padding",
+              "key": "fdfb84a738e359717a0f380fd016fa103189d1b8",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-card-content-area-binding-padding-top",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "230:3635"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/3/value",
+            "binding_path": "/variable_bindings/paddingTop/id",
+            "variable": {
+              "id": "VariableID:222:2307",
+              "name": "desktop/content-padding",
+              "key": "fdfb84a738e359717a0f380fd016fa103189d1b8",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-card-content-area-binding-padding-right",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "230:3635"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/4/value",
+            "binding_path": "/variable_bindings/paddingRight/id",
+            "variable": {
+              "id": "VariableID:222:2307",
+              "name": "desktop/content-padding",
+              "key": "fdfb84a738e359717a0f380fd016fa103189d1b8",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-card-content-area-binding-padding-bottom",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "230:3635"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/5/value",
+            "binding_path": "/variable_bindings/paddingBottom/id",
+            "variable": {
+              "id": "VariableID:222:2307",
+              "name": "desktop/content-padding",
+              "key": "fdfb84a738e359717a0f380fd016fa103189d1b8",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-card-content-area-binding-item-spacing",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "230:3635"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/2/value",
+            "binding_path": "/variable_bindings/itemSpacing/id",
+            "variable": {
+              "id": "VariableID:222:2304",
+              "name": "desktop/content-gap",
+              "key": "6107273315777c321a1088de2e5da9e0be2be809",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-card-content-area-binding-fills",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "230:3635"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/13/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:dd9ec21777b96b29256fb926ca8ad8d55b8d726f/22:17",
+              "name": "Grey/White",
+              "key": "dd9ec21777b96b29256fb926ca8ad8d55b8d726f",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-desktop-root-card-content-area-text-content-binding-item-spacing",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "230:3636"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/2/value",
+            "binding_path": "/variable_bindings/itemSpacing/id",
+            "variable": {
+              "id": "VariableID:556:1864",
+              "name": "desktop/text-gap-lg",
+              "key": "a37b5690b58d9a36f9f94b647c217fb347d05fd9",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-card-content-area-text-content-heading-binding-fills",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "230:3637"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/children/0/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:19d93a58b6262b6219b051ff77d19d246421b40e/22:16",
+              "name": "Grey/Black",
+              "key": "19d93a58b6262b6219b051ff77d19d246421b40e",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-desktop-root-card-content-area-text-content-body-binding-fills",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-hero",
+              "variant_node_id": "230:3680",
+              "node_id": "230:3638"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/children/1/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:c5d8cf956aea528fb50c7a73d1cacb256f6a2c8c/17:139",
+              "name": "Grey/500",
+              "key": "c5d8cf956aea528fb50c7a73d1cacb256f6a2c8c",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          }
+        ],
+        "native_context_proofs": [
+          {
+            "id": "native-mobile-root-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-mobile-root-structure"
+          },
+          {
+            "id": "native-mobile-root-card-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-mobile-root-card-structure"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-mobile-root-card-content-area-structure"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-text-content-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-mobile-root-card-content-area-text-content-structure"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-text-content-heading-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-mobile-root-card-content-area-text-content-heading-structure"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-text-content-body-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-mobile-root-card-content-area-text-content-body-structure"
+          },
+          {
+            "id": "native-desktop-root-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-desktop-root-structure"
+          },
+          {
+            "id": "native-desktop-root-card-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-desktop-root-card-structure"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-desktop-root-card-content-area-structure"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-text-content-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-desktop-root-card-content-area-text-content-structure"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-text-content-heading-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-desktop-root-card-content-area-text-content-heading-structure"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-text-content-body-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-desktop-root-card-content-area-text-content-body-structure"
+          }
         ]
       }
     },
@@ -53381,6 +54861,216 @@
                 "git_sha": "5431e8b61920d3eed6e9d59d6cd23c0932deae6c"
               }
             }
+          }
+        ],
+        "native_fact_proofs": [
+          {
+            "id": "native-mobile-root-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "button-primary",
+              "variant_node_id": "337:4691",
+              "node_id": "337:4691"
+            },
+            "contract_path": "/contracts/mobile/root/facts/7/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-mobile-root-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "button-primary",
+              "variant_node_id": "337:4691",
+              "node_id": "337:4691"
+            },
+            "contract_path": "/contracts/mobile/root/facts/8/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-mobile-root-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "button-primary",
+              "variant_node_id": "337:4691",
+              "node_id": "337:4691"
+            },
+            "contract_path": "/contracts/mobile/root/facts/12/value"
+          },
+          {
+            "id": "native-mobile-root-label-text-resize-alias",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "button-primary",
+              "variant_node_id": "337:4691",
+              "node_id": "337:4690"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/11/value"
+          },
+          {
+            "id": "native-mobile-root-label-text-alignment-alias",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "button-primary",
+              "variant_node_id": "337:4691",
+              "node_id": "337:4690"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/12/value"
+          },
+          {
+            "id": "native-desktop-root-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "button-primary",
+              "variant_node_id": "337:4694",
+              "node_id": "337:4694"
+            },
+            "contract_path": "/contracts/desktop/root/facts/7/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-desktop-root-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "button-primary",
+              "variant_node_id": "337:4694",
+              "node_id": "337:4694"
+            },
+            "contract_path": "/contracts/desktop/root/facts/8/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-desktop-root-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "button-primary",
+              "variant_node_id": "337:4694",
+              "node_id": "337:4694"
+            },
+            "contract_path": "/contracts/desktop/root/facts/12/value"
+          },
+          {
+            "id": "native-desktop-root-label-text-resize-alias",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "button-primary",
+              "variant_node_id": "337:4694",
+              "node_id": "337:4693"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/11/value"
+          },
+          {
+            "id": "native-desktop-root-label-text-alignment-alias",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "button-primary",
+              "variant_node_id": "337:4694",
+              "node_id": "337:4693"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/12/value"
+          }
+        ],
+        "native_relation_proofs": [
+          {
+            "id": "native-owner-controls",
+            "kind": "owner-controls",
+            "source": {
+              "component_id": "button-primary",
+              "variant_node_id": "337:4694",
+              "node_id": "337:4694"
+            },
+            "default_variant_id": "desktop"
+          },
+          {
+            "id": "native-mobile-root-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "button-primary",
+              "variant_node_id": "337:4691",
+              "node_id": "337:4691"
+            },
+            "element_path": "/contracts/mobile/root"
+          },
+          {
+            "id": "native-mobile-root-label-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "button-primary",
+              "variant_node_id": "337:4691",
+              "node_id": "337:4690"
+            },
+            "element_path": "/contracts/mobile/root/children/0"
+          },
+          {
+            "id": "native-desktop-root-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "button-primary",
+              "variant_node_id": "337:4694",
+              "node_id": "337:4694"
+            },
+            "element_path": "/contracts/desktop/root"
+          },
+          {
+            "id": "native-desktop-root-label-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "button-primary",
+              "variant_node_id": "337:4694",
+              "node_id": "337:4693"
+            },
+            "element_path": "/contracts/desktop/root/children/0"
+          }
+        ],
+        "native_variable_proofs": [
+          {
+            "id": "native-mobile-root-label-binding-fills",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "button-primary",
+              "variant_node_id": "337:4691",
+              "node_id": "337:4690"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:2645e5dcb86a808341e1c609f5e1f850074dfb41/4383:1",
+              "name": "✦/_text/text-on-color-strong",
+              "key": "2645e5dcb86a808341e1c609f5e1f850074dfb41",
+              "collection_id": "VariableCollectionId:7454857a304bf18e633c7dda3cf5c019a1b66e25/4251:276",
+              "collection_name": "Semantics",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-desktop-root-label-binding-fills",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "button-primary",
+              "variant_node_id": "337:4694",
+              "node_id": "337:4693"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:2645e5dcb86a808341e1c609f5e1f850074dfb41/4383:1",
+              "name": "✦/_text/text-on-color-strong",
+              "key": "2645e5dcb86a808341e1c609f5e1f850074dfb41",
+              "collection_id": "VariableCollectionId:7454857a304bf18e633c7dda3cf5c019a1b66e25/4251:276",
+              "collection_name": "Semantics",
+              "resolved_type": "COLOR"
+            }
+          }
+        ],
+        "native_context_proofs": [
+          {
+            "id": "native-mobile-root-label-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-mobile-root-label-structure"
+          },
+          {
+            "id": "native-desktop-root-label-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-desktop-root-label-structure"
           }
         ]
       }
@@ -69206,6 +70896,1296 @@
               "node_id": "326:6618"
             },
             "asset_contract_id": "secondary-image"
+          }
+        ],
+        "native_fact_proofs": [
+          {
+            "id": "native-mobile-root-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "11:1218"
+            },
+            "contract_path": "/contracts/mobile/root/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-mobile-root-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "11:1218"
+            },
+            "contract_path": "/contracts/mobile/root/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-mobile-root-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "11:1218"
+            },
+            "contract_path": "/contracts/mobile/root/facts/12/value"
+          },
+          {
+            "id": "native-mobile-root-card-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "619:1843"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-mobile-root-card-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "619:1843"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-mobile-root-card-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "619:1843"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/12/value"
+          },
+          {
+            "id": "native-mobile-root-card-secondary-image-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "11:1184"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/6/value"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "11:1190"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "11:1190"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "11:1190"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/12/value"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-text-content-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "11:1191"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-text-content-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "11:1191"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-text-content-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "11:1191"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/12/value"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-text-content-heading-text-resize-alias",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "11:1192"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/children/0/facts/11/value"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-text-content-heading-text-alignment-alias",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "11:1192"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/children/0/facts/12/value"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-text-content-body-text-resize-alias",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "11:1193"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/children/1/facts/11/value"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-text-content-body-text-alignment-alias",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "11:1193"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/children/1/facts/12/value"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-button-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "337:4834"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/1/facts/7/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-button-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "337:4834"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/1/facts/8/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-button-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "337:4834"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/1/facts/12/value"
+          },
+          {
+            "id": "native-desktop-root-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "337:4844"
+            },
+            "contract_path": "/contracts/desktop/root/facts/7/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-desktop-root-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "337:4844"
+            },
+            "contract_path": "/contracts/desktop/root/facts/8/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-desktop-root-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "337:4844"
+            },
+            "contract_path": "/contracts/desktop/root/facts/12/value"
+          },
+          {
+            "id": "native-desktop-root-card-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "619:19662"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/7/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-desktop-root-card-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "619:19662"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/8/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-desktop-root-card-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "619:19662"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/12/value"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "326:6612"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "326:6612"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "326:6612"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/12/value"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-text-content-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "326:6613"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/facts/7/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-text-content-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "326:6613"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/facts/8/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-text-content-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "326:6613"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/facts/12/value"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-text-content-heading-text-resize-alias",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "326:6614"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/children/0/facts/11/value"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-text-content-heading-text-alignment-alias",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "326:6614"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/children/0/facts/12/value"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-text-content-body-text-resize-alias",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "326:6615"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/children/1/facts/11/value"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-text-content-body-text-alignment-alias",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "326:6615"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/children/1/facts/12/value"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-button-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "337:4842"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/1/facts/7/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-button-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "337:4842"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/1/facts/8/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-button-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "337:4842"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/1/facts/12/value"
+          },
+          {
+            "id": "native-desktop-root-card-secondary-image-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "326:6618"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/6/value"
+          }
+        ],
+        "native_relation_proofs": [
+          {
+            "id": "native-owner-controls",
+            "kind": "owner-controls",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "11:1218"
+            },
+            "default_variant_id": "mobile"
+          },
+          {
+            "id": "native-mobile-root-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "11:1218"
+            },
+            "element_path": "/contracts/mobile/root"
+          },
+          {
+            "id": "native-mobile-root-card-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "619:1843"
+            },
+            "element_path": "/contracts/mobile/root/children/0"
+          },
+          {
+            "id": "native-mobile-root-card-secondary-image-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "11:1184"
+            },
+            "element_path": "/contracts/mobile/root/children/0/children/0"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "11:1190"
+            },
+            "element_path": "/contracts/mobile/root/children/0/children/1"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-text-content-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "11:1191"
+            },
+            "element_path": "/contracts/mobile/root/children/0/children/1/children/0"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-text-content-heading-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "11:1192"
+            },
+            "element_path": "/contracts/mobile/root/children/0/children/1/children/0/children/0"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-text-content-body-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "11:1193"
+            },
+            "element_path": "/contracts/mobile/root/children/0/children/1/children/0/children/1"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-button-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "337:4834"
+            },
+            "element_path": "/contracts/mobile/root/children/0/children/1/children/1"
+          },
+          {
+            "id": "native-desktop-root-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "337:4844"
+            },
+            "element_path": "/contracts/desktop/root"
+          },
+          {
+            "id": "native-desktop-root-card-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "619:19662"
+            },
+            "element_path": "/contracts/desktop/root/children/0"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "326:6612"
+            },
+            "element_path": "/contracts/desktop/root/children/0/children/0"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-text-content-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "326:6613"
+            },
+            "element_path": "/contracts/desktop/root/children/0/children/0/children/0"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-text-content-heading-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "326:6614"
+            },
+            "element_path": "/contracts/desktop/root/children/0/children/0/children/0/children/0"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-text-content-body-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "326:6615"
+            },
+            "element_path": "/contracts/desktop/root/children/0/children/0/children/0/children/1"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-button-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "337:4842"
+            },
+            "element_path": "/contracts/desktop/root/children/0/children/0/children/1"
+          },
+          {
+            "id": "native-desktop-root-card-secondary-image-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "326:6618"
+            },
+            "element_path": "/contracts/desktop/root/children/0/children/1"
+          }
+        ],
+        "native_variable_proofs": [
+          {
+            "id": "native-mobile-root-binding-padding-left",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "11:1218"
+            },
+            "contract_path": "/contracts/mobile/root/facts/6/value",
+            "binding_path": "/variable_bindings/paddingLeft/id",
+            "variable": {
+              "id": "VariableID:11:326",
+              "name": "mobile/block-margin",
+              "key": "1d1bbc87f87ab1bea5fafd0fe81eabdc9ba7166e",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-binding-padding-top",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "11:1218"
+            },
+            "contract_path": "/contracts/mobile/root/facts/3/value",
+            "binding_path": "/variable_bindings/paddingTop/id",
+            "variable": {
+              "id": "VariableID:11:326",
+              "name": "mobile/block-margin",
+              "key": "1d1bbc87f87ab1bea5fafd0fe81eabdc9ba7166e",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-binding-padding-right",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "11:1218"
+            },
+            "contract_path": "/contracts/mobile/root/facts/4/value",
+            "binding_path": "/variable_bindings/paddingRight/id",
+            "variable": {
+              "id": "VariableID:11:326",
+              "name": "mobile/block-margin",
+              "key": "1d1bbc87f87ab1bea5fafd0fe81eabdc9ba7166e",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-card-binding-top-left-radius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "619:1843"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/12/value",
+            "binding_path": "/variable_bindings/topLeftRadius/id",
+            "variable": {
+              "id": "VariableID:564:1840",
+              "name": "mobile/block-radius",
+              "key": "f333ca538325d34ff1c16b237f044021a43b7db1",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-card-binding-top-right-radius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "619:1843"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/12/value",
+            "binding_path": "/variable_bindings/topRightRadius/id",
+            "variable": {
+              "id": "VariableID:564:1840",
+              "name": "mobile/block-radius",
+              "key": "f333ca538325d34ff1c16b237f044021a43b7db1",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-card-binding-bottom-left-radius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "619:1843"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/12/value",
+            "binding_path": "/variable_bindings/bottomLeftRadius/id",
+            "variable": {
+              "id": "VariableID:564:1840",
+              "name": "mobile/block-radius",
+              "key": "f333ca538325d34ff1c16b237f044021a43b7db1",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-card-binding-bottom-right-radius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "619:1843"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/12/value",
+            "binding_path": "/variable_bindings/bottomRightRadius/id",
+            "variable": {
+              "id": "VariableID:564:1840",
+              "name": "mobile/block-radius",
+              "key": "f333ca538325d34ff1c16b237f044021a43b7db1",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-card-content-area-binding-padding-left",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "11:1190"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/6/value",
+            "binding_path": "/variable_bindings/paddingLeft/id",
+            "variable": {
+              "id": "VariableID:11:807",
+              "name": "mobile/content-padding",
+              "key": "d8423ca4573203a2d8c720209d8e0382064861de",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-card-content-area-binding-padding-top",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "11:1190"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/3/value",
+            "binding_path": "/variable_bindings/paddingTop/id",
+            "variable": {
+              "id": "VariableID:11:807",
+              "name": "mobile/content-padding",
+              "key": "d8423ca4573203a2d8c720209d8e0382064861de",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-card-content-area-binding-padding-right",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "11:1190"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/4/value",
+            "binding_path": "/variable_bindings/paddingRight/id",
+            "variable": {
+              "id": "VariableID:11:807",
+              "name": "mobile/content-padding",
+              "key": "d8423ca4573203a2d8c720209d8e0382064861de",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-card-content-area-binding-padding-bottom",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "11:1190"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/5/value",
+            "binding_path": "/variable_bindings/paddingBottom/id",
+            "variable": {
+              "id": "VariableID:11:807",
+              "name": "mobile/content-padding",
+              "key": "d8423ca4573203a2d8c720209d8e0382064861de",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-card-content-area-binding-item-spacing",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "11:1190"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/2/value",
+            "binding_path": "/variable_bindings/itemSpacing/id",
+            "variable": {
+              "id": "VariableID:11:809",
+              "name": "mobile/content-gap",
+              "key": "30fc0eb41947d64598dde4e1a3fb0d4967d135eb",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-mobile-root-card-content-area-binding-fills",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "11:1190"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/13/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:dd9ec21777b96b29256fb926ca8ad8d55b8d726f/22:17",
+              "name": "Grey/White",
+              "key": "dd9ec21777b96b29256fb926ca8ad8d55b8d726f",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-mobile-root-card-content-area-text-content-heading-binding-fills",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "11:1192"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/children/0/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:19d93a58b6262b6219b051ff77d19d246421b40e/22:16",
+              "name": "Grey/Black",
+              "key": "19d93a58b6262b6219b051ff77d19d246421b40e",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-mobile-root-card-content-area-text-content-body-binding-fills",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "11:1193"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/children/1/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:c5d8cf956aea528fb50c7a73d1cacb256f6a2c8c/17:139",
+              "name": "Grey/500",
+              "key": "c5d8cf956aea528fb50c7a73d1cacb256f6a2c8c",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-mobile-root-card-content-area-button-binding-fills",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "11:1218",
+              "node_id": "337:4834"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/1/facts/13/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:c5d8cf956aea528fb50c7a73d1cacb256f6a2c8c/17:139",
+              "name": "Grey/500",
+              "key": "c5d8cf956aea528fb50c7a73d1cacb256f6a2c8c",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-desktop-root-binding-padding-left",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "337:4844"
+            },
+            "contract_path": "/contracts/desktop/root/facts/6/value",
+            "binding_path": "/variable_bindings/paddingLeft/id",
+            "variable": {
+              "id": "VariableID:510:20764",
+              "name": "desktop/block-margin",
+              "key": "de56f2e92a0beca776631c3fd0eb1c1b704f338b",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-binding-padding-top",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "337:4844"
+            },
+            "contract_path": "/contracts/desktop/root/facts/3/value",
+            "binding_path": "/variable_bindings/paddingTop/id",
+            "variable": {
+              "id": "VariableID:510:20764",
+              "name": "desktop/block-margin",
+              "key": "de56f2e92a0beca776631c3fd0eb1c1b704f338b",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-binding-padding-right",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "337:4844"
+            },
+            "contract_path": "/contracts/desktop/root/facts/4/value",
+            "binding_path": "/variable_bindings/paddingRight/id",
+            "variable": {
+              "id": "VariableID:510:20764",
+              "name": "desktop/block-margin",
+              "key": "de56f2e92a0beca776631c3fd0eb1c1b704f338b",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-card-binding-top-left-radius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "619:19662"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/12/value",
+            "binding_path": "/variable_bindings/topLeftRadius/id",
+            "variable": {
+              "id": "VariableID:564:1839",
+              "name": "desktop/block-radius",
+              "key": "aad6ad3fce3f817c6a6733fc9ca071e70aa8e849",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-card-binding-top-right-radius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "619:19662"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/12/value",
+            "binding_path": "/variable_bindings/topRightRadius/id",
+            "variable": {
+              "id": "VariableID:564:1839",
+              "name": "desktop/block-radius",
+              "key": "aad6ad3fce3f817c6a6733fc9ca071e70aa8e849",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-card-binding-bottom-left-radius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "619:19662"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/12/value",
+            "binding_path": "/variable_bindings/bottomLeftRadius/id",
+            "variable": {
+              "id": "VariableID:564:1839",
+              "name": "desktop/block-radius",
+              "key": "aad6ad3fce3f817c6a6733fc9ca071e70aa8e849",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-card-binding-bottom-right-radius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "619:19662"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/12/value",
+            "binding_path": "/variable_bindings/bottomRightRadius/id",
+            "variable": {
+              "id": "VariableID:564:1839",
+              "name": "desktop/block-radius",
+              "key": "aad6ad3fce3f817c6a6733fc9ca071e70aa8e849",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-card-content-area-binding-padding-left",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "326:6612"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/6/value",
+            "binding_path": "/variable_bindings/paddingLeft/id",
+            "variable": {
+              "id": "VariableID:222:2307",
+              "name": "desktop/content-padding",
+              "key": "fdfb84a738e359717a0f380fd016fa103189d1b8",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-card-content-area-binding-padding-top",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "326:6612"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/3/value",
+            "binding_path": "/variable_bindings/paddingTop/id",
+            "variable": {
+              "id": "VariableID:222:2307",
+              "name": "desktop/content-padding",
+              "key": "fdfb84a738e359717a0f380fd016fa103189d1b8",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-card-content-area-binding-padding-right",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "326:6612"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/4/value",
+            "binding_path": "/variable_bindings/paddingRight/id",
+            "variable": {
+              "id": "VariableID:222:2307",
+              "name": "desktop/content-padding",
+              "key": "fdfb84a738e359717a0f380fd016fa103189d1b8",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-card-content-area-binding-padding-bottom",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "326:6612"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/5/value",
+            "binding_path": "/variable_bindings/paddingBottom/id",
+            "variable": {
+              "id": "VariableID:222:2307",
+              "name": "desktop/content-padding",
+              "key": "fdfb84a738e359717a0f380fd016fa103189d1b8",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-card-content-area-binding-item-spacing",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "326:6612"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/2/value",
+            "binding_path": "/variable_bindings/itemSpacing/id",
+            "variable": {
+              "id": "VariableID:222:2304",
+              "name": "desktop/content-gap",
+              "key": "6107273315777c321a1088de2e5da9e0be2be809",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-card-content-area-binding-fills",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "326:6612"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/13/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:dd9ec21777b96b29256fb926ca8ad8d55b8d726f/22:17",
+              "name": "Grey/White",
+              "key": "dd9ec21777b96b29256fb926ca8ad8d55b8d726f",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-desktop-root-card-content-area-text-content-binding-item-spacing",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "326:6613"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/facts/2/value",
+            "binding_path": "/variable_bindings/itemSpacing/id",
+            "variable": {
+              "id": "VariableID:222:2302",
+              "name": "desktop/text-gap",
+              "key": "dbd9684e7847f6779e9a4107dabed8c533120a7d",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-card-content-area-text-content-heading-binding-fills",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "326:6614"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/children/0/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:19d93a58b6262b6219b051ff77d19d246421b40e/22:16",
+              "name": "Grey/Black",
+              "key": "19d93a58b6262b6219b051ff77d19d246421b40e",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-desktop-root-card-content-area-text-content-body-binding-fills",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "326:6615"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/children/1/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:c5d8cf956aea528fb50c7a73d1cacb256f6a2c8c/17:139",
+              "name": "Grey/500",
+              "key": "c5d8cf956aea528fb50c7a73d1cacb256f6a2c8c",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-desktop-root-card-content-area-button-binding-fills",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "banner-secondary",
+              "variant_node_id": "337:4844",
+              "node_id": "337:4842"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/1/facts/13/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:c5d8cf956aea528fb50c7a73d1cacb256f6a2c8c/17:139",
+              "name": "Grey/500",
+              "key": "c5d8cf956aea528fb50c7a73d1cacb256f6a2c8c",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          }
+        ],
+        "native_context_proofs": [
+          {
+            "id": "native-mobile-root-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-mobile-root-structure"
+          },
+          {
+            "id": "native-mobile-root-card-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-mobile-root-card-structure"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-mobile-root-card-content-area-structure"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-text-content-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-mobile-root-card-content-area-text-content-structure"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-text-content-heading-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-mobile-root-card-content-area-text-content-heading-structure"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-text-content-body-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-mobile-root-card-content-area-text-content-body-structure"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-button-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-mobile-root-card-content-area-button-structure"
+          },
+          {
+            "id": "native-desktop-root-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-desktop-root-structure"
+          },
+          {
+            "id": "native-desktop-root-card-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-desktop-root-card-structure"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-desktop-root-card-content-area-structure"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-text-content-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-desktop-root-card-content-area-text-content-structure"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-text-content-heading-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-desktop-root-card-content-area-text-content-heading-structure"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-text-content-body-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-desktop-root-card-content-area-text-content-body-structure"
           }
         ]
       }
