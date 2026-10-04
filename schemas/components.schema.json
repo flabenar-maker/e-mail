@@ -421,6 +421,12 @@
           "items": {
             "$ref": "#/$defs/nativeFactProof"
           }
+        },
+        "native_relation_proofs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nativeRelationProof"
+          }
         }
       }
     },
@@ -2993,6 +2999,62 @@
                 "primary",
                 "counter"
               ]
+            }
+          }
+        }
+      ]
+    },
+    "nativeRelationProof": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "source",
+            "element_path"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "kind": {
+              "const": "element-structure"
+            },
+            "source": {
+              "$ref": "#/$defs/factProofSelector"
+            },
+            "element_path": {
+              "type": "string",
+              "pattern": "^/contracts/(?:mobile|desktop|variant_contracts/[0-9]+)/root(?:/children/[0-9]+)*$"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "source",
+            "default_variant_id"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "kind": {
+              "const": "owner-controls"
+            },
+            "source": {
+              "$ref": "#/$defs/factProofSelector"
+            },
+            "default_variant_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
             }
           }
         }

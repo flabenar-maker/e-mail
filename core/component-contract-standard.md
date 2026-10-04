@@ -212,6 +212,14 @@ Capture identity/freshness остаётся у общего request-bound proof 
 
 У этих metadata нет общего ignore-list, rendering fallback или stored PASS. Неиспользованный/удалённый proof оставляет исходные obligations открытыми. Owner-local IDs уникальны во всех evidence arrays; один source/kind/axis имеет один reduction. Метаданные не меняют HTML, export boundary, compact Description или роль source-only artwork.
 
+## Native structure and control references
+
+Optional `evidence_links.native_relation_proofs` адресует собственный element (`element-structure`) или зарегистрированный default variant (`owner-controls`). Это authoring metadata, не runtime override или копия source tree. Точное размещение элемента подтверждается одним same-node typed `reference-size` и независимыми width/height mappings. Имена/классы/visibility и порядок непосредственных children выводятся из semantic element, registered axes, Boolean properties и source identities дочерних reference-size facts; неизвестное не получает default. Alternate contracts используют собственный Viewport axis.
+
+Boolean reference проверяет native property name (нормализуется только Figma ID suffix), canonical default и actual visibility. Полный native definition set сверяется с canonical Boolean properties и полными axis domains всех registered variants. UI order options не имеет смысла для HTML и сравнивается как точное множество без дублей. Выбор default хранится ссылкой на точный registered variant, не выводится из порядка вариантов или числа.
+
+Nested-component INSTANCE требует registered main variant, complete VARIANT properties и независимые direct mappings значений каждой оси. Rendered-node image INSTANCE требует точную собственную asset boundary/dependency цепочку; его native children не становятся HTML. Структурный proof не скрывает artwork/capability diagnostics, scalar mismatch, неизвестные поля или непроверенные bindings. Дополнительные controls/неподдерживаемые modes остаются unverified. Raw report сохраняется; coverage принимается только от internally computed неизменённого proof для того же exact record/packet.
+
 ## Onboarding нового компонента
 
 Если в библиотеке появился неизвестный компонент:
