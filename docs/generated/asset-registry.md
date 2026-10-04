@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: asset-registry -->
-<!-- source-digest: sha256:583ab7dd394da56e98dc9142da231a3b1aa004c0f131903427db6c1c11432efe -->
+<!-- source-digest: sha256:20bdb3a3867d6eef1a6227cc8695d1e23a085fd29f776f384cc4e54aaea30135 -->
 <!-- schema-versions: components=2.3.0, assets=1.0.0 -->
 # CUPIS asset registry
 
