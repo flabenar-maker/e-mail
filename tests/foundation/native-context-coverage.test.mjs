@@ -34,11 +34,14 @@ test('rejects a missing structure proof or wrong mobile root node',()=>{const f=
 test('copied coverage cannot filter actual raw facts and future fields stay uncovered',()=>{const f=fixture(),coverage=api().auditNativeContextProofs(f),future=structuredClone(f.packet);future.variants[0].source_node.future_field=true;const raw=auditFigmaContractFacts({record:f.record,live:future});assert.equal(api().applyNativeContextCoverage({facts:raw,coverage:structuredClone(coverage)}),raw);});
 
 
+
 test('html-link receives ordinary HTML context only through its own structure proof', () => {
   const f = fixture(), element = f.record.contracts.mobile.root.children[1], node = f.packet.variants[0].source_node.children[1];
   element.render_mode = 'html-link'; element.semantic_role = 'help-link'; node.node_type = 'TEXT'; node.name = 'help-link';
+  Object.assign(node, {layout_positioning: 'AUTO', layout_grow: 0, minimum_width_px: null, opacity: 1, rotation: 0, strokes: [], variable_bindings: {}, fills: []});
   f.record.evidence_links.native_context_proofs = [{id: 'link-context', kind: 'html-element-context', structure_proof_id: 'detail-structure'}];
-  assert.equal(api().auditNativeContextProofs(f).ok, true);
+  const coverage = api().auditNativeContextProofs(f); assert.equal(coverage.ok, true);
+  assert.ok(coverage.verified_sources.some(source => source.source_path === '/clips_content'));
 });
 
 test('ordinary false clips_content is semantic absence, while true needs an exact typed Boolean map', () => {
@@ -50,6 +53,17 @@ test('ordinary false clips_content is semantic absence, while true needs an exac
   f.record.contracts.figma_fact_links.push({variant_node_id: '101:1', node_id: f.node.node_id, source_path: '/clips_content', contract_path: `/contracts/mobile/root/facts/${f.record.contracts.mobile.root.facts.length - 1}/value/value`, transform: 'identity'});
   assert.equal(api().auditNativeContextProofs(f).ok, true);
 });
+for (const [label, mutate] of [
+  ['wrong Boolean value', f => { f.record.contracts.mobile.root.facts.at(-1).value.value = false; }],
+  ['wrong Boolean type', f => { f.record.contracts.mobile.root.facts.at(-1).value.type = 'keyword'; }],
+  ['wrong Boolean provenance', f => { f.record.contracts.mobile.root.facts.at(-1).provenance.node_id = '101:2'; }],
+  ['missing Boolean map', f => { f.record.contracts.figma_fact_links.pop(); }],
+]) test(`active clips_content rejects ${label}`, () => {
+  const f = fixture(); f.node.clips_content = true;
+  f.record.contracts.mobile.root.facts.push({id: 'clip-content', value: {type: 'boolean', value: true}, provenance: {kind: 'figma-literal', node_id: f.node.node_id}});
+  f.record.contracts.figma_fact_links.push({variant_node_id: '101:1', node_id: f.node.node_id, source_path: '/clips_content', contract_path: `/contracts/mobile/root/facts/${f.record.contracts.mobile.root.facts.length - 1}/value/value`, transform: 'identity'});
+  mutate(f); assert.equal(api().auditNativeContextProofs(f).ok, false);
+});
 
 test('non-null minimum width needs a same-node mapped px measure', () => {
   const f = fixture(); f.node.minimum_width_px = 24;
@@ -57,4 +71,17 @@ test('non-null minimum width needs a same-node mapped px measure', () => {
   f.record.contracts.mobile.root.facts.push({id: 'minimum-width', value: {type: 'measure', value: 24, unit: 'px'}, provenance: {kind: 'figma-literal', node_id: f.node.node_id}});
   f.record.contracts.figma_fact_links.push({variant_node_id: '101:1', node_id: f.node.node_id, source_path: '/minimum_width_px', contract_path: `/contracts/mobile/root/facts/${f.record.contracts.mobile.root.facts.length - 1}/value/value`, transform: 'identity'});
   assert.equal(api().auditNativeContextProofs(f).ok, true);
+});
+for (const [label, mutate] of [
+  ['wrong unit', f => { f.record.contracts.mobile.root.facts.at(-1).value.unit = 'percent'; }],
+  ['wrong value type', f => { f.record.contracts.mobile.root.facts.at(-1).value.type = 'integer'; delete f.record.contracts.mobile.root.facts.at(-1).value.unit; }],
+  ['wrong provenance', f => { f.record.contracts.mobile.root.facts.at(-1).provenance.node_id = '101:2'; }],
+  ['wrong source path', f => { f.record.contracts.figma_fact_links.at(-1).source_path = '/minimum_width'; }],
+  ['missing map', f => { f.record.contracts.figma_fact_links.pop(); }],
+  ['wrong value', f => { f.record.contracts.mobile.root.facts.at(-1).value.value = 25; }],
+]) test(`non-null minimum width rejects ${label}`, () => {
+  const f = fixture(); f.node.minimum_width_px = 24;
+  f.record.contracts.mobile.root.facts.push({id: 'minimum-width', value: {type: 'measure', value: 24, unit: 'px'}, provenance: {kind: 'figma-literal', node_id: f.node.node_id}});
+  f.record.contracts.figma_fact_links.push({variant_node_id: '101:1', node_id: f.node.node_id, source_path: '/minimum_width_px', contract_path: `/contracts/mobile/root/facts/${f.record.contracts.mobile.root.facts.length - 1}/value/value`, transform: 'identity'});
+  mutate(f); assert.equal(api().auditNativeContextProofs(f).ok, false);
 });
