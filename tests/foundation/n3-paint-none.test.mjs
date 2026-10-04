@@ -39,7 +39,7 @@ test('opaque mapped paint proves native type, visibility and opacity qualifiers'
 test('empty paint is proven absent when HTML element has no own paint fact', () => {assert.ok(sources(fixture({paint: false})).includes('/fills'));});
 test('capture MIXED paint error is not proof of an absent background', () => {
   const f = fixture({paint: false});
-  f.packet.capture_errors.push({node_id: f.node.node_id, field: 'fills', reason: 'MIXED'});
+  f.packet.capture_errors.push({node_id: f.node.node_id, field: 'fills', code: 'MIXED_VALUE'});
   assert.equal(auditNativeContextProofs(f).ok, false);
 });
 for (const [name, change] of [
