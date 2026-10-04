@@ -314,6 +314,33 @@ test('style-usage rejects a native letter-spacing mismatch even with the exact s
   text.text_style.letter_spacing.value = 1;
   assertUnverified(f, 'proof-style', /letter.spacing|style|segment/i);
 });
+test('style-usage closes only mixed null aggregate aliases proven by complete mapped runs', () => {
+  const { f, text } = verifiedStyleFixture();
+  f.record.identity = { ...f.record.identity, library: 'service', semantic_role: 'block' }; f.record.asset_contracts = [];
+  f.record.contracts.mobile.root = { id: 'style-root', semantic_role: 'block', render_mode: 'presentation-table', facts: [], children: f.record.contracts.mobile.root.children };
+  f.record.contracts.desktop.root = { id: 'style-root', semantic_role: 'block', render_mode: 'presentation-table', facts: [], children: [] };
+  text.text_style.font_family = null; text.text_style.font_style = null; text.text_style.text_decoration = null;
+  const runs = [
+    { start: 0, end: 2, characters: 'He', font_family: 'Roboto', font_style: 'Regular', font_size_px: 14, line_height: { unit: 'PERCENT', value: 140 }, text_decoration: 'NONE', fills: [{ type: 'solid', visible: true, opacity: 1, color: '#AA7100' }] },
+    { start: 2, end: 4, characters: 'lp', font_family: 'Roboto', font_style: 'Regular', font_size_px: 14, line_height: { unit: 'PERCENT', value: 140 }, text_decoration: 'UNDERLINE', fills: [{ type: 'solid', visible: true, opacity: 1, color: '#AA7100' }] }
+  ];
+  text.styled_text_segments = clone(runs);
+  const segments = f.record.contracts.mobile.root.children[0].facts[1]; segments.value.items = clone(runs);
+  const leaves = (value, path = []) => value && typeof value === 'object' && !Array.isArray(value)
+    ? Object.entries(value).flatMap(([key, child]) => leaves(child, [...path, key]))
+    : Array.isArray(value) ? value.flatMap((child, index) => leaves(child, [...path, index])) : [path];
+  for (const [index, run] of runs.entries()) for (const leaf of leaves(run)) {
+    const suffix = leaf.join('/');
+    f.record.contracts.figma_fact_links.push({ variant_node_id: '101:1', node_id: '101:3', source_path: `/styled_text_segments/${index}/${suffix}`, contract_path: `/contracts/mobile/root/children/0/facts/1/value/items/${index}/${suffix}`, transform: 'identity' });
+  }
+  recount(f); assertVerified(f, 'proof-style');
+  const raw = auditFigmaContractFacts({ record: f.record, live: f.session.captures[0].packet });
+  assert.equal(raw.issues.some(issue => ['FIGMA_SOURCE_PATH_MISSING', 'FIGMA_CONTRACT_MISMATCH', 'CONTRACT_FACT_UNMAPPED'].includes(issue.code)), false);
+  const aliases = ['/text_style/font_family', '/text_style/font_style', '/text_style/text_decoration'];
+  assert.deepEqual(raw.issues.filter(issue => issue.code === 'FIGMA_FACT_UNCOVERED').map(issue => issue.source_path).filter(path => aliases.includes(path)).sort(), aliases.sort());
+  const effective = api().applyContractFactProofCoverage({ facts: raw, proofs: reportFor(f) });
+  assert.equal(effective.issues.some(issue => aliases.includes(issue.source_path)), false);
+});
 test('mobile-image-auto requires a direct-image element, its exact asset, and an explicit auto policy', () => {
   const f = imagePolicyFixture(); setProof(f, { id: 'proof-auto', kind: 'mobile-image-auto', contract_path: '/contracts/mobile/root/children/0/facts/1/value', source: { component_id: f.record.id, variant_node_id: '210:1', node_id: '210:3' }, asset_contract_id: 'synthetic-image' }); assertVerified(f, 'proof-auto');
 });
