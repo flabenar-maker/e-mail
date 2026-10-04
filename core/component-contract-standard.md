@@ -242,6 +242,14 @@ Successful internally computed coverage is paired with the exact canonical recor
 
 The paint profile requires one closed opaque visible SOLID with an independently mapped exact own color; an empty paint array proves absence only without an own color fact. Hidden paint is accepted only inside an independently verified rendered-node image boundary and never becomes an HTML matte. Extra/unknown paints remain unsupported. A flat divider or rendered image with independently mapped sizing/wrap can prove inert NONE layout only with explicit zero padding/spacing and supported axis qualifiers; no general NONE exemption exists.
 
+### Native image Fill paint reference
+
+`image-fill-paint-context` is a closed `{id, kind, structure_proof_id}` authoring reference to one independently verified own element structure and its existing image-fill asset. Source viewport, exact semantic boundary, same-node mapped reference geometry, file ratio and 2x output dimensions must agree with the canonical compatible JPEG/source/display/alpha/clipping/background policies. No copied expected paint values or caller field masks are accepted.
+
+The narrow captured-paint profile requires one complete visible opaque IMAGE Fill, a nonempty actual source hash, FILL mode, identity 2×3 transform, zero rotation and all seven zero filters. Per the [Figma ImagePaint API](https://developers.figma.com/docs/plugins/api/Paint/#imagepaint), scalingFactor applies to TILE only; a finite positive factor under guarded FILL is inactive, not an export scale. Active filters, transforms, other modes, unknown paint fields, absent evidence or conflicting ownership remain unverified.
+
+Coverage closes only the 20 captured paint leaves after exact request-bound identity and independent structure validation. It does not cover axis sizing, node clipping, unknown context, raster resolution, actual crop/output bytes, JPEG quality/sRGB or uncaptured paint properties. A library paint proof does not replace concrete-instance export preflight or claim an exported file is ready. Runtime values, crop/export policy and raw audit diagnostics remain unchanged.
+
 ## Onboarding нового компонента
 
 Если в библиотеке появился неизвестный компонент:

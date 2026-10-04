@@ -72186,6 +72186,11 @@
             "id": "native-desktop-root-card-content-area-text-content-body-context",
             "kind": "html-element-context",
             "structure_proof_id": "native-desktop-root-card-content-area-text-content-body-structure"
+          },
+          {
+            "id": "native-image-fill-mobile-secondary-image",
+            "kind": "image-fill-paint-context",
+            "structure_proof_id": "native-mobile-root-card-secondary-image-structure"
           }
         ]
       }
