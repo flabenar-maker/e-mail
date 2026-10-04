@@ -1,3 +1,4 @@
+import {artworkPlacementName, verifyOwnedArtworkInstances} from './native-owned-artwork.mjs';
 // A source graphic is delegated to an independently registered whole-node
 // export. This is neither scalar HTML equality nor an exemption by source role.
 const object = v => v !== null && typeof v === 'object' && !Array.isArray(v);
@@ -11,13 +12,14 @@ export function ownedContextStructure(record, proof) {
 }
 function renderedBoundary(owner, relation) {
   const element = pointer(owner, relation.element_path);
-  if (!['asset', 'icon'].includes(owner.identity?.semantic_role) || element?.render_mode !== 'direct-image' || element.children?.length !== 0) throw Error('source graphic requires a registered direct-image owner boundary');
+  if (owner.identity?.semantic_role === 'template' || element?.render_mode !== 'direct-image' || element.children?.length !== 0 ||
+      !['asset', 'icon'].includes(owner.identity?.semantic_role) && !/^\/contracts\/(?:mobile|desktop)\/root\/children\//u.test(relation.element_path)) throw Error('registered owned direct-image boundary required');
   const asset = unique(owner.asset_contracts?.filter(a => a.id === element.asset_contract_id), 'one owned artwork asset required');
   if (asset.source_mode_id !== 'rendered-node' || asset.display_mode_id !== 'direct-image' || asset.export_profile_id !== 'png-4x' ||
       asset.clipping_policy_id !== 'preserve-artwork' || !closed(asset.export_boundary, ['kind', 'semantic_node_name']) || asset.export_boundary.kind !== 'node' ||
       asset.export_boundary.semantic_node_name !== asset.owner_layer_name || !closed(asset.crop, ['mode', 'position_source']) || asset.crop.mode !== 'none' || asset.crop.position_source !== 'exact-node-after-overrides' ||
       !closed(asset.background, ['own_visible_boundary_fill', 'artificial_matte']) || asset.background.own_visible_boundary_fill !== 'preserve' || asset.background.artificial_matte !== 'forbid') throw Error('whole rendered-node export preserving artwork without an artificial matte required');
-  return {owner, relation, element, asset};
+  return {owner, relation, element, asset, placement_name: artworkPlacementName({record: owner, element, asset, variant_node_id: relation.source.variant_node_id})};
 }
 export function resolveArtworkContextReference({record, proof, records}) {
   if (proof.kind === 'rendered-artwork-context') return renderedBoundary(record, ownedContextStructure(record, proof));
@@ -35,7 +37,8 @@ export function resolveArtworkContextReference({record, proof, records}) {
 export function verifyArtworkDependency({record, proof, boundary, env}) {
   env.dependencies(boundary.owner.id);
   const ownerEntry = env.selected(boundary.relation.source);
-  if (ownerEntry.node.name !== boundary.asset.owner_layer_name) throw Error('actual whole-node boundary name mismatch');
+  if (ownerEntry.node.name !== boundary.placement_name) throw Error('actual whole-node boundary name mismatch');
+  verifyOwnedArtworkInstances({record: boundary.owner, boundary: ownerEntry, asset: boundary.asset, env});
   if (proof.kind === 'rendered-artwork-context') return ownerEntry;
   const instance = env.selected({component_id: boundary.owner.id, ...boundary.dependency.source});
   if (instance.node.node_type !== 'INSTANCE' || (instance.node.node_id !== ownerEntry.node.node_id && !instance.ancestors.some(n => n.node_id === ownerEntry.node.node_id))) throw Error('actual dependency must lie inside the independently verified owner boundary');

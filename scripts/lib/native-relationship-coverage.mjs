@@ -1,4 +1,5 @@
 import {createHash} from 'node:crypto';
+import {artworkPlacementName, verifyRegisteredArtworkInstance} from './native-owned-artwork.mjs';
 import {isDeepStrictEqual as equal} from 'node:util';
 import {createContractProofEnvironment} from './contract-fact-proofs.mjs';
 import {applyNativeFactCoverage} from './native-fact-coverage.mjs';
@@ -113,13 +114,15 @@ function visibility(record, e, node, packet, add) {
 function instance(record, e, source, node, env, add) {
   if (e.render_mode === 'direct-image') {
     const assets = record.asset_contracts?.filter(a => a.id === e.asset_contract_id);
-    if (assets?.length !== 1 || assets[0].owner_layer_name !== node.name || assets[0].source_mode_id !== 'rendered-node') throw Error('rendered-node asset ownership required');
+    if (assets?.length !== 1 || artworkPlacementName({record, element: e, asset: assets[0], variant_node_id: source.variant_node_id}) !== node.name || assets[0].source_mode_id !== 'rendered-node') throw Error('rendered-node asset ownership required');
     env.dependencies(record.id);
     const deps = record.evidence_links?.source_dependencies?.filter(l => l.source.node_id === node.node_id && l.source.variant_node_id === source.variant_node_id && l.asset_owner.node_id === node.node_id && l.asset_owner.asset_id === e.asset_contract_id);
     if (deps?.length !== 1) throw Error('one owned source dependency required for direct-image instance');
-    const target = env.lookup(deps[0].target.component_id);
-    if ((target.properties?.length ?? 0) || target.variants?.length || !equal(node.instance_properties, {})) throw Error('unmodeled artwork instance properties');
-    add('/main_component_id'); add('/instance_properties'); return;
+    const {variant} = verifyRegisteredArtworkInstance({record, link: deps[0], node, records: env.records});
+    add('/main_component_id');
+    if (variant.axes.length) for (const axis of variant.axes) for (const key of ['type', 'value', 'boundVariables']) add('/instance_properties/' + axis.name + '/' + key);
+    else add('/instance_properties');
+    return;
   }
   const child = env.lookup(e.component_id);
   if (child.figma.file_key !== record.figma.file_key || (child.properties?.length ?? 0) !== 0) throw Error('same-file nested component without unmodeled controls required');
@@ -167,7 +170,7 @@ function structure(record, p, env, add) {
   if (!type || node.node_type !== type) throw Error('canonical element/native class mismatch');
   const variant = variants(record).find(v => v.node_id === p.source.variant_node_id);
   const asset = ownAsset;
-  const name = root ? variant.axes.length ? variant.axes.map(a => `${a.name}=${a.value}`).join(', ') : record.identity.figma_name : asset?.owner_layer_name ?? e.semantic_role;
+  const name = root ? variant.axes.length ? variant.axes.map(a => `${a.name}=${a.value}`).join(', ') : record.identity.figma_name : asset?.source_mode_id === 'rendered-node' && asset.export_profile_id === 'png-4x' ? artworkPlacementName({record, element: e, asset, variant_node_id: p.source.variant_node_id}) : asset?.owner_layer_name ?? e.semantic_role;
   if (typeof name !== 'string' || node.name !== name) throw Error('canonical semantic/variant name mismatch');
   visibility(record, e, node, entry.packet, add);
   if (e.render_mode === 'direct-image' || e.render_mode === 'background-image' || e.render_mode === 'nested-component') {

@@ -1,4 +1,5 @@
 import { isDeepStrictEqual } from "node:util";
+import {isSharedArtworkReference, verifyRegisteredArtworkInstance} from "./native-owned-artwork.mjs";
 import { validateCaptureFreshness } from "./component-evidence-freshness.mjs";
 import { auditFigmaContractFacts, hasCompleteMixedTextRuns } from "./figma-contract-facts.mjs";
 import { auditContractFactProofs } from "./contract-fact-proofs.mjs";
@@ -424,7 +425,12 @@ function classifyEvidenceCaptureDiagnostics(report, { recordId, model, session }
       const actual = scope.nodes.get(obligation.source.node_id)?.node;
       if (!link || !target || link.asset_owner.node_id !== obligation.asset_owner.node_id || link.asset_owner.asset_id !== obligation.asset_owner.asset_id ||
           actual?.node_type !== "INSTANCE" || actual.main_component_id !== target.target.node_id ||
-          !load(target.target.component_id).scope?.variants.has(target.target.node_id) || !closure(target.target.component_id, new Set([...trail, id]))) { ok = false; break; }
+          !isSharedArtworkReference(model.records.find(record => record.id === target.target.component_id)) &&
+           (!load(target.target.component_id).scope?.variants.has(target.target.node_id) || !closure(target.target.component_id, new Set([...trail, id])))) { ok = false; break; }
+       if (isSharedArtworkReference(model.records.find(record => record.id === target.target.component_id))) {
+         try {verifyRegisteredArtworkInstance({record: current.record, link, node: actual, records: model.records});}
+         catch {ok = false; break;}
+       }
     }
     complete.set(id, !!ok); return !!ok;
   }
@@ -499,13 +505,16 @@ function auditArtworkEvidence({ recordId, model, session }) {
     else if (!obligation) item.reason = "EVIDENCE_SOURCE_OUTSIDE_REQUIRED_SCOPE";
     else if (link.asset_owner.node_id !== obligation.asset_owner.node_id || link.asset_owner.asset_id !== obligation.asset_owner.asset_id) item.reason = "EVIDENCE_ASSET_OWNER_MISMATCH";
     else if (target) {
-      const tree = targetTree(link.target.component_id), actual = scope.nodes.get(link.source.node_id)?.node;
-      if (!tree.identityValid || !tree.variants.has(target.target.node_id)) item.reason = "EVIDENCE_TARGET_IDENTITY_UNVERIFIED";
+      const actual = scope.nodes.get(link.source.node_id)?.node, targetRecord = model.records.find(record => record.id === link.target.component_id);
+      const shared = isSharedArtworkReference(targetRecord), tree = shared ? null : targetTree(link.target.component_id);
+      if (!shared && (!tree.identityValid || !tree.variants.has(target.target.node_id))) item.reason = "EVIDENCE_TARGET_IDENTITY_UNVERIFIED";
       else if (actual?.node_type !== "INSTANCE" || typeof actual.main_component_id !== "string" || !actual.main_component_id) item.reason = "EVIDENCE_MAIN_COMPONENT_UNVERIFIED";
       else {
         item.actual = actual.main_component_id;
         item.status = item.actual === item.expected ? "verified" : "mismatch";
         item.reason = item.status === "verified" ? "EVIDENCE_MAIN_COMPONENT_MATCH" : "EVIDENCE_MAIN_COMPONENT_MISMATCH";
+        if (shared && item.status === "verified") try {verifyRegisteredArtworkInstance({record, link, node: actual, records: model.records});}
+        catch {item.status = "unverified"; item.reason = "EVIDENCE_INSTANCE_PROPERTIES_UNVERIFIED";}
       }
     }
     if (item.status === "verified") verified.push(source(link));
@@ -575,7 +584,7 @@ function projectedNodeId(nativeId, nativeRoot, actualRoot) {
 // Qualified, ephemeral proof over existing contracts and fresh packets. The
 // parent never acquires the child's assets. Scalar facts stay independent;
 // original capture diagnostics receive only the narrow ephemeral disposition
-// below. The source-only graphic still requires its own audit.
+// below. Shared graphics are checked only inside the actual consuming boundary.
 export function auditNestedArtworkEvidence({ recordId, model, session } = {}) {
   const issues = [], boundaries = [], dependencies = [], receipts = new Set();
   const report = { ok: false, component_id: recordId, canonical_git_sha: model?.canonical_sha ?? null,
@@ -685,14 +694,16 @@ export function auditNestedArtworkEvidence({ recordId, model, session } = {}) {
           } else if (link.asset_owner.node_id !== obligation.asset_owner.node_id || link.asset_owner.asset_id !== obligation.asset_owner.asset_id) item.reason = "EVIDENCE_ASSET_OWNER_MISMATCH";
           else if (!byId.has(link.target.component_id)) item.reason = "EVIDENCE_NESTED_TARGET_UNKNOWN";
           else {
-            const canonical = resolved.targets.get(`${targetId}/${link.id}`), graphic = treeFor(link.target.component_id);
+            const canonical = resolved.targets.get(`${targetId}/${link.id}`), shared = isSharedArtworkReference(byId.get(link.target.component_id)), graphic = shared ? null : treeFor(link.target.component_id);
             if (canonical) { item.target = { ...canonical.target }; item.expected = canonical.target.node_id; }
             if (!canonical || resolved.issues.length) item.reason = "EVIDENCE_INPUT_UNVERIFIED";
-            else if (!graphic?.tree.identityValid || !graphic.tree.variants.has(canonical.target.node_id)) item.reason = "EVIDENCE_TARGET_IDENTITY_UNVERIFIED";
+            else if (!shared && (!graphic?.tree.identityValid || !graphic.tree.variants.has(canonical.target.node_id))) item.reason = "EVIDENCE_TARGET_IDENTITY_UNVERIFIED";
             else {
               item.actual = sourceEntry.node.main_component_id;
               item.status = item.actual === item.expected ? "verified" : "mismatch";
               item.reason = item.status === "verified" ? "EVIDENCE_MAIN_COMPONENT_MATCH" : "EVIDENCE_NESTED_PLACEMENT_UNVERIFIED";
+              if (shared && item.status === "verified") try {verifyRegisteredArtworkInstance({record: target, link, node: sourceEntry.node, records: model.records});}
+              catch {item.status = "unverified"; item.reason = "EVIDENCE_INSTANCE_PROPERTIES_UNVERIFIED";}
             }
           }
           dependencies.push(item);
