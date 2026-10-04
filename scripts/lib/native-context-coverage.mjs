@@ -4,6 +4,7 @@ import {createContractProofEnvironment} from './contract-fact-proofs.mjs';
 import {auditNativeRelationProofs} from './native-relationship-coverage.mjs';
 import {applyNativeVariableCoverage} from './native-variable-coverage.mjs';
 import {isFigmaContractFactReportFor} from './figma-contract-facts.mjs';
+import {ownedContextStructure, resolveArtworkContextReference, verifyArtworkDependency, verifySourceArtworkContext} from './native-artwork-context.mjs';
 
 // Context proofs reference an independently verified semantic element. They
 // never accept field masks, duplicated defaults, or caller-provided success.
@@ -19,14 +20,11 @@ const tuple = s => JSON.stringify([s.component_id, s.variant_node_id, s.node_id,
 const issue = (code, path, message) => ({code, path, message});
 const ordered = a => a.sort((x, y) => x.path.localeCompare(y.path) || x.code.localeCompare(y.code));
 function shape(p) {
-  return closed(p, ['id', 'kind', 'structure_proof_id']) && match(ID, p.id) &&
-    p.kind === 'html-element-context' && match(ID, p.structure_proof_id);
+  if (!match(ID, p?.id) || !match(ID, p?.structure_proof_id)) return false;
+  if (['html-element-context', 'rendered-artwork-context'].includes(p.kind)) return closed(p, ['id', 'kind', 'structure_proof_id']);
+  return p.kind === 'source-artwork-context' && closed(p, ['id', 'kind', 'structure_proof_id', 'owner_component_id', 'dependency_link_id']) && match(ID, p.owner_component_id) && match(ID, p.dependency_link_id);
 }
-function structure(record, proof) {
-  const matches = record.evidence_links?.native_relation_proofs?.filter(p => p.id === proof.structure_proof_id && p.kind === 'element-structure');
-  if (matches?.length !== 1) throw Error('one owned element-structure proof required');
-  return matches[0];
-}
+const structure = ownedContextStructure;
 export function validateNativeContextProofReferences({records = []} = {}) {
   const issues = [], owners = new Set();
   for (const [i, r] of records.entries()) {
@@ -42,13 +40,16 @@ export function validateNativeContextProofReferences({records = []} = {}) {
     }
     for (const [j, p] of proofs.entries()) {
       const at = `${base}/native_context_proofs/${j}`;
-      if (!shape(p)) {issues.push(issue('NATIVE_CONTEXT_SHAPE_INVALID', at, 'Closed html-element-context reference required.')); continue;}
+      if (!shape(p)) {issues.push(issue('NATIVE_CONTEXT_SHAPE_INVALID', at, 'Closed supported context reference required.')); continue;}
       try {
-        const relation = structure(r, p), e = pointer(r, relation.element_path);
-        if (['asset', 'icon', 'template'].includes(r.identity?.semantic_role) || !['presentation-table', 'html-text', 'nested-component', 'direct-image'].includes(e?.render_mode)) throw Error('ordinary HTML element capability required; source artwork is a separate boundary');
+        if (p.kind === 'html-element-context') {
+          const relation = structure(r, p), e = pointer(r, relation.element_path);
+          if (['asset', 'icon', 'template'].includes(r.identity?.semantic_role) || !['presentation-table', 'html-text', 'nested-component', 'direct-image'].includes(e?.render_mode)) throw Error('ordinary HTML element capability required; source artwork is a separate boundary');
+        } else resolveArtworkContextReference({record: r, proof: p, records});
       } catch (error) {issues.push(issue('NATIVE_CONTEXT_TARGET_INVALID', at, error.message));}
-      if (references.has(p.structure_proof_id)) issues.push(issue('NATIVE_CONTEXT_SOURCE_DUPLICATE', at, 'One context per independently verified element.'));
-      references.add(p.structure_proof_id);
+      const reference = JSON.stringify([p.owner_component_id ?? r.id, p.structure_proof_id, p.dependency_link_id ?? null]);
+      if (references.has(reference)) issues.push(issue('NATIVE_CONTEXT_SOURCE_DUPLICATE', at, 'One context per independently verified element/dependency.'));
+      references.add(reference);
     }
   }
   return ordered(issues);
@@ -139,17 +140,22 @@ export function auditNativeContextProofs({record, model, session} = {}) {
   const canonical = model?.records?.filter(r => r.id === record?.id);
   if (canonical?.length !== 1 || !equal(canonical[0], record)) {report.issues.push(issue('NATIVE_CONTEXT_CANONICAL_MISMATCH', '/record', 'Exact canonical record required.')); return report;}
   const validation = validateNativeContextProofReferences({records: model.records}), env = createContractProofEnvironment(model, session);
-  const relations = auditNativeRelationProofs({record, model, session});
+  const relationReports = new Map();
+  const relationsFor = owner => {if (!relationReports.has(owner.id)) relationReports.set(owner.id, auditNativeRelationProofs({record: owner, model, session})); return relationReports.get(owner.id);};
   report.issues.push(...validation, ...env.issues);
   for (const p of Array.isArray(proofs) ? proofs : []) {
     const item = {proof_id: p?.id ?? null, kind: p?.kind ?? null, status: 'unverified'}, local = [];
     env.beginProof();
     try {
       if (validation.length || env.issues.length) throw Error('context metadata/session unverified');
-      const relation = structure(record, p), result = relations.results.filter(r => r.proof_id === relation.id);
+      const boundary = p.kind === 'html-element-context' ? null : resolveArtworkContextReference({record, proof: p, records: model.records});
+      const owner = boundary?.owner ?? record, relation = boundary?.relation ?? structure(record, p);
+      const result = relationsFor(owner).results.filter(r => r.proof_id === relation.id);
       if (result.length !== 1 || result[0].status !== 'verified') throw Error('independent ordered element structure is unverified');
-      const entry = env.selected(relation.source);
-      verifyContext(record, relation, entry.node, entry.packet, path => local.push({...relation.source, source_path: path}));
+      const entry = boundary ? verifyArtworkDependency({record, proof: p, boundary, env}) : env.selected(relation.source);
+      const source = entry.selector, add = path => local.push({...source, source_path: path});
+      if (p.kind === 'source-artwork-context') verifySourceArtworkContext({record, entry, add});
+      else verifyContext(record, relation, entry.node, entry.packet, add);
       item.status = 'verified'; report.verified_sources.push(...local);
     } catch (error) {
       item.reason = error.message; report.issues.push(issue('NATIVE_CONTEXT_UNVERIFIED', `/evidence_links/native_context_proofs/${p?.id ?? 'invalid'}`, error.message));

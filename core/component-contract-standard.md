@@ -234,7 +234,7 @@ Existing `style-usage` proof проверяет единственный foundat
 
 ## Native HTML context references
 
-Optional `evidence_links.native_context_proofs` references one owned, independently verified `element-structure` proof. It carries no copied native values or caller field mask. Only ordinary HTML capabilities are eligible; source-only artwork and Templates require their own boundaries.
+Optional `evidence_links.native_context_proofs` references one owned, independently verified `element-structure` proof. It carries no copied native values or caller field mask. The html-element-context kind is restricted to ordinary HTML capabilities; source-only artwork and Templates are not admitted by that role alone.
 
 The narrow absence profile requires AUTO positioning, null minimum width, opacity 1, rotation 0 and empty strokes; present effects must be empty. Nonzero grow and explicit alignment require independent exact same-node mappings. Empty bindings are proved as empty; nonempty aliases remain the variable checker’s responsibility. Auto Layout orientation/wrap require their own direct facts, NO_WRAP and zero counter-axis spacing. Active unsupported values are not silently approximated.
 
@@ -263,3 +263,11 @@ The paint profile requires one closed opaque visible SOLID with an independently
 - Generated documentation использует records как единственный источник component facts.
 - Email build получает только выбранные разрешённые contracts компонентов конкретного письма.
 - Email build не обязан читать этот authoring standard и не использует Figma Description как источник реализации.
+
+## Native artwork context references
+
+`rendered-artwork-context` references an independently verified owned direct-image element and its existing whole-node PNG @4x export boundary. It requires preserve-artwork clipping, exact-node-after-overrides, preservation of own visible boundary Fill, no artificial matte, and a fresh complete declared source-dependency graph. It reuses narrow image context guards; it does not turn graphic descendants into HTML.
+
+`source-artwork-context` names the other canonical export owner, its element-structure proof and its exact dependency-link ID. Actual same-file ancestry, INSTANCE main-component identity, publication key and both request-bound captures must verify. Source-only role, a name match or numerical coincidence never constitutes proof. The narrow profile admits a complete visible component with positive intrinsic dimensions, inert fixed NONE layout, zero corners, clipping, empty controls/bindings/strokes, no active effects and one opaque visible SOLID paint. Different supported paint is preserved by the actual export, not copied into an HTML color contract.
+
+Intrinsic source dimensions, consumer/display dimensions and scaled export dimensions have different owners and need not equal one another. Source root values are delegated to the verified whole artwork boundary, not asserted as HTML scalar equality. No expected native values or caller field masks are accepted. Unsupported appearance, broken identity/dependency, missing fresh evidence and unknown root fields remain unverified/uncovered. Raw scalar findings and capture diagnostics are retained.
