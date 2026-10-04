@@ -116,12 +116,13 @@ function templateScope(record, live) {
   return { issues, obligations, nodes, identityValid };
 }
 
-// No artwork means no new T1/S1 duty for an ordinary HTML component. A
-// declared evidence section or artwork role cannot opt out through empty links.
+// Artwork duties come from roles, export contracts or declared artwork links,
+// not from the mere presence of independently checked HTML proof metadata.
 function requiresEvidenceScope(record) {
   return ["template", "asset", "icon"].includes(record?.identity?.semantic_role) ||
     (record?.asset_contracts?.length ?? 0) > 0 ||
-    (record != null && Object.hasOwn(record, "evidence_links"));
+    (record?.evidence_links?.foundation_values?.length ?? 0) > 0 ||
+    (record?.evidence_links?.source_dependencies?.length ?? 0) > 0;
 }
 
 // Independently determined requirements: removing links cannot remove duties.
