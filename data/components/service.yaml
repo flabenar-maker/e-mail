@@ -14702,6 +14702,1357 @@
             },
             "element_path": "/contracts/mobile/root/children/0"
           }
+        ],
+        "native_variable_proofs": [
+          {
+            "id": "native-variable-459-29175-459-29175-paddingleft",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:29175"
+            },
+            "contract_path": "/contracts/desktop/root/facts/6/value",
+            "binding_path": "/variable_bindings/paddingLeft/id",
+            "variable": {
+              "id": "VariableID:510:20764",
+              "name": "desktop/block-margin",
+              "key": "de56f2e92a0beca776631c3fd0eb1c1b704f338b",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29175-459-29175-paddingtop",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:29175"
+            },
+            "contract_path": "/contracts/desktop/root/facts/3/value",
+            "binding_path": "/variable_bindings/paddingTop/id",
+            "variable": {
+              "id": "VariableID:510:20764",
+              "name": "desktop/block-margin",
+              "key": "de56f2e92a0beca776631c3fd0eb1c1b704f338b",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29175-459-29175-paddingright",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:29175"
+            },
+            "contract_path": "/contracts/desktop/root/facts/4/value",
+            "binding_path": "/variable_bindings/paddingRight/id",
+            "variable": {
+              "id": "VariableID:510:20764",
+              "name": "desktop/block-margin",
+              "key": "de56f2e92a0beca776631c3fd0eb1c1b704f338b",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29175-619-21427-topleftradius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "619:21427"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/12/value",
+            "binding_path": "/variable_bindings/topLeftRadius/id",
+            "variable": {
+              "id": "VariableID:564:1839",
+              "name": "desktop/block-radius",
+              "key": "aad6ad3fce3f817c6a6733fc9ca071e70aa8e849",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29175-619-21427-toprightradius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "619:21427"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/12/value",
+            "binding_path": "/variable_bindings/topRightRadius/id",
+            "variable": {
+              "id": "VariableID:564:1839",
+              "name": "desktop/block-radius",
+              "key": "aad6ad3fce3f817c6a6733fc9ca071e70aa8e849",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29175-619-21427-bottomleftradius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "619:21427"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/12/value",
+            "binding_path": "/variable_bindings/bottomLeftRadius/id",
+            "variable": {
+              "id": "VariableID:564:1839",
+              "name": "desktop/block-radius",
+              "key": "aad6ad3fce3f817c6a6733fc9ca071e70aa8e849",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29175-619-21427-bottomrightradius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "619:21427"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/12/value",
+            "binding_path": "/variable_bindings/bottomRightRadius/id",
+            "variable": {
+              "id": "VariableID:564:1839",
+              "name": "desktop/block-radius",
+              "key": "aad6ad3fce3f817c6a6733fc9ca071e70aa8e849",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29175-459-27422-itemspacing",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:27422"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/2/value",
+            "binding_path": "/variable_bindings/itemSpacing/id",
+            "variable": {
+              "id": "VariableID:222:2304",
+              "name": "desktop/content-gap",
+              "key": "6107273315777c321a1088de2e5da9e0be2be809",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29175-459-27422-paddingleft",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:27422"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/6/value",
+            "binding_path": "/variable_bindings/paddingLeft/id",
+            "variable": {
+              "id": "VariableID:222:2307",
+              "name": "desktop/content-padding",
+              "key": "fdfb84a738e359717a0f380fd016fa103189d1b8",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29175-459-27422-paddingtop",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:27422"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/3/value",
+            "binding_path": "/variable_bindings/paddingTop/id",
+            "variable": {
+              "id": "VariableID:222:2307",
+              "name": "desktop/content-padding",
+              "key": "fdfb84a738e359717a0f380fd016fa103189d1b8",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29175-459-27422-paddingright",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:27422"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/4/value",
+            "binding_path": "/variable_bindings/paddingRight/id",
+            "variable": {
+              "id": "VariableID:222:2307",
+              "name": "desktop/content-padding",
+              "key": "fdfb84a738e359717a0f380fd016fa103189d1b8",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29175-459-27422-paddingbottom",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:27422"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/5/value",
+            "binding_path": "/variable_bindings/paddingBottom/id",
+            "variable": {
+              "id": "VariableID:222:2307",
+              "name": "desktop/content-padding",
+              "key": "fdfb84a738e359717a0f380fd016fa103189d1b8",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29175-459-27422-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:27422"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/13/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:dd9ec21777b96b29256fb926ca8ad8d55b8d726f/22:17",
+              "name": "Grey/White",
+              "key": "dd9ec21777b96b29256fb926ca8ad8d55b8d726f",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-459-29175-459-27423-itemspacing",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:27423"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/facts/2/value",
+            "binding_path": "/variable_bindings/itemSpacing/id",
+            "variable": {
+              "id": "VariableID:222:2304",
+              "name": "desktop/content-gap",
+              "key": "6107273315777c321a1088de2e5da9e0be2be809",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29175-459-27425-itemspacing",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:27425"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/children/1/facts/2/value",
+            "binding_path": "/variable_bindings/itemSpacing/id",
+            "variable": {
+              "id": "VariableID:224:1290",
+              "name": "desktop/text-gap-sm",
+              "key": "37f775f72d75383241cdcdd4f5da70c7a155c660",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29175-459-27426-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:27426"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/children/1/children/0/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:19d93a58b6262b6219b051ff77d19d246421b40e/22:16",
+              "name": "Grey/Black",
+              "key": "19d93a58b6262b6219b051ff77d19d246421b40e",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-459-29175-459-27427-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:27427"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/children/1/children/1/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:19d93a58b6262b6219b051ff77d19d246421b40e/22:16",
+              "name": "Grey/Black",
+              "key": "19d93a58b6262b6219b051ff77d19d246421b40e",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-459-29175-459-27431-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:27431"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/1/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:c5d8cf956aea528fb50c7a73d1cacb256f6a2c8c/17:139",
+              "name": "Grey/500",
+              "key": "c5d8cf956aea528fb50c7a73d1cacb256f6a2c8c",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-459-29175-459-38314-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:38314"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/7/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:96486960f4a66353a2f0c958277b45259f2a4c79/17:135",
+              "name": "Grey/100",
+              "key": "96486960f4a66353a2f0c958277b45259f2a4c79",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-459-29175-459-38136-itemspacing",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:38136"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/2/facts/2/value",
+            "binding_path": "/variable_bindings/itemSpacing/id",
+            "variable": {
+              "id": "VariableID:222:2304",
+              "name": "desktop/content-gap",
+              "key": "6107273315777c321a1088de2e5da9e0be2be809",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29175-459-38136-paddingleft",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:38136"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/2/facts/6/value",
+            "binding_path": "/variable_bindings/paddingLeft/id",
+            "variable": {
+              "id": "VariableID:222:2307",
+              "name": "desktop/content-padding",
+              "key": "fdfb84a738e359717a0f380fd016fa103189d1b8",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29175-459-38136-paddingtop",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:38136"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/2/facts/3/value",
+            "binding_path": "/variable_bindings/paddingTop/id",
+            "variable": {
+              "id": "VariableID:222:2307",
+              "name": "desktop/content-padding",
+              "key": "fdfb84a738e359717a0f380fd016fa103189d1b8",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29175-459-38136-paddingright",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:38136"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/2/facts/4/value",
+            "binding_path": "/variable_bindings/paddingRight/id",
+            "variable": {
+              "id": "VariableID:222:2307",
+              "name": "desktop/content-padding",
+              "key": "fdfb84a738e359717a0f380fd016fa103189d1b8",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29175-459-38136-paddingbottom",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:38136"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/2/facts/5/value",
+            "binding_path": "/variable_bindings/paddingBottom/id",
+            "variable": {
+              "id": "VariableID:222:2307",
+              "name": "desktop/content-padding",
+              "key": "fdfb84a738e359717a0f380fd016fa103189d1b8",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29175-459-38136-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:38136"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/2/facts/13/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:dd9ec21777b96b29256fb926ca8ad8d55b8d726f/22:17",
+              "name": "Grey/White",
+              "key": "dd9ec21777b96b29256fb926ca8ad8d55b8d726f",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-459-29175-477-21328-itemspacing",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "477:21328"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/2/children/0/facts/2/value",
+            "binding_path": "/variable_bindings/itemSpacing/id",
+            "variable": {
+              "id": "VariableID:556:1864",
+              "name": "desktop/text-gap-lg",
+              "key": "a37b5690b58d9a36f9f94b647c217fb347d05fd9",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29175-459-38174-itemspacing",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:38174"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/2/children/1/facts/2/value",
+            "binding_path": "/variable_bindings/itemSpacing/id",
+            "variable": {
+              "id": "VariableID:224:1290",
+              "name": "desktop/text-gap-sm",
+              "key": "37f775f72d75383241cdcdd4f5da70c7a155c660",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29175-459-38174-paddingleft",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:38174"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/2/children/1/facts/6/value",
+            "binding_path": "/variable_bindings/paddingLeft/id",
+            "variable": {
+              "id": "VariableID:222:2306",
+              "name": "desktop/content-padding-sm",
+              "key": "fcd0d8d949e8996c07f1b545ec4481ea09b98b0a",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29175-459-38174-paddingtop",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:38174"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/2/children/1/facts/3/value",
+            "binding_path": "/variable_bindings/paddingTop/id",
+            "variable": {
+              "id": "VariableID:222:2306",
+              "name": "desktop/content-padding-sm",
+              "key": "fcd0d8d949e8996c07f1b545ec4481ea09b98b0a",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29175-459-38174-paddingright",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:38174"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/2/children/1/facts/4/value",
+            "binding_path": "/variable_bindings/paddingRight/id",
+            "variable": {
+              "id": "VariableID:222:2306",
+              "name": "desktop/content-padding-sm",
+              "key": "fcd0d8d949e8996c07f1b545ec4481ea09b98b0a",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29175-459-38174-paddingbottom",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:38174"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/2/children/1/facts/5/value",
+            "binding_path": "/variable_bindings/paddingBottom/id",
+            "variable": {
+              "id": "VariableID:222:2306",
+              "name": "desktop/content-padding-sm",
+              "key": "fcd0d8d949e8996c07f1b545ec4481ea09b98b0a",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29175-459-38174-topleftradius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:38174"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/2/children/1/facts/12/value",
+            "binding_path": "/variable_bindings/topLeftRadius/id",
+            "variable": {
+              "id": "VariableID:564:1841",
+              "name": "desktop/nested-block-radius",
+              "key": "4ea695c20e556732e4f29314bebe0d9207ff1ae6",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29175-459-38174-toprightradius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:38174"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/2/children/1/facts/12/value",
+            "binding_path": "/variable_bindings/topRightRadius/id",
+            "variable": {
+              "id": "VariableID:564:1841",
+              "name": "desktop/nested-block-radius",
+              "key": "4ea695c20e556732e4f29314bebe0d9207ff1ae6",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29175-459-38174-bottomleftradius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:38174"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/2/children/1/facts/12/value",
+            "binding_path": "/variable_bindings/bottomLeftRadius/id",
+            "variable": {
+              "id": "VariableID:564:1841",
+              "name": "desktop/nested-block-radius",
+              "key": "4ea695c20e556732e4f29314bebe0d9207ff1ae6",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29175-459-38174-bottomrightradius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29175",
+              "node_id": "459:38174"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/2/children/1/facts/12/value",
+            "binding_path": "/variable_bindings/bottomRightRadius/id",
+            "variable": {
+              "id": "VariableID:564:1841",
+              "name": "desktop/nested-block-radius",
+              "key": "4ea695c20e556732e4f29314bebe0d9207ff1ae6",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-459-29176-paddingleft",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:29176"
+            },
+            "contract_path": "/contracts/mobile/root/facts/6/value",
+            "binding_path": "/variable_bindings/paddingLeft/id",
+            "variable": {
+              "id": "VariableID:11:326",
+              "name": "mobile/block-margin",
+              "key": "1d1bbc87f87ab1bea5fafd0fe81eabdc9ba7166e",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-459-29176-paddingtop",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:29176"
+            },
+            "contract_path": "/contracts/mobile/root/facts/3/value",
+            "binding_path": "/variable_bindings/paddingTop/id",
+            "variable": {
+              "id": "VariableID:11:326",
+              "name": "mobile/block-margin",
+              "key": "1d1bbc87f87ab1bea5fafd0fe81eabdc9ba7166e",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-459-29176-paddingright",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:29176"
+            },
+            "contract_path": "/contracts/mobile/root/facts/4/value",
+            "binding_path": "/variable_bindings/paddingRight/id",
+            "variable": {
+              "id": "VariableID:11:326",
+              "name": "mobile/block-margin",
+              "key": "1d1bbc87f87ab1bea5fafd0fe81eabdc9ba7166e",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-619-21428-topleftradius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "619:21428"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/12/value",
+            "binding_path": "/variable_bindings/topLeftRadius/id",
+            "variable": {
+              "id": "VariableID:564:1840",
+              "name": "mobile/block-radius",
+              "key": "f333ca538325d34ff1c16b237f044021a43b7db1",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-619-21428-toprightradius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "619:21428"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/12/value",
+            "binding_path": "/variable_bindings/topRightRadius/id",
+            "variable": {
+              "id": "VariableID:564:1840",
+              "name": "mobile/block-radius",
+              "key": "f333ca538325d34ff1c16b237f044021a43b7db1",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-619-21428-bottomleftradius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "619:21428"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/12/value",
+            "binding_path": "/variable_bindings/bottomLeftRadius/id",
+            "variable": {
+              "id": "VariableID:564:1840",
+              "name": "mobile/block-radius",
+              "key": "f333ca538325d34ff1c16b237f044021a43b7db1",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-619-21428-bottomrightradius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "619:21428"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/12/value",
+            "binding_path": "/variable_bindings/bottomRightRadius/id",
+            "variable": {
+              "id": "VariableID:564:1840",
+              "name": "mobile/block-radius",
+              "key": "f333ca538325d34ff1c16b237f044021a43b7db1",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-459-28002-itemspacing",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:28002"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/2/value",
+            "binding_path": "/variable_bindings/itemSpacing/id",
+            "variable": {
+              "id": "VariableID:11:809",
+              "name": "mobile/content-gap",
+              "key": "30fc0eb41947d64598dde4e1a3fb0d4967d135eb",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-459-28002-paddingleft",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:28002"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/6/value",
+            "binding_path": "/variable_bindings/paddingLeft/id",
+            "variable": {
+              "id": "VariableID:11:807",
+              "name": "mobile/content-padding",
+              "key": "d8423ca4573203a2d8c720209d8e0382064861de",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-459-28002-paddingtop",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:28002"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/3/value",
+            "binding_path": "/variable_bindings/paddingTop/id",
+            "variable": {
+              "id": "VariableID:11:807",
+              "name": "mobile/content-padding",
+              "key": "d8423ca4573203a2d8c720209d8e0382064861de",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-459-28002-paddingright",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:28002"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/4/value",
+            "binding_path": "/variable_bindings/paddingRight/id",
+            "variable": {
+              "id": "VariableID:11:807",
+              "name": "mobile/content-padding",
+              "key": "d8423ca4573203a2d8c720209d8e0382064861de",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-459-28002-paddingbottom",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:28002"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/5/value",
+            "binding_path": "/variable_bindings/paddingBottom/id",
+            "variable": {
+              "id": "VariableID:11:807",
+              "name": "mobile/content-padding",
+              "key": "d8423ca4573203a2d8c720209d8e0382064861de",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-459-28002-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:28002"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/13/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:dd9ec21777b96b29256fb926ca8ad8d55b8d726f/22:17",
+              "name": "Grey/White",
+              "key": "dd9ec21777b96b29256fb926ca8ad8d55b8d726f",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-459-28003-itemspacing",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:28003"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/facts/2/value",
+            "binding_path": "/variable_bindings/itemSpacing/id",
+            "variable": {
+              "id": "VariableID:11:809",
+              "name": "mobile/content-gap",
+              "key": "30fc0eb41947d64598dde4e1a3fb0d4967d135eb",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-459-28004-itemspacing",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:28004"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/children/0/facts/2/value",
+            "binding_path": "/variable_bindings/itemSpacing/id",
+            "variable": {
+              "id": "VariableID:11:809",
+              "name": "mobile/content-gap",
+              "key": "30fc0eb41947d64598dde4e1a3fb0d4967d135eb",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-459-28006-itemspacing",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:28006"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/children/0/children/1/facts/2/value",
+            "binding_path": "/variable_bindings/itemSpacing/id",
+            "variable": {
+              "id": "VariableID:11:810",
+              "name": "mobile/text-gap",
+              "key": "4b37f048b6c04d79d457ca795cfc1b006fab8d41",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-459-28007-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:28007"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/children/0/children/1/children/0/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:19d93a58b6262b6219b051ff77d19d246421b40e/22:16",
+              "name": "Grey/Black",
+              "key": "19d93a58b6262b6219b051ff77d19d246421b40e",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-459-28008-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:28008"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/children/0/children/1/children/1/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:19d93a58b6262b6219b051ff77d19d246421b40e/22:16",
+              "name": "Grey/Black",
+              "key": "19d93a58b6262b6219b051ff77d19d246421b40e",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-459-28011-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:28011"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/1/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:c5d8cf956aea528fb50c7a73d1cacb256f6a2c8c/17:139",
+              "name": "Grey/500",
+              "key": "c5d8cf956aea528fb50c7a73d1cacb256f6a2c8c",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-459-38449-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:38449"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/7/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:96486960f4a66353a2f0c958277b45259f2a4c79/17:135",
+              "name": "Grey/100",
+              "key": "96486960f4a66353a2f0c958277b45259f2a4c79",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-459-38319-itemspacing",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:38319"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/2/facts/2/value",
+            "binding_path": "/variable_bindings/itemSpacing/id",
+            "variable": {
+              "id": "VariableID:11:809",
+              "name": "mobile/content-gap",
+              "key": "30fc0eb41947d64598dde4e1a3fb0d4967d135eb",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-459-38319-paddingleft",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:38319"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/2/facts/6/value",
+            "binding_path": "/variable_bindings/paddingLeft/id",
+            "variable": {
+              "id": "VariableID:11:807",
+              "name": "mobile/content-padding",
+              "key": "d8423ca4573203a2d8c720209d8e0382064861de",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-459-38319-paddingtop",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:38319"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/2/facts/3/value",
+            "binding_path": "/variable_bindings/paddingTop/id",
+            "variable": {
+              "id": "VariableID:11:807",
+              "name": "mobile/content-padding",
+              "key": "d8423ca4573203a2d8c720209d8e0382064861de",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-459-38319-paddingright",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:38319"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/2/facts/4/value",
+            "binding_path": "/variable_bindings/paddingRight/id",
+            "variable": {
+              "id": "VariableID:11:807",
+              "name": "mobile/content-padding",
+              "key": "d8423ca4573203a2d8c720209d8e0382064861de",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-459-38319-paddingbottom",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:38319"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/2/facts/5/value",
+            "binding_path": "/variable_bindings/paddingBottom/id",
+            "variable": {
+              "id": "VariableID:11:807",
+              "name": "mobile/content-padding",
+              "key": "d8423ca4573203a2d8c720209d8e0382064861de",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-459-38319-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:38319"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/2/facts/13/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:dd9ec21777b96b29256fb926ca8ad8d55b8d726f/22:17",
+              "name": "Grey/White",
+              "key": "dd9ec21777b96b29256fb926ca8ad8d55b8d726f",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-484-20069-itemspacing",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "484:20069"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/2/children/0/facts/2/value",
+            "binding_path": "/variable_bindings/itemSpacing/id",
+            "variable": {
+              "id": "VariableID:556:1863",
+              "name": "mobile/text-gap-lg",
+              "key": "1e21787688328f22fce6b405dc5cddde23cb3dd8",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-459-38357-itemspacing",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:38357"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/2/children/1/facts/2/value",
+            "binding_path": "/variable_bindings/itemSpacing/id",
+            "variable": {
+              "id": "VariableID:224:1291",
+              "name": "mobile/text-gap-sm",
+              "key": "91c7492226c8500a514ecbf2d1a7505858b041b9",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-459-38357-paddingleft",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:38357"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/2/children/1/facts/6/value",
+            "binding_path": "/variable_bindings/paddingLeft/id",
+            "variable": {
+              "id": "VariableID:11:805",
+              "name": "mobile/content-padding-sm",
+              "key": "5886d3fe482a9ccf5db6ea2d48bc7991fab1cfab",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-459-38357-paddingtop",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:38357"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/2/children/1/facts/3/value",
+            "binding_path": "/variable_bindings/paddingTop/id",
+            "variable": {
+              "id": "VariableID:11:805",
+              "name": "mobile/content-padding-sm",
+              "key": "5886d3fe482a9ccf5db6ea2d48bc7991fab1cfab",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-459-38357-paddingright",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:38357"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/2/children/1/facts/4/value",
+            "binding_path": "/variable_bindings/paddingRight/id",
+            "variable": {
+              "id": "VariableID:11:805",
+              "name": "mobile/content-padding-sm",
+              "key": "5886d3fe482a9ccf5db6ea2d48bc7991fab1cfab",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-459-38357-paddingbottom",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:38357"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/2/children/1/facts/5/value",
+            "binding_path": "/variable_bindings/paddingBottom/id",
+            "variable": {
+              "id": "VariableID:11:805",
+              "name": "mobile/content-padding-sm",
+              "key": "5886d3fe482a9ccf5db6ea2d48bc7991fab1cfab",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-459-38357-topleftradius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:38357"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/2/children/1/facts/12/value",
+            "binding_path": "/variable_bindings/topLeftRadius/id",
+            "variable": {
+              "id": "VariableID:564:1842",
+              "name": "mobile/nested-block-radius",
+              "key": "323853c1bee50ae6350f3b0179f7800b47307d12",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-459-38357-toprightradius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:38357"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/2/children/1/facts/12/value",
+            "binding_path": "/variable_bindings/topRightRadius/id",
+            "variable": {
+              "id": "VariableID:564:1842",
+              "name": "mobile/nested-block-radius",
+              "key": "323853c1bee50ae6350f3b0179f7800b47307d12",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-459-38357-bottomleftradius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:38357"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/2/children/1/facts/12/value",
+            "binding_path": "/variable_bindings/bottomLeftRadius/id",
+            "variable": {
+              "id": "VariableID:564:1842",
+              "name": "mobile/nested-block-radius",
+              "key": "323853c1bee50ae6350f3b0179f7800b47307d12",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-459-29176-459-38357-bottomrightradius",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-transaction-success",
+              "variant_node_id": "459:29176",
+              "node_id": "459:38357"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/2/children/1/facts/12/value",
+            "binding_path": "/variable_bindings/bottomRightRadius/id",
+            "variable": {
+              "id": "VariableID:564:1842",
+              "name": "mobile/nested-block-radius",
+              "key": "323853c1bee50ae6350f3b0179f7800b47307d12",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          }
         ]
       }
     },
@@ -189019,6 +190370,711 @@
             },
             "element_path": "/contracts/mobile/root"
           }
+        ],
+        "native_variable_proofs": [
+          {
+            "id": "native-variable-477-21325-477-21325-itemspacing",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21325"
+            },
+            "contract_path": "/contracts/desktop/root/facts/2/value",
+            "binding_path": "/variable_bindings/itemSpacing/id",
+            "variable": {
+              "id": "VariableID:556:1864",
+              "name": "desktop/text-gap-lg",
+              "key": "a37b5690b58d9a36f9f94b647c217fb347d05fd9",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-477-21325-477-21214-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21214"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/0/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:e538f658046d087d77837fcac42b6d7ebb90e5ab/17:137",
+              "name": "Grey/300",
+              "key": "e538f658046d087d77837fcac42b6d7ebb90e5ab",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-477-21325-477-21215-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21215"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:19d93a58b6262b6219b051ff77d19d246421b40e/22:16",
+              "name": "Grey/Black",
+              "key": "19d93a58b6262b6219b051ff77d19d246421b40e",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-477-21325-477-21218-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21218"
+            },
+            "contract_path": "/contracts/desktop/root/children/1/children/0/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:e538f658046d087d77837fcac42b6d7ebb90e5ab/17:137",
+              "name": "Grey/300",
+              "key": "e538f658046d087d77837fcac42b6d7ebb90e5ab",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-477-21325-477-21219-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21219"
+            },
+            "contract_path": "/contracts/desktop/root/children/1/children/1/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:19d93a58b6262b6219b051ff77d19d246421b40e/22:16",
+              "name": "Grey/Black",
+              "key": "19d93a58b6262b6219b051ff77d19d246421b40e",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-477-21325-477-21222-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21222"
+            },
+            "contract_path": "/contracts/desktop/root/children/2/children/0/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:e538f658046d087d77837fcac42b6d7ebb90e5ab/17:137",
+              "name": "Grey/300",
+              "key": "e538f658046d087d77837fcac42b6d7ebb90e5ab",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-477-21325-477-21223-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21223"
+            },
+            "contract_path": "/contracts/desktop/root/children/2/children/1/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:19d93a58b6262b6219b051ff77d19d246421b40e/22:16",
+              "name": "Grey/Black",
+              "key": "19d93a58b6262b6219b051ff77d19d246421b40e",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-477-21325-477-21226-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21226"
+            },
+            "contract_path": "/contracts/desktop/root/children/3/children/0/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:e538f658046d087d77837fcac42b6d7ebb90e5ab/17:137",
+              "name": "Grey/300",
+              "key": "e538f658046d087d77837fcac42b6d7ebb90e5ab",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-477-21325-477-21227-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21227"
+            },
+            "contract_path": "/contracts/desktop/root/children/3/children/1/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:19d93a58b6262b6219b051ff77d19d246421b40e/22:16",
+              "name": "Grey/Black",
+              "key": "19d93a58b6262b6219b051ff77d19d246421b40e",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-477-21325-477-21230-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21230"
+            },
+            "contract_path": "/contracts/desktop/root/children/4/children/0/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:e538f658046d087d77837fcac42b6d7ebb90e5ab/17:137",
+              "name": "Grey/300",
+              "key": "e538f658046d087d77837fcac42b6d7ebb90e5ab",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-477-21325-477-21231-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21231"
+            },
+            "contract_path": "/contracts/desktop/root/children/4/children/1/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:19d93a58b6262b6219b051ff77d19d246421b40e/22:16",
+              "name": "Grey/Black",
+              "key": "19d93a58b6262b6219b051ff77d19d246421b40e",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-477-21325-477-21234-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21234"
+            },
+            "contract_path": "/contracts/desktop/root/children/5/children/0/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:e538f658046d087d77837fcac42b6d7ebb90e5ab/17:137",
+              "name": "Grey/300",
+              "key": "e538f658046d087d77837fcac42b6d7ebb90e5ab",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-477-21325-477-21235-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21235"
+            },
+            "contract_path": "/contracts/desktop/root/children/5/children/1/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:19d93a58b6262b6219b051ff77d19d246421b40e/22:16",
+              "name": "Grey/Black",
+              "key": "19d93a58b6262b6219b051ff77d19d246421b40e",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-477-21325-477-21238-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21238"
+            },
+            "contract_path": "/contracts/desktop/root/children/6/children/0/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:e538f658046d087d77837fcac42b6d7ebb90e5ab/17:137",
+              "name": "Grey/300",
+              "key": "e538f658046d087d77837fcac42b6d7ebb90e5ab",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-477-21325-477-21239-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "477:21325",
+              "node_id": "477:21239"
+            },
+            "contract_path": "/contracts/desktop/root/children/6/children/1/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:19d93a58b6262b6219b051ff77d19d246421b40e/22:16",
+              "name": "Grey/Black",
+              "key": "19d93a58b6262b6219b051ff77d19d246421b40e",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-484-20068-484-20068-itemspacing",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20068"
+            },
+            "contract_path": "/contracts/mobile/root/facts/2/value",
+            "binding_path": "/variable_bindings/itemSpacing/id",
+            "variable": {
+              "id": "VariableID:556:1863",
+              "name": "mobile/text-gap-lg",
+              "key": "1e21787688328f22fce6b405dc5cddde23cb3dd8",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-484-20068-484-20045-itemspacing",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20045"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/2/value",
+            "binding_path": "/variable_bindings/itemSpacing/id",
+            "variable": {
+              "id": "VariableID:224:1291",
+              "name": "mobile/text-gap-sm",
+              "key": "91c7492226c8500a514ecbf2d1a7505858b041b9",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-484-20068-484-20046-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20046"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/0/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:e538f658046d087d77837fcac42b6d7ebb90e5ab/17:137",
+              "name": "Grey/300",
+              "key": "e538f658046d087d77837fcac42b6d7ebb90e5ab",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-484-20068-484-20047-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20047"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:19d93a58b6262b6219b051ff77d19d246421b40e/22:16",
+              "name": "Grey/Black",
+              "key": "19d93a58b6262b6219b051ff77d19d246421b40e",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-484-20068-484-20049-itemspacing",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20049"
+            },
+            "contract_path": "/contracts/mobile/root/children/1/facts/2/value",
+            "binding_path": "/variable_bindings/itemSpacing/id",
+            "variable": {
+              "id": "VariableID:224:1291",
+              "name": "mobile/text-gap-sm",
+              "key": "91c7492226c8500a514ecbf2d1a7505858b041b9",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-484-20068-484-20050-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20050"
+            },
+            "contract_path": "/contracts/mobile/root/children/1/children/0/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:e538f658046d087d77837fcac42b6d7ebb90e5ab/17:137",
+              "name": "Grey/300",
+              "key": "e538f658046d087d77837fcac42b6d7ebb90e5ab",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-484-20068-484-20051-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20051"
+            },
+            "contract_path": "/contracts/mobile/root/children/1/children/1/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:19d93a58b6262b6219b051ff77d19d246421b40e/22:16",
+              "name": "Grey/Black",
+              "key": "19d93a58b6262b6219b051ff77d19d246421b40e",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-484-20068-484-20041-itemspacing",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20041"
+            },
+            "contract_path": "/contracts/mobile/root/children/2/facts/2/value",
+            "binding_path": "/variable_bindings/itemSpacing/id",
+            "variable": {
+              "id": "VariableID:224:1291",
+              "name": "mobile/text-gap-sm",
+              "key": "91c7492226c8500a514ecbf2d1a7505858b041b9",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-484-20068-484-20042-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20042"
+            },
+            "contract_path": "/contracts/mobile/root/children/2/children/0/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:e538f658046d087d77837fcac42b6d7ebb90e5ab/17:137",
+              "name": "Grey/300",
+              "key": "e538f658046d087d77837fcac42b6d7ebb90e5ab",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-484-20068-484-20043-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20043"
+            },
+            "contract_path": "/contracts/mobile/root/children/2/children/1/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:19d93a58b6262b6219b051ff77d19d246421b40e/22:16",
+              "name": "Grey/Black",
+              "key": "19d93a58b6262b6219b051ff77d19d246421b40e",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-484-20068-484-20053-itemspacing",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20053"
+            },
+            "contract_path": "/contracts/mobile/root/children/3/facts/2/value",
+            "binding_path": "/variable_bindings/itemSpacing/id",
+            "variable": {
+              "id": "VariableID:224:1291",
+              "name": "mobile/text-gap-sm",
+              "key": "91c7492226c8500a514ecbf2d1a7505858b041b9",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-484-20068-484-20054-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20054"
+            },
+            "contract_path": "/contracts/mobile/root/children/3/children/0/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:e538f658046d087d77837fcac42b6d7ebb90e5ab/17:137",
+              "name": "Grey/300",
+              "key": "e538f658046d087d77837fcac42b6d7ebb90e5ab",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-484-20068-484-20055-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20055"
+            },
+            "contract_path": "/contracts/mobile/root/children/3/children/1/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:19d93a58b6262b6219b051ff77d19d246421b40e/22:16",
+              "name": "Grey/Black",
+              "key": "19d93a58b6262b6219b051ff77d19d246421b40e",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-484-20068-484-20057-itemspacing",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20057"
+            },
+            "contract_path": "/contracts/mobile/root/children/4/facts/2/value",
+            "binding_path": "/variable_bindings/itemSpacing/id",
+            "variable": {
+              "id": "VariableID:224:1291",
+              "name": "mobile/text-gap-sm",
+              "key": "91c7492226c8500a514ecbf2d1a7505858b041b9",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-484-20068-484-20058-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20058"
+            },
+            "contract_path": "/contracts/mobile/root/children/4/children/0/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:e538f658046d087d77837fcac42b6d7ebb90e5ab/17:137",
+              "name": "Grey/300",
+              "key": "e538f658046d087d77837fcac42b6d7ebb90e5ab",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-484-20068-484-20059-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20059"
+            },
+            "contract_path": "/contracts/mobile/root/children/4/children/1/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:19d93a58b6262b6219b051ff77d19d246421b40e/22:16",
+              "name": "Grey/Black",
+              "key": "19d93a58b6262b6219b051ff77d19d246421b40e",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-484-20068-484-20061-itemspacing",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20061"
+            },
+            "contract_path": "/contracts/mobile/root/children/5/facts/2/value",
+            "binding_path": "/variable_bindings/itemSpacing/id",
+            "variable": {
+              "id": "VariableID:224:1291",
+              "name": "mobile/text-gap-sm",
+              "key": "91c7492226c8500a514ecbf2d1a7505858b041b9",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-484-20068-484-20062-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20062"
+            },
+            "contract_path": "/contracts/mobile/root/children/5/children/0/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:e538f658046d087d77837fcac42b6d7ebb90e5ab/17:137",
+              "name": "Grey/300",
+              "key": "e538f658046d087d77837fcac42b6d7ebb90e5ab",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-484-20068-484-20063-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20063"
+            },
+            "contract_path": "/contracts/mobile/root/children/5/children/1/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:19d93a58b6262b6219b051ff77d19d246421b40e/22:16",
+              "name": "Grey/Black",
+              "key": "19d93a58b6262b6219b051ff77d19d246421b40e",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-484-20068-484-20065-itemspacing",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20065"
+            },
+            "contract_path": "/contracts/mobile/root/children/6/facts/2/value",
+            "binding_path": "/variable_bindings/itemSpacing/id",
+            "variable": {
+              "id": "VariableID:224:1291",
+              "name": "mobile/text-gap-sm",
+              "key": "91c7492226c8500a514ecbf2d1a7505858b041b9",
+              "collection_id": "VariableCollectionId:11:324",
+              "collection_name": "Spacing",
+              "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-variable-484-20068-484-20066-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20066"
+            },
+            "contract_path": "/contracts/mobile/root/children/6/children/0/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:e538f658046d087d77837fcac42b6d7ebb90e5ab/17:137",
+              "name": "Grey/300",
+              "key": "e538f658046d087d77837fcac42b6d7ebb90e5ab",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-484-20068-484-20067-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "details-operation",
+              "variant_node_id": "484:20068",
+              "node_id": "484:20067"
+            },
+            "contract_path": "/contracts/mobile/root/children/6/children/1/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:19d93a58b6262b6219b051ff77d19d246421b40e/22:16",
+              "name": "Grey/Black",
+              "key": "19d93a58b6262b6219b051ff77d19d246421b40e",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          }
         ]
       }
     },
@@ -193950,6 +196006,84 @@
               "node_id": "466:13295"
             },
             "element_path": "/contracts/variant_contracts/3/root/children/0"
+          }
+        ],
+        "native_variable_proofs": [
+          {
+            "id": "native-variable-459-29369-459-29369-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "badge-operation-status",
+              "variant_node_id": "459:29369",
+              "node_id": "459:29369"
+            },
+            "contract_path": "/contracts/variant_contracts/0/root/facts/13/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:1ea662e4dd6185714c07e610ff3e33dd6edf8fa3/22:15",
+              "name": "Green/100",
+              "key": "1ea662e4dd6185714c07e610ff3e33dd6edf8fa3",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-459-29369-459-29370-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "badge-operation-status",
+              "variant_node_id": "459:29369",
+              "node_id": "459:29370"
+            },
+            "contract_path": "/contracts/variant_contracts/0/root/children/0/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:9ca87e868c2b5c348498f505a95a6049f5ac9df2/22:3",
+              "name": "Green/500",
+              "key": "9ca87e868c2b5c348498f505a95a6049f5ac9df2",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-466-13292-466-13292-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "badge-operation-status",
+              "variant_node_id": "466:13292",
+              "node_id": "466:13292"
+            },
+            "contract_path": "/contracts/variant_contracts/2/root/facts/13/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:1ea662e4dd6185714c07e610ff3e33dd6edf8fa3/22:15",
+              "name": "Green/100",
+              "key": "1ea662e4dd6185714c07e610ff3e33dd6edf8fa3",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-variable-466-13292-466-13293-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "badge-operation-status",
+              "variant_node_id": "466:13292",
+              "node_id": "466:13293"
+            },
+            "contract_path": "/contracts/variant_contracts/2/root/children/0/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:9ca87e868c2b5c348498f505a95a6049f5ac9df2/22:3",
+              "name": "Green/500",
+              "key": "9ca87e868c2b5c348498f505a95a6049f5ac9df2",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
           }
         ]
       }
