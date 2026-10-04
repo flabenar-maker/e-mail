@@ -240,6 +240,8 @@ The narrow absence profile requires AUTO positioning, null minimum width, opacit
 
 Successful internally computed coverage is paired with the exact canonical record and live raw packet. Unknown fields remain uncovered; mismatches and capture errors remain. The profile changes audit evidence only, never HTML defaults, rendering values or the semantic tree.
 
+The paint profile requires one closed opaque visible SOLID with an independently mapped exact own color; an empty paint array proves absence only without an own color fact. Hidden paint is accepted only inside an independently verified rendered-node image boundary and never becomes an HTML matte. Extra/unknown paints remain unsupported. A flat divider or rendered image with independently mapped sizing/wrap can prove inert NONE layout only with explicit zero padding/spacing and supported axis qualifiers; no general NONE exemption exists.
+
 ## Onboarding нового компонента
 
 Если в библиотеке появился неизвестный компонент:

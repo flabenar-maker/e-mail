@@ -54,15 +54,53 @@ export function validateNativeContextProofReferences({records = []} = {}) {
   return ordered(issues);
 }
 function directFact(record, relation, node, factId, sourcePath) {
-  const e = pointer(record, relation.element_path), fs = e.facts.map((f, i) => ({f, i})).filter(({f}) => f.id === factId);
+  const e = pointer(record, relation.element_path), fs = e.facts.map((f, i) => ({f, i})).filter(({f}) => f.id === factId || (factId === 'layout-orientation' && f.id === 'layout-axis'));
   if (fs.length !== 1) return false;
   const {f, i} = fs[0], links = (record.contracts.figma_fact_links ?? []).filter(l => l.contract_path === `${relation.element_path}/facts/${i}/value/value`);
-  if (!['figma-literal', 'figma-binding'].includes(f.provenance?.kind) || f.provenance.node_id !== node.node_id || links.length !== 1) return false;
+  if (!['figma-literal', 'figma-binding'].includes(f.provenance?.kind) || f.provenance.node_id !== node.node_id || links.length !== 1 ||
+      f.value?.type !== (sourcePath === '/layout_grow' ? 'number' : 'keyword')) return false;
   const l = links[0], value = pointer(node, sourcePath);
   return l.variant_node_id === relation.source.variant_node_id && l.node_id === node.node_id && l.source_path === sourcePath &&
     (l.transform === 'identity' ? equal(f.value.value, value) : l.transform === 'lowercase' && typeof value === 'string' && f.value.value === value.toLowerCase());
 }
-function verifyContext(record, relation, node, add) {
+function paintContext(record, relation, node, packet, add) {
+  if (packet.capture_errors.some(error => error.node_id === node.node_id && error.field === 'fills')) throw Error('capture could not establish complete native paint; absence is unverified');
+  if (!Object.hasOwn(node, 'fills')) return;
+  const e = pointer(record, relation.element_path), colors = e.facts.filter(f => f.value?.type === 'color');
+  if (equal(node.fills, [])) {
+    if (colors.length) throw Error('empty native paint cannot satisfy an own canonical color');
+    add('/fills'); return;
+  }
+  if (!Array.isArray(node.fills) || node.fills.length !== 1 || !closed(node.fills[0], ['type', 'visible', 'opacity', 'color'])) throw Error('one complete supported native paint required');
+  const paint = node.fills[0];
+  if (paint.type !== 'solid' || paint.opacity !== 1 || !/^#[0-9A-Fa-f]{6}$/u.test(paint.color)) throw Error('opaque solid native paint required');
+  if (paint.visible === false && e.render_mode === 'direct-image' && colors.length === 0) {
+    // An independently verified rendered-node boundary preserves artwork.
+    // An explicitly hidden paint contributes no HTML background or matte.
+    for (const key of ['type', 'visible', 'opacity', 'color']) add(`/fills/0/${key}`);
+    return;
+  }
+  if (paint.visible !== true) throw Error('visible own HTML paint required');
+  const mappings = (record.contracts.figma_fact_links ?? []).filter(l => l.variant_node_id === relation.source.variant_node_id && l.node_id === node.node_id && l.source_path === '/fills/0/color');
+  if (mappings.length !== 1 || mappings[0].transform !== 'identity') throw Error('one independent same-node color mapping required');
+  const f = pointer(record, mappings[0].contract_path.replace(/\/value\/value$/u, ''));
+  if (!e.facts.includes(f) || f.value?.type !== 'color' || f.value.value !== paint.color || !['figma-literal', 'figma-binding'].includes(f.provenance?.kind) || f.provenance.node_id !== node.node_id) throw Error('exact own typed paint value/provenance required');
+  for (const key of ['type', 'visible', 'opacity']) add(`/fills/0/${key}`);
+}
+function inertNoneContext(record, relation, node, e, add) {
+  const divider = e.render_mode === 'presentation-table' && e.semantic_role === 'divider' && e.children.length === 0 && (node.children ?? []).length === 0;
+  const image = e.render_mode === 'direct-image' && e.children.length === 0;
+  if ((!divider && !image) || !directFact(record, relation, node, 'horizontal-sizing', '/layout/horizontal_sizing') ||
+      !directFact(record, relation, node, 'vertical-sizing', '/layout/vertical_sizing') || !directFact(record, relation, node, 'layout-wrap', '/layout/wrap')) throw Error('NONE requires a verified flat divider or rendered image with mapped sizing/wrap');
+  const layout = node.layout;
+  for (const [key, wanted] of [['mode', 'NONE'], ['wrap', 'NO_WRAP'], ['primary_axis_sizing', 'AUTO'], ['counter_axis_sizing', 'FIXED'], ['primary_axis_alignment', 'MIN'], ['counter_axis_alignment', 'MIN'], ['item_spacing', 0], ['counter_axis_spacing', 0]]) {
+    if (!equal(layout[key], wanted)) throw Error(`unsupported inert NONE layout ${key}`);
+    add(`/layout/${key}`);
+  }
+  if (!closed(layout.padding, ['top', 'right', 'bottom', 'left']) || Object.values(layout.padding).some(value => value !== 0)) throw Error('inert NONE padding must be explicitly zero');
+  for (const side of ['top', 'right', 'bottom', 'left']) add(`/layout/padding/${side}`);
+}
+function verifyContext(record, relation, node, packet, add) {
   const e = pointer(record, relation.element_path);
   // These are semantic absence conditions for ordinary HTML, not a global
   // list of fields to ignore. Any active unsupported appearance fails proof.
@@ -83,8 +121,11 @@ function verifyContext(record, relation, node, add) {
   if (equal(node.variable_bindings, {})) add('/variable_bindings');
   // Nonempty bindings are deliberately not covered here; the variable proof
   // checks exact identities, definitions, consumer modes and scalar mappings.
+  paintContext(record, relation, node, packet, add);
   if (node.layout !== undefined) {
-    if (!object(node.layout) || !['HORIZONTAL', 'VERTICAL'].includes(node.layout.mode)) throw Error('known Auto Layout context required');
+    if (!object(node.layout)) throw Error('known layout context required');
+    if (node.layout.mode === 'NONE') {inertNoneContext(record, relation, node, e, add); return;}
+    if (!['HORIZONTAL', 'VERTICAL'].includes(node.layout.mode)) throw Error('known Auto Layout context required');
     if (!directFact(record, relation, node, 'layout-orientation', '/layout/mode') ||
         !directFact(record, relation, node, 'layout-wrap', '/layout/wrap')) throw Error('orientation and wrap need their own same-node mapped facts');
     if (node.layout.wrap !== 'NO_WRAP' || node.layout.counter_axis_spacing !== 0) throw Error('wrapped or nonzero counter-axis spacing requires explicit implementation');
@@ -107,8 +148,8 @@ export function auditNativeContextProofs({record, model, session} = {}) {
       if (validation.length || env.issues.length) throw Error('context metadata/session unverified');
       const relation = structure(record, p), result = relations.results.filter(r => r.proof_id === relation.id);
       if (result.length !== 1 || result[0].status !== 'verified') throw Error('independent ordered element structure is unverified');
-      const node = env.selected(relation.source).node;
-      verifyContext(record, relation, node, path => local.push({...relation.source, source_path: path}));
+      const entry = env.selected(relation.source);
+      verifyContext(record, relation, entry.node, entry.packet, path => local.push({...relation.source, source_path: path}));
       item.status = 'verified'; report.verified_sources.push(...local);
     } catch (error) {
       item.reason = error.message; report.issues.push(issue('NATIVE_CONTEXT_UNVERIFIED', `/evidence_links/native_context_proofs/${p?.id ?? 'invalid'}`, error.message));
