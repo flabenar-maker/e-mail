@@ -77,7 +77,7 @@ function imageFillFixture() {
   const f = fixture(), element = f.record.contracts.mobile.root.children[1], node = f.packet.variants[0].source_node.children[1];
   element.render_mode = 'direct-image'; element.semantic_role = 'hero-image'; element.asset_contract_id = 'hero-image'; element.children = [];
   node.node_type = 'FRAME'; node.name = 'hero-image @2x'; node.children = []; node.fills = [{type: 'image', visible: true, opacity: 1, image_hash: 'actual-test-hash'}];
-  f.record.asset_contracts = [{id: 'hero-image', source_mode_id: 'image-fill', owner_layer_name: 'hero-image @2x', export_profile_id: 'jpeg-2x', export_boundary: {kind: 'fill', semantic_role: 'hero-image', export_scale: 2}}];
+  f.record.asset_contracts = [{id: 'hero-image', source_mode_id: 'image-fill', display_mode_id: 'direct-image', owner_layer_name: 'hero-image @2x', export_profile_id: 'jpeg-2x', export_boundary: {kind: 'fill', semantic_node_name: 'hero-image @2x'}}];
   return f;
 }
 test('owned image-fill direct-image accepts only its flat native FRAME boundary', () => {
