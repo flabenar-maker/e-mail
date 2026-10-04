@@ -103,7 +103,7 @@ for (const [label, mutate] of [
   ['canonical child', f => { f.record.contracts.mobile.root.children[1].children = [{id: 'unexpected'}]; }],
   ['missing native children', f => { delete f.packet.variants[0].source_node.children[1].children; }],
   ['malformed image hash', f => { f.packet.variants[0].source_node.children[1].fills[0].image_hash = ''; }],
-  ['malformed scale mode', f => { f.packet.variants[0].source_node.children[1].fills[0].scale_mode = 'FIT'; }],
+  ['unknown scale mode', f => { f.packet.variants[0].source_node.children[1].fills[0].scale_mode = 'UNKNOWN'; }],
   ['unknown paint key', f => { f.packet.variants[0].source_node.children[1].fills[0].unknown = true; }],
 ]) test(`owned image-fill direct-image rejects ${label}`, () => { const f = imageFillFixture(); mutate(f); assert.equal(audit(f).ok, false); });
 
