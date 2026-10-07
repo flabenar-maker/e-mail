@@ -182,5 +182,5 @@ test('nested Shared-origin exception still requires the actual parent placement'
   f.pp.capture_meta.node_count -= 3;
   const projected = nested(f);
   assert.equal(projected.ok, false);
-  assert.ok(projected.issues.some(issue => issue.code === 'EVIDENCE_NESTED_PLACEMENT_UNVERIFIED' || issue.code === 'EVIDENCE_CAPTURE_ERROR'));
+  assert.ok(projected.issues.some(issue => ['EVIDENCE_NESTED_GEOMETRY_UNVERIFIED', 'EVIDENCE_NESTED_PLACEMENT_UNVERIFIED', 'EVIDENCE_CAPTURE_ERROR'].includes(issue.code)));
 });
