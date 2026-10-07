@@ -30,6 +30,12 @@ function actualPlacements(f) {
 }
 function nested(report) { assert.ok(report.nested_html, 'combined audit must expose nested_html rather than silently stopping at genuine HTML INSTANCE descendants'); return report.nested_html; }
 function firstText(instance) { return walk(instance.node).find(node => node.node_type === 'TEXT'); }
+function selectedDetailsTextContract(f, placement) {
+  const record = f.model.records.find(item => item.id === 'details-operation');
+  const variant = record.variants.find(item => item.node_id === placement.node.main_component_id);
+  const viewport = variant.axes.find(axis => axis.name === 'Viewport').value.toLowerCase();
+  return {record, variant_node_id: variant.node_id, text: record.contracts[viewport].root.children[0].children[0]};
+}
 
 test('actual d977 child records independently pass the combined auditor before nested-owner coverage is tested', async () => {
   const f = await fixture();
@@ -77,13 +83,13 @@ test('nested HTML leaves an observed descendant reference measurement unverified
 });
 
 for (const [label, mutate] of [
-  ['removes the unique direct characters mapping', f => { const record = f.model.records.find(item => item.id === 'details-operation'); const link = record.contracts.figma_fact_links.find(item => item.source_path === '/characters'); record.contracts.figma_fact_links = record.contracts.figma_fact_links.filter(item => item !== link); }],
-  ['duplicates the direct characters mapping', f => { const record = f.model.records.find(item => item.id === 'details-operation'); record.contracts.figma_fact_links.push(structuredClone(record.contracts.figma_fact_links.find(item => item.source_path === '/characters'))); }],
-  ['removes the attached plain-text slot', f => { const record = f.model.records.find(item => item.id === 'details-operation'); const root = record.contracts.desktop.root; root.children[0].children[0].content_slots = []; }],
+  ['removes the unique direct characters mapping', (f, placement) => { const selected = selectedDetailsTextContract(f, placement); const link = selected.record.contracts.figma_fact_links.find(item => item.variant_node_id === selected.variant_node_id && item.source_path === '/characters'); selected.record.contracts.figma_fact_links = selected.record.contracts.figma_fact_links.filter(item => item !== link); }],
+  ['duplicates the direct characters mapping', (f, placement) => { const selected = selectedDetailsTextContract(f, placement); selected.record.contracts.figma_fact_links.push(structuredClone(selected.record.contracts.figma_fact_links.find(item => item.variant_node_id === selected.variant_node_id && item.source_path === '/characters'))); }],
+  ['removes the attached plain-text slot', (f, placement) => { selectedDetailsTextContract(f, placement).text.content_slots = []; }],
 ]) test(`nested HTML content override is unverified when it ${label}`, async () => {
-  const f = await fixture(), owner = f.model.records.find(r => r.id === 'block-transaction-success'), actual = firstText(actualPlacements(f).find(item => item.component_id === 'details-operation'));
+  const f = await fixture(), owner = f.model.records.find(r => r.id === 'block-transaction-success'), placement = actualPlacements(f).find(item => item.component_id === 'details-operation'), actual = firstText(placement);
   actual.characters = `${actual.characters.slice(0, -1)}X`;
-  mutate(f);
+  mutate(f, placement);
   const result = nested(auditFigmaComponentEvidence({record: owner, live: f.packets[owner.id], model: f.model, session: f.session}));
   assert.equal(result.ok, false);
   assert.ok(result.issues.some(item => item.code === 'NESTED_HTML_CONTENT_UNVERIFIED'));
