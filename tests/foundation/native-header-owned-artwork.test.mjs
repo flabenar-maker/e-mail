@@ -79,7 +79,7 @@ test('Header raw report preserves an unknown native field', () => {
   assert.equal(raw.issues.some(i => i.source_path === '/future_field'), true);
   assert.deepEqual(raw, structuredClone(raw));
 });
-test('Header-only capture verifies registered nested artwork without Shared receipts or clipping closure', () => { const f = fixture(); api(); assert.equal(f.session.captures.length, 1); assert.equal(all(f).relation.ok, true); const r = all(f).context; assert.equal(r.ok, true); assert.equal(r.verified_sources.some(x => x.source_path === '/clips_content'), false); });
+test('Header-only capture separates PNG clipping preservation from HTML scalar coverage', () => { const f = fixture(); api(); assert.equal(f.session.captures.length, 1); assert.equal(all(f).relation.ok, true); const r = all(f).context; assert.equal(r.ok, true); assert.equal(r.verified_sources.some(x => x.source_path === '/clips_content'), false); assert.deepEqual(paths(r.export_preserved_sources), ['/clips_content', '/clips_content']); });
 for (const [name, mutate] of [['missing dependency', f => f.owner.evidence_links.source_dependencies.pop()], ['cross-owner link', f => f.owner.evidence_links.source_dependencies[0].asset_owner.node_id = '1008:1823'], ['bad Mobile suffix', f => f.packet.variants[0].source_node.children[0].name = 'header-logo-compact @2x'], ['unregistered target', f => f.owner.evidence_links.source_dependencies[0].target.component_id = 'unknown'], ['missing nested instance link', f => f.owner.evidence_links.source_dependencies = f.owner.evidence_links.source_dependencies.filter(x => x.id !== 'mobile-product')], ['unknown nested instance', f => { f.packet.variants[0].source_node.children[0].children.push({...node('I1008:1709;9:9', 'INSTANCE', 'unknown', 1, 1), main_component_id: '9:9', instance_properties: {}}); f.packet.capture_meta.node_count = 7; }], ['removed nested instance', f => { f.packet.variants[0].source_node.children[0].children = []; f.packet.capture_meta.node_count = 5; }], ['stale capture', f => f.session.canonical_git_sha = 'd'.repeat(40)]]) test(`Header artwork refuses ${name}`, () => { const f = fixture(); mutate(f); api(); assert.equal(all(f).relation.ok && all(f).context.ok, false); });
 
 test('Header actual boundary ignores incidental Shared main and property provenance', () => {
@@ -181,4 +181,115 @@ for (const [label, mutate] of [
     const combined = auditFigmaComponentEvidence({record: f.owner, live: f.packet, model: f.model, session: f.session});
     assert.ok(combined.effective_facts.issues.some(issue => issue.code === 'FIGMA_CAPTURE_UNSUPPORTED' && issue.details?.some(detail => detail.code === 'MIXED_VALUE')));
   }
+});
+
+
+// Break protected: treating PNG-boundary clipping or Shared instance provenance
+// as verified HTML scalars, or filtering a raw warning without a qualified boundary.
+function headerPlacements(f) {
+  return f.packet.variants.map(variant => variant.source_node.children[0]);
+}
+function headerProducts(f) {
+  return headerPlacements(f).map(placement => placement.children[0]);
+}
+function paths(items) { return items.map(item => item.source_path).sort(); }
+test('Header rendered PNG context preserves false and true clipping without HTML scalar closure', () => {
+  const f = fixture();
+  for (const placement of headerPlacements(f)) placement.clips_content = false;
+  let coverage = all(f).context;
+  assert.equal(coverage.ok, true);
+  assert.deepEqual(paths(coverage.export_preserved_sources), ['/clips_content', '/clips_content']);
+  assert.equal(coverage.export_preserved_source_fact_count, 2);
+  assert.equal(coverage.not_required_source_fact_count, 8);
+  assert.equal(coverage.mapped_source_fact_count, coverage.verified_sources.length);
+  assert.ok(!coverage.verified_sources.some(item => item.source_path === '/clips_content'));
+  for (const placement of headerPlacements(f)) placement.clips_content = true;
+  coverage = all(f).context;
+  assert.equal(coverage.ok, true);
+  assert.deepEqual(paths(coverage.export_preserved_sources), ['/clips_content', '/clips_content']);
+  const raw = auditFigmaContractFacts({record: f.owner, live: f.packet});
+  assert.ok(raw.issues.some(item => item.source_path === '/clips_content'));
+  const effective = context.applyNativeContextCoverage({facts: raw, coverage});
+  assert.ok(!effective.issues.some(item => item.source_path === '/clips_content'));
+  const copied = structuredClone(coverage);
+  assert.equal(context.applyNativeContextCoverage({facts: raw, coverage: copied}), raw);
+  const mutated = structuredClone(coverage); mutated.export_preserved_sources.pop();
+  assert.equal(context.applyNativeContextCoverage({facts: raw, coverage: mutated}), raw);
+  f.packet.variants[0].source_node.children[0].future_root_field = 'retain';
+  const futureRaw = auditFigmaContractFacts({record: f.owner, live: f.packet}), futureCoverage = all(f).context;
+  const futureEffective = context.applyNativeContextCoverage({facts: futureRaw, coverage: futureCoverage});
+  assert.ok(futureRaw.issues.some(item => item.source_path === '/future_root_field'));
+  assert.ok(futureEffective.issues.some(item => item.source_path === '/future_root_field'));
+});
+test('Header PNG context marks only complete actual Shared root metadata as not-required', () => {
+  const f = fixture(), coverage = all(f).context;
+  assert.equal(coverage.ok, true);
+  assert.deepEqual(paths(coverage.not_required_sources), [
+    '/instance_properties/Product/boundVariables', '/instance_properties/Product/boundVariables',
+    '/instance_properties/Product/type', '/instance_properties/Product/type',
+    '/instance_properties/Product/value', '/instance_properties/Product/value',
+    '/main_component_id', '/main_component_id'
+  ]);
+  assert.ok(!coverage.verified_sources.some(item => item.source_path === '/main_component_id' || item.source_path.startsWith('/instance_properties')));
+  const raw = auditFigmaContractFacts({record: f.owner, live: f.packet});
+  const copied = structuredClone(coverage);
+  copied.not_required_sources.pop();
+  assert.equal(context.applyNativeContextCoverage({facts: raw, coverage: copied}), raw);
+  f.packet.variants[0].source_node.children[0].future_root_field = 'retain';
+  const future = auditFigmaContractFacts({record: f.owner, live: f.packet});
+  assert.ok(future.issues.some(item => item.source_path === '/future_root_field'));
+});
+for (const [label, mutate] of [
+  ['broken export boundary', f => f.owner.asset_contracts[0].export_boundary.semantic_node_name = 'other @4x'],
+  ['wrong PNG profile', f => f.owner.asset_contracts[0].export_profile_id = 'jpeg-2x'],
+  ['wrong rendered source mode', f => f.owner.asset_contracts[0].source_mode_id = 'image-fill'],
+  ['artificial matte', f => f.owner.asset_contracts[0].background.artificial_matte = 'allow'],
+  ['missing actual dependency', f => f.owner.evidence_links.source_dependencies = f.owner.evidence_links.source_dependencies.filter(item => item.id !== 'mobile-header')],
+  ['non Shared actual root', f => f.model.records.find(item => item.id === 'asset-header-logo-compact-4x').identity.library = 'marketing'],
+  ['malformed known instance property', f => f.packet.variants[0].source_node.children[0].instance_properties.Product.type = 'BOOLEAN'],
+  ['unknown instance property field', f => f.packet.variants[0].source_node.children[0].instance_properties.Product.future = 'unverified'],
+  ['missing clipping qualifier', f => delete f.packet.variants[0].source_node.children[0].clips_content],
+  ['invalid clipping qualifier', f => f.packet.variants[0].source_node.children[0].clips_content = 'false']
+]) test('Header export context refuses ' + label, () => {
+  const f = fixture(); mutate(f);
+  const coverage = all(f).context;
+  assert.equal(coverage.ok, false);
+  assert.ok(!(coverage.export_preserved_sources ?? []).some(item => item.variant_node_id === '15:2037' && item.node_id === '1008:1709'));
+  assert.ok(!(coverage.not_required_sources ?? []).some(item => item.variant_node_id === '15:2037' && item.node_id === '1008:1709'));
+  assert.ok(coverage.issues.length > 0);
+});
+test('Header export context does not make absent Shared origin fields a new gate', () => {
+  const f = fixture(), mobile = f.packet.variants[0].source_node.children[0];
+  delete mobile.main_component_id;
+  delete mobile.instance_properties;
+  const coverage = all(f).context;
+  assert.equal(coverage.ok, true);
+  assert.ok((coverage.export_preserved_sources ?? []).some(item => item.variant_node_id === '15:2037' && item.source_path === '/clips_content'));
+  assert.ok(!(coverage.not_required_sources ?? []).some(item => item.variant_node_id === '15:2037'));
+  assert.ok(!coverage.verified_sources.some(item => item.variant_node_id === '15:2037' && (item.source_path === '/main_component_id' || item.source_path?.startsWith('/instance_properties'))));
+});
+test('Header combined audit projects only qualified Mobile absolute-child warning to effective facts', () => {
+  const f = fixture(), product = headerProducts(f)[0];
+  f.packet.capture_errors.push({node_id: product.node_id, code: 'ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW'});
+  const combined = auditFigmaComponentEvidence({record: f.owner, live: f.packet, model: f.model, session: f.session});
+  const raw = combined.facts.issues.find(item => item.code === 'FIGMA_CAPTURE_UNSUPPORTED');
+  const effective = combined.effective_facts.issues.find(item => item.code === 'FIGMA_CAPTURE_UNSUPPORTED');
+  const disposition = combined.evidence_links.capture_diagnostics.find(item => item.raw?.node_id === product.node_id && item.raw?.code === 'ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW');
+  assert.ok(raw.details.some(detail => detail.node_id === product.node_id && detail.code === 'ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW'));
+  assert.ok(!effective?.details?.some(detail => detail.node_id === product.node_id && detail.code === 'ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW'));
+  assert.equal(disposition?.status, 'verified');
+  assert.deepEqual(combined.facts, auditFigmaContractFacts({record: f.owner, live: f.packet}));
+});
+test('Header combined audit keeps unqualified absolute-child warning effective', () => {
+  const f = fixture(), product = headerProducts(f)[0];
+  f.owner.asset_contracts[0].export_boundary.semantic_node_name = 'broken @4x';
+  f.packet.capture_errors.push({node_id: product.node_id, code: 'ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW'});
+  const combined = auditFigmaComponentEvidence({record: f.owner, live: f.packet, model: f.model, session: f.session});
+  assert.ok(combined.effective_facts.issues.some(item => item.code === 'FIGMA_CAPTURE_UNSUPPORTED' && item.details?.some(detail => detail.node_id === product.node_id && detail.code === 'ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW')));
+});
+test('Header combined audit keeps an ABSOLUTE warning with an extraneous field effective', () => {
+  const f = fixture(), product = headerProducts(f)[0];
+  f.packet.capture_errors.push({node_id: product.node_id, code: 'ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW', field: 'fills'});
+  const combined = auditFigmaComponentEvidence({record: f.owner, live: f.packet, model: f.model, session: f.session});
+  assert.ok(combined.effective_facts.issues.some(item => item.code === 'FIGMA_CAPTURE_UNSUPPORTED' && item.details?.some(detail => detail.node_id === product.node_id && detail.code === 'ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW' && detail.field === 'fills')));
 });

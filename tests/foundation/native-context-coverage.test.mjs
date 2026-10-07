@@ -85,3 +85,19 @@ for (const [label, mutate] of [
   f.record.contracts.figma_fact_links.push({variant_node_id: '101:1', node_id: f.node.node_id, source_path: '/minimum_width_px', contract_path: `/contracts/mobile/root/facts/${f.record.contracts.mobile.root.facts.length - 1}/value/value`, transform: 'identity'});
   mutate(f); assert.equal(api().auditNativeContextProofs(f).ok, false);
 });
+
+
+// Break protected: an ordinary HTML boolean clipping value is accidentally
+// accepted as PNG export preservation without its exact same-node fact map.
+test('ordinary HTML clipping remains scalar coverage and never export preservation', () => {
+  const f = fixture(); f.node.clips_content = false;
+  let coverage = api().auditNativeContextProofs(f);
+  assert.equal(coverage.ok, true);
+  assert.ok(coverage.verified_sources.some(item => item.source_path === '/clips_content'));
+  assert.deepEqual(coverage.export_preserved_sources, []);
+  assert.deepEqual(coverage.not_required_sources, []);
+  assert.equal(coverage.export_preserved_source_fact_count, 0);
+  assert.equal(coverage.not_required_source_fact_count, 0);
+  f.node.clips_content = true;
+  assert.equal(api().auditNativeContextProofs(f).ok, false);
+});
