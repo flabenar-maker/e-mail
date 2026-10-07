@@ -310,9 +310,9 @@ function mobileDirectImageFixture() {
   const f = s1Fixture(), header = f.header;
   const desktopImage = f.roots.get(header.id)[0].children[0];
   const mobileImage = f.roots.get(header.id)[1].children[0];
-  mobileImage.name = "renamed-live-mobile-layer";
+  mobileImage.name = "brand @4x";
   header.asset_contracts[0] = {
-    ...header.asset_contracts[0], source_mode_id: "rendered-node", display_mode_id: "direct-image", source_viewport: "desktop",
+    ...header.asset_contracts[0], source_mode_id: "rendered-node", display_mode_id: "direct-image", export_profile_id: "png-4x", source_viewport: "desktop",
     owner_layer_name: "desktop-export-label", export_boundary: { kind: "node", semantic_node_name: "desktop-export-label" },
   };
   desktopImage.name = "desktop-export-label";
@@ -333,7 +333,7 @@ const mobileAudit = ({ f, header }) => s1Audit(f, header);
 const sourceIds = result => result.required_sources.map(source => source.node_id);
 const headerSourceIds = ["804:4", "I804:4;802:3", "804:5", "I804:5;803:3"];
 
-test("S1 resolves a renamed non-source mobile direct-image boundary from its local asset contract", () => {
+test("S1 resolves the exact semantic other-viewport direct-image boundary from its local asset contract", () => {
   const fixture = mobileDirectImageFixture(), result = mobileAudit(fixture);
   assert.equal(result.ok, true, JSON.stringify(result.issues));
   assert.deepEqual(sourceIds(result), headerSourceIds);

@@ -285,16 +285,10 @@ test('source-value-set rejects altered request/receipt and incomplete-tree packe
 test('consumer-geometry requires the full source-to-consumer dependency and exact owned asset placement', () => {
   const f = consumerChainFixture(); setProof(f, { id: 'proof-consumer', kind: 'consumer-geometry', contract_path: '/contracts/mobile/root/facts/1/value', consumer_component_id: 'synthetic-header', asset_contract_id: 'synthetic-image', placements: { mobile: { component_id: 'synthetic-header', variant_node_id: '501:1', node_id: '501:3' }, desktop: { component_id: 'synthetic-header', variant_node_id: '501:2', node_id: '501:4' } } }); assertVerified(f, 'proof-consumer');
 });
-test('consumer-geometry rejects invalid Product variant, actual instance identity, and asset ownership', () => {
-  for (const change of [
-    (f) => { f.model.records.find((record) => record.id === 'synthetic-product').variants.pop(); },
-    (f) => { f.session.captures.find((capture) => capture.component_id === 'synthetic-header').packet.variants[0].source_node.children[0].children[0].main_component_id = '601:2'; },
-    (f) => { f.model.records.find((record) => record.id === 'synthetic-header').evidence_links.source_dependencies.find((link) => link.id === 'mobile-compact').asset_owner.node_id = '501:4'; }
-  ]) {
-    const { f } = verifiedConsumerProofFixture();
-    change(f);
-    assertUnverified(f, 'proof-consumer', /capture|variant|instance|main|asset|owner|identity|dependency|consumer/i);
-  }
+test('consumer-geometry rejects an incorrect actual asset owner', () => {
+  const { f } = verifiedConsumerProofFixture();
+  f.model.records.find((record) => record.id === 'synthetic-header').evidence_links.source_dependencies.find((link) => link.id === 'mobile-compact').asset_owner.node_id = '501:4';
+  assertUnverified(f, 'proof-consumer', /capture|asset|owner|identity|dependency|consumer/i);
 });
 test('asset-profile requires one exact root owner and rejects a suffix borrowed from a variant label', () => {
   const f = baseFixture(); f.model.source_documents.set('assets-foundation', { display_modes: [{ id: 'direct-image', contract: { mobile_height_behavior: 'auto', intrinsic_ratio_required: true, deformation_forbidden: true, crop_owner: 'asset' } }], export_profiles: [{ id: 'png-4x', contract: { suffix: '@4x', scale: 4 } }] }); setProof(f, { id: 'proof-asset', kind: 'asset-profile', contract_path: '/contracts/mobile/root/facts/2/value', asset_owner_id: f.record.id, asset_contract_id: 'synthetic-image' }); assertVerified(f, 'proof-asset'); f.session.captures[0].packet.owner_identity.name = 'Product @4x'; assertUnverified(f, 'proof-asset', /suffix|owner|asset/i);

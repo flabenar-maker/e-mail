@@ -25,6 +25,7 @@ function records() {
   owner.variants = [{id: "desktop", node_id: "10:2", axes: [{name: "Viewport", value: "Desktop"}]}, {id: "mobile", node_id: "10:3", axes: [{name: "Viewport", value: "Mobile"}]}];
   const target = structuredClone(shared.components.find(r => r.identity.node_kind === "component" && !r.variants.length));
   target.id = "test-artwork";
+  target.identity = {...target.identity, library: "marketing", semantic_role: "block"};
   target.figma.node_id = "20:1";
   owner.evidence_links = {foundation_values: [foundationLink()], source_dependencies: [dependencyLink()]};
   return [owner, target];
