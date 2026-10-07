@@ -112,6 +112,15 @@ export function auditNestedHtmlEvidence({recordId,model,session}={}){
       const source=env.selected({component_id:child.id,variant_node_id:selected[0].node_id,node_id:selected[0].node_id});
       receipts.add(source.capture.receipt_id);
       const rows=elements(child,selected[0].node_id);
+      const childRefs=references(child);
+      if(childRefs.some(next=>genuine(lookup(next.element.component_id)))){
+        fail("NESTED_HTML_DEPTH_UNVERIFIED",ref.path,"Deeper genuine HTML needs its own independently qualified actual projection; immediate-child proof cannot be borrowed.",{component_id:child.id});
+        continue;
+      }
+      if((child.asset_contracts??[]).length||rows.some(({element})=>["direct-image","background-image"].includes(element.render_mode))||childRefs.some(next=>!genuine(lookup(next.element.component_id)))){
+        fail("NESTED_HTML_ARTWORK_UNVERIFIED",ref.path,"Contained artwork needs independently qualified actual graphic-owner evidence before any descendant comparison; Shared master/default identity is not an export gate.",{component_id:child.id});
+        continue;
+      }
       if(!sourceAudits.has(child.id))sourceAudits.set(child.id,auditFigmaComponentEvidence({record:child,live:source.packet,model,session}));
       const sourceAudit=sourceAudits.get(child.id);
       if(!sourceAudit.ok)fail('NESTED_HTML_SOURCE_UNVERIFIED',ref.path,'The independently captured canonical child implementation has open obligations.',{component_id:child.id});

@@ -228,6 +228,8 @@ A changed plain-text value is retained only as an observed content override when
 
 Actual descendant variable proofs resolve the actual consumer mode and alias chain from the parent packet, while retaining the original canonical child mapping and typed target. Original source resolution and actual consumer resolution must both agree with the native scalar and canonical value. Root binding obligations remain parent-owned. Unknown fields, incomplete receipts, wrong variants, ancestry/order, unsupported overrides and source obligations remain open; raw findings and unrelated artwork diagnostics are not masked. This changes authoring evidence only, not HTML, export profiles, component values or Figma design.
 
+The current actual-consumer comparator proves one genuine HTML level with pure HTML children. Deeper genuine dependencies and contained graphic projections are explicitly unverified before descendant/source-default comparison until their own actual-consumer proof is implemented and tested. This is not recursive projection support, and must not become a Shared master, publication, geometry or standalone-capture gate. The existing actual-owner artwork branch remains separate.
+
 ## Native variable binding references
 
 Optional `evidence_links.native_variable_proofs` ссылается на существующий same-node typed px/color fact, точный native binding leaf и variable identity (ID/key/name/type/collection). Равное число или цвет не доказывают правильную переменную. Existing fact value/provenance не заменяются копией variable definition.
