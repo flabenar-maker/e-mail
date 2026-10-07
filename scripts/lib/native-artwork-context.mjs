@@ -1,4 +1,4 @@
-import {artworkPlacementName, verifyOwnedArtworkInstances} from './native-owned-artwork.mjs';
+import {artworkPlacementName, isSharedArtworkReference, verifyOwnedArtworkInstances} from './native-owned-artwork.mjs';
 // A source graphic is delegated to an independently registered whole-node
 // export. This is neither scalar HTML equality nor an exemption by source role.
 const object = v => v !== null && typeof v === 'object' && !Array.isArray(v);
@@ -46,6 +46,30 @@ export function verifyArtworkDependency({record, proof, boundary, env}) {
   if (instance.node.main_component_id !== sourceEntry.node.node_id || !closed(instance.node.instance_properties, []) || sourceEntry.packet.component_properties.length !== 0) throw Error('exact main artwork without unmodeled instance controls required');
   return sourceEntry;
 }
+// Called only after the owned boundary and its complete actual graph passed.
+// These known native metadata fields are opaque export inputs, not HTML facts.
+// Their presence, values, or shape are never a Shared origin acceptance gate.
+export function preserveSharedArtworkMetadata({boundary, entry, env, add}) {
+  if (entry.node.node_type !== 'INSTANCE') return;
+  const link = unique(boundary.owner.evidence_links?.source_dependencies?.filter(d =>
+    d.source.variant_node_id === entry.variantId && d.source.node_id === entry.node.node_id &&
+    d.asset_owner.node_id === entry.node.node_id && d.asset_owner.asset_id === boundary.asset.id), 'one actual root artwork dependency required');
+  const target = unique(env.records.filter(r => r.id === link.target.component_id), 'one registered artwork reference required');
+  if (!isSharedArtworkReference(target)) return;
+  function leaves(value, path) {
+    if (Array.isArray(value)) {
+      if (!value.length) add(path);
+      value.forEach((child, i) => leaves(child, path + '/' + i));
+    } else if (object(value)) {
+      const entries = Object.entries(value);
+      if (!entries.length) add(path);
+      for (const [key, child] of entries) leaves(child, path + '/' + key);
+    } else add(path);
+  }
+  for (const key of ['main_component_id', 'instance_properties'])
+    if (Object.hasOwn(entry.node, key)) leaves(entry.node[key], '/' + key);
+}
+
 export function verifySourceArtworkContext({record, entry, add}) {
   const node = entry.node;
   if (node.node_id !== record.figma.node_id || node.node_type !== 'COMPONENT' || node.name !== record.identity.figma_name || entry.packet.owner_identity.name !== node.name || node.visible !== true) throw Error('exact visible source component identity required');

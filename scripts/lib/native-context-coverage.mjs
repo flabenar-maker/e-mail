@@ -4,7 +4,7 @@ import {createContractProofEnvironment} from './contract-fact-proofs.mjs';
 import {auditNativeRelationProofs} from './native-relationship-coverage.mjs';
 import {applyNativeVariableCoverage} from './native-variable-coverage.mjs';
 import {isFigmaContractFactReportFor} from './figma-contract-facts.mjs';
-import {ownedContextStructure, resolveArtworkContextReference, verifyArtworkDependency, verifySourceArtworkContext} from './native-artwork-context.mjs';
+import {ownedContextStructure, preserveSharedArtworkMetadata, resolveArtworkContextReference, verifyArtworkDependency, verifySourceArtworkContext} from './native-artwork-context.mjs';
 import {resolveImageFillContextReference, verifyImageFillPaintContext} from './native-image-fill-context.mjs';
 import {resolveImageFillInertAxisContextReference, verifyImageFillInertAxisContext} from './native-image-fill-inert-axis-context.mjs';
 
@@ -108,7 +108,7 @@ function inertNoneContext(record, relation, node, e, add) {
   if (!closed(layout.padding, ['top', 'right', 'bottom', 'left']) || Object.values(layout.padding).some(value => value !== 0)) throw Error('inert NONE padding must be explicitly zero');
   for (const side of ['top', 'right', 'bottom', 'left']) add(`/layout/padding/${side}`);
 }
-function verifyContext(record, relation, node, packet, add, ordinaryHtml) {
+function verifyContext(record, relation, node, packet, add, ordinaryHtml, addExport) {
   const e = pointer(record, relation.element_path);
   // These are semantic absence conditions for ordinary HTML, not a global
   // list of fields to ignore. Any active unsupported appearance fails proof.
@@ -118,14 +118,17 @@ function verifyContext(record, relation, node, packet, add, ordinaryHtml) {
   }
   if (node.minimum_width_px === null) add('/minimum_width_px');
   else if (!directFact(record, relation, node, 'minimum-width', '/minimum_width_px')) throw Error('minimum width requires an independently mapped exact px measure');
+  if (!ordinaryHtml && ['FRAME', 'COMPONENT', 'COMPONENT_SET', 'INSTANCE'].includes(node.node_type) && !Object.hasOwn(node, 'clips_content')) throw Error('complete rendered artwork clipping qualifier required');
   if (Object.hasOwn(node, 'clips_content')) {
     if (ordinaryHtml) {
       if (node.clips_content === false) add('/clips_content');
       else if (!directFact(record, relation, node, 'clip-content', '/clips_content')) throw Error('active clipping requires an independently mapped exact Boolean');
-    } else if (typeof node.clips_content !== 'boolean') throw Error('complete rendered artwork clipping qualifier required');
-    // The other admitted path already passed the owned PNG/rendered-node
-    // preserve-artwork boundary verifier. Its native clipping is not an HTML
-    // scalar. Do not remove that raw obligation as ordinary HTML coverage.
+    } else {
+      if (typeof node.clips_content !== 'boolean') throw Error('complete rendered artwork clipping qualifier required');
+      // Independently verified whole-node PNG export preserves this actual
+      // Boolean. It is not an HTML scalar or an expected native default.
+      addExport('/clips_content');
+    }
   }
   if (Object.hasOwn(node, 'effects')) {
     if (!equal(node.effects, [])) throw Error('active effects require their own supported implementation');
@@ -152,7 +155,7 @@ function verifyContext(record, relation, node, packet, add, ordinaryHtml) {
   } else if (e.render_mode === 'presentation-table') throw Error('container layout context missing');
 }
 export function auditNativeContextProofs({record, model, session} = {}) {
-  const report = {ok: false, component_id: record?.id ?? null, canonical_git_sha: model?.canonical_sha ?? null, receipt_ids: [], results: [], issues: [], verified_sources: []};
+  const report = {ok: false, component_id: record?.id ?? null, canonical_git_sha: model?.canonical_sha ?? null, receipt_ids: [], results: [], issues: [], verified_sources: [], export_preserved_sources: [], not_required_sources: [], mapped_source_fact_count: 0, export_preserved_source_fact_count: 0, not_required_source_fact_count: 0};
   const proofs = record?.evidence_links?.native_context_proofs ?? [];
   if (Array.isArray(proofs) && !proofs.length) {report.ok = true; return report;}
   const canonical = model?.records?.filter(r => r.id === record?.id);
@@ -162,7 +165,7 @@ export function auditNativeContextProofs({record, model, session} = {}) {
   const relationsFor = owner => {if (!relationReports.has(owner.id)) relationReports.set(owner.id, auditNativeRelationProofs({record: owner, model, session})); return relationReports.get(owner.id);};
   report.issues.push(...validation, ...env.issues);
   for (const p of Array.isArray(proofs) ? proofs : []) {
-    const item = {proof_id: p?.id ?? null, kind: p?.kind ?? null, status: 'unverified'}, local = [];
+    const item = {proof_id: p?.id ?? null, kind: p?.kind ?? null, status: 'unverified'}, local = [], exported = [], notRequired = [];
     env.beginProof();
     try {
       if (validation.length || env.issues.length) throw Error('context metadata/session unverified');
@@ -171,29 +174,45 @@ export function auditNativeContextProofs({record, model, session} = {}) {
       const result = relationsFor(owner).results.filter(r => r.proof_id === relation.id);
       if (result.length !== 1 || result[0].status !== 'verified') throw Error('independent ordered element structure is unverified');
       const entry = boundary ? verifyArtworkDependency({record, proof: p, boundary, env}) : env.selected(relation.source);
-      const source = entry.selector, add = path => local.push({...source, source_path: path});
+      const source = entry.selector, add = path => local.push({...source, source_path: path}), addExport = path => exported.push({...source, source_path: path}), addNotRequired = path => notRequired.push({...source, source_path: path});
       if (p.kind === 'source-artwork-context') verifySourceArtworkContext({record, entry, add});
       else if (p.kind === 'image-fill-paint-context') item.foundation_paths = verifyImageFillPaintContext({record, proof: p, entry, model, add});
       else if (p.kind === 'image-fill-inert-axis-context') verifyImageFillInertAxisContext({record, proof: p, entry, add});
-      else verifyContext(record, relation, entry.node, entry.packet, add, p.kind === 'html-element-context');
-      item.status = 'verified'; report.verified_sources.push(...local);
+      else {
+        verifyContext(record, relation, entry.node, entry.packet, add, p.kind === 'html-element-context', addExport);
+        if (p.kind === 'rendered-artwork-context') preserveSharedArtworkMetadata({boundary, entry, env, add: addNotRequired});
+      }
+      item.status = 'verified'; report.verified_sources.push(...local); report.export_preserved_sources.push(...exported); report.not_required_sources.push(...notRequired);
     } catch (error) {
       item.reason = error.message; report.issues.push(issue('NATIVE_CONTEXT_UNVERIFIED', `/evidence_links/native_context_proofs/${p?.id ?? 'invalid'}`, error.message));
     }
-    Object.assign(item, env.proofTrace(), {source_paths: item.status === 'verified' ? local : []}); report.results.push(item);
+    Object.assign(item, env.proofTrace(), {source_paths: item.status === 'verified' ? local : [], export_preserved_source_paths: item.status === 'verified' ? exported : [], not_required_source_paths: item.status === 'verified' ? notRequired : []}); report.results.push(item);
   }
   report.receipt_ids = [...env.receipts].sort();
-  report.verified_sources = [...new Map(report.verified_sources.map(s => [tuple(s), s])).values()].sort((a, b) => tuple(a).localeCompare(tuple(b)));
+  for (const key of ['verified_sources', 'export_preserved_sources', 'not_required_sources']) report[key] = [...new Map(report[key].map(s => [tuple(s), s])).values()].sort((a, b) => tuple(a).localeCompare(tuple(b)));
+  report.mapped_source_fact_count = report.verified_sources.length;
+  report.export_preserved_source_fact_count = report.export_preserved_sources.length;
+  report.not_required_source_fact_count = report.not_required_sources.length;
   ordered(report.issues); report.ok = !report.issues.length && report.results.every(r => r.status === 'verified');
-  if (report.verified_sources.length) computed.set(report, {record: structuredClone(record), live: structuredClone(env.tree(record.id).packet), sources: structuredClone(report.verified_sources), digest: digest(report)});
+  if (report.verified_sources.length || report.export_preserved_sources.length || report.not_required_sources.length) computed.set(report, {record: structuredClone(record), live: structuredClone(env.tree(record.id).packet), sources: structuredClone(report.verified_sources), exported: structuredClone(report.export_preserved_sources), notRequired: structuredClone(report.not_required_sources), digest: digest(report)});
   return report;
 }
 export function applyNativeContextCoverage({facts, coverage, nativeVariableProofs, nativeRelationProofs, nativeFactProofs, contractProofs} = {}) {
   const base = applyNativeVariableCoverage({facts, coverage: nativeVariableProofs, nativeRelationProofs, nativeFactProofs, contractProofs});
   const trusted = computed.get(coverage);
   if (!trusted || digest(coverage) !== trusted.digest || !isFigmaContractFactReportFor({facts, record: trusted.record, live: trusted.live})) return base;
-  const sources = new Set(trusted.sources.map(tuple));
-  const issues = base.issues.filter(i => !(i.code === 'FIGMA_FACT_UNCOVERED' && sources.has(tuple({component_id: facts.component_id, ...i}))));
-  const removed = base.issues.length - issues.length;
-  return removed ? {...base, ok: !issues.length, ...(typeof base.mapped_source_fact_count === 'number' ? {mapped_source_fact_count: base.mapped_source_fact_count + removed} : {}), issues} : base;
+  const sources = new Set(trusted.sources.map(tuple)), exported = new Set(trusted.exported.map(tuple)), notRequired = new Set(trusted.notRequired.map(tuple));
+  let mappedCount = 0, exportCount = 0, notRequiredCount = 0;
+  const issues = base.issues.filter(i => {
+    if (i.code !== 'FIGMA_FACT_UNCOVERED') return true;
+    const key = tuple({component_id: facts.component_id, ...i});
+    if (sources.has(key)) {mappedCount++; return false;}
+    if (exported.has(key)) {exportCount++; return false;}
+    if (notRequired.has(key)) {notRequiredCount++; return false;}
+    return true;
+  });
+  return mappedCount + exportCount + notRequiredCount ? {...base, ok: !issues.length,
+    ...(typeof base.mapped_source_fact_count === 'number' ? {mapped_source_fact_count: base.mapped_source_fact_count + mappedCount} : {}),
+    export_preserved_source_fact_count: (base.export_preserved_source_fact_count ?? 0) + exportCount,
+    not_required_source_fact_count: (base.not_required_source_fact_count ?? 0) + notRequiredCount, issues} : base;
 }

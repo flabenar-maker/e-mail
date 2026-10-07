@@ -415,6 +415,7 @@ function classifyEvidenceCaptureDiagnostics(report, { recordId, model, session }
     return boundaries.length === 1 && eligible(current.record, boundaries[0]) ? boundaries[0] : null;
   }
   const nativeAbsolute = entry => entry?.node.layout?.mode === "NONE" && Array.isArray(entry.node.children) && entry.node.children.length > 0;
+  const exactAbsoluteReview = (entry, raw) => raw.code === "ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW" && Object.keys(raw).length === 2 && Object.hasOwn(raw, "node_id") && nativeAbsolute(entry);
   const unresolvedMain = (entry, raw) => raw.code === "MAIN_COMPONENT_UNRESOLVED" && raw.field === undefined &&
     entry?.node.node_type === "INSTANCE" && entry.node.main_component_id === null;
   function unusedOwnSharedOrigin(current, entry, raw) {
@@ -438,7 +439,7 @@ function classifyEvidenceCaptureDiagnostics(report, { recordId, model, session }
       const entry = scope.nodes.get(error.node_id);
       if (unusedOwnSharedOrigin(current, entry, error)) continue;
       if (error.code === "MIXED_VALUE" && hasCompleteMixedTextRuns(entry?.node, error.field)) continue;
-      if (error.code === "ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW" && nativeAbsolute(entry) && ownBoundary(current, entry)) continue;
+      if (exactAbsoluteReview(entry, error) && ownBoundary(current, entry)) continue;
       ok = false; break;
     }
     if (ok) for (const obligation of scope.obligations ?? []) {
@@ -484,7 +485,7 @@ function classifyEvidenceCaptureDiagnostics(report, { recordId, model, session }
       notRequired = true; reason = "EVIDENCE_SHARED_ORIGIN_NOT_REQUIRED";
     } else if (current.valid && raw.code === "MIXED_VALUE" && hasCompleteMixedTextRuns(entry?.node, raw.field)) {
       verified = true; reason = "EVIDENCE_COMPLETE_MIXED_TEXT_RUNS";
-    } else if (current.valid && raw.code === "ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW" && nativeAbsolute(entry)) {
+    } else if (current.valid && exactAbsoluteReview(entry, raw)) {
       const own = ownBoundary(current, entry);
       if (own && closure(componentId)) { verified = true; reason = "EVIDENCE_NODE_ARTWORK_LAYOUT"; }
       else {
@@ -804,18 +805,22 @@ export function auditFigmaComponentEvidence({ record, live, model, session, deri
     const base = applyNativeContextCoverage({facts, coverage: contexts, nativeVariableProofs: variableProofs, nativeRelationProofs: relations, nativeFactProofs: nativeProofs, contractProofs: factProofs});
     // Internal, freshly computed owner proofs qualify only an exact diagnostic.
     // The genuine raw facts/packet remain unchanged; no caller mask is accepted.
-    const notRequired = [...(evidence.capture_diagnostics ?? []), ...(nested.capture_diagnostics ?? [])].filter(value =>
-      value.component_id === record.id && value.status === "not-required" && value.reason === "EVIDENCE_SHARED_ORIGIN_NOT_REQUIRED");
-    const unnecessary = raw => notRequired.some(value => isDeepStrictEqual(value.raw, raw));
+    const qualified = [...(evidence.capture_diagnostics ?? []), ...(nested.capture_diagnostics ?? [])].filter(value =>
+      value.component_id === record.id && (value.status === "not-required" && value.reason === "EVIDENCE_SHARED_ORIGIN_NOT_REQUIRED" ||
+        value.status === "verified" && value.raw.code === "ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW" && Object.keys(value.raw).length === 2 &&
+        ["EVIDENCE_NODE_ARTWORK_LAYOUT", "EVIDENCE_PROJECTED_NODE_ARTWORK_LAYOUT"].includes(value.reason)));
+    const disposition = raw => qualified.find(value => isDeepStrictEqual(value.raw, raw));
     let effective = base;
-    if (notRequired.length) {
+    if (qualified.length) {
       const issues = base.issues.flatMap(value => {
         if (value.code !== "FIGMA_CAPTURE_UNSUPPORTED" || !Array.isArray(value.details)) return [value];
-        const details = value.details.filter(raw => !unnecessary(raw));
+        const details = value.details.filter(raw => !disposition(raw));
         return details.length === value.details.length ? [value] : details.length ? [{...value, details}] : [];
       });
-      const capture_diagnostics = (base.capture_diagnostics ?? []).map(value => unnecessary(value.raw)
-        ? {...value, status: "not-required", reason: "EVIDENCE_SHARED_ORIGIN_NOT_REQUIRED"} : value);
+      const capture_diagnostics = (base.capture_diagnostics ?? []).map(value => {
+        const proof = disposition(value.raw);
+        return proof ? {...value, status: proof.status, reason: proof.reason} : value;
+      });
       effective = {...base, ok: issues.length === 0, issues, capture_diagnostics};
     }
     return {ok: effective.ok && evidence.ok && nested.ok && factProofs.ok && nativeProofs.ok && relations.ok && variableProofs.ok && contexts.ok, facts, effective_facts: effective, fact_proofs: factProofs, native_fact_proofs: nativeProofs, native_relation_proofs: relations, native_variable_proofs: variableProofs, native_context_proofs: contexts, evidence_links: evidence, nested_artwork: nested,
