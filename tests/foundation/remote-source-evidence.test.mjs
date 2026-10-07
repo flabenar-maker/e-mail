@@ -52,15 +52,32 @@ function fixture() {
 const run=f=>auditComponentEvidenceLinks({recordId:'item',model:f.model,session:f.session});
 const nested=f=>auditNestedArtworkEvidence({recordId:'parent',model:f.model,session:f.session});
 const has=(r,c)=>r.issues.some(i=>i.code===c);
-test('synthetic registered remote target, own links and nested ancestry are otherwise valid',()=>{const f=fixture();assert.deepEqual(validateEvidenceLinkReferences({records:f.model.records}),[]);assert.equal(run(f).ok,true);assert.equal(nested(f).ok,true);assert.equal(nested(f).dependencies.length,2);});
-for(const [label,value] of [['missing',undefined],['wrong key',{remote:true,component_key:'another-key'}],['local lookalike',{remote:false,component_key:KEY}],['empty key',{remote:true,component_key:''}],['extra field',{remote:true,component_key:KEY,ignored:true}]]) {
-  test('own and nested proof reject remote '+label,()=>{const f=fixture();if(value===undefined)delete f.gp.variants[0].source_node.remote_source;else f.gp.variants[0].source_node.remote_source=structuredClone(value);
-    for(const r of [run(f),nested(f)]){assert.equal(r.ok,false);assert.ok(has(r,'EVIDENCE_REMOTE_SOURCE_IDENTITY_MISMATCH'));}});
-}
-test('wrong root owner cannot be rescued by the correct publication key',()=>{const f=fixture();f.gp.component_node_id='500:9';assert.ok(has(run(f),'EVIDENCE_CAPTURE_IDENTITY_MISMATCH'));assert.equal(nested(f).ok,false);});
-test('local source compatibility and all scalar/capture diagnostics remain',()=>{const f=fixture();delete f.glyph.figma.remote_source;delete f.gp.variants[0].source_node.remote_source;assert.equal(run(f).ok,true);assert.equal(nested(f).ok,true);
-  f.ip.capture_errors.push({node_id:'401:10',code:'MIXED_VALUE',field:'fills'});const before=auditFigmaContractFacts({record:f.parent,live:f.pp});const r=auditFigmaComponentEvidence({record:f.parent,live:f.pp,model:f.model,session:f.session});assert.deepEqual(r.facts,before);assert.ok(has(r.nested_artwork,'EVIDENCE_CAPTURE_ERROR'));assert.equal(r.ok,false);});
-test('consumer impact cannot confirm a forged verified report with a wrong remote key',()=>{const f=fixture(),report=run(f);assert.equal(report.ok,true);f.gp.variants[0].source_node.remote_source.component_key='other';const r=collectEvidenceConsumers({model:f.model,session:f.session,reports:[report],sourceComponentId:'glyph'});assert.deepEqual(r.confirmed,[]);assert.ok(r.issues.some(i=>i.code==='EVIDENCE_REPORT_CONTEXT_MISMATCH'));});
+// Shared source-only capture/publication tests are not export acceptance gates.
+// Break protected: a valid current owner node is rejected without a Shared receipt,
+// or a real current-owner capture diagnostic/raw report is silently discarded.
+test('actual owner evidence does not require a Shared capture or publication provenance', () => {
+  const f = fixture();
+  f.session.captures = f.session.captures.filter(capture => capture.component_id !== 'glyph');
+  f.session.component_ids = ['parent', 'item'];
+  for (const link of f.item.evidence_links.source_dependencies) delete link.target.variant_id;
+  for (const root of f.ip.variants.map(variant => variant.source_node)) { delete root.main_component_id; root.instance_properties = {Unexpected: {type: 'VARIANT', value: 'ignored', boundVariables: {}}}; }
+  const own = run(f), dependent = nested(f);
+  assert.equal(own.ok, true);
+  assert.equal(dependent.ok, true);
+  assert.ok(own.verified_sources.every(source => source.field_path === '/node_id'));
+  assert.ok(dependent.dependencies.every(item => item.status === 'verified' && item.actual === item.source.node_id));
+});
+test('actual owner capture diagnostics and raw report remain after Shared capture is absent', () => {
+  const f = fixture();
+  f.session.captures = f.session.captures.filter(capture => capture.component_id !== 'glyph');
+  f.session.component_ids = ['parent', 'item'];
+  f.ip.capture_errors.push({node_id:'401:10', code:'MIXED_VALUE', field:'fills'});
+  const raw = auditFigmaContractFacts({record:f.item, live:f.ip});
+  const audit = auditFigmaComponentEvidence({record:f.item, live:f.ip, model:f.model, session:f.session});
+  assert.deepEqual(audit.facts, raw);
+  assert.ok(audit.capture_diagnostics.some(item => item.code === 'EVIDENCE_CAPTURE_ERROR'));
+  assert.equal(audit.ok, false);
+});
 test('remote inputs remain immutable',()=>{const f=fixture(),before=structuredClone(f);run(f);nested(f);assert.deepEqual(f,before);});
 
 function envelope(glyph) {return {schema_version:'2.3.0',registry:{id:'components-shared',library:'shared',status:'active',source:{figma_file_key:'synthetic-current-file',roots:[{role:'remote-reference',node_id:'500:1'}],baseline_commit:'b'.repeat(40),verified_at:'2026-10-02'}},components:[glyph]};}

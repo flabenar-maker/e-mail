@@ -186,27 +186,34 @@ for (const [label, mutate] of [
   assert.ok(report.issues.some(issue => issue.code === "EVIDENCE_CAPTURE_ERROR" && issue.capture_error?.node_id === raw.node_id));
 });
 
-test("remote source-only root lacking NONE layout remains unresolved when artificially warned", () => {
+// Break protected: an unresolved diagnostic on the actual owner boundary is not
+// discarded merely because Shared source packets are intentionally absent.
+test("actual owner warning without NONE layout remains unresolved", () => {
   const f = fixture();
-  f.glyph.identity.library = "shared"; f.glyph.figma.remote_source = { component_key: "remote-key" };
-  const root = f.gp.variants[0].source_node;
-  root.remote_source = { remote: true, component_key: "remote-key" };
-  const raw = { code: "ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW", node_id: root.node_id };
-  f.gp.capture_errors.push(raw);
-  const report = run(f), disposition = report.capture_diagnostics?.find(value => value.raw?.node_id === raw.node_id);
-  assert.equal(disposition?.status, "unverified"); assert.ok(disposition?.reason);
-  assert.ok(report.issues.some(issue => issue.code === "EVIDENCE_CAPTURE_ERROR" && issue.capture_error?.node_id === raw.node_id));
+  const artwork = f.ip.variants[0].source_node.children.find(child => child.node_id === "401:10");
+  delete artwork.layout;
+  const raw = { code: "ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW", node_id: artwork.node_id };
+  f.ip.capture_errors.push(raw);
+  f.session.captures = f.session.captures.filter(capture => capture.component_id !== "glyph");
+  f.session.component_ids = ["parent", "item"];
+  const report = run(f), disposition = report.capture_diagnostics?.find(value => value.raw?.node_id === artwork.node_id);
+  assert.equal(disposition?.status, "unverified");
+  assert.deepEqual(disposition?.raw, raw);
+  assert.ok(report.issues.some(issue => issue.code === "EVIDENCE_CAPTURE_ERROR" && issue.capture_error?.node_id === artwork.node_id));
 });
-
-test("remote key mismatch leaves an otherwise-NONE source-only warning unresolved", () => {
-  const f = fixture(); f.glyph.identity.library = "shared"; f.glyph.figma.remote_source = { component_key: "remote-key" };
-  const root = f.gp.variants[0].source_node;
-  root.remote_source = { remote: true, component_key: "wrong-key" };
-  root.layout = { mode: "NONE", horizontal_sizing: "FIXED", vertical_sizing: "FIXED", padding: { top: 0, right: 0, bottom: 0, left: 0 } };
-  const raw = { code: "ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW", node_id: root.node_id }; f.gp.capture_errors.push(raw);
-  const report = run(f), disposition = report.capture_diagnostics?.find(value => value.raw?.node_id === raw.node_id);
-  assert.equal(disposition?.status, "unverified"); assert.ok(disposition?.reason);
-  assert.ok(report.issues.some(issue => issue.code === "EVIDENCE_CAPTURE_ERROR" && issue.capture_error?.node_id === raw.node_id));
+test("actual owner warning with incomplete artwork stays unresolved", () => {
+  const f = fixture();
+  const artwork = f.ip.variants[0].source_node.children.find(child => child.node_id === "401:10");
+  artwork.layout = { mode: "NONE", horizontal_sizing: "FIXED", vertical_sizing: "FIXED", padding: { top: 0, right: 0, bottom: 0, left: 0 } };
+  artwork.children = [];
+  const raw = { code: "ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW", node_id: artwork.node_id };
+  f.ip.capture_errors.push(raw);
+  f.session.captures = f.session.captures.filter(capture => capture.component_id !== "glyph");
+  f.session.component_ids = ["parent", "item"];
+  const report = run(f), disposition = report.capture_diagnostics?.find(value => value.raw?.node_id === artwork.node_id);
+  assert.equal(disposition?.status, "unverified");
+  assert.deepEqual(disposition?.raw, raw);
+  assert.ok(report.issues.some(issue => issue.code === "EVIDENCE_CAPTURE_ERROR" && issue.capture_error?.node_id === artwork.node_id));
 });
 
 test("unsupported paint diagnostic inside declared artwork remains unresolved", () => {

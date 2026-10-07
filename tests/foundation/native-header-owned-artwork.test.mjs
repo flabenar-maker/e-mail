@@ -5,6 +5,7 @@ import test from 'node:test';
 import {createContractProofEnvironment} from '../../scripts/lib/contract-fact-proofs.mjs';
 import {auditFigmaContractFacts} from '../../scripts/lib/figma-contract-facts.mjs';
 import {auditComponentEvidenceLinks} from '../../scripts/lib/figma-component-evidence.mjs';
+import {collectEvidenceConsumers} from '../../scripts/lib/component-evidence-links.mjs';
 const owned = await import('../../scripts/lib/native-owned-artwork.mjs').catch(error => {
   const expected = new URL('../../scripts/lib/native-owned-artwork.mjs', import.meta.url).href;
   if (error?.code === 'ERR_MODULE_NOT_FOUND' && error.url === expected) return {};
@@ -80,3 +81,55 @@ test('Header raw report preserves an unknown native field', () => {
 });
 test('Header-only capture verifies registered nested artwork without Shared receipts or clipping closure', () => { const f = fixture(); api(); assert.equal(f.session.captures.length, 1); assert.equal(all(f).relation.ok, true); const r = all(f).context; assert.equal(r.ok, true); assert.equal(r.verified_sources.some(x => x.source_path === '/clips_content'), false); });
 for (const [name, mutate] of [['missing dependency', f => f.owner.evidence_links.source_dependencies.pop()], ['swapped main', f => f.packet.variants[0].source_node.children[0].main_component_id = '1008:1473'], ['cross-owner link', f => f.owner.evidence_links.source_dependencies[0].asset_owner.node_id = '1008:1823'], ['unknown property', f => f.packet.variants[0].source_node.children[0].instance_properties.Unknown = {type: 'VARIANT', value: 'x', boundVariables: {}}], ['bad Mobile suffix', f => f.packet.variants[0].source_node.children[0].name = 'header-logo-compact @2x'], ['unregistered target', f => f.owner.evidence_links.source_dependencies[0].target.component_id = 'unknown'], ['missing nested instance link', f => f.owner.evidence_links.source_dependencies = f.owner.evidence_links.source_dependencies.filter(x => x.id !== 'mobile-product')], ['unknown nested instance', f => { f.packet.variants[0].source_node.children[0].children.push({...node('I1008:1709;9:9', 'INSTANCE', 'unknown', 1, 1), main_component_id: '9:9', instance_properties: {}}); f.packet.capture_meta.node_count = 7; }], ['removed nested instance', f => { f.packet.variants[0].source_node.children[0].children = []; f.packet.capture_meta.node_count = 5; }], ['stale capture', f => f.session.canonical_git_sha = 'd'.repeat(40)]]) test(`Header artwork refuses ${name}`, () => { const f = fixture(); mutate(f); api(); assert.equal(all(f).relation.ok && all(f).context.ok, false); });
+
+// Break protected: treating Shared provenance as an export gate hides a valid
+// consumer-owned PNG boundary, or lets a forged owner-boundary report pass.
+test('Header owner evidence is independent of Shared main variant and property provenance', () => {
+  const f = fixture();
+  const instances = [
+    f.packet.variants[0].source_node.children[0],
+    f.packet.variants[1].source_node.children[0],
+    f.packet.variants[0].source_node.children[0].children[0],
+    f.packet.variants[1].source_node.children[0].children[0]
+  ];
+  for (const instance of instances) {
+    delete instance.main_component_id;
+    instance.instance_properties = {Unexpected: {type: 'VARIANT', value: 'not-a-master', boundVariables: {}}};
+  }
+  for (const link of f.owner.evidence_links.source_dependencies) delete link.target.variant_id;
+  const report = auditComponentEvidenceLinks({recordId: f.owner.id, model: f.model, session: f.session});
+  assert.equal(report.ok, true);
+  assert.ok(report.results.every(item => item.status === 'verified' && item.expected === item.source.node_id && item.actual === item.source.node_id));
+  assert.ok(report.verified_sources.every(source => source.field_path === '/node_id'));
+  assert.equal(all(f).relation.ok && all(f).context.ok, true);
+  const impact = collectEvidenceConsumers({model: f.model, session: f.session, sourceComponentId: 'asset-header-logo-4x', reports: [report]});
+  assert.deepEqual(impact.confirmed, []);
+  assert.deepEqual(impact.possible, [{component_id: 'email-header', asset_owner_node_id: '1008:1823', asset_id: 'header-logo', via: [{component_id: 'email-header', link_id: 'desktop-header'}]}]);
+});
+
+test('Header owner report rejects a forged actual boundary without Shared capture', () => {
+  const f = fixture();
+  const report = auditComponentEvidenceLinks({recordId: f.owner.id, model: f.model, session: f.session});
+  assert.equal(report.ok, true);
+  const clean = collectEvidenceConsumers({model: f.model, session: f.session, sourceComponentId: 'asset-header-logo-4x', reports: [report]});
+  assert.deepEqual(clean.confirmed, []);
+  assert.equal(clean.possible.length, 1);
+  const forged = clone(report);
+  forged.results[0].actual = 'forged-owner-node';
+  const impact = collectEvidenceConsumers({model: f.model, session: f.session, sourceComponentId: 'asset-header-logo-4x', reports: [forged]});
+  assert.deepEqual(impact.confirmed, []);
+  assert.ok(impact.issues.some(issue => issue.code === 'EVIDENCE_REPORT_CONTEXT_MISMATCH'));
+});
+
+for (const [name, mutate] of [
+  ['wrong actual node', f => f.owner.evidence_links.native_relation_proofs[0].source.node_id = 'unknown-node'],
+  ['wrong actual name', f => f.packet.variants[0].source_node.children[0].name = 'wrong-logo @4x'],
+  ['wrong actual type', f => f.packet.variants[0].source_node.children[0].node_type = 'FRAME'],
+  ['hidden actual node', f => f.packet.variants[0].source_node.children[0].visible = false],
+  ['broken nested ancestry', f => { const root = f.packet.variants[0].source_node; root.children.push(root.children[0].children.pop()); f.packet.capture_meta.node_count = 6; }],
+  ['wrong actual boundary', f => f.owner.asset_contracts[0].export_boundary.semantic_node_name = 'other @4x']
+]) test('Header owner evidence refuses '+name, () => {
+  const f = fixture(); mutate(f);
+  assert.equal(auditComponentEvidenceLinks({recordId: f.owner.id, model: f.model, session: f.session}).ok, false);
+  assert.equal(all(f).relation.ok && all(f).context.ok, false);
+});
