@@ -122,7 +122,7 @@ test('Header owner report rejects a forged actual boundary without Shared captur
 });
 
 for (const [name, mutate] of [
-  ['wrong actual node', f => f.owner.evidence_links.native_relation_proofs[0].source.node_id = 'unknown-node'],
+  ['wrong actual node', f => f.packet.variants[0].source_node.children[0].node_id = '1008:1710'],
   ['wrong actual name', f => f.packet.variants[0].source_node.children[0].name = 'wrong-logo @4x'],
   ['wrong actual type', f => f.packet.variants[0].source_node.children[0].node_type = 'FRAME'],
   ['hidden actual node', f => f.packet.variants[0].source_node.children[0].visible = false],

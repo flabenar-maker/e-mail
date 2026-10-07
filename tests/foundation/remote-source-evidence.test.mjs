@@ -75,7 +75,7 @@ test('actual owner capture diagnostics and raw report remain after Shared captur
   const raw = auditFigmaContractFacts({record:f.item, live:f.ip});
   const audit = auditFigmaComponentEvidence({record:f.item, live:f.ip, model:f.model, session:f.session});
   assert.deepEqual(audit.facts, raw);
-  assert.ok(audit.capture_diagnostics.some(item => item.code === 'EVIDENCE_CAPTURE_ERROR'));
+  assert.ok(audit.evidence_links.capture_diagnostics.some(item => item.raw?.code === 'MIXED_VALUE' && item.status === 'unverified'));
   assert.equal(audit.ok, false);
 });
 test('remote inputs remain immutable',()=>{const f=fixture(),before=structuredClone(f);run(f);nested(f);assert.deepEqual(f,before);});
