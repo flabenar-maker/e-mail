@@ -122,6 +122,21 @@ test('nested HTML rejects wrong all-axis actual instance properties', async () =
   assert.ok(nested(auditFigmaComponentEvidence({record: f.model.records.find(r => r.id === 'block-transaction-success'), live: f.packets['block-transaction-success'], model: f.model, session: f.session})).issues.some(i => i.code === 'NESTED_HTML_PLACEMENT_UNVERIFIED'));
 });
 
+test('nested HTML fails closed before borrowing immediate-child coverage for a deeper genuine dependency', async () => {
+  const f = await fixture(), owner = f.model.records.find(r => r.id === 'block-transaction-success'), details = f.model.records.find(r => r.id === 'details-operation');
+  // Synthetic unit mutation only: it models a second genuine library edge;
+  // it is not a Figma capture, a new canonical value, or an admitted packet.
+  details.contracts.mobile.root.children.push({
+    id: 'synthetic-deeper-genuine-html',
+    render_mode: 'nested-component',
+    component_id: 'badge-operation-status',
+    facts: [],
+    children: [],
+  });
+  const result = nested(auditFigmaComponentEvidence({record: owner, live: f.packets[owner.id], model: f.model, session: f.session}));
+  assert.equal(result.ok, false);
+  assert.ok(result.issues.some(item => item.code === 'NESTED_HTML_DEPTH_UNVERIFIED'));
+});
 for (const [label, mutate] of [
   ['missing projected descendant usage', f => { const usage = f.packets['block-transaction-success'].binding_evidence.usages.find(item => item.node_id.startsWith('I484:20069;')); f.packets['block-transaction-success'].binding_evidence.usages = f.packets['block-transaction-success'].binding_evidence.usages.filter(item => item !== usage); }],
   ['wrong projected resolved value', f => { const usage = f.packets['block-transaction-success'].binding_evidence.usages.find(item => item.node_id.startsWith('I484:20069;')); usage.resolved_value = typeof usage.resolved_value === 'number' ? usage.resolved_value + 1 : {r: 1, g: 0, b: 0, a: 1}; }],
