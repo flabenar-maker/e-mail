@@ -1,7 +1,7 @@
 import {createHash} from 'node:crypto';
 import {isDeepStrictEqual as equal} from 'node:util';
 import {createContractProofEnvironment} from './contract-fact-proofs.mjs';
-import {applyNativeRelationCoverage} from './native-relationship-coverage.mjs';
+import {applyNativeRelationCoverage, auditNativeRelationProofs} from './native-relationship-coverage.mjs';
 import {isFigmaContractFactReportFor} from './figma-contract-facts.mjs';
 
 const ID=/^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
@@ -90,8 +90,8 @@ function terminal(id,type,c,usage,trail=new Set()){
  if(type==='FLOAT'){if(!finite(value))throw Error('finite FLOAT terminal required');return number(value);}
  return opaqueColor(value);
 }
-function verify(record,p,env,c){
- const selected=env.selected(p.source),node=selected.node,t=target(record,p.contract_path),f=field(p.binding_path);
+function verify(record,p,env,c,consumer=p.source){
+ const selected=env.selected(consumer),node=selected.node,t=target(record,p.contract_path),f=field(p.binding_path);
  const alias=pointer(node,p.binding_path.replace(/\/id$/u,'')),v=c.variables.get(p.variable.id),collection=c.collections.get(p.variable.collection_id);
  if(!closed(alias,['id'])||alias.id!==p.variable.id||!v||!collection||v.name!==p.variable.name||v.key!==p.variable.key||v.collection_id!==p.variable.collection_id||v.resolved_type!==p.variable.resolved_type||collection.name!==p.variable.collection_name)throw Error('exact binding variable/key/name/type/collection ownership mismatch');
  const usage=c.usages.get(JSON.stringify([node.node_id,p.binding_path.replace(/\/id$/u,'')]));
@@ -110,7 +110,7 @@ function verify(record,p,env,c){
    if(!closed(node.corner_radii,['top_left','top_right','bottom_left','bottom_right'])||Object.values(node.corner_radii).some(n=>!finite(n)||number(n)!==actual)||CORNERS.some(k=>!equal(node.variable_bindings?.[k],{id:v.id})))throw Error('four equal native corners and uniform variable aliases required');
   }else if(!['HORIZONTAL','VERTICAL'].includes(node.layout?.mode))throw Error('known Auto Layout field required');
  }else if(!['COMPONENT','FRAME','INSTANCE','RECTANGLE','TEXT'].includes(node.node_type)||node.fills?.length!==1||node.fills[0].type!=='solid'||node.fills[0].visible!==true||node.fills[0].opacity!==1)throw Error('one opaque visible solid native paint required');
- return {...p.source,source_path:p.binding_path};
+ return {...consumer,source_path:p.binding_path};
 }
 export function auditNativeVariableProofs({record,model,session}={}){
  const report={ok:false,component_id:record?.id??null,canonical_git_sha:model?.canonical_sha??null,receipt_ids:[],results:[],issues:[],verified_sources:[]};
@@ -140,4 +140,40 @@ export function applyNativeVariableCoverage({facts,coverage,nativeRelationProofs
  const sources=new Set(trusted.sources.map(tuple)),issues=base.issues.filter(i=>!(i.code==='FIGMA_FACT_UNCOVERED'&&sources.has(tuple({component_id:facts.component_id,...i})))),removed=base.issues.length-issues.length;
  if(!removed)return base;
  return{...base,ok:!issues.length,...(typeof base.mapped_source_fact_count==='number'?{mapped_source_fact_count:base.mapped_source_fact_count+removed}:{}),issues};
+}
+
+// Verify the original canonical binding AND its independently captured actual
+// consumer. Selectors change only the consumer read context, never the packet,
+// canonical mapping/provenance, typed target, or source receipt.
+export function auditProjectedNativeVariableProofs({record,model,session,placement,source_variant_node_id}={}){
+ const report={ok:false,component_id:record?.id??null,canonical_git_sha:model?.canonical_sha??null,receipt_ids:[],results:[],issues:[],verified_sources:[]};
+ const owners=model?.records?.filter(r=>r.id===record?.id);
+ if(owners?.length!==1||!equal(owners[0],record)||!selector(placement)||!match(ROOT,source_variant_node_id)){report.issues.push(issue('NATIVE_PROJECTED_VARIABLE_INPUT_UNVERIFIED','/record','Canonical child and exact actual placement selectors required.'));return report;}
+ const validation=validateNativeVariableProofReferences({records:model.records}),env=createContractProofEnvironment(model,session);
+ report.issues.push(...validation,...env.issues);
+ try{
+  if(report.issues.length)throw Error('canonical variable metadata/session unverified');
+  const parent=env.lookup(placement.component_id),actual=env.selected(placement),source=env.selected({component_id:record.id,variant_node_id:source_variant_node_id,node_id:source_variant_node_id});
+  if(parent.figma.file_key!==record.figma.file_key||actual.node.node_type!=='INSTANCE'||actual.node.main_component_id!==source_variant_node_id||actual.ancestors.length===0)throw Error('genuine registered actual child identity/ancestry required');
+  const declared=(parent.evidence_links?.native_relation_proofs??[]).filter(p=>p.kind==='element-structure'&&equal(p.source,placement)&&pointer(parent,p.element_path)?.render_mode==='nested-component'&&pointer(parent,p.element_path)?.component_id===record.id);
+  const relations=auditNativeRelationProofs({record:parent,model,session});
+  if(declared.length!==1||relations.results.filter(r=>r.proof_id===declared[0].id&&r.status==='verified').length!==1)throw Error('independent exact parent placement structure required');
+  const sourceCatalog=catalog(source.packet),actualCatalog=catalog(actual.packet);
+  const proofs=(record.evidence_links?.native_variable_proofs??[]).filter(p=>p.source.variant_node_id===source_variant_node_id&&p.source.node_id!==source_variant_node_id);
+  for(const p of proofs){
+   const item={proof_id:p.id,status:'unverified'};env.beginProof();
+   try{
+    const original=env.selected(p.source);
+    if(!original.ancestors.some(n=>n.node_id===source_variant_node_id))throw Error('canonical descendant ancestry required');
+    const actualId='I'+placement.node_id.replace(/^I/u,'')+';'+p.source.node_id.replace(/^I/u,'');
+    const consumer={...placement,node_id:actualId},entry=env.selected(consumer);
+    if(!entry.ancestors.some(n=>n.node_id===placement.node_id))throw Error('complete projected consumer ancestry required');
+    verify(record,p,env,sourceCatalog);
+    const actualSource=verify(record,p,env,actualCatalog,consumer);
+    item.status='verified';item.source_paths=[actualSource];report.verified_sources.push(actualSource);
+   }catch(e){item.reason=e.message;report.issues.push(issue('NATIVE_PROJECTED_VARIABLE_UNVERIFIED',`/evidence_links/native_variable_proofs/${p.id}`,e.message));}
+   Object.assign(item,env.proofTrace());report.results.push(item);
+  }
+ }catch(e){report.issues.push(issue('NATIVE_PROJECTED_VARIABLE_UNVERIFIED','/placement',e.message));}
+ report.receipt_ids=[...env.receipts].sort();ordered(report.issues);report.ok=!report.issues.length&&report.results.every(r=>r.status==='verified');return report;
 }

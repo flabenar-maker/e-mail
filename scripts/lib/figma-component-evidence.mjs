@@ -1,4 +1,5 @@
 import { isDeepStrictEqual } from "node:util";
+import {auditNestedHtmlEvidence} from "./nested-html-evidence.mjs";
 import {artworkPlacementName, isSharedArtworkReference, verifyRegisteredArtworkInstance} from "./native-owned-artwork.mjs";
 import { validateCaptureFreshness } from "./component-evidence-freshness.mjs";
 import { auditFigmaContractFacts, hasCompleteMixedTextRuns } from "./figma-contract-facts.mjs";
@@ -791,6 +792,7 @@ export function auditFigmaComponentEvidence({ record, live, model, session, deri
   let evidence = { ok: false, component_id: record?.id ?? null, canonical_git_sha: null,
     session_started_at: null, receipt_ids: [], results: [], issues: [], required_sources: [], verified_sources: [] };
   let nested = { ok: true, component_id: record?.id ?? null, canonical_git_sha: model?.canonical_sha ?? null, session_started_at: session?.started_at ?? null, receipt_ids: [], boundaries: [], dependencies: [], issues: [] };
+  let nestedHtml = {ok: true, component_id: record?.id ?? null, placements: [], observed_content_overrides: [], observed_reference_measurements: [], issues: []};
   const requiredProofs = (record?.evidence_links?.fact_proofs?.length ?? 0) > 0 || (record?.evidence_links?.normative_decisions?.length ?? 0) > 0;
   let factProofs = {ok: !requiredProofs, results: [], verified_contract_paths: [], verified_sources: [], issues: requiredProofs ? [issue("CONTRACT_PROOF_INPUT_UNVERIFIED", "/session", "Typed proofs require the same canonical record and actual live session packet.")] : []};
   const requiredNativeProofs = (record?.evidence_links?.native_fact_proofs?.length ?? 0) > 0;
@@ -823,8 +825,8 @@ export function auditFigmaComponentEvidence({ record, live, model, session, deri
       });
       effective = {...base, ok: issues.length === 0, issues, capture_diagnostics};
     }
-    return {ok: effective.ok && evidence.ok && nested.ok && factProofs.ok && nativeProofs.ok && relations.ok && variableProofs.ok && contexts.ok, facts, effective_facts: effective, fact_proofs: factProofs, native_fact_proofs: nativeProofs, native_relation_proofs: relations, native_variable_proofs: variableProofs, native_context_proofs: contexts, evidence_links: evidence, nested_artwork: nested,
-      issues: [...effective.issues, ...evidence.issues, ...nested.issues, ...factProofs.issues, ...nativeProofs.issues, ...relations.issues, ...variableProofs.issues, ...contexts.issues]};
+    return {ok: effective.ok && evidence.ok && nested.ok && nestedHtml.ok && factProofs.ok && nativeProofs.ok && relations.ok && variableProofs.ok && contexts.ok, facts, effective_facts: effective, fact_proofs: factProofs, native_fact_proofs: nativeProofs, native_relation_proofs: relations, native_variable_proofs: variableProofs, native_context_proofs: contexts, evidence_links: evidence, nested_artwork: nested, nested_html: nestedHtml,
+      issues: [...effective.issues, ...evidence.issues, ...nested.issues, ...nestedHtml.issues, ...factProofs.issues, ...nativeProofs.issues, ...relations.issues, ...variableProofs.issues, ...contexts.issues]};
   };
   if (!model || !session) {
     if (nestedReferences(record ?? {}).length) {
@@ -863,5 +865,6 @@ export function auditFigmaComponentEvidence({ record, live, model, session, deri
     evidence.ok = true;
   } else evidence = auditComponentEvidenceLinks({ recordId: record.id, model, session });
   if (nestedReferences(record).length) nested = auditNestedArtworkEvidence({ recordId: record.id, model, session });
+  nestedHtml = auditNestedHtmlEvidence({recordId: record.id, model, session});
   return finish();
 }
