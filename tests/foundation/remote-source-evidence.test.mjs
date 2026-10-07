@@ -160,7 +160,7 @@ test('nested actual Shared origin warning is not required only through verified 
   }
   assert.equal(own.ok, true);
   assert.equal(projected.ok, true);
-  assert.ok(own.dependencies.every(item => item.status === 'verified' && item.actual === item.source.node_id));
+  assert.ok(own.results.every(item => item.status === 'verified' && item.actual === item.source.node_id));
 });
 
 test('nested Shared-origin exception does not accept another producer error', () => {

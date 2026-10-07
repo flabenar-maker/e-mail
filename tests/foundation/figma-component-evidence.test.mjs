@@ -315,7 +315,7 @@ function mobileDirectImageFixture() {
     ...header.asset_contracts[0], source_mode_id: "rendered-node", display_mode_id: "direct-image", export_profile_id: "png-4x", source_viewport: "desktop",
     owner_layer_name: "desktop-export-label @4x", export_boundary: { kind: "node", semantic_node_name: "desktop-export-label @4x" },
   };
-  desktopImage.name = "desktop-export-label";
+  desktopImage.name = "desktop-export-label @4x";
   header.contracts.mobile.root = { render_mode: "presentation-table", children: [{
     id: "mobile-direct-image", semantic_role: "brand", render_mode: "direct-image", asset_contract_id: "header-logo", children: [],
     facts: [{ id: "reference-size", value: { type: "dimensions", width: 322, height: 50, unit: "px" }, provenance: { kind: "figma-literal", node_id: mobileImage.node_id } }],
