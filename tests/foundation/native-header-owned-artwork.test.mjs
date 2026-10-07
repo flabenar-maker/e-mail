@@ -79,7 +79,7 @@ test('Header raw report preserves an unknown native field', () => {
   assert.equal(raw.issues.some(i => i.source_path === '/future_field'), true);
   assert.deepEqual(raw, structuredClone(raw));
 });
-test('Header-only capture separates PNG clipping preservation from HTML scalar coverage', () => { const f = fixture(); api(); assert.equal(f.session.captures.length, 1); assert.equal(all(f).relation.ok, true); const r = all(f).context; assert.equal(r.ok, true); assert.equal(r.verified_sources.some(x => x.source_path === '/clips_content'), false); assert.deepEqual(paths(r.export_preserved_sources), ['/clips_content', '/clips_content']); });
+test('Header-only capture separates PNG clipping preservation from HTML scalar coverage', () => { const f = fixture(); api(); assert.equal(f.session.captures.length, 1); assert.equal(all(f).relation.ok, true); const r = all(f).context; assert.equal(r.ok, true); assert.equal(r.verified_sources.some(x => x.source_path === '/clips_content'), false); assert.ok(Array.isArray(r.export_preserved_sources), 'missing export_preserved_sources'); assert.deepEqual(paths(r.export_preserved_sources), ['/clips_content', '/clips_content']); });
 for (const [name, mutate] of [['missing dependency', f => f.owner.evidence_links.source_dependencies.pop()], ['cross-owner link', f => f.owner.evidence_links.source_dependencies[0].asset_owner.node_id = '1008:1823'], ['bad Mobile suffix', f => f.packet.variants[0].source_node.children[0].name = 'header-logo-compact @2x'], ['unregistered target', f => f.owner.evidence_links.source_dependencies[0].target.component_id = 'unknown'], ['missing nested instance link', f => f.owner.evidence_links.source_dependencies = f.owner.evidence_links.source_dependencies.filter(x => x.id !== 'mobile-product')], ['unknown nested instance', f => { f.packet.variants[0].source_node.children[0].children.push({...node('I1008:1709;9:9', 'INSTANCE', 'unknown', 1, 1), main_component_id: '9:9', instance_properties: {}}); f.packet.capture_meta.node_count = 7; }], ['removed nested instance', f => { f.packet.variants[0].source_node.children[0].children = []; f.packet.capture_meta.node_count = 5; }], ['stale capture', f => f.session.canonical_git_sha = 'd'.repeat(40)]]) test(`Header artwork refuses ${name}`, () => { const f = fixture(); mutate(f); api(); assert.equal(all(f).relation.ok && all(f).context.ok, false); });
 
 test('Header actual boundary ignores incidental Shared main and property provenance', () => {
@@ -198,6 +198,8 @@ test('Header rendered PNG context preserves false and true clipping without HTML
   for (const placement of headerPlacements(f)) placement.clips_content = false;
   let coverage = all(f).context;
   assert.equal(coverage.ok, true);
+  assert.ok(Array.isArray(coverage.export_preserved_sources), 'missing export_preserved_sources');
+  assert.ok(Array.isArray(coverage.not_required_sources), 'missing not_required_sources');
   assert.deepEqual(paths(coverage.export_preserved_sources), ['/clips_content', '/clips_content']);
   assert.equal(coverage.export_preserved_source_fact_count, 2);
   assert.equal(coverage.not_required_source_fact_count, 8);
@@ -224,6 +226,7 @@ test('Header rendered PNG context preserves false and true clipping without HTML
 test('Header PNG context marks only complete actual Shared root metadata as not-required', () => {
   const f = fixture(), coverage = all(f).context;
   assert.equal(coverage.ok, true);
+  assert.ok(Array.isArray(coverage.not_required_sources), 'missing not_required_sources');
   assert.deepEqual(paths(coverage.not_required_sources), [
     '/instance_properties/Product/boundVariables', '/instance_properties/Product/boundVariables',
     '/instance_properties/Product/type', '/instance_properties/Product/type',
@@ -246,8 +249,6 @@ for (const [label, mutate] of [
   ['artificial matte', f => f.owner.asset_contracts[0].background.artificial_matte = 'allow'],
   ['missing actual dependency', f => f.owner.evidence_links.source_dependencies = f.owner.evidence_links.source_dependencies.filter(item => item.id !== 'mobile-header')],
   ['non Shared actual root', f => f.model.records.find(item => item.id === 'asset-header-logo-compact-4x').identity.library = 'marketing'],
-  ['malformed known instance property', f => f.packet.variants[0].source_node.children[0].instance_properties.Product.type = 'BOOLEAN'],
-  ['unknown instance property field', f => f.packet.variants[0].source_node.children[0].instance_properties.Product.future = 'unverified'],
   ['missing clipping qualifier', f => delete f.packet.variants[0].source_node.children[0].clips_content],
   ['invalid clipping qualifier', f => f.packet.variants[0].source_node.children[0].clips_content = 'false']
 ]) test('Header export context refuses ' + label, () => {
@@ -264,6 +265,7 @@ test('Header export context does not make absent Shared origin fields a new gate
   delete mobile.instance_properties;
   const coverage = all(f).context;
   assert.equal(coverage.ok, true);
+  assert.ok(Array.isArray(coverage.export_preserved_sources), 'missing export_preserved_sources');
   assert.ok((coverage.export_preserved_sources ?? []).some(item => item.variant_node_id === '15:2037' && item.source_path === '/clips_content'));
   assert.ok(!(coverage.not_required_sources ?? []).some(item => item.variant_node_id === '15:2037'));
   assert.ok(!coverage.verified_sources.some(item => item.variant_node_id === '15:2037' && (item.source_path === '/main_component_id' || item.source_path?.startsWith('/instance_properties'))));
@@ -292,4 +294,32 @@ test('Header combined audit keeps an ABSOLUTE warning with an extraneous field e
   f.packet.capture_errors.push({node_id: product.node_id, code: 'ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW', field: 'fills'});
   const combined = auditFigmaComponentEvidence({record: f.owner, live: f.packet, model: f.model, session: f.session});
   assert.ok(combined.effective_facts.issues.some(item => item.code === 'FIGMA_CAPTURE_UNSUPPORTED' && item.details?.some(detail => detail.node_id === product.node_id && detail.code === 'ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW' && detail.field === 'fills')));
+});
+
+
+for (const [label, mutate, sourcePath] of [
+  ['a malformed known instance property', f => f.packet.variants[0].source_node.children[0].instance_properties.Product.type = 'BOOLEAN', '/instance_properties/Product/type'],
+  ['an unknown instance property field', f => f.packet.variants[0].source_node.children[0].instance_properties.Product.future = 'unverified', '/instance_properties/Product/future']
+]) test('Header export context preserves opaque Shared ' + label + ' without making it an HTML scalar', () => {
+  const f = fixture(), before = all(f).context; mutate(f);
+  const raw = auditFigmaContractFacts({record: f.owner, live: f.packet});
+  const coverage = all(f).context;
+  assert.ok(Array.isArray(coverage.not_required_sources), 'missing not_required_sources');
+  assert.deepEqual(paths(coverage.export_preserved_sources), paths(before.export_preserved_sources));
+  assert.ok(coverage.not_required_sources.some(item => item.variant_node_id === '15:2037' && item.source_path === sourcePath));
+  assert.ok(!coverage.verified_sources.some(item => item.variant_node_id === '15:2037' && item.source_path === sourcePath));
+  const effective = context.applyNativeContextCoverage({facts: raw, coverage});
+  assert.ok(raw.issues.some(item => item.source_path === sourcePath));
+  assert.ok(!effective.issues.some(item => item.source_path === sourcePath));
+});
+test('Header rejects mutation of either authenticated new context collection on the original report', () => {
+  const f = fixture(), raw = auditFigmaContractFacts({record: f.owner, live: f.packet});
+  const exportCoverage = all(f).context;
+  assert.ok(Array.isArray(exportCoverage.export_preserved_sources), 'missing export_preserved_sources');
+  exportCoverage.export_preserved_sources.pop();
+  assert.equal(context.applyNativeContextCoverage({facts: raw, coverage: exportCoverage}), raw);
+  const originCoverage = all(f).context;
+  assert.ok(Array.isArray(originCoverage.not_required_sources), 'missing not_required_sources');
+  originCoverage.not_required_sources.pop();
+  assert.equal(context.applyNativeContextCoverage({facts: raw, coverage: originCoverage}), raw);
 });

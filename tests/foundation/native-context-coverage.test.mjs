@@ -94,6 +94,8 @@ test('ordinary HTML clipping remains scalar coverage and never export preservati
   let coverage = api().auditNativeContextProofs(f);
   assert.equal(coverage.ok, true);
   assert.ok(coverage.verified_sources.some(item => item.source_path === '/clips_content'));
+  assert.ok(Array.isArray(coverage.export_preserved_sources), 'missing export_preserved_sources');
+  assert.ok(Array.isArray(coverage.not_required_sources), 'missing not_required_sources');
   assert.deepEqual(coverage.export_preserved_sources, []);
   assert.deepEqual(coverage.not_required_sources, []);
   assert.equal(coverage.export_preserved_source_fact_count, 0);
