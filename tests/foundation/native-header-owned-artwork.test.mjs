@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {createContractProofEnvironment} from '../../scripts/lib/contract-fact-proofs.mjs';
 import {auditFigmaContractFacts} from '../../scripts/lib/figma-contract-facts.mjs';
-import {auditComponentEvidenceLinks} from '../../scripts/lib/figma-component-evidence.mjs';
+import {auditComponentEvidenceLinks, auditFigmaComponentEvidence} from '../../scripts/lib/figma-component-evidence.mjs';
 import {collectEvidenceConsumers} from '../../scripts/lib/component-evidence-links.mjs';
 const owned = await import('../../scripts/lib/native-owned-artwork.mjs').catch(error => {
   const expected = new URL('../../scripts/lib/native-owned-artwork.mjs', import.meta.url).href;
@@ -157,6 +157,13 @@ test('Header classifies only an unresolved Shared origin inside its exact actual
   assert.ok(!report.issues.some(issue => issue.code === 'EVIDENCE_CAPTURE_ERROR' && issue.capture_error?.node_id === actual.node_id));
   assert.equal(report.ok, true);
   assert.ok(rawFacts.issues.some(issue => issue.source_path === '/main_component_id'));
+  const combined = auditFigmaComponentEvidence({record: f.owner, live: f.packet, model: f.model, session: f.session});
+  const rawUnsupported = combined.facts.issues.find(issue => issue.code === 'FIGMA_CAPTURE_UNSUPPORTED');
+  const effectiveUnsupported = combined.effective_facts.issues.find(issue => issue.code === 'FIGMA_CAPTURE_UNSUPPORTED');
+  assert.ok(rawUnsupported?.details?.some(detail => detail.node_id === actual.node_id && detail.code === raw.code));
+  assert.ok(!effectiveUnsupported?.details?.some(detail => detail.node_id === actual.node_id && detail.code === raw.code));
+  assert.equal(combined.effective_facts.ok, true);
+  assert.equal(combined.evidence_links.ok, true);
   const proofs = all(f);
   assert.equal(proofs.relation.ok && proofs.context.ok, true);
   assert.ok(proofs.relation.verified_sources.every(source => source.source_path !== '/main_component_id' && !source.source_path?.startsWith('/instance_properties')));
@@ -171,4 +178,8 @@ for (const [label, mutate] of [
   const report = auditComponentEvidenceLinks({recordId: f.owner.id, model: f.model, session: f.session});
   assert.equal(report.ok, false);
   assert.ok(report.issues.some(issue => issue.code === 'EVIDENCE_CAPTURE_ERROR'));
+  if (label === 'a different capture error') {
+    const combined = auditFigmaComponentEvidence({record: f.owner, live: f.packet, model: f.model, session: f.session});
+    assert.ok(combined.effective_facts.issues.some(issue => issue.code === 'FIGMA_CAPTURE_UNSUPPORTED' && issue.details?.some(detail => detail.code === 'MIXED_VALUE')));
+  }
 });
