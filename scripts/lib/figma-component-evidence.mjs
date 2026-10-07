@@ -1,5 +1,5 @@
 import { isDeepStrictEqual } from "node:util";
-import {isSharedArtworkReference, verifyRegisteredArtworkInstance} from "./native-owned-artwork.mjs";
+import {artworkPlacementName, isSharedArtworkReference, verifyRegisteredArtworkInstance} from "./native-owned-artwork.mjs";
 import { validateCaptureFreshness } from "./component-evidence-freshness.mjs";
 import { auditFigmaContractFacts, hasCompleteMixedTextRuns } from "./figma-contract-facts.mjs";
 import { auditContractFactProofs } from "./contract-fact-proofs.mjs";
@@ -304,7 +304,10 @@ function consumerArtworkNode(record, asset, viewport, variantId, entries) {
         links[0].source_path !== '/reference_dimensions/' + dimension) return undefined;
   }
   const selected = entries.filter(entry => entry.node.node_id === fact.provenance.node_id && entry.ancestors.length > 0);
-  return selected.length === 1 ? selected[0].node : undefined;
+  if (selected.length !== 1) return undefined;
+  try { if (selected[0].node.name !== artworkPlacementName({record, element, asset, variant_node_id: variantId})) return undefined; }
+  catch { return undefined; }
+  return selected[0].node;
 }
 
 function artworkScope(record, live) {
@@ -346,6 +349,12 @@ function artworkScope(record, live) {
       if (!node) {
         scope.issues.push(issue("EVIDENCE_ASSET_BOUNDARY_UNVERIFIED", `/asset_contracts/${asset.id}/${variantId}`, "The export selector or exact viewport consumer links must resolve unambiguously to one existing boundary.")); continue;
       }
+      const elements = [];
+      function elementForAsset(element) { if (element.asset_contract_id === asset.id) elements.push(element); (element.children ?? []).forEach(elementForAsset); }
+      if (['mobile', 'desktop'].includes(viewport)) elementForAsset(record.contracts[viewport].root);
+      if (elements.length === 1 && elements[0].visibility?.mode === 'always' && node.visible !== true) {
+        scope.issues.push(issue("EVIDENCE_ASSET_BOUNDARY_UNVERIFIED", '/asset_contracts/' + asset.id + '/' + variantId, "The always-visible actual artwork boundary must be visible.")); continue;
+      }
       boundaries.push({ node, asset_id: asset.id });
     }
     scope.boundaries.push(...boundaries.map(boundary => ({ ...boundary, variant_node_id: variantId })));
@@ -356,7 +365,7 @@ function artworkScope(record, live) {
         scope.issues.push(issue("EVIDENCE_SCOPE_AMBIGUOUS", `/capture/${entry.node.node_id}`, "Instance belongs to overlapping or duplicate asset boundaries.")); continue;
       }
       const owner = owners[0];
-      scope.obligations.push({ source: { variant_node_id: variantId, node_id: entry.node.node_id, field_path: "/main_component_id" },
+      scope.obligations.push({ source: { variant_node_id: variantId, node_id: entry.node.node_id, field_path: "/node_id" },
         asset_owner: { node_id: owner.node.node_id, ...(owner.asset_id === undefined ? {} : { asset_id: owner.asset_id }) } });
     }
   }
@@ -424,13 +433,13 @@ function classifyEvidenceCaptureDiagnostics(report, { recordId, model, session }
       const link = links.length === 1 ? links[0] : null, target = link && resolved.targets.get(`${id}/${link.id}`);
       const actual = scope.nodes.get(obligation.source.node_id)?.node;
       if (!link || !target || link.asset_owner.node_id !== obligation.asset_owner.node_id || link.asset_owner.asset_id !== obligation.asset_owner.asset_id ||
-          actual?.node_type !== "INSTANCE" || actual.main_component_id !== target.target.node_id ||
-          !isSharedArtworkReference(model.records.find(record => record.id === target.target.component_id)) &&
-           (!load(target.target.component_id).scope?.variants.has(target.target.node_id) || !closure(target.target.component_id, new Set([...trail, id])))) { ok = false; break; }
+          actual?.node_type !== "INSTANCE") { ok = false; break; }
        if (isSharedArtworkReference(model.records.find(record => record.id === target.target.component_id))) {
          try {verifyRegisteredArtworkInstance({record: current.record, link, node: actual, records: model.records});}
          catch {ok = false; break;}
-       }
+       } else if (actual.main_component_id !== target.target.node_id ||
+          !load(target.target.component_id).scope?.variants.has(target.target.node_id) ||
+          !closure(target.target.component_id, new Set([...trail, id]))) { ok = false; break; }
     }
     complete.set(id, !!ok); return !!ok;
   }
@@ -480,7 +489,7 @@ function auditArtworkEvidence({ recordId, model, session }) {
   const resolved = resolveEvidenceTargets({ records: model.records, manifest: model.manifest, sourceDocuments: model.source_documents });
   issues.push(...resolved.issues);
   const links = record.evidence_links?.source_dependencies ?? [];
-  const source = link => ({ ...link.source, field_path: "/main_component_id" });
+  const source = link => ({ ...link.source, field_path: "/node_id" });
   const obligations = new Map(scope.obligations.map(o => [sourceKey(o.source), o]));
   for (const obligation of scope.obligations) {
     if (links.filter(link => sourceKey(source(link)) === sourceKey(obligation.source)).length !== 1) issues.push(issue("EVIDENCE_REQUIRED_LINK_MISSING", `/evidence_links/${sourceKey(obligation.source)}`, "Every actual INSTANCE in artwork requires its own dependency link.", { source: { ...obligation.source } }));
@@ -507,17 +516,23 @@ function auditArtworkEvidence({ recordId, model, session }) {
     else if (target) {
       const actual = scope.nodes.get(link.source.node_id)?.node, targetRecord = model.records.find(record => record.id === link.target.component_id);
       const shared = isSharedArtworkReference(targetRecord), tree = shared ? null : targetTree(link.target.component_id);
-      if (!shared && (!tree.identityValid || !tree.variants.has(target.target.node_id))) item.reason = "EVIDENCE_TARGET_IDENTITY_UNVERIFIED";
+      if (shared) {
+        item.expected = link.source.node_id;
+        try {
+          verifyRegisteredArtworkInstance({record, link, node: actual, records: model.records});
+          item.actual = actual.node_id; item.status = "verified"; item.reason = "EVIDENCE_ACTUAL_ARTWORK_NODE_MATCH";
+        } catch { item.reason = "EVIDENCE_ACTUAL_ARTWORK_NODE_UNVERIFIED"; }
+      }
+      else if (!tree.identityValid || !tree.variants.has(target.target.node_id)) item.reason = "EVIDENCE_TARGET_IDENTITY_UNVERIFIED";
       else if (actual?.node_type !== "INSTANCE" || typeof actual.main_component_id !== "string" || !actual.main_component_id) item.reason = "EVIDENCE_MAIN_COMPONENT_UNVERIFIED";
       else {
         item.actual = actual.main_component_id;
         item.status = item.actual === item.expected ? "verified" : "mismatch";
         item.reason = item.status === "verified" ? "EVIDENCE_MAIN_COMPONENT_MATCH" : "EVIDENCE_MAIN_COMPONENT_MISMATCH";
-        if (shared && item.status === "verified") try {verifyRegisteredArtworkInstance({record, link, node: actual, records: model.records});}
-        catch {item.status = "unverified"; item.reason = "EVIDENCE_INSTANCE_PROPERTIES_UNVERIFIED";}
       }
     }
-    if (item.status === "verified") verified.push(source(link));
+    if (item.status === "verified") verified.push({ ...link.source,
+      field_path: isSharedArtworkReference(model.records.find(record => record.id === link.target.component_id)) ? "/node_id" : "/main_component_id" });
     else issues.push(issue(item.reason, `/evidence_links/${link.id}`, `Source dependency is ${item.status}.`, { link_id: link.id }));
     results.push(item);
   }
@@ -526,6 +541,11 @@ function auditArtworkEvidence({ recordId, model, session }) {
     issues.push(issue("EVIDENCE_SCOPE_UNSUPPORTED", `/evidence_links/${link.id}`, "Shell assertions require Template role."));
   }
   report.receipt_ids = [...receipts].sort(order);
+  report.required_sources = orderedSources(scope.obligations.map(obligation => {
+    const candidates = links.filter(link => sourceKey(source(link)) === sourceKey(obligation.source));
+    return candidates.length === 1 && !isSharedArtworkReference(model.records.find(record => record.id === candidates[0].target.component_id))
+      ? { ...obligation.source, field_path: "/main_component_id" } : obligation.source;
+  }));
   report.verified_sources = orderedSources(verified);
   classifyEvidenceCaptureDiagnostics(report, { recordId, model, session });
   results.sort((a, b) => order(a.link_id, b.link_id)); orderedIssues(issues);
@@ -697,13 +717,18 @@ export function auditNestedArtworkEvidence({ recordId, model, session } = {}) {
             const canonical = resolved.targets.get(`${targetId}/${link.id}`), shared = isSharedArtworkReference(byId.get(link.target.component_id)), graphic = shared ? null : treeFor(link.target.component_id);
             if (canonical) { item.target = { ...canonical.target }; item.expected = canonical.target.node_id; }
             if (!canonical || resolved.issues.length) item.reason = "EVIDENCE_INPUT_UNVERIFIED";
-            else if (!shared && (!graphic?.tree.identityValid || !graphic.tree.variants.has(canonical.target.node_id))) item.reason = "EVIDENCE_TARGET_IDENTITY_UNVERIFIED";
+            else if (shared) {
+              item.source.field_path = "/node_id"; item.expected = item.source.node_id;
+              try {
+                verifyRegisteredArtworkInstance({record: target, link, node: sourceEntry.node, records: model.records, expected_node_id: item.source.node_id});
+                item.actual = sourceEntry.node.node_id; item.status = "verified"; item.reason = "EVIDENCE_ACTUAL_ARTWORK_NODE_MATCH";
+              } catch { item.reason = "EVIDENCE_ACTUAL_ARTWORK_NODE_UNVERIFIED"; }
+            }
+            else if (!graphic?.tree.identityValid || !graphic.tree.variants.has(canonical.target.node_id)) item.reason = "EVIDENCE_TARGET_IDENTITY_UNVERIFIED";
             else {
               item.actual = sourceEntry.node.main_component_id;
               item.status = item.actual === item.expected ? "verified" : "mismatch";
               item.reason = item.status === "verified" ? "EVIDENCE_MAIN_COMPONENT_MATCH" : "EVIDENCE_NESTED_PLACEMENT_UNVERIFIED";
-              if (shared && item.status === "verified") try {verifyRegisteredArtworkInstance({record: target, link, node: sourceEntry.node, records: model.records});}
-              catch {item.status = "unverified"; item.reason = "EVIDENCE_INSTANCE_PROPERTIES_UNVERIFIED";}
             }
           }
           dependencies.push(item);

@@ -184,9 +184,12 @@ export function createContractProofEnvironment(model, session) {
       const entry = selected({ component_id: id, ...link.source }), child = lookup(link.target.component_id);
       const targets = link.target.variant_id ? child.variants.filter(v => v.id === link.target.variant_id) : variants(child);
       const own = t.nodes.get(link.asset_owner.node_id);
-      if (targets.length !== 1 || child.figma.file_key !== t.record.figma.file_key || entry.node.node_type !== 'INSTANCE' || entry.node.main_component_id !== targets[0].node_id || !own || own.variantId !== entry.variantId || (own.node.node_id !== entry.node.node_id && !entry.ancestors.some(a => a.node_id === own.node.node_id))) throw Error('source dependency identity or asset owner ancestry mismatch');
+      if (child.figma.file_key !== t.record.figma.file_key || entry.node.node_type !== 'INSTANCE' || !own || own.variantId !== entry.variantId || (own.node.node_id !== entry.node.node_id && !entry.ancestors.some(a => a.node_id === own.node.node_id))) throw Error('actual dependency identity or asset owner ancestry mismatch');
       if (isSharedArtworkReference(child)) verifyRegisteredArtworkInstance({record: t.record, link, node: entry.node, records: model.records});
-      else dependencies(child.id, next);
+      else {
+        if (targets.length !== 1 || entry.node.main_component_id !== targets[0].node_id) throw Error('canonical nested source main variant mismatch');
+        dependencies(child.id, next);
+      }
     }
     // Every native INSTANCE inside a source-only graphic needs an exact link.
     if (['asset', 'icon'].includes(t.record.identity.semantic_role)) for (const e of t.nodes.values()) if (e.node.node_type === 'INSTANCE' && (t.record.evidence_links?.source_dependencies ?? []).filter(l => l.source.node_id === e.node.node_id && l.source.variant_node_id === e.variantId).length !== 1) throw Error('required source dependency link missing');

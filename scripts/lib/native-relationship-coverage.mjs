@@ -1,5 +1,5 @@
 import {createHash} from 'node:crypto';
-import {artworkPlacementName, verifyRegisteredArtworkInstance} from './native-owned-artwork.mjs';
+import {artworkPlacementName, isSharedArtworkReference, verifyRegisteredArtworkInstance} from './native-owned-artwork.mjs';
 import {isDeepStrictEqual as equal} from 'node:util';
 import {createContractProofEnvironment} from './contract-fact-proofs.mjs';
 import {applyNativeFactCoverage} from './native-fact-coverage.mjs';
@@ -118,7 +118,12 @@ function instance(record, e, source, node, env, add) {
     env.dependencies(record.id);
     const deps = record.evidence_links?.source_dependencies?.filter(l => l.source.node_id === node.node_id && l.source.variant_node_id === source.variant_node_id && l.asset_owner.node_id === node.node_id && l.asset_owner.asset_id === e.asset_contract_id);
     if (deps?.length !== 1) throw Error('one owned source dependency required for direct-image instance');
-    const {variant} = verifyRegisteredArtworkInstance({record, link: deps[0], node, records: env.records});
+    const {target, variant} = verifyRegisteredArtworkInstance({record, link: deps[0], node, records: env.records});
+    if (isSharedArtworkReference(target)) {
+      // Only actual owner identity is verified here. Preserve raw main/property
+      // findings; do not claim a Shared master equality that was never checked.
+      add('/node_id'); return;
+    }
     add('/main_component_id');
     if (variant.axes.length) for (const axis of variant.axes) for (const key of ['type', 'value', 'boundVariables']) add('/instance_properties/' + axis.name + '/' + key);
     else add('/instance_properties');

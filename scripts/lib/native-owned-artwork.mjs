@@ -1,6 +1,6 @@
 import {isDeepStrictEqual as equal} from 'node:util';
 
-// Shared entries are identity references. Only the consuming owner's actual
+// Shared entries are informational references. Only the consuming owner's actual
 // complete tree is evidence; no Shared source contract or capture is required.
 export function isSharedArtworkReference(record) {
   return record?.identity?.library === 'shared' && ['asset', 'icon'].includes(record.identity.semantic_role);
@@ -9,8 +9,14 @@ const unique = (items, message) => {if (items?.length !== 1) throw Error(message
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const closed = (value, keys) => object(value) && keys.every(key => Object.hasOwn(value, key)) && Object.keys(value).every(key => keys.includes(key));
 
-export function verifyRegisteredArtworkInstance({record, link, node, records}) {
+export function verifyRegisteredArtworkInstance({record, link, node, records, expected_node_id = link?.source?.node_id}) {
   const target = unique(records?.filter(candidate => candidate.id === link?.target?.component_id), 'one registered artwork identity required');
+  if (isSharedArtworkReference(target)) {
+    if (target.figma?.file_key !== record.figma?.file_key || node?.node_type !== 'INSTANCE' || node.node_id !== expected_node_id) throw Error('exact actual artwork node in its consuming owner required');
+    // Master main/variant/properties/publication metadata are not export facts.
+    // Callers prove this node's ancestry and the independently declared boundary.
+    return {target, variant: null};
+  }
   if (!['asset', 'icon'].includes(target.identity?.semantic_role) || target.figma?.file_key !== record.figma?.file_key ||
       !Array.isArray(target.properties) || target.properties.length || !Array.isArray(target.variants) || node?.node_type !== 'INSTANCE') throw Error('registered same-file artwork without unsupported controls required');
   const variants = target.variants.length ? target.variants : [{node_id: target.figma.node_id, axes: []}];

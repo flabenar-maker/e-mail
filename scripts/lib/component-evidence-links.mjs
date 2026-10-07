@@ -1,3 +1,4 @@
+import {isSharedArtworkReference} from './native-owned-artwork.mjs';
 // Pure, offline metadata checks. Live identity, ancestry and completeness
 // require a separate fresh capture; a valid reference is not that proof.
 const ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
@@ -88,6 +89,11 @@ function ownsVariant(record, nodeId) {
 }
 
 function targetNode(record, target) {
+  if (isSharedArtworkReference(record)) {
+    // Informational catalog lookup, not proof of an actual instance's ancestry.
+    const variants = record.variants.filter(variant => variant.id === target.variant_id);
+    return variants.length === 1 ? variants[0].node_id : record.figma.node_id;
+  }
   if (record.identity.node_kind === "component" && record.variants.length === 0) {
     return Object.hasOwn(target, "variant_id") ? null : record.figma.node_id;
   }
@@ -248,13 +254,15 @@ export function collectEvidenceConsumers({ model, session, sourceComponentId, re
   const allReceipts = new Set((session?.captures ?? []).map(capture => capture.receipt_id));
   const seenReports = new Set();
   function mismatch(path, message) { issue(issues, "EVIDENCE_REPORT_CONTEXT_MISMATCH", path, message); }
-  function nodeFrom(capture, variantId, nodeId) {
+  function nodeFrom(capture, variantId, nodeId, boundaryId) {
     const variants = capture?.packet?.variants?.filter(variant => variant.variant_node_id === variantId);
     if (variants?.length !== 1) return null;
-    const queue = [variants[0].source_node], nodes = [], visited = new Set();
+    const queue = [{node: variants[0].source_node, ancestors: []}], nodes = [], visited = new Set();
     while (queue.length) {
-      const node = queue.pop(); if (!node || visited.has(node)) return null;
-      visited.add(node); if (node.node_id === nodeId) nodes.push(node); queue.push(...(node.children ?? []));
+      const {node, ancestors} = queue.pop(); if (!node || visited.has(node)) return null;
+      visited.add(node);
+      if (node.node_id === nodeId && (boundaryId === undefined || node.node_id === boundaryId || ancestors.includes(boundaryId))) nodes.push(node);
+      queue.push(...(node.children ?? []).map(child => ({node: child, ancestors: [...ancestors, node.node_id]})));
     }
     return nodes.length === 1 ? nodes[0] : null;
   }
@@ -272,9 +280,22 @@ export function collectEvidenceConsumers({ model, session, sourceComponentId, re
       const edge = resolved.targets.get(`${report.component_id}/${item.link_id}`), targetCapture = edge && oneCapture(edge.target.component_id);
       const sameSource = edge && ["file_key", "variant_node_id", "node_id"].every(key => item.source?.[key] === edge.source[key]);
       const sameTarget = edge && ["component_id", "variant_id", "file_key", "node_id"].every(key => item.target?.[key] === edge.target[key]);
-      const covered = edge && report.verified_sources.some(source => source.variant_node_id === edge.source.variant_node_id && source.node_id === edge.source.node_id && source.field_path === "/main_component_id");
-      const actualNode = edge && nodeFrom(capture, edge.source.variant_node_id, edge.source.node_id);
+      const shared = edge && isSharedArtworkReference(byId.get(edge.target.component_id));
+      const field = shared ? "/node_id" : "/main_component_id";
+      const covered = edge && report.verified_sources.some(source => source.variant_node_id === edge.source.variant_node_id && source.node_id === edge.source.node_id && source.field_path === field);
+      const actualNode = edge && nodeFrom(capture, edge.source.variant_node_id, edge.source.node_id, edge.asset_owner.node_id);
       const targetNode = edge && nodeFrom(targetCapture, edge.target.node_id, edge.target.node_id);
+      if (shared) {
+        if (edge.kind !== "source-dependency" || !sameSource || !sameTarget || !covered ||
+            item.asset_owner?.node_id !== edge.asset_owner.node_id || item.asset_owner?.asset_id !== edge.asset_owner.asset_id ||
+            item.expected !== edge.source.node_id || item.actual !== edge.source.node_id || actualNode?.node_type !== "INSTANCE" ||
+            capture.packet.file_key !== owner.figma.file_key || capture.packet.component_node_id !== owner.figma.node_id) {
+          mismatch(path + '/' + item.link_id, "Verified artwork assertion must retain the actual current owner node, boundary and receipt.");
+        }
+        // Owner evidence proves an export placement, not usage of a Shared master.
+        // The catalog edge remains possible-only in the reverse projection below.
+        continue;
+      }
       if (!edge || edge.kind !== "source-dependency" || !sameSource || !sameTarget || !covered || !targetCapture ||
           !report.receipt_ids.includes(targetCapture.receipt_id) || !session.component_ids.includes(edge.target.component_id) ||
           item.asset_owner?.node_id !== edge.asset_owner.node_id || item.asset_owner?.asset_id !== edge.asset_owner.asset_id ||
