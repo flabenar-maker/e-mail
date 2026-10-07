@@ -212,7 +212,9 @@ test('Header rendered PNG context preserves false and true clipping without HTML
   const raw = auditFigmaContractFacts({record: f.owner, live: f.packet});
   assert.ok(raw.issues.some(item => item.source_path === '/clips_content'));
   const effective = context.applyNativeContextCoverage({facts: raw, coverage});
-  assert.ok(!effective.issues.some(item => item.source_path === '/clips_content'));
+  const placements = new Set(headerPlacements(f).map(item => item.node_id));
+  assert.ok(!effective.issues.some(item => item.source_path === '/clips_content' && placements.has(item.node_id)));
+  assert.equal(effective.issues.filter(item => item.source_path === '/clips_content' && ['15:2037', '230:3679'].includes(item.node_id)).length, 2);
   const copied = structuredClone(coverage);
   assert.equal(context.applyNativeContextCoverage({facts: raw, coverage: copied}), raw);
   const mutated = structuredClone(coverage); mutated.export_preserved_sources.pop();
@@ -272,6 +274,8 @@ test('Header export context does not make absent Shared origin fields a new gate
 });
 test('Header combined audit projects only qualified Mobile absolute-child warning to effective facts', () => {
   const f = fixture(), product = headerProducts(f)[0];
+  product.children.push(node(product.node_id + ';artwork', 'VECTOR', 'product artwork', 1, 1));
+  f.packet.capture_meta.node_count = 7;
   f.packet.capture_errors.push({node_id: product.node_id, code: 'ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW'});
   const combined = auditFigmaComponentEvidence({record: f.owner, live: f.packet, model: f.model, session: f.session});
   const raw = combined.facts.issues.find(item => item.code === 'FIGMA_CAPTURE_UNSUPPORTED');
