@@ -131,3 +131,56 @@ test("schema permits null native minimum width without permitting other null or 
   nullWidth.components[0].contracts.source_variants[0].source_node.reference_dimensions.width = null;
   assert.ok(validateComponentRegistryShape(nullWidth, schema).length > 0);
 });
+
+
+const removeSharedCapture = f => {
+  f.session.captures = f.session.captures.filter(capture => capture.component_id !== f.glyph.id);
+  f.session.component_ids = ['parent', 'item'];
+  for (const link of f.item.evidence_links.source_dependencies) delete link.target.variant_id;
+};
+const unresolvedSharedOrigin = f => {
+  const actual = f.ip.variants[0].source_node.children.find(node => node.node_id === '401:10');
+  actual.main_component_id = null;
+  const raw = {node_id: actual.node_id, code: 'MAIN_COMPONENT_UNRESOLVED'};
+  f.ip.capture_errors.push(raw);
+  return {actual, raw};
+};
+
+test('nested actual Shared origin warning is not required only through verified parent and child placement', () => {
+  const f = fixture();
+  removeSharedCapture(f);
+  const {actual, raw} = unresolvedSharedOrigin(f);
+  const own = run(f), projected = nested(f);
+  for (const report of [own, projected]) {
+    const disposition = report.capture_diagnostics?.find(item => item.raw?.node_id === actual.node_id && item.raw?.code === raw.code);
+    assert.deepEqual(disposition?.raw, raw);
+    assert.equal(disposition?.status, 'not-required');
+    assert.equal(disposition?.reason, 'EVIDENCE_SHARED_ORIGIN_NOT_REQUIRED');
+    assert.ok(!report.issues.some(issue => issue.code === 'EVIDENCE_CAPTURE_ERROR' && issue.capture_error?.node_id === actual.node_id));
+  }
+  assert.equal(own.ok, true);
+  assert.equal(projected.ok, true);
+  assert.ok(own.dependencies.every(item => item.status === 'verified' && item.actual === item.source.node_id));
+});
+
+test('nested Shared-origin exception does not accept another producer error', () => {
+  const f = fixture();
+  removeSharedCapture(f);
+  const {actual} = unresolvedSharedOrigin(f);
+  f.ip.capture_errors.splice(-1, 1, {node_id: actual.node_id, code: 'MIXED_VALUE', field: 'fills'});
+  const own = run(f), projected = nested(f);
+  assert.equal(own.ok, false);
+  assert.equal(projected.ok, false);
+  assert.ok(own.issues.concat(projected.issues).some(issue => issue.code === 'EVIDENCE_CAPTURE_ERROR'));
+});
+
+test('nested Shared-origin exception still requires the actual parent placement', () => {
+  const f = fixture();
+  removeSharedCapture(f);
+  unresolvedSharedOrigin(f);
+  f.pp.variants[0].source_node.children = [];
+  f.pp.capture_meta.node_count -= 3;
+  const projected = nested(f);
+  assert.equal(projected.ok, false);
+  assert.ok(projected.issues.some(issue => issue.code === 'EVIDENCE_NESTED_PLACEMENT_UNVERIFIED' || issue.code === 'EVIDENCE_CAPTURE_ERROR'));
+});

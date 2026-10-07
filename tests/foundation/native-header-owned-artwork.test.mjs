@@ -141,3 +141,34 @@ for (const [name, mutate] of [
   assert.equal(auditComponentEvidenceLinks({recordId: f.owner.id, model: f.model, session: f.session}).ok, false);
   assert.equal(all(f).relation.ok && all(f).context.ok, false);
 });
+
+
+test('Header classifies only an unresolved Shared origin inside its exact actual boundary as not required', () => {
+  const f = fixture(), actual = f.packet.variants[0].source_node.children[0];
+  actual.main_component_id = null;
+  const raw = {node_id: actual.node_id, code: 'MAIN_COMPONENT_UNRESOLVED'};
+  f.packet.capture_errors.push(raw);
+  const rawFacts = auditFigmaContractFacts({record: f.owner, live: f.packet});
+  const report = auditComponentEvidenceLinks({recordId: f.owner.id, model: f.model, session: f.session});
+  const disposition = report.capture_diagnostics.find(item => item.raw?.node_id === actual.node_id && item.raw?.code === raw.code);
+  assert.deepEqual(disposition?.raw, raw);
+  assert.equal(disposition?.status, 'not-required');
+  assert.equal(disposition?.reason, 'EVIDENCE_SHARED_ORIGIN_NOT_REQUIRED');
+  assert.ok(!report.issues.some(issue => issue.code === 'EVIDENCE_CAPTURE_ERROR' && issue.capture_error?.node_id === actual.node_id));
+  assert.equal(report.ok, true);
+  assert.ok(rawFacts.issues.some(issue => issue.source_path === '/main_component_id'));
+  const proofs = all(f);
+  assert.equal(proofs.relation.ok && proofs.context.ok, true);
+  assert.ok(proofs.relation.verified_sources.every(source => source.source_path !== '/main_component_id' && !source.source_path?.startsWith('/instance_properties')));
+});
+
+for (const [label, mutate] of [
+  ['a different capture error', f => { const actual = f.packet.variants[0].source_node.children[0]; actual.main_component_id = null; f.packet.capture_errors.push({node_id: actual.node_id, code: 'MIXED_VALUE', field: 'fills'}); }],
+  ['an unknown node outside the declared boundary', f => f.packet.capture_errors.push({node_id: '9:9', code: 'MAIN_COMPONENT_UNRESOLVED'})],
+  ['a broken declared boundary', f => { const actual = f.packet.variants[0].source_node.children[0]; actual.main_component_id = null; f.packet.capture_errors.push({node_id: actual.node_id, code: 'MAIN_COMPONENT_UNRESOLVED'}); f.owner.asset_contracts[0].export_boundary.semantic_node_name = 'other @4x'; }],
+]) test('Header keeps MAIN_COMPONENT_UNRESOLVED blocking for ' + label, () => {
+  const f = fixture(); mutate(f);
+  const report = auditComponentEvidenceLinks({recordId: f.owner.id, model: f.model, session: f.session});
+  assert.equal(report.ok, false);
+  assert.ok(report.issues.some(issue => issue.code === 'EVIDENCE_CAPTURE_ERROR'));
+});

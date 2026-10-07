@@ -313,7 +313,7 @@ function mobileDirectImageFixture() {
   mobileImage.name = "brand @4x";
   header.asset_contracts[0] = {
     ...header.asset_contracts[0], source_mode_id: "rendered-node", display_mode_id: "direct-image", export_profile_id: "png-4x", source_viewport: "desktop",
-    owner_layer_name: "desktop-export-label", export_boundary: { kind: "node", semantic_node_name: "desktop-export-label" },
+    owner_layer_name: "desktop-export-label @4x", export_boundary: { kind: "node", semantic_node_name: "desktop-export-label @4x" },
   };
   desktopImage.name = "desktop-export-label";
   header.contracts.mobile.root = { render_mode: "presentation-table", children: [{
