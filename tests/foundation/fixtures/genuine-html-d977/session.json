@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.1.0",
+  "canonical_git_sha": "d9771f9fe5063bbe6794843ac893a13d81c48a2a",
+  "session_nonce": "b04fca300499ec3b0a1f51bdc2e1b40db5c16bddfcbb5517b59af515ba521320",
+  "started_at": "2026-10-07T12:51:35.891Z",
+  "completed_at": "2026-10-07T13:07:46.610Z",
+  "component_ids": [
+    "block-transaction-success",
+    "badge-operation-status",
+    "details-operation"
+  ],
+  "captures": [
+    {
+      "component_id": "block-transaction-success",
+      "receipt_id": "genuine-html-d9771f9-0",
+      "tool": "use_figma",
+      "request_nonce": "0e77167403e541a3a2fff65685cfa477cda78204f1310079624ff3be42f55ff7",
+      "requested_at": "2026-10-07T12:51:35.891Z",
+      "received_at": "2026-10-07T12:51:51.009Z",
+      "packet_path": "packets/block-transaction-success.json",
+      "packet_sha256": "fb37806b456d21c861381dd58bcfbdbe58f212a260913a208295deb82bdc83a0"
+    },
+    {
+      "component_id": "badge-operation-status",
+      "receipt_id": "genuine-html-d9771f9-1",
+      "tool": "use_figma",
+      "request_nonce": "7e5b0817d7dd3363ea653c5327b95a2257dbb548b2b266e4ad2e21b304bf2099",
+      "requested_at": "2026-10-07T13:07:42.717Z",
+      "received_at": "2026-10-07T13:07:46.610Z",
+      "packet_path": "packets/badge-operation-status.json",
+      "packet_sha256": "e55f9612c6b77141006850df369e1ba2e0c1e2ebdf3dee2f046c0436b45ff20b"
+    },
+    {
+      "component_id": "details-operation",
+      "receipt_id": "genuine-html-d9771f9-2",
+      "tool": "use_figma",
+      "request_nonce": "b566c640e993f99255a1a4489acac858135cdc3b5ddf0fc490c6fbcf4da24b0f",
+      "requested_at": "2026-10-07T12:51:35.895Z",
+      "received_at": "2026-10-07T12:51:53.125Z",
+      "packet_path": "packets/details-operation.json",
+      "packet_sha256": "978262ad3952b43c99cc076999c0a8a95dd26326bfe5299d3da9fef42f0b8741"
+    }
+  ]
+}
