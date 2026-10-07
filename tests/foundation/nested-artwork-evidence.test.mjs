@@ -15,7 +15,7 @@ const record = (id, owner, role, variants) => ({ id, identity: { semantic_role: 
     desktop: { root: { render_mode: "presentation-table", facts: [], children: [] } }, figma_fact_links: [] } });
 const variants = (mobile, desktop) => [{ id: "mobile", node_id: mobile, axes: axes("Mobile") }, { id: "desktop", node_id: desktop, axes: axes("Desktop") }];
 function element(owner, viewport, variantId, id, mode, target) {
-  const value = { id: "owned-child", render_mode: mode, ...target, children: [], facts: [{ id: "reference-size",
+  const value = { id: "owned-child", ...(mode === "direct-image" ? {semantic_role: "artwork"} : {}), render_mode: mode, ...target, children: [], facts: [{ id: "reference-size",
     value: { type: "dimensions", width: 24, height: 24, unit: "px" }, provenance: { kind: "figma-literal", node_id: id } }] };
   owner.contracts[viewport].root.children.push(value);
   for (const dimension of ["width", "height"]) owner.contracts.figma_fact_links.push({ variant_node_id: variantId, node_id: id,
@@ -35,7 +35,7 @@ function fixture(frame = false) {
   const item = record("item", "400:0", "item", variants("401:1", "401:2"));
   const glyph = record("glyph", "500:1", "icon", []);
   for (const viewport of ["mobile", "desktop"]) glyph.contracts[viewport].root.render_mode = "figma-source-only";
-  item.asset_contracts = [{ id: "item-artwork", owner_layer_name: "artwork @4x", source_viewport: "desktop", source_mode_id: "rendered-node",
+  item.asset_contracts = [{ id: "item-artwork", owner_layer_name: "artwork @4x", source_viewport: "desktop", source_mode_id: "rendered-node", export_profile_id: "png-4x",
     export_boundary: { kind: "node", semantic_node_name: "artwork @4x" } }];
   item.evidence_links = { foundation_values: [], source_dependencies: [] };
   const parentTrees = [], itemTrees = [];

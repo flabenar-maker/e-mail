@@ -18,7 +18,7 @@ const record=(id,owner,role,variants)=>({id,status:'active',identity:{figma_name
   provenance:{node_id:owner,captured_at:'2026-10-02T00:00:00Z'},documentation:{purpose:'Synthetic source for mechanism regression.',critical_constraint_ids:[]},constraints:[]});
 const variants=(m,d)=>[{id:'mobile',node_id:m,axes:axes('Mobile')},{id:'desktop',node_id:d,axes:axes('Desktop')}];
 function addElement(owner,viewport,variantId,id,mode,target) {
-  const value={id:'owned-child',semantic_role:'graphic',render_mode:mode,...target,visibility:{mode:'always'},children:[],facts:[{id:'reference-size',value:{type:'dimensions',width:24,height:24,unit:'px'},provenance:{kind:'figma-literal',node_id:id}}]};
+  const value={id:'owned-child',semantic_role:mode==='direct-image'?'artwork':'graphic',render_mode:mode,...target,visibility:{mode:'always'},children:[],facts:[{id:'reference-size',value:{type:'dimensions',width:24,height:24,unit:'px'},provenance:{kind:'figma-literal',node_id:id}}]};
   owner.contracts[viewport].root.children.push(value);
   for(const dimension of ['width','height']) owner.contracts.figma_fact_links.push({variant_node_id:variantId,node_id:id,source_path:'/reference_dimensions/'+dimension,contract_path:`/contracts/${viewport}/root/children/0/facts/0/value/${dimension}`,transform:'identity'});
 }
@@ -27,7 +27,7 @@ function fixture() {
   const item=record('item','400:0','item',variants('401:1','401:2'));
   const glyph=record('glyph','500:1','icon',[]);glyph.figma.remote_source={component_key:KEY};
   for(const v of ['mobile','desktop']) glyph.contracts[v].root.render_mode='figma-source-only';
-  item.asset_contracts=[{id:'item-artwork',owner_layer_name:'artwork @4x',source_viewport:'desktop',source_mode_id:'rendered-node',export_boundary:{kind:'node',semantic_node_name:'artwork @4x'}}];
+  item.asset_contracts=[{id:'item-artwork',owner_layer_name:'artwork @4x',source_viewport:'desktop',source_mode_id:'rendered-node',export_profile_id:'png-4x',export_boundary:{kind:'node',semantic_node_name:'artwork @4x'}}];
   item.evidence_links={foundation_values:[],source_dependencies:[]};
   const parentTrees=[],itemTrees=[];
   for(const [v,parentId,itemId,placement,artwork] of [['mobile','301:1','401:1','301:10','401:10'],['desktop','301:2','401:2','301:20','401:20']]) {
