@@ -676,7 +676,7 @@ const componentSources = [
   ["components-schema", "schemas/components.schema.json", "schema"],
 ];
 
-test("declares all component registries as shadow sources outside every bundle", async () => {
+test("declares raw registries outside every bundle and components schema only in onboarding", async () => {
   const manifest = await canonicalManifest();
   const sources = new Map(
     manifest.sources.map((source) => [source.id, source]),
@@ -685,7 +685,9 @@ test("declares all component registries as shadow sources outside every bundle",
   for (const [id, path, kind] of componentSources) {
     assert.deepEqual(sources.get(id), { id, kind, path });
     for (const profile of manifest.bundle_profiles) {
-      assert.equal(profile.source_ids.includes(id), false);
+      const expected = id === "components-schema" && profile.id === "component-onboarding";
+      assert.equal(profile.source_ids.includes(id), expected);
+      assert.equal(profile.generated_bundle.static_source_ids.includes(id), expected);
     }
   }
 });
