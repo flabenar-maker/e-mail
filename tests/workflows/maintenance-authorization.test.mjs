@@ -20,7 +20,7 @@ async function activate(r,id,{naming=false}={}){
  const w=await readStrictYaml(join(r,'data/workflows/'+id+'.yaml'));w.workflow.status='active';await write(r,'data/workflows/'+id+'.yaml',w);
  if(naming){const n=await readStrictYaml(join(r,'data/foundations/figma-naming.yaml'));n.foundation.status='active';await write(r,'data/foundations/figma-naming.yaml',n);}
  await write(r,'system/manifest.yaml',m);
- return resolveSkillContext({repoRoot:r,routeId:id,workflowMode:'write',candidates:id==='figma-description-sync'?['button-secondary']:[],viewports:id==='figma-description-sync'?['mobile','desktop']:[]});
+ return resolveSkillContext({repoRoot:r,routeId:id,workflowMode:'write',candidates:id==='figma-description-sync'?[{id:'button-secondary'}]:[],viewports:id==='figma-description-sync'?['mobile','desktop']:[]});
 }
 test('P3: naming format admits active but canonical status stays shadow',async()=>{
  const n=await readStrictYaml(join(root,'data/foundations/figma-naming.yaml'));
