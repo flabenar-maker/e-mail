@@ -1,5 +1,5 @@
 import {isDeepStrictEqual as equal} from 'node:util';
-import {hasCompleteMixedTextRuns} from './figma-contract-facts.mjs';
+import {canonicalFigmaNumber, hasCompleteMixedTextRuns} from './figma-contract-facts.mjs';
 
 // Only the existing HTML endpoint/range representation is qualified here.
 // No caller masks, component IDs, duplicated colors, or inferred CSS angle.
@@ -45,7 +45,11 @@ export function verifyHtmlMixedTextPaintContext({record, relation, node, packet,
   const element = pointer(record, relation.element_path), errors = packet.capture_errors.filter(error => error.node_id === node.node_id && error.field === 'fills');
   if (node.node_type !== 'TEXT' || !['html-text', 'html-link'].includes(element.render_mode) || (node.fills !== null && !equal(node.fills, [])) || errors.length !== 1 || !closed(errors[0], ['node_id', 'code', 'field']) || errors[0].code !== 'MIXED_VALUE' || !hasCompleteMixedTextRuns(node, 'fills')) throw Error('complete captured MIXED text fills and ranges required');
   const selected = exactFact(element, 'styled-text-segments'), runs = node.styled_text_segments;
-  if (selected.fact.value?.type !== 'segments' || !own(selected.fact, node) || !equal(selected.fact.value.items, runs) ||
+  // Reuse the existing source identity comparison for these two numeric fields
+  // only. Retain every original raw run and compare all other fields strictly.
+  const comparableRuns = runs.map(run => ({...run, font_size_px: canonicalFigmaNumber(run.font_size_px),
+    line_height: {...run.line_height, value: canonicalFigmaNumber(run.line_height.value)}}));
+  if (selected.fact.value?.type !== 'segments' || !own(selected.fact, node) || !equal(selected.fact.value.items, comparableRuns) ||
       runs.some(run => !closed(run, ['start', 'end', 'characters', 'font_family', 'font_style', 'font_size_px', 'line_height', 'text_decoration', 'fills']) ||
         !closed(run.line_height, ['unit', 'value']) || run.fills.length !== 1 || run.fills.some(paint => !closed(paint, ['type', 'visible', 'opacity', 'color']) || paint.type !== 'solid' || paint.visible !== true || paint.opacity !== 1 || !hex(paint.color)))) throw Error('exact own complete typed text ranges with closed opaque SOLID paints required');
   const leaves = [];
@@ -58,7 +62,7 @@ export function verifyHtmlMixedTextPaintContext({record, relation, node, packet,
   if (!leaves.every(leaf => {
     const path = `${base}${leaf.path}`, links = mappings.filter(link => link.contract_path === path);
     return links.length === 1 && links[0].variant_node_id === relation.source.variant_node_id && links[0].node_id === node.node_id &&
-      links[0].transform === 'identity' && links[0].source_path === `/styled_text_segments${leaf.path}` && equal(pointer(record, path), leaf.value);
+      links[0].transform === 'identity' && links[0].source_path === `/styled_text_segments${leaf.path}` && equal(pointer(record, path), /^\/\d+\/(?:font_size_px|line_height\/value)$/u.test(leaf.path) ? canonicalFigmaNumber(leaf.value) : leaf.value);
   })) throw Error('every styled-run primitive needs its independent same-node identity mapping');
   // Not paint absence: the complete independently mapped ranges retain paint.
   // Binding identities and text_case are outside this aggregate-only proof.

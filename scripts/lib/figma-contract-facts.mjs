@@ -135,7 +135,7 @@ function contractFactPaths(record, derivedEvidence = []) {
   return result;
 }
 
-function canonicalFigmaNumber(value) {
+export function canonicalFigmaNumber(value) {
   if (typeof value !== "number" || !Number.isFinite(value)) return value;
   const nearestInteger = Math.round(value);
   return Math.abs(value - nearestInteger) < 0.0001 ? nearestInteger : value;
