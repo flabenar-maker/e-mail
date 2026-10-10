@@ -30,19 +30,19 @@ const workflowDefinition=m=>m.generated_docs.find(d=>d.id==='library-maintenance
 const codes=e=>(e instanceof AggregateError?e.errors:[e]).map(x=>x.code);
 
 // Removing renderer/registration loses a declared output; a second prose source
-// or rewriting the old four outputs would violate the public projection boundary.
-test('two workflow checkpoints are deterministic projections and preserve existing four outputs',async()=>{
+// or rewriting the four non-workflow outputs would violate the public projection boundary.
+test('six workflow checkpoints are deterministic projections and preserve existing four outputs',async()=>{
   const f=await fixture(); try{
     const schema=JSON.parse(await readFile(join(f.root,'schemas/manifest.schema.json'),'utf8'));
     assert.deepEqual(validateManifestShape(f.manifest,schema),[]);
     assert.deepEqual(await validateManifestSemantics(f.manifest,f.root),[]);
     const first=await renderAllGeneratedDocs({repoRoot:f.root,manifest:f.manifest});
     const second=await renderAllGeneratedDocs({repoRoot:f.root,manifest:f.manifest});
-    assert.deepEqual(first,second); assert.equal(first.size,6);
+    assert.deepEqual(first,second); assert.equal(first.size,10);
     for(const name of ['component-registry','typography-registry','asset-registry','naming-reference']){
       assert.equal(first.get(`docs/generated/${name}.md`),await readFile(join(repoRoot,`docs/generated/${name}.md`),'utf8'));
     }
-    for(const name of ['library-maintenance','email-build'])assert.match(first.get(`docs/generated/${name}-checkpoint.md`),/GENERATED FILE/);
+    for(const name of ['library-maintenance','component-onboarding','figma-description-sync','figma-naming-audit','migration-progress','email-build'])assert.match(first.get(`docs/generated/${name}-checkpoint.md`),/GENERATED FILE/);
   }finally{await f.cleanup();}
 });
 
@@ -54,8 +54,9 @@ test('checkpoint preserves every mode and typed stop/input/condition boundary',a
     const maintenance=docs.get('docs/generated/library-maintenance-checkpoint.md');
     assert.match(maintenance,/## Mode: `read-only`/); assert.match(maintenance,/## Mode: `write`/);
     assert.match(maintenance,/Status: `shadow`/);
-    assert.match(maintenance,/`figma-write-in-scope`/);assert.match(maintenance,/`figma-write-outside-allowlist`/);
-    assert.match(maintenance,/`request-input`/); assert.match(maintenance,/`stop`/);
+    assert.match(maintenance,/`figma-write-in-scope`/);assert.match(maintenance,/`repository-write-in-scope`/);
+    assert.match(maintenance,/`authorization-scope-mismatch`/);assert.match(maintenance,/`figma-readback-mismatch`/);assert.match(maintenance,/`publication-boundary-invalid`/);
+    assert.match(maintenance,/`request-required`/); assert.match(maintenance,/`target-scope-required`/);assert.match(maintenance,/`write-authorization-required`/); assert.match(maintenance,/`stop`/);
     assert.ok(maintenance.indexOf('### 1. `pin-canonical-state`')<maintenance.indexOf('### 2. `assess-impact`'));
     assert.match(maintenance,/\[figma-library-standard\]\(\.\.\/\.\.\/core\/figma-library-standard\.md\)/);
     const email=docs.get('docs/generated/email-build-checkpoint.md');

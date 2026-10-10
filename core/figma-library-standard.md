@@ -12,7 +12,7 @@
 - Граница полного компонентного контракта определена в `core/component-contract-standard.md`.
 - Правила компактной Figma Description определены в `core/figma-component-description-standard.md`.
 - Универсальная логика нейминга читается непосредственно из `data/foundations/figma-naming.yaml`.
-- Статус доступности рабочих маршрутов задаёт `workflows/system-paused.md`; запись маршрута в manifest сама по себе не разрешает изменение.
+- Статус и назначенный workflow каждого маршрута определяет текущий `system/manifest.yaml`. Resolver подтверждает согласованность workflow/profile/dependency статусов; `workflows/system-paused.md` применяется только к маршруту, которому manifest назначил `workflow-paused`. Запись источника или подготовленного workflow сама по себе не разрешает изменение.
 
 ## Принципы
 

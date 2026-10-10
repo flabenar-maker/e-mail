@@ -127,7 +127,7 @@ async function activateAllRoutes(root, manifest) {
   for (const route of manifest.routes) {
     route.workflow_source_id = route.id.startsWith("email-")
       ? "workflow-email-build"
-      : "workflow-library-maintenance";
+      : `workflow-${route.id}`;
     const profile = manifest.bundle_profiles.find(
       ({ id }) => id === route.bundle_profile_id,
     );
@@ -145,9 +145,10 @@ async function activateAllRoutes(root, manifest) {
   }
   await activateEmailRoutes(root, manifest);
   manifest.structured_workflows.status = "active";
-  await writeStatusFixture(root, "data/workflows/library-maintenance.yaml", (document) => {
-    document.workflow.status = "active";
-  });
+  await Promise.all(manifest.routes.filter(route => !route.id.startsWith("email-")).map(route =>
+    writeStatusFixture(root, `data/workflows/${route.id}.yaml`, document => { document.workflow.status = "active"; })
+  ));
+  await writeStatusFixture(root, "data/foundations/figma-naming.yaml", document => { document.foundation.status = "active"; });
 }
 
 test("email routes deliver model assembly material to the workflow steps that consume it", async (t) => {
@@ -592,6 +593,7 @@ test("an explicitly active maintenance route resolves exact ordered steps", asyn
       "inspect-canonical-sources",
       "inspect-figma-read-only",
       "verify-read-only-findings",
+      "handoff",
     ],
   );
   assert.equal(Object.isFrozen(result.workflow.steps), true);

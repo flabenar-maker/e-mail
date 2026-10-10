@@ -117,11 +117,8 @@ test("invalid generated bundle closure blocks the system validator", async (t) =
     `${JSON.stringify(manifest, null, 2)}\n`,
   );
   const generated = await renderAllGeneratedDocs({ repoRoot: root, manifest });
-  for (const path of [
-    "docs/generated/library-maintenance-checkpoint.md",
-    "docs/generated/email-build-checkpoint.md",
-  ]) {
-    await writeFixtureFile(root, path, generated.get(path));
+  for (const [path, content] of generated) {
+    await writeFixtureFile(root, path, content);
   }
 
   const result = await runValidator(root);

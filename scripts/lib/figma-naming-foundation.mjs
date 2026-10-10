@@ -5,7 +5,7 @@ import { SystemValidationError } from "./diagnostics.mjs";
 import { validateDocumentShape } from "./schema-validation.mjs";
 import { readStrictYaml } from "./strict-yaml.mjs";
 
-const SUPPORTED_FIGMA_NAMING_VERSION = "1.0.0";
+const SUPPORTED_FIGMA_NAMING_VERSION = "1.1.0";
 const FORBIDDEN_CONCRETE_KEYS = new Set([
   "component_id",
   "node_id",

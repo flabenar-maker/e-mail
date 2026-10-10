@@ -1,0 +1,518 @@
+{
+  "schema_version": "1.0.0",
+  "workflow": {
+    "id": "figma-description-sync",
+    "status": "shadow",
+    "source_ids": [
+      "repository-readme",
+      "figma-library-standard",
+      "component-contract-standard",
+      "figma-component-description-standard"
+    ],
+    "modes": [
+      {
+        "id": "read-only",
+        "required_inputs": [
+          "request",
+          "target-scope"
+        ],
+        "input_blockers": [
+          {
+            "input": "request",
+            "blocker": "request-required"
+          },
+          {
+            "input": "target-scope",
+            "blocker": "target-scope-required"
+          }
+        ],
+        "allowed_outputs": [
+          "pinned-sha",
+          "impact-report",
+          "audit-findings",
+          "figma-before",
+          "change-preview",
+          "verification-summary",
+          "handoff-summary"
+        ],
+        "steps": [
+          {
+            "id": "pin-canonical-state",
+            "source_ids": [
+              "repository-readme"
+            ],
+            "required_inputs": [
+              "request"
+            ],
+            "blockers": [
+              "source-pin-missing",
+              "request-required",
+              "target-scope-required"
+            ],
+            "allowed_outputs": [
+              "pinned-sha"
+            ],
+            "handoff": {
+              "on_success": "next",
+              "on_blocked": "stop"
+            },
+            "order": 1
+          },
+          {
+            "id": "assess-impact",
+            "source_ids": [
+              "repository-readme",
+              "figma-library-standard",
+              "component-contract-standard",
+              "figma-component-description-standard"
+            ],
+            "required_inputs": [
+              "target-scope",
+              "pinned-sha"
+            ],
+            "blockers": [
+              "scope-ambiguous",
+              "source-conflict"
+            ],
+            "allowed_outputs": [
+              "impact-report"
+            ],
+            "handoff": {
+              "on_success": "next",
+              "on_blocked": "stop"
+            },
+            "order": 2
+          },
+          {
+            "id": "inspect-canonical-sources",
+            "source_ids": [
+              "repository-readme",
+              "figma-library-standard",
+              "component-contract-standard"
+            ],
+            "required_inputs": [
+              "impact-report"
+            ],
+            "blockers": [
+              "source-missing",
+              "contract-ambiguous"
+            ],
+            "allowed_outputs": [
+              "audit-findings"
+            ],
+            "handoff": {
+              "on_success": "next",
+              "on_blocked": "stop"
+            },
+            "order": 3
+          },
+          {
+            "id": "inspect-figma-read-only",
+            "source_ids": [
+              "figma-library-standard"
+            ],
+            "required_inputs": [
+              "target-scope"
+            ],
+            "blockers": [
+              "identity-unconfirmed",
+              "fact-unproven"
+            ],
+            "allowed_outputs": [
+              "figma-before",
+              "audit-findings"
+            ],
+            "handoff": {
+              "on_success": "next",
+              "on_blocked": "stop"
+            },
+            "order": 4
+          },
+          {
+            "id": "preview-exact-change",
+            "source_ids": [
+              "repository-readme",
+              "figma-library-standard",
+              "component-contract-standard",
+              "figma-component-description-standard"
+            ],
+            "required_inputs": [
+              "impact-report",
+              "audit-findings"
+            ],
+            "blockers": [
+              "identity-unconfirmed",
+              "semantic-role-required",
+              "fact-unproven"
+            ],
+            "allowed_outputs": [
+              "change-preview"
+            ],
+            "handoff": {
+              "on_success": "next",
+              "on_blocked": "stop"
+            },
+            "order": 5
+          },
+          {
+            "id": "verify-read-only-findings",
+            "source_ids": [
+              "repository-readme",
+              "figma-library-standard",
+              "component-contract-standard"
+            ],
+            "required_inputs": [
+              "audit-findings"
+            ],
+            "blockers": [
+              "fact-unproven"
+            ],
+            "allowed_outputs": [
+              "verification-summary"
+            ],
+            "handoff": {
+              "on_success": "next",
+              "on_blocked": "stop"
+            },
+            "order": 6
+          },
+          {
+            "id": "handoff",
+            "source_ids": [
+              "repository-readme"
+            ],
+            "required_inputs": [
+              "pinned-sha",
+              "impact-report",
+              "verification-summary"
+            ],
+            "blockers": [
+              "handoff-incomplete"
+            ],
+            "allowed_outputs": [
+              "handoff-summary"
+            ],
+            "handoff": {
+              "on_success": "complete",
+              "on_blocked": "stop"
+            },
+            "order": 7
+          }
+        ]
+      },
+      {
+        "id": "write",
+        "required_inputs": [
+          "request",
+          "target-scope",
+          "write-authorization"
+        ],
+        "input_blockers": [
+          {
+            "input": "request",
+            "blocker": "request-required"
+          },
+          {
+            "input": "target-scope",
+            "blocker": "target-scope-required"
+          },
+          {
+            "input": "write-authorization",
+            "blocker": "write-authorization-required"
+          }
+        ],
+        "allowed_outputs": [
+          "pinned-sha",
+          "impact-report",
+          "audit-findings",
+          "figma-before",
+          "change-preview",
+          "change-boundary",
+          "figma-change",
+          "figma-readback",
+          "repository-change",
+          "verification-summary",
+          "github-pr",
+          "handoff-summary"
+        ],
+        "steps": [
+          {
+            "id": "pin-canonical-state",
+            "source_ids": [
+              "repository-readme"
+            ],
+            "required_inputs": [
+              "request"
+            ],
+            "blockers": [
+              "source-pin-missing",
+              "request-required",
+              "target-scope-required",
+              "write-authorization-required"
+            ],
+            "allowed_outputs": [
+              "pinned-sha"
+            ],
+            "handoff": {
+              "on_success": "next",
+              "on_blocked": "stop"
+            },
+            "order": 1
+          },
+          {
+            "id": "assess-impact",
+            "source_ids": [
+              "repository-readme",
+              "figma-library-standard",
+              "component-contract-standard",
+              "figma-component-description-standard"
+            ],
+            "required_inputs": [
+              "target-scope",
+              "pinned-sha"
+            ],
+            "blockers": [
+              "scope-ambiguous",
+              "source-conflict"
+            ],
+            "allowed_outputs": [
+              "impact-report"
+            ],
+            "handoff": {
+              "on_success": "next",
+              "on_blocked": "stop"
+            },
+            "order": 2
+          },
+          {
+            "id": "inspect-canonical-sources",
+            "source_ids": [
+              "repository-readme",
+              "figma-library-standard",
+              "component-contract-standard"
+            ],
+            "required_inputs": [
+              "impact-report"
+            ],
+            "blockers": [
+              "source-missing",
+              "contract-ambiguous"
+            ],
+            "allowed_outputs": [
+              "audit-findings"
+            ],
+            "handoff": {
+              "on_success": "next",
+              "on_blocked": "stop"
+            },
+            "order": 3
+          },
+          {
+            "id": "inspect-figma-read-only",
+            "source_ids": [
+              "figma-library-standard"
+            ],
+            "required_inputs": [
+              "target-scope"
+            ],
+            "blockers": [
+              "identity-unconfirmed",
+              "fact-unproven"
+            ],
+            "allowed_outputs": [
+              "figma-before",
+              "audit-findings"
+            ],
+            "handoff": {
+              "on_success": "next",
+              "on_blocked": "stop"
+            },
+            "order": 4
+          },
+          {
+            "id": "preview-exact-change",
+            "source_ids": [
+              "repository-readme",
+              "figma-library-standard",
+              "component-contract-standard",
+              "figma-component-description-standard"
+            ],
+            "required_inputs": [
+              "impact-report",
+              "audit-findings"
+            ],
+            "blockers": [
+              "identity-unconfirmed",
+              "semantic-role-required",
+              "fact-unproven"
+            ],
+            "allowed_outputs": [
+              "change-preview"
+            ],
+            "handoff": {
+              "on_success": "next",
+              "on_blocked": "stop"
+            },
+            "order": 5
+          },
+          {
+            "id": "prepare-change-boundary",
+            "source_ids": [
+              "repository-readme",
+              "figma-library-standard",
+              "component-contract-standard",
+              "figma-component-description-standard"
+            ],
+            "required_inputs": [
+              "change-preview",
+              "write-authorization",
+              "pinned-sha"
+            ],
+            "blockers": [
+              "authorization-missing",
+              "authorization-scope-mismatch"
+            ],
+            "allowed_outputs": [
+              "change-boundary"
+            ],
+            "handoff": {
+              "on_success": "next",
+              "on_blocked": "stop"
+            },
+            "order": 6
+          },
+          {
+            "id": "apply-authorized-figma-change",
+            "source_ids": [
+              "figma-component-description-standard",
+              "figma-library-standard"
+            ],
+            "required_inputs": [
+              "change-boundary",
+              "write-authorization",
+              "figma-before"
+            ],
+            "blockers": [
+              "authorization-scope-mismatch"
+            ],
+            "allowed_outputs": [
+              "figma-change"
+            ],
+            "handoff": {
+              "on_success": "next",
+              "on_blocked": "stop"
+            },
+            "order": 7
+          },
+          {
+            "id": "verify-figma-readback",
+            "source_ids": [
+              "figma-library-standard"
+            ],
+            "required_inputs": [
+              "change-boundary",
+              "figma-before",
+              "figma-change"
+            ],
+            "blockers": [
+              "figma-readback-mismatch"
+            ],
+            "allowed_outputs": [
+              "figma-readback"
+            ],
+            "handoff": {
+              "on_success": "next",
+              "on_blocked": "stop"
+            },
+            "order": 8
+          },
+          {
+            "id": "synchronize-dependents",
+            "source_ids": [
+              "component-contract-standard"
+            ],
+            "required_inputs": [
+              "change-boundary"
+            ],
+            "blockers": [
+              "dependency-unresolved"
+            ],
+            "allowed_outputs": [
+              "repository-change"
+            ],
+            "handoff": {
+              "on_success": "next",
+              "on_blocked": "stop"
+            },
+            "order": 9
+          },
+          {
+            "id": "verify-exact-cloud-commit",
+            "source_ids": [
+              "repository-readme"
+            ],
+            "required_inputs": [
+              "repository-change",
+              "pinned-sha"
+            ],
+            "blockers": [
+              "local-verification-failed"
+            ],
+            "allowed_outputs": [
+              "verification-summary"
+            ],
+            "handoff": {
+              "on_success": "next",
+              "on_blocked": "stop"
+            },
+            "order": 10
+          },
+          {
+            "id": "publish-review",
+            "order": 11,
+            "source_ids": [
+              "repository-readme"
+            ],
+            "required_inputs": [
+              "verification-summary",
+              "repository-change"
+            ],
+            "blockers": [
+              "publication-boundary-invalid"
+            ],
+            "allowed_outputs": [
+              "github-pr"
+            ],
+            "handoff": {
+              "on_success": "next",
+              "on_blocked": "stop"
+            }
+          },
+          {
+            "id": "handoff",
+            "source_ids": [
+              "repository-readme"
+            ],
+            "required_inputs": [
+              "pinned-sha",
+              "impact-report",
+              "verification-summary",
+              "github-pr"
+            ],
+            "blockers": [
+              "handoff-incomplete"
+            ],
+            "allowed_outputs": [
+              "handoff-summary"
+            ],
+            "handoff": {
+              "on_success": "complete",
+              "on_blocked": "stop"
+            },
+            "order": 12
+          }
+        ]
+      }
+    ]
+  }
+}

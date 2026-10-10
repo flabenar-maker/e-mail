@@ -99,7 +99,7 @@ test("shape validation rejects unsupported version", async () => {
     canonicalNaming(),
     readSchema(),
   ]);
-  naming.schema_version = "1.1.0";
+  naming.schema_version = "1.2.0";
 
   const errors = validateFigmaNamingShape(naming, schema);
 
