@@ -64,3 +64,39 @@ test('P3: every required step input must exist before that step, not merely late
   const errors=validateWorkflowRegistrySemantics(workflow,{sources:[{id:'repository-readme'}]});
   assert.ok(errors.some(e=>e.code==='WORKFLOW_STEP_INPUT_UNAVAILABLE'));
 });
+
+for (const pausedRouteId of ['email-new-build', 'email-continue-fix']) {
+  test(`P3: partial topology rejects paused ${pausedRouteId} while maintenance is active`, async () => {
+    const root = await createSystemFixture();
+    try {
+      const { manifest } = await candidate(root, 'library-maintenance');
+      const route = manifest.routes.find(value => value.id === pausedRouteId);
+      const profile = manifest.bundle_profiles.find(value => value.id === route.bundle_profile_id);
+      route.workflow_source_id = 'workflow-paused';
+      profile.generated_bundle.status = 'structured-shadow';
+      profile.source_ids = profile.source_ids.map(id => id === 'workflow-email-build' ? 'workflow-paused' : id);
+      profile.generated_bundle.static_source_ids = [...profile.source_ids];
+      await write(root, 'system/manifest.yaml', manifest);
+      const errors = await validateManifestSemantics(manifest, root);
+      assert.ok(errors.some(error => error.code === 'structured-workflow-status-topology-invalid'));
+    } finally { await cleanupSystemFixture(root); }
+  });
+}
+
+for (const reboundRouteId of ['email-new-build', 'email-continue-fix']) {
+  test(`P3: partial topology rejects ${reboundRouteId} rebound to active maintenance workflow`, async () => {
+    const root = await createSystemFixture();
+    try {
+      const { manifest } = await candidate(root, 'library-maintenance');
+      const route = manifest.routes.find(value => value.id === reboundRouteId);
+      const profile = manifest.bundle_profiles.find(value => value.id === route.bundle_profile_id);
+      route.workflow_source_id = 'workflow-library-maintenance';
+      profile.generated_bundle.status = 'structured-active';
+      profile.source_ids = profile.source_ids.map(id => id === 'workflow-email-build' ? 'workflow-library-maintenance' : id);
+      profile.generated_bundle.static_source_ids = [...profile.source_ids];
+      await write(root, 'system/manifest.yaml', manifest);
+      const errors = await validateManifestSemantics(manifest, root);
+      assert.ok(errors.some(error => error.code === 'structured-workflow-status-topology-invalid'));
+    } finally { await cleanupSystemFixture(root); }
+  });
+}
