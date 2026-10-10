@@ -4,6 +4,11 @@ import {fixture as relationFixture} from './native-relationship-coverage.test.mj
 import {auditFigmaContractFacts} from '../../scripts/lib/figma-contract-facts.mjs';
 import {auditNativeRelationProofs} from '../../scripts/lib/native-relationship-coverage.mjs';
 import {auditContractFactProofs, contractDecisionContextDigest, contractDecisionValueDigest} from '../../scripts/lib/contract-fact-proofs.mjs';
+import {readFile} from 'node:fs/promises';
+import {dirname, join} from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {loadComponentEvidenceModel} from '../../scripts/lib/component-evidence-inputs.mjs';
+import {auditFigmaComponentEvidence} from '../../scripts/lib/figma-component-evidence.mjs';
 
 const context = await import('../../scripts/lib/native-context-coverage.mjs');
 const clone = value => structuredClone(value);
@@ -12,6 +17,22 @@ const api = () => {
   return context;
 };
 const selector = node_id => ({component_id: 'relationship-fixture', variant_node_id: '101:1', node_id});
+const CONTACT_STATIC_SHA = '698cf59b459b76f263d23bce6f98896b18f4cfcd';
+const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '../..');
+async function actualContactFixture() {
+  // Static unit fixture from the admitted 9c packet: the real node/runs/error
+  // shape is retained, while only the test envelope binds it to this source SHA.
+  const packet = JSON.parse(await readFile(join(repoRoot, 'tests/foundation/fixtures/paint-repair-contact-9c-static.json'), 'utf8'));
+  const sessionNonce = 'a'.repeat(64), requestNonce = 'b'.repeat(64);
+  packet.capture_meta.request = {canonical_git_sha: CONTACT_STATIC_SHA, session_nonce: sessionNonce, request_nonce: requestNonce};
+  const session = {schema_version: '1.1.0', canonical_git_sha: CONTACT_STATIC_SHA, session_nonce: sessionNonce, started_at: '2026-10-10T10:23:00.000Z', completed_at: '2026-10-10T10:24:00.000Z', component_ids: ['block-contact-support'], captures: [{component_id: 'block-contact-support', receipt_id: 'static-contact-empty-fills', tool: 'use_figma', request_nonce: requestNonce, requested_at: '2026-10-10T10:23:01.000Z', received_at: '2026-10-10T10:23:59.000Z', packet}]};
+  const model = await loadComponentEvidenceModel({repoRoot, canonicalSha: CONTACT_STATIC_SHA});
+  return {model, session, packet, record: model.records.find(item => item.id === 'block-contact-support')};
+}
+function contactHelpContexts(report) { return report.native_context_proofs.results.filter(item => item.proof_id.endsWith('help-text-context')); }
+function contactHelpNodes() { return ['459:27586', '459:27607']; }
+function contactContextByNode(report, nodeId) { return contactHelpContexts(report).find(item => item.source_selectors?.[0]?.node_id === nodeId); }
+function contactReport(f) { return auditFigmaComponentEvidence({record: f.record, live: f.packet, model: f.model, session: f.session}); }
 
 function addFact(record, fact, source_path) {
   const root = record.contracts.mobile.root;
@@ -182,6 +203,29 @@ test('gradient coverage rejects copied, tampered, and cross-packet reports', () 
   other.variants[0].source_node.future_gradient_field = true;
   const otherRaw = auditFigmaContractFacts({record: f.record, live: other});
   assert.equal(api().applyNativeContextCoverage({facts: otherRaw, coverage: api().auditNativeContextProofs(f)}), otherRaw);
+});
+
+test('actual Contact mixed TEXT captures with empty aggregate fills qualify through full native-context routing', async () => {
+  const f = await actualContactFixture(), report = contactReport(f);
+  assert.equal(contactHelpContexts(report).length, 2, JSON.stringify(contactHelpContexts(report)));
+  assert.equal(contactHelpContexts(report).every(item => item.status === 'verified'), true, JSON.stringify(contactHelpContexts(report)));
+  for (const node_id of contactHelpNodes()) assert.equal(report.effective_facts.issues.some(issue => issue.node_id === node_id && issue.source_path === '/fills'), false);
+  assert.ok(report.effective_facts.issues.some(issue => issue.node_id === '459:27586' && issue.source_path === '/text_style/text_case'));
+  assert.ok(report.effective_facts.issues.some(issue => issue.node_id === '459:27607' && issue.source_path.startsWith('/variable_bindings/')));
+});
+
+for (const {label, affected, mutate} of [
+  {label: 'removes the same-node fills MIXED_VALUE error', affected: contactHelpNodes(), mutate: f => {f.packet.capture_errors = f.packet.capture_errors.filter(error => !(contactHelpNodes().includes(error.node_id) && error.field === 'fills'));}},
+  {label: 'duplicates a same-node fills MIXED_VALUE error', affected: ['459:27586'], mutate: f => {f.packet.capture_errors.push(structuredClone(f.packet.capture_errors.find(error => error.node_id === '459:27586' && error.field === 'fills')));}},
+  {label: 'moves the fills MIXED_VALUE error to a foreign node', affected: ['459:27586'], mutate: f => {f.packet.capture_errors.find(error => error.node_id === '459:27586' && error.field === 'fills').node_id = '459:27585';}}
+]) test(`actual Contact empty aggregate fills stays unverified when it ${label}`, async () => {
+  const f = await actualContactFixture(); mutate(f); const report = contactReport(f);
+  assert.equal(contactHelpContexts(report).length, 2, JSON.stringify(contactHelpContexts(report)));
+  for (const node_id of affected) {
+    assert.equal(contactContextByNode(report, node_id)?.status, 'unverified', JSON.stringify(contactHelpContexts(report)));
+    assert.ok(report.effective_facts.issues.some(issue => issue.node_id === node_id && issue.source_path === '/fills'));
+  }
+  for (const node_id of contactHelpNodes().filter(node_id => !affected.includes(node_id))) assert.equal(contactContextByNode(report, node_id)?.status, 'verified', JSON.stringify(contactHelpContexts(report)));
 });
 
 test('mixed null fills context leaves an unknown root field effective-uncovered', () => {
