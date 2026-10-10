@@ -1,5 +1,7 @@
 # CUPIS: ремонт доказательств fact provenance — implementation plan
 
+**Актуальный статус10.10.2026:** этот адресный P2-план выполнен, принят и слит PR #110/main e44c726175ca3b93c3a41b43d75424d060bf6390. Ниже сохранена историческая последовательность с собственными pins; она не является командой повторить работу. Текущий P3 — [draft PR #112](https://github.com/flabenar-maker/e-mail/pull/112), порядок — [cutover plan](../2026-10-01-cupis-final-maintenance-cutover.md#p3-current-2026-10-10).
+
 Дата: 03.10.2026. Пользователь одобрил спецификацию командой «Делай сразу весь»: выполняем весь этот ремонт без промежуточных запросов, но без merge/P3/cutover. Основание — PR #110@5431e8b61920d3eed6e9d59d6cd23c0932deae6c; main@618d124df0a664c84d23a724ba50ef2b324e9b97.
 
 Спецификация: [contract-fact-proof](../../specs/2026-10-03-cupis-contract-fact-proof-design.md). Родитель: [cutover](../2026-10-01-cupis-final-maintenance-cutover.md). Это только остаток provenance P2; F2, широкая native/binding/visual coverage и F7 не закрываются.
