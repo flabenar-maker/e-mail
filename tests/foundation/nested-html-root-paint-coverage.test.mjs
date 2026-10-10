@@ -52,15 +52,22 @@ function primarySourceContext(f) { return record(f, 'button-primary').evidence_l
 test('authentic Hero Primary roots receive only independently qualified nested paint and direct bindings', async () => {
   const f = await fixture();
   addOwnInertContexts(f);
-  // A real, unknown parent layout leaf is not a child-derived paint fact and must remain uncovered.
-  heroRoots(f)[0].node.layout.unknown_future_layout_field = true;
   const primary = auditFigmaComponentEvidence({record: record(f, 'button-primary'), live: f.packets['button-primary'], model: f.model, session: f.session});
   assert.equal(primary.ok, true, JSON.stringify(primary.issues));
   const result = report(f);
   assert.equal(result.nested_html.ok, true, JSON.stringify(result.nested_html.issues));
   for (const {node} of heroRoots(f)) assert.deepEqual(rootPaintCovered(result, node.node_id), [], `root paint/bindings must be private computed coverage: ${node.node_id}`);
   assert.ok(rawIssuesFor(result, '1045:18176').some(issue => paths.has(issue.source_path)), 'computed coverage must not mutate raw facts');
-  assert.ok(issuesFor(result, '1045:18176').some(issue => issue.source_path === '/layout/unknown_future_layout_field'), 'parent layout remains parent-owned');
+});
+
+test('a parent-owned unknown root layout leaf remains uncovered and does not authorize nested paint closure', async () => {
+  const f = await fixture();
+  addOwnInertContexts(f);
+  heroRoots(f)[0].node.layout.unknown_future_layout_field = true;
+  const result = report(f);
+  assert.equal(result.nested_html.ok, false, JSON.stringify(result.nested_html.issues));
+  assert.ok(issuesFor(result, '1045:18176').some(issue => issue.source_path === '/layout/unknown_future_layout_field'));
+  assert.ok(rawIssuesFor(result, '1045:18176').some(issue => issue.source_path === '/layout/unknown_future_layout_field'));
 });
 
 test('private root-paint bridge rejects forged nested reports and facts', async () => {
