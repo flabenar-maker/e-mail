@@ -1126,7 +1126,12 @@ test("semantic validation rejects incoherent partial email-cutover topology", as
       }],
     ]),
     ["active aggregate with partial topology", (manifest) => {
-      manifest.structured_workflows.status = "active";
+      const route = manifest.routes.find(({ id }) => id === "library-maintenance");
+      const profile = manifest.bundle_profiles.find(({ id }) => id === route.bundle_profile_id);
+      route.workflow_source_id = "workflow-paused";
+      profile.source_ids = profile.source_ids.map(id => id === "workflow-library-maintenance" ? "workflow-paused" : id);
+      profile.generated_bundle.static_source_ids = [...profile.source_ids];
+      profile.generated_bundle.status = "structured-shadow";
     }],
     ["active aggregate routes everything to email while maintenance stays shadow", (manifest) => {
       manifest.structured_workflows.status = "active";

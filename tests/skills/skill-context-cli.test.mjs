@@ -60,8 +60,8 @@ test("parses route, mode and repeated exact selectors", () => {
   assert.deepEqual(parseViewport("mobile"), ["mobile"]);
 });
 
-test("prints deterministic JSON for a paused canonical route", async () => {
-  const args = ["--route", "migration-progress"];
+test("prints deterministic JSON for an active canonical route", async () => {
+  const args = ["--route", "migration-progress", "--mode", "read-only"];
   const first = await runCli(args);
   const second = await runCli(args);
 
@@ -70,11 +70,9 @@ test("prints deterministic JSON for a paused canonical route", async () => {
   assert.equal(first.stdout, second.stdout);
   assert.equal(first.stdout.endsWith("\n"), true);
   const result = JSON.parse(first.stdout);
-  assert.equal(result.status, "paused");
-  assert.equal(result.bundle.mode, "structured-shadow");
-  assert.deepEqual(result.blockers.map(({ code }) => code), [
-    "SKILL_ROUTE_PAUSED",
-  ]);
+  assert.equal(result.status, "resolved");
+  assert.equal(result.bundle.mode, "structured-active");
+  assert.deepEqual(result.blockers ?? [], []);
 });
 
 test("invalid arguments return typed JSON and exit one", async () => {
