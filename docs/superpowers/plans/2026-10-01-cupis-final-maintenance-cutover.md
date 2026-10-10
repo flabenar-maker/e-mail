@@ -39,7 +39,9 @@
 | Owner | Raw → effective | Подтверждённая область | Remaining |
 | --- | --- | --- | --- |
 | Button/Primary | 118 → 4 | 4 context refs verified; 2 CSS-angle proofs verified; 12 matrix leaves not-required, scalar-verified 0 | 4 fills binding IDs: по два на roots337:4691/337:4694 |
-| Block/Contact-Support | 311 → 12 | 12 context refs verified, включая help459:27586/459:27607; все 8 raw MIXED_VALUE diagnostics сохранены | 6 text_case + 6 fills/textRangeFills binding IDs на Desktop472:16997/Mobile472:16998 |
+| Block/Contact-Support | 311 → 12 | 14 context refs verified, включая help459:27586/459:27607; все 8 raw MIXED_VALUE diagnostics сохранены | 6 text_case + 6 fills/textRangeFills binding IDs на Desktop472:16997/Mobile472:16998 |
+
+Уточнение счётчика после final gate8d: authoritative audit-full.json содержит 14/14 verified html-element-context для Contact. Сохранённый compact final-audit-summary.json ошибочно указал 12 verified; это ошибка краткого отчёта, не количество declarations или другая proof category. Original compact bytes/hash не переписаны; clarification receipt SHA256 af23d6f3c57974256499b00f83ec2c6c55a811fe5fd501f0a3301593fbe8e300 связан с audit-full SHA256 a7a7c75f4f86f4e4a01c783f0fbf93faf277cfd4ca8c736412a15dc71ef9ba77. Effective remaining12 — отдельный корректный счётчик, не число verified contexts. Source/code/values не менялись и fresh capture не повторялся. Документационный successor проверяется узко; full1748/1748 и оба Windows gates остаются на exact8d, не перепиниваются.
 
 Value mismatch 0. Оба combined=false; непроверенные поля не скрыты. Полный residual inventory содержит точные variant/node/source paths. Parent Transaction и другие закрытые scopes не пересчитаны — эти два owner не являются общей приёмкой библиотеки.
 
