@@ -39425,6 +39425,16 @@
             "id": "native-desktop-root-content-area-help-notice-context",
             "kind": "html-element-context",
             "structure_proof_id": "native-desktop-root-content-area-help-notice-structure"
+          },
+          {
+            "id": "native-mobile-root-content-area-help-notice-help-text-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-mobile-root-content-area-help-notice-help-text-structure"
+          },
+          {
+            "id": "native-desktop-root-content-area-help-notice-help-text-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-desktop-root-content-area-help-notice-help-text-structure"
           }
         ]
       }

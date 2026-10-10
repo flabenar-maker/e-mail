@@ -1,12 +1,13 @@
 import {createHash} from 'node:crypto';
 import {isDeepStrictEqual as equal} from 'node:util';
-import {createContractProofEnvironment} from './contract-fact-proofs.mjs';
+import {createContractProofEnvironment, auditContractFactProofs} from './contract-fact-proofs.mjs';
 import {auditNativeRelationProofs} from './native-relationship-coverage.mjs';
 import {applyNativeVariableCoverage} from './native-variable-coverage.mjs';
 import {isFigmaContractFactReportFor} from './figma-contract-facts.mjs';
 import {ownedContextStructure, preserveSharedArtworkMetadata, resolveArtworkContextReference, verifyArtworkDependency, verifySourceArtworkContext} from './native-artwork-context.mjs';
 import {resolveImageFillContextReference, verifyImageFillPaintContext} from './native-image-fill-context.mjs';
 import {resolveImageFillInertAxisContextReference, verifyImageFillInertAxisContext} from './native-image-fill-inert-axis-context.mjs';
+import {verifyHtmlGradientPaintContext, verifyHtmlMixedTextPaintContext} from './native-html-paint-context.mjs';
 
 // Context proofs reference an independently verified semantic element. They
 // never accept field masks, duplicated defaults, or caller-provided success.
@@ -71,9 +72,11 @@ function directFact(record, relation, node, factId, sourcePath) {
   return l.variant_node_id === relation.source.variant_node_id && l.node_id === node.node_id && l.source_path === sourcePath &&
     (l.transform === 'identity' ? equal(f.value.value, value) : l.transform === 'lowercase' && typeof value === 'string' && f.value.value === value.toLowerCase());
 }
-function paintContext(record, relation, node, packet, add) {
+function paintContext(record, relation, node, packet, add, ordinaryHtml, addNotRequired, contractProofsFor) {
+  if (ordinaryHtml && node.fills === null) {verifyHtmlMixedTextPaintContext({record, relation, node, packet, add}); return;}
   if (packet.capture_errors.some(error => error.node_id === node.node_id && error.field === 'fills')) throw Error('capture could not establish complete native paint; absence is unverified');
   if (!Object.hasOwn(node, 'fills')) return;
+  if (ordinaryHtml && Array.isArray(node.fills) && node.fills[0]?.type === 'gradient_linear') {verifyHtmlGradientPaintContext({record, relation, node, contractProofs: contractProofsFor(), add, addNotRequired}); return;}
   const e = pointer(record, relation.element_path), colors = e.facts.filter(f => f.value?.type === 'color');
   if (equal(node.fills, [])) {
     if (colors.length) throw Error('empty native paint cannot satisfy an own canonical color');
@@ -108,7 +111,7 @@ function inertNoneContext(record, relation, node, e, add) {
   if (!closed(layout.padding, ['top', 'right', 'bottom', 'left']) || Object.values(layout.padding).some(value => value !== 0)) throw Error('inert NONE padding must be explicitly zero');
   for (const side of ['top', 'right', 'bottom', 'left']) add(`/layout/padding/${side}`);
 }
-function verifyContext(record, relation, node, packet, add, ordinaryHtml, addExport) {
+function verifyContext(record, relation, node, packet, add, ordinaryHtml, addExport, addNotRequired, contractProofsFor) {
   const e = pointer(record, relation.element_path);
   // These are semantic absence conditions for ordinary HTML, not a global
   // list of fields to ignore. Any active unsupported appearance fails proof.
@@ -143,7 +146,7 @@ function verifyContext(record, relation, node, packet, add, ordinaryHtml, addExp
   if (equal(node.variable_bindings, {})) add('/variable_bindings');
   // Nonempty bindings are deliberately not covered here; the variable proof
   // checks exact identities, definitions, consumer modes and scalar mappings.
-  paintContext(record, relation, node, packet, add);
+  paintContext(record, relation, node, packet, add, ordinaryHtml, addNotRequired, contractProofsFor);
   if (node.layout !== undefined) {
     if (!object(node.layout)) throw Error('known layout context required');
     if (node.layout.mode === 'NONE') {inertNoneContext(record, relation, node, e, add); return;}
@@ -161,7 +164,8 @@ export function auditNativeContextProofs({record, model, session} = {}) {
   const canonical = model?.records?.filter(r => r.id === record?.id);
   if (canonical?.length !== 1 || !equal(canonical[0], record)) {report.issues.push(issue('NATIVE_CONTEXT_CANONICAL_MISMATCH', '/record', 'Exact canonical record required.')); return report;}
   const validation = validateNativeContextProofReferences({records: model.records}), env = createContractProofEnvironment(model, session);
-  const relationReports = new Map();
+  const relationReports = new Map(), contractReports = new Map();
+  const contractsFor = owner => {if (!contractReports.has(owner.id)) contractReports.set(owner.id, auditContractFactProofs({record: owner, model, session})); return contractReports.get(owner.id);};
   const relationsFor = owner => {if (!relationReports.has(owner.id)) relationReports.set(owner.id, auditNativeRelationProofs({record: owner, model, session})); return relationReports.get(owner.id);};
   report.issues.push(...validation, ...env.issues);
   for (const p of Array.isArray(proofs) ? proofs : []) {
@@ -179,7 +183,7 @@ export function auditNativeContextProofs({record, model, session} = {}) {
       else if (p.kind === 'image-fill-paint-context') item.foundation_paths = verifyImageFillPaintContext({record, proof: p, entry, model, add});
       else if (p.kind === 'image-fill-inert-axis-context') verifyImageFillInertAxisContext({record, proof: p, entry, add});
       else {
-        verifyContext(record, relation, entry.node, entry.packet, add, p.kind === 'html-element-context', addExport);
+        verifyContext(record, relation, entry.node, entry.packet, add, p.kind === 'html-element-context', addExport, addNotRequired, () => contractsFor(owner));
         if (p.kind === 'rendered-artwork-context') preserveSharedArtworkMetadata({boundary, entry, env, add: addNotRequired});
       }
       item.status = 'verified'; report.verified_sources.push(...local); report.export_preserved_sources.push(...exported); report.not_required_sources.push(...notRequired);

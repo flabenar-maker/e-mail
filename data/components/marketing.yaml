@@ -55101,6 +55101,16 @@
             "id": "native-desktop-root-label-context",
             "kind": "html-element-context",
             "structure_proof_id": "native-desktop-root-label-structure"
+          },
+          {
+            "id": "native-mobile-root-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-mobile-root-structure"
+          },
+          {
+            "id": "native-desktop-root-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-desktop-root-structure"
           }
         ]
       }
