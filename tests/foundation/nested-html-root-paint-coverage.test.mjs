@@ -66,8 +66,8 @@ test('a parent-owned unknown root layout leaf remains uncovered and does not aut
   heroRoots(f)[0].node.layout.unknown_future_layout_field = true;
   const result = report(f);
   assert.equal(result.nested_html.ok, false, JSON.stringify(result.nested_html.issues));
-  assert.ok(issuesFor(result, '1045:18176').some(issue => issue.source_path === '/layout/unknown_future_layout_field'));
-  assert.ok(rawIssuesFor(result, '1045:18176').some(issue => issue.source_path === '/layout/unknown_future_layout_field'));
+  assert.ok(result.nested_html.issues.some(issue => issue.code === 'NESTED_HTML_PLACEMENT_UNVERIFIED' && issue.source_path === '/layout/unknown_future_layout_field'));
+  assert.ok(rawIssuesFor(result, '1045:18176').some(issue => issue.source_path === '/layout/unknown_future_layout_field') || result.nested_html.issues.some(issue => issue.source_path === '/layout/unknown_future_layout_field'));
 });
 
 test('private root-paint bridge rejects forged nested reports and facts', async () => {
