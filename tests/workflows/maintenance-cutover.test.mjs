@@ -53,9 +53,10 @@ test('P3: resolved steps cannot cite absent actual bundle source content',async(
       profile.generated_bundle.static_source_ids=[...profile.source_ids];
     }
     await write(root,'system/manifest.yaml',manifest);
-    const result=await resolveSkillContext({repoRoot:root,routeId:'migration-progress',workflowMode:'read-only'});
+    const p=manifest.bundle_profiles.find(p=>p.id==='library-maintenance');p.source_ids=p.source_ids.filter(id=>id!=='component-contract-standard');p.generated_bundle.static_source_ids=[...p.source_ids];await write(root,'system/manifest.yaml',manifest);
+    const result=await resolveSkillContext({repoRoot:root,routeId:'library-maintenance',workflowMode:'read-only'});
     assert.equal(result.status,'blocked');
-    assert.ok(result.blockers.some(b=>b.code==='SKILL_WORKFLOW_SOURCE_MISSING'&&b.path.includes('figma-library-standard')));
+    assert.ok(result.blockers.some(b=>b.code==='SKILL_WORKFLOW_SOURCE_MISSING'&&b.path.includes('component-contract-standard')));
   }finally{await cleanupSystemFixture(root);}
 });
 test('P3: every required step input must exist before that step, not merely later',()=>{
