@@ -180,8 +180,9 @@ export async function resolveSkillContext({
     }
     const steps = resolveWorkflowSteps(registry, workflowMode);
     const delivered = new Set(bundle.static_sources.filter(({content}) => typeof content === "string" && content.length > 0).map(({id}) => id));
-    // Existing email workflows consume closed selected component projections, not full registry prose.
-    const selectedComponentInput = EMAIL_ROUTE_IDS.has(route.id) && bundle.components.length > 0;
+    // Email catalog IDs refer to the typed selection capability, never raw registry prose.
+    // Optional continue/fix discovery may have an empty selection; it is not a contract-free render permission.
+    const selectedComponentInput = EMAIL_ROUTE_IDS.has(route.id) && (bundle.components.length > 0 || manifestProfile.generated_bundle.component_selection === "optional");
     const componentCatalogIds = new Set(["components-shared", "components-marketing", "components-service"]);
     const missing = [...new Set(steps.flatMap(({source_ids}) => source_ids))].filter(id => !delivered.has(id) && !(selectedComponentInput && componentCatalogIds.has(id)));
     if (missing.length) return blocked(missing.map(id => diagnostic("SKILL_WORKFLOW_SOURCE_MISSING", `/workflow/source_ids/${id}`, `Workflow steps require actual source content in this bundle: ${id}.`)));
