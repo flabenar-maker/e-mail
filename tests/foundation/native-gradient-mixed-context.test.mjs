@@ -124,6 +124,66 @@ for (const [label, mutate] of [
   const f = mixedTextFixture(); mutate(f); assert.equal(api().auditNativeContextProofs(f).ok, false);
 });
 
+function refreshGradientApproval(f) {
+  const root = f.record.contracts.mobile.root;
+  const angle = root.facts.find(fact => fact.id === 'background-gradient-css-angle-degrees');
+  const index = root.facts.indexOf(angle);
+  const target = f.record.evidence_links.normative_decisions[0].targets[0];
+  target.context_sha256 = contractDecisionContextDigest({selector: selector(f.node.node_id), paintIndex: 0, model: f.model, session: f.session});
+  target.value_sha256 = contractDecisionValueDigest({record: f.record, contractPath: `/contracts/mobile/root/facts/${index}/value`});
+}
+
+test('gradient context permits fallback and start facts mapped from the same captured endpoint', () => {
+  const f = gradientFixture();
+  addFact(f.record, {id: 'background-gradient-fallback', value: {type: 'color', value: '#18B037'}, provenance: {kind: 'figma-literal', node_id: f.node.node_id}}, '/fills/0/gradient_stops/0/color');
+  assert.equal(api().auditNativeContextProofs(f).ok, true);
+});
+
+test('gradient context rejects a fills MIXED_VALUE capture diagnostic', () => {
+  const f = gradientFixture();
+  f.packet.capture_errors.push({node_id: f.node.node_id, code: 'MIXED_VALUE', field: 'fills'});
+  assert.equal(api().auditNativeContextProofs(f).ok, false);
+});
+
+test('gradient context rejects a wrong-owner endpoint mapping', () => {
+  const f = gradientFixture();
+  f.record.contracts.figma_fact_links.find(link => link.source_path === '/fills/0/gradient_stops/0/color').node_id = '101:2';
+  assert.equal(api().auditNativeContextProofs(f).ok, false);
+});
+
+test('gradient context rejects a changed native matrix under the prior approval digest', () => {
+  const f = gradientFixture();
+  f.node.fills[0].gradient_transform[0][2] = 1;
+  assert.equal(api().auditNativeContextProofs(f).ok, false);
+});
+
+for (const [label, mutate] of [
+  ['third stop with refreshed approval digest', f => {f.node.fills[0].gradient_stops.push({position: .5, color: '#000000', alpha: 1}); f.node.fills[0].stops.push({position: .5, color: '#000000', alpha: 1}); refreshGradientApproval(f);}],
+  ['nonendpoint position with refreshed approval digest', f => {f.node.fills[0].gradient_stops[1].position = .9; f.node.fills[0].stops[1].position = .9; refreshGradientApproval(f);}]
+]) test(`gradient context rejects ${label}`, () => {
+  const f = gradientFixture(); mutate(f); assert.equal(api().auditNativeContextProofs(f).ok, false);
+});
+
+test('mixed null fills rejects malformed producer capture-error shape', () => {
+  const f = mixedTextFixture();
+  f.packet.capture_errors[0].extra = true;
+  assert.equal(api().auditNativeContextProofs(f).ok, false);
+});
+
+test('gradient coverage rejects copied, tampered, and cross-packet reports', () => {
+  const f = gradientFixture();
+  const raw = auditFigmaContractFacts({record: f.record, live: f.packet});
+  const coverage = api().auditNativeContextProofs(f);
+  const tampered = coverage;
+  tampered.not_required_sources.push({component_id: f.record.id, variant_node_id: '101:1', node_id: f.node.node_id, source_path: '/fills/0/gradient_transform/0/0'});
+  assert.equal(api().applyNativeContextCoverage({facts: raw, coverage: structuredClone(coverage)}), raw);
+  assert.equal(api().applyNativeContextCoverage({facts: raw, coverage: tampered}), raw);
+  const other = structuredClone(f.packet);
+  other.variants[0].source_node.future_gradient_field = true;
+  const otherRaw = auditFigmaContractFacts({record: f.record, live: other});
+  assert.equal(api().applyNativeContextCoverage({facts: otherRaw, coverage: api().auditNativeContextProofs(f)}), otherRaw);
+});
+
 test('mixed null fills context leaves an unknown root field effective-uncovered', () => {
   const f = mixedTextFixture(); f.node.future_native_field = true;
   const raw = auditFigmaContractFacts({record: f.record, live: f.packet}), coverage = api().auditNativeContextProofs(f);
