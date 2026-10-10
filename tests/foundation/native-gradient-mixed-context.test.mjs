@@ -253,7 +253,7 @@ for (const {label, affected, mutate} of [
   for (const node_id of contactHelpNodes().filter(node_id => !affected.includes(node_id))) assert.equal(contactContextByNode(report, node_id)?.status, 'verified', JSON.stringify(contactHelpContexts(report)));
 });
 
-for (const {label, mutate} of [
+for (const {label, mutate, early = false} of [
   {label: 'a material line-height difference', mutate: f => { contactNativeNode(f.packet, '459:27607').styled_text_segments[0].line_height.value = 140.01; }},
   {label: 'a material font-size difference', mutate: f => { contactNativeNode(f.packet, '459:27607').styled_text_segments[0].font_size_px = 12.01; }},
   {label: 'a changed line-height unit', mutate: f => { contactNativeNode(f.packet, '459:27607').styled_text_segments[0].line_height.unit = 'PIXELS'; }},
@@ -264,6 +264,13 @@ for (const {label, mutate} of [
   {label: 'a changed color rather than numeric canonicalization', mutate: f => { contactNativeNode(f.packet, '459:27607').styled_text_segments[0].fills[0].color = '#757679'; }}
 ]) test(`actual Contact mixed TEXT empty aggregate rejects ${label}`, async () => {
   const f = await actualContactFixture(); mutate(f); const report = contactReport(f);
+  if (early) {
+    assert.equal(report.ok, false);
+    assert.deepEqual(report.native_context_proofs.results, []);
+    assert.ok(report.issues.some(item => item.code === 'EVIDENCE_REQUEST_IDENTITY_MISMATCH' && item.path === '/session/captures/packet/capture_meta/request'));
+    assert.equal(contactNativeNode(f.packet, '459:27607').styled_text_segments[0].line_height.value, 139.9999976158142);
+    return;
+  }
   assert.equal(contactContextByNode(report, f.record, '459:27607')?.status, 'unverified', JSON.stringify(contactHelpContexts(report)));
   assert.ok(report.effective_facts.issues.some(issue => issue.node_id === '459:27607' && issue.source_path === '/fills'));
 });
