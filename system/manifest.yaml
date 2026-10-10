@@ -22,6 +22,10 @@ sources:
   - { id: workflow-paused, kind: workflow, path: workflows/system-paused.md }
   - { id: workflows-schema, kind: schema, path: schemas/workflows.schema.json }
   - { id: workflow-library-maintenance, kind: workflow, path: data/workflows/library-maintenance.yaml }
+  - { id: workflow-component-onboarding, kind: workflow, path: data/workflows/component-onboarding.yaml }
+  - { id: workflow-figma-description-sync, kind: workflow, path: data/workflows/figma-description-sync.yaml }
+  - { id: workflow-figma-naming-audit, kind: workflow, path: data/workflows/figma-naming-audit.yaml }
+  - { id: workflow-migration-progress, kind: workflow, path: data/workflows/migration-progress.yaml }
   - { id: workflow-email-build, kind: workflow, path: data/workflows/email-build.yaml }
   - { id: manifest-schema, kind: schema, path: schemas/manifest.schema.json }
   - { id: typography-foundation, kind: registry, path: data/foundations/typography.yaml }
@@ -45,12 +49,20 @@ sources:
   - { id: generated-asset-registry, kind: generated, path: docs/generated/asset-registry.md }
   - { id: generated-naming-reference, kind: generated, path: docs/generated/naming-reference.md }
   - { id: generated-library-maintenance-checkpoint, kind: generated, path: docs/generated/library-maintenance-checkpoint.md }
+  - { id: generated-component-onboarding-checkpoint, kind: generated, path: docs/generated/component-onboarding-checkpoint.md }
+  - { id: generated-figma-description-sync-checkpoint, kind: generated, path: docs/generated/figma-description-sync-checkpoint.md }
+  - { id: generated-figma-naming-audit-checkpoint, kind: generated, path: docs/generated/figma-naming-audit-checkpoint.md }
+  - { id: generated-migration-progress-checkpoint, kind: generated, path: docs/generated/migration-progress-checkpoint.md }
   - { id: generated-email-build-checkpoint, kind: generated, path: docs/generated/email-build-checkpoint.md }
 structured_workflows:
   status: partial
   schema_source_id: workflows-schema
   entries:
     - { id: library-maintenance, source_id: workflow-library-maintenance }
+    - { id: component-onboarding, source_id: workflow-component-onboarding }
+    - { id: figma-description-sync, source_id: workflow-figma-description-sync }
+    - { id: figma-naming-audit, source_id: workflow-figma-naming-audit }
+    - { id: migration-progress, source_id: workflow-migration-progress }
     - { id: email-build, source_id: workflow-email-build }
 generated_docs:
   - id: component-registry
@@ -79,6 +91,26 @@ generated_docs:
     renderer: workflow-checkpoint
     workflow_source_id: workflow-email-build
     input_source_ids: [workflow-email-build, workflows-schema, manifest-schema, system-manifest]
+  - id: component-onboarding-checkpoint
+    output_source_id: generated-component-onboarding-checkpoint
+    renderer: workflow-checkpoint
+    workflow_source_id: workflow-component-onboarding
+    input_source_ids: [workflow-component-onboarding, workflows-schema, manifest-schema, system-manifest]
+  - id: figma-description-sync-checkpoint
+    output_source_id: generated-figma-description-sync-checkpoint
+    renderer: workflow-checkpoint
+    workflow_source_id: workflow-figma-description-sync
+    input_source_ids: [workflow-figma-description-sync, workflows-schema, manifest-schema, system-manifest]
+  - id: figma-naming-audit-checkpoint
+    output_source_id: generated-figma-naming-audit-checkpoint
+    renderer: workflow-checkpoint
+    workflow_source_id: workflow-figma-naming-audit
+    input_source_ids: [workflow-figma-naming-audit, workflows-schema, manifest-schema, system-manifest]
+  - id: migration-progress-checkpoint
+    output_source_id: generated-migration-progress-checkpoint
+    renderer: workflow-checkpoint
+    workflow_source_id: workflow-migration-progress
+    input_source_ids: [workflow-migration-progress, workflows-schema, manifest-schema, system-manifest]
 bundle_profiles:
   - id: library-maintenance
     source_ids: [repository-readme, figma-library-standard, component-contract-standard, figma-component-description-standard, workflow-paused]

@@ -97,7 +97,12 @@ export function validateWorkflowRegistrySemantics(workflow, manifest) {
         ),
       );
     }
+    const availableInputs = new Set(mode.required_inputs ?? []);
     mode.steps.forEach((step, stepIndex) => {
+      for (const input of step.required_inputs) {
+        if (!availableInputs.has(input)) errors.push(diagnostic("WORKFLOW_STEP_INPUT_UNAVAILABLE", `/workflow/modes/${modeIndex}/steps/${stepIndex}/required_inputs`, `Step input must be a mode input or a preceding output: ${input}.`));
+      }
+      for (const output of step.allowed_outputs) availableInputs.add(output);
       const expectedOrder = stepIndex + 1;
       if (step.order !== expectedOrder) {
         errors.push(

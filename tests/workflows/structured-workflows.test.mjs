@@ -37,6 +37,10 @@ test("canonical manifest activates only email structured workflows", async () =>
         id: "library-maintenance",
         source_id: "workflow-library-maintenance",
       },
+      { id: "component-onboarding", source_id: "workflow-component-onboarding" },
+      { id: "figma-description-sync", source_id: "workflow-figma-description-sync" },
+      { id: "figma-naming-audit", source_id: "workflow-figma-naming-audit" },
+      { id: "migration-progress", source_id: "workflow-migration-progress" },
       { id: "email-build", source_id: "workflow-email-build" },
     ],
   });

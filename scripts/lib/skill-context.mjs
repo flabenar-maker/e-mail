@@ -173,6 +173,10 @@ export async function resolveSkillContext({
       manifest,
     });
     const steps = resolveWorkflowSteps(registry, workflowMode);
+    const delivered = new Set(bundle.static_sources.filter(({content}) => typeof content === "string" && content.length > 0).map(({id}) => id));
+    const missing = [...new Set(steps.flatMap(({source_ids}) => source_ids))].filter(id => !delivered.has(id));
+    if (missing.length) return blocked(missing.map(id => diagnostic("SKILL_WORKFLOW_SOURCE_MISSING", `/workflow/source_ids/${id}`, `Workflow steps require actual source content in this bundle: ${id}.`)));
+    const selectedMode = registry.workflow.modes.find(({id}) => id === workflowMode);
     return {
       status: "resolved",
       route,
@@ -180,6 +184,8 @@ export async function resolveSkillContext({
       workflow: {
         id: entry.id,
         mode: workflowMode,
+        required_inputs: structuredClone(selectedMode.required_inputs),
+        input_blockers: structuredClone(selectedMode.input_blockers ?? []),
         steps,
       },
     };

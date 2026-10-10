@@ -1,0 +1,124 @@
+{
+  "schema_version": "1.0.0",
+  "workflow": {
+    "id": "migration-progress",
+    "status": "shadow",
+    "source_ids": [
+      "repository-readme",
+      "migration-roadmap"
+    ],
+    "modes": [
+      {
+        "id": "read-only",
+        "required_inputs": [
+          "request",
+          "cloud-state-evidence"
+        ],
+        "input_blockers": [
+          {
+            "input": "request",
+            "blocker": "request-required"
+          },
+          {
+            "input": "cloud-state-evidence",
+            "blocker": "cloud-state-evidence-required"
+          }
+        ],
+        "allowed_outputs": [
+          "pinned-sha",
+          "audit-findings",
+          "verification-summary",
+          "handoff-summary"
+        ],
+        "steps": [
+          {
+            "id": "pin-canonical-state",
+            "source_ids": [
+              "repository-readme"
+            ],
+            "required_inputs": [
+              "request"
+            ],
+            "blockers": [
+              "source-pin-missing",
+              "request-required",
+              "cloud-state-evidence-required"
+            ],
+            "allowed_outputs": [
+              "pinned-sha"
+            ],
+            "handoff": {
+              "on_success": "next",
+              "on_blocked": "stop"
+            },
+            "order": 1
+          },
+          {
+            "id": "compare-roadmap-with-cloud-state",
+            "source_ids": [
+              "migration-roadmap",
+              "repository-readme"
+            ],
+            "required_inputs": [
+              "pinned-sha",
+              "cloud-state-evidence"
+            ],
+            "blockers": [
+              "source-pin-mismatch",
+              "cloud-state-unverified"
+            ],
+            "allowed_outputs": [
+              "audit-findings"
+            ],
+            "handoff": {
+              "on_success": "next",
+              "on_blocked": "stop"
+            },
+            "order": 2
+          },
+          {
+            "id": "verify-read-only-findings",
+            "source_ids": [
+              "migration-roadmap"
+            ],
+            "required_inputs": [
+              "audit-findings"
+            ],
+            "blockers": [
+              "fact-unproven"
+            ],
+            "allowed_outputs": [
+              "verification-summary"
+            ],
+            "handoff": {
+              "on_success": "next",
+              "on_blocked": "stop"
+            },
+            "order": 3
+          },
+          {
+            "id": "handoff",
+            "source_ids": [
+              "repository-readme"
+            ],
+            "required_inputs": [
+              "pinned-sha",
+              "verification-summary"
+            ],
+            "blockers": [
+              "handoff-incomplete"
+            ],
+            "allowed_outputs": [
+              "handoff-summary"
+            ],
+            "handoff": {
+              "on_success": "complete",
+              "on_blocked": "stop"
+            },
+            "order": 4
+          }
+        ]
+      }
+    ]
+  }
+}
