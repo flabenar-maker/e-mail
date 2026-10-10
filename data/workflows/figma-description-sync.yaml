@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "workflow": {
-    "id": "library-maintenance",
+    "id": "figma-description-sync",
     "status": "shadow",
     "source_ids": [
       "repository-readme",
@@ -30,6 +30,8 @@
           "pinned-sha",
           "impact-report",
           "audit-findings",
+          "figma-before",
+          "change-preview",
           "verification-summary",
           "handoff-summary"
         ],
@@ -117,15 +119,40 @@
               "fact-unproven"
             ],
             "allowed_outputs": [
-              "audit-findings",
-              "figma-before"
+              "figma-before",
+              "audit-findings"
             ],
             "handoff": {
               "on_success": "next",
               "on_blocked": "stop"
             },
-            "condition_id": "figma-evidence-required",
             "order": 4
+          },
+          {
+            "id": "preview-exact-change",
+            "source_ids": [
+              "repository-readme",
+              "figma-library-standard",
+              "component-contract-standard",
+              "figma-component-description-standard"
+            ],
+            "required_inputs": [
+              "impact-report",
+              "audit-findings"
+            ],
+            "blockers": [
+              "identity-unconfirmed",
+              "semantic-role-required",
+              "fact-unproven"
+            ],
+            "allowed_outputs": [
+              "change-preview"
+            ],
+            "handoff": {
+              "on_success": "next",
+              "on_blocked": "stop"
+            },
+            "order": 5
           },
           {
             "id": "verify-read-only-findings",
@@ -147,7 +174,7 @@
               "on_success": "next",
               "on_blocked": "stop"
             },
-            "order": 5
+            "order": 6
           },
           {
             "id": "handoff",
@@ -169,7 +196,7 @@
               "on_success": "complete",
               "on_blocked": "stop"
             },
-            "order": 6
+            "order": 7
           }
         ]
       },
@@ -198,12 +225,12 @@
           "pinned-sha",
           "impact-report",
           "audit-findings",
+          "figma-before",
           "change-preview",
           "change-boundary",
-          "figma-before",
-          "repository-change",
           "figma-change",
           "figma-readback",
+          "repository-change",
           "verification-summary",
           "github-pr",
           "handoff-summary"
@@ -281,6 +308,28 @@
             "order": 3
           },
           {
+            "id": "inspect-figma-read-only",
+            "source_ids": [
+              "figma-library-standard"
+            ],
+            "required_inputs": [
+              "target-scope"
+            ],
+            "blockers": [
+              "identity-unconfirmed",
+              "fact-unproven"
+            ],
+            "allowed_outputs": [
+              "figma-before",
+              "audit-findings"
+            ],
+            "handoff": {
+              "on_success": "next",
+              "on_blocked": "stop"
+            },
+            "order": 4
+          },
+          {
             "id": "preview-exact-change",
             "source_ids": [
               "repository-readme",
@@ -304,7 +353,7 @@
               "on_success": "next",
               "on_blocked": "stop"
             },
-            "order": 4
+            "order": 5
           },
           {
             "id": "prepare-change-boundary",
@@ -330,55 +379,12 @@
               "on_success": "next",
               "on_blocked": "stop"
             },
-            "order": 5
-          },
-          {
-            "id": "inspect-figma-read-only",
-            "source_ids": [
-              "figma-library-standard"
-            ],
-            "required_inputs": [
-              "change-boundary"
-            ],
-            "blockers": [
-              "identity-unconfirmed",
-              "fact-unproven"
-            ],
-            "allowed_outputs": [
-              "figma-before",
-              "audit-findings"
-            ],
-            "handoff": {
-              "on_success": "next",
-              "on_blocked": "stop"
-            },
-            "condition_id": "figma-write-in-scope",
             "order": 6
-          },
-          {
-            "id": "apply-minimal-repository-change",
-            "source_ids": [
-              "component-contract-standard"
-            ],
-            "required_inputs": [
-              "change-boundary"
-            ],
-            "blockers": [
-              "authorization-scope-mismatch"
-            ],
-            "allowed_outputs": [
-              "repository-change"
-            ],
-            "handoff": {
-              "on_success": "next",
-              "on_blocked": "stop"
-            },
-            "condition_id": "repository-write-in-scope",
-            "order": 7
           },
           {
             "id": "apply-authorized-figma-change",
             "source_ids": [
+              "figma-component-description-standard",
               "figma-library-standard"
             ],
             "required_inputs": [
@@ -396,8 +402,7 @@
               "on_success": "next",
               "on_blocked": "stop"
             },
-            "condition_id": "figma-write-in-scope",
-            "order": 8
+            "order": 7
           },
           {
             "id": "verify-figma-readback",
@@ -419,8 +424,7 @@
               "on_success": "next",
               "on_blocked": "stop"
             },
-            "condition_id": "figma-write-in-scope",
-            "order": 9
+            "order": 8
           },
           {
             "id": "synchronize-dependents",
@@ -440,7 +444,7 @@
               "on_success": "next",
               "on_blocked": "stop"
             },
-            "order": 10
+            "order": 9
           },
           {
             "id": "verify-exact-cloud-commit",
@@ -461,11 +465,11 @@
               "on_success": "next",
               "on_blocked": "stop"
             },
-            "order": 11
+            "order": 10
           },
           {
             "id": "publish-review",
-            "order": 12,
+            "order": 11,
             "source_ids": [
               "repository-readme"
             ],
@@ -491,7 +495,7 @@
             ],
             "required_inputs": [
               "pinned-sha",
-              "change-boundary",
+              "impact-report",
               "verification-summary",
               "github-pr"
             ],
@@ -505,7 +509,7 @@
               "on_success": "complete",
               "on_blocked": "stop"
             },
-            "order": 13
+            "order": 12
           }
         ]
       }

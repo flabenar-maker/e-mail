@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: workflow-checkpoint -->
-<!-- source-digest: sha256:108da790013d4a796b13fe119892cfbbf3dbde108503601bfa7ec932c62d3ee2 -->
+<!-- source-digest: sha256:3501c7e109583247d43fd544e54a96a9c25e42cde51f01b409b76cedd86dd421 -->
 <!-- schema-versions: manifest=1.3.0, workflows=1.0.0 -->
 # Workflow checkpoint: `email-build`
 

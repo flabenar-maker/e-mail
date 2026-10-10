@@ -1,13 +1,11 @@
 {
   "schema_version": "1.0.0",
   "workflow": {
-    "id": "library-maintenance",
+    "id": "figma-naming-audit",
     "status": "shadow",
     "source_ids": [
       "repository-readme",
-      "figma-library-standard",
-      "component-contract-standard",
-      "figma-component-description-standard"
+      "figma-library-standard"
     ],
     "modes": [
       {
@@ -29,7 +27,9 @@
         "allowed_outputs": [
           "pinned-sha",
           "impact-report",
+          "figma-before",
           "audit-findings",
+          "change-preview",
           "verification-summary",
           "handoff-summary"
         ],
@@ -60,9 +60,7 @@
             "id": "assess-impact",
             "source_ids": [
               "repository-readme",
-              "figma-library-standard",
-              "component-contract-standard",
-              "figma-component-description-standard"
+              "figma-library-standard"
             ],
             "required_inputs": [
               "target-scope",
@@ -82,29 +80,6 @@
             "order": 2
           },
           {
-            "id": "inspect-canonical-sources",
-            "source_ids": [
-              "repository-readme",
-              "figma-library-standard",
-              "component-contract-standard"
-            ],
-            "required_inputs": [
-              "impact-report"
-            ],
-            "blockers": [
-              "source-missing",
-              "contract-ambiguous"
-            ],
-            "allowed_outputs": [
-              "audit-findings"
-            ],
-            "handoff": {
-              "on_success": "next",
-              "on_blocked": "stop"
-            },
-            "order": 3
-          },
-          {
             "id": "inspect-figma-read-only",
             "source_ids": [
               "figma-library-standard"
@@ -117,28 +92,72 @@
               "fact-unproven"
             ],
             "allowed_outputs": [
-              "audit-findings",
-              "figma-before"
+              "figma-before",
+              "audit-findings"
             ],
             "handoff": {
               "on_success": "next",
               "on_blocked": "stop"
             },
-            "condition_id": "figma-evidence-required",
+            "order": 3
+          },
+          {
+            "id": "confirm-naming-semantics",
+            "source_ids": [
+              "figma-library-standard"
+            ],
+            "required_inputs": [
+              "figma-before"
+            ],
+            "blockers": [
+              "identity-unconfirmed",
+              "semantic-role-required",
+              "export-scale-unconfirmed"
+            ],
+            "allowed_outputs": [
+              "audit-findings"
+            ],
+            "handoff": {
+              "on_success": "next",
+              "on_blocked": "stop"
+            },
             "order": 4
+          },
+          {
+            "id": "preview-exact-change",
+            "source_ids": [
+              "repository-readme",
+              "figma-library-standard"
+            ],
+            "required_inputs": [
+              "impact-report",
+              "audit-findings"
+            ],
+            "blockers": [
+              "identity-unconfirmed",
+              "semantic-role-required",
+              "fact-unproven"
+            ],
+            "allowed_outputs": [
+              "change-preview"
+            ],
+            "handoff": {
+              "on_success": "next",
+              "on_blocked": "stop"
+            },
+            "order": 5
           },
           {
             "id": "verify-read-only-findings",
             "source_ids": [
               "repository-readme",
-              "figma-library-standard",
-              "component-contract-standard"
+              "figma-library-standard"
             ],
             "required_inputs": [
               "audit-findings"
             ],
             "blockers": [
-              "fact-unproven"
+              "semantic-role-required"
             ],
             "allowed_outputs": [
               "verification-summary"
@@ -147,7 +166,7 @@
               "on_success": "next",
               "on_blocked": "stop"
             },
-            "order": 5
+            "order": 6
           },
           {
             "id": "handoff",
@@ -169,7 +188,7 @@
               "on_success": "complete",
               "on_blocked": "stop"
             },
-            "order": 6
+            "order": 7
           }
         ]
       },
@@ -197,13 +216,13 @@
         "allowed_outputs": [
           "pinned-sha",
           "impact-report",
+          "figma-before",
           "audit-findings",
           "change-preview",
           "change-boundary",
-          "figma-before",
-          "repository-change",
           "figma-change",
           "figma-readback",
+          "repository-change",
           "verification-summary",
           "github-pr",
           "handoff-summary"
@@ -236,9 +255,7 @@
             "id": "assess-impact",
             "source_ids": [
               "repository-readme",
-              "figma-library-standard",
-              "component-contract-standard",
-              "figma-component-description-standard"
+              "figma-library-standard"
             ],
             "required_inputs": [
               "target-scope",
@@ -258,20 +275,19 @@
             "order": 2
           },
           {
-            "id": "inspect-canonical-sources",
+            "id": "inspect-figma-read-only",
             "source_ids": [
-              "repository-readme",
-              "figma-library-standard",
-              "component-contract-standard"
+              "figma-library-standard"
             ],
             "required_inputs": [
-              "impact-report"
+              "target-scope"
             ],
             "blockers": [
-              "source-missing",
-              "contract-ambiguous"
+              "identity-unconfirmed",
+              "fact-unproven"
             ],
             "allowed_outputs": [
+              "figma-before",
               "audit-findings"
             ],
             "handoff": {
@@ -281,12 +297,32 @@
             "order": 3
           },
           {
+            "id": "confirm-naming-semantics",
+            "source_ids": [
+              "figma-library-standard"
+            ],
+            "required_inputs": [
+              "figma-before"
+            ],
+            "blockers": [
+              "identity-unconfirmed",
+              "semantic-role-required",
+              "export-scale-unconfirmed"
+            ],
+            "allowed_outputs": [
+              "audit-findings"
+            ],
+            "handoff": {
+              "on_success": "next",
+              "on_blocked": "stop"
+            },
+            "order": 4
+          },
+          {
             "id": "preview-exact-change",
             "source_ids": [
               "repository-readme",
-              "figma-library-standard",
-              "component-contract-standard",
-              "figma-component-description-standard"
+              "figma-library-standard"
             ],
             "required_inputs": [
               "impact-report",
@@ -304,15 +340,13 @@
               "on_success": "next",
               "on_blocked": "stop"
             },
-            "order": 4
+            "order": 5
           },
           {
             "id": "prepare-change-boundary",
             "source_ids": [
               "repository-readme",
-              "figma-library-standard",
-              "component-contract-standard",
-              "figma-component-description-standard"
+              "figma-library-standard"
             ],
             "required_inputs": [
               "change-preview",
@@ -330,51 +364,7 @@
               "on_success": "next",
               "on_blocked": "stop"
             },
-            "order": 5
-          },
-          {
-            "id": "inspect-figma-read-only",
-            "source_ids": [
-              "figma-library-standard"
-            ],
-            "required_inputs": [
-              "change-boundary"
-            ],
-            "blockers": [
-              "identity-unconfirmed",
-              "fact-unproven"
-            ],
-            "allowed_outputs": [
-              "figma-before",
-              "audit-findings"
-            ],
-            "handoff": {
-              "on_success": "next",
-              "on_blocked": "stop"
-            },
-            "condition_id": "figma-write-in-scope",
             "order": 6
-          },
-          {
-            "id": "apply-minimal-repository-change",
-            "source_ids": [
-              "component-contract-standard"
-            ],
-            "required_inputs": [
-              "change-boundary"
-            ],
-            "blockers": [
-              "authorization-scope-mismatch"
-            ],
-            "allowed_outputs": [
-              "repository-change"
-            ],
-            "handoff": {
-              "on_success": "next",
-              "on_blocked": "stop"
-            },
-            "condition_id": "repository-write-in-scope",
-            "order": 7
           },
           {
             "id": "apply-authorized-figma-change",
@@ -396,8 +386,7 @@
               "on_success": "next",
               "on_blocked": "stop"
             },
-            "condition_id": "figma-write-in-scope",
-            "order": 8
+            "order": 7
           },
           {
             "id": "verify-figma-readback",
@@ -419,13 +408,12 @@
               "on_success": "next",
               "on_blocked": "stop"
             },
-            "condition_id": "figma-write-in-scope",
-            "order": 9
+            "order": 8
           },
           {
             "id": "synchronize-dependents",
             "source_ids": [
-              "component-contract-standard"
+              "figma-library-standard"
             ],
             "required_inputs": [
               "change-boundary"
@@ -440,7 +428,7 @@
               "on_success": "next",
               "on_blocked": "stop"
             },
-            "order": 10
+            "order": 9
           },
           {
             "id": "verify-exact-cloud-commit",
@@ -461,11 +449,11 @@
               "on_success": "next",
               "on_blocked": "stop"
             },
-            "order": 11
+            "order": 10
           },
           {
             "id": "publish-review",
-            "order": 12,
+            "order": 11,
             "source_ids": [
               "repository-readme"
             ],
@@ -491,7 +479,7 @@
             ],
             "required_inputs": [
               "pinned-sha",
-              "change-boundary",
+              "impact-report",
               "verification-summary",
               "github-pr"
             ],
@@ -505,7 +493,7 @@
               "on_success": "complete",
               "on_blocked": "stop"
             },
-            "order": 13
+            "order": 12
           }
         ]
       }

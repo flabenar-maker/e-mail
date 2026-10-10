@@ -3,7 +3,11 @@ import { join } from "node:path";
 
 import { SystemValidationError } from "./diagnostics.mjs";
 import { validateDocumentShape } from "./schema-validation.mjs";
-import { readStrictYaml } from "./strict-yaml.mjs";
+import { readStrictYaml, parseStrictYaml } from "./strict-yaml.mjs";
+import { isDeepStrictEqual } from "node:util";
+import { validateFigmaNameProposal } from "./figma-name-validator.mjs";
+import { auditFigmaComponentEvidence } from "./figma-component-evidence.mjs";
+import { validateComponentRegistryShape } from "./component-registry.mjs";
 
 const SUPPORTED_WORKFLOW_VERSION = "1.0.0";
 
@@ -97,7 +101,12 @@ export function validateWorkflowRegistrySemantics(workflow, manifest) {
         ),
       );
     }
+    const availableInputs = new Set(mode.required_inputs ?? []);
     mode.steps.forEach((step, stepIndex) => {
+      for (const input of step.required_inputs) {
+        if (!availableInputs.has(input)) errors.push(diagnostic("WORKFLOW_STEP_INPUT_UNAVAILABLE", `/workflow/modes/${modeIndex}/steps/${stepIndex}/required_inputs`, `Step input must be a mode input or a preceding output: ${input}.`));
+      }
+      for (const output of step.allowed_outputs) availableInputs.add(output);
       const expectedOrder = stepIndex + 1;
       if (step.order !== expectedOrder) {
         errors.push(
@@ -231,4 +240,162 @@ export async function validateStructuredWorkflows({ repoRoot, manifest }) {
     }
   }
   return sortDiagnostics(errors);
+}
+
+// A bounded consumer of the maintenance steps returned by the resolver.
+// Tool handlers are explicit capabilities: this module owns no Figma/GitHub client.
+const MAINTENANCE_ROUTES = new Set(['library-maintenance','component-onboarding','figma-description-sync','figma-naming-audit','migration-progress']);
+const exact = (a,b) => isDeepStrictEqual(a,b);
+const present = value => value !== undefined && value !== null;
+function deepFreeze(value){if(value&&typeof value==='object'){for(const child of Object.values(value))deepFreeze(child);Object.freeze(value);}return value;}
+function workflowStop(code,path,executed=[]){return {status:'blocked',blockers:[{code,path}],executed:[...executed]};}
+function pointerParts(pointer){
+ if(typeof pointer!=='string'||!pointer.startsWith('/')||pointer==='/')throw Error('Invalid pointer');
+ const parts=pointer.slice(1).split('/').map(v=>v.replaceAll('~1','/').replaceAll('~0','~'));
+ if(parts.some(v=>!v||['__proto__','constructor','prototype'].includes(v)))throw Error('Unsafe pointer');return parts;
+}
+function pointerValue(object,pointer){return pointerParts(pointer).reduce((value,key)=>value?.[key],object);}
+function assignPointer(object,pointer,value){const parts=pointerParts(pointer);let owner=object;for(const key of parts.slice(0,-1)){if(!owner||!Object.hasOwn(owner,key))throw Error('Missing path');owner=owner[key];}const key=parts.at(-1);if(!Object.hasOwn(owner,key))throw Error('Missing field');owner[key]=structuredClone(value);}
+function nodeIndex(nodes){
+ const result=new Map();const visit=value=>{if(!value||typeof value!=='object')return;if(typeof value.node_id==='string'){if(result.has(value.node_id))throw Error('Ambiguous identity');result.set(value.node_id,value);}for(const child of Object.values(value))if(child&&typeof child==='object')visit(child);};visit(nodes);return result;
+}
+function exactBoundary(preview,authorization,scope,route,pin){
+ if(!preview||!authorization||!exact(preview,authorization)||preview.route_id!==route||preview.pinned_sha!==pin||preview.file_key!==scope?.file_key||
+  !Array.isArray(preview.changes)||!Array.isArray(preview.repository_paths)||!Array.isArray(scope.node_ids)||!Array.isArray(scope.repository_paths))return false;
+ const paths=new Set(),keys=new Set();
+ for(const path of preview.repository_paths){if(typeof path!=='string'||path.startsWith('/')||path.includes('\\')||path.split('/').some(v=>!v||v==='..'||v==='.')||!scope.repository_paths.includes(path)||paths.has(path))return false;paths.add(path);}
+ for(const change of preview.changes){
+  if(!change||Object.keys(change).sort().join(',')!=='after,before,node_id,pointer'||!scope.node_ids.includes(change.node_id)||!present(change.before)||!present(change.after))return false;
+  let parts;try{parts=pointerParts(change.pointer);}catch{return false;}
+  const key=change.node_id+'\0'+change.pointer;if(keys.has(key)||parts[0]==='node_id')return false;keys.add(key);
+  if(route==='figma-description-sync'&&(change.pointer!=='/description'||typeof change.after!=='string'))return false;
+  if(route==='figma-naming-audit'){
+   if(change.pointer!=='/name'||typeof change.before!=='string'||typeof change.after!=='string')return false;
+   const suffix=value=>value.match(/@(?:2|4)x$/u)?.[0]??null;
+   if(suffix(change.before)!==suffix(change.after))return false;
+  }
+ }
+ if(['migration-progress','component-onboarding'].includes(route)&&preview.changes.length)return false;
+ return preview.changes.length>0||preview.repository_paths.length>0;
+}
+function expectedReadback(before,boundary){
+ const expected=structuredClone(before),index=nodeIndex(expected);
+ for(const change of boundary.changes){const node=index.get(change.node_id);if(!node||!exact(pointerValue(node,change.pointer),change.before))throw Error('Stale before');assignPointer(node,change.pointer,change.after);}return expected;
+}
+
+export async function executeMaintenanceWorkflow({context,pinnedSha,inputs={},conditions={},handlers={}}={}){
+ const executed=[];
+ const stop=(code,path)=>workflowStop(code,path,executed);
+ if(context?.status!=='resolved'||!MAINTENANCE_ROUTES.has(context.route?.id)||context.route.workflow_source_id==='workflow-paused')return stop('maintenance-context-not-resolved','/context');
+ if(!/^[a-f0-9]{40}$/u.test(pinnedSha??''))return stop('source-pin-missing','/pinnedSha');
+ const source=context.bundle?.static_sources?.find(s=>s.id===context.route.workflow_source_id);
+ let registry,mode;
+ try{
+  registry=parseStrictYaml(source?.content,source?.path);
+  mode=registry.workflow.modes.find(m=>m.id===context.workflow.mode);
+  if(registry.workflow.id!==context.route.id||registry.workflow.status!=='active'||!mode||
+   !exact(mode.steps,context.workflow.steps)||!exact(mode.required_inputs,context.workflow.required_inputs))return stop('workflow-handoff-mismatch','/workflow');
+  const available=new Set(context.bundle.static_sources.filter(s=>typeof s.content==='string'&&s.content.length).map(s=>s.id));
+  if(mode.steps.some(s=>s.source_ids.some(id=>!available.has(id))))return stop('workflow-source-missing','/bundle/static_sources');
+ }catch{return stop('workflow-handoff-mismatch','/workflow');}
+ // Capabilities consume this one closed bundle; they cannot mutate later steps' context.
+ const bundle=deepFreeze(structuredClone(context.bundle));
+ const state=structuredClone(inputs);
+ for(const input of mode.required_inputs)if(!present(state[input]))return stop(mode.input_blockers?.find(v=>v.input===input)?.blocker??'workflow-input-missing','/inputs/'+input);
+ if(mode.id==='read-only'&&mode.steps.some(s=>/^(?:apply-|synchronize-|publish-)/u.test(s.id)))return stop('read-only-write-forbidden','/workflow/steps');
+ let before=null,boundary=null,readbackVerified=false;
+ for(const step of mode.steps){
+  let enabled=true;
+  if(step.condition_id){
+   if(step.condition_id==='figma-write-in-scope')enabled=(boundary?.changes.length??0)>0;
+   else if(step.condition_id==='repository-write-in-scope')enabled=(boundary?.repository_paths.length??0)>0;
+   else if(step.condition_id==='figma-evidence-required')enabled=Array.isArray(state['target-scope']?.node_ids)&&state['target-scope'].node_ids.length>0;
+   else if(typeof conditions[step.condition_id]==='boolean')enabled=conditions[step.condition_id];
+   else return stop('workflow-condition-unresolved','/conditions/'+step.condition_id);
+  }
+  if(!enabled)continue;
+  for(const input of step.required_inputs)if(!present(state[input]))return stop('workflow-input-missing','/steps/'+step.id+'/inputs/'+input);
+  let output;
+  if(step.id==='validate-staged-onboarding'){
+   const record=state['staged-component-record'], evidence=state['figma-factual-evidence'], approval=state['approved-ready-component'];
+   if(!record?.id||!record.contracts?.mobile?.root||!record.contracts?.desktop?.root||!evidence?.model||!evidence?.session||!evidence?.live||
+      evidence.model.canonical_sha!==pinnedSha||approval?.id!==record.id||approval?.file_key!==record.figma?.file_key||approval?.node_id!==record.figma?.node_id)
+      return stop('fact-unproven','/staged-component-record');
+   try{
+     const schemaSource=bundle.static_sources.find(source=>source.id==='components-schema');
+     const registry=evidence.model.source_documents?.get('components-'+record.identity?.library);
+     if(!schemaSource||!registry||validateComponentRegistryShape({...registry,components:[record]},JSON.parse(schemaSource.content)).length)return stop('fact-unproven','/staged-component-record');
+     const report=auditFigmaComponentEvidence({record,live:evidence.live,model:evidence.model,session:evidence.session,derivedEvidence:evidence.derived_evidence??[]});
+    if(!report.ok)return stop('fact-unproven','/figma-factual-evidence');output={'audit-findings':report};
+   }catch{return stop('fact-unproven','/figma-factual-evidence');}
+  }else if(step.id==='prepare-change-boundary'){
+   const preview=state['change-preview'];
+   if(!exactBoundary(preview,state['write-authorization'],state['target-scope'],context.route.id,pinnedSha))return stop('authorization-scope-mismatch','/write-authorization');
+   const nameChanges=preview.changes.filter(change=>change.pointer==='/name');
+   if(nameChanges.length){
+    const semantics=state['audit-findings']?.semantics??[];
+    const suffix=value=>typeof value==='string'?value.match(/@(?:2|4)x$/u)?.[0]??null:null;
+    for(const change of nameChanges){
+     if(typeof change.before!=='string'||typeof change.after!=='string'||suffix(change.before)!==suffix(change.after))return stop('naming-proposal-invalid','/change-preview');
+     if(!Array.isArray(semantics)||semantics.filter(v=>v.node_id===change.node_id&&v.confirmed===true&&typeof v.role==='string'&&v.role.trim().length).length!==1)return stop('semantic-role-required','/audit-findings/semantics');
+    }
+    const naming=bundle.foundation_definitions.find(d=>d.foundation_id==='figma-naming'&&d.definition_group==='foundation')?.value;
+    if(naming?.foundation?.status!=='active')return stop('naming-foundation-missing','/bundle/foundation_definitions');
+    for(const change of nameChanges){const semantic=semantics.find(v=>v.node_id===change.node_id&&v.confirmed===true);
+     if(validateFigmaNameProposal(naming,{...semantic,name:change.after,existingName:change.before}).length)return stop('naming-proposal-invalid','/change-preview');
+    }
+   }
+   boundary=structuredClone(preview);output={'change-boundary':boundary};
+  }else{
+   if(/^(?:apply-|synchronize-|publish-)/u.test(step.id)&&mode.id!=='write')return stop('read-only-write-forbidden','/steps/'+step.id);
+   if(step.id==='apply-authorized-figma-change'){
+    if(!boundary||!before)return stop('authorization-scope-mismatch','/change-boundary');
+    try{expectedReadback(before,boundary);}catch{return stop('authorization-scope-mismatch','/figma-before');}
+   }
+   if(['synchronize-dependents','verify-exact-cloud-commit','publish-review','handoff'].includes(step.id)&&boundary?.changes.length&&!readbackVerified)return stop('figma-readback-mismatch','/figma-readback');
+   if(step.id==='confirm-naming-semantics'){
+    // A tool adapter must provide exact confirmed roles; names are never inferred here.
+    if(!Array.isArray(state['target-scope']?.node_ids)||!before)return stop('identity-unconfirmed','/target-scope');
+   }
+   if(typeof handlers[step.id]!=='function')return stop('workflow-handler-missing','/handlers/'+step.id);
+   try{output=await handlers[step.id]({step:deepFreeze(structuredClone(step)),inputs:deepFreeze(structuredClone(state)),bundle,pinned_sha:pinnedSha,route_id:context.route.id});}
+   catch{return stop('workflow-handler-failed','/steps/'+step.id);}
+   if(output?.blockers?.length)return stop(output.blockers[0].code??'workflow-handler-blocked','/steps/'+step.id);
+  }
+  if(!output||typeof output!=='object'||Object.keys(output).some(key=>!step.allowed_outputs.includes(key))||step.allowed_outputs.some(key=>!present(output[key])))return stop('workflow-output-invalid','/steps/'+step.id);
+  if(step.id==='pin-canonical-state'&&output['pinned-sha']!==pinnedSha)return stop('source-pin-mismatch','/pinned-sha');
+  if(step.id==='pin-canonical-state'&&context.route.id==='migration-progress'){
+   const cloud=state['cloud-state-evidence'];
+   if(!cloud||cloud.cloud_channel!=='github'||!(/^[a-f0-9]{40}$/u.test(cloud.tree_sha??'')))return stop('cloud-state-unverified','/cloud-state-evidence');
+   if(cloud.canonical_sha!==pinnedSha)return stop('source-pin-mismatch','/cloud-state-evidence/canonical_sha');
+  }
+  if(step.id==='inspect-figma-read-only'){
+   try{before=structuredClone(output['figma-before']);const index=nodeIndex(before);if(!state['target-scope'].node_ids.every(id=>index.has(id)))return stop('identity-unconfirmed','/figma-before');}
+   catch{return stop('identity-unconfirmed','/figma-before');}
+  }
+  if(step.id==='confirm-naming-semantics'){
+   const semantics=output['audit-findings']?.semantics;
+   if(!Array.isArray(semantics)||!state['target-scope'].node_ids.every(id=>semantics.filter(v=>v.node_id===id&&typeof v.role==='string'&&v.role.length&&v.confirmed===true).length===1))return stop('semantic-role-required','/audit-findings/semantics');
+  }
+  if(step.id==='verify-figma-readback'){
+   try{if(!exact(expectedReadback(before,boundary),output['figma-readback']))return stop('figma-readback-mismatch','/figma-readback');}
+   catch{return stop('figma-readback-mismatch','/figma-readback');}
+   readbackVerified=true;
+  }
+  if(step.allowed_outputs.includes('repository-change')){
+    const change=output['repository-change'];
+    if(!boundary||!Array.isArray(change?.paths)||new Set(change.paths).size!==change.paths.length||change.paths.some(path=>!boundary.repository_paths.includes(path)))return stop('repository-change-outside-scope','/repository-change/paths');
+   }
+   if(step.id==='verify-exact-cloud-commit'){
+   const summary=output['verification-summary'];
+   if(summary?.pinned_sha!==state['repository-change']?.cloud_sha||!Array.isArray(summary?.checks)||!summary.checks.length||summary.checks.some(c=>typeof c.command!=='string'||c.exit_code!==0))return stop('local-verification-failed','/verification-summary');
+  }
+  if(step.id==='publish-review'){
+   const pr=output['github-pr'];
+   if(pr?.draft!==true||pr.base!=='main'||pr.head_sha!==state['repository-change']?.cloud_sha||!/^https:\/\/github\.com\/flabenar-maker\/e-mail\/pull\/[1-9][0-9]*$/u.test(pr.url??''))return stop('publication-boundary-invalid','/github-pr');
+  }
+  Object.assign(state,structuredClone(output));executed.push(step.id);
+ }
+ const verification=state['verification-summary'];
+ return {status:'complete',executed,outputs:state,handoff:{pinned_sha:pinnedSha,route_id:context.route.id,mode:mode.id,bundle_digest:bundle.digest,cloud_commit:state['repository-change']?.cloud_sha??null,cloud_branch:state['repository-change']?.branch??null,inspected_scope:state['target-scope']??null,changed_paths:state['repository-change']?.paths??[],verification_summary:verification??null,cloud_channel:'github',github_pr:state['github-pr']??null,limitations:verification?.limitations??[]}};
 }
