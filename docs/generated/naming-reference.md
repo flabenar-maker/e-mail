@@ -1,7 +1,7 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: naming-reference -->
-<!-- source-digest: sha256:ada43fa0b0dd8900cfddd8a733f761a720adcdf5fd4fdaa41c5aa8395be34888 -->
-<!-- schema-versions: figma-naming=1.0.0 -->
+<!-- source-digest: sha256:3a2d12be7d26f74ffc39aaa483352cfb79f025b139a71b36ea5c6365c0f099b8 -->
+<!-- schema-versions: figma-naming=1.1.0 -->
 # CUPIS Figma naming reference
 
 This reference contains universal naming vocabulary and templates only. It does not contain component records, node IDs or a rename map.

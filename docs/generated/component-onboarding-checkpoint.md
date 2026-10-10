@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: workflow-checkpoint -->
-<!-- source-digest: sha256:21da9dd9caa0257775fc00943e503a966338b70f3a6c70b07efbb7c2b570ab70 -->
+<!-- source-digest: sha256:20bc6e885d2d6bf60d4cab55b0325ec5d171fa5167da8a2e8404bac6b9cf3143 -->
 <!-- schema-versions: manifest=1.3.0, workflows=1.0.0 -->
 # Workflow checkpoint: `component-onboarding`
 
@@ -30,6 +30,7 @@ The routing table describes current assignments only; workflow status is not a r
 - [figma-library-standard](../../core/figma-library-standard.md)
 - [component-contract-standard](../../core/component-contract-standard.md)
 - [figma-component-description-standard](../../core/figma-component-description-standard.md)
+- [components-schema](../../schemas/components.schema.json)
 
 ## Mode: `read-only`
 
@@ -90,7 +91,7 @@ Not declared.
 ### 3. `validate-staged-onboarding`
 
 - Condition: always
-- Sources: [repository-readme](../../README.md), [figma-library-standard](../../core/figma-library-standard.md), [component-contract-standard](../../core/component-contract-standard.md), [figma-component-description-standard](../../core/figma-component-description-standard.md)
+- Sources: [repository-readme](../../README.md), [figma-library-standard](../../core/figma-library-standard.md), [component-contract-standard](../../core/component-contract-standard.md), [figma-component-description-standard](../../core/figma-component-description-standard.md), [components-schema](../../schemas/components.schema.json)
 - Required inputs: `approved-ready-component`, `staged-component-record`, `figma-factual-evidence`
 - Blockers: `identity-unconfirmed`, `contract-ambiguous`, `fact-unproven`, `viewport-contract-missing`
 - Allowed outputs: `audit-findings`
@@ -130,7 +131,7 @@ Not declared.
 ## Mode: `write`
 
 - Required inputs: `request`, `target-scope`, `approved-ready-component`, `staged-component-record`, `figma-factual-evidence`, `write-authorization`
-- Allowed outputs: `pinned-sha`, `impact-report`, `audit-findings`, `change-preview`, `change-boundary`, `repository-change`, `verification-summary`, `handoff-summary`
+- Allowed outputs: `pinned-sha`, `impact-report`, `audit-findings`, `change-preview`, `change-boundary`, `repository-change`, `verification-summary`, `github-pr`, `handoff-summary`
 
 ### Input blocker mappings
 
@@ -190,7 +191,7 @@ Not declared.
 ### 3. `validate-staged-onboarding`
 
 - Condition: always
-- Sources: [repository-readme](../../README.md), [figma-library-standard](../../core/figma-library-standard.md), [component-contract-standard](../../core/component-contract-standard.md), [figma-component-description-standard](../../core/figma-component-description-standard.md)
+- Sources: [repository-readme](../../README.md), [figma-library-standard](../../core/figma-library-standard.md), [component-contract-standard](../../core/component-contract-standard.md), [figma-component-description-standard](../../core/figma-component-description-standard.md), [components-schema](../../schemas/components.schema.json)
 - Required inputs: `approved-ready-component`, `staged-component-record`, `figma-factual-evidence`
 - Blockers: `identity-unconfirmed`, `contract-ambiguous`, `fact-unproven`, `viewport-contract-missing`
 - Allowed outputs: `audit-findings`
@@ -247,11 +248,21 @@ Not declared.
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
-### 9. `handoff`
+### 9. `publish-review`
 
 - Condition: always
 - Sources: [repository-readme](../../README.md)
-- Required inputs: `pinned-sha`, `impact-report`, `verification-summary`
+- Required inputs: `verification-summary`, `repository-change`
+- Blockers: `publication-boundary-invalid`
+- Allowed outputs: `github-pr`
+- Success handoff: `next`
+- Blocked handoff: `stop`
+
+### 10. `handoff`
+
+- Condition: always
+- Sources: [repository-readme](../../README.md)
+- Required inputs: `pinned-sha`, `impact-report`, `verification-summary`, `github-pr`
 - Blockers: `handoff-incomplete`
 - Allowed outputs: `handoff-summary`
 - Success handoff: `complete`

@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: workflow-checkpoint -->
-<!-- source-digest: sha256:26c778323d103a603dcdc09d01573d6d93412e859ebd718702ecc2745318c3e6 -->
+<!-- source-digest: sha256:93010d3af882bed295d12986038c197dbcd4cfab1fecebad691601865d249e73 -->
 <!-- schema-versions: manifest=1.3.0, workflows=1.0.0 -->
 # Workflow checkpoint: `library-maintenance`
 
@@ -91,7 +91,7 @@ Not declared.
 - Sources: [figma-library-standard](../../core/figma-library-standard.md)
 - Required inputs: `target-scope`
 - Blockers: `identity-unconfirmed`, `fact-unproven`
-- Allowed outputs: `audit-findings`
+- Allowed outputs: `audit-findings`, `figma-before`
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
@@ -118,7 +118,7 @@ Not declared.
 ## Mode: `write`
 
 - Required inputs: `request`, `target-scope`, `write-authorization`
-- Allowed outputs: `pinned-sha`, `impact-report`, `audit-findings`, `change-preview`, `change-boundary`, `figma-before`, `repository-change`, `figma-change`, `figma-readback`, `verification-summary`, `handoff-summary`
+- Allowed outputs: `pinned-sha`, `impact-report`, `audit-findings`, `change-preview`, `change-boundary`, `figma-before`, `repository-change`, `figma-change`, `figma-readback`, `verification-summary`, `github-pr`, `handoff-summary`
 
 ### Input blocker mappings
 
@@ -253,11 +253,21 @@ Not declared.
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
-### 12. `handoff`
+### 12. `publish-review`
 
 - Condition: always
 - Sources: [repository-readme](../../README.md)
-- Required inputs: `pinned-sha`, `change-boundary`, `verification-summary`
+- Required inputs: `verification-summary`, `repository-change`
+- Blockers: `publication-boundary-invalid`
+- Allowed outputs: `github-pr`
+- Success handoff: `next`
+- Blocked handoff: `stop`
+
+### 13. `handoff`
+
+- Condition: always
+- Sources: [repository-readme](../../README.md)
+- Required inputs: `pinned-sha`, `change-boundary`, `verification-summary`, `github-pr`
 - Blockers: `handoff-incomplete`
 - Allowed outputs: `handoff-summary`
 - Success handoff: `complete`

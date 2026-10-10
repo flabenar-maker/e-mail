@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: workflow-checkpoint -->
-<!-- source-digest: sha256:9f2845396239c14cb35bfc7b48f6a9c2ca934f4563a7d815bc4e4bdd3d9aaa60 -->
+<!-- source-digest: sha256:ca74358b023f6258bccffb2cd7591fbb766fcbab419ef72b4676a349be2de101 -->
 <!-- schema-versions: manifest=1.3.0, workflows=1.0.0 -->
 # Workflow checkpoint: `figma-naming-audit`
 
@@ -126,7 +126,7 @@ Not declared.
 ## Mode: `write`
 
 - Required inputs: `request`, `target-scope`, `write-authorization`
-- Allowed outputs: `pinned-sha`, `impact-report`, `figma-before`, `audit-findings`, `change-preview`, `change-boundary`, `figma-change`, `figma-readback`, `repository-change`, `verification-summary`, `handoff-summary`
+- Allowed outputs: `pinned-sha`, `impact-report`, `figma-before`, `audit-findings`, `change-preview`, `change-boundary`, `figma-change`, `figma-readback`, `repository-change`, `verification-summary`, `github-pr`, `handoff-summary`
 
 ### Input blocker mappings
 
@@ -251,11 +251,21 @@ Not declared.
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
-### 11. `handoff`
+### 11. `publish-review`
 
 - Condition: always
 - Sources: [repository-readme](../../README.md)
-- Required inputs: `pinned-sha`, `impact-report`, `verification-summary`
+- Required inputs: `verification-summary`, `repository-change`
+- Blockers: `publication-boundary-invalid`
+- Allowed outputs: `github-pr`
+- Success handoff: `next`
+- Blocked handoff: `stop`
+
+### 12. `handoff`
+
+- Condition: always
+- Sources: [repository-readme](../../README.md)
+- Required inputs: `pinned-sha`, `impact-report`, `verification-summary`, `github-pr`
 - Blockers: `handoff-incomplete`
 - Allowed outputs: `handoff-summary`
 - Success handoff: `complete`
