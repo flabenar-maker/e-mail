@@ -122,3 +122,7 @@ Fresh final9978/8: сначала host receipt без обязательного
 ## Следующая граница
 
 Согласованный дочерний repair выполнен и отражён в родительском плане/roadmap. В последующем отдельно разрешённом F2 follow-up четыре reference widths исправлены и fresh-verified на894; его факты/проверки — в текущей точке родительского плана, не часть прежнего preservation claim этого repair. Required native/binding/visual evidence и F7 остаются в P2; overall P2 не принят. Нет merge, P3, #109, activation, cutover, Figma writes или изменений email/images/skills. PR #110 draft/open. Docs-only publication не разрешает эти действия.
+
+## Текущий итог после слияния P2 — 10.10.2026
+
+Работа этого адресного P2-плана включена в слитый PR #110/main e44c726175ca3b93c3a41b43d75424d060bf6390. Собственные historical receipts/точные SHA/ограничения выше сохранены; старые «кандидат/не слит» не являются актуальной командой продолжения. P2 принят; повторять его закрытые scopes нельзя. Текущий P3 и дальнейшие зависимости задаёт [единый cutover plan](../2026-10-01-cupis-final-maintenance-cutover.md#p3-current-2026-10-10), глобальную очередь — [roadmap](../2026-08-25-cupis-migration-roadmap.md).

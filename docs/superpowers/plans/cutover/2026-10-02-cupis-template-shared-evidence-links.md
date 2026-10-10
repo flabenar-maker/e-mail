@@ -280,3 +280,7 @@ Self-review координатора и отдельное read-only review Terr
 - Входные/выходные функции заданы выше один раз; implementation не начинается с выдумывания второго API или реестра.
 - Пять Review Focus cases имеют конкретные negative assertions; source digests не перепутаны с rendering equality.
 - План подтверждён; задачи 1–5 реализовали формат/offline validation, fresh capture/canonical-session inputs, T1/S1 checkers и общий auditor/CLI без реальных links. В задаче 6 записаны и свежим canonical MCP подтверждены все 29 обязательных links данного ремонта, включая Mobile Header; metadata isolation проверена. Итоговый gate задачи 7 выполнен в его области; приёмка P2 остаётся открытой.
+
+## Текущий итог после слияния P2 — 10.10.2026
+
+Работа этого адресного P2-плана включена в слитый PR #110/main e44c726175ca3b93c3a41b43d75424d060bf6390. Собственные historical receipts/точные SHA/ограничения выше сохранены; старые «кандидат/не слит» не являются актуальной командой продолжения. P2 принят; повторять его закрытые scopes нельзя. Текущий P3 и дальнейшие зависимости задаёт [единый cutover plan](../2026-10-01-cupis-final-maintenance-cutover.md#p3-current-2026-10-10), глобальную очередь — [roadmap](../2026-08-25-cupis-migration-roadmap.md).

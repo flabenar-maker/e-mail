@@ -11,8 +11,20 @@
 **Spec:** [Master-spec, §§15–18](../specs/2026-08-24-cupis-structured-email-system-design.md#16-cutover-и-rollback), [roadmap](2026-08-25-cupis-migration-roadmap.md), [локальная маршрутизация](../specs/2026-09-28-cupis-codex-routing-web-delivery-design.md).
 
 ## Статус и основание
+<a id="p3-current-2026-10-10"></a>
 
-План подготовлен 01.10.2026 на `main@e08b5099f72b9ac3aa7aff33df6a3a3526868232` и после review слит через PR #106 в `09537effc89daadacaed1d05497a1e75beb18152`. Prerequisite 10A выполнен: итоговый router синхронизирован после отдельного разрешения; canonical byte-match, catalog/frontmatter, сохранность специализаций/config и локальные handoff/boundary gates подтверждены. По следующей команде начат пакет 1 на main@ace7725d6e88dce0b9b130cd5610f4bcade4feb9; его source-closure findings записаны ниже. Пакет 1 слит через PR #108 на `6c0bf7d0d3b1ca7909b692541883d2b0e9788709`. Пакет 2 продолжается отдельно в [draft PR #110](https://github.com/flabenar-maker/e-mail/pull/110); свежая точка возврата и весь неслитый журнал находятся ниже в этом плане. Пакет2 принят в кандидате после fresh-source и full-local gates10.10.2026; пока не слит. Подробный итог и собственные pins — в текущей точке ниже. 11A ещё не завершён; пакеты 3–6 и production cutover не выполнены.
+### Текущая точка: P2 слит, P3 выполняется — 10.10.2026
+
+PR #110 слит отдельной командой пользователя: main e44c726175ca3b93c3a41b43d75424d060bf6390, tree f8928fbae27bdb6d9eec207bf0ad894fc445b361 совпадает с принятым кандидатом04de691. Postmerge receipt1d41ca73ca3f3e8d81f761414f47faf8381e334aab3648bf0bcce86e19449061; [облачный merge record](https://github.com/flabenar-maker/e-mail/pull/110#issuecomment-6100055096). Исторические source/full/local pins и отрицательные результаты ниже сохраняют собственные SHA; формулировки «не слит» в историческом журнале относятся к моменту их записи. Закрытый P2 не повторяем.
+
+По команде «следующий пакет» начат только P3: route-specific workflow/source closure, точные inputs/authorization, stop/readback и cold-context handoff. Основная ветка сохраняет пять paused maintenance routes и два active email routes. P3 готовится в отдельном draft PR; не является активацией поддержки или завершением11A. После его приёмки и отдельно разрешённого слияния — P4. P5/P6/#109/Altcraft/URL/local skill sync не начинаются.
+
+Изменяем только утверждённые P1/P3 пути: maintenance workflows/manifest mappings, resolver и workflow validation/consumer, naming format/version guard, статус-владение Core и механические generated checkpoints/naming reference, их tests. Четыре новых workflow и checkpoint outputs заранее определены P1; test fixture получает лишь эти зависимости. Component values/trees/assets, HTML renderer, email workflow, Figma и готовые письма сохраняются.
+
+Порядок исполнения: genuine RED → минимальный cloud code/data → targeted GREEN и route/authorization/readback negatives → отдельное read-only Figma evidence без mutation → generated equivalence → один exact full local gate и fresh branch review → docs-only финальная сверка. Routine tests/регрессии — фактический GPT-5.6 Terra Medium, cloud GitHub не test runner.
+
+
+План подготовлен 01.10.2026 на `main@e08b5099f72b9ac3aa7aff33df6a3a3526868232` и после review слит через PR #106 в `09537effc89daadacaed1d05497a1e75beb18152`. Prerequisite 10A выполнен: итоговый router синхронизирован после отдельного разрешения; canonical byte-match, catalog/frontmatter, сохранность специализаций/config и локальные handoff/boundary gates подтверждены. По следующей команде начат пакет 1 на main@ace7725d6e88dce0b9b130cd5610f4bcade4feb9; его source-closure findings записаны ниже. Пакет 1 слит через PR #108 на `6c0bf7d0d3b1ca7909b692541883d2b0e9788709`. Пакет 2 продолжается отдельно в [draft PR #110](https://github.com/flabenar-maker/e-mail/pull/110); свежая точка возврата и весь неслитый журнал находятся ниже в этом плане. Пакет2 принят и слит10.10.2026 через PR #110; текущий P3 описан выше. Подробный итог и собственные pins — в текущей точке ниже. 11A ещё не завершён; пакеты 3–6 и production cutover не выполнены.
 
 Два email routes уже активны; пять маршрутов поддержки пока указывают на `workflow-paused`. `data/workflows/library-maintenance.yaml` существует со статусом `shadow`, но сам этот файл не доказывает достаточность каждого профиля. В частности, его общие steps ссылаются на component/naming sources; профиль `migration-progress` содержит README, roadmap и paused boundary. До переключения надо проверить фактическую совместимость, а не назначать общий workflow всем маршрутам.
 
@@ -22,7 +34,7 @@
 
 <a id="текущая-точка-возврата-p2--точная-карта-remaining-proof-и-f7-03102026"></a>
 
-### Текущая точка возврата P2 — принят в кандидате, готов к слиянию, 10.10.2026
+### Историческая точка возврата P2 — принят до слияния, 10.10.2026
 
 **P2 принят в кандидате, не слит.** Exact final code/Data/generated63b324c4bbec59324b4887f851b702173c357ccb: full local Node1883/1883, validator/generated/оба Windows gates numeric exit0; новая actual MCP session подтверждает Hero444→0, Secondary413→0, Primary118→0, Button/Secondary88→0, mismatch0/top-level issues0/combined=true. Сохранены implementation values, деревья, source mappings и пять foundations; Shared не отдельный owner. [Приёмка и evidence](#p2-final-acceptance-complete-2026-10-10). main@618d124df0a664c84d23a724ba50ef2b324e9b97 неизменён; PR110 draft/open без merge. Далее — отдельное разрешение на слияние, затем P3; не повторять закрытые source scopes, не включать #109/Altcraft/URL implementation/activation/skillsync и не менять Figma/renderer/письма.
 
