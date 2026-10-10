@@ -45,7 +45,7 @@ function execution(c,{rename=false,damage=false,authorize=true,noop=false}={}){
   if(s.id==='preview-exact-change')return {'change-preview':preview};
   if(s.id==='apply-authorized-figma-change'){nodes[0][field]=next;if(damage)nodes[0].height=49;return {'figma-change':{node_ids:['1:2']}};}
   if(s.id==='verify-figma-readback')return {'figma-readback':structuredClone(nodes)};
-  if(s.id==='synchronize-dependents')return {'repository-change':{paths:[],cloud_sha:SHA}};
+  if(s.id==='synchronize-dependents')return {'repository-change':{paths:[],cloud_sha:SHA,branch:'codex/fixture'}};
   if(s.id==='verify-exact-cloud-commit')return {'verification-summary':{pinned_sha:SHA,checks:[{command:'controlled-fixture-check',exit_code:0}],limitations:['controlled fixture, not live mutation']}};
   if(s.id==='publish-review')return {'github-pr':{url:'https://github.com/flabenar-maker/e-mail/pull/999',head_sha:SHA,base:'main',draft:true}};
   if(s.id==='handoff')return {'handoff-summary':{}};
@@ -106,4 +106,17 @@ test('P3: missing required input and tampered workflow handoff stop before tool 
 
 test('P3: a proposed name must pass the delivered naming foundation, not only preserve its scale',async()=>{
  const f=await fixture();try{const c=await activate(f.root,'figma-naming-audit',{naming:true});const e=execution(c,{rename:true});e.preview.changes[0].after='benefit-icon@4x';e.options.inputs['write-authorization']=structuredClone(e.preview);const result=await workflows.executeMaintenanceWorkflow(e.options);assert.equal(result.status,'blocked');assert.ok(result.blockers.some(b=>b.code==='naming-proposal-invalid'));assert.ok(!e.calls.includes('apply-authorized-figma-change'));}finally{await f.cleanup();}
+});
+
+
+test('P3: dependent synchronization cannot report a file outside the approved preview',async()=>{
+ const f=await fixture();try{const c=await activate(f.root,'figma-description-sync');const e=execution(c);e.options.handlers['synchronize-dependents']=async()=>({'repository-change':{paths:['core/unauthorized.md'],cloud_sha:SHA,branch:'codex/fixture'}});
+ const result=await workflows.executeMaintenanceWorkflow(e.options);assert.equal(result.status,'blocked');assert.ok(result.blockers.some(b=>b.code==='repository-change-outside-scope'));assert.ok(!e.calls.includes('publish-review'));}finally{await f.cleanup();}
+});
+test('P3: tool capabilities receive the actual immutable resolved bundle, not reopen paths',async()=>{
+ const f=await fixture();try{const c=await activate(f.root,'figma-description-sync',{mode:'read-only'});const e=execution(c);e.options.handlers['inspect-canonical-sources']=async({bundle})=>{assert.ok(Object.isFrozen(bundle));assert.ok(bundle.static_sources.find(s=>s.id==='component-contract-standard').content.length);assert.ok(bundle.components.some(record=>record.id==='button-secondary'));return {'audit-findings':{inspected:true}};};e.options.handlers['verify-read-only-findings']=async()=>({'verification-summary':{limitations:['fixture']}});
+ const result=await workflows.executeMaintenanceWorkflow(e.options);assert.equal(result.status,'complete');}finally{await f.cleanup();}
+});
+test('P3: non-draft PR response is not accepted as an authorized publication',async()=>{
+ const f=await fixture();try{const c=await activate(f.root,'figma-description-sync');const e=execution(c);e.options.handlers['publish-review']=async()=>({'github-pr':{url:'https://github.com/flabenar-maker/e-mail/pull/999',head_sha:SHA,base:'main',draft:false}});const result=await workflows.executeMaintenanceWorkflow(e.options);assert.equal(result.status,'blocked');assert.ok(result.blockers.some(b=>b.code==='publication-boundary-invalid'));}finally{await f.cleanup();}
 });
