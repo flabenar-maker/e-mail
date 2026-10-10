@@ -17,13 +17,13 @@ async function candidate(root,routeId='migration-progress'){
   const manifest=await readStrictYaml(join(root,'system/manifest.yaml'));
   const route=manifest.routes.find(r=>r.id===routeId);
   const profile=manifest.bundle_profiles.find(p=>p.id===route.bundle_profile_id);
-  route.workflow_source_id='workflow-library-maintenance';
+  route.workflow_source_id='workflow-'+routeId;
   profile.generated_bundle.status='structured-active';
   profile.source_ids=profile.source_ids.map(id=>id==='workflow-paused'?route.workflow_source_id:id);
   profile.generated_bundle.static_source_ids=[...profile.source_ids];
-  const wf=await readStrictYaml(join(root,'data/workflows/library-maintenance.yaml'));
+  const wf=await readStrictYaml(join(root,'data/workflows/'+routeId+'.yaml'));
   wf.workflow.status='active';
-  await write(root,'data/workflows/library-maintenance.yaml',wf);
+  await write(root,'data/workflows/'+routeId+'.yaml',wf);
   await write(root,'system/manifest.yaml',manifest);
   return {manifest,wf,profile,route};
 }
