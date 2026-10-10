@@ -44,7 +44,7 @@ test("metadata leaves render impact, asset contracts, and representative documen
   const baseline = structuredClone(registries);
   for (const document of Object.values(baseline)) for (const component of document.components) delete component.evidence_links;
   const beforeIndex = indexComponentRegistries(baseline);
-  const records = ["email-header", "block-personal-data-update", "block-receipt-info"].map((id) => beforeIndex.bySystemId.get(id));
+  const records = ["email-header", "banner-hero", "block-contact-support", "block-personal-data-update", "block-receipt-info"].map((id) => beforeIndex.bySystemId.get(id));
   assert.ok(records.every(Boolean));
   const before = records.map((component) => buildRenderImpactProjection({ component, coverage: resolveRendererCoverage(rendererRegistry, component.id), foundations: { rendering } }));
   const afterIndex = actualIndex;

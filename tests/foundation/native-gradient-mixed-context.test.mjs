@@ -20,12 +20,24 @@ function addFact(record, fact, source_path) {
   return root.facts.length - 1;
 }
 
+function addLayoutFacts(f, element, node, elementPath) {
+  element.facts.push(
+    {id: 'layout-orientation', value: {type: 'keyword', value: 'vertical'}, provenance: {kind: 'figma-literal', node_id: node.node_id}},
+    {id: 'layout-wrap', value: {type: 'keyword', value: 'no_wrap'}, provenance: {kind: 'figma-literal', node_id: node.node_id}}
+  );
+  f.record.contracts.figma_fact_links.push(
+    {variant_node_id: '101:1', node_id: node.node_id, source_path: '/layout/mode', contract_path: `${elementPath}/facts/${element.facts.length - 2}/value/value`, transform: 'lowercase'},
+    {variant_node_id: '101:1', node_id: node.node_id, source_path: '/layout/wrap', contract_path: `${elementPath}/facts/${element.facts.length - 1}/value/value`, transform: 'lowercase'}
+  );
+}
+
 function gradientFixture() {
   const f = relationFixture(), node = f.packet.variants[0].source_node, root = f.record.contracts.mobile.root;
   f.record.identity = {...f.record.identity, semantic_role: 'button'};
   root.semantic_role = 'button';
   Object.assign(node, {layout_positioning: 'AUTO', layout_grow: 0, minimum_width_px: null, opacity: 1, rotation: 0, strokes: [], variable_bindings: {}, effects: []});
   node.layout = {mode: 'VERTICAL', wrap: 'NO_WRAP', counter_axis_spacing: 0};
+  addLayoutFacts(f, root, node, '/contracts/mobile/root');
   node.fills = [{type: 'gradient_linear', visible: true, opacity: 1,
     gradient_stops: [{position: 0, color: '#18B037', alpha: 1}, {position: 1, color: '#3DD55C', alpha: 1}],
     stops: [{position: 0, color: '#18B037', alpha: 1}, {position: 1, color: '#3DD55C', alpha: 1}],
@@ -45,8 +57,9 @@ function gradientFixture() {
 function mixedTextFixture() {
   const f = relationFixture(), node = f.packet.variants[0].source_node.children[0], element = f.record.contracts.mobile.root.children[0];
   element.render_mode = 'html-text';
-  Object.assign(node, {characters: 'Help', fills: null, layout_positioning: 'AUTO', layout_grow: 0, minimum_width_px: null, opacity: 1, rotation: 0, strokes: [], variable_bindings: {}, effects: [], text_style: {font_family: null, font_style: null, text_decoration: null}});
+  Object.assign(node, {characters: 'Help', fills: null, text_case: 'UPPER', layout_positioning: 'AUTO', layout_grow: 0, minimum_width_px: null, opacity: 1, rotation: 0, strokes: [], variable_bindings: {fills: {type: 'VARIABLE_ALIAS', id: 'VariableID:fill'}, textRangeFills: {type: 'VARIABLE_ALIAS', id: 'VariableID:text-range'}}, effects: [], text_style: {font_family: null, font_style: null, text_decoration: null}});
   node.layout = {mode: 'VERTICAL', wrap: 'NO_WRAP', counter_axis_spacing: 0};
+  addLayoutFacts(f, element, node, '/contracts/mobile/root/children/0');
   const runs = [
     {start: 0, end: 2, characters: 'He', font_family: 'Roboto', font_style: 'Regular', font_size_px: 14, line_height: {unit: 'PERCENT', value: 140}, text_decoration: 'NONE', fills: [{type: 'solid', visible: true, opacity: 1, color: '#AA7100'}]},
     {start: 2, end: 4, characters: 'lp', font_family: 'Roboto', font_style: 'Regular', font_size_px: 14, line_height: {unit: 'PERCENT', value: 140}, text_decoration: 'UNDERLINE', fills: [{type: 'solid', visible: true, opacity: 1, color: '#AA7100'}]}
@@ -67,20 +80,22 @@ function mixedTextFixture() {
 test('html context qualifies two mapped gradient endpoint colors without proving native transform', () => {
   const f = gradientFixture();
   assert.equal(auditNativeRelationProofs(f).ok, true, 'independent root structure');
-  assert.equal(auditContractFactProofs({record: f.record, model: f.model, session: f.session}).ok, true, 'independent approved angle');
   const raw = auditFigmaContractFacts({record: f.record, live: f.packet});
   const coverage = api().auditNativeContextProofs(f);
   assert.equal(coverage.ok, true);
-  assert.deepEqual(coverage.verified_sources.map(source => source.source_path).filter(path => path.includes('gradient_stops')).sort(), ['/fills/0/gradient_stops/0/color', '/fills/0/gradient_stops/1/color']);
+  assert.deepEqual(coverage.verified_sources.map(source => source.source_path).filter(path => path.includes('gradient_stops')).sort(), ['/fills/0/gradient_stops/0/alpha', '/fills/0/gradient_stops/0/color', '/fills/0/gradient_stops/0/position', '/fills/0/gradient_stops/1/alpha', '/fills/0/gradient_stops/1/color', '/fills/0/gradient_stops/1/position']);
   assert.equal(coverage.verified_sources.some(source => source.source_path.includes('gradient_transform')), false);
+  assert.equal(coverage.not_required_sources.filter(source => source.source_path.startsWith('/fills/0/gradient_transform/')).length, 6);
   const effective = api().applyNativeContextCoverage({facts: raw, coverage});
-  assert.ok(effective.issues.some(issue => issue.source_path === '/fills/0/gradient_transform/0/0'));
+  assert.ok(raw.issues.some(issue => issue.source_path === '/fills/0/gradient_transform/0/0'));
+  assert.equal(effective.issues.some(issue => issue.source_path === '/fills/0/gradient_transform/0/0'), false);
 });
 
 for (const [label, mutate] of [
   ['missing end mapping', f => {f.record.contracts.figma_fact_links.splice(-1, 1);}],
   ['third stop', f => {f.node.fills[0].gradient_stops.push({position: .5, color: '#000000', alpha: 1}); f.node.fills[0].stops.push({position: .5, color: '#000000', alpha: 1});}],
   ['nonendpoint position', f => {f.node.fills[0].gradient_stops[1].position = .9;}],
+  ['divergent stops alias', f => {f.node.fills[0].stops[1].alpha = .5;}],
   ['stale angle decision', f => {f.record.evidence_links.normative_decisions[0].targets[0].context_sha256 = '0'.repeat(64);}]
 ]) test(`gradient context rejects ${label}`, () => {
   const f = gradientFixture(); mutate(f); assert.equal(api().auditNativeContextProofs(f).ok, false);
@@ -96,14 +111,23 @@ test('html context qualifies only the null mixed fills aggregate from complete m
   const effective = api().applyNativeContextCoverage({facts: raw, coverage});
   assert.ok(raw.capture_diagnostics.some(diagnostic => diagnostic.raw?.code === 'MIXED_VALUE' && diagnostic.raw?.field === 'fills'));
   assert.equal(effective.issues.some(issue => issue.source_path === '/fills'), false);
-  assert.ok(effective.issues.some(issue => issue.source_path === '/text_case') || effective.issues.some(issue => issue.source_path.startsWith('/variable_bindings')));
+  assert.ok(effective.issues.some(issue => issue.source_path === '/text_case'));
+  assert.ok(effective.issues.some(issue => issue.source_path.startsWith('/variable_bindings/')));
 });
 
 for (const [label, mutate] of [
   ['incomplete run', f => {f.node.styled_text_segments[0].end = 1;}],
   ['non-solid run paint', f => {f.node.styled_text_segments[0].fills[0].type = 'gradient_linear';}],
   ['missing primitive mapping', f => {f.record.contracts.figma_fact_links.pop();}],
-  ['unknown root field', f => {f.node.future_native_field = true;}]
+  ['unknown run paint field', f => {f.node.styled_text_segments[0].fills[0].future = true;}]
 ]) test(`mixed null fills context rejects ${label}`, () => {
   const f = mixedTextFixture(); mutate(f); assert.equal(api().auditNativeContextProofs(f).ok, false);
+});
+
+test('mixed null fills context leaves an unknown root field effective-uncovered', () => {
+  const f = mixedTextFixture(); f.node.future_native_field = true;
+  const raw = auditFigmaContractFacts({record: f.record, live: f.packet}), coverage = api().auditNativeContextProofs(f);
+  assert.equal(coverage.ok, true);
+  const effective = api().applyNativeContextCoverage({facts: raw, coverage});
+  assert.ok(effective.issues.some(issue => issue.source_path === '/future_native_field'));
 });
