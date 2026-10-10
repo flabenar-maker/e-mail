@@ -123,10 +123,10 @@ bundle_profiles:
       allowed_foundation_ids: [typography, spacing, assets, figma-naming]
       required_foundation_ids: []
   - id: component-onboarding
-    source_ids: [repository-readme, figma-library-standard, component-contract-standard, figma-component-description-standard, workflow-paused]
+    source_ids: [repository-readme, figma-library-standard, component-contract-standard, figma-component-description-standard, components-schema, workflow-paused]
     generated_bundle:
       status: structured-shadow
-      static_source_ids: [repository-readme, figma-library-standard, component-contract-standard, figma-component-description-standard, workflow-paused]
+      static_source_ids: [repository-readme, figma-library-standard, component-contract-standard, figma-component-description-standard, components-schema, workflow-paused]
       component_selection: optional
       viewport_selection: both
       foundation_selection: explicit-or-referenced

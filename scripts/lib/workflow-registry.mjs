@@ -7,6 +7,7 @@ import { readStrictYaml, parseStrictYaml } from "./strict-yaml.mjs";
 import { isDeepStrictEqual } from "node:util";
 import { validateFigmaNameProposal } from "./figma-name-validator.mjs";
 import { auditFigmaComponentEvidence } from "./figma-component-evidence.mjs";
+import { validateComponentRegistryShape } from "./component-registry.mjs";
 
 const SUPPORTED_WORKFLOW_VERSION = "1.0.0";
 
@@ -320,7 +321,11 @@ export async function executeMaintenanceWorkflow({context,pinnedSha,inputs={},co
    if(!record?.id||!record.contracts?.mobile?.root||!record.contracts?.desktop?.root||!evidence?.model||!evidence?.session||!evidence?.live||
       evidence.model.canonical_sha!==pinnedSha||approval?.id!==record.id||approval?.file_key!==record.figma?.file_key||approval?.node_id!==record.figma?.node_id)
       return stop('fact-unproven','/staged-component-record');
-   try{const report=auditFigmaComponentEvidence({record,live:evidence.live,model:evidence.model,session:evidence.session,derivedEvidence:evidence.derived_evidence??[]});
+   try{
+     const schemaSource=bundle.static_sources.find(source=>source.id==='components-schema');
+     const registry=evidence.model.source_documents?.get('components-'+record.identity?.library);
+     if(!schemaSource||!registry||validateComponentRegistryShape({...registry,components:[record]},JSON.parse(schemaSource.content)).length)return stop('fact-unproven','/staged-component-record');
+     const report=auditFigmaComponentEvidence({record,live:evidence.live,model:evidence.model,session:evidence.session,derivedEvidence:evidence.derived_evidence??[]});
     if(!report.ok)return stop('fact-unproven','/figma-factual-evidence');output={'audit-findings':report};
    }catch{return stop('fact-unproven','/figma-factual-evidence');}
   }else if(step.id==='prepare-change-boundary'){

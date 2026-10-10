@@ -7,7 +7,8 @@
       "repository-readme",
       "figma-library-standard",
       "component-contract-standard",
-      "figma-component-description-standard"
+      "figma-component-description-standard",
+      "components-schema"
     ],
     "modes": [
       {
@@ -106,7 +107,8 @@
               "repository-readme",
               "figma-library-standard",
               "component-contract-standard",
-              "figma-component-description-standard"
+              "figma-component-description-standard",
+              "components-schema"
             ],
             "required_inputs": [
               "approved-ready-component",
@@ -305,7 +307,8 @@
               "repository-readme",
               "figma-library-standard",
               "component-contract-standard",
-              "figma-component-description-standard"
+              "figma-component-description-standard",
+              "components-schema"
             ],
             "required_inputs": [
               "approved-ready-component",
