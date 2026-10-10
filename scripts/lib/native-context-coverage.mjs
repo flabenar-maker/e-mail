@@ -9,6 +9,7 @@ import {resolveImageFillContextReference, verifyImageFillPaintContext} from './n
 import {resolveImageFillInertAxisContextReference, verifyImageFillInertAxisContext} from './native-image-fill-inert-axis-context.mjs';
 import {verifyHtmlGradientPaintContext, verifyHtmlMixedTextPaintContext} from './native-html-paint-context.mjs';
 import {verifyInactiveHtmlStrokes} from './native-inactive-html-strokes.mjs';
+import {resolveImageFillConsumerContextReference, verifyImageFillConsumerContext} from './native-image-fill-consumer-context.mjs';
 
 // Context proofs reference an independently verified semantic element. They
 // never accept field masks, duplicated defaults, or caller-provided success.
@@ -26,6 +27,7 @@ const ordered = a => a.sort((x, y) => x.path.localeCompare(y.path) || x.code.loc
 function shape(p) {
   if (!match(ID, p?.id) || !match(ID, p?.structure_proof_id)) return false;
   if (['html-element-context', 'rendered-artwork-context', 'image-fill-paint-context', 'image-fill-inert-axis-context'].includes(p.kind)) return closed(p, ['id', 'kind', 'structure_proof_id']);
+  if (p.kind === 'image-fill-consumer-context') return closed(p, ['id', 'kind', 'structure_proof_id', 'source_structure_proof_id']) && match(ID, p.source_structure_proof_id);
   return p.kind === 'source-artwork-context' && closed(p, ['id', 'kind', 'structure_proof_id', 'owner_component_id', 'dependency_link_id']) && match(ID, p.owner_component_id) && match(ID, p.dependency_link_id);
 }
 const structure = ownedContextStructure;
@@ -51,11 +53,13 @@ export function validateNativeContextProofReferences({records = []} = {}) {
           if (['asset', 'icon', 'template'].includes(r.identity?.semantic_role) || !['presentation-table', 'html-text', 'html-link', 'nested-component', 'direct-image'].includes(e?.render_mode)) throw Error('ordinary HTML element capability required; source artwork is a separate boundary');
         } else if (p.kind === 'image-fill-paint-context') resolveImageFillContextReference({record: r, proof: p});
         else if (p.kind === 'image-fill-inert-axis-context') resolveImageFillInertAxisContextReference({record: r, proof: p});
+        else if (p.kind === 'image-fill-consumer-context') resolveImageFillConsumerContextReference({record: r, proof: p});
         else resolveArtworkContextReference({record: r, proof: p, records});
       } catch (error) {issues.push(issue('NATIVE_CONTEXT_TARGET_INVALID', at, error.message));}
       const reference = JSON.stringify([p.owner_component_id ?? r.id, p.structure_proof_id, p.dependency_link_id ?? null]);
       const prior = references.get(reference) ?? [];
-      const independentPair = prior.length === 1 && ((p.kind === 'image-fill-inert-axis-context' && prior[0] === 'image-fill-paint-context') || (p.kind === 'image-fill-paint-context' && prior[0] === 'image-fill-inert-axis-context'));
+      const imageKinds = new Set(['image-fill-paint-context', 'image-fill-inert-axis-context', 'image-fill-consumer-context']);
+      const independentPair = imageKinds.has(p.kind) && prior.every(kind => imageKinds.has(kind) && kind !== p.kind);
       if (prior.length && !independentPair) issues.push(issue('NATIVE_CONTEXT_SOURCE_DUPLICATE', at, 'One context per element/dependency, except the distinct image Fill paint/inert-axis pair.'));
       references.set(reference, [...prior, p.kind]);
     }
@@ -100,9 +104,9 @@ function paintContext(record, relation, node, packet, add, ordinaryHtml, addNotR
   if (!e.facts.includes(f) || f.value?.type !== 'color' || f.value.value !== paint.color || !['figma-literal', 'figma-binding'].includes(f.provenance?.kind) || f.provenance.node_id !== node.node_id) throw Error('exact own typed paint value/provenance required');
   for (const key of ['type', 'visible', 'opacity']) add(`/fills/0/${key}`);
 }
-function inertNoneContext(record, relation, node, e, add) {
+function inertNoneContext(record, relation, node, e, add, qualifiedImage = false) {
   const divider = e.render_mode === 'presentation-table' && e.semantic_role === 'divider' && e.children.length === 0 && (node.children ?? []).length === 0;
-  const image = e.render_mode === 'direct-image' && e.children.length === 0;
+  const image = (e.render_mode === 'direct-image' || qualifiedImage && e.render_mode === 'background-image') && e.children.length === 0;
   if ((!divider && !image) || !directFact(record, relation, node, 'horizontal-sizing', '/layout/horizontal_sizing') ||
       !directFact(record, relation, node, 'vertical-sizing', '/layout/vertical_sizing') || !directFact(record, relation, node, 'layout-wrap', '/layout/wrap')) throw Error('NONE requires a verified flat divider or rendered image with mapped sizing/wrap');
   const layout = node.layout;
@@ -113,7 +117,7 @@ function inertNoneContext(record, relation, node, e, add) {
   if (!closed(layout.padding, ['top', 'right', 'bottom', 'left']) || Object.values(layout.padding).some(value => value !== 0)) throw Error('inert NONE padding must be explicitly zero');
   for (const side of ['top', 'right', 'bottom', 'left']) add(`/layout/padding/${side}`);
 }
-function verifyContext(record, relation, node, packet, add, ordinaryHtml, addExport, addNotRequired, contractProofsFor) {
+function verifyContext(record, relation, node, packet, add, ordinaryHtml, addExport, addNotRequired, contractProofsFor, qualifiedImagePaint) {
   const e = pointer(record, relation.element_path);
   // These are semantic absence conditions for ordinary HTML, not a global
   // list of fields to ignore. Any active unsupported appearance fails proof.
@@ -149,10 +153,11 @@ function verifyContext(record, relation, node, packet, add, ordinaryHtml, addExp
   if (equal(node.variable_bindings, {})) add('/variable_bindings');
   // Nonempty bindings are deliberately not covered here; the variable proof
   // checks exact identities, definitions, consumer modes and scalar mappings.
-  paintContext(record, relation, node, packet, add, ordinaryHtml, addNotRequired, contractProofsFor);
+  if (qualifiedImagePaint) qualifiedImagePaint();
+  else paintContext(record, relation, node, packet, add, ordinaryHtml, addNotRequired, contractProofsFor);
   if (node.layout !== undefined) {
     if (!object(node.layout)) throw Error('known layout context required');
-    if (node.layout.mode === 'NONE') {inertNoneContext(record, relation, node, e, add); return;}
+    if (node.layout.mode === 'NONE') {inertNoneContext(record, relation, node, e, add, !!qualifiedImagePaint); return;}
     if (!['HORIZONTAL', 'VERTICAL'].includes(node.layout.mode)) throw Error('known Auto Layout context required');
     if (!directFact(record, relation, node, 'layout-orientation', '/layout/mode') ||
         !directFact(record, relation, node, 'layout-wrap', '/layout/wrap')) throw Error('orientation and wrap need their own same-node mapped facts');
@@ -176,7 +181,7 @@ export function auditNativeContextProofs({record, model, session} = {}) {
     env.beginProof();
     try {
       if (validation.length || env.issues.length) throw Error('context metadata/session unverified');
-      const boundary = ['html-element-context', 'image-fill-paint-context', 'image-fill-inert-axis-context'].includes(p.kind) ? null : resolveArtworkContextReference({record, proof: p, records: model.records});
+      const boundary = ['html-element-context', 'image-fill-paint-context', 'image-fill-inert-axis-context', 'image-fill-consumer-context'].includes(p.kind) ? null : resolveArtworkContextReference({record, proof: p, records: model.records});
       const owner = boundary?.owner ?? record, relation = boundary?.relation ?? structure(record, p);
       const result = relationsFor(owner).results.filter(r => r.proof_id === relation.id);
       if (result.length !== 1 || result[0].status !== 'verified') throw Error('independent ordered element structure is unverified');
@@ -185,6 +190,7 @@ export function auditNativeContextProofs({record, model, session} = {}) {
       if (p.kind === 'source-artwork-context') verifySourceArtworkContext({record, entry, add});
       else if (p.kind === 'image-fill-paint-context') item.foundation_paths = verifyImageFillPaintContext({record, proof: p, entry, model, add});
       else if (p.kind === 'image-fill-inert-axis-context') verifyImageFillInertAxisContext({record, proof: p, entry, add});
+      else if (p.kind === 'image-fill-consumer-context') verifyContext(record, relation, entry.node, entry.packet, add, true, addExport, addNotRequired, () => contractsFor(owner), () => {item.foundation_paths = verifyImageFillConsumerContext({record, proof: p, entry, env, model, relationsFor, add});});
       else {
         verifyContext(record, relation, entry.node, entry.packet, add, p.kind === 'html-element-context', addExport, addNotRequired, () => contractsFor(owner));
         if (p.kind === 'rendered-artwork-context') preserveSharedArtworkMetadata({boundary, entry, env, add: addNotRequired});

@@ -41635,6 +41635,23 @@
             "id": "native-desktop-root-card-content-area-text-content-body-context",
             "kind": "html-element-context",
             "structure_proof_id": "native-desktop-root-card-content-area-text-content-body-structure"
+          },
+          {
+            "id": "native-image-fill-desktop-hero-source",
+            "kind": "image-fill-paint-context",
+            "structure_proof_id": "native-desktop-root-card-hero-image-structure"
+          },
+          {
+            "id": "native-image-fill-mobile-hero-consumer",
+            "kind": "image-fill-consumer-context",
+            "structure_proof_id": "native-mobile-root-card-hero-image-structure",
+            "source_structure_proof_id": "native-desktop-root-card-hero-image-structure"
+          },
+          {
+            "id": "native-image-fill-desktop-hero-consumer",
+            "kind": "image-fill-consumer-context",
+            "structure_proof_id": "native-desktop-root-card-hero-image-structure",
+            "source_structure_proof_id": "native-desktop-root-card-hero-image-structure"
           }
         ]
       }
@@ -72578,6 +72595,18 @@
             "id": "native-image-fill-mobile-secondary-image-inert-axis",
             "kind": "image-fill-inert-axis-context",
             "structure_proof_id": "native-mobile-root-card-secondary-image-structure"
+          },
+          {
+            "id": "native-image-fill-mobile-secondary-consumer",
+            "kind": "image-fill-consumer-context",
+            "structure_proof_id": "native-mobile-root-card-secondary-image-structure",
+            "source_structure_proof_id": "native-mobile-root-card-secondary-image-structure"
+          },
+          {
+            "id": "native-image-fill-desktop-secondary-consumer",
+            "kind": "image-fill-consumer-context",
+            "structure_proof_id": "native-desktop-root-card-secondary-image-structure",
+            "source_structure_proof_id": "native-mobile-root-card-secondary-image-structure"
           }
         ]
       }
