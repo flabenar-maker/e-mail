@@ -326,12 +326,17 @@ export async function executeMaintenanceWorkflow({context,pinnedSha,inputs={},co
   }else if(step.id==='prepare-change-boundary'){
    const preview=state['change-preview'];
    if(!exactBoundary(preview,state['write-authorization'],state['target-scope'],context.route.id,pinnedSha))return stop('authorization-scope-mismatch','/write-authorization');
-   if(context.route.id==='figma-naming-audit'){
-    const naming=context.bundle.foundation_definitions.find(d=>d.foundation_id==='figma-naming'&&d.definition_group==='foundation')?.value;
+   const nameChanges=preview.changes.filter(change=>change.pointer==='/name');
+   if(nameChanges.length){
     const semantics=state['audit-findings']?.semantics??[];
-    if(!naming)return stop('naming-foundation-missing','/bundle/foundation_definitions');
-    for(const change of preview.changes){const semantic=semantics.find(v=>v.node_id===change.node_id&&v.confirmed===true);
-     if(!semantic)return stop('semantic-role-required','/audit-findings/semantics');
+    const suffix=value=>typeof value==='string'?value.match(/@(?:2|4)x$/u)?.[0]??null:null;
+    for(const change of nameChanges){
+     if(typeof change.before!=='string'||typeof change.after!=='string'||suffix(change.before)!==suffix(change.after))return stop('naming-proposal-invalid','/change-preview');
+     if(!Array.isArray(semantics)||semantics.filter(v=>v.node_id===change.node_id&&v.confirmed===true&&typeof v.role==='string'&&v.role.trim().length).length!==1)return stop('semantic-role-required','/audit-findings/semantics');
+    }
+    const naming=bundle.foundation_definitions.find(d=>d.foundation_id==='figma-naming'&&d.definition_group==='foundation')?.value;
+    if(naming?.foundation?.status!=='active')return stop('naming-foundation-missing','/bundle/foundation_definitions');
+    for(const change of nameChanges){const semantic=semantics.find(v=>v.node_id===change.node_id&&v.confirmed===true);
      if(validateFigmaNameProposal(naming,{...semantic,name:change.after,existingName:change.before}).length)return stop('naming-proposal-invalid','/change-preview');
     }
    }
