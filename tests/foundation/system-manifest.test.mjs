@@ -51,17 +51,14 @@ async function mutateFixtureManifest(root, mutate) {
 
 function activateEmailCutover(manifest) {
   manifest.structured_workflows.status = "partial";
-  for (const routeId of ["email-new-build", "email-continue-fix"]) {
-    const route = manifest.routes.find(({ id }) => id === routeId);
+  for (const route of manifest.routes) {
     const profile = manifest.bundle_profiles.find(({ id }) => id === route.bundle_profile_id);
-    route.workflow_source_id = "workflow-email-build";
-    profile.generated_bundle.status = "structured-active";
-    profile.source_ids = profile.source_ids.filter((id) => id !== "workflow-paused");
-    profile.generated_bundle.static_source_ids = profile.generated_bundle.static_source_ids.filter(
-      (id) => id !== "workflow-paused",
-    );
-    profile.source_ids.push("workflow-email-build");
-    profile.generated_bundle.static_source_ids.push("workflow-email-build");
+    const activeEmail = route.id.startsWith("email-");
+    const sourceId = activeEmail ? "workflow-email-build" : "workflow-paused";
+    route.workflow_source_id = sourceId;
+    profile.generated_bundle.status = activeEmail ? "structured-active" : "structured-shadow";
+    profile.source_ids = profile.source_ids.map((id) => id.startsWith("workflow-") ? sourceId : id);
+    profile.generated_bundle.static_source_ids = [...profile.source_ids];
   }
 }
 
@@ -1105,7 +1102,7 @@ test("semantic validation rejects incoherent partial email-cutover topology", as
     ["wrong active route set", (manifest) => {
       manifest.routes.find(({ id }) => id === "email-continue-fix").workflow_source_id = "workflow-paused";
     }],
-    ["non-email route active during partial", (manifest) => {
+    ["partial route/profile inconsistency", (manifest) => {
       manifest.routes.find(({ id }) => id === "library-maintenance").workflow_source_id = "workflow-library-maintenance";
     }],
     ["email route bound to wrong workflow", (manifest) => {
@@ -1126,12 +1123,9 @@ test("semantic validation rejects incoherent partial email-cutover topology", as
       }],
     ]),
     ["active aggregate with partial topology", (manifest) => {
-      const route = manifest.routes.find(({ id }) => id === "library-maintenance");
-      const profile = manifest.bundle_profiles.find(({ id }) => id === route.bundle_profile_id);
-      route.workflow_source_id = "workflow-paused";
-      profile.source_ids = profile.source_ids.map(id => id === "workflow-library-maintenance" ? "workflow-paused" : id);
-      profile.generated_bundle.static_source_ids = [...profile.source_ids];
-      profile.generated_bundle.status = "structured-shadow";
+      manifest.structured_workflows.status = "active";
+      assert.equal(manifest.routes.filter(({ id }) => id.startsWith("email-")).every(({ workflow_source_id }) => workflow_source_id === "workflow-email-build"), true);
+      assert.equal(manifest.routes.filter(({ id }) => !id.startsWith("email-")).every(({ workflow_source_id }) => workflow_source_id === "workflow-paused"), true);
     }],
     ["active aggregate routes everything to email while maintenance stays shadow", (manifest) => {
       manifest.structured_workflows.status = "active";
@@ -1164,10 +1158,9 @@ test("semantic validation rejects incoherent partial email-cutover topology", as
 
   for (const [name, mutate] of cases) {
     const root = await validFixture(t);
-    const manifest = await mutateFixtureManifest(root, (fixtureManifest) => {
-      activateEmailCutover(fixtureManifest);
-      mutate(fixtureManifest);
-    });
+    const baseline = await mutateFixtureManifest(root, activateEmailCutover);
+    assert.deepEqual(await validateManifestSemantics(baseline, root), [], `baseline/${name}`);
+    const manifest = await mutateFixtureManifest(root, mutate);
     const errors = await validateManifestSemantics(manifest, root);
     assert.ok(
       errors.some(({ code }) => code === "structured-workflow-status-topology-invalid"),
