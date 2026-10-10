@@ -54,7 +54,7 @@ test('P3: resolved steps cannot cite absent actual bundle source content',async(
     }
     await write(root,'system/manifest.yaml',manifest);
     const p=manifest.bundle_profiles.find(p=>p.id==='library-maintenance');p.source_ids=p.source_ids.filter(id=>id!=='component-contract-standard');p.generated_bundle.static_source_ids=[...p.source_ids];await write(root,'system/manifest.yaml',manifest);
-    const result=await resolveSkillContext({repoRoot:root,routeId:'library-maintenance',workflowMode:'read-only'});
+    const result=await resolveSkillContext({repoRoot:root,routeId:'library-maintenance',workflowMode:'read-only',viewports:['mobile','desktop']});
     assert.equal(result.status,'blocked');
     assert.ok(result.blockers.some(b=>b.code==='SKILL_WORKFLOW_SOURCE_MISSING'&&b.path.includes('component-contract-standard')));
   }finally{await cleanupSystemFixture(root);}
