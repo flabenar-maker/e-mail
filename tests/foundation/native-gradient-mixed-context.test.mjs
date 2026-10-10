@@ -17,7 +17,7 @@ const api = () => {
   return context;
 };
 const selector = node_id => ({component_id: 'relationship-fixture', variant_node_id: '101:1', node_id});
-const CONTACT_STATIC_SHA = '698cf59b459b76f263d23bce6f98896b18f4cfcd';
+const CONTACT_STATIC_SHA = '15a601fd656af83eabb468057f5a11a065f350ce';
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '../..');
 async function actualContactFixture() {
   // Static unit fixture from the admitted 9c packet: the real node/runs/error
@@ -31,7 +31,27 @@ async function actualContactFixture() {
 }
 function contactHelpContexts(report) { return report.native_context_proofs.results.filter(item => item.proof_id.endsWith('help-text-context')); }
 function contactHelpNodes() { return ['459:27586', '459:27607']; }
-function contactContextByNode(report, nodeId) { return contactHelpContexts(report).find(item => item.source_selectors?.[0]?.node_id === nodeId); }
+function contactProofIdByNode(record, nodeId) {
+  const structure = record.evidence_links.native_relation_proofs.find(proof => proof.kind === 'element-structure' && proof.source?.node_id === nodeId);
+  const contexts = record.evidence_links.native_context_proofs.filter(proof => proof.kind === 'html-element-context' && proof.structure_proof_id === structure?.id);
+  if (contexts.length !== 1) throw Error('exact Contact help context identity missing');
+  return contexts[0].id;
+}
+function contactContextByNode(report, recordOrNode, maybeNode) {
+  if (maybeNode === undefined) return contactHelpContexts(report).find(item => item.source_selectors?.[0]?.node_id === recordOrNode);
+  return report.native_context_proofs.results.find(item => item.proof_id === contactProofIdByNode(recordOrNode, maybeNode));
+}
+function contactPointer(root, path) { return path.split('/').slice(1).reduce((value, key) => value?.[key], root); }
+function contactNativeNode(packet, nodeId) {
+  const walk = node => node?.node_id === nodeId ? node : (node?.children ?? []).map(walk).find(Boolean);
+  return packet.variants.map(variant => walk(variant.source_node)).find(Boolean);
+}
+function contactSegmentsFact(record, variantNodeId, nodeId) {
+  const link = record.contracts.figma_fact_links.find(item => item.variant_node_id === variantNodeId && item.node_id === nodeId && item.source_path === '/styled_text_segments/0/line_height/value');
+  const match = link?.contract_path.match(/^(.*)\/facts\/(\d+)\/value\/items\/0\/line_height\/value$/u);
+  if (!match) throw Error('actual Contact styled-run mapping missing');
+  return {link, fact: contactPointer(record, match[1]).facts[Number(match[2])]};
+}
 function contactReport(f) { return auditFigmaComponentEvidence({record: f.record, live: f.packet, model: f.model, session: f.session}); }
 
 function addFact(record, fact, source_path) {
@@ -207,6 +227,11 @@ test('gradient coverage rejects copied, tampered, and cross-packet reports', () 
 
 test('actual Contact mixed TEXT captures with empty aggregate fills qualify through full native-context routing', async () => {
   const f = await actualContactFixture(), report = contactReport(f);
+  const desktop = contactNativeNode(f.packet, '459:27586'), mobile = contactNativeNode(f.packet, '459:27607');
+  assert.equal(desktop.styled_text_segments[0].line_height.value, 139.9999976158142);
+  assert.equal(mobile.styled_text_segments[0].line_height.value, 139.9999976158142);
+  assert.equal(contactSegmentsFact(f.record, '472:16997', desktop.node_id).fact.value.items[0].line_height.value, 140);
+  assert.equal(contactSegmentsFact(f.record, '472:16998', mobile.node_id).fact.value.items[0].line_height.value, 140);
   assert.equal(contactHelpContexts(report).length, 2, JSON.stringify(contactHelpContexts(report)));
   assert.equal(contactHelpContexts(report).every(item => item.status === 'verified'), true, JSON.stringify(contactHelpContexts(report)));
   for (const node_id of contactHelpNodes()) assert.equal(report.effective_facts.issues.some(issue => issue.node_id === node_id && issue.source_path === '/fills'), false);
@@ -226,6 +251,21 @@ for (const {label, affected, mutate} of [
     assert.ok(report.effective_facts.issues.some(issue => issue.node_id === node_id && issue.source_path === '/fills'));
   }
   for (const node_id of contactHelpNodes().filter(node_id => !affected.includes(node_id))) assert.equal(contactContextByNode(report, node_id)?.status, 'verified', JSON.stringify(contactHelpContexts(report)));
+});
+
+for (const {label, mutate} of [
+  {label: 'a material line-height difference', mutate: f => { contactNativeNode(f.packet, '459:27607').styled_text_segments[0].line_height.value = 140.01; }},
+  {label: 'a material font-size difference', mutate: f => { contactNativeNode(f.packet, '459:27607').styled_text_segments[0].font_size_px = 12.01; }},
+  {label: 'a changed line-height unit', mutate: f => { contactNativeNode(f.packet, '459:27607').styled_text_segments[0].line_height.unit = 'PIXELS'; }},
+  {label: 'an unknown raw run field', mutate: f => { contactNativeNode(f.packet, '459:27607').styled_text_segments[0].unexpected = true; }},
+  {label: 'an unknown canonical run field', mutate: f => { contactSegmentsFact(f.record, '472:16998', '459:27607').fact.value.items[0].unexpected = true; }},
+  {label: 'a wrong-node primitive mapping', mutate: f => { contactSegmentsFact(f.record, '472:16998', '459:27607').link.node_id = '459:27606'; }},
+  {label: 'a stale packet binding', mutate: f => { f.packet.capture_meta.request.canonical_git_sha = 'f'.repeat(40); }},
+  {label: 'a changed color rather than numeric canonicalization', mutate: f => { contactNativeNode(f.packet, '459:27607').styled_text_segments[0].fills[0].color = '#757679'; }}
+]) test(`actual Contact mixed TEXT empty aggregate rejects ${label}`, async () => {
+  const f = await actualContactFixture(); mutate(f); const report = contactReport(f);
+  assert.equal(contactContextByNode(report, f.record, '459:27607')?.status, 'unverified', JSON.stringify(contactHelpContexts(report)));
+  assert.ok(report.effective_facts.issues.some(issue => issue.node_id === '459:27607' && issue.source_path === '/fills'));
 });
 
 test('mixed null fills context leaves an unknown root field effective-uncovered', () => {
