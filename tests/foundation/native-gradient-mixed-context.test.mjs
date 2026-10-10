@@ -260,7 +260,7 @@ for (const {label, mutate, early = false} of [
   {label: 'an unknown raw run field', mutate: f => { contactNativeNode(f.packet, '459:27607').styled_text_segments[0].unexpected = true; }},
   {label: 'an unknown canonical run field', mutate: f => { contactSegmentsFact(f.record, '472:16998', '459:27607').fact.value.items[0].unexpected = true; }},
   {label: 'a wrong-node primitive mapping', mutate: f => { contactSegmentsFact(f.record, '472:16998', '459:27607').link.node_id = '459:27606'; }},
-  {label: 'a stale packet binding', mutate: f => { f.packet.capture_meta.request.canonical_git_sha = 'f'.repeat(40); }},
+  {label: 'a stale packet binding', early: true, mutate: f => { f.packet.capture_meta.request.canonical_git_sha = 'f'.repeat(40); }},
   {label: 'a changed color rather than numeric canonicalization', mutate: f => { contactNativeNode(f.packet, '459:27607').styled_text_segments[0].fills[0].color = '#757679'; }}
 ]) test(`actual Contact mixed TEXT empty aggregate rejects ${label}`, async () => {
   const f = await actualContactFixture(); mutate(f); const report = contactReport(f);
