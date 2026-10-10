@@ -8,6 +8,7 @@ import {ownedContextStructure, preserveSharedArtworkMetadata, resolveArtworkCont
 import {resolveImageFillContextReference, verifyImageFillPaintContext} from './native-image-fill-context.mjs';
 import {resolveImageFillInertAxisContextReference, verifyImageFillInertAxisContext} from './native-image-fill-inert-axis-context.mjs';
 import {verifyHtmlGradientPaintContext, verifyHtmlMixedTextPaintContext} from './native-html-paint-context.mjs';
+import {verifyInactiveHtmlStrokes} from './native-inactive-html-strokes.mjs';
 
 // Context proofs reference an independently verified semantic element. They
 // never accept field masks, duplicated defaults, or caller-provided success.
@@ -116,10 +117,11 @@ function verifyContext(record, relation, node, packet, add, ordinaryHtml, addExp
   const e = pointer(record, relation.element_path);
   // These are semantic absence conditions for ordinary HTML, not a global
   // list of fields to ignore. Any active unsupported appearance fails proof.
-  for (const [path, wanted] of [['/layout_positioning', 'AUTO'], ['/opacity', 1], ['/rotation', 0], ['/strokes', []]]) {
+  for (const [path, wanted] of [['/layout_positioning', 'AUTO'], ['/opacity', 1], ['/rotation', 0]]) {
     if (!equal(pointer(node, path), wanted)) throw Error(`unsupported HTML context at ${path}`);
     add(path);
   }
+  verifyInactiveHtmlStrokes({node, packet, add, addNotRequired});
   if (node.minimum_width_px === null) add('/minimum_width_px');
   else if (!directFact(record, relation, node, 'minimum-width', '/minimum_width_px')) throw Error('minimum width requires an independently mapped exact px measure');
   if (!ordinaryHtml && ['FRAME', 'COMPONENT', 'COMPONENT_SET', 'INSTANCE'].includes(node.node_type) && !Object.hasOwn(node, 'clips_content')) throw Error('complete rendered artwork clipping qualifier required');
