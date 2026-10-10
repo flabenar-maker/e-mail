@@ -1,6 +1,6 @@
 # CUPIS: ремонт доказательств fact provenance — implementation plan
 
-**Актуальный статус10.10.2026:** этот адресный P2-план выполнен, принят и слит PR #110/main e44c726175ca3b93c3a41b43d75424d060bf6390. Ниже сохранена историческая последовательность с собственными pins; она не является командой повторить работу. P3 принят и слит [PR #112](https://github.com/flabenar-maker/e-mail/pull/112)/main a1177d6e1b9840d193d4ee4d761bf95248e3d8bb; начат P4, его regression/gate ещё не приняты. Текущий порядок — [cutover plan](../2026-10-01-cupis-final-maintenance-cutover.md#p4-current-2026-10-10).
+**Актуальный статус11.10.2026:** этот адресный P2-план выполнен, принят и слит PR #110/main e44c726175ca3b93c3a41b43d75424d060bf6390. Ниже сохранена историческая последовательность с собственными pins; она не является командой повторить работу. P3 принят и слит [PR #112](https://github.com/flabenar-maker/e-mail/pull/112)/main a1177d6e1b9840d193d4ee4d761bf95248e3d8bb; P4 локально принят в draftPR113/source963, ещё не слит; его final docs-only gate/bridge и отдельный merge остаются. 11A/P5 не завершены. Текущий порядок — [cutover plan](../2026-10-01-cupis-final-maintenance-cutover.md#p4-current-2026-10-11).
 
 Дата: 03.10.2026. Пользователь одобрил спецификацию командой «Делай сразу весь»: выполняем весь этот ремонт без промежуточных запросов, но без merge/P3/cutover. Основание — PR #110@5431e8b61920d3eed6e9d59d6cd23c0932deae6c; main@618d124df0a664c84d23a724ba50ef2b324e9b97.
 
@@ -125,6 +125,6 @@ Fresh final9978/8: сначала host receipt без обязательного
 
 Согласованный дочерний repair выполнен и отражён в родительском плане/roadmap. В последующем отдельно разрешённом F2 follow-up четыре reference widths исправлены и fresh-verified на894; его факты/проверки — в текущей точке родительского плана, не часть прежнего preservation claim этого repair. Required native/binding/visual evidence и F7 остаются в P2; overall P2 не принят. Нет merge, P3, #109, activation, cutover, Figma writes или изменений email/images/skills. PR #110 draft/open. Docs-only publication не разрешает эти действия.
 
-## Текущий итог после слияния P2 — 10.10.2026
+## Текущий итог после слияния P2/P3 — 11.10.2026
 
-Работа этого адресного P2-плана включена в слитый PR #110/main e44c726175ca3b93c3a41b43d75424d060bf6390. Собственные historical receipts/точные SHA/ограничения выше сохранены; старые «кандидат/не слит» не являются актуальной командой продолжения. P2 принят; повторять его закрытые scopes нельзя. Текущий P3 и дальнейшие зависимости задаёт [единый cutover plan](../2026-10-01-cupis-final-maintenance-cutover.md#p3-current-2026-10-10), глобальную очередь — [roadmap](../2026-08-25-cupis-migration-roadmap.md).
+Работа этого адресного P2-плана включена в слитый PR #110/main e44c726175ca3b93c3a41b43d75424d060bf6390. Собственные historical receipts/точные SHA/ограничения выше сохранены; старые «кандидат/не слит» не являются актуальной командой продолжения. P2 принят; повторять его закрытые scopes нельзя. P3 слитPR112, P4 локально принят в draftPR113 и ждёт отдельного merge. Текущий P4 и дальнейшие зависимости задаёт [единый cutover plan](../2026-10-01-cupis-final-maintenance-cutover.md#p4-current-2026-10-11), глобальную очередь — [roadmap](../2026-08-25-cupis-migration-roadmap.md).

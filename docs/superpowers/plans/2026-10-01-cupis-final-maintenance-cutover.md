@@ -13,19 +13,20 @@
 ## Статус и основание
 <a id="p3-current-2026-10-10"></a>
 <a id="p4-current-2026-10-10"></a>
+<a id="p4-current-2026-10-11"></a>
 
-### Текущая точка: P3 слит, P4 начат — 10.10.2026
+### Текущая точка: P3 слит, P4 локально принят в кандидате и ждёт отдельного слияния — 11.10.2026
 
 PR #110 слит отдельной командой пользователя: main e44c726175ca3b93c3a41b43d75424d060bf6390, tree f8928fbae27bdb6d9eec207bf0ad894fc445b361 совпадает с принятым кандидатом04de691. Postmerge receipt1d41ca73ca3f3e8d81f761414f47faf8381e334aab3648bf0bcce86e19449061; [облачный merge record](https://github.com/flabenar-maker/e-mail/pull/110#issuecomment-6100055096). Исторические source/full/local pins и отрицательные результаты ниже сохраняют собственные SHA; формулировки «не слит» в историческом журнале относятся к моменту их записи. Закрытый P2 не повторяем.
 
-По отдельной команде пользователя [PR #112](https://github.com/flabenar-maker/e-mail/pull/112) слит обычным SHA-guarded squash: main a1177d6e1b9840d193d4ee4d761bf95248e3d8bb, tree0944794bccdc3a4204c1d5b0e6d0063cf9b85a81 совпадает с принятым head2c6ebff42a514922f0ec70b657b58023bb7280c5. Fresh premerge2c6 receipt cb67a7e3be6237477c29b6cb5004322654cac207a433b11df6fd3c5d8add3cd6; отдельный postmerge identity receipt 070aeba7826b7fdbf0dfa526ce8c2b43dc204faef8dda5a56a7de1554aa4ee07. Full3df и прежние receipts сохраняют собственные pins. Начат только [P4 candidate](https://github.com/flabenar-maker/e-mail/tree/codex/maintenance-cutover-p4-email-regression): regression двух email routes и итоговый gate11A. Пять maintenance routes остаются paused, два email routes active. P4 ещё не принят и не слит; активацияP5, cleanupP6, #109, прикладные HTML/URL/форма вопросов и local skill sync не начинаются.
+По отдельной команде пользователя [PR #112](https://github.com/flabenar-maker/e-mail/pull/112) слит обычным SHA-guarded squash: main a1177d6e1b9840d193d4ee4d761bf95248e3d8bb, tree0944794bccdc3a4204c1d5b0e6d0063cf9b85a81 совпадает с принятым head2c6ebff42a514922f0ec70b657b58023bb7280c5. Premerge2c6 и отдельный postmerge070aeba7 сохраняют свои pins. P4 прошёл finite regression, полный exact local gate и один fresh review на source 963c785906d2c2c7d0fe8b8b5f6fc36e74d5953e в [draft PR #113](https://github.com/flabenar-maker/e-mail/pull/113); [локальная приёмка](#p4-local-acceptance-2026-10-11). Этот docs-only successor ещё требует собственной узкой проверки и all-non-doc bridge к full963, не перепинивает его. PR113 не слит: 11A не закрыт до отдельного merge. Пять maintenance routes paused, два email routes active. P5/P6, #109, прикладные HTML/URL/форма вопросов, local skill sync и Figma writes не начаты.
 
 P4 проверяет перечисленные ниже email/workflow/renderer/bootstrap sources, не меняя их. Текущие публикации ограничены четырьмя активными планами и §3.5 master-spec: статус, собственные pins и проверяемые результаты. Component values/trees/assets, Core rules, manifest mappings/statuses, skills, renderer, email workflow, Figma и готовые письма сохраняются. Выявленное изменение render-impact сначала классифицируется и требует предусмотренного Step3 разрешения; оно не исправляется переутверждением эталона.
 
 Порядок P4: active resolver/targeted email tests → точное before/after сравнение representative Marketing/Service в обоих viewports и сохранности technical fix → условная классификация render-impact → один exact local full/validator/generated/Windows gate → один fresh whole-branch review → финальный docs-only successor с отдельным byte bridge. Routine tests/регрессии — фактический GPT-5.6 Terra Medium; GitHub не test runner. Это повторная regression готовой системы, не новая вёрстка или live-client приёмка.
 
 
-План подготовлен 01.10.2026 на `main@e08b5099f72b9ac3aa7aff33df6a3a3526868232` и после review слит через PR #106 в `09537effc89daadacaed1d05497a1e75beb18152`. Prerequisite 10A выполнен: итоговый router синхронизирован после отдельного разрешения; canonical byte-match, catalog/frontmatter, сохранность специализаций/config и локальные handoff/boundary gates подтверждены. По следующей команде начат пакет 1 на main@ace7725d6e88dce0b9b130cd5610f4bcade4feb9; его source-closure findings записаны ниже. Пакет 1 слит через PR #108 на `6c0bf7d0d3b1ca7909b692541883d2b0e9788709`. Пакет 2 завершён и слит через [PR #110](https://github.com/flabenar-maker/e-mail/pull/110). Исторический подробный журнал сохранён ниже; P3 слит [PR #112](https://github.com/flabenar-maker/e-mail/pull/112). Текущая точка — [P4](#p4-current-2026-10-10); 11A ещё не завершён, пакеты5–6 и production cutover не выполнены.
+План подготовлен 01.10.2026 на `main@e08b5099f72b9ac3aa7aff33df6a3a3526868232` и после review слит через PR #106 в `09537effc89daadacaed1d05497a1e75beb18152`. Prerequisite 10A выполнен: итоговый router синхронизирован после отдельного разрешения; canonical byte-match, catalog/frontmatter, сохранность специализаций/config и локальные handoff/boundary gates подтверждены. По следующей команде начат пакет 1 на main@ace7725d6e88dce0b9b130cd5610f4bcade4feb9; его source-closure findings записаны ниже. Пакет 1 слит через PR #108 на `6c0bf7d0d3b1ca7909b692541883d2b0e9788709`. Пакет 2 завершён и слит через [PR #110](https://github.com/flabenar-maker/e-mail/pull/110). Исторический подробный журнал сохранён ниже; P3 слит [PR #112](https://github.com/flabenar-maker/e-mail/pull/112). Текущая точка — [P4](#p4-current-2026-10-11): локально принят в draftPR113, не слит. 11A ещё не завершён; пакеты5–6 и production cutover не выполнены.
 
 Два email routes активны; пять production-маршрутов поддержки всё ещё указывают на `workflow-paused`. В слитом P3 зарегистрированы пять специализированных shadow workflows: library-maintenance, component-onboarding, figma-description-sync, figma-naming-audit и migration-progress. Профили поддержки ещё не переключены. Candidate fixtures проверяют конкретный workflow каждого route; это не разрешение production-активации.
 
@@ -35,7 +36,35 @@ P4 проверяет перечисленные ниже email/workflow/rendere
 
 
 
-#### Журнал P4 — начало, 10.10.2026
+<a id="p4-local-acceptance-2026-10-11"></a>
+
+#### P4: локальная приёмка кандидата, 11.10.2026 (МСК)
+
+**Source pin:** 963c785906d2c2c7d0fe8b8b5f6fc36e74d5953e; immutable source execution snapshot cloud-map306/306. Baseline до maintenanceP3: e44c726175ca3b93c3a41b43d75424d060bf6390, отдельный snapshot296/296. Пять changed docs/301 иных blob+modes сохранены относительно maina1177d6e1b9840d193d4ee4d761bf95248e3d8bb; archive и старые receipts не перепинены.
+
+**Step1:** четыре existing email contract files — 28/28, fail0, numeric exit0; actual resolver/handoff сценарии new-build, design/technical continue-fix, template-root/nested placement, one-bundle и dependent mixed stop. Original receipt/log сохранены; companion только прочитал Node24 Unicode summary вместо старого TAP-parser, не заявил повторный прогон. Actual file SHA256 555923aef5743ed0b63c29d226cdd03157a27fcaca23194697974bebca738558, путь C:/Users/flabe/AppData/Local/Temp/p4-963-targeted.final-receipt.json.
+
+**Step2:** representative Marketing/Service BOTHviewport проходят настоящие production handoff/renderer через текущие controlled fixtures. Before/after HTML bytes, asset files (size+SHA), явные sorted asset-contract/profile/dimension/aspect bindings, output metrics, model inputs и render-impact digests совпадают; source версии/src/tree при technical fix проверены целевыми production tests. Actual compare file SHA256 b1059d1deba2e07e9de9dd5c82b5c03fdb7ed75cbc7acdb86b02883f4da33909, путь C:/Users/flabe/AppData/Local/Temp/p4-representative-compare.receipt.json. Встроенный receiptSha256 обозначает digest тела до добавления собственного hash-поля, не hash сериализованного файла; здесь используется независимо вычисленный actual byte hash. Первичный collector не выводил size/asset-bindings отдельно: после замечания fresh reviewer дополнен только временный harness. Refined capture: один executed/14 честных name-pattern skips на каждом pin; это не full suite. Earlier whole-helper captures и lexical-name collision attempt сохранены отдельно; последний был ошибкой временного harness до product execution, не дефектом системы. После удаления transient new capture file оба cloud-map checks снова дали0 mismatches; source blobs не менялись.
+
+**Step3:** computed render-impact не изменился. Не переутверждались goldens, не менялась strategy; новых live-Figma/real-client/Altcraft или визуальных утверждений нет. Controlled preservation не выдается за новую проверку дизайна всех компонентов. Отложенный #109 остаётся вне scope.
+
+**Step4:** один fresh полный local run — 1915/1915, fail/cancelled/skipped/todo0; все пять реальных numeric gates0. Node v24.19.0; lock SHA256 c73027e0083f1bd6681e20a59367110db0f0be292b51f6ffdb4ecff2f5d63919. npm отсутствовал: использован проверенный same-lock dependency junction, не заявляется npm ci. Полные logs читала только фактическая GPT-5.6 Terra Medium, Actions/PR Checks не запускались/не читались/не использовались. Actual file SHA256 4e128a2b27e25b67a8024f328834c6f828e1f9296c48b59014573315c3608764, путь C:/Users/flabe/AppData/Local/Temp/p4-963-final.receipt.json; реальные argv/runtime/log hashes — в receipt.
+
+| Gate | Результат | duration ms |
+| --- | --- | --- |
+| test | numeric exit0 | 441757 |
+| validate | numeric exit0 | 25015 |
+| generated_check | numeric exit0 | 3030 |
+| bootstrap_verify | numeric exit0 | 25607 |
+| bootstrap_contract | numeric exit0 | 198170 |
+
+**Step5:** один fresh whole-branch GPT-5.6 Terra Medium review, scope963/basea117 и five route proof/source/negative gates. Critical0/Important0; две устаревшие CURRENT-навигационные меткиP3 в дочерних планах заменены наP4 в этом уже запланированном status successor; historical pins не менялись. Actual report C:/Users/flabe/AppData/Local/Temp/p4-963-whole-branch-review.md, actual file SHA256 bb8199d2aa41dbe7185ad4280e5410a44230b5e0ef47abd7abb85ca2bcff4461. Архив, полный live-library audit, real-client visual acceptance, activation и прикладной follow-up не объявляются сделанными.
+
+**Preservation/context:** actual boundary receipt f06ae0b1b1d3412a914fa1df75cda6470bc813dba6cc1f597141f8de3ac81a18, C:/Users/flabe/AppData/Local/Temp/p4-963-boundary-normalized-receipt.json: ровно5 docs/301 preserved blobs+modes, single migration-progress read-only resolver numeric0/pausedSKILL_ROUTE_PAUSED, repository-readme+migration-roadmap. Первый checker-order attempt сохранён LIMITED; companion сравнил одинаковый path-set, не переписал source/execution. Контракты/foundations/renderer/email workflow/skills/Figma/готовые письма не изменены.
+
+**Дальше:** fresh narrow final-doc gate и byte bridge → отдельно разрешённый mergePR113 → только затем отдельно разрешённый P5 exact activation/rollback map. Этот local candidate PASS не является завершённым11A вmain или activation. Cards109, затем отдельно детализированные HTML/links/question-form, затем cleanupP6 сохраняют очередь.
+
+#### Исторический журнал P4 — начало, 10.10.2026
 
 База и postmerge main: a1177d6e1b9840d193d4ee4d761bf95248e3d8bb; сравнение поведения до maintenanceP3 — e44c726175ca3b93c3a41b43d75424d060bf6390. Все execution snapshots временные и hash-проверяются против точного cloud tree; это не источник правок. Step1–2 начаты: actual resolver/production renderer через существующие structured fixtures, оба режима continue/fix, root/nested/mixed-stop и Marketing/Service BOTHviewport. Сравниваются реальные HTML bytes, asset contracts/файлы, output metrics, model inputs и render-impact; исходные версии и src technical fix сохраняются. Fixtures не выдаются за новую live-Figma или real-client приёмку. Targeted/comparison/full/review результаты пока не получены; все P4 checkboxes остаются открыты. Следующий шаг — завершить Step1–2, затем условный Step3 и exact local gate/review. P4 merge и P5 требуют отдельной команды.
 
@@ -1522,13 +1551,15 @@ Generated usage отражает записанные контракты, не �
 
 **Interfaces:** Consumes: final candidate/source maps пакета 3. Produces: exact-SHA proof record для допуска 11B.
 
-- [ ] **Step 1:** Прогнать active new-build и continue/fix resolver и targeted email tests; проверить template-root, nested components, один bundle и остановку зависимого mixed scope.
-- [ ] **Step 2:** На representative marketing/service моделях сравнить HTML/asset contracts и output metrics до/после maintenance-правок; сравнить источники моделей и render-impact digests. Отдельно проверить versions, локальные src и неизменность исходника при technical fix.
-- [ ] **Step 3:** Если обнаружено render-impact изменение, не переутвердить эталон автоматически: классифицировать владельца причины и получить нужное разрешение; Terra сравнивает rendered/reference screenshots с сохранёнными Figma evidence. Нет изменения rendering strategy — нет новой имитации real-client приёмки.
-- [ ] **Step 4:** На точном финальном cloud SHA выполнить `npm run verify`, `npm run generate:check`, применимый Windows bootstrap и allowed-path/preserved-blob gate. При отсутствии npm использовать существующий pnpm/эквивалентные Node scripts; не менять lockfile только ради среды.
-- [ ] **Step 5:** Reviewer проверяет proof пяти routes, источник каждого значимого факта и отрицательные gates. 11A закрывается после local PASS, отдельного merge и фиксации фактов в roadmap; blocker оставляет конкретный route неподготовленным.
+- [x] **Step 1:** Прогнать active new-build и continue/fix resolver и targeted email tests; проверить template-root, nested components, один bundle и остановку зависимого mixed scope.
+- [x] **Step 2:** На representative marketing/service моделях сравнить HTML/asset contracts и output metrics до/после maintenance-правок; сравнить источники моделей и render-impact digests. Отдельно проверить versions, локальные src и неизменность исходника при technical fix.
+- [x] **Step 3:** Если обнаружено render-impact изменение, не переутвердить эталон автоматически: классифицировать владельца причины и получить нужное разрешение; Terra сравнивает rendered/reference screenshots с сохранёнными Figma evidence. Нет изменения rendering strategy — нет новой имитации real-client приёмки.
+- [x] **Step 4:** На точном финальном cloud SHA выполнить `npm run verify`, `npm run generate:check`, применимый Windows bootstrap и allowed-path/preserved-blob gate. При отсутствии npm использовать существующий pnpm/эквивалентные Node scripts; не менять lockfile только ради среды.
+- [x] **Step 5:** Reviewer проверяет proof пяти routes, источник каждого значимого факта и отрицательные gates. 11A закрывается после local PASS, отдельного merge и фиксации фактов в roadmap; blocker оставляет конкретный route неподготовленным.
 
 **Acceptance:** Работающие письма не регрессировали, полный final gate зелёный, каждая proposed activation имеет собственное достаточное evidence.
+
+**Фактический кандидат P4 (11.10.2026):** Steps1–5 локально выполнены на 963c785906d2c2c7d0fe8b8b5f6fc36e74d5953e, [приёмка](#p4-local-acceptance-2026-10-11); PR113 не слит. Final docs-only successor проверяется отдельно. 11A закрывается только после собственного merge/equal-tree и обновления roadmap; P5 не начат.
 
 ## 11B — отдельное разрешённое переключение
 
