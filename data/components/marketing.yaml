@@ -53074,7 +53074,269 @@
         "purpose": "Вторичная кликабельная HTML-кнопка для действий внутри письма.",
         "critical_constraint_ids": []
       },
-      "constraints": []
+      "constraints": [],
+      "evidence_links": {
+        "foundation_values": [],
+        "source_dependencies": [],
+        "native_fact_proofs": [
+          {
+            "id": "native-mobile-root-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "button-secondary",
+              "variant_node_id": "337:4576",
+              "node_id": "337:4576"
+            },
+            "contract_path": "/contracts/mobile/root/facts/7/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-mobile-root-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "button-secondary",
+              "variant_node_id": "337:4576",
+              "node_id": "337:4576"
+            },
+            "contract_path": "/contracts/mobile/root/facts/8/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-mobile-root-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "button-secondary",
+              "variant_node_id": "337:4576",
+              "node_id": "337:4576"
+            },
+            "contract_path": "/contracts/mobile/root/facts/12/value"
+          },
+          {
+            "id": "native-mobile-root-label-text-resize-alias",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "button-secondary",
+              "variant_node_id": "337:4576",
+              "node_id": "337:4553"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/11/value"
+          },
+          {
+            "id": "native-mobile-root-label-text-alignment-alias",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "button-secondary",
+              "variant_node_id": "337:4576",
+              "node_id": "337:4553"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/12/value"
+          },
+          {
+            "id": "native-desktop-root-axis-sizing-alias-primary",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "button-secondary",
+              "variant_node_id": "337:4699",
+              "node_id": "337:4699"
+            },
+            "contract_path": "/contracts/desktop/root/facts/7/value",
+            "axis": "primary"
+          },
+          {
+            "id": "native-desktop-root-axis-sizing-alias-counter",
+            "kind": "axis-sizing-alias",
+            "source": {
+              "component_id": "button-secondary",
+              "variant_node_id": "337:4699",
+              "node_id": "337:4699"
+            },
+            "contract_path": "/contracts/desktop/root/facts/8/value",
+            "axis": "counter"
+          },
+          {
+            "id": "native-desktop-root-uniform-corners",
+            "kind": "uniform-corners",
+            "source": {
+              "component_id": "button-secondary",
+              "variant_node_id": "337:4699",
+              "node_id": "337:4699"
+            },
+            "contract_path": "/contracts/desktop/root/facts/12/value"
+          },
+          {
+            "id": "native-desktop-root-label-text-resize-alias",
+            "kind": "text-resize-alias",
+            "source": {
+              "component_id": "button-secondary",
+              "variant_node_id": "337:4699",
+              "node_id": "337:4698"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/11/value"
+          },
+          {
+            "id": "native-desktop-root-label-text-alignment-alias",
+            "kind": "text-alignment-alias",
+            "source": {
+              "component_id": "button-secondary",
+              "variant_node_id": "337:4699",
+              "node_id": "337:4698"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/12/value"
+          }
+        ],
+        "native_relation_proofs": [
+          {
+            "id": "native-owner-controls",
+            "kind": "owner-controls",
+            "source": {
+              "component_id": "button-secondary",
+              "variant_node_id": "337:4699",
+              "node_id": "337:4699"
+            },
+            "default_variant_id": "desktop"
+          },
+          {
+            "id": "native-mobile-root-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "button-secondary",
+              "variant_node_id": "337:4576",
+              "node_id": "337:4576"
+            },
+            "element_path": "/contracts/mobile/root"
+          },
+          {
+            "id": "native-mobile-root-label-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "button-secondary",
+              "variant_node_id": "337:4576",
+              "node_id": "337:4553"
+            },
+            "element_path": "/contracts/mobile/root/children/0"
+          },
+          {
+            "id": "native-desktop-root-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "button-secondary",
+              "variant_node_id": "337:4699",
+              "node_id": "337:4699"
+            },
+            "element_path": "/contracts/desktop/root"
+          },
+          {
+            "id": "native-desktop-root-label-structure",
+            "kind": "element-structure",
+            "source": {
+              "component_id": "button-secondary",
+              "variant_node_id": "337:4699",
+              "node_id": "337:4698"
+            },
+            "element_path": "/contracts/desktop/root/children/0"
+          }
+        ],
+        "native_variable_proofs": [
+          {
+            "id": "native-mobile-root-binding-fills",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "button-secondary",
+              "variant_node_id": "337:4576",
+              "node_id": "337:4576"
+            },
+            "contract_path": "/contracts/mobile/root/facts/13/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:c5d8cf956aea528fb50c7a73d1cacb256f6a2c8c/17:139",
+              "name": "Grey/500",
+              "key": "c5d8cf956aea528fb50c7a73d1cacb256f6a2c8c",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-mobile-root-label-binding-fills",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "button-secondary",
+              "variant_node_id": "337:4576",
+              "node_id": "337:4553"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:dd9ec21777b96b29256fb926ca8ad8d55b8d726f/22:17",
+              "name": "Grey/White",
+              "key": "dd9ec21777b96b29256fb926ca8ad8d55b8d726f",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-desktop-root-binding-fills",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "button-secondary",
+              "variant_node_id": "337:4699",
+              "node_id": "337:4699"
+            },
+            "contract_path": "/contracts/desktop/root/facts/13/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:c5d8cf956aea528fb50c7a73d1cacb256f6a2c8c/17:139",
+              "name": "Grey/500",
+              "key": "c5d8cf956aea528fb50c7a73d1cacb256f6a2c8c",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-desktop-root-label-binding-fills",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "button-secondary",
+              "variant_node_id": "337:4699",
+              "node_id": "337:4698"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/facts/1/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "variable": {
+              "id": "VariableID:dd9ec21777b96b29256fb926ca8ad8d55b8d726f/22:17",
+              "name": "Grey/White",
+              "key": "dd9ec21777b96b29256fb926ca8ad8d55b8d726f",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          }
+        ],
+        "native_context_proofs": [
+          {
+            "id": "native-mobile-root-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-mobile-root-structure"
+          },
+          {
+            "id": "native-mobile-root-label-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-mobile-root-label-structure"
+          },
+          {
+            "id": "native-desktop-root-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-desktop-root-structure"
+          },
+          {
+            "id": "native-desktop-root-label-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-desktop-root-label-structure"
+          }
+        ]
+      }
     },
     {
       "id": "button-primary",
