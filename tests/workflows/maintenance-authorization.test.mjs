@@ -154,7 +154,7 @@ test('P3 RED: library name change cannot alter the delivered export scale',async
 });
 
 test('P3 RED: library name change with preserved scale still needs one confirmed semantic role',async()=>{
- const f=await fixture();try{const c=await activate(f.root,'library-maintenance');assert.equal(c.status,'resolved');const e=execution(c,{rename:true});e.options.handlers['inspect-figma-read-only']=async()=>({'figma-before':structuredClone(e.nodes),'audit-findings':{semantics:[]}});const result=await workflows.executeMaintenanceWorkflow(e.options);assert.equal(result.status,'blocked');assert.ok(result.blockers.some(v=>v.code==='semantic-role-required'));assert.ok(!e.calls.includes('apply-authorized-figma-change'));}finally{await f.cleanup();}
+ const f=await fixture();try{const c=await activate(f.root,'library-maintenance');assert.equal(c.status,'resolved');const e=execution(c,{rename:true});e.options.handlers['inspect-canonical-sources']=async()=>({'audit-findings':{semantics:[]}});const result=await workflows.executeMaintenanceWorkflow(e.options);assert.equal(result.status,'blocked');assert.ok(result.blockers.some(v=>v.code==='semantic-role-required'));assert.ok(!e.calls.includes('apply-authorized-figma-change'));}finally{await f.cleanup();}
 });
 
 // Historical controlled audit fixture, not fresh current-head Figma acceptance.
