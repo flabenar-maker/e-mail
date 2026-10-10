@@ -164,9 +164,22 @@ test("canonical manifest generates the full component registry", async () => {
 test("all generated references share a deterministic provenance header", async () => {
   const first = await renderCanonical();
   const second = await renderCanonical();
+  const manifest = await manifestWithGeneratedDocs();
+  const expectedPaths = manifest.generated_docs
+    .map(({ output_source_id }) => {
+      const source = manifest.sources.find(({ id }) => id === output_source_id);
+      assert.ok(source, `Missing generated output source: ${output_source_id}`);
+      return source.path;
+    })
+    .sort();
 
   assert.deepEqual(first, second);
-  assert.equal(first.size, 6);
+  assert.equal(expectedPaths.length, 10);
+  assert.deepEqual([...first.keys()].sort(), expectedPaths);
+  assert.deepEqual(
+    await compareGeneratedDocs({ repoRoot, rendered: first }),
+    [],
+  );
 
   for (const [path, content] of first) {
     assert.match(
