@@ -12,21 +12,22 @@
 
 ## Статус и основание
 <a id="p3-current-2026-10-10"></a>
+<a id="p4-current-2026-10-10"></a>
 
-### Текущая точка: P2 слит, P3 проверен в кандидате и ждёт отдельного слияния — 10.10.2026
+### Текущая точка: P3 слит, P4 начат — 10.10.2026
 
 PR #110 слит отдельной командой пользователя: main e44c726175ca3b93c3a41b43d75424d060bf6390, tree f8928fbae27bdb6d9eec207bf0ad894fc445b361 совпадает с принятым кандидатом04de691. Postmerge receipt1d41ca73ca3f3e8d81f761414f47faf8381e334aab3648bf0bcce86e19449061; [облачный merge record](https://github.com/flabenar-maker/e-mail/pull/110#issuecomment-6100055096). Исторические source/full/local pins и отрицательные результаты ниже сохраняют собственные SHA; формулировки «не слит» в историческом журнале относятся к моменту их записи. Закрытый P2 не повторяем.
 
-По команде «следующий пакет» реализован только кандидат P3: route-specific workflow/source closure, точные inputs/authorization, stop/readback и cold-context handoff. Основная ветка сохраняет пять paused maintenance routes и два active email routes. P3 прошёл итоговую локальную проверку и закрытие замечания независимого review в [draft PR #112](https://github.com/flabenar-maker/e-mail/pull/112); не является активацией поддержки или завершением11A. После его приёмки и отдельно разрешённого слияния — P4. P5/P6/#109/Altcraft/URL/local skill sync не начинаются.
+По отдельной команде пользователя [PR #112](https://github.com/flabenar-maker/e-mail/pull/112) слит обычным SHA-guarded squash: main a1177d6e1b9840d193d4ee4d761bf95248e3d8bb, tree0944794bccdc3a4204c1d5b0e6d0063cf9b85a81 совпадает с принятым head2c6ebff42a514922f0ec70b657b58023bb7280c5. Fresh premerge2c6 receipt cb67a7e3be6237477c29b6cb5004322654cac207a433b11df6fd3c5d8add3cd6; отдельный postmerge identity receipt 070aeba7826b7fdbf0dfa526ce8c2b43dc204faef8dda5a56a7de1554aa4ee07. Full3df и прежние receipts сохраняют собственные pins. Начат только [P4 candidate](https://github.com/flabenar-maker/e-mail/tree/codex/maintenance-cutover-p4-email-regression): regression двух email routes и итоговый gate11A. Пять maintenance routes остаются paused, два email routes active. P4 ещё не принят и не слит; активацияP5, cleanupP6, #109, прикладные HTML/URL/форма вопросов и local skill sync не начинаются.
 
-Изменяем только утверждённые P1/P3 пути: maintenance workflows/manifest mappings, resolver и workflow validation/consumer, naming format/version guard, статус-владение Core и механические generated checkpoints/naming reference, их tests. Четыре новых workflow и checkpoint outputs заранее определены P1; test fixture получает лишь эти зависимости. Component values/trees/assets, HTML renderer, email workflow, Figma и готовые письма сохраняются.
+P4 проверяет перечисленные ниже email/workflow/renderer/bootstrap sources, не меняя их. Текущие публикации ограничены четырьмя активными планами и §3.5 master-spec: статус, собственные pins и проверяемые результаты. Component values/trees/assets, Core rules, manifest mappings/statuses, skills, renderer, email workflow, Figma и готовые письма сохраняются. Выявленное изменение render-impact сначала классифицируется и требует предусмотренного Step3 разрешения; оно не исправляется переутверждением эталона.
 
-Порядок исполнения: genuine RED → минимальный cloud code/data → targeted GREEN и route/authorization/readback negatives → отдельное read-only Figma evidence без mutation → generated equivalence → один exact full local gate и fresh branch review → docs-only финальная сверка. Routine tests/регрессии — фактический GPT-5.6 Terra Medium, cloud GitHub не test runner.
+Порядок P4: active resolver/targeted email tests → точное before/after сравнение representative Marketing/Service в обоих viewports и сохранности technical fix → условная классификация render-impact → один exact local full/validator/generated/Windows gate → один fresh whole-branch review → финальный docs-only successor с отдельным byte bridge. Routine tests/регрессии — фактический GPT-5.6 Terra Medium; GitHub не test runner. Это повторная regression готовой системы, не новая вёрстка или live-client приёмка.
 
 
-План подготовлен 01.10.2026 на `main@e08b5099f72b9ac3aa7aff33df6a3a3526868232` и после review слит через PR #106 в `09537effc89daadacaed1d05497a1e75beb18152`. Prerequisite 10A выполнен: итоговый router синхронизирован после отдельного разрешения; canonical byte-match, catalog/frontmatter, сохранность специализаций/config и локальные handoff/boundary gates подтверждены. По следующей команде начат пакет 1 на main@ace7725d6e88dce0b9b130cd5610f4bcade4feb9; его source-closure findings записаны ниже. Пакет 1 слит через PR #108 на `6c0bf7d0d3b1ca7909b692541883d2b0e9788709`. Пакет 2 завершён и слит через [PR #110](https://github.com/flabenar-maker/e-mail/pull/110). Исторический подробный журнал сохранён ниже; текущая точка — [P3](#p3-current-2026-10-10). 11A ещё не завершён; пакет3 проверен в кандидате [draft PR #112](https://github.com/flabenar-maker/e-mail/pull/112), пакеты4–6 и production cutover не выполнены.
+План подготовлен 01.10.2026 на `main@e08b5099f72b9ac3aa7aff33df6a3a3526868232` и после review слит через PR #106 в `09537effc89daadacaed1d05497a1e75beb18152`. Prerequisite 10A выполнен: итоговый router синхронизирован после отдельного разрешения; canonical byte-match, catalog/frontmatter, сохранность специализаций/config и локальные handoff/boundary gates подтверждены. По следующей команде начат пакет 1 на main@ace7725d6e88dce0b9b130cd5610f4bcade4feb9; его source-closure findings записаны ниже. Пакет 1 слит через PR #108 на `6c0bf7d0d3b1ca7909b692541883d2b0e9788709`. Пакет 2 завершён и слит через [PR #110](https://github.com/flabenar-maker/e-mail/pull/110). Исторический подробный журнал сохранён ниже; P3 слит [PR #112](https://github.com/flabenar-maker/e-mail/pull/112). Текущая точка — [P4](#p4-current-2026-10-10); 11A ещё не завершён, пакеты5–6 и production cutover не выполнены.
 
-Два email routes активны; пять production-маршрутов поддержки всё ещё указывают на `workflow-paused`. В кандидате P3 зарегистрированы пять специализированных shadow workflows: library-maintenance, component-onboarding, figma-description-sync, figma-naming-audit и migration-progress. Профили поддержки ещё не переключены. Candidate fixtures проверяют конкретный workflow каждого route; это не разрешение production-активации.
+Два email routes активны; пять production-маршрутов поддержки всё ещё указывают на `workflow-paused`. В слитом P3 зарегистрированы пять специализированных shadow workflows: library-maintenance, component-onboarding, figma-description-sync, figma-naming-audit и migration-progress. Профили поддержки ещё не переключены. Candidate fixtures проверяют конкретный workflow каждого route; это не разрешение production-активации.
 
 Исходный `backup/pre-structured-migration-2026-08-24` сохранить. Каждый пакет начинает с нового pinned main и собственной облачной ветки; merge и следующий пакет — только после успешных проверок и отдельной команды.
 
@@ -34,11 +35,15 @@ PR #110 слит отдельной командой пользователя: m
 
 
 
+#### Журнал P4 — начало, 10.10.2026
+
+База и postmerge main: a1177d6e1b9840d193d4ee4d761bf95248e3d8bb; сравнение поведения до maintenanceP3 — e44c726175ca3b93c3a41b43d75424d060bf6390. Все execution snapshots временные и hash-проверяются против точного cloud tree; это не источник правок. Step1–2 начаты: actual resolver/production renderer через существующие structured fixtures, оба режима continue/fix, root/nested/mixed-stop и Marketing/Service BOTHviewport. Сравниваются реальные HTML bytes, asset contracts/файлы, output metrics, model inputs и render-impact; исходные версии и src technical fix сохраняются. Fixtures не выдаются за новую live-Figma или real-client приёмку. Targeted/comparison/full/review результаты пока не получены; все P4 checkboxes остаются открыты. Следующий шаг — завершить Step1–2, затем условный Step3 и exact local gate/review. P4 merge и P5 требуют отдельной команды.
+
 #### Журнал P3: исправления по доказанному RED
 
 <a id="p3-final-acceptance-2026-10-10"></a>
 
-#### P3: итоговая приёмка кандидата, 10.10.2026
+#### Историческая P3-приёмка кандидата до слияния, 10.10.2026
 
 **Pin:** final code/generated 3df9e7b791fd5a9dd5b7c862cf1aa9a445c990ae. Main e44c726175ca3b93c3a41b43d75424d060bf6390 не менялся; PR112 остаётся draft/open, не слит. Полный локальный Node — 1915/1915, fail0/skip0. full Node suite: numeric exit0; system validator: numeric exit0; generated-doc equivalence: numeric exit0; Windows bootstrap verifier: numeric exit0; Windows bootstrap contract: numeric exit0. Exact final receipt SHA256 8ba37ed599a6d696431fe2c6fd9bedc2962f5040321fa0b30a668d5412e67471; путь C:/Users/flabe/AppData/Local/Temp/p3-3df-final.receipt.json. Реальные команды, длительности, runtime, lock, логи и их hashes — в receipt. Node24.19.0; npm отсутствовал, использован проверенный same-lock dependency junction, не заявляется npm ci. Полные logs читала только фактическая GPT-5.6 Terra Medium; Actions/PR Checks не запускались, не читались и не использовались.
 
@@ -1509,7 +1514,7 @@ Generated usage отражает записанные контракты, не �
 
 **Acceptance:** Нет необъяснённых gaps; skill действует по returned steps; позитивные и отрицательные сценарии подтверждены. Description-only и mapped rename проходят точный allowlist/preservation diff; неожиданный diff блокирует запись, зависимую синхронизацию и публикацию без auto-repair. Эти доказательства обязательны до 11B; main по-прежнему paused для поддержки.
 
-**Фактический итог P3:** Steps1–5 выполнены и локально приняты в draft PR112; пакет ещё не слит. [Финальная приёмка](#p3-final-acceptance-2026-10-10). P4 и production cutover не начаты.
+**Фактический итог P3:** Steps1–5 приняты и слиты [PR #112](https://github.com/flabenar-maker/e-mail/pull/112) в main a1177d6e1b9840d193d4ee4d761bf95248e3d8bb. [Историческая final candidate acceptance](#p3-final-acceptance-2026-10-10) сохраняет свои pins; отдельный equal-tree postmerge указан в [текущем статусе](#p4-current-2026-10-10). P4 начат, production cutover не выполнен.
 
 ### Пакет 4: Regression email и итоговый gate 11A
 

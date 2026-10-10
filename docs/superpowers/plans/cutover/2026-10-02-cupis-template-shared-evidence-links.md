@@ -1,6 +1,6 @@
 # Служебные связи Template и Shared — Implementation Plan T1/S1
 
-**Актуальный статус10.10.2026:** этот адресный P2-план выполнен, принят и слит PR #110/main e44c726175ca3b93c3a41b43d75424d060bf6390. Ниже сохранена историческая последовательность с собственными pins; она не является командой повторить работу. Текущий P3 проверен в кандидате и ждёт отдельно разрешённого слияния — [draft PR #112](https://github.com/flabenar-maker/e-mail/pull/112), порядок — [cutover plan](../2026-10-01-cupis-final-maintenance-cutover.md#p3-current-2026-10-10).
+**Актуальный статус10.10.2026:** этот адресный P2-план выполнен, принят и слит PR #110/main e44c726175ca3b93c3a41b43d75424d060bf6390. Ниже сохранена историческая последовательность с собственными pins; она не является командой повторить работу. P3 принят и слит [PR #112](https://github.com/flabenar-maker/e-mail/pull/112)/main a1177d6e1b9840d193d4ee4d761bf95248e3d8bb; начат P4, его regression/gate ещё не приняты. Текущий порядок — [cutover plan](../2026-10-01-cupis-final-maintenance-cutover.md#p4-current-2026-10-10).
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Рутинные тесты, разбор failures и regression поручать GPT-5.6 Terra Medium; координатор выполняет реализацию. Steps use checkbox (`- [ ]`) syntax for tracking.
 
