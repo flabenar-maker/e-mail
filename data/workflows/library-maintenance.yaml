@@ -117,7 +117,8 @@
               "fact-unproven"
             ],
             "allowed_outputs": [
-              "audit-findings"
+              "audit-findings",
+              "figma-before"
             ],
             "handoff": {
               "on_success": "next",
@@ -204,6 +205,7 @@
           "figma-change",
           "figma-readback",
           "verification-summary",
+          "github-pr",
           "handoff-summary"
         ],
         "steps": [
@@ -462,6 +464,27 @@
             "order": 11
           },
           {
+            "id": "publish-review",
+            "order": 12,
+            "source_ids": [
+              "repository-readme"
+            ],
+            "required_inputs": [
+              "verification-summary",
+              "repository-change"
+            ],
+            "blockers": [
+              "publication-boundary-invalid"
+            ],
+            "allowed_outputs": [
+              "github-pr"
+            ],
+            "handoff": {
+              "on_success": "next",
+              "on_blocked": "stop"
+            }
+          },
+          {
             "id": "handoff",
             "source_ids": [
               "repository-readme"
@@ -469,7 +492,8 @@
             "required_inputs": [
               "pinned-sha",
               "change-boundary",
-              "verification-summary"
+              "verification-summary",
+              "github-pr"
             ],
             "blockers": [
               "handoff-incomplete"
@@ -481,7 +505,7 @@
               "on_success": "complete",
               "on_blocked": "stop"
             },
-            "order": 12
+            "order": 13
           }
         ]
       }

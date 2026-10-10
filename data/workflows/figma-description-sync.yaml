@@ -232,6 +232,7 @@
           "figma-readback",
           "repository-change",
           "verification-summary",
+          "github-pr",
           "handoff-summary"
         ],
         "steps": [
@@ -467,6 +468,27 @@
             "order": 10
           },
           {
+            "id": "publish-review",
+            "order": 11,
+            "source_ids": [
+              "repository-readme"
+            ],
+            "required_inputs": [
+              "verification-summary",
+              "repository-change"
+            ],
+            "blockers": [
+              "publication-boundary-invalid"
+            ],
+            "allowed_outputs": [
+              "github-pr"
+            ],
+            "handoff": {
+              "on_success": "next",
+              "on_blocked": "stop"
+            }
+          },
+          {
             "id": "handoff",
             "source_ids": [
               "repository-readme"
@@ -474,7 +496,8 @@
             "required_inputs": [
               "pinned-sha",
               "impact-report",
-              "verification-summary"
+              "verification-summary",
+              "github-pr"
             ],
             "blockers": [
               "handoff-incomplete"
@@ -486,7 +509,7 @@
               "on_success": "complete",
               "on_blocked": "stop"
             },
-            "order": 11
+            "order": 12
           }
         ]
       }

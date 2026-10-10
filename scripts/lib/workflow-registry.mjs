@@ -5,6 +5,8 @@ import { SystemValidationError } from "./diagnostics.mjs";
 import { validateDocumentShape } from "./schema-validation.mjs";
 import { readStrictYaml, parseStrictYaml } from "./strict-yaml.mjs";
 import { isDeepStrictEqual } from "node:util";
+import { validateFigmaNameProposal } from "./figma-name-validator.mjs";
+import { auditFigmaComponentEvidence } from "./figma-component-evidence.mjs";
 
 const SUPPORTED_WORKFLOW_VERSION = "1.0.0";
 
@@ -311,9 +313,26 @@ export async function executeMaintenanceWorkflow({context,pinnedSha,inputs={},co
   if(!enabled)continue;
   for(const input of step.required_inputs)if(!present(state[input]))return stop('workflow-input-missing','/steps/'+step.id+'/inputs/'+input);
   let output;
-  if(step.id==='prepare-change-boundary'){
+  if(step.id==='validate-staged-onboarding'){
+   const record=state['staged-component-record'], evidence=state['figma-factual-evidence'], approval=state['approved-ready-component'];
+   if(!record?.id||!record.contracts?.mobile?.root||!record.contracts?.desktop?.root||!evidence?.model||!evidence?.session||!evidence?.live||
+      evidence.model.canonical_sha!==pinnedSha||approval?.id!==record.id||approval?.file_key!==record.figma?.file_key||approval?.node_id!==record.figma?.node_id)
+      return stop('fact-unproven','/staged-component-record');
+   try{const report=auditFigmaComponentEvidence({record,live:evidence.live,model:evidence.model,session:evidence.session,derivedEvidence:evidence.derived_evidence??[]});
+    if(!report.ok)return stop('fact-unproven','/figma-factual-evidence');output={'audit-findings':report};
+   }catch{return stop('fact-unproven','/figma-factual-evidence');}
+  }else if(step.id==='prepare-change-boundary'){
    const preview=state['change-preview'];
    if(!exactBoundary(preview,state['write-authorization'],state['target-scope'],context.route.id,pinnedSha))return stop('authorization-scope-mismatch','/write-authorization');
+   if(context.route.id==='figma-naming-audit'){
+    const naming=context.bundle.foundation_definitions.find(d=>d.foundation_id==='figma-naming'&&d.definition_group==='foundation')?.value;
+    const semantics=state['audit-findings']?.semantics??[];
+    if(!naming)return stop('naming-foundation-missing','/bundle/foundation_definitions');
+    for(const change of preview.changes){const semantic=semantics.find(v=>v.node_id===change.node_id&&v.confirmed===true);
+     if(!semantic)return stop('semantic-role-required','/audit-findings/semantics');
+     if(validateFigmaNameProposal(naming,{...semantic,name:change.after,existingName:change.before}).length)return stop('naming-proposal-invalid','/change-preview');
+    }
+   }
    boundary=structuredClone(preview);output={'change-boundary':boundary};
   }else{
    if(/^(?:apply-|synchronize-|publish-)/u.test(step.id)&&mode.id!=='write')return stop('read-only-write-forbidden','/steps/'+step.id);
@@ -333,6 +352,11 @@ export async function executeMaintenanceWorkflow({context,pinnedSha,inputs={},co
   }
   if(!output||typeof output!=='object'||Object.keys(output).some(key=>!step.allowed_outputs.includes(key))||step.allowed_outputs.some(key=>!present(output[key])))return stop('workflow-output-invalid','/steps/'+step.id);
   if(step.id==='pin-canonical-state'&&output['pinned-sha']!==pinnedSha)return stop('source-pin-mismatch','/pinned-sha');
+  if(step.id==='pin-canonical-state'&&context.route.id==='migration-progress'){
+   const cloud=state['cloud-state-evidence'];
+   if(!cloud||cloud.cloud_channel!=='github'||!(/^[a-f0-9]{40}$/u.test(cloud.tree_sha??'')))return stop('cloud-state-unverified','/cloud-state-evidence');
+   if(cloud.canonical_sha!==pinnedSha)return stop('source-pin-mismatch','/cloud-state-evidence/canonical_sha');
+  }
   if(step.id==='inspect-figma-read-only'){
    try{before=structuredClone(output['figma-before']);const index=nodeIndex(before);if(!state['target-scope'].node_ids.every(id=>index.has(id)))return stop('identity-unconfirmed','/figma-before');}
    catch{return stop('identity-unconfirmed','/figma-before');}
@@ -349,6 +373,10 @@ export async function executeMaintenanceWorkflow({context,pinnedSha,inputs={},co
   if(step.id==='verify-exact-cloud-commit'){
    const summary=output['verification-summary'];
    if(summary?.pinned_sha!==state['repository-change']?.cloud_sha||!Array.isArray(summary?.checks)||!summary.checks.length||summary.checks.some(c=>typeof c.command!=='string'||c.exit_code!==0))return stop('local-verification-failed','/verification-summary');
+  }
+  if(step.id==='publish-review'){
+   const pr=output['github-pr'];
+   if(pr?.draft!==true||pr.base!=='main'||pr.head_sha!==state['repository-change']?.cloud_sha||!/^https:\/\/github\.com\/flabenar-maker\/e-mail\/pull\/[1-9][0-9]*$/u.test(pr.url??''))return stop('publication-boundary-invalid','/github-pr');
   }
   Object.assign(state,structuredClone(output));executed.push(step.id);
  }
