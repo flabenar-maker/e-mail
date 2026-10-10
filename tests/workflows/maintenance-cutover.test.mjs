@@ -1,13 +1,17 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile,writeFile} from 'node:fs/promises';
-import {join} from 'node:path';
-import {createSystemFixture,cleanupSystemFixture} from '../helpers/system-fixture.mjs';
+import {join,dirname} from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {createSystemFixture as createFixture,copyFixtureFile,canonicalSystemFixtureFiles} from '../helpers/system-fixture.mjs';
 import {readStrictYaml} from '../../scripts/lib/strict-yaml.mjs';
 import {resolveSkillContext} from '../../scripts/lib/skill-context.mjs';
 import {validateManifestSemantics} from '../../scripts/lib/system-manifest.mjs';
 import {validateWorkflowRegistrySemantics} from '../../scripts/lib/workflow-registry.mjs';
 
+const cleanups=new Map();
+async function createSystemFixture(){const f=await createFixture();const repoRoot=dirname(dirname(dirname(fileURLToPath(import.meta.url))));for(const path of canonicalSystemFixtureFiles)await copyFixtureFile(repoRoot,f.root,path);cleanups.set(f.root,f.cleanup);return f.root;}
+async function cleanupSystemFixture(root){await cleanups.get(root)();}
 const write=(root,path,value)=>writeFile(join(root,path),JSON.stringify(value,null,2)+'\n');
 async function candidate(root,routeId='migration-progress'){
   const manifest=await readStrictYaml(join(root,'system/manifest.yaml'));
