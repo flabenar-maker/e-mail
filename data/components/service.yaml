@@ -32761,6 +32761,17 @@
                               "kind": "figma-literal",
                               "node_id": "459:27604"
                             }
+                          },
+                          {
+                            "id": "text-case",
+                            "value": {
+                              "type": "keyword",
+                              "value": "original"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27604"
+                            }
                           }
                         ],
                         "children": [],
@@ -32955,6 +32966,17 @@
                             "value": {
                               "type": "number",
                               "value": 0
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27605"
+                            }
+                          },
+                          {
+                            "id": "text-case",
+                            "value": {
+                              "type": "keyword",
+                              "value": "original"
                             },
                             "provenance": {
                               "kind": "figma-literal",
@@ -33365,6 +33387,17 @@
                             "value": {
                               "type": "number",
                               "value": 0
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27607"
+                            }
+                          },
+                          {
+                            "id": "text-case",
+                            "value": {
+                              "type": "keyword",
+                              "value": "original"
                             },
                             "provenance": {
                               "kind": "figma-literal",
@@ -34175,6 +34208,17 @@
                               "kind": "figma-literal",
                               "node_id": "459:27583"
                             }
+                          },
+                          {
+                            "id": "text-case",
+                            "value": {
+                              "type": "keyword",
+                              "value": "original"
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27583"
+                            }
                           }
                         ],
                         "children": [],
@@ -34369,6 +34413,17 @@
                             "value": {
                               "type": "number",
                               "value": 0
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27584"
+                            }
+                          },
+                          {
+                            "id": "text-case",
+                            "value": {
+                              "type": "keyword",
+                              "value": "original"
                             },
                             "provenance": {
                               "kind": "figma-literal",
@@ -34779,6 +34834,17 @@
                             "value": {
                               "type": "number",
                               "value": 0
+                            },
+                            "provenance": {
+                              "kind": "figma-literal",
+                              "node_id": "459:27586"
+                            }
+                          },
+                          {
+                            "id": "text-case",
+                            "value": {
+                              "type": "keyword",
+                              "value": "original"
                             },
                             "provenance": {
                               "kind": "figma-literal",
@@ -37827,6 +37893,48 @@
             "source_path": "/layout_grow",
             "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/11/value/value",
             "transform": "identity"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27583",
+            "source_path": "/text_style/text_case",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/0/facts/16/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27584",
+            "source_path": "/text_style/text_case",
+            "contract_path": "/contracts/desktop/root/children/0/children/0/children/1/facts/16/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16997",
+            "node_id": "459:27586",
+            "source_path": "/text_style/text_case",
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/12/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27604",
+            "source_path": "/text_style/text_case",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/0/facts/16/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27605",
+            "source_path": "/text_style/text_case",
+            "contract_path": "/contracts/mobile/root/children/0/children/0/children/1/facts/16/value/value",
+            "transform": "lowercase"
+          },
+          {
+            "variant_node_id": "472:16998",
+            "node_id": "459:27607",
+            "source_path": "/text_style/text_case",
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/12/value/value",
+            "transform": "lowercase"
           }
         ]
       },
@@ -39362,6 +39470,126 @@
               "collection_id": "VariableCollectionId:11:324",
               "collection_name": "Spacing",
               "resolved_type": "FLOAT"
+            }
+          },
+          {
+            "id": "native-desktop-root-content-area-help-notice-help-text-paint-binding-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27586"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/7/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "paint_source_path": "/styled_text_segments/0/fills/0/color",
+            "variable": {
+              "id": "VariableID:ee519cb1483388c831c3ea1ab0cedfaf4c143618/17:138",
+              "name": "Grey/400",
+              "key": "ee519cb1483388c831c3ea1ab0cedfaf4c143618",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-desktop-root-content-area-help-notice-help-text-paint-binding-text-range-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27586"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/7/value",
+            "binding_path": "/variable_bindings/textRangeFills/0/id",
+            "paint_source_path": "/styled_text_segments/1/fills/0/color",
+            "variable": {
+              "id": "VariableID:9ca87e868c2b5c348498f505a95a6049f5ac9df2/22:3",
+              "name": "Green/500",
+              "key": "9ca87e868c2b5c348498f505a95a6049f5ac9df2",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-desktop-root-content-area-help-notice-help-text-paint-binding-text-range-fills-1",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16997",
+              "node_id": "459:27586"
+            },
+            "contract_path": "/contracts/desktop/root/children/0/children/1/children/0/facts/7/value",
+            "binding_path": "/variable_bindings/textRangeFills/1/id",
+            "paint_source_path": "/styled_text_segments/0/fills/0/color",
+            "variable": {
+              "id": "VariableID:ee519cb1483388c831c3ea1ab0cedfaf4c143618/17:138",
+              "name": "Grey/400",
+              "key": "ee519cb1483388c831c3ea1ab0cedfaf4c143618",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-mobile-root-content-area-help-notice-help-text-paint-binding-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27607"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/7/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "paint_source_path": "/styled_text_segments/0/fills/0/color",
+            "variable": {
+              "id": "VariableID:ee519cb1483388c831c3ea1ab0cedfaf4c143618/17:138",
+              "name": "Grey/400",
+              "key": "ee519cb1483388c831c3ea1ab0cedfaf4c143618",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-mobile-root-content-area-help-notice-help-text-paint-binding-text-range-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27607"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/7/value",
+            "binding_path": "/variable_bindings/textRangeFills/0/id",
+            "paint_source_path": "/styled_text_segments/1/fills/0/color",
+            "variable": {
+              "id": "VariableID:9ca87e868c2b5c348498f505a95a6049f5ac9df2/22:3",
+              "name": "Green/500",
+              "key": "9ca87e868c2b5c348498f505a95a6049f5ac9df2",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-mobile-root-content-area-help-notice-help-text-paint-binding-text-range-fills-1",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "block-contact-support",
+              "variant_node_id": "472:16998",
+              "node_id": "459:27607"
+            },
+            "contract_path": "/contracts/mobile/root/children/0/children/1/children/0/facts/7/value",
+            "binding_path": "/variable_bindings/textRangeFills/1/id",
+            "paint_source_path": "/styled_text_segments/0/fills/0/color",
+            "variable": {
+              "id": "VariableID:ee519cb1483388c831c3ea1ab0cedfaf4c143618/17:138",
+              "name": "Grey/400",
+              "key": "ee519cb1483388c831c3ea1ab0cedfaf4c143618",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
             }
           }
         ],

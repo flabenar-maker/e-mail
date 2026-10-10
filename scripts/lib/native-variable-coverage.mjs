@@ -3,6 +3,7 @@ import {isDeepStrictEqual as equal} from 'node:util';
 import {createContractProofEnvironment} from './contract-fact-proofs.mjs';
 import {applyNativeRelationCoverage, auditNativeRelationProofs} from './native-relationship-coverage.mjs';
 import {isFigmaContractFactReportFor} from './figma-contract-facts.mjs';
+import {NATIVE_PAINT_COLOR_PATH, readNativePaintLocations, createNativePaintVariableVerifier} from './native-paint-variable-context.mjs';
 
 const ID=/^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
 const ROOT=/^[0-9]+:[0-9]+$/u;
@@ -25,7 +26,8 @@ const issue=(code,path,message)=>({code,path,message});
 const ordered=issues=>issues.sort((a,b)=>a.path.localeCompare(b.path)||a.code.localeCompare(b.code));
 const variants=r=>r?.variants?.length?r.variants:[{node_id:r?.figma?.node_id,axes:[]}];
 const selector=s=>closed(s,['component_id','variant_node_id','node_id'])&&match(ID,s.component_id)&&match(ROOT,s.variant_node_id)&&match(NODE,s.node_id);
-function field(path){
+function field(path,paintPath){
+ if(paintPath!==undefined)return match(NATIVE_PAINT_COLOR_PATH,paintPath)&&match(/^\/variable_bindings\/(?:fills|textRangeFills)\/\d+\/id$/u,path)?{field:'paint',source_path:paintPath,type:'COLOR',paint_context:paintPath.startsWith('/fills/')?'gradient':'mixed'}:null;
  const p=/^\/variable_bindings\/([^/]+)\/id$/u.exec(path)?.[1];
  return FIELDS[p]?{field:p,source_path:FIELDS[p],type:'FLOAT'}:path==='/variable_bindings/fills/0/id'?{field:'fills',source_path:'/fills/0/color',type:'COLOR'}:null;
 }
@@ -36,7 +38,7 @@ function target(record,path){
  return object(value)&&object(fact)?{value,fact,viewport:plain??record.contracts?.variant_contracts?.[index]?.axes?.find(a=>a.name==='Viewport')?.value?.toLowerCase()}:null;
 }
 function variableShape(v){return closed(v,['id','name','key','collection_id','collection_name','resolved_type'])&&['id','name','key','collection_id','collection_name'].every(k=>text(v[k]))&&['FLOAT','COLOR'].includes(v.resolved_type);}
-function shape(p){return closed(p,['id','kind','source','contract_path','binding_path','variable'])&&match(ID,p.id)&&p.kind==='variable-binding'&&selector(p.source)&&match(PATH,p.contract_path)&&!!field(p.binding_path)&&variableShape(p.variable);}
+function shape(p){return closed(p,['id','kind','source','contract_path','binding_path','variable',...(Object.hasOwn(p??{},'paint_source_path')?['paint_source_path']:[])])&&match(ID,p.id)&&p.kind==='variable-binding'&&selector(p.source)&&match(PATH,p.contract_path)&&!!field(p.binding_path,p.paint_source_path)&&variableShape(p.variable);}
 export function validateNativeVariableProofReferences({records=[]}={}){
  const issues=[],owners=new Map();
  for(const [i,r]of records.entries()){if(owners.has(r.id))issues.push(issue('NATIVE_VARIABLE_OWNER_AMBIGUOUS',`/records/${i}`,'One canonical owner required.'));owners.set(r.id,r);}
@@ -49,9 +51,9 @@ export function validateNativeVariableProofReferences({records=[]}={}){
   for(const [j,p]of proofs.entries()){
    const at=`${base}/native_variable_proofs/${j}`;
    if(!shape(p)){issues.push(issue('NATIVE_VARIABLE_SHAPE_INVALID',at,'Closed variable-binding metadata required.'));continue;}
-   const t=target(r,p.contract_path),f=field(p.binding_path),vs=variants(r).filter(v=>v.node_id===p.source.variant_node_id),vp=vs[0]?.axes?.find(a=>a.name==='Viewport')?.value?.toLowerCase();
+   const t=target(r,p.contract_path),f=field(p.binding_path,p.paint_source_path),vs=variants(r).filter(v=>v.node_id===p.source.variant_node_id),vp=vs[0]?.axes?.find(a=>a.name==='Viewport')?.value?.toLowerCase();
    if(owners.get(p.source.component_id)!==r||vs.length!==1||(vp&&vp!==t?.viewport))issues.push(issue('NATIVE_VARIABLE_SELECTOR_INVALID',at,'Exact owned source/target viewport required.'));
-   if(!t||f.type!==p.variable.resolved_type||!(f.type==='FLOAT'?t.value.type==='measure'&&t.value.unit==='px'&&finite(t.value.value):t.value.type==='color'&&/^#[0-9a-fA-F]{6}$/u.test(t.value.value)))issues.push(issue('NATIVE_VARIABLE_TARGET_INVALID',at,'Compatible exact typed px/color target required.'));
+   if(!t||f.type!==p.variable.resolved_type||!(f.type==='FLOAT'?t.value.type==='measure'&&t.value.unit==='px'&&finite(t.value.value):f.paint_context==='mixed'?t.value.type==='segments'&&Array.isArray(t.value.items):t.value.type==='color'&&/^#[0-9a-fA-F]{6}$/u.test(t.value.value)))issues.push(issue('NATIVE_VARIABLE_TARGET_INVALID',at,'Compatible exact typed px/color target required.'));
    if(!['figma-literal','figma-binding'].includes(t?.fact.provenance?.kind)||t.fact.provenance.node_id!==p.source.node_id)issues.push(issue('NATIVE_VARIABLE_PROVENANCE_INVALID',at,'Independent same-node native provenance required.'));
    const key=JSON.stringify([p.source,p.binding_path]);if(obligations.has(key))issues.push(issue('NATIVE_VARIABLE_SOURCE_DUPLICATE',at,'One proof per exact binding leaf.'));obligations.add(key);
   }
@@ -60,7 +62,7 @@ export function validateNativeVariableProofReferences({records=[]}={}){
 }
 function catalog(packet){
  const root=packet.binding_evidence;
- if(!closed(root,['variables','collections','usages'])||!['variables','collections','usages'].every(k=>Array.isArray(root[k])))throw Error('complete binding evidence required');
+ if(!closed(root,['variables','collections','usages',...(Object.hasOwn(root??{},'paint_locations')?['paint_locations']:[])])||!['variables','collections','usages'].every(k=>Array.isArray(root[k])))throw Error('complete binding evidence required');
  const variables=new Map(),collections=new Map(),usages=new Map();
  for(const v of root.variables){
   if(!closed(v,['id','name','key','remote','collection_id','resolved_type','values_by_mode'])||!['id','name','key','collection_id'].every(k=>text(v[k]))||typeof v.remote!=='boolean'||!['FLOAT','COLOR','BOOLEAN','STRING'].includes(v.resolved_type)||!object(v.values_by_mode)||variables.has(v.id))throw Error('unique complete actual variable definitions required');
@@ -74,7 +76,7 @@ function catalog(packet){
   if(!closed(usage,['node_id','binding_path','variable_id','resolved_type','resolved_value','mode_selections'])||!match(NODE,usage.node_id)||!text(usage.binding_path)||!text(usage.variable_id)||!['FLOAT','COLOR','BOOLEAN','STRING'].includes(usage.resolved_type)||!Array.isArray(usage.mode_selections)||usage.mode_selections.some(m=>!closed(m,['collection_id','mode_id'])||!text(m.collection_id)||!text(m.mode_id))||new Set(usage.mode_selections.map(m=>m.collection_id)).size!==usage.mode_selections.length)throw Error('complete consumer binding usage required');
   const key=JSON.stringify([usage.node_id,usage.binding_path]);if(usages.has(key))throw Error('duplicate consumer binding usage');usages.set(key,usage);
  }
- return{variables,collections,usages};
+ return{variables,collections,usages,paintLocations:readNativePaintLocations(packet,variables)};
 }
 function opaqueColor(value){
  if(!(closed(value,['r','g','b'])||closed(value,['r','g','b','a']))||['r','g','b'].some(k=>!finite(value[k])||value[k]<0||value[k]>1)||(Object.hasOwn(value,'a')&&value.a!==1))throw Error('opaque exact RGB/RGBA color required');
@@ -90,8 +92,8 @@ function terminal(id,type,c,usage,trail=new Set()){
  if(type==='FLOAT'){if(!finite(value))throw Error('finite FLOAT terminal required');return number(value);}
  return opaqueColor(value);
 }
-function verify(record,p,env,c,consumer=p.source){
- const selected=env.selected(consumer),node=selected.node,t=target(record,p.contract_path),f=field(p.binding_path);
+function verify(record,p,env,c,consumer=p.source,paintVerifier){
+ const selected=env.selected(consumer),node=selected.node,t=target(record,p.contract_path),f=field(p.binding_path,p.paint_source_path);
  const alias=pointer(node,p.binding_path.replace(/\/id$/u,'')),v=c.variables.get(p.variable.id),collection=c.collections.get(p.variable.collection_id);
  if(!closed(alias,['id'])||alias.id!==p.variable.id||!v||!collection||v.name!==p.variable.name||v.key!==p.variable.key||v.collection_id!==p.variable.collection_id||v.resolved_type!==p.variable.resolved_type||collection.name!==p.variable.collection_name)throw Error('exact binding variable/key/name/type/collection ownership mismatch');
  const usage=c.usages.get(JSON.stringify([node.node_id,p.binding_path.replace(/\/id$/u,'')]));
@@ -99,6 +101,12 @@ function verify(record,p,env,c,consumer=p.source){
  for(const mode of usage.mode_selections){const collection=c.collections.get(mode.collection_id);if(!collection||!collection.modes.some(m=>m.id===mode.mode_id))throw Error('actual selected mode unresolved');}
  const resolved=f.type==='FLOAT'?number(usage.resolved_value):opaqueColor(usage.resolved_value),value=terminal(v.id,f.type,c,usage);
  if(f.type==='FLOAT'&&!finite(usage.resolved_value))throw Error('finite resolveForConsumer value required');
+ if(f.paint_context){
+  if(!equal(consumer,p.source)||!paintVerifier)throw Error('projected paint-variable context is not independently qualified');
+  if(value!==resolved)throw Error('terminal/consumer color mismatch');
+  paintVerifier({proof:p,node,packet:selected.packet,locations:c.paintLocations,value});
+  return {...consumer,source_path:p.binding_path};
+ }
  const links=(record.contracts?.figma_fact_links??[]).filter(l=>l.contract_path===`${p.contract_path}/value`);
  if(links.length!==1||links[0].variant_node_id!==p.source.variant_node_id||links[0].node_id!==p.source.node_id||links[0].source_path!==f.source_path||links[0].transform!=='identity')throw Error('unique independent binding-to-field mapping required');
  const native=pointer(node,f.source_path),actual=f.type==='FLOAT'?number(native):native;
@@ -121,11 +129,12 @@ export function auditNativeVariableProofs({record,model,session}={}){
  const validation=validateNativeVariableProofReferences({records:model.records}),env=createContractProofEnvironment(model,session);
  report.issues.push(...validation,...env.issues);
  let c;
+ const paintVerifier=createNativePaintVariableVerifier({record,model,session});
  for(const p of Array.isArray(proofs)?proofs:[]){
   const item={proof_id:p?.id??null,kind:p?.kind??null,status:'unverified'};env.beginProof();
   try{
    if(validation.length||env.issues.length)throw Error('variable metadata/session unverified');
-   c??=catalog(env.tree(record.id).packet);const source=verify(record,p,env,c);item.status='verified';item.source_paths=[source];report.verified_sources.push(source);
+   c??=catalog(env.tree(record.id).packet);const source=verify(record,p,env,c,p.source,paintVerifier);item.status='verified';item.source_paths=[source];report.verified_sources.push(source);
   }catch(e){item.reason=e.message;item.source_paths=[];report.issues.push(issue('NATIVE_VARIABLE_UNVERIFIED',`/evidence_links/native_variable_proofs/${p?.id??'invalid'}`,e.message));}
   Object.assign(item,env.proofTrace());report.results.push(item);
  }

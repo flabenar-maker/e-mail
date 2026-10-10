@@ -3100,7 +3100,7 @@
         },
         "binding_path": {
           "type": "string",
-          "pattern": "^/variable_bindings/(?:(?:paddingLeft|paddingTop|paddingRight|paddingBottom|itemSpacing|topLeftRadius|topRightRadius|bottomLeftRadius|bottomRightRadius)/id|fills/0/id)$"
+          "pattern": "^/variable_bindings/(?:(?:paddingLeft|paddingTop|paddingRight|paddingBottom|itemSpacing|topLeftRadius|topRightRadius|bottomLeftRadius|bottomRightRadius)/id|(?:fills|textRangeFills)/[0-9]+/id)$"
         },
         "variable": {
           "type": "object",
@@ -3141,8 +3141,42 @@
               ]
             }
           }
+        },
+        "paint_source_path": {
+          "type": "string",
+          "pattern": "^/(?:fills/[0-9]+/stops/[0-9]+|styled_text_segments/[0-9]+/fills/[0-9]+)/color$"
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "paint_source_path"
+            ]
+          },
+          "then": {
+            "properties": {
+              "binding_path": {
+                "pattern": "^/variable_bindings/(?:fills|textRangeFills)/[0-9]+/id$"
+              },
+              "variable": {
+                "properties": {
+                  "resolved_type": {
+                    "const": "COLOR"
+                  }
+                }
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "binding_path": {
+                "pattern": "^/variable_bindings/(?:(?:paddingLeft|paddingTop|paddingRight|paddingBottom|itemSpacing|topLeftRadius|topRightRadius|bottomLeftRadius|bottomRightRadius)/id|fills/0/id)$"
+              }
+            }
+          }
+        }
+      ]
     },
     "nativeContextProof": {
       "oneOf": [

@@ -55089,6 +55089,86 @@
               "collection_name": "Semantics",
               "resolved_type": "COLOR"
             }
+          },
+          {
+            "id": "native-desktop-root-paint-binding-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "button-primary",
+              "variant_node_id": "337:4694",
+              "node_id": "337:4694"
+            },
+            "contract_path": "/contracts/desktop/root/facts/15/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "paint_source_path": "/fills/0/stops/1/color",
+            "variable": {
+              "id": "VariableID:704582647f9b095771e51ba7ff67468e310de275/22:5",
+              "name": "Green/300",
+              "key": "704582647f9b095771e51ba7ff67468e310de275",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-desktop-root-paint-binding-fills-1",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "button-primary",
+              "variant_node_id": "337:4694",
+              "node_id": "337:4694"
+            },
+            "contract_path": "/contracts/desktop/root/facts/14/value",
+            "binding_path": "/variable_bindings/fills/1/id",
+            "paint_source_path": "/fills/0/stops/0/color",
+            "variable": {
+              "id": "VariableID:a9015ac7b09ab50dccace9cd298b46dada8b4520/22:4",
+              "name": "Green/400",
+              "key": "a9015ac7b09ab50dccace9cd298b46dada8b4520",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-mobile-root-paint-binding-fills-0",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "button-primary",
+              "variant_node_id": "337:4691",
+              "node_id": "337:4691"
+            },
+            "contract_path": "/contracts/mobile/root/facts/15/value",
+            "binding_path": "/variable_bindings/fills/0/id",
+            "paint_source_path": "/fills/0/stops/1/color",
+            "variable": {
+              "id": "VariableID:704582647f9b095771e51ba7ff67468e310de275/22:5",
+              "name": "Green/300",
+              "key": "704582647f9b095771e51ba7ff67468e310de275",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
+          },
+          {
+            "id": "native-mobile-root-paint-binding-fills-1",
+            "kind": "variable-binding",
+            "source": {
+              "component_id": "button-primary",
+              "variant_node_id": "337:4691",
+              "node_id": "337:4691"
+            },
+            "contract_path": "/contracts/mobile/root/facts/14/value",
+            "binding_path": "/variable_bindings/fills/1/id",
+            "paint_source_path": "/fills/0/stops/0/color",
+            "variable": {
+              "id": "VariableID:a9015ac7b09ab50dccace9cd298b46dada8b4520/22:4",
+              "name": "Green/400",
+              "key": "a9015ac7b09ab50dccace9cd298b46dada8b4520",
+              "collection_id": "VariableCollectionId:3b29eff80abbf8cba059b4f3a2a46b61f38a23b4/17:75",
+              "collection_name": "Brand Core Colors",
+              "resolved_type": "COLOR"
+            }
           }
         ],
         "native_context_proofs": [

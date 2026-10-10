@@ -70,7 +70,13 @@ async function captureFigmaContractFactsBody(componentNodeId, captureBindings = 
     }
     return value;
   };
-  const paints = (list, nodeId) => list.map((paint, index) => {
+  const paintLocations = [];
+  const directPaintAlias = (nodeId, sourcePath, alias) => {
+    if (!captureBindings || alias === undefined) return;
+    if (!alias || alias.type !== "VARIABLE_ALIAS" || typeof alias.id !== "string" || !alias.id.trim()) throw new Error("Exact direct paint variable alias required");
+    paintLocations.push({ node_id: nodeId, source_path: sourcePath, variable_id: alias.id });
+  };
+  const paints = (list, nodeId, sourcePrefix = null) => list.map((paint, index) => {
     const result = {
       type: paint.type.toLowerCase(),
       visible: paint.visible !== false,
@@ -78,11 +84,12 @@ async function captureFigmaContractFactsBody(componentNodeId, captureBindings = 
     };
     if (paint.type === "SOLID") {
       result.color = rgb(paint.color);
+      if (sourcePrefix?.startsWith("/styled_text_segments/")) directPaintAlias(nodeId, `${sourcePrefix}/${index}/color`, paint.boundVariables?.color);
     } else if (paint.type.startsWith("GRADIENT_")) {
-      result.gradient_stops = paint.gradientStops.map((stop) => ({
-        position: stop.position,
-        ...rgba(stop.color),
-      }));
+      result.gradient_stops = paint.gradientStops.map((stop, stopIndex) => {
+        if (sourcePrefix === "/fills") directPaintAlias(nodeId, "/fills/" + index + "/stops/" + stopIndex + "/color", stop.boundVariables?.color);
+        return { position: stop.position, ...rgba(stop.color) };
+      });
       // Existing fact links use stops; keep the original v1 field too.
       result.stops = result.gradient_stops;
       result.gradient_transform = paint.gradientTransform;
@@ -242,7 +249,7 @@ async function captureFigmaContractFactsBody(componentNodeId, captureBindings = 
       top_left: node.topLeftRadius, top_right: node.topRightRadius,
       bottom_right: node.bottomRightRadius, bottom_left: node.bottomLeftRadius,
     };
-    if ("fills" in node) result.fills = paints(mixed(node.fills, node.id, "fills") ?? [], node.id);
+    if ("fills" in node) result.fills = paints(mixed(node.fills, node.id, "fills") ?? [], node.id, "/fills");
     if ("strokes" in node) result.strokes = paints(mixed(node.strokes, node.id, "strokes") ?? [], node.id);
     if (result.strokes?.length > 0 && "strokeWeight" in node) result.stroke_weight = mixed(node.strokeWeight, node.id, "strokeWeight");
     if (result.strokes?.length > 0 && "strokeAlign" in node) result.stroke_align = node.strokeAlign;
@@ -301,12 +308,12 @@ async function captureFigmaContractFactsBody(componentNodeId, captureBindings = 
       )) {
         result.styled_text_segments = node.getStyledTextSegments([
           "fontName", "fontSize", "lineHeight", "fills", "textDecoration",
-        ]).map((segment) => ({
+        ]).map((segment, segmentIndex) => ({
           start: segment.start, end: segment.end, characters: segment.characters,
           font_family: segment.fontName.family, font_style: segment.fontName.style,
           font_size_px: segment.fontSize, line_height: segment.lineHeight,
           text_decoration: segment.textDecoration,
-          fills: paints(segment.fills, node.id),
+          fills: paints(segment.fills, node.id, `/styled_text_segments/${segmentIndex}/fills`),
         }));
       }
     }
@@ -366,6 +373,6 @@ async function captureFigmaContractFactsBody(componentNodeId, captureBindings = 
     component_properties: componentProperties,
     variants,
     capture_errors: errors,
-    ...(captureBindings ? { binding_evidence: { variables: [...actualVariables.values()].map(v => v.definition), collections: [...actualCollections.values()], usages: bindingUsages } } : {}),
+    ...(captureBindings ? { binding_evidence: { variables: [...actualVariables.values()].map(v => v.definition), collections: [...actualCollections.values()], usages: bindingUsages, paint_locations: { schema_version: "1.0.0", items: paintLocations } } } : {}),
   };
 }
