@@ -3161,7 +3161,8 @@
           "then": {
             "properties": {
               "binding_path": {
-                "pattern": "^/variable_bindings/(?:fills|textRangeFills)/[0-9]+/id$"
+                "pattern": "^/variable_bindings/(?:fills|textRangeFills)/[0-9]+/id$",
+                "type": "string"
               },
               "variable": {
                 "properties": {
@@ -3177,7 +3178,8 @@
           "else": {
             "properties": {
               "binding_path": {
-                "pattern": "^/variable_bindings/(?:(?:paddingLeft|paddingTop|paddingRight|paddingBottom|itemSpacing|topLeftRadius|topRightRadius|bottomLeftRadius|bottomRightRadius)/id|fills/0/id)$"
+                "pattern": "^/variable_bindings/(?:(?:paddingLeft|paddingTop|paddingRight|paddingBottom|itemSpacing|topLeftRadius|topRightRadius|bottomLeftRadius|bottomRightRadius)/id|fills/0/id)$",
+                "type": "string"
               }
             },
             "type": "object"
