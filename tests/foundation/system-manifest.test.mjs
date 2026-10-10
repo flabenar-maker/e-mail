@@ -1093,6 +1093,7 @@ test("canonical routes activate email bundles while non-email bundles remain sha
         id: "email-build-checkpoint",
         output_source_id: "generated-email-build-checkpoint",
       },
+      ...["component-onboarding", "figma-description-sync", "figma-naming-audit", "migration-progress"].map(id => ({id: `${id}-checkpoint`, output_source_id: `generated-${id}-checkpoint`})),
     ],
   );
 });

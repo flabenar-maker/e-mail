@@ -366,7 +366,8 @@ export async function validateManifestSemantics(manifest, repoRoot) {
     const entry = structuredWorkflows.entries.find(({source_id}) => source_id === route.workflow_source_id);
     if (!entry || source?.kind !== "workflow" || bundle.status !== "structured-active" ||
       profile.source_ids.includes("workflow-paused") || !profile.source_ids.includes(route.workflow_source_id) ||
-      (emailRouteIds.has(route.id) && route.workflow_source_id !== "workflow-email-build")) return false;
+      (emailRouteIds.has(route.id) && route.workflow_source_id !== "workflow-email-build") ||
+      (!emailRouteIds.has(route.id) && entry.id !== route.id)) return false;
     try { const document = await readStrictYaml(join(repoRoot,source.path));
       return document.workflow?.id === entry.id && document.workflow?.status === "active";
     } catch { return false; }

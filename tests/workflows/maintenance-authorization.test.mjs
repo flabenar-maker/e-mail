@@ -148,7 +148,7 @@ test('P3: migration progress completes read-only only on exact GitHub cloud evid
 });
 
 test('P3 RED: library name change cannot alter the delivered export scale',async()=>{
- const f=await fixture();try{const c=await activate(f.root,'library-maintenance');assert.equal(c.status,'resolved');const e=execution(c,{rename:true});e.preview.changes[0].after='benefit-icon @2x';e.options.inputs['write-authorization']=structuredClone(e.preview);const result=await workflows.executeMaintenanceWorkflow(e.options);assert.equal(result.status,'blocked');assert.ok(result.blockers.some(v=>v.code==='naming-proposal-invalid'));assert.ok(!e.calls.includes('apply-authorized-figma-change'));}finally{await f.cleanup();}
+ const f=await fixture();try{const c=await activate(f.root,'library-maintenance');assert.equal(c.status,'resolved');const e=execution(c,{rename:true});e.preview.changes[0].after='benefit-icon @2x';e.options.inputs['write-authorization']=structuredClone(e.preview);e.options.handlers['apply-authorized-figma-change']=async()=>{e.calls.push('apply-authorized-figma-change');e.nodes[0].name=e.preview.changes[0].after;return {'figma-change':{node_ids:['1:2']}};};const result=await workflows.executeMaintenanceWorkflow(e.options);assert.equal(result.status,'blocked');assert.ok(result.blockers.some(v=>v.code==='naming-proposal-invalid'));assert.ok(!e.calls.includes('apply-authorized-figma-change'));}finally{await f.cleanup();}
 });
 
 test('P3 RED: library name change with preserved scale still needs one confirmed semantic role',async()=>{
