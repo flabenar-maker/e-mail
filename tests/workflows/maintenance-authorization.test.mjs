@@ -120,3 +120,37 @@ test('P3: tool capabilities receive the actual immutable resolved bundle, not re
 test('P3: non-draft PR response is not accepted as an authorized publication',async()=>{
  const f=await fixture();try{const c=await activate(f.root,'figma-description-sync');const e=execution(c);e.options.handlers['publish-review']=async()=>({'github-pr':{url:'https://github.com/flabenar-maker/e-mail/pull/999',head_sha:SHA,base:'main',draft:false}});const result=await workflows.executeMaintenanceWorkflow(e.options);assert.equal(result.status,'blocked');assert.ok(result.blockers.some(b=>b.code==='publication-boundary-invalid'));}finally{await f.cleanup();}
 });
+
+// APPEND ONLY to tests/workflows/maintenance-authorization.test.mjs.
+// Uses that file's fixture(), activate(), execution(), SHA, workflows and assert.
+
+test('P3: library repository-only write completes with exact local receipt and draft publication',async()=>{
+ const f=await fixture();try{const c=await activate(f.root,'library-maintenance');assert.equal(c.status,'resolved');
+  const preview={pinned_sha:SHA,route_id:'library-maintenance',file_key:'file',changes:[],repository_paths:['data/components/marketing.yaml']},calls=[];
+  const handlers=Object.fromEntries(c.workflow.steps.map(s=>[s.id,async()=>{calls.push(s.id);
+   if(s.id==='pin-canonical-state')return {'pinned-sha':SHA};if(s.id==='assess-impact')return {'impact-report':{scope:'fixture'}};
+   if(s.id==='inspect-canonical-sources')return {'audit-findings':{inspected:true}};if(s.id==='preview-exact-change')return {'change-preview':preview};
+   if(['apply-minimal-repository-change','synchronize-dependents'].includes(s.id))return {'repository-change':{paths:preview.repository_paths,cloud_sha:SHA,branch:'codex/fixture'}};
+   if(s.id==='verify-exact-cloud-commit')return {'verification-summary':{pinned_sha:SHA,checks:[{command:'controlled-fixture-check',exit_code:0}],limitations:['fixture']}};
+   if(s.id==='publish-review')return {'github-pr':{url:'https://github.com/flabenar-maker/e-mail/pull/999',head_sha:SHA,base:'main',draft:true}};if(s.id==='handoff')return {'handoff-summary':{}};throw Error('Unexpected '+s.id);
+  }]));
+  const result=await workflows.executeMaintenanceWorkflow({context:c,pinnedSha:SHA,inputs:{request:'fixture','target-scope':{file_key:'file',node_ids:[],repository_paths:preview.repository_paths},'write-authorization':structuredClone(preview)},handlers});
+  assert.equal(result.status,'complete');assert.deepEqual(result.handoff.changed_paths,preview.repository_paths);assert.equal(result.handoff.verification_summary.checks[0].exit_code,0);assert.equal(result.handoff.github_pr.draft,true);assert.ok(!calls.includes('inspect-figma-read-only'));
+ }finally{await f.cleanup();}
+});
+
+test('P3: migration progress completes read-only only on exact GitHub cloud evidence pin',async()=>{
+ const f=await fixture();try{const c=await activate(f.root,'migration-progress',{mode:'read-only'});assert.equal(c.status,'resolved');const calls=[];
+  const handlers=Object.fromEntries(c.workflow.steps.map(s=>[s.id,async()=>{calls.push(s.id);if(s.id==='pin-canonical-state')return {'pinned-sha':SHA};if(s.id==='compare-roadmap-with-cloud-state')return {'audit-findings':{roadmap:'checked'}};if(s.id==='verify-read-only-findings')return {'verification-summary':{limitations:['fixture']}};if(s.id==='handoff')return {'handoff-summary':{}};throw Error('Unexpected '+s.id);}]));
+  const result=await workflows.executeMaintenanceWorkflow({context:c,pinnedSha:SHA,inputs:{request:'status','cloud-state-evidence':{canonical_sha:SHA,tree_sha:'b'.repeat(40),cloud_channel:'github'}},handlers});
+  assert.equal(result.status,'complete');assert.equal(result.handoff.cloud_commit,null);assert.equal(result.handoff.github_pr,null);assert.ok(calls.every(id=>!/(apply|synchronize|publish)/.test(id)));
+ }finally{await f.cleanup();}
+});
+
+test('P3 RED: library name change cannot alter the delivered export scale',async()=>{
+ const f=await fixture();try{const c=await activate(f.root,'library-maintenance');assert.equal(c.status,'resolved');const e=execution(c,{rename:true});e.preview.changes[0].after='benefit-icon @2x';e.options.inputs['write-authorization']=structuredClone(e.preview);const result=await workflows.executeMaintenanceWorkflow(e.options);assert.equal(result.status,'blocked');assert.ok(result.blockers.some(v=>v.code==='naming-proposal-invalid'));assert.ok(!e.calls.includes('apply-authorized-figma-change'));}finally{await f.cleanup();}
+});
+
+test('P3 RED: library name change with preserved scale still needs one confirmed semantic role',async()=>{
+ const f=await fixture();try{const c=await activate(f.root,'library-maintenance');assert.equal(c.status,'resolved');const e=execution(c,{rename:true});e.options.handlers['inspect-figma-read-only']=async()=>({'figma-before':structuredClone(e.nodes),'audit-findings':{semantics:[]}});const result=await workflows.executeMaintenanceWorkflow(e.options);assert.equal(result.status,'blocked');assert.ok(result.blockers.some(v=>v.code==='semantic-role-required'));assert.ok(!e.calls.includes('apply-authorized-figma-change'));}finally{await f.cleanup();}
+});
