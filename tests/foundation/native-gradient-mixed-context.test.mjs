@@ -235,7 +235,10 @@ test('actual Contact mixed TEXT captures with empty aggregate fills qualify thro
   assert.equal(contactHelpContexts(report).length, 2, JSON.stringify(contactHelpContexts(report)));
   assert.equal(contactHelpContexts(report).every(item => item.status === 'verified'), true, JSON.stringify(contactHelpContexts(report)));
   for (const node_id of contactHelpNodes()) assert.equal(report.effective_facts.issues.some(issue => issue.node_id === node_id && issue.source_path === '/fills'), false);
-  assert.ok(report.effective_facts.issues.some(issue => issue.node_id === '459:27586' && issue.source_path === '/text_style/text_case'));
+  const textCaseNodes = ['459:27583', '459:27584', '459:27586', '459:27604', '459:27605', '459:27607'];
+  const textCaseMaps = f.record.contracts.figma_fact_links.filter(link => textCaseNodes.includes(link.node_id) && link.source_path === '/text_style/text_case' && link.transform === 'lowercase' && link.contract_path.endsWith('/value/value'));
+  assert.equal(textCaseMaps.length, 6, JSON.stringify(textCaseMaps));
+  for (const node_id of textCaseNodes) assert.equal(report.effective_facts.issues.some(issue => issue.node_id === node_id && issue.source_path === '/text_style/text_case'), false, node_id);
   assert.ok(report.effective_facts.issues.some(issue => issue.node_id === '459:27607' && issue.source_path.startsWith('/variable_bindings/')));
 });
 
