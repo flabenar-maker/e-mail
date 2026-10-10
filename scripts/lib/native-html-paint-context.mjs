@@ -43,7 +43,7 @@ export function verifyHtmlGradientPaintContext({record, relation, node, contract
 }
 export function verifyHtmlMixedTextPaintContext({record, relation, node, packet, add}) {
   const element = pointer(record, relation.element_path), errors = packet.capture_errors.filter(error => error.node_id === node.node_id && error.field === 'fills');
-  if (node.node_type !== 'TEXT' || !['html-text', 'html-link'].includes(element.render_mode) || node.fills !== null || errors.length !== 1 || !closed(errors[0], ['node_id', 'code', 'field']) || errors[0].code !== 'MIXED_VALUE' || !hasCompleteMixedTextRuns(node, 'fills')) throw Error('complete captured MIXED text fills and ranges required');
+  if (node.node_type !== 'TEXT' || !['html-text', 'html-link'].includes(element.render_mode) || (node.fills !== null && !equal(node.fills, [])) || errors.length !== 1 || !closed(errors[0], ['node_id', 'code', 'field']) || errors[0].code !== 'MIXED_VALUE' || !hasCompleteMixedTextRuns(node, 'fills')) throw Error('complete captured MIXED text fills and ranges required');
   const selected = exactFact(element, 'styled-text-segments'), runs = node.styled_text_segments;
   if (selected.fact.value?.type !== 'segments' || !own(selected.fact, node) || !equal(selected.fact.value.items, runs) ||
       runs.some(run => !closed(run, ['start', 'end', 'characters', 'font_family', 'font_style', 'font_size_px', 'line_height', 'text_decoration', 'fills']) ||

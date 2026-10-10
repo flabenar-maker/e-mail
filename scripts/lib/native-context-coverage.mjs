@@ -73,7 +73,8 @@ function directFact(record, relation, node, factId, sourcePath) {
     (l.transform === 'identity' ? equal(f.value.value, value) : l.transform === 'lowercase' && typeof value === 'string' && f.value.value === value.toLowerCase());
 }
 function paintContext(record, relation, node, packet, add, ordinaryHtml, addNotRequired, contractProofsFor) {
-  if (ordinaryHtml && node.fills === null) {verifyHtmlMixedTextPaintContext({record, relation, node, packet, add}); return;}
+  const mixedEmptyPaint = equal(node.fills, []) && (packet.capture_errors.some(error => error.node_id === node.node_id && error.field === 'fills') || (Array.isArray(node.styled_text_segments) && node.styled_text_segments.some(run => Array.isArray(run.fills) && run.fills.length > 0)));
+  if (ordinaryHtml && (node.fills === null || mixedEmptyPaint)) {verifyHtmlMixedTextPaintContext({record, relation, node, packet, add}); return;}
   if (packet.capture_errors.some(error => error.node_id === node.node_id && error.field === 'fills')) throw Error('capture could not establish complete native paint; absence is unverified');
   if (!Object.hasOwn(node, 'fills')) return;
   if (ordinaryHtml && Array.isArray(node.fills) && node.fills[0]?.type === 'gradient_linear') {verifyHtmlGradientPaintContext({record, relation, node, contractProofs: contractProofsFor(), add, addNotRequired}); return;}
