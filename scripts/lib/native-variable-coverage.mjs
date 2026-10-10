@@ -186,3 +186,45 @@ export function auditProjectedNativeVariableProofs({record,model,session,placeme
  }catch(e){report.issues.push(issue('NATIVE_PROJECTED_VARIABLE_UNVERIFIED','/placement',e.message));}
  report.receipt_ids=[...env.receipts].sort();ordered(report.issues);report.ok=!report.issues.length&&report.results.every(r=>r.status==='verified');return report;
 }
+
+
+// Immediate genuine root paint aliases only. Source targets remain child-owned;
+// the actual instance is checked directly, including modes and paint locations.
+export function auditProjectedRootPaintVariableProofs({record,model,session,placement,source_variant_node_id}={}) {
+ const report={ok:false,results:[],issues:[],verified_sources:[]};
+ try {
+  const owners=model?.records?.filter(r=>r.id===record?.id);
+  if(owners?.length!==1||!equal(owners[0],record)||!selector(placement)||!match(ROOT,source_variant_node_id))throw Error('exact canonical child/root placement required');
+  const validation=validateNativeVariableProofReferences({records:model.records}),env=createContractProofEnvironment(model,session);
+  if(validation.length||env.issues.length)throw Error('canonical root variable metadata/session unverified');
+  const parent=env.lookup(placement.component_id),actual=env.selected(placement),source=env.selected({component_id:record.id,variant_node_id:source_variant_node_id,node_id:source_variant_node_id});
+  const declared=(parent.evidence_links?.native_relation_proofs??[]).filter(p=>p.kind==='element-structure'&&equal(p.source,placement)&&pointer(parent,p.element_path)?.render_mode==='nested-component'&&pointer(parent,p.element_path)?.component_id===record.id);
+  const relations=auditNativeRelationProofs({record:parent,model,session});
+  if(parent.figma.file_key!==record.figma.file_key||actual.node.node_type!=='INSTANCE'||actual.node.main_component_id!==source_variant_node_id||!actual.ancestors.length||declared.length!==1||relations.results.filter(p=>p.proof_id===declared[0].id&&p.status==='verified').length!==1||!equal(actual.node.fills,source.node.fills))throw Error('independent actual root placement and complete equal paint required');
+  const sourceCatalog=catalog(source.packet),actualCatalog=catalog(actual.packet),paintVerifier=createNativePaintVariableVerifier({record,model,session});
+  const proofs=(record.evidence_links?.native_variable_proofs??[]).filter(p=>p.source.variant_node_id===source_variant_node_id&&p.source.node_id===source_variant_node_id&&/^\/variable_bindings\/fills\/\d+\/id$/u.test(p.binding_path));
+  const sourceAliases=source.node.variable_bindings?.fills,actualAliases=actual.node.variable_bindings?.fills;
+  if(sourceAliases===undefined&&actualAliases===undefined){report.ok=true;return report;}
+  if(!Array.isArray(sourceAliases)||!equal(sourceAliases,actualAliases)||proofs.length!==sourceAliases.length)throw Error('complete independently declared root paint aliases required');
+  for(const p of proofs) {
+   const original=verify(record,p,env,sourceCatalog,p.source,paintVerifier),binding=p.binding_path.replace(/\/id$/u,''),alias=pointer(actual.node,binding),v=actualCatalog.variables.get(p.variable.id),collection=actualCatalog.collections.get(p.variable.collection_id);
+   if(!closed(alias,['id'])||alias.id!==p.variable.id||!v||!collection||v.name!==p.variable.name||v.key!==p.variable.key||v.collection_id!==p.variable.collection_id||v.resolved_type!=='COLOR'||collection.name!==p.variable.collection_name)throw Error('exact actual root alias/key/name/type/collection required');
+   const usage=actualCatalog.usages.get(JSON.stringify([actual.node.node_id,binding]));
+   if(!usage||usage.variable_id!==v.id||usage.resolved_type!=='COLOR')throw Error('actual root consumer usage missing');
+   for(const m of usage.mode_selections)if(!actualCatalog.collections.get(m.collection_id)?.modes.some(x=>x.id===m.mode_id))throw Error('actual root selected mode unresolved');
+   const value=terminal(v.id,'COLOR',actualCatalog,usage),resolved=opaqueColor(usage.resolved_value),f=field(p.binding_path,p.paint_source_path),typed=target(record,p.contract_path);
+   if(value!==resolved||typed?.value.type!=='color'||typed.value.value!==value||pointer(actual.node,f.source_path)!==value)throw Error('actual root terminal/usage/native/child typed endpoint mismatch');
+   if(f.paint_context) {
+    if(f.paint_context!=='gradient'||!actualCatalog.paintLocations)throw Error('only independently qualified direct root gradient paint locations supported');
+    const location=actualCatalog.paintLocations.filter(l=>l.node_id===actual.node.node_id&&l.source_path===p.paint_source_path);
+    if(location.length!==1||location[0].variable_id!==v.id)throw Error('actual direct root paint alias anchor required');
+    const paths=c=>c.paintLocations?.filter(l=>l.node_id===(c===sourceCatalog?source.node.node_id:actual.node.node_id)&&l.variable_id===v.id).map(l=>l.source_path).sort();
+    if(!equal(paths(sourceCatalog),paths(actualCatalog))||paths(actualCatalog).some(path=>pointer(actual.node,path)!==value))throw Error('all actual root same-ID direct locations must match the independently qualified child');
+   }
+   const verified={...placement,source_path:p.binding_path};
+   report.results.push({proof_id:p.id,status:'verified',source:original,actual:verified});report.verified_sources.push(verified);
+  }
+  report.ok=true;
+ }catch(e){report.issues.push(issue('NATIVE_PROJECTED_ROOT_PAINT_VARIABLE_UNVERIFIED','/placement',e.message));}
+ return report;
+}

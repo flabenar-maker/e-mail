@@ -154,7 +154,11 @@ function verifyContext(record, relation, node, packet, add, ordinaryHtml, addExp
   // Nonempty bindings are deliberately not covered here; the variable proof
   // checks exact identities, definitions, consumer modes and scalar mappings.
   if (qualifiedImagePaint) qualifiedImagePaint();
-  else paintContext(record, relation, node, packet, add, ordinaryHtml, addNotRequired, contractProofsFor);
+  else if (ordinaryHtml && e.render_mode === 'nested-component' && !e.facts.some(f => f.value?.type === 'color')) {
+    // Root placement context only. Child paint remains uncovered here and can
+    // be qualified only by the separate actual nested-source audit.
+    if(packet.capture_errors.some(error => error.node_id === node.node_id && error.field === 'fills')) throw Error('complete nested root paint required');
+  } else paintContext(record, relation, node, packet, add, ordinaryHtml, addNotRequired, contractProofsFor);
   if (node.layout !== undefined) {
     if (!object(node.layout)) throw Error('known layout context required');
     if (node.layout.mode === 'NONE') {inertNoneContext(record, relation, node, e, add, !!qualifiedImagePaint); return;}

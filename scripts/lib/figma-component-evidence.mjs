@@ -1,5 +1,5 @@
 import { isDeepStrictEqual } from "node:util";
-import {auditNestedHtmlEvidence} from "./nested-html-evidence.mjs";
+import {auditNestedHtmlEvidence, applyNestedHtmlRootPaintCoverage} from "./nested-html-evidence.mjs";
 import {artworkPlacementName, isSharedArtworkReference, verifyRegisteredArtworkInstance} from "./native-owned-artwork.mjs";
 import { validateCaptureFreshness } from "./component-evidence-freshness.mjs";
 import { auditFigmaContractFacts, hasCompleteMixedTextRuns } from "./figma-contract-facts.mjs";
@@ -804,7 +804,8 @@ export function auditFigmaComponentEvidence({ record, live, model, session, deri
   const requiredContexts = (record?.evidence_links?.native_context_proofs?.length ?? 0) > 0;
   let contexts = {ok: !requiredContexts, results: [], verified_sources: [], issues: requiredContexts ? [issue("NATIVE_CONTEXT_INPUT_UNVERIFIED", "/session", "Context requires an exact canonical element, native structure and live session packet.")] : []};
   const finish = () => {
-    const base = applyNativeContextCoverage({facts, coverage: contexts, nativeVariableProofs: variableProofs, nativeRelationProofs: relations, nativeFactProofs: nativeProofs, contractProofs: factProofs});
+    const contextBase = applyNativeContextCoverage({facts, coverage: contexts, nativeVariableProofs: variableProofs, nativeRelationProofs: relations, nativeFactProofs: nativeProofs, contractProofs: factProofs});
+    const base = applyNestedHtmlRootPaintCoverage({facts, effective: contextBase, nestedHtml});
     // Internal, freshly computed owner proofs qualify only an exact diagnostic.
     // The genuine raw facts/packet remain unchanged; no caller mask is accepted.
     const qualified = [...(evidence.capture_diagnostics ?? []), ...(nested.capture_diagnostics ?? [])].filter(value =>

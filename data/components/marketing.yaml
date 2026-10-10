@@ -41652,6 +41652,16 @@
             "kind": "image-fill-consumer-context",
             "structure_proof_id": "native-desktop-root-card-hero-image-structure",
             "source_structure_proof_id": "native-desktop-root-card-hero-image-structure"
+          },
+          {
+            "id": "native-mobile-root-card-content-area-button-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-mobile-root-card-content-area-button-structure"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-button-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-desktop-root-card-content-area-button-structure"
           }
         ]
       }
@@ -72607,6 +72617,11 @@
             "kind": "image-fill-consumer-context",
             "structure_proof_id": "native-desktop-root-card-secondary-image-structure",
             "source_structure_proof_id": "native-mobile-root-card-secondary-image-structure"
+          },
+          {
+            "id": "native-desktop-root-card-content-area-button-context",
+            "kind": "html-element-context",
+            "structure_proof_id": "native-desktop-root-card-content-area-button-structure"
           }
         ]
       }

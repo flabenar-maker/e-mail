@@ -1,8 +1,10 @@
 import {isDeepStrictEqual as equal} from 'node:util';
+import {createHash} from 'node:crypto';
+import {isFigmaContractFactReportFor} from './figma-contract-facts.mjs';
 import {createContractProofEnvironment} from './contract-fact-proofs.mjs';
 import {auditFigmaComponentEvidence} from './figma-component-evidence.mjs';
 import {auditNativeRelationProofs} from './native-relationship-coverage.mjs';
-import {auditNativeVariableProofs, auditProjectedNativeVariableProofs} from './native-variable-coverage.mjs';
+import {auditNativeVariableProofs, auditProjectedNativeVariableProofs, auditProjectedRootPaintVariableProofs} from './native-variable-coverage.mjs';
 import {auditNativeFactProofs} from './native-fact-coverage.mjs';
 import {auditNativeContextProofs} from './native-context-coverage.mjs';
 import {isSharedArtworkReference} from './native-owned-artwork.mjs';
@@ -13,6 +15,8 @@ import {isSharedArtworkReference} from './native-owned-artwork.mjs';
 const NODE=/^(?:[0-9]+:[0-9]+|I[0-9]+:[0-9]+(?:;[0-9]+:[0-9]+)+)$/u;
 const pointer=(v,p)=>p.split('/').slice(1).reduce((a,k)=>a?.[k.replaceAll('~1','/').replaceAll('~0','~')],v);
 const tuple=s=>JSON.stringify([s.component_id,s.variant_node_id,s.node_id,s.source_path]);
+const rootPaintComputed=new WeakMap();
+const digest=v=>createHash('sha256').update(JSON.stringify(v)).digest('hex');
 const finite=v=>typeof v==='number'&&Number.isFinite(v);
 const normalize=v=>finite(v)&&Math.abs(v-Math.round(v))<0.0001?Math.round(v):v;
 const axes=a=>JSON.stringify(a?.map(v=>[v.name,v.value]).sort((a,b)=>a[0].localeCompare(b[0])));
@@ -68,7 +72,7 @@ function contentAssociation(record,variant,nodeId,rows){
 }
 
 export function auditNestedHtmlEvidence({recordId,model,session}={}){
-  const report={ok:false,component_id:recordId,canonical_git_sha:model?.canonical_sha??null,receipt_ids:[],placements:[],observed_content_overrides:[],observed_reference_measurements:[],issues:[]};
+  const report={ok:false,component_id:recordId,canonical_git_sha:model?.canonical_sha??null,receipt_ids:[],placements:[],observed_content_overrides:[],observed_reference_measurements:[],root_paint_coverage:[],issues:[]};
   const fail=(code,path,message,extra={})=>report.issues.push({code,path,message,...extra});
   const matches=model?.records?.filter(r=>r.id===recordId);
   if(matches?.length!==1){fail('NESTED_HTML_OWNER_UNVERIFIED','/records','Exactly one canonical owner is required.');return report;}
@@ -88,7 +92,7 @@ export function auditNestedHtmlEvidence({recordId,model,session}={}){
   try{cycle(owner,new Set());}catch(e){fail('NESTED_HTML_DEPENDENCY_CYCLE','/contracts',e.message);return report;}
   for(const id of new Set([owner.id,...refs.map(r=>r.element.component_id)]))if((session?.captures??[]).filter(c=>c.component_id===id).length!==1)fail('EVIDENCE_CAPTURE_MISSING','/session/captures','One actual receipt per selected genuine owner is required.',{component_id:id});
   if(report.issues.length)return report;
-  const env=createContractProofEnvironment(model,session),receipts=new Set(),sourceAudits=new Map();
+  const env=createContractProofEnvironment(model,session),receipts=new Set(),sourceAudits=new Map(),rootSources=[];
   if(env.issues.length){report.issues.push(...env.issues);return report;}
   const relations=auditNativeRelationProofs({record:owner,model,session});
   const parentCoverage=[relations,auditNativeVariableProofs({record:owner,model,session}),auditNativeFactProofs({record:owner,model,session}),auditNativeContextProofs({record:owner,model,session})];
@@ -171,8 +175,58 @@ export function auditNestedHtmlEvidence({recordId,model,session}={}){
       const variables=auditProjectedNativeVariableProofs({record:child,model,session,placement:{component_id:owner.id,variant_node_id:variant.node_id,node_id:actualId},source_variant_node_id:selected[0].node_id});
       if(!variables.ok)fail('NESTED_HTML_VARIABLE_UNVERIFIED',ref.path,'Actual descendant aliases, selected modes and consumer resolution require independent verification.',{details:variables.issues});
       placement.checked_variable_bindings=variables.results.filter(r=>r.status==='verified').length;
+      if (report.issues.length===before && sourceAudit.ok) {
+        const selector={component_id:owner.id,variant_node_id:variant.node_id,node_id:actualId};
+        const rootVariables=auditProjectedRootPaintVariableProofs({record:child,model,session,placement:selector,source_variant_node_id:selected[0].node_id});
+        if(!rootVariables.ok)fail('NESTED_HTML_ROOT_PAINT_UNVERIFIED',ref.path,'Actual root paint bindings require independent identity, modes and direct locations.',{details:rootVariables.issues});
+        else {
+          const paint=qualifiedRootPaintSources({sourceAudit,source,actual,placement:selector});
+          const sources=[...paint,...rootVariables.verified_sources.map(s=>({...s,disposition:'verified'}))];
+          rootSources.push(...sources);report.root_paint_coverage.push({component_id:child.id,source_variant_node_id:selected[0].node_id,actual:selector,sources});
+        }
+      }
       placement.status=report.issues.length===before?'verified':'unverified';
     }catch(e){fail('NESTED_HTML_PLACEMENT_UNVERIFIED',ref.path,e.message);}
   }
-  report.receipt_ids=[...receipts].sort();report.ok=report.issues.length===0;return report;
+  report.receipt_ids=[...receipts].sort();report.ok=report.issues.length===0;
+  if(rootSources.length)rootPaintComputed.set(report,{record:structuredClone(owner),live:structuredClone(env.tree(owner.id).packet),sources:structuredClone(rootSources),digest:digest(report)});
+  return report;
+}
+
+
+// Only an independently qualified immediate child's complete root paint can
+// be inherited. Geometry/layout, strokes, text and unknown parent extras stay
+// parent-owned. Original raw records/packets and diagnostics are immutable.
+function qualifiedRootPaintSources({sourceAudit,source,actual,placement}) {
+  if(!sourceAudit.ok||!equal(source.node.fills,actual.fills))throw Error('qualified child and complete equal actual root paint required');
+  if(source.node.fills===undefined&&actual.fills===undefined)return[];
+  if(equal(source.node.fills,[])&&equal(actual.fills,[]))return[{...placement,source_path:'/fills',disposition:'verified'}];
+  const paint=source.node.fills?.[0],solid=paint?.type==='solid',gradient=paint?.type==='gradient_linear';
+  if(!Array.isArray(source.node.fills)||source.node.fills.length!==1||(!solid&&!gradient))throw Error('only independently qualified root SOLID or linear gradient paint supported');
+  const paths=solid?['/fills/0/type','/fills/0/visible','/fills/0/opacity','/fills/0/color']:[
+    '/fills/0/type','/fills/0/visible','/fills/0/opacity',
+    ...['gradient_stops','stops'].flatMap(alias=>[0,1].flatMap(i=>['position','color','alpha'].map(k=>`/fills/0/${alias}/${i}/${k}`))),
+    ...[0,1].flatMap(r=>[0,1,2].map(c=>`/fills/0/gradient_transform/${r}/${c}`))
+  ];
+  const notRequired=new Set((sourceAudit.native_context_proofs?.not_required_sources??[]).filter(s=>s.node_id===source.node.node_id&&s.variant_node_id===source.selector.variant_node_id).map(s=>s.source_path));
+  return paths.map(path=>{
+    if(pointer(source.node,path)===undefined||!equal(pointer(source.node,path),pointer(actual,path)))throw Error('complete independently qualified root paint leaf required');
+    const matrix=path.startsWith('/fills/0/gradient_transform/');
+    if(matrix&&!notRequired.has(path))throw Error('native matrix is not a verified CSS orientation');
+    return{...placement,source_path:path,disposition:matrix?'not-required':'verified'};
+  });
+}
+export function applyNestedHtmlRootPaintCoverage({facts,effective=facts,nestedHtml}={}) {
+ const trusted=rootPaintComputed.get(nestedHtml);
+ if(!trusted||digest(nestedHtml)!==trusted.digest||!isFigmaContractFactReportFor({facts,record:trusted.record,live:trusted.live}))return effective;
+ const verified=new Set(trusted.sources.filter(s=>s.disposition==='verified').map(tuple)),notRequired=new Set(trusted.sources.filter(s=>s.disposition==='not-required').map(tuple));
+ let mapped=0,inert=0;
+ const issues=effective.issues.filter(i=>{
+  if(i.code!=='FIGMA_FACT_UNCOVERED')return true;
+  const key=tuple({component_id:facts.component_id,...i});
+  if(verified.has(key)){mapped++;return false;}
+  if(notRequired.has(key)){inert++;return false;}
+  return true;
+ });
+ return mapped+inert?{...effective,ok:!issues.length,issues,mapped_source_fact_count:(effective.mapped_source_fact_count??0)+mapped,not_required_source_fact_count:(effective.not_required_source_fact_count??0)+inert}:effective;
 }
