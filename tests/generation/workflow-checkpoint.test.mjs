@@ -56,7 +56,7 @@ test('checkpoint preserves every mode and typed stop/input/condition boundary',a
     assert.match(maintenance,/Status: `shadow`/);
     assert.match(maintenance,/`figma-write-in-scope`/);assert.match(maintenance,/`repository-write-in-scope`/);
     assert.match(maintenance,/`authorization-scope-mismatch`/);assert.match(maintenance,/`figma-readback-mismatch`/);assert.match(maintenance,/`publication-boundary-invalid`/);
-    assert.match(maintenance,/`request-input`/); assert.match(maintenance,/`stop`/);
+    assert.match(maintenance,/`request-required`/); assert.match(maintenance,/`target-scope-required`/);assert.match(maintenance,/`write-authorization-required`/); assert.match(maintenance,/`stop`/);
     assert.ok(maintenance.indexOf('### 1. `pin-canonical-state`')<maintenance.indexOf('### 2. `assess-impact`'));
     assert.match(maintenance,/\[figma-library-standard\]\(\.\.\/\.\.\/core\/figma-library-standard\.md\)/);
     const email=docs.get('docs/generated/email-build-checkpoint.md');
