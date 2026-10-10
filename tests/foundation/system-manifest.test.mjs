@@ -91,9 +91,9 @@ test("migration progress resolves the canonical roadmap bundle", async () => {
   assert.deepEqual(profile.source_ids, [
     "repository-readme",
     "migration-roadmap",
-    "workflow-paused",
+    "workflow-migration-progress",
   ]);
-  assert.equal(route.workflow_source_id, "workflow-paused");
+  assert.equal(route.workflow_source_id, "workflow-migration-progress");
   assert.equal(route.bundle_profile_id, "migration-progress");
 });
 
@@ -1048,20 +1048,20 @@ test("resolves immutable generated definitions and route policy", async () => {
 });
 
 
-test("canonical routes activate email bundles while non-email bundles remain shadow", async () => {
+test("canonical routes activate all structured bundles", async () => {
   const manifest = await canonicalManifest();
-  assert.equal(manifest.structured_workflows.status, "partial");
+  assert.equal(manifest.structured_workflows.status, "active");
   for (const profile of manifest.bundle_profiles) {
     const email = profile.id.startsWith("email-");
     assert.deepEqual(profile.generated_bundle.static_source_ids, profile.source_ids);
-    assert.equal(profile.generated_bundle.status, email ? "structured-active" : "structured-shadow");
-    assert.equal(profile.generated_bundle.static_source_ids.includes("workflow-paused"), !email);
-    assert.equal(profile.generated_bundle.static_source_ids.includes("workflow-email-build"), email);
+    assert.equal(profile.generated_bundle.status, "structured-active");
+    assert.equal(profile.generated_bundle.static_source_ids.includes("workflow-paused"), false);
+    assert.equal(profile.generated_bundle.static_source_ids.includes(email ? "workflow-email-build" : `workflow-${profile.id}`), true);
   }
   for (const route of manifest.routes) {
     assert.equal(
       route.workflow_source_id,
-      route.id.startsWith("email-") ? "workflow-email-build" : "workflow-paused",
+      route.id.startsWith("email-") ? "workflow-email-build" : `workflow-${route.id}`,
       route.id,
     );
   }
