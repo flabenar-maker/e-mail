@@ -373,7 +373,8 @@ export async function validateManifestSemantics(manifest, repoRoot) {
     } catch { return false; }
   }));
   const topologyInvalid = routeTopology.some(value => !value) ||
-    (partial && (activeRoutes.length === 0 || activeRoutes.length === manifest.routes.length)) ||
+    (partial && (activeRoutes.length === 0 || activeRoutes.length === manifest.routes.length ||
+      [...emailRouteIds].some(id => !activeRoutes.some(route => route.id === id)))) ||
     (active && activeRoutes.length !== manifest.routes.length) ||
     (!partial && !active && activeRoutes.length > 0);
   if (topologyInvalid) {
