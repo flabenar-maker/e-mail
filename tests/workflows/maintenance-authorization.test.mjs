@@ -47,13 +47,14 @@ function execution(c,{rename=false,damage=false,authorize=true,noop=false}={}){
   if(s.id==='verify-figma-readback')return {'figma-readback':structuredClone(nodes)};
   if(s.id==='synchronize-dependents')return {'repository-change':{paths:[],cloud_sha:SHA}};
   if(s.id==='verify-exact-cloud-commit')return {'verification-summary':{pinned_sha:SHA,checks:[{command:'controlled-fixture-check',exit_code:0}],limitations:['controlled fixture, not live mutation']}};
+  if(s.id==='publish-review')return {'github-pr':{url:'https://github.com/flabenar-maker/e-mail/pull/999',head_sha:SHA,base:'main',draft:true}};
   if(s.id==='handoff')return {'handoff-summary':{}};
   throw Error('Unexpected handler '+s.id);
  }]));
  return {nodes,calls,preview,options:{context:c,pinnedSha:SHA,inputs:{request:'fixture','target-scope':{file_key:'file',node_ids:['1:2'],repository_paths:[]},'write-authorization':authorize?structuredClone(preview):true},conditions:{},handlers}};
 }
 test('P3: controlled description write preserves every field except the exact authorized description',async()=>{
- const f=await fixture();try{const c=await activate(f.root,'figma-description-sync');assert.equal(c.status,'resolved');const e=execution(c);const result=await workflows.executeMaintenanceWorkflow(e.options);assert.equal(result.status,'complete');assert.equal(e.nodes[0].description,'new precise description');const preserved=structuredClone(e.nodes);preserved[0].description='old';assert.deepEqual(preserved,before);assert.equal(result.handoff.pinned_sha,SHA);assert.ok(e.calls.includes('verify-figma-readback'));}finally{await f.cleanup();}
+ const f=await fixture();try{const c=await activate(f.root,'figma-description-sync');assert.equal(c.status,'resolved');const e=execution(c);const result=await workflows.executeMaintenanceWorkflow(e.options);assert.equal(result.status,'complete');assert.equal(e.nodes[0].description,'new precise description');const preserved=structuredClone(e.nodes);preserved[0].description='old';assert.deepEqual(preserved,before);assert.equal(result.handoff.pinned_sha,SHA);assert.equal(result.handoff.github_pr?.draft,true);assert.equal(result.handoff.github_pr?.head_sha,SHA);assert.ok(e.calls.includes('verify-figma-readback'));}finally{await f.cleanup();}
 });
 test('P3: mapped rename preserves @4x and all structure; no-op still requires separate readback',async()=>{
  const f=await fixture();try{const c=await activate(f.root,'figma-naming-audit',{naming:true});assert.equal(c.status,'resolved');for(const noop of [false,true]){const e=execution(c,{rename:true,noop});const result=await workflows.executeMaintenanceWorkflow(e.options);assert.equal(result.status,'complete');assert.match(e.nodes[0].name,/@4x$/);assert.ok(e.calls.includes('verify-figma-readback'));}}finally{await f.cleanup();}
@@ -100,4 +101,9 @@ test('P3: missing required input and tampered workflow handoff stop before tool 
  const f=await fixture();try{const c=await activate(f.root,'figma-description-sync');for(const what of ['input','handoff','paused']){const e=execution(c);if(what==='input')delete e.options.inputs['target-scope'];if(what==='handoff'){e.options.context=structuredClone(c);e.options.context.workflow.steps[0].source_ids=[];}if(what==='paused'){e.options.context={...c,status:'paused'};}
  const result=await workflows.executeMaintenanceWorkflow(e.options);assert.equal(result.status,'blocked');assert.equal(e.calls.length,0);}
  }finally{await f.cleanup();}
+});
+
+
+test('P3: a proposed name must pass the delivered naming foundation, not only preserve its scale',async()=>{
+ const f=await fixture();try{const c=await activate(f.root,'figma-naming-audit',{naming:true});const e=execution(c,{rename:true});e.preview.changes[0].after='benefit-icon@4x';e.options.inputs['write-authorization']=structuredClone(e.preview);const result=await workflows.executeMaintenanceWorkflow(e.options);assert.equal(result.status,'blocked');assert.ok(result.blockers.some(b=>b.code==='naming-proposal-invalid'));assert.ok(!e.calls.includes('apply-authorized-figma-change'));}finally{await f.cleanup();}
 });
