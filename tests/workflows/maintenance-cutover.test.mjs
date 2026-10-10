@@ -46,7 +46,7 @@ test('P3: resolved steps cannot cite absent actual bundle source content',async(
       const wf=await readStrictYaml(join(root,source.path));wf.workflow.status='active';await write(root,source.path,wf);
     }
     for(const route of manifest.routes){
-      if(route.workflow_source_id==='workflow-paused')route.workflow_source_id='workflow-library-maintenance';
+      if(route.workflow_source_id==='workflow-paused')route.workflow_source_id='workflow-'+route.id;
       const profile=manifest.bundle_profiles.find(p=>p.id===route.bundle_profile_id);
       profile.generated_bundle.status='structured-active';
       profile.source_ids=profile.source_ids.map(s=>s==='workflow-paused'?route.workflow_source_id:s);
