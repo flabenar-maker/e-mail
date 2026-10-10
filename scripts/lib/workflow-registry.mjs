@@ -297,6 +297,8 @@ export async function executeMaintenanceWorkflow({context,pinnedSha,inputs={},co
   const available=new Set(context.bundle.static_sources.filter(s=>typeof s.content==='string'&&s.content.length).map(s=>s.id));
   if(mode.steps.some(s=>s.source_ids.some(id=>!available.has(id))))return stop('workflow-source-missing','/bundle/static_sources');
  }catch{return stop('workflow-handoff-mismatch','/workflow');}
+ // Capabilities consume this one closed bundle; they cannot mutate later steps' context.
+ const bundle=deepFreeze(structuredClone(context.bundle));
  const state=structuredClone(inputs);
  for(const input of mode.required_inputs)if(!present(state[input]))return stop(mode.input_blockers?.find(v=>v.input===input)?.blocker??'workflow-input-missing','/inputs/'+input);
  if(mode.id==='read-only'&&mode.steps.some(s=>/^(?:apply-|synchronize-|publish-)/u.test(s.id)))return stop('read-only-write-forbidden','/workflow/steps');
@@ -346,7 +348,7 @@ export async function executeMaintenanceWorkflow({context,pinnedSha,inputs={},co
     if(!Array.isArray(state['target-scope']?.node_ids)||!before)return stop('identity-unconfirmed','/target-scope');
    }
    if(typeof handlers[step.id]!=='function')return stop('workflow-handler-missing','/handlers/'+step.id);
-   try{output=await handlers[step.id]({step:deepFreeze(structuredClone(step)),inputs:deepFreeze(structuredClone(state)),pinned_sha:pinnedSha,route_id:context.route.id});}
+   try{output=await handlers[step.id]({step:deepFreeze(structuredClone(step)),inputs:deepFreeze(structuredClone(state)),bundle,pinned_sha:pinnedSha,route_id:context.route.id});}
    catch{return stop('workflow-handler-failed','/steps/'+step.id);}
    if(output?.blockers?.length)return stop(output.blockers[0].code??'workflow-handler-blocked','/steps/'+step.id);
   }
@@ -370,7 +372,11 @@ export async function executeMaintenanceWorkflow({context,pinnedSha,inputs={},co
    catch{return stop('figma-readback-mismatch','/figma-readback');}
    readbackVerified=true;
   }
-  if(step.id==='verify-exact-cloud-commit'){
+  if(step.allowed_outputs.includes('repository-change')){
+    const change=output['repository-change'];
+    if(!boundary||!Array.isArray(change?.paths)||new Set(change.paths).size!==change.paths.length||change.paths.some(path=>!boundary.repository_paths.includes(path)))return stop('repository-change-outside-scope','/repository-change/paths');
+   }
+   if(step.id==='verify-exact-cloud-commit'){
    const summary=output['verification-summary'];
    if(summary?.pinned_sha!==state['repository-change']?.cloud_sha||!Array.isArray(summary?.checks)||!summary.checks.length||summary.checks.some(c=>typeof c.command!=='string'||c.exit_code!==0))return stop('local-verification-failed','/verification-summary');
   }
@@ -381,5 +387,5 @@ export async function executeMaintenanceWorkflow({context,pinnedSha,inputs={},co
   Object.assign(state,structuredClone(output));executed.push(step.id);
  }
  const verification=state['verification-summary'];
- return {status:'complete',executed,outputs:state,handoff:{pinned_sha:pinnedSha,route_id:context.route.id,mode:mode.id,bundle_digest:context.bundle.digest,inspected_scope:state['target-scope']??null,changed_paths:state['repository-change']?.paths??[],verification_summary:verification??null,cloud_channel:'github',github_pr:state['github-pr']??null,limitations:verification?.limitations??[]}};
+ return {status:'complete',executed,outputs:state,handoff:{pinned_sha:pinnedSha,route_id:context.route.id,mode:mode.id,bundle_digest:bundle.digest,cloud_commit:state['repository-change']?.cloud_sha??null,cloud_branch:state['repository-change']?.branch??null,inspected_scope:state['target-scope']??null,changed_paths:state['repository-change']?.paths??[],verification_summary:verification??null,cloud_channel:'github',github_pr:state['github-pr']??null,limitations:verification?.limitations??[]}};
 }
