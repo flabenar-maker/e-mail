@@ -71,7 +71,7 @@ test('Contact owns six ORIGINAL text-case facts with one exact lowercase source 
   for(const item of found){
     assert.deepEqual(item.fact.value,{type:'keyword',value:'original'});
     const variant=record.variants.find(value=>value.id===item.viewport);
-    const contractPath=`/contracts/${item.viewport}/${item.path}/value`;
+    const contractPath=`/contracts/${item.viewport}/${item.path}/value/value`;
     const maps=record.contracts.figma_fact_links.filter(link=>link.variant_node_id===variant.node_id&&link.node_id===item.node_id&&link.source_path==='/text_style/text_case'&&link.contract_path===contractPath&&link.transform==='lowercase');
     assert.equal(maps.length,1,`one lowercase mapping for ${item.node_id}`);
   }

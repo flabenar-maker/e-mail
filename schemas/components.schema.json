@@ -3152,7 +3152,11 @@
           "if": {
             "required": [
               "paint_source_path"
-            ]
+            ],
+            "type": "object",
+            "properties": {
+              "paint_source_path": {}
+            }
           },
           "then": {
             "properties": {
@@ -3164,16 +3168,19 @@
                   "resolved_type": {
                     "const": "COLOR"
                   }
-                }
+                },
+                "type": "object"
               }
-            }
+            },
+            "type": "object"
           },
           "else": {
             "properties": {
               "binding_path": {
                 "pattern": "^/variable_bindings/(?:(?:paddingLeft|paddingTop|paddingRight|paddingBottom|itemSpacing|topLeftRadius|topRightRadius|bottomLeftRadius|bottomRightRadius)/id|fills/0/id)$"
               }
-            }
+            },
+            "type": "object"
           }
         }
       ]
