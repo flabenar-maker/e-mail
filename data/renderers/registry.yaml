@@ -25,6 +25,7 @@ coverage:
   - { component_id: icon-user-follow-fill, mode: source-only, reason: "Nested icon source; HTML output is owned by its parent component." }
   - { component_id: icon-user-forbid-fill, mode: source-only, reason: "Nested icon source; HTML output is owned by its parent component." }
   - { component_id: icon-user-unfollow-fill, mode: source-only, reason: "Nested icon source; HTML output is owned by its parent component." }
+  - { component_id: icon-account-circle-line-remote, mode: source-only, reason: "Remote nested glyph source; HTML and export output are owned by its parent component." }
   - { component_id: asset-card-image-2x, mode: source-only, reason: "Export source for Card/Image; it has no standalone HTML output." }
   - { component_id: asset-feature-icon-4x, mode: source-only, reason: "Export source for parent-owned icon assets; it has no standalone HTML output." }
   - { component_id: badge-step-number, mode: interpreter }
@@ -62,3 +63,4 @@ coverage:
   - { component_id: details-receipt, mode: interpreter }
   - { component_id: details-suspicious-operation, mode: interpreter }
   - { component_id: details-transfer, mode: interpreter }
+  - { component_id: asset-partner-mark-remote, mode: source-only, reason: "Remote artwork lookup source; display and export belong to the existing partner badge." }

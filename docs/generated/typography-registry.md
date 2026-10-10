@@ -1,10 +1,11 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: typography-registry -->
-<!-- source-digest: sha256:3628edbaf7e6f3d872d0921c28efd51e52af55dd43633c9780e3cc88d8eb4fa1 -->
-<!-- schema-versions: components=2.1.0, typography=1.0.0 -->
+<!-- source-digest: sha256:04e0d6e716c4809b0141a0368ed8978da829c28eb0df25965b5f0af70a1320c0 -->
+<!-- schema-versions: components=2.3.0, typography=1.0.0 -->
 # CUPIS typography registry
 
 Typography definitions come from the structured foundation. Consumers are computed from component contracts.
+These are recorded associations, not a fresh Figma usage audit or proof that a style is unused. Node-local values remain in their component contracts. Variant default denotes a typed reference in the base viewport contract.
 
 ## Responsive pairs
 
@@ -31,7 +32,12 @@ Typography definitions come from the structured foundation. Consumers are comput
 - Line-height: `140%`
 - Letter-spacing: `0%`
 - Responsive pair: `action`
-- Consumers: none
+- Consumers: `button-primary`, `button-secondary`, `card-icon`, `card-image`, `item-bullet`
+  - Component `button-primary`; viewport `desktop`; variant `desktop`; element `root-label`
+  - Component `button-secondary`; viewport `desktop`; variant `desktop`; element `root-label`
+  - Component `card-icon`; viewport `desktop`; variant `desktop`; element `root-text-content-link`
+  - Component `card-image`; viewport `desktop`; variant `desktop`; element `root-text-content-link`
+  - Component `item-bullet`; viewport `desktop`; variant `desktop`; element `root-text-content-link`
 - Figma description: CTA-текст в Desktop внутри Primary/Secondary-кнопок и самостоятельных action-ссылок. Не применять к обычной inline-ссылке внутри Body-текста только из-за кликабельности. Пара: Mobile/Action. Roboto Medium, 16px, line-height 140%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.
 
 ### Desktop/Body/Large
@@ -46,7 +52,70 @@ Typography definitions come from the structured foundation. Consumers are comput
 - Line-height: `140%`
 - Letter-spacing: `0%`
 - Responsive pair: `body-large`
-- Consumers: none
+- Consumers: `banner-app-download`, `banner-fiscal-check-link`, `banner-hero`, `banner-inline`, `block-contact-support`, `block-content`, `block-icon-list`, `block-info-alert`, `block-instruction-steps`, `block-personal-data-update`, `block-transaction-error`, `item-bullet`, `item-step`
+  - Component `banner-app-download`; viewport `desktop`; variant `desktop`; element `root-content-area-text-qr-header-row-body`
+  - Component `banner-fiscal-check-link`; viewport `desktop`; variant `desktop`; element `root-item-01-link-text`
+  - Component `banner-fiscal-check-link`; viewport `desktop`; variant `desktop`; element `root-item-02-link-text`
+  - Component `banner-hero`; viewport `desktop`; variant `desktop`; element `root-card-content-area-text-content-body`
+  - Component `banner-inline`; viewport `desktop`; variant `desktop`; element `root-content-area-body`
+  - Component `block-contact-support`; viewport `desktop`; variant `desktop`; element `root-content-area-phone-cta-heading`
+  - Component `block-content`; viewport `desktop`; variant `desktop`; element `root-content-area-text-content-body-01`
+  - Component `block-content`; viewport `desktop`; variant `desktop`; element `root-content-area-text-content-body-02`
+  - Component `block-content`; viewport `desktop`; variant `desktop`; element `root-content-area-text-content-body-03`
+  - Component `block-content`; viewport `desktop`; variant `desktop`; element `root-content-area-text-content-body-04`
+  - Component `block-content`; viewport `desktop`; variant `desktop`; element `root-content-area-text-content-body-05`
+  - Component `block-icon-list`; viewport `desktop`; variant `desktop`; element `root-content-area-items-item-01-text-content-body`
+  - Component `block-icon-list`; viewport `desktop`; variant `desktop`; element `root-content-area-items-item-02-text-content-body`
+  - Component `block-icon-list`; viewport `desktop`; variant `desktop`; element `root-content-area-items-item-03-text-content-body`
+  - Component `block-icon-list`; viewport `desktop`; variant `desktop`; element `root-content-area-items-item-04-text-content-body`
+  - Component `block-icon-list`; viewport `desktop`; variant `desktop`; element `root-content-area-items-item-05-text-content-body`
+  - Component `block-icon-list`; viewport `desktop`; variant `desktop`; element `root-content-area-items-item-06-text-content-body`
+  - Component `block-info-alert`; viewport `desktop`; variant `desktop`; element `root-content-area-body`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-numbered-list-intro-01`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-numbered-list-intro-02`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-numbered-list-item-01-numbered-row-content`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-numbered-list-item-01-numbered-row-number`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-numbered-list-item-01-sub-item-01-content`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-numbered-list-item-01-sub-item-01-dash`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-numbered-list-item-01-sub-item-02-content`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-numbered-list-item-01-sub-item-02-dash`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-numbered-list-item-01-sub-item-03-content`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-numbered-list-item-01-sub-item-03-dash`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-numbered-list-item-02-numbered-row-content`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-numbered-list-item-02-numbered-row-number`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-numbered-list-item-02-sub-item-01-content`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-numbered-list-item-02-sub-item-01-dash`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-numbered-list-item-02-sub-item-02-content`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-numbered-list-item-02-sub-item-02-dash`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-numbered-list-item-02-sub-item-03-content`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-numbered-list-item-02-sub-item-03-dash`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-numbered-list-item-03-numbered-row-content`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-numbered-list-item-03-numbered-row-number`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-numbered-list-item-03-sub-item-01-content`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-numbered-list-item-03-sub-item-01-dash`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-numbered-list-item-03-sub-item-02-content`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-numbered-list-item-03-sub-item-02-dash`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-numbered-list-item-03-sub-item-03-content`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-numbered-list-item-03-sub-item-03-dash`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-numbered-list-item-04-numbered-row-content`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-numbered-list-item-04-numbered-row-number`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-numbered-list-item-04-sub-item-01-content`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-numbered-list-item-04-sub-item-01-dash`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-numbered-list-item-04-sub-item-02-content`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-numbered-list-item-04-sub-item-02-dash`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-numbered-list-item-04-sub-item-03-content`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-numbered-list-item-04-sub-item-03-dash`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-warning-warning-text`
+  - Component `block-personal-data-update`; viewport `desktop`; variant `desktop`; element `root-card-body-area-text-content-action-link`
+  - Component `block-personal-data-update`; viewport `desktop`; variant `desktop`; element `root-card-body-area-text-content-body-01`
+  - Component `block-personal-data-update`; viewport `desktop`; variant `desktop`; element `root-card-body-area-text-content-body-02`
+  - Component `block-personal-data-update`; viewport `desktop`; variant `desktop`; element `root-card-body-area-text-content-greeting`
+  - Component `block-personal-data-update`; viewport `desktop`; variant `desktop`; element `root-card-body-area-text-content-sign-off`
+  - Component `block-personal-data-update`; viewport `desktop`; variant `desktop`; element `root-card-body-area-text-content-warning-text`
+  - Component `block-transaction-error`; viewport `desktop`; variant `desktop`; element `root-card-body-area-primary-content-error-description`
+  - Component `block-transaction-error`; viewport `desktop`; variant `desktop`; element `root-card-body-area-primary-content-heading`
+  - Component `item-bullet`; viewport `desktop`; variant `desktop`; element `root-text-content-primary-text`
+  - Component `item-step`; viewport `desktop`; variant `desktop`; element `root-text-content-heading`
 - Figma description: Основной или акцентный содержательный текст в Desktop. Использовать для заметного текста блока; не применять к плотным подписям и значениям только ради увеличения размера. Основная мобильная пара: Mobile/Body/Large. Roboto Regular, 18px, line-height 140%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.
 
 ### Desktop/Body/Medium
@@ -61,7 +130,79 @@ Typography definitions come from the structured foundation. Consumers are comput
 - Line-height: `140%`
 - Letter-spacing: `0%`
 - Responsive pair: `body-medium`
-- Consumers: none
+- Consumers: `badge-operation-status`, `badge-step-number`, `banner-secondary`, `block-contact-support`, `block-transaction-success`, `card-icon`, `card-image`, `details-operation`, `details-operation-plain`, `details-receipt`, `details-suspicious-operation`, `details-transfer`, `item-alert`, `item-bullet`, `item-notification`, `item-step`
+  - Component `badge-operation-status`; viewport `desktop`; variant `desktop-error`; element `root-status-label`
+  - Component `badge-operation-status`; viewport `desktop`; variant `desktop-pending`; element `root-status-label`
+  - Component `badge-operation-status`; viewport `desktop`; variant `desktop-success`; element `root-status-label`
+  - Component `badge-step-number`; viewport `desktop`; variant `desktop-accent`; element `root-label`
+  - Component `badge-step-number`; viewport `desktop`; variant `desktop-neutral`; element `root-label`
+  - Component `banner-secondary`; viewport `desktop`; variant `desktop`; element `root-card-content-area-text-content-body`
+  - Component `block-contact-support`; viewport `desktop`; variant `desktop`; element `root-content-area-help-notice-help-text`
+  - Component `block-transaction-success`; viewport `desktop`; variant `desktop`; element `root-card-summary-area-description-text`
+  - Component `card-icon`; viewport `desktop`; variant `desktop`; element `root-text-content-description`
+  - Component `card-image`; viewport `desktop`; variant `desktop`; element `root-text-content-description`
+  - Component `details-operation-plain`; viewport `desktop`; variant `desktop`; element `root-row-01-label`
+  - Component `details-operation-plain`; viewport `desktop`; variant `desktop`; element `root-row-01-value`
+  - Component `details-operation-plain`; viewport `desktop`; variant `desktop`; element `root-row-02-label`
+  - Component `details-operation-plain`; viewport `desktop`; variant `desktop`; element `root-row-02-value`
+  - Component `details-operation-plain`; viewport `desktop`; variant `desktop`; element `root-row-03-label`
+  - Component `details-operation-plain`; viewport `desktop`; variant `desktop`; element `root-row-03-value`
+  - Component `details-operation`; viewport `desktop`; variant `desktop`; element `root-row-01-label`
+  - Component `details-operation`; viewport `desktop`; variant `desktop`; element `root-row-01-value`
+  - Component `details-operation`; viewport `desktop`; variant `desktop`; element `root-row-02-label`
+  - Component `details-operation`; viewport `desktop`; variant `desktop`; element `root-row-02-value`
+  - Component `details-operation`; viewport `desktop`; variant `desktop`; element `root-row-03-label`
+  - Component `details-operation`; viewport `desktop`; variant `desktop`; element `root-row-03-value`
+  - Component `details-operation`; viewport `desktop`; variant `desktop`; element `root-row-04-label`
+  - Component `details-operation`; viewport `desktop`; variant `desktop`; element `root-row-04-value`
+  - Component `details-operation`; viewport `desktop`; variant `desktop`; element `root-row-05-label`
+  - Component `details-operation`; viewport `desktop`; variant `desktop`; element `root-row-05-value`
+  - Component `details-operation`; viewport `desktop`; variant `desktop`; element `root-row-06-label`
+  - Component `details-operation`; viewport `desktop`; variant `desktop`; element `root-row-06-value`
+  - Component `details-operation`; viewport `desktop`; variant `desktop`; element `root-row-07-label`
+  - Component `details-operation`; viewport `desktop`; variant `desktop`; element `root-row-07-value`
+  - Component `details-receipt`; viewport `desktop`; variant `desktop`; element `root-row-01-label`
+  - Component `details-receipt`; viewport `desktop`; variant `desktop`; element `root-row-01-value`
+  - Component `details-receipt`; viewport `desktop`; variant `desktop`; element `root-row-02-label`
+  - Component `details-receipt`; viewport `desktop`; variant `desktop`; element `root-row-02-value`
+  - Component `details-receipt`; viewport `desktop`; variant `desktop`; element `root-row-03-label`
+  - Component `details-receipt`; viewport `desktop`; variant `desktop`; element `root-row-03-value`
+  - Component `details-receipt`; viewport `desktop`; variant `desktop`; element `root-row-04-label`
+  - Component `details-receipt`; viewport `desktop`; variant `desktop`; element `root-row-04-value`
+  - Component `details-receipt`; viewport `desktop`; variant `desktop`; element `root-row-05-label`
+  - Component `details-receipt`; viewport `desktop`; variant `desktop`; element `root-row-05-value`
+  - Component `details-receipt`; viewport `desktop`; variant `desktop`; element `root-row-06-label`
+  - Component `details-receipt`; viewport `desktop`; variant `desktop`; element `root-row-06-value`
+  - Component `details-receipt`; viewport `desktop`; variant `desktop`; element `root-row-07-label`
+  - Component `details-receipt`; viewport `desktop`; variant `desktop`; element `root-row-07-value`
+  - Component `details-receipt`; viewport `desktop`; variant `desktop`; element `root-row-08-label`
+  - Component `details-receipt`; viewport `desktop`; variant `desktop`; element `root-row-08-value`
+  - Component `details-suspicious-operation`; viewport `desktop`; variant `desktop`; element `root-heading`
+  - Component `details-transfer`; viewport `desktop`; variant `desktop`; element `root-row-01-label`
+  - Component `details-transfer`; viewport `desktop`; variant `desktop`; element `root-row-01-value`
+  - Component `details-transfer`; viewport `desktop`; variant `desktop`; element `root-row-02-label`
+  - Component `details-transfer`; viewport `desktop`; variant `desktop`; element `root-row-02-value`
+  - Component `details-transfer`; viewport `desktop`; variant `desktop`; element `root-row-03-label`
+  - Component `details-transfer`; viewport `desktop`; variant `desktop`; element `root-row-03-value`
+  - Component `details-transfer`; viewport `desktop`; variant `desktop`; element `root-row-04-label`
+  - Component `details-transfer`; viewport `desktop`; variant `desktop`; element `root-row-04-value`
+  - Component `details-transfer`; viewport `desktop`; variant `desktop`; element `root-row-05-label`
+  - Component `details-transfer`; viewport `desktop`; variant `desktop`; element `root-row-05-value`
+  - Component `details-transfer`; viewport `desktop`; variant `desktop`; element `root-row-06-label`
+  - Component `details-transfer`; viewport `desktop`; variant `desktop`; element `root-row-06-value`
+  - Component `details-transfer`; viewport `desktop`; variant `desktop`; element `root-row-07-label`
+  - Component `details-transfer`; viewport `desktop`; variant `desktop`; element `root-row-07-value`
+  - Component `details-transfer`; viewport `desktop`; variant `desktop`; element `root-row-08-label`
+  - Component `details-transfer`; viewport `desktop`; variant `desktop`; element `root-row-08-value`
+  - Component `details-transfer`; viewport `desktop`; variant `desktop`; element `root-row-09-label`
+  - Component `details-transfer`; viewport `desktop`; variant `desktop`; element `root-row-09-value`
+  - Component `details-transfer`; viewport `desktop`; variant `desktop`; element `root-row-10-label`
+  - Component `details-transfer`; viewport `desktop`; variant `desktop`; element `root-row-10-value`
+  - Component `item-alert`; viewport `desktop`; variant `desktop`; element `root-body`
+  - Component `item-bullet`; viewport `desktop`; variant `desktop`; element `root-text-content-supporting-text-01`
+  - Component `item-bullet`; viewport `desktop`; variant `desktop`; element `root-text-content-supporting-text-02`
+  - Component `item-notification`; viewport `desktop`; variant `desktop`; element `root-body`
+  - Component `item-step`; viewport `desktop`; variant `desktop`; element `root-text-content-caption`
 - Figma description: Плотный информационный и вспомогательный текст в Desktop: подписи, значения и описания внутри компонентов. Не использовать как Caption или CTA. Основная мобильная пара: Mobile/Body/Medium; точный выбор задаёт контракт компонента. Roboto Regular, 16px, line-height 140%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.
 
 ### Desktop/Caption
@@ -76,7 +217,29 @@ Typography definitions come from the structured foundation. Consumers are comput
 - Line-height: `140%`
 - Letter-spacing: `0%`
 - Responsive pair: `caption`
-- Consumers: none
+- Consumers: `block-bullet-list`, `block-cards-images`, `block-content`, `block-icon-cards`, `block-icon-list`, `block-instruction-steps`, `block-personal-data-update`, `block-steps`, `block-transaction-error`, `block-transaction-success`, `email-footer`, `email-footer-legal`
+  - Component `block-bullet-list`; viewport `desktop`; variant `desktop`; element `root-content-area-caption`
+  - Component `block-cards-images`; viewport `desktop`; variant `desktop`; element `root-content-area-caption`
+  - Component `block-content`; viewport `desktop`; variant `desktop`; element `root-content-area-caption`
+  - Component `block-icon-cards`; viewport `desktop`; variant `desktop`; element `root-content-area-caption`
+  - Component `block-icon-list`; viewport `desktop`; variant `desktop`; element `root-content-area-caption`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-alert-notice-link`
+  - Component `block-instruction-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-disclaimer-disclaimer-text`
+  - Component `block-personal-data-update`; viewport `desktop`; variant `desktop`; element `root-card-body-area-alert-notice-link`
+  - Component `block-personal-data-update`; viewport `desktop`; variant `desktop`; element `root-card-body-area-disclaimer-disclaimer-text`
+  - Component `block-personal-data-update`; viewport `desktop`; variant `desktop`; element `root-card-body-area-text-content-link-expiry`
+  - Component `block-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-caption`
+  - Component `block-transaction-error`; viewport `desktop`; variant `desktop`; element `root-card-body-area-attention-notice-notice-text`
+  - Component `block-transaction-error`; viewport `desktop`; variant `desktop`; element `root-card-body-area-supporting-content-card-warning`
+  - Component `block-transaction-error`; viewport `desktop`; variant `desktop`; element `root-card-body-area-supporting-content-timeout-notice`
+  - Component `block-transaction-success`; viewport `desktop`; variant `desktop`; element `root-card-details-area-limit-alert-notice-link`
+  - Component `block-transaction-success`; viewport `desktop`; variant `desktop`; element `root-card-details-area-limit-alert-notice-text`
+  - Component `email-footer-legal`; viewport `desktop`; variant `desktop`; element `root-footer-body-disclaimer-section-disclaimer-text-01`
+  - Component `email-footer-legal`; viewport `desktop`; variant `desktop`; element `root-footer-body-disclaimer-section-disclaimer-text-02`
+  - Component `email-footer`; viewport `desktop`; variant `desktop`; element `root-footer-body-disclaimer-section-caption`
+  - Component `email-footer`; viewport `desktop`; variant `desktop`; element `root-footer-body-disclaimer-section-disclaimer-text-01`
+  - Component `email-footer`; viewport `desktop`; variant `desktop`; element `root-footer-body-disclaimer-section-disclaimer-text-02`
+  - Component `email-footer`; viewport `desktop`; variant `desktop`; element `root-footer-body-disclaimer-section-disclaimer-text-03`
 - Figma description: Вспомогательный, предупреждающий и юридический текст в Desktop: дисклеймеры, сроки действия и второстепенные пояснения. Не использовать для основного содержательного текста. Пара: Mobile/Caption. Roboto Regular, 14px, line-height 140%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.
 
 ### Desktop/Display
@@ -91,7 +254,10 @@ Typography definitions come from the structured foundation. Consumers are comput
 - Line-height: `120%`
 - Letter-spacing: `0%`
 - Responsive pair: `display`
-- Consumers: none
+- Consumers: `banner-hero`, `block-transaction-error`, `block-transaction-success`
+  - Component `banner-hero`; viewport `desktop`; variant `desktop`; element `root-card-content-area-text-content-heading`
+  - Component `block-transaction-error`; viewport `desktop`; variant `desktop`; element `root-card-summary-area-partner-info-row-text-details-amount`
+  - Component `block-transaction-success`; viewport `desktop`; variant `desktop`; element `root-card-summary-area-partner-info-row-text-details-amount`
 - Figma description: Главный выразительный текст Desktop для Hero-заголовка и крупного результата операции. Не использовать как обычный заголовок блока или карточки. Пара: Mobile/Display. Roboto Bold, 32px, line-height 120%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.
 
 ### Desktop/Heading
@@ -106,7 +272,18 @@ Typography definitions come from the structured foundation. Consumers are comput
 - Line-height: `120%`
 - Letter-spacing: `0%`
 - Responsive pair: `heading`
-- Consumers: none
+- Consumers: `block-bullet-list`, `block-cards-images`, `block-contact-support`, `block-content`, `block-icon-cards`, `block-icon-list`, `block-personal-data-update`, `block-receipt-info`, `block-steps`, `nps-options`
+  - Component `block-bullet-list`; viewport `desktop`; variant `desktop`; element `root-content-area-heading`
+  - Component `block-cards-images`; viewport `desktop`; variant `desktop`; element `root-content-area-heading`
+  - Component `block-contact-support`; viewport `desktop`; variant `desktop`; element `root-content-area-phone-cta-phone-number`
+  - Component `block-content`; viewport `desktop`; variant `desktop`; element `root-content-area-text-content-heading`
+  - Component `block-icon-cards`; viewport `desktop`; variant `desktop`; element `root-content-area-heading`
+  - Component `block-icon-list`; viewport `desktop`; variant `desktop`; element `root-content-area-heading`
+  - Component `block-personal-data-update`; viewport `desktop`; variant `desktop`; element `root-card-status-area-status-row-heading`
+  - Component `block-receipt-info`; viewport `desktop`; variant `desktop`; element `root-status-area-status-row-heading`
+  - Component `block-steps`; viewport `desktop`; variant `desktop`; element `root-content-area-heading`
+  - Component `nps-options`; viewport `desktop`; variant `desktop-2`; element `root-content-area-heading`
+  - Component `nps-options`; viewport `desktop`; variant `desktop-3`; element `root-content-area-heading`
 - Figma description: Основной заголовок самостоятельного контентного блока в Desktop. Не использовать для Hero или заголовка карточки. Пара: Mobile/Heading. Roboto SemiBold, 26px, line-height 120%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.
 
 ### Desktop/Heading/Compact
@@ -121,7 +298,8 @@ Typography definitions come from the structured foundation. Consumers are comput
 - Line-height: `120%`
 - Letter-spacing: `0px`
 - Responsive pair: `heading-compact`
-- Consumers: none
+- Consumers: `banner-secondary`
+  - Component `banner-secondary`; viewport `desktop`; variant `desktop`; element `root-card-content-area-text-content-heading`
 - Figma description: Компактный заголовок Desktop для ограниченного текстового контейнера; сейчас используется в Banner/Secondary. Не заменять обычным Desktop/Heading без проверки макета и контракта компонента. Мобильная роль: Mobile/Heading. Roboto SemiBold, 20px, line-height 120%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.
 
 ### Desktop/Title
@@ -136,7 +314,11 @@ Typography definitions come from the structured foundation. Consumers are comput
 - Line-height: `120%`
 - Letter-spacing: `0%`
 - Responsive pair: `title`
-- Consumers: none
+- Consumers: `block-transaction-error`, `block-transaction-success`, `card-icon`, `card-image`
+  - Component `block-transaction-error`; viewport `desktop`; variant `desktop`; element `root-card-summary-area-partner-info-row-text-details-partner-name`
+  - Component `block-transaction-success`; viewport `desktop`; variant `desktop`; element `root-card-summary-area-partner-info-row-text-details-partner-name`
+  - Component `card-icon`; viewport `desktop`; variant `desktop`; element `root-text-content-heading`
+  - Component `card-image`; viewport `desktop`; variant `desktop`; element `root-text-content-heading`
 - Figma description: Заголовок карточки или внутренней сущности в Desktop, включая имя партнёра и локальный результат внутри блока. Не использовать как заголовок самостоятельного блока. Пара: Mobile/Title. Roboto Medium, 20px, line-height 120%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.
 
 ### Mobile/Action
@@ -151,7 +333,16 @@ Typography definitions come from the structured foundation. Consumers are comput
 - Line-height: `140%`
 - Letter-spacing: `0%`
 - Responsive pair: `action`
-- Consumers: none
+- Consumers: `banner-app-download`, `button-primary`, `button-secondary`, `card-icon`, `card-image`, `item-bullet`
+  - Component `banner-app-download`; viewport `mobile`; variant `mobile`; element `root-content-area-store-buttons-appgallery-button-button-text-title`
+  - Component `banner-app-download`; viewport `mobile`; variant `mobile`; element `root-content-area-store-buttons-getapps-button-button-text-title`
+  - Component `banner-app-download`; viewport `mobile`; variant `mobile`; element `root-content-area-store-buttons-google-play-button-button-text-title`
+  - Component `banner-app-download`; viewport `mobile`; variant `mobile`; element `root-content-area-store-buttons-rustore-button-button-text-title`
+  - Component `button-primary`; viewport `mobile`; variant `mobile`; element `root-label`
+  - Component `button-secondary`; viewport `mobile`; variant `mobile`; element `root-label`
+  - Component `card-icon`; viewport `mobile`; variant `mobile`; element `root-text-content-link`
+  - Component `card-image`; viewport `mobile`; variant `mobile`; element `root-text-content-link`
+  - Component `item-bullet`; viewport `mobile`; variant `mobile`; element `root-text-content-link`
 - Figma description: CTA-текст в Mobile внутри Primary/Secondary-кнопок, store-кнопок и самостоятельных action-ссылок. Не применять к обычной inline-ссылке внутри Body-текста только из-за кликабельности. Пара: Desktop/Action. Roboto Medium, 14px, line-height 140%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.
 
 ### Mobile/Body/Large
@@ -166,7 +357,110 @@ Typography definitions come from the structured foundation. Consumers are comput
 - Line-height: `140%`
 - Letter-spacing: `0%`
 - Responsive pair: `body-large`
-- Consumers: none
+- Consumers: `badge-step-number`, `banner-app-download`, `banner-fiscal-check-link`, `banner-hero`, `banner-inline`, `banner-secondary`, `block-contact-support`, `block-content`, `block-icon-list`, `block-info-alert`, `block-instruction-steps`, `block-personal-data-update`, `block-transaction-error`, `card-icon`, `card-image`, `details-operation`, `details-operation-plain`, `details-receipt`, `details-suspicious-operation`, `details-transfer`, `item-bullet`, `item-step`
+  - Component `badge-step-number`; viewport `mobile`; variant `mobile-accent`; element `root-label`
+  - Component `badge-step-number`; viewport `mobile`; variant `mobile-neutral`; element `root-label`
+  - Component `banner-app-download`; viewport `mobile`; variant `mobile`; element `root-content-area-body`
+  - Component `banner-fiscal-check-link`; viewport `mobile`; variant `mobile`; element `root-item-01-link-text`
+  - Component `banner-fiscal-check-link`; viewport `mobile`; variant `mobile`; element `root-item-02-link-text`
+  - Component `banner-hero`; viewport `mobile`; variant `mobile`; element `root-card-content-area-text-content-body`
+  - Component `banner-inline`; viewport `mobile`; variant `mobile`; element `root-content-area-body`
+  - Component `banner-secondary`; viewport `mobile`; variant `mobile`; element `root-card-content-area-text-content-body`
+  - Component `block-contact-support`; viewport `mobile`; variant `mobile`; element `root-content-area-phone-cta-heading`
+  - Component `block-content`; viewport `mobile`; variant `mobile`; element `root-content-area-text-content-body-01`
+  - Component `block-content`; viewport `mobile`; variant `mobile`; element `root-content-area-text-content-body-02`
+  - Component `block-content`; viewport `mobile`; variant `mobile`; element `root-content-area-text-content-body-03`
+  - Component `block-content`; viewport `mobile`; variant `mobile`; element `root-content-area-text-content-body-04`
+  - Component `block-content`; viewport `mobile`; variant `mobile`; element `root-content-area-text-content-body-05`
+  - Component `block-icon-list`; viewport `mobile`; variant `mobile`; element `root-content-area-item-01-text-content-body`
+  - Component `block-icon-list`; viewport `mobile`; variant `mobile`; element `root-content-area-item-02-text-content-body`
+  - Component `block-icon-list`; viewport `mobile`; variant `mobile`; element `root-content-area-item-03-text-content-body`
+  - Component `block-icon-list`; viewport `mobile`; variant `mobile`; element `root-content-area-item-04-text-content-body`
+  - Component `block-icon-list`; viewport `mobile`; variant `mobile`; element `root-content-area-item-05-text-content-body`
+  - Component `block-icon-list`; viewport `mobile`; variant `mobile`; element `root-content-area-item-06-text-content-body`
+  - Component `block-info-alert`; viewport `mobile`; variant `mobile`; element `root-content-area-body`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-numbered-list-intro-01`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-numbered-list-intro-02`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-numbered-list-item-01-numbered-row-content`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-numbered-list-item-01-numbered-row-number`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-numbered-list-item-01-sub-item-01-content`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-numbered-list-item-02-numbered-row-content`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-numbered-list-item-02-numbered-row-number`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-numbered-list-item-02-sub-item-01-content`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-numbered-list-item-03-numbered-row-content`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-numbered-list-item-03-numbered-row-number`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-numbered-list-item-03-sub-item-01-content`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-numbered-list-item-04-numbered-row-content`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-numbered-list-item-04-numbered-row-number`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-numbered-list-item-04-sub-item-01-content`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-warning-warning-text`
+  - Component `block-personal-data-update`; viewport `mobile`; variant `mobile`; element `root-card-body-area-text-content-action-link`
+  - Component `block-personal-data-update`; viewport `mobile`; variant `mobile`; element `root-card-body-area-text-content-body-01`
+  - Component `block-personal-data-update`; viewport `mobile`; variant `mobile`; element `root-card-body-area-text-content-body-02`
+  - Component `block-personal-data-update`; viewport `mobile`; variant `mobile`; element `root-card-body-area-text-content-greeting`
+  - Component `block-personal-data-update`; viewport `mobile`; variant `mobile`; element `root-card-body-area-text-content-sign-off`
+  - Component `block-personal-data-update`; viewport `mobile`; variant `mobile`; element `root-card-body-area-text-content-warning-text`
+  - Component `block-transaction-error`; viewport `mobile`; variant `mobile`; element `root-card-body-area-primary-content-error-description`
+  - Component `block-transaction-error`; viewport `mobile`; variant `mobile`; element `root-card-body-area-primary-content-heading`
+  - Component `card-icon`; viewport `mobile`; variant `mobile`; element `root-text-content-description`
+  - Component `card-image`; viewport `mobile`; variant `mobile`; element `root-text-content-description`
+  - Component `details-operation-plain`; viewport `mobile`; variant `mobile`; element `root-row-01-label`
+  - Component `details-operation-plain`; viewport `mobile`; variant `mobile`; element `root-row-01-value`
+  - Component `details-operation-plain`; viewport `mobile`; variant `mobile`; element `root-row-02-label`
+  - Component `details-operation-plain`; viewport `mobile`; variant `mobile`; element `root-row-02-value`
+  - Component `details-operation-plain`; viewport `mobile`; variant `mobile`; element `root-row-03-label`
+  - Component `details-operation-plain`; viewport `mobile`; variant `mobile`; element `root-row-03-value`
+  - Component `details-operation`; viewport `mobile`; variant `mobile`; element `root-row-01-label`
+  - Component `details-operation`; viewport `mobile`; variant `mobile`; element `root-row-01-value`
+  - Component `details-operation`; viewport `mobile`; variant `mobile`; element `root-row-02-label`
+  - Component `details-operation`; viewport `mobile`; variant `mobile`; element `root-row-02-value`
+  - Component `details-operation`; viewport `mobile`; variant `mobile`; element `root-row-03-label`
+  - Component `details-operation`; viewport `mobile`; variant `mobile`; element `root-row-03-value`
+  - Component `details-operation`; viewport `mobile`; variant `mobile`; element `root-row-04-label`
+  - Component `details-operation`; viewport `mobile`; variant `mobile`; element `root-row-04-value`
+  - Component `details-operation`; viewport `mobile`; variant `mobile`; element `root-row-05-label`
+  - Component `details-operation`; viewport `mobile`; variant `mobile`; element `root-row-05-value`
+  - Component `details-operation`; viewport `mobile`; variant `mobile`; element `root-row-06-label`
+  - Component `details-operation`; viewport `mobile`; variant `mobile`; element `root-row-06-value`
+  - Component `details-operation`; viewport `mobile`; variant `mobile`; element `root-row-07-label`
+  - Component `details-operation`; viewport `mobile`; variant `mobile`; element `root-row-07-value`
+  - Component `details-receipt`; viewport `mobile`; variant `mobile`; element `root-row-01-label`
+  - Component `details-receipt`; viewport `mobile`; variant `mobile`; element `root-row-01-value`
+  - Component `details-receipt`; viewport `mobile`; variant `mobile`; element `root-row-02-label`
+  - Component `details-receipt`; viewport `mobile`; variant `mobile`; element `root-row-02-value`
+  - Component `details-receipt`; viewport `mobile`; variant `mobile`; element `root-row-03-label`
+  - Component `details-receipt`; viewport `mobile`; variant `mobile`; element `root-row-03-value`
+  - Component `details-receipt`; viewport `mobile`; variant `mobile`; element `root-row-04-label`
+  - Component `details-receipt`; viewport `mobile`; variant `mobile`; element `root-row-04-value`
+  - Component `details-receipt`; viewport `mobile`; variant `mobile`; element `root-row-05-label`
+  - Component `details-receipt`; viewport `mobile`; variant `mobile`; element `root-row-05-value`
+  - Component `details-receipt`; viewport `mobile`; variant `mobile`; element `root-row-06-label`
+  - Component `details-receipt`; viewport `mobile`; variant `mobile`; element `root-row-06-value`
+  - Component `details-receipt`; viewport `mobile`; variant `mobile`; element `root-row-07-label`
+  - Component `details-receipt`; viewport `mobile`; variant `mobile`; element `root-row-07-value`
+  - Component `details-receipt`; viewport `mobile`; variant `mobile`; element `root-row-08-label`
+  - Component `details-receipt`; viewport `mobile`; variant `mobile`; element `root-row-08-value`
+  - Component `details-suspicious-operation`; viewport `mobile`; variant `mobile`; element `root-heading`
+  - Component `details-transfer`; viewport `mobile`; variant `mobile`; element `root-row-01-label`
+  - Component `details-transfer`; viewport `mobile`; variant `mobile`; element `root-row-01-value`
+  - Component `details-transfer`; viewport `mobile`; variant `mobile`; element `root-row-02-label`
+  - Component `details-transfer`; viewport `mobile`; variant `mobile`; element `root-row-02-value`
+  - Component `details-transfer`; viewport `mobile`; variant `mobile`; element `root-row-03-label`
+  - Component `details-transfer`; viewport `mobile`; variant `mobile`; element `root-row-03-value`
+  - Component `details-transfer`; viewport `mobile`; variant `mobile`; element `root-row-04-label`
+  - Component `details-transfer`; viewport `mobile`; variant `mobile`; element `root-row-04-value`
+  - Component `details-transfer`; viewport `mobile`; variant `mobile`; element `root-row-05-label`
+  - Component `details-transfer`; viewport `mobile`; variant `mobile`; element `root-row-05-value`
+  - Component `details-transfer`; viewport `mobile`; variant `mobile`; element `root-row-06-label`
+  - Component `details-transfer`; viewport `mobile`; variant `mobile`; element `root-row-06-value`
+  - Component `details-transfer`; viewport `mobile`; variant `mobile`; element `root-row-07-label`
+  - Component `details-transfer`; viewport `mobile`; variant `mobile`; element `root-row-07-value`
+  - Component `details-transfer`; viewport `mobile`; variant `mobile`; element `root-row-08-label`
+  - Component `details-transfer`; viewport `mobile`; variant `mobile`; element `root-row-08-value`
+  - Component `details-transfer`; viewport `mobile`; variant `mobile`; element `root-row-09-label`
+  - Component `details-transfer`; viewport `mobile`; variant `mobile`; element `root-row-09-value`
+  - Component `item-bullet`; viewport `mobile`; variant `mobile`; element `root-text-content-primary-text`
+  - Component `item-step`; viewport `mobile`; variant `mobile`; element `root-text-content-heading`
 - Figma description: Основной содержательный текст и значения в Mobile. Использовать для основной читаемой информации блока; не применять к Caption или CTA. Основная desktop-пара: Desktop/Body/Large; точный выбор задаёт контракт компонента. Roboto Regular, 14px, line-height 140%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.
 
 ### Mobile/Body/Medium
@@ -181,7 +475,42 @@ Typography definitions come from the structured foundation. Consumers are comput
 - Line-height: `140%`
 - Letter-spacing: `0%`
 - Responsive pair: `body-medium`
-- Consumers: none
+- Consumers: `badge-operation-status`, `block-contact-support`, `block-instruction-steps`, `block-personal-data-update`, `block-transaction-error`, `block-transaction-success`, `item-alert`, `item-bullet`, `item-notification`, `item-step`
+  - Component `badge-operation-status`; viewport `mobile`; variant `mobile-error`; element `root-status-label`
+  - Component `badge-operation-status`; viewport `mobile`; variant `mobile-pending`; element `root-status-label`
+  - Component `badge-operation-status`; viewport `mobile`; variant `mobile-success`; element `root-status-label`
+  - Component `block-contact-support`; viewport `mobile`; variant `mobile`; element `root-content-area-help-notice-help-text`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-alert-notice-link`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-numbered-list-item-01-sub-item-01-dash`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-numbered-list-item-01-sub-item-02-content`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-numbered-list-item-01-sub-item-02-dash`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-numbered-list-item-01-sub-item-03-content`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-numbered-list-item-01-sub-item-03-dash`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-numbered-list-item-02-sub-item-01-dash`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-numbered-list-item-02-sub-item-02-content`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-numbered-list-item-02-sub-item-02-dash`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-numbered-list-item-02-sub-item-03-content`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-numbered-list-item-02-sub-item-03-dash`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-numbered-list-item-03-sub-item-01-dash`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-numbered-list-item-03-sub-item-02-content`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-numbered-list-item-03-sub-item-02-dash`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-numbered-list-item-03-sub-item-03-content`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-numbered-list-item-03-sub-item-03-dash`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-numbered-list-item-04-sub-item-01-dash`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-numbered-list-item-04-sub-item-02-content`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-numbered-list-item-04-sub-item-02-dash`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-numbered-list-item-04-sub-item-03-content`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-numbered-list-item-04-sub-item-03-dash`
+  - Component `block-personal-data-update`; viewport `mobile`; variant `mobile`; element `root-card-body-area-alert-notice-link`
+  - Component `block-transaction-error`; viewport `mobile`; variant `mobile`; element `root-card-body-area-attention-notice-notice-text`
+  - Component `block-transaction-success`; viewport `mobile`; variant `mobile`; element `root-card-details-area-limit-alert-notice-link`
+  - Component `block-transaction-success`; viewport `mobile`; variant `mobile`; element `root-card-details-area-limit-alert-notice-text`
+  - Component `block-transaction-success`; viewport `mobile`; variant `mobile`; element `root-card-summary-area-description-text`
+  - Component `item-alert`; viewport `mobile`; variant `mobile`; element `root-body`
+  - Component `item-bullet`; viewport `mobile`; variant `mobile`; element `root-text-content-supporting-text-01`
+  - Component `item-bullet`; viewport `mobile`; variant `mobile`; element `root-text-content-supporting-text-02`
+  - Component `item-notification`; viewport `mobile`; variant `mobile`; element `root-body`
+  - Component `item-step`; viewport `mobile`; variant `mobile`; element `root-text-content-caption`
 - Figma description: Компактный информационный и вспомогательный текст в Mobile. Использовать только там, где компоненту нужен более плотный уровень Body; не подменять им Caption. Основная desktop-пара: Desktop/Body/Medium; точный выбор задаёт контракт компонента. Roboto Regular, 12px, line-height 140%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.
 
 ### Mobile/Caption
@@ -196,7 +525,24 @@ Typography definitions come from the structured foundation. Consumers are comput
 - Line-height: `140%`
 - Letter-spacing: `0%`
 - Responsive pair: `caption`
-- Consumers: none
+- Consumers: `block-bullet-list`, `block-cards-images`, `block-content`, `block-icon-cards`, `block-icon-list`, `block-instruction-steps`, `block-personal-data-update`, `block-steps`, `block-transaction-error`, `email-footer`, `email-footer-legal`
+  - Component `block-bullet-list`; viewport `mobile`; variant `mobile`; element `root-content-area-caption`
+  - Component `block-cards-images`; viewport `mobile`; variant `mobile`; element `root-content-area-caption`
+  - Component `block-content`; viewport `mobile`; variant `mobile`; element `root-content-area-caption`
+  - Component `block-icon-cards`; viewport `mobile`; variant `mobile`; element `root-content-area-caption`
+  - Component `block-icon-list`; viewport `mobile`; variant `mobile`; element `root-content-area-caption`
+  - Component `block-instruction-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-disclaimer-disclaimer-text`
+  - Component `block-personal-data-update`; viewport `mobile`; variant `mobile`; element `root-card-body-area-disclaimer-disclaimer-text`
+  - Component `block-personal-data-update`; viewport `mobile`; variant `mobile`; element `root-card-body-area-text-content-link-expiry`
+  - Component `block-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-caption`
+  - Component `block-transaction-error`; viewport `mobile`; variant `mobile`; element `root-card-body-area-supporting-content-card-warning`
+  - Component `block-transaction-error`; viewport `mobile`; variant `mobile`; element `root-card-body-area-supporting-content-timeout-notice`
+  - Component `email-footer-legal`; viewport `mobile`; variant `mobile`; element `root-footer-body-disclaimer-section-disclaimer-text-01`
+  - Component `email-footer-legal`; viewport `mobile`; variant `mobile`; element `root-footer-body-disclaimer-section-disclaimer-text-02`
+  - Component `email-footer`; viewport `mobile`; variant `mobile`; element `root-footer-body-disclaimer-section-caption`
+  - Component `email-footer`; viewport `mobile`; variant `mobile`; element `root-footer-body-disclaimer-section-disclaimer-text-01`
+  - Component `email-footer`; viewport `mobile`; variant `mobile`; element `root-footer-body-disclaimer-section-disclaimer-text-02`
+  - Component `email-footer`; viewport `mobile`; variant `mobile`; element `root-footer-body-disclaimer-section-disclaimer-text-03`
 - Figma description: Вспомогательный, предупреждающий и юридический текст в Mobile: дисклеймеры, сроки действия и второстепенные пояснения. Не использовать как Mobile/Body/Medium только из-за совпадения параметров. Пара: Desktop/Caption. Roboto Regular, 12px, line-height 140%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.
 
 ### Mobile/Display
@@ -211,7 +557,10 @@ Typography definitions come from the structured foundation. Consumers are comput
 - Line-height: `120%`
 - Letter-spacing: `0%`
 - Responsive pair: `display`
-- Consumers: none
+- Consumers: `banner-hero`, `block-transaction-error`, `block-transaction-success`
+  - Component `banner-hero`; viewport `mobile`; variant `mobile`; element `root-card-content-area-text-content-heading`
+  - Component `block-transaction-error`; viewport `mobile`; variant `mobile`; element `root-card-summary-area-partner-info-row-partner-details-text-details-amount`
+  - Component `block-transaction-success`; viewport `mobile`; variant `mobile`; element `root-card-summary-area-partner-info-row-partner-details-text-details-amount`
 - Figma description: Главный выразительный текст Mobile для Hero-заголовка и крупного результата операции. Не использовать как обычный заголовок блока или карточки. Пара: Desktop/Display. Roboto Bold, 20px, line-height 120%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.
 
 ### Mobile/Heading
@@ -226,7 +575,19 @@ Typography definitions come from the structured foundation. Consumers are comput
 - Line-height: `120%`
 - Letter-spacing: `0%`
 - Responsive pair: `heading`
-- Consumers: none
+- Consumers: `banner-secondary`, `block-bullet-list`, `block-cards-images`, `block-contact-support`, `block-content`, `block-icon-cards`, `block-icon-list`, `block-personal-data-update`, `block-receipt-info`, `block-steps`, `nps-options`
+  - Component `banner-secondary`; viewport `mobile`; variant `mobile`; element `root-card-content-area-text-content-heading`
+  - Component `block-bullet-list`; viewport `mobile`; variant `mobile`; element `root-content-area-heading`
+  - Component `block-cards-images`; viewport `mobile`; variant `mobile`; element `root-content-area-heading`
+  - Component `block-contact-support`; viewport `mobile`; variant `mobile`; element `root-content-area-phone-cta-phone-number`
+  - Component `block-content`; viewport `mobile`; variant `mobile`; element `root-content-area-text-content-heading`
+  - Component `block-icon-cards`; viewport `mobile`; variant `mobile`; element `root-content-area-heading`
+  - Component `block-icon-list`; viewport `mobile`; variant `mobile`; element `root-content-area-heading`
+  - Component `block-personal-data-update`; viewport `mobile`; variant `mobile`; element `root-card-status-area-status-row-heading`
+  - Component `block-receipt-info`; viewport `mobile`; variant `mobile`; element `root-status-area-status-row-heading`
+  - Component `block-steps`; viewport `mobile`; variant `mobile`; element `root-content-area-heading`
+  - Component `nps-options`; viewport `mobile`; variant `mobile-2`; element `root-content-area-heading`
+  - Component `nps-options`; viewport `mobile`; variant `mobile-3`; element `root-content-area-heading`
 - Figma description: Основной заголовок самостоятельного контентного блока в Mobile. В Banner/Secondary также выполняет мобильную роль компактного заголовка. Не использовать для Hero или заголовка карточки. Основная пара: Desktop/Heading. Roboto SemiBold, 18px, line-height 120%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.
 
 ### Mobile/Title
@@ -241,5 +602,9 @@ Typography definitions come from the structured foundation. Consumers are comput
 - Line-height: `120%`
 - Letter-spacing: `0%`
 - Responsive pair: `title`
-- Consumers: none
+- Consumers: `block-transaction-error`, `block-transaction-success`, `card-icon`, `card-image`
+  - Component `block-transaction-error`; viewport `mobile`; variant `mobile`; element `root-card-summary-area-partner-info-row-partner-details-text-details-partner-name`
+  - Component `block-transaction-success`; viewport `mobile`; variant `mobile`; element `root-card-summary-area-partner-info-row-partner-details-text-details-partner-name`
+  - Component `card-icon`; viewport `mobile`; variant `mobile`; element `root-text-content-heading`
+  - Component `card-image`; viewport `mobile`; variant `mobile`; element `root-text-content-heading`
 - Figma description: Заголовок карточки или внутренней сущности в Mobile, включая имя партнёра и локальный результат внутри блока. Не использовать как заголовок самостоятельного блока. Пара: Desktop/Title. Roboto Medium, 16px, line-height 120%, letter-spacing 0. Стиль управляется централизованно; локальные переопределения запрещены.

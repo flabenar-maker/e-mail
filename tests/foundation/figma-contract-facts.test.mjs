@@ -303,6 +303,9 @@ test("exported asset artwork is an image boundary, not individually mapped vecto
   };
   const report = auditFigmaContractFacts({ record, live });
   assert.equal(report.issues.some((issue) => issue.code === "FIGMA_CAPTURE_UNSUPPORTED"), false);
+  const diagnostic = report.capture_diagnostics?.find(value => value.raw?.node_id === "3:1");
+  assert.equal(diagnostic?.status, "unverified");
+  assert.equal(diagnostic?.reason, "ARTWORK_DIAGNOSTIC_REQUIRES_EVIDENCE");
   assert.equal(report.issues.some((issue) => issue.node_id === "4:1"), false);
 });
 
@@ -324,7 +327,10 @@ test("mixed text is supported when every styled segment is captured exactly", ()
       { variant_node_id: "2:1", axes: [{ name: "Viewport", value: "Mobile" }],
         source_node: { node_id: "2:1", children: [{
           node_id: "3:1", node_type: "TEXT",
-          styled_text_segments: [{ start: 0, end: 1 }, { start: 1, end: 2 }],
+          characters: "go!", styled_text_segments: [
+            { start: 0, end: 2, characters: "go", font_family: "Roboto", font_style: "Regular", font_size_px: 14, line_height: { unit: "PERCENT", value: 140 }, fills: [{ type: "solid", color: "#48494A", opacity: 1, visible: true }], text_decoration: "NONE" },
+            { start: 2, end: 3, characters: "!", font_family: "Roboto", font_style: "Regular", font_size_px: 14, line_height: { unit: "PERCENT", value: 140 }, fills: [{ type: "solid", color: "#48494A", opacity: 1, visible: true }], text_decoration: "UNDERLINE" },
+          ],
         }] } },
       { variant_node_id: "2:2", axes: [{ name: "Viewport", value: "Desktop" }],
         source_node: { node_id: "2:2" } },
@@ -399,4 +405,53 @@ test("a pinned registry literal without an email-only derivation remains unmappe
   assert.ok(report.issues.some((item) =>
     item.code === "CONTRACT_FACT_UNMAPPED" &&
     item.contract_path === "/contracts/mobile/root/facts/2/value/value"));
+});
+for (const version of ["1.0.0", "1.1.0"]) test(`scalar audit still reads ${version} without inventing evidence metadata`, () => {
+  const { record, packet }=fixture();packet.capture_version=version;
+  const r=auditFigmaContractFacts({record,live:packet});
+  assert.equal(r.issues.some(i=>i.code==="FIGMA_CAPTURE_VERSION_UNSUPPORTED"),false);
+  assert.ok(r.issues.some(i=>i.code==="FIGMA_FACT_UNCOVERED"));
+});
+test("scalar audit rejects an unknown capture version",()=>{
+  const {record,packet}=fixture();packet.capture_version="9.0.0";
+  assert.ok(auditFigmaContractFacts({record,live:packet}).issues.some(i=>i.code==="FIGMA_CAPTURE_VERSION_UNSUPPORTED"));
+});
+
+
+test("contract-fact audit reports complete mixed runs as verified while preserving the original raw error", () => {
+  const { record, packet, mappings } = fixture();
+  const text = packet.variants[0].source_node.children[0];
+  text.characters = "Help!";
+  text.styled_text_segments = [
+    { start: 0, end: 4, characters: "Help", font_family: "Roboto", font_style: "Regular", font_size_px: 14, line_height: { unit: "PERCENT", value: 140 }, fills: [{ type: "solid", color: "#48494A", opacity: 1, visible: true }], text_decoration: "NONE" },
+    { start: 4, end: 5, characters: "!", font_family: "Roboto", font_style: "Regular", font_size_px: 14, line_height: { unit: "PERCENT", value: 140 }, fills: [{ type: "solid", color: "#48494A", opacity: 1, visible: true }], text_decoration: "UNDERLINE" },
+  ];
+  const raw = { code: "MIXED_VALUE", node_id: "3:1", field: "textDecoration" };
+  packet.capture_errors.push(raw);
+  const before = structuredClone(packet.capture_errors), report = auditFigmaContractFacts({ record, live: packet, mappings });
+  assert.ok(Array.isArray(report.capture_diagnostics), "fact audit must expose raw diagnostic dispositions");
+  const disposition = report.capture_diagnostics.find(value => value.raw?.node_id === raw.node_id && value.raw?.field === raw.field);
+  assert.deepEqual(disposition?.raw, raw); assert.equal(disposition?.status, "verified"); assert.ok(disposition?.reason);
+  assert.ok(!report.issues.some(issue => issue.code === "FIGMA_CAPTURE_UNSUPPORTED" && issue.details?.some(detail => detail.node_id === raw.node_id && detail.field === raw.field)));
+  assert.deepEqual(packet.capture_errors, before);
+});
+
+for (const [label, mutate] of [
+  ["gap", text => { text.styled_text_segments[0].end = 3; text.styled_text_segments[0].characters = "Hel"; }],
+  ["overlap", text => { text.styled_text_segments[1].start = 3; }],
+  ["missing fill", text => { delete text.styled_text_segments[0].fills; }],
+  ["foreign characters", text => { text.styled_text_segments[1].characters = "?"; }],
+  ["fontWeight", text => { text._mixedField = "fontWeight"; }],
+  ["textStyleId", text => { text._mixedField = "textStyleId"; }],
+  ["letterSpacing", text => { text._mixedField = "letterSpacing"; }],
+]) test("malformed mixed fact capture " + label + " is FIGMA_CAPTURE_UNSUPPORTED", () => {
+  const { record, packet, mappings } = fixture(), text = packet.variants[0].source_node.children[0];
+  text.characters = "Help!"; text.styled_text_segments = [
+    { start: 0, end: 4, characters: "Help", font_family: "Roboto", font_style: "Regular", font_size_px: 14, line_height: { unit: "PERCENT", value: 140 }, fills: [{ type: "solid", color: "#48494A", opacity: 1, visible: true }], text_decoration: "NONE" },
+    { start: 4, end: 5, characters: "!", font_family: "Roboto", font_style: "Regular", font_size_px: 14, line_height: { unit: "PERCENT", value: 140 }, fills: [{ type: "solid", color: "#48494A", opacity: 1, visible: true }], text_decoration: "UNDERLINE" },
+  ];
+  mutate(text); const raw = { code: "MIXED_VALUE", node_id: "3:1", field: text._mixedField ?? "textDecoration" }; packet.capture_errors.push(raw);
+  const report = auditFigmaContractFacts({ record, live: packet, mappings }), disposition = report.capture_diagnostics?.find(value => value.raw?.field === raw.field);
+  assert.equal(disposition?.status, "unverified"); assert.ok(disposition?.reason);
+  assert.ok(report.issues.some(issue => issue.code === "FIGMA_CAPTURE_UNSUPPORTED" && issue.details?.some(detail => detail.node_id === raw.node_id && detail.field === raw.field)));
 });

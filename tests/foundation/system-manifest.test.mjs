@@ -67,7 +67,7 @@ function activateEmailCutover(manifest) {
 
 test("loads the repository canonical manifest", async () => {
   const manifest = await canonicalManifest();
-  assert.equal(manifest.schema_version, "1.2.0");
+  assert.equal(manifest.schema_version, "1.3.0");
   assert.equal(manifest.system.id, "cupis-email-system");
 });
 
@@ -769,7 +769,7 @@ const testGeneratedBundle = {
 };
 
 function addGeneratedCapability(manifest) {
-  manifest.schema_version = "1.2.0";
+  manifest.schema_version = "1.3.0";
   manifest.sources = manifest.sources.filter(
     (source) => source.kind !== "generated",
   );
@@ -1084,6 +1084,14 @@ test("canonical routes activate email bundles while non-email bundles remain sha
       {
         id: "naming-reference",
         output_source_id: "generated-naming-reference",
+      },
+      {
+        id: "library-maintenance-checkpoint",
+        output_source_id: "generated-library-maintenance-checkpoint",
+      },
+      {
+        id: "email-build-checkpoint",
+        output_source_id: "generated-email-build-checkpoint",
       },
     ],
   );
@@ -1466,3 +1474,25 @@ test("reports a missing required email-build skill", async (t) => {
 
   assert.ok(errors.some((error) => error.code === "missing-required-skill"));
 });
+for (const [mode, expected] of [["missing", "EVIDENCE_TARGET_POINTER_MISSING"], ["wrong-type", "EVIDENCE_TARGET_VALUE_INVALID"]]) {
+  test(`system resolves component evidence against loaded foundation: ${mode}`, async t => {
+    const root=await validFixture(t);
+    const data=await readStrictYaml(join(root,"data/components/shared.yaml"));
+    const record=data.components.find(r=>r.id==="email-template"),variant=record.variants[0];
+    record.evidence_links={source_dependencies:[],foundation_values:[{id:"synthetic-background",source:{variant_node_id:variant.node_id,node_id:variant.node_id,field_path:"/fills/0/color"},target:{source_id:"rendering-foundation",pointer:"/shell/background_color"},comparison:"opaque-solid-color"}]};
+    await writeFixtureFile(root,"data/components/shared.yaml",JSON.stringify(data));
+    // Deliberately relax only this test schema leaf so the resolver, not Ajv,
+    // must defend the canonical target boundary. Production schema is unchanged.
+    const schema=JSON.parse(await readFile(join(root,"schemas/rendering.schema.json"),"utf8"));
+    schema.$defs.shell.required=schema.$defs.shell.required.filter(k=>k!=="background_color");
+    schema.$defs.shell.properties.background_color={};
+    await writeFixtureFile(root,"schemas/rendering.schema.json",JSON.stringify(schema));
+    const rendering=await readStrictYaml(join(root,"data/foundations/rendering.yaml"));
+    if(mode==="missing")delete rendering.shell.background_color;else rendering.shell.background_color=42;
+    await writeFixtureFile(root,"data/foundations/rendering.yaml",JSON.stringify(rendering));
+    const result=await validateSystem({repoRoot:root});
+    const issue=result.errors.find(e=>e.code===expected);
+    assert.ok(issue,JSON.stringify(result.errors));
+    assert.ok(issue.path.startsWith("/registries/shared/components/"));
+  });
+}

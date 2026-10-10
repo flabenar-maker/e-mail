@@ -1,0 +1,329 @@
+// External RED transport draft. Intended destination: tests/foundation/native-header-owned-artwork.test.mjs.
+// Break protected: accepting an unregistered/mis-bound nested instance as a Header PNG export dependency.
+import assert from 'node:assert/strict';
+import test from 'node:test';
+import {createContractProofEnvironment} from '../../scripts/lib/contract-fact-proofs.mjs';
+import {auditFigmaContractFacts} from '../../scripts/lib/figma-contract-facts.mjs';
+import {auditComponentEvidenceLinks, auditFigmaComponentEvidence} from '../../scripts/lib/figma-component-evidence.mjs';
+import {collectEvidenceConsumers} from '../../scripts/lib/component-evidence-links.mjs';
+const owned = await import('../../scripts/lib/native-owned-artwork.mjs').catch(error => {
+  const expected = new URL('../../scripts/lib/native-owned-artwork.mjs', import.meta.url).href;
+  if (error?.code === 'ERR_MODULE_NOT_FOUND' && error.url === expected) return {};
+  throw error;
+});
+const relation = await import('../../scripts/lib/native-relationship-coverage.mjs');
+const context = await import('../../scripts/lib/native-context-coverage.mjs');
+const {validateNativeRelationProofReferences} = relation;
+const SHA = 'a'.repeat(40), NONCE = 'b'.repeat(64), REQUEST = 'c'.repeat(64);
+const clone = structuredClone;
+const sel = (variant_node_id, node_id) => ({component_id: 'email-header', variant_node_id, node_id});
+const dim = (node_id, width, height) => ({id: 'reference-size', value: {type: 'dimensions', width, height, unit: 'px'}, provenance: {kind: 'figma-literal', node_id}});
+const none = () => ({mode: 'NONE', horizontal_sizing: 'FIXED', vertical_sizing: 'FIXED', primary_axis_sizing: 'AUTO', counter_axis_sizing: 'FIXED', item_spacing: 0, counter_axis_spacing: 0, wrap: 'NO_WRAP', primary_axis_alignment: 'MIN', counter_axis_alignment: 'MIN', padding: {top: 0, right: 0, bottom: 0, left: 0}});
+function node(id, type, name, width, height, children = []) { return {node_id: id, node_type: type, name, visible: true, opacity: 1, reference_dimensions: {width, height, unit: 'px'}, layout: none(), layout_positioning: 'AUTO', layout_grow: 0, minimum_width_px: null, clips_content: true, corner_radius: 0, corner_radii: {top_left: 0, top_right: 0, bottom_right: 0, bottom_left: 0}, rotation: 0, strokes: [], effects: [], fills: [], variable_bindings: {}, component_property_references: {}, children}; }
+function source(id, node_id, figma, variants) { return {id, identity: {library: 'shared', node_kind: 'component-set', semantic_role: 'asset', figma_name: figma}, figma: {file_key: 'native-file', node_id}, properties: [], variants, asset_contracts: [], contracts: {mobile: {root: {id: 'root', semantic_role: 'asset', render_mode: 'figma-source-only', visibility: {mode: 'always'}, facts: [], children: []}}, desktop: {root: {id: 'root', semantic_role: 'asset', render_mode: 'figma-source-only', visibility: {mode: 'always'}, facts: [], children: []}}, figma_fact_links: []}, evidence_links: {foundation_values: [], source_dependencies: [], native_relation_proofs: [], native_context_proofs: []}}; }
+function fixture() {
+  const headerShared = source('asset-header-logo-4x', '1008:1476', 'Asset/Header-Logo @4x', [{id: 'product-cupis', node_id: '1008:1473', axes: [{name: 'Product', value: 'CUPIS'}]}]);
+  const compactShared = source('asset-header-logo-compact-4x', '1008:1708', 'Asset/Header-Logo-Compact @4x', [{id: 'product-cupis', node_id: '1008:1686', axes: [{name: 'Product', value: 'CUPIS'}]}]);
+  const productShared = source('asset-product-logo', '1008:874', 'Asset/Product-Logo', [{id: 'product-cupis', node_id: '1008:871', axes: [{name: 'Product', value: 'CUPIS'}]}]);
+  const asset = {id: 'header-logo', owner_layer_name: 'header-logo @4x', source_viewport: 'desktop', source_mode_id: 'rendered-node', display_mode_id: 'direct-image', export_profile_id: 'png-4x', alpha_mode_id: 'transparent', clipping_policy_id: 'preserve-artwork', export_boundary: {kind: 'node', semantic_node_name: 'header-logo @4x'}, pixel_dimensions: {width: 1288, height: 200, unit: 'px'}, aspect_ratio: {width: 322, height: 50}, crop: {mode: 'none', position_source: 'exact-node-after-overrides'}, background: {own_visible_boundary_fill: 'preserve', artificial_matte: 'forbid'}};
+  const product = {...node('I1008:1823;1008:1309', 'INSTANCE', 'Asset/Product-Logo', 273.125, 38), main_component_id: '1008:871', instance_properties: {Product: {type: 'VARIANT', value: 'CUPIS', boundVariables: {}}}};
+  const desktop = {...node('1008:1823', 'INSTANCE', 'header-logo @4x', 322, 50, [product]), main_component_id: '1008:1473', instance_properties: {Product: {type: 'VARIANT', value: 'CUPIS', boundVariables: {}}}};
+  const mobileProduct = {...clone(product), node_id: 'I1008:1709;1008:1347', reference_dimensions: {width: 179.6875, height: 25, unit: 'px'}};
+  const mobile = {...clone(desktop), node_id: '1008:1709', name: 'header-logo-compact @4x', reference_dimensions: {width: 212, height: 33, unit: 'px'}, main_component_id: '1008:1686', children: [mobileProduct]};
+  const owner = {id: 'email-header', identity: {library: 'marketing', node_kind: 'component-set', semantic_role: 'email', figma_name: 'Email/Header'}, figma: {file_key: 'native-file', node_id: '326:5159'}, properties: [], variants: [{id: 'mobile', node_id: '15:2037', axes: [{name: 'Viewport', value: 'Mobile'}]}, {id: 'desktop', node_id: '230:3679', axes: [{name: 'Viewport', value: 'Desktop'}]}], asset_contracts: [asset], contracts: {mobile: {root: {id: 'root', semantic_role: 'email', render_mode: 'presentation-table', visibility: {mode: 'always'}, facts: [dim('15:2037', 328, 49)], children: [{id: 'logo', semantic_role: 'header-logo-compact', render_mode: 'direct-image', asset_contract_id: 'header-logo', visibility: {mode: 'always'}, facts: [dim('1008:1709', 212, 33)], children: []}]}}, desktop: {root: {id: 'root', semantic_role: 'email', render_mode: 'presentation-table', visibility: {mode: 'always'}, facts: [dim('230:3679', 600, 74)], children: [{id: 'logo', semantic_role: 'header-logo', render_mode: 'direct-image', asset_contract_id: 'header-logo', visibility: {mode: 'always'}, facts: [dim('1008:1823', 322, 50)], children: []}]}}, figma_fact_links: []}, evidence_links: {foundation_values: [], source_dependencies: [
+    {id: 'mobile-header', source: {variant_node_id: '15:2037', node_id: '1008:1709'}, target: {component_id: compactShared.id, variant_id: 'product-cupis'}, asset_owner: {node_id: '1008:1709', asset_id: asset.id}},
+    {id: 'desktop-header', source: {variant_node_id: '230:3679', node_id: '1008:1823'}, target: {component_id: headerShared.id, variant_id: 'product-cupis'}, asset_owner: {node_id: '1008:1823', asset_id: asset.id}},
+    {id: 'mobile-product', source: {variant_node_id: '15:2037', node_id: mobileProduct.node_id}, target: {component_id: productShared.id, variant_id: 'product-cupis'}, asset_owner: {node_id: '1008:1709', asset_id: asset.id}},
+    {id: 'desktop-product', source: {variant_node_id: '230:3679', node_id: product.node_id}, target: {component_id: productShared.id, variant_id: 'product-cupis'}, asset_owner: {node_id: '1008:1823', asset_id: asset.id}}], native_relation_proofs: [
+    {id: 'mobile-logo', kind: 'element-structure', source: sel('15:2037', '1008:1709'), element_path: '/contracts/mobile/root/children/0'},
+    {id: 'desktop-logo', kind: 'element-structure', source: sel('230:3679', '1008:1823'), element_path: '/contracts/desktop/root/children/0'}], native_context_proofs: [{id: 'mobile-artwork', kind: 'rendered-artwork-context', structure_proof_id: 'mobile-logo'}, {id: 'desktop-artwork', kind: 'rendered-artwork-context', structure_proof_id: 'desktop-logo'}]}};
+  // The placements are actual VERTICAL consumer nodes. Their dimensions/facts are
+  // independently mapped; these are not source/export dimensions.
+  for (const [placement, mode, horizontal, vertical] of [[mobile, 'VERTICAL', 'FIXED', 'HUG'], [desktop, 'VERTICAL', 'FIXED', 'FIXED']]) {
+    placement.layout = {...none(), mode, horizontal_sizing: horizontal, vertical_sizing: vertical};
+    placement.fills = [{type: 'solid', visible: true, opacity: 1, color: '#F3F3F5'}];
+  }
+  const addFacts = (element, nodeId, axis, vertical) => element.facts.push(
+    {id: 'layout-axis', value: {type: 'keyword', value: axis}, provenance: {kind: 'figma-literal', node_id: nodeId}},
+    {id: 'horizontal-sizing', value: {type: 'keyword', value: 'fixed'}, provenance: {kind: 'figma-literal', node_id: nodeId}},
+    {id: 'vertical-sizing', value: {type: 'keyword', value: vertical}, provenance: {kind: 'figma-literal', node_id: nodeId}},
+    {id: 'layout-wrap', value: {type: 'keyword', value: 'no_wrap'}, provenance: {kind: 'figma-literal', node_id: nodeId}},
+    {id: 'background', value: {type: 'color', value: '#F3F3F5'}, provenance: {kind: 'figma-literal', node_id: nodeId}});
+  addFacts(owner.contracts.mobile.root.children[0], '1008:1709', 'vertical', 'hug');
+  addFacts(owner.contracts.desktop.root.children[0], '1008:1823', 'vertical', 'fixed');
+  for (const [variant, nodeId, base] of [['15:2037', '1008:1709', '/contracts/mobile/root/children/0/facts'], ['230:3679', '1008:1823', '/contracts/desktop/root/children/0/facts']]) {
+    for (const key of ['width', 'height']) owner.contracts.figma_fact_links.push({variant_node_id: variant, node_id: nodeId, source_path: `/reference_dimensions/${key}`, contract_path: `${base}/0/value/${key}`, transform: 'identity'});
+    for (const [source_path, index, transform] of [['/layout/mode', 1, 'lowercase'], ['/layout/horizontal_sizing', 2, 'lowercase'], ['/layout/vertical_sizing', 3, 'lowercase'], ['/layout/wrap', 4, 'lowercase'], ['/fills/0/color', 5, 'identity']]) owner.contracts.figma_fact_links.push({variant_node_id: variant, node_id: nodeId, source_path, contract_path: `${base}/${index}/value/value`, transform});
+  }
+  const roots = [{variant_node_id: '15:2037', axes: owner.variants[0].axes, source_node: node('15:2037', 'COMPONENT', 'Viewport=Mobile', 328, 49, [mobile])}, {variant_node_id: '230:3679', axes: owner.variants[1].axes, source_node: node('230:3679', 'COMPONENT', 'Viewport=Desktop', 600, 74, [desktop])}];
+  const packet = {capture_version: '1.3.0', file_key: 'native-file', component_node_id: owner.figma.node_id, owner_identity: {node_id: owner.figma.node_id, node_type: 'COMPONENT_SET', name: owner.identity.figma_name}, component_properties: [{name: 'Viewport', type: 'VARIANT', default: 'Mobile', variant_options: ['Mobile', 'Desktop']}], capture_errors: [], variants: roots, capture_meta: {started_at: '2026-10-05T10:00:01.000Z', completed_at: '2026-10-05T10:00:02.000Z', tree_complete: true, node_count: 6, request: {session_nonce: NONCE, request_nonce: REQUEST, canonical_git_sha: SHA}}};
+  const session = {schema_version: '1.1.0', canonical_git_sha: SHA, session_nonce: NONCE, started_at: '2026-10-05T10:00:00.000Z', completed_at: '2026-10-05T10:00:03.000Z', component_ids: [owner.id], captures: [{component_id: owner.id, receipt_id: 'header', tool: 'use_figma', request_nonce: REQUEST, requested_at: '2026-10-05T10:00:01.000Z', received_at: '2026-10-05T10:00:02.000Z', packet}]};
+  return {owner, session, packet, model: {canonical_sha: SHA, records: [owner, headerShared, compactShared, productShared], source_documents: new Map(), manifest: {sources: []}}};
+}
+function api() { for (const n of ['isSharedArtworkReference', 'verifyRegisteredArtworkInstance']) assert.equal(typeof owned[n], 'function', `missing owned-artwork API: ${n}`); }
+function all(f) { return {relation: relation.auditNativeRelationProofs({record: f.owner, model: f.model, session: f.session}), context: context.auditNativeContextProofs({record: f.owner, model: f.model, session: f.session})}; }
+test('Header fixture authenticates its sole complete owner packet before owned-artwork behavior', () => {
+  const f = fixture(), env = createContractProofEnvironment(f.model, f.session);
+  assert.deepEqual(env.issues, []);
+  assert.equal(env.selected(sel('15:2037', '1008:1709')).node.node_id, '1008:1709');
+  assert.equal(env.selected(sel('230:3679', '1008:1823')).node.node_id, '1008:1823');
+  assert.equal(env.tree(f.owner.id).nodes.size, 6);
+  assert.deepEqual(validateNativeRelationProofReferences({records: f.model.records}), []);
+});
+test('Header owner-only evidence-link audit needs no Shared capture receipt', () => {
+  const f = fixture(); api(); assert.equal(auditComponentEvidenceLinks({recordId: f.owner.id, model: f.model, session: f.session}).ok, true);
+});
+test('Header raw report preserves an unknown native field', () => {
+  const f = fixture(); f.packet.variants[0].source_node.children[0].future_field = 'keep';
+  const raw = auditFigmaContractFacts({record: f.owner, live: f.packet});
+  assert.equal(raw.issues.some(i => i.source_path === '/future_field'), true);
+  assert.deepEqual(raw, structuredClone(raw));
+});
+test('Header-only capture separates PNG clipping preservation from HTML scalar coverage', () => { const f = fixture(); api(); assert.equal(f.session.captures.length, 1); assert.equal(all(f).relation.ok, true); const r = all(f).context; assert.equal(r.ok, true); assert.equal(r.verified_sources.some(x => x.source_path === '/clips_content'), false); assert.ok(Array.isArray(r.export_preserved_sources), 'missing export_preserved_sources'); assert.deepEqual(paths(r.export_preserved_sources), ['/clips_content', '/clips_content']); });
+for (const [name, mutate] of [['missing dependency', f => f.owner.evidence_links.source_dependencies.pop()], ['cross-owner link', f => f.owner.evidence_links.source_dependencies[0].asset_owner.node_id = '1008:1823'], ['bad Mobile suffix', f => f.packet.variants[0].source_node.children[0].name = 'header-logo-compact @2x'], ['unregistered target', f => f.owner.evidence_links.source_dependencies[0].target.component_id = 'unknown'], ['missing nested instance link', f => f.owner.evidence_links.source_dependencies = f.owner.evidence_links.source_dependencies.filter(x => x.id !== 'mobile-product')], ['unknown nested instance', f => { f.packet.variants[0].source_node.children[0].children.push({...node('I1008:1709;9:9', 'INSTANCE', 'unknown', 1, 1), main_component_id: '9:9', instance_properties: {}}); f.packet.capture_meta.node_count = 7; }], ['removed nested instance', f => { f.packet.variants[0].source_node.children[0].children = []; f.packet.capture_meta.node_count = 5; }], ['stale capture', f => f.session.canonical_git_sha = 'd'.repeat(40)]]) test(`Header artwork refuses ${name}`, () => { const f = fixture(); mutate(f); api(); assert.equal(all(f).relation.ok && all(f).context.ok, false); });
+
+test('Header actual boundary ignores incidental Shared main and property provenance', () => {
+  const f = fixture();
+  f.packet.variants[0].source_node.children[0].main_component_id = '1008:1473';
+  f.packet.variants[0].source_node.children[0].instance_properties.Unknown = {type: 'VARIANT', value: 'x', boundVariables: {}};
+  assert.equal(auditComponentEvidenceLinks({recordId: f.owner.id, model: f.model, session: f.session}).ok, true);
+  assert.equal(all(f).relation.ok && all(f).context.ok, true);
+});
+
+// Break protected: treating Shared provenance as an export gate hides a valid
+// consumer-owned PNG boundary, or lets a forged owner-boundary report pass.
+test('Header owner evidence is independent of Shared main variant and property provenance', () => {
+  const f = fixture();
+  const instances = [
+    f.packet.variants[0].source_node.children[0],
+    f.packet.variants[1].source_node.children[0],
+    f.packet.variants[0].source_node.children[0].children[0],
+    f.packet.variants[1].source_node.children[0].children[0]
+  ];
+  for (const instance of instances) {
+    delete instance.main_component_id;
+    instance.instance_properties = {Unexpected: {type: 'VARIANT', value: 'not-a-master', boundVariables: {}}};
+  }
+  for (const link of f.owner.evidence_links.source_dependencies) delete link.target.variant_id;
+  const report = auditComponentEvidenceLinks({recordId: f.owner.id, model: f.model, session: f.session});
+  assert.equal(report.ok, true);
+  assert.ok(report.results.every(item => item.status === 'verified' && item.expected === item.source.node_id && item.actual === item.source.node_id));
+  assert.ok(report.verified_sources.every(source => source.field_path === '/node_id'));
+  assert.equal(all(f).relation.ok && all(f).context.ok, true);
+  const impact = collectEvidenceConsumers({model: f.model, session: f.session, sourceComponentId: 'asset-header-logo-4x', reports: [report]});
+  assert.deepEqual(impact.confirmed, []);
+  assert.deepEqual(impact.possible, [{component_id: 'email-header', asset_owner_node_id: '1008:1823', asset_id: 'header-logo', via: [{component_id: 'email-header', link_id: 'desktop-header'}]}]);
+});
+
+test('Header owner report rejects a forged actual boundary without Shared capture', () => {
+  const f = fixture();
+  const report = auditComponentEvidenceLinks({recordId: f.owner.id, model: f.model, session: f.session});
+  assert.equal(report.ok, true);
+  const clean = collectEvidenceConsumers({model: f.model, session: f.session, sourceComponentId: 'asset-header-logo-4x', reports: [report]});
+  assert.deepEqual(clean.confirmed, []);
+  assert.equal(clean.possible.length, 1);
+  const forged = clone(report);
+  forged.results[0].actual = 'forged-owner-node';
+  const impact = collectEvidenceConsumers({model: f.model, session: f.session, sourceComponentId: 'asset-header-logo-4x', reports: [forged]});
+  assert.deepEqual(impact.confirmed, []);
+  assert.ok(impact.issues.some(issue => issue.code === 'EVIDENCE_REPORT_CONTEXT_MISMATCH'));
+});
+
+for (const [name, mutate] of [
+  ['wrong actual node', f => f.packet.variants[0].source_node.children[0].node_id = '1008:1710'],
+  ['wrong actual name', f => f.packet.variants[0].source_node.children[0].name = 'wrong-logo @4x'],
+  ['wrong actual type', f => f.packet.variants[0].source_node.children[0].node_type = 'FRAME'],
+  ['hidden actual node', f => f.packet.variants[0].source_node.children[0].visible = false],
+  ['broken nested ancestry', f => { const root = f.packet.variants[0].source_node; root.children.push(root.children[0].children.pop()); f.packet.capture_meta.node_count = 6; }],
+  ['wrong actual boundary', f => f.owner.asset_contracts[0].export_boundary.semantic_node_name = 'other @4x']
+]) test('Header owner evidence refuses '+name, () => {
+  const f = fixture(); mutate(f);
+  assert.equal(auditComponentEvidenceLinks({recordId: f.owner.id, model: f.model, session: f.session}).ok, false);
+  assert.equal(all(f).relation.ok && all(f).context.ok, false);
+});
+
+
+test('Header classifies only an unresolved Shared origin inside its exact actual boundary as not required', () => {
+  const f = fixture(), actual = f.packet.variants[0].source_node.children[0];
+  actual.main_component_id = null;
+  const raw = {node_id: actual.node_id, code: 'MAIN_COMPONENT_UNRESOLVED'};
+  f.packet.capture_errors.push(raw);
+  const rawFacts = auditFigmaContractFacts({record: f.owner, live: f.packet});
+  const report = auditComponentEvidenceLinks({recordId: f.owner.id, model: f.model, session: f.session});
+  const disposition = report.capture_diagnostics.find(item => item.raw?.node_id === actual.node_id && item.raw?.code === raw.code);
+  assert.deepEqual(disposition?.raw, raw);
+  assert.equal(disposition?.status, 'not-required');
+  assert.equal(disposition?.reason, 'EVIDENCE_SHARED_ORIGIN_NOT_REQUIRED');
+  assert.ok(!report.issues.some(issue => issue.code === 'EVIDENCE_CAPTURE_ERROR' && issue.capture_error?.node_id === actual.node_id));
+  assert.equal(report.ok, true);
+  assert.ok(rawFacts.issues.some(issue => issue.code === 'FIGMA_CAPTURE_UNSUPPORTED' && issue.details?.some(detail => detail.node_id === actual.node_id && detail.code === raw.code)));
+  const combined = auditFigmaComponentEvidence({record: f.owner, live: f.packet, model: f.model, session: f.session});
+  const rawUnsupported = combined.facts.issues.find(issue => issue.code === 'FIGMA_CAPTURE_UNSUPPORTED');
+  const effectiveUnsupported = combined.effective_facts.issues.find(issue => issue.code === 'FIGMA_CAPTURE_UNSUPPORTED');
+  assert.ok(rawUnsupported?.details?.some(detail => detail.node_id === actual.node_id && detail.code === raw.code));
+  assert.ok(!effectiveUnsupported?.details?.some(detail => detail.node_id === actual.node_id && detail.code === raw.code));
+  assert.equal(combined.evidence_links.ok, true);
+  const proofs = all(f);
+  assert.equal(proofs.relation.ok && proofs.context.ok, true);
+  assert.ok(proofs.relation.verified_sources.every(source => source.source_path !== '/main_component_id' && !source.source_path?.startsWith('/instance_properties')));
+});
+
+for (const [label, mutate] of [
+  ['a different capture error', f => { const actual = f.packet.variants[0].source_node.children[0]; actual.main_component_id = null; f.packet.capture_errors.push({node_id: actual.node_id, code: 'MIXED_VALUE', field: 'fills'}); }],
+  ['an unknown node outside the declared boundary', f => f.packet.capture_errors.push({node_id: '9:9', code: 'MAIN_COMPONENT_UNRESOLVED'})],
+  ['a broken declared boundary', f => { const actual = f.packet.variants[0].source_node.children[0]; actual.main_component_id = null; f.packet.capture_errors.push({node_id: actual.node_id, code: 'MAIN_COMPONENT_UNRESOLVED'}); f.owner.asset_contracts[0].export_boundary.semantic_node_name = 'other @4x'; }],
+]) test('Header keeps MAIN_COMPONENT_UNRESOLVED blocking for ' + label, () => {
+  const f = fixture(); mutate(f);
+  const report = auditComponentEvidenceLinks({recordId: f.owner.id, model: f.model, session: f.session});
+  assert.equal(report.ok, false);
+  assert.ok(report.issues.some(issue => issue.code === 'EVIDENCE_CAPTURE_ERROR'));
+  if (label === 'a different capture error') {
+    const combined = auditFigmaComponentEvidence({record: f.owner, live: f.packet, model: f.model, session: f.session});
+    assert.ok(combined.effective_facts.issues.some(issue => issue.code === 'FIGMA_CAPTURE_UNSUPPORTED' && issue.details?.some(detail => detail.code === 'MIXED_VALUE')));
+  }
+});
+
+
+// Break protected: treating PNG-boundary clipping or Shared instance provenance
+// as verified HTML scalars, or filtering a raw warning without a qualified boundary.
+function headerPlacements(f) {
+  return f.packet.variants.map(variant => variant.source_node.children[0]);
+}
+function headerProducts(f) {
+  return headerPlacements(f).map(placement => placement.children[0]);
+}
+function paths(items) { return items.map(item => item.source_path).sort(); }
+test('Header rendered PNG context preserves false and true clipping without HTML scalar closure', () => {
+  const f = fixture();
+  for (const placement of headerPlacements(f)) placement.clips_content = false;
+  let coverage = all(f).context;
+  assert.equal(coverage.ok, true);
+  assert.ok(Array.isArray(coverage.export_preserved_sources), 'missing export_preserved_sources');
+  assert.ok(Array.isArray(coverage.not_required_sources), 'missing not_required_sources');
+  assert.deepEqual(paths(coverage.export_preserved_sources), ['/clips_content', '/clips_content']);
+  assert.equal(coverage.export_preserved_source_fact_count, 2);
+  assert.equal(coverage.not_required_source_fact_count, 8);
+  assert.equal(coverage.mapped_source_fact_count, coverage.verified_sources.length);
+  assert.ok(!coverage.verified_sources.some(item => item.source_path === '/clips_content'));
+  for (const placement of headerPlacements(f)) placement.clips_content = true;
+  coverage = all(f).context;
+  assert.equal(coverage.ok, true);
+  assert.deepEqual(paths(coverage.export_preserved_sources), ['/clips_content', '/clips_content']);
+  const raw = auditFigmaContractFacts({record: f.owner, live: f.packet});
+  assert.ok(raw.issues.some(item => item.source_path === '/clips_content'));
+  const effective = context.applyNativeContextCoverage({facts: raw, coverage});
+  const placements = new Set(headerPlacements(f).map(item => item.node_id));
+  assert.ok(!effective.issues.some(item => item.source_path === '/clips_content' && placements.has(item.node_id)));
+  assert.equal(effective.issues.filter(item => item.source_path === '/clips_content' && ['15:2037', '230:3679'].includes(item.node_id)).length, 2);
+  const copied = structuredClone(coverage);
+  assert.equal(context.applyNativeContextCoverage({facts: raw, coverage: copied}), raw);
+  const mutated = structuredClone(coverage); mutated.export_preserved_sources.pop();
+  assert.equal(context.applyNativeContextCoverage({facts: raw, coverage: mutated}), raw);
+  f.packet.variants[0].source_node.children[0].future_root_field = 'retain';
+  const futureRaw = auditFigmaContractFacts({record: f.owner, live: f.packet}), futureCoverage = all(f).context;
+  const futureEffective = context.applyNativeContextCoverage({facts: futureRaw, coverage: futureCoverage});
+  assert.ok(futureRaw.issues.some(item => item.source_path === '/future_root_field'));
+  assert.ok(futureEffective.issues.some(item => item.source_path === '/future_root_field'));
+});
+test('Header PNG context marks only complete actual Shared root metadata as not-required', () => {
+  const f = fixture(), coverage = all(f).context;
+  assert.equal(coverage.ok, true);
+  assert.ok(Array.isArray(coverage.not_required_sources), 'missing not_required_sources');
+  assert.deepEqual(paths(coverage.not_required_sources), [
+    '/instance_properties/Product/boundVariables', '/instance_properties/Product/boundVariables',
+    '/instance_properties/Product/type', '/instance_properties/Product/type',
+    '/instance_properties/Product/value', '/instance_properties/Product/value',
+    '/main_component_id', '/main_component_id'
+  ]);
+  assert.ok(!coverage.verified_sources.some(item => item.source_path === '/main_component_id' || item.source_path.startsWith('/instance_properties')));
+  const raw = auditFigmaContractFacts({record: f.owner, live: f.packet});
+  const copied = structuredClone(coverage);
+  copied.not_required_sources.pop();
+  assert.equal(context.applyNativeContextCoverage({facts: raw, coverage: copied}), raw);
+  f.packet.variants[0].source_node.children[0].future_root_field = 'retain';
+  const future = auditFigmaContractFacts({record: f.owner, live: f.packet});
+  assert.ok(future.issues.some(item => item.source_path === '/future_root_field'));
+});
+for (const [label, mutate] of [
+  ['broken export boundary', f => f.owner.asset_contracts[0].export_boundary.semantic_node_name = 'other @4x'],
+  ['wrong PNG profile', f => f.owner.asset_contracts[0].export_profile_id = 'jpeg-2x'],
+  ['wrong rendered source mode', f => f.owner.asset_contracts[0].source_mode_id = 'image-fill'],
+  ['artificial matte', f => f.owner.asset_contracts[0].background.artificial_matte = 'allow'],
+  ['missing actual dependency', f => f.owner.evidence_links.source_dependencies = f.owner.evidence_links.source_dependencies.filter(item => item.id !== 'mobile-header')],
+  ['non Shared actual root', f => f.model.records.find(item => item.id === 'asset-header-logo-compact-4x').identity.library = 'marketing'],
+  ['missing clipping qualifier', f => delete f.packet.variants[0].source_node.children[0].clips_content],
+  ['invalid clipping qualifier', f => f.packet.variants[0].source_node.children[0].clips_content = 'false']
+]) test('Header export context refuses ' + label, () => {
+  const f = fixture(); mutate(f);
+  const coverage = all(f).context;
+  assert.equal(coverage.ok, false);
+  assert.ok(!(coverage.export_preserved_sources ?? []).some(item => item.variant_node_id === '15:2037' && item.node_id === '1008:1709'));
+  assert.ok(!(coverage.not_required_sources ?? []).some(item => item.variant_node_id === '15:2037' && item.node_id === '1008:1709'));
+  assert.ok(coverage.issues.length > 0);
+});
+test('Header export context does not make absent Shared origin fields a new gate', () => {
+  const f = fixture(), mobile = f.packet.variants[0].source_node.children[0];
+  delete mobile.main_component_id;
+  delete mobile.instance_properties;
+  const coverage = all(f).context;
+  assert.equal(coverage.ok, true);
+  assert.ok(Array.isArray(coverage.export_preserved_sources), 'missing export_preserved_sources');
+  assert.ok((coverage.export_preserved_sources ?? []).some(item => item.variant_node_id === '15:2037' && item.source_path === '/clips_content'));
+  assert.ok(!(coverage.not_required_sources ?? []).some(item => item.variant_node_id === '15:2037'));
+  assert.ok(!coverage.verified_sources.some(item => item.variant_node_id === '15:2037' && (item.source_path === '/main_component_id' || item.source_path?.startsWith('/instance_properties'))));
+});
+test('Header combined audit projects only qualified Mobile absolute-child warning to effective facts', () => {
+  const f = fixture(), product = headerProducts(f)[0];
+  product.children.push(node(product.node_id + ';artwork', 'VECTOR', 'product artwork', 1, 1));
+  f.packet.capture_meta.node_count = 7;
+  f.packet.capture_errors.push({node_id: product.node_id, code: 'ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW'});
+  const combined = auditFigmaComponentEvidence({record: f.owner, live: f.packet, model: f.model, session: f.session});
+  const raw = combined.facts.issues.find(item => item.code === 'FIGMA_CAPTURE_UNSUPPORTED');
+  const effective = combined.effective_facts.issues.find(item => item.code === 'FIGMA_CAPTURE_UNSUPPORTED');
+  const disposition = combined.evidence_links.capture_diagnostics.find(item => item.raw?.node_id === product.node_id && item.raw?.code === 'ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW');
+  assert.ok(raw.details.some(detail => detail.node_id === product.node_id && detail.code === 'ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW'));
+  assert.ok(!effective?.details?.some(detail => detail.node_id === product.node_id && detail.code === 'ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW'));
+  assert.equal(disposition?.status, 'verified');
+  assert.deepEqual(combined.facts, auditFigmaContractFacts({record: f.owner, live: f.packet}));
+});
+test('Header combined audit keeps unqualified absolute-child warning effective', () => {
+  const f = fixture(), product = headerProducts(f)[0];
+  f.owner.asset_contracts[0].export_boundary.semantic_node_name = 'broken @4x';
+  f.packet.capture_errors.push({node_id: product.node_id, code: 'ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW'});
+  const combined = auditFigmaComponentEvidence({record: f.owner, live: f.packet, model: f.model, session: f.session});
+  assert.ok(combined.effective_facts.issues.some(item => item.code === 'FIGMA_CAPTURE_UNSUPPORTED' && item.details?.some(detail => detail.node_id === product.node_id && detail.code === 'ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW')));
+});
+test('Header combined audit keeps an ABSOLUTE warning with an extraneous field effective', () => {
+  const f = fixture(), product = headerProducts(f)[0];
+  f.packet.capture_errors.push({node_id: product.node_id, code: 'ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW', field: 'fills'});
+  const combined = auditFigmaComponentEvidence({record: f.owner, live: f.packet, model: f.model, session: f.session});
+  assert.ok(combined.effective_facts.issues.some(item => item.code === 'FIGMA_CAPTURE_UNSUPPORTED' && item.details?.some(detail => detail.node_id === product.node_id && detail.code === 'ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW' && detail.field === 'fills')));
+});
+
+
+for (const [label, mutate, sourcePath] of [
+  ['a malformed known instance property', f => f.packet.variants[0].source_node.children[0].instance_properties.Product.type = 'BOOLEAN', '/instance_properties/Product/type'],
+  ['an unknown instance property field', f => f.packet.variants[0].source_node.children[0].instance_properties.Product.future = 'unverified', '/instance_properties/Product/future']
+]) test('Header export context preserves opaque Shared ' + label + ' without making it an HTML scalar', () => {
+  const f = fixture(), before = all(f).context; mutate(f);
+  const raw = auditFigmaContractFacts({record: f.owner, live: f.packet});
+  const coverage = all(f).context;
+  assert.ok(Array.isArray(coverage.not_required_sources), 'missing not_required_sources');
+  assert.deepEqual(paths(coverage.export_preserved_sources), paths(before.export_preserved_sources));
+  assert.ok(coverage.not_required_sources.some(item => item.variant_node_id === '15:2037' && item.source_path === sourcePath));
+  assert.ok(!coverage.verified_sources.some(item => item.variant_node_id === '15:2037' && item.source_path === sourcePath));
+  const effective = context.applyNativeContextCoverage({facts: raw, coverage});
+  assert.ok(raw.issues.some(item => item.source_path === sourcePath));
+  assert.ok(!effective.issues.some(item => item.source_path === sourcePath));
+});
+test('Header rejects mutation of either authenticated new context collection on the original report', () => {
+  const f = fixture(), raw = auditFigmaContractFacts({record: f.owner, live: f.packet});
+  const exportCoverage = all(f).context;
+  assert.ok(Array.isArray(exportCoverage.export_preserved_sources), 'missing export_preserved_sources');
+  exportCoverage.export_preserved_sources.pop();
+  assert.equal(context.applyNativeContextCoverage({facts: raw, coverage: exportCoverage}), raw);
+  const originCoverage = all(f).context;
+  assert.ok(Array.isArray(originCoverage.not_required_sources), 'missing not_required_sources');
+  originCoverage.not_required_sources.pop();
+  assert.equal(context.applyNativeContextCoverage({facts: raw, coverage: originCoverage}), raw);
+});

@@ -11,7 +11,7 @@
   ],
   "properties": {
     "schema_version": {
-      "const": "2.1.0"
+      "const": "2.3.0"
     },
     "registry": {
       "$ref": "#/$defs/registry"
@@ -49,7 +49,10 @@
           ]
         },
         "status": {
-          "enum": ["shadow", "active"]
+          "enum": [
+            "shadow",
+            "active"
+          ]
         },
         "source": {
           "type": "object",
@@ -80,7 +83,8 @@
                   "role": {
                     "enum": [
                       "library",
-                      "templates"
+                      "templates",
+                      "remote-reference"
                     ]
                   },
                   "node_id": {
@@ -103,6 +107,36 @@
       }
     },
     "component": {
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "figma": {
+                "type": "object",
+                "properties": {
+                  "remote_source": {}
+                },
+                "required": [
+                  "remote_source"
+                ]
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "identity": {
+                "type": "object",
+                "properties": {
+                  "figma_name": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9]+(?:/[A-Za-z0-9 @-]+)+$"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
       "type": "object",
       "additionalProperties": false,
       "required": [
@@ -143,7 +177,7 @@
           "properties": {
             "figma_name": {
               "type": "string",
-              "pattern": "^[A-Za-z0-9]+(?:/[A-Za-z0-9 @-]+)+$"
+              "minLength": 1
             },
             "node_kind": {
               "enum": [
@@ -203,6 +237,19 @@
               "type": "string",
               "pattern": "^[0-9]+:[0-9]+$"
             },
+            "remote_source": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "component_key"
+              ],
+              "properties": {
+                "component_key": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
             "verified_at": {
               "type": "string",
               "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
@@ -255,6 +302,9 @@
           "items": {
             "$ref": "#/$defs/assetContract"
           }
+        },
+        "evidence_links": {
+          "$ref": "#/$defs/evidenceLinks"
         },
         "contracts": {
           "type": "object",
@@ -330,6 +380,197 @@
           "type": "array",
           "items": {
             "$ref": "#/$defs/constraint"
+          }
+        }
+      }
+    },
+    "evidenceLinks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "foundation_values",
+        "source_dependencies"
+      ],
+      "properties": {
+        "foundation_values": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/foundationEvidenceLink"
+          }
+        },
+        "source_dependencies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sourceEvidenceLink"
+          }
+        },
+        "fact_proofs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/factProof"
+          }
+        },
+        "normative_decisions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/normativeDecision"
+          }
+        },
+        "native_fact_proofs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nativeFactProof"
+          }
+        },
+        "native_relation_proofs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nativeRelationProof"
+          }
+        },
+        "native_variable_proofs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nativeVariableProof"
+          }
+        },
+        "native_context_proofs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nativeContextProof"
+          }
+        }
+      }
+    },
+    "foundationEvidenceLink": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "source",
+        "target",
+        "comparison"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "variant_node_id",
+            "node_id",
+            "field_path"
+          ],
+          "properties": {
+            "variant_node_id": {
+              "type": "string",
+              "pattern": "^[0-9]+:[0-9]+$"
+            },
+            "node_id": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+:[0-9]+|I[0-9]+:[0-9]+(?:;[0-9]+:[0-9]+)+)$"
+            },
+            "field_path": {
+              "type": "string",
+              "pattern": "^(?:/(?:[^~/*]|~[01])*)+$"
+            }
+          }
+        },
+        "target": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "source_id",
+            "pointer"
+          ],
+          "properties": {
+            "source_id": {
+              "const": "rendering-foundation"
+            },
+            "pointer": {
+              "enum": [
+                "/shell/background_color",
+                "/shell/max_width_px",
+                "/shell/horizontal_inset_px"
+              ]
+            }
+          }
+        },
+        "comparison": {
+          "enum": [
+            "pixel-number",
+            "opaque-solid-color"
+          ]
+        }
+      }
+    },
+    "sourceEvidenceLink": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "source",
+        "target",
+        "asset_owner"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "variant_node_id",
+            "node_id"
+          ],
+          "properties": {
+            "variant_node_id": {
+              "type": "string",
+              "pattern": "^[0-9]+:[0-9]+$"
+            },
+            "node_id": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+:[0-9]+|I[0-9]+:[0-9]+(?:;[0-9]+:[0-9]+)+)$"
+            }
+          }
+        },
+        "target": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "component_id"
+          ],
+          "properties": {
+            "component_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "variant_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            }
+          }
+        },
+        "asset_owner": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "node_id"
+          ],
+          "properties": {
+            "node_id": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+:[0-9]+|I[0-9]+:[0-9]+(?:;[0-9]+:[0-9]+)+)$"
+            },
+            "asset_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            }
           }
         }
       }
@@ -515,7 +756,10 @@
           "pattern": " @(?:2x|4x)$"
         },
         "source_viewport": {
-          "enum": ["mobile", "desktop"]
+          "enum": [
+            "mobile",
+            "desktop"
+          ]
         },
         "source_mode_id": {
           "type": "string",
@@ -1244,6 +1488,23 @@
                       "minLength": 1
                     }
                   }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "kind",
+                    "proof_id"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "const": "contract-proof"
+                    },
+                    "proof_id": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                    }
+                  }
                 }
               ]
             }
@@ -1748,6 +2009,23 @@
         "visible": {
           "type": "boolean"
         },
+        "remote_source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "remote",
+            "component_key"
+          ],
+          "properties": {
+            "remote": {
+              "const": true
+            },
+            "component_key": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
         "layout": {
           "type": "object",
           "additionalProperties": false,
@@ -1973,7 +2251,10 @@
           "type": "number"
         },
         "minimum_width_px": {
-          "type": "number"
+          "type": [
+            "number",
+            "null"
+          ]
         },
         "maximum_width_px": {
           "type": "number"
@@ -2209,6 +2490,792 @@
           "$ref": "#/$defs/element"
         }
       }
+    },
+    "factProofSelector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "component_id",
+        "variant_node_id",
+        "node_id"
+      ],
+      "properties": {
+        "component_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "variant_node_id": {
+          "type": "string",
+          "pattern": "^[0-9]+:[0-9]+$"
+        },
+        "node_id": {
+          "type": "string",
+          "pattern": "^(?:[0-9]+:[0-9]+|I[0-9]+:[0-9]+(?:;[0-9]+:[0-9]+)+)$"
+        }
+      }
+    },
+    "factProof": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "contract_path",
+            "sources",
+            "field"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "kind": {
+              "const": "source-value-set"
+            },
+            "contract_path": {
+              "type": "string",
+              "pattern": "^/contracts/(?:mobile|desktop|variant_contracts/[0-9]+)/root(?:/children/[0-9]+)*/facts/[0-9]+/value$"
+            },
+            "sources": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/factProofSelector"
+              }
+            },
+            "field": {
+              "enum": [
+                "color",
+                "dimensions"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "contract_path",
+            "consumer_component_id",
+            "asset_contract_id",
+            "placements"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "kind": {
+              "const": "consumer-geometry"
+            },
+            "contract_path": {
+              "type": "string",
+              "pattern": "^/contracts/(?:mobile|desktop|variant_contracts/[0-9]+)/root(?:/children/[0-9]+)*/facts/[0-9]+/value$"
+            },
+            "consumer_component_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "asset_contract_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "placements": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "mobile",
+                "desktop"
+              ],
+              "properties": {
+                "mobile": {
+                  "$ref": "#/$defs/factProofSelector"
+                },
+                "desktop": {
+                  "$ref": "#/$defs/factProofSelector"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "contract_path",
+            "asset_owner_id",
+            "asset_contract_id"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "kind": {
+              "const": "asset-profile"
+            },
+            "contract_path": {
+              "type": "string",
+              "pattern": "^/contracts/(?:mobile|desktop|variant_contracts/[0-9]+)/root(?:/children/[0-9]+)*/facts/[0-9]+/value$"
+            },
+            "asset_owner_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "asset_contract_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "contract_path",
+            "source"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "kind": {
+              "const": "style-usage"
+            },
+            "contract_path": {
+              "type": "string",
+              "pattern": "^/contracts/(?:mobile|desktop|variant_contracts/[0-9]+)/root(?:/children/[0-9]+)*/facts/[0-9]+/value$"
+            },
+            "source": {
+              "$ref": "#/$defs/factProofSelector"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "contract_path",
+            "source",
+            "asset_contract_id"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "kind": {
+              "const": "mobile-image-auto"
+            },
+            "contract_path": {
+              "type": "string",
+              "pattern": "^/contracts/(?:mobile|desktop|variant_contracts/[0-9]+)/root(?:/children/[0-9]+)*/facts/[0-9]+/value$"
+            },
+            "source": {
+              "$ref": "#/$defs/factProofSelector"
+            },
+            "asset_contract_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "contract_path",
+            "card",
+            "content",
+            "image",
+            "asset_contract_id"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "kind": {
+              "const": "content-height-cover"
+            },
+            "contract_path": {
+              "type": "string",
+              "pattern": "^/contracts/(?:mobile|desktop|variant_contracts/[0-9]+)/root(?:/children/[0-9]+)*/facts/[0-9]+/value$"
+            },
+            "card": {
+              "$ref": "#/$defs/factProofSelector"
+            },
+            "content": {
+              "$ref": "#/$defs/factProofSelector"
+            },
+            "image": {
+              "$ref": "#/$defs/factProofSelector"
+            },
+            "asset_contract_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "contract_path",
+            "source",
+            "paint_index",
+            "decision_id"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "kind": {
+              "const": "approved-css-gradient-angle"
+            },
+            "contract_path": {
+              "type": "string",
+              "pattern": "^/contracts/(?:mobile|desktop|variant_contracts/[0-9]+)/root(?:/children/[0-9]+)*/facts/[0-9]+/value$"
+            },
+            "source": {
+              "$ref": "#/$defs/factProofSelector"
+            },
+            "paint_index": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "decision_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            }
+          }
+        }
+      ]
+    },
+    "normativeDecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "owner_id",
+        "targets",
+        "authorization"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "kind": {
+          "const": "css-linear-gradient-angle"
+        },
+        "owner_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "targets": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "viewport",
+              "element_id",
+              "fact_id",
+              "contract_path",
+              "value_sha256",
+              "context_sha256",
+              "source",
+              "paint_index"
+            ],
+            "properties": {
+              "viewport": {
+                "enum": [
+                  "mobile",
+                  "desktop"
+                ]
+              },
+              "element_id": {
+                "type": "string",
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+              },
+              "fact_id": {
+                "type": "string",
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+              },
+              "contract_path": {
+                "type": "string",
+                "pattern": "^/contracts/(?:mobile|desktop|variant_contracts/[0-9]+)/root(?:/children/[0-9]+)*/facts/[0-9]+/value$"
+              },
+              "value_sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "context_sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "source": {
+                "$ref": "#/$defs/factProofSelector"
+              },
+              "paint_index": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        },
+        "authorization": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "user_instruction",
+            "scope",
+            "approved_spec"
+          ],
+          "properties": {
+            "user_instruction": {
+              "type": "string",
+              "minLength": 1
+            },
+            "scope": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "owner_id",
+                "contract_paths"
+              ],
+              "properties": {
+                "owner_id": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                },
+                "contract_paths": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "pattern": "^/contracts/(?:mobile|desktop|variant_contracts/[0-9]+)/root(?:/children/[0-9]+)*/facts/[0-9]+/value$"
+                  }
+                }
+              }
+            },
+            "approved_spec": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "path",
+                "git_sha"
+              ],
+              "properties": {
+                "path": {
+                  "type": "string",
+                  "pattern": "^docs/superpowers/specs/[a-z0-9-]+\\.md$"
+                },
+                "git_sha": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{40}$"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "nativeFactProof": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "source",
+            "contract_path"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "kind": {
+              "const": "uniform-corners"
+            },
+            "source": {
+              "$ref": "#/$defs/factProofSelector"
+            },
+            "contract_path": {
+              "type": "string",
+              "pattern": "^/contracts/(?:mobile|desktop|variant_contracts/[0-9]+)/root(?:/children/[0-9]+)*/facts/[0-9]+/value$"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "source",
+            "contract_path"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "kind": {
+              "const": "text-resize-alias"
+            },
+            "source": {
+              "$ref": "#/$defs/factProofSelector"
+            },
+            "contract_path": {
+              "type": "string",
+              "pattern": "^/contracts/(?:mobile|desktop|variant_contracts/[0-9]+)/root(?:/children/[0-9]+)*/facts/[0-9]+/value$"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "source",
+            "contract_path"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "kind": {
+              "const": "text-alignment-alias"
+            },
+            "source": {
+              "$ref": "#/$defs/factProofSelector"
+            },
+            "contract_path": {
+              "type": "string",
+              "pattern": "^/contracts/(?:mobile|desktop|variant_contracts/[0-9]+)/root(?:/children/[0-9]+)*/facts/[0-9]+/value$"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "source",
+            "contract_path",
+            "axis"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "kind": {
+              "const": "axis-sizing-alias"
+            },
+            "source": {
+              "$ref": "#/$defs/factProofSelector"
+            },
+            "contract_path": {
+              "type": "string",
+              "pattern": "^/contracts/(?:mobile|desktop|variant_contracts/[0-9]+)/root(?:/children/[0-9]+)*/facts/[0-9]+/value$"
+            },
+            "axis": {
+              "enum": [
+                "primary",
+                "counter"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "nativeRelationProof": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "source",
+            "element_path"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "kind": {
+              "const": "element-structure"
+            },
+            "source": {
+              "$ref": "#/$defs/factProofSelector"
+            },
+            "element_path": {
+              "type": "string",
+              "pattern": "^/contracts/(?:mobile|desktop|variant_contracts/[0-9]+)/root(?:/children/[0-9]+)*$"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "source",
+            "default_variant_id"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "kind": {
+              "const": "owner-controls"
+            },
+            "source": {
+              "$ref": "#/$defs/factProofSelector"
+            },
+            "default_variant_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            }
+          }
+        }
+      ]
+    },
+    "nativeVariableProof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "source",
+        "contract_path",
+        "binding_path",
+        "variable"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "kind": {
+          "const": "variable-binding"
+        },
+        "source": {
+          "$ref": "#/$defs/factProofSelector"
+        },
+        "contract_path": {
+          "type": "string",
+          "pattern": "^/contracts/(?:mobile|desktop|variant_contracts/[0-9]+)/root(?:/children/[0-9]+)*/facts/[0-9]+/value$"
+        },
+        "binding_path": {
+          "type": "string",
+          "pattern": "^/variable_bindings/(?:(?:paddingLeft|paddingTop|paddingRight|paddingBottom|itemSpacing|topLeftRadius|topRightRadius|bottomLeftRadius|bottomRightRadius)/id|(?:fills|textRangeFills)/[0-9]+/id)$"
+        },
+        "variable": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "name",
+            "key",
+            "collection_id",
+            "collection_name",
+            "resolved_type"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "key": {
+              "type": "string",
+              "minLength": 1
+            },
+            "collection_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "collection_name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "resolved_type": {
+              "enum": [
+                "FLOAT",
+                "COLOR"
+              ]
+            }
+          }
+        },
+        "paint_source_path": {
+          "type": "string",
+          "pattern": "^/(?:fills/[0-9]+/stops/[0-9]+|styled_text_segments/[0-9]+/fills/[0-9]+)/color$"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "paint_source_path"
+            ],
+            "type": "object",
+            "properties": {
+              "paint_source_path": {}
+            }
+          },
+          "then": {
+            "properties": {
+              "binding_path": {
+                "pattern": "^/variable_bindings/(?:fills|textRangeFills)/[0-9]+/id$",
+                "type": "string"
+              },
+              "variable": {
+                "properties": {
+                  "resolved_type": {
+                    "const": "COLOR"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "else": {
+            "properties": {
+              "binding_path": {
+                "pattern": "^/variable_bindings/(?:(?:paddingLeft|paddingTop|paddingRight|paddingBottom|itemSpacing|topLeftRadius|topRightRadius|bottomLeftRadius|bottomRightRadius)/id|fills/0/id)$",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        }
+      ]
+    },
+    "nativeContextProof": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "structure_proof_id"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "kind": {
+              "enum": [
+                "html-element-context",
+                "rendered-artwork-context",
+                "image-fill-paint-context",
+                "image-fill-inert-axis-context"
+              ]
+            },
+            "structure_proof_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "structure_proof_id",
+            "owner_component_id",
+            "dependency_link_id"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "kind": {
+              "const": "source-artwork-context"
+            },
+            "structure_proof_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "owner_component_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "dependency_link_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "kind",
+            "structure_proof_id",
+            "source_structure_proof_id"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "kind": {
+              "const": "image-fill-consumer-context"
+            },
+            "structure_proof_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "source_structure_proof_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            }
+          }
+        }
+      ]
     }
   }
 }

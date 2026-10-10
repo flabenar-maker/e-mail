@@ -11,6 +11,7 @@ import {
 import {
   compareGeneratedDocs,
   loadGeneratedDocModel,
+  renderGeneratedDoc,
   renderAllGeneratedDocs,
 } from "../../scripts/lib/generated-docs.mjs";
 import { readStrictYaml } from "../../scripts/lib/strict-yaml.mjs";
@@ -129,7 +130,11 @@ test("component traversal uses library order and stable ids", async () => {
   const registries = await loadComponentRegistries({ repoRoot });
   const records = listComponentRecords(registries);
 
-  assert.equal(records.length, 61);
+  assert.equal(records.length, 63);
+  const remoteIds = new Set(["icon-account-circle-line-remote", "asset-partner-mark-remote"]);
+  const remote = records.filter(({ record }) => remoteIds.has(record.id));
+  assert.deepEqual(remote.map(({ library, record }) => [library, record.id, record.identity.figma_name, record.figma.node_id, record.figma.remote_source.component_key]), [["shared", "asset-partner-mark-remote", "marafon", "439:4098", "be6c194606af9516b3cc07847f52d6db0c8cb6d7"], ["shared", "icon-account-circle-line-remote", "account-circle-line", "1331:1646", "8ea141edd5ec0679825e7fde633e211282b2405b"]]);
+  assert.equal(records.filter(({ record }) => !remoteIds.has(record.id)).length, 61);
   assert.deepEqual(
     [...new Set(records.map(({ library }) => library))],
     ["shared", "marketing", "service"],
@@ -161,12 +166,12 @@ test("all generated references share a deterministic provenance header", async (
   const second = await renderCanonical();
 
   assert.deepEqual(first, second);
-  assert.equal(first.size, 4);
+  assert.equal(first.size, 6);
 
   for (const [path, content] of first) {
     assert.match(
       content,
-      /^<!-- GENERATED FILE — DO NOT EDIT MANUALLY\. -->\n<!-- renderer: (component-registry|typography-registry|asset-registry|naming-reference) -->\n<!-- source-digest: sha256:[0-9a-f]{64} -->\n<!-- schema-versions: [^\n]+ -->\n/u,
+      /^<!-- GENERATED FILE — DO NOT EDIT MANUALLY\. -->\n<!-- renderer: (component-registry|typography-registry|asset-registry|naming-reference|workflow-checkpoint) -->\n<!-- source-digest: sha256:[0-9a-f]{64} -->\n<!-- schema-versions: [^\n]+ -->\n/u,
       path,
     );
     assert.doesNotMatch(content.slice(0, 300), /generated-at|timestamp/iu);
@@ -248,7 +253,6 @@ test("typography registry derives the Figma description from semantic text and f
   delete style.figma_description;
   style.figma_description_semantics =
     "Главный выразительный текст Desktop для Hero-заголовка и крупного результата операции. Не использовать как обычный заголовок блока или карточки. Пара: Mobile/Display.";
-  style.figma_style_id = "S:testdisplay,";
   style.font_size_px = 33;
   style.font.figma_style = "Medium";
   style.line_height = { unit: "px", value: 30 };
@@ -274,15 +278,16 @@ test("generated comparison reports missing and stale files by exact path", async
       copyFixtureFile(repoRoot, fixture.root, path),
     ),
   );
+  const manifest = await manifestWithGeneratedDocs(fixture.root);
   await Promise.all(
-    generatedSources.map(({ path }) =>
-      rm(join(fixture.root, path), { force: true }),
-    ),
+    manifest.generated_docs.map(({ output_source_id }) => {
+      const output = manifest.sources.find(({ id }) => id === output_source_id);
+      return rm(join(fixture.root, output.path), { force: true });
+    }),
   );
 
-  const manifest = await manifestWithGeneratedDocs(fixture.root);
   const model = await loadGeneratedDocModel({ repoRoot: fixture.root, manifest });
-  assert.equal(model.schemaVersions.components, "2.1.0");
+  assert.equal(model.schemaVersions.components, "2.3.0");
 
   const rendered = await renderAllGeneratedDocs({
     repoRoot: fixture.root,
@@ -316,4 +321,156 @@ test("generated comparison reports missing and stale files by exact path", async
     ),
     [["GENERATED_DOC_STALE", `/${stalePath}`]],
   );
+});
+
+function typographyDefinition() {
+  return generatedDefinitions.find(({ id }) => id === "typography-registry");
+}
+
+async function typographyModel() {
+  const canonical = await loadGeneratedDocModel({
+    repoRoot,
+    manifest: await manifestWithGeneratedDocs(),
+  });
+  return {
+    ...canonical,
+    registries: structuredClone(canonical.registries),
+    typography: structuredClone(canonical.typography),
+  };
+}
+
+function renderTypography(model) {
+  return renderGeneratedDoc({ definition: typographyDefinition(), model });
+}
+
+function styleSection(content, name) {
+  const start = content.indexOf(`### ${name}\n`);
+  assert.notEqual(start, -1, name);
+  const next = content.indexOf("\n### ", start + 1);
+  return content.slice(start, next === -1 ? undefined : next);
+}
+
+function recordAt(model, id) {
+  return listComponentRecords(model.registries).find(({ record }) => record.id === id)?.record;
+}
+
+function pointer(root, path) {
+  return path.slice(1).split("/").reduce((value, key) => value?.[key], root);
+}
+
+function semanticStyleLink(record) {
+  const link = record.contracts.figma_fact_links.find(
+    ({ source_path }) => source_path === "/text_style/figma_style_id",
+  );
+  assert.ok(link);
+  return link;
+}
+
+test("typography registry records exact semantic consumers with base and variant ownership", async () => {
+  const model = await typographyModel();
+  const before = structuredClone({ registries: model.registries, typography: model.typography });
+  const content = renderTypography(model);
+  const section = styleSection(content, "Mobile/Body/Large");
+
+  assert.match(section, /- Consumers: `badge-step-number`/u);
+  assert.match(section, /  - Component `badge-step-number`; viewport `mobile`; variant `mobile-neutral`; element `root-label`/u);
+  assert.match(section, /  - Component `badge-step-number`; viewport `mobile`; variant `mobile-accent`; element `root-label`/u);
+  assert.match(section, /Figma style ID: `S:a3c66207faa33c3c4f22e054bd4d177b33d616c8,`/u);
+  assert.deepEqual({ registries: model.registries, typography: model.typography }, before, "projection must not rewrite local contract facts");
+  assert.equal((content.match(/^  - Component /gmu) ?? []).length, 364);
+  assert.equal((content.match(/^- Consumers: `.+$/gmu) ?? []).length, 15);
+});
+
+test("typography registry deduplicates an identical semantic link but retains typed references and distinct tuple identity", async () => {
+  const model = await typographyModel();
+  const badge = recordAt(model, "badge-step-number");
+  const link = semanticStyleLink(badge);
+  badge.contracts.figma_fact_links.push(structuredClone(link));
+  badge.contracts.mobile.root.facts.push({
+    id: "typed-typography-reference",
+    value: {
+      type: "foundation-reference", foundation_id: "typography",
+      definition_group: "styles", definition_id: "mobile-display",
+    },
+  });
+  const content = renderTypography(model);
+  const mobile = styleSection(content, "Mobile/Body/Large");
+  const detail = "Component `badge-step-number`; viewport `mobile`; variant `mobile-neutral`; element `root-label`";
+  assert.equal(mobile.split(detail).length - 1, 1);
+  const desktop = styleSection(content, "Mobile/Display");
+  assert.match(desktop, /- Consumers: `badge-step-number`/u);
+  assert.match(desktop, /  - Component `badge-step-number`; viewport `mobile`; variant `default`; element `root`/u);
+});
+
+test("typography registry rejects malformed advertised semantic links instead of rendering them unused", async () => {
+  const mutations = [
+    (record, link) => { pointer(record, link.contract_path.replace(/\/value\/value$/u, "")).value.value = "S:unknown,"; },
+    (record, link) => { pointer(record, link.contract_path.replace(/\/value\/value$/u, "")).provenance.node_id = "18:2947"; },
+    (_record, link) => { link.variant_node_id = "18:2947"; },
+    (_record, link) => { link.contract_path = link.contract_path.replace(/\/value\/value$/u, "/value/not-value"); },
+  ];
+  for (const mutate of mutations) {
+    const model = await typographyModel();
+    const badge = recordAt(model, "badge-step-number");
+    mutate(badge, semanticStyleLink(badge));
+    assert.throws(
+      () => renderTypography(model),
+      (error) => error?.code === "GENERATED_TYPOGRAPHY_CONSUMER_INVALID",
+    );
+  }
+});
+
+test("snapshot-only, detached, and empty style IDs do not become typography consumers", async () => {
+  const model = await typographyModel();
+  const badge = recordAt(model, "badge-step-number");
+  badge.contracts.source_variants = [{
+    variant_node_id: "snapshot-only", source_node: {
+      node_id: "snapshot-only", text_style: { figma_style_id: "S:a3c66207faa33c3c4f22e054bd4d177b33d616c8," },
+    },
+  }];
+  badge.contracts.mobile.root.facts.push({
+    id: "detached-empty-style-id",
+    value: { type: "string", value: "" },
+    provenance: { kind: "figma-literal", node_id: "18:2942" },
+  });
+  const content = renderTypography(model);
+  assert.doesNotMatch(content, /snapshot-only/u);
+  assert.match(styleSection(content, "Mobile/Body/Large"), /Component `badge-step-number`/u);
+});
+test("typography consumer projection rejects missing ownership and ambiguous exact style identities", async () => {
+  const cases = [
+    (model, record, link) => { record.contracts.figma_fact_links = record.contracts.figma_fact_links.filter((item) => item !== link); },
+    (model) => { model.typography.styles[1].figma_style_id = model.typography.styles[0].figma_style_id; },
+  ];
+  for (const mutate of cases) {
+    const model = await typographyModel();
+    const record = recordAt(model, "badge-step-number");
+    mutate(model, record, semanticStyleLink(record));
+    assert.throws(() => renderTypography(model), (error) => error?.code === "GENERATED_TYPOGRAPHY_CONSUMER_INVALID");
+  }
+});
+
+test("snapshot-only record and detached empty ID do not create a typography consumer", async () => {
+  const model = await typographyModel();
+  const snapshot = structuredClone(recordAt(model, "badge-step-number"));
+  snapshot.id = "snapshot-only-consumer";
+  snapshot.contracts.figma_fact_links = [];
+  const stripSemanticStyleFacts = (node) => {
+    if (!node || typeof node !== "object") return;
+    if (Array.isArray(node.facts)) node.facts = node.facts.filter(({ id }) => id !== "figma-style-id");
+    for (const child of node.children ?? []) stripSemanticStyleFacts(child);
+  };
+  for (const contract of [...Object.values(snapshot.contracts).filter((value) => value?.root), ...(snapshot.contracts.variant_contracts ?? [])]) stripSemanticStyleFacts(contract.root);
+  snapshot.contracts.source_variants = [{ variant_node_id: "snapshot-only", source_node: { node_id: "snapshot-only", text_style: { figma_style_id: "S:a3c66207faa33c3c4f22e054bd4d177b33d616c8," } } }];
+  snapshot.contracts.mobile.root.facts.push({ id: "detached-empty-style-id", value: { type: "string", value: "" }, provenance: { kind: "figma-literal", node_id: "18:2942" } });
+  model.registries.shared.components.push(snapshot);
+  assert.doesNotMatch(renderTypography(model), /snapshot-only-consumer|snapshot-only/u);
+});
+
+test("typography consumer association preserves a local numeric override without metric matching", async () => {
+  const model = await typographyModel();
+  const badge = recordAt(model, "badge-step-number");
+  badge.contracts.mobile.root.children[0].facts.push({ id: "local-font-weight-override", value: { type: "number", value: 900 }, provenance: { kind: "figma-literal", node_id: "18:2941" } });
+  assert.match(styleSection(renderTypography(model), "Mobile/Body/Large"), /Component `badge-step-number`; viewport `mobile`; variant `mobile-neutral`; element `root-label`/u);
+  assert.equal(badge.contracts.mobile.root.children[0].facts.at(-1).value.value, 900);
 });

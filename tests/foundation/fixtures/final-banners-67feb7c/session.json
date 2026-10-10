@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.1.0",
+  "canonical_git_sha": "67feb7c15bb5b7fcea082f67222d9b8ced909978",
+  "session_nonce": "392a7d2183e44c2906e44e9a8d8fa013a2db73a9b0e0259286dcb8b2abf49e49",
+  "started_at": "2026-10-10T15:14:54.000Z",
+  "completed_at": "2026-10-10T15:21:59.000Z",
+  "component_ids": [
+    "banner-hero",
+    "banner-secondary",
+    "button-primary",
+    "button-secondary"
+  ],
+  "captures": [
+    {
+      "component_id": "banner-hero",
+      "receipt_id": "banner-hero-67feb7c-0",
+      "tool": "use_figma",
+      "request_nonce": "da273f2209a4168d6ae5267ce7764ca2d8480b78c9aebb942b471398cf0bcc9b",
+      "requested_at": "2026-10-10T15:14:54.000Z",
+      "received_at": "2026-10-10T15:14:58.000Z",
+      "packet_path": "packets/banner-hero.json",
+      "packet_sha256": "7f8f1c5aad05989d3be7f7983de5f42045f3ddec33122d7c436d7abcd7c99cd2"
+    },
+    {
+      "component_id": "banner-secondary",
+      "receipt_id": "banner-secondary-67feb7c-0",
+      "tool": "use_figma",
+      "request_nonce": "a08f3eb60ee966a1be38d4b1f47aed8c08093eab11240f08a159fd6fdd5cf393",
+      "requested_at": "2026-10-10T15:14:58.000Z",
+      "received_at": "2026-10-10T15:15:00.000Z",
+      "packet_path": "packets/banner-secondary.json",
+      "packet_sha256": "5b1fde38e8bf99793cd2724b9352caa5c00fda2c97687ddda678358dc8a22d1b"
+    },
+    {
+      "component_id": "button-primary",
+      "receipt_id": "button-primary-67feb7c-0",
+      "tool": "use_figma",
+      "request_nonce": "6824cd27707cc1cda3ac2a7fa834060b04cdfe0eb73ca624609535eaebb652a1",
+      "requested_at": "2026-10-10T15:15:00.000Z",
+      "received_at": "2026-10-10T15:15:00.000Z",
+      "packet_path": "packets/button-primary.json",
+      "packet_sha256": "d7154559bddd5e02d29e199ccd88789615bfb69768d7b2e699a3cb17c1dadd2f"
+    },
+    {
+      "component_id": "button-secondary",
+      "receipt_id": "button-secondary-67feb7c-0",
+      "tool": "use_figma",
+      "request_nonce": "07a6da24b1e427f7fe109b8f68189cba2e8e5604b5aa3a1114b0010d71c6e5a3",
+      "requested_at": "2026-10-10T15:21:56.000Z",
+      "received_at": "2026-10-10T15:21:59.000Z",
+      "packet_path": "packets/button-secondary.json",
+      "packet_sha256": "dfef6a8e04117756df651279d7af4c67ec94b55c9e3b29fb6486acbc1fb41170"
+    }
+  ]
+}

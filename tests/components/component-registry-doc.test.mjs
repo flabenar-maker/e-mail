@@ -56,6 +56,7 @@ test("section model has one fixed order and skips empty optional sections", asyn
   minimal.properties = [];
   minimal.constraints = [];
   minimal.documentation.critical_constraint_ids = [];
+  minimal.evidence_links = { foundation_values: [], source_dependencies: [] };
   assert.deepEqual(
     listComponentDocumentationSections(minimal).map(({ id }) => id),
     [
@@ -209,4 +210,50 @@ test("exported traversal preserves viewport and tree order", async () => {
     "desktop:/contracts/desktop/root:root",
     "desktop:/contracts/desktop/root/children/0:content",
   ]);
+});
+
+
+test("evidence links activate only the existing dependencies section and render canonical forms", async () => {
+  const { index } = await loadContext();
+  const empty = structuredClone(record(index, "email-template"));
+  const before = listComponentDocumentationSections(empty);
+  empty.evidence_links = { foundation_values: [], source_dependencies: [] };
+  assert.deepEqual(listComponentDocumentationSections(empty), before);
+
+  const template = structuredClone(record(index, "email-template"));
+  template.evidence_links = {
+    foundation_values: [{
+      id: "mobile-shell-left-inset",
+      source: { variant_node_id: "1102:6", node_id: "1102:6", field_path: "/layout/padding/left" },
+      target: { source_id: "rendering-foundation", pointer: "/shell/horizontal_inset_px" },
+      comparison: "pixel-number",
+    }],
+    source_dependencies: [],
+  };
+  const activation = structuredClone(template);
+  activation.variants = [];
+  activation.properties = [];
+  activation.constraints = [];
+  activation.documentation.critical_constraint_ids = [];
+  const inactiveSections = listComponentDocumentationSections({ ...activation, evidence_links: { foundation_values: [], source_dependencies: [] } });
+  assert.deepEqual(listComponentDocumentationSections(activation).map(({ id }) => id), [...inactiveSections.map(({ id }) => id), "constraints-and-dependencies"]);
+  const output = renderComponentRegistrySection(template, index);
+  assert.match(output, /- Evidence link \(foundation\): \x60mobile-shell-left-inset\x60 — source variant \x601102:6\x60, node \x601102:6\x60, field \x60\/layout\/padding\/left\x60 → foundation \x60rendering-foundation\x60 \x60\/shell\/horizontal_inset_px\x60; comparison \x60pixel-number\x60/u);
+  const header = structuredClone(record(index, "email-header"));
+  header.evidence_links = { foundation_values: [], source_dependencies: [{ id: "desktop-header-logo-source", source: { variant_node_id: "230:3679", node_id: "1008:1823" }, target: { component_id: "asset-header-logo-4x", variant_id: "product-cupis" }, asset_owner: { node_id: "1008:1823", asset_id: "header-logo" } }] };
+  const sourceOutput = renderComponentRegistrySection(header, index);
+  assert.match(sourceOutput, /- Evidence link \(source\): \x60desktop-header-logo-source\x60 — source variant \x60230:3679\x60, instance \x601008:1823\x60 → component \x60asset-header-logo-4x\x60 \(\x60Asset\/Header-Logo @4x\x60\); target variant \x60product-cupis\x60; asset owner \x601008:1823\x60; asset \x60header-logo\x60/u);
+  assert.doesNotMatch(output, /Evidence link.*(?:#(?:[0-9A-F]{3}|[0-9A-F]{6})|verified)/iu);
+});
+
+
+test("canonical links add only evidence lines to existing dependency sections", async () => {
+  const { index } = await loadContext();
+  for (const id of ["block-personal-data-update", "block-receipt-info"]) {
+    const after = record(index, id);
+    const before = structuredClone(after);
+    before.evidence_links = { foundation_values: [], source_dependencies: [] };
+    const strip = (value) => value.split("\n").filter((line) => !line.startsWith("- Evidence link ")).join("\n");
+    assert.equal(strip(renderComponentRegistrySection(after, index)), renderComponentRegistrySection(before, index), id);
+  }
 });
