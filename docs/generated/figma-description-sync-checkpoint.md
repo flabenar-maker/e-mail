@@ -1,14 +1,14 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: workflow-checkpoint -->
-<!-- source-digest: sha256:26c778323d103a603dcdc09d01573d6d93412e859ebd718702ecc2745318c3e6 -->
+<!-- source-digest: sha256:bf4446424599201f792ab0845e03ca90e1877242799c69a3ddbab56b6433aa38 -->
 <!-- schema-versions: manifest=1.3.0, workflows=1.0.0 -->
-# Workflow checkpoint: `library-maintenance`
+# Workflow checkpoint: `figma-description-sync`
 
 Status: `shadow`
 
 This is a generated reading projection of the structured workflow. It does not activate a route, authorize a write, or add a runtime instruction.
 
-Canonical workflow: [workflow-library-maintenance](../../data/workflows/library-maintenance.yaml)
+Canonical workflow: [workflow-figma-description-sync](../../data/workflows/figma-description-sync.yaml)
 
 ## Current manifest routing
 
@@ -34,7 +34,7 @@ The routing table describes current assignments only; workflow status is not a r
 ## Mode: `read-only`
 
 - Required inputs: `request`, `target-scope`
-- Allowed outputs: `pinned-sha`, `impact-report`, `audit-findings`, `verification-summary`, `handoff-summary`
+- Allowed outputs: `pinned-sha`, `impact-report`, `audit-findings`, `figma-before`, `change-preview`, `verification-summary`, `handoff-summary`
 
 ### Input blocker mappings
 
@@ -87,15 +87,25 @@ Not declared.
 
 ### 4. `inspect-figma-read-only`
 
-- Condition: `figma-evidence-required`
+- Condition: always
 - Sources: [figma-library-standard](../../core/figma-library-standard.md)
 - Required inputs: `target-scope`
 - Blockers: `identity-unconfirmed`, `fact-unproven`
-- Allowed outputs: `audit-findings`
+- Allowed outputs: `figma-before`, `audit-findings`
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
-### 5. `verify-read-only-findings`
+### 5. `preview-exact-change`
+
+- Condition: always
+- Sources: [repository-readme](../../README.md), [figma-library-standard](../../core/figma-library-standard.md), [component-contract-standard](../../core/component-contract-standard.md), [figma-component-description-standard](../../core/figma-component-description-standard.md)
+- Required inputs: `impact-report`, `audit-findings`
+- Blockers: `identity-unconfirmed`, `semantic-role-required`, `fact-unproven`
+- Allowed outputs: `change-preview`
+- Success handoff: `next`
+- Blocked handoff: `stop`
+
+### 6. `verify-read-only-findings`
 
 - Condition: always
 - Sources: [repository-readme](../../README.md), [figma-library-standard](../../core/figma-library-standard.md), [component-contract-standard](../../core/component-contract-standard.md)
@@ -105,7 +115,7 @@ Not declared.
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
-### 6. `handoff`
+### 7. `handoff`
 
 - Condition: always
 - Sources: [repository-readme](../../README.md)
@@ -118,7 +128,7 @@ Not declared.
 ## Mode: `write`
 
 - Required inputs: `request`, `target-scope`, `write-authorization`
-- Allowed outputs: `pinned-sha`, `impact-report`, `audit-findings`, `change-preview`, `change-boundary`, `figma-before`, `repository-change`, `figma-change`, `figma-readback`, `verification-summary`, `handoff-summary`
+- Allowed outputs: `pinned-sha`, `impact-report`, `audit-findings`, `figma-before`, `change-preview`, `change-boundary`, `figma-change`, `figma-readback`, `repository-change`, `verification-summary`, `handoff-summary`
 
 ### Input blocker mappings
 
@@ -173,7 +183,17 @@ Not declared.
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
-### 4. `preview-exact-change`
+### 4. `inspect-figma-read-only`
+
+- Condition: always
+- Sources: [figma-library-standard](../../core/figma-library-standard.md)
+- Required inputs: `target-scope`
+- Blockers: `identity-unconfirmed`, `fact-unproven`
+- Allowed outputs: `figma-before`, `audit-findings`
+- Success handoff: `next`
+- Blocked handoff: `stop`
+
+### 5. `preview-exact-change`
 
 - Condition: always
 - Sources: [repository-readme](../../README.md), [figma-library-standard](../../core/figma-library-standard.md), [component-contract-standard](../../core/component-contract-standard.md), [figma-component-description-standard](../../core/figma-component-description-standard.md)
@@ -183,7 +203,7 @@ Not declared.
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
-### 5. `prepare-change-boundary`
+### 6. `prepare-change-boundary`
 
 - Condition: always
 - Sources: [repository-readme](../../README.md), [figma-library-standard](../../core/figma-library-standard.md), [component-contract-standard](../../core/component-contract-standard.md), [figma-component-description-standard](../../core/figma-component-description-standard.md)
@@ -193,39 +213,19 @@ Not declared.
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
-### 6. `inspect-figma-read-only`
+### 7. `apply-authorized-figma-change`
 
-- Condition: `figma-write-in-scope`
-- Sources: [figma-library-standard](../../core/figma-library-standard.md)
-- Required inputs: `change-boundary`
-- Blockers: `identity-unconfirmed`, `fact-unproven`
-- Allowed outputs: `figma-before`, `audit-findings`
-- Success handoff: `next`
-- Blocked handoff: `stop`
-
-### 7. `apply-minimal-repository-change`
-
-- Condition: `repository-write-in-scope`
-- Sources: [component-contract-standard](../../core/component-contract-standard.md)
-- Required inputs: `change-boundary`
-- Blockers: `authorization-scope-mismatch`
-- Allowed outputs: `repository-change`
-- Success handoff: `next`
-- Blocked handoff: `stop`
-
-### 8. `apply-authorized-figma-change`
-
-- Condition: `figma-write-in-scope`
-- Sources: [figma-library-standard](../../core/figma-library-standard.md)
+- Condition: always
+- Sources: [figma-component-description-standard](../../core/figma-component-description-standard.md), [figma-library-standard](../../core/figma-library-standard.md)
 - Required inputs: `change-boundary`, `write-authorization`, `figma-before`
 - Blockers: `authorization-scope-mismatch`
 - Allowed outputs: `figma-change`
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
-### 9. `verify-figma-readback`
+### 8. `verify-figma-readback`
 
-- Condition: `figma-write-in-scope`
+- Condition: always
 - Sources: [figma-library-standard](../../core/figma-library-standard.md)
 - Required inputs: `change-boundary`, `figma-before`, `figma-change`
 - Blockers: `figma-readback-mismatch`
@@ -233,7 +233,7 @@ Not declared.
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
-### 10. `synchronize-dependents`
+### 9. `synchronize-dependents`
 
 - Condition: always
 - Sources: [component-contract-standard](../../core/component-contract-standard.md)
@@ -243,7 +243,7 @@ Not declared.
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
-### 11. `verify-exact-cloud-commit`
+### 10. `verify-exact-cloud-commit`
 
 - Condition: always
 - Sources: [repository-readme](../../README.md)
@@ -253,11 +253,11 @@ Not declared.
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
-### 12. `handoff`
+### 11. `handoff`
 
 - Condition: always
 - Sources: [repository-readme](../../README.md)
-- Required inputs: `pinned-sha`, `change-boundary`, `verification-summary`
+- Required inputs: `pinned-sha`, `impact-report`, `verification-summary`
 - Blockers: `handoff-incomplete`
 - Allowed outputs: `handoff-summary`
 - Success handoff: `complete`
