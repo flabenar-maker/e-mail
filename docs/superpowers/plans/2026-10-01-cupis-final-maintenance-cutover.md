@@ -16,13 +16,13 @@
 <a id="p4-current-2026-10-11"></a>
 <a id="p5-preparation-2026-10-11"></a>
 
-### Текущая точка: P4 слит; пакет 5 самостоятельный, затем 5 fix 1 и 5 fix 2 — 11.10.2026
+### Текущая точка: пакет 5, Step1 — карта подготовлена; активация ждёт согласования — 11.10.2026
 
 PR #110 слит отдельной командой пользователя: main e44c726175ca3b93c3a41b43d75424d060bf6390, tree f8928fbae27bdb6d9eec207bf0ad894fc445b361 совпадает с принятым кандидатом04de691. Postmerge receipt1d41ca73ca3f3e8d81f761414f47faf8381e334aab3648bf0bcce86e19449061; [облачный merge record](https://github.com/flabenar-maker/e-mail/pull/110#issuecomment-6100055096). Исторические source/full/local pins и отрицательные результаты ниже сохраняют собственные SHA; формулировки «не слит» в историческом журнале относятся к моменту их записи. Закрытый P2 не повторяем.
 
-P3 слит [PR #112](https://github.com/flabenar-maker/e-mail/pull/112). По следующей отдельной команде пользователя [PR #113](https://github.com/flabenar-maker/e-mail/pull/113) слит обычным SHA-guarded squash в main ead5580e319dc3a68332b4ad1ed01f35f08afcc3; tree b25188cf6ef2ee17f51f275226d7cbe6d276e25d точно совпадает с локально принятым head e98a18a0f01bb07a363f8fc99e231be9700e08a5. Отдельный postmerge identity receipt c073702351e10ed27a26f5e2bfe6dd4eaa85c0a32ea5ff58d79099fef29bdc9b подтверждает single parent a117 и прежние five-paused/two-active routes; [исходная локальная приёмка P4](#p4-local-acceptance-2026-10-11) сохраняет свои source/full/narrow pins. 11A завершён и слит. Пакет 5 не начат, поддержка не активирована; 5 fix 1, 5 fix 2, пакет 6, локальная синхронизация навыков и Figma writes не выполнены. Эта публикация уточняет только планы, не включает реализацию следующих работ.
+P3 слит [PR #112](https://github.com/flabenar-maker/e-mail/pull/112). По следующей отдельной команде пользователя [PR #113](https://github.com/flabenar-maker/e-mail/pull/113) слит обычным SHA-guarded squash в main ead5580e319dc3a68332b4ad1ed01f35f08afcc3; tree b25188cf6ef2ee17f51f275226d7cbe6d276e25d точно совпадает с локально принятым head e98a18a0f01bb07a363f8fc99e231be9700e08a5. Отдельный postmerge identity receipt c073702351e10ed27a26f5e2bfe6dd4eaa85c0a32ea5ff58d79099fef29bdc9b подтверждает single parent a117 и прежние five-paused/two-active routes; [исходная локальная приёмка P4](#p4-local-acceptance-2026-10-11) сохраняет свои source/full/narrow pins. 11A завершён и слит. Пакет 5 начат только подготовкой Step1: [карта](#p5-switch-map-2026-10-11) и rollback baseline; поддержка не активирована; 5 fix 1, 5 fix 2, пакет 6, локальная синхронизация навыков и Figma writes не выполнены. Эта публикация уточняет только планы, не включает реализацию следующих работ.
 
-Текущая plan-only правка ограничена четырьмя активными планами и статусом §3.5 master-spec: фактическое слияние P4, самостоятельная граница пакета 5, этапы 5 fix и зависимости пакета 6. Component values/trees/assets, Core rules, manifest mappings/statuses, skills, renderer, email workflow, Figma и готовые письма сохраняются. Публикация и последующее слияние этих планов не разрешают активацию, реализацию 5 fix, локальную установку или очистку.
+Текущая Step1 plan-only правка ограничена четырьмя активными планами и status§3.5 master-spec: точная proposed карта/rollback, её согласование и текущая точка P5. На этом шаге7 runtime-файлов карты, README, generated docs, tests, Core, contracts, skills, renderer, email workflow, Figma и письма сохраняются. Публикация карты не выполняет Step2, не разрешает merge/локальную установку/5 fix/очистку.
 
 Текущий порядок: самостоятельный пакет 5 (карта → разрешённая активация → exact local gate/merge → разрешённая локальная синхронизация и clean-context приёмка) → 5 fix 1 (обновлённые карточные блоки) → 5 fix 2 (прикладная сборка и HTML) → отдельно разрешённый пакет 6. Подготовить недостающую детализацию 5 fix можно раньше; её реализация не входит в пакет 5 и не расширяет его acceptance.
 
@@ -1576,13 +1576,100 @@ Generated usage отражает записанные контракты, не �
 
 **Interfaces:** Consumes: merged 11A и разрешение cutover. Produces: active maintenance routes с подтверждённым resolver/handoff и точкой rollback.
 
-- [ ] **Step 1:** Закрепить свежий main как rollback SHA, сохранить прежнюю резервную ветку и показать exact old → new таблицу route/workflow/profile/status. Не делать глобальный shadow → active replace.
+- [x] **Step 1 — подготовка карты:** Закрепить fresh main A98 и rollback ref, сохранить прежний backup и подготовить exact old→new route/workflow/profile/status карту; [состав и границы](#p5-switch-map-2026-10-11). Это выполненная подготовка, не activation acceptance. Step2 требует отдельного согласования показанной карты; глобальный shadow→active replace запрещён.
 - [ ] **Step 2:** Получить отдельное разрешение на эту карту. В candidate назначить только доказанные structured workflows, убрать paused source из их profiles и обновить только зависимые статусы. Email route records сохранить побайтово, если отдельного разрешённого defect fix нет.
 - [ ] **Step 3:** Для каждого включаемого route доказать `resolved`, exact mode и нужные steps; negative dependency/source cases должны давать typed blocked. При частичном переключении aggregate остаётся partial; active допускается только когда все текущие routes готовы.
 - [ ] **Step 4:** На exact final SHA выполнить один полный локальный gate, generated check, bootstrap и независимое ревью. Получить отдельное разрешение merge; защита GitHub, требующая remote check, является blocker, не повод обходить её.
 - [ ] **Step 5:** После merge и отдельного разрешения синхронизировать изменённые локальные навыки с backup; подтвердить discovery и clean-context работу всех routes. Сбой исправляется corrective/revert PR, не force-reset; Figma не откатывается автоматически.
 
 **Acceptance:** Включён только доказанный объём, локальный clean-context результат соответствует main, rollback имеет точный SHA/allowed diff. 11C ещё не выполнен.
+
+<a id="p5-switch-map-2026-10-11"></a>
+
+#### P5 Step 1: точная карта переключения и rollback — 11.10.2026
+
+**Статус:** карта подготовлена в документационном candidate. Это не активация и не её приёмка; Step2–5 не выполнены. Числа ниже сняты из canonical cloud sources, а не из прежних Markdown-описаний. Source pin: `a98d348fc4b342a223b9d7e8674098826ab9d125`, tree `de71b53f395764242f95cfecdbc79d3faf795643`,306 source blobs. Свежий `migration-progress / read-only` дал numeric0, `paused / SKILL_ROUTE_PAUSED`; bundle SHA256 dd75e69c7a65fdc3ee202d209e2229a56bdada0c7a55451f48ab999d8931704b остаётся на собственном A98 pin. Старые P2/P3/P4 и Step1 old-state packet не перепиниваются.
+
+**Rollback до переключения:** [`backup/pre-maintenance-activation-2026-10-11`](https://github.com/flabenar-maker/e-mail/tree/backup/pre-maintenance-activation-2026-10-11) закреплена на `a98d348fc4b342a223b9d7e8674098826ab9d125`. Существующая [`backup/pre-structured-migration-2026-08-24`](https://github.com/flabenar-maker/e-mail/tree/backup/pre-structured-migration-2026-08-24) сохранена на `48e4d6c5f51e1ccd2311b52f5805616f183150a8`, без передвижения или удаления. Перед Step2 снова проверить cloud main, обе ветки и previous-values этой карты. Если с подготовки карты изменились только планы, записать новый candidate base, сохранив runtime baseline; любое отличие mapped runtime-полей или их окружения останавливает переключение до обновлённого preview.
+
+**Что пользователь согласует на Step2:** подключение пяти существующих процессов и только перечисленных статусных зависимостей. Конечный proposed aggregate `active` допустим только при готовых пяти maintenance + двух прежних email routes. Это не общий replace shadow→active. Если разрешена/готова лишь часть, на своей точной карте оставить `partial` и остальные маршруты paused; нельзя объявить полную активацию. Свежую readiness положительных/отрицательных путей доказывает Step3, а не эта таблица.
+
+| Маршрут | Сейчас | Предлагаемый workflow source | Существующие режимы |
+| --- | --- | --- | --- |
+| `library-maintenance` | `workflow-paused` | `workflow-library-maintenance` | `read-only / write` |
+| `component-onboarding` | `workflow-paused` | `workflow-component-onboarding` | `read-only / write` |
+| `figma-description-sync` | `workflow-paused` | `workflow-figma-description-sync` | `read-only / write` |
+| `figma-naming-audit` | `workflow-paused` | `workflow-figma-naming-audit` | `read-only / write` |
+| `migration-progress` | `workflow-paused` | `workflow-migration-progress` | `read-only` |
+
+**Точные изменяемые scalar fields:**27 полей в7 runtime-файлах. JSON pointers и порядок индексов относятся только к закреплённому A98; при новом base сначала перепроверить identity/previous-values. Оба списка источников профиля остаются одинаковыми по содержимому и порядку; замена выполняется только в прежнем элементе `workflow-paused`, остальные элементы, selections и IDs сохраняются.
+
+| Файл | JSON pointer на A98 | Previous | Proposed |
+| --- | --- | --- | --- |
+| `system/manifest.yaml` | `/routes/0/workflow_source_id` | `workflow-paused` | `workflow-library-maintenance` |
+| `system/manifest.yaml` | `/bundle_profiles/0/source_ids/4` | `workflow-paused` | `workflow-library-maintenance` |
+| `system/manifest.yaml` | `/bundle_profiles/0/generated_bundle/static_source_ids/4` | `workflow-paused` | `workflow-library-maintenance` |
+| `system/manifest.yaml` | `/bundle_profiles/0/generated_bundle/status` | `structured-shadow` | `structured-active` |
+| `data/workflows/library-maintenance.yaml` | `/workflow/status` | `shadow` | `active` |
+| `system/manifest.yaml` | `/routes/1/workflow_source_id` | `workflow-paused` | `workflow-component-onboarding` |
+| `system/manifest.yaml` | `/bundle_profiles/1/source_ids/5` | `workflow-paused` | `workflow-component-onboarding` |
+| `system/manifest.yaml` | `/bundle_profiles/1/generated_bundle/static_source_ids/5` | `workflow-paused` | `workflow-component-onboarding` |
+| `system/manifest.yaml` | `/bundle_profiles/1/generated_bundle/status` | `structured-shadow` | `structured-active` |
+| `data/workflows/component-onboarding.yaml` | `/workflow/status` | `shadow` | `active` |
+| `system/manifest.yaml` | `/routes/2/workflow_source_id` | `workflow-paused` | `workflow-figma-description-sync` |
+| `system/manifest.yaml` | `/bundle_profiles/2/source_ids/4` | `workflow-paused` | `workflow-figma-description-sync` |
+| `system/manifest.yaml` | `/bundle_profiles/2/generated_bundle/static_source_ids/4` | `workflow-paused` | `workflow-figma-description-sync` |
+| `system/manifest.yaml` | `/bundle_profiles/2/generated_bundle/status` | `structured-shadow` | `structured-active` |
+| `data/workflows/figma-description-sync.yaml` | `/workflow/status` | `shadow` | `active` |
+| `system/manifest.yaml` | `/routes/3/workflow_source_id` | `workflow-paused` | `workflow-figma-naming-audit` |
+| `system/manifest.yaml` | `/bundle_profiles/3/source_ids/2` | `workflow-paused` | `workflow-figma-naming-audit` |
+| `system/manifest.yaml` | `/bundle_profiles/3/generated_bundle/static_source_ids/2` | `workflow-paused` | `workflow-figma-naming-audit` |
+| `system/manifest.yaml` | `/bundle_profiles/3/generated_bundle/status` | `structured-shadow` | `structured-active` |
+| `data/workflows/figma-naming-audit.yaml` | `/workflow/status` | `shadow` | `active` |
+| `system/manifest.yaml` | `/routes/4/workflow_source_id` | `workflow-paused` | `workflow-migration-progress` |
+| `system/manifest.yaml` | `/bundle_profiles/4/source_ids/2` | `workflow-paused` | `workflow-migration-progress` |
+| `system/manifest.yaml` | `/bundle_profiles/4/generated_bundle/static_source_ids/2` | `workflow-paused` | `workflow-migration-progress` |
+| `system/manifest.yaml` | `/bundle_profiles/4/generated_bundle/status` | `structured-shadow` | `structured-active` |
+| `data/workflows/migration-progress.yaml` | `/workflow/status` | `shadow` | `active` |
+| `data/foundations/figma-naming.yaml` | `/foundation/status` | `shadow` | `active` |
+| `system/manifest.yaml` | `/structured_workflows/status` | `partial` | `active` |
+
+**Обоснование зависимостей:** `scripts/lib/system-manifest.mjs` проверяет route/profile/workflow и aggregate topology; `scripts/lib/skill-context.mjs` проверяет реальные bundle sources, mode и naming status; `scripts/lib/workflow-registry.mjs` требует active workflow и точный immutable handoff. `figma-naming` сейчас shadow, его status необходим для naming-route и naming-задач общей поддержки. Definitions/шаблоны/суффиксы @2x/@4x не меняются; typography/spacing/assets уже active и сохраняются. Schema versions, structured entries, workflow modes/steps/permissions и consumer code этим переключением не переписываются.
+
+**Производные изменения будущего activation candidate:**
+
+- `docs/generated/{library-maintenance,component-onboarding,figma-description-sync,figma-naming-audit,migration-progress,email-build}-checkpoint.md`: все6 outputs пересобираются существующим генератором. В каждом есть таблица всех маршрутов и source-digest manifest; изменение email-checkpoint не разрешает менять email workflow или HTML.
+- `docs/generated/naming-reference.md`: пересобирается header/source-digest foundation; универсальные определения сохраняются.
+- `docs/generated/component-registry.md`, `typography-registry.md`, `asset-registry.md` должны побайтово сохраниться: их собственные inputs не входят в7 runtime-файлов карты.
+- `README.md`: после фактического включения точечно обновить только текущие фразы о паузе поддержки и текущий handoff-status. Не добавлять новые правила или список будущих fixes. `workflows/system-paused.md` и его manifest registration не удаляются: conditional gate относится только к явно paused route и остаётся до отдельно разрешённого P6.
+- Conditional paused/authorization guards в skills не удалять. Любую конкретную устаревающую status-фразу сначала показать дословно old→new; тонкая маршрутизация/remote pin/bundle/authorization сохраняются. Эта карта не разрешает локальную перезапись навыков; Step5 — отдельное согласование backup/sync/discovery по фактическому byte diff.
+- Планы получают фактический candidate/merge/gate status; raw тестовые receipts, bundles и логи остаются локальными.
+
+**Сохранность:** оба email route records и их profile objects — побайтово как на A98; `data/workflows/email-build.yaml`, rendering/typography/spacing/assets foundations, renderer registry/code, components/schema/Core, Figma, конкретные email.html/images/versions и старые backup refs не входят в allowlist. Никаких live Figma writes, автоматического описания/переименования, onboarding реального блока, 5 fix1/2 или очистки. `migration-progress` остаётся read-only; write-режим у других workflows не даёт сам по себе согласия на отдельную операцию.
+
+**Будущие Step3 проверки, сейчас НЕ запущены:** все9 существующих route/mode combinations, exact delivered source closure и typed negative cases. CLI selections ниже — для контекстной проверки после согласованного переключения, не команды выполнить активный workflow сейчас:
+
+```text
+node scripts/resolve-skill-context.mjs --route library-maintenance --mode read-only --component email-header --viewport both --foundation figma-naming
+node scripts/resolve-skill-context.mjs --route library-maintenance --mode write --component email-header --viewport both --foundation figma-naming
+node scripts/resolve-skill-context.mjs --route component-onboarding --mode read-only --viewport both
+node scripts/resolve-skill-context.mjs --route component-onboarding --mode write --viewport both
+node scripts/resolve-skill-context.mjs --route figma-description-sync --mode read-only --component email-header --viewport both
+node scripts/resolve-skill-context.mjs --route figma-description-sync --mode write --component email-header --viewport both
+node scripts/resolve-skill-context.mjs --route figma-naming-audit --mode read-only --foundation figma-naming
+node scripts/resolve-skill-context.mjs --route figma-naming-audit --mode write --foundation figma-naming
+node scripts/resolve-skill-context.mjs --route migration-progress --mode read-only
+```
+
+Каждый результат должен иметь `resolved`, правильные route/workflow/mode/steps. Для onboarding resolver не является фактической приёмкой нового компонента: отдельный controlled handoff должен сохранять schema/factual-evidence gate; никакой реальный компонент этой картой не добавляется. Negative cases: missing/incorrect source, invalid mode, inactive naming, unauthorized mutation, unexpected readback diff и неверный aggregate/partial topology должны останавливать соответствующее действие с typed blocker. Read-only никогда не пишет. Для всех включаемых процессов подтверждается существующий authorization/preservation consumer, не только resolverstatus.
+
+**Тестовая карта будущего activation candidate:** использовать `tests/workflows/{structured-workflows,maintenance-cutover,maintenance-authorization}.test.mjs`, `tests/skills/{skill-context,skill-context-cli,cupis-email-task-router}.test.mjs`, `tests/foundation/system-manifest.test.mjs`. Существующие canonical assertions «только email active / maintenance shadow» после авторизованного изменения могут устареть: Terra классифицирует точные failures и обновляет только доказанные status expectations/fixtures по подтверждённой карте, не ослабляя негативные gates или HTML goldens. Дополнительный test path/production repair сначала получить отдельным impact preview, если он выходит из этой статусной области. Ни одного теста или expectation в Step1 не меняем.
+
+**Step4 перед отдельным merge:** один exact final local `npm run verify` (либо явно зафиксированный package-equivalent validator + полный Node suite при недоступном npm), `npm run generate:check`, применимые Windows bootstrap gates и один independent whole-branch review; source/allowed-diff/preserved-blob и обе email regression checks. Все routine/visual проверки — actual GPT-5.6 Terra Medium, no Actions/PR Checks. Состояние protected branch, требующее remote check, является blocker; не обходить. Docs-only карта проходит только scoped local gate, не выдаваемый за activation/full/visual/client acceptance.
+
+**Rollback после будущей активации, только по отдельному решению:** corrective/revert cloud PR возвращает ровно подтверждённые previous scalar values, scoped status-prose и пересобранные generated outputs; новые несвязанные коммиты и планы не затираются. Before/after route/profile/naming/aggregate и email-preservation проверяются локально на exact revert SHA, merge — отдельно. Не force-reset и не замена всего main на A98; Figma и локальные навыки автоматически не откатываются.
+
+**Следующий шаг:** показать и согласовать эту точную карту (Step2); до согласования любые runtime/status edits запрещены. Глобальная очередь остаётся пакет5 → 5 fix1 → 5 fix2 → пакет6.
 
 ## После самостоятельного пакета 5 — отдельные пакеты 5 fix
 <a id="p5-fix-queue-2026-10-11"></a>
