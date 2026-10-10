@@ -34,10 +34,7 @@
           "const": "figma-naming"
         },
         "status": {
-          "enum": [
-            "shadow",
-            "active"
-          ]
+          "enum": ["shadow", "active"]
         },
         "language": {
           "const": "English"
