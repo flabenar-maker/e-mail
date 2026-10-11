@@ -1,4 +1,5 @@
 name: Explicit CUPIS verification
+run-name: cupis-cloud:${{ github.event_name }}:${{ inputs.request_id || github.event.pull_request.number }}:${{ inputs.source_sha || github.event.pull_request.head.sha }}
 on:
   workflow_dispatch:
     inputs:
