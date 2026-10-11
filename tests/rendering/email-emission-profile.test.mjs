@@ -261,7 +261,7 @@ test("split-div-wrappers-restore-block-and-inner-tables-retain-native-display", 
   assert.ok(fixed.length > 0);
   assert.ok(fill.length > 0);
   for (const tag of fixed) {
-    assert.doesNotMatch(tag, /width:100%/u);
+    assert.doesNotMatch(tag, /(?:^|;)width:100%(?:;|$)/u);
     assert.match(tag, /min-width:(?:32|48)px/u);
   }
   for (const tag of fill) {

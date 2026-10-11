@@ -242,7 +242,7 @@
         "is_not_inline": true
       },
       "service_rules": {
-        "enabled": false
+        "enabled": true
       },
       "block_labels": {
         "email-template": "Письмо",

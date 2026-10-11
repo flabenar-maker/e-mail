@@ -1,3 +1,4 @@
+import { planTemplateRules, buildPersonalizationPreview } from "./lib/email-template-rules.mjs";
 import { serializeEmailHtml } from "./lib/email-html-serializer.mjs";
 import { execFileSync } from "node:child_process";
 import { dirname, join, resolve } from "node:path";
@@ -29,12 +30,12 @@ function parseArguments(argv) {
   for (let index = 0; index < argv.length; index += 2) {
     const flag = argv[index];
     const value = argv[index + 1];
-    if (!["--model", "--mode", "--output", "--delivery"].includes(flag) || !value) {
+    if (!["--model", "--mode", "--output", "--delivery", "--name"].includes(flag) || !value) {
       throw new Error(USAGE);
     }
     values[flag.slice(2)] = value;
   }
-  if (!values.model || !values.mode || !values.output || ![6,8].includes(argv.length)) {
+  if (!values.model || !values.mode || !values.output || ![6,8,10].includes(argv.length)) {
     throw new Error(USAGE);
   }
   return values;
@@ -81,11 +82,14 @@ async function main() {
   }) : undefined;
   const model = delivery?.model ?? originalModel;
   if (delivery) Object.assign(dependencies, {deliveryProfile:delivery.profile, outputBindings:delivery.outputBindings, deliveryDocument:delivery.document, deliveryInventory:delivery.inventory, designModel:originalModel});
+  if (delivery) dependencies.templateRules = planTemplateRules({model:originalModel,inventory:delivery.inventory,profile:delivery.profile});
   const semanticErrors = validateEmailModelSemantics(model, dependencies);
   if (semanticErrors.length > 0) {
     throw new AggregateError(semanticErrors, "Email model semantic validation failed.");
   }
 
+  if (args.name && !delivery) throw new Error("A personalization preview requires --delivery.");
+  if (args.name) { const input = buildPersonalizationPreview({emissionInput:{model,templateRules:dependencies.templateRules},scenario:{first_name:args.name === "empty" ? "" : args.name}}); dependencies.previewValues=input.previewValues; }
   const rendered = renderEmailDocument(model, dependencies);
   if (rendered.diagnostics.length > 0) {
     throw new AggregateError(rendered.diagnostics, "Email rendering failed.");
@@ -97,7 +101,7 @@ async function main() {
       assetPaths: rendered.assets.map((asset) => asset.path),
     },
   });
-  const structured = delivery ? serializeEmailHtml({html}) : {html,diagnostics:[]};
+  const structured = delivery ? serializeEmailHtml({html,protectedFragments:(rendered.protectedFragments??[]).map(fragment=>{const start=html.indexOf(fragment.text);if(start<0)throw new Error("EMAIL_SERVICE_FRAGMENT_MISSING");return {start,end:start+fragment.text.length};})}) : {html,diagnostics:[]};
   if (structured.diagnostics.length) throw new AggregateError(structured.diagnostics,"HTML serialization failed.");
   const preview = buildEmailPreview({ html:structured.html, mode: args.mode });
   await mkdir(dirname(outputPath), { recursive: true });

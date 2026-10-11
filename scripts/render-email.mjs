@@ -1,3 +1,4 @@
+import { planTemplateRules, buildPersonalizationPreview } from "./lib/email-template-rules.mjs";
 import { readFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { serializeEmailHtml } from "./lib/email-html-serializer.mjs";
@@ -86,6 +87,7 @@ async function main() {
   }) : undefined;
   const model = delivery?.model ?? originalModel;
   if (delivery) Object.assign(dependencies, {deliveryProfile:delivery.profile, outputBindings:delivery.outputBindings, deliveryDocument:delivery.document, deliveryInventory:delivery.inventory, designModel:originalModel});
+  if (delivery) dependencies.templateRules = planTemplateRules({model:originalModel,inventory:delivery.inventory,profile:delivery.profile});
   const semanticErrors = validateEmailModelSemantics(model, dependencies);
   if (semanticErrors.length > 0) {
     throw new AggregateError(semanticErrors, "Email model semantic validation failed.");
@@ -104,7 +106,7 @@ async function main() {
   });
   const modelFolder = dirname(modelPath);
   if (delivery) {
-    const structured = serializeEmailHtml({html});
+    const structured = serializeEmailHtml({html,protectedFragments:(rendered.protectedFragments??[]).map(fragment=>{const start=html.indexOf(fragment.text);if(start<0)throw new Error("EMAIL_SERVICE_FRAGMENT_MISSING");return {start,end:start+fragment.text.length};})});
     if (structured.diagnostics.length) throw new AggregateError(structured.diagnostics, "HTML serialization failed.");
     const assetBuffers = new Map(await Promise.all(rendered.assets.map(async asset => [asset.path,await readFile(join(modelFolder,...asset.path.split("/")))])));
     const rebased = rebasePackageResources({html:structured.html,assetPaths:[...assetBuffers.keys()],htmlEntry:delivery.profile.package.html_entry,assetRootEntry:delivery.profile.package.asset_root_entry});
@@ -118,7 +120,18 @@ async function main() {
     const zip = encodeZipStore(packaged.entries);
     const hash = bytes => createHash("sha256").update(bytes).digest("hex");
     const report = {schema_version:"1.0.0",source_sha:dependencies.systemCommit,profile_id:delivery.profile.id,profile_version:delivery.profile.version,serializer_version:"1.0.0",package_id:delivery.profile.package.id,readiness:"ready",external_acceptance:"not-run",metrics:measureEmailOutput({html:rebased.html,css}),html_sha256:hash(rebased.html),archive_sha256:hash(zip),assets:[...assetBuffers].map(([path,bytes])=>({path,sha256:hash(bytes)}))};
+    const previews = [];
+    for (const [path,first_name] of [["preview-name.html","алексей"],["preview-empty-name.html",""],["preview-long-name.html","Александра-Виктория"]]) {
+      const input = buildPersonalizationPreview({emissionInput:{model,templateRules:dependencies.templateRules},scenario:{first_name}});
+      const previewRendered = renderEmailDocument(input.model,{...dependencies,previewValues:input.previewValues});
+      if(previewRendered.diagnostics.length)throw new AggregateError(previewRendered.diagnostics,"Personalization preview failed.");
+      const previewStructured=serializeEmailHtml({html:previewRendered.html,protectedFragments:(previewRendered.protectedFragments??[]).map(fragment=>{const start=previewRendered.html.indexOf(fragment.text);return {start,end:start+fragment.text.length};})});
+      if(previewStructured.diagnostics.length)throw new AggregateError(previewStructured.diagnostics,"Preview serialization failed.");
+      previews.push({path,bytes:Buffer.from(previewStructured.html,"utf8")});
+    }
+    report.preview_files=previews.map(entry=>entry.path);
     await publishFileSetAtomically({outputDir,entries:[
+      ...previews,
       {path:"email.html",bytes:Buffer.from(structured.html,"utf8")},
       ...[...assetBuffers].map(([path,bytes])=>({path,bytes})),
       {path:"altcraft.zip",bytes:zip},

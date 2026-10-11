@@ -1,3 +1,4 @@
+import { buildEmailServiceFragments } from "./email-service-fragments.mjs";
 import { resolveEmissionProfile } from "./email-emission-profile.mjs";
 import { renderContractTree, selectVariantRoot } from "./email-interpreter.mjs";
 import {
@@ -132,6 +133,8 @@ function prepareElement({
   const originalId = element.id;
   const prepared = structuredClone(element);
   prepared.id = scopedId(instancePath, originalId);
+  prepared.output_origin = {component_id:record.id,instance_path:instancePath,viewport,original_element_id:originalId};
+  if (path.endsWith("/root")) prepared.output_block = record.id + " / " + instancePath;
 
   let visible = prepared.visibility?.mode === "instance" ? prepared.visibility.default_visible : true;
   if (prepared.visibility?.mode === "property") {
@@ -418,6 +421,7 @@ export function renderComponent({
   componentIndex,
   foundations,
   emissionProfile,
+  outputBindings, templateRules, previewValues,
 }) {
   const accumulator = createAccumulator();
   const roots = {};
@@ -459,7 +463,7 @@ export function renderComponent({
     assets: accumulator.assets,
     properties: accumulator.properties,
     foundations,
-    emissionProfile,
+    emissionProfile, outputBindings, templateRules, previewValues,
   });
 
   return {
@@ -563,7 +567,9 @@ export function renderEmailDocument(model, dependencies) {
   }
   const style = (css ? `<style>${css}</style>` : "") + (msoCss ? `<!--[if mso]><style>${msoCss}</style><![endif]-->` : "");
   const metadata = buildMetadataComment(model, dependencies);
-  const body = renderPrimitive("email-shell", shell, rendered.html);
+  const service = dependencies.deliveryDocument ? buildEmailServiceFragments({deliveryDocument:dependencies.deliveryDocument,profile:dependencies.deliveryProfile}) : undefined;
+  const serviceHtml = service ? Object.values(service).map(fragment=>fragment.html).join("") : "";
+  const body = serviceHtml + renderPrimitive("email-shell", shell, rendered.html);
   const language = escapeAttribute(model.metadata.language);
   const direction = escapeAttribute(model.metadata.direction);
   const html = `<!doctype html><html lang="${language}" dir="${direction}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${metadata}${style}</head><body style="margin:0;padding:0"><div lang="${language}" dir="${direction}">${body}</div></body></html>`;
@@ -572,6 +578,7 @@ export function renderEmailDocument(model, dependencies) {
     assets: rendered.assets,
     diagnostics: [],
     css, msoCss,
+    protectedFragments:service ? Object.values(service).map(fragment=>({text:fragment.html})) : [],
     metrics: measureEmailOutput({ html, css, msoCss }),
   };
 }
