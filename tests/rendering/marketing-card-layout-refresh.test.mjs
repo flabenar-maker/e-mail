@@ -223,7 +223,14 @@ test("Card/Icon Show Description and Show Link retain independent live visibilit
 });
 
 test("Mobile Card/Icon stays fluid as a nested child and asset/Description/outside records are preserved",()=>{
-  assert.equal(hash(records.get("card-icon").contracts.mobile),fixture.preserved_mobile_card_icon);
+  const mobile = structuredClone(records.get("card-icon").contracts.mobile);
+  const link = flat(mobile.root).find(n => sourceId(n) === "1015:18749");
+  assert.deepEqual(link.facts.filter(f => ["horizontal-sizing","vertical-sizing"].includes(f.id)), [
+    {id:"horizontal-sizing",value:{type:"keyword",value:"fill"},provenance:{kind:"figma-literal",node_id:"1015:18749"}},
+    {id:"vertical-sizing",value:{type:"keyword",value:"hug"},provenance:{kind:"figma-literal",node_id:"1015:18749"}},
+  ], "exactly two authorized native annotations, no blanket Mobile normalization");
+  link.facts = link.facts.filter(f => !["horizontal-sizing","vertical-sizing"].includes(f.id));
+  assert.equal(hash(mobile),fixture.preserved_mobile_card_icon);
   const html=viewportHtml(render("block-icon-cards",{long:true}).html,"mobile");
   assert.doesNotMatch(html,/<table[^>]*(?:width="271"|max-width:271px)/u);
   for(const [id,expected]of Object.entries(fixture.preserved_records))assert.equal(hash(records.get(id)),expected,id);
@@ -247,6 +254,83 @@ test("all existing direct scalar links of changed owners point to exact frozen n
       assert.notEqual(actual,undefined,owner.id+" "+link.node_id+link.source_path);
       actual=link.transform==="lowercase"&&typeof actual==="string"?actual.toLowerCase():nativeNumber(actual);
       assert.deepEqual(ptr(record,link.contract_path),actual,owner.id+" "+link.node_id+link.source_path);
+    }
+  }
+});
+
+
+function assertCardIconLinkSizing(record, owner) {
+  const expected = [
+    ["mobile","11:1020","1015:18749",271],
+    ["desktop","260:662","1015:18846",392],
+  ];
+  for (const [viewport,variantId,nodeId,width] of expected) {
+    const node = flat(record.contracts[viewport].root).find(n => sourceId(n) === nodeId);
+    const native = owner.native_text_sizing.find(n => n.node_id === nodeId);
+    assert.ok(native, "actual native sidecar node " + nodeId);
+    assert.equal(native.horizontal_sizing,"FILL",nodeId + " horizontal_sizing");
+    assert.equal(native.vertical_sizing,"HUG",nodeId + " vertical_sizing");
+    assert.equal(native.layout_align,"STRETCH",nodeId + " layout_align");
+    assert.equal(value(node,"layout-align"),"stretch");
+    assert.equal(value(node,"text-auto-resize"),"height");
+    assert.equal(fact(node,"reference-size").width,width,"native reference width remains an observation");
+    for (const [id,field,literal] of [["horizontal-sizing","horizontal_sizing","fill"],["vertical-sizing","vertical_sizing","hug"]]) {
+      const facts = node.facts.filter(f => f.id === id);
+      assert.deepEqual(facts,[{id,value:{type:"keyword",value:literal},provenance:{kind:"figma-literal",node_id:nodeId}}]);
+      const links = record.contracts.figma_fact_links.filter(l => l.node_id === nodeId && l.source_path === "/layout/" + field);
+      assert.equal(links.length,1,nodeId + " exactly one direct " + field + " mapping");
+      assert.equal(links[0].variant_node_id,variantId);assert.equal(links[0].transform,"lowercase");
+      assert.equal(ptr(record,links[0].contract_path),native[field].toLowerCase(),nodeId + " same-node pointer");
+    }
+  }
+}
+
+test("Card/Icon links add only actual FILL/HUG annotations and exact sidecar mappings",()=>{
+  assert.deepEqual(fixture.card_icon_link_sizing_repair.observations,[
+    {viewport:"mobile",variant_node_id:"11:1020",node_id:"1015:18749",horizontal_sizing:"FILL",vertical_sizing:"HUG",layout_align:"STRETCH"},
+    {viewport:"desktop",variant_node_id:"260:662",node_id:"1015:18846",horizontal_sizing:"FILL",vertical_sizing:"HUG",layout_align:"STRETCH"},
+  ]);
+  assertCardIconLinkSizing(records.get("card-icon"),nativeOwner("card-icon"));
+});
+
+test("Card/Icon sizing guard rejects each missing fact, native mismatch and stale direct pointer",()=>{
+  for(const [viewport,nodeId] of [["mobile","1015:18749"],["desktop","1015:18846"]]){
+    for(const [id,field] of [["horizontal-sizing","horizontal_sizing"],["vertical-sizing","vertical_sizing"]]){
+      const missing=structuredClone(records.get("card-icon"));
+      const node=flat(missing.contracts[viewport].root).find(n=>sourceId(n)===nodeId);
+      node.facts=node.facts.filter(f=>f.id!==id);
+      assert.throws(()=>assertCardIconLinkSizing(missing,nativeOwner("card-icon")),assert.AssertionError);
+      const wrongSource=structuredClone(nativeOwner("card-icon"));
+      wrongSource.native_text_sizing.find(n=>n.node_id===nodeId)[field]="FIXED";
+      assert.throws(()=>assertCardIconLinkSizing(records.get("card-icon"),wrongSource),assert.AssertionError);
+      const stale=structuredClone(records.get("card-icon"));
+      stale.contracts.figma_fact_links.find(l=>l.node_id===nodeId&&l.source_path==="/layout/"+field).contract_path="/contracts/"+viewport+"/root/facts/0/value/width";
+      assert.throws(()=>assertCardIconLinkSizing(stale,nativeOwner("card-icon")),assert.AssertionError);
+    }
+  }
+});
+
+test("Card/Icon actual link rendering stays parent-relative at default and narrow text widths with custom labels",()=>{
+  for(const narrow of [false,true])for(const label of ["Ссылка >","Перейти к подробностям","x".repeat(160)]){
+    const record=structuredClone(records.get("card-icon"));
+    if(narrow)for(const viewport of ["mobile","desktop"]){
+      // Controlled narrow text-column input: native link reference width stays 271/392.
+      const column=flat(record.contracts[viewport].root).find(n=>n.semantic_role==="text-content");
+      column.facts.find(f=>f.id==="reference-size").value.width=180;
+    }
+    const input=instance("card-icon");
+    for(const entry of input.content_values)if(entry.element_id==="root-text-content-link"&&entry.slot_id==="text")entry.value.value=label;
+    const localRecords=new Map(records);localRecords.set("card-icon",record);
+    const output=renderComponent({componentId:"card-icon",viewportData:input,...deps,componentIndex:{bySystemId:localRecords}});
+    assert.deepEqual(output.diagnostics,[]);
+    for(const viewport of ["mobile","desktop"]){
+      const anchors=domNodes(parse(viewportHtml(output.html,viewport))).filter(n=>n.tag==="a");
+      assert.equal(anchors.length,1);assert.equal(anchors[0].attrs.href,"https://example.test/card");
+      assert.match(anchors[0].attrs.style,/width:100%/u);assert.match(anchors[0].attrs.style,/display:block/u);
+      assert.match(anchors[0].attrs.style,/overflow-wrap:anywhere/u);
+      assert.doesNotMatch(anchors[0].attrs.style,/(?:max-width|width):(?:271|392)px|(?:^|;)height:/u);
+      assert.equal(textOf(anchors[0]),label.replaceAll(">","&gt;"));
+      assert.equal(domNodes(anchors[0]).some(n=>n.tag==="img"),false);
     }
   }
 });

@@ -31183,5 +31183,31 @@
     "card-image": "d9a8bd1f82d68b9e79b12ca6e1e9137afc94e9dbc83b5a7afe792a4985803ee2",
     "card-icon": "70d514d5c5421a75223ef16ec352df6e02b75800456b0f46bbee6c76128cd0f3",
     "button-secondary": "c0c7133fc818a74196493460f282e0bee3736c2557d284fb677d368932ef2cb5"
+  },
+  "card_icon_link_sizing_repair": {
+    "source_sidecar_sha256": "6c6a9f5e856c8cb09852c07e80eba65b2c65ffe825ba43f4ed02e937f8b52c75",
+    "observations": [
+      {
+        "viewport": "mobile",
+        "variant_node_id": "11:1020",
+        "node_id": "1015:18749",
+        "horizontal_sizing": "FILL",
+        "vertical_sizing": "HUG",
+        "layout_align": "STRETCH"
+      },
+      {
+        "viewport": "desktop",
+        "variant_node_id": "260:662",
+        "node_id": "1015:18846",
+        "horizontal_sizing": "FILL",
+        "vertical_sizing": "HUG",
+        "layout_align": "STRETCH"
+      }
+    ],
+    "allowed_mobile_annotation_ids": [
+      "horizontal-sizing",
+      "vertical-sizing"
+    ],
+    "scope": "Only the two native link sizing annotations on Mobile node1015:18749 are removed before comparing the original preserved Mobile digest. Both actual new facts are asserted separately. Raw packets, original source pins and preserved digest remain unchanged; new total2191 is an expected audit count, not PASS."
   }
 }
