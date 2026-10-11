@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: workflow-checkpoint -->
-<!-- source-digest: sha256:5429695174a6636266754bca465c8d1c374c0a2089a2f925832efa3cc654a6b1 -->
+<!-- source-digest: sha256:f31bede21e324a58cdd789afb908b3366dfb572d7240f48d073e73aa43fb724b -->
 <!-- schema-versions: manifest=1.3.0, workflows=1.0.0 -->
 # Workflow checkpoint: `migration-progress`
 
