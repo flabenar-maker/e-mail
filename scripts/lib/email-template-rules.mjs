@@ -1,4 +1,5 @@
 export const GREETING_TEMPLATE='{if lead._fname}Здравствуйте, {uppercasefirst(lead._fname)}!{else}Здравствуйте!{end}';
+export const EMAIL_SERVICE_RULES_VERSION='1.0.0';
 const greetings=new Set(['Здравствуйте, Имя!','Здравствуйте, $user$!']);
 const normalize=text=>text.replaceAll('\u00a0',' ').trim();
 export function isTemplateGreeting(text) {return typeof text==='string'&&greetings.has(normalize(text));}
@@ -6,7 +7,7 @@ export function emitGreetingTemplate({rule,originalText}) {
   return rule?.kind==='conditional-greeting'&&isTemplateGreeting(originalText)?GREETING_TEMPLATE:originalText;
 }
 export function planTemplateRules({model,inventory,profile}) {
-  if(!profile.service_rules?.enabled)return {rules:[],diagnostics:[]};
+  if(!profile.service_rules?.enabled)return {version:EMAIL_SERVICE_RULES_VERSION,rules:[],diagnostics:[]};
   const groups=new Map();
   for(const binding of inventory.text_bindings??[]) {
     const ranges=isTemplateGreeting(binding.value)?[null]:(binding.runs??[]).filter(run=>isTemplateGreeting(run.characters)).map(run=>({start:run.start,end:run.end,text:run.characters}));
@@ -18,7 +19,7 @@ export function planTemplateRules({model,inventory,profile}) {
       rule.bindings.push(target);groups.set(key,rule);
     }
   }
-  return {rules:[...groups.values()],diagnostics:[]};
+  return {version:EMAIL_SERVICE_RULES_VERSION,rules:[...groups.values()],diagnostics:[]};
 }
 export function matchesTemplateTarget(target,origin) {
   return target.instance_path===origin?.instance_path&&target.component_id===origin?.component_id&&target.viewport===origin?.viewport&&target.element_id===(origin?.original_element_id??origin?.element_id)&&typeof target.slot_id==='string'&&target.slot_id===origin?.slot_id;

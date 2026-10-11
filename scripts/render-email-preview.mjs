@@ -104,7 +104,7 @@ async function main() {
   const structured = delivery ? serializeEmailHtml({html,protectedFragments:(rendered.protectedFragments??[]).map(fragment=>{const start=html.indexOf(fragment.text);if(start<0)throw new Error("EMAIL_SERVICE_FRAGMENT_MISSING");return {start,end:start+fragment.text.length};})}) : {html,diagnostics:[]};
   if (structured.diagnostics.length) throw new AggregateError(structured.diagnostics,"HTML serialization failed.");
   const finalDiagnostics=delivery?validateDeliveryDocument({document:delivery.document,inventory:delivery.inventory,profile:delivery.profile,purpose:"final",sourceSha:dependencies.systemCommit,emailId:originalModel.id}):[];
-  const labelledHtml=delivery?structured.html.replace("<head>",`<head>\n<title>Предпросмотр${finalDiagnostics.length?" — данные для выпуска неполные":""}</title>\n<!-- CUPIS preview: readiness=${finalDiagnostics.length?"incomplete":"ready"}; purpose=preview -->`):structured.html;
+  const labelledHtml=delivery?structured.html.replace("<head>",`<head>\n<title>Предпросмотр${finalDiagnostics.length?" — данные для выпуска неполные":""}</title>\n<!-- CUPIS preview: readiness=${finalDiagnostics.length?"incomplete":"ready"}; purpose=preview; emission_profile=${rendered.emission_profile.id}@${rendered.emission_profile.version}; effective_fallback=${rendered.effective_fallback}; service_rules_version=${dependencies.templateRules.version} -->`):structured.html;
   const preview = buildEmailPreview({ html:labelledHtml, mode: args.mode });
   await mkdir(dirname(outputPath), { recursive: true });
   await writeFile(outputPath, preview, "utf8");

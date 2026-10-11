@@ -580,6 +580,8 @@ export function renderEmailDocument(model, dependencies) {
     assets: rendered.assets,
     diagnostics: [],
     css, msoCss,
+    emission_profile: {id:emissionProfile.id,version:emissionProfile.version},
+    effective_fallback: emissionProfile.fallback_viewport,
     protectedFragments:service ? Object.values(service).map(fragment=>({text:fragment.html})) : [],
     metrics: measureEmailOutput({ html, css, msoCss }),
   };
