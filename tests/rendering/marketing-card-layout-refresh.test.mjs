@@ -334,3 +334,44 @@ test("Card/Icon actual link rendering stays parent-relative at default and narro
     }
   }
 });
+
+
+test("all twelve Icon-List graphics record actual native Fixed sizing and same-node direct mappings",()=>{
+  const expected={
+    mobile:["1015:18589","1015:18593","1015:18597","1015:18601","1015:18605","1015:18609"],
+    desktop:["1015:18565","1802:3513","1802:3523","1802:3533","1802:3567","1802:3577"],
+  };
+  const record=records.get("block-icon-list");
+  for(const viewport of ["mobile","desktop"])for(const nodeId of expected[viewport]){
+    const native=sourceNode("block-icon-list",viewport,nodeId),node=ownerNode("block-icon-list",viewport,nodeId);
+    assert.equal(native.layout.horizontal_sizing,"FIXED");assert.equal(native.layout.vertical_sizing,"FIXED");
+    assert.equal(native.reference_dimensions.width,viewport==="mobile"?42:56);assert.equal(native.reference_dimensions.height,viewport==="mobile"?42:56);
+    for(const [id,sourcePath]of [["horizontal-sizing","/layout/horizontal_sizing"],["vertical-sizing","/layout/vertical_sizing"]]){
+      assert.deepEqual(node.facts.filter(f=>f.id===id),[{id,value:{type:"keyword",value:"fixed"},provenance:{kind:"figma-literal",node_id:nodeId}}]);
+      const mappings=record.contracts.figma_fact_links.filter(l=>l.node_id===nodeId&&l.source_path===sourcePath);
+      assert.equal(mappings.length,1,nodeId+sourcePath);assert.equal(mappings[0].transform,"lowercase");
+      assert.equal(mappings[0].variant_node_id,viewport==="mobile"?"946:26514":"946:26515");
+      assert.equal(ptr(record,mappings[0].contract_path),"fixed");
+    }
+  }
+});
+
+test("canonical Fixed icons cannot collapse in Hug table wrappers while Card/Image remains fluid",()=>{
+  for(const long of [false,true])for(const [id,viewport,size,count]of [
+    ["card-icon","desktop",72,1],["card-icon","mobile",52,1],
+    ["block-icon-list","desktop",56,6],["block-icon-list","mobile",42,6],
+  ]){
+    const tree=parse(viewportHtml(render(id,{long}).html,viewport));
+    const images=domNodes(tree).filter(n=>n.tag==="img");assert.equal(images.length,count);
+    for(const image of images){
+      assert.equal(image.attrs.width,String(size));assert.equal(image.attrs.height,String(size));
+      assert.match(image.attrs.style,new RegExp("(?:^|;)min-width:"+size+"px(?:;|$)","u"),id+" "+viewport+" reserves native image width under long text pressure");
+      assert.equal(ancestor(image,"td").attrs.width,String(size));
+    }
+  }
+  for(const viewport of ["mobile","desktop"]){
+    const images=domNodes(parse(viewportHtml(render("card-image",{long:true}).html,viewport))).filter(n=>n.tag==="img");
+    assert.equal(images.length,1);assert.match(images[0].attrs.style,/width:100%/u);assert.match(images[0].attrs.style,/height:auto/u);
+    assert.doesNotMatch(images[0].attrs.style,/min-width:/u);assert.equal(images[0].attrs.height,undefined);
+  }
+});
