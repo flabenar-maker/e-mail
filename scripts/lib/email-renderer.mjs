@@ -1,3 +1,4 @@
+import { resolveEmissionProfile } from "./email-emission-profile.mjs";
 import { renderContractTree, selectVariantRoot } from "./email-interpreter.mjs";
 import {
   measureEmailOutput,
@@ -416,6 +417,7 @@ export function renderComponent({
   rendererRegistry,
   componentIndex,
   foundations,
+  emissionProfile,
 }) {
   const accumulator = createAccumulator();
   const roots = {};
@@ -457,6 +459,7 @@ export function renderComponent({
     assets: accumulator.assets,
     properties: accumulator.properties,
     foundations,
+    emissionProfile,
   });
 
   return {
@@ -522,6 +525,7 @@ export function renderEmailDocument(model, dependencies) {
     componentId: model?.root?.component_id,
     viewportData: model?.root,
     ...dependencies,
+    emissionProfile:dependencies.emissionProfile ?? resolveEmissionProfile({deliveryProfile:dependencies.deliveryProfile,renderingFoundation:rendering}),
   });
 
   if (rendered.diagnostics.length > 0) {
@@ -545,8 +549,9 @@ export function renderEmailDocument(model, dependencies) {
     };
   }
   const css = rendered.css ?? "";
+  const msoCss = rendered.msoCss ?? "";
   const budgetDiagnostics = validateEmbeddedCssBudget(
-    css,
+    css + msoCss,
     dependencies.foundations.rendering.embedded_css.max_bytes_exclusive,
   );
   if (budgetDiagnostics.length > 0) {
@@ -556,7 +561,7 @@ export function renderEmailDocument(model, dependencies) {
       diagnostics: budgetDiagnostics,
     };
   }
-  const style = css ? `<style>${css}</style>` : "";
+  const style = (css ? `<style>${css}</style>` : "") + (msoCss ? `<!--[if mso]><style>${msoCss}</style><![endif]-->` : "");
   const metadata = buildMetadataComment(model, dependencies);
   const body = renderPrimitive("email-shell", shell, rendered.html);
   const language = escapeAttribute(model.metadata.language);
@@ -566,6 +571,7 @@ export function renderEmailDocument(model, dependencies) {
     html,
     assets: rendered.assets,
     diagnostics: [],
-    metrics: measureEmailOutput({ html, css }),
+    css, msoCss,
+    metrics: measureEmailOutput({ html, css, msoCss }),
   };
 }

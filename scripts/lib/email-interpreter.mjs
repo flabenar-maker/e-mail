@@ -1,3 +1,4 @@
+import { createViewportRules } from "./email-emission-profile.mjs";
 import { renderPrimitive } from "./email-primitives.mjs";
 
 function clone(value) {
@@ -680,6 +681,14 @@ function renderSplit(pair, path, context) {
   const diagnostics = sortDiagnostics([...mobile.diagnostics, ...desktop.diagnostics]);
   if (!mobile.html && !desktop.html) return { html: "", rules: [], diagnostics };
   const classes = splitClasses(path);
+  if (context.emissionProfile?.fallback_viewport === "mobile") {
+    const mobileWrapper = mobile.html ? '<!--[if !mso]><!-->' + renderPrimitive("responsive-visibility", {className:classes.mobile,hidden:false}, mobile.html) + '<!--<![endif]-->' : '';
+    // Word gets a visible opening wrapper; ordinary clients get the inline-hidden
+    // wrapper. Content and its closing tag occur once, without a third tree.
+    const desktopWrapper = desktop.html ? `<!--[if mso]><div class="${classes.desktop}" style="display:block;max-height:none;overflow:visible"><![endif]--><!--[if !mso]><!--><div class="${classes.desktop}" style="display:none;max-height:0;overflow:hidden"><!--<![endif]-->${desktop.html}</div>` : '';
+    const rules = createViewportRules({profile:context.emissionProfile,classes,mobileDisplay:"block",desktopDisplay:"block"});
+    return {html:mobileWrapper + desktopWrapper,rules:rules.ordinaryRules,msoRules:rules.msoRules,diagnostics};
+  }
   const html = [
     mobile.html
       ? renderPrimitive("responsive-visibility", { className: classes.mobile, hidden: true }, mobile.html)
@@ -727,6 +736,7 @@ function renderPaired(pair, path, context) {
     return {
       html: mobileShell.html,
       rules: children.flatMap(({ rules }) => rules),
+      msoRules: children.flatMap(child => child.msoRules ?? []),
       diagnostics: sortDiagnostics([...childDiagnostics, ...mobileShell.diagnostics]),
     };
   }
@@ -734,8 +744,9 @@ function renderPaired(pair, path, context) {
   return renderSplit(pair, path, context);
 }
 
-function breakpointCss(rules, foundations, diagnostics) {
+function breakpointCss(rules, foundations, diagnostics, emissionProfile) {
   if (rules.length === 0) return "";
+  if (emissionProfile?.fallback_viewport === "mobile") return [...new Set(rules)].join("");
   const breakpoint = foundations?.rendering?.breakpoints?.find(
     ({ id }) => id === "cupis-mobile",
   );
@@ -784,6 +795,7 @@ export function renderContractTree({
   visibility = {},
   variantAxes = {},
   foundations = {},
+  emissionProfile,
 }) {
   if (coverage?.component_id !== component?.id || coverage?.mode !== "interpreter") {
     return {
@@ -822,9 +834,10 @@ export function renderContractTree({
   const result = renderPaired(
     pairViewportTrees({ mobile, desktop }),
     "root",
-    { content, assets, properties, visibility, variantAxes, foundations },
+    { content, assets, properties, visibility, variantAxes, foundations, emissionProfile },
   );
   const diagnostics = [...result.diagnostics];
-  const css = breakpointCss(result.rules, foundations, diagnostics);
-  return { html: result.html, css, diagnostics: sortDiagnostics(diagnostics) };
+  const css = breakpointCss(result.rules, foundations, diagnostics, emissionProfile);
+  const msoCss = [...new Set(result.msoRules ?? [])].join("");
+  return { html: result.html, css, msoCss, diagnostics: sortDiagnostics(diagnostics) };
 }
