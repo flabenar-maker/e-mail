@@ -15,7 +15,7 @@
 
 В этом режиме запрещены установки, изменения файлов, настроек, плагинов, подключений и Figma.
 
-1. Через GitHub определи текущий commit ветки `main` репозитория `flabenar-maker/e-mail`.
+1. Сохрани exact cloud SHA из доверенного task-router/bootstrap handoff; не перепинивай `main` внутри переданной задачи. Для отдельного запуска один раз определи текущий commit `main` репозитория `flabenar-maker/e-mail` через GitHub. Явно разрешённая candidate-проверка использует указанный cloud SHA.
 2. На этом SHA прочитай `system/manifest.yaml`. Это единственная карта системы; второго manifest или fallback-пути нет.
 3. Прочитай объявленные в manifest repository/bootstrap entrypoints. Общая просьба ознакомиться с проектом сама по себе не требует выбора предметного route или загрузки всех навыков.
 4. Если есть отдельный CUPIS-запрос, используй project entrypoint из `AGENTS.md` для выбора специализации. Явно выбранный навык сохраняется. Читай только выбранный навык по его manifest registration на том же SHA; он отвечает за route/mode и один resolved context, а не ручной список файлов в bootstrap.
@@ -34,7 +34,7 @@ RESTORE разрешает только безопасные, минимальн
 
 ### 1. Загрузить актуальный контекст
 
-Сначала полностью выполни READ ONLY. Все дальнейшие решения должны опираться на тот же pinned SHA.
+Сначала полностью выполни READ ONLY. Все дальнейшие решения должны опираться на тот же pinned SHA. До любых companion/domain/execution CLI подготовь snapshot, raw preflight и same-lock runtime по разделу7; порядок разделов не разрешает исполнение ещё непроверенных helper files.
 
 ### 2. Проверить зависимости
 
@@ -48,22 +48,19 @@ RESTORE разрешает только безопасные, минимальн
 
 Если GitHub или Figma требуют OAuth, остановись на этом шаге, назови нужное подключение и попроси пользователя подтвердить вход. Не пытайся обходить авторизацию и не сообщай об успешном подключении до фактической read-проверки.
 
-### 3. Проверить repo-scoped навыки
+### 3. Восстановить обнаруживаемые навыки из закреплённого источника
 
-Прочитай секцию `skills` из `system/manifest.yaml` и для каждой записи:
+Этот раздел относится к RESTORE. READ ONLY только сообщает состояние и не устанавливает, не синхронизирует и не перезаписывает навыки. Manifest на pinned SHA — единственный каталог owned skills; не зашивай их имена в setup-логику. Для required-записей проверь наличие исходного SKILL.md и совпадение frontmatter name; optional-записи проверяй, если они уже установлены или их установка отдельно выбрана.
 
-- `required` — убедись, что `SKILL.md` существует, его frontmatter `name` совпадает с manifest и Codex обнаруживает навык;
-- `optional` — выполни те же проверки, только если папка навыка присутствует; отсутствие optional-навыка не является блокером.
+1. Штатным способом текущей установки Codex установи, откуда приложение действительно обнаруживает каждый выбранный навык. Зафиксируй точный целевой каталог и уже обнаруженные одноимённые копии. Не предполагай персональный абсолютный путь. Для проекта с разрешённым постоянным checkout используй его уже обнаруживаемое repo-scoped расположение. Для cloud-only проекта выбери явно разрешённое обнаруживаемое пользовательское расположение: disposable verification snapshot не является установкой, а постоянный второй checkout проекта ради discovery не создаётся.
+2. Сравни весь набор файлов только выбранных manifest-owned skill directories с raw cloud bytes того же pinned SHA. Запиши прежний source pin из существующей install receipt; при её отсутствии версия неизвестна, укажи фактические digest различия. Не выдавай совпадение имени или прежнюю успешную проверку за совпадение текущей версии. Missing registration/source, несовпадающий frontmatter или неоднозначная фактически активная копия — blocker до изменения.
+3. Покажи точные source SHA, destination, affected owned files, конфликты и минимальный diff. Авторизация RESTORE покрывает обратимую установку отсутствующих навыков в согласованное расположение; существующую глобальную/пользовательскую копию не удаляй и не перезаписывай без отдельного разрешения. Уже данное разрешение на тот же конкретный scope повторять не нужно. Если repo-scoped и глобальная версии конфликтуют, не предполагай приоритет по одному наличию папки: проверь реально обнаруженную для проекта версию, сообщи конфликт и согласуй затрагиваемую копию. Не создавай дубль как обход конфликта и не трогай unrelated skills.
+4. После необходимого разрешения создай датированный backup фактически существующих затрагиваемых owned files вне всех owned skill directories, чтобы backup не попадал в discovery или installed inventory. Сохрани их исходные raw bytes и предыдущую install receipt. Синхронизируй только согласованный изменившийся набор из того же pinned cloud SHA; не добавляй в SKILL.md runtime-код, профиль, helper outputs или копии предметных правил. Неизвестные дополнительные файлы не удаляй автоматически: сообщи расхождение и конкретную границу его исправления.
+5. Сохрани отдельную приватную install receipt вне owned skill directories и source snapshot: schema_version, source_sha, manifest-owned skill IDs, фактические destinations, raw-file SHA256 digests, предыдущее состояние и backup references, реально выполненные действия. Это локальные пути и доказательства установки; не публикуй их в GitHub. Запись prepared/synced не равна acceptance. Повторный RESTORE сравнивает эту receipt и текущие байты, не создаёт вторые копии.
+6. Подтверди реальное discovery в приложении, затем проверь каждый установленный owned file против канонического pinned источника. Для installed-skills используй свежую bound inventory текущих файлов и реальный локальный helper; отсутствие обнаружения или byte mismatch оставляет восстановление незавершённым. Файловая проверка и JSON-симуляция не доказывают, что Codex загрузил навык.
+7. После подготовки runtime и существующего cached-profile binding по следующим разделам проведи отдельные clean-context проверки каждой специализации и router handoff: один source pin, один domain bundle, conditional profile_pair_key, unavailable-model handling и stopped/mixed границы. Не загружай обе специализации в один обычный task. Запиши реальные agent/helper/discovery результаты и ограничения в install receipt; закрывай приёмку только после фактических проверок.
 
-Не зашивай имена навыков в bootstrap-логику: manifest является единственным каталогом зависимостей восстановления.
-
-Если глобально уже существует навык с тем же именем:
-
-1. сообщи, какой именно навык конфликтует;
-2. оставь repo-scoped версию приоритетной для этого проекта;
-3. не удаляй и не перезаписывай глобальную копию без отдельного подтверждения пользователя.
-
-Повторный запуск не должен создавать вторую копию ни одного навыка.
+Runtime helpers, schemas, canonical policy и same-lock dependencies исполняются из проверенного disposable pinned snapshot по разделу7. В установленное расположение навыков копируются только их manifest-owned файлы; helpers не превращаются во второй постоянный source checkout. Existing user+PC state/binding остаётся вне snapshot и переиспользуется без новой диагностики; RESTORE навыков само по себе не разрешает refresh профиля, изменение глобальных настроек, merge или production outputs.
 
 ### 4. Безопасно сравнить настройки
 
@@ -100,7 +97,7 @@ RESTORE разрешает только безопасные, минимальн
 
 Привязка пары пользователь + ПК хранится отдельно: только после разрешения на конкретный локальный путь укажи --local-binding-root в несинхронизируемом подкаталоге LOCALAPPDATA. CLI не создаёт и не ищет binding там автоматически. Каталог должен быть вне пользовательского workspace и state root, без symbolic links/junctions. active-profile.json содержит только случайный непрозрачный pair_key. Копирование OneDrive/workspace и профиля на другой ПК не переносит активную привязку: bootstrap создаёт там собственную. Альтернатива при недоступном локальном каталоге — --pair-key с доверенным непрозрачным ключом пары, предоставленным внешним coordinator; не извлекай ключ из скопированного профиля. Не используй hostname, SID, machine GUID, auth-файлы или hardware для идентификатора.
 
-Из exact-SHA snapshot запусти companion CLI (значения путей ниже — placeholders разрешённых каталогов):
+Из прошедшего raw preflight по разделу7 exact-SHA snapshot запусти companion CLI (значения путей ниже — placeholders разрешённых каталогов):
 
 ~~~powershell
 node scripts/init-execution-profile.mjs --action init --workspace PERSISTENT_WORKSPACE --local-binding-root PERMITTED_LOCALAPPDATA_SUBDIRECTORY
@@ -117,7 +114,17 @@ Windows x64/arm64 + Node 24 допускают local при всех извес�
 
 ### 7. Проверить локальный контракт
 
-Node.js 24 обязателен. Отсутствие Node 24 или несовпадающая major-версия — блокер восстановления. Во временном изолированном снимке закреплённого cloud SHA выполни чистую установку и проверки; это среда исполнения, не рабочая копия для правок:
+Node.js 24 обязателен. Отсутствие Node 24 или несовпадающая major-версия — блокер восстановления. Подготовь новый disposable snapshot exact cloud SHA и его первого родителя (fetch depth2); это среда исполнения, не рабочая копия для правок. Во всех checkout-командах применяй только process-local Git options, например:
+
+~~~text
+git -c core.autocrlf=false -c core.eol=lf checkout --detach PINNED_SHA
+~~~
+
+Не меняй global/system/local постоянный Git config, исходные .gitattributes, protected blobs или существующие CRLF blobs ради проверки. Если прежний snapshot уже создан с преобразованием EOL, подготовь новый снимок из cloud commit с этими параметрами; не исправляй source bytes вручную и не объявляй нормализацию исходником.
+
+До первого domain/execution/helper вызова проверь не только HEAD==PINNED_SHA, но и raw identity: inventory из git ls-tree -r -z PINNED_SHA, regular-file modes/types и raw Git blob hash каждого tracked file (git hash-object --no-filters PATH либо эквивалентный streaming blob hash) должны совпасть. Откажись при missing/changed/symlinked source или alias родителя, произвольных untracked/ignored files; единственное execution-исключение — проверенные same-lock node_modules. Git status/diff применяют clean filters и сами по себе не доказывают raw identity. Сохрани приватный preflight результат с exact source pin; ненулевые mismatches останавливают helper execution. Проверка bytes не переинициализирует профиль ПК.
+
+После успешного raw preflight выполни подготовку зависимостей и проверки. Предпочтительный npm-путь ниже; при отсутствии package runner разрешён идентичный прямой node scripts/validate-system.mjs с фактически проверенными same-lock зависимостями, с записью direct-equivalent, без заявления о выполненном npm ci:
 
 ```powershell
 npm ci --ignore-scripts
@@ -144,7 +151,8 @@ Verifier выполняет только локальное чтение. Нен
 
 - pinned SHA и прочитанные источники;
 - состояние GitHub/Figma и требуемый ручной OAuth;
-- обнаруженный repo-scoped навык и возможный глобальный конфликт;
+- фактически обнаруженные навыки, installation source SHA и проверенные raw digests, целевые расположения и возможные конфликты;
+- приватную install receipt, backup references и отдельные результаты discovery/byte sync/clean-context;
 - изменён ли config, где лежит backup и какие ключи были добавлены;
 - результат `bootstrap/verify.ps1`;
 - что сознательно не менялось.

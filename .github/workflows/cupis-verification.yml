@@ -61,6 +61,13 @@ jobs:
           foreach ($id in $request.workload_ids) { if ($allowed -cnotcontains $id) { throw 'CLOUD_REQUEST_INVALID' } }
           "source_sha=$($request.source_sha)" | Out-File -LiteralPath $env:GITHUB_OUTPUT -Append -Encoding utf8
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        # Process-only checkout settings preserve raw HEAD bytes on Windows.
+        env:
+          GIT_CONFIG_COUNT: '2'
+          GIT_CONFIG_KEY_0: core.autocrlf
+          GIT_CONFIG_VALUE_0: 'false'
+          GIT_CONFIG_KEY_1: core.eol
+          GIT_CONFIG_VALUE_1: lf
         with:
           ref: ${{ steps.request.outputs.source_sha }}
           fetch-depth: 2

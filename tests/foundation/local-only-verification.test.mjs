@@ -10,6 +10,10 @@ test('only explicit opt-in verification workflow; no automatic push, synchronize
  assert.deepEqual(Object.keys(w.on).sort(),['pull_request','workflow_dispatch']);assert.deepEqual(w.on.pull_request.types,['labeled']);assert.deepEqual(w.permissions,{contents:'read'});
  assert.match(w.jobs.verify.if,/cupis-cloud-verification/u);assert.match(w.jobs.verify.if,/head.repo.full_name/u);assert.match(w.jobs.verify.if,/mergeable/u);
  assert.equal(w.jobs.verify['runs-on'],'windows-2025');assert.equal(w.jobs.verify['timeout-minutes'],30);
+ const checkout=w.jobs.verify.steps.find(step=>step.uses?.startsWith('actions/checkout@'));
+ assert.deepEqual(checkout.env,{GIT_CONFIG_COUNT:'2',GIT_CONFIG_KEY_0:'core.autocrlf',GIT_CONFIG_VALUE_0:'false',GIT_CONFIG_KEY_1:'core.eol',GIT_CONFIG_VALUE_1:'lf'});
+ for(const env of [w.env,w.jobs.verify.env,...w.jobs.verify.steps.filter(step=>step!==checkout).map(step=>step.env)])assert.ok(!Object.keys(env??{}).some(key=>key.startsWith('GIT_CONFIG_')),'checkout conversion settings cannot leak into checks');
+
  for(const step of w.jobs.verify.steps){if(step.uses)assert.match(step.uses,/^[\w-]+\/[\w-]+@[a-f0-9]{40}$/u);if(step.run)assert.doesNotMatch(step.run,/\$\{\{/u);}
  assert.match(raw,/persist-credentials: false/u);assert.match(raw,/GITHUB_EVENT_PATH/u);assert.match(raw,/run-verification\.mjs/u);assert.doesNotMatch(raw,/pull_request_target|secrets\.|npm run verify/u);
 });
