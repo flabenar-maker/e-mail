@@ -294,3 +294,45 @@ test("scalar audit accepts both capture versions without suppressing other issue
   const unknown = auditFigmaContractFacts({ record, live: { ...packet, capture_version: "9.0.0" } });
   assert.ok(unknown.issues.some(({ code }) => code === "FIGMA_CAPTURE_VERSION_UNSUPPORTED"));
 });
+
+
+// Real TextNode fields captured on 2026-10-11: these controls deliberately have
+// no layoutMode, which belongs to Auto Layout containers, not ordinary TEXT.
+for (const [horizontal, vertical, resize, align] of [
+  ["FILL", "HUG", "HEIGHT", "STRETCH"],
+  ["FIXED", "FIXED", "NONE", "INHERIT"],
+]) {
+  test("TEXT capture emits native " + horizontal + "/" + vertical + " sizing without layoutMode", async () => {
+    const text = textNode({ layoutSizingHorizontal: horizontal, layoutSizingVertical: vertical,
+      layoutAlign: align, layoutGrow: 0, textAutoResize: resize });
+    assert.equal(Object.hasOwn(text, "layoutMode"), false);
+    const packet = await captureWith(fakeFigma({ node: component([text]) }).figma);
+    const captured = packet.variants[0].source_node.children[0];
+    assert.equal(captured.layout?.horizontal_sizing, horizontal);
+    assert.equal(captured.layout?.vertical_sizing, vertical);
+    assert.equal(Object.hasOwn(captured.layout, "mode"), false, "do not manufacture a TEXT Auto Layout mode");
+    assert.equal(captured.text_geometry.auto_resize, resize);
+    assert.equal(captured.text_style.text_auto_resize, resize);
+    assert.equal(captured.layout_align, align);
+    assert.deepEqual(packet.capture_errors, []);
+  });
+}
+
+test("native TEXT Fill mapping is independent of HEIGHT and rejects a stale Fixed contract", async () => {
+  const packet = await captureWith(fakeFigma({ node: component([textNode({
+    layoutSizingHorizontal: "FILL", layoutSizingVertical: "HUG", textAutoResize: "HEIGHT",
+  })]) }).figma);
+  const record = mappedRecord();
+  const index = record.contracts.mobile.root.facts.length;
+  record.contracts.mobile.root.facts.push({ id: "horizontal-sizing", value: { type: "keyword", value: "fill" },
+    provenance: { kind: "figma-literal", node_id: "2:1" } });
+  const contract_path = "/contracts/mobile/root/facts/" + index + "/value/value";
+  record.contracts.figma_fact_links.push({ variant_node_id: "1:1", node_id: "2:1",
+    source_path: "/layout/horizontal_sizing", contract_path, transform: "lowercase" });
+  const matching = auditFigmaContractFacts({ record, live: packet });
+  assert.deepEqual(matching.issues.filter(issue => issue.contract_path === contract_path), []);
+  record.contracts.mobile.root.facts[index].value.value = "fixed";
+  const stale = auditFigmaContractFacts({ record, live: packet });
+  assert.ok(stale.issues.some(issue => issue.code === "FIGMA_CONTRACT_MISMATCH" && issue.contract_path === contract_path));
+  assert.equal(packet.variants[0].source_node.children[0].text_geometry.auto_resize, "HEIGHT");
+});
