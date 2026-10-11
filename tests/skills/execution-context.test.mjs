@@ -66,3 +66,10 @@ test('saved profile needs the active pair and exact workload signature and never
  for(const invalid of [undefined,{...profile,pair_key:'other'},{...profile,profile:{...p,schema_version:'2.0.0'}},{...profile,profile:{...p,workload_decisions:[{...p.workload_decisions[0],signature:'0'.repeat(64)}]}},{status:'resolved',pair_key:'opaque-pair',profile:{schema_version:'1.0.0',pair_key:'opaque-pair',workload_decisions:p.workload_decisions}}]) assert.equal(api.resolveExecutionContext({...f,request,profile:invalid}).verification[0].target,'github-hosted');
 });
 test('initial model selection can precede artifact creation',async t=>{const f=await fixture(t);delete f.request.executor_agent_id;f.request.artifact_refs=[];const request=await api.loadExecutionRequest({request:f.request,repoRoot:f.root});assert.equal(api.resolveExecutionContext({...f,request}).status,'resolved');});
+
+test('successful attempts and network outages release the transient guard, typed refusals stay one-shot',()=>{
+ assert.equal(typeof runtime.createRuntimeCapabilityCache,'function');const cache=runtime.createRuntimeCapabilityCache();const identity={runtime_session_id:'synthetic-test',tool_signature:'synthetic-tool'};cache.get({...identity,read:caps});const candidate={...identity,model:'gpt-5.6-terra',effort:'medium'};
+ assert.equal(typeof cache.finishAttempt,'function','coordinator must be able to finish a successful actual spawn');
+ for(const outcome of ['success','network-error']){assert.equal(cache.beginAttempt(candidate),true);assert.equal(cache.finishAttempt({...candidate,outcome}),true);assert.equal(cache.get({...identity,read:caps}).refusals?.length??0,0);}
+ assert.equal(cache.beginAttempt(candidate),true);assert.equal(cache.recordRefusal({...candidate,code:'MODEL_UNAVAILABLE'}),true);assert.equal(cache.finishAttempt({...candidate,outcome:'success'}),false);assert.equal(cache.beginAttempt(candidate),false);
+});
