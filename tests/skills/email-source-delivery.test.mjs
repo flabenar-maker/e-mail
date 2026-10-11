@@ -152,3 +152,24 @@ test("removing a collected required URL blocks the release before any output is 
     await assert.rejects(execFileAsync(process.execPath, ["scripts/render-email.mjs", "--model", join(folder, "model.json"), "--delivery", join(folder, "delivery.json"), "--output", output], { cwd: repoRoot, env: { ...process.env, CUPIS_SYSTEM_COMMIT: sourceSha } }), /REQUIRED_URL|Fill the address/u); await assert.rejects(readdir(output), /ENOENT/u);
   }
 });
+
+test("blank subject remains a labelled incomplete preview and never creates an archive", async (t) => {
+  const folder = await mkdtemp(join(tmpdir(), "cupis-source-delivery-preview-"));
+  t.after(() => rm(folder, { recursive: true, force: true }));
+  const { document } = await releaseInput(folder);
+  const blank = { ...document, subject: "" };
+  const delivery = join(folder, "blank-subject-delivery.json");
+  const preview = join(folder, "preview", "email.html");
+  await writeFile(delivery, JSON.stringify(blank));
+  await execFileAsync(process.execPath, ["scripts/render-email-preview.mjs", "--model", join(folder, "model.json"), "--delivery", delivery, "--mode", "normal", "--output", preview], { cwd: repoRoot, env: { ...process.env, CUPIS_SYSTEM_COMMIT: sourceSha } });
+  const html = await readFile(preview, "utf8");
+  assert.match(html, /<title>Предпросмотр — данные для выпуска неполные<\/title>/u);
+  assert.match(html, /CUPIS preview: readiness=incomplete; purpose=preview/u);
+  await assert.rejects(readFile(join(folder, "preview", "altcraft.zip")), /ENOENT/u);
+  const release = join(folder, "release");
+  await execFileAsync(process.execPath, ["scripts/render-email.mjs", "--model", join(folder, "model.json"), "--delivery", join(folder, "delivery.json"), "--output", release], { cwd: repoRoot, env: { ...process.env, CUPIS_SYSTEM_COMMIT: sourceSha } });
+  const report = JSON.parse(await readFile(join(release, "release-report.json"), "utf8"));
+  assert.equal(report.emission_profile.id, "altcraft-mobile-base-v1");
+  assert.equal(report.emission_profile.effective_fallback, "mobile");
+  assert.equal(report.service_rules_version, "1.0.0");
+});

@@ -4,6 +4,8 @@ import test from "node:test";
 import {
   buildPersonalizationPreview,
   emitGreetingTemplate,
+  findGreetingRule,
+  matchesTemplateTarget,
   planTemplateRules,
 } from "../../scripts/lib/email-template-rules.mjs";
 import { buildPlainText } from "../../scripts/lib/email-plain-text.mjs";
@@ -29,6 +31,17 @@ test("exact and NBSP standalone greetings emit the exact Altcraft template", () 
   const rule = { kind: "conditional-greeting", bindings: [greetingBinding] };
   assert.equal(emitGreetingTemplate({ rule, originalText: "Здравствуйте, Имя!" }), TEMPLATE);
   assert.equal(emitGreetingTemplate({ rule, originalText: " Здравствуйте, Имя! " }), TEMPLATE);
+});
+
+test("greeting and range-link targets require the exact original slot and range", () => {
+  const target = { ...greetingBinding, range: { start: 0, end: 8 } };
+  const rule = { kind: "conditional-greeting", bindings: [target], emitted_template: TEMPLATE };
+  const origin = { ...greetingBinding, original_element_id: greetingBinding.element_id };
+
+  assert.equal(matchesTemplateTarget(target, origin), true);
+  assert.equal(matchesTemplateTarget(target, { ...origin, slot_id: "href" }), false);
+  assert.equal(findGreetingRule({ templateRules: { rules: [rule] }, origin, range: { start: 0, end: 8 } }), rule);
+  assert.equal(findGreetingRule({ templateRules: { rules: [rule] }, origin, range: { start: 1, end: 8 } }), undefined);
 });
 
 test("repeated greetings share one policy while near matches stay unchanged", () => {

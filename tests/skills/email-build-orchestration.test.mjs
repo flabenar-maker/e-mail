@@ -101,7 +101,12 @@ test("actual resolver workflow modes gate source proof and design continuation e
   const inventory = collectEmailActions({model,componentIndex:index,profile});
   const deliveryDocument = createDeliveryDraft({emailId:model.id,sourceSha,profile,inventory});
   deliveryDocument.subject = "Source gate regression";
-  const handoff = (resolution, { handoffModel = model, handoffDelivery = deliveryDocument } = {}) => executeEmailBuildHandoff({
+  const handoff = (resolution, options = {}) => {
+    const handoffModel = options.handoffModel ?? model;
+    const handoffDelivery = Object.hasOwn(options, "handoffDelivery")
+      ? options.handoffDelivery
+      : deliveryDocument;
+    return executeEmailBuildHandoff({
     repoRoot,
     assetRoot: root,
     outputDir: join(root, "output"),
@@ -112,7 +117,8 @@ test("actual resolver workflow modes gate source proof and design continuation e
     sourceSha,
     ...(handoffDelivery ? {deliveryDocument: handoffDelivery} : {}),
     rendererRunner: async () => { invocations += 1; },
-  });
+    });
+  };
   const missingDelivery = await handoff(newBuild, { handoffDelivery: undefined });
   assert.deepEqual(missingDelivery.blockers, ["delivery-required"]);
   const invalidMinimalModel = await handoff(newBuild);
