@@ -774,6 +774,11 @@
               },
               "same_lock_dependencies": {
                 "const": true
+              },
+              "docs_scope": {
+                "enum": [
+                  "first-parent"
+                ]
               }
             }
           },

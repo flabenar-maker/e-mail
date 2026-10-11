@@ -319,6 +319,18 @@
               "workflow_sha": {
                 "type": "string",
                 "pattern": "^[a-f0-9]{40}$"
+              },
+              "event_sha": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{40}$"
+              },
+              "run_id": {
+                "type": "string",
+                "pattern": "^[0-9]+$"
+              },
+              "run_attempt": {
+                "type": "string",
+                "pattern": "^[0-9]+$"
               }
             }
           },
@@ -333,17 +345,26 @@
                 {
                   "required": [
                     "event_sha"
-                  ]
+                  ],
+                  "properties": {
+                    "event_sha": {}
+                  }
                 },
                 {
                   "required": [
                     "run_id"
-                  ]
+                  ],
+                  "properties": {
+                    "run_id": {}
+                  }
                 },
                 {
                   "required": [
                     "run_attempt"
-                  ]
+                  ],
+                  "properties": {
+                    "run_attempt": {}
+                  }
                 }
               ]
             }

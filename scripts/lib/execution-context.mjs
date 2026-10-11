@@ -26,16 +26,17 @@ export function safeExecutionPath(value){
  return value.split('/').every(part=>part&&part!=='.'&&part!=='..'&&!/[. ]$/u.test(part)&&!/~[0-9]/u.test(part)&&!/^(?:con|prn|aux|nul|com[0-9¹²³]|lpt[0-9¹²³])(?:\.|$)/iu.test(part));
 }
 // All refs are explicit files under this root. No absolute refs, glob scopes, aliases or symlinks.
-export async function readExecutionRef({ref,repoRoot,referenceRoot=repoRoot}){
+export async function readExecutionRef({ref,repoRoot,referenceRoot=repoRoot,signal,maxBytes=Infinity}){
+ signal?.throwIfAborted();
  if(!ref||Object.keys(ref).sort().join(',')!=='digest,path'||!safeExecutionPath(ref.path)||!/^[a-f0-9]{64}$/u.test(ref.digest))throw fail('EXECUTION_REFERENCE_INVALID','Expected a safe repository-relative {path,digest} file reference.');
  const root=await realpath(referenceRoot);let file=root;
  try {
   for(const segment of ref.path.split('/')){file=join(file,segment);if((await lstat(file)).isSymbolicLink())throw fail('EXECUTION_REFERENCE_UNSAFE','Symbolic links are not permitted in execution references.');}
   const actual=await realpath(file),rel=relative(root,actual);if(rel.startsWith('..')||isAbsolute(rel))throw fail('EXECUTION_REFERENCE_UNSAFE','Reference escaped its allowed root.');
-  const before=await lstat(file);if(!before.isFile())throw fail('EXECUTION_REFERENCE_INVALID','Reference must name a regular file.');
-  const bytes=await readFile(file);const after=await lstat(file);if(after.isSymbolicLink()||before.ino!==after.ino||before.size!==after.size||before.mtimeMs!==after.mtimeMs)throw fail('EXECUTION_REFERENCE_CHANGED','Reference changed while reading.');
+  signal?.throwIfAborted();const before=await lstat(file);if(before.size>maxBytes)throw fail("EXECUTION_REFERENCE_TOO_LARGE","Reference exceeds the explicit byte limit.");if(!before.isFile())throw fail('EXECUTION_REFERENCE_INVALID','Reference must name a regular file.');
+  const bytes=await readFile(file,{signal});signal?.throwIfAborted();const after=await lstat(file);if(after.isSymbolicLink()||before.ino!==after.ino||before.size!==after.size||before.mtimeMs!==after.mtimeMs)throw fail('EXECUTION_REFERENCE_CHANGED','Reference changed while reading.');
   if(hash(bytes)!==ref.digest)throw fail('EXECUTION_REFERENCE_DIGEST_MISMATCH','Reference digest does not match the actual file bytes.');return bytes.toString('utf8');
- }catch(error){if(error instanceof SystemValidationError)throw error;throw fail('EXECUTION_REFERENCE_READ','Execution reference could not be read.');}
+ }catch(error){if(signal?.aborted)throw signal.reason;if(error instanceof SystemValidationError)throw error;throw fail('EXECUTION_REFERENCE_READ','Execution reference could not be read.');}
 }
 // Preserve the existing domain resolver output in context; the envelope binds its trusted handoff.
 export async function loadExecutionRequest({request,repoRoot,referenceRoot=repoRoot}){

@@ -39,6 +39,7 @@ function validateReferences(policy) {
   if (new Set(ids).size !== ids.length) error("/workloads", "Workload IDs must be unique.");
   for (const required of ["docs-scoped", "repository-full", "windows-bootstrap", "visual-fixtures", "installed-skills", "real-email-visual"]) if (!ids.includes(required)) error("/workloads", "Required workload missing: " + required);
   for (const workload of policy.workloads) {
+    if ((workload.id === "docs-scoped" && (workload.requirements.docs_scope !== "first-parent" || JSON.stringify(workload.commands) !== JSON.stringify([{executable:"node",args:["scripts/lib/execution-docs-check.mjs"]}]))) || (workload.id !== "docs-scoped" && workload.requirements.docs_scope !== undefined)) error("/workloads/" + workload.id, "Docs scope must use the fixed first-parent source program.");
     if (["installed-skills", "real-email-visual"].includes(workload.id) && workload.portability !== "local-only") error("/workloads/" + workload.id, "Live user artifacts and installed skills require local verification.");
     const references = workload.commands.flatMap(command => command.args.filter(arg => /^\{[a-z_]+\}$/u.test(arg)).map(arg => arg.slice(1,-1)));
     if (references.some(input => !workload.required_inputs.includes(input)) || workload.required_inputs.some(input => !references.includes(input))) error("/workloads/" + workload.id, "Command input references must exactly cover required inputs.");

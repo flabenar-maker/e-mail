@@ -285,7 +285,8 @@
         "runtimes": [
           "node"
         ],
-        "same_lock_dependencies": true
+        "same_lock_dependencies": true,
+        "docs_scope": "first-parent"
       },
       "limits": {
         "concurrency": 2,
@@ -296,13 +297,7 @@
         {
           "executable": "node",
           "args": [
-            "--test",
-            "--test-concurrency=2",
-            "tests/skills/cupis-email-task-router.test.mjs",
-            "tests/skills/maintenance-skill-boundary.test.mjs",
-            "tests/skills/email-build-skill-boundary.test.mjs",
-            "tests/skills/execution-policy.test.mjs",
-            "tests/skills/model-selection.test.mjs"
+            "scripts/lib/execution-docs-check.mjs"
           ]
         }
       ]
