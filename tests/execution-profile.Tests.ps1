@@ -35,6 +35,20 @@ console.log('PASS: external persistent profile, repeat init and 100 reads; synth
     $parseErrors = $null
     [System.Management.Automation.Language.Parser]::ParseFile($collectorPath, [ref]$parseTokens, [ref]$parseErrors) | Out-Null
     if ($parseErrors.Count -gt 0) { throw 'Collector is incompatible with this PowerShell parser.' }
+    # Synthetic query functions intercept both CIM reads; invalid temp path prevents
+    # any actual disk query even on the intentionally failing pre-fix implementation.
+    $script:denialQueries = 0
+    function Get-CimInstance {
+        param($ClassName, $Property, $OperationTimeoutSec)
+        $script:denialQueries++
+        throw [System.UnauthorizedAccessException]::new('Synthetic denied observation')
+    }
+    $denialPropagated = $false
+    try {
+        & $collectorPath -NodeExecutable 'COLLECTOR_MUST_NOT_RUN' -TemporaryRoot ([string][char]0) | Out-Null
+    } catch { $denialPropagated = $true }
+    finally { Remove-Item -LiteralPath 'Function:\Get-CimInstance' }
+    if (-not $denialPropagated -or $script:denialQueries -ne 1) { throw 'Collector must stop on the first denied query and propagate unavailable; no retry.' }
     Write-Output '[PASS] Execution profile contract passed; actual hardware was not sampled.'
 } finally {
     $resolvedTemporaryRoot = [System.IO.Path]::GetFullPath($temporaryRoot)
