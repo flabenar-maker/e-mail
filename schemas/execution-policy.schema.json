@@ -1,0 +1,883 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "safety_bump",
+    "maximum_tier",
+    "capability_ids",
+    "tiers",
+    "task_kinds",
+    "operation_capabilities",
+    "critical_mutations",
+    "review",
+    "delegation",
+    "runtime_capabilities",
+    "hardware_thresholds",
+    "profile",
+    "local_limits",
+    "cloud_limits",
+    "workloads",
+    "verification",
+    "context"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "safety_bump": {
+      "const": 1
+    },
+    "maximum_tier": {
+      "const": 4
+    },
+    "capability_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true,
+      "minItems": 1
+    },
+    "tiers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "tier",
+          "candidates"
+        ],
+        "properties": {
+          "tier": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 4
+          },
+          "candidates": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "model",
+                "effort"
+              ],
+              "properties": {
+                "model": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "effort": {
+                  "enum": [
+                    "low",
+                    "medium",
+                    "high"
+                  ]
+                }
+              }
+            },
+            "minItems": 1
+          }
+        }
+      },
+      "minItems": 4,
+      "maxItems": 4
+    },
+    "task_kinds": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mechanical-read",
+        "run-prescribed-checks",
+        "bounded-change",
+        "failure-diagnosis",
+        "visual-compare",
+        "architecture-change",
+        "policy-change",
+        "contract-change",
+        "ambiguous-task"
+      ],
+      "properties": {
+        "mechanical-read": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "base_tier",
+            "mechanical",
+            "required_capabilities"
+          ],
+          "properties": {
+            "base_tier": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4
+            },
+            "mechanical": {
+              "type": "boolean"
+            },
+            "required_capabilities": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            }
+          }
+        },
+        "run-prescribed-checks": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "base_tier",
+            "mechanical",
+            "required_capabilities"
+          ],
+          "properties": {
+            "base_tier": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4
+            },
+            "mechanical": {
+              "type": "boolean"
+            },
+            "required_capabilities": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            }
+          }
+        },
+        "bounded-change": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "base_tier",
+            "mechanical",
+            "required_capabilities"
+          ],
+          "properties": {
+            "base_tier": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4
+            },
+            "mechanical": {
+              "type": "boolean"
+            },
+            "required_capabilities": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            }
+          }
+        },
+        "failure-diagnosis": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "base_tier",
+            "mechanical",
+            "required_capabilities"
+          ],
+          "properties": {
+            "base_tier": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4
+            },
+            "mechanical": {
+              "type": "boolean"
+            },
+            "required_capabilities": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            }
+          }
+        },
+        "visual-compare": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "base_tier",
+            "mechanical",
+            "required_capabilities"
+          ],
+          "properties": {
+            "base_tier": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4
+            },
+            "mechanical": {
+              "type": "boolean"
+            },
+            "required_capabilities": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            }
+          }
+        },
+        "architecture-change": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "base_tier",
+            "mechanical",
+            "required_capabilities"
+          ],
+          "properties": {
+            "base_tier": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4
+            },
+            "mechanical": {
+              "type": "boolean"
+            },
+            "required_capabilities": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            }
+          }
+        },
+        "policy-change": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "base_tier",
+            "mechanical",
+            "required_capabilities"
+          ],
+          "properties": {
+            "base_tier": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4
+            },
+            "mechanical": {
+              "type": "boolean"
+            },
+            "required_capabilities": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            }
+          }
+        },
+        "contract-change": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "base_tier",
+            "mechanical",
+            "required_capabilities"
+          ],
+          "properties": {
+            "base_tier": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4
+            },
+            "mechanical": {
+              "type": "boolean"
+            },
+            "required_capabilities": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            }
+          }
+        },
+        "ambiguous-task": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "base_tier",
+            "mechanical",
+            "required_capabilities"
+          ],
+          "properties": {
+            "base_tier": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4
+            },
+            "mechanical": {
+              "type": "boolean"
+            },
+            "required_capabilities": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            }
+          }
+        }
+      }
+    },
+    "operation_capabilities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "read",
+        "write"
+      ],
+      "properties": {
+        "read": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "write": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "critical_mutations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "minimum_base_tier",
+        "prefixes",
+        "basenames",
+        "path_fragments",
+        "wildcard_scope_is_critical"
+      ],
+      "properties": {
+        "minimum_base_tier": {
+          "const": 3
+        },
+        "prefixes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "basenames": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "path_fragments": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "wildcard_scope_is_critical": {
+          "const": true
+        }
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mechanical_mode",
+        "semantic_mode",
+        "reviewer_tier_increment",
+        "require_distinct_agent",
+        "require_primary_sources",
+        "require_all_requirements",
+        "test_success_is_acceptance",
+        "ordinary_repair_attempts",
+        "misunderstanding_escalation",
+        "ceiling_escalation",
+        "external_wait_escalates"
+      ],
+      "properties": {
+        "mechanical_mode": {
+          "const": "independent-source-check"
+        },
+        "semantic_mode": {
+          "const": "independent-agent"
+        },
+        "reviewer_tier_increment": {
+          "const": 1
+        },
+        "require_distinct_agent": {
+          "const": true
+        },
+        "require_primary_sources": {
+          "const": true
+        },
+        "require_all_requirements": {
+          "const": true
+        },
+        "test_success_is_acceptance": {
+          "const": false
+        },
+        "ordinary_repair_attempts": {
+          "const": 2
+        },
+        "misunderstanding_escalation": {
+          "const": "next-tier"
+        },
+        "ceiling_escalation": {
+          "const": "different-independent-agent"
+        },
+        "external_wait_escalates": {
+          "const": false
+        }
+      }
+    },
+    "delegation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "max_subagents",
+        "explicit_model",
+        "explicit_reasoning_effort",
+        "fork_turns",
+        "bounded_brief",
+        "serialize_overlapping_writes"
+      ],
+      "properties": {
+        "max_subagents": {
+          "const": 3
+        },
+        "explicit_model": {
+          "const": true
+        },
+        "explicit_reasoning_effort": {
+          "const": true
+        },
+        "fork_turns": {
+          "const": "none"
+        },
+        "bounded_brief": {
+          "const": true
+        },
+        "serialize_overlapping_writes": {
+          "const": true
+        }
+      }
+    },
+    "runtime_capabilities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "snapshot_key",
+        "max_candidate_attempts",
+        "invalidate_on",
+        "typed_refusal_codes",
+        "forbidden_sources",
+        "outage_is_unavailability"
+      ],
+      "properties": {
+        "source": {
+          "const": "declared-runtime-tools"
+        },
+        "snapshot_key": {
+          "const": [
+            "runtime_session_id",
+            "tool_signature"
+          ]
+        },
+        "max_candidate_attempts": {
+          "const": 1
+        },
+        "invalidate_on": {
+          "const": [
+            "new-session",
+            "account-change",
+            "tool-signature-change",
+            "MODEL_UNAVAILABLE",
+            "EFFORT_UNAVAILABLE"
+          ]
+        },
+        "typed_refusal_codes": {
+          "const": [
+            "MODEL_UNAVAILABLE",
+            "EFFORT_UNAVAILABLE",
+            "CAPABILITY_UNAVAILABLE"
+          ]
+        },
+        "forbidden_sources": {
+          "const": [
+            "auth-files",
+            "models-cache",
+            "app-catalog",
+            "web-search",
+            "prices",
+            "benchmarks"
+          ]
+        },
+        "outage_is_unavailability": {
+          "const": false
+        }
+      }
+    },
+    "hardware_thresholds": {
+      "const": [
+        {
+          "platform": "win32",
+          "architectures": [
+            "x64",
+            "arm64"
+          ],
+          "node_major": 24,
+          "physical_ram_gib": 16,
+          "free_ram_gib": 8,
+          "logical_cpus": 8,
+          "free_temporary_disk_gib": 4
+        }
+      ]
+    },
+    "profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "default_state_root",
+        "unknown_observations_target",
+        "unknown_workload_target",
+        "collector_on_resolve",
+        "collector_on_policy_change",
+        "collector_on_explicit_reassessment",
+        "workload_signature_fields",
+        "binding",
+        "observations_timestamp",
+        "current_load_measured"
+      ],
+      "properties": {
+        "default_state_root": {
+          "const": ".cupis-local/execution"
+        },
+        "unknown_observations_target": {
+          "const": "github-hosted"
+        },
+        "unknown_workload_target": {
+          "const": "github-hosted"
+        },
+        "collector_on_resolve": {
+          "const": false
+        },
+        "collector_on_policy_change": {
+          "const": false
+        },
+        "collector_on_explicit_reassessment": {
+          "const": true
+        },
+        "workload_signature_fields": {
+          "const": [
+            "id",
+            "commands",
+            "requirements",
+            "limits"
+          ]
+        },
+        "binding": {
+          "const": "pair_key"
+        },
+        "observations_timestamp": {
+          "const": "initialized_at"
+        },
+        "current_load_measured": {
+          "const": false
+        }
+      }
+    },
+    "local_limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "concurrency",
+        "timeout_minutes",
+        "max_heavy_batches"
+      ],
+      "properties": {
+        "concurrency": {
+          "const": 2
+        },
+        "timeout_minutes": {
+          "const": 30
+        },
+        "max_heavy_batches": {
+          "const": 1
+        }
+      }
+    },
+    "cloud_limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "concurrency",
+        "timeout_minutes",
+        "max_heavy_batches",
+        "runner"
+      ],
+      "properties": {
+        "concurrency": {
+          "const": 2
+        },
+        "timeout_minutes": {
+          "const": 30
+        },
+        "max_heavy_batches": {
+          "const": 1
+        },
+        "runner": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "workloads": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "portability",
+          "heavy",
+          "required_inputs",
+          "requirements",
+          "limits",
+          "commands"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "portability": {
+            "enum": [
+              "portable",
+              "local-only"
+            ]
+          },
+          "heavy": {
+            "type": "boolean"
+          },
+          "required_inputs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "requirements": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "platforms",
+              "architectures",
+              "node_major",
+              "runtimes",
+              "same_lock_dependencies"
+            ],
+            "properties": {
+              "platforms": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true,
+                "minItems": 1
+              },
+              "architectures": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true,
+                "minItems": 1
+              },
+              "node_major": {
+                "const": 24
+              },
+              "runtimes": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true,
+                "minItems": 1
+              },
+              "same_lock_dependencies": {
+                "const": true
+              }
+            }
+          },
+          "limits": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "concurrency",
+              "timeout_minutes",
+              "max_heavy_batches"
+            ],
+            "properties": {
+              "concurrency": {
+                "const": 2
+              },
+              "timeout_minutes": {
+                "const": 30
+              },
+              "max_heavy_batches": {
+                "const": 1
+              }
+            }
+          },
+          "commands": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "executable",
+                "args"
+              ],
+              "properties": {
+                "executable": {
+                  "enum": [
+                    "node",
+                    "powershell"
+                  ]
+                },
+                "args": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "minItems": 1
+                }
+              }
+            },
+            "minItems": 1
+          }
+        }
+      },
+      "minItems": 6
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_identity",
+        "same_program_local_and_cloud",
+        "direct_node_requires_same_lock",
+        "cloud_terminal_conclusions",
+        "local_offer_choices",
+        "local_offer_once_per_execution",
+        "local_offer_runs_tests",
+        "local_offer_runs_collector",
+        "local_only_can_pass_cloud"
+      ],
+      "properties": {
+        "source_identity": {
+          "const": "exact-sha"
+        },
+        "same_program_local_and_cloud": {
+          "const": true
+        },
+        "direct_node_requires_same_lock": {
+          "const": true
+        },
+        "cloud_terminal_conclusions": {
+          "const": [
+            "success",
+            "failure",
+            "cancelled",
+            "timed_out",
+            "infrastructure-error"
+          ]
+        },
+        "local_offer_choices": {
+          "const": [
+            "lightweight",
+            "full-later",
+            "skip-additional"
+          ]
+        },
+        "local_offer_once_per_execution": {
+          "const": true
+        },
+        "local_offer_runs_tests": {
+          "const": false
+        },
+        "local_offer_runs_collector": {
+          "const": false
+        },
+        "local_only_can_pass_cloud": {
+          "const": false
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "max_json_bytes",
+        "overflow_code",
+        "include_full_policy"
+      ],
+      "properties": {
+        "max_json_bytes": {
+          "const": 4096
+        },
+        "overflow_code": {
+          "const": "EXECUTION_CONTEXT_TOO_LARGE"
+        },
+        "include_full_policy": {
+          "const": false
+        }
+      }
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:cupis:execution-policy:1.0.0",
+  "title": "CUPIS execution policy"
+}

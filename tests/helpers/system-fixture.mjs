@@ -12,6 +12,8 @@ import { tmpdir } from "node:os";
 
 
 export const canonicalSystemFixtureFiles = [
+  "data/execution/policy.yaml",
+  "schemas/execution-policy.schema.json",
   "schemas/manifest.schema.json",
   "schemas/workflows.schema.json",
   "schemas/typography.schema.json",

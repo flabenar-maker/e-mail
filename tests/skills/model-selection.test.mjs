@@ -12,7 +12,7 @@ async function setup() {
 }
 function caps() {
   return { schema_version: "1.0.0", runtime_session_id: "test-session", tool_signature: "declared-spawn-v1", source: "declared-runtime-tools", max_subagents: 3,
-    models: [ ["gpt-6-luna", "low"], ["gpt-5.6-luna", "low"], ["gpt-5.6-terra", "medium"], ["gpt-5.6-sol", "medium"], ["gpt-6.1-sol", "high"], ["gpt-6-astra", "high"] ].map(([id, effort]) => ({ id, efforts: [effort], capabilities: ["read", "write", "vision"] })) };
+    models: [ ["gpt-6-luna", "low"], ["gpt-5.6-luna", "low"], ["gpt-5.6-terra", "medium"], ["gpt-5.6-sol", "medium"], ["gpt-6.1-sol", "high"], ["gpt-6-astra", "high"] ].map(([id, effort]) => ({ id, efforts: [effort], capabilities: ["text", "code", "vision"] })) };
 }
 const select = (policy, taskKind, capabilities = caps(), extra = {}) => selectionModule.selectModel({ policy, taskKind, operation: "read", allowedPaths: ["docs/example.md"], capabilities, ...extra });
 test("approved task matrix applies exactly one safety tier and remains deterministic", async () => {
@@ -32,9 +32,9 @@ test("fixed ordered replacement checks effort and never downgrades", async () =>
  assert.equal(select(policy,"mechanical-read",runtime).blockers[0].code,"MODEL_ROLE_UNAVAILABLE");
 });
 test("visual roles require actual declared vision for both executor and reviewer", async () => {
- const policy=await setup(); const runtime=caps(); runtime.models.find(x=>x.id==="gpt-6.1-sol").capabilities=["read","write"];
+ const policy=await setup(); const runtime=caps(); runtime.models.find(x=>x.id==="gpt-6.1-sol").capabilities=["text","code"];
  assert.equal(select(policy,"visual-compare",runtime).executor.model,"gpt-6-astra");
- runtime.models.find(x=>x.id==="gpt-6-astra").capabilities=["read","write"];
+ runtime.models.find(x=>x.id==="gpt-6-astra").capabilities=["text","code"];
  assert.equal(select(policy,"visual-compare",runtime).status,"blocked");
 });
 test("semantic review is independent and one tier above actual executor", async () => {

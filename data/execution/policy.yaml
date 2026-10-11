@@ -1,0 +1,554 @@
+{
+  "schema_version": "1.0.0",
+  "safety_bump": 1,
+  "maximum_tier": 4,
+  "capability_ids": [
+    "text",
+    "code",
+    "vision"
+  ],
+  "tiers": [
+    {
+      "tier": 1,
+      "candidates": [
+        {
+          "model": "gpt-6-luna",
+          "effort": "low"
+        },
+        {
+          "model": "gpt-5.6-luna",
+          "effort": "low"
+        }
+      ]
+    },
+    {
+      "tier": 2,
+      "candidates": [
+        {
+          "model": "gpt-5.6-terra",
+          "effort": "medium"
+        },
+        {
+          "model": "gpt-5.6-sol",
+          "effort": "medium"
+        }
+      ]
+    },
+    {
+      "tier": 3,
+      "candidates": [
+        {
+          "model": "gpt-6.1-sol",
+          "effort": "high"
+        }
+      ]
+    },
+    {
+      "tier": 4,
+      "candidates": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ]
+    }
+  ],
+  "task_kinds": {
+    "mechanical-read": {
+      "base_tier": 1,
+      "mechanical": true,
+      "required_capabilities": [
+        "text"
+      ]
+    },
+    "run-prescribed-checks": {
+      "base_tier": 1,
+      "mechanical": true,
+      "required_capabilities": [
+        "text",
+        "code"
+      ]
+    },
+    "bounded-change": {
+      "base_tier": 2,
+      "mechanical": false,
+      "required_capabilities": [
+        "text",
+        "code"
+      ]
+    },
+    "failure-diagnosis": {
+      "base_tier": 2,
+      "mechanical": false,
+      "required_capabilities": [
+        "text",
+        "code"
+      ]
+    },
+    "visual-compare": {
+      "base_tier": 2,
+      "mechanical": false,
+      "required_capabilities": [
+        "text",
+        "vision"
+      ]
+    },
+    "architecture-change": {
+      "base_tier": 3,
+      "mechanical": false,
+      "required_capabilities": [
+        "text",
+        "code"
+      ]
+    },
+    "policy-change": {
+      "base_tier": 3,
+      "mechanical": false,
+      "required_capabilities": [
+        "text",
+        "code"
+      ]
+    },
+    "contract-change": {
+      "base_tier": 3,
+      "mechanical": false,
+      "required_capabilities": [
+        "text",
+        "code"
+      ]
+    },
+    "ambiguous-task": {
+      "base_tier": 3,
+      "mechanical": false,
+      "required_capabilities": [
+        "text",
+        "code"
+      ]
+    }
+  },
+  "operation_capabilities": {
+    "read": [],
+    "write": [
+      "code"
+    ]
+  },
+  "critical_mutations": {
+    "minimum_base_tier": 3,
+    "prefixes": [
+      ".agents/",
+      ".codex/",
+      "skills/",
+      "schemas/",
+      "core/",
+      "workflows/",
+      "data/workflows/",
+      "data/execution/",
+      "data/renderers/",
+      "data/foundations/rendering.yaml",
+      "system/",
+      "bootstrap/"
+    ],
+    "basenames": [
+      "agents.md",
+      "skill.md"
+    ],
+    "path_fragments": [
+      "authorization",
+      "permission",
+      "contract",
+      "renderer",
+      "render-email",
+      "execution-policy",
+      "model-selection",
+      "execution-context",
+      "execution-receipt",
+      "machine-profile"
+    ],
+    "wildcard_scope_is_critical": true
+  },
+  "review": {
+    "mechanical_mode": "independent-source-check",
+    "semantic_mode": "independent-agent",
+    "reviewer_tier_increment": 1,
+    "require_distinct_agent": true,
+    "require_primary_sources": true,
+    "require_all_requirements": true,
+    "test_success_is_acceptance": false,
+    "ordinary_repair_attempts": 2,
+    "misunderstanding_escalation": "next-tier",
+    "ceiling_escalation": "different-independent-agent",
+    "external_wait_escalates": false
+  },
+  "delegation": {
+    "max_subagents": 3,
+    "explicit_model": true,
+    "explicit_reasoning_effort": true,
+    "fork_turns": "none",
+    "bounded_brief": true,
+    "serialize_overlapping_writes": true
+  },
+  "runtime_capabilities": {
+    "source": "declared-runtime-tools",
+    "snapshot_key": [
+      "runtime_session_id",
+      "tool_signature"
+    ],
+    "max_candidate_attempts": 1,
+    "invalidate_on": [
+      "new-session",
+      "account-change",
+      "tool-signature-change",
+      "MODEL_UNAVAILABLE",
+      "EFFORT_UNAVAILABLE"
+    ],
+    "typed_refusal_codes": [
+      "MODEL_UNAVAILABLE",
+      "EFFORT_UNAVAILABLE",
+      "CAPABILITY_UNAVAILABLE"
+    ],
+    "forbidden_sources": [
+      "auth-files",
+      "models-cache",
+      "app-catalog",
+      "web-search",
+      "prices",
+      "benchmarks"
+    ],
+    "outage_is_unavailability": false
+  },
+  "hardware_thresholds": [
+    {
+      "platform": "win32",
+      "architectures": [
+        "x64",
+        "arm64"
+      ],
+      "node_major": 24,
+      "physical_ram_gib": 16,
+      "free_ram_gib": 8,
+      "logical_cpus": 8,
+      "free_temporary_disk_gib": 4
+    }
+  ],
+  "profile": {
+    "default_state_root": ".cupis-local/execution",
+    "unknown_observations_target": "github-hosted",
+    "unknown_workload_target": "github-hosted",
+    "collector_on_resolve": false,
+    "collector_on_policy_change": false,
+    "collector_on_explicit_reassessment": true,
+    "workload_signature_fields": [
+      "id",
+      "commands",
+      "requirements",
+      "limits"
+    ],
+    "binding": "pair_key",
+    "observations_timestamp": "initialized_at",
+    "current_load_measured": false
+  },
+  "local_limits": {
+    "concurrency": 2,
+    "timeout_minutes": 30,
+    "max_heavy_batches": 1
+  },
+  "cloud_limits": {
+    "concurrency": 2,
+    "timeout_minutes": 30,
+    "max_heavy_batches": 1,
+    "runner": "windows-2025"
+  },
+  "workloads": [
+    {
+      "id": "docs-scoped",
+      "portability": "portable",
+      "heavy": false,
+      "required_inputs": [],
+      "requirements": {
+        "platforms": [
+          "win32"
+        ],
+        "architectures": [
+          "x64",
+          "arm64"
+        ],
+        "node_major": 24,
+        "runtimes": [
+          "node"
+        ],
+        "same_lock_dependencies": true
+      },
+      "limits": {
+        "concurrency": 2,
+        "timeout_minutes": 30,
+        "max_heavy_batches": 1
+      },
+      "commands": [
+        {
+          "executable": "node",
+          "args": [
+            "--test",
+            "--test-concurrency=2",
+            "tests/skills/cupis-email-task-router.test.mjs",
+            "tests/skills/maintenance-skill-boundary.test.mjs",
+            "tests/skills/email-build-skill-boundary.test.mjs",
+            "tests/skills/execution-policy.test.mjs",
+            "tests/skills/model-selection.test.mjs"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "repository-full",
+      "portability": "portable",
+      "heavy": true,
+      "required_inputs": [],
+      "requirements": {
+        "platforms": [
+          "win32"
+        ],
+        "architectures": [
+          "x64",
+          "arm64"
+        ],
+        "node_major": 24,
+        "runtimes": [
+          "node"
+        ],
+        "same_lock_dependencies": true
+      },
+      "limits": {
+        "concurrency": 2,
+        "timeout_minutes": 30,
+        "max_heavy_batches": 1
+      },
+      "commands": [
+        {
+          "executable": "node",
+          "args": [
+            "scripts/validate-system.mjs"
+          ]
+        },
+        {
+          "executable": "node",
+          "args": [
+            "--test",
+            "--test-concurrency=2",
+            "tests/foundation/*.test.mjs",
+            "tests/characterization/*.test.mjs",
+            "tests/components/*.test.mjs",
+            "tests/generation/*.test.mjs",
+            "tests/rendering/*.test.mjs",
+            "tests/workflows/*.test.mjs",
+            "tests/skills/*.test.mjs"
+          ]
+        },
+        {
+          "executable": "node",
+          "args": [
+            "scripts/generate-docs.mjs",
+            "--check"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "windows-bootstrap",
+      "portability": "portable",
+      "heavy": true,
+      "required_inputs": [],
+      "requirements": {
+        "platforms": [
+          "win32"
+        ],
+        "architectures": [
+          "x64",
+          "arm64"
+        ],
+        "node_major": 24,
+        "runtimes": [
+          "node",
+          "powershell"
+        ],
+        "same_lock_dependencies": true
+      },
+      "limits": {
+        "concurrency": 2,
+        "timeout_minutes": 30,
+        "max_heavy_batches": 1
+      },
+      "commands": [
+        {
+          "executable": "powershell",
+          "args": [
+            "-NoProfile",
+            "-NonInteractive",
+            "-File",
+            "bootstrap/verify.ps1"
+          ]
+        },
+        {
+          "executable": "powershell",
+          "args": [
+            "-NoProfile",
+            "-NonInteractive",
+            "-File",
+            "tests/bootstrap-contract.Tests.ps1"
+          ]
+        },
+        {
+          "executable": "powershell",
+          "args": [
+            "-NoProfile",
+            "-NonInteractive",
+            "-File",
+            "tests/execution-profile.Tests.ps1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "visual-fixtures",
+      "portability": "portable",
+      "heavy": true,
+      "required_inputs": [],
+      "requirements": {
+        "platforms": [
+          "win32"
+        ],
+        "architectures": [
+          "x64",
+          "arm64"
+        ],
+        "node_major": 24,
+        "runtimes": [
+          "node"
+        ],
+        "same_lock_dependencies": true
+      },
+      "limits": {
+        "concurrency": 2,
+        "timeout_minutes": 30,
+        "max_heavy_batches": 1
+      },
+      "commands": [
+        {
+          "executable": "node",
+          "args": [
+            "--test",
+            "--test-concurrency=2",
+            "tests/rendering/visual-scenarios.test.mjs",
+            "tests/rendering/pilot-fidelity-regressions.test.mjs",
+            "tests/rendering/qr-artwork-geometry.test.mjs"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "installed-skills",
+      "portability": "local-only",
+      "heavy": false,
+      "required_inputs": [
+        "installed_skills_root"
+      ],
+      "requirements": {
+        "platforms": [
+          "win32"
+        ],
+        "architectures": [
+          "x64",
+          "arm64"
+        ],
+        "node_major": 24,
+        "runtimes": [
+          "node"
+        ],
+        "same_lock_dependencies": true
+      },
+      "limits": {
+        "concurrency": 2,
+        "timeout_minutes": 30,
+        "max_heavy_batches": 1
+      },
+      "commands": [
+        {
+          "executable": "node",
+          "args": [
+            "scripts/verify-installed-skills.mjs",
+            "--skills-root",
+            "{installed_skills_root}"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "real-email-visual",
+      "portability": "local-only",
+      "heavy": true,
+      "required_inputs": [
+        "email_model",
+        "reference_manifest",
+        "evidence_root"
+      ],
+      "requirements": {
+        "platforms": [
+          "win32"
+        ],
+        "architectures": [
+          "x64",
+          "arm64"
+        ],
+        "node_major": 24,
+        "runtimes": [
+          "node"
+        ],
+        "same_lock_dependencies": true
+      },
+      "limits": {
+        "concurrency": 2,
+        "timeout_minutes": 30,
+        "max_heavy_batches": 1
+      },
+      "commands": [
+        {
+          "executable": "node",
+          "args": [
+            "scripts/verify-real-email-visual.mjs",
+            "--model",
+            "{email_model}",
+            "--references",
+            "{reference_manifest}",
+            "--output",
+            "{evidence_root}"
+          ]
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "source_identity": "exact-sha",
+    "same_program_local_and_cloud": true,
+    "direct_node_requires_same_lock": true,
+    "cloud_terminal_conclusions": [
+      "success",
+      "failure",
+      "cancelled",
+      "timed_out",
+      "infrastructure-error"
+    ],
+    "local_offer_choices": [
+      "lightweight",
+      "full-later",
+      "skip-additional"
+    ],
+    "local_offer_once_per_execution": true,
+    "local_offer_runs_tests": false,
+    "local_offer_runs_collector": false,
+    "local_only_can_pass_cloud": false
+  },
+  "context": {
+    "max_json_bytes": 4096,
+    "overflow_code": "EXECUTION_CONTEXT_TOO_LARGE",
+    "include_full_policy": false
+  }
+}

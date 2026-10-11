@@ -1,6 +1,7 @@
 import { access, readFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 
+import { loadExecutionPolicy } from "./execution-policy.mjs";
 import { SystemValidationError } from "./diagnostics.mjs";
 import { resolveEvidenceTargets } from "./component-evidence-links.mjs";
 import { validateDocumentShape } from "./schema-validation.mjs";
@@ -1104,6 +1105,8 @@ export async function validateSystem({
     if (prerequisiteErrors.length > 0) {
       return { manifest, errors: prerequisiteErrors };
     }
+
+    await loadExecutionPolicy({ repoRoot, manifest });
 
     const { validateStructuredWorkflows } = await import(
       "./workflow-registry.mjs"

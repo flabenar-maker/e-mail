@@ -6,6 +6,8 @@ entrypoints:
   repository: README.md
   bootstrap: bootstrap/README.md
 sources:
+  - { id: execution-policy, kind: registry, path: data/execution/policy.yaml }
+  - { id: execution-policy-schema, kind: schema, path: schemas/execution-policy.schema.json }
   - { id: system-manifest, kind: entrypoint, path: system/manifest.yaml }
   - { id: repository-readme, kind: entrypoint, path: README.md }
   - { id: bootstrap-readme, kind: entrypoint, path: bootstrap/README.md }
