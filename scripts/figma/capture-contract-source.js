@@ -221,8 +221,6 @@ async function captureFigmaContractFactsBody(componentNodeId, captureBindings = 
     if ("layoutMode" in node) {
       result.layout = {
         mode: node.layoutMode,
-        horizontal_sizing: node.layoutSizingHorizontal,
-        vertical_sizing: node.layoutSizingVertical,
         primary_axis_sizing: node.primaryAxisSizingMode,
         counter_axis_sizing: node.counterAxisSizingMode,
         item_spacing: node.itemSpacing,
@@ -238,6 +236,12 @@ async function captureFigmaContractFactsBody(componentNodeId, captureBindings = 
       if (node.layoutMode === "NONE" && node.children.length > 0) {
         errors.push({ node_id: node.id, code: "ABSOLUTE_CHILD_LAYOUT_REQUIRES_REVIEW" });
       }
+    }
+    // Directional sizing also belongs to TEXT, which has no layoutMode.
+    if ("layoutSizingHorizontal" in node || "layoutSizingVertical" in node) {
+      result.layout ??= {};
+      if ("layoutSizingHorizontal" in node) result.layout.horizontal_sizing = node.layoutSizingHorizontal;
+      if ("layoutSizingVertical" in node) result.layout.vertical_sizing = node.layoutSizingVertical;
     }
     if ("minWidth" in node) result.minimum_width_px = node.minWidth;
     if ("layoutAlign" in node) result.layout_align = node.layoutAlign;

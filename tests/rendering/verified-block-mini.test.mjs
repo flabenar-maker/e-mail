@@ -161,7 +161,7 @@ test("Figma-verified Card/Image @2x keeps mobile fluid ratio and desktop exact d
   assert.doesNotMatch(output.html, /<img[^>]*height="322"/u);
 });
 
-test("Figma-verified Card/Icon desktop preserves a fill text child in its centered row", async () => {
+test("Figma-verified Card/Icon desktop preserves its MIN/CENTER row and fill text child", async () => {
   const component = await record("marketing", "card-icon");
   const content = contentFor(component);
   for (const viewport of ["mobile", "desktop"]) {
@@ -178,13 +178,22 @@ test("Figma-verified Card/Icon desktop preserves a fill text child in its center
   });
 
   assert.deepEqual(output.diagnostics, []);
-  const centeredTables = [...output.html.matchAll(/<table\b[^>]*align="center"[^>]*>/gu)]
-    .map((match) => match[0]);
-  const centeredRow = centeredTables.find((table) => !table.includes("border-radius"));
-  assert.ok(centeredRow, "missing the centered Card/Icon content row");
-  assert.match(centeredRow, /width="100%"/u);
+  const desktop = component.contracts.desktop.root;
+  const value = (element, id) => element.facts.find((fact) => fact.id === id)?.value?.value;
+  const imageArea = desktop.children.find((child) => child.id === "root-image-area-icon");
+  const textArea = desktop.children.find((child) => child.id === "root-text-content");
+  assert.equal(value(desktop, "layout-axis"), "horizontal");
+  assert.equal(value(desktop, "primary-alignment"), "min");
+  assert.equal(value(desktop, "counter-alignment"), "center");
+  assert.equal(imageArea.facts.find((fact) => fact.id === "reference-size").value.width, 72);
+  assert.equal(value(desktop, "layout-gap"), 24);
+  assert.equal(textArea.facts.find((fact) => fact.id === "reference-size").value.width, 392);
+  assert.equal(value(textArea, "horizontal-sizing"), "fill");
   assert.match(output.html, /<td width="72"/u);
   assert.match(output.html, /<td width="24"/u);
+  assert.match(output.html, /<td[^>]*valign="top"/u);
+  assert.match(output.html, /<td[^>]*valign="middle"/u);
+  assert.doesNotMatch(output.html, /<table[^>]*height="138"|height:138px/u);
 });
 test("Figma-verified Block/Receipt-Info preserves exact paired corner radii", async () => {
   const component = await record("service", "block-receipt-info");

@@ -119,6 +119,12 @@ function propsFromFacts(facts = [], { viewport, mode, isRoot = false, parentAxis
       props.width = size.width;
     }
   }
+  // A native Fill link occupies the same text column in either viewport.
+  if (mode === "html-link" && sizing === "fill") {
+    props.style.display = "block";
+    props.style.width = "100%";
+    props.style["overflow-wrap"] = "anywhere";
+  }
   // Email-only geometry keeps exported artwork at its actual displayed size.
   const emailSize = fact("email-render-size");
   if (emailSize?.type === "dimensions") {
@@ -558,14 +564,28 @@ function renderShell(element, viewport, path, childHtml, context) {
           ],
         };
       }
+      const imageProps = {
+        ...asset,
+        ...factProps,
+        height: factProps.height ?? asset.height,
+        style: { ...(asset.style ?? {}), ...factProps.style },
+        alt: slotValue(entry, "alt"),
+      };
+      // Native Fixed artwork reserves its final displayed width in auto-layout tables.
+      // Resolve all fluid policies and email-render-size before setting the minimum.
+      const fixedWidth = element.facts?.some(({ id, value }) =>
+        id === "horizontal-sizing" && value?.value === "fixed");
+      if (fixedWidth && !imageProps.fluid && Number.isFinite(imageProps.width) && imageProps.width > 0) {
+        const minimum = imageProps.style["min-width"];
+        const minimumPx = typeof minimum === "number" ? minimum
+          : typeof minimum === "string" && /^\d+(?:\.\d+)?px$/u.test(minimum) ? Number.parseFloat(minimum) : undefined;
+        // Keep explicit non-pixel constraints; never lower a declared pixel minimum.
+        if (minimum === undefined || minimum === null || minimum === "" || Number.isFinite(minimumPx)) {
+          imageProps.style["min-width"] = `${Math.max(imageProps.width, minimumPx ?? 0)}px`;
+        }
+      }
       return {
-        html: wrapAction(element, entry, renderPrimitive("direct-image", {
-          ...asset,
-          ...factProps,
-          height: factProps.height ?? asset.height,
-          style: { ...(asset.style ?? {}), ...factProps.style },
-          alt: slotValue(entry, "alt"),
-        })),
+        html: wrapAction(element, entry, renderPrimitive("direct-image", imageProps)),
         diagnostics: [],
       };
     }

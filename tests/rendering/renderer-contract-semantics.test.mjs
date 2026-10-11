@@ -187,3 +187,66 @@ test("every direct-image contract element exposes exactly one alt-text slot", as
       JSON.stringify(missing),
   );
 });
+
+
+for(const spec of [
+    {name:"fixed",sizing:"fixed",fixed:true},
+    {name:"fill",sizing:"fill",fluid:true},
+    {name:"hug",sizing:"hug"},
+    {name:"unspecified"},
+    {name:"fixed-with-fluid-policy",sizing:"fixed",fluid:true,behavior:"width-behavior",behaviorValue:"fluid-to-container"},
+    {name:"fixed-with-auto-height-policy",sizing:"fixed",fluid:true,behavior:"height-behavior",behaviorValue:"auto"},
+  ])test("direct image sizing in Hug wrappers: "+spec.name,async()=>{
+    const picture=node({id:"picture",mode:"direct-image",facts:[
+      fact("reference-size",{type:"dimensions",width:72,height:72,unit:"px"}),
+      ...(spec.sizing?[fact("horizontal-sizing",{type:"keyword",value:spec.sizing})]:[]),
+      fact("vertical-sizing",{type:"keyword",value:"fixed"}),
+      ...(spec.behavior?[fact(spec.behavior,{type:"keyword",value:spec.behaviorValue})]:[]),
+    ]});picture.asset_contract_id="picture";
+    const wrapper=node({id:"image-column",facts:[
+      fact("reference-size",{type:"dimensions",width:72,height:160,unit:"px"}),
+      fact("layout-axis",{type:"keyword",value:"horizontal"}),
+      fact("horizontal-sizing",{type:"keyword",value:"hug"}),
+      fact("vertical-sizing",{type:"keyword",value:"fill"}),
+    ],children:[picture]});
+    const link=node({id:"text-column",mode:"html-link",facts:[
+      fact("reference-size",{type:"dimensions",width:156,height:160,unit:"px"}),
+      fact("horizontal-sizing",{type:"keyword",value:"fill"}),
+      fact("vertical-sizing",{type:"keyword",value:"hug"}),
+    ],slots:[{id:"text",required:true},{id:"href",required:true}]});
+    const root=node({id:"root",facts:[
+      fact("reference-size",{type:"dimensions",width:252,height:160,unit:"px"}),
+      fact("layout-axis",{type:"keyword",value:"horizontal"}),measure("layout-gap",24),
+    ],children:[wrapper,link]});
+    const result=await render({component:component(root),content:{picture:{alt:"Native icon"},"text-column":{text:"x".repeat(160),href:"https://example.test/live"}},assets:{picture:{src:"icon.png",width:288,height:288}}});
+    assert.deepEqual(result.diagnostics,[],spec.name);
+    const images=[...result.html.matchAll(/<img\b[^>]*>/gu)];assert.ok(images.length>0,spec.name);
+    for(const [image]of images){
+      const style=image.match(/style="([^"]*)"/u)?.[1]??"";
+      if(spec.fixed){
+        assert.match(style,/(?:^|;)min-width:72px(?:;|$)/u,"native Fixed width is a non-compressible table-layout minimum");
+        assert.match(style,/(?:^|;)width:72px(?:;|$)/u);assert.match(style,/(?:^|;)height:72px(?:;|$)/u);
+      }else{
+        assert.doesNotMatch(style,/(?:^|;)min-width:/u,spec.name+" must not inherit Fixed protection");
+        assert.match(style,/(?:^|;)max-width:100%(?:;|$)/u,spec.name+" retains responsive cap");
+        if(spec.fluid){assert.match(style,/(?:^|;)width:100%(?:;|$)/u);assert.match(style,/(?:^|;)height:auto(?:;|$)/u);assert.doesNotMatch(image,/\sheight="/u);}
+        else{assert.match(style,/(?:^|;)width:72px(?:;|$)/u);assert.match(style,/(?:^|;)height:72px(?:;|$)/u);}
+      }
+    }
+    assert.doesNotMatch(result.html,/<(?:table|td)[^>]*height="160"/u,"Hug/Fill wrapper reference height is not a fixed row height");
+});
+
+test("native Fixed image protection follows email-render-size instead of source or export pixel dimensions",async()=>{
+  const image=node({id:"picture",mode:"direct-image",facts:[
+    fact("reference-size",{type:"dimensions",width:72,height:72,unit:"px"}),
+    fact("horizontal-sizing",{type:"keyword",value:"fixed"}),
+    fact("vertical-sizing",{type:"keyword",value:"fixed"}),
+    fact("email-render-size",{type:"dimensions",width:24,height:24,unit:"px"}),
+  ]});image.asset_contract_id="picture";
+  const result=await render({component:component(node({id:"root",children:[image]})),content:{picture:{alt:""}},assets:{picture:{src:"icon.png",width:288,height:288}}});
+  assert.deepEqual(result.diagnostics,[]);
+  for(const [tag]of result.html.matchAll(/<img\b[^>]*>/gu)){
+    assert.match(tag,/min-width:24px/u);assert.match(tag,/\swidth="24"/u);assert.match(tag,/\sheight="24"/u);
+    assert.doesNotMatch(tag,/min-width:(?:72|288)px/u);
+  }
+});
