@@ -525,11 +525,12 @@ export function renderEmailDocument(model, dependencies) {
     }
   }
 
+  const emissionProfile = dependencies.emissionProfile ?? resolveEmissionProfile({deliveryProfile:dependencies.deliveryProfile,renderingFoundation:rendering});
   const rendered = renderComponent({
     componentId: model?.root?.component_id,
     viewportData: model?.root,
     ...dependencies,
-    emissionProfile:dependencies.emissionProfile ?? resolveEmissionProfile({deliveryProfile:dependencies.deliveryProfile,renderingFoundation:rendering}),
+    emissionProfile,
   });
 
   if (rendered.diagnostics.length > 0) {
@@ -565,7 +566,8 @@ export function renderEmailDocument(model, dependencies) {
       diagnostics: budgetDiagnostics,
     };
   }
-  const style = (css ? `<style>${css}</style>` : "") + (msoCss ? `<!--[if mso]><style>${msoCss}</style><![endif]-->` : "");
+  const styleBlock = value => emissionProfile.fallback_viewport === "mobile" ? `<style>\n${value}\n</style>` : `<style>${value}</style>`;
+  const style = (css ? styleBlock(css) : "") + (msoCss ? `<!--[if mso]>${styleBlock(msoCss)}<![endif]-->` : "");
   const metadata = buildMetadataComment(model, dependencies);
   const service = dependencies.deliveryDocument ? buildEmailServiceFragments({deliveryDocument:dependencies.deliveryDocument,profile:dependencies.deliveryProfile}) : undefined;
   const serviceHtml = service ? Object.values(service).map(fragment=>fragment.html).join("") : "";

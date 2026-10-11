@@ -785,7 +785,7 @@ function renderPaired(pair, path, context) {
 
 function breakpointCss(rules, foundations, diagnostics, emissionProfile) {
   if (rules.length === 0) return "";
-  if (emissionProfile?.fallback_viewport === "mobile") return [...new Set(rules)].join("");
+  if (emissionProfile?.fallback_viewport === "mobile") return [...new Set(rules)].join("\n");
   const breakpoint = foundations?.rendering?.breakpoints?.find(
     ({ id }) => id === "cupis-mobile",
   );
@@ -878,6 +878,6 @@ export function renderContractTree({
   );
   const diagnostics = [...result.diagnostics];
   const css = breakpointCss(result.rules, foundations, diagnostics, emissionProfile);
-  const msoCss = [...new Set(result.msoRules ?? [])].join("");
+  const msoCss = [...new Set(result.msoRules ?? [])].join(emissionProfile?.fallback_viewport === "mobile" ? "\n" : "");
   return { html: result.html, css, msoCss, diagnostics: sortDiagnostics(diagnostics) };
 }

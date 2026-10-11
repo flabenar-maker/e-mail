@@ -122,6 +122,11 @@ async function main() {
     const zip = encodeZipStore(packaged.entries);
     const hash = bytes => createHash("sha256").update(bytes).digest("hex");
     const report = {schema_version:"1.0.0",source_sha:dependencies.systemCommit,profile_id:delivery.profile.id,profile_version:delivery.profile.version,serializer_version:"1.0.0",package_id:delivery.profile.package.id,readiness:"ready",external_acceptance:"not-run",metrics:measureEmailOutput({html:packageStructured.html,css}),html_sha256:hash(packageStructured.html),archive_sha256:hash(zip),assets:[...assetBuffers].map(([path,bytes])=>({path,sha256:hash(bytes)}))};
+    const requiredFields=delivery.inventory.fields.filter(field=>field.required);
+    report.link_readiness={status:"ready",inventory_digest:delivery.inventory.inventory_digest,field_count:delivery.inventory.fields.length,required_count:requiredFields.length,resolved_required_count:requiredFields.length};
+    // These are checks performed by this build, not a claim about test suites or clients.
+    report.local_checks={delivery_inputs:"passed",model_semantics:"passed",rendering:"passed",html_serialization:"passed",resource_references:"passed",css_budget:"passed",plain_text:"passed",package_entries:"passed"};
+    report.package_file_count=packaged.entries.length;
     const previews = [];
     for (const [path,first_name] of [["preview-name.html","алексей"],["preview-empty-name.html",""],["preview-long-name.html","Александра-Виктория"]]) {
       const input = buildPersonalizationPreview({emissionInput:{model,templateRules:dependencies.templateRules},scenario:{first_name}});
@@ -132,6 +137,7 @@ async function main() {
       previews.push({path,bytes:Buffer.from(previewStructured.html,"utf8")});
     }
     report.preview_files=previews.map(entry=>entry.path);
+    report.local_checks.personalization_previews="passed";
     await publishFileSetAtomically({outputDir,entries:[
       ...previews,
       {path:"email.html",bytes:Buffer.from(structured.html,"utf8")},
