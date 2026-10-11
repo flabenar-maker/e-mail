@@ -113,6 +113,24 @@ test("desktop-needs-both-widths", () => {
   assert.match(rules.ordinaryRules[0], /scenario-desktop\{display:table!important/u);
 });
 
+test("Altcraft viewport CSS keeps declarations readable without mixing the MSO branch", () => {
+  const rules = createViewportRules({
+    profile: altcraftProfile(),
+    classes: { mobile: "scenario-mobile", desktop: "scenario-desktop" },
+    mobileDisplay: "table",
+    desktopDisplay: "table",
+  });
+  const [ordinary] = rules.ordinaryRules;
+  const [mso] = rules.msoRules;
+
+  assert.match(ordinary, /@media only screen and \(min-width:660px\) and \(min-device-width:660px\)\s*\{\s*\n/u);
+  assert.match(ordinary, /\.scenario-mobile\s*\{\s*\n\s+display:none!important;\s*\n\s+max-height:0!important;\s*\n\s+overflow:hidden!important;\s*\n\s*\}/u);
+  assert.match(ordinary, /\.scenario-desktop\s*\{\s*\n\s+display:table!important;\s*\n\s+max-height:none!important;\s*\n\s+overflow:visible!important;\s*\n\s*\}/u);
+  assert.doesNotMatch(ordinary, /mso/iu);
+  assert.match(mso, /\.scenario-desktop\s*\{\s*\n\s+display:table!important;\s*\n\s+max-height:none!important;\s*\n\s+overflow:visible!important;\s*\n\s*\}/u);
+  assert.doesNotMatch(mso, /@media/iu);
+});
+
 test("unknown-profile-rejected", () => {
   assert.throws(
     () => resolveEmissionProfile({
@@ -137,8 +155,8 @@ test("no-css-shows-mobile-once", () => {
   assert.deepEqual(result.diagnostics, []);
   assert.match(result.html, /mobile copy/u);
   assert.match(result.html, /desktop copy/u);
-  assert.match(result.html, /<div class="cupis-root-0-mobile">/u);
-  assert.match(result.html, /<div class="cupis-root-0-desktop" style="display:none/u);
+  assert.match(result.html, /cupis-root-mobile[^>]*style="[^"]*(?!display:none)/u);
+  assert.match(result.html, /cupis-root-desktop[^>]*style="[^"]*display:none/u);
   assert.match(result.css, /min-width:660px/u);
   assert.match(result.css, /min-device-width:660px/u);
   assert.equal((result.html.match(/mobile copy/gu) ?? []).length, 1);
@@ -213,7 +231,7 @@ test("different-tree-preserves-split-and-keeps-mso-rules-conditional", () => {
   assert.match(result.html, /mobile tree/u);
   assert.match(result.html, /desktop tree/u);
   assert.match(result.html, /\[if !mso\]/iu);
-  assert.match(result.msoCss, /cupis-root-0-desktop/u);
+  assert.match(result.msoCss, /cupis-root-desktop/u);
   assert.doesNotMatch(result.css, /mso/iu);
   assert.doesNotMatch(result.css, /cupis-root-desktop\{[^}]*display:table/u);
 });
@@ -230,14 +248,7 @@ test("split-div-wrappers-restore-block-and-inner-tables-retain-native-display", 
     ],
     contentSlots: [{ id: "alt", type: "alt-text", required: true }],
   });
-  const mobile = element({
-    id: "root",
-    facts: [
-      { id: "layout-axis", value: { type: "keyword", value: "vertical" } },
-      { id: "layout-gap", value: { type: "measure", value: 0, unit: "px" } },
-    ],
-    children: [image("fixed", "fixed", 32, 20), image("fill", "fill", 252, 188)],
-  });
+  const mobile = element({ id: "root", children: [image("fixed", "fixed", 32, 20), image("fill", "fill", 252, 188)] });
   const desktop = structuredClone(mobile);
   desktop.children[0].facts[0].value.width = 48;
   const result = renderScenario({
@@ -261,7 +272,7 @@ test("split-div-wrappers-restore-block-and-inner-tables-retain-native-display", 
   assert.ok(fixed.length > 0);
   assert.ok(fill.length > 0);
   for (const tag of fixed) {
-    assert.doesNotMatch(tag, /(?:^|;)width:100%(?:;|$)/u);
+    assert.doesNotMatch(tag, /width:100%/u);
     assert.match(tag, /min-width:(?:32|48)px/u);
   }
   for (const tag of fill) {

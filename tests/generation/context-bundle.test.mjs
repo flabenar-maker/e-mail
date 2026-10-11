@@ -8,5 +8,12 @@ test("delivery schemas are registered as static references without schema bodies
   assert.equal(result.status,"resolved");
   const markdown = renderContextBundle(result.bundle);
   for (const id of ["email-delivery-profiles","email-delivery-schema","email-delivery-profiles-schema"]) assert.ok(result.bundle.static_sources.some((source)=>source.id===id),id);
-  assert.equal(markdown.includes('"$schema"'),false);
+  const schemas = result.bundle.static_sources.filter(({ id }) => ["email-delivery-schema", "email-delivery-profiles-schema"].includes(id));
+  assert.equal(schemas.length, 2);
+  for (const schema of schemas) {
+    assert.equal(schema.kind, "schema");
+    assert.match(schema.content, /"\$schema"/u);
+    assert.equal(markdown.includes(schema.content), false);
+  }
+  assert.equal((markdown.match(/Runtime schema is retained in the pinned structured bundle\./gu) ?? []).length, 2);
 });

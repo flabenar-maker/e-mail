@@ -64,7 +64,7 @@ test("resolved workflow classifies typed inputs and only exposes that mode's out
   );
   assert.deepEqual(
     resolveEmailBuildRequest({ workflow: emailWorkflow, inputs: { request: input(), "source-email-html": input(), "source-images-directory": input(), "exact-change-scope": input() } }),
-    { mode: "continue-fix-technical", blocker: null, allowedOutputs: ["version-folder", "email-html", "images-directory", "verification-summary", "handoff-summary", "delivery-form", "delivery-draft", "altcraft-package", "release-report"] },
+    { mode: "continue-fix-technical", blocker: null, allowedOutputs: ["version-folder", "email-html", "images-directory", "verification-summary", "handoff-summary"] },
   );
   assert.deepEqual(
     resolveEmailBuildRequest({ workflow: emailWorkflow, inputs: { request: input() } }),
@@ -101,26 +101,39 @@ test("actual resolver workflow modes gate source proof and design continuation e
   const inventory = collectEmailActions({model,componentIndex:index,profile});
   const deliveryDocument = createDeliveryDraft({emailId:model.id,sourceSha,profile,inventory});
   deliveryDocument.subject = "Source gate regression";
-  const handoff = (resolution, includeDelivery = true) => executeEmailBuildHandoff({
+  const handoff = (resolution, { handoffModel = model, handoffDelivery = deliveryDocument } = {}) => executeEmailBuildHandoff({
     repoRoot,
     assetRoot: root,
     outputDir: join(root, "output"),
-    model,
+    model: handoffModel,
     candidates: [{id:"email-template"}],
     assetEvidence: [],
     resolution,
     sourceSha,
-    ...(includeDelivery ? {deliveryDocument} : {}),
+    ...(handoffDelivery ? {deliveryDocument: handoffDelivery} : {}),
     rendererRunner: async () => { invocations += 1; },
   });
-  const missingDelivery = await handoff(newBuild, false);
+  const missingDelivery = await handoff(newBuild, { handoffDelivery: undefined });
   assert.deepEqual(missingDelivery.blockers, ["delivery-required"]);
-  const missingSource = await handoff(newBuild);
+  const invalidMinimalModel = await handoff(newBuild);
+  assert.deepEqual(invalidMinimalModel.blockers, ["delivery-not-ready"]);
+  assert.ok(invalidMinimalModel.deliveryDiagnostics.some(({ code }) => code === "EMAIL_MODEL_REQUIRED_SLOT_MISSING"));
+
+  const nativeModel = JSON.parse(await readFile(join(repoRoot, "tests", "fixtures", "rendering", "pilot-email.json"), "utf8"));
+  const nativeInventory = collectEmailActions({model:nativeModel, componentIndex:index, profile});
+  const nativeDelivery = createDeliveryDraft({emailId:nativeModel.id, sourceSha, profile, inventory:nativeInventory});
+  nativeDelivery.subject = "Source gate regression";
+  nativeDelivery.preheader = "Source gate preheader";
+  nativeDelivery.answers = Object.fromEntries(nativeInventory.fields.map((field, index) => [
+    field.id,
+    field.managed ? field.value : `https://example.test/source-gate/${index + 1}`,
+  ]));
+  const missingSource = await handoff(newBuild, { handoffModel: nativeModel, handoffDelivery: nativeDelivery });
   assert.ok(missingSource.blockers.includes("source-evidence-missing"));
-  const missingDesignEvidence = await handoff(designFix);
+  const missingDesignEvidence = await handoff(designFix, { handoffModel: nativeModel, handoffDelivery: nativeDelivery });
   assert.ok(missingDesignEvidence.blockers.includes("figma-source-missing"));
   assert.ok(missingDesignEvidence.blockers.includes("visual-regression"));
-  const technical = await handoff(technicalFix);
+  const technical = await handoff(technicalFix, { handoffModel: nativeModel, handoffDelivery: nativeDelivery });
   assert.equal(technical.blockers.includes("figma-source-missing"), false);
   assert.equal(technical.blockers.includes("visual-regression"), false);
   assert.equal(technical.executed, true);
