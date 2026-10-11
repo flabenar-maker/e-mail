@@ -34,7 +34,7 @@ test("loads the canonical Figma naming foundation", async () => {
   const naming = await loadFigmaNamingFoundation({ repoRoot });
 
   assert.equal(naming.foundation.id, "figma-naming");
-  assert.equal(naming.foundation.status, "shadow");
+  assert.equal(naming.foundation.status, "active");
   assert.deepEqual(
     naming.namespaces.map((item) => item.label),
     [
