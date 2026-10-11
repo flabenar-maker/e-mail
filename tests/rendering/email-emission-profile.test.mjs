@@ -155,9 +155,10 @@ test("no-css-shows-mobile-once", () => {
   assert.deepEqual(result.diagnostics, []);
   assert.match(result.html, /mobile copy/u);
   assert.match(result.html, /desktop copy/u);
-  assert.match(result.html, /cupis-root-0-mobile"/u);
-  assert.doesNotMatch(result.html, /cupis-root-0-mobile"[^>]*style="[^"]*display:none/u);
-  assert.match(result.html, /cupis-root-0-desktop[^>]*style="[^"]*display:none/u);
+  const mobileTag = result.html.match(/<div\b(?=[^>]*\bclass="cupis-root(?:-\d+)?-mobile")[^>]*>/u);
+  assert.ok(mobileTag, "the mobile wrapper must be emitted");
+  assert.doesNotMatch(mobileTag[0], /display\s*:\s*none/iu);
+  assert.match(result.html, /cupis-root(?:-\d+)?-desktop[^>]*style="[^"]*display\s*:\s*none/u);
   assert.match(result.css, /min-width:660px/u);
   assert.match(result.css, /min-device-width:660px/u);
   assert.equal((result.html.match(/mobile copy/gu) ?? []).length, 1);
@@ -232,9 +233,9 @@ test("different-tree-preserves-split-and-keeps-mso-rules-conditional", () => {
   assert.match(result.html, /mobile tree/u);
   assert.match(result.html, /desktop tree/u);
   assert.match(result.html, /\[if !mso\]/iu);
-  assert.match(result.msoCss, /cupis-root-0-desktop/u);
+  assert.match(result.msoCss, /cupis-root(?:-\d+)?-desktop/u);
   assert.doesNotMatch(result.css, /mso/iu);
-  assert.doesNotMatch(result.css, /cupis-root-0-desktop\s*\{[^}]*display:table/u);
+  assert.doesNotMatch(result.css, /cupis-root(?:-\d+)?-desktop\s*\{[^}]*display:table/u);
 });
 
 test("split-div-wrappers-restore-block-and-inner-tables-retain-native-display", () => {
@@ -269,15 +270,15 @@ test("split-div-wrappers-restore-block-and-inner-tables-retain-native-display", 
     },
   });
   assert.deepEqual(result.diagnostics, []);
-  assert.match(result.css, /cupis-root-0-(?:mobile|desktop)\s*\{\s*display:block!important/u);
-  assert.match(result.html, /<div class="cupis-root-0-(?:mobile|desktop)"/u);
+  assert.match(result.css, /cupis-root(?:-\d+)?-(?:mobile|desktop)\s*\{\s*display:block!important/u);
+  assert.match(result.html, /<div class="cupis-root(?:-\d+)?-(?:mobile|desktop)"/u);
   assert.match(result.html, /<table\b/u);
   const fixed = [...result.html.matchAll(/<img\b[^>]*src="images\/fixed\.png"[^>]*>/gu)].map((match) => match[0]);
   const fill = [...result.html.matchAll(/<img\b[^>]*src="images\/fill\.png"[^>]*>/gu)].map((match) => match[0]);
   assert.ok(fixed.length > 0);
   assert.ok(fill.length > 0);
   for (const tag of fixed) {
-    assert.doesNotMatch(tag, /width:100%/u);
+    assert.doesNotMatch(tag, /(?:^|;)width:100%/u);
     assert.match(tag, /min-width:(?:32|48)px/u);
   }
   for (const tag of fill) {

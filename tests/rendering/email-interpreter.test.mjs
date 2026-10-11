@@ -399,20 +399,22 @@ test("unsupported render mode returns one stable diagnostic at the exact viewpor
   ]);
 });
 
-test("interpreter source contains no pilot-specific rendering logic", async () => {
+test("interpreter source uses generic template rules without concrete pilot resources", async () => {
   const source = await readFile(
     join(repoRoot, "scripts/lib/email-interpreter.mjs"),
     "utf8",
   );
+  assert.match(source, /from "\.\/email-template-rules\.mjs"/u);
   for (const id of [
-    "email-template",
     "button-primary",
     "card-image",
     "banner-secondary",
     "banner-app-download",
     "email-footer",
+    "pilot-",
+    "fixtures/",
   ]) {
-    assert.equal(source.includes(id), false, `unexpected component id ${id}`);
+    assert.equal(source.includes(id), false, `unexpected concrete template resource ${id}`);
   }
 });
 

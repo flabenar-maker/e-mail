@@ -132,7 +132,7 @@ test("actual resolver workflow modes gate source proof and design continuation e
   nativeDelivery.preheader = "Source gate preheader";
   nativeDelivery.answers = Object.fromEntries(nativeInventory.fields.map((field, index) => [
     field.id,
-    field.managed ? field.value : `https://example.test/source-gate/${index + 1}`,
+    field.managed ? field.value : `https://1cupis.ru/synthetic/source-gate/${index + 1}`,
   ]));
   const missingSource = await handoff(newBuild, { handoffModel: nativeModel, handoffDelivery: nativeDelivery });
   assert.ok(missingSource.blockers.includes("source-evidence-missing"));
