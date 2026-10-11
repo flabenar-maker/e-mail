@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: workflow-checkpoint -->
-<!-- source-digest: sha256:be0ab35706a033ab75a70db754ab5e7ebdf183a1b5be25cecd6eb5e8252a28bf -->
+<!-- source-digest: sha256:66e52cc4cc9cd29b773e19bc1fe88f02cee0cb9841cbbb1537cfe809af8a22be -->
 <!-- schema-versions: manifest=1.3.0, workflows=1.0.0 -->
 # Workflow checkpoint: `email-build`
 
@@ -40,11 +40,14 @@ The routing table describes current assignments only; workflow status is not a r
 - [components-shared](../../data/components/shared.yaml)
 - [components-marketing](../../data/components/marketing.yaml)
 - [components-service](../../data/components/service.yaml)
+- [email-delivery-profiles](../../data/delivery/profiles.yaml)
+- [email-delivery-schema](../../schemas/email-delivery.schema.json)
+- [email-delivery-profiles-schema](../../schemas/email-delivery-profiles.schema.json)
 
 ## Mode: `new-build`
 
 - Required inputs: `request`, `email-purpose`, `mobile-figma-instance`, `desktop-figma-instance`, `output-parent`
-- Allowed outputs: `version-folder`, `email-html`, `images-directory`, `source-comparison`, `verification-summary`, `handoff-summary`
+- Allowed outputs: `version-folder`, `email-html`, `images-directory`, `source-comparison`, `verification-summary`, `handoff-summary`, `delivery-form`, `delivery-draft`, `altcraft-package`, `release-report`
 
 ### Input blocker mappings
 
@@ -130,7 +133,7 @@ The routing table describes current assignments only; workflow status is not a r
 - Sources: [email-model-assembly-standard](../../core/email-model-assembly-standard.md), [figma-library-standard](../../core/figma-library-standard.md), [component-contract-standard](../../core/component-contract-standard.md)
 - Required inputs: `validated-design-sources`
 - Blockers: `design-structure-ambiguous`
-- Allowed outputs: `component-map`, `instance-inputs`, `source-readings`, `source-correspondence`
+- Allowed outputs: `component-map`, `instance-inputs`, `source-readings`, `source-correspondence`, `logical-email-draft`
 - Success handoff: `next`
 - Blocked handoff: `request-input`
 
@@ -144,17 +147,47 @@ The routing table describes current assignments only; workflow status is not a r
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
-### 5. `export-assets-via-mcp`
+### 5. `prepare-delivery-form`
+
+- Condition: always
+- Sources: [email-delivery-profiles](../../data/delivery/profiles.yaml), [email-delivery-schema](../../schemas/email-delivery.schema.json), [email-model-schema](../../schemas/email-model.schema.json)
+- Required inputs: `logical-email-draft`, `resolved-component-contracts`
+- Blockers: `delivery-inventory-invalid`, `delivery-source-stale`
+- Allowed outputs: `delivery-form`, `delivery-draft`
+- Success handoff: `next`
+- Blocked handoff: `stop`
+
+### 6. `collect-delivery-answers`
+
+- Condition: always
+- Sources: [email-delivery-schema](../../schemas/email-delivery.schema.json)
+- Required inputs: `delivery-form`, `delivery-draft`
+- Blockers: `delivery-user-input-missing`
+- Allowed outputs: `delivery-answers`
+- Success handoff: `next`
+- Blocked handoff: `request-input`
+
+### 7. `validate-delivery-answers`
+
+- Condition: always
+- Sources: [email-delivery-profiles](../../data/delivery/profiles.yaml), [email-delivery-schema](../../schemas/email-delivery.schema.json)
+- Required inputs: `delivery-answers`, `logical-email-draft`
+- Blockers: `delivery-required-url-missing`, `delivery-inventory-stale`, `delivery-answer-invalid`
+- Allowed outputs: `validated-delivery`
+- Success handoff: `next`
+- Blocked handoff: `request-input`
+
+### 8. `export-assets-via-mcp`
 
 - Condition: always
 - Sources: [asset-export-standard](../../core/asset-export-standard.md), [components-shared](../../data/components/shared.yaml), [components-marketing](../../data/components/marketing.yaml), [components-service](../../data/components/service.yaml)
-- Required inputs: `resolved-component-contracts`, `validated-design-sources`
+- Required inputs: `resolved-component-contracts`, `validated-design-sources`, `validated-delivery`
 - Blockers: `asset-contract-missing`, `asset-export-failed`, `asset-preflight-blocked`, `asset-resolution-decision-required`
 - Allowed outputs: `images-directory`, `asset-export-evidence`
 - Success handoff: `next`
 - Blocked handoff: `request-input`
 
-### 6. `build-temporary-email-model`
+### 9. `build-temporary-email-model`
 
 - Condition: always
 - Sources: [email-model-schema](../../schemas/email-model.schema.json), [email-model-assembly-standard](../../core/email-model-assembly-standard.md), [email-rendering-standard](../../core/email-rendering-standard.md), [component-contract-standard](../../core/component-contract-standard.md), [rendering-foundation](../../data/foundations/rendering.yaml), [renderer-registry](../../data/renderers/registry.yaml)
@@ -164,7 +197,7 @@ The routing table describes current assignments only; workflow status is not a r
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
-### 7. `verify-model-source`
+### 10. `verify-model-source`
 
 - Condition: always
 - Sources: [email-model-assembly-standard](../../core/email-model-assembly-standard.md), [email-source-fidelity-standard](../../core/email-source-fidelity-standard.md), [asset-export-standard](../../core/asset-export-standard.md)
@@ -174,17 +207,17 @@ The routing table describes current assignments only; workflow status is not a r
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
-### 8. `render-email-cli`
+### 11. `render-email-cli`
 
 - Condition: always
 - Sources: [email-rendering-standard](../../core/email-rendering-standard.md), [email-source-fidelity-standard](../../core/email-source-fidelity-standard.md), [rendering-foundation](../../data/foundations/rendering.yaml), [renderer-registry](../../data/renderers/registry.yaml)
-- Required inputs: `temporary-email-model`, `component-map`, `instance-inputs`, `source-readings`, `source-correspondence`, `asset-export-evidence`, `images-directory`, `source-comparison`, `version-folder`
+- Required inputs: `temporary-email-model`, `component-map`, `instance-inputs`, `source-readings`, `source-correspondence`, `asset-export-evidence`, `images-directory`, `source-comparison`, `version-folder`, `validated-delivery`
 - Blockers: `source-evidence-missing`, `source-evidence-mismatch`, `renderer-diagnostic`, `atomic-output-failed`
-- Allowed outputs: `email-html`
+- Allowed outputs: `email-html`, `altcraft-package`, `release-report`
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
-### 9. `verify-rendered-email`
+### 12. `verify-rendered-email`
 
 - Condition: always
 - Sources: [email-rendering-standard](../../core/email-rendering-standard.md), [typography-standard](../../core/typography-standard.md), [asset-export-standard](../../core/asset-export-standard.md), [rendering-foundation](../../data/foundations/rendering.yaml)
@@ -194,7 +227,7 @@ The routing table describes current assignments only; workflow status is not a r
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
-### 10. `clean-output-folder`
+### 13. `clean-output-folder`
 
 - Condition: always
 - Sources: [email-rendering-standard](../../core/email-rendering-standard.md)
@@ -204,7 +237,7 @@ The routing table describes current assignments only; workflow status is not a r
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
-### 11. `handoff`
+### 14. `handoff`
 
 - Condition: always
 - Sources: [email-rendering-standard](../../core/email-rendering-standard.md)
@@ -217,7 +250,7 @@ The routing table describes current assignments only; workflow status is not a r
 ## Mode: `continue-fix-design`
 
 - Required inputs: `request`, `source-email-html`, `source-images-directory`, `exact-change-scope`, `mobile-figma-instance`, `desktop-figma-instance`
-- Allowed outputs: `version-folder`, `email-html`, `images-directory`, `verification-summary`, `handoff-summary`
+- Allowed outputs: `version-folder`, `email-html`, `images-directory`, `verification-summary`, `handoff-summary`, `delivery-form`, `delivery-draft`, `altcraft-package`, `release-report`
 
 ### Input blocker mappings
 
@@ -317,7 +350,7 @@ The routing table describes current assignments only; workflow status is not a r
 - Sources: [email-model-assembly-standard](../../core/email-model-assembly-standard.md), [figma-library-standard](../../core/figma-library-standard.md), [component-contract-standard](../../core/component-contract-standard.md)
 - Required inputs: `validated-design-sources`, `exact-change-scope`
 - Blockers: `design-structure-ambiguous`
-- Allowed outputs: `component-map`, `instance-inputs`
+- Allowed outputs: `component-map`, `instance-inputs`, `logical-email-draft`
 - Success handoff: `next`
 - Blocked handoff: `request-input`
 
@@ -331,27 +364,57 @@ The routing table describes current assignments only; workflow status is not a r
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
-### 6. `update-assets-via-mcp`
+### 6. `prepare-delivery-form`
+
+- Condition: always
+- Sources: [email-delivery-profiles](../../data/delivery/profiles.yaml), [email-delivery-schema](../../schemas/email-delivery.schema.json), [email-model-schema](../../schemas/email-model.schema.json)
+- Required inputs: `logical-email-draft`, `resolved-component-contracts`
+- Blockers: `delivery-inventory-invalid`, `delivery-source-stale`
+- Allowed outputs: `delivery-form`, `delivery-draft`
+- Success handoff: `next`
+- Blocked handoff: `stop`
+
+### 7. `collect-delivery-answers`
+
+- Condition: always
+- Sources: [email-delivery-schema](../../schemas/email-delivery.schema.json)
+- Required inputs: `delivery-form`, `delivery-draft`
+- Blockers: `delivery-user-input-missing`
+- Allowed outputs: `delivery-answers`
+- Success handoff: `next`
+- Blocked handoff: `request-input`
+
+### 8. `validate-delivery-answers`
+
+- Condition: always
+- Sources: [email-delivery-profiles](../../data/delivery/profiles.yaml), [email-delivery-schema](../../schemas/email-delivery.schema.json)
+- Required inputs: `delivery-answers`, `logical-email-draft`
+- Blockers: `delivery-required-url-missing`, `delivery-inventory-stale`, `delivery-answer-invalid`
+- Allowed outputs: `validated-delivery`
+- Success handoff: `next`
+- Blocked handoff: `request-input`
+
+### 9. `update-assets-via-mcp`
 
 - Condition: `asset-change-in-scope`
 - Sources: [asset-export-standard](../../core/asset-export-standard.md), [components-shared](../../data/components/shared.yaml), [components-marketing](../../data/components/marketing.yaml), [components-service](../../data/components/service.yaml)
-- Required inputs: `resolved-component-contracts`, `validated-design-sources`, `images-directory`
+- Required inputs: `resolved-component-contracts`, `validated-design-sources`, `images-directory`, `validated-delivery`
 - Blockers: `asset-contract-missing`, `asset-export-failed`, `unreferenced-asset-proof-missing`, `asset-preflight-blocked`, `asset-resolution-decision-required`
 - Allowed outputs: `images-directory`, `asset-export-evidence`
 - Success handoff: `next`
 - Blocked handoff: `request-input`
 
-### 7. `apply-scoped-html-change`
+### 10. `apply-scoped-html-change`
 
 - Condition: always
 - Sources: [email-model-schema](../../schemas/email-model.schema.json), [email-model-assembly-standard](../../core/email-model-assembly-standard.md), [email-rendering-standard](../../core/email-rendering-standard.md), [component-contract-standard](../../core/component-contract-standard.md), [typography-standard](../../core/typography-standard.md), [rendering-foundation](../../data/foundations/rendering.yaml), [renderer-registry](../../data/renderers/registry.yaml)
-- Required inputs: `version-folder`, `exact-change-scope`, `resolved-component-contracts`, `component-map`, `instance-inputs`, `images-directory`
+- Required inputs: `version-folder`, `exact-change-scope`, `resolved-component-contracts`, `component-map`, `instance-inputs`, `images-directory`, `validated-delivery`
 - Blockers: `change-outside-scope`, `renderer-diagnostic`
 - Allowed outputs: `email-html`
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
-### 8. `verify-source-regression`
+### 11. `verify-source-regression`
 
 - Condition: always
 - Sources: [email-rendering-standard](../../core/email-rendering-standard.md), [rendering-foundation](../../data/foundations/rendering.yaml)
@@ -361,7 +424,7 @@ The routing table describes current assignments only; workflow status is not a r
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
-### 9. `clean-output-folder`
+### 12. `clean-output-folder`
 
 - Condition: always
 - Sources: [email-rendering-standard](../../core/email-rendering-standard.md)
@@ -371,7 +434,7 @@ The routing table describes current assignments only; workflow status is not a r
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
-### 10. `handoff`
+### 13. `handoff`
 
 - Condition: always
 - Sources: [email-rendering-standard](../../core/email-rendering-standard.md)

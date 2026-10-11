@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: workflow-checkpoint -->
-<!-- source-digest: sha256:bce90e8114f30e04b05c8ae4b98c1cc6d8334da28d0aa7f0f9bff5b975fbe1e4 -->
+<!-- source-digest: sha256:fe72cb06b7c77851fd4a4a964ea2f2541e8d94d6958fa95f5564b4042aec68ef -->
 <!-- schema-versions: manifest=1.3.0, workflows=1.0.0 -->
 # Workflow checkpoint: `figma-naming-audit`
 

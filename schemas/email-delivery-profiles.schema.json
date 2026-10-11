@@ -1,0 +1,205 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "profiles": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "const": "altcraft-mobile-base-v1"
+          },
+          "version": {
+            "const": "1.0.0"
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "roles": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "label": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "component_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "bindings": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "viewport": {
+                        "enum": [
+                          "mobile",
+                          "desktop"
+                        ]
+                      },
+                      "element_id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "slot_id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "kind": {
+                        "enum": [
+                          "slot-link",
+                          "output-link"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "viewport",
+                      "element_id",
+                      "slot_id",
+                      "kind"
+                    ]
+                  }
+                },
+                "href": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "id",
+                "label",
+                "component_id",
+                "bindings"
+              ]
+            }
+          },
+          "allowed_templates": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "const": "{unsubscribe}"
+            }
+          },
+          "emission": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "fallback_viewport": {
+                "const": "mobile"
+              },
+              "desktop_condition": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "viewport_min_px": {
+                    "const": 660
+                  },
+                  "device_min_px": {
+                    "const": 660
+                  }
+                },
+                "required": [
+                  "viewport_min_px",
+                  "device_min_px"
+                ]
+              },
+              "mso_desktop": {
+                "const": true
+              },
+              "preserve_structural_splits": {
+                "const": true
+              }
+            },
+            "required": [
+              "fallback_viewport",
+              "desktop_condition",
+              "mso_desktop",
+              "preserve_structural_splits"
+            ]
+          },
+          "package": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "const": "altcraft-full-v1"
+              },
+              "html_entry": {
+                "const": "email/html.html"
+              },
+              "asset_root_entry": {
+                "const": "images"
+              },
+              "is_amp": {
+                "const": false
+              },
+              "is_not_inline": {
+                "const": true
+              }
+            },
+            "required": [
+              "id",
+              "html_entry",
+              "asset_root_entry",
+              "is_amp",
+              "is_not_inline"
+            ]
+          },
+          "service_rules": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "enabled": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "enabled"
+            ]
+          },
+          "block_labels": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "required": [
+          "id",
+          "version",
+          "label",
+          "roles",
+          "allowed_templates",
+          "emission",
+          "package",
+          "service_rules"
+        ]
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "profiles"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.local.cupis/email-delivery-profiles.schema.json",
+  "title": "Registered email release profiles"
+}

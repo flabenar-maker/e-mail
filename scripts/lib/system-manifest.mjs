@@ -1107,6 +1107,9 @@ export async function validateSystem({
       return { manifest, errors: prerequisiteErrors };
     }
 
+    const { loadEmailDeliveryProfiles } = await import("./email-delivery-profile.mjs");
+    await loadEmailDeliveryProfiles({ repoRoot, manifest });
+
     await loadExecutionPolicy({ repoRoot, manifest });
     await validateExecutionSchemas({ repoRoot, manifest });
 

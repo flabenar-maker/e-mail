@@ -1,3 +1,6 @@
+import { applyOutputLink } from "./email-service-fragments.mjs";
+import { findGreetingRule, greetingValue, matchesTemplateTarget, renderStyledGreeting } from "./email-template-rules.mjs";
+import { createViewportRules } from "./email-emission-profile.mjs";
 import { renderPrimitive } from "./email-primitives.mjs";
 
 function clone(value) {
@@ -209,34 +212,49 @@ function escapeInline(value) {
     .replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
 }
 
-function richTextFromFacts(element, entry, style) {
+function richTextFromFacts(element, entry, style, context, viewport) {
+  const textOrigin={...element.output_origin,slot_id:"text"};
   const fact = element.facts?.find(({ id }) => id === "styled-text-segments");
   if (!fact) return null;
   const segments = fact.value?.items ?? [];
   const supplied = slotValue(entry, "text");
   const source = element.facts?.find(({ id }) => id === "source-text")?.value?.value;
-  if (!Array.isArray(supplied) && supplied !== source) {
-    return { html: "", error: "Rich text requires source text or one text run per styled segment." };
+  if (!Array.isArray(supplied) && supplied !== source) return {html:"",error:"Rich text requires source text or one text run per styled segment."};
+  const runs = Array.isArray(supplied) ? supplied : segments.map(({characters}) => characters);
+  if (runs.length !== segments.length || runs.some(run => typeof run !== "string")) return {html:"",error:"Rich text run count does not match the exact Figma segments."};
+  const span = (segment, value, raw = false, href) => {
+    const color=segment.fills?.find(({type,visible})=>type==="solid"&&visible!==false)?.color;
+    const decoration=segment.text_decoration==="UNDERLINE"?"underline":"none";
+    const weight={Regular:400,Medium:500,SemiBold:600,Bold:700}[segment.font_style];
+    const inlineStyle=`color:${color};font-family:${segment.font_family},Arial,sans-serif;font-size:${segment.font_size_px}px;font-weight:${weight};line-height:${segment.line_height.value}${segment.line_height.unit==="PERCENT"?"%":"px"};text-decoration:${decoration}`;
+    const text=raw?value:escapeInline(value).replaceAll("\u2028","<br>").replaceAll("\n","<br>");
+    return href?`<a href="${escapeInline(href)}" style="${inlineStyle}">${text}</a>`:`<span style="${inlineStyle}">${text}</span>`;
+  };
+  const fullRule=findGreetingRule({templateRules:context.templateRules,origin:textOrigin});
+  if(fullRule) {
+    const value=greetingValue({rule:fullRule,origin:textOrigin,previewValues:context.previewValues});
+    const body=renderStyledGreeting({text:source,segments,span,previewValue:value===fullRule.emitted_template?undefined:value});
+    if(body!==null)return {html:renderPrimitive("text",{style},body),error:null};
   }
-  const runs = Array.isArray(supplied) ? supplied : segments.map(({ characters }) => characters);
-  if (runs.length !== segments.length || runs.some((run) => typeof run !== "string")) {
-    return { html: "", error: "Rich text run count does not match the exact Figma segments." };
-  }
-  const body = segments.map((segment, index) => {
-    const color = segment.fills?.find(({ type, visible }) => type === "solid" && visible !== false)?.color;
-    const decoration = segment.text_decoration === "UNDERLINE" ? "underline" : "none";
-    const text = escapeInline(runs[index]).replaceAll("\u2028", "<br>").replaceAll("\n", "<br>");
-    const weight = { Regular: 400, Medium: 500, SemiBold: 600, Bold: 700 }[segment.font_style];
-    const inlineStyle = `color:${color};font-family:${segment.font_family},Arial,sans-serif;font-size:${segment.font_size_px}px;font-weight:${weight};line-height:${segment.line_height.value}${segment.line_height.unit === "PERCENT" ? "%" : "px"};text-decoration:${decoration}`;
-    if (decoration !== "underline") return `<span style="${inlineStyle}">${text}</span>`;
-    const href = slotValue(entry, "help-url") ?? slotValue(entry, `link-${index + 1}-url`);
-    if (!href) return null;
-    return `<a href="${escapeInline(href)}" style="${inlineStyle}">${text}</a>`;
+  const body=segments.map((segment,index)=>{
+    const range={start:segment.start,end:segment.end};
+    const rule=findGreetingRule({templateRules:context.templateRules,origin:textOrigin,range});
+    const value=rule?greetingValue({rule,origin:textOrigin,range,previewValues:context.previewValues}):runs[index];
+    const output=(context.outputBindings??[]).find(binding=>binding.kind==="output-range-link"&&matchesTemplateTarget(binding.target,textOrigin)&&binding.target.range?.start===segment.start&&binding.target.range?.end===segment.end);
+    const href=output?.href??slotValue(entry,"help-url")??slotValue(entry,`link-${index+1}-url`);
+    if((output||segment.text_decoration==="UNDERLINE")&&!href)return null;
+    if(output&&context.anchorContexts?.[viewport])return null;
+    return span(segment,value,false,(output||segment.text_decoration==="UNDERLINE")?href:undefined);
   });
-  if (body.some((run) => run === null)) return { html: "", error: "Underlined link segment has no URL." };
-  return { html: renderPrimitive("text", { style }, body.join("")), error: null };
+  if(body.some(run=>run===null))return {html:"",error:"Inline link has no URL or would create a nested anchor."};
+  return {html:renderPrimitive("text",{style},body.join("")),error:null};
 }
 
+function emittedSlotText(element,entry,context,slotId="text") {
+  const origin={...element.output_origin,slot_id:slotId};
+  const rule=findGreetingRule({templateRules:context.templateRules,origin});
+  return rule?greetingValue({rule,origin,previewValues:context.previewValues}):slotValue(entry,slotId);
+}
 function contentFor(context, viewport, element) {
   const entry = scopedEntry(context.content, viewport, element.id) ?? {};
   const diagnostics = [];
@@ -353,7 +371,7 @@ function renderWholeButtonAction(element, entry, childHtml, factProps, gap) {
   return renderPrimitive("table", { ...factProps, style }, "<tr>" + cell + "</tr>");
 }
 
-function renderShell(element, viewport, path, childHtml, context) {
+function renderShellNative(element, viewport, path, childHtml, context) {
   if (!element) return { html: "", diagnostics: [] };
   const visibility = visibilityFor(element, viewport, context, path);
   if (!visibility.visible) return { html: "", diagnostics: visibility.diagnostics };
@@ -523,7 +541,7 @@ function renderShell(element, viewport, path, childHtml, context) {
       return { html: outer, diagnostics: [] };
     }
     case "html-text": {
-      const rich = richTextFromFacts(element, entry, factProps.style);
+      const rich = richTextFromFacts(element, entry, factProps.style, context, viewport);
       if (rich) {
         return rich.error
           ? { html: "", diagnostics: [diagnostic("RENDER_RICH_TEXT_INVALID", `/contracts/${viewport}/${path}`, rich.error)] }
@@ -531,7 +549,7 @@ function renderShell(element, viewport, path, childHtml, context) {
       }
       return {
         html: renderPrimitive("text", {
-          text: slotValue(entry, "text"),
+          text: emittedSlotText(element,entry,context),
           style: factProps.style,
         }),
         diagnostics: [],
@@ -543,7 +561,7 @@ function renderShell(element, viewport, path, childHtml, context) {
           "link",
           {
             href: slotValue(entry, "href"),
-            ...(children.length === 0 ? { text: slotValue(entry, "text") } : {}),
+            ...(children.length === 0 ? { text: emittedSlotText(element,entry,context) } : {}),
             style: factProps.style,
           },
           joined,
@@ -637,6 +655,26 @@ function renderShell(element, viewport, path, childHtml, context) {
   }
 }
 
+function anchorContext(element,viewport,context) {
+  const entry=scopedEntry(context.content,viewport,element?.id)??{};
+  const href=element?.render_mode==="html-link"?slotValue(entry,"href"):actionHref(element??{},entry);
+  return href?{href}:context.anchorContexts?.[viewport];
+}
+function renderShell(element,viewport,path,children,context) {
+  const result=renderShellNative(element,viewport,path,children,context);
+  if(result.diagnostics.length)return result;
+  let html=result.html;
+  if(element.render_mode==="direct-image") {
+    const linked=applyOutputLink({html,origin:element.output_origin,outputBindings:context.outputBindings,existingAnchorContext:anchorContext(element,viewport,context)});
+    if(linked.diagnostics.length)return linked;
+    html=linked.html;
+  }
+  if(html&&element.output_block&&context.emissionProfile?.fallback_viewport==="mobile") {
+    const label=element.output_block.replaceAll(/--+/gu,"-").replaceAll("<","&lt;").replaceAll(">","&gt;");
+    html=`<!-- cupis:block ${label} -->${html}<!-- cupis:end ${label} -->`;
+  }
+  return {html,diagnostics:[]};
+}
 function layoutAxisFor(element) {
   const axis = element?.facts?.find(({ id }) => id === "layout-axis" || id.endsWith("-layout-axis"))?.value?.value;
   return ["horizontal", "vertical"].includes(axis) ? axis : undefined;
@@ -649,6 +687,7 @@ function renderSingle(element, viewport, path, context) {
   const childContext = {
     ...context,
     parentLayoutAxis: { ...context.parentLayoutAxis, [viewport]: layoutAxisFor(element) },
+    anchorContexts:{...context.anchorContexts,[viewport]:anchorContext(element,viewport,context)},
   };
   const children = (element.children ?? []).map((child, index) =>
     renderSingle(child, viewport, `${path}/children/${index}`, childContext),
@@ -680,6 +719,14 @@ function renderSplit(pair, path, context) {
   const diagnostics = sortDiagnostics([...mobile.diagnostics, ...desktop.diagnostics]);
   if (!mobile.html && !desktop.html) return { html: "", rules: [], diagnostics };
   const classes = splitClasses(path);
+  if (context.emissionProfile?.fallback_viewport === "mobile") {
+    const mobileWrapper = mobile.html ? '<!--[if !mso]><!-->' + renderPrimitive("responsive-visibility", {className:classes.mobile,hidden:false}, mobile.html) + '<!--<![endif]-->' : '';
+    // Word gets a visible opening wrapper; ordinary clients get the inline-hidden
+    // wrapper. Content and its closing tag occur once, without a third tree.
+    const desktopWrapper = desktop.html ? `<!--[if mso]><div class="${classes.desktop}" style="display:block;max-height:none;overflow:visible"><![endif]--><!--[if !mso]><!--><div class="${classes.desktop}" style="display:none;max-height:0;overflow:hidden"><!--<![endif]-->${desktop.html}</div>` : '';
+    const rules = createViewportRules({profile:context.emissionProfile,classes,mobileDisplay:"block",desktopDisplay:"block"});
+    return {html:mobileWrapper + desktopWrapper,rules:rules.ordinaryRules,msoRules:rules.msoRules,diagnostics};
+  }
   const html = [
     mobile.html
       ? renderPrimitive("responsive-visibility", { className: classes.mobile, hidden: true }, mobile.html)
@@ -711,6 +758,7 @@ function renderPaired(pair, path, context) {
   const childContext = {
     ...context,
     parentLayoutAxis: { mobile: layoutAxisFor(pair.mobile), desktop: layoutAxisFor(pair.desktop) },
+    anchorContexts:{mobile:anchorContext(pair.mobile,"mobile",context),desktop:anchorContext(pair.desktop,"desktop",context)},
   };
   const children = pair.children.map((child, index) =>
     renderPaired(child, `${path}-${index}`, childContext),
@@ -727,6 +775,7 @@ function renderPaired(pair, path, context) {
     return {
       html: mobileShell.html,
       rules: children.flatMap(({ rules }) => rules),
+      msoRules: children.flatMap(child => child.msoRules ?? []),
       diagnostics: sortDiagnostics([...childDiagnostics, ...mobileShell.diagnostics]),
     };
   }
@@ -734,8 +783,9 @@ function renderPaired(pair, path, context) {
   return renderSplit(pair, path, context);
 }
 
-function breakpointCss(rules, foundations, diagnostics) {
+function breakpointCss(rules, foundations, diagnostics, emissionProfile) {
   if (rules.length === 0) return "";
+  if (emissionProfile?.fallback_viewport === "mobile") return [...new Set(rules)].join("\n");
   const breakpoint = foundations?.rendering?.breakpoints?.find(
     ({ id }) => id === "cupis-mobile",
   );
@@ -784,6 +834,8 @@ export function renderContractTree({
   visibility = {},
   variantAxes = {},
   foundations = {},
+  emissionProfile,
+  outputBindings, templateRules, previewValues,
 }) {
   if (coverage?.component_id !== component?.id || coverage?.mode !== "interpreter") {
     return {
@@ -822,9 +874,10 @@ export function renderContractTree({
   const result = renderPaired(
     pairViewportTrees({ mobile, desktop }),
     "root",
-    { content, assets, properties, visibility, variantAxes, foundations },
+    { content, assets, properties, visibility, variantAxes, foundations, emissionProfile, outputBindings, templateRules, previewValues },
   );
   const diagnostics = [...result.diagnostics];
-  const css = breakpointCss(result.rules, foundations, diagnostics);
-  return { html: result.html, css, diagnostics: sortDiagnostics(diagnostics) };
+  const css = breakpointCss(result.rules, foundations, diagnostics, emissionProfile);
+  const msoCss = [...new Set(result.msoRules ?? [])].join(emissionProfile?.fallback_viewport === "mobile" ? "\n" : "");
+  return { html: result.html, css, msoCss, diagnostics: sortDiagnostics(diagnostics) };
 }

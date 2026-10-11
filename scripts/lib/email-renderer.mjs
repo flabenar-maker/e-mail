@@ -1,3 +1,5 @@
+import { buildEmailServiceFragments } from "./email-service-fragments.mjs";
+import { resolveEmissionProfile } from "./email-emission-profile.mjs";
 import { renderContractTree, selectVariantRoot } from "./email-interpreter.mjs";
 import {
   measureEmailOutput,
@@ -131,6 +133,8 @@ function prepareElement({
   const originalId = element.id;
   const prepared = structuredClone(element);
   prepared.id = scopedId(instancePath, originalId);
+  prepared.output_origin = {component_id:record.id,instance_path:instancePath,viewport,original_element_id:originalId};
+  if (path.endsWith("/root")) prepared.output_block = record.id + " / " + instancePath;
 
   let visible = prepared.visibility?.mode === "instance" ? prepared.visibility.default_visible : true;
   if (prepared.visibility?.mode === "property") {
@@ -416,6 +420,8 @@ export function renderComponent({
   rendererRegistry,
   componentIndex,
   foundations,
+  emissionProfile,
+  outputBindings, templateRules, previewValues,
 }) {
   const accumulator = createAccumulator();
   const roots = {};
@@ -457,6 +463,7 @@ export function renderComponent({
     assets: accumulator.assets,
     properties: accumulator.properties,
     foundations,
+    emissionProfile, outputBindings, templateRules, previewValues,
   });
 
   return {
@@ -518,10 +525,12 @@ export function renderEmailDocument(model, dependencies) {
     }
   }
 
+  const emissionProfile = dependencies.emissionProfile ?? resolveEmissionProfile({deliveryProfile:dependencies.deliveryProfile,renderingFoundation:rendering});
   const rendered = renderComponent({
     componentId: model?.root?.component_id,
     viewportData: model?.root,
     ...dependencies,
+    emissionProfile,
   });
 
   if (rendered.diagnostics.length > 0) {
@@ -545,8 +554,9 @@ export function renderEmailDocument(model, dependencies) {
     };
   }
   const css = rendered.css ?? "";
+  const msoCss = rendered.msoCss ?? "";
   const budgetDiagnostics = validateEmbeddedCssBudget(
-    css,
+    css + msoCss,
     dependencies.foundations.rendering.embedded_css.max_bytes_exclusive,
   );
   if (budgetDiagnostics.length > 0) {
@@ -556,9 +566,12 @@ export function renderEmailDocument(model, dependencies) {
       diagnostics: budgetDiagnostics,
     };
   }
-  const style = css ? `<style>${css}</style>` : "";
+  const styleBlock = value => emissionProfile.fallback_viewport === "mobile" ? `<style>\n${value}\n</style>` : `<style>${value}</style>`;
+  const style = (css ? styleBlock(css) : "") + (msoCss ? `<!--[if mso]>${styleBlock(msoCss)}<![endif]-->` : "");
   const metadata = buildMetadataComment(model, dependencies);
-  const body = renderPrimitive("email-shell", shell, rendered.html);
+  const service = dependencies.deliveryDocument ? buildEmailServiceFragments({deliveryDocument:dependencies.deliveryDocument,profile:dependencies.deliveryProfile}) : undefined;
+  const serviceHtml = service ? Object.values(service).map(fragment=>fragment.html).join("") : "";
+  const body = serviceHtml + renderPrimitive("email-shell", shell, rendered.html);
   const language = escapeAttribute(model.metadata.language);
   const direction = escapeAttribute(model.metadata.direction);
   const html = `<!doctype html><html lang="${language}" dir="${direction}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${metadata}${style}</head><body style="margin:0;padding:0"><div lang="${language}" dir="${direction}">${body}</div></body></html>`;
@@ -566,6 +579,10 @@ export function renderEmailDocument(model, dependencies) {
     html,
     assets: rendered.assets,
     diagnostics: [],
-    metrics: measureEmailOutput({ html, css }),
+    css, msoCss,
+    emission_profile: {id:emissionProfile.id,version:emissionProfile.version},
+    effective_fallback: emissionProfile.fallback_viewport,
+    protectedFragments:service ? Object.values(service).map(fragment=>({text:fragment.html})) : [],
+    metrics: measureEmailOutput({ html, css, msoCss }),
   };
 }

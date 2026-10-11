@@ -1,0 +1,23 @@
+{
+  "profile": {
+    "id": "altcraft-mobile-base-v1",
+    "version": "1.0.0",
+    "emission": {
+      "fallback_viewport": "mobile",
+      "desktop_condition": {
+        "viewport_min_px": 660,
+        "device_min_px": 660
+      },
+      "mso_desktop": true,
+      "preserve_structural_splits": true
+    }
+  },
+  "viewport_cases": [
+    { "viewport_width": 375, "device_width": 375, "expected": "mobile" },
+    { "viewport_width": 390, "device_width": 390, "expected": "mobile" },
+    { "viewport_width": 659, "device_width": 659, "expected": "mobile" },
+    { "viewport_width": 660, "device_width": 660, "expected": "desktop" },
+    { "viewport_width": 800, "device_width": 800, "expected": "desktop" },
+    { "viewport_width": 980, "device_width": 390, "expected": "mobile" }
+  ]
+}

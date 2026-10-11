@@ -39,3 +39,23 @@
 - описывает файловую структуру конкретного письма, проверки и итоговый ответ пользователю.
 
 Такие данные принадлежат структурированным источникам, компонентным контрактам, renderer-слою и workflow сборки.
+
+## Delivery intake and output policy
+
+For an Altcraft release, inspect both design instances into a logical model before exporting images. Run `node scripts/prepare-email-delivery.mjs --model <draft.json> --output <new-intake-folder>` and give the user its Russian `form.html`. The local form saves `delivery.json`; it does not send data. Inherit sender and reply settings unless the user explicitly supplies them.
+
+Delivery values belong to the separate strict delivery schema. `data/delivery/profiles.yaml` owns fixed addresses, exact element selectors, and emission/package policy. Component contracts, the design model schema, and Figma remain unchanged. Recompute the visible action inventory and reject stale source SHA, profile version, or inventory digest. Required Footer/support/NPS addresses must be supplied before image export and final release.
+
+Render with `--delivery <delivery.json>` for an Altcraft release. Validate the original design model against source evidence; validate and project only the exact inventoried URL targets into a clone for emission. An address assignment never authorizes changes to text, geometry, assets, or neighboring actions. Legacy rendering without a delivery document remains a design HTML operation; it is not an Altcraft release.
+
+Installing or restoring context uses the manifest-selected email workflow, which includes intake and readiness steps. Do not copy URLs, service macros, or serializer recipes into skill Markdown. Real import, sending, and mail-client acceptance require external evidence and remain `not-run` after local verification.
+
+Altcraft output contains readable `email.html`, unchanged `images/`, `altcraft.zip`, and `release-report.json`. Structural HTML formatting preserves inline text/links, complete attributes/styles, conditional MSO/VML, template tokens, and service padding. The full archive contains `email/html.html`, `email/subject.txt`, `email/text.txt`, `email/is_amp.txt=false`, `email/is_not_inline.txt=true`, and `images/`; only explicit sender/reply settings create `email/from_email.txt`, `email/from_name.txt`, `email/replyto_email.txt`, `email/replyto_name.txt`. Do not copy inactive AMP or another account's template.json. Resource paths in packaged HTML are rebased to `../images/` by exact resource spans. Local preview retains `images/`. The form, answers, and report stay outside the archive.
+
+The emission profile uses mobile inline fallback, desktop only when both viewport and device widths reach 660px, and separate conditional MSO desktop visibility. Structural splits remain wherever one tree cannot preserve both designs. Ordinary and MSO CSS share the exclusive 16,384-byte limit, checked again after rebasing. These checks are local browser/source evidence; real import and client delivery remain `not-run`.
+
+Package field names and layout follow [Altcraft import/export documentation](https://guides.altcraft.com/en/user-guide/message-templates/56258129/) and the supplied private export. The simplified single-HTML import format is a separate format; do not mix its rules with this full-channel package.
+
+Service rules match only a complete greeting slot or a proven styled run (`Здравствуйте, Имя!`, including NBSP/edge whitespace; the existing exact Figma alias `Здравствуйте, $user$!` is equivalent). Apply conditional personalization after validating original text. Preserve styled segments, nearby text, and links. Named, empty-name, and long-name previews are separate files outside the ZIP; final output retains the reusable template. Preheader, hidden padding, and the exact Mail.ru snippet-end fragment occur in that order as protected fragments.
+
+The logo output anchor is attached by full instance/component/viewport/element origin, with a conflict diagnostic for a different existing anchor. Footer/store roles fill declared URL slots. Genuine styled hyperlinks lacking a slot use addressed output ranges; they do not alter component contracts. Human-readable block comments identify component/instance boundaries in HTML. Additional `preview-name.html`, `preview-empty-name.html`, and `preview-long-name.html` files are allowed local release outputs.

@@ -770,6 +770,13 @@ export async function buildContextBundle({
     return blocked(caughtBlockers(error));
   }
 
+  if (profile.generated_bundle.static_source_ids.includes("email-delivery-profiles")) {
+    try {
+      const { loadEmailDeliveryProfiles } = await import("./email-delivery-profile.mjs");
+      await loadEmailDeliveryProfiles({ repoRoot, manifest, componentIndex:model.index });
+    } catch (error) { return blocked(caughtBlockers(error)); }
+  }
+
   const roots = resolveRootIds(model.index, candidates, selectedViewports);
   if (roots.status === "blocked") return roots;
   const closure = collectDependencyClosure(
@@ -848,7 +855,7 @@ export function renderContextBundle(bundle) {
               "",
               `Digest: \`${source.digest}\``,
               "",
-              renderCodeBlock(source.content, "markdown"),
+              ["email-delivery-schema","email-delivery-profiles-schema"].includes(source.id) ? "Runtime schema is retained in the pinned structured bundle. Use the intake/render commands; read this schema only when changing its contract." : renderCodeBlock(source.content, "markdown"),
             ].join("\n"),
         )
         .join("\n\n")

@@ -1,3 +1,5 @@
+import { planTemplateRules, buildPersonalizationPreview } from "./lib/email-template-rules.mjs";
+import { serializeEmailHtml } from "./lib/email-html-serializer.mjs";
 import { execFileSync } from "node:child_process";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -15,6 +17,8 @@ import {
 import { postprocessEmail } from "./lib/email-postprocess.mjs";
 import { buildEmailPreview } from "./lib/email-preview.mjs";
 import { renderEmailDocument } from "./lib/email-renderer.mjs";
+import { loadDeliveryDocument } from "./lib/email-delivery-profile.mjs";
+import { prepareEmailDelivery, validateDeliveryDocument } from "./lib/email-delivery.mjs";
 import { loadRendererRegistry } from "./lib/renderer-registry.mjs";
 import { loadRenderingFoundation } from "./lib/rendering-foundation.mjs";
 
@@ -26,12 +30,12 @@ function parseArguments(argv) {
   for (let index = 0; index < argv.length; index += 2) {
     const flag = argv[index];
     const value = argv[index + 1];
-    if (!["--model", "--mode", "--output"].includes(flag) || !value) {
+    if (!["--model", "--mode", "--output", "--delivery", "--name"].includes(flag) || !value) {
       throw new Error(USAGE);
     }
     values[flag.slice(2)] = value;
   }
-  if (!values.model || !values.mode || !values.output || argv.length !== 6) {
+  if (!values.model || !values.mode || !values.output || ![6,8,10].includes(argv.length)) {
     throw new Error(USAGE);
   }
   return values;
@@ -56,7 +60,7 @@ async function main() {
   const args = parseArguments(process.argv.slice(2));
   const modelPath = resolve(args.model);
   const outputPath = resolve(args.output);
-  const [model, registries, rendererRegistry, rendering] = await Promise.all([
+  const [originalModel, registries, rendererRegistry, rendering] = await Promise.all([
     loadEmailModel({
       modelPath,
       schemaPath: join(repoRoot, "schemas", "email-model.schema.json"),
@@ -71,11 +75,21 @@ async function main() {
     foundations: { rendering },
     systemCommit: resolveSystemCommit(),
   };
+  const delivery = args.delivery ? await prepareEmailDelivery({
+    repoRoot, model:originalModel, componentIndex:dependencies.componentIndex,
+    document:await loadDeliveryDocument(resolve(args.delivery)),
+    purpose:"preview", sourceSha:dependencies.systemCommit,
+  }) : undefined;
+  const model = delivery?.model ?? originalModel;
+  if (delivery) Object.assign(dependencies, {deliveryProfile:delivery.profile, outputBindings:delivery.outputBindings, deliveryDocument:delivery.document, deliveryInventory:delivery.inventory, designModel:originalModel});
+  if (delivery) dependencies.templateRules = planTemplateRules({model:originalModel,inventory:delivery.inventory,profile:delivery.profile});
   const semanticErrors = validateEmailModelSemantics(model, dependencies);
   if (semanticErrors.length > 0) {
     throw new AggregateError(semanticErrors, "Email model semantic validation failed.");
   }
 
+  if (args.name && !delivery) throw new Error("A personalization preview requires --delivery.");
+  if (args.name) { const input = buildPersonalizationPreview({emissionInput:{model,templateRules:dependencies.templateRules},scenario:{first_name:args.name === "empty" ? "" : args.name}}); dependencies.previewValues=input.previewValues; }
   const rendered = renderEmailDocument(model, dependencies);
   if (rendered.diagnostics.length > 0) {
     throw new AggregateError(rendered.diagnostics, "Email rendering failed.");
@@ -87,7 +101,11 @@ async function main() {
       assetPaths: rendered.assets.map((asset) => asset.path),
     },
   });
-  const preview = buildEmailPreview({ html, mode: args.mode });
+  const structured = delivery ? serializeEmailHtml({html,protectedFragments:(rendered.protectedFragments??[]).map(fragment=>{const start=html.indexOf(fragment.text);if(start<0)throw new Error("EMAIL_SERVICE_FRAGMENT_MISSING");return {start,end:start+fragment.text.length};})}) : {html,diagnostics:[]};
+  if (structured.diagnostics.length) throw new AggregateError(structured.diagnostics,"HTML serialization failed.");
+  const finalDiagnostics=delivery?validateDeliveryDocument({document:delivery.document,inventory:delivery.inventory,profile:delivery.profile,purpose:"final",sourceSha:dependencies.systemCommit,emailId:originalModel.id}):[];
+  const labelledHtml=delivery?structured.html.replace("<head>",`<head>\n<title>Предпросмотр${finalDiagnostics.length?" — данные для выпуска неполные":""}</title>\n<!-- CUPIS preview: readiness=${finalDiagnostics.length?"incomplete":"ready"}; purpose=preview; emission_profile=${rendered.emission_profile.id}@${rendered.emission_profile.version}; effective_fallback=${rendered.effective_fallback}; service_rules_version=${dependencies.templateRules.version} -->`):structured.html;
+  const preview = buildEmailPreview({ html:labelledHtml, mode: args.mode });
   await mkdir(dirname(outputPath), { recursive: true });
   await writeFile(outputPath, preview, "utf8");
   process.stdout.write(outputPath + "\n");

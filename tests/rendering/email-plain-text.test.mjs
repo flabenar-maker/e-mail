@@ -1,0 +1,15 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+import { buildPlainText } from "../../scripts/lib/email-plain-text.mjs";
+const profile={allowed_templates:["{unsubscribe}"],roles:[]};
+const inventory={fields:[{id:"email/card/cta/href",label:"Подробнее",required:true,managed:false,bindings:[]},{id:"footer-unsubscribe",label:"Отписка",required:true,managed:true,value:"{unsubscribe}",bindings:[]}]};
+const deliveryDocument={answers:{"email/card/cta/href":"https://1cupis.ru/go","footer-unsubscribe":"{unsubscribe}"},plain_text:{mode:"auto"}};
+const logicalModel=(mobile,desktop=mobile)=>({schema_version:"1.1.0",id:"release",metadata:{language:"ru",direction:"ltr"},root:{instance_id:"email",component_id:"email",variants:{mobile:"mobile",desktop:"desktop"},property_values:[],content_values:[{element_id:"body",slot_id:"text",scope:"mobile",value:{type:"plain-text",value:mobile}},{element_id:"body",slot_id:"text",scope:"desktop",value:{type:"plain-text",value:desktop}}],asset_files:[],slots:[],nested_components:[]}});
+test("plain text emits shared native content and action URL once and retains inventoried unsubscribe",()=>{const text=buildPlainText({model:logicalModel("Единый текст"),inventory,deliveryDocument,profile});assert.equal((text.match(/Единый текст/g)??[]).length,1);assert.equal((text.match(/https:\/\/1cupis\.ru\/go/g)??[]).length,1);assert.match(text,/\{unsubscribe\}/);});
+test("unknown answers never become plain-text service output",()=>{const text=buildPlainText({model:logicalModel("Единый текст"),inventory,deliveryDocument:{...deliveryDocument,answers:{...deliveryDocument.answers,unknown:"https://attacker.test"}},profile});assert.equal(text.includes("attacker.test"),false);});
+test("conflicting mobile and desktop native text is rejected instead of selected arbitrarily",()=>{assert.throws(()=>buildPlainText({model:logicalModel("Мобильный текст","Desktop text"),inventory,deliveryDocument,profile}),/CONFLICT|viewport/i);});
+test("manual text preserves user content",()=>{const text=buildPlainText({model:logicalModel("ignored"),inventory,deliveryDocument:{...deliveryDocument,plain_text:{mode:"manual",value:"Только один абзац\n{unsubscribe}"}},profile});assert.match(text,/Только один абзац/); assert.match(text,/\{unsubscribe\}/);});
+
+test("manual text without required unsubscribe is rejected",()=>{
+  assert.throws(()=>buildPlainText({model:logicalModel("ignored"),inventory,deliveryDocument:{...deliveryDocument,plain_text:{mode:"manual",value:"Только один абзац"}},profile}),/unsubscribe|required/i);
+});
