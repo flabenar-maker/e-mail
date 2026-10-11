@@ -1,6 +1,6 @@
 # Служебные связи Template и Shared — Implementation Plan T1/S1
 
-**Актуальный статус11.10.2026:** этот адресный P2-план выполнен, принят и слит PR110; P3/P4/11A также слиты PR112/113. P5 Step4 final gate/review и mergePR115 завершены: main bbc495d64cb0f4f486a8a62c8c732cbeb29c3f7b, equal-tree c246; пять maintenance routes активны. [Step5 получил пользовательские требования и адресный план](../2026-10-01-cupis-final-maintenance-cutover.md#p5-local-skills-deferred-2026-10-11); реализация и приёмка не выполнены, навыки не изменялись,5fix1/2/P6 не начаты. Ниже — сохранённая историческая последовательность со своими pins, не команда повторить старые шаги.
+**Актуальный статус11.10.2026:** этот адресный P2-план выполнен, принят и слит PR110; P3/P4/11A также слиты PR112/113. P5 Step4 final gate/review и mergePR115 завершены: main bbc495d64cb0f4f486a8a62c8c732cbeb29c3f7b, equal-tree c246; пять maintenance routes активны. Текущая реализация и открытые gates — в [единственной точке Step5](../2026-10-01-cupis-final-maintenance-cutover.md#p5-local-skills-deferred-2026-10-11). Ниже — сохранённая историческая последовательность со своими pins, не команда повторить старые шаги.
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Рутинные тесты, разбор failures и regression поручать GPT-5.6 Terra Medium; координатор выполняет реализацию. Steps use checkbox (`- [ ]`) syntax for tracking.
 

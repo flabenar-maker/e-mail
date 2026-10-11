@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {mkdtemp,mkdir,copyFile,writeFile,rm,symlink} from 'node:fs/promises';
+import {mkdtemp,mkdir,copyFile,readFile,writeFile,rm,symlink,utimes} from 'node:fs/promises';
 import {execFileSync} from 'node:child_process';
 import {tmpdir} from 'node:os';
 import {join,resolve} from 'node:path';
@@ -18,7 +18,7 @@ async function fixture(t,{crlf=false,deps=false}={}){
  let executions=0;const options={requestId:'source-identity',sourceSha:git('rev-parse','HEAD'),workloadIds:['docs-scoped'],target:'local',repoRoot:repo,outputRoot:join(root,'evidence'),runner:{checkRuntime:async()=>{},...(deps?{}:{checkDependencies:async()=>({mode:'direct-equivalent'})}),execute:async()=>{executions++;return {status:'success',exitCode:0};}}};
  return {repo,root,git,options,executions:()=>executions};
 }
-test('raw CRLF HEAD bytes survive later LF attributes without dirty false positive',async t=>{const f=await fixture(t,{crlf:true});assert.notEqual(f.git('status','--porcelain'),'');assert.equal((await runVerification(f.options)).conclusion,'success');assert.equal(f.executions(),1);});
+test('raw CRLF HEAD bytes survive later LF attributes without dirty false positive',async t=>{const f=await fixture(t,{crlf:true}),tracked=join(f.repo,'tracked.txt'),stamp=new Date(Date.now()+2000);await utimes(tracked,stamp,stamp);assert.deepEqual(execFileSync('git',['show','HEAD:tracked.txt'],{cwd:f.repo}),Buffer.from('raw\r\n'));assert.deepEqual(await readFile(tracked),Buffer.from('raw\r\n'));assert.equal(f.git('status','--porcelain'),'M tracked.txt');assert.equal((await runVerification(f.options)).conclusion,'success');assert.equal(f.executions(),1);});
 test('raw edit hidden by Git clean normalization is rejected',async t=>{const f=await fixture(t);await writeFile(join(f.repo,'.gitattributes'),'tracked.txt text eol=lf\n');f.git('add','.gitattributes');f.git('commit','--quiet','-m','LF policy');f.options.sourceSha=f.git('rev-parse','HEAD');await writeFile(join(f.repo,'tracked.txt'),'raw\r\n');f.git('diff','--quiet','HEAD','--');await assert.rejects(runVerification(f.options),{code:'VERIFICATION_SOURCE_DIRTY'});assert.equal(f.executions(),0);});
 test('verified same-lock untracked dependencies are allowed',async t=>{const f=await fixture(t,{deps:true});assert.equal((await runVerification(f.options)).conclusion,'success');});
 test('arbitrary untracked source remains rejected beside verified dependencies',async t=>{const f=await fixture(t,{deps:true});await writeFile(join(f.repo,'surprise.mjs'),'changed');await assert.rejects(runVerification(f.options),{code:'VERIFICATION_SOURCE_DIRTY'});assert.equal(f.executions(),0);});
