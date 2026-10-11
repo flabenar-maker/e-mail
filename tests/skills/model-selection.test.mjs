@@ -74,7 +74,7 @@ test("Windows aliases cannot disguise critical writable directories",async()=>{
 });
 test("every rendering strategy helper and execution workflow receives the critical floor",async()=>{
  const policy=await setup();
- for(const path of ["scripts/lib/render-impact.mjs","scripts/lib/rendering-foundation.mjs","scripts/lib/email-rendering.mjs",".github/workflows/execution-verification.yml"]) {
+ for(const path of ["data/foundations/rendering.yaml","scripts/lib/render-impact.mjs","scripts/lib/rendering-foundation.mjs","scripts/lib/email-rendering.mjs",".github/workflows/execution-verification.yml"]) {
   const result=select(policy,"bounded-change",caps(),{operation:"write",allowedPaths:[path]});assert.equal(result.base_tier,3,path);assert.equal(result.executor.tier,4,path);
  }
 });

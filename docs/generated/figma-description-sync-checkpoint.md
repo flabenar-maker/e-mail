@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: workflow-checkpoint -->
-<!-- source-digest: sha256:22ff8e47cad7053b1102e04549edc457e5e2c89911de335458e36f3311a52b22 -->
+<!-- source-digest: sha256:0d8efa5c002d50f4fd1fd0abfa576dda728e27fcf0800d72d5ccb74b1697cce7 -->
 <!-- schema-versions: manifest=1.3.0, workflows=1.0.0 -->
 # Workflow checkpoint: `figma-description-sync`
 

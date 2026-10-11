@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: workflow-checkpoint -->
-<!-- source-digest: sha256:8a1f847bdec844d5d0288a2474337a19b1116c4a59688fecd2a6f03a70ae4cab -->
+<!-- source-digest: sha256:c56f872a01b972116b7ad57b0ed384ff79b23774e211534aace6e591b5f3c3a0 -->
 <!-- schema-versions: manifest=1.3.0, workflows=1.0.0 -->
 # Workflow checkpoint: `library-maintenance`
 

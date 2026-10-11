@@ -7,9 +7,10 @@ import { parseStrictYaml, readStrictYaml } from "./strict-yaml.mjs";
 
 const fail = (code, path, message) => { throw new SystemValidationError(code, path, message); };
 async function sourcePath(repoRoot, manifest, id, kind) {
+  const canonical = {"execution-policy":"data/execution/policy.yaml", "execution-policy-schema":"schemas/execution-policy.schema.json"};
   const entries = manifest?.sources?.filter(source => source.id === id) ?? [];
   const source = entries[0];
-  if (entries.length !== 1 || source.kind !== kind || typeof source.path !== "string" || !source.path || /[\\:*?]/u.test(source.path) || source.path.startsWith("/") || source.path.split("/").some(part => !part || part === "." || part === "..")) {
+  if (entries.length !== 1 || source.kind !== kind || source.path !== canonical[id] || typeof source.path !== "string" || !source.path || /[\\:*?]/u.test(source.path) || source.path.startsWith("/") || source.path.split("/").some(part => !part || part === "." || part === "..")) {
     fail("execution-policy-source", "/sources/" + id, "Expected one registered repository-relative " + kind + " source.");
   }
   const root = await realpath(repoRoot);
@@ -45,13 +46,26 @@ function validateReferences(policy) {
 }
 
 export async function loadExecutionPolicy({ repoRoot, manifest }) {
-  const registry = manifest ?? await readStrictYaml(resolve(repoRoot, "system/manifest.yaml"));
-  const dataPath = await sourcePath(repoRoot, registry, "execution-policy", "registry");
-  const schemaPath = await sourcePath(repoRoot, registry, "execution-policy-schema", "schema");
-  const [raw, schemaText] = await Promise.all([readFile(dataPath, "utf8"), readFile(schemaPath, "utf8")]);
-  const policy = parseStrictYaml(raw, dataPath);
-  const errors = validateExecutionPolicyShape(policy, JSON.parse(schemaText));
-  if (errors.length) throw errors[0];
-  validateReferences(policy);
-  return { ...policy, policy_digest: createHash("sha256").update(raw).digest("hex") };
+  try {
+    const registry = manifest ?? await readStrictYaml(resolve(repoRoot, "system/manifest.yaml"));
+    const dataPath = await sourcePath(repoRoot, registry, "execution-policy", "registry");
+    const schemaPath = await sourcePath(repoRoot, registry, "execution-policy-schema", "schema");
+    const [raw, schemaText] = await Promise.all([readFile(dataPath, "utf8"), readFile(schemaPath, "utf8")]);
+    const policy = parseStrictYaml(raw, dataPath);
+    let schema;
+    try { schema = JSON.parse(schemaText); }
+    catch { fail("execution-policy-schema", "schemas/execution-policy.schema.json", "Execution policy schema is not valid JSON."); }
+    let errors;
+    try { errors = validateExecutionPolicyShape(policy, schema); }
+    catch (error) {
+      if (error instanceof SystemValidationError) throw error;
+      fail("execution-policy-schema", "schemas/execution-policy.schema.json", "Execution policy schema could not be compiled.");
+    }
+    if (errors.length) throw errors[0];
+    validateReferences(policy);
+    return { ...policy, policy_digest: createHash("sha256").update(raw).digest("hex") };
+  } catch (error) {
+    if (error instanceof SystemValidationError) throw error;
+    fail("execution-policy-read", "data/execution/policy.yaml", "Execution policy or its registered schema could not be read.");
+  }
 }

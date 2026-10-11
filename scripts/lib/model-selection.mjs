@@ -2,16 +2,16 @@
 const blocker = (code, path, message) => ({code, path, message});
 const nonempty = value => typeof value === "string" && value.trim().length > 0;
 function validRuntime(runtime, policy) {
-  return runtime?.schema_version === "1.0.0" && runtime.source === policy.runtime_capabilities.source && nonempty(runtime.runtime_session_id) && nonempty(runtime.tool_signature) && Number.isInteger(runtime.max_subagents) && runtime.max_subagents > 0 && Array.isArray(runtime.models) && runtime.models.every(model => nonempty(model.id) && Array.isArray(model.efforts) && model.efforts.every(nonempty) && Array.isArray(model.capabilities) && model.capabilities.every(nonempty)) && new Set(runtime.models.map(model => model.id)).size === runtime.models.length && (runtime.refusals === undefined || Array.isArray(runtime.refusals));
+  return runtime?.schema_version === "1.0.0" && runtime.source === policy.runtime_capabilities.source && nonempty(runtime.runtime_session_id) && nonempty(runtime.tool_signature) && Number.isInteger(runtime.max_subagents) && runtime.max_subagents > 0 && Array.isArray(runtime.models) && runtime.models.every(model => model !== null && typeof model === "object" && !Array.isArray(model) && nonempty(model.id) && Array.isArray(model.efforts) && model.efforts.every(nonempty) && Array.isArray(model.capabilities) && model.capabilities.every(nonempty)) && new Set(runtime.models.map(model => model.id)).size === runtime.models.length && (runtime.refusals === undefined || Array.isArray(runtime.refusals));
 }
 function scopePath(path) {
   if (!nonempty(path)) return null;
   const normalized = path.replaceAll("\\", "/").toLowerCase();
-  if (normalized.startsWith("/") || /[:\x00-\x1f]/u.test(normalized) || normalized.split("/").some(part => part === ".." || part === "." || part === "")) return null;
+  if (normalized.startsWith("/") || /[:<>"|\x00-\x1f]/u.test(normalized) || normalized.split("/").some(part => part === ".." || part === "." || part === "" || /[. ]$/u.test(part) || /~[0-9]/u.test(part) || /^(?:con|prn|aux|nul|com[0-9¹²³]|lpt[0-9¹²³])(?:\.|$)/u.test(part))) return null;
   return normalized;
 }
 function criticalScope(paths, rule) {
-  return paths.some(path => (rule.wildcard_scope_is_critical && /[*?\[\]{}]/u.test(path)) || rule.prefixes.some(prefix => path === prefix.replace(/\/$/u, "") || path.startsWith(prefix)) || rule.basenames.includes(path.split("/").at(-1)) || rule.path_fragments.some(fragment => path.includes(fragment)));
+  return paths.some(path => (rule.wildcard_scope_is_critical && /[*?\[\]{}]/u.test(path)) || rule.prefixes.some(prefix => path === prefix.replace(/\/$/u, "") || path.startsWith(prefix)) || rule.basenames.includes(path.split("/").at(-1)) || rule.path_fragments.some(fragment => path.includes(fragment)) || rule.scoped_fragments.some(scope => path.startsWith(scope.prefix) && scope.fragments.some(fragment => path.includes(fragment))));
 }
 function refused(candidate, runtime, policy) {
   return (runtime.refusals ?? []).some(refusal => refusal?.runtime_session_id === runtime.runtime_session_id && refusal.tool_signature === runtime.tool_signature && refusal.model === candidate.model && refusal.effort === candidate.effort && policy.runtime_capabilities.typed_refusal_codes.includes(refusal.code));
