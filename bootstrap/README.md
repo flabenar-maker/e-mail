@@ -92,7 +92,30 @@ RESTORE разрешает только безопасные, минимальн
 2. через Figma проверь read-доступ к файлу `8zka5bHkcrJVK9I9dKjnhC` и корням `538:17236`, `538:17235`;
 3. не изменяй Figma и не запускай публикацию библиотеки.
 
-### 6. Проверить локальный контракт
+### 6. Настроить один локальный baseline профиля
+
+Этот шаг относится только к RESTORE или первой явно запрошенной проверке. READ ONLY и вопросы без verification workloads не читают профиль и binding, не запускают collector и не создают локальное состояние.
+
+Выбери один явно разрешённый постоянный пользовательский workspace вне disposable Git snapshot. Во всех последующих задачах и чатах используй тот же state root: по умолчанию это WORKSPACE/.cupis-local/execution. Нельзя использовать путь внутри временного снимка. Профиль и вывод profile CLI содержат только локальные данные; не коммить их, не включай в cloud requests и не публикуй в GitHub.
+
+Привязка пары пользователь + ПК хранится отдельно: только после разрешения на конкретный локальный путь укажи --local-binding-root в несинхронизируемом подкаталоге LOCALAPPDATA. CLI не создаёт и не ищет binding там автоматически. Каталог должен быть вне пользовательского workspace и state root, без symbolic links/junctions. active-profile.json содержит только случайный непрозрачный pair_key. Копирование OneDrive/workspace и профиля на другой ПК не переносит активную привязку: bootstrap создаёт там собственную. Альтернатива при недоступном локальном каталоге — --pair-key с доверенным непрозрачным ключом пары, предоставленным внешним coordinator; не извлекай ключ из скопированного профиля. Не используй hostname, SID, machine GUID, auth-файлы или hardware для идентификатора.
+
+Из exact-SHA snapshot запусти companion CLI (значения путей ниже — placeholders разрешённых каталогов):
+
+~~~powershell
+node scripts/init-execution-profile.mjs --action init --workspace PERSISTENT_WORKSPACE --local-binding-root PERMITTED_LOCALAPPDATA_SUBDIRECTORY
+node scripts/init-execution-profile.mjs --action read --workspace PERSISTENT_WORKSPACE --local-binding-root PERMITTED_LOCALAPPDATA_SUBDIRECTORY
+~~~
+
+Первый init один раз вызывает ограниченный collector; повторный init и read используют сохранённый baseline без аппаратной диагностики. Collector читает только platform/architecture, logical CPU, physical/free RAM, free temporary disk и runtime presence. Windows PowerShell subprocess ограничен 15 секундами; доверенный скрипт запускается с process-only -ExecutionPolicy Bypass, как bootstrap verifier. Постоянные настройки Windows и execution policy не меняются. Запрет запуска или неполные данные сохраняются консервативно: unavailable/unknown даёт cloud preference; при отказе нет повторного запуска или обхода запрета доступа к CIM. Это только выбор среды, он не заявляет фактический cloud run и не отменяет действующий запрет Actions. Не проси full access для настройки.
+
+Windows x64/arm64 + Node 24 допускают local при всех известных значениях: physical RAM >=16 GiB, free RAM >=8 GiB, logical CPU >=8 и free temporary disk >=4 GiB. Это эвристика на initialized_at. В каждом отчёте указывай, что текущая память/нагрузка не измерялись. Local limits: concurrency=2, timeout=30 минут, один тяжёлый batch одновременно. Локальный runner получает runner_lock_root из CLI handoff и использует этот же постоянный каталог блокировок для всех задач; путь не передаётся в cloud metadata.
+
+Обычный resolver получает --state-root и --pair-key либо --local-binding-root и читает профиль только для workloads. Request.profile_pair_key должен совпадать с активной привязкой. Отсутствующая/чужая/invalid привязка или неизвестная workload signature даёт cloud без collector. Model-only policy changes не инвалидируют baseline. Изменение policy или workload никогда само не запускает init.
+
+Только по прямой просьбе переоценить baseline используй --action refresh --explicit-refresh yes с теми же путями. PROFILE_STATE_UNWRITABLE означает, что результат не сохранён: выбери разрешённое постоянное место, не заявляй успешную настройку. PROFILE_INITIALIZATION_IN_PROGRESS возвращается без ожидания и повторной диагностики при конкурентном init или interrupted marker. Если процесс аварийно завершился и оставил init.lock, сначала установи, что инициализация больше не выполняется; только в рамках явно запрошенного восстановления убери эту конкретную пустую блокировку и выполни explicit refresh. Сам resolver блокировки не снимает и диагностику не повторяет.
+
+### 7. Проверить локальный контракт
 
 Node.js 24 обязателен. Отсутствие Node 24 или несовпадающая major-версия — блокер восстановления. Во временном изолированном снимке закреплённого cloud SHA выполни чистую установку и проверки; это среда исполнения, не рабочая копия для правок:
 
@@ -115,7 +138,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File bootstrap/verify.ps1
 
 Verifier выполняет только локальное чтение. Ненулевой exit code — обязательный блокер, который нельзя скрывать.
 
-### 7. Отчитаться
+### 8. Отчитаться
 
 В финальном сообщении перечисли только проверенные факты:
 

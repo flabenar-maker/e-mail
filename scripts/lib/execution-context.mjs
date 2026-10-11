@@ -49,7 +49,7 @@ export async function loadExecutionRequest({request,repoRoot,referenceRoot=repoR
  freeze(copy);verified.set(copy,freeze(structuredClone(domain)));return copy;
 }
 export async function validateExecutionSchemas({repoRoot,manifest}){
- for(const name of ['runtime-capabilities','execution-request','execution-decision','execution-receipt']){
+ for(const name of ['runtime-capabilities','execution-request','execution-decision','execution-receipt','machine-profile']){
   const path='schemas/'+name+'.schema.json',entries=manifest.sources.filter(x=>x.id===name+'-schema');
   if(entries.length!==1||entries[0].kind!=='schema'||entries[0].path!==path)throw fail('execution-schema-source','Expected one canonical execution schema registration.');
   const root=await realpath(repoRoot),actual=await realpath(join(root,path));if(relative(root,actual).startsWith('..'))throw fail('execution-schema-source','Execution schema escaped repository.');

@@ -6,6 +6,7 @@ entrypoints:
   repository: README.md
   bootstrap: bootstrap/README.md
 sources:
+  - { id: machine-profile-schema, kind: schema, path: schemas/machine-profile.schema.json }
   - { id: runtime-capabilities-schema, kind: schema, path: schemas/runtime-capabilities.schema.json }
   - { id: execution-request-schema, kind: schema, path: schemas/execution-request.schema.json }
   - { id: execution-decision-schema, kind: schema, path: schemas/execution-decision.schema.json }

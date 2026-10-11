@@ -4,8 +4,9 @@ import {resolve} from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {loadExecutionRequest,resolveExecutionContext,renderExecutionDecision} from './lib/execution-context.mjs';
 import {loadExecutionPolicy} from './lib/execution-policy.mjs';
-const usage='Usage: resolve-execution-context --request FILE --capabilities FILE --repo-root DIR [--profile FILE] [--reference-root DIR]. Git/policy source is repo-root; refs are {path,digest}, relative to the one explicit reference-root (default repo-root). Domain JSON envelope: {schema_version:"1.0.0",source_sha,route,mode,authorization:{operation,allowed_paths},context:<unchanged domain resolver output>}. Initial executor_agent_id is optional; rerun with actual spawned ID before acceptance. Profile is read only for workloads, never collected.';
-export function parseArguments(args){const parsed={};for(let i=0;i<args.length;i+=2){if(!['--request','--capabilities','--repo-root','--profile','--reference-root'].includes(args[i])||!args[i+1]||args[i+1].startsWith('--')||Object.hasOwn(parsed,args[i]))throw new Error(usage);parsed[args[i]]=args[i+1];}if(!parsed['--request']||!parsed['--capabilities']||!parsed['--repo-root'])throw new Error(usage);return parsed;}
+import {readExecutionProfile,readActiveProfileBinding,authorizedLocalBindingRoot} from './lib/machine-profile.mjs';
+const usage='Usage: resolve-execution-context --request FILE --capabilities FILE --repo-root DIR [--profile FILE | --state-root DIR (--pair-key KEY | --local-binding-root DIR)] [--reference-root DIR]. Git/policy source is repo-root; refs are {path,digest}, relative to the one explicit reference-root (default repo-root). Domain JSON envelope: {schema_version:"1.0.0",source_sha,route,mode,authorization:{operation,allowed_paths},context:<unchanged domain resolver output>}. Initial executor_agent_id is optional; rerun with actual spawned ID before acceptance. Profile is read only for workloads, never collected.';
+export function parseArguments(args){const parsed={};for(let i=0;i<args.length;i+=2){if(!['--request','--capabilities','--repo-root','--profile','--reference-root','--state-root','--pair-key','--local-binding-root'].includes(args[i])||!args[i+1]||args[i+1].startsWith('--')||Object.hasOwn(parsed,args[i]))throw new Error(usage);parsed[args[i]]=args[i+1];}if(!parsed['--request']||!parsed['--capabilities']||!parsed['--repo-root'])throw new Error(usage);return parsed;}
 const failure=(code,message)=>({schema_version:'1.0.0',status:'blocked',blockers:[{code,path:'/cli',message}]});
 export async function main(args=process.argv.slice(2)){
  if(args.length===1&&args[0]==='--help'){process.stdout.write(usage+'\n');return 0;}
@@ -17,7 +18,18 @@ export async function main(args=process.argv.slice(2)){
   const request=await loadExecutionRequest({request:raw,repoRoot:root,referenceRoot:resolve(options['--reference-root']??root)});
   const policy=await loadExecutionPolicy({repoRoot:root});const capabilities=JSON.parse(await readFile(options['--capabilities'],'utf8'));
   // Saved profile data only. Active pair binding is supplied by the coordinator, never inferred from hardware.
-  const profile=request.workload_ids.length&&options['--profile']?JSON.parse(await readFile(options['--profile'],'utf8')):undefined;
+  let profile;
+  if(request.workload_ids.length){
+   if(options['--state-root']){
+    if(options['--profile']||(options['--pair-key']&&options['--local-binding-root']))throw new Error('Conflicting profile sources.');
+    let pairKey=options['--pair-key'];
+    if(!pairKey&&options['--local-binding-root']){
+     const bindingRoot=authorizedLocalBindingRoot({bindingRoot:options['--local-binding-root'],localAppData:process.env.LOCALAPPDATA,stateRoot:options['--state-root']});
+     const binding=await readActiveProfileBinding({bindingRoot});if(binding.status==='resolved')pairKey=binding.pair_key;
+    }
+    if(pairKey)profile=await readExecutionProfile({stateRoot:resolve(options['--state-root']),pairKey});
+   }else if(options['--profile'])profile=JSON.parse(await readFile(options['--profile'],'utf8'));
+  }
   const decision=resolveExecutionContext({request,policy,capabilities,profile});process.stdout.write(renderExecutionDecision(decision));return decision.status==='resolved'?0:1;
  }catch(error){process.stdout.write(renderExecutionDecision(failure(error.code?.startsWith('EXECUTION_')?error.code:'EXECUTION_INPUT_INVALID','Execution input could not be loaded or verified.')));return 1;}
 }
