@@ -18,7 +18,7 @@ import { postprocessEmail } from "./lib/email-postprocess.mjs";
 import { buildEmailPreview } from "./lib/email-preview.mjs";
 import { renderEmailDocument } from "./lib/email-renderer.mjs";
 import { loadDeliveryDocument } from "./lib/email-delivery-profile.mjs";
-import { prepareEmailDelivery } from "./lib/email-delivery.mjs";
+import { prepareEmailDelivery, validateDeliveryDocument } from "./lib/email-delivery.mjs";
 import { loadRendererRegistry } from "./lib/renderer-registry.mjs";
 import { loadRenderingFoundation } from "./lib/rendering-foundation.mjs";
 
@@ -103,7 +103,9 @@ async function main() {
   });
   const structured = delivery ? serializeEmailHtml({html,protectedFragments:(rendered.protectedFragments??[]).map(fragment=>{const start=html.indexOf(fragment.text);if(start<0)throw new Error("EMAIL_SERVICE_FRAGMENT_MISSING");return {start,end:start+fragment.text.length};})}) : {html,diagnostics:[]};
   if (structured.diagnostics.length) throw new AggregateError(structured.diagnostics,"HTML serialization failed.");
-  const preview = buildEmailPreview({ html:structured.html, mode: args.mode });
+  const finalDiagnostics=delivery?validateDeliveryDocument({document:delivery.document,inventory:delivery.inventory,profile:delivery.profile,purpose:"final",sourceSha:dependencies.systemCommit,emailId:originalModel.id}):[];
+  const labelledHtml=delivery?structured.html.replace("<head>",`<head>\n<title>Предпросмотр${finalDiagnostics.length?" — данные для выпуска неполные":""}</title>\n<!-- CUPIS preview: readiness=${finalDiagnostics.length?"incomplete":"ready"}; purpose=preview -->`):structured.html;
+  const preview = buildEmailPreview({ html:labelledHtml, mode: args.mode });
   await mkdir(dirname(outputPath), { recursive: true });
   await writeFile(outputPath, preview, "utf8");
   process.stdout.write(outputPath + "\n");

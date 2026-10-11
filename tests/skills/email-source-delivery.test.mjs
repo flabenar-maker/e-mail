@@ -41,7 +41,16 @@ function makeNativeInstance({ componentId, index, axesByViewport = {}, prefix })
     visit(selected.root);
   }
   for (const id of assets) instance.asset_files.push({ asset_contract_id:id,path:`images/${prefix}-${id}.png` });
-  for (const entry of nested.values()) instance.nested_components.push({ element_id:entry.element_id, instance:makeNativeInstance({ componentId:entry.component_id,index,axesByViewport:entry.axes,prefix:`${prefix}-${entry.component_id}` }) });
+  // This fixture declares the actual cross-viewport badge placement explicitly.
+  const mobileBadge=nested.get("root-card-summary-area-partner-info-row-status");
+  const desktopBadge=nested.get("root-card-summary-area-partner-info-row-status-container-status");
+  if(componentId==="block-transaction-error"&&mobileBadge&&desktopBadge) {
+    assert.equal(mobileBadge.component_id,"badge-operation-status");
+    assert.equal(desktopBadge.component_id,mobileBadge.component_id);
+    instance.nested_components.push({element_ids:{mobile:mobileBadge.element_id,desktop:desktopBadge.element_id},instance:makeNativeInstance({componentId:mobileBadge.component_id,index,axesByViewport:{mobile:mobileBadge.axes.mobile,desktop:desktopBadge.axes.desktop},prefix:`${prefix}-status-badge`})});
+    nested.delete(mobileBadge.element_id);nested.delete(desktopBadge.element_id);
+  }
+  for (const entry of nested.values()) instance.nested_components.push({ element_id:entry.element_id, instance:makeNativeInstance({ componentId:entry.component_id,index,axesByViewport:entry.axes,prefix:`${prefix}-${entry.element_id}` }) });
   return instance;
 }
 
