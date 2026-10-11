@@ -111,15 +111,17 @@ async function main() {
     const assetBuffers = new Map(await Promise.all(rendered.assets.map(async asset => [asset.path,await readFile(join(modelFolder,...asset.path.split("/")))])));
     const rebased = rebasePackageResources({html:structured.html,assetPaths:[...assetBuffers.keys()],htmlEntry:delivery.profile.package.html_entry,assetRootEntry:delivery.profile.package.asset_root_entry});
     if (rebased.diagnostics.length) throw new AggregateError(rebased.diagnostics, "Package resources failed.");
-    const css = [...rebased.html.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style\s*>/giu)].map(match => match[1]).join("");
+    const packageStructured = serializeEmailHtml({html:rebased.html,protectedFragments:(rendered.protectedFragments??[]).map(fragment=>{const start=rebased.html.indexOf(fragment.text);if(start<0)throw new Error("EMAIL_SERVICE_FRAGMENT_MISSING");return {start,end:start+fragment.text.length};})});
+    if(packageStructured.diagnostics.length)throw new AggregateError(packageStructured.diagnostics,"Package HTML serialization failed.");
+    const css = [...packageStructured.html.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style\s*>/giu)].map(match => match[1]).join("");
     const budget = validateEmbeddedCssBudget(css, rendering.embedded_css.max_bytes_exclusive);
     if (budget.length) throw new AggregateError(budget,"Final CSS budget exceeded.");
     const plainText = buildPlainText({model:originalModel,inventory:delivery.inventory,deliveryDocument:delivery.document,profile:delivery.profile,templateRules:dependencies.templateRules});
-    const packaged = buildAltcraftEntries({html:rebased.html,assetBuffers,deliveryDocument:delivery.document,plainText,profile:delivery.profile});
+    const packaged = buildAltcraftEntries({html:packageStructured.html,assetBuffers,deliveryDocument:delivery.document,plainText,profile:delivery.profile});
     if (packaged.diagnostics.length) throw new AggregateError(packaged.diagnostics,"Package construction failed.");
     const zip = encodeZipStore(packaged.entries);
     const hash = bytes => createHash("sha256").update(bytes).digest("hex");
-    const report = {schema_version:"1.0.0",source_sha:dependencies.systemCommit,profile_id:delivery.profile.id,profile_version:delivery.profile.version,serializer_version:"1.0.0",package_id:delivery.profile.package.id,readiness:"ready",external_acceptance:"not-run",metrics:measureEmailOutput({html:rebased.html,css}),html_sha256:hash(rebased.html),archive_sha256:hash(zip),assets:[...assetBuffers].map(([path,bytes])=>({path,sha256:hash(bytes)}))};
+    const report = {schema_version:"1.0.0",source_sha:dependencies.systemCommit,profile_id:delivery.profile.id,profile_version:delivery.profile.version,serializer_version:"1.0.0",package_id:delivery.profile.package.id,readiness:"ready",external_acceptance:"not-run",metrics:measureEmailOutput({html:packageStructured.html,css}),html_sha256:hash(packageStructured.html),archive_sha256:hash(zip),assets:[...assetBuffers].map(([path,bytes])=>({path,sha256:hash(bytes)}))};
     const previews = [];
     for (const [path,first_name] of [["preview-name.html","алексей"],["preview-empty-name.html",""],["preview-long-name.html","Александра-Виктория"]]) {
       const input = buildPersonalizationPreview({emissionInput:{model,templateRules:dependencies.templateRules},scenario:{first_name}});

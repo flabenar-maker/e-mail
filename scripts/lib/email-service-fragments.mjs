@@ -9,7 +9,8 @@ export function buildEmailServiceFragments({deliveryDocument,profile}) {
   };
 }
 export function applyOutputLink({html,origin,outputBindings=[],existingAnchorContext}) {
-  const matches=outputBindings.filter(binding=>binding.kind==='managed-output-link'&&matchesTemplateTarget(binding.target,origin));
+  const outputOrigin={...origin,slot_id:origin?.slot_id??'href'};
+  const matches=outputBindings.filter(binding=>binding.kind==='managed-output-link'&&matchesTemplateTarget(binding.target,outputOrigin));
   if(!matches.length)return {html,diagnostics:[]};
   if(matches.length!==1)return {html,diagnostics:[{code:'EMAIL_OUTPUT_LINK_CONFLICT',path:'/outputBindings',message:'Multiple output links address one origin.'}]};
   const href=matches[0].href;

@@ -213,6 +213,7 @@ function escapeInline(value) {
 }
 
 function richTextFromFacts(element, entry, style, context, viewport) {
+  const textOrigin={...element.output_origin,slot_id:"text"};
   const fact = element.facts?.find(({ id }) => id === "styled-text-segments");
   if (!fact) return null;
   const segments = fact.value?.items ?? [];
@@ -229,17 +230,17 @@ function richTextFromFacts(element, entry, style, context, viewport) {
     const text=raw?value:escapeInline(value).replaceAll("\u2028","<br>").replaceAll("\n","<br>");
     return href?`<a href="${escapeInline(href)}" style="${inlineStyle}">${text}</a>`:`<span style="${inlineStyle}">${text}</span>`;
   };
-  const fullRule=findGreetingRule({templateRules:context.templateRules,origin:element.output_origin});
+  const fullRule=findGreetingRule({templateRules:context.templateRules,origin:textOrigin});
   if(fullRule) {
-    const value=greetingValue({rule:fullRule,origin:element.output_origin,previewValues:context.previewValues});
+    const value=greetingValue({rule:fullRule,origin:textOrigin,previewValues:context.previewValues});
     const body=renderStyledGreeting({text:source,segments,span,previewValue:value===fullRule.emitted_template?undefined:value});
     if(body!==null)return {html:renderPrimitive("text",{style},body),error:null};
   }
   const body=segments.map((segment,index)=>{
     const range={start:segment.start,end:segment.end};
-    const rule=findGreetingRule({templateRules:context.templateRules,origin:element.output_origin,range});
-    const value=rule?greetingValue({rule,origin:element.output_origin,range,previewValues:context.previewValues}):runs[index];
-    const output=(context.outputBindings??[]).find(binding=>binding.kind==="output-range-link"&&matchesTemplateTarget(binding.target,element.output_origin)&&binding.target.range?.start===segment.start&&binding.target.range?.end===segment.end);
+    const rule=findGreetingRule({templateRules:context.templateRules,origin:textOrigin,range});
+    const value=rule?greetingValue({rule,origin:textOrigin,range,previewValues:context.previewValues}):runs[index];
+    const output=(context.outputBindings??[]).find(binding=>binding.kind==="output-range-link"&&matchesTemplateTarget(binding.target,textOrigin)&&binding.target.range?.start===segment.start&&binding.target.range?.end===segment.end);
     const href=output?.href??slotValue(entry,"help-url")??slotValue(entry,`link-${index+1}-url`);
     if((output||segment.text_decoration==="UNDERLINE")&&!href)return null;
     if(output&&context.anchorContexts?.[viewport])return null;
@@ -249,6 +250,11 @@ function richTextFromFacts(element, entry, style, context, viewport) {
   return {html:renderPrimitive("text",{style},body.join("")),error:null};
 }
 
+function emittedSlotText(element,entry,context,slotId="text") {
+  const origin={...element.output_origin,slot_id:slotId};
+  const rule=findGreetingRule({templateRules:context.templateRules,origin});
+  return rule?greetingValue({rule,origin,previewValues:context.previewValues}):slotValue(entry,slotId);
+}
 function contentFor(context, viewport, element) {
   const entry = scopedEntry(context.content, viewport, element.id) ?? {};
   const diagnostics = [];
@@ -543,7 +549,7 @@ function renderShellNative(element, viewport, path, childHtml, context) {
       }
       return {
         html: renderPrimitive("text", {
-          text: (()=>{const rule=findGreetingRule({templateRules:context.templateRules,origin:element.output_origin});return rule?greetingValue({rule,origin:element.output_origin,previewValues:context.previewValues}):slotValue(entry,"text");})(),
+          text: emittedSlotText(element,entry,context),
           style: factProps.style,
         }),
         diagnostics: [],
@@ -555,7 +561,7 @@ function renderShellNative(element, viewport, path, childHtml, context) {
           "link",
           {
             href: slotValue(entry, "href"),
-            ...(children.length === 0 ? { text: slotValue(entry, "text") } : {}),
+            ...(children.length === 0 ? { text: emittedSlotText(element,entry,context) } : {}),
             style: factProps.style,
           },
           joined,
@@ -664,7 +670,7 @@ function renderShell(element,viewport,path,children,context) {
     html=linked.html;
   }
   if(html&&element.output_block&&context.emissionProfile?.fallback_viewport==="mobile") {
-    const label=element.output_block.replaceAll("--","- -").replaceAll("<","&lt;").replaceAll(">","&gt;");
+    const label=element.output_block.replaceAll(/--+/gu,"-").replaceAll("<","&lt;").replaceAll(">","&gt;");
     html=`<!-- cupis:block ${label} -->${html}<!-- cupis:end ${label} -->`;
   }
   return {html,diagnostics:[]};

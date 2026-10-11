@@ -50,7 +50,7 @@ export function validateDeliveryProfile(profile, { componentIndex } = {}) {
       if (record) {
         const elements = allElements(record, binding.viewport).filter(e => e.id === binding.element_id);
         const valid = binding.kind === 'output-link'
-          ? elements.some(e => e.render_mode === 'direct-image')
+          ? binding.slot_id === 'href' && elements.some(e => e.render_mode === 'direct-image')
           : elements.some(e => e.content_slots?.some(slot => slot.id === binding.slot_id && slot.type === 'url'));
         if (!valid) errors.push(issue('EMAIL_DELIVERY_ROLE_TARGET_UNKNOWN', path, 'Role target does not exist in the registered viewport contracts.'));
       }

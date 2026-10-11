@@ -121,6 +121,7 @@ test("removing a collected required URL blocks the release before any output is 
   t.after(() => rm(folder, { recursive: true, force: true }));
   const { inventory, document } = await releaseInput(folder);
   const required = inventory.fields.filter(({ role }) => ["footer-site", "footer-support"].includes(role));
+  assert.equal(required.length, 2);
   for (const field of required) {
     const blocked = { ...document, answers: { ...document.answers, [field.id]: "" } }; await writeFile(join(folder, "delivery.json"), JSON.stringify(blocked)); const output = join(folder, `blocked-${field.role}`);
     await assert.rejects(execFileAsync(process.execPath, ["scripts/render-email.mjs", "--model", join(folder, "model.json"), "--delivery", join(folder, "delivery.json"), "--output", output], { cwd: repoRoot, env: { ...process.env, CUPIS_SYSTEM_COMMIT: sourceSha } }), /REQUIRED_URL|Fill the address/u); await assert.rejects(readdir(output), /ENOENT/u);

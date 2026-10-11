@@ -89,8 +89,10 @@ export function serializeEmailHtml({html,blockBoundaries=[],protectedFragments=[
     const boundary=token.kind==='tag'&&structural.has(token.name) || token.kind==='declaration' || token.kind==='comment';
     if(boundary) {
       flush();if(token.closing)depth=Math.max(0,depth-1);
+      if(token.kind==='comment'&&token.raw.startsWith('<!-- cupis:block ')&&lines.length&&lines.at(-1)!=='')lines.push('');
       line=' '.repeat(depth*indentWidth)+token.raw;
       flush();if(token.kind==='tag'&&!token.closing&&!token.void)depth++;
+      if(token.kind==='comment'&&token.raw.startsWith('<!-- cupis:end '))lines.push('');
     } else {
       if(!line)line=' '.repeat(depth*indentWidth);
       line+=token.raw;

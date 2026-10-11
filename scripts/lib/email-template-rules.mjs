@@ -21,7 +21,7 @@ export function planTemplateRules({model,inventory,profile}) {
   return {rules:[...groups.values()],diagnostics:[]};
 }
 export function matchesTemplateTarget(target,origin) {
-  return target.instance_path===origin?.instance_path&&target.component_id===origin?.component_id&&target.viewport===origin?.viewport&&target.element_id===(origin?.original_element_id??origin?.element_id)&&(!origin?.slot_id||!target.slot_id||target.slot_id===origin.slot_id);
+  return target.instance_path===origin?.instance_path&&target.component_id===origin?.component_id&&target.viewport===origin?.viewport&&target.element_id===(origin?.original_element_id??origin?.element_id)&&typeof target.slot_id==='string'&&target.slot_id===origin?.slot_id;
 }
 export function findGreetingRule({templateRules,origin,range}) {
   return (templateRules?.rules??[]).find(rule=>rule.bindings.some(target=>matchesTemplateTarget(target,origin)&&(!range?!target.range:target.range?.start===range.start&&target.range?.end===range.end)));
