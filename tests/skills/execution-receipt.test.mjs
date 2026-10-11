@@ -41,3 +41,15 @@ test('local-only evidence is bound to reviewed artifact and named input bytes',(
 test('mechanical direct source review accepts higher qualified coordinator, never lower or injected effort',()=>{const f=fixture();f.decision.review.mode='independent-source-check';f.decision.review.reviewer=f.decision.executor;f.decision.review.eligible_reviewers=[f.decision.executor,{tier:4,model:'gpt-6-astra',effort:'high'}];f.reviewReceipts[0].review_mode='independent-source-check';assert.equal(run(f).status,'accepted');for(const change of [{reviewer_model:'gpt-6-luna',reviewer_effort:'low'},{reviewer_effort:'medium'},{reviewer_agent_id:'worker'}]){const g=structuredClone(f);Object.assign(g.reviewReceipts[0],change);assert.equal(run(g).status,'blocked');}});
 
 test('changed named input refs invalidate stale selected input digest before receipt acceptance',()=>{const f=fixture();f.decision.input_refs={installed_skills_root:ref('input.json')};f.decision.verification=[{id:'installed-skills',portability:'local-only',target:'local',signature:'d'.repeat(64),input_names:['installed_skills_root'],input_digest:inputHash(f.decision.input_refs),limits:{concurrency:2,timeout_minutes:30,max_heavy_batches:1}}];f.decision.input_refs.installed_skills_root.digest='f'.repeat(64);assert.equal(run(f).status,'blocked');assert.ok(run(f).blockers.some(b=>b.code==='EXECUTION_INPUT_BINDING_INVALID'));});
+
+
+test('strict receipt schema compiles and requires separate cloud run identities only for cloud',async()=>{
+ const {default:Ajv2020}=await import('ajv/dist/2020.js');const {readFile}=await import('node:fs/promises');
+ const schema=JSON.parse(await readFile(new URL('../../schemas/execution-receipt.schema.json',import.meta.url),'utf8'));
+ const validate=new Ajv2020({strict:true,allErrors:true}).compile({$defs:schema.$defs,$ref:'#/$defs/verification'});
+ const cloud={schema_version:'1.0.0',request_id:'request',source_sha:'a'.repeat(40),workflow_sha:'b'.repeat(40),event_sha:'c'.repeat(40),run_id:'17',run_attempt:'2',target:'github-hosted',workload_results:[],conclusion:'failure',evidence_refs:[]};
+ assert.equal(validate(cloud),true,JSON.stringify(validate.errors));
+ for(const name of ['workflow_sha','event_sha','run_id','run_attempt']){const missing={...cloud};delete missing[name];assert.equal(validate(missing),false,name);}
+ const local={...cloud,target:'local',workflow_sha:null};for(const name of ['event_sha','run_id','run_attempt'])delete local[name];assert.equal(validate(local),true);
+ for(const name of ['event_sha','run_id','run_attempt'])assert.equal(validate({...local,[name]:cloud[name]}),false,name);
+});
