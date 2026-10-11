@@ -142,8 +142,9 @@ test("actual resolver workflow modes gate source proof and design continuation e
   const technical = await handoff(technicalFix, { handoffModel: nativeModel, handoffDelivery: nativeDelivery });
   assert.equal(technical.blockers.includes("figma-source-missing"), false);
   assert.equal(technical.blockers.includes("visual-regression"), false);
-  assert.equal(technical.executed, true);
-  assert.equal(invocations, 1);
+  assert.ok(technical.blockers.includes("source-evidence-missing"));
+  assert.equal(technical.executed, false);
+  assert.equal(invocations, 0);
 });
 
 test("handoff fails closed without a recognized nested workflow mode", async (t) => {
