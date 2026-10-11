@@ -5,6 +5,7 @@ import Ajv2020 from 'ajv/dist/2020.js';
 import requestSchema from '../../schemas/execution-request.schema.json' with {type:'json'};
 import decisionSchema from '../../schemas/execution-decision.schema.json' with {type:'json'};
 import {selectModel} from './model-selection.mjs';
+import {isValidMachineProfile} from './machine-profile-validation.mjs';
 import {validateRuntimeCapabilities} from './runtime-capabilities.mjs';
 import {SystemValidationError} from './diagnostics.mjs';
 const ajv=new Ajv2020({strict:true,allErrors:true});
@@ -80,7 +81,7 @@ export function resolveExecutionContext({request,policy,capabilities,profile}){
   const workload=policy.workloads.find(x=>x.id===id);if(!workload)return blocked('EXECUTION_WORKLOAD_UNKNOWN','Requested workload is not in the policy.');
   if(workload.required_inputs.some(input=>!Object.hasOwn(request.input_refs??{},input)))return blocked('EXECUTION_WORKLOAD_INPUT_MISSING','Workload requires verified input references.');
   const signature=workloadSignature(workload);const p=profile?.status==='resolved'&&request.profile_pair_key&&profile.pair_key===request.profile_pair_key&&profile.profile?.pair_key===request.profile_pair_key?profile.profile:null;
-  const validProfile=p?.schema_version==='1.0.0'&&typeof p.initialized_at==='string'&&Number.isFinite(Date.parse(p.initialized_at))&&p.observations_status==='available'&&p.observations&&typeof p.observations==='object'&&/^[a-f0-9]{64}$/u.test(p.baseline_policy_digest??'')&&p.local_limits?.concurrency===policy.local_limits.concurrency&&p.local_limits?.timeout_minutes===policy.local_limits.timeout_minutes&&p.local_limits?.max_heavy_batches===policy.local_limits.max_heavy_batches&&Array.isArray(p.workload_decisions)&&p.workload_decisions.every(x=>typeof x?.id==='string'&&/^[a-f0-9]{64}$/u.test(x.signature??'')&&['local','github-hosted'].includes(x.target))&&new Set(p.workload_decisions.map(x=>x.id)).size===p.workload_decisions.length;
+  const validProfile=isValidMachineProfile(p,request.profile_pair_key)&&p.local_limits.concurrency===policy.local_limits.concurrency&&p.local_limits.timeout_minutes===policy.local_limits.timeout_minutes&&p.local_limits.max_heavy_batches===policy.local_limits.max_heavy_batches;
   const saved=validProfile?p.workload_decisions.find(x=>x.id===id&&x.signature===signature):null;
   const target=workload.portability==='local-only'?'local':saved?.target==='local'?'local':'github-hosted';
   const input_names=[...workload.required_inputs].sort();const input_digest=input_names.length?workloadInputDigest(Object.fromEntries(input_names.map(name=>[name,request.input_refs[name]]))):null;

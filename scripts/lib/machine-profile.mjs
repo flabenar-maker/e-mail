@@ -1,12 +1,10 @@
 import {readFile,lstat,mkdir,open,rename,unlink,rmdir} from 'node:fs/promises';
 import {createHash,randomUUID} from 'node:crypto';
 import {resolve,join,dirname,parse,relative,isAbsolute,sep} from 'node:path';
-import Ajv2020 from 'ajv/dist/2020.js';
-import schema from '../../schemas/machine-profile.schema.json' with {type:'json'};
+import {isValidMachineProfile as validProfile} from './machine-profile-validation.mjs';
 import {workloadSignature} from './execution-context.mjs';
 import {SystemValidationError} from './diagnostics.mjs';
 
-const validate=new Ajv2020({strict:true,allErrors:true}).compile(schema);
 const fail=(code,message)=>new SystemValidationError(code,'/profile',message);
 const pairValid=value=>typeof value==='string'&&value.length>0&&value.length<=200&&!/[\x00-\x1f]/u.test(value);
 const within=(root,path)=>{const rel=relative(resolve(root),resolve(path));return !rel||(!rel.startsWith('..'+sep)&&rel!=='..'&&!isAbsolute(rel));};
@@ -28,9 +26,6 @@ async function readJson(path) {
  const stat=await lstat(path);if(!stat.isFile()||stat.size>65536)throw fail('PROFILE_STATE_INVALID','Saved profile data must be a small regular JSON file.');
  return JSON.parse(await readFile(path,'utf8'));
 }
-function validProfile(profile,pairKey) {
- return validate(profile)&&profile.pair_key===pairKey&&Number.isFinite(Date.parse(profile.initialized_at))&&new Set(profile.workload_decisions.map(x=>x.id)).size===profile.workload_decisions.length&&(profile.observations_status!=='unavailable'||profile.workload_decisions.every(x=>x.target==='github-hosted'));
-}
 // Read-only by construction: no collector argument, process API or runtime probes.
 export async function readExecutionProfile({stateRoot,pairKey}) {
  try {
@@ -39,7 +34,7 @@ export async function readExecutionProfile({stateRoot,pairKey}) {
   return {status:'resolved',pair_key:pairKey,profile};
  } catch(error) {
   if(['ENOENT','ENOTDIR'].includes(error.code))return {status:'absent',pair_key:pairKey};
-  return {status:'invalid',pair_key:pairKey,code:error.code==='PROFILE_PATH_UNSAFE'?error.code:'PROFILE_STATE_INVALID'};
+  return {status:'invalid',pair_key:pairKey,code:['EACCES','EPERM'].includes(error.code)?'PROFILE_STATE_UNWRITABLE':error.code==='PROFILE_PATH_UNSAFE'?error.code:'PROFILE_STATE_INVALID'};
  }
 }
 async function atomicJson(path,value) {
@@ -77,7 +72,7 @@ function localEligible(observations,workload,policy) {
 }
 async function initialize({stateRoot,pairKey,collectOnce,policy},refresh) {
  const path=executionProfilePath({stateRoot,pairKey});
- if(!refresh){const saved=await readExecutionProfile({stateRoot,pairKey});if(saved.status==='resolved')return saved.profile;if(saved.status==='invalid')throw fail('PROFILE_STATE_INVALID','Saved profile is invalid; explicit reassessment is required.');}
+ if(!refresh){const saved=await readExecutionProfile({stateRoot,pairKey});if(saved.status==='resolved')return saved.profile;if(saved.status==='invalid')throw fail(saved.code==='PROFILE_STATE_UNWRITABLE'?'PROFILE_STATE_UNWRITABLE':'PROFILE_STATE_INVALID',saved.code==='PROFILE_STATE_UNWRITABLE'?'Choose an authorized persistent state root that can save the profile.':'Saved profile is invalid; explicit reassessment is required.');}
  if(!policy||!Array.isArray(policy.workloads)||!Array.isArray(policy.hardware_thresholds)||!/^[a-f0-9]{64}$/u.test(policy.policy_digest??'')||policy.local_limits?.concurrency!==2||policy.local_limits?.timeout_minutes!==30||policy.local_limits?.max_heavy_batches!==1)throw fail('PROFILE_POLICY_INVALID','Use the validated execution policy for profile initialization.');
  const directory=dirname(path);await storageReady(directory);
  const lock=join(directory,'init.lock'),started=join(directory,'initialization-started.json');
@@ -85,7 +80,7 @@ async function initialize({stateRoot,pairKey,collectOnce,policy},refresh) {
  try {
   // Check again under the cross-process lock, before sampling anything.
   if(!refresh){
-   const saved=await readExecutionProfile({stateRoot,pairKey});if(saved.status==='resolved')return saved.profile;if(saved.status==='invalid')throw fail('PROFILE_STATE_INVALID','Saved profile is invalid; explicit reassessment is required.');
+   const saved=await readExecutionProfile({stateRoot,pairKey});if(saved.status==='resolved')return saved.profile;if(saved.status==='invalid')throw fail(saved.code==='PROFILE_STATE_UNWRITABLE'?'PROFILE_STATE_UNWRITABLE':'PROFILE_STATE_INVALID',saved.code==='PROFILE_STATE_UNWRITABLE'?'Choose an authorized persistent state root that can save the profile.':'Saved profile is invalid; explicit reassessment is required.');
    try{await lstat(started);throw fail('PROFILE_INITIALIZATION_IN_PROGRESS','A previous initialization did not finish saving; explicit reassessment is required.');}catch(error){if(error.code!=='ENOENT')throw error;}
   }
   // A durable marker prevents automatic resampling after a crash or failed final save.
