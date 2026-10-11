@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, mkdir, rm, writeFile } from "node:fs/promises";
+import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
@@ -15,7 +15,9 @@ test("profile validator is synchronous and accepts the documented profile shape"
 test("profile schema loader rejects unknown fields", async (t) => {
   const repoRoot = await mkdtemp(join(tmpdir(), "delivery-profile-"));
   t.after(() => rm(repoRoot, { recursive: true, force: true }));
-  await mkdir(join(repoRoot, "data", "delivery"), { recursive: true });
+  await mkdir(join(repoRoot, "data", "delivery"), { recursive: true }); await mkdir(join(repoRoot, "schemas"), { recursive: true }); await writeFile(join(repoRoot,"schemas","email-delivery-profiles.schema.json"), await readFile(join(process.cwd(),"schemas","email-delivery-profiles.schema.json"))); await writeFile(join(repoRoot,"schemas","email-delivery.schema.json"), await readFile(join(process.cwd(),"schemas","email-delivery.schema.json")));
   await writeFile(join(repoRoot, "data", "delivery", "profiles.yaml"), JSON.stringify({ ...profileDocument, unexpected: true }));
-  await assert.rejects(loadEmailDeliveryProfiles({ repoRoot }), /unknown|additional|schema/i);
+  const manifest={sources:[{id:"email-delivery-profiles",kind:"registry",path:"data/delivery/profiles.yaml"},{id:"email-delivery-profiles-schema",kind:"schema",path:"schemas/email-delivery-profiles.schema.json"},{id:"email-delivery-schema",kind:"schema",path:"schemas/email-delivery.schema.json"}]}; await assert.rejects(loadEmailDeliveryProfiles({ repoRoot, manifest, componentIndex:{bySystemId:new Map()} }), (error) => error instanceof AggregateError && error.errors.some((item) => item.code === "EMAIL_DELIVERY_PROFILES_SCHEMA"));
 });
+
+

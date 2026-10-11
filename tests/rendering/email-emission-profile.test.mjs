@@ -137,8 +137,8 @@ test("no-css-shows-mobile-once", () => {
   assert.deepEqual(result.diagnostics, []);
   assert.match(result.html, /mobile copy/u);
   assert.match(result.html, /desktop copy/u);
-  assert.match(result.html, /cupis-root-mobile[^>]*style="[^"]*(?!display:none)/u);
-  assert.match(result.html, /cupis-root-desktop[^>]*style="[^"]*display:none/u);
+  assert.match(result.html, /<div class="cupis-root-0-mobile">/u);
+  assert.match(result.html, /<div class="cupis-root-0-desktop" style="display:none/u);
   assert.match(result.css, /min-width:660px/u);
   assert.match(result.css, /min-device-width:660px/u);
   assert.equal((result.html.match(/mobile copy/gu) ?? []).length, 1);
@@ -213,7 +213,7 @@ test("different-tree-preserves-split-and-keeps-mso-rules-conditional", () => {
   assert.match(result.html, /mobile tree/u);
   assert.match(result.html, /desktop tree/u);
   assert.match(result.html, /\[if !mso\]/iu);
-  assert.match(result.msoCss, /cupis-root-desktop/u);
+  assert.match(result.msoCss, /cupis-root-0-desktop/u);
   assert.doesNotMatch(result.css, /mso/iu);
   assert.doesNotMatch(result.css, /cupis-root-desktop\{[^}]*display:table/u);
 });
@@ -230,7 +230,14 @@ test("split-div-wrappers-restore-block-and-inner-tables-retain-native-display", 
     ],
     contentSlots: [{ id: "alt", type: "alt-text", required: true }],
   });
-  const mobile = element({ id: "root", children: [image("fixed", "fixed", 32, 20), image("fill", "fill", 252, 188)] });
+  const mobile = element({
+    id: "root",
+    facts: [
+      { id: "layout-axis", value: { type: "keyword", value: "vertical" } },
+      { id: "layout-gap", value: { type: "measure", value: 0, unit: "px" } },
+    ],
+    children: [image("fixed", "fixed", 32, 20), image("fill", "fill", 252, 188)],
+  });
   const desktop = structuredClone(mobile);
   desktop.children[0].facts[0].value.width = 48;
   const result = renderScenario({

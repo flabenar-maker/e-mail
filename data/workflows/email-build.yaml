@@ -217,8 +217,29 @@
             }
           },
           {
-            "id": "validate-delivery-answers",
+            "id": "collect-delivery-answers",
             "order": 6,
+            "source_ids": [
+              "email-delivery-schema"
+            ],
+            "required_inputs": [
+              "delivery-form",
+              "delivery-draft"
+            ],
+            "blockers": [
+              "delivery-user-input-missing"
+            ],
+            "allowed_outputs": [
+              "delivery-answers"
+            ],
+            "handoff": {
+              "on_success": "next",
+              "on_blocked": "request-input"
+            }
+          },
+          {
+            "id": "validate-delivery-answers",
+            "order": 7,
             "source_ids": [
               "email-delivery-profiles",
               "email-delivery-schema"
@@ -242,7 +263,7 @@
           },
           {
             "id": "export-assets-via-mcp",
-            "order": 7,
+            "order": 8,
             "source_ids": [
               "asset-export-standard",
               "components-shared",
@@ -271,7 +292,7 @@
           },
           {
             "id": "build-temporary-email-model",
-            "order": 8,
+            "order": 9,
             "source_ids": [
               "email-model-schema",
               "email-model-assembly-standard",
@@ -301,7 +322,7 @@
           },
           {
             "id": "verify-model-source",
-            "order": 9,
+            "order": 10,
             "source_ids": [
               "email-model-assembly-standard",
               "email-source-fidelity-standard",
@@ -327,7 +348,7 @@
           },
           {
             "id": "render-email-cli",
-            "order": 10,
+            "order": 11,
             "source_ids": [
               "email-rendering-standard",
               "email-source-fidelity-standard",
@@ -364,7 +385,7 @@
           },
           {
             "id": "verify-rendered-email",
-            "order": 11,
+            "order": 12,
             "source_ids": [
               "email-rendering-standard",
               "typography-standard",
@@ -392,7 +413,7 @@
           },
           {
             "id": "clean-output-folder",
-            "order": 12,
+            "order": 13,
             "source_ids": [
               "email-rendering-standard"
             ],
@@ -414,7 +435,7 @@
           },
           {
             "id": "handoff",
-            "order": 13,
+            "order": 14,
             "source_ids": [
               "email-rendering-standard"
             ],
@@ -654,8 +675,29 @@
             }
           },
           {
-            "id": "validate-delivery-answers",
+            "id": "collect-delivery-answers",
             "order": 7,
+            "source_ids": [
+              "email-delivery-schema"
+            ],
+            "required_inputs": [
+              "delivery-form",
+              "delivery-draft"
+            ],
+            "blockers": [
+              "delivery-user-input-missing"
+            ],
+            "allowed_outputs": [
+              "delivery-answers"
+            ],
+            "handoff": {
+              "on_success": "next",
+              "on_blocked": "request-input"
+            }
+          },
+          {
+            "id": "validate-delivery-answers",
+            "order": 8,
             "source_ids": [
               "email-delivery-profiles",
               "email-delivery-schema"
@@ -679,7 +721,7 @@
           },
           {
             "id": "update-assets-via-mcp",
-            "order": 8,
+            "order": 9,
             "condition_id": "asset-change-in-scope",
             "source_ids": [
               "asset-export-standard",
@@ -711,7 +753,7 @@
           },
           {
             "id": "apply-scoped-html-change",
-            "order": 9,
+            "order": 10,
             "source_ids": [
               "email-model-schema",
               "email-model-assembly-standard",
@@ -744,7 +786,7 @@
           },
           {
             "id": "verify-source-regression",
-            "order": 10,
+            "order": 11,
             "source_ids": [
               "email-rendering-standard",
               "rendering-foundation"
@@ -771,7 +813,7 @@
           },
           {
             "id": "clean-output-folder",
-            "order": 11,
+            "order": 12,
             "source_ids": [
               "email-rendering-standard"
             ],
@@ -793,7 +835,7 @@
           },
           {
             "id": "handoff",
-            "order": 12,
+            "order": 13,
             "source_ids": [
               "email-rendering-standard"
             ],

@@ -855,7 +855,7 @@ export function renderContextBundle(bundle) {
               "",
               `Digest: \`${source.digest}\``,
               "",
-              renderCodeBlock(source.content, "markdown"),
+              ["email-delivery-schema","email-delivery-profiles-schema"].includes(source.id) ? "Runtime schema is retained in the pinned structured bundle. Use the intake/render commands; read this schema only when changing its contract." : renderCodeBlock(source.content, "markdown"),
             ].join("\n"),
         )
         .join("\n\n")

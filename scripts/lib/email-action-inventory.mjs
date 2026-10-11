@@ -55,6 +55,7 @@ export function collectEmailActions({ model, componentIndex, profile }) {
   diagnostics.push(...indexed.duplicatePaths.map(path => diagnostic('EMAIL_DELIVERY_INSTANCE_DUPLICATE', '/root', 'Duplicate instance path: ' + path)));
   const instanceOrders = new Map([...indexed.keys()].map((path, index) => [path, index]));
   const actions = [];
+  const textBindings = [];
   const selection = [];
   function visitInstance(instance, viewport, parentPath = '', stack = [], inheritedBlock, inheritedAxes) {
     if (!instance) return;
@@ -79,6 +80,14 @@ export function collectEmailActions({ model, componentIndex, profile }) {
       if (!element || !visible(element, instance, viewport)) return;
       elementOrder += 1;
       const urlSlots = (element.content_slots ?? []).filter(slot => slot.type === 'url');
+      if (element.render_mode === 'html-text' || element.render_mode === 'html-link') {
+        for (const slot of element.content_slots ?? []) {
+          if (!['plain-text','rich-text'].includes(slot.type)) continue;
+          const supplied = deliveryBinding(instance, element.id, slot.id, viewport);
+          const value = supplied ? deliveryText(supplied.value) : sourceText(element, instance, viewport);
+          if (value) textBindings.push({instance_path:path,component_id:record.id,viewport,element_id:element.id,slot_id:slot.id,value,runs:structuredClone(element.facts?.find(fact => fact.id === 'styled-text-segments')?.value?.items ?? [])});
+        }
+      }
       for (const slot of urlSlots) add(element, slot, roleFor(profile, record.id, viewport, element.id, slot.id, 'slot-link'));
       for (const role of profile?.roles ?? []) {
         if (role.component_id !== record.id) continue;
@@ -132,5 +141,6 @@ export function collectEmailActions({ model, componentIndex, profile }) {
   fields.sort((a,b) => a.order[0]-b.order[0] || a.order[1]-b.order[1]);
   const clean = fields.map(({ order, proof, ...field }) => field);
   const structure = { email_id: model?.id, profile_id: profile?.id, profile_version: profile?.version, selection, fields: clean.map(({ value, ...field }) => ({ ...field, bindings: field.bindings.map(({ range, ...binding }) => ({ ...binding, ...(range ? { range: { start: range.start, end: range.end, text: range.text } } : {}) })) })) };
-  return { email_id: model?.id, fields: clean, inventory_digest: createHash('sha256').update(JSON.stringify(structure)).digest('hex'), diagnostics };
+  structure.text_bindings = textBindings;
+  return { email_id: model?.id, fields: clean, text_bindings:textBindings, inventory_digest: createHash('sha256').update(JSON.stringify(structure)).digest('hex'), diagnostics };
 }

@@ -1,3 +1,4 @@
+import { serializeEmailHtml } from "./lib/email-html-serializer.mjs";
 import { execFileSync } from "node:child_process";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -96,7 +97,9 @@ async function main() {
       assetPaths: rendered.assets.map((asset) => asset.path),
     },
   });
-  const preview = buildEmailPreview({ html, mode: args.mode });
+  const structured = delivery ? serializeEmailHtml({html}) : {html,diagnostics:[]};
+  if (structured.diagnostics.length) throw new AggregateError(structured.diagnostics,"HTML serialization failed.");
+  const preview = buildEmailPreview({ html:structured.html, mode: args.mode });
   await mkdir(dirname(outputPath), { recursive: true });
   await writeFile(outputPath, preview, "utf8");
   process.stdout.write(outputPath + "\n");

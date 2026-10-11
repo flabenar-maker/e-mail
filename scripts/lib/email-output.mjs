@@ -13,6 +13,7 @@ import {
 import { dirname, isAbsolute, join, posix, resolve, win32 } from "node:path";
 
 import { SystemValidationError } from "./diagnostics.mjs";
+import { validateZipEntryPath } from "./zip-store.mjs";
 
 function fail(code, path, message) {
   throw new SystemValidationError(code, path, message);
@@ -150,4 +151,34 @@ export async function publishEmailAtomically({ outputDir, html, assets = [] }) {
     outputDir: finalDir,
     files: ["email.html", "images/"],
   };
+}
+
+export async function publishFileSetAtomically({outputDir,entries}) {
+  const targets=new Set(),folded=new Set();
+  if(!Array.isArray(entries)||!entries.length)fail('EMAIL_OUTPUT_ENTRIES_INVALID','/entries','At least one file is required.');
+  for(const entry of entries) {
+    if(!validateZipEntryPath(entry.path)||targets.has(entry.path)||folded.has(entry.path.toLowerCase())||!Buffer.isBuffer(entry.bytes))fail('EMAIL_OUTPUT_ENTRY_INVALID','/entries','Unsafe, duplicate, or incomplete file entry.');
+    targets.add(entry.path);folded.add(entry.path.toLowerCase());
+  }
+  const finalDir=resolve(outputDir),parent=dirname(finalDir),basename=finalDir.slice(parent.length+1);
+  if(!basename)fail('EMAIL_OUTPUT_PATH_UNSAFE','/outputDir','Output directory is unsafe.');
+  const wasEmpty=await assertOutputAvailable(finalDir);
+  await mkdir(parent,{recursive:true});
+  const staging=join(parent,'.'+basename+'.staging-'+randomUUID());
+  try {
+    await mkdir(staging);
+    for(const entry of entries) {
+      const target=join(staging,...entry.path.split('/'));
+      await mkdir(dirname(target),{recursive:true});await writeFile(target,entry.bytes);
+      if(!(await readFile(target)).equals(entry.bytes))fail('EMAIL_OUTPUT_VALIDATION_FAILED','/'+entry.path,'Staged bytes differ.');
+    }
+    // rmdir only accepts an empty destination; a concurrent writer blocks publish.
+    if(wasEmpty)await rmdir(finalDir);
+    else if(await exists(finalDir))fail('EMAIL_OUTPUT_EXISTS','/outputDir','Destination appeared during staging.');
+    await rename(staging,finalDir);
+  } catch(error) {
+    if(dirname(staging)===parent && staging.startsWith(join(parent,'.'+basename+'.staging-')))await rm(staging,{recursive:true,force:true});
+    throw error;
+  }
+  return {outputDir:finalDir,files:[...targets].sort()};
 }

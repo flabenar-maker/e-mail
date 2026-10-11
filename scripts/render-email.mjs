@@ -1,3 +1,11 @@
+import { readFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
+import { serializeEmailHtml } from "./lib/email-html-serializer.mjs";
+import { rebasePackageResources } from "./lib/email-resource-references.mjs";
+import { buildPlainText } from "./lib/email-plain-text.mjs";
+import { buildAltcraftEntries } from "./lib/email-altcraft-package.mjs";
+import { encodeZipStore } from "./lib/zip-store.mjs";
+import { validateEmbeddedCssBudget, measureEmailOutput } from "./lib/email-metrics.mjs";
 import { execFileSync } from "node:child_process";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -11,7 +19,7 @@ import {
   loadEmailModel,
   validateEmailModelSemantics,
 } from "./lib/email-model.mjs";
-import { publishEmailAtomically } from "./lib/email-output.mjs";
+import { publishEmailAtomically, publishFileSetAtomically } from "./lib/email-output.mjs";
 import { postprocessEmail } from "./lib/email-postprocess.mjs";
 import { renderEmailDocument } from "./lib/email-renderer.mjs";
 import { loadDeliveryDocument } from "./lib/email-delivery-profile.mjs";
@@ -95,6 +103,28 @@ async function main() {
     },
   });
   const modelFolder = dirname(modelPath);
+  if (delivery) {
+    const structured = serializeEmailHtml({html});
+    if (structured.diagnostics.length) throw new AggregateError(structured.diagnostics, "HTML serialization failed.");
+    const assetBuffers = new Map(await Promise.all(rendered.assets.map(async asset => [asset.path,await readFile(join(modelFolder,...asset.path.split("/")))])));
+    const rebased = rebasePackageResources({html:structured.html,assetPaths:[...assetBuffers.keys()],htmlEntry:delivery.profile.package.html_entry,assetRootEntry:delivery.profile.package.asset_root_entry});
+    if (rebased.diagnostics.length) throw new AggregateError(rebased.diagnostics, "Package resources failed.");
+    const css = [...rebased.html.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style\s*>/giu)].map(match => match[1]).join("");
+    const budget = validateEmbeddedCssBudget(css, rendering.embedded_css.max_bytes_exclusive);
+    if (budget.length) throw new AggregateError(budget,"Final CSS budget exceeded.");
+    const plainText = buildPlainText({model:originalModel,inventory:delivery.inventory,deliveryDocument:delivery.document,profile:delivery.profile,templateRules:dependencies.templateRules});
+    const packaged = buildAltcraftEntries({html:rebased.html,assetBuffers,deliveryDocument:delivery.document,plainText,profile:delivery.profile});
+    if (packaged.diagnostics.length) throw new AggregateError(packaged.diagnostics,"Package construction failed.");
+    const zip = encodeZipStore(packaged.entries);
+    const hash = bytes => createHash("sha256").update(bytes).digest("hex");
+    const report = {schema_version:"1.0.0",source_sha:dependencies.systemCommit,profile_id:delivery.profile.id,profile_version:delivery.profile.version,serializer_version:"1.0.0",package_id:delivery.profile.package.id,readiness:"ready",external_acceptance:"not-run",metrics:measureEmailOutput({html:rebased.html,css}),html_sha256:hash(rebased.html),archive_sha256:hash(zip),assets:[...assetBuffers].map(([path,bytes])=>({path,sha256:hash(bytes)}))};
+    await publishFileSetAtomically({outputDir,entries:[
+      {path:"email.html",bytes:Buffer.from(structured.html,"utf8")},
+      ...[...assetBuffers].map(([path,bytes])=>({path,bytes})),
+      {path:"altcraft.zip",bytes:zip},
+      {path:"release-report.json",bytes:Buffer.from(JSON.stringify(report,null,2)+"\n","utf8")},
+    ]});
+  } else {
   await publishEmailAtomically({
     outputDir,
     html,
@@ -103,6 +133,7 @@ async function main() {
       sourcePath: join(modelFolder, ...asset.path.split("/")),
     })),
   });
+  }
   process.stdout.write(outputDir + "\n");
 }
 

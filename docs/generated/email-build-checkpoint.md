@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: workflow-checkpoint -->
-<!-- source-digest: sha256:c58989ffa6833815e5bd3de16374604ba5bcfb917c97bb399591200e6b948b67 -->
+<!-- source-digest: sha256:66e52cc4cc9cd29b773e19bc1fe88f02cee0cb9841cbbb1537cfe809af8a22be -->
 <!-- schema-versions: manifest=1.3.0, workflows=1.0.0 -->
 # Workflow checkpoint: `email-build`
 
@@ -157,7 +157,17 @@ The routing table describes current assignments only; workflow status is not a r
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
-### 6. `validate-delivery-answers`
+### 6. `collect-delivery-answers`
+
+- Condition: always
+- Sources: [email-delivery-schema](../../schemas/email-delivery.schema.json)
+- Required inputs: `delivery-form`, `delivery-draft`
+- Blockers: `delivery-user-input-missing`
+- Allowed outputs: `delivery-answers`
+- Success handoff: `next`
+- Blocked handoff: `request-input`
+
+### 7. `validate-delivery-answers`
 
 - Condition: always
 - Sources: [email-delivery-profiles](../../data/delivery/profiles.yaml), [email-delivery-schema](../../schemas/email-delivery.schema.json)
@@ -167,7 +177,7 @@ The routing table describes current assignments only; workflow status is not a r
 - Success handoff: `next`
 - Blocked handoff: `request-input`
 
-### 7. `export-assets-via-mcp`
+### 8. `export-assets-via-mcp`
 
 - Condition: always
 - Sources: [asset-export-standard](../../core/asset-export-standard.md), [components-shared](../../data/components/shared.yaml), [components-marketing](../../data/components/marketing.yaml), [components-service](../../data/components/service.yaml)
@@ -177,7 +187,7 @@ The routing table describes current assignments only; workflow status is not a r
 - Success handoff: `next`
 - Blocked handoff: `request-input`
 
-### 8. `build-temporary-email-model`
+### 9. `build-temporary-email-model`
 
 - Condition: always
 - Sources: [email-model-schema](../../schemas/email-model.schema.json), [email-model-assembly-standard](../../core/email-model-assembly-standard.md), [email-rendering-standard](../../core/email-rendering-standard.md), [component-contract-standard](../../core/component-contract-standard.md), [rendering-foundation](../../data/foundations/rendering.yaml), [renderer-registry](../../data/renderers/registry.yaml)
@@ -187,7 +197,7 @@ The routing table describes current assignments only; workflow status is not a r
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
-### 9. `verify-model-source`
+### 10. `verify-model-source`
 
 - Condition: always
 - Sources: [email-model-assembly-standard](../../core/email-model-assembly-standard.md), [email-source-fidelity-standard](../../core/email-source-fidelity-standard.md), [asset-export-standard](../../core/asset-export-standard.md)
@@ -197,7 +207,7 @@ The routing table describes current assignments only; workflow status is not a r
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
-### 10. `render-email-cli`
+### 11. `render-email-cli`
 
 - Condition: always
 - Sources: [email-rendering-standard](../../core/email-rendering-standard.md), [email-source-fidelity-standard](../../core/email-source-fidelity-standard.md), [rendering-foundation](../../data/foundations/rendering.yaml), [renderer-registry](../../data/renderers/registry.yaml)
@@ -207,7 +217,7 @@ The routing table describes current assignments only; workflow status is not a r
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
-### 11. `verify-rendered-email`
+### 12. `verify-rendered-email`
 
 - Condition: always
 - Sources: [email-rendering-standard](../../core/email-rendering-standard.md), [typography-standard](../../core/typography-standard.md), [asset-export-standard](../../core/asset-export-standard.md), [rendering-foundation](../../data/foundations/rendering.yaml)
@@ -217,7 +227,7 @@ The routing table describes current assignments only; workflow status is not a r
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
-### 12. `clean-output-folder`
+### 13. `clean-output-folder`
 
 - Condition: always
 - Sources: [email-rendering-standard](../../core/email-rendering-standard.md)
@@ -227,7 +237,7 @@ The routing table describes current assignments only; workflow status is not a r
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
-### 13. `handoff`
+### 14. `handoff`
 
 - Condition: always
 - Sources: [email-rendering-standard](../../core/email-rendering-standard.md)
@@ -364,7 +374,17 @@ The routing table describes current assignments only; workflow status is not a r
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
-### 7. `validate-delivery-answers`
+### 7. `collect-delivery-answers`
+
+- Condition: always
+- Sources: [email-delivery-schema](../../schemas/email-delivery.schema.json)
+- Required inputs: `delivery-form`, `delivery-draft`
+- Blockers: `delivery-user-input-missing`
+- Allowed outputs: `delivery-answers`
+- Success handoff: `next`
+- Blocked handoff: `request-input`
+
+### 8. `validate-delivery-answers`
 
 - Condition: always
 - Sources: [email-delivery-profiles](../../data/delivery/profiles.yaml), [email-delivery-schema](../../schemas/email-delivery.schema.json)
@@ -374,7 +394,7 @@ The routing table describes current assignments only; workflow status is not a r
 - Success handoff: `next`
 - Blocked handoff: `request-input`
 
-### 8. `update-assets-via-mcp`
+### 9. `update-assets-via-mcp`
 
 - Condition: `asset-change-in-scope`
 - Sources: [asset-export-standard](../../core/asset-export-standard.md), [components-shared](../../data/components/shared.yaml), [components-marketing](../../data/components/marketing.yaml), [components-service](../../data/components/service.yaml)
@@ -384,7 +404,7 @@ The routing table describes current assignments only; workflow status is not a r
 - Success handoff: `next`
 - Blocked handoff: `request-input`
 
-### 9. `apply-scoped-html-change`
+### 10. `apply-scoped-html-change`
 
 - Condition: always
 - Sources: [email-model-schema](../../schemas/email-model.schema.json), [email-model-assembly-standard](../../core/email-model-assembly-standard.md), [email-rendering-standard](../../core/email-rendering-standard.md), [component-contract-standard](../../core/component-contract-standard.md), [typography-standard](../../core/typography-standard.md), [rendering-foundation](../../data/foundations/rendering.yaml), [renderer-registry](../../data/renderers/registry.yaml)
@@ -394,7 +414,7 @@ The routing table describes current assignments only; workflow status is not a r
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
-### 10. `verify-source-regression`
+### 11. `verify-source-regression`
 
 - Condition: always
 - Sources: [email-rendering-standard](../../core/email-rendering-standard.md), [rendering-foundation](../../data/foundations/rendering.yaml)
@@ -404,7 +424,7 @@ The routing table describes current assignments only; workflow status is not a r
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
-### 11. `clean-output-folder`
+### 12. `clean-output-folder`
 
 - Condition: always
 - Sources: [email-rendering-standard](../../core/email-rendering-standard.md)
@@ -414,7 +434,7 @@ The routing table describes current assignments only; workflow status is not a r
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
-### 12. `handoff`
+### 13. `handoff`
 
 - Condition: always
 - Sources: [email-rendering-standard](../../core/email-rendering-standard.md)
