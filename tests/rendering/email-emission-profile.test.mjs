@@ -218,7 +218,7 @@ test("different-tree-preserves-split-and-keeps-mso-rules-conditional", () => {
   assert.doesNotMatch(result.css, /cupis-root-desktop\{[^}]*display:table/u);
 });
 
-test("split-tables-restore-native-display-and-fixed-fill-image-guards", () => {
+test("split-div-wrappers-restore-block-and-inner-tables-retain-native-display", () => {
   const image = (id, sizing, width, height) => element({
     id,
     role: "image",
@@ -246,7 +246,9 @@ test("split-tables-restore-native-display-and-fixed-fill-image-guards", () => {
     },
   });
   assert.deepEqual(result.diagnostics, []);
-  assert.match(result.css, /display:table!important/u);
+  assert.match(result.css, /cupis-root-(?:mobile|desktop)\{display:block!important/u);
+  assert.match(result.html, /<div class="cupis-root-(?:mobile|desktop)"/u);
+  assert.match(result.html, /<table\b/u);
   const fixed = [...result.html.matchAll(/<img\b[^>]*src="images\/fixed\.png"[^>]*>/gu)].map((match) => match[0]);
   const fill = [...result.html.matchAll(/<img\b[^>]*src="images\/fill\.png"[^>]*>/gu)].map((match) => match[0]);
   assert.ok(fixed.length > 0);
