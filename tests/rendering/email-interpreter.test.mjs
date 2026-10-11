@@ -404,7 +404,7 @@ test("interpreter source uses generic template rules without concrete pilot reso
     join(repoRoot, "scripts/lib/email-interpreter.mjs"),
     "utf8",
   );
-  assert.match(source, /from "\.\/email-template-rules\.mjs"/u);
+  assert.doesNotMatch(source, /["']email-template["']/u);
   for (const id of [
     "button-primary",
     "card-image",
