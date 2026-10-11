@@ -142,7 +142,7 @@ test("remediation preserves exact activated workflow mapping and required curren
   }
 });
 
-test("roadmap records completed Stage 8 and finalized 11A while retaining independent 11B–11C gates", async () => {
+test("roadmap records completed Stage 8 and finalized 11A–11B while retaining independent 11C gates", async () => {
   const [roadmap, remediationPlan] = await Promise.all([
     readFile(join(repoRoot, roadmapPath), "utf8"),
     readFile(join(repoRoot, remediationPlanPath), "utf8"),
@@ -158,9 +158,9 @@ test("roadmap records completed Stage 8 and finalized 11A while retaining indepe
     const start = headings[0].index;
     const end = phaseHeadings.find(({ index }) => index > start)?.index ?? stage11.length;
     const lines = stage11.slice(start, end).split("\n");
-    if (phase === "11A") {
-      assert.ok(lines.some((line) => line.startsWith("- [x] ")), "11A must contain a checked gate");
-      assert.equal(lines.some((line) => line.startsWith("- [ ] ")), false, "11A must not retain an unchecked gate");
+    if (phase !== "11C") {
+      assert.ok(lines.some((line) => line.startsWith("- [x] ")), `${phase} must contain a checked gate`);
+      assert.equal(lines.some((line) => line.startsWith("- [ ] ")), false, `${phase} must not retain an unchecked gate`);
     } else {
       assert.ok(lines.some((line) => line.startsWith("- [ ] ")), `${phase} must retain an unchecked gate`);
     }
