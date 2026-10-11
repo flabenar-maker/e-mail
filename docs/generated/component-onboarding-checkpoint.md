@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: workflow-checkpoint -->
-<!-- source-digest: sha256:d3b61de5c4b3b4f02f1240602fe53896db506989feadca4285bf7d6e1ea00180 -->
+<!-- source-digest: sha256:cde2f010a67b92d60770d1509be2f61db600c43e695624b6ed24c9465372ecff -->
 <!-- schema-versions: manifest=1.3.0, workflows=1.0.0 -->
 # Workflow checkpoint: `component-onboarding`
 
@@ -243,7 +243,7 @@ Not declared.
 - Condition: always
 - Sources: [repository-readme](../../README.md)
 - Required inputs: `repository-change`, `pinned-sha`
-- Blockers: `local-verification-failed`
+- Blockers: `execution-verification-failed`, `execution-acceptance-blocked`
 - Allowed outputs: `verification-summary`
 - Success handoff: `next`
 - Blocked handoff: `stop`

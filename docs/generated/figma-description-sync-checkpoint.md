@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: workflow-checkpoint -->
-<!-- source-digest: sha256:426db031c932db13944e7ada6bd1d854b6734072cf831d11f628b71a4e5deae4 -->
+<!-- source-digest: sha256:f7c7363234374b08e9f529ac3600eedc0a7d21606f793445e4d60f338b83989a -->
 <!-- schema-versions: manifest=1.3.0, workflows=1.0.0 -->
 # Workflow checkpoint: `figma-description-sync`
 
@@ -248,7 +248,7 @@ Not declared.
 - Condition: always
 - Sources: [repository-readme](../../README.md)
 - Required inputs: `repository-change`, `pinned-sha`
-- Blockers: `local-verification-failed`
+- Blockers: `execution-verification-failed`, `execution-acceptance-blocked`
 - Allowed outputs: `verification-summary`
 - Success handoff: `next`
 - Blocked handoff: `stop`
