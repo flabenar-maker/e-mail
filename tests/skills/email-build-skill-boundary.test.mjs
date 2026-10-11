@@ -132,7 +132,7 @@ function assertGuardFixtures() {
     "No Figma mutation; then edit it.", "No new-component design; then create it.",
     "No production email outputs committed to GitHub; then commit them.",
     "No overwrite of a source email version; then overwrite it.",
-    "No GitHub Actions or PR Checks; then run it.",
+    "PR Checks never replace receipts; then run it.",
     "No Figma mutation.\nThen edit it.", "No new-component design.\nThen create it.",
     "No production email outputs committed to GitHub.\nThen commit them.",
     "No overwrite of a source email version.\nThen overwrite it.",

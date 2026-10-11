@@ -14,7 +14,7 @@ Act as a thin router over one machine-resolved CUPIS context. GitHub owns persis
 1. Prefer the authenticated `gh CLI` for cloud GitHub reads and writes. If it is unavailable or unauthenticated, use the GitHub MCP connector. Never expose credentials.
 2. Reuse the pinned cloud SHA supplied by a trusted CUPIS task-router or bootstrap handoff for this task; do not repin `main` during that handoff. For a standalone invocation, pin the current `main` SHA of `flabenar-maker/e-mail`. An explicitly authorized scoped candidate test uses its exact cloud SHA. Read `system/manifest.yaml` at the selected SHA; the specialization and task sources must match it. On mismatch stop rather than silently switching versions. The manifest is the only route catalog.
 3. Select the route from the request. For migration status or next-step questions, select `migration-progress`, list `docs/superpowers/plans/` at the pinned SHA and re-read the roadmap before answering.
-4. Materialize a disposable exact-SHA snapshot of the pinned cloud commit. Verify that the snapshot HEAD equals the pinned SHA, run `npm ci --ignore-scripts`, then invoke:
+4. Materialize a disposable exact-SHA snapshot of the pinned cloud commit. Verify that the snapshot HEAD equals the pinned SHA and prepare verified same-lock dependencies (see execution handoff), then invoke:
 
    ```text
    npm run resolve:skill-context -- --route <route-id> [--mode <workflow-mode>] [--component <stable-id>]... [--viewport mobile|desktop|both] [--foundation <id>]...
@@ -40,7 +40,23 @@ A direct user request does not replace an applicable implementation plan while t
 4. Apply the resolved naming foundation only when creating, renaming or auditing names. Before a rename, show the exact old → new mapping and inspect dependent records. Preserve an asset owner's scale suffix unless the user explicitly changes its export contract.
 5. Make the smallest permitted change. Do not build or modify a concrete `email.html` or `images/` set with this skill.
 6. Publish persistent edits only through cloud GitHub. Create `codex/<semantic-slug>` from the pinned SHA, change only allowed paths and open one draft PR. Never update `main` or merge without separate authorization.
-7. On the exact final cloud commit, run the workflow's relevant local checks plus changed-content, dependency synchronization, allowed-path-diff and preserved-blob checks. Never start, read or rely on GitHub Actions or PR Checks.
+7. On the exact final cloud commit, obtain the workflow's relevant verification receipts plus changed-content, dependency synchronization, allowed-path-diff and preserved-blob checks under the execution decision. Selected portable GitHub Actions require the explicit verified request; PR Checks never replace receipts.
+
+<!-- CUPIS_EXECUTION_BINDING -->
+## Execution handoff
+
+After the domain gate, consult node scripts/resolve-execution-context.mjs --help for the short request/envelope contract; no full policy, schema, plan or other specialization is needed.
+Use the pinned snapshot with verified same-lock dependencies; npm ci --ignore-scripts is preferred, and the identical direct Node script is allowed when npm/pnpm is absent. Record actual dependency/lock evidence; never claim npm ci if it was not performed.
+Save the unchanged domain JSON in its source/route/mode/authorization envelope. Bind exact requirements, permitted outputs and actual artifacts with raw-byte SHA256 refs below one explicit reference root outside source.
+The coordinator records only actual declared spawn-tool capabilities for this runtime session/signature, then calls node scripts/resolve-execution-context.mjs --request REQUEST --capabilities CAPABILITIES --repo-root SNAPSHOT --reference-root EVIDENCE.
+For workloads, reuse the saved local profile/binding through the optional help arguments and request.profile_pair_key; a pure read without workloads touches neither profile nor collector.
+The coordinator uses decision.executor and decision.review with real agent tools, explicit model/reasoning_effort and fork_turns=none; keep briefs bounded and overlapping writes sequential. The Node helper does not spawn agents.
+Bind the real executor_agent_id and final artifact refs by resolving again before acceptance. The reviewer inspects original requirements and actual permitted changes/sources, covers every requirement, and has a distinct real agent ID; executor confidence or test PASS is insufficient.
+A typed model/effort refusal refreshes the runtime choice through the helper; no arbitrary substitution, downgrade or model web search. Network failures are not model refusals.
+Selected portable verification uses node scripts/run-verification.mjs or node scripts/request-cloud-verification.mjs; unavailable cloud gives CLOUD_WORKFLOW_NOT_READY. Actual emails/images, installed discovery and live Figma remain local and are never uploaded automatically.
+Use node scripts/finalize-execution.mjs --help and finalize bound review/verification receipts. Missing local-only evidence remains blocked after green cloud results; local_offer is informational and never starts another run or collects hardware.
+Handoff includes source/route/mode, decision and actual agent IDs, bound artifacts/receipts, acceptance status and limitations. Paused/blocked domains, allowed outputs and separate merge/install permissions still control the task.
+<!-- END_CUPIS_EXECUTION_BINDING -->
 
 ## Figma mutation gate
 

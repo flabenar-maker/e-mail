@@ -1,10 +1,12 @@
 import {spawn,execFile} from 'node:child_process';
 import {promisify} from 'node:util';
-import {readFile,writeFile,mkdir,rm,rename,realpath} from 'node:fs/promises';
+import {readFile,writeFile,mkdir,rm,rename,realpath,lstat,readdir} from 'node:fs/promises';
+import {createReadStream} from 'node:fs';
+import {createHash} from 'node:crypto';
 import {resolve,join,relative,isAbsolute,dirname,basename} from 'node:path';
 import {performance} from 'node:perf_hooks';
 import {loadExecutionPolicy} from './execution-policy.mjs';
-import {workloadSignature,workloadInputDigest,artifactDigest,readExecutionRef} from './execution-context.mjs';
+import {workloadSignature,workloadInputDigest,artifactDigest,readExecutionRef,safeExecutionPath} from './execution-context.mjs';
 import {bytesDigest,inputFailure,readBoundInventory,INPUT_MAX_BYTES} from './execution-inputs.mjs';
 export {selectDocsTests} from './execution-docs-check.mjs';
 const exec=promisify(execFile),fail=inputFailure;
@@ -28,22 +30,68 @@ function batchBudget({signal,now,started}){
  return {signal:controller.signal,check,run,remaining:()=>Math.max(1,deadline-now()),dispose:()=>{clearTimeout(timer);signal?.removeEventListener('abort',cancel);}};
 }
 const terminalStatus=error=>error?.code==='VERIFICATION_TIMED_OUT'?'timed_out':error?.code==='VERIFICATION_CANCELLED'?'cancelled':'infrastructure-error';
-async function readSourceSha(repoRoot){
- const {stdout}=await exec('git',['rev-parse','HEAD'],{cwd:repoRoot,timeout:10000,maxBuffer:65536});
- await exec('git',['diff','--quiet','HEAD','--'],{cwd:repoRoot,timeout:10000,maxBuffer:65536});
- // Untracked source can affect a test import. Dependencies are the only permitted untracked tree.
- const extra=await exec('git',['ls-files','--others','--exclude-standard'],{cwd:repoRoot,timeout:10000,maxBuffer:65536});
- if(extra.stdout.trim())throw fail('VERIFICATION_SOURCE_DIRTY','Exact-source verification excludes untracked source files.');return stdout.trim();
+// Git status applies clean filters and cannot establish raw source identity.
+const SOURCE_LIST_LIMIT=16*1024*1024,DEPENDENCY_JSON_LIMIT=2*1024*1024,ENTRY_LIMIT=100000;
+async function boundedJson(file,signal){
+ signal?.throwIfAborted();const st=await lstat(file);if(!st.isFile()||st.isSymbolicLink()||st.size>DEPENDENCY_JSON_LIMIT)throw new Error('invalid metadata');
+ return JSON.parse(await readFile(file,{encoding:'utf8',signal}));
 }
 async function checkDependencies(repoRoot,{signal}={}){
  try{
-  const lock=JSON.parse(await readFile(join(repoRoot,'package-lock.json'),{encoding:'utf8',signal}));
-  const installed=JSON.parse(await readFile(join(repoRoot,'node_modules/.package-lock.json'),{encoding:'utf8',signal}));
+  const source=await realpath(repoRoot),dependencyRoot=await realpath(join(repoRoot,'node_modules'));
+  // A top-level approved junction is permitted; it cannot alias source or an ancestor of it.
+  if(dependencyRoot!==join(source,'node_modules')&&(within(source,dependencyRoot)||within(dependencyRoot,source)))throw new Error('source alias');
+  const lock=await boundedJson(join(source,'package-lock.json'),signal),installed=await boundedJson(join(dependencyRoot,'.package-lock.json'),signal);
   const entries=Object.entries(lock.packages).filter(([name])=>name);
-  if(Object.keys(installed.packages).length!==entries.length)throw new Error('extra dependency');
-  for(const [name,spec] of entries){signal?.throwIfAborted();const actual=installed.packages[name];if(!actual||['version','resolved','integrity'].some(k=>actual[k]!==spec[k]))throw new Error('lock mismatch');const pkg=JSON.parse(await readFile(join(repoRoot,name,'package.json'),{encoding:'utf8',signal}));if(pkg.version!==spec.version)throw new Error('version mismatch');}
-  return {mode:'direct-equivalent',lock_digest:bytesDigest(await readFile(join(repoRoot,'package-lock.json'),{signal}))};
- }catch{signal?.throwIfAborted();throw fail('VERIFICATION_DEPENDENCIES_UNVERIFIED','Install exact locked dependencies or provide the same-lock direct Node equivalent; npm ci was not run by this runner.');}
+  if(entries.length>10000||Object.keys(installed.packages).length!==entries.length)throw new Error('extra dependency');
+  const packageRoots=[],bins=new Set();
+  for(const [name,spec] of entries){
+   signal?.throwIfAborted();if(!safeExecutionPath(name)||!name.startsWith('node_modules/'))throw new Error('invalid package path');
+   const actual=installed.packages[name];if(!actual||['version','resolved','integrity'].some(k=>actual[k]!==spec[k]))throw new Error('lock mismatch');
+   const relativeName=name.slice('node_modules/'.length),pkgPath=join(dependencyRoot,relativeName,'package.json');
+   const pkg=await boundedJson(pkgPath,signal);if(pkg.version!==spec.version)throw new Error('version mismatch');
+   packageRoots.push(relativeName);const bin=pkg.bin;if(typeof bin==='string')bins.add((pkg.name??relativeName).split('/').at(-1));else if(bin&&typeof bin==='object')for(const key of Object.keys(bin))bins.add(key);
+  }
+  // Admit only locked package trees, their scope parents, metadata and npm bin shims.
+  let count=0;const walk=async(relativePath='')=>{
+   signal?.throwIfAborted();for(const entry of await readdir(join(dependencyRoot,relativePath),{withFileTypes:true})){
+    if(++count>ENTRY_LIMIT)throw new Error('dependency inventory too large');signal?.throwIfAborted();
+    const p=relativePath?relativePath+'/'+entry.name:entry.name,absolute=join(dependencyRoot,p);
+    const packagePath=packageRoots.some(name=>p===name||p.startsWith(name+'/')),parent=packageRoots.some(name=>name.startsWith(p+'/'));
+    const binPath=p.startsWith('.bin/')&&bins.has(p.slice(5).replace(/\.(?:cmd|ps1)$/u,''));
+    if(!(packagePath||parent||p==='.package-lock.json'||p==='.bin'||binPath))throw new Error('unregistered dependency path');
+    const st=await lstat(absolute);
+    if(st.isSymbolicLink()){
+     if(!binPath||!within(dependencyRoot,await realpath(absolute)))throw new Error('dependency alias');
+    }else if(st.isDirectory())await walk(p);else if(!st.isFile())throw new Error('unsupported dependency type');
+   }
+  };await walk();
+  return {mode:'direct-equivalent',lock_digest:bytesDigest(await readFile(join(source,'package-lock.json'),{signal}))};
+ }catch(error){signal?.throwIfAborted();throw fail('VERIFICATION_DEPENDENCIES_UNVERIFIED','Install exact locked dependencies or provide the same-lock direct Node equivalent; npm ci was not run by this runner.');}
+}
+async function readSourceSha(repoRoot,{signal}={}){
+ const git=async args=>(await exec('git',args,{cwd:repoRoot,timeout:10000,maxBuffer:SOURCE_LIST_LIMIT,signal})).stdout;
+ try{
+  signal?.throwIfAborted();const sha=(await git(['rev-parse','HEAD'])).trim(),root=await realpath(repoRoot);
+  if(!SHA.test(sha))throw new Error('invalid HEAD');
+  const records=(await git(['ls-tree','-r','-z',sha])).split('\0').filter(Boolean);if(records.length>ENTRY_LIMIT)throw new Error('source inventory too large');
+  const directories=new Set([root]);
+  for(const record of records){
+   signal?.throwIfAborted();const match=/^(100644|100755) blob ([a-f0-9]{40})\t(.+)$/su.exec(record);
+   if(!match||!safeExecutionPath(match[3]))throw new Error('unsupported tracked type/path');
+   let current=root;const parts=match[3].split('/');
+   for(const segment of parts.slice(0,-1)){current=join(current,segment);if(!directories.has(current)){const st=await lstat(current);if(!st.isDirectory()||st.isSymbolicLink())throw new Error('tracked parent alias');directories.add(current);}}
+   const file=join(root,...parts),before=await lstat(file);if(!before.isFile()||before.isSymbolicLink())throw new Error('tracked type changed');
+   if(process.platform!=='win32'&&Boolean(before.mode&0o111)!==(match[1]==='100755'))throw new Error('tracked executable mode changed');
+   const hash=createHash('sha1').update('blob '+before.size+'\0');let bytes=0;
+   for await(const chunk of createReadStream(file,{signal})){signal?.throwIfAborted();bytes+=chunk.length;hash.update(chunk);}
+   const after=await lstat(file);if(after.isSymbolicLink()||!after.isFile()||before.ino!==after.ino||before.size!==after.size||before.mtimeMs!==after.mtimeMs||bytes!==before.size||hash.digest('hex')!==match[2])throw new Error('tracked bytes changed');
+  }
+  const untracked=(await git(['ls-files','--others','-z'])).split('\0').filter(Boolean);
+  if(untracked.some(p=>p!=='node_modules'&&!p.startsWith('node_modules/')))throw new Error('untracked source');
+  if(untracked.length)await checkDependencies(root,{signal});
+  if((await git(['rev-parse','HEAD'])).trim()!==sha)throw new Error('HEAD changed');return sha;
+ }catch(error){signal?.throwIfAborted();if(error.code==='VERIFICATION_DEPENDENCIES_UNVERIFIED')throw error;throw fail('VERIFICATION_SOURCE_DIRTY','Exact source requires unchanged raw tracked file bytes/types and only verified same-lock dependencies.');}
 }
 async function checkRuntime(workloads,{signal}={}){
  if(Number(process.versions.node.split('.')[0])!==24||process.platform!=='win32'||!['x64','arm64'].includes(process.arch))throw fail('VERIFICATION_RUNTIME_UNAVAILABLE','Selected workloads require Windows x64/arm64 and Node 24.');
@@ -89,7 +137,9 @@ export async function runVerification(options){
  if(Object.keys(limits).length!==3||Object.entries(BASE_LIMITS).some(([key,value])=>limits[key]!==value))throw fail('VERIFICATION_LIMITS_INVALID','Concurrency 2, total timeout 30 minutes and one heavy batch are fixed.');
  const runner={readSourceSha,checkRuntime,checkDependencies,execute:executeVerificationCommand,now:()=>performance.now(),...options.runner};
  const started=runner.now();
- if(await runner.readSourceSha(repoRoot)!==sourceSha)throw fail('VERIFICATION_SOURCE_MISMATCH','Checkout must equal requested source SHA before workloads.');
+ const budget=batchBudget({signal,now:runner.now,started});
+ try{
+ if(await budget.run(()=>runner.readSourceSha(repoRoot,{signal:budget.signal}))!==sourceSha)throw fail('VERIFICATION_SOURCE_MISMATCH','Checkout must equal requested source SHA before workloads.');
  const policy=await loadExecutionPolicy({repoRoot}),workloads=workloadIds.map(id=>policy.workloads.find(w=>w.id===id));
  if(workloads.some(w=>!w))throw fail('VERIFICATION_WORKLOAD_UNKNOWN','Unknown workload.');
  if(target==='github-hosted'&&workloads.some(w=>w.portability!=='portable'))throw fail('VERIFICATION_LOCAL_ONLY','Actual user inputs and installed skills stay local.');
@@ -104,7 +154,6 @@ export async function runVerification(options){
   await mkdir(lockRoot,{recursive:true});const actual=await realpath(lockRoot);if(within(sourceRoot,actual)||within(output,actual))throw fail('VERIFICATION_LOCK_ROOT_INVALID','Persistent lock root cannot resolve into source/evidence.');
   lock=join(actual,'heavy-batch.lock');try{await mkdir(lock);}catch(error){if(error.code==='EEXIST')throw fail('VERIFICATION_HEAVY_BATCH_ACTIVE','A heavy batch owns the persistent lock; no automatic stale-lock stealing.');throw error;}
  }
- const budget=batchBudget({signal,now:runner.now,started});
  try{
   // Never overwrite an earlier run's evidence. Runtime/dependency failures are execution failures.
   await mkdir(output,{recursive:false});
@@ -144,6 +193,7 @@ export async function runVerification(options){
    evidence.push({path:file,digest:bytesDigest(body)});results.push(result);
   }
   if(!stopStatus)try{budget.check();}catch(error){stopStatus=terminalStatus(error);for(const result of results){result.status=stopStatus;result.exit_code=-1;}}
+  if(!stopStatus&&await budget.run(()=>runner.readSourceSha(repoRoot,{signal:budget.signal}))!==sourceSha)throw fail('VERIFICATION_SOURCE_MISMATCH','Source changed during verification.');
   const receipt={schema_version:'1.0.0',request_id:requestId,source_sha:sourceSha,workflow_sha:target==='github-hosted'?cloudIdentity.workflow_sha:null,...(target==='github-hosted'?{event_sha:cloudIdentity.event_sha,run_id:cloudIdentity.run_id,run_attempt:cloudIdentity.run_attempt}:{}),target,workload_results:results,conclusion:stopStatus??'success',evidence_refs:evidence,...(workloads.some(w=>w.required_inputs.length)?{artifact_digest:artifactHash}:{})};
   const receiptPath=join(output,'receipt.json'),temporary=join(output,'receipt.pending');
   if(receipt.conclusion==='success'){
@@ -152,8 +202,8 @@ export async function runVerification(options){
   }else await writeFile(receiptPath,JSON.stringify(receipt,null,2)+'\n',{flag:'wx',signal:AbortSignal.timeout(10000)});
   return receipt;
  }finally{
-  budget.dispose();
   if(privateRoot)await rm(privateRoot,{recursive:true,force:true});
   if(lock&&!keepLock)await rm(lock,{recursive:true});
  }
+ }finally{budget.dispose();}
 }

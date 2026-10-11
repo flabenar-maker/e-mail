@@ -1588,26 +1588,26 @@ Generated usage отражает записанные контракты, не �
 - [x] **Step 2 — candidate:** По команде пользователя карта согласована делегированным GPT-6.1 Sol Ultra model-review (APPROVED, map SHA256 53b775425ba0bcf715026bdcae201681eb513c447ce562b010efd6286a7481bc) и применена в candidate PR #115, теперь слитом по отдельной команде пользователя: ровно27 scalar fields/7 runtime files, зависимые generated outputs и README status. Это не отдельное human merge authority и не readiness; Step3 own-pin checkpoint принят; Step4 final gate/review/merge завершён; Step5 отложен ([статус](#p5-current-2026-10-11)). Email route/profile objects сохранены побайтово.
 - [x] **Step 3:** Для каждого включаемого route доказать `resolved`, exact mode и нужные steps; negative dependency/source cases должны давать typed blocked. При частичном переключении aggregate остаётся partial; active допускается только когда все текущие routes готовы. Bounded own-pin result и L1 evidence — [current checkpoint](#p5-current-2026-10-11); full/merge/local cutover этим не закрыты.
 - [x] **Step 4:** Exact-c246 полный локальный gate/generated/bootstrap/representative outputs и независимое финальное review приняты; по отдельной команде пользователя PR115 слит в main bbc495d64cb0f4f486a8a62c8c732cbeb29c3f7b, equal-tree/postmerge подтверждён. Actions/PR Checks не использовались, branch protection не обходилась.
-- [ ] **Step 5 — требования и план подготовлены:** Пользовательские требования получены; архитектура и адресный implementation plan ниже ожидают просмотра перед реализацией. Затем выполнить принятую проверку и отдельно разрешённые backup/sync, discovery и clean-context приёмку. [Единственная точка продолжения](#p5-local-skills-deferred-2026-10-11). Текущий коммит не меняет и не устанавливает навыки, не выполняет Step5.
+- [ ] **Step 5 — реализация подготовлена, приёмка не завершена:** Принятые архитектура и адресный implementation plan реализуются в PR116. Финальные exact-source gates, независимое review и отдельно разрешённые backup/sync, discovery и clean-context приёмка остаются обязательными. [Единственная точка продолжения](#p5-local-skills-deferred-2026-10-11). Изменения source skills не являются установкой и не закрывают Step5.
 
 **Acceptance:** Включён только доказанный объём, локальный clean-context результат соответствует main, rollback имеет точный SHA/allowed diff. 11C ещё не выполнен.
 
 <a id="p5-local-skills-deferred-2026-10-11"></a>
 
-#### P5 Step5: машинная политика исполнения навыков — требования и план 11.10.2026
+#### P5 Step5: машинная политика исполнения навыков — реализация и открытая приёмка 11.10.2026
 
 PR115 слит; Step4 завершён. Пользователь предоставил доработки для трёх существующих навыков: ограниченные субагенты и независимая содержательная приёмка; фиксированные версии GPT с разрешёнными заменами; однократный профиль пользователь+ПК и условное использование GitHub-hosted Actions. Дополнительно принят принцип «перестраховаться»: одна ступень качества выше базового уровня задачи.
 
 Архитектура и точные предложенные значения: [дочерняя спецификация](../specs/2026-10-11-cupis-skill-execution-policy-design.md). Файлы, интерфейсы и последовательность: [адресный implementation plan](cutover/2026-10-11-cupis-skill-execution-policy.md). Глобальная очередь остаётся в roadmap; эта секция — единственная точка статуса Step5, дочерний план не создаёт отдельный пакет.
 
 - [x] Получить пользовательские требования и архитектурные уточнения; подготовить конкретную спецификацию и адресный план для просмотра.
-- [ ] Пользователь просматривает план и его конкретные model/fallback/threshold значения перед реализацией.
+- [x] Архитектура и конкретные model/fallback/threshold значения приняты; выполнение адресного плана разрешено.
 - [ ] Реализовать принятую кодовую политику, receipts и минимальные skill bindings; аппаратная диагностика один раз на пару, без reinit перед тестами; ordinary execution не читает полный policy/планы/схемы в Markdown context.
 - [ ] Выполнить свежие targeted/exact-final проверки в выбранной среде и независимое содержательное review фактического результата. Старые1915/c246 и effab scoped receipts сохраняют свои pins.
 - [ ] После отдельного принятого merge и отдельного разрешения выполнить backup/sync только изменённых skills/bindings, реальное discovery и clean-context обеих специализаций, pinned handoff и stopped/mixed границ.
 - [ ] Зафиксировать фактические результаты, закрыть Step5/11B и отдельно согласовать переход к5fix1.
 
-Этот docs-only commit не реализует политику, не меняет навыки/config/bootstrap/runtime, не создаёт профиль ПК и не запускает Actions или локальную приёмку. Прежние unconditional no-Actions/fixed-Terra правила должны быть согласованно заменены при принятой реализации; исторические доказательства не переписываются. 5fix1/2/P6, Figma и существующие письма не изменены.
+В PR116 подготовлены кодовая политика, receipts, reusable baseline, verification runner и тонкие bindings трёх существующих навыков. Tasks1–5 имеют собственные exact-source targeted результаты; Task6 и final gate/review остаются pending до фактического подтверждения. Однократный локальный baseline настроен 11.10.2026; приватные hardware/binding данные не публикуются. Актуальные read-only доказательства финального source pin фиксируются в [PR116](https://github.com/flabenar-maker/e-mail/pull/116), без перепинивания старых receipts или выдуманного SHA собственного коммита. Source implementation prepared не означает merge, installation, discovery или завершённую clean-context приёмку. Step5/11B открыты; 5fix1/2/P6, Figma и существующие письма вне этой работы.
 
 <a id="p5-switch-map-2026-10-11"></a>
 

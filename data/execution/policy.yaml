@@ -172,6 +172,20 @@
         "fragments": [
           "render"
         ]
+      },
+      {
+        "prefix": "scripts/",
+        "fragments": [
+          "execution-",
+          "-execution",
+          "runtime-capabilities",
+          "verification-runner",
+          "cloud-verification",
+          "run-verification",
+          "request-cloud-verification",
+          "verify-installed-skills",
+          "verify-real-email-visual"
+        ]
       }
     ]
   },

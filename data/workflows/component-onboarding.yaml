@@ -432,7 +432,8 @@
               "pinned-sha"
             ],
             "blockers": [
-              "local-verification-failed"
+              "execution-verification-failed",
+              "execution-acceptance-blocked"
             ],
             "allowed_outputs": [
               "verification-summary"

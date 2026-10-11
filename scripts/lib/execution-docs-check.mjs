@@ -17,15 +17,17 @@ const COMPLETE_GUARDS=[
  'tests/skills/execution-receipt.test.mjs',
  'tests/skills/machine-profile.test.mjs',
  'tests/skills/verification-runner.test.mjs',
+ 'tests/skills/execution-source-identity.test.mjs',
+ 'tests/skills/execution-skill-boundary.test.mjs',
  'tests/foundation/local-only-verification.test.mjs',
 ].sort();
 const guardMap=[
- ['.agents/skills/building-cupis-emails/',['tests/skills/email-build-skill-boundary.test.mjs']],
- ['.agents/skills/maintaining-cupis-email-system/',['tests/skills/maintenance-skill-boundary.test.mjs']],
- ['.agents/skills/cupis-email-task-router/',['tests/skills/cupis-email-task-router.test.mjs']],
+ ['.agents/skills/building-cupis-emails/',['tests/skills/email-build-skill-boundary.test.mjs','tests/skills/execution-skill-boundary.test.mjs']],
+ ['.agents/skills/maintaining-cupis-email-system/',['tests/skills/maintenance-skill-boundary.test.mjs','tests/skills/execution-skill-boundary.test.mjs']],
+ ['.agents/skills/cupis-email-task-router/',['tests/skills/cupis-email-task-router.test.mjs','tests/skills/execution-skill-boundary.test.mjs']],
  ['data/execution/',COMPLETE_GUARDS],
  ['schemas/execution-',COMPLETE_GUARDS],
- ['scripts/lib/verification-runner.mjs',['tests/skills/verification-runner.test.mjs']],
+ ['scripts/lib/verification-runner.mjs',['tests/skills/verification-runner.test.mjs','tests/skills/execution-source-identity.test.mjs']],
  ['.github/workflows/',['tests/foundation/local-only-verification.test.mjs']],
 ];
 export function selectDocsTests(changedPaths){

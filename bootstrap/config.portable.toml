@@ -1,5 +1,7 @@
 # Merge only missing safe keys after backup and a redacted diff.
-# A compatible current model is acceptable; no model ID is required.
+# A compatible current coordinator model is acceptable; no model ID is required.
+# Subagent selection comes from data/execution/policy.yaml via the selected skill helper.
+# Profile/binding paths and runtime capabilities are local state, never portable config.
 model_reasoning_effort = "high"
 
 [features]

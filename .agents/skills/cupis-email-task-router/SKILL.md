@@ -26,4 +26,6 @@ For a mixed email/library request, identify separate scopes and their dependency
 
 Briefly name the outcome and selected specialization (or the one missing fact/blocker). **REQUIRED SUB-SKILL:** Read and use only the selected specialization from its manifest registration; pass the request, pinned SHA, evidence and scope boundary. It retains the handed-off SHA without repinning and owns route/mode selection, resolver invocation and execution. If the skill or task sources do not match that SHA, stop and report the mismatch. Do not load both specializations for a single-scope task, fetch a bundle here, or bypass their stopped routes.
 
+The selected specialization owns execution policy resolution after its domain gate; this router forwards the pinned handoff only.
+
 Bootstrap/setup requests follow the project bootstrap entrypoint instead.
