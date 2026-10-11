@@ -48,3 +48,10 @@ test("manifest cannot redirect canonical policy or its strict schema",async(t)=>
   await assert.rejects(load({repoRoot:f.root,manifest}),error=>error.code==="execution-policy-source",path);
  }
 });
+
+test("schema parse and policy read failures retain typed loader diagnostics",async(t)=>{
+ const load=loader(); const f=await fixture(t); const schemaPath=join(f.root,"schemas/execution-policy.schema.json");const schema=await readFile(schemaPath);
+ await writeFile(schemaPath,"{broken json");await assert.rejects(load({repoRoot:f.root,manifest:f.manifest}),error=>error.code==="execution-policy-schema");
+ await writeFile(schemaPath,schema);const policyPath=join(f.root,"data/execution/policy.yaml");await rm(policyPath);await mkdir(policyPath);
+ await assert.rejects(load({repoRoot:f.root,manifest:f.manifest}),error=>error.code==="execution-policy-read");
+});
