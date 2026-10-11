@@ -4803,8 +4803,8 @@
         "structure_fingerprint": "sha256:1e99c3cea4bfd175c368c3a843dc694a1c945a2c9848af1666811119e49da1bc",
         "verification": {
           "status": "figma-source-recorded",
-          "checked_at": "2026-09-13",
-          "reason": "Поля structure_fingerprint, verified_at (2026-09-06) и contracts.source_variants сохранены как исторический снимок; они не подтверждают обновлённую структуру. Свежие read-only MCP-факты 11.10.2026, прямые mappings и отдельные scoped source/render receipts относятся к текущим semantic contracts; полный native-origin audit не заявлен. checked_at остаётся датой прежней проверки до приёмки нового scoped audit."
+          "checked_at": "2026-10-11",
+          "reason": "Поля structure_fingerprint, verified_at (2026-09-06) и contracts.source_variants сохранены как исторический снимок и не подтверждают обновлённую структуру. checked_at относится только к scoped-сверке значений, properties, текущей topology/source identity и защищённых объектов на candidate e1e7c9a6d9f94d9e83d28d47845f8b7b4878a490 по read-only MCP-данным 11.10.2026: 2187 direct mappings, включая 4 native TEXT sidecar facts; scalar и topology-v2 receipts закреплены в PR #118. Исходные raw packets не переписаны; прежние full-native diagnostics и native-evidence omissions сохранены. Полное native-origin/whole-library доказательство и HTML/visual/full-test приёмка этой датой не заявлены."
         }
       },
       "variants": [
@@ -16041,8 +16041,8 @@
         "structure_fingerprint": "sha256:c63c3dc20a045beeaba79ba062390ade2ee8608a623dc74a12efde6266651e92",
         "verification": {
           "status": "figma-source-recorded",
-          "checked_at": "2026-09-13",
-          "reason": "Поля structure_fingerprint, verified_at (2026-09-06) и contracts.source_variants сохранены как исторический снимок; они не подтверждают обновлённую структуру. Свежие read-only MCP-факты 11.10.2026, прямые mappings и отдельные scoped source/render receipts относятся к текущим semantic contracts; полный native-origin audit не заявлен. checked_at остаётся датой прежней проверки до приёмки нового scoped audit."
+          "checked_at": "2026-10-11",
+          "reason": "Поля structure_fingerprint, verified_at (2026-09-06) и contracts.source_variants сохранены как исторический снимок и не подтверждают обновлённую структуру. checked_at относится только к scoped-сверке значений, properties, текущей topology/source identity и защищённых объектов на candidate e1e7c9a6d9f94d9e83d28d47845f8b7b4878a490 по read-only MCP-данным 11.10.2026: 2187 direct mappings, включая 4 native TEXT sidecar facts; scalar и topology-v2 receipts закреплены в PR #118. Исходные raw packets не переписаны; прежние full-native diagnostics и native-evidence omissions сохранены. Полное native-origin/whole-library доказательство и HTML/visual/full-test приёмка этой датой не заявлены."
         }
       },
       "variants": [
@@ -111885,8 +111885,8 @@
         "structure_fingerprint": "sha256:e45ebbe8c07207092e26b3712d88d65bbc5d7d560f4b8daee20e1f4dfc6a2ab6",
         "verification": {
           "status": "figma-source-recorded",
-          "checked_at": "2026-09-13",
-          "reason": "Поля structure_fingerprint, verified_at (2026-09-06) и contracts.source_variants сохранены как исторический снимок; они не подтверждают обновлённую структуру. Свежие read-only MCP-факты 11.10.2026, прямые mappings и отдельные scoped source/render receipts относятся к текущим semantic contracts; полный native-origin audit не заявлен. checked_at остаётся датой прежней проверки до приёмки нового scoped audit."
+          "checked_at": "2026-10-11",
+          "reason": "Поля structure_fingerprint, verified_at (2026-09-06) и contracts.source_variants сохранены как исторический снимок и не подтверждают обновлённую структуру. checked_at относится только к scoped-сверке значений, properties, текущей topology/source identity и защищённых объектов на candidate e1e7c9a6d9f94d9e83d28d47845f8b7b4878a490 по read-only MCP-данным 11.10.2026: 2187 direct mappings, включая 4 native TEXT sidecar facts; scalar и topology-v2 receipts закреплены в PR #118. Исходные raw packets не переписаны; прежние full-native diagnostics и native-evidence omissions сохранены. Полное native-origin/whole-library доказательство и HTML/visual/full-test приёмка этой датой не заявлены."
         }
       },
       "variants": [
@@ -116228,8 +116228,8 @@
         "structure_fingerprint": "sha256:758ae01e42519336077861f93e6c60cd8cfaec0784c8b97bc0d2017ea295f547",
         "verification": {
           "status": "figma-source-recorded",
-          "checked_at": "2026-09-13",
-          "reason": "Поля structure_fingerprint, verified_at (2026-09-06) и contracts.source_variants сохранены как исторический снимок; они не подтверждают обновлённую структуру. Свежие read-only MCP-факты 11.10.2026, прямые mappings и отдельные scoped source/render receipts относятся к текущим semantic contracts; полный native-origin audit не заявлен. checked_at остаётся датой прежней проверки до приёмки нового scoped audit."
+          "checked_at": "2026-10-11",
+          "reason": "Поля structure_fingerprint, verified_at (2026-09-06) и contracts.source_variants сохранены как исторический снимок и не подтверждают обновлённую структуру. checked_at относится только к scoped-сверке значений, properties, текущей topology/source identity и защищённых объектов на candidate e1e7c9a6d9f94d9e83d28d47845f8b7b4878a490 по read-only MCP-данным 11.10.2026: 2187 direct mappings, включая 4 native TEXT sidecar facts; scalar и topology-v2 receipts закреплены в PR #118. Исходные raw packets не переписаны; прежние full-native diagnostics и native-evidence omissions сохранены. Полное native-origin/whole-library доказательство и HTML/visual/full-test приёмка этой датой не заявлены."
         }
       },
       "variants": [
@@ -137786,8 +137786,8 @@
         "structure_fingerprint": "sha256:a36c2a891344e693c283d021aca44c4eea77cc087823eec968327605d84f7a6c",
         "verification": {
           "status": "figma-source-recorded",
-          "checked_at": "2026-09-13",
-          "reason": "Поля structure_fingerprint, verified_at (2026-09-06) и contracts.source_variants сохранены как исторический снимок; они не подтверждают обновлённую структуру. Свежие read-only MCP-факты 11.10.2026, прямые mappings и отдельные scoped source/render receipts относятся к текущим semantic contracts; полный native-origin audit не заявлен. checked_at остаётся датой прежней проверки до приёмки нового scoped audit."
+          "checked_at": "2026-10-11",
+          "reason": "Поля structure_fingerprint, verified_at (2026-09-06) и contracts.source_variants сохранены как исторический снимок и не подтверждают обновлённую структуру. checked_at относится только к scoped-сверке значений, properties, текущей topology/source identity и защищённых объектов на candidate e1e7c9a6d9f94d9e83d28d47845f8b7b4878a490 по read-only MCP-данным 11.10.2026: 2187 direct mappings, включая 4 native TEXT sidecar facts; scalar и topology-v2 receipts закреплены в PR #118. Исходные raw packets не переписаны; прежние full-native diagnostics и native-evidence omissions сохранены. Полное native-origin/whole-library доказательство и HTML/visual/full-test приёмка этой датой не заявлены."
         }
       },
       "variants": [
