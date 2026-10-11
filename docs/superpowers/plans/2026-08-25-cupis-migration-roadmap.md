@@ -284,7 +284,7 @@ Manifest-driven разрешение source paths было выполнено н
 
 Итоговые специализации — `maintaining-cupis-email-system` и `building-cupis-emails`; `cupis-email-task-router` остаётся тонким входом, не третьим предметным навыком. Onboarding уже созданного и одобренного компонента остаётся частью поддержки, не проектированием нового блока. Неизвестный компонент по-прежнему блокирует email-build до регистрации.
 
-Подробный [implementation plan этапа 11](2026-10-01-cupis-final-maintenance-cutover.md) слит в PR106, P1/P2/P3 — PR108/110/112. P4 локально принят в draftPR113 на source963 после exact regression/full/review; Результат final docs-only gate хранится в exact-SHA receipt вPR113, отдельно от full963; mergePR113 не выполнен. 11A не закрыт вmain; P5/P6 и follow-up карточек не начаты, поддержка не включена.
+**Историческая запись P4 до merge PR #113 (source963; не текущая очередь):** Подробный [implementation plan этапа 11](2026-10-01-cupis-final-maintenance-cutover.md) слит в PR106, P1/P2/P3 — PR108/110/112. P4 локально принят в draftPR113 на source963 после exact regression/full/review; Результат final docs-only gate хранится в exact-SHA receipt вPR113, отдельно от full963; mergePR113 не выполнен. 11A не закрыт вmain; P5/P6 и follow-up карточек не начаты, поддержка не включена. Актуальный статус — [единый checkpoint](2026-10-01-cupis-final-maintenance-cutover.md#p5-current-2026-10-11).
 
 #### 11A. Проверки готовности до переключения
 
