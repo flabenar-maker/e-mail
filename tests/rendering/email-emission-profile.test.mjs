@@ -156,6 +156,7 @@ test("no-css-shows-mobile-once", () => {
   assert.match(result.html, /mobile copy/u);
   assert.match(result.html, /desktop copy/u);
   assert.match(result.html, /cupis-root-0-mobile"/u);
+  assert.doesNotMatch(result.html, /cupis-root-0-mobile"[^>]*style="[^"]*display:none/u);
   assert.match(result.html, /cupis-root-0-desktop[^>]*style="[^"]*display:none/u);
   assert.match(result.css, /min-width:660px/u);
   assert.match(result.css, /min-device-width:660px/u);

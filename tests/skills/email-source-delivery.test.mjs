@@ -170,6 +170,6 @@ test("blank subject remains a labelled incomplete preview and never creates an a
   await execFileAsync(process.execPath, ["scripts/render-email.mjs", "--model", join(folder, "model.json"), "--delivery", join(folder, "delivery.json"), "--output", release], { cwd: repoRoot, env: { ...process.env, CUPIS_SYSTEM_COMMIT: sourceSha } });
   const report = JSON.parse(await readFile(join(release, "release-report.json"), "utf8"));
   assert.equal(report.emission_profile.id, "altcraft-mobile-base-v1");
-  assert.equal(report.emission_profile.effective_fallback, "mobile");
+  assert.equal(report.effective_fallback, "mobile");
   assert.equal(report.service_rules_version, "1.0.0");
 });
