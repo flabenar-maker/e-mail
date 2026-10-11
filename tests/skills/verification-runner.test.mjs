@@ -114,3 +114,8 @@ test('docs root commit uses all tracked paths and unknown source paths use compl
 test('missing immutable first parent is a typed docs scope failure',async()=>{
  const {deriveDocsScope}=await import('../../scripts/lib/execution-docs-check.mjs');const readGit=async args=>{if(args[0]==='rev-parse')return sha;if(args[0]==='cat-file'&&args[1]==='-p')return 'tree '+other+'\nparent '+other+'\n\nmessage';throw Object.assign(new Error('missing parent'),{code:128});};await assert.rejects(deriveDocsScope({repoRoot,sourceSha:sha,readGit}),{code:'VERIFICATION_DOCS_BASE_MISSING'});
 });
+test('root commit message text cannot invent an immutable first parent',async()=>{
+ const {deriveDocsScope}=await import('../../scripts/lib/execution-docs-check.mjs');
+ const readGit=async args=>{if(args[0]==='rev-parse')return sha;if(args[0]==='cat-file'&&args[1]==='-p')return 'tree '+other+'\nauthor Synthetic\n\nA root commit message\nparent '+other+'\n';if(args[0]==='ls-tree')return 'README.md\0';throw new Error('Root commit must not probe a message-invented parent');};
+ const scope=await deriveDocsScope({repoRoot,sourceSha:sha,readGit});assert.equal(scope.base_sha,null);assert.deepEqual(scope.changed_paths,['README.md']);
+});
