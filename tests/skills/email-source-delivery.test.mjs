@@ -20,10 +20,22 @@ const sourceSha = process.env.CUPIS_SYSTEM_COMMIT;
 const png = Buffer.from("89504e470d0a1a0a0000000d49484452000000010000000108060000001f15c4890000000a49444154789c6360000002000154a24f9d0000000049454e44ae426082", "hex");
 function makeNativeInstance({ componentId, index, axesByViewport = {}, prefix }) {
   const record = index.bySystemId.get(componentId); if (!record) throw new Error(`missing ${componentId}`);
+  const resolvedAxes=structuredClone(axesByViewport);
+  if(Object.values(resolvedAxes).some(axes=>Object.keys(axes).length)) {
+    for(const viewport of ["mobile","desktop"]) {
+      if(Object.keys(resolvedAxes[viewport]??{}).length)continue;
+      const known=resolvedAxes[viewport==="mobile"?"desktop":"mobile"]??{};
+      const candidates=(record.variants??[]).filter(variant=>variant.axes?.some(axis=>axis.name==="Viewport"&&axis.value.toLowerCase()===viewport));
+      const candidate=candidates.find(variant=>Object.entries(known).every(([name,value])=>variant.axes.some(axis=>axis.name===name&&axis.value.toLowerCase()===value.toLowerCase())))??candidates[0];
+      const axes=Object.fromEntries((candidate?.axes??[]).filter(axis=>axis.name!=="Viewport").map(axis=>[axis.name,axis.value]));
+      if(!Object.keys(axes).length)throw new Error(`missing complementary axes ${componentId}/${viewport}`);
+      resolvedAxes[viewport]=axes;
+    }
+  }
   const instance = { instance_id: prefix, component_id: componentId, variants: {}, property_values: (record.properties ?? []).filter((p) => p.type === "boolean").map((p) => ({ property_id: p.id, scope: "all", value: true })), content_values: [], asset_files: [], slots: [], nested_components: [] };
   const assets = new Set(), nested = new Map();
   for (const viewport of ["mobile", "desktop"]) {
-    const axes = axesByViewport[viewport] ?? {}; const selected = selectVariantRoot(record, viewport, axes); if (selected.diagnostics.length) throw new Error(`variant ${componentId}/${viewport}`);
+    const axes = resolvedAxes[viewport] ?? {}; const selected = selectVariantRoot(record, viewport, axes); if (selected.diagnostics.length) throw new Error(`variant ${componentId}/${viewport}`);
     instance.variants[viewport] = viewport; if (Object.keys(axes).length) (instance.variant_axes ??= {})[viewport] = axes;
     const visit = (element) => { if (element.visibility?.mode === "instance" && !element.visibility.default_visible) return; const text = element.facts?.find((f) => f.id === "source-text")?.value?.value ?? element.facts?.find((f) => f.id === "styled-text-segments")?.value?.items?.map((run) => run.characters).join(""); for (const slot of element.content_slots ?? []) if (!['url','placeholder'].includes(slot.type)) instance.content_values.push({ element_id: element.id, slot_id: slot.id, scope: viewport, value: slot.type === 'alt-text' ? { type:'alt-text',purpose:'informative',value:'Синтетическое изображение' } : slot.type === 'rich-text' ? { type:'rich-text',segments:[{type:'text',value:text ?? 'Синтетический текст'}] } : { type:'plain-text',value:text ?? 'Синтетический текст' } }); if (element.asset_contract_id) assets.add(element.asset_contract_id); if (element.render_mode === 'nested-component') { const entry = nested.get(element.id) ?? { element_id:element.id, component_id:element.component_id, axes:{} }; entry.axes[viewport] = Object.fromEntries((element.facts ?? []).filter((f) => f.id.startsWith('instance-') && f.id !== 'instance-viewport' && typeof f.value?.value === 'string').map((f) => [f.id.slice(9).replace(/^./u,(c) => c.toUpperCase()),f.value.value])); nested.set(element.id,entry); } for (const child of element.children ?? []) visit(child); };
     visit(selected.root);
@@ -37,13 +49,6 @@ async function releaseInput(folder, { includeNps = false } = {}) {
   const modelPath = join(repoRoot, "tests", "fixtures", "rendering", "pilot-email.json");
   const raw = JSON.parse(await readFile(modelPath, "utf8"));
   const model = structuredClone(raw);
-  await writeFile(join(folder, "model.json"), JSON.stringify(model));
-  const assetPaths = [...JSON.stringify(model).matchAll(/"path":"(images\/[^"]+)"/gu)].map((match) => match[1]);
-  for (const path of new Set(assetPaths)) {
-    const target = join(folder, ...path.split("/"));
-    await mkdir(dirname(target), { recursive: true });
-    await writeFile(target, png);
-  }
   const [registries, profiles] = await Promise.all([
     loadComponentRegistries({ repoRoot }),
     loadEmailDeliveryProfiles({ repoRoot }),
@@ -53,6 +58,13 @@ async function releaseInput(folder, { includeNps = false } = {}) {
   const footer = content.findIndex((item) => item.component_id === "email-footer");
   const additions = [makeNativeInstance({ componentId:"block-transaction-error",index:componentIndex,prefix:"synthetic-greeting" }), ...(includeNps ? [makeNativeInstance({ componentId:"nps-options",index:componentIndex,axesByViewport:{mobile:{Count:"3"},desktop:{Count:"3"}},prefix:"synthetic-nps" })] : [])];
   content.splice(footer, 0, ...additions);
+  await writeFile(join(folder, "model.json"), JSON.stringify(model));
+  const assetPaths = [...JSON.stringify(model).matchAll(/"path":"(images\/[^"]+)"/gu)].map((match) => match[1]);
+  for (const path of new Set(assetPaths)) {
+    const target = join(folder, ...path.split("/"));
+    await mkdir(dirname(target), { recursive: true });
+    await writeFile(target, png);
+  }
   const profile = profiles.profiles.find(({ id }) => id === "altcraft-mobile-base-v1");
   const inventory = collectEmailActions({ model, componentIndex, profile });
   const document = createDeliveryDraft({ emailId: model.id, sourceSha, profile, inventory });
@@ -88,6 +100,10 @@ test("CLI builds a self-contained synthetic Altcraft release with managed links,
   assert.doesNotMatch(html, /(?:src|background)="(?!images\/)/u);
   const report = JSON.parse(await readFile(join(output, "release-report.json"), "utf8"));
   assert.equal(report.external_acceptance, "not-run");
+  assert.equal(report.link_readiness.status,"ready");
+  assert.ok(report.link_readiness.required_count>0);
+  assert.equal(report.link_readiness.resolved_required_count,report.link_readiness.required_count);
+  assert.equal(report.local_checks.personalization_previews,"passed");
   assert.deepEqual(report.preview_files, ["preview-name.html", "preview-empty-name.html", "preview-long-name.html"]);
   const zip = await readFile(join(output, "altcraft.zip"));
   const python = process.env.CUPIS_BUNDLED_PYTHON || "python";
