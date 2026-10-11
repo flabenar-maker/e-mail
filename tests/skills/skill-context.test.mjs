@@ -97,12 +97,25 @@ function replaceWorkflowSource(manifest, routeId, sourceId) {
   }
 }
 
+async function deactivateMaintenanceRoutes(root, manifest) {
+  manifest.structured_workflows.status = "partial";
+  for (const route of manifest.routes.filter(({ id }) => !id.startsWith("email-"))) {
+    route.workflow_source_id = "workflow-paused";
+    const profile = manifest.bundle_profiles.find(({ id }) => id === route.bundle_profile_id);
+    profile.source_ids = profile.source_ids.map((id) => id === `workflow-${route.id}` ? "workflow-paused" : id);
+    profile.generated_bundle.static_source_ids = [...profile.source_ids];
+    profile.generated_bundle.status = "structured-shadow";
+    await writeStatusFixture(root, `data/workflows/${route.id}.yaml`, (document) => { document.workflow.status = "shadow"; });
+  }
+  await writeStatusFixture(root, "data/foundations/figma-naming.yaml", (document) => { document.foundation.status = "shadow"; });
+}
+
 async function activateEmailRoutesExceptTypography(root, manifest) {
   await activateEmailRoutes(root, manifest, { includeTypography: false });
 }
 
 async function activateEmailRoutes(root, manifest, { includeTypography = true } = {}) {
-  manifest.structured_workflows.status = "partial";
+  await deactivateMaintenanceRoutes(root, manifest);
   for (const routeId of ["email-new-build", "email-continue-fix"]) {
     replaceWorkflowSource(manifest, routeId, "workflow-email-build");
     manifest.bundle_profiles.find(({ id }) => id === routeId).generated_bundle.status = "structured-active";
@@ -144,6 +157,13 @@ async function activateAllRoutes(root, manifest) {
     profile.generated_bundle.status = "structured-active";
   }
   await activateEmailRoutes(root, manifest);
+  for (const route of manifest.routes.filter(route => !route.id.startsWith("email-"))) {
+    route.workflow_source_id = `workflow-${route.id}`;
+    const profile = manifest.bundle_profiles.find(({ id }) => id === route.bundle_profile_id);
+    profile.source_ids = profile.source_ids.map(id => id === "workflow-paused" ? route.workflow_source_id : id);
+    profile.generated_bundle.static_source_ids = [...profile.source_ids];
+    profile.generated_bundle.status = "structured-active";
+  }
   manifest.structured_workflows.status = "active";
   await Promise.all(manifest.routes.filter(route => !route.id.startsWith("email-")).map(route =>
     writeStatusFixture(root, `data/workflows/${route.id}.yaml`, document => { document.workflow.status = "active"; })
@@ -223,24 +243,23 @@ test("technical and read-only email resolution has no Figma input prerequisite",
     );
   }
 });
-test("canonical maintenance routes resolve one paused shadow context", async () => {
+test("canonical migration route resolves an active structured context", async () => {
   const result = await resolveSkillContext({
     repoRoot,
     routeId: "migration-progress",
+    workflowMode: "read-only",
   });
 
-  assert.equal(result.status, "paused");
+  assert.equal(result.status, "resolved");
   assert.equal(result.route.id, "migration-progress");
-  assert.equal(result.bundle.mode, "structured-shadow");
-  assert.equal(result.workflow, undefined);
-  assert.deepEqual(result.blockers.map(({ code }) => code), [
-    "SKILL_ROUTE_PAUSED",
-  ]);
+  assert.equal(result.bundle.mode, "structured-active");
+  assert.ok(result.workflow.steps.length > 0);
+  assert.deepEqual(result.blockers ?? [], []);
 });
 
-test("canonical repository activates only email routes while non-email routes remain paused", async () => {
+test("canonical repository activates every structured route", async () => {
   const manifest = await loadSystemManifest({ repoRoot });
-  assert.equal(manifest.structured_workflows.status, "partial");
+  assert.equal(manifest.structured_workflows.status, "active");
   for (const route of manifest.routes) {
     const email = route.id.startsWith("email-");
     const profile = manifest.bundle_profiles.find(({ id }) => id === route.bundle_profile_id);
@@ -254,6 +273,7 @@ test("canonical repository activates only email routes while non-email routes re
       }
       : {
         routeId: route.id,
+        workflowMode: route.id === "migration-progress" ? "read-only" : "read-only",
         candidates: bundle.component_selection === "required" ? [{ id: "banner-hero" }] : [],
         viewports: bundle.viewport_selection === "none" ? [] : ["mobile", "desktop"],
         foundationIds: bundle.required_foundation_ids,
@@ -262,10 +282,10 @@ test("canonical repository activates only email routes while non-email routes re
       repoRoot,
       ...request,
     });
-    assert.equal(route.workflow_source_id, email ? "workflow-email-build" : "workflow-paused", route.id);
-    assert.equal(profile.generated_bundle.status, email ? "structured-active" : "structured-shadow", route.id);
-    assert.equal(result.status, email ? "resolved" : "paused", route.id);
-    assert.deepEqual((result.blockers ?? []).map(({ code }) => code), email ? [] : ["SKILL_ROUTE_PAUSED"], route.id);
+    assert.equal(route.workflow_source_id, email ? "workflow-email-build" : `workflow-${route.id}`, route.id);
+    assert.equal(profile.generated_bundle.status, "structured-active", route.id);
+    assert.equal(result.status, "resolved", route.id);
+    assert.deepEqual(result.blockers ?? [], [], route.id);
   }
 });
 
@@ -676,7 +696,7 @@ test("active route blocks a workflow source absent from structured capability", 
     "structured-workflow-status-topology-invalid",
   ]);
 });
-test("canonical email routes resolve while maintenance remains paused", async () => {
+test("canonical email and maintenance routes resolve", async () => {
   for (const [routeId, workflowMode, candidates, viewports] of [
     ["email-new-build", "new-build", [{ id: "banner-hero" }], ["mobile", "desktop"]],
     ["email-continue-fix", "continue-fix-technical", [], []],
@@ -685,7 +705,7 @@ test("canonical email routes resolve while maintenance remains paused", async ()
     assert.equal(result.status, "resolved", routeId);
     assert.ok(result.workflow.steps.length > 0, routeId);
   }
-  const maintenance = await resolveSkillContext({ repoRoot, routeId: "migration-progress" });
-  assert.equal(maintenance.status, "paused");
-  assert.deepEqual(maintenance.blockers.map(({ code }) => code), ["SKILL_ROUTE_PAUSED"]);
+  const maintenance = await resolveSkillContext({ repoRoot, routeId: "migration-progress", workflowMode: "read-only" });
+  assert.equal(maintenance.status, "resolved");
+  assert.deepEqual(maintenance.blockers ?? [], []);
 });

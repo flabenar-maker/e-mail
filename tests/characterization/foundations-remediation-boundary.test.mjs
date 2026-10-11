@@ -107,7 +107,7 @@ test("semantic manifest paths cannot silently move into Legacy", async () => {
   }
 });
 
-test("remediation preserves paused routes and required current pilot coverage without freezing future additions", async () => {
+test("remediation preserves exact activated workflow mapping and required current pilot coverage without freezing future additions", async () => {
   const [manifest, rendererRegistry] = await Promise.all([
     readStrictYaml(join(repoRoot, "system/manifest.yaml")),
     readStrictYaml(join(repoRoot, "data/renderers/registry.yaml")),
@@ -117,10 +117,18 @@ test("remediation preserves paused routes and required current pilot coverage wi
   );
 
   assert.ok(manifest.routes.length > 0);
-  assert.equal(
-    manifest.routes.every(({ id, workflow_source_id }) => ["email-new-build", "email-continue-fix"].includes(id) ? workflow_source_id === "workflow-email-build" : workflow_source_id === "workflow-paused"),
-    true,
-  );
+  const expectedWorkflows = new Map([
+    ["library-maintenance", "workflow-library-maintenance"],
+    ["component-onboarding", "workflow-component-onboarding"],
+    ["figma-description-sync", "workflow-figma-description-sync"],
+    ["figma-naming-audit", "workflow-figma-naming-audit"],
+    ["migration-progress", "workflow-migration-progress"],
+    ["email-new-build", "workflow-email-build"],
+    ["email-continue-fix", "workflow-email-build"],
+  ]);
+  for (const { id, workflow_source_id } of manifest.routes) {
+    assert.equal(workflow_source_id, expectedWorkflows.get(id) ?? "workflow-paused", id);
+  }
   for (const componentId of [
     "email-template",
     "button-primary",
@@ -134,7 +142,7 @@ test("remediation preserves paused routes and required current pilot coverage wi
   }
 });
 
-test("roadmap records completed Stage 8 and retains incomplete 11A–11C cutover gates", async () => {
+test("roadmap records completed Stage 8 and finalized 11A while retaining independent 11B–11C gates", async () => {
   const [roadmap, remediationPlan] = await Promise.all([
     readFile(join(repoRoot, roadmapPath), "utf8"),
     readFile(join(repoRoot, remediationPlanPath), "utf8"),
@@ -143,17 +151,19 @@ test("roadmap records completed Stage 8 and retains incomplete 11A–11C cutover
   assert.doesNotMatch(numberedStage(roadmap, 8), /- \[ \] /u);
   assert.match(numberedStage(roadmap, 8), /- \[x\] /u);
   const stage11 = numberedStage(roadmap, 11);
+  const phaseHeadings = [...stage11.matchAll(/^#### 11[A-C][.].*$/gmu)];
   for (const phase of ["11A", "11B", "11C"]) {
-    const headings = [...stage11.matchAll(new RegExp(`^#### ${phase}\\..*$`, "gmu"))];
+    const headings = phaseHeadings.filter(({ 0: heading }) => heading.startsWith(`#### ${phase}.`));
     assert.equal(headings.length, 1, `Expected exactly one ${phase} heading`);
-    assert.match(
-      stage11,
-      new RegExp(
-        `^#### ${phase}\\..*\\r?\\n(?:(?!^#### 11[A-C]\\.)[\\s\\S])*?^- \\[ \\] `,
-        "mu",
-      ),
-      `${phase} must retain an unchecked gate`,
-    );
+    const start = headings[0].index;
+    const end = phaseHeadings.find(({ index }) => index > start)?.index ?? stage11.length;
+    const lines = stage11.slice(start, end).split("\n");
+    if (phase === "11A") {
+      assert.ok(lines.some((line) => line.startsWith("- [x] ")), "11A must contain a checked gate");
+      assert.equal(lines.some((line) => line.startsWith("- [ ] ")), false, "11A must not retain an unchecked gate");
+    } else {
+      assert.ok(lines.some((line) => line.startsWith("- [ ] ")), `${phase} must retain an unchecked gate`);
+    }
   }
   assert.match(stage11, /Web-часть 10A отменена/u);
   assert.match(

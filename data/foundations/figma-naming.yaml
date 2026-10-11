@@ -1,7 +1,7 @@
 schema_version: 1.1.0
 foundation:
   id: figma-naming
-  status: shadow
+  status: active
   language: English
   scope: figma-library-maintenance
 

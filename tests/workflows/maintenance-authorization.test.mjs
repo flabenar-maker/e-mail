@@ -24,14 +24,14 @@ async function activate(r,id,{naming=false,mode='write'}={}){
  await write(r,'system/manifest.yaml',m);
  return resolveSkillContext({repoRoot:r,routeId:id,workflowMode:mode,candidates:id==='figma-description-sync'?[{id:'button-secondary'}]:[],viewports:['figma-description-sync','component-onboarding'].includes(id)?['mobile','desktop']:id==='library-maintenance'?['mobile']:[]});
 }
-test('P3: naming format admits active but canonical status stays shadow',async()=>{
+test('P3: naming format admits active canonical status',async()=>{
  const n=await readStrictYaml(join(root,'data/foundations/figma-naming.yaml'));
  const s=JSON.parse(await readFile(join(root,'schemas/figma-naming.schema.json'),'utf8'));
- assert.equal(n.foundation.status,'shadow');n.foundation.status='active';
+ assert.equal(n.foundation.status,'active');
  assert.deepEqual(validateFigmaNamingShape(n,s),[]);
 });
 test('P3: active naming candidate cannot consume a shadow naming foundation',async()=>{
- const f=await fixture();try{const c=await activate(f.root,'figma-naming-audit');assert.equal(c.status,'blocked');assert.ok(c.blockers.some(v=>v.code==='SKILL_ROUTE_STATUS_INACTIVE'&&v.path.includes('figma-naming')));}finally{await f.cleanup();}
+ const f=await fixture();try{const n=await readStrictYaml(join(f.root,'data/foundations/figma-naming.yaml'));n.foundation.status='shadow';await write(f.root,'data/foundations/figma-naming.yaml',n);const c=await activate(f.root,'figma-naming-audit');assert.equal(c.status,'blocked');assert.ok(c.blockers.some(v=>v.code==='SKILL_ROUTE_STATUS_INACTIVE'&&v.path.includes('figma-naming')));}finally{await f.cleanup();}
 });
 const before=[{node_id:'1:2',name:'feature-icon @4x',description:'old',type:'FRAME',layoutMode:'HORIZONTAL',primaryAxisAlignItems:'MIN',counterAxisAlignItems:'CENTER',itemSpacing:8,paddingTop:4,paddingRight:6,paddingBottom:4,paddingLeft:6,width:48,height:48,visible:true,children:[{node_id:'1:3',type:'SLOT',name:'Icon slot',children:[{node_id:'1:4',type:'TEXT',characters:'Icon label',fontName:{family:'Roboto',style:'Regular'},fontSize:14,lineHeightPx:20,children:[]}]}],componentProperties:{State:{type:'VARIANT',value:'Default'},'Show Icon':{type:'BOOLEAN',value:true}},componentPropertyReferences:{visible:'Show Icon'},boundVariables:{paddingTop:'space-4',itemSpacing:'space-8'},variantProperties:{Viewport:'Mobile',Style:'Accent'},exportSettings:[{format:'PNG',constraint:{type:'SCALE',value:2},suffix:'@2x'},{format:'PNG',constraint:{type:'SCALE',value:4},suffix:'@4x'}],fills:[]}];
 function execution(c,{rename=false,damage=false,authorize=true,noop=false}={}){

@@ -53,7 +53,7 @@ test('checkpoint preserves every mode and typed stop/input/condition boundary',a
     const docs=await renderAllGeneratedDocs({repoRoot:f.root,manifest:f.manifest});
     const maintenance=docs.get('docs/generated/library-maintenance-checkpoint.md');
     assert.match(maintenance,/## Mode: `read-only`/); assert.match(maintenance,/## Mode: `write`/);
-    assert.match(maintenance,/Status: `shadow`/);
+    assert.match(maintenance,/Status: `active`/);
     assert.match(maintenance,/`figma-write-in-scope`/);assert.match(maintenance,/`repository-write-in-scope`/);
     assert.match(maintenance,/`authorization-scope-mismatch`/);assert.match(maintenance,/`figma-readback-mismatch`/);assert.match(maintenance,/`publication-boundary-invalid`/);
     assert.match(maintenance,/`request-required`/); assert.match(maintenance,/`target-scope-required`/);assert.match(maintenance,/`write-authorization-required`/); assert.match(maintenance,/`stop`/);
@@ -67,18 +67,28 @@ test('checkpoint preserves every mode and typed stop/input/condition boundary',a
   }finally{await f.cleanup();}
 });
 
-// A shadow workflow cannot masquerade as an active route; changes to actual
-// routing must change both the visible map and source digest.
-test('checkpoint readiness and digest come from actual manifest routing',async()=>{
+// Current manifest routing is authoritative; a coherent alternate must change both
+// the visible map and the source digest without changing the registered workflow document.
+test('checkpoint routing and digest come from actual manifest routing',async()=>{
   const f=await fixture();try{
-    const model=await loadGeneratedDocModel({repoRoot:f.root,manifest:f.manifest});
-    const before=renderGeneratedDoc({definition:workflowDefinition(f.manifest),model});
-    assert.match(before,/`library-maintenance`[^\n]*`workflow-paused`[^\n]*`structured-shadow`/);
-    assert.match(before,/not activate/);
-    const next=structuredClone(f.manifest);next.routes.find(r=>r.id==='library-maintenance').workflow_source_id='workflow-library-maintenance';
-    await writeFixtureFile(f.root,'system/manifest.yaml',JSON.stringify(next,null,2)+'\n');
-    const after=renderGeneratedDoc({definition:workflowDefinition(next),model:await loadGeneratedDocModel({repoRoot:f.root,manifest:next})});
-    assert.match(after,/`library-maintenance`[^\n]*`workflow-library-maintenance`/);
+    assert.deepEqual(await validateManifestSemantics(f.manifest,f.root),[]);
+    const before=renderGeneratedDoc({definition:workflowDefinition(f.manifest),model:await loadGeneratedDocModel({repoRoot:f.root,manifest:f.manifest})});
+    assert.match(before,/`library-maintenance`[^\n]*`workflow-library-maintenance`[^\n]*`structured-active`/);
+    assert.match(before,/does not activate a route/);
+    const alternate=structuredClone(f.manifest);
+    const route=alternate.routes.find(r=>r.id==='library-maintenance');
+    const profile=alternate.bundle_profiles.find(p=>p.id===route.bundle_profile_id);
+    assert.equal(route.workflow_source_id,'workflow-library-maintenance');
+    assert.ok(profile);
+    route.workflow_source_id='workflow-paused';
+    profile.source_ids=profile.source_ids.map(id=>id==='workflow-library-maintenance'?'workflow-paused':id);
+    profile.generated_bundle.static_source_ids=profile.generated_bundle.static_source_ids.map(id=>id==='workflow-library-maintenance'?'workflow-paused':id);
+    profile.generated_bundle.status='structured-shadow';
+    alternate.structured_workflows.status='partial';
+    assert.deepEqual(await validateManifestSemantics(alternate,f.root),[]);
+    await writeFixtureFile(f.root,'system/manifest.yaml',JSON.stringify(alternate,null,2)+'\n');
+    const after=renderGeneratedDoc({definition:workflowDefinition(alternate),model:await loadGeneratedDocModel({repoRoot:f.root,manifest:alternate})});
+    assert.match(after,/`library-maintenance`[^\n]*`workflow-paused`[^\n]*`structured-shadow`/);
     assert.notEqual(before.match(/source-digest: ([^ ]+)/)[1],after.match(/source-digest: ([^ ]+)/)[1]);
   }finally{await f.cleanup();}
 });
@@ -109,8 +119,12 @@ test('checkpoint semantic validation rejects unregistered selectors and incomple
 
 test('checkpoint model rejects raw manifest bytes that do not describe supplied routing',async()=>{
   const f=await fixture();try{
-    const altered=structuredClone(f.manifest);altered.routes[0].workflow_source_id='workflow-library-maintenance';
-    await assert.rejects(loadGeneratedDocModel({repoRoot:f.root,manifest:altered}),e=>codes(e).includes('GENERATED_WORKFLOW_MANIFEST_MISMATCH'));
+    const altered=structuredClone(f.manifest);
+    const route=altered.routes.find(r=>r.id==='component-onboarding');
+    assert.equal(route.workflow_source_id,'workflow-component-onboarding');
+    route.workflow_source_id='workflow-library-maintenance';
+    assert.notEqual(route.workflow_source_id,f.manifest.routes.find(r=>r.id==='component-onboarding').workflow_source_id);
+    await assert.rejects(loadGeneratedDocModel({repoRoot:f.root,manifest:altered}),e=>codes(e).includes('GENERATED_WORKFLOW_MANIFEST_MISMATCH')&&e.path==='/system/manifest.yaml');
   }finally{await f.cleanup();}
 });
 

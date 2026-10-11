@@ -16,13 +16,21 @@
 <a id="p4-current-2026-10-11"></a>
 <a id="p5-preparation-2026-10-11"></a>
 
-### Текущая точка: P4 слит; пакет 5 самостоятельный, затем 5 fix 1 и 5 fix 2 — 11.10.2026
+<a id="p5-current-2026-10-11"></a>
+
+### Текущая точка: пакет 5 — Step3 принят на собственном source pin; Step4 final gate pending — 11.10.2026
 
 PR #110 слит отдельной командой пользователя: main e44c726175ca3b93c3a41b43d75424d060bf6390, tree f8928fbae27bdb6d9eec207bf0ad894fc445b361 совпадает с принятым кандидатом04de691. Postmerge receipt1d41ca73ca3f3e8d81f761414f47faf8381e334aab3648bf0bcce86e19449061; [облачный merge record](https://github.com/flabenar-maker/e-mail/pull/110#issuecomment-6100055096). Исторические source/full/local pins и отрицательные результаты ниже сохраняют собственные SHA; формулировки «не слит» в историческом журнале относятся к моменту их записи. Закрытый P2 не повторяем.
 
-P3 слит [PR #112](https://github.com/flabenar-maker/e-mail/pull/112). По следующей отдельной команде пользователя [PR #113](https://github.com/flabenar-maker/e-mail/pull/113) слит обычным SHA-guarded squash в main ead5580e319dc3a68332b4ad1ed01f35f08afcc3; tree b25188cf6ef2ee17f51f275226d7cbe6d276e25d точно совпадает с локально принятым head e98a18a0f01bb07a363f8fc99e231be9700e08a5. Отдельный postmerge identity receipt c073702351e10ed27a26f5e2bfe6dd4eaa85c0a32ea5ff58d79099fef29bdc9b подтверждает single parent a117 и прежние five-paused/two-active routes; [исходная локальная приёмка P4](#p4-local-acceptance-2026-10-11) сохраняет свои source/full/narrow pins. 11A завершён и слит. Пакет 5 не начат, поддержка не активирована; 5 fix 1, 5 fix 2, пакет 6, локальная синхронизация навыков и Figma writes не выполнены. Эта публикация уточняет только планы, не включает реализацию следующих работ.
+P3 слит [PR #112](https://github.com/flabenar-maker/e-mail/pull/112). По следующей отдельной команде пользователя [PR #113](https://github.com/flabenar-maker/e-mail/pull/113) слит обычным SHA-guarded squash в main ead5580e319dc3a68332b4ad1ed01f35f08afcc3; tree b25188cf6ef2ee17f51f275226d7cbe6d276e25d точно совпадает с локально принятым head e98a18a0f01bb07a363f8fc99e231be9700e08a5. Отдельный postmerge identity receipt c073702351e10ed27a26f5e2bfe6dd4eaa85c0a32ea5ff58d79099fef29bdc9b подтверждает single parent a117 и прежние five-paused/two-active routes; [исходная локальная приёмка P4](#p4-local-acceptance-2026-10-11) сохраняет свои source/full/narrow pins. 11A завершён и слит. Пакет 5: Step1 подготовил [карту](#p5-switch-map-2026-10-11) и rollback baseline; Step2 после делегированного model-review согласования применил её только в draft PR #115. Main A98 остаётся без активации; Step3 принят в bounded scope на source 018f ([checkpoint](#p5-current-2026-10-11)), Step4 final gate/review и приёмка всего candidate pending; 5 fix 1, 5 fix 2, пакет 6, локальная синхронизация навыков и Figma writes не выполнены. Эта публикация обновляет только текущий статус пяти документов после Step3; merge, локальная установка и следующие пакеты не разрешены.
 
-Текущая plan-only правка ограничена четырьмя активными планами и статусом §3.5 master-spec: фактическое слияние P4, самостоятельная граница пакета 5, этапы 5 fix и зависимости пакета 6. Component values/trees/assets, Core rules, manifest mappings/statuses, skills, renderer, email workflow, Figma и готовые письма сохраняются. Публикация и последующее слияние этих планов не разрешают активацию, реализацию 5 fix, локальную установку или очистку.
+Текущий cloud candidate включает согласованные 27 scalar fields/7 runtime files, одну status-фразу README, семь outputs существующего генератора и разрешённые status/fixture test repairs. Исторический status successor `744ad0516a4442c1489b22a8cfc53f7b210ec797` менял только CURRENT status sections пяти существующих документов; runtime, README, generated outputs, tests, Core, contracts, skills, renderer, email workflow, Figma, письма и оба email route/profile objects относительно source 018f на этом commit сохранились. Последующие отдельно согласованные status-test corrections и точный final protected-source bridge фиксируются в итоговых PR metadata. Original 018f capture/session/receipts не перепиниваются. Это не production/merge/local-sync acceptance.
+
+**Step3 — собственный proof pin:** `018f367a441841d0fd75fcc1fdf33f8866b03a9f`, tree `3ab9c5b3cfb9a4c295ca07ae4ab1b3d2067d9f63`. Actual GPT-5.6 Terra Medium: targeted 7 existing test files — 167 PASS / 0 FAIL, numeric exit0; все 9 существующих route/mode combinations — resolved, exact workflow/mode/steps и source closure, missing sources0. Original targeted receipt (numeric exit0, countersnull из-за прежнего parser issue; не источник числового167/0) SHA256 `13dfc6ce3dd050718c129c05631ec256f188cb2c3915102286169e9824488b9a`; corrected-counts receipt `p5-step3-018f-targeted-counts.json` SHA256 `4311c29b842976414bd5398cfbfe2757b5a2d274e17cfa56d19052d940e8d464` устанавливает 167 PASS / 0 FAIL из retained log, original receipt не изменён; readiness receipt SHA256 `b48d318e75fd98a229e339a7e9adfcf58d7fc854bc4c655986671f410aeedb39`. Это targeted result, не full suite.
+
+**L1 — accepted bounded host procedure:** bounded proof независимо принят: frozen v3 receipt SHA256 `1450238b1ebe6ff372603ba1e44fe20d04222334ee2d263ddf8ac34c6d604d11`, final Core-origin trace `0b1bbca66b0626a17bb9778c10465c0c48de6271ceae5f9b4b7c4496a7b9a27c`, closure review `a6e559f4b982a0a89a60f340d084383f0d50d09fdf5278109162487c7e4b7c77`. Оба actual read-only consumer positives — 7 steps; один общий recomputed inspection gate `7a8230e4db9106b4559cbf4f05e6426dd475c1ed638d6123529072176c58620f` проверяет delivered source/digests, selected Header и naming foundation, original request/session/packet/semantic binding и combined audit. Actual controlled WRITE negatives отказывают до authoritative outputs/dependent sinks (outputs0/sinks0), реальные writes0. Coherent replay against independently held new request и semantic refusal честно переиспользованы на original own pin с защищённым source/evidence bridge; они НЕ объявляются final-module reruns. Ранее отклонённый `2773...` receipt и его overwritten mutable interim traces superseded; original `9b6...`, acquisition packet/session/challenge/semantic carrier сохранены. Настоящий read-only MCP packet сохраняет original 018f/session/tool origin: Header owner326:5159, mobile15:2037 / desktop230:3679, canonicalcapture1.3.0/full78nodes; combined audit top/effective PASS. Приёмка относится к host-bound orchestration, не к криптографическому origin attestation или новой production adapter implementation. Результаты действуют только после независимой приёмки конкретного финального receipt; immutable original acquisition/authority receipts и capture bytes не изменяются и не перепиниваются; сохранность overwritten mutable interim traces не заявляется. Никакой resolver-only result не заменяет L1.
+
+**Step4 — PENDING:** один FINAL полный локальный gate, generate:check, Windows bootstrap, обе controlled email regressions, allowed-diff/preserved-blob proof и independent whole-branch review выполняются на точном окончательном candidate SHA. Этот текст не утверждает успех своего будущего коммита. Исторический docs-only bridge 018f→744 сохраняет собственный pin и 301 equal blobs+modes. Для окончательного candidate finite bridge от original 018f допустим только при равенстве model/capture loader/consumer/target bytes и всех источников вне отдельно согласованных status-document/test corrections; точный allowed diff и число protected blobs+modes фиксируются в итоговых PR metadata. Final migration-progress/source closure проверяются заново, old packet не подаётся как capture нового head. Merge и Step5 backup/local sync/discovery/clean-context приёмка требуют отдельных разрешений и не выполнены.
 
 Текущий порядок: самостоятельный пакет 5 (карта → разрешённая активация → exact local gate/merge → разрешённая локальная синхронизация и clean-context приёмка) → 5 fix 1 (обновлённые карточные блоки) → 5 fix 2 (прикладная сборка и HTML) → отдельно разрешённый пакет 6. Подготовить недостающую детализацию 5 fix можно раньше; её реализация не входит в пакет 5 и не расширяет его acceptance.
 
@@ -1576,13 +1584,100 @@ Generated usage отражает записанные контракты, не �
 
 **Interfaces:** Consumes: merged 11A и разрешение cutover. Produces: active maintenance routes с подтверждённым resolver/handoff и точкой rollback.
 
-- [ ] **Step 1:** Закрепить свежий main как rollback SHA, сохранить прежнюю резервную ветку и показать exact old → new таблицу route/workflow/profile/status. Не делать глобальный shadow → active replace.
-- [ ] **Step 2:** Получить отдельное разрешение на эту карту. В candidate назначить только доказанные structured workflows, убрать paused source из их profiles и обновить только зависимые статусы. Email route records сохранить побайтово, если отдельного разрешённого defect fix нет.
-- [ ] **Step 3:** Для каждого включаемого route доказать `resolved`, exact mode и нужные steps; negative dependency/source cases должны давать typed blocked. При частичном переключении aggregate остаётся partial; active допускается только когда все текущие routes готовы.
+- [x] **Step 1 — подготовка карты:** Закрепить fresh main A98 и rollback ref, сохранить прежний backup и подготовить exact old→new route/workflow/profile/status карту; [состав и границы](#p5-switch-map-2026-10-11). Это выполненная подготовка, не activation acceptance. Step2 требует отдельного согласования показанной карты; глобальный shadow→active replace запрещён.
+- [x] **Step 2 — candidate:** По команде пользователя карта согласована делегированным GPT-6.1 Sol Ultra model-review (APPROVED, map SHA256 53b775425ba0bcf715026bdcae201681eb513c447ce562b010efd6286a7481bc) и применена в draft PR #115: ровно27 scalar fields/7 runtime files, зависимые generated outputs и README status. Это не отдельное human merge authority и не readiness; Step3 own-pin checkpoint принят; Step4 final gate pending ([статус](#p5-current-2026-10-11)). Email route/profile objects сохранены побайтово.
+- [x] **Step 3:** Для каждого включаемого route доказать `resolved`, exact mode и нужные steps; negative dependency/source cases должны давать typed blocked. При частичном переключении aggregate остаётся partial; active допускается только когда все текущие routes готовы. Bounded own-pin result и L1 evidence — [current checkpoint](#p5-current-2026-10-11); full/merge/local cutover этим не закрыты.
 - [ ] **Step 4:** На exact final SHA выполнить один полный локальный gate, generated check, bootstrap и независимое ревью. Получить отдельное разрешение merge; защита GitHub, требующая remote check, является blocker, не повод обходить её.
 - [ ] **Step 5:** После merge и отдельного разрешения синхронизировать изменённые локальные навыки с backup; подтвердить discovery и clean-context работу всех routes. Сбой исправляется corrective/revert PR, не force-reset; Figma не откатывается автоматически.
 
 **Acceptance:** Включён только доказанный объём, локальный clean-context результат соответствует main, rollback имеет точный SHA/allowed diff. 11C ещё не выполнен.
+
+<a id="p5-switch-map-2026-10-11"></a>
+
+#### P5 Step 1: точная карта переключения и rollback — 11.10.2026
+
+**Исторический Step1:** карта подготовлена в документационном candidate F824; его old-state facts сохраняют свои pins. **Текущий статус:** согласованный полный map применён только в draft PR #115; Step3 own-pin result принят, Step4 final gate и Step5 pending; [единый checkpoint](#p5-current-2026-10-11). Main A98 не изменён. Числа ниже сняты из canonical cloud sources, а не из прежних Markdown-описаний. Source pin: `a98d348fc4b342a223b9d7e8674098826ab9d125`, tree `de71b53f395764242f95cfecdbc79d3faf795643`,306 source blobs. Свежий `migration-progress / read-only` дал numeric0, `paused / SKILL_ROUTE_PAUSED`; bundle SHA256 dd75e69c7a65fdc3ee202d209e2229a56bdada0c7a55451f48ab999d8931704b остаётся на собственном A98 pin. Старые P2/P3/P4 и Step1 old-state packet не перепиниваются.
+
+**Rollback до переключения:** [`backup/pre-maintenance-activation-2026-10-11`](https://github.com/flabenar-maker/e-mail/tree/backup/pre-maintenance-activation-2026-10-11) закреплена на `a98d348fc4b342a223b9d7e8674098826ab9d125`. Существующая [`backup/pre-structured-migration-2026-08-24`](https://github.com/flabenar-maker/e-mail/tree/backup/pre-structured-migration-2026-08-24) сохранена на `48e4d6c5f51e1ccd2311b52f5805616f183150a8`, без передвижения или удаления. Перед Step2 снова проверить cloud main, обе ветки и previous-values этой карты. Если с подготовки карты изменились только планы, записать новый candidate base, сохранив runtime baseline; любое отличие mapped runtime-полей или их окружения останавливает переключение до обновлённого preview.
+
+**Что пользователь согласует на Step2:** подключение пяти существующих процессов и только перечисленных статусных зависимостей. Конечный proposed aggregate `active` допустим только при готовых пяти maintenance + двух прежних email routes. Это не общий replace shadow→active. Если разрешена/готова лишь часть, на своей точной карте оставить `partial` и остальные маршруты paused; нельзя объявить полную активацию. Свежую readiness положительных/отрицательных путей доказывает Step3, а не эта таблица.
+
+| Маршрут | Сейчас | Предлагаемый workflow source | Существующие режимы |
+| --- | --- | --- | --- |
+| `library-maintenance` | `workflow-paused` | `workflow-library-maintenance` | `read-only / write` |
+| `component-onboarding` | `workflow-paused` | `workflow-component-onboarding` | `read-only / write` |
+| `figma-description-sync` | `workflow-paused` | `workflow-figma-description-sync` | `read-only / write` |
+| `figma-naming-audit` | `workflow-paused` | `workflow-figma-naming-audit` | `read-only / write` |
+| `migration-progress` | `workflow-paused` | `workflow-migration-progress` | `read-only` |
+
+**Точные изменяемые scalar fields:**27 полей в7 runtime-файлах. JSON pointers и порядок индексов относятся только к закреплённому A98; при новом base сначала перепроверить identity/previous-values. Оба списка источников профиля остаются одинаковыми по содержимому и порядку; замена выполняется только в прежнем элементе `workflow-paused`, остальные элементы, selections и IDs сохраняются.
+
+| Файл | JSON pointer на A98 | Previous | Proposed |
+| --- | --- | --- | --- |
+| `system/manifest.yaml` | `/routes/0/workflow_source_id` | `workflow-paused` | `workflow-library-maintenance` |
+| `system/manifest.yaml` | `/bundle_profiles/0/source_ids/4` | `workflow-paused` | `workflow-library-maintenance` |
+| `system/manifest.yaml` | `/bundle_profiles/0/generated_bundle/static_source_ids/4` | `workflow-paused` | `workflow-library-maintenance` |
+| `system/manifest.yaml` | `/bundle_profiles/0/generated_bundle/status` | `structured-shadow` | `structured-active` |
+| `data/workflows/library-maintenance.yaml` | `/workflow/status` | `shadow` | `active` |
+| `system/manifest.yaml` | `/routes/1/workflow_source_id` | `workflow-paused` | `workflow-component-onboarding` |
+| `system/manifest.yaml` | `/bundle_profiles/1/source_ids/5` | `workflow-paused` | `workflow-component-onboarding` |
+| `system/manifest.yaml` | `/bundle_profiles/1/generated_bundle/static_source_ids/5` | `workflow-paused` | `workflow-component-onboarding` |
+| `system/manifest.yaml` | `/bundle_profiles/1/generated_bundle/status` | `structured-shadow` | `structured-active` |
+| `data/workflows/component-onboarding.yaml` | `/workflow/status` | `shadow` | `active` |
+| `system/manifest.yaml` | `/routes/2/workflow_source_id` | `workflow-paused` | `workflow-figma-description-sync` |
+| `system/manifest.yaml` | `/bundle_profiles/2/source_ids/4` | `workflow-paused` | `workflow-figma-description-sync` |
+| `system/manifest.yaml` | `/bundle_profiles/2/generated_bundle/static_source_ids/4` | `workflow-paused` | `workflow-figma-description-sync` |
+| `system/manifest.yaml` | `/bundle_profiles/2/generated_bundle/status` | `structured-shadow` | `structured-active` |
+| `data/workflows/figma-description-sync.yaml` | `/workflow/status` | `shadow` | `active` |
+| `system/manifest.yaml` | `/routes/3/workflow_source_id` | `workflow-paused` | `workflow-figma-naming-audit` |
+| `system/manifest.yaml` | `/bundle_profiles/3/source_ids/2` | `workflow-paused` | `workflow-figma-naming-audit` |
+| `system/manifest.yaml` | `/bundle_profiles/3/generated_bundle/static_source_ids/2` | `workflow-paused` | `workflow-figma-naming-audit` |
+| `system/manifest.yaml` | `/bundle_profiles/3/generated_bundle/status` | `structured-shadow` | `structured-active` |
+| `data/workflows/figma-naming-audit.yaml` | `/workflow/status` | `shadow` | `active` |
+| `system/manifest.yaml` | `/routes/4/workflow_source_id` | `workflow-paused` | `workflow-migration-progress` |
+| `system/manifest.yaml` | `/bundle_profiles/4/source_ids/2` | `workflow-paused` | `workflow-migration-progress` |
+| `system/manifest.yaml` | `/bundle_profiles/4/generated_bundle/static_source_ids/2` | `workflow-paused` | `workflow-migration-progress` |
+| `system/manifest.yaml` | `/bundle_profiles/4/generated_bundle/status` | `structured-shadow` | `structured-active` |
+| `data/workflows/migration-progress.yaml` | `/workflow/status` | `shadow` | `active` |
+| `data/foundations/figma-naming.yaml` | `/foundation/status` | `shadow` | `active` |
+| `system/manifest.yaml` | `/structured_workflows/status` | `partial` | `active` |
+
+**Обоснование зависимостей:** `scripts/lib/system-manifest.mjs` проверяет route/profile/workflow и aggregate topology; `scripts/lib/skill-context.mjs` проверяет реальные bundle sources, mode и naming status; `scripts/lib/workflow-registry.mjs` требует active workflow и точный immutable handoff. `figma-naming` сейчас shadow, его status необходим для naming-route и naming-задач общей поддержки. Definitions/шаблоны/суффиксы @2x/@4x не меняются; typography/spacing/assets уже active и сохраняются. Schema versions, structured entries, workflow modes/steps/permissions и consumer code этим переключением не переписываются.
+
+**Производные изменения будущего activation candidate:**
+
+- `docs/generated/{library-maintenance,component-onboarding,figma-description-sync,figma-naming-audit,migration-progress,email-build}-checkpoint.md`: все6 outputs пересобираются существующим генератором. В каждом есть таблица всех маршрутов и source-digest manifest; изменение email-checkpoint не разрешает менять email workflow или HTML.
+- `docs/generated/naming-reference.md`: пересобирается header/source-digest foundation; универсальные определения сохраняются.
+- `docs/generated/component-registry.md`, `typography-registry.md`, `asset-registry.md` должны побайтово сохраниться: их собственные inputs не входят в7 runtime-файлов карты.
+- `README.md`: после фактического включения точечно обновить только текущие фразы о паузе поддержки и текущий handoff-status. Не добавлять новые правила или список будущих fixes. `workflows/system-paused.md` и его manifest registration не удаляются: conditional gate относится только к явно paused route и остаётся до отдельно разрешённого P6.
+- Conditional paused/authorization guards в skills не удалять. Любую конкретную устаревающую status-фразу сначала показать дословно old→new; тонкая маршрутизация/remote pin/bundle/authorization сохраняются. Эта карта не разрешает локальную перезапись навыков; Step5 — отдельное согласование backup/sync/discovery по фактическому byte diff.
+- Планы получают фактический candidate/merge/gate status; raw тестовые receipts, bundles и логи остаются локальными.
+
+**Сохранность:** оба email route records и их profile objects — побайтово как на A98; `data/workflows/email-build.yaml`, rendering/typography/spacing/assets foundations, renderer registry/code, components/schema/Core, Figma, конкретные email.html/images/versions и старые backup refs не входят в allowlist. Никаких live Figma writes, автоматического описания/переименования, onboarding реального блока, 5 fix1/2 или очистки. `migration-progress` остаётся read-only; write-режим у других workflows не даёт сам по себе согласия на отдельную операцию.
+
+**Будущие Step3 проверки, сейчас НЕ запущены:** все9 существующих route/mode combinations, exact delivered source closure и typed negative cases. CLI selections ниже — для контекстной проверки после согласованного переключения, не команды выполнить активный workflow сейчас:
+
+```text
+node scripts/resolve-skill-context.mjs --route library-maintenance --mode read-only --component email-header --viewport both --foundation figma-naming
+node scripts/resolve-skill-context.mjs --route library-maintenance --mode write --component email-header --viewport both --foundation figma-naming
+node scripts/resolve-skill-context.mjs --route component-onboarding --mode read-only --viewport both
+node scripts/resolve-skill-context.mjs --route component-onboarding --mode write --viewport both
+node scripts/resolve-skill-context.mjs --route figma-description-sync --mode read-only --component email-header --viewport both
+node scripts/resolve-skill-context.mjs --route figma-description-sync --mode write --component email-header --viewport both
+node scripts/resolve-skill-context.mjs --route figma-naming-audit --mode read-only --foundation figma-naming
+node scripts/resolve-skill-context.mjs --route figma-naming-audit --mode write --foundation figma-naming
+node scripts/resolve-skill-context.mjs --route migration-progress --mode read-only
+```
+
+Каждый результат должен иметь `resolved`, правильные route/workflow/mode/steps. Для onboarding resolver не является фактической приёмкой нового компонента: отдельный controlled handoff должен сохранять schema/factual-evidence gate; никакой реальный компонент этой картой не добавляется. Negative cases: missing/incorrect source, invalid mode, inactive naming, unauthorized mutation, unexpected readback diff и неверный aggregate/partial topology должны останавливать соответствующее действие с typed blocker. Read-only никогда не пишет. Для всех включаемых процессов подтверждается существующий authorization/preservation consumer, не только resolverstatus.
+
+**Тестовая карта будущего activation candidate:** использовать `tests/workflows/{structured-workflows,maintenance-cutover,maintenance-authorization}.test.mjs`, `tests/skills/{skill-context,skill-context-cli,cupis-email-task-router}.test.mjs`, `tests/foundation/system-manifest.test.mjs`. Существующие canonical assertions «только email active / maintenance shadow» после авторизованного изменения могут устареть: Terra классифицирует точные failures и обновляет только доказанные status expectations/fixtures по подтверждённой карте, не ослабляя негативные gates или HTML goldens. Дополнительный test path/production repair сначала получить отдельным impact preview, если он выходит из этой статусной области. Ни одного теста или expectation в Step1 не меняем.
+
+**Step4 перед отдельным merge:** один exact final local `npm run verify` (либо явно зафиксированный package-equivalent validator + полный Node suite при недоступном npm), `npm run generate:check`, применимые Windows bootstrap gates и один independent whole-branch review; source/allowed-diff/preserved-blob и обе email regression checks. Все routine/visual проверки — actual GPT-5.6 Terra Medium, no Actions/PR Checks. Состояние protected branch, требующее remote check, является blocker; не обходить. Docs-only карта проходит только scoped local gate, не выдаваемый за activation/full/visual/client acceptance.
+
+**Rollback после будущей активации, только по отдельному решению:** corrective/revert cloud PR возвращает ровно подтверждённые previous scalar values, scoped status-prose и пересобранные generated outputs; новые несвязанные коммиты и планы не затираются. Before/after route/profile/naming/aggregate и email-preservation проверяются локально на exact revert SHA, merge — отдельно. Не force-reset и не замена всего main на A98; Figma и локальные навыки автоматически не откатываются.
+
+**Следующий шаг:** Terra выполняет Step3 exact-candidate route/mode/source-closure и typed negatives, затем Step4 final local gate и независимое whole-branch review. Resolver не доказывает свежие MCP facts: empty/stale/misbound packets и неоднозначные semantics должны отдельно подтвердить no-write gate. Merge требует отдельного разрешения; local sync/Step5,5 fix1/2 иP6 не начаты. Глобальная очередь остаётся пакет5 → 5 fix1 → 5 fix2 → пакет6.
 
 ## После самостоятельного пакета 5 — отдельные пакеты 5 fix
 <a id="p5-fix-queue-2026-10-11"></a>

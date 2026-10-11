@@ -1,10 +1,10 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: workflow-checkpoint -->
-<!-- source-digest: sha256:93010d3af882bed295d12986038c197dbcd4cfab1fecebad691601865d249e73 -->
+<!-- source-digest: sha256:8a1f847bdec844d5d0288a2474337a19b1116c4a59688fecd2a6f03a70ae4cab -->
 <!-- schema-versions: manifest=1.3.0, workflows=1.0.0 -->
 # Workflow checkpoint: `library-maintenance`
 
-Status: `shadow`
+Status: `active`
 
 This is a generated reading projection of the structured workflow. It does not activate a route, authorize a write, or add a runtime instruction.
 
@@ -14,13 +14,13 @@ Canonical workflow: [workflow-library-maintenance](../../data/workflows/library-
 
 | Route | Assigned workflow source | Bundle status |
 | --- | --- | --- |
-| `component-onboarding` | `workflow-paused` | `structured-shadow` |
+| `component-onboarding` | `workflow-component-onboarding` | `structured-active` |
 | `email-continue-fix` | `workflow-email-build` | `structured-active` |
 | `email-new-build` | `workflow-email-build` | `structured-active` |
-| `figma-description-sync` | `workflow-paused` | `structured-shadow` |
-| `figma-naming-audit` | `workflow-paused` | `structured-shadow` |
-| `library-maintenance` | `workflow-paused` | `structured-shadow` |
-| `migration-progress` | `workflow-paused` | `structured-shadow` |
+| `figma-description-sync` | `workflow-figma-description-sync` | `structured-active` |
+| `figma-naming-audit` | `workflow-figma-naming-audit` | `structured-active` |
+| `library-maintenance` | `workflow-library-maintenance` | `structured-active` |
+| `migration-progress` | `workflow-migration-progress` | `structured-active` |
 
 The routing table describes current assignments only; workflow status is not a readiness guarantee.
 

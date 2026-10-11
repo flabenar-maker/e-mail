@@ -55,7 +55,7 @@ sources:
   - { id: generated-migration-progress-checkpoint, kind: generated, path: docs/generated/migration-progress-checkpoint.md }
   - { id: generated-email-build-checkpoint, kind: generated, path: docs/generated/email-build-checkpoint.md }
 structured_workflows:
-  status: partial
+  status: active
   schema_source_id: workflows-schema
   entries:
     - { id: library-maintenance, source_id: workflow-library-maintenance }
@@ -113,50 +113,50 @@ generated_docs:
     input_source_ids: [workflow-migration-progress, workflows-schema, manifest-schema, system-manifest]
 bundle_profiles:
   - id: library-maintenance
-    source_ids: [repository-readme, figma-library-standard, component-contract-standard, figma-component-description-standard, workflow-paused]
+    source_ids: [repository-readme, figma-library-standard, component-contract-standard, figma-component-description-standard, workflow-library-maintenance]
     generated_bundle:
-      status: structured-shadow
-      static_source_ids: [repository-readme, figma-library-standard, component-contract-standard, figma-component-description-standard, workflow-paused]
+      status: structured-active
+      static_source_ids: [repository-readme, figma-library-standard, component-contract-standard, figma-component-description-standard, workflow-library-maintenance]
       component_selection: optional
       viewport_selection: one-or-both
       foundation_selection: explicit-or-referenced
       allowed_foundation_ids: [typography, spacing, assets, figma-naming]
       required_foundation_ids: []
   - id: component-onboarding
-    source_ids: [repository-readme, figma-library-standard, component-contract-standard, figma-component-description-standard, components-schema, workflow-paused]
+    source_ids: [repository-readme, figma-library-standard, component-contract-standard, figma-component-description-standard, components-schema, workflow-component-onboarding]
     generated_bundle:
-      status: structured-shadow
-      static_source_ids: [repository-readme, figma-library-standard, component-contract-standard, figma-component-description-standard, components-schema, workflow-paused]
+      status: structured-active
+      static_source_ids: [repository-readme, figma-library-standard, component-contract-standard, figma-component-description-standard, components-schema, workflow-component-onboarding]
       component_selection: optional
       viewport_selection: both
       foundation_selection: explicit-or-referenced
       allowed_foundation_ids: [typography, spacing, assets, figma-naming]
       required_foundation_ids: []
   - id: figma-description-sync
-    source_ids: [repository-readme, figma-library-standard, component-contract-standard, figma-component-description-standard, workflow-paused]
+    source_ids: [repository-readme, figma-library-standard, component-contract-standard, figma-component-description-standard, workflow-figma-description-sync]
     generated_bundle:
-      status: structured-shadow
-      static_source_ids: [repository-readme, figma-library-standard, component-contract-standard, figma-component-description-standard, workflow-paused]
+      status: structured-active
+      static_source_ids: [repository-readme, figma-library-standard, component-contract-standard, figma-component-description-standard, workflow-figma-description-sync]
       component_selection: required
       viewport_selection: both
       foundation_selection: referenced
       allowed_foundation_ids: [typography, spacing, assets]
       required_foundation_ids: []
   - id: figma-naming-audit
-    source_ids: [repository-readme, figma-library-standard, workflow-paused]
+    source_ids: [repository-readme, figma-library-standard, workflow-figma-naming-audit]
     generated_bundle:
-      status: structured-shadow
-      static_source_ids: [repository-readme, figma-library-standard, workflow-paused]
+      status: structured-active
+      static_source_ids: [repository-readme, figma-library-standard, workflow-figma-naming-audit]
       component_selection: optional
       viewport_selection: none
       foundation_selection: explicit
       allowed_foundation_ids: [figma-naming]
       required_foundation_ids: [figma-naming]
   - id: migration-progress
-    source_ids: [repository-readme, migration-roadmap, workflow-paused]
+    source_ids: [repository-readme, migration-roadmap, workflow-migration-progress]
     generated_bundle:
-      status: structured-shadow
-      static_source_ids: [repository-readme, migration-roadmap, workflow-paused]
+      status: structured-active
+      static_source_ids: [repository-readme, migration-roadmap, workflow-migration-progress]
       component_selection: none
       viewport_selection: none
       foundation_selection: none
@@ -183,11 +183,11 @@ bundle_profiles:
       allowed_foundation_ids: [typography, spacing, assets]
       required_foundation_ids: []
 routes:
-  - { id: library-maintenance, workflow_source_id: workflow-paused, bundle_profile_id: library-maintenance }
-  - { id: component-onboarding, workflow_source_id: workflow-paused, bundle_profile_id: component-onboarding }
-  - { id: figma-description-sync, workflow_source_id: workflow-paused, bundle_profile_id: figma-description-sync }
-  - { id: figma-naming-audit, workflow_source_id: workflow-paused, bundle_profile_id: figma-naming-audit }
-  - { id: migration-progress, workflow_source_id: workflow-paused, bundle_profile_id: migration-progress }
+  - { id: library-maintenance, workflow_source_id: workflow-library-maintenance, bundle_profile_id: library-maintenance }
+  - { id: component-onboarding, workflow_source_id: workflow-component-onboarding, bundle_profile_id: component-onboarding }
+  - { id: figma-description-sync, workflow_source_id: workflow-figma-description-sync, bundle_profile_id: figma-description-sync }
+  - { id: figma-naming-audit, workflow_source_id: workflow-figma-naming-audit, bundle_profile_id: figma-naming-audit }
+  - { id: migration-progress, workflow_source_id: workflow-migration-progress, bundle_profile_id: migration-progress }
   - { id: email-new-build, workflow_source_id: workflow-email-build, bundle_profile_id: email-new-build }
   - { id: email-continue-fix, workflow_source_id: workflow-email-build, bundle_profile_id: email-continue-fix }
 skills:

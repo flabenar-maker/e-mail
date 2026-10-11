@@ -25,12 +25,12 @@ async function canonicalWorkflow(workflowId) {
   return loadWorkflowRegistry({ repoRoot, workflowId });
 }
 
-test("canonical manifest activates only email structured workflows", async () => {
+test("canonical manifest activates all structured workflows", async () => {
   const manifest = await loadSystemManifest({ repoRoot });
 
   assert.equal(manifest.schema_version, "1.3.0");
   assert.deepEqual(manifest.structured_workflows, {
-    status: "partial",
+    status: "active",
     schema_source_id: "workflows-schema",
     entries: [
       {
@@ -51,15 +51,15 @@ test("canonical manifest activates only email structured workflows", async () =>
     true,
   );
   assert.equal(
-    manifest.routes.filter(({ id }) => !id.startsWith("email-")).every(({ workflow_source_id }) => workflow_source_id === "workflow-paused"),
+    manifest.routes.filter(({ id }) => !id.startsWith("email-")).every(({ id, workflow_source_id }) => workflow_source_id === `workflow-${id}`),
     true,
   );
   for (const profile of manifest.bundle_profiles) {
     const email = profile.id.startsWith("email-");
-    assert.equal(profile.generated_bundle.status, email ? "structured-active" : "structured-shadow");
+    assert.equal(profile.generated_bundle.status, "structured-active");
     assert.deepEqual(profile.generated_bundle.static_source_ids, profile.source_ids);
-    assert.equal(profile.source_ids.includes("workflow-paused"), !email);
-    assert.equal(profile.source_ids.includes("workflow-email-build"), email);
+    assert.equal(profile.source_ids.includes("workflow-paused"), false);
+    assert.equal(profile.source_ids.includes(email ? "workflow-email-build" : `workflow-${profile.id}`), true);
   }
 });
 
@@ -69,7 +69,7 @@ test("loads exact maintenance and email workflow registries", async () => {
 
   assert.equal(maintenance.schema_version, "1.0.0");
   assert.equal(maintenance.workflow.id, "library-maintenance");
-  assert.equal(maintenance.workflow.status, "shadow");
+  assert.equal(maintenance.workflow.status, "active");
   assert.equal(email.workflow.status, "active");
   assert.deepEqual(
     maintenance.workflow.modes.map(({ id }) => id),
@@ -137,13 +137,13 @@ test("workflow schema and semantics reject unknown fields and unordered steps", 
   );
 });
 
-test("context bundles use structured-shadow and block archived source paths", async (t) => {
+test("context bundles use structured-active and block archived source paths", async (t) => {
   const canonical = await buildContextBundle({
     repoRoot,
     routeId: "migration-progress",
   });
   assert.equal(canonical.status, "resolved");
-  assert.equal(canonical.bundle.mode, "structured-shadow");
+  assert.equal(canonical.bundle.mode, "structured-active");
 
   const fixture = await createSystemFixture();
   t.after(fixture.cleanup);

@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "workflow": {
     "id": "migration-progress",
-    "status": "shadow",
+    "status": "active",
     "source_ids": [
       "repository-readme",
       "migration-roadmap"
