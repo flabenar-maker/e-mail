@@ -79,7 +79,7 @@ Store URLs: RuStore 461821467231807192, Google Play 533879077140969685, App Gall
 
 ## Документы этапов
 
-1. ../plans/2026-10-11-altcraft-delivery-form.md
-2. ../plans/2026-10-11-altcraft-mobile-html.md
-3. ../plans/2026-10-11-altcraft-export-format.md
-4. ../plans/2026-10-11-altcraft-service-rules.md
+1. ../plans/archive/2026-10-11-altcraft-delivery-form.md
+2. ../plans/archive/2026-10-11-altcraft-mobile-html.md
+3. ../plans/archive/2026-10-11-altcraft-export-format.md
+4. ../plans/archive/2026-10-11-altcraft-service-rules.md
