@@ -1,0 +1,384 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "execution-receipt",
+  "$defs": {
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "request_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_sha": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "artifact_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "executor_agent_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reviewer_agent_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reviewer_model": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reviewer_effort": {
+          "type": "string",
+          "minLength": 1
+        },
+        "review_mode": {
+          "enum": [
+            "independent-agent",
+            "independent-source-check"
+          ]
+        },
+        "primary_sources_reviewed": {
+          "type": "boolean"
+        },
+        "reviewed_refs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "digest": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "path",
+              "digest"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "requirement_results": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "ref": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "path": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "digest": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  }
+                },
+                "required": [
+                  "path",
+                  "digest"
+                ]
+              },
+              "status": {
+                "enum": [
+                  "accepted",
+                  "changes-required",
+                  "blocked"
+                ]
+              }
+            },
+            "required": [
+              "ref",
+              "status"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "status": {
+                "enum": [
+                  "open",
+                  "resolved"
+                ]
+              },
+              "message": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "id",
+              "status",
+              "message"
+            ]
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "verdict": {
+          "enum": [
+            "accepted",
+            "changes-required",
+            "blocked"
+          ]
+        }
+      },
+      "required": [
+        "schema_version",
+        "request_id",
+        "source_sha",
+        "artifact_digest",
+        "executor_agent_id",
+        "reviewer_agent_id",
+        "reviewer_model",
+        "reviewer_effort",
+        "review_mode",
+        "primary_sources_reviewed",
+        "reviewed_refs",
+        "requirement_results",
+        "findings",
+        "verdict"
+      ]
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "request_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_sha": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "workflow_sha": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{40}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "target": {
+          "enum": [
+            "local",
+            "github-hosted"
+          ]
+        },
+        "workload_results": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "signature": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "status": {
+                "enum": [
+                  "success",
+                  "failure",
+                  "cancelled",
+                  "timed_out",
+                  "infrastructure-error",
+                  "skipped"
+                ]
+              },
+              "exit_code": {
+                "type": "integer"
+              },
+              "input_digest": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "id",
+              "signature",
+              "status",
+              "exit_code"
+            ]
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "conclusion": {
+          "enum": [
+            "success",
+            "failure",
+            "cancelled",
+            "timed_out",
+            "infrastructure-error"
+          ]
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "digest": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "path",
+              "digest"
+            ]
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "artifact_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "event_sha": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "run_id": {
+          "type": "string",
+          "pattern": "^[0-9]+$"
+        },
+        "run_attempt": {
+          "type": "string",
+          "pattern": "^[0-9]+$"
+        }
+      },
+      "required": [
+        "schema_version",
+        "request_id",
+        "source_sha",
+        "workflow_sha",
+        "target",
+        "workload_results",
+        "conclusion",
+        "evidence_refs"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "target": {
+                "const": "github-hosted"
+              }
+            },
+            "required": [
+              "target"
+            ]
+          },
+          "then": {
+            "required": [
+              "event_sha",
+              "run_id",
+              "run_attempt"
+            ],
+            "properties": {
+              "workflow_sha": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{40}$"
+              },
+              "event_sha": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{40}$"
+              },
+              "run_id": {
+                "type": "string",
+                "pattern": "^[0-9]+$"
+              },
+              "run_attempt": {
+                "type": "string",
+                "pattern": "^[0-9]+$"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "workflow_sha": {
+                "type": "null"
+              }
+            },
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "event_sha"
+                  ],
+                  "properties": {
+                    "event_sha": {}
+                  }
+                },
+                {
+                  "required": [
+                    "run_id"
+                  ],
+                  "properties": {
+                    "run_id": {}
+                  }
+                },
+                {
+                  "required": [
+                    "run_attempt"
+                  ],
+                  "properties": {
+                    "run_attempt": {}
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/review"
+    },
+    {
+      "$ref": "#/$defs/verification"
+    }
+  ]
+}

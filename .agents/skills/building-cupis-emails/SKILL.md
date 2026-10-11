@@ -33,12 +33,14 @@ This preparation reads identity and routing data only; it does not authorize ass
 
 The resolver and handoff read execution files from repoRoot; they do not automatically fetch the pinned cloud commit. Before invoking either, verify that those files match the pinned cloud commit. Candidate tests use an authorized disposable exact-SHA verification snapshot, never a local authoring copy. If a matching execution environment cannot be verified, stop and report it; do not use an arbitrary checkout. This is an execution prerequisite, not a claim of an implemented runtime SHA gate.
 
-Use an available package runner for the same repository script. Prefer `npm`; if `npm` is unavailable but `pnpm` is available, use `pnpm`. If neither runner is available, stop and report the missing execution prerequisite. The command requires the chosen route and mode:
+Use an available package runner for the same repository script. Prefer npm; pnpm is also supported. With verified same-lock dependencies, direct Node is the equivalent when those runners are absent. The command requires the chosen route and mode:
 
 ```text
 npm run resolve:skill-context -- --route ROUTE --mode MODE
 # Or, when npm is unavailable:
 pnpm run resolve:skill-context --route ROUTE --mode MODE
+# Same-lock direct equivalent:
+node scripts/resolve-skill-context.mjs --route ROUTE --mode MODE
 ```
 
 Replace ROUTE and MODE with the classified values. For design-dependent work append `--viewport both` and repeat `--component ID` for each confirmed stable component ID, including the root. For other modes, component and viewport arguments must match the selected profile and available evidence.
@@ -47,10 +49,26 @@ Consume exactly one resolved bundle and only returned workflow.steps. A changed 
 
 When the manifest route is paused or the resolver reports SKILL_ROUTE_PAUSED, stop execution without a manual fallback; only read-only navigation is permitted. When the resolver returns blocked, report its diagnostics. A resolved route on an explicitly authorized candidate SHA permits that candidate test before merge. Production readiness still requires the acceptance and publication gates; a resolved status alone does not prove fidelity.
 
+<!-- CUPIS_EXECUTION_BINDING -->
+## Execution handoff
+
+After the domain gate, consult node scripts/resolve-execution-context.mjs --help for the short request/envelope contract; no full policy, schema, plan or other specialization is needed.
+Use the pinned snapshot with verified same-lock dependencies; npm ci --ignore-scripts is preferred, and the identical direct Node script is allowed when npm/pnpm is absent. Record actual dependency/lock evidence; never claim npm ci if it was not performed.
+Save the unchanged domain JSON in its source/route/mode/authorization envelope. Bind exact requirements, permitted outputs and actual artifacts with raw-byte SHA256 refs below one explicit reference root outside source.
+The coordinator records only actual declared spawn-tool capabilities for this runtime session/signature, then calls node scripts/resolve-execution-context.mjs --request REQUEST --capabilities CAPABILITIES --repo-root SNAPSHOT --reference-root EVIDENCE.
+To reuse a saved profile for workloads, request.profile_pair_key is REQUIRED alongside --pair-key or --local-binding-root. Obtain the trusted pair once per new chat with init-execution-profile.mjs --action read --state-root STATE --local-binding-root BIND, then reuse it; never infer trust from a copied wrapper or init/collect before tests. No-workload reads need no pair and touch no profile.
+The coordinator uses decision.executor and decision.review with real agent tools, explicit model/reasoning_effort and fork_turns=none; keep briefs bounded and overlapping writes sequential. The Node helper does not spawn agents.
+Bind the real executor_agent_id and final artifact refs by resolving again before acceptance. The reviewer inspects original requirements and actual permitted changes/sources, covers every requirement, and has a distinct real agent ID; executor confidence or test PASS is insufficient.
+A typed model/effort refusal refreshes the runtime choice through the helper; no arbitrary substitution, downgrade or model web search. Network failures are not model refusals.
+Selected portable verification uses node scripts/run-verification.mjs or node scripts/request-cloud-verification.mjs; unavailable cloud gives CLOUD_WORKFLOW_NOT_READY. Actual emails/images, installed discovery and live Figma remain local and are never uploaded automatically.
+Use node scripts/finalize-execution.mjs --help and finalize bound review/verification receipts. Missing local-only evidence remains blocked after green cloud results; local_offer is informational and never starts another run or collects hardware.
+Handoff includes source/route/mode, decision and actual agent IDs, bound artifacts/receipts, acceptance status and limitations. Paused/blocked domains, allowed outputs and separate merge/install permissions still control the task.
+<!-- END_CUPIS_EXECUTION_BINDING -->
+
 ## Operating boundaries
 
 No Figma mutation.
 No new-component design.
 No production email outputs committed to GitHub.
 No overwrite of a source email version.
-No GitHub Actions or PR Checks.
+Actual email verification stays local; PR Checks never replace receipts.

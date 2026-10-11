@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: workflow-checkpoint -->
-<!-- source-digest: sha256:8a1f847bdec844d5d0288a2474337a19b1116c4a59688fecd2a6f03a70ae4cab -->
+<!-- source-digest: sha256:0b93367dbd8ab018f0de01f5877a0c9854c05ce15e6c31c6952eb41288a61896 -->
 <!-- schema-versions: manifest=1.3.0, workflows=1.0.0 -->
 # Workflow checkpoint: `library-maintenance`
 
@@ -248,7 +248,7 @@ Not declared.
 - Condition: always
 - Sources: [repository-readme](../../README.md)
 - Required inputs: `repository-change`, `pinned-sha`
-- Blockers: `local-verification-failed`
+- Blockers: `execution-verification-failed`, `execution-acceptance-blocked`
 - Allowed outputs: `verification-summary`
 - Success handoff: `next`
 - Blocked handoff: `stop`

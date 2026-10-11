@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "runtime-capabilities",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "runtime_session_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tool_signature": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source": {
+      "const": "declared-runtime-tools"
+    },
+    "max_subagents": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "models": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "efforts": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "capabilities": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "text",
+                "code",
+                "vision"
+              ]
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "id",
+          "efforts",
+          "capabilities"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "refusals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "runtime_session_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "tool_signature": {
+            "type": "string",
+            "minLength": 1
+          },
+          "model": {
+            "type": "string",
+            "minLength": 1
+          },
+          "effort": {
+            "type": "string",
+            "minLength": 1
+          },
+          "code": {
+            "enum": [
+              "MODEL_UNAVAILABLE",
+              "EFFORT_UNAVAILABLE",
+              "CAPABILITY_UNAVAILABLE"
+            ]
+          }
+        },
+        "required": [
+          "runtime_session_id",
+          "tool_signature",
+          "model",
+          "effort",
+          "code"
+        ]
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "schema_version",
+    "runtime_session_id",
+    "tool_signature",
+    "source",
+    "max_subagents",
+    "models"
+  ]
+}

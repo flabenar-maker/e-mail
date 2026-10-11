@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: workflow-checkpoint -->
-<!-- source-digest: sha256:b05ad1152630d648a9a4adb772aca1e7145e0a445e177a1b420f075f555c0f81 -->
+<!-- source-digest: sha256:bce90e8114f30e04b05c8ae4b98c1cc6d8334da28d0aa7f0f9bff5b975fbe1e4 -->
 <!-- schema-versions: manifest=1.3.0, workflows=1.0.0 -->
 # Workflow checkpoint: `figma-naming-audit`
 
@@ -246,7 +246,7 @@ Not declared.
 - Condition: always
 - Sources: [repository-readme](../../README.md)
 - Required inputs: `repository-change`, `pinned-sha`
-- Blockers: `local-verification-failed`
+- Blockers: `execution-verification-failed`, `execution-acceptance-blocked`
 - Allowed outputs: `verification-summary`
 - Success handoff: `next`
 - Blocked handoff: `stop`

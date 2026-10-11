@@ -69,6 +69,12 @@ Require-Literal 'README.md' 'system/manifest.yaml' 'the canonical system manifes
 Require-Literal 'bootstrap/README.md' 'system/manifest.yaml' 'the canonical system manifest'
 Require-Literal '.agents/skills/maintaining-cupis-email-system/SKILL.md' 'system/manifest.yaml' 'the canonical system manifest'
 Require-Literal 'AGENTS.md' 'README.md' 'the project map'
+Require-Literal 'AGENTS.md' 'data/execution/policy.yaml' 'the canonical execution policy'
+Require-Literal 'bootstrap/README.md' 'resolve-execution-context.mjs --help' 'the bounded execution handoff'
+Require-Literal 'bootstrap/config.portable.toml' 'data/execution/policy.yaml' 'the execution policy owner'
+foreach ($specialization in @('building-cupis-emails', 'maintaining-cupis-email-system')) {
+    Require-Literal ".agents/skills/$specialization/SKILL.md" 'CUPIS_EXECUTION_BINDING' 'the thin execution binding'
+}
 Require-Literal 'AGENTS.md' 'bootstrap/README.md' 'the bootstrap entrypoint'
 Require-Literal '.gitattributes' '.agents/skills/** text eol=lf' 'LF normalization for repo-scoped skills'
 

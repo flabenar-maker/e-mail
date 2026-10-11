@@ -6,6 +6,13 @@ entrypoints:
   repository: README.md
   bootstrap: bootstrap/README.md
 sources:
+  - { id: machine-profile-schema, kind: schema, path: schemas/machine-profile.schema.json }
+  - { id: runtime-capabilities-schema, kind: schema, path: schemas/runtime-capabilities.schema.json }
+  - { id: execution-request-schema, kind: schema, path: schemas/execution-request.schema.json }
+  - { id: execution-decision-schema, kind: schema, path: schemas/execution-decision.schema.json }
+  - { id: execution-receipt-schema, kind: schema, path: schemas/execution-receipt.schema.json }
+  - { id: execution-policy, kind: registry, path: data/execution/policy.yaml }
+  - { id: execution-policy-schema, kind: schema, path: schemas/execution-policy.schema.json }
   - { id: system-manifest, kind: entrypoint, path: system/manifest.yaml }
   - { id: repository-readme, kind: entrypoint, path: README.md }
   - { id: bootstrap-readme, kind: entrypoint, path: bootstrap/README.md }

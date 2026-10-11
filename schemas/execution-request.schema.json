@@ -1,0 +1,162 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "execution-request",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "request_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_sha": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{40}$"
+    },
+    "route": {
+      "type": "string",
+      "minLength": 1
+    },
+    "mode": {
+      "type": "string",
+      "minLength": 1
+    },
+    "executor_agent_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "domain_context_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "path",
+        "digest"
+      ]
+    },
+    "task_kind": {
+      "type": "string",
+      "minLength": 1
+    },
+    "operation": {
+      "enum": [
+        "read",
+        "write"
+      ]
+    },
+    "allowed_paths": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "requirement_refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "digest": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "required": [
+          "path",
+          "digest"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "artifact_refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "digest": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "required": [
+          "path",
+          "digest"
+        ]
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "workload_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "input_refs": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "digest": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "required": [
+          "path",
+          "digest"
+        ]
+      }
+    },
+    "profile_pair_key": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": [
+    "schema_version",
+    "request_id",
+    "source_sha",
+    "route",
+    "mode",
+    "domain_context_ref",
+    "task_kind",
+    "operation",
+    "allowed_paths",
+    "requirement_refs",
+    "artifact_refs",
+    "workload_ids"
+  ]
+}
