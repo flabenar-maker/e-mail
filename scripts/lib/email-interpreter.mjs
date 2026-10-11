@@ -119,6 +119,11 @@ function propsFromFacts(facts = [], { viewport, mode, isRoot = false, parentAxis
       props.width = size.width;
     }
   }
+  // A native Fill link occupies the same text column in either viewport.
+  if (mode === "html-link" && sizing === "fill") {
+    props.style.display = "block";
+    props.style.width = "100%";
+  }
   // Email-only geometry keeps exported artwork at its actual displayed size.
   const emailSize = fact("email-render-size");
   if (emailSize?.type === "dimensions") {
