@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: component-registry -->
-<!-- source-digest: sha256:cea9316180aeee833f896669c7ed84485fd4310e21506bfaf2a3afd732186806 -->
+<!-- source-digest: sha256:ebc00c163e4f566356a012f1b7c2d299a4f3a5fecc6ba190421f73799e3979ed -->
 <!-- schema-versions: components=2.3.0, typography=1.0.0, spacing=1.0.0, assets=1.0.0 -->
 # CUPIS component registry
 
@@ -6632,7 +6632,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#326:5580` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
-- Figma source check: `figma-source-recorded` on `2026-10-11`; Поля structure_fingerprint, verified_at (2026-09-06) и contracts.source_variants сохранены как исторический снимок и не подтверждают обновлённую структуру. checked_at относится только к scoped-сверке значений/properties и ограниченному composite topology/source identity: candidate bc277c341c7e84f119c87095e67577bb58514805, receipt verification/final-scoped-source-composite-bc277-valid.json (SHA256 0b07290b43ffcea9716301d239e0da58985339b52d2b258e40225d704bd193c6). 2187 direct mappings (4 native TEXT sidecar facts) проверены на e1e7c9a6d9f94d9e83d28d47845f8b7b4878a490; semantic contracts на bc277 неизменны, отличаются verification metadata. v3 подтверждает 142 native node/order и 6 Boolean bindings; v4 и фактическое compact MCP-чтение 30 instance/main/owner записей подтверждают ancestry 6 projected wrappers; отдельный expert primary review подтверждает этот ограниченный состав. v2 исторический и недостаточный для topology proof, ретроспективно не повышен до PASS. Исходные raw packets/native errors и прежние native-evidence omissions сохранены; whole-origin/whole-library, historical source_variants и HTML/visual/full-test приёмка не заявлены.
+- Figma source check: `figma-source-recorded` on `2026-10-11`; Поля structure_fingerprint, verified_at (2026-09-06) и contracts.source_variants сохранены как исторический снимок и не подтверждают обновлённую структуру. checked_at относится только к scoped-сверке значений/properties и ограниченному composite topology/source identity: candidate bc277c341c7e84f119c87095e67577bb58514805, receipt verification/final-scoped-source-composite-bc277-valid.json (SHA256 0b07290b43ffcea9716301d239e0da58985339b52d2b258e40225d704bd193c6). 2187 direct mappings (4 native TEXT sidecar facts) проверены на e1e7c9a6d9f94d9e83d28d47845f8b7b4878a490; semantic contracts на bc277 неизменны, отличаются verification metadata. v3 подтверждает 142 native node/order и 6 Boolean bindings; v4 и фактическое compact MCP-чтение 30 instance/main/owner записей подтверждают ancestry 6 projected wrappers; отдельный expert primary review подтверждает этот ограниченный состав. v2 исторический и недостаточный для topology proof, ретроспективно не повышен до PASS. Исходные raw packets/native errors и прежние native-evidence omissions сохранены; whole-origin/whole-library, historical source_variants и HTML/visual/full-test приёмка не заявлены. Последующее source-grounded уточнение Card/Icon: Mobile1015:18749 и Desktop1015:18846 получают по двум отсутствовавшим horizontal-sizing=fill/vertical-sizing=hug фактам и четырём direct links из исходного native TEXT sidecar (FILL/HUG/STRETCH). Единственное исключение из прежнего Mobile byte-preservation — эти два link sizing annotations; остальные Mobile geometry/assets/styles/visibility/href сохранены. Исторический bc277 composite остаётся на собственном pin и не подтверждает это последующее дополнение. Новый общий объём2191 mappings ожидает отдельной фактической проверки; checked_at не объявляет новый audit/visual/full PASS.
 - Structure fingerprint: `sha256:a36c2a891344e693c283d021aca44c4eea77cc087823eec968327605d84f7a6c`
 - Purpose: Карточка с графической иконкой, живым текстом и необязательной ссылкой.
 
@@ -6756,6 +6756,8 @@ RENDER: HTML
       - Fact `figma-style-name`: `Desktop/Action`; provenance: `figma-literal` at `1015:18846`
       - Fact `font-weight`: `500`; provenance: `figma-literal` at `1015:18846`
       - Fact `layout-align`: `stretch`; provenance: `figma-literal` at `1015:18846`
+      - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `1015:18846`
+      - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `1015:18846`
 
 ### Mobile
 
@@ -6852,6 +6854,8 @@ RENDER: HTML
       - Fact `figma-style-name`: `Mobile/Action`; provenance: `figma-literal` at `1015:18749`
       - Fact `font-weight`: `500`; provenance: `figma-literal` at `1015:18749`
       - Fact `layout-align`: `stretch`; provenance: `figma-literal` at `1015:18749`
+      - Fact `horizontal-sizing`: `fill`; provenance: `figma-literal` at `1015:18749`
+      - Fact `vertical-sizing`: `hug`; provenance: `figma-literal` at `1015:18749`
 
 ### Properties and variants
 
