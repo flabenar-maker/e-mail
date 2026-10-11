@@ -257,7 +257,30 @@
         "card-icon": "Карточка с иконкой",
         "cards-images": "Карточки с изображениями",
         "icon-cards": "Карточки с иконками",
-        "icon-list": "Список с иконками"
+        "icon-list": "Список с иконками",
+        "banner-hero": "Главный баннер",
+        "banner-inline": "Баннер внутри письма",
+        "block-cards-images": "Карточки с изображениями",
+        "block-icon-cards": "Карточки с иконками",
+        "block-icon-list": "Список с иконками",
+        "block-steps": "Пошаговая инструкция",
+        "block-content": "Текстовый блок",
+        "block-bullet-list": "Список пунктов",
+        "block-info-alert": "Информационный блок",
+        "button-primary": "Основная кнопка",
+        "button-secondary": "Дополнительная кнопка",
+        "block-transaction-success": "Успешная операция",
+        "block-transaction-error": "Ошибка операции",
+        "block-contact-support": "Обращение в поддержку",
+        "block-personal-data-update": "Обновление персональных данных",
+        "block-receipt-info": "Информация о чеке",
+        "banner-fiscal-check-link": "Ссылка на чек",
+        "block-instruction-steps": "Инструкция по шагам",
+        "details-transfer": "Данные перевода",
+        "details-suspicious-operation": "Данные подозрительной операции",
+        "details-operation-plain": "Данные операции",
+        "details-receipt": "Данные чека",
+        "details-operation": "Данные операции"
       }
     }
   ]
