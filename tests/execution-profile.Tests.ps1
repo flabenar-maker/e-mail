@@ -37,18 +37,25 @@ console.log('PASS: external persistent profile, repeat init and 100 reads; synth
     if ($parseErrors.Count -gt 0) { throw 'Collector is incompatible with this PowerShell parser.' }
     # Synthetic query functions intercept both CIM reads; invalid temp path prevents
     # any actual disk query even on the intentionally failing pre-fix implementation.
-    $script:denialQueries = 0
+    # The collector runs as a child script scope. Keep the injected probe in the
+    # global session scope so the mock and this harness observe the same counter.
+    $global:cupisExecutionProfileDeniedQueryCount = 0
     function Get-CimInstance {
         param($ClassName, $Property, $OperationTimeoutSec)
-        $script:denialQueries++
+        $global:cupisExecutionProfileDeniedQueryCount++
         throw [System.UnauthorizedAccessException]::new('Synthetic denied observation')
     }
     $denialPropagated = $false
     try {
         & $collectorPath -NodeExecutable 'COLLECTOR_MUST_NOT_RUN' -TemporaryRoot ([string][char]0) | Out-Null
     } catch { $denialPropagated = $true }
-    finally { Remove-Item -LiteralPath 'Function:\Get-CimInstance' }
-    if (-not $denialPropagated -or $script:denialQueries -ne 1) { throw 'Collector must stop on the first denied query and propagate unavailable; no retry.' }
+    finally {
+        Remove-Item -LiteralPath 'Function:\Get-CimInstance'
+        $denialQueries = $global:cupisExecutionProfileDeniedQueryCount
+        Remove-Variable -Name cupisExecutionProfileDeniedQueryCount -Scope Global
+    }
+    if (-not $denialPropagated) { throw 'Collector must propagate the first denied query.' }
+    if ($denialQueries -ne 1) { throw 'Collector must stop after exactly one denied query; no later query or retry is allowed.' }
     Write-Output '[PASS] Execution profile contract passed; actual hardware was not sampled.'
 } finally {
     $resolvedTemporaryRoot = [System.IO.Path]::GetFullPath($temporaryRoot)
