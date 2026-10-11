@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: component-registry -->
-<!-- source-digest: sha256:ebc00c163e4f566356a012f1b7c2d299a4f3a5fecc6ba190421f73799e3979ed -->
+<!-- source-digest: sha256:bec3f94d28cd0525331003ec5a6a4c92225cb8e325d2a3ae0ae350a593433eab -->
 <!-- schema-versions: components=2.3.0, typography=1.0.0, spacing=1.0.0, assets=1.0.0 -->
 # CUPIS component registry
 
@@ -4592,7 +4592,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#946:26516` (`component-set`)
 - Source root: `538:17236`
 - Verified: `2026-09-06`
-- Figma source check: `figma-source-recorded` on `2026-10-11`; Поля structure_fingerprint, verified_at (2026-09-06) и contracts.source_variants сохранены как исторический снимок и не подтверждают обновлённую структуру. checked_at относится только к scoped-сверке значений/properties и ограниченному composite topology/source identity: candidate bc277c341c7e84f119c87095e67577bb58514805, receipt verification/final-scoped-source-composite-bc277-valid.json (SHA256 0b07290b43ffcea9716301d239e0da58985339b52d2b258e40225d704bd193c6). 2187 direct mappings (4 native TEXT sidecar facts) проверены на e1e7c9a6d9f94d9e83d28d47845f8b7b4878a490; semantic contracts на bc277 неизменны, отличаются verification metadata. v3 подтверждает 142 native node/order и 6 Boolean bindings; v4 и фактическое compact MCP-чтение 30 instance/main/owner записей подтверждают ancestry 6 projected wrappers; отдельный expert primary review подтверждает этот ограниченный состав. v2 исторический и недостаточный для topology proof, ретроспективно не повышен до PASS. Исходные raw packets/native errors и прежние native-evidence omissions сохранены; whole-origin/whole-library, historical source_variants и HTML/visual/full-test приёмка не заявлены.
+- Figma source check: `figma-source-recorded` on `2026-10-11`; Поля structure_fingerprint, verified_at (2026-09-06) и contracts.source_variants сохранены как исторический снимок и не подтверждают обновлённую структуру. checked_at относится только к scoped-сверке значений/properties и ограниченному composite topology/source identity: candidate bc277c341c7e84f119c87095e67577bb58514805, receipt verification/final-scoped-source-composite-bc277-valid.json (SHA256 0b07290b43ffcea9716301d239e0da58985339b52d2b258e40225d704bd193c6). 2187 direct mappings (4 native TEXT sidecar facts) проверены на e1e7c9a6d9f94d9e83d28d47845f8b7b4878a490; semantic contracts на bc277 неизменны, отличаются verification metadata. v3 подтверждает 142 native node/order и 6 Boolean bindings; v4 и фактическое compact MCP-чтение 30 instance/main/owner записей подтверждают ancestry 6 projected wrappers; отдельный expert primary review подтверждает этот ограниченный состав. v2 исторический и недостаточный для topology proof, ретроспективно не повышен до PASS. Исходные raw packets/native errors и прежние native-evidence omissions сохранены; whole-origin/whole-library, historical source_variants и HTML/visual/full-test приёмка не заявлены. Последующее source-grounded дополнение Icon-List:12 существующих graphic nodes получают24 отсутствовавших native horizontal/vertical-sizing=fixed facts и24 direct mappings из исходного capture-block-icon-list.json (SHA256 bda6b0aae69c9c18dfd384645779652c4c1965f89ebf3bc406eac1d8fa350a91); reference sizes42Mobile/56Desktop, asset identities/exports и raw packet неизменны. Исторические e1/bc277/source receipts сохраняют свои pins и не выданы за приёмку дополнения. Новый ожидаемый общий объём2215 mappings требует фактического candidate audit; текущий checked_at не заявляет новый GREEN/browser/full PASS.
 - Structure fingerprint: `sha256:758ae01e42519336077861f93e6c60cd8cfaec0784c8b97bc0d2017ea295f547`
 - Purpose: Контентный блок со списком строк, каждая из которых использует графическую иконку и живой текст.
 
@@ -4704,6 +4704,8 @@ RENDER: HTML
             - Fact `reference-size`: `56×56px`; provenance: `figma-literal` at `1015:18565`
             - Fact `border-radius`: `0px`; provenance: `figma-literal` at `1015:18565`
             - Fact `clip-content`: `true`; provenance: `figma-literal` at `1015:18565`
+            - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `1015:18565`
+            - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `1015:18565`
         - `root-content-area-items-item-01-text-content` — role `text-content`; render `presentation-table`; visibility `always`
           - Fact `reference-size`: `408×50px`; provenance: `figma-literal` at `946:26220`
           - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `946:26220`
@@ -4773,6 +4775,8 @@ RENDER: HTML
             - Fact `reference-size`: `56×56px`; provenance: `figma-literal` at `1802:3513`
             - Fact `border-radius`: `0px`; provenance: `figma-literal` at `1802:3513`
             - Fact `clip-content`: `true`; provenance: `figma-literal` at `1802:3513`
+            - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `1802:3513`
+            - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `1802:3513`
         - `root-content-area-items-item-02-text-content` — role `text-content`; render `presentation-table`; visibility `always`
           - Fact `reference-size`: `408×50px`; provenance: `figma-literal` at `946:26370`
           - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `946:26370`
@@ -4842,6 +4846,8 @@ RENDER: HTML
             - Fact `reference-size`: `56×56px`; provenance: `figma-literal` at `1802:3523`
             - Fact `border-radius`: `0px`; provenance: `figma-literal` at `1802:3523`
             - Fact `clip-content`: `true`; provenance: `figma-literal` at `1802:3523`
+            - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `1802:3523`
+            - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `1802:3523`
         - `root-content-area-items-item-03-text-content` — role `text-content`; render `presentation-table`; visibility `always`
           - Fact `reference-size`: `408×50px`; provenance: `figma-literal` at `946:26470`
           - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `946:26470`
@@ -4911,6 +4917,8 @@ RENDER: HTML
             - Fact `reference-size`: `56×56px`; provenance: `figma-literal` at `1802:3533`
             - Fact `border-radius`: `0px`; provenance: `figma-literal` at `1802:3533`
             - Fact `clip-content`: `true`; provenance: `figma-literal` at `1802:3533`
+            - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `1802:3533`
+            - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `1802:3533`
         - `root-content-area-items-item-04-text-content` — role `text-content`; render `presentation-table`; visibility `always`
           - Fact `reference-size`: `408×50px`; provenance: `figma-literal` at `946:26480`
           - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `946:26480`
@@ -4980,6 +4988,8 @@ RENDER: HTML
             - Fact `reference-size`: `56×56px`; provenance: `figma-literal` at `1802:3567`
             - Fact `border-radius`: `0px`; provenance: `figma-literal` at `1802:3567`
             - Fact `clip-content`: `true`; provenance: `figma-literal` at `1802:3567`
+            - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `1802:3567`
+            - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `1802:3567`
         - `root-content-area-items-item-05-text-content` — role `text-content`; render `presentation-table`; visibility `always`
           - Fact `reference-size`: `408×50px`; provenance: `figma-literal` at `946:26490`
           - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `946:26490`
@@ -5049,6 +5059,8 @@ RENDER: HTML
             - Fact `reference-size`: `56×56px`; provenance: `figma-literal` at `1802:3577`
             - Fact `border-radius`: `0px`; provenance: `figma-literal` at `1802:3577`
             - Fact `clip-content`: `true`; provenance: `figma-literal` at `1802:3577`
+            - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `1802:3577`
+            - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `1802:3577`
         - `root-content-area-items-item-06-text-content` — role `text-content`; render `presentation-table`; visibility `always`
           - Fact `reference-size`: `408×50px`; provenance: `figma-literal` at `946:26500`
           - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `946:26500`
@@ -5205,6 +5217,8 @@ RENDER: HTML
           - Fact `reference-size`: `42×42px`; provenance: `figma-literal` at `1015:18589`
           - Fact `border-radius`: `0px`; provenance: `figma-literal` at `1015:18589`
           - Fact `clip-content`: `true`; provenance: `figma-literal` at `1015:18589`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `1015:18589`
+          - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `1015:18589`
       - `root-content-area-item-01-text-content` — role `text-content`; render `presentation-table`; visibility `always`
         - Fact `reference-size`: `194×40px`; provenance: `figma-literal` at `946:26092`
         - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `946:26092`
@@ -5274,6 +5288,8 @@ RENDER: HTML
           - Fact `reference-size`: `42×42px`; provenance: `figma-literal` at `1015:18593`
           - Fact `border-radius`: `0px`; provenance: `figma-literal` at `1015:18593`
           - Fact `clip-content`: `true`; provenance: `figma-literal` at `1015:18593`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `1015:18593`
+          - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `1015:18593`
       - `root-content-area-item-02-text-content` — role `text-content`; render `presentation-table`; visibility `always`
         - Fact `reference-size`: `194×40px`; provenance: `figma-literal` at `946:26420`
         - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `946:26420`
@@ -5343,6 +5359,8 @@ RENDER: HTML
           - Fact `reference-size`: `42×42px`; provenance: `figma-literal` at `1015:18597`
           - Fact `border-radius`: `0px`; provenance: `figma-literal` at `1015:18597`
           - Fact `clip-content`: `true`; provenance: `figma-literal` at `1015:18597`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `1015:18597`
+          - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `1015:18597`
       - `root-content-area-item-03-text-content` — role `text-content`; render `presentation-table`; visibility `always`
         - Fact `reference-size`: `194×40px`; provenance: `figma-literal` at `946:26430`
         - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `946:26430`
@@ -5412,6 +5430,8 @@ RENDER: HTML
           - Fact `reference-size`: `42×42px`; provenance: `figma-literal` at `1015:18601`
           - Fact `border-radius`: `0px`; provenance: `figma-literal` at `1015:18601`
           - Fact `clip-content`: `true`; provenance: `figma-literal` at `1015:18601`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `1015:18601`
+          - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `1015:18601`
       - `root-content-area-item-04-text-content` — role `text-content`; render `presentation-table`; visibility `always`
         - Fact `reference-size`: `194×40px`; provenance: `figma-literal` at `946:26440`
         - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `946:26440`
@@ -5481,6 +5501,8 @@ RENDER: HTML
           - Fact `reference-size`: `42×42px`; provenance: `figma-literal` at `1015:18605`
           - Fact `border-radius`: `0px`; provenance: `figma-literal` at `1015:18605`
           - Fact `clip-content`: `true`; provenance: `figma-literal` at `1015:18605`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `1015:18605`
+          - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `1015:18605`
       - `root-content-area-item-05-text-content` — role `text-content`; render `presentation-table`; visibility `always`
         - Fact `reference-size`: `194×40px`; provenance: `figma-literal` at `946:26460`
         - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `946:26460`
@@ -5550,6 +5572,8 @@ RENDER: HTML
           - Fact `reference-size`: `42×42px`; provenance: `figma-literal` at `1015:18609`
           - Fact `border-radius`: `0px`; provenance: `figma-literal` at `1015:18609`
           - Fact `clip-content`: `true`; provenance: `figma-literal` at `1015:18609`
+          - Fact `horizontal-sizing`: `fixed`; provenance: `figma-literal` at `1015:18609`
+          - Fact `vertical-sizing`: `fixed`; provenance: `figma-literal` at `1015:18609`
       - `root-content-area-item-06-text-content` — role `text-content`; render `presentation-table`; visibility `always`
         - Fact `reference-size`: `194×40px`; provenance: `figma-literal` at `946:26450`
         - Fact `layout-axis`: `vertical`; provenance: `figma-literal` at `946:26450`
