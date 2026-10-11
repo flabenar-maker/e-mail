@@ -12,9 +12,9 @@
 
 ## Статус реализации
 
-Код опубликован в draft [PR №119](https://github.com/flabenar-maker/e-mail/pull/119); итоговая локальная приёмка ещё выполняется. Реализованы безопасная структурная запись HTML, точный пересчёт ресурсных путей, текстовая версия, полный ZIP с каталогами email/ и images/ и атомарная публикация. В HTML пакета изображения адресуются через ../images/; HTML повторно сериализуется после пересчёта путей. Значения отправителя при наследовании не заменяются пустыми файлами.
+Код опубликован в draft [PR №119](https://github.com/flabenar-maker/e-mail/pull/119); локальная кодовая приёмка завершена. Реализованы безопасная структурная запись HTML, точный пересчёт ресурсных путей, текстовая версия, полный ZIP с каталогами email/ и images/ и атомарная публикация. В HTML пакета изображения адресуются через ../images/; HTML повторно сериализуется после пересчёта путей. Значения отправителя при наследовании не заменяются пустыми файлами.
 
-Исторические source/Figma/install pins сохранены. Установленные тонкие навыки менять или переустанавливать не требуется: восстановление получает зарегистрированные источники и обновлённый workflow. Внешняя проверка импорта, отправки и почтовых клиентов — not-run; слияние PR не выполнено.
+Исторические source/Figma/install pins сохранены. При следующем запуске выпуск выбирается через system_commit этой версии и зарегистрированные manifest sources; SKILL.md не менялся, поэтому переустановка не требовалась. Это проверенная организация источников, а не новая приёмка установки или discovery. Внешняя проверка импорта, отправки и почтовых клиентов — not-run; слияние PR не выполнено.
 
 ## Global Constraints
 
@@ -55,13 +55,13 @@
 
 blockBoundaries содержит подтверждённые границы emitted блоков/экземпляров. protectedFragments адресует служебные фрагменты и текстовые острова. Они создаются из emission-происхождения, не из угадывания по маркетинговым текстам. Предусмотрен lossless scanner контролируемой HTML-грамматики: кавычки атрибутов, raw style payload и conditional comments учитываются до поиска границ. Никакого browser DOM parse → outerHTML, который нормализует шаблоны или MSO.
 
-- [ ] Зафиксировать cases structural-lines-not-one-stream, inline-text-is-byte-preserved, attributes-and-urls-unchanged, mso-fragment-unchanged, padding-codepoints-unchanged, serialization-is-idempotent. Для protected fragment assert.equal(afterSlice, beforeSlice); для повторного вызова assert.equal(second.html, first.html).
-- [ ] Читать токены с сохранением исходных байтов. Добавлять indentation/LF на безопасных table/tbody/tr/td границах и между отдельными блоками; не пересобирать открывающие теги из attribute map.
-- [ ] Максимальные текстовые и inline-острова сохранять без внутреннего форматирования. Leaf cell с прямым текстом не получает добавленных текстовых whitespace. Не разрезать соседние inline elements, в том числе элементы кнопок icon+text.
-- [ ] Protected MSO/VML и preheader fragments расположить в структуре документа без изменения их внутренней записи. Комментарии границ блоков делать короткими и понятными; не вставлять их между частями inline-текста.
-- [ ] Генерируемый обычный CSS записывать отдельным style-блоком с границами правил/деклараций из их структурного построителя. Существующие непрозрачные payload CSS не переформатировать. Переносы внутри quoted URL и значений запрещены.
-- [ ] Предупреждение синтаксиса сериализации останавливает final release, а не запускает generic formatter fallback. После сериализации повторно измерять финальный HTML/CSS, учитывая добавленные байты.
-- [ ] Terra выполняет node --test tests/rendering/email-html-serializer.test.mjs. Готово: структурная запись и сохранность payload доказаны локально.
+- [x] Зафиксировать cases structural-lines-not-one-stream, inline-text-is-byte-preserved, attributes-and-urls-unchanged, mso-fragment-unchanged, padding-codepoints-unchanged, serialization-is-idempotent. Для protected fragment assert.equal(afterSlice, beforeSlice); для повторного вызова assert.equal(second.html, first.html).
+- [x] Читать токены с сохранением исходных байтов. Добавлять indentation/LF на безопасных table/tbody/tr/td границах и между отдельными блоками; не пересобирать открывающие теги из attribute map.
+- [x] Максимальные текстовые и inline-острова сохранять без внутреннего форматирования. Leaf cell с прямым текстом не получает добавленных текстовых whitespace. Не разрезать соседние inline elements, в том числе элементы кнопок icon+text.
+- [x] Protected MSO/VML и preheader fragments расположить в структуре документа без изменения их внутренней записи. Комментарии границ блоков делать короткими и понятными; не вставлять их между частями inline-текста.
+- [x] Генерируемый обычный CSS записывать отдельным style-блоком с границами правил/деклараций из их структурного построителя. Существующие непрозрачные payload CSS не переформатировать. Переносы внутри quoted URL и значений запрещены.
+- [x] Предупреждение синтаксиса сериализации останавливает final release, а не запускает generic formatter fallback. После сериализации повторно измерять финальный HTML/CSS, учитывая добавленные байты.
+- [x] Terra выполняет node --test tests/rendering/email-html-serializer.test.mjs. Готово: структурная запись и сохранность payload доказаны локально.
 
 ## Задача 2 Все ресурсные ссылки и rebasing
 
@@ -73,11 +73,11 @@ blockBoundaries содержит подтверждённые границы emi
 
 ResourceReference: kind, source_start, source_end, raw_value, resolved_asset_path. Реальная замена выполняется по точным диапазонам в обратном порядке. htmlEntry='email/html.html', assetRootEntry='images'. Нельзя заменить похожую строку внутри href, обычного текста, macro или постороннего CSS.
 
-- [ ] Зафиксировать references-cover-img-css-background-and-vml, exact-case-is-required, rebase-keeps-url-escaping, undeclared-asset-rejected, output-path-remains-inside-package. src/background/CSS url/VML получают адрес ../images/<имя>; нересурсный href с похожим текстом остаётся прежним.
-- [ ] Поддержать одинарные/двойные кавычки, HTML entity decoding при сопоставлении ресурса и сохранение нужного quoting при записи. Не разрешать произвольный ../ на уровне email-model или validate-local-src.
-- [ ] Проверить каждый target по нормализованному пути, существованию объявленного файла и точному case. Отказаться от абсолютного пути, backslash, URL схемы для локального ресурса и выхода из package root.
-- [ ] Сохранить byte hash копируемых изображений. CSS background и VML reference должны ссылаться на тот же файл, что и fallback img.
-- [ ] Terra выполняет node --test tests/rendering/email-resource-references.test.mjs. Готово: пути корректны для нового расположения HTML без ослабления старых защит.
+- [x] Зафиксировать references-cover-img-css-background-and-vml, exact-case-is-required, rebase-keeps-url-escaping, undeclared-asset-rejected, output-path-remains-inside-package. src/background/CSS url/VML получают адрес ../images/<имя>; нересурсный href с похожим текстом остаётся прежним.
+- [x] Поддержать одинарные/двойные кавычки, HTML entity decoding при сопоставлении ресурса и сохранение нужного quoting при записи. Не разрешать произвольный ../ на уровне email-model или validate-local-src.
+- [x] Проверить каждый target по нормализованному пути, существованию объявленного файла и точному case. Отказаться от абсолютного пути, backslash, URL схемы для локального ресурса и выхода из package root.
+- [x] Сохранить byte hash копируемых изображений. CSS background и VML reference должны ссылаться на тот же файл, что и fallback img.
+- [x] Terra выполняет node --test tests/rendering/email-resource-references.test.mjs. Готово: пути корректны для нового расположения HTML без ослабления старых защит.
 
 ## Задача 3 Текстовая версия и полный файл-набор
 
@@ -89,12 +89,12 @@ ResourceReference: kind, source_start, source_end, raw_value, resolved_asset_pat
 
 assetBuffers содержит уже проверенные declared path → bytes. entries не содержит абсолютных файловых путей, данных формы или служебного отчёта. subject обязателен в final; optional sender/reply_to файлы создаются только для явно заданных значений. is_amp.txt='false', is_not_inline.txt='true'.
 
-- [ ] Зафиксировать plain-text-is-not-duplicated-by-viewports, plain-text-excludes-hidden-service-fragments, unsub-is-present-in-both-versions, inherited-sender-files-are-omitted, full-format-not-mixed-with-simple.
-- [ ] Генерировать text.txt из логического содержания и действий, не из regex strip tags двух готовых viewport-деревьев. Разные структуры представления одной сущности не удваивают абзацы. Противоречащие тексты двух версий дают диагностику, а не случайный выбор.
-- [ ] Для ручного text.txt проверить необходимые служебные ссылки; пользовательский текст не переписывать молча. На этапе 4 персонализация/отписка применяются и к plain text через тот же policy.
-- [ ] Построить email/html.html, subject.txt, text.txt и заданные sender/reply_to файлы, profile flags, images/. Не добавлять inactive AMP и не копировать export template.json.
-- [ ] Обычный email.html предпросмотра хранит images/*; пакетный html.html получает rebase. Сериализовать каждый результат после собственных преобразований пути, сохраняя один алгоритм оформления.
-- [ ] Terra выполняет node --test tests/rendering/email-plain-text.test.mjs tests/rendering/email-altcraft-package.test.mjs. Готово: структуру пакета можно проверить без аккаунта Альткрафта.
+- [x] Зафиксировать plain-text-is-not-duplicated-by-viewports, plain-text-excludes-hidden-service-fragments, unsub-is-present-in-both-versions, inherited-sender-files-are-omitted, full-format-not-mixed-with-simple.
+- [x] Генерировать text.txt из логического содержания и действий, не из regex strip tags двух готовых viewport-деревьев. Разные структуры представления одной сущности не удваивают абзацы. Противоречащие тексты двух версий дают диагностику, а не случайный выбор.
+- [x] Для ручного text.txt проверить необходимые служебные ссылки; пользовательский текст не переписывать молча. На этапе 4 персонализация/отписка применяются и к plain text через тот же policy.
+- [x] Построить email/html.html, subject.txt, text.txt и заданные sender/reply_to файлы, profile flags, images/. Не добавлять inactive AMP и не копировать export template.json.
+- [x] Обычный email.html предпросмотра хранит images/*; пакетный html.html получает rebase. Сериализовать каждый результат после собственных преобразований пути, сохраняя один алгоритм оформления.
+- [x] Terra выполняет node --test tests/rendering/email-plain-text.test.mjs tests/rendering/email-altcraft-package.test.mjs. Готово: структуру пакета можно проверить без аккаунта Альткрафта.
 
 ## Задача 4 ZIP и атомарный выпуск
 
@@ -105,18 +105,22 @@ assetBuffers содержит уже проверенные declared path → by
 
 ZIP store method=0, UTF-8 names, CRC32 и фиксированное допустимое DOS time, entries отсортированы. ZIP64 не нужен для наших писем: превышение 65535 entries или uint32 size/offset отклоняется. Не вводить дефлятор ради уже сжатых PNG/JPEG и не полагаться на внешний архиватор.
 
-- [ ] Зафиксировать standard-zip-reader-can-open-package, zip-crc-and-bytes-match, invalid-entry-path-rejected, failed-write-leaves-no-final-version, existing-version-not-overwritten. Независимую проверку ZIP выполняет bundled Python zipfile через Terra, а не второй самописный reader той же реализации.
-- [ ] Реализовать ZIP writer с относительными нормализованными entry names. Отклонить duplicates и escape paths. Буфер каждого изображения после независимого чтения ZIP должен совпадать побайтно.
-- [ ] Выделить общий безопасный atomic file-set publisher из существующего email-output, сохранив publishEmailAtomically старый интерфейс и защиту непустой папки. Staging находится рядом с target, cleanup затрагивает только собственный проверенный путь.
-- [ ] Новая версия содержит предпросмотр email.html/images, altcraft.zip и release-report.json; при необходимости локальную копию DeliveryDocument вне ZIP. Никаких source email overwrite.
-- [ ] Отчёт содержит hashes/counts, html_bytes/css_bytes, serializer/profile version, link readiness, local checks и external_acceptance=not-run. Размер HTML показывать отдельно от ZIP/images; повышенный размер не устранять удалением нужных ветвей.
-- [ ] Terra выполняет node --test tests/rendering/zip-store.test.mjs tests/rendering/email-output.test.mjs tests/rendering/email-altcraft-package.test.mjs; независимо читает собранный ZIP и сравнивает declared references/actual files/hashes.
-- [ ] Terra сравнивает до/после сериализации и распакованного пакетного HTML на 375/390/660/800px и CSS-stripped режиме. Требование: геометрия, текст, порядок, все изображения и ссылки сохранены. Это не проверка импортера Альткрафта.
-- [ ] Подключить новый exporter к build handoff и разрешённым outputs workflow. Публикация этапа после согласования: feat: emit structured HTML and full Altcraft packages. Историческая ветка PR118 сохраняется; новый PR требует отдельного разрешения на слияние.
+- [x] Зафиксировать standard-zip-reader-can-open-package, zip-crc-and-bytes-match, invalid-entry-path-rejected, failed-write-leaves-no-final-version, existing-version-not-overwritten. Независимую проверку ZIP выполняет bundled Python zipfile через Terra, а не второй самописный reader той же реализации.
+- [x] Реализовать ZIP writer с относительными нормализованными entry names. Отклонить duplicates и escape paths. Буфер каждого изображения после независимого чтения ZIP должен совпадать побайтно.
+- [x] Выделить общий безопасный atomic file-set publisher из существующего email-output, сохранив publishEmailAtomically старый интерфейс и защиту непустой папки. Staging находится рядом с target, cleanup затрагивает только собственный проверенный путь.
+- [x] Новая версия содержит предпросмотр email.html/images, altcraft.zip и release-report.json; при необходимости локальную копию DeliveryDocument вне ZIP. Никаких source email overwrite.
+- [x] Отчёт содержит hashes/counts, html_bytes/css_bytes, serializer/profile version, link readiness, local checks и external_acceptance=not-run. Размер HTML показывать отдельно от ZIP/images; повышенный размер не устранять удалением нужных ветвей.
+- [x] Terra выполняет node --test tests/rendering/zip-store.test.mjs tests/rendering/email-output.test.mjs tests/rendering/email-altcraft-package.test.mjs; независимо читает собранный ZIP и сравнивает declared references/actual files/hashes.
+- [x] Terra сравнивает до/после сериализации и распакованного пакетного HTML на 375/390/660/800px и CSS-stripped режиме. Требование: геометрия, текст, порядок, все изображения и ссылки сохранены. Это не проверка импортера Альткрафта.
+- [x] Подключить новый exporter к build handoff и разрешённым outputs workflow. Публикация этапа после согласования: feat: emit structured HTML and full Altcraft packages. Историческая ветка PR118 сохраняется; новый PR требует отдельного разрешения на слияние.
 
 ## Ручная проверка команды
 
 Выдать краткие действия: импортировать один новый ZIP привычным способом, открыть HTML editor, проверить распознавание групп и изображений без ручного редактирования, сохранить и при возможности выгрузить шаблон. Результат или изменённый HTML пользователь может сообщить/передать позднее. Агент не запускает импорт и не ждёт обязательного полного доступа для завершения локальной кодовой части. Пока результата нет, external_acceptance=not-run.
+
+## Локальная приёмка
+
+Локальная приёмка завершена для candidate `37d0c4601bd6888437f36d8bf8acdf319acf2798`: verify из package.json (npm run validate && npm test), выполненный прямыми Node-командами: node scripts/validate-system.mjs и полный набор семи групп из scripts.test — 2175/2175 PASS, 0 FAIL/cancelled/skipped, 465981 ms; точный Git HEAD и изолированный Git-контекст, CUPIS_SYSTEM_COMMIT этого candidate, bundled Python и проверенный same-lock cache; generate-docs --check и bootstrap/verify.ps1 PASS; независимое review production на f837 и отдельная визуальная приёмка на 6e6d связаны проверенной идентичностью исходников. Внешняя приёмка импорта, отправки и почтовых клиентов — not-run. PR119 остаётся draft и не слит.
 
 ## Результат этапа
 

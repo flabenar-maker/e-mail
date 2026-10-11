@@ -12,9 +12,9 @@
 
 ## Статус реализации
 
-Код опубликован в draft [PR №119](https://github.com/flabenar-maker/e-mail/pull/119); итоговая локальная приёмка ещё выполняется. Реализованы типизированные параметры выпуска, инвентаризация видимых действий, автономная русская форма, проверка ответов и обязательный шаг их получения перед экспортом ассетов. Схемы и профиль включены в manifest и оба email-bundle; Markdown-контекст содержит ссылки на схемы вместо их развёрнутых тел. Исходный дизайн проверяется независимо от проекции ссылок.
+Код опубликован в draft [PR №119](https://github.com/flabenar-maker/e-mail/pull/119); локальная кодовая приёмка завершена. Реализованы типизированные параметры выпуска, инвентаризация видимых действий, автономная русская форма, проверка ответов и обязательный шаг их получения перед экспортом ассетов. Схемы и профиль включены в manifest и оба email-bundle; Markdown-контекст содержит ссылки на схемы вместо их развёрнутых тел. Исходный дизайн проверяется независимо от проекции ссылок.
 
-Исторические source/Figma/install pins сохранены. Установленные тонкие навыки менять или переустанавливать не требуется: восстановление получает зарегистрированные источники и обновлённый workflow. Внешняя проверка импорта, отправки и почтовых клиентов — not-run; слияние PR не выполнено.
+Исторические source/Figma/install pins сохранены. При следующем запуске выпуск выбирается через system_commit этой версии и зарегистрированные manifest sources; SKILL.md не менялся, поэтому переустановка не требовалась. Это проверенная организация источников, а не новая приёмка установки или discovery. Внешняя проверка импорта, отправки и почтовых клиентов — not-run; слияние PR не выполнено.
 
 ## Global Constraints
 
@@ -59,12 +59,12 @@
 
 ActionField и Binding определены в Spec. Точный порядок: порядок блоков/экземпляров исходного письма, затем порядок действий внутри блока. Идентификатор поля основан на полном instance_path и целевом слоте; label не является идентификатором. Отпечаток включает профиль/варианты/видимость/структуру bindings, но не введённые пользовательские URL.
 
-- [ ] Terra создаёт маленькие синтетические fixtures из уже поддержанных контрактных форм: две карточки с одинаковой надписью, visible/hidden NPS, вложенное действие, rich-text link, различающиеся viewport-слоты.
-- [ ] Зафиксировать тесты absent-urls-do-not-block-inventory, duplicate-labels-have-distinct-fields, hidden-actions-omitted, visible-nps-has-three-fields, ambiguous-viewport-pair-is-not-merged. Для первого fields непустой и нет диагностики про отсутствие URL; для второго assert.notEqual(fields[0].id, fields[1].id); NPS required-строк ровно 3.
-- [ ] Реализовать обход выбранных variant_axes, property/instance visibility, slots и nested_components с помощью существующего selectVariantRoot. Не проходить все варианты реестра вместо конкретного письма.
-- [ ] Объединять viewport-bindings только по доказанному логическому соответствию. Профиль содержит явное соответствие для постоянных ролей; не вводить сопоставление по порядку, одинаковой подписи или визуальной похожести.
-- [ ] Сохранить полный диагностический результат ошибок структуры. Режим исследования допускает отсутствующие URL и файлы ассетов, но не разрешает подавление остальных ошибок рендера/модели.
-- [ ] Terra выполняет node --test tests/rendering/email-action-inventory.test.mjs. Готово: все указанные случаи проходят локально.
+- [x] Terra создаёт маленькие синтетические fixtures из уже поддержанных контрактных форм: две карточки с одинаковой надписью, visible/hidden NPS, вложенное действие, rich-text link, различающиеся viewport-слоты.
+- [x] Зафиксировать тесты absent-urls-do-not-block-inventory, duplicate-labels-have-distinct-fields, hidden-actions-omitted, visible-nps-has-three-fields, ambiguous-viewport-pair-is-not-merged. Для первого fields непустой и нет диагностики про отсутствие URL; для второго assert.notEqual(fields[0].id, fields[1].id); NPS required-строк ровно 3.
+- [x] Реализовать обход выбранных variant_axes, property/instance visibility, slots и nested_components с помощью существующего selectVariantRoot. Не проходить все варианты реестра вместо конкретного письма.
+- [x] Объединять viewport-bindings только по доказанному логическому соответствию. Профиль содержит явное соответствие для постоянных ролей; не вводить сопоставление по порядку, одинаковой подписи или визуальной похожести.
+- [x] Сохранить полный диагностический результат ошибок структуры. Режим исследования допускает отсутствующие URL и файлы ассетов, но не разрешает подавление остальных ошибок рендера/модели.
+- [x] Terra выполняет node --test tests/rendering/email-action-inventory.test.mjs. Готово: все указанные случаи проходят локально.
 
 ## Задача 2 Профиль и русская форма
 
@@ -76,12 +76,12 @@ ActionField и Binding определены в Spec. Точный порядок
 
 DeliveryDocument определяется Spec; sender/reply_to содержат mode=inherit или mode=explicit с name/address. plain_text содержит mode=auto или mode=manual с value. answers — объект field_id → строка. Для preview параметры могут быть неполными; readiness различает черновик и финал.
 
-- [ ] Зафиксировать schema-rejects-unknown-fields, inherited-sender-is-not-empty-override, form-labels-are-russian, managed-links-are-prefilled, form-has-no-network-requests. assert.equal(document.sender.mode, 'inherit'); managed logo/store/unsubscribe отображаются без повторного обязательного запроса.
-- [ ] В profiles.yaml зарегистрировать точные URL из Spec, разрешённую метку {unsubscribe} и существующие роли footer/NPS. Логотип — отдельная output-only роль, без добавления action в component contract. Проверка профиля подтверждает существование адресуемых владельцев/элементов и отсутствие конфликтующих role mappings.
-- [ ] Отобразить секции «Параметры письма» и «Ссылки в письме». Каждая ссылка показывает блок, экземпляр, текст/описание, обязательность и значение. Не показывать пользователю node IDs, адреса файлов и технические flags AMP/CSS.
-- [ ] Самостоятельная HTML-форма экспортирует один проверяемый JSON ответов. Все вставляемые подписи и исходные значения экранируются. Никаких remote fetch, автоматического отправления письма или записи поверх готовой версии.
-- [ ] Добавить prepare-email-delivery.mjs с аргументами --model, --profile, --output; выход — form.html и delivery.json в отдельной локальной папке. Недостающие пользовательские адреса не мешают созданию формы.
-- [ ] Terra выполняет node --test tests/foundation/email-delivery-profile.test.mjs tests/rendering/email-delivery-form.test.mjs. Готово: формат и значения формы корректны.
+- [x] Зафиксировать schema-rejects-unknown-fields, inherited-sender-is-not-empty-override, form-labels-are-russian, managed-links-are-prefilled, form-has-no-network-requests. assert.equal(document.sender.mode, 'inherit'); managed logo/store/unsubscribe отображаются без повторного обязательного запроса.
+- [x] В profiles.yaml зарегистрировать точные URL из Spec, разрешённую метку {unsubscribe} и существующие роли footer/NPS. Логотип — отдельная output-only роль, без добавления action в component contract. Проверка профиля подтверждает существование адресуемых владельцев/элементов и отсутствие конфликтующих role mappings.
+- [x] Отобразить секции «Параметры письма» и «Ссылки в письме». Каждая ссылка показывает блок, экземпляр, текст/описание, обязательность и значение. Не показывать пользователю node IDs, адреса файлов и технические flags AMP/CSS.
+- [x] Самостоятельная HTML-форма экспортирует один проверяемый JSON ответов. Все вставляемые подписи и исходные значения экранируются. Никаких remote fetch, автоматического отправления письма или записи поверх готовой версии.
+- [x] Добавить prepare-email-delivery.mjs с аргументами --model, --profile, --output; выход — form.html и delivery.json в отдельной локальной папке. Недостающие пользовательские адреса не мешают созданию формы.
+- [x] Terra выполняет node --test tests/foundation/email-delivery-profile.test.mjs tests/rendering/email-delivery-form.test.mjs. Готово: формат и значения формы корректны.
 
 ## Задача 3 Ответы и проверка готовности
 
@@ -93,12 +93,12 @@ DeliveryDocument определяется Spec; sender/reply_to содержат
 
 purpose равен preview или final. Функция проекции возвращает новую модель, не мутирует оригинал. outputBindings предназначены только для зарегистрированных выходных ролей; их фактический HTML-хук добавляется на этапе 4.
 
-- [ ] Зафиксировать stale-inventory-is-rejected, final-missing-required-link-blocks, example-domain-is-not-send-ready, fixed-links-cannot-be-overridden, original-model-is-unchanged.
-- [ ] Проверить email_id/profile version/source binding/inventory_digest и точный набор field IDs. Не применять ответы по label. Неизвестные/устаревшие поля дают отдельную понятную диагностику.
-- [ ] Для final отклонять обязательные пустые адреса, '#', зарезервированные example.com/example.org/example.net и неподходящие шаблонные метки. Разрешать явные HTTP/HTTPS/mailto/tel назначения по роли; служебные метки только по allowlist профиля. Не подменять адрес автоматически.
-- [ ] Проверить сохранение разных ссылок разных экземпляров. Header URL не используется для footer-site. Не строить NPS URL из предполагаемого шаблона backend.
-- [ ] Собрать exact slot projection с scope=all только при доказанной общей привязке; иначе scope=mobile/desktop. После проекции выполнить обычную семантическую проверку модели, не ослабляя её.
-- [ ] Terra выполняет node --test tests/rendering/email-delivery.test.mjs. Готово: все обязательные данные конечного выпуска проверяются независимо от корректности дизайна.
+- [x] Зафиксировать stale-inventory-is-rejected, final-missing-required-link-blocks, example-domain-is-not-send-ready, fixed-links-cannot-be-overridden, original-model-is-unchanged.
+- [x] Проверить email_id/profile version/source binding/inventory_digest и точный набор field IDs. Не применять ответы по label. Неизвестные/устаревшие поля дают отдельную понятную диагностику.
+- [x] Для final отклонять обязательные пустые адреса, '#', зарезервированные example.com/example.org/example.net и неподходящие шаблонные метки. Разрешать явные HTTP/HTTPS/mailto/tel назначения по роли; служебные метки только по allowlist профиля. Не подменять адрес автоматически.
+- [x] Проверить сохранение разных ссылок разных экземпляров. Header URL не используется для footer-site. Не строить NPS URL из предполагаемого шаблона backend.
+- [x] Собрать exact slot projection с scope=all только при доказанной общей привязке; иначе scope=mobile/desktop. После проекции выполнить обычную семантическую проверку модели, не ослабляя её.
+- [x] Terra выполняет node --test tests/rendering/email-delivery.test.mjs. Готово: все обязательные данные конечного выпуска проверяются независимо от корректности дизайна.
 
 ## Задача 4 Подключение в процесс и источники
 
@@ -106,13 +106,17 @@ purpose равен preview или final. Функция проекции воз�
 
 **Produces:** executeEmailBuildHandoff принимает deliveryDocument/profile; rendererRunner получает deliveryPath и purpose. CLI --delivery подключает внешний документ; существующий вызов без документа сохраняет базовое поведение для совместимости. Workflow для финального CUPIS Altcraft-выпуска требует новый документ и readiness, поэтому старый CLI не становится обходом нового release-gate.
 
-- [ ] Добавить профиль/schema в manifest и соответствующие bundle profiles. Обновить загрузчики и validateSystem, чтобы отсутствующие/несогласованные новые источники останавливались типизированной диагностикой.
-- [ ] В workflow между исследованием структуры и asset/export/build добавить prepare-delivery-form и validate-delivery-inputs. Required inputs не требуют ссылки для первого шага; build/export шаг требует readiness final.
-- [ ] Сохранить source-fidelity проверки исходного дизайна. Новые пользовательские href проверяются как явно адресуемые delivery-значения; это не исключение для любых изменений текста, геометрии или изображений.
-- [ ] Передавать deliveryPath через defaultRendererRunner и preview CLI; временные JSON создавать вне source и удалять только собственные проверенные пути. Черновик с незаполненными адресами не публикует готовый ZIP.
-- [ ] Дополнить email-source-delivery.test.mjs случаями no-asset-export-before-form и final-handoff-requires-ready-delivery. Существующие проверки Figma source и asset evidence сохраняются.
-- [ ] Terra выполняет node --test tests/skills/email-source-delivery.test.mjs tests/rendering/email-delivery.test.mjs, затем npm run validate и npm run generate:check. Готово: процесс действительно использует форму, а не только умеет нарисовать её.
-- [ ] Опубликовать этап в отдельной cloud-ветке после согласования этого плана. Коммит: feat: add typed email delivery inputs and Russian intake form. Изменять историческую ветку PR118/main напрямую и сливать новый PR без отдельного разрешения запрещено.
+- [x] Добавить профиль/schema в manifest и соответствующие bundle profiles. Обновить загрузчики и validateSystem, чтобы отсутствующие/несогласованные новые источники останавливались типизированной диагностикой.
+- [x] В workflow между исследованием структуры и asset/export/build добавить prepare-delivery-form и validate-delivery-inputs. Required inputs не требуют ссылки для первого шага; build/export шаг требует readiness final.
+- [x] Сохранить source-fidelity проверки исходного дизайна. Новые пользовательские href проверяются как явно адресуемые delivery-значения; это не исключение для любых изменений текста, геометрии или изображений.
+- [x] Передавать deliveryPath через defaultRendererRunner и preview CLI; временные JSON создавать вне source и удалять только собственные проверенные пути. Черновик с незаполненными адресами не публикует готовый ZIP.
+- [x] Дополнить email-source-delivery.test.mjs случаями no-asset-export-before-form и final-handoff-requires-ready-delivery. Существующие проверки Figma source и asset evidence сохраняются.
+- [x] Terra выполняет node --test tests/skills/email-source-delivery.test.mjs tests/rendering/email-delivery.test.mjs, затем npm run validate и npm run generate:check. Готово: процесс действительно использует форму, а не только умеет нарисовать её.
+- [x] Опубликовать этап в отдельной cloud-ветке после согласования этого плана. Коммит: feat: add typed email delivery inputs and Russian intake form. Изменять историческую ветку PR118/main напрямую и сливать новый PR без отдельного разрешения запрещено.
+
+## Локальная приёмка
+
+Локальная приёмка завершена для candidate `37d0c4601bd6888437f36d8bf8acdf319acf2798`: verify из package.json (npm run validate && npm test), выполненный прямыми Node-командами: node scripts/validate-system.mjs и полный набор семи групп из scripts.test — 2175/2175 PASS, 0 FAIL/cancelled/skipped, 465981 ms; точный Git HEAD и изолированный Git-контекст, CUPIS_SYSTEM_COMMIT этого candidate, bundled Python и проверенный same-lock cache; generate-docs --check и bootstrap/verify.ps1 PASS; независимое review production на f837 и отдельная визуальная приёмка на 6e6d связаны проверенной идентичностью исходников. Внешняя приёмка импорта, отправки и почтовых клиентов — not-run. PR119 остаётся draft и не слит.
 
 ## Результат этапа
 
