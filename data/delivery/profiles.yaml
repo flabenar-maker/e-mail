@@ -1,0 +1,264 @@
+{
+  "schema_version": "1.0.0",
+  "profiles": [
+    {
+      "id": "altcraft-mobile-base-v1",
+      "version": "1.0.0",
+      "label": "Выпуск письма для Альткрафта",
+      "roles": [
+        {
+          "id": "header-logo",
+          "label": "Логотип ЦУПИС",
+          "component_id": "email-header",
+          "bindings": [
+            {
+              "viewport": "mobile",
+              "element_id": "root-header-logo-compact",
+              "slot_id": "href",
+              "kind": "output-link"
+            },
+            {
+              "viewport": "desktop",
+              "element_id": "root-header-logo",
+              "slot_id": "href",
+              "kind": "output-link"
+            }
+          ],
+          "href": "https://1cupis.ru/?utm_source=crm&utm_medium=email&utm_campaign=logo"
+        },
+        {
+          "id": "store-rustore",
+          "label": "RuStore",
+          "component_id": "banner-app-download",
+          "bindings": [
+            {
+              "viewport": "mobile",
+              "element_id": "root-content-area-store-buttons-rustore-button",
+              "slot_id": "href",
+              "kind": "slot-link"
+            },
+            {
+              "viewport": "desktop",
+              "element_id": "root-content-area-store-buttons-rustore-button",
+              "slot_id": "href",
+              "kind": "slot-link"
+            }
+          ],
+          "href": "https://redirect.appmetrica.yandex.com/serve/461821467231807192"
+        },
+        {
+          "id": "store-google-play",
+          "label": "Google Play",
+          "component_id": "banner-app-download",
+          "bindings": [
+            {
+              "viewport": "mobile",
+              "element_id": "root-content-area-store-buttons-google-play-button",
+              "slot_id": "href",
+              "kind": "slot-link"
+            },
+            {
+              "viewport": "desktop",
+              "element_id": "root-content-area-store-buttons-google-play-button",
+              "slot_id": "href",
+              "kind": "slot-link"
+            }
+          ],
+          "href": "https://redirect.appmetrica.yandex.com/serve/533879077140969685"
+        },
+        {
+          "id": "store-appgallery",
+          "label": "App Gallery",
+          "component_id": "banner-app-download",
+          "bindings": [
+            {
+              "viewport": "mobile",
+              "element_id": "root-content-area-store-buttons-appgallery-button",
+              "slot_id": "href",
+              "kind": "slot-link"
+            },
+            {
+              "viewport": "desktop",
+              "element_id": "root-content-area-store-buttons-appgallery-button",
+              "slot_id": "href",
+              "kind": "slot-link"
+            }
+          ],
+          "href": "https://redirect.appmetrica.yandex.com/serve/1038282229081536966"
+        },
+        {
+          "id": "store-getapps",
+          "label": "Get Apps",
+          "component_id": "banner-app-download",
+          "bindings": [
+            {
+              "viewport": "mobile",
+              "element_id": "root-content-area-store-buttons-getapps-button",
+              "slot_id": "href",
+              "kind": "slot-link"
+            },
+            {
+              "viewport": "desktop",
+              "element_id": "root-content-area-store-buttons-getapps-button",
+              "slot_id": "href",
+              "kind": "slot-link"
+            }
+          ],
+          "href": "https://redirect.appmetrica.yandex.com/serve/29475923791277577"
+        },
+        {
+          "id": "footer-unsubscribe",
+          "label": "Отписаться от рассылки",
+          "component_id": "email-footer",
+          "bindings": [
+            {
+              "viewport": "mobile",
+              "element_id": "root-footer-body-disclaimer-section-disclaimer-text-03",
+              "slot_id": "href",
+              "kind": "slot-link"
+            },
+            {
+              "viewport": "desktop",
+              "element_id": "root-footer-body-disclaimer-section-disclaimer-text-03",
+              "slot_id": "href",
+              "kind": "slot-link"
+            }
+          ],
+          "href": "{unsubscribe}"
+        },
+        {
+          "id": "footer-site",
+          "label": "1cupis.ru в футере",
+          "component_id": "email-footer",
+          "bindings": [
+            {
+              "viewport": "mobile",
+              "element_id": "root-footer-body-disclaimer-section-disclaimer-text-02",
+              "slot_id": "link-2-url",
+              "kind": "slot-link"
+            },
+            {
+              "viewport": "desktop",
+              "element_id": "root-footer-body-disclaimer-section-disclaimer-text-02",
+              "slot_id": "link-2-url",
+              "kind": "slot-link"
+            }
+          ]
+        },
+        {
+          "id": "footer-support",
+          "label": "Служба поддержки",
+          "component_id": "email-footer",
+          "bindings": [
+            {
+              "viewport": "mobile",
+              "element_id": "root-footer-body-disclaimer-section-disclaimer-text-02",
+              "slot_id": "link-4-url",
+              "kind": "slot-link"
+            },
+            {
+              "viewport": "desktop",
+              "element_id": "root-footer-body-disclaimer-section-disclaimer-text-02",
+              "slot_id": "link-4-url",
+              "kind": "slot-link"
+            }
+          ]
+        },
+        {
+          "id": "nps-good",
+          "label": "Положительный ответ",
+          "component_id": "nps-options",
+          "bindings": [
+            {
+              "viewport": "mobile",
+              "element_id": "root-content-area-emoji-buttons-good",
+              "slot_id": "href",
+              "kind": "slot-link"
+            },
+            {
+              "viewport": "desktop",
+              "element_id": "root-content-area-emoji-buttons-good",
+              "slot_id": "href",
+              "kind": "slot-link"
+            }
+          ]
+        },
+        {
+          "id": "nps-neutral",
+          "label": "Нейтральный ответ",
+          "component_id": "nps-options",
+          "bindings": [
+            {
+              "viewport": "mobile",
+              "element_id": "root-content-area-emoji-buttons-neutral",
+              "slot_id": "href",
+              "kind": "slot-link"
+            },
+            {
+              "viewport": "desktop",
+              "element_id": "root-content-area-emoji-buttons-neutral",
+              "slot_id": "href",
+              "kind": "slot-link"
+            }
+          ]
+        },
+        {
+          "id": "nps-bad",
+          "label": "Отрицательный ответ",
+          "component_id": "nps-options",
+          "bindings": [
+            {
+              "viewport": "mobile",
+              "element_id": "root-content-area-emoji-buttons-bad",
+              "slot_id": "href",
+              "kind": "slot-link"
+            },
+            {
+              "viewport": "desktop",
+              "element_id": "root-content-area-emoji-buttons-bad",
+              "slot_id": "href",
+              "kind": "slot-link"
+            }
+          ]
+        }
+      ],
+      "allowed_templates": [
+        "{unsubscribe}"
+      ],
+      "emission": {
+        "fallback_viewport": "mobile",
+        "desktop_condition": {
+          "viewport_min_px": 660,
+          "device_min_px": 660
+        },
+        "mso_desktop": true,
+        "preserve_structural_splits": true
+      },
+      "package": {
+        "id": "altcraft-full-v1",
+        "html_entry": "email/html.html",
+        "asset_root_entry": "images",
+        "is_amp": false,
+        "is_not_inline": true
+      },
+      "service_rules": {
+        "enabled": false
+      },
+      "block_labels": {
+        "email-template": "Письмо",
+        "email-header": "Шапка письма",
+        "email-footer": "Футер",
+        "email-footer-legal": "Юридический футер",
+        "banner-app-download": "Скачать приложение",
+        "nps-options": "Оценка письма",
+        "banner-primary": "Главный баннер",
+        "banner-secondary": "Дополнительный баннер",
+        "card-image": "Карточка с изображением",
+        "card-icon": "Карточка с иконкой",
+        "cards-images": "Карточки с изображениями",
+        "icon-cards": "Карточки с иконками",
+        "icon-list": "Список с иконками"
+      }
+    }
+  ]
+}

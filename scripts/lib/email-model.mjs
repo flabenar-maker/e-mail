@@ -336,11 +336,12 @@ function nestedElementId(item, viewport) {
   return item.element_ids?.[viewport] ?? item.element_id;
 }
 
-function validateRequiredTree(element, instance, viewport, errors, path) {
+function validateRequiredTree(element, instance, viewport, errors, path, deliveryResearch = false) {
   if (!visible(element, instance, viewport, errors, path)) return;
 
   for (const slot of element.content_slots ?? []) {
     if (!slot.required) continue;
+    if (deliveryResearch && slot.type === "url") continue;
     if (element.render_mode === "slot" && slot.id === "content") {
       const value = (instance.slots ?? []).find((item) => item.element_id === element.id);
       if (!value || value.instances.length === 0) {
@@ -369,7 +370,7 @@ function validateRequiredTree(element, instance, viewport, errors, path) {
     const asset = (instance.asset_files ?? []).find(
       (item) => item.asset_contract_id === element.asset_contract_id,
     );
-    if (!asset) {
+    if (!asset && !deliveryResearch) {
       errors.push(
         diagnostic(
           "EMAIL_MODEL_REQUIRED_ASSET_MISSING",
@@ -410,6 +411,7 @@ function validateRequiredTree(element, instance, viewport, errors, path) {
       viewport,
       errors,
       path + "/children/" + index,
+      deliveryResearch,
     );
   });
 }
@@ -427,7 +429,7 @@ function validateInstance(instance, dependencies, errors, path, stack) {
     return;
   }
   const coverage = coverageRecord(dependencies, instance.component_id);
-  if (!coverage || coverage.mode !== "interpreter") {
+  if (!dependencies.deliveryResearch && (!coverage || coverage.mode !== "interpreter")) {
     errors.push(
       diagnostic(
         "EMAIL_MODEL_COVERAGE_UNAVAILABLE",
@@ -546,6 +548,7 @@ function validateInstance(instance, dependencies, errors, path, stack) {
       viewport,
       errors,
       path + "/contracts/" + viewport + "/root",
+      dependencies.deliveryResearch,
     );
   }
 
@@ -572,7 +575,7 @@ function validateInstance(instance, dependencies, errors, path, stack) {
   });
 }
 
-export function validateEmailModelSemantics(model, dependencies) {
+export function validateEmailModelSemantics(model, dependencies, options = {}) {
   const errors = [];
   if (!model?.root) {
     return [
@@ -583,6 +586,6 @@ export function validateEmailModelSemantics(model, dependencies) {
       ),
     ];
   }
-  validateInstance(model.root, dependencies, errors, "/root", []);
+  validateInstance(model.root, { ...dependencies, deliveryResearch: options.purpose === "delivery-inventory" }, errors, "/root", []);
   return sortDiagnostics(errors);
 }

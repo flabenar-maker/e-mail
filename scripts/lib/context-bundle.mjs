@@ -770,6 +770,13 @@ export async function buildContextBundle({
     return blocked(caughtBlockers(error));
   }
 
+  if (profile.generated_bundle.static_source_ids.includes("email-delivery-profiles")) {
+    try {
+      const { loadEmailDeliveryProfiles } = await import("./email-delivery-profile.mjs");
+      await loadEmailDeliveryProfiles({ repoRoot, manifest, componentIndex:model.index });
+    } catch (error) { return blocked(caughtBlockers(error)); }
+  }
+
   const roots = resolveRootIds(model.index, candidates, selectedViewports);
   if (roots.status === "blocked") return roots;
   const closure = collectDependencyClosure(

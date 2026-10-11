@@ -21,7 +21,8 @@
     "finalize:execution": "node scripts/finalize-execution.mjs",
     "profile:execution": "node scripts/init-execution-profile.mjs",
     "verify:execution": "node scripts/run-verification.mjs",
-    "cloud:execution": "node scripts/request-cloud-verification.mjs"
+    "cloud:execution": "node scripts/request-cloud-verification.mjs",
+    "prepare:delivery": "node scripts/prepare-email-delivery.mjs"
   },
   "dependencies": {
     "ajv": "8.20.0",

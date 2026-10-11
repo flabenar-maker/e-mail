@@ -15,6 +15,7 @@ import { loadAssetsFoundation, resolveAssetContract } from "./assets-foundation.
 import { loadRendererRegistry } from "./renderer-registry.mjs";
 import { validateEmailModelSemantics } from "./email-model.mjs";
 import { selectVariantRoot } from "./email-interpreter.mjs";
+import { prepareEmailDelivery } from "./email-delivery.mjs";
 
 function failure(code) {
   const error = new Error(code);
@@ -394,11 +395,11 @@ export async function prepareEmailBuildHandoff({
   };
 }
 
-async function defaultRendererRunner({ repoRoot, modelPath, outputDir }) {
+async function defaultRendererRunner({ repoRoot, modelPath, outputDir, deliveryPath, sourceSha }) {
   await execFileAsync(
     process.execPath,
-    [join(repoRoot, "scripts", "render-email.mjs"), "--model", modelPath, "--output", outputDir],
-    { cwd: repoRoot },
+    [join(repoRoot, "scripts", "render-email.mjs"), "--model", modelPath, "--output", outputDir, ...(deliveryPath ? ["--delivery", deliveryPath] : [])],
+    { cwd: repoRoot, env:{...process.env, ...(sourceSha ? {CUPIS_SYSTEM_COMMIT:sourceSha} : {})} },
   );
 }
 
@@ -473,13 +474,29 @@ export async function executeEmailBuildHandoff({
   resolution,
   continueFixEvidence,
   sourceEvidence,
+  deliveryDocument,
+  sourceSha,
   ...input
 }) {
   const workflowMode = resolution?.workflow?.mode;
   const workflowModeBlockers = EXECUTABLE_WORKFLOW_MODES.has(workflowMode)
     ? []
     : ["workflow-mode-invalid"];
-  const handoff = await prepareEmailBuildHandoff(input);
+  const deliveryRequired = resolution?.workflow?.steps?.some(step => step.id === "validate-delivery-answers");
+  if (deliveryRequired && !deliveryDocument) return { blockers:["delivery-required"], executed:false };
+  let delivery;
+  if (deliveryDocument) {
+    try {
+      sourceSha ??= process.env.CUPIS_SYSTEM_COMMIT;
+      sourceSha ??= (await execFileAsync("git", ["rev-parse","HEAD"], {cwd:input.repoRoot})).stdout.trim();
+      if (!/^[0-9a-f]{40}$/u.test(sourceSha)) throw failure("EMAIL_DELIVERY_SOURCE_UNKNOWN");
+      const componentIndex = indexComponentRegistries(await loadComponentRegistries({repoRoot:input.repoRoot}));
+      delivery = await prepareEmailDelivery({repoRoot:input.repoRoot, model:input.model, componentIndex, document:deliveryDocument, purpose:"final", sourceSha});
+    } catch (error) {
+      return {blockers:["delivery-not-ready"], deliveryDiagnostics:error instanceof AggregateError ? error.errors : [{code:error.code ?? "EMAIL_DELIVERY_FAILED",message:error.message}],executed:false};
+    }
+  }
+  const handoff = await prepareEmailBuildHandoff({...input, model:delivery?.model ?? input.model});
   const sourceGate = workflowModeBlockers.length
     ? { blockers: [], diagnostics: [] }
     : await verifyNewBuildSource({
@@ -487,7 +504,7 @@ export async function executeEmailBuildHandoff({
       sourceEvidence,
       repoRoot: input.repoRoot,
       assetRoot: input.assetRoot,
-      model: handoff.model,
+      model: input.model,
       assetEvidence: input.assetEvidence,
     });
   const blockers = [...new Set([
@@ -498,12 +515,15 @@ export async function executeEmailBuildHandoff({
   ])].sort();
   if (blockers.length) return { ...handoff, blockers, sourceDiagnostics: sourceGate.diagnostics, executed: false };
   const modelPath = join(input.assetRoot, `.temporary-email-model-${randomUUID()}.json`);
+  const deliveryPath = delivery ? join(input.assetRoot, `.temporary-email-delivery-${randomUUID()}.json`) : undefined;
   try {
-    await writeFile(modelPath, JSON.stringify(handoff.model), "utf8");
-    await rendererRunner({ repoRoot: input.repoRoot, modelPath, outputDir });
+    await writeFile(modelPath, JSON.stringify(delivery ? input.model : handoff.model), "utf8");
+    if (deliveryPath) await writeFile(deliveryPath, JSON.stringify(deliveryDocument), "utf8");
+    await rendererRunner({ repoRoot: input.repoRoot, modelPath, outputDir, deliveryPath, sourceSha });
     return { ...handoff, sourceDiagnostics: sourceGate.diagnostics, executed: true };
   } finally {
     await rm(modelPath, { force: true });
+    if (deliveryPath) await rm(deliveryPath, { force:true });
   }
 }
 
