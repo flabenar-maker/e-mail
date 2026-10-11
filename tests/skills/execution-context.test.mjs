@@ -55,3 +55,5 @@ test('runtime cache reads declarations once per session signature and typed refu
  assert.equal(cache.recordRefusal({...key,...candidate,code:'MODEL_UNAVAILABLE'}),true);assert.equal(cache.get({...key,read}).refusals.length,1);assert.equal(reads,1);
  cache.get({...key,tool_signature:'new-tool',read:()=>({...read(),tool_signature:'new-tool'})});assert.equal(reads,2);
 });
+
+test('initial unbound resolution works and bound rerun keeps the same tier',async t=>{const f=await fixture(t);delete f.request.executor_agent_id;let request=await api.loadExecutionRequest({request:f.request,repoRoot:f.root});const initial=api.resolveExecutionContext({...f,request});assert.equal(initial.status,'resolved');assert.equal(initial.executor_agent_id,null);request=await api.loadExecutionRequest({request:{...f.request,executor_agent_id:'actual-worker'},repoRoot:f.root});const bound=api.resolveExecutionContext({...f,request});assert.deepEqual(bound.executor,initial.executor);assert.equal(bound.executor_agent_id,'actual-worker');});

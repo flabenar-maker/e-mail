@@ -22,3 +22,5 @@ test('local-only workload must have matching local successful evidence',()=>{
  for(const change of [{target:'github-hosted',workflow_sha:'a'.repeat(40)},{source_sha:'b'.repeat(40)},{workload_results:[]},{conclusion:'failure'}]){f.verificationReceipts=[{...v,...change}];assert.equal(run(f).status,'blocked');}
 });
 test('blocked or edited incomplete decisions cannot bypass the gate',()=>{for(const change of [{status:'blocked'},{review:null},{requirement_refs:[]},{executor:null},{domain_status:'paused'}]){const f=fixture();Object.assign(f.decision,change);assert.equal(run(f).status,'blocked');}});
+
+test('unbound decision cannot accept an asserted executor identity',()=>{const f=fixture();f.decision.executor_agent_id=null;assert.equal(run(f).status,'blocked');});
