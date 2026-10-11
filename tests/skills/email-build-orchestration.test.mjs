@@ -9,6 +9,10 @@ import { fileURLToPath } from "node:url";
 import { createEmailVersion, executeEmailBuildHandoff, resolveEmailBuildRequest } from "../../scripts/lib/email-build-orchestration.mjs";
 import { resolveSkillContext } from "../../scripts/lib/skill-context.mjs";
 import { loadWorkflowRegistry } from "../../scripts/lib/workflow-registry.mjs";
+import { loadComponentRegistries, indexComponentRegistries } from "../../scripts/lib/component-registry.mjs";
+import { loadEmailDeliveryProfiles } from "../../scripts/lib/email-delivery-profile.mjs";
+import { collectEmailActions } from "../../scripts/lib/email-action-inventory.mjs";
+import { createDeliveryDraft } from "../../scripts/lib/email-delivery-form.mjs";
 
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 
@@ -52,7 +56,7 @@ test("resolved workflow classifies typed inputs and only exposes that mode's out
   );
   assert.deepEqual(
     resolveEmailBuildRequest({ workflow: emailWorkflow, inputs: { ...base, "mobile-figma-instance": { role: "mobile", emailId: "a" }, "desktop-figma-instance": { role: "desktop", emailId: "a" } } }),
-    { mode: "new-build", blocker: null, allowedOutputs: ["version-folder", "email-html", "images-directory", "source-comparison", "verification-summary", "handoff-summary"] },
+    { mode: "new-build", blocker: null, allowedOutputs: ["version-folder", "email-html", "images-directory", "source-comparison", "verification-summary", "handoff-summary", "delivery-form", "delivery-draft", "altcraft-package", "release-report"] },
   );
   assert.deepEqual(
     resolveEmailBuildRequest({ workflow: emailWorkflow, inputs: { request: input(), "source-email-html": input(), "source-images-directory": input(), "mobile-figma-instance": input(), "desktop-figma-instance": input() } }),
@@ -60,7 +64,7 @@ test("resolved workflow classifies typed inputs and only exposes that mode's out
   );
   assert.deepEqual(
     resolveEmailBuildRequest({ workflow: emailWorkflow, inputs: { request: input(), "source-email-html": input(), "source-images-directory": input(), "exact-change-scope": input() } }),
-    { mode: "continue-fix-technical", blocker: null, allowedOutputs: ["version-folder", "email-html", "images-directory", "verification-summary", "handoff-summary"] },
+    { mode: "continue-fix-technical", blocker: null, allowedOutputs: ["version-folder", "email-html", "images-directory", "verification-summary", "handoff-summary", "delivery-form", "delivery-draft", "altcraft-package", "release-report"] },
   );
   assert.deepEqual(
     resolveEmailBuildRequest({ workflow: emailWorkflow, inputs: { request: input() } }),
@@ -90,16 +94,27 @@ test("actual resolver workflow modes gate source proof and design continuation e
   assert.equal(technicalFix.workflow.mode, "continue-fix-technical");
 
   let invocations = 0;
-  const handoff = (resolution) => executeEmailBuildHandoff({
+  const sourceSha = "f".repeat(40);
+  const model = {schema_version:"1.1.0",id:"source-gate",metadata:{language:"ru",direction:"ltr"},root:{instance_id:"source-gate",component_id:"email-template",variants:{mobile:"mobile",desktop:"desktop"},property_values:[],content_values:[],asset_files:[],slots:[],nested_components:[]}};
+  const index = indexComponentRegistries(await loadComponentRegistries({repoRoot}));
+  const profile = (await loadEmailDeliveryProfiles({repoRoot,componentIndex:index})).profiles[0];
+  const inventory = collectEmailActions({model,componentIndex:index,profile});
+  const deliveryDocument = createDeliveryDraft({emailId:model.id,sourceSha,profile,inventory});
+  deliveryDocument.subject = "Source gate regression";
+  const handoff = (resolution, includeDelivery = true) => executeEmailBuildHandoff({
     repoRoot,
     assetRoot: root,
     outputDir: join(root, "output"),
-    model: { root: { component_id: "unregistered", slots: [] } },
-    candidates: [],
+    model,
+    candidates: [{id:"email-template"}],
     assetEvidence: [],
     resolution,
+    sourceSha,
+    ...(includeDelivery ? {deliveryDocument} : {}),
     rendererRunner: async () => { invocations += 1; },
   });
+  const missingDelivery = await handoff(newBuild, false);
+  assert.deepEqual(missingDelivery.blockers, ["delivery-required"]);
   const missingSource = await handoff(newBuild);
   assert.ok(missingSource.blockers.includes("source-evidence-missing"));
   const missingDesignEvidence = await handoff(designFix);
@@ -108,7 +123,8 @@ test("actual resolver workflow modes gate source proof and design continuation e
   const technical = await handoff(technicalFix);
   assert.equal(technical.blockers.includes("figma-source-missing"), false);
   assert.equal(technical.blockers.includes("visual-regression"), false);
-  assert.equal(invocations, 0);
+  assert.equal(technical.executed, true);
+  assert.equal(invocations, 1);
 });
 
 test("handoff fails closed without a recognized nested workflow mode", async (t) => {
@@ -280,3 +296,4 @@ test("versioning rejects linked root email and images entries", async (t) => {
     (error) => error.code === "version-path-unsafe",
   );
 });
+

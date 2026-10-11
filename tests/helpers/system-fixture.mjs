@@ -61,6 +61,9 @@ export const canonicalSystemFixtureFiles = [
   "core/email-model-assembly-standard.md",
   "core/email-source-fidelity-standard.md",
   "schemas/email-model.schema.json",
+  "schemas/email-delivery.schema.json",
+  "schemas/email-delivery-profiles.schema.json",
+  "data/delivery/profiles.yaml",
   "core/typography-standard.md",
   "core/asset-export-standard.md",
   "core/figma-library-standard.md",
@@ -131,3 +134,5 @@ export async function fixtureDigest(root, relativePaths) {
   }
   return hash.digest("hex");
 }
+
+
