@@ -273,6 +273,18 @@
         "artifact_digest": {
           "type": "string",
           "pattern": "^[a-f0-9]{64}$"
+        },
+        "event_sha": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "run_id": {
+          "type": "string",
+          "pattern": "^[0-9]+$"
+        },
+        "run_attempt": {
+          "type": "string",
+          "pattern": "^[0-9]+$"
         }
       },
       "required": [
@@ -284,6 +296,59 @@
         "workload_results",
         "conclusion",
         "evidence_refs"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "target": {
+                "const": "github-hosted"
+              }
+            },
+            "required": [
+              "target"
+            ]
+          },
+          "then": {
+            "required": [
+              "event_sha",
+              "run_id",
+              "run_attempt"
+            ],
+            "properties": {
+              "workflow_sha": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{40}$"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "workflow_sha": {
+                "type": "null"
+              }
+            },
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "event_sha"
+                  ]
+                },
+                {
+                  "required": [
+                    "run_id"
+                  ]
+                },
+                {
+                  "required": [
+                    "run_attempt"
+                  ]
+                }
+              ]
+            }
+          }
+        }
       ]
     }
   },

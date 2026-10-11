@@ -1,0 +1,79 @@
+name: Explicit CUPIS verification
+on:
+  workflow_dispatch:
+    inputs:
+      request_id:
+        description: Exact selected execution request ID
+        required: true
+        type: string
+      source_sha:
+        description: Exact selected source commit SHA
+        required: true
+        type: string
+      workloads:
+        description: Comma-separated selected portable workload IDs
+        required: true
+        type: string
+  pull_request:
+    types: [labeled]
+permissions:
+  contents: read
+concurrency:
+  group: cupis-explicit-verification
+  cancel-in-progress: false
+jobs:
+  verify:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.action == 'labeled' && github.event.label.name == 'cupis-cloud-verification' &&
+      github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.mergeable == true)
+    runs-on: windows-2025
+    timeout-minutes: 30
+    steps:
+      # Pins verified with official action repository commits/v4 metadata on 2026-10-11.
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - name: Validate selected event identity before checkout
+        id: request
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $eventData = Get-Content -Raw -LiteralPath $env:GITHUB_EVENT_PATH | ConvertFrom-Json
+          if ($env:GITHUB_EVENT_NAME -eq 'workflow_dispatch') {
+            $keys = ($eventData.inputs.PSObject.Properties.Name | Sort-Object) -join ','
+            if ($keys -ne 'request_id,source_sha,workloads') { throw 'CLOUD_REQUEST_INVALID' }
+            $request = [pscustomobject]@{ schema_version = '1.0.0'; request_id = $eventData.inputs.request_id; source_sha = $eventData.inputs.source_sha; workload_ids = @($eventData.inputs.workloads.Split(',')) }
+          } elseif ($env:GITHUB_EVENT_NAME -eq 'pull_request') {
+            if ($eventData.action -ne 'labeled' -or $eventData.label.name -ne 'cupis-cloud-verification' -or $eventData.pull_request.mergeable -ne $true -or $eventData.pull_request.head.repo.full_name -ne $eventData.repository.full_name) { throw 'CLOUD_REQUEST_INVALID' }
+            $body = [string]$eventData.pull_request.body
+            $markers = [regex]::Matches($body, '<!-- cupis-cloud-verification:')
+            $matches = [regex]::Matches($body, '(?s)<!-- cupis-cloud-verification:v1\n(.*?)\n-->')
+            if ($markers.Count -ne 1 -or $matches.Count -ne 1) { throw 'CLOUD_REQUEST_INVALID' }
+            $request = $matches[0].Groups[1].Value | ConvertFrom-Json
+            if ($request.source_sha -cne $eventData.pull_request.head.sha) { throw 'CLOUD_REQUEST_INVALID' }
+          } else { throw 'CLOUD_REQUEST_INVALID' }
+          $keys = ($request.PSObject.Properties.Name | Sort-Object) -join ','
+          if ($keys -ne 'request_id,schema_version,source_sha,workload_ids' -or $request.schema_version -cne '1.0.0' -or $request.source_sha -cnotmatch '^[a-f0-9]{40}$' -or $request.request_id -cnotmatch '^[-A-Za-z0-9_.]{1,100}$') { throw 'CLOUD_REQUEST_INVALID' }
+          $allowed = @('docs-scoped','repository-full','windows-bootstrap','visual-fixtures')
+          if ($request.workload_ids -isnot [array] -or $request.workload_ids.Count -eq 0 -or @($request.workload_ids | Sort-Object -Unique).Count -ne $request.workload_ids.Count) { throw 'CLOUD_REQUEST_INVALID' }
+          foreach ($id in $request.workload_ids) { if ($allowed -cnotcontains $id) { throw 'CLOUD_REQUEST_INVALID' } }
+          "source_sha=$($request.source_sha)" | Out-File -LiteralPath $env:GITHUB_OUTPUT -Append -Encoding utf8
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ steps.request.outputs.source_sha }}
+          persist-credentials: false
+      - name: Install exact locked dependencies
+        shell: pwsh
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Run selected workloads with exact event identity
+        shell: pwsh
+        run: node scripts/run-verification.mjs --from-event
+      - name: Preserve receipt and bounded command evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: cupis-verification-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/cupis-verification-evidence/*.json
+          if-no-files-found: error
+          retention-days: 7

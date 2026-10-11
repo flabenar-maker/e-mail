@@ -392,6 +392,8 @@
           "args": [
             "-NoProfile",
             "-NonInteractive",
+            "-ExecutionPolicy",
+            "Bypass",
             "-File",
             "bootstrap/verify.ps1"
           ]
@@ -401,6 +403,8 @@
           "args": [
             "-NoProfile",
             "-NonInteractive",
+            "-ExecutionPolicy",
+            "Bypass",
             "-File",
             "tests/bootstrap-contract.Tests.ps1"
           ]
@@ -410,6 +414,8 @@
           "args": [
             "-NoProfile",
             "-NonInteractive",
+            "-ExecutionPolicy",
+            "Bypass",
             "-File",
             "tests/execution-profile.Tests.ps1"
           ]
@@ -484,7 +490,7 @@
           "executable": "node",
           "args": [
             "scripts/verify-installed-skills.mjs",
-            "--skills-root",
+            "--inventory",
             "{installed_skills_root}"
           ]
         }
@@ -527,7 +533,7 @@
             "{email_model}",
             "--references",
             "{reference_manifest}",
-            "--output",
+            "--evidence-inventory",
             "{evidence_root}"
           ]
         }

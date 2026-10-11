@@ -36,3 +36,16 @@ test('visual helper rejects file-only evidence without independent qualified ima
 test('installed helper rejects unbound paths rather than claiming PASS',async t=>{await assert.rejects((await import('../../scripts/verify-installed-skills.mjs')).verifyInstalledSkills({}),{code:'INSTALLED_SKILLS_EVIDENCE_MISSING'});});
 test('Windows workload uses process-only ExecutionPolicy Bypass on every fixed command',async()=>{const p=await loadExecutionPolicy({repoRoot});for(const command of p.workloads.find(x=>x.id==='windows-bootstrap').commands){assert.deepEqual(command.args.slice(0,5),['-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File']);}});
 test('docs workload narrows guard tests from changed paths without accepting arbitrary argv',async()=>{const {selectDocsTests}=await api();assert.deepEqual(selectDocsTests(['.agents/skills/building-cupis-emails/SKILL.md']),['tests/skills/email-build-skill-boundary.test.mjs']);assert.throws(()=>selectDocsTests(['../outside']),{code:'VERIFICATION_CHANGED_PATH_INVALID'});});
+test('total deadline is shared across commands and workloads',async t=>{
+ const f=await fixture(t,{workloadIds:['repository-full','docs-scoped']});let now=100,executions=0;f.options.runner.now=()=>now;f.options.runner.execute=async(command,options)=>{executions++;assert.equal(options.timeoutMs,1800000);now+=1800001;return {status:'success',exitCode:0};};
+ const receipt=await (await api()).runVerification(f.options);assert.equal(executions,1);assert.equal(receipt.conclusion,'timed_out');assert.equal(receipt.workload_results.length,2);assert.ok(receipt.workload_results.every(r=>r.status==='timed_out'));
+});
+test('unconfirmed termination retains persistent heavy lock for manual recovery',async t=>{
+ const f=await fixture(t,{workloadIds:['repository-full']});f.options.runner.execute=async()=>({status:'infrastructure-error',exitCode:-1,terminationConfirmed:false});const {runVerification}=await api();assert.equal((await runVerification(f.options)).conclusion,'infrastructure-error');await assert.rejects(runVerification({...f.options,outputRoot:join(f.root,'another-run')}),{code:'VERIFICATION_HEAVY_BATCH_ACTIVE'});
+});
+test('owned process times out and confirms termination before returning',async()=>{
+ const {executeVerificationCommand}=await api();const result=await executeVerificationCommand({executable:'node',args:['--eval','setInterval(()=>{},1000)']},{repoRoot,timeoutMs:250});assert.equal(result.status,'timed_out');assert.equal(result.terminationConfirmed,true);
+});
+test('owned process cancellation does not produce a successful result',async()=>{
+ const {executeVerificationCommand}=await api(),controller=new AbortController();const pending=executeVerificationCommand({executable:'node',args:['--eval','setInterval(()=>{},1000)']},{repoRoot,timeoutMs:5000,signal:controller.signal});setTimeout(()=>controller.abort(),250);const result=await pending;assert.equal(result.status,'cancelled');assert.equal(result.terminationConfirmed,true);
+});
