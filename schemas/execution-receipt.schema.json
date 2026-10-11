@@ -222,6 +222,10 @@
               },
               "exit_code": {
                 "type": "integer"
+              },
+              "input_digest": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
               }
             },
             "required": [
@@ -265,6 +269,10 @@
           },
           "minItems": 0,
           "uniqueItems": true
+        },
+        "artifact_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
         }
       },
       "required": [

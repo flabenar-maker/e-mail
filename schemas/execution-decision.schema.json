@@ -204,6 +204,35 @@
                 "model",
                 "effort"
               ]
+            },
+            "eligible_reviewers": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "tier": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 4
+                  },
+                  "model": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "effort": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "tier",
+                  "model",
+                  "effort"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
             }
           },
           "required": [
@@ -263,6 +292,25 @@
                   "timeout_minutes",
                   "max_heavy_batches"
                 ]
+              },
+              "input_names": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              },
+              "input_digest": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
               }
             },
             "required": [
@@ -282,6 +330,27 @@
         "blockers": {
           "type": "array",
           "maxItems": 0
+        },
+        "input_refs": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "digest": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "path",
+              "digest"
+            ]
+          }
         }
       },
       "required": [
