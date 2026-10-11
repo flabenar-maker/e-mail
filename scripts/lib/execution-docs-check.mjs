@@ -38,7 +38,8 @@ export async function deriveDocsScope({repoRoot,sourceSha,readGit}={}){
  const git=readGit??(async args=>(await exec('git',args,{cwd:repoRoot,timeout:10000,maxBuffer:1024*1024})).stdout);
  const actual=(await git(['rev-parse','HEAD'])).trim();if(!/^[a-f0-9]{40}$/u.test(actual)||(sourceSha&&sourceSha!==actual))throw fail('VERIFICATION_SOURCE_MISMATCH','Docs source must equal exact checkout.');
  // cat-file reads parent metadata even in shallow clones; rev-list would hide a missing parent.
- const metadata=await git(['cat-file','-p',actual]);const parent=/^parent ([a-f0-9]{40})$/mu.exec(metadata)?.[1]??null;
+ const metadata=await git(['cat-file','-p',actual]);
+ const header=metadata.split(/\r?\n\r?\n/u,1)[0];const parent=/^parent ([a-f0-9]{40})$/mu.exec(header)?.[1]??null;
  if(parent)try{await git(['cat-file','-e',parent+'^{commit}']);}catch{throw fail('VERIFICATION_DOCS_BASE_MISSING','Prepare exact source and its first parent before verification; runner does not fetch.');}
  const raw=parent?await git(['diff','--name-only','-z','--no-renames',parent,actual,'--']):await git(['ls-tree','--name-only','-r','-z',actual]);
  const changed_paths=[...new Set(raw.split('\0').filter(Boolean))].sort(),tests=selectDocsTests(changed_paths);
