@@ -81,3 +81,8 @@ test("every rendering strategy helper and execution workflow receives the critic
 test("malformed declared model entries return typed unavailable instead of throwing",async()=>{
  const policy=await setup();for(const entry of [null,undefined,42,"model",[],{}]) {const result=select(policy,"bounded-change",{...caps(),models:[entry]});assert.equal(result.status,"blocked");assert.equal(result.blockers[0].code,"MODEL_ROLE_UNAVAILABLE");}
 });
+
+test('all execution control modules and CLIs have a critical mutation floor',async()=>{
+ const policy=await setup();for(const path of ['scripts/lib/runtime-capabilities.mjs','scripts/lib/execution-context.mjs','scripts/lib/execution-receipt.mjs','scripts/lib/verification-runner.mjs','scripts/lib/cloud-verification.mjs','scripts/lib/machine-profile.mjs','scripts/lib/machine-profile-validation.mjs','scripts/resolve-execution-context.mjs','scripts/finalize-execution.mjs','scripts/init-execution-profile.mjs','scripts/run-verification.mjs','scripts/request-cloud-verification.mjs','scripts/verify-installed-skills.mjs','scripts/verify-real-email-visual.mjs']){const r=select(policy,'bounded-change',caps(),{operation:'write',allowedPaths:[path]});assert.equal(r.base_tier,3,path);assert.equal(r.executor.tier,4,path);}
+ assert.equal(select(policy,'bounded-change',caps(),{operation:'write',allowedPaths:['tests/skills/ordinary-fixture.test.mjs']}).base_tier,2);
+});
