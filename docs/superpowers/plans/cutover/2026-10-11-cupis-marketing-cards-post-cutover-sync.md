@@ -80,11 +80,11 @@
 - Acceptance criterion: verifier performs fresh exact-final local validate, full tests and generated check (npm run verify plus npm run generate:check, or the honest direct equivalents with verified same-lock dependencies), then source-link/identity/preserved-object audit. Capture/export/raw-native limitations stay visible and separate from functional acceptance.
 - Acceptance criterion: distinct selected expert reviewer reads all five primary requirements, fresh actual sources, final permitted diff, RED/GREEN/local visual receipts and this plan. Resolve actionable findings within scope; reverify any changed final commit.
 - [x] Mark the full1–4 implementation candidate prepared/open/unmerged in current status and attach PR #118.
-- [ ] Integration acceptance: separate merge authorization and exact accepted merged evidence are required to close5fix1;5fix2/P6 remain pending.
+- [x] Integration acceptance: separately authorized PR118 merge completed at main b037987d9ab6df4cdc3f169fa6002212abc3580c, with fresh local candidate and merged verification. Exact original acceptance/source/visual pins are preserved; see ../../specs/2026-10-11-pr118-integration.md. 5fix2 implementation and P6 remain pending.
 
 ## Current status
 
-The full 5 fix 1.1–1.4 implementation candidate is prepared in open, unmerged [PR #118](https://github.com/flabenar-maker/e-mail/pull/118). Current status describes candidate preparation, not merged acceptance. Task4 defines the final acceptance gates; their actual execution status and exact-candidate results are recorded in PR #118 after metadata, status and canonical generated output are published. This preparation record does not predeclare a final run PASS and does not override later exact receipts in PR #118. No future commit SHA is inferred here.
+The full 5 fix 1.1–1.4 implementation is accepted and separately merged through [PR #118](https://github.com/flabenar-maker/e-mail/pull/118), main b037987d9ab6df4cdc3f169fa6002212abc3580c. The 14-file previous scope excludes new Altcraft work. Fresh local verification and preserved original acceptance pins are recorded in [integration evidence](../../specs/2026-10-11-pr118-integration.md). The original history below retains its own source pins and limitations.
 
 - Meaningful RED: e656d2dd8847cd3bc40eecf4812f82097b175ccd, 41 tests, 25 pass / 16 expected implementation failures, no harness defect. Published tests/fixture/plan remain the immutable RED baseline.
 - Production: five owners, direct native TEXT capture, and the isolated generic Fill html-link change. Focused GREEN at e1e7c9a6d9f94d9e83d28d47845f8b7b4878a490: six focused files, 72/72 pass. A separately published test amendment corrected the existing verified-block-mini expected contract; it does not replace the frozen RED receipt.
@@ -94,7 +94,7 @@ The full 5 fix 1.1–1.4 implementation candidate is prepared in open, unmerged 
 - Card/Icon master gap10 and six projected gaps0 remain exact native observations. The one-child rendering disposition is limited to the frozen same-asset/one-visible-child/zero-padding/empty-paint topology; a second or hidden child or changed appearance invalidates it. No descendant override or new evidence schema was introduced.
 - Canonical generation, browser visual comparisons, full local verification and distinct final review retain their own exact candidate receipts in PR #118. Terra owns local test/visual execution. No GitHub Actions or PR Checks are quality evidence. No Figma writes, existing-email edits or merge occurred in this implementation scope.
 
-Integration acceptance remains pending separate merge authorization and accepted merged evidence. The existing Step5/11B results remain unchanged; 5 fix 2 and package6 remain pending.
+Integration acceptance is complete by separate authorization; see the exact merged evidence above. Existing Step5/11B results are unchanged; 5fix2 implementation and package6 remain pending.
 
 ## Bounded fixed-image correction after972 candidate checks
 
