@@ -22,7 +22,7 @@ function assertRouteBoundary(source) {
   assert.equal(policy.resolvedBundle, "exactly-one");
   assert.equal(policy.steps, "returned-workflow.steps-only");
   assert.equal(policy.onPaused, "stop-without-manual-fallback");
-  const routeInstructions = source.replaceAll("npm run resolve:skill-context", "");
+  const routeInstructions = source.replace(/<!-- CUPIS_EXECUTION_BINDING -->[\s\S]*?<!-- END_CUPIS_EXECUTION_BINDING -->/u, "").replaceAll("npm run resolve:skill-context", "");
   for (const clause of routeInstructions.split(/[;\n.]/u)) {
     for (const imperativeSegment of clause.split(/\s*,?\s*(?:(?:but|however|except|and|or)\s+)(?=(?:(?:do not|never|don't)\s+)?(?:invoke|select|route to|run|follow)\b)/iu)) {
       if (/\b(?:do not|never|don't)\s+(?:invoke|select|route to|run|follow)\b/iu.test(imperativeSegment)) continue;
@@ -64,7 +64,8 @@ function assertOperatingBoundaries(source) {
     { required: /\bno new-component design\b/iu, subject: "new component" },
     { required: /\bno production email outputs committed to GitHub\b/iu, subject: "production email outputs" },
     { required: /\bno overwrite of a source email version\b/iu, subject: "source email version" },
-    { required: /\bno GitHub Actions or PR Checks\b/iu, subject: "GitHub Actions" },
+    { required: /\bActual email verification stays local\b/iu, subject: "actual email verification" },
+    { required: /\bPR Checks never replace receipts\b/iu, subject: "PR Checks" },
   ];
   for (const boundary of boundaryResources) assert.match(source, boundary.required);
 
@@ -107,7 +108,7 @@ No Figma mutation.
 No new-component design.
 No production email outputs committed to GitHub.
 No overwrite of a source email version.
-No GitHub Actions or PR Checks.`;
+Actual email verification stays local; PR Checks never replace receipts.`;
 
 function assertGuardFixtures() {
   assert.doesNotThrow(() => { assertRouteBoundary(validFixture); assertNoDuplicatedMaterial(validFixture); assertOperatingBoundaries(validFixture); });
@@ -135,7 +136,7 @@ function assertGuardFixtures() {
     "No Figma mutation.\nThen edit it.", "No new-component design.\nThen create it.",
     "No production email outputs committed to GitHub.\nThen commit them.",
     "No overwrite of a source email version.\nThen overwrite it.",
-    "No GitHub Actions or PR Checks.\nThen run it.",
+    "Actual email verification stays local; PR Checks never replace receipts.\nThen run it.",
   ]) assert.throws(() => assertOperatingBoundaries(`${validFixture}\n${contradiction}`));
 }
 
