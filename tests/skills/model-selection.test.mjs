@@ -64,3 +64,20 @@ test("explicit typed refusals skip a candidate only for the current runtime sign
  runtime.refusals[0].tool_signature="old-tool"; assert.equal(select(policy,"mechanical-read",runtime).executor.model,"gpt-5.6-terra");
  runtime.refusals[0].tool_signature="declared-spawn-v1"; runtime.refusals[0].code="NETWORK_ERROR"; assert.equal(select(policy,"mechanical-read",runtime).executor.model,"gpt-5.6-terra");
 });
+
+test("Windows aliases cannot disguise critical writable directories",async()=>{
+ const policy=await setup();
+ for(const path of ["schemas./x.json","core /x.md","schemas.../x.json",".agents/skills /x/SKILL.md","schema~1/x.json","NUL/x.md","docs/con.txt"]) {
+  const result=select(policy,"bounded-change",caps(),{operation:"write",allowedPaths:[path]}); assert.equal(result.status,"blocked",path);assert.equal(result.blockers[0].code,"EXECUTION_TASK_KIND_SCOPE_MISMATCH",path);
+ }
+ const mixed=select(policy,"bounded-change",caps(),{operation:"write",allowedPaths:["ScHeMaS\\x.json"]});assert.equal(mixed.base_tier,3);assert.equal(mixed.executor.tier,4);
+});
+test("every rendering strategy helper and execution workflow receives the critical floor",async()=>{
+ const policy=await setup();
+ for(const path of ["scripts/lib/render-impact.mjs","scripts/lib/rendering-foundation.mjs","scripts/lib/email-rendering.mjs",".github/workflows/execution-verification.yml"]) {
+  const result=select(policy,"bounded-change",caps(),{operation:"write",allowedPaths:[path]});assert.equal(result.base_tier,3,path);assert.equal(result.executor.tier,4,path);
+ }
+});
+test("malformed declared model entries return typed unavailable instead of throwing",async()=>{
+ const policy=await setup();for(const entry of [null,undefined,42,"model",[],{}]) {const result=select(policy,"bounded-change",{...caps(),models:[entry]});assert.equal(result.status,"blocked");assert.equal(result.blockers[0].code,"MODEL_ROLE_UNAVAILABLE");}
+});

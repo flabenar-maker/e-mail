@@ -38,3 +38,13 @@ test("manifest lookup rejects unregistered or escaping policy sources",async()=>
  const load=loader(); await assert.rejects(load({repoRoot,manifest:{sources:[]}}),e=>e.code==="execution-policy-source");
  await assert.rejects(load({repoRoot,manifest:{sources:[{id:"execution-policy",kind:"registry",path:"../policy.yaml"},{id:"execution-policy-schema",kind:"schema",path:"schemas/execution-policy.schema.json"}]}}),e=>e.code==="execution-policy-source");
 });
+
+test("manifest cannot redirect canonical policy or its strict schema",async(t)=>{
+ const load=loader();const f=await fixture(t);
+ await writeFile(join(f.root,"alternative-policy.yaml"),await readFile(join(f.root,"data/execution/policy.yaml")));
+ await writeFile(join(f.root,"permissive-schema.json"),JSON.stringify({type:"object"}));
+ for(const [id,path] of [["execution-policy","alternative-policy.yaml"],["execution-policy-schema","permissive-schema.json"]]) {
+  const manifest=structuredClone(f.manifest);manifest.sources.find(source=>source.id===id).path=path;
+  await assert.rejects(load({repoRoot:f.root,manifest}),error=>error.code==="execution-policy-source",path);
+ }
+});
