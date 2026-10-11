@@ -123,6 +123,7 @@ function propsFromFacts(facts = [], { viewport, mode, isRoot = false, parentAxis
   if (mode === "html-link" && sizing === "fill") {
     props.style.display = "block";
     props.style.width = "100%";
+    props.style["overflow-wrap"] = "anywhere";
   }
   // Email-only geometry keeps exported artwork at its actual displayed size.
   const emailSize = fact("email-render-size");
