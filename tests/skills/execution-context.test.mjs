@@ -57,3 +57,12 @@ test('runtime cache reads declarations once per session signature and typed refu
 });
 
 test('initial unbound resolution works and bound rerun keeps the same tier',async t=>{const f=await fixture(t);delete f.request.executor_agent_id;let request=await api.loadExecutionRequest({request:f.request,repoRoot:f.root});const initial=api.resolveExecutionContext({...f,request});assert.equal(initial.status,'resolved');assert.equal(initial.executor_agent_id,null);request=await api.loadExecutionRequest({request:{...f.request,executor_agent_id:'actual-worker'},repoRoot:f.root});const bound=api.resolveExecutionContext({...f,request});assert.deepEqual(bound.executor,initial.executor);assert.equal(bound.executor_agent_id,'actual-worker');});
+
+test('saved profile needs the active pair and exact workload signature and never widens outputs',async t=>{
+ const f=await fixture(t);f.request.workload_ids=['docs-scoped'];f.request.profile_pair_key='opaque-pair';
+ const request=await api.loadExecutionRequest({request:f.request,repoRoot:f.root});const workload=f.policy.workloads.find(x=>x.id==='docs-scoped');
+ const p={schema_version:'1.0.0',pair_key:'opaque-pair',initialized_at:'2026-10-11T00:00:00Z',observations_status:'available',observations:{platform:'win32'},baseline_policy_digest:f.policy.policy_digest,local_limits:f.policy.local_limits,workload_decisions:[{id:'docs-scoped',signature:api.workloadSignature(workload),target:'local'}]};
+ const profile={status:'resolved',pair_key:'opaque-pair',profile:p};let result=api.resolveExecutionContext({...f,request,profile});assert.equal(result.verification[0].target,'local');assert.deepEqual(result.allowed_paths,f.request.allowed_paths);
+ for(const invalid of [undefined,{...profile,pair_key:'other'},{...profile,profile:{...p,schema_version:'2.0.0'}},{...profile,profile:{...p,workload_decisions:[{...p.workload_decisions[0],signature:'0'.repeat(64)}]}},{status:'resolved',pair_key:'opaque-pair',profile:{schema_version:'1.0.0',pair_key:'opaque-pair',workload_decisions:p.workload_decisions}}]) assert.equal(api.resolveExecutionContext({...f,request,profile:invalid}).verification[0].target,'github-hosted');
+});
+test('initial model selection can precede artifact creation',async t=>{const f=await fixture(t);delete f.request.executor_agent_id;f.request.artifact_refs=[];const request=await api.loadExecutionRequest({request:f.request,repoRoot:f.root});assert.equal(api.resolveExecutionContext({...f,request}).status,'resolved');});

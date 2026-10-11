@@ -16,7 +16,9 @@
     "render:email": "node scripts/render-email.mjs",
     "preview:email": "node scripts/render-email-preview.mjs",
     "test": "node --test tests/foundation/*.test.mjs tests/characterization/*.test.mjs tests/components/*.test.mjs tests/generation/*.test.mjs tests/rendering/*.test.mjs tests/workflows/*.test.mjs tests/skills/*.test.mjs",
-    "verify": "npm run validate && npm test"
+    "verify": "npm run validate && npm test",
+    "resolve:execution-context": "node scripts/resolve-execution-context.mjs",
+    "finalize:execution": "node scripts/finalize-execution.mjs"
   },
   "dependencies": {
     "ajv": "8.20.0",

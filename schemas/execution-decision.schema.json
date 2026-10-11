@@ -1,0 +1,367 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "execution-decision",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "status": {
+          "const": "resolved"
+        },
+        "domain_status": {
+          "const": "resolved"
+        },
+        "request_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_sha": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "policy_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "route": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mode": {
+          "type": "string",
+          "minLength": 1
+        },
+        "operation": {
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "allowed_paths": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "executor_agent_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "domain_context_ref": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "digest": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "path",
+            "digest"
+          ]
+        },
+        "requirement_refs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "digest": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "path",
+              "digest"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "artifact_refs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "digest": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "path",
+              "digest"
+            ]
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "base_tier": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "target_tier": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "executor": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tier": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4
+            },
+            "model": {
+              "type": "string",
+              "minLength": 1
+            },
+            "effort": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "tier",
+            "model",
+            "effort"
+          ]
+        },
+        "review": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "required": {
+              "const": true
+            },
+            "mode": {
+              "enum": [
+                "independent-agent",
+                "independent-source-check"
+              ]
+            },
+            "distinct_agent_required": {
+              "const": true
+            },
+            "primary_sources_required": {
+              "const": true
+            },
+            "all_requirements_required": {
+              "const": true
+            },
+            "reviewer": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "tier": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 4
+                },
+                "model": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "effort": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "tier",
+                "model",
+                "effort"
+              ]
+            }
+          },
+          "required": [
+            "required",
+            "mode",
+            "distinct_agent_required",
+            "primary_sources_required",
+            "all_requirements_required",
+            "reviewer"
+          ]
+        },
+        "verification": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "portability": {
+                "enum": [
+                  "portable",
+                  "local-only"
+                ]
+              },
+              "target": {
+                "enum": [
+                  "local",
+                  "github-hosted"
+                ]
+              },
+              "signature": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "limits": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "concurrency": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "timeout_minutes": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "max_heavy_batches": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                },
+                "required": [
+                  "concurrency",
+                  "timeout_minutes",
+                  "max_heavy_batches"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "portability",
+              "target",
+              "signature",
+              "limits"
+            ]
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "safety_ceiling_reached": {
+          "type": "boolean"
+        },
+        "blockers": {
+          "type": "array",
+          "maxItems": 0
+        }
+      },
+      "required": [
+        "schema_version",
+        "status",
+        "domain_status",
+        "request_id",
+        "source_sha",
+        "policy_digest",
+        "route",
+        "mode",
+        "operation",
+        "allowed_paths",
+        "executor_agent_id",
+        "domain_context_ref",
+        "requirement_refs",
+        "artifact_refs",
+        "base_tier",
+        "target_tier",
+        "executor",
+        "review",
+        "verification",
+        "safety_ceiling_reached",
+        "blockers"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "1.0.0"
+        },
+        "status": {
+          "const": "blocked"
+        },
+        "blockers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string",
+                "minLength": 1
+              },
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "message": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "code",
+              "path",
+              "message"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "domain_status": {
+          "enum": [
+            "resolved",
+            "paused",
+            "blocked"
+          ]
+        },
+        "executor": {
+          "type": "null"
+        }
+      },
+      "required": [
+        "schema_version",
+        "status",
+        "blockers"
+      ]
+    }
+  ]
+}

@@ -24,3 +24,6 @@ test('local-only workload must have matching local successful evidence',()=>{
 test('blocked or edited incomplete decisions cannot bypass the gate',()=>{for(const change of [{status:'blocked'},{review:null},{requirement_refs:[]},{executor:null},{domain_status:'paused'}]){const f=fixture();Object.assign(f.decision,change);assert.equal(run(f).status,'blocked');}});
 
 test('unbound decision cannot accept an asserted executor identity',()=>{const f=fixture();f.decision.executor_agent_id=null;assert.equal(run(f).status,'blocked');});
+
+test('actual artifact is mandatory even after executor binding',()=>{const f=fixture();f.decision.artifact_refs=[];assert.equal(run(f).status,'blocked');});
+test('mechanical acceptance still needs qualified independent direct source review',()=>{const f=fixture();f.decision.review.mode='independent-source-check';f.decision.review.reviewer=f.decision.executor;Object.assign(f.reviewReceipts[0],{review_mode:'independent-source-check',reviewer_model:f.decision.executor.model,reviewer_effort:f.decision.executor.effort});assert.equal(run(f).status,'accepted');f.reviewReceipts[0].reviewer_agent_id='worker';assert.equal(run(f).status,'blocked');});
