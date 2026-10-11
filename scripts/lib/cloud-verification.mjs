@@ -7,6 +7,7 @@ import {inflateRawSync} from 'node:zlib';
 import Ajv2020 from 'ajv/dist/2020.js';
 import receiptSchema from '../../schemas/execution-receipt.schema.json' with {type:'json'};
 import {validateCloudRequest,writeCloudRequestMarker,readCloudEventRequest} from './execution-cloud-event.mjs';
+import {validatedProfileWrapper} from './machine-profile-validation.mjs';
 
 const WORKFLOW='.github/workflows/cupis-verification.yml';
 const LABEL='cupis-cloud-verification';
@@ -17,6 +18,9 @@ const fail=(code,message)=>Object.assign(new Error(message),{code});
 const blocked=(code,message)=>({status:'blocked',code,message});
 const positive=value=>/^[1-9][0-9]*$/u.test(String(value))&&Number.isSafeInteger(Number(value));
 const time=value=>typeof value==='string'&&Number.isFinite(Date.parse(value));
+// GitHub run timestamps have whole-second precision. Round only down to that
+// precision; do not add an unbounded clock-skew allowance or choose an older run.
+const apiTime=value=>Math.floor(new Date(value).getTime()/1000)*1000;
 const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
 const validReceipt=new Ajv2020({strict:true,allErrors:true}).compile({$defs:receiptSchema.$defs,$ref:'#/$defs/verification'});
 const terminal=new Set(['success','failure','cancelled','timed_out','infrastructure-error']);
@@ -43,7 +47,10 @@ export function createCloudRequestStore({stateRoot,fs=filesystem}){
 }
 export function createLocalOfferStore({stateRoot,fs=syncFilesystem}){
  const root=resolve(stateRoot);
- return {claim(key){fs.mkdirSync(root,{recursive:true});try{fs.mkdirSync(join(root,'local-offer-'+hash(key)));return true;}catch(error){if(error.code==='EEXIST')return false;throw fail('LOCAL_OFFER_STATE_UNWRITABLE','The once-only offer could not be persisted.');}}};
+ return {claim(key){
+  try{fs.mkdirSync(root,{recursive:true});}catch{throw fail('LOCAL_OFFER_STATE_UNWRITABLE','The offer state directory could not be created.');}
+  try{fs.mkdirSync(join(root,'local-offer-'+hash(key)));return true;}catch(error){if(error.code==='EEXIST')return false;throw fail('LOCAL_OFFER_STATE_UNWRITABLE','The once-only offer could not be persisted.');}
+ }};
 }
 
 function selectedRequest(decision){
@@ -93,7 +100,7 @@ export async function requestCloudVerification({decision,prIdentity,gh,requestSt
    if(eventWorkflow?.content!==sourceWorkflow.content)return blocked('CLOUD_WORKFLOW_NOT_READY','Event workflow must equal the selected source workflow.');
    const fresh=await gh.getPullRequest({repository,number});
    if(!prReady(fresh,repository,number,selected.carrier.source_sha)||!prUnchanged(pr,fresh))return blocked('CLOUD_WORKFLOW_NOT_READY','PR changed during request preparation.');
-   const created=gh.now?.()??new Date(),createdAt=created.toISOString();
+   const created=new Date(apiTime(gh.now?.()??new Date())),createdAt=created.toISOString();
    const request={...selected.carrier,workloads:selected.workloads,repository,pr_number:number,event,workflow_id:workflow?String(workflow.id):null,workflow_path:WORKFLOW,workflow_sha:eventSha,event_sha:eventSha,workflow_digest:hash(sourceWorkflow.content),base_sha:pr.base.sha,ref:pr.head.ref,display_title:`cupis-cloud:${event}:${event==='workflow_dispatch'?selected.carrier.request_id:number}:${selected.carrier.source_sha}`,created_at:createdAt,discovery_until:new Date(created.getTime()+120000).toISOString(),run_id:null};
    const pending={status:'uncertain',code:'CLOUD_REQUEST_OUTCOME_UNKNOWN',fingerprint,request};
    // Write-ahead uncertainty includes body mutation: interrupted body/label operations
@@ -123,7 +130,7 @@ function requestValid(r){
  return REPOSITORY.test(r.repository??'')&&Number.isSafeInteger(r.pr_number)&&r.pr_number>0&&['workflow_dispatch','pull_request'].includes(r.event)&&r.workflow_path===WORKFLOW&&SHA.test(r.workflow_sha)&&SHA.test(r.event_sha)&&SHA.test(r.base_sha)&&HASH.test(r.workflow_digest)&&time(r.created_at)&&time(r.discovery_until)&&Date.parse(r.discovery_until)-Date.parse(r.created_at)===120000&&(r.run_id===null||positive(r.run_id))&&(r.workflow_id===null||positive(r.workflow_id))&&Array.isArray(r.workloads)&&r.workloads.length===r.workload_ids.length&&r.workloads.every((w,i)=>w.id===r.workload_ids[i]&&HASH.test(w.signature));
 }
 function matchingRun(run,r){
- const created=Date.parse(run?.created_at),start=Date.parse(r.created_at),end=Date.parse(r.discovery_until);
+ const created=Date.parse(run?.created_at),start=apiTime(r.created_at),end=apiTime(r.discovery_until);
  if(!positive(run?.id)||String(run.run_attempt)!=='1'||run.repository?.full_name!==r.repository||run.head_repository?.full_name!==r.repository||run.event!==r.event||run.path?.split('@')[0]!==WORKFLOW||(r.workflow_id!==null&&String(run.workflow_id)!==r.workflow_id)||run.display_title!==r.display_title||run.head_branch!==r.ref||!Number.isFinite(created)||created<start||created>end)return false;
  if(r.event==='workflow_dispatch')return run.head_sha===r.source_sha;
  // API head_sha is not treated as GITHUB_SHA. Both explicitly known source/event
@@ -156,9 +163,9 @@ export async function readCloudVerification({request,gh}){
  const reject=(code,message)=>({...blocked(code,message),...(trustedRun&&run?.status==='completed'?{terminal_receipt:terminalReceipt(request,run)}:{})});
  try{
   if(!requestValid(request))return blocked('CLOUD_REQUEST_INVALID','A durable selected request record is required.');
-  if(request.run_id){run=await gh.getRun({repository:request.repository,runId:request.run_id});if(!matchingRun(run,request))return blocked('CLOUD_RUN_IDENTITY_MISMATCH','Selected API run does not match the exact request identity.');}
+  if(request.run_id){run=await gh.getRun({repository:request.repository,runId:request.run_id});if(String(run?.id)!==request.run_id||!matchingRun(run,request))return blocked('CLOUD_RUN_IDENTITY_MISMATCH','Selected API run does not match the exact request identity.');}
   else{
-   const found=await gh.listRuns({repository:request.repository,event:request.event,created:request.created_at+'..'+request.discovery_until});
+   const found=await gh.listRuns({repository:request.repository,event:request.event,created:new Date(apiTime(request.created_at)).toISOString()+'..'+new Date(apiTime(request.discovery_until)).toISOString()});
    if(!Array.isArray(found?.workflow_runs)||found.total_count!==found.workflow_runs.length||found.total_count>100)return blocked('CLOUD_RUN_AMBIGUOUS','Bounded discovery cannot prove a unique selected run.');
    const candidates=found.workflow_runs.filter(item=>matchingRun(item,request));
    if(candidates.length>1)return blocked('CLOUD_RUN_AMBIGUOUS','Multiple selected event candidates exist; no artifact was downloaded.');
@@ -189,16 +196,28 @@ export function buildLocalVerificationOffer(options){
  if(!receipt||!validReceipt(receipt)||receipt.target!=='github-hosted'||!terminal.has(receipt.conclusion)||receipt.request_id!==decision.request_id||receipt.source_sha!==decision.source_sha)return null;
  const selected=decision.verification.filter(w=>w.target==='github-hosted');
  if(!selected.length||receipt.workload_results.some(w=>!selected.some(s=>s.id===w.id&&s.signature===w.signature)))return null;
- const {offerStore,profile}=options;if(!offerStore)return null;
+ const {offerStore,profile,pairKey}=options;if(!offerStore)return null;
  const identity=[receipt.request_id,receipt.source_sha,receipt.workflow_sha,receipt.event_sha,receipt.run_id,receipt.run_attempt];
  if(!offerStore.claim(JSON.stringify(identity)))return null;
- const cached=profile?.status==='resolved'?profile.profile:null;
+ const validated=validatedProfileWrapper({wrapper:profile,pairKey});
+ const cached=validated.status==='resolved'?validated.profile:null;
  const initialized=cached&&time(cached.initialized_at)?cached.initialized_at:null;
- const scopes=selected.map(w=>w.id),failed=receipt.workload_results.filter(w=>w.status!=='success'||w.exit_code!==0).map(w=>w.id);
+ const scopes=selected.map(w=>w.id);
  const reproduction=receipt.conclusion!=='success';
- return {execution_id:hash(JSON.stringify(identity)),conclusion:receipt.conclusion,goal:reproduction?'Reproduce the selected cloud failure with the smallest relevant local scope.':'Optionally check the selected scope in this local environment.',scopes,baseline_initialized_at:initialized,current_load_measured:false,baseline_note:initialized?'Saved baseline only; current free memory, CPU load and disk availability were not measured.':'Saved baseline unavailable or unknown; current load was not measured.',limits:{concurrency:2,timeout_minutes:30,max_heavy_batches:1},risks:[{kind:'hang',description:'A local batch may slow or hang this PC when other applications consume resources.'},{kind:'software-opening',description:'Any check that needs local software may open applications; that requires a separately selected action.'},{kind:'time',description:'A full batch may take up to 30 minutes and delay other work; the saved baseline is not a duration guarantee.'}],choices:[{id:'lightweight',action:reproduction?'scoped-reproduction':'scoped-check',scopes:failed.length?failed:scopes,requires_explicit_selection:true},{id:'full-later',action:'defer-full-local-check',scopes,requires_explicit_selection:true},{id:'skip-additional',action:'skip-optional-only',scopes:[],requires_explicit_selection:true}],required_checks_note:'Skipping an additional run cannot satisfy missing mandatory local-only verification or independent semantic review.'};
+ // A receipt's non-success workload can be a propagated, unexecuted batch. It
+ // cannot identify the smallest failing command/test without inspecting evidence.
+ const lightweight=reproduction?{
+  id:'lightweight',action:receipt.evidence_refs.length?'inspect-failure-evidence':'diagnose-missing-evidence',
+  scopes:[],run_ready:false,evidence_refs:structuredClone(receipt.evidence_refs),requires_explicit_selection:true,
+  description:'Inspect the bound evidence or diagnose its absence first; identify a failing command or test before separately selecting the smallest local reproduction.',
+  next_step:{action:'select-smallest-reproduction',scope:null,requires_explicit_selection:true}
+ }:{id:'lightweight',action:'scoped-check',scopes,requires_explicit_selection:true};
+ return {execution_id:hash(JSON.stringify(identity)),conclusion:receipt.conclusion,goal:reproduction?'Inspect the selected cloud failure, then select the smallest relevant local reproduction.':'Optionally check the selected scope in this local environment.',scopes,baseline_initialized_at:initialized,current_load_measured:false,baseline_note:initialized?'Saved baseline only; current free memory, CPU load and disk availability were not measured.':'Saved baseline unavailable or unknown; current load was not measured.',limits:{concurrency:2,timeout_minutes:30,max_heavy_batches:1},risks:[{kind:'hang',description:'A local batch may slow or hang this PC when other applications consume resources.'},{kind:'software-opening',description:'Any check that needs local software may open applications; that requires a separately selected action.'},{kind:'time',description:'A full batch may take up to 30 minutes and delay other work; the saved baseline is not a duration guarantee.'}],choices:[lightweight,{id:'full-later',action:'defer-full-local-check',scopes,requires_explicit_selection:true},{id:'skip-additional',action:'skip-optional-only',scopes:[],requires_explicit_selection:true}],required_checks_note:'Skipping an additional run cannot satisfy missing mandatory local-only verification or independent semantic review.'};
 }
-export function finalizeWithLocalOffer({acceptance,...options}){return {...acceptance,local_offer:buildLocalVerificationOffer(options)};}
+export function finalizeWithLocalOffer({acceptance,...options}){
+ try{return {...acceptance,local_offer:buildLocalVerificationOffer(options)};}
+ catch{return {...acceptance,local_offer:null,local_offer_diagnostic:{code:'LOCAL_OFFER_STATE_UNWRITABLE',message:'The optional local offer was not delivered because its claim could not be saved. Formal acceptance is unchanged.'}};}
+}
 
 // All remote calls pass structured argv and JSON stdin. There is no shell, no API
 // endpoint for enable/rerun, no run-log reader, and no implicit retry of mutations.
