@@ -51,8 +51,9 @@ async function mutateFixtureManifest(root, mutate) {
 
 test("loads the repository canonical manifest", async () => {
   const manifest = await canonicalManifest();
-  assert.equal(manifest.schema_version, "1.3.0");
+  assert.equal(manifest.schema_version, "1.4.0");
   assert.equal(manifest.system.id, "cupis-email-system");
+  assert.equal(Object.hasOwn(manifest.system, "repository"), false);
 });
 
 test("system progress resolves the canonical status bundle", async () => {
@@ -731,7 +732,7 @@ const testGeneratedBundle = {
 };
 
 function addGeneratedCapability(manifest) {
-  manifest.schema_version = "1.3.0";
+  manifest.schema_version = "1.4.0";
   manifest.sources = manifest.sources.filter(
     (source) => source.kind !== "generated",
   );
