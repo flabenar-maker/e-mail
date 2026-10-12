@@ -10,7 +10,7 @@
 
 **Spec:** [Master-spec §§16–18](../specs/2026-08-24-cupis-structured-email-system-design.md#16-cutover-и-rollback), [11C](2026-10-01-cupis-final-maintenance-cutover.md#11c--отдельная-итоговая-очистка).
 
-**Статус:** Реализация кандидата; merge отдельно. Основание — команда пользователя «Делай пакет 6» от 12.10.2026, отдельная от разрешения cutover. Пакет подготовлен поверх принятого docs candidate [PR120](https://github.com/flabenar-maker/e-mail/pull/120), source `401a8823e96b5db012694e2360a4ba9f67c64858`; canonical runtime остаётся слитым main@fd40. Обновление планов и cleanup рассматриваются отдельными PR. Полная локальная приёмка точного final SHA и независимое review фиксируются в cleanup PR; этот документ не подменяет receipts.
+**Статус:** Завершён и слит [PR121](https://github.com/flabenar-maker/e-mail/pull/121) в `main@3235fafa6a50cb0f78fcd15780b95ea58d262d79`. Реализация разрешена командой «Делай пакет 6», последовательное слияние — отдельной командой пользователя от 12.10.2026. Сначала слит [PR120](https://github.com/flabenar-maker/e-mail/pull/120) в `dd9f38bdf49a2df339adc10e1ce2372fa885b8bc`, затем base PR121 изменён на `main` без расширения его 19 путей. Исторический source подготовки `401a8823e96b5db012694e2360a4ba9f67c64858` и исходные test pins сохраняются; это отчёт завершения, а не команда повторить очистку.
 
 ## Граница и порядок
 
@@ -18,7 +18,7 @@
 - [x] Принять13 remove и 10 preserve решений для Legacy; перечислить замены и сохранить текущие regression checks.
 - [x] Показать точный deletion allowlist и rollback; пакет 6 разрешён прямой командой пользователя, merge отдельно. Версионный cloud diff обратим и не удаляет историю Git.
 - [x] Подготовить минимальный repository diff; source/route и protected-blob проверки выполняются на exact cloud candidate.
-- [ ] Принять full local gate, независимое review и отдельное слияние; только затем закрыть этап 11 в main.
+- [x] Принять full local gate, независимое review и отдельное слияние; только затем закрыть этап 11 в main.
 
 ## Решения для Legacy
 
@@ -71,6 +71,16 @@ Current `tests/characterization/html-rendering-shadow.test.mjs` сохраняе
 ## Проверки и ограничения
 
 На exact final cloud commit выполняются local validator, generated check, полный семигрупповой Node suite и Windows bootstrap verifier/contract tests без установки. Дополнительно проверяются все route/mode outputs, отсутствие runtime owners в Legacy/removed paths, полный allowed-path diff, сохранившиеся10 baseline blobs и обе backup refs. Source byte identity current renderer/data гарантирует отсутствие изменения HTML/design; новую визуальную съёмку для такого diff не заявляем. Actions/PR Checks, повторный сбор профиля ПК, установка навыков, Figma и реальные письма не входят в пакет. Импорт/отправка/реальные почтовики остаются not-run.
+
+
+### Итоговая приёмка и интеграция 12.10.2026
+
+- Проверенный cloud commit: `f509149be961b5f4faf05f5064461ef306ba0071`, tree `12dfc03151c88029338a61088779988f3bfab4d6`, parent `320bbf0808783c95cdb30dd0fedef7deb797b405`. Свежая локальная проверка перед слиянием выполнена независимо агентом GPT-5.6 Terra / medium; фактические длительности и исходные отчёты сохранены отдельно.
+- Полный семигрупповой Node suite: **2175/2175 PASS**, exit 0; свежий прогон перед merge — 1026.299s при concurrency 2. Validator, generated check и Windows bootstrap verify — PASS. Windows contract и route/mode результаты переиспользованы из локальной exact-f509 приёмки от 12.10.2026 12:40 +03:00 с исходными датами: contract exit 0, 227.256s; все 19 комбинаций с корректными входами разрешены, отрицательные input blockers сохранены. Реальная установка навыков в этом пакете не выполнялась.
+- Все 379 файлов снимка совпали с raw Git blobs. Изменены только 19 разрешённых путей; 373 защищённых исходных blobs и 10 сохранённых материалов Legacy не изменены. Обе резервные ветки сохранены. Независимое содержательное review — PASS.
+- Последовательность cloud-интеграции: PR120 → `dd9f38bdf49a2df339adc10e1ce2372fa885b8bc` → retarget PR121 на `main` → PR121 → `3235fafa6a50cb0f78fcd15780b95ea58d262d79`. Candidate и слитый main имеют одинаковое дерево; этап 11 и миграция завершены.
+- PR90 и PR109 закрыты как устаревшие, их отдельные ветки удалены. Замены — слитые PR91 и PR118; основная и резервные ветки сохранены.
+- Actions/PR Checks не использовались. Figma, component contracts, renderer и действующие HTML-письма в пакете не менялись; импорт, отправка и реальные почтовые клиенты остаются `not-run`. Исторические source/capture/install receipts не перепинены на merge SHA.
 
 ## Обратимый rollback
 

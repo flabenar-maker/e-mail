@@ -2,6 +2,19 @@
 
 Этот файл — единственный источник setup-логики проекта. Он маршрутизирует Codex к каноническим источникам, но не копирует правила вёрстки или component contracts.
 
+## Быстрый выбор
+
+В новом чате укажи репозиторий `flabenar-maker/e-mail`, затем выбери действие:
+
+| Что нужно | Запрос | Результат |
+| --- | --- | --- |
+| Вернуться к работе и узнать актуальное состояние | «Ознакомься с проектом» | Чтение текущего GitHub-коммита, карты источников и границ работы |
+| Подготовить новый ПК или подключить зависимости | «Восстанови рабочую среду проекта» | Проверка подключений, обнаружения навыков, зависимостей и локальной работоспособности |
+
+Ознакомление ничего не устанавливает. Восстановление среды следует протоколу ниже; OAuth и замена существующих пользовательских копий требуют предусмотренного разрешения. Это восстановление контекста проекта, а не истории исходного чата.
+
+Текущее состояние берётся из GitHub. Локальный снимок закреплённого коммита используется для проверок; архив или старый checkout не заменяет канонический источник.
+
 ## Как выбрать режим
 
 Распознавай намерение, а не только точное совпадение текста:
@@ -186,4 +199,4 @@ Exact-source verification compares raw tracked bytes and regular-file types to H
 
 When npm/pnpm is absent, use the package.json script's identical node invocation with verified same-lock dependencies; record lock digest, source SHA and direct-equivalent, never claim npm ci. Runtime helpers execute from the pinned disposable snapshot, without a second permanent source checkout.
 
-After separate merge and installation authorization, back up and sync only changed manifest-owned skills and necessary bootstrap bindings. Verify actual discovery, canonical byte synchronization, both specializations in separate clean contexts, retained source handoff and stopped/mixed boundaries. installed-skills validates bound current inventory; synthetic Node tests and repository byte checks do not prove application discovery. Step5/11B remains open until that actual acceptance; current status is recorded only at the canonical Step5 anchor.
+After separate merge and installation authorization, back up and sync only changed manifest-owned skills and necessary bootstrap bindings. Verify actual discovery, canonical byte synchronization, both specializations in separate clean contexts, retained source handoff and stopped/mixed boundaries. installed-skills validates bound current inventory; synthetic Node tests and repository byte checks do not prove application discovery. Each restoration requires that actual acceptance; the completed migration status and historical installation evidence are recorded only at the canonical Step5 anchor.
