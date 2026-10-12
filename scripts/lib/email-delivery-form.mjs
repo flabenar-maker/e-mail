@@ -1,6 +1,7 @@
 const escapeHtml = value => String(value ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
 
 export function createDeliveryDraft({ emailId, sourceSha, profile, inventory, deliveryMetadata = {} }) {
+  const reusableAnswers = deliveryMetadata.source_sha === sourceSha && deliveryMetadata.inventory_digest === inventory.inventory_digest ? deliveryMetadata.answers : undefined;
   return {
     schema_version:'1.0.0', email_id:emailId, profile_id:profile.id, profile_version:profile.version,
     source_sha:sourceSha, inventory_digest:inventory.inventory_digest,
@@ -8,7 +9,7 @@ export function createDeliveryDraft({ emailId, sourceSha, profile, inventory, de
     sender:structuredClone(deliveryMetadata.sender ?? {mode:'inherit'}),
     reply_to:structuredClone(deliveryMetadata.reply_to ?? {mode:'inherit'}),
     plain_text:structuredClone(deliveryMetadata.plain_text ?? {mode:'auto'}),
-    answers:Object.fromEntries(inventory.fields.map(field => [field.id, field.managed ? field.value ?? '' : deliveryMetadata.answers?.[field.id] ?? field.value ?? '']))
+    answers:Object.fromEntries(inventory.fields.map(field => [field.id, field.managed ? field.value ?? '' : reusableAnswers?.[field.id] ?? field.value ?? '']))
   };
 }
 
