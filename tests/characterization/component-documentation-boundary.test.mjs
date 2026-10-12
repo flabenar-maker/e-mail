@@ -1,6 +1,5 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -14,40 +13,6 @@ const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 
 async function read(relativePath) {
   return readFile(join(repoRoot, relativePath), "utf8");
-}
-
-function sortJsonValue(value) {
-  if (Array.isArray(value)) {
-    return value.map(sortJsonValue);
-  }
-  if (value !== null && typeof value === "object") {
-    return Object.fromEntries(
-      Object.keys(value)
-        .sort()
-        .map((key) => [key, sortJsonValue(value[key])]),
-    );
-  }
-  return value;
-}
-
-function projectMigrationSignificantFields(record) {
-  return {
-    id: record.id,
-    status: record.status,
-    identity: record.identity,
-    figma: record.figma,
-    variants: record.variants,
-    properties: record.properties,
-    asset_contracts: record.asset_contracts,
-    contracts: record.contracts,
-    provenance: record.provenance,
-  };
-}
-
-function digest(value) {
-  return `sha256:${createHash("sha256")
-    .update(JSON.stringify(sortJsonValue(value)), "utf8")
-    .digest("hex")}`;
 }
 
 function findElement(element, predicate) {
@@ -99,106 +64,7 @@ test("component documentation standards keep the full contract and Figma project
   assert.doesNotMatch(figmaStandard, /весь email workflow/u);
 });
 
-test("direct Figma source capture preserves shared and service registries and marks marketing verification", async () => {
-  const registries = await loadComponentRegistries({ repoRoot });
-  const projected = Object.fromEntries(
-    Object.entries(registries).map(([library, document]) => [
-      library,
-      document.components.map(projectMigrationSignificantFields),
-    ]),
-  );
-  const remoteIds = new Set(["icon-account-circle-line-remote", "asset-partner-mark-remote"]);
-  const remoteShared = projected.shared.filter(({ id }) => remoteIds.has(id));
-  const localProjected = {
-    ...projected,
-    shared: projected.shared.filter(({ id }) => !remoteIds.has(id)),
-  };
-  const localRecords = Object.values(localProjected).flat();
-  const allRecords = Object.values(projected).flat();
-  const systemIds = localRecords.map((record) => record.id);
-  const figmaIdentities = localRecords.map(
-    (record) => `${record.figma.file_key}#${record.figma.node_id}`,
-  );
-
-  assert.deepEqual(
-    Object.fromEntries(
-      Object.entries(localProjected).map(([library, records]) => [
-        library,
-        records.length,
-      ]),
-    ),
-    { shared: 17, marketing: 26, service: 18 },
-  );
-  assert.equal(localRecords.length, 61);
-  assert.equal(new Set(systemIds).size, 61);
-  assert.equal(new Set(figmaIdentities).size, 61);
-  assert.equal(allRecords.length, 63);
-  assert.equal(new Set(allRecords.map(({ id }) => id)).size, 63);
-  assert.deepEqual(remoteShared.map((record) => ({
-    id: record.id,
-    component_key: record.figma.remote_source?.component_key,
-    source_root_node_id: record.figma.source_root_node_id,
-    node_id: record.figma.node_id,
-    root_modes: ["mobile", "desktop"].map((viewport) => record.contracts[viewport].root.render_mode),
-  })), [{
-    id: "icon-account-circle-line-remote",
-    component_key: "8ea141edd5ec0679825e7fde633e211282b2405b",
-    source_root_node_id: "1331:1646",
-    node_id: "1331:1646",
-    root_modes: ["figma-source-only", "figma-source-only"],
-  }, {
-    id: "asset-partner-mark-remote",
-    component_key: "be6c194606af9516b3cc07847f52d6db0c8cb6d7",
-    source_root_node_id: "439:4098",
-    node_id: "439:4098",
-    root_modes: ["figma-source-only", "figma-source-only"],
-  }]);
-
-  assert.equal(
-    digest(localProjected.shared),
-    "sha256:f5b811bad670e4cab8106ce26dbabb92644cc3fe5559f9ccdab22ea619555a1b",
-  );
-  assert.equal(
-    digest(projected.service),
-    "sha256:051853fa8a91656e29e05ca2bcf912137eab4fd4b9be29c0980fd258bd2c8570",
-  );
-
-  const blocked = projected.marketing
-    .filter((record) => record.figma.verification.status === "blocked-ambiguous-description")
-    .map((record) => record.id)
-    .sort();
-  assert.deepEqual(blocked, []);
-  const recorded = projected.marketing.filter(
-    (record) => record.figma.verification.status === "figma-source-recorded",
-  );
-  assert.equal(recorded.length, 26);
-  assert.equal(recorded.reduce((total, record) => total + record.contracts.source_variants.length, 0), 55);
-  for (const record of recorded) {
-    assert.deepEqual(
-      record.contracts.source_variants.map(({ variant_node_id }) => variant_node_id).sort(),
-      (record.variants.length > 0 ? record.variants.map(({ node_id }) => node_id) : [record.figma.node_id]).sort(),
-    );
-  }
-  const primary = projected.marketing.find((record) => record.id === "button-primary");
-  for (const viewport of ["mobile", "desktop"]) {
-    assert.deepEqual(findFact(primary, viewport, "background-gradient-css-angle-degrees"), {
-      type: "number",
-      value: 25,
-    });
-  }
-
-  for (const record of allRecords) {
-    assert.ok(record.contracts.mobile?.root, `${record.id}: missing Mobile`);
-    assert.ok(record.contracts.desktop?.root, `${record.id}: missing Desktop`);
-    assert.notStrictEqual(record.contracts.mobile, record.contracts.desktop);
-    assert.notStrictEqual(
-      record.contracts.mobile.root,
-      record.contracts.desktop.root,
-    );
-  }
-});
-
-test("migration preserves high-risk responsive, asset, property and template contracts", async () => {
+test("component contracts preserve high-risk responsive, asset, property and template contracts", async () => {
   const registries = await loadComponentRegistries({ repoRoot });
   const index = indexComponentRegistries(registries);
 

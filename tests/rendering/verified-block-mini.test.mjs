@@ -81,7 +81,7 @@ test("Figma-verified Block/Info-Alert fully renders Mobile and Desktop from cont
   assert.ok(!/<table[^>]*height="(?:\\d+)"/u.test(output.html), "Block height must grow with reflow");
   for (const viewport of ["mobile", "desktop"]) {
     assert.ok(allFacts(component.contracts[viewport].root).every((fact) =>
-      fact.provenance?.kind === "figma-literal"), "No legacy Markdown values in pilot");
+      fact.provenance?.kind === "figma-literal"), "Current literal provenance values in pilot");
   }
 });
 

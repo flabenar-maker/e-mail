@@ -203,7 +203,7 @@ test("documentation and unrelated source metadata do not change render impact", 
       record.documentation.purpose = "Rewritten documentation.";
     },
     (record) => {
-      record.description = "Legacy Figma Description.";
+      record.description = "Untrusted Figma Description.";
     },
     (record) => {
       record.figma.verified_at = "2030-01-01";

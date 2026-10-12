@@ -80,7 +80,7 @@ test('system progress is read-only and binds actual cloud evidence to the same p
  const f=await fixture();try{const c=await activate(f.root,'system-progress',{mode:'read-only'});assert.equal(c.status,'resolved');const calls=[];
  const handlers=Object.fromEntries(c.workflow.steps.map(s=>[s.id,async()=>{calls.push(s.id);return Object.fromEntries(s.allowed_outputs.map(key=>[key,key==='pinned-sha'?SHA:{}]));}]));
  const result=await workflows.executeMaintenanceWorkflow({context:c,pinnedSha:SHA,inputs:{request:'status','cloud-state-evidence':{canonical_sha:'b'.repeat(40),tree_sha:'c'.repeat(40),cloud_channel:'github'}},handlers});
- assert.equal(result.status,'blocked');assert.ok(result.blockers.some(b=>b.code==='source-pin-mismatch'));assert.ok(!calls.includes('compare-roadmap-with-cloud-state'));
+ assert.equal(result.status,'blocked');assert.ok(result.blockers.some(b=>b.code==='source-pin-mismatch'));assert.ok(!calls.includes('compare-status-with-cloud-state'));
  const forbidden=await resolveSkillContext({repoRoot:f.root,routeId:'system-progress',workflowMode:'write'});assert.equal(forbidden.status,'blocked');assert.ok(forbidden.blockers.some(b=>b.code==='WORKFLOW_MODE_UNKNOWN'));
  }finally{await f.cleanup();}
 });
@@ -143,7 +143,7 @@ test('library repository-only write completes with exact local receipt and draft
 
 test('system progress completes read-only only on exact GitHub cloud evidence pin',async()=>{
  const f=await fixture();try{const c=await activate(f.root,'system-progress',{mode:'read-only'});assert.equal(c.status,'resolved');const calls=[];
-  const handlers=Object.fromEntries(c.workflow.steps.map(s=>[s.id,async()=>{calls.push(s.id);if(s.id==='pin-canonical-state')return {'pinned-sha':SHA};if(s.id==='compare-roadmap-with-cloud-state')return {'audit-findings':{roadmap:'checked'}};if(s.id==='verify-read-only-findings')return {'verification-summary':{limitations:['fixture']}};if(s.id==='handoff')return {'handoff-summary':{}};throw Error('Unexpected '+s.id);}]));
+  const handlers=Object.fromEntries(c.workflow.steps.map(s=>[s.id,async()=>{calls.push(s.id);if(s.id==='pin-canonical-state')return {'pinned-sha':SHA};if(s.id==='compare-status-with-cloud-state')return {'audit-findings':{status:'checked'}};if(s.id==='verify-read-only-findings')return {'verification-summary':{limitations:['fixture']}};if(s.id==='handoff')return {'handoff-summary':{}};throw Error('Unexpected '+s.id);}]));
   const result=await workflows.executeMaintenanceWorkflow({context:c,pinnedSha:SHA,inputs:{request:'status','cloud-state-evidence':{canonical_sha:SHA,tree_sha:'b'.repeat(40),cloud_channel:'github'}},handlers});
   assert.equal(result.status,'complete');assert.equal(result.handoff.cloud_commit,null);assert.equal(result.handoff.github_pr,null);assert.ok(calls.every(id=>!/(apply|synchronize|publish)/.test(id)));
  }finally{await f.cleanup();}

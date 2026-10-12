@@ -1052,6 +1052,11 @@ test("canonical routes activate all structured bundles", async () => {
   );
 });
 
+const componentDocumentationStandardSources = [
+  ["figma-library-standard", "core/figma-library-standard.md", ["library-maintenance", "component-onboarding", "figma-description-sync", "figma-naming-audit", "email-new-build", "email-continue-fix"]],
+  ["component-contract-standard", "core/component-contract-standard.md", ["library-maintenance", "component-onboarding", "figma-description-sync", "email-new-build", "email-continue-fix"]],
+  ["figma-component-description-standard", "core/figma-component-description-standard.md", ["library-maintenance", "component-onboarding", "figma-description-sync"]],
+];
 test("declares component documentation standards for library-facing bundles", async () => {
   const manifest = await canonicalManifest();
   const sources = new Map(
