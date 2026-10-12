@@ -181,7 +181,7 @@ test('controlled historical onboarding write publishes an approved repository-on
 });
 
 
-function portableWriteExecution(context,repository,{url=`https://github.com/${repository.toLowerCase()}/pull/7`,head_sha=SHA,base='main',draft=true}={}){
+function portableWriteExecution(context,repository,{url=`https://github.com/${typeof repository==='string'?repository.toLowerCase():'invalid'}/pull/7`,head_sha=SHA,base='main',draft=true}={}){
  const preview={pinned_sha:SHA,route_id:context.route.id,file_key:'file',changes:[],repository_paths:['data/components/marketing.yaml']};
  const calls=[],handlerInputs=[];
  const handlers=Object.fromEntries(context.workflow.steps.map(step=>[step.id,async input=>{
