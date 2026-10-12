@@ -14,7 +14,6 @@ const FORBIDDEN_CONCRETE_KEYS = new Set([
   "height",
   "rename_map",
   "figma_write",
-  "auto_migrate",
 ]);
 
 function diagnostic(code, path, message) {
