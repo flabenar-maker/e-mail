@@ -5,18 +5,18 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadEmailModel } from './lib/email-model.mjs';
 import { loadComponentRegistries, indexComponentRegistries } from './lib/component-registry.mjs';
-import { loadEmailDeliveryProfiles, selectDeliveryProfile } from './lib/email-delivery-profile.mjs';
+import { loadEmailDeliveryProfiles, selectDeliveryProfile, loadDeliveryDocument } from './lib/email-delivery-profile.mjs';
 import { collectEmailActions } from './lib/email-action-inventory.mjs';
 import { createDeliveryDraft, renderDeliveryForm } from './lib/email-delivery-form.mjs';
 import { formatRendererDiagnostics } from './lib/diagnostics.mjs';
 
 const repoRoot = dirname(dirname(fileURLToPath(import.meta.url)));
-const usage = 'Usage: node scripts/prepare-email-delivery.mjs --model <logical-model.json> --output <new-intake-folder> [--profile <id>]';
+const usage = 'Usage: node scripts/prepare-email-delivery.mjs --model <logical-model.json> --output <new-intake-folder> [--profile <id>] [--delivery <known-delivery.json>]';
 async function main() {
   const args = {};
   const argv = process.argv.slice(2);
   for (let i = 0; i < argv.length; i += 2) {
-    if (!['--model','--output','--profile'].includes(argv[i]) || !argv[i + 1] || Object.hasOwn(args, argv[i])) throw new Error(usage);
+    if (!['--model','--output','--profile','--delivery'].includes(argv[i]) || !argv[i + 1] || Object.hasOwn(args, argv[i])) throw new Error(usage);
     args[argv[i]] = argv[i + 1];
   }
   if (!args['--model'] || !args['--output']) throw new Error(usage);
@@ -30,7 +30,9 @@ async function main() {
   const profile = selectDeliveryProfile(await loadEmailDeliveryProfiles({ repoRoot, componentIndex }), args['--profile']);
   const inventory = collectEmailActions({ model, componentIndex, profile });
   if (inventory.diagnostics.length) throw new AggregateError(inventory.diagnostics, 'Email research is blocked.');
-  const deliveryDraft = createDeliveryDraft({ emailId:model.id, inventory, profile, sourceSha });
+  const deliveryMetadata = args['--delivery'] ? await loadDeliveryDocument(resolve(args['--delivery'])) : undefined;
+  if (deliveryMetadata && deliveryMetadata.email_id !== model.id) throw new Error('EMAIL_DELIVERY_EMAIL_MISMATCH');
+  const deliveryDraft = createDeliveryDraft({ emailId:model.id, inventory, profile, sourceSha, deliveryMetadata });
   const output = resolve(args['--output']);
   const staging = output + '.intake-' + randomUUID();
   await mkdir(dirname(output), {recursive:true});

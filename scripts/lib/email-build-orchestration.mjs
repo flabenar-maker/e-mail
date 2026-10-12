@@ -1,3 +1,4 @@
+import { visibleModelAssets, modelAssetKey, hasInstanceVisibility } from "./email-instance-visibility.mjs";
 import { cp, lstat, mkdir, readdir, writeFile, realpath, readFile, rm } from "node:fs/promises";
 import { createHash, randomUUID } from "node:crypto";
 import { execFile } from "node:child_process";
@@ -16,6 +17,9 @@ import { loadRendererRegistry } from "./renderer-registry.mjs";
 import { validateEmailModelSemantics } from "./email-model.mjs";
 import { selectVariantRoot } from "./email-interpreter.mjs";
 import { prepareEmailDelivery } from "./email-delivery.mjs";
+import { loadEmailDeliveryProfiles, selectDeliveryProfile } from "./email-delivery-profile.mjs";
+import { collectEmailActions } from "./email-action-inventory.mjs";
+import { createDeliveryDraft, missingDeliveryFields } from "./email-delivery-form.mjs";
 
 function failure(code) {
   const error = new Error(code);
@@ -346,9 +350,11 @@ export async function prepareEmailBuildHandoff({
     assetKey(item.instance_id, item.component_id, item.asset_contract_id, item.path), item,
   ]));
   const assetContracts = [];
+  const activeAssets = hasInstanceVisibility(model.root) ? visibleModelAssets(model, componentIndex) : null;
   for (const instance of instances(model.root)) {
     const component = componentIndex.bySystemId.get(instance.component_id);
     for (const asset of instance.asset_files ?? []) {
+      if (activeAssets && !activeAssets.has(modelAssetKey(instance, asset.asset_contract_id))) continue;
       const item = evidence.get(assetKey(
         instance.instance_id,
         instance.component_id,
@@ -483,7 +489,22 @@ export async function executeEmailBuildHandoff({
     ? []
     : ["workflow-mode-invalid"];
   const deliveryRequired = resolution?.workflow?.steps?.some(step => step.id === "validate-delivery-answers");
-  if (deliveryRequired && !deliveryDocument) return { blockers:["delivery-required"], executed:false };
+  if (deliveryRequired && !deliveryDocument) {
+    try {
+      sourceSha ??= process.env.CUPIS_SYSTEM_COMMIT;
+      sourceSha ??= (await execFileAsync("git", ["rev-parse","HEAD"], {cwd:input.repoRoot})).stdout.trim();
+      if (!/^[0-9a-f]{40}$/u.test(sourceSha)) throw failure("EMAIL_DELIVERY_SOURCE_UNKNOWN");
+      const componentIndex = indexComponentRegistries(await loadComponentRegistries({repoRoot:input.repoRoot}));
+      const profile = selectDeliveryProfile(await loadEmailDeliveryProfiles({repoRoot:input.repoRoot,componentIndex}));
+      const inventory = collectEmailActions({model:input.model,componentIndex,profile});
+      if (inventory.diagnostics.length) throw new AggregateError(inventory.diagnostics, "Delivery research is blocked.");
+      const deliveryDraft = createDeliveryDraft({emailId:input.model.id,sourceSha,profile,inventory});
+      if (missingDeliveryFields({inventory,deliveryDraft}).length) return { blockers:["delivery-required"], executed:false };
+      deliveryDocument = deliveryDraft;
+    } catch (error) {
+      return {blockers:["delivery-not-ready"],deliveryDiagnostics:error instanceof AggregateError ? error.errors : [{code:error.code ?? "EMAIL_DELIVERY_FAILED",message:error.message}],executed:false};
+    }
+  }
   let delivery;
   if (deliveryDocument) {
     try {

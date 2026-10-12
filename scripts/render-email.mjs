@@ -123,6 +123,7 @@ async function main() {
     const hash = bytes => createHash("sha256").update(bytes).digest("hex");
     const report = {schema_version:"1.0.0",source_sha:dependencies.systemCommit,profile_id:delivery.profile.id,profile_version:delivery.profile.version,serializer_version:"1.0.0",package_id:delivery.profile.package.id,readiness:"ready",external_acceptance:"not-run",metrics:measureEmailOutput({html:packageStructured.html,css}),html_sha256:hash(packageStructured.html),archive_sha256:hash(zip),assets:[...assetBuffers].map(([path,bytes])=>({path,sha256:hash(bytes)}))};
     const requiredFields=delivery.inventory.fields.filter(field=>field.required);
+    report.delivery_metadata={subject:delivery.document.subject.trim()?'provided':'absent',preheader:delivery.document.preheader.trim()?'provided':'absent',sender:delivery.document.sender.mode,reply_to:delivery.document.reply_to.mode,plain_text:delivery.document.plain_text.mode};
     report.link_readiness={status:"ready",inventory_digest:delivery.inventory.inventory_digest,field_count:delivery.inventory.fields.length,required_count:requiredFields.length,resolved_required_count:requiredFields.length};
     // These are checks performed by this build, not a claim about test suites or clients.
     report.local_checks={delivery_inputs:"passed",model_semantics:"passed",rendering:"passed",html_serialization:"passed",resource_references:"passed",css_budget:"passed",plain_text:"passed",package_entries:"passed"};

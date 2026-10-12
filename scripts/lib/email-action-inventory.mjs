@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import { selectVariantRoot } from './email-interpreter.mjs';
 import { validateEmailModelSemantics } from './email-model.mjs';
+import { instanceElementVisible } from './email-instance-visibility.mjs';
 
 const viewports = ['mobile', 'desktop'];
 const diagnostic = (code, path, message) => ({ code, path, message });
@@ -30,15 +31,12 @@ function roleFor(profile, componentId, viewport, elementId, slotId, kind) {
   return (profile?.roles ?? []).find(role => role.component_id === componentId && role.bindings.some(binding => binding.viewport === viewport && binding.element_id === elementId && binding.slot_id === slotId && binding.kind === kind));
 }
 function visible(element, instance, viewport) {
-  if (element.visibility?.mode === 'instance') return element.visibility.default_visible === true;
-  if (element.visibility?.mode !== 'property') return true;
-  const values = instance.property_values ?? [];
-  const item = values.find(item => item.property_id === element.visibility.property_id && item.scope === viewport) ?? values.find(item => item.property_id === element.visibility.property_id && item.scope === 'all');
-  return item?.value === true;
+  return instanceElementVisible(element, instance, viewport);
 }
+
 function sourceText(element, instance, viewport) {
   for (const slot of element.content_slots ?? []) {
-    if (['plain-text','rich-text','alt-text'].includes(slot.type)) {
+    if (['plain-text','rich-text'].includes(slot.type)) {
       const text = deliveryText(deliveryBinding(instance, element.id, slot.id, viewport)?.value);
       if (text) return text;
     }
@@ -48,6 +46,19 @@ function sourceText(element, instance, viewport) {
 function actionText(element, instance, viewport) {
   if (!visible(element, instance, viewport)) return '';
   return sourceText(element, instance, viewport) || (element.children ?? []).map(child => actionText(child, instance, viewport)).filter(Boolean).join(' ');
+}
+function ownerText(root, instance, viewport) {
+  const texts = [];
+  const visit = element => {
+    if (!element || !visible(element, instance, viewport) || element.render_mode === 'html-link' || element.action) return;
+    if (element.render_mode === 'html-text') {
+      const text = sourceText(element, instance, viewport);
+      if (text.trim()) texts.push({text,heading:/title|heading/u.test(element.semantic_role ?? '')});
+    }
+    for (const child of element.children ?? []) visit(child);
+  };
+  visit(root);
+  return (texts.find(item => item.heading) ?? texts.find(item => item.text.length <= 160))?.text ?? '';
 }
 export function collectEmailActions({ model, componentIndex, profile }) {
   const diagnostics = validateEmailModelSemantics(model, { componentIndex }, { purpose: 'delivery-inventory' }).map(({ code, path, message }) => ({ code, path, message }));
@@ -66,12 +77,16 @@ export function collectEmailActions({ model, componentIndex, profile }) {
     const selected = selectVariantRoot(record, viewport, axes);
     diagnostics.push(...selected.diagnostics);
     if (!selected.root) return;
-    selection.push({ path, viewport, component_id: record.id, axes, properties: instance.property_values });
-    const block = inheritedBlock ?? profile?.block_labels?.[record.id] ?? `Блок ${instanceOrders.get(path) + 1}`;
+    selection.push({ path, viewport, component_id: record.id, axes, properties: instance.property_values,
+      ...(instance.visibility_values?.length ? { visibility_values: instance.visibility_values } : {}),
+    });
+    const blockRole = inheritedBlock ?? profile?.block_labels?.[record.id] ?? `Блок ${instanceOrders.get(path) + 1}`;
+    const owner = ownerText(selected.root, instance, viewport);
+    const block = owner && !blockRole.includes(owner) ? `${blockRole} — ${owner}` : blockRole;
     let elementOrder = 0;
     function add(element, slot, role, kind = 'slot-link', range) {
       const original = deliveryBinding(instance, element.id, slot.id, viewport);
-      const label = role?.label ?? (range?.text || actionText(element, instance, viewport) || 'Ссылка');
+      const label = range?.text || actionText(element, instance, viewport) || role?.label || 'Ссылка';
       const value = role?.href ?? deliveryText(original?.value) ?? '';
       const binding = { instance_path: path, component_id: record.id, viewport, element_id: element.id, slot_id: slot.id, kind, ...(range ? { range } : {}) };
       actions.push({ label, block_label: block, instance_label: `Экземпляр ${instanceOrders.get(path) + 1}`, kind: 'url', required: kind !== 'slot-link' || slot.required === true || element.render_mode === 'html-link' || element.action?.required === true, managed: typeof role?.href === 'string', value: kind === 'output-range-link' ? range.href ?? '' : value, bindings: [binding], role: role?.id ?? null, order: [instanceOrders.get(path), elementOrder], proof: role ? 'registered-role' : original?.scope === 'all' ? 'explicit-all-slot' : original && original.scope !== 'all' ? 'viewport-specific-slot' : 'stable-slot-identity' });

@@ -209,7 +209,8 @@
             ],
             "allowed_outputs": [
               "delivery-form",
-              "delivery-draft"
+              "delivery-draft",
+              "delivery-answers"
             ],
             "handoff": {
               "on_success": "next",
@@ -235,7 +236,8 @@
             "handoff": {
               "on_success": "next",
               "on_blocked": "request-input"
-            }
+            },
+            "condition_id": "missing-user-action-links"
           },
           {
             "id": "validate-delivery-answers",
@@ -667,7 +669,8 @@
             ],
             "allowed_outputs": [
               "delivery-form",
-              "delivery-draft"
+              "delivery-draft",
+              "delivery-answers"
             ],
             "handoff": {
               "on_success": "next",
@@ -693,7 +696,8 @@
             "handoff": {
               "on_success": "next",
               "on_blocked": "request-input"
-            }
+            },
+            "condition_id": "missing-user-action-links"
           },
           {
             "id": "validate-delivery-answers",

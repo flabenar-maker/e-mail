@@ -3,6 +3,8 @@ import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { indexComponentRegistries, loadComponentRegistries } from "./lib/component-registry.mjs";
 import { verifyEmailModelSource } from "./lib/email-source-fidelity.mjs";
+import { hasInstanceVisibility, instanceElementVisible, visibleContractElements } from "./lib/email-instance-visibility.mjs";
+import { selectVariantRoot } from "./lib/email-interpreter.mjs";
 
 function hasAdditionalVariantAxes(instance) {
   if (!instance) return false;
@@ -28,7 +30,8 @@ if (!path || process.argv.length > 4 || (process.argv.length === 4 && !selectedT
   try {
     const input = JSON.parse(await readFile(path, "utf8"));
     const hasInlineRuns = input.readings?.fields?.some(({ inline_runs }) => inline_runs?.length);
-    const resolvedContracts = hasInlineRuns || hasAdditionalVariantAxes(input.model?.root) || hasAssetFiles(input.model?.root)
+    const usesVisibility = hasInstanceVisibility(input.model?.root);
+    const resolvedContracts = usesVisibility || hasInlineRuns || hasAdditionalVariantAxes(input.model?.root) || hasAssetFiles(input.model?.root)
       ? indexComponentRegistries(await loadComponentRegistries({ repoRoot: fileURLToPath(new URL("../", import.meta.url)) })).bySystemId
       : new Map();
     const diagnostics = verifyEmailModelSource({ ...input, resolvedContracts }).map(({ code, path: fieldPath, message }) =>
@@ -42,7 +45,15 @@ if (!path || process.argv.length > 4 || (process.argv.length === 4 && !selectedT
         }
         const modelCount = (input.model?.root?.slots ?? [])
           .filter(({ element_id }) => element_id === "content")
-          .reduce((count, slot) => count + (slot.instances?.length ?? 0), 0);
+          .reduce((count, slot) => count + (slot.instances ?? []).filter((instance) => {
+            if (!usesVisibility) return true;
+            const owner = input.model.root;
+            const ownerRoot = selectVariantRoot(resolvedContracts.get(owner.component_id), viewport, owner.variant_axes?.[viewport] ?? {}).root;
+            if (!visibleContractElements(ownerRoot, owner, viewport).has(slot.element_id)) return false;
+            const record = resolvedContracts.get(instance.component_id);
+            const root = selectVariantRoot(record, viewport, instance.variant_axes?.[viewport] ?? {}).root;
+            return root && instanceElementVisible(root, instance, viewport);
+          }).length, 0);
         if (!Number.isInteger(selection?.expected_top_level_count) || selection.expected_top_level_count < 0 ||
             selection.expected_top_level_count !== modelCount) {
           diagnostics.push({ code: "EMAIL_SOURCE_SCOPE_INCOMPLETE", path: `/readings/selection/${viewport}/expected_top_level_count`,

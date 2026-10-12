@@ -3,6 +3,7 @@ import { isAbsolute, posix, win32 } from "node:path";
 
 import { SystemValidationError } from "./diagnostics.mjs";
 import { selectVariantRoot } from "./email-interpreter.mjs";
+import { instanceElementVisible, visibleContractElements } from "./email-instance-visibility.mjs";
 import { validateDocumentShape } from "./schema-validation.mjs";
 
 const SUPPORTED_VERSION = "1.1.0";
@@ -207,28 +208,31 @@ function propertyTypeMatches(value, expected) {
 }
 
 function visible(element, instance, viewport, errors, path) {
-  if (element.visibility?.mode === "instance") {
-    return element.visibility.default_visible;
-  }
-  if (element.visibility?.mode !== "property") return true;
-  const propertyId = element.visibility.property_id;
-  const value = propertyValue(instance, propertyId, viewport);
-  if (typeof value !== "boolean") {
-    errors.push(
-      diagnostic(
-        "EMAIL_MODEL_REQUIRED_PROPERTY_MISSING",
-        path + "/visibility/property_id",
-        "Boolean property " + propertyId + " is not resolved for " + viewport + ".",
-      ),
-    );
-    return false;
-  }
-  return value;
+  return instanceElementVisible(element, instance, viewport, (propertyId) => {
+    errors.push(diagnostic(
+      "EMAIL_MODEL_REQUIRED_PROPERTY_MISSING", path + "/visibility/property_id",
+      "Boolean property " + propertyId + " is not resolved for " + viewport + ".",
+    ));
+  });
 }
 
 function validateDeclaredBindings(instance, record, maps, errors, path) {
   const properties = new Map((record.properties ?? []).map((item) => [item.id, item]));
   const assets = new Set((record.asset_contracts ?? []).map((item) => item.id));
+
+  (instance.visibility_values ?? []).forEach((item, index) => {
+    const itemPath = path + "/visibility_values/" + index;
+    if (typeof item.value !== "boolean") errors.push(diagnostic(
+      "EMAIL_MODEL_VISIBILITY_INVALID", itemPath + "/value", "Instance visibility must be boolean.",
+    ));
+    const viewports = item.scope === "all" ? VIEWPORTS : [item.scope];
+    for (const viewport of viewports) {
+      if (!maps[viewport]?.has(item.element_id)) errors.push(diagnostic(
+        "EMAIL_MODEL_VISIBILITY_ELEMENT_UNKNOWN", itemPath + "/element_id",
+        "Visibility element " + item.element_id + " is not declared for " + viewport + ".",
+      ));
+    }
+  });
 
   (instance.property_values ?? []).forEach((item, index) => {
     const property = properties.get(item.property_id);
@@ -416,7 +420,7 @@ function validateRequiredTree(element, instance, viewport, errors, path, deliver
   });
 }
 
-function validateInstance(instance, dependencies, errors, path, stack) {
+function validateInstance(instance, dependencies, errors, path, stack, activeViewports = VIEWPORTS) {
   const record = componentRecord(dependencies, instance.component_id);
   if (!record) {
     errors.push(
@@ -449,6 +453,7 @@ function validateInstance(instance, dependencies, errors, path, stack) {
     return;
   }
 
+  validateScopedBindings(errors, instance.visibility_values, path + "/visibility_values", (item) => item.element_id);
   validateScopedBindings(
     errors,
     instance.property_values,
@@ -539,7 +544,10 @@ function validateInstance(instance, dependencies, errors, path, stack) {
       }
     }
   });
-  for (const viewport of VIEWPORTS) {
+  const activeElements = Object.fromEntries(VIEWPORTS.map((viewport) => [viewport,
+    activeViewports.includes(viewport) ? visibleContractElements(selectedRoots[viewport], instance, viewport) : new Set(),
+  ]));
+  for (const viewport of activeViewports) {
     const root = selectedRoots[viewport];
     if (!root) continue;
     validateRequiredTree(
@@ -561,6 +569,7 @@ function validateInstance(instance, dependencies, errors, path, stack) {
         errors,
         path + "/slots/" + slotIndex + "/instances/" + childIndex,
         nextStack,
+        activeViewports.filter((viewport) => activeElements[viewport].has(slot.element_id)),
       );
     });
   });
@@ -571,6 +580,7 @@ function validateInstance(instance, dependencies, errors, path, stack) {
       errors,
       path + "/nested_components/" + index + "/instance",
       nextStack,
+      activeViewports.filter((viewport) => activeElements[viewport].has(nestedElementId(nested, viewport))),
     );
   });
 }
