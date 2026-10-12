@@ -156,7 +156,7 @@ function sourceScenario() {
     correspondence.visibility.push({ instance_id: 'block', element_id: 'group', viewport, node_id: root + ';11:2' });
     readings.assets.push({ viewport, node_id: root + ';11:4', owner_node_id: root, evidence_id: 'hidden-asset' });
   }
-  return { model: input.model, readings, correspondence, resolvedContracts: input.componentIndex.bySystemId };
+  return { model: input.model, readings, correspondence, resolvedContracts: input.componentIndex.bySystemId, selectedTest: true };
 }
 
 test('independent graph proves hidden ancestor omissions without invented exclusions', () => {
@@ -355,4 +355,10 @@ test('explicit extra instance correspondence cannot claim a used or hidden sourc
     input.correspondence.instances.push({ instance_id: 'invented', nodes: { mobile: 'm-root' + suffix, desktop: 'd-root' + suffix } });
     assert.ok(verifyEmailModelSource(input).some(x => /SOURCE_(INSTANCE|TARGET|STRUCTURE)|VISIBILITY/u.test(x.code)));
   }
+});
+
+
+test('production visibility proof rejects contracts without registered Figma identity', () => {
+  const input = sourceScenario(); delete input.selectedTest;
+  assert.ok(verifyEmailModelSource(input).some(x => /VISIBILITY.*(IDENTITY|OWNER|VARIANT)/u.test(x.code)));
 });
