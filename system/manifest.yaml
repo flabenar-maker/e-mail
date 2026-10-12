@@ -16,7 +16,7 @@ sources:
   - { id: system-manifest, kind: entrypoint, path: system/manifest.yaml }
   - { id: repository-readme, kind: entrypoint, path: README.md }
   - { id: bootstrap-readme, kind: entrypoint, path: bootstrap/README.md }
-  - { id: migration-roadmap, kind: entrypoint, path: docs/superpowers/plans/2026-08-25-cupis-migration-roadmap.md }
+  - { id: system-status, kind: entrypoint, path: docs/system-status.md }
   - { id: component-contract-standard, kind: core, path: core/component-contract-standard.md }
   - { id: figma-component-description-standard, kind: core, path: core/figma-component-description-standard.md }
   - { id: email-rendering-standard, kind: core, path: core/email-rendering-standard.md }
@@ -29,13 +29,13 @@ sources:
   - { id: typography-standard, kind: core, path: core/typography-standard.md }
   - { id: asset-export-standard, kind: core, path: core/asset-export-standard.md }
   - { id: figma-library-standard, kind: core, path: core/figma-library-standard.md }
-  - { id: workflow-paused, kind: workflow, path: workflows/system-paused.md }
+  - { id: workflow-paused, kind: workflow, path: core/paused-route-boundary.md }
   - { id: workflows-schema, kind: schema, path: schemas/workflows.schema.json }
   - { id: workflow-library-maintenance, kind: workflow, path: data/workflows/library-maintenance.yaml }
   - { id: workflow-component-onboarding, kind: workflow, path: data/workflows/component-onboarding.yaml }
   - { id: workflow-figma-description-sync, kind: workflow, path: data/workflows/figma-description-sync.yaml }
   - { id: workflow-figma-naming-audit, kind: workflow, path: data/workflows/figma-naming-audit.yaml }
-  - { id: workflow-migration-progress, kind: workflow, path: data/workflows/migration-progress.yaml }
+  - { id: workflow-system-progress, kind: workflow, path: data/workflows/system-progress.yaml }
   - { id: workflow-email-build, kind: workflow, path: data/workflows/email-build.yaml }
   - { id: manifest-schema, kind: schema, path: schemas/manifest.schema.json }
   - { id: typography-foundation, kind: registry, path: data/foundations/typography.yaml }
@@ -62,7 +62,7 @@ sources:
   - { id: generated-component-onboarding-checkpoint, kind: generated, path: docs/generated/component-onboarding-checkpoint.md }
   - { id: generated-figma-description-sync-checkpoint, kind: generated, path: docs/generated/figma-description-sync-checkpoint.md }
   - { id: generated-figma-naming-audit-checkpoint, kind: generated, path: docs/generated/figma-naming-audit-checkpoint.md }
-  - { id: generated-migration-progress-checkpoint, kind: generated, path: docs/generated/migration-progress-checkpoint.md }
+  - { id: generated-system-progress-checkpoint, kind: generated, path: docs/generated/system-progress-checkpoint.md }
   - { id: generated-email-build-checkpoint, kind: generated, path: docs/generated/email-build-checkpoint.md }
 structured_workflows:
   status: active
@@ -72,7 +72,7 @@ structured_workflows:
     - { id: component-onboarding, source_id: workflow-component-onboarding }
     - { id: figma-description-sync, source_id: workflow-figma-description-sync }
     - { id: figma-naming-audit, source_id: workflow-figma-naming-audit }
-    - { id: migration-progress, source_id: workflow-migration-progress }
+    - { id: system-progress, source_id: workflow-system-progress }
     - { id: email-build, source_id: workflow-email-build }
 generated_docs:
   - id: component-registry
@@ -116,11 +116,11 @@ generated_docs:
     renderer: workflow-checkpoint
     workflow_source_id: workflow-figma-naming-audit
     input_source_ids: [workflow-figma-naming-audit, workflows-schema, manifest-schema, system-manifest]
-  - id: migration-progress-checkpoint
-    output_source_id: generated-migration-progress-checkpoint
+  - id: system-progress-checkpoint
+    output_source_id: generated-system-progress-checkpoint
     renderer: workflow-checkpoint
-    workflow_source_id: workflow-migration-progress
-    input_source_ids: [workflow-migration-progress, workflows-schema, manifest-schema, system-manifest]
+    workflow_source_id: workflow-system-progress
+    input_source_ids: [workflow-system-progress, workflows-schema, manifest-schema, system-manifest]
 bundle_profiles:
   - id: library-maintenance
     source_ids: [repository-readme, figma-library-standard, component-contract-standard, figma-component-description-standard, workflow-library-maintenance]
@@ -162,11 +162,11 @@ bundle_profiles:
       foundation_selection: explicit
       allowed_foundation_ids: [figma-naming]
       required_foundation_ids: [figma-naming]
-  - id: migration-progress
-    source_ids: [repository-readme, migration-roadmap, workflow-migration-progress]
+  - id: system-progress
+    source_ids: [repository-readme, system-status, workflow-system-progress]
     generated_bundle:
       status: structured-active
-      static_source_ids: [repository-readme, migration-roadmap, workflow-migration-progress]
+      static_source_ids: [repository-readme, system-status, workflow-system-progress]
       component_selection: none
       viewport_selection: none
       foundation_selection: none
@@ -197,7 +197,7 @@ routes:
   - { id: component-onboarding, workflow_source_id: workflow-component-onboarding, bundle_profile_id: component-onboarding }
   - { id: figma-description-sync, workflow_source_id: workflow-figma-description-sync, bundle_profile_id: figma-description-sync }
   - { id: figma-naming-audit, workflow_source_id: workflow-figma-naming-audit, bundle_profile_id: figma-naming-audit }
-  - { id: migration-progress, workflow_source_id: workflow-migration-progress, bundle_profile_id: migration-progress }
+  - { id: system-progress, workflow_source_id: workflow-system-progress, bundle_profile_id: system-progress }
   - { id: email-new-build, workflow_source_id: workflow-email-build, bundle_profile_id: email-new-build }
   - { id: email-continue-fix, workflow_source_id: workflow-email-build, bundle_profile_id: email-continue-fix }
 skills:

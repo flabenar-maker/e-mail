@@ -46,7 +46,7 @@ For an Altcraft release, inspect both design instances into a logical model befo
 
 Delivery values belong to the separate strict delivery schema. `data/delivery/profiles.yaml` owns fixed addresses, exact element selectors, and emission/package policy. Component contracts, the design model schema, and Figma remain unchanged. Recompute the visible action inventory and reject stale source SHA, profile version, or inventory digest. Required Footer/support/NPS addresses must be supplied before image export and final release.
 
-Render with `--delivery <delivery.json>` for an Altcraft release. Validate the original design model against source evidence; validate and project only the exact inventoried URL targets into a clone for emission. An address assignment never authorizes changes to text, geometry, assets, or neighboring actions. Legacy rendering without a delivery document remains a design HTML operation; it is not an Altcraft release.
+Render with `--delivery <delivery.json>` for an Altcraft release. Validate the original design model against source evidence; validate and project only the exact inventoried URL targets into a clone for emission. An address assignment never authorizes changes to text, geometry, assets, or neighboring actions. Rendering without a delivery document remains a design HTML operation; it is not an Altcraft release.
 
 Installing or restoring context uses the manifest-selected email workflow, which includes intake and readiness steps. Do not copy URLs, service macros, or serializer recipes into skill Markdown. Real import, sending, and mail-client acceptance require external evidence and remain `not-run` after local verification.
 

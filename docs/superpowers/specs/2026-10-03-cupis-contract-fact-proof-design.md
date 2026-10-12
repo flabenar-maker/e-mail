@@ -1,18 +1,6 @@
-# CUPIS: доказательство реализационных фактов без подмены их источника
+# Доказательство реализационных фактов
 
-Дата: 03.10.2026. Статус: одобрено пользователем («Делай сразу весь»); реализация выполняется по [дочернему плану](../plans/cutover/2026-10-03-cupis-contract-fact-proof-repair.md). Это уточнение оставшейся области P2, не новый глобальный этап.
-
-Основание: cloud candidate PR #110, `ae71f358a8360e8c087021dba0847195dbaf60e5`, при `main@618d124df0a664c84d23a724ba50ef2b324e9b97`. Порядок и открытые обязанности остаются в [roadmap](../plans/2026-08-25-cupis-migration-roadmap.md) и [журнале cutover](../plans/2026-10-01-cupis-final-maintenance-cutover.md#остаток-directcross-sourcederivednormative-proof--03102026). Уже реализованные T1/S1 и nested-artwork не заменяются; их граница находится в [предыдущей спецификации](2026-10-02-cupis-template-shared-evidence-links-design.md).
-
-## 1. Что исправляем и что сохраняем
-
-Цель — честно и проверяемо выразить происхождение уже существующих фактов. Машина должна отличать значение, буквально прочитанное из Figma, от размера использования у другого владельца, HTML-интерпретации и согласованного HTML-решения.
-
-Сохраняются все текущие значения: размеры, цвета, шрифты, отступы, `auto`, `content-driven-cover`, 25°, crop, alpha, export profiles, asset boundaries, структура Mobile/Desktop и поведение HTML. Не меняются Figma, короткие Description, локальные письма и изображения, renderer, статусы маршрутов, навыки, PR #109 или `main`. Слияние, P3 и cutover не входят в разрешение на этот ремонт.
-
-Сверка на `9af5fad12c044c6173c4686cbd7e46b6333ec38a` обнаружила 18 unmapped leaves: 3 единицы измерения и 15 остальных. Среди имеющихся scalar mappings было 0 value mismatches. Это не приёмка компонентов: непокрытые native facts, capture diagnostics, F2, binding/visual evidence и F7 остаются отдельными обязанностями. Семь свежих packets и два supplemental reads сохраняют исходные SHA, receipts и даты; они не становятся evidence будущего code commit.
-
-Подтверждены пять неверных provenance-ссылок: старые sections Description отсутствуют у двух Primary CSS-angle facts, Hero mobile-auto и Secondary mobile-auto/desktop-cover. Исправление provenance не разрешает менять их значения или возвращать подробные Description.
+Техническая спецификация различает прямые Figma-значения, размер использования, HTML-интерпретацию и отдельно разрешённое HTML-решение. Числа, геометрия и экспортные контракты принадлежат своим машинным источникам.
 
 ## 2. Выбор метода
 
@@ -39,7 +27,7 @@
 
 Существующая `asset-reference` остаётся ссылкой без нового literal/provenance: proof проверяет разрешение этой ссылки и export relationship. Это не число из Figma. Другие reference types не получают автоматического освобождения от live проверки только потому, что ссылка валидна.
 
-Форма machine fields и диагностики должна быть полностью описана в implementation plan после одобрения этой спецификации. Нельзя начинать canonical mapping changes по одним названиям kinds.
+Точную форму machine fields проверяют действующие схемы и модули аудита; названия kinds сами по себе не подтверждают факты.
 
 ## 4. Закрытый набор проверок
 
@@ -117,7 +105,7 @@ Generic proof-checker является отдельным небольшим pur
 
 Для 18 leaves составляется exact accounting: own-source geometry/color; consumer geometry; units той же пары; suffix; asset relationship; три responsive keywords и два нормативных CSS-angle targets. Неуспешный proof, неверный provenance или потеря одного обязательного variant оставляют соответствующий leaf непроверенным. Старая QR derivation сохраняется отдельно и не расширяется component-ID branches для нового scope.
 
-Появление source path в новом proof не позволяет скрыть direct mismatch на нём. Пока оставшиеся implementation-significant fields не классифицированы/подтверждены, нет combined acceptance компонентов или P2. В частности, этот ремонт не автоматически закрывает absolute-child layout, все mixed fields или 1629 source coverage diagnostics.
+Появление source path в proof не позволяет скрыть direct mismatch на нём. Combined acceptance требует независимой полноты всех значимых полей, включая absolute-child layout и mixed fields; успешный частный proof не подтверждает весь компонент.
 
 ## 7. Потребители и карта влияния реализации
 
@@ -134,16 +122,4 @@ Generic proof-checker является отдельным небольшим pur
 
 `evidence_links` не входит в email bundle уже сейчас, а provenance исключается из его facts. Новые proof metadata не должны попадать в модель/рендер. Source digests и schema version могут измениться; rendering projection и итоговый HTML на одинаковых входах должны быть побайтово прежними. Типизированная provenance обновляет readable registry механически; Compact Description остаётся прежней.
 
-Список выше — область будущей реализации, не отчёт о выполненных изменениях. Точный allowlist полей записей, новые версии схем, API shapes и команды RED/GREEN будут закреплены после письменного одобрения в дочернем implementation plan P2, без самостоятельного нового roadmap.
-
-## 8. Критерии успеха и порядок следующего шага
-
-1. Письменно согласован этот способ proof, включая consumer-size meaning и отдельное нормативное25°, без изменения текущих rendering values. Затем составлен и одобрен implementation plan; до этого нет product/schema/canonical writes.
-2. RED cases показывают нынешние gaps; GREEN проверяет каждый kind и ошибки: wrong source/file/variant/owner/asset/path/style/decision, duplicate/cyclic links, missing variants, неполные/старые packets, same-value wrong-node, чужой receipt/SHA и попытка подменить expected value.
-3. Проверены Mobile auto и Desktop content-driven cover как правила: при смене reference-height нельзя случайно закрепить HTML height; неподходящая source topology или display policy не проходят. Fixed geometry остаётся independently observable, не переписывается ради успеха.
-4. Подтверждено, что три units закрываются доказанной парой своего источника; source322×50 не используется вместо consumer212×33, и обратная подмена отклоняется.
-5. Fresh MCP session точного code commit включает реальные нужные targets, включая Product-Logo. Реальные новые receipts не заменяются прошлыми семью packets. Terra Medium выполняет локальный audit и сообщает exact accounting, не только зелёный общий статус.
-6. Сохранность numeric values, структура, assets/foundations, compact Description, rendered/export projections и несвязанные records проверяются автоматически. Нет массового обхода всех62 записей ради одного scope.
-7. Новый механизм проверен в собственной области; открытые F2 widths, оставшиеся binding/visual/significant coverage и F7 всё ещё записаны в текущем плане. После их closure — независимое review и полный локальный gate exact final SHA перед отдельным разрешением на merge.
-
-Эта спецификация не означает приёмку P2, готовность cutover, изменение оставшихся правил или разрешение запустить P3/#109. Она устраняет одну конкретную неопределённость: каким способом доказывать уже записанные факты, не выдавая HTML-решения за буквальные поля Figma.
+Форму полей, API и диагностики задают текущие машинные схемы и перечисленные модули. Изменение их поведения требует явно ограниченной задачи и свежей проверки.

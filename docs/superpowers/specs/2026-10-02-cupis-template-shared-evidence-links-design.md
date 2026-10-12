@@ -1,19 +1,6 @@
-# CUPIS: служебные связи Template и Shared — дизайн T1/S1
+# Служебные связи Template и Shared
 
-Дата: 02.10.2026. Статус: направление и письменная спецификация одобрены пользователем. [Implementation plan T1/S1](../plans/cutover/2026-10-02-cupis-template-shared-evidence-links.md) подтверждён; задачи 1–5 выполнены в кандидате PR #110 (формат/offline references, capture/canonical-session inputs, T1/S1 checkers и общий auditor/CLI). Задача 6 выполнена в кандидате: 29 обязательных служебных связей подтверждены свежим canonical MCP-сеансом, включая оба Mobile Header instances; generated projection и scoped локальная изоляция проверены. Ошибка определения Mobile asset boundary устранена без изменения дизайна или export contract. Итоговая проверка задачи 7 выполнена в кандидате; ограниченный ремонт T1/S1 принят в его собственной области, но P2 целиком не принят.
-
-Основание: `main@618d124df0a664c84d23a724ba50ef2b324e9b97`, кандидат [PR #110](https://github.com/flabenar-maker/e-mail/pull/110) `e544e303f7d5ebf3e7b3ea01f87a7c19234a95d2`. Это дочернее уточнение [master-spec](2026-08-24-cupis-structured-email-system-design.md), а не второй глобальный план. Последовательность остаётся в [roadmap](../plans/2026-08-25-cupis-migration-roadmap.md), исходные факты и карта владельцев — в [журнале P2](../plans/2026-10-01-cupis-final-maintenance-cutover.md).
-
-## 1. Цель и граница
-
-Сделать машинно-проверяемыми две уже выявленные связи:
-
-- T1: фактические параметры корневого Template → существующие параметры HTML-оболочки в rendering foundation;
-- S1: исходный Shared-элемент → конкретное место использования → владелец составного ассета.
-
-Один факт сохраняет одного владельца. Новые записи описывают, **что с чем проверять**, а не содержат вторую копию цвета, размера, HTML или export policy. Shared не становится самостоятельным блоком письма; Template остаётся корнем композиции и источником её оболочки, не дополнительным элементом content.
-
-Не входят: изменение чисел, цветов, шрифтов, asset contracts, HTML-деревьев, дизайна/Description/нейминга Figma, локальных писем, активация маршрутов, PR #109, остальные незакрытые факты P2 и автоматическое слияние. Проверка конкретного Template-инстанса при сборке письма не объявляется реализованной библиотечной сверкой.
+Технические правила связывают точный источник, потребителя и владельца факта. Полнота ссылок проверяется отдельно от совпадения значений.
 
 ## 2. Выбранное решение
 
@@ -142,68 +129,4 @@ Live checker получает канонические записи/manifest/fou
 
 Полный generated registry может показывать эти ссылки в существующей секции зависимостей, помечая их как служебные: это проекция, не новая база. Никаких ручных копий реестра. Compact Description остаётся побайтово прежним.
 
-P2 реализует schema, проверку и разрешённые mappings в candidate. Подключение служебной проекции к route-specific maintenance bundle/workflow относится к уже запланированному P3: оно должно использовать те же canonical поля и необходимые manifest-resolved sources. Email bundles не расширяются этими metadata. P2 не считается активацией maintenance; P3 не считается выполненным от наличия checker.
-
-## 7. Первая область данных и сохраняемые границы
-
-Первое внедрение использует карту P2, а не заново обходит всю библиотеку:
-
-- `email-template` — T1;
-- большой и компактный Header-Logo, Product-варианты, `email-header` — S1;
-- positive/negative status badges и прочитанные `block-personal-data-update` / `block-receipt-info` — S1, включая реальные glyph overrides;
-- исходные icons служат targets; отсутствие найденного consumer у остальных десяти иконок не исправляется вымышленными links.
-
-До записи каждого mapping — адресное свежее чтение его source/target/owner. Подтверждение отдельных связей не переутверждает всю запись или все 61 компонент. Числа, alpha/radius, старые дубли asset contracts и спорный mobile-display fact большого логотипа не переписываются в рамках этой работы.
-
-## 8. Область реализации по согласованной спецификации
-
-Карта ответственности утверждённого implementation plan; задачи 1–5 реализуют форму/offline references, capture/canonical-session inputs, T1/S1 checkers и общую интеграцию; задача 6 добавила 29 подтверждённых mappings и projection; задача 7 проверила реализацию в её границах:
-
-| Область | Владелец изменения |
-| --- | --- |
-| Форма links | `schemas/components.schema.json`; служебный раздел в разрешённых записях `data/components/{shared,marketing,service}.yaml` |
-| Семантические ссылки | `scripts/lib/component-registry.mjs` и узкий отдельный модуль проверки evidence links; типы и известные source IDs берутся из текущей системы |
-| Сверка с Figma | `scripts/audit-figma-contract-facts.mjs`, минимальная интеграция в `scripts/lib/figma-contract-facts.mjs`; переиспользование `scripts/lib/foundation-evidence.mjs` для значения после проверки identity/ownership |
-| Capture metadata и main-component read | `scripts/figma/capture-contract-source.js`; без изменения визуальных узлов и числовых фактов |
-| Нормативная граница и readable projection | `core/component-contract-standard.md`, `scripts/lib/component-registry-doc.mjs`, производный `docs/generated/component-registry.md` |
-| Проверки | Schema/semantic, fact audit/CLI, capture, generated projection, сохранность email bundles/render-impact/HTML и export inputs |
-| Дальнейшее подключение | Карта P3 в текущем cutover plan; не изменение статуса маршрутов или навыков в P2 |
-
-Точные имена функций, новые файлы и тестовые команды определены в связанном implementation plan, подтверждённом пользователем. Он встраивается в текущий P2, не создаёт новый глобальный этап или параллельный список задач.
-
-## 9. Критерии приёмки реализации
-
-- Свежие правильные связи проходят; изменение цвета/desktop width Template или реального main component обнаруживается точным diagnostic.
-- Чужой file/node/variant, подставленный canonical target, неправильный asset owner и отсутствующий link не дают успеха.
-- Compound instance IDs и реальные overrides проходят без сведения к master; default и actual различаются.
-- Скрытый/полупрозрачный/multi-fill источник не подтверждает opaque shell background только совпадением HEX.
-- Native 62×62 не превращается в display 46.5×46.5 или badge 72×72; существующие правила экспорта не меняются.
-- Отсутствующий/старый/усечённый пакет остаётся unverified. Сохранённый `source_variants` не используется вместо нового чтения.
-- Новые metadata не изменяют render-impact projection, HTML, export inputs и compact Figma Description на неизменных моделях.
-- Есть двусторонняя проверка coverage, не только happy path объявленных links; остальные blockers P2 сохранены.
-- Targeted проверки выполняет Terra Medium локально на точных cloud commits; перед разрешённым merge кода — полный локальный gate. Actions/PR Checks не используются.
-
-## 10. Текущее состояние и следующий шаг
-
-Задачи 1–5 реализованы в кандидате PR #110: schema 2.2.0/typed metadata/offline references, capture 1.1.0 с async main lookup и metadata, manifest-resolved canonical model и проверяемый временный session. Code/test SHA задачи 2 — `98b8b7633d689badc21ecf15241fdd54a9cbc30d`; 161/161 scoped tests, validator/generated check PASS. Проверки, уточнения test fixtures и ограничения записаны в implementation plan/журнале P2. Это не подтверждение live-связей и не приёмка всего ремонта.
-
-T1 checker задачи 3 реализован на `f0237a32727a54a8c5b503918cdd8bcc40e435ee`: девять обязательств независимо от links, exact identity/paint/sizing и canonical targets; 152/152 scoped tests, validator/generated check PASS через Terra Medium. Это synthetic gate механизма, не подтверждение фактических библиотечных links.
-
-S1 задачи 4 реализован на `931c764a03215213448b67d7aa3b56c21aabc3dc`: scope не зависит от объявленных links; проверяются actual nested main IDs, точные owner/boundary и свежая target identity; confirmed impact отделён от possible default-цепочек. 191/191 scoped tests, validator/generated check PASS через Terra Medium. Это synthetic gate, не новое MCP-подтверждение библиотеки.
-
-Задача 5 выполнена на `59e8bbfbd50cadfa5db05e698201bd82fab2d979`: Общий отчёт сохраняет исходный scalar report без удаления diagnostics; итог — facts.ok AND evidence_links.ok. Проверка links не закрывает FIGMA_FACT_UNCOVERED. CLI связывает --live с точным receipt packet по owner, realpath и hash bytes; новые session/SHA flags парные, внешние mappings/expected targets не допускаются. Без session scoped Template/artwork получает EVIDENCE_SESSION_REQUIRED, а не успех. Обычный HTML без artwork не получает выдуманную новую обязанность. System validator разрешает foundation targets из уже загруженных canonical документов и возвращает точные ошибки с registry paths. Scalar auditor не изменён: capture 1.0/1.1 поддерживались ранее; новые regression controls это подтверждают, link proof по-прежнему требует 1.1. 318/318 scoped tests и validator/generated check PASS через Terra Medium. Это synthetic mechanism gate, не live acceptance.
-
-Задача 6 выполнена в кандидате: 29 обязательных служебных связей подтверждены свежим canonical MCP-сеансом, включая оба Mobile Header instances; generated projection и scoped локальная изоляция проверены. Ошибка определения Mobile asset boundary устранена без изменения дизайна или export contract. Итоговая проверка задачи 7 выполнена в кандидате; ограниченный ремонт T1/S1 принят в его собственной области, но P2 целиком не принят. Свежая canonical-сверка на 9a671a5cbbef8157933cf326e90138b1ad9e95d5 подтвердила 29 обязательных links, включая Mobile Header. Она не снимает 1976 scalar и 56 capture diagnostics; точный scope и receipts указаны в implementation plan. Полная запись результатов — в задаче 6 implementation plan. Числовые факты, foundation values, HTML/export policy и Figma сохранены. Следующий незакрытый пункт — оставшиеся значимые owner/node/path и nested artwork в P2: сначала определить точную область и владельца каждого факта, затем согласовать нужные исправления. F2 reference widths, foundation/binding evidence и F7 остаются открытыми. P3, #109, cutover и merge автоматически не начинаются.
-## 11. Последующий ограниченный repair: nested-artwork
-
-Исторические результаты задач выше сохраняют свои исходные SHA и границы. После отдельного freshness repair новые live links требуют request-bound session1.1/capture1.2 с независимым порядком host/Figma часов; scalar compatibility не означает live acceptance старого packet.
-
-На code SHA `eba2e0e5ddabeaa4bd64b4dab46de577e5af5bb9` combined audit дополнен независимым `nested_artwork`: итог `facts.ok && evidence_links.ok && nested_artwork.ok`. Дочерний artwork owner не превращается в родительский asset; exact placement и compound ancestry доказываются отдельно от default source. Неизвестные targets, недостающие links и scalar/capture diagnostics не снимаются. Этот bounded proof не означает полного подтверждения Vector/Fill facts или компонента. Нормативное правило находится в [Core](../../../core/component-contract-standard.md#служебные-связи-для-сверки); точный fresh receipt, tests и оставшиеся зависимости — в [актуальном журнале P2](../plans/2026-10-01-cupis-final-maintenance-cutover.md). P2 остаётся открытым; activation/merge/P3 не выполняются.
-
-## 12. Последующее ограниченное продолжение: remote source
-
-Неизвестный вложенный glyph разрешён как опубликованный внешний main component, а не локальный CUPIS component set. Каноническая remote reference владеет точным publication key и self lookup-root; свежий capture возвращает фактический remote status/key. Current-file lookup и исходный файл публикации различаются, native geometry не подменяет display geometry потребителя. Shared helper не создаёт новый HTML-блок или экспорт. Универсальное правило принадлежит [Core](../../../core/component-contract-standard.md#служебные-связи-для-сверки).
-
-Identity checker и confirmed-impact projection требуют точного remote key; отсутствие/несовпадение/extra metadata оставляет источник unverified. Existing local naming и ownership boundaries сохранены. Source capture допускает фактическое отсутствие minimum constraint как null, не изменяя числовые reference/HTML dimensions. Raw scalar/capture diagnostics не подавляются.
-
-Пять child links и один remote helper подтверждены новым семипакетным MCP-сеансом на production SHA `9d1f9c27d5ad73fd90a108c57911b291682a6225`; 277 targeted tests прошли на последующем tests-only `32b059f43bdfda2dc4917f45de069931eb93ec74`. Исторические proof pins не перезаписываются после documentation commits. Generated registry обновляется только механически. [Журнал P2](../plans/2026-10-01-cupis-final-maintenance-cutover.md) хранит exact receipts, scope и открытые обязательства; этот результат не закрывает весь P2 и не разрешает P3/activation/merge.
+Служебная проекция maintenance использует те же canonical поля и manifest-resolved sources. Email bundles не расширяются этими metadata. Наличие checker не заменяет разрешение на запись или проверку фактических источников.

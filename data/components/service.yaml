@@ -36,7 +36,7 @@
         "verification": {
           "status": "figma-source-recorded",
           "checked_at": "2026-09-13",
-          "reason": "Mobile и Desktop source nodes сверены непосредственно с Figma; существующие HTML-проекции остаются миграционным черновиком и не являются доказанным build contract."
+          "reason": "Mobile и Desktop source nodes сверены непосредственно с Figma; существующие HTML-проекции остаются непроверенным HTML-деревом и не являются доказанным build contract."
         }
       },
       "variants": [
@@ -16269,7 +16269,7 @@
         "verification": {
           "status": "figma-source-recorded",
           "checked_at": "2026-09-13",
-          "reason": "Mobile и Desktop source nodes сверены непосредственно с Figma; существующие HTML-проекции остаются миграционным черновиком и не являются доказанным build contract."
+          "reason": "Mobile и Desktop source nodes сверены непосредственно с Figma; существующие HTML-проекции остаются непроверенным HTML-деревом и не являются доказанным build contract."
         }
       },
       "variants": [
@@ -31951,7 +31951,7 @@
         "verification": {
           "status": "figma-source-recorded",
           "checked_at": "2026-09-13",
-          "reason": "Mobile и Desktop source nodes сверены непосредственно с Figma; существующие HTML-проекции остаются миграционным черновиком и не являются доказанным build contract."
+          "reason": "Mobile и Desktop source nodes сверены непосредственно с Figma; существующие HTML-проекции остаются непроверенным HTML-деревом и не являются доказанным build contract."
         }
       },
       "variants": [
@@ -39686,7 +39686,7 @@
         "verification": {
           "status": "figma-source-recorded",
           "checked_at": "2026-09-13",
-          "reason": "Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной миграционной проекцией."
+          "reason": "Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной HTML-проекцией."
         }
       },
       "variants": [],
@@ -40349,7 +40349,7 @@
         "verification": {
           "status": "figma-source-recorded",
           "checked_at": "2026-09-13",
-          "reason": "Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной миграционной проекцией."
+          "reason": "Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной HTML-проекцией."
         }
       },
       "variants": [],
@@ -40926,7 +40926,7 @@
         "verification": {
           "status": "figma-source-recorded",
           "checked_at": "2026-09-13",
-          "reason": "Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной миграционной проекцией."
+          "reason": "Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной HTML-проекцией."
         }
       },
       "variants": [],
@@ -42066,7 +42066,7 @@
         "verification": {
           "status": "figma-source-recorded",
           "checked_at": "2026-09-13",
-          "reason": "Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной миграционной проекцией."
+          "reason": "Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной HTML-проекцией."
         }
       },
       "variants": [
@@ -63741,7 +63741,7 @@
         "verification": {
           "status": "figma-source-recorded",
           "checked_at": "2026-09-13",
-          "reason": "Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной миграционной проекцией."
+          "reason": "Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной HTML-проекцией."
         }
       },
       "variants": [],
@@ -64330,7 +64330,7 @@
         "verification": {
           "status": "figma-source-recorded",
           "checked_at": "2026-09-13",
-          "reason": "Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной миграционной проекцией."
+          "reason": "Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной HTML-проекцией."
         }
       },
       "variants": [],
@@ -64888,7 +64888,7 @@
         "verification": {
           "status": "figma-source-recorded",
           "checked_at": "2026-09-13",
-          "reason": "Mobile и Desktop source nodes сверены непосредственно с Figma; существующие HTML-проекции остаются миграционным черновиком и не являются доказанным build contract."
+          "reason": "Mobile и Desktop source nodes сверены непосредственно с Figma; существующие HTML-проекции остаются непроверенным HTML-деревом и не являются доказанным build contract."
         }
       },
       "variants": [
@@ -67495,7 +67495,7 @@
         "verification": {
           "status": "figma-source-recorded",
           "checked_at": "2026-09-13",
-          "reason": "Mobile и Desktop source nodes сверены непосредственно с Figma; существующие HTML-проекции остаются миграционным черновиком и не являются доказанным build contract."
+          "reason": "Mobile и Desktop source nodes сверены непосредственно с Figma; существующие HTML-проекции остаются непроверенным HTML-деревом и не являются доказанным build contract."
         }
       },
       "variants": [
@@ -84954,7 +84954,7 @@
         "verification": {
           "status": "figma-source-recorded",
           "checked_at": "2026-09-13",
-          "reason": "Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной миграционной проекцией."
+          "reason": "Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной HTML-проекцией."
         }
       },
       "variants": [
@@ -92317,7 +92317,7 @@
         "verification": {
           "status": "figma-source-recorded",
           "checked_at": "2026-09-13",
-          "reason": "Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной миграционной проекцией."
+          "reason": "Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной HTML-проекцией."
         }
       },
       "variants": [
@@ -110727,7 +110727,7 @@
         "verification": {
           "status": "figma-source-recorded",
           "checked_at": "2026-09-13",
-          "reason": "Mobile и Desktop source nodes сверены непосредственно с Figma; существующие HTML-проекции остаются миграционным черновиком и не являются доказанным build contract."
+          "reason": "Mobile и Desktop source nodes сверены непосредственно с Figma; существующие HTML-проекции остаются непроверенным HTML-деревом и не являются доказанным build contract."
         }
       },
       "variants": [
@@ -116951,7 +116951,7 @@
         "verification": {
           "status": "figma-source-recorded",
           "checked_at": "2026-09-13",
-          "reason": "Mobile и Desktop source nodes сверены непосредственно с Figma; существующие HTML-проекции остаются миграционным черновиком и не являются доказанным build contract."
+          "reason": "Mobile и Desktop source nodes сверены непосредственно с Figma; существующие HTML-проекции остаются непроверенным HTML-деревом и не являются доказанным build contract."
         }
       },
       "variants": [
@@ -123706,7 +123706,7 @@
         "verification": {
           "status": "figma-source-recorded",
           "checked_at": "2026-09-13",
-          "reason": "Mobile и Desktop source nodes сверены непосредственно с Figma; существующие HTML-проекции остаются миграционным черновиком и не являются доказанным build contract."
+          "reason": "Mobile и Desktop source nodes сверены непосредственно с Figma; существующие HTML-проекции остаются непроверенным HTML-деревом и не являются доказанным build contract."
         }
       },
       "variants": [
@@ -174640,7 +174640,7 @@
         "verification": {
           "status": "figma-source-recorded",
           "checked_at": "2026-09-13",
-          "reason": "Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной миграционной проекцией."
+          "reason": "Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной HTML-проекцией."
         }
       },
       "variants": [
@@ -193264,7 +193264,7 @@
         "verification": {
           "status": "figma-source-recorded",
           "checked_at": "2026-09-13",
-          "reason": "Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной миграционной проекцией."
+          "reason": "Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной HTML-проекцией."
         }
       },
       "variants": [

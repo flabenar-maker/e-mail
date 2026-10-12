@@ -244,7 +244,7 @@ export async function validateStructuredWorkflows({ repoRoot, manifest }) {
 
 // A bounded consumer of the maintenance steps returned by the resolver.
 // Tool handlers are explicit capabilities: this module owns no Figma/GitHub client.
-const MAINTENANCE_ROUTES = new Set(['library-maintenance','component-onboarding','figma-description-sync','figma-naming-audit','migration-progress']);
+const MAINTENANCE_ROUTES = new Set(['library-maintenance','component-onboarding','figma-description-sync','figma-naming-audit','system-progress']);
 const exact = (a,b) => isDeepStrictEqual(a,b);
 const present = value => value !== undefined && value !== null;
 function deepFreeze(value){if(value&&typeof value==='object'){for(const child of Object.values(value))deepFreeze(child);Object.freeze(value);}return value;}
@@ -275,7 +275,7 @@ function exactBoundary(preview,authorization,scope,route,pin){
    if(suffix(change.before)!==suffix(change.after))return false;
   }
  }
- if(['migration-progress','component-onboarding'].includes(route)&&preview.changes.length)return false;
+ if(['system-progress','component-onboarding'].includes(route)&&preview.changes.length)return false;
  return preview.changes.length>0||preview.repository_paths.length>0;
 }
 function expectedReadback(before,boundary){
@@ -364,7 +364,7 @@ export async function executeMaintenanceWorkflow({context,pinnedSha,inputs={},co
   }
   if(!output||typeof output!=='object'||Object.keys(output).some(key=>!step.allowed_outputs.includes(key))||step.allowed_outputs.some(key=>!present(output[key])))return stop('workflow-output-invalid','/steps/'+step.id);
   if(step.id==='pin-canonical-state'&&output['pinned-sha']!==pinnedSha)return stop('source-pin-mismatch','/pinned-sha');
-  if(step.id==='pin-canonical-state'&&context.route.id==='migration-progress'){
+  if(step.id==='pin-canonical-state'&&context.route.id==='system-progress'){
    const cloud=state['cloud-state-evidence'];
    if(!cloud||cloud.cloud_channel!=='github'||!(/^[a-f0-9]{40}$/u.test(cloud.tree_sha??'')))return stop('cloud-state-unverified','/cloud-state-evidence');
    if(cloud.canonical_sha!==pinnedSha)return stop('source-pin-mismatch','/cloud-state-evidence/canonical_sha');

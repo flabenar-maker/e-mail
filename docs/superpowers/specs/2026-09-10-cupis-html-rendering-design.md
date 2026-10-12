@@ -1,8 +1,4 @@
-# CUPIS HTML Rendering Design
-
-Дата: 2026-09-10.
-
-Статус: архитектура согласована; пакеты 1–9 реализованы, Package 10 расширен обязательным client-resilience контуром.
+# Архитектура HTML-рендеринга
 
 ## 1. Назначение
 
@@ -267,66 +263,3 @@ Purpose, документационный текст и Figma Description в dig
 Полный перебор свойств используется только для небольшого числа комбинаций. Browser comparison проверяет геометрию, но не доказывает поддержку всех почтовых клиентов.
 
 Litmus, Email on Acid и CRM-тесты остаются опциональными. Отдельные хаки для старого Outlook не входят в обязательный baseline без отдельного решения.
-
-## 16. Пилот
-
-До полной миграции архитектура доказывается на разных типах:
-
-- `Email/Template` — корневая оболочка и Slot;
-- библиотечная кнопка — properties и nested component;
-- `Card/Image` — адаптивное direct image;
-- `Banner/Secondary` — различное Mobile/Desktop image behavior;
-- `Banner/App-Download` — сложная responsive-композиция;
-- `Email/Footer` — текст, ссылки, иконки и переключаемые секции.
-
-Только успешный пилот разрешает миграцию остальных активных компонентов.
-
-## 17. Последовательность этапа 8
-
-1. Characterization baseline и владельцы данных.
-2. Rendering foundation и renderer-ready schema.
-3. Семантическая нормализация пилотных contracts.
-4. Разделение Core без копирования structured definitions.
-5. Email-примитивы, interpreter и renderer registry.
-6. Pilot coverage и только необходимые специальные обработчики.
-7. Нормализованная модель, CLI и атомарная публикация.
-8. Render-impact digest и типизированная диагностика.
-9. Автоматические HTML- и контрактные проверки.
-10. Client resilience 10A–10D и затем Mobile/Desktop visual scenarios.
-11. Миграция остальных компонентов.
-12. Shadow comparison и перевод workflows без одновременной подачи legacy/new правил.
-
-Figma, production-письма и maintenance skill не переключаются скрытно. Figma требует отдельного MCP impact gate, а maintenance skill переводится на итоговые bundles отдельным этапом roadmap.
-
-## 18. Критерии готовности
-
-Этап завершён, когда:
-
-- Package 10A–10D завершены, target-client fallback выбран по Altcraft evidence и зафиксирован в rendering foundation;
-- все активные компоненты имеют renderer-ready contracts и coverage;
-- стандартные компоненты собираются общим интерпретатором;
-- исключения обоснованы и протестированы;
-- rendering foundation/schema проходят validation;
-- Core не дублирует structured definitions;
-- workflow использует только новый набор источников;
-- Mobile/Desktop-сценарии проходят проверки;
-- новое письмо атомарно собирается в `email.html` и `images/`;
-- comparison не показывает необъяснённых смысловых потерь;
-- Figma и production-письма не изменены техническим cutover.
-
-## 19. Зафиксированные решения
-
-При обычной реализации не пересматриваются:
-
-- contract-driven архитектура вместо arbitrary Figma-to-HTML;
-- временная нормализованная модель;
-- общий interpreter как основной путь;
-- специальные обработчики только для доказанных исключений;
-- единый владелец renderer mapping;
-- автоматически вычисляемый render-impact digest;
-- responsive-семантика на уровне нужного поддерева;
-- повторное использование assets foundation;
-- атомарная публикация;
-- отдельные режимы NEW BUILD и CONTINUE/FIX.
-
-Реальное противоречие сначала оформляется как архитектурное решение, а не локальное исключение.

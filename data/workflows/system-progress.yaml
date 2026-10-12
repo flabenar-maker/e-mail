@@ -1,11 +1,11 @@
 {
   "schema_version": "1.0.0",
   "workflow": {
-    "id": "migration-progress",
+    "id": "system-progress",
     "status": "active",
     "source_ids": [
       "repository-readme",
-      "migration-roadmap"
+      "system-status"
     ],
     "modes": [
       {
@@ -54,9 +54,9 @@
             "order": 1
           },
           {
-            "id": "compare-roadmap-with-cloud-state",
+            "id": "compare-status-with-cloud-state",
             "source_ids": [
-              "migration-roadmap",
+              "system-status",
               "repository-readme"
             ],
             "required_inputs": [
@@ -79,7 +79,7 @@
           {
             "id": "verify-read-only-findings",
             "source_ids": [
-              "migration-roadmap"
+              "system-status"
             ],
             "required_inputs": [
               "audit-findings"

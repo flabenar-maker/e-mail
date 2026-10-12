@@ -238,16 +238,6 @@ export function validateComponentDocumentation(record) {
     }
   });
 
-  if (Object.hasOwn(record ?? {}, "description")) {
-    errors.push(
-      diagnostic(
-        "COMPONENT_DOCUMENTATION_RETIRED_BLOCKS_FORBIDDEN",
-        "/description",
-        `${componentId}: retired description blocks are forbidden in schema 2.0.0.`,
-      ),
-    );
-  }
-
   if (deriveComponentRenderType(record) === null) {
     errors.push(
       diagnostic(

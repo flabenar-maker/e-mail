@@ -387,8 +387,6 @@
       "properties": {
         "status": {
           "enum": [
-            "shadow",
-            "partial",
             "active"
           ]
         },
@@ -433,7 +431,7 @@
       "properties": {
         "status": {
           "enum": [
-            "structured-shadow",
+            "structured-paused",
             "structured-active"
           ]
         },

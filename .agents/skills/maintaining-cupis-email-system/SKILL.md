@@ -13,7 +13,7 @@ Act as a thin router over one machine-resolved CUPIS context. GitHub owns persis
 
 1. Prefer the authenticated `gh CLI` for cloud GitHub reads and writes. If it is unavailable or unauthenticated, use the GitHub MCP connector. Never expose credentials.
 2. Reuse the pinned cloud SHA supplied by a trusted CUPIS task-router or bootstrap handoff for this task; do not repin `main` during that handoff. For a standalone invocation, pin the current `main` SHA of `flabenar-maker/e-mail`. An explicitly authorized scoped candidate test uses its exact cloud SHA. Read `system/manifest.yaml` at the selected SHA; the specialization and task sources must match it. On mismatch stop rather than silently switching versions. The manifest is the only route catalog.
-3. Select the route from the request. For migration status or next-step questions, select `migration-progress`, list `docs/superpowers/plans/` at the pinned SHA and re-read the roadmap before answering.
+3. Select the route from the request. For system status or next-step questions, select `system-progress` and compare `docs/system-status.md` with actual GitHub state at the pinned SHA before answering.
 4. Materialize a disposable exact-SHA snapshot of the pinned cloud commit. Verify that the snapshot HEAD equals the pinned SHA and prepare verified same-lock dependencies (see execution handoff), then invoke:
 
    ```text
@@ -26,9 +26,9 @@ Act as a thin router over one machine-resolved CUPIS context. GitHub owns persis
 
 ### Paused routes
 
-When the resolver returns `paused` with `SKILL_ROUTE_PAUSED`, use its bundle only for read-only navigation or an explicitly scoped migration implementation plan. A paused result does not authorize a production library operation, Figma write or email build. Do not substitute another workflow, a manual source list, archived files or remembered chat context.
+When the resolver returns `paused` with `SKILL_ROUTE_PAUSED`, use its bundle only for read-only navigation or an explicitly scoped system maintenance plan. A paused result does not authorize a production library operation, Figma write or email build. Do not substitute another workflow, a manual source list, unregistered files or remembered chat context.
 
-Repository migration work is allowed only when the user request names the change and an applicable implementation plan defines its boundary. It still requires cloud publication, exact-SHA local verification and separate merge authorization.
+Repository maintenance work is allowed only when the user request names the change and an applicable implementation plan defines its boundary. It still requires cloud publication, exact-SHA local verification and separate merge authorization.
 
 A direct user request does not replace an applicable implementation plan while the route is paused. If the task is neither read-only navigation nor covered by such a plan, return `not ready` without any mutation.
 

@@ -1,27 +1,4 @@
-# CUPIS Email Client Resilience Design
-
-Дата: 2026-09-16.
-
-Статус: архитектура согласована; реализация запланирована внутри этапа 8, Package 10.
-
-## 1. Назначение
-
-Документ определяет, как CUPIS renderer должен сохранять читаемость и проверяемость письма в целевых почтовых клиентах, не подменяя фактические Figma-контракты внешними шаблонами и не добавляя визуальные значения по предположению.
-
-Область охватывает шесть связанных задач: fallback без `<style>`, минимальную поддерживаемую ширину, бюджет embedded CSS, язык и направление документа, явную alt-семантику и политику тёмной темы.
-
-## 2. Границы
-
-Изменения относятся к rendering foundation, временной модели письма, renderer shell, email-примитивам, диагностике и QA этапа 8.
-
-Они не:
-
-- меняют размеры, отступы, цвета, структуру или assets компонентов;
-- меняют Figma без отдельного подтверждённого клиентского дефекта и отдельного разрешения;
-- заменяют Mobile/Desktop component contracts общей эвристикой;
-- добавляют VML, Outlook-only ветви, `@font-face` или dark-mode image swapping;
-- считают browser preview доказательством поведения конкретного почтового клиента;
-- выводят размер MIME из размера локального HTML.
+# Устойчивость HTML в почтовых клиентах
 
 ## 3. Источники и доказательства
 
@@ -164,27 +141,3 @@ MIME size не вычисляется локально. Если он нужен
 - asset/Figma defect.
 
 Только третий случай создаёт отдельную Figma-задачу с mutation gate. Автоматическая подложка запрещена.
-
-## 11. Интеграция в этап 8
-
-Package 10 делится на четыре обязательных подпакета:
-
-- **10A — Exact policy and model:** rendering foundation/schema, metadata и alt model.
-- **10B — Renderer implementation:** shell, primitive, interpreter, diagnostics и metrics.
-- **10C — Automated and browser resilience:** normal/no-style scenarios, exact widths, CSS boundary и visual pilot.
-- **10D — Altcraft client evidence and fallback decision:** целевые приложения, зафиксированный результат и отдельное решение о baseline.
-
-Только после 10D выполняется финальный visual gate Package 10 для Email/Header, Email/Footer и пилотных блоков. Package 11 не начинается раньше завершения 10A–10D.
-
-## 12. Критерии готовности
-
-- Rendering foundation хранит все шесть точных политик без component-specific данных.
-- Email model не проходит validation без `language`, `direction` и явной alt-семантики.
-- `<html>` и внутренний wrapper получают одинаковые `lang` и `dir`.
-- Совокупный embedded CSS проходит при `16383` байтах и блокируется при `16384`.
-- На заявленной минимальной ширине normal preview не имеет горизонтального overflow.
-- No-style preview создан и проверен отдельно, без выдачи его за конкретный клиент.
-- Результат Altcraft-проверки содержит точные client coordinates и приводит к явному fallback decision.
-- Dark-mode policy генерирует ровно объявленный результат и не добавляет графику.
-- Figma и component visual contracts не меняются без отдельного подтверждённого дефекта.
-- Все code/schema проверки выполняются локально на точном cloud SHA; GitHub Actions не используются.
