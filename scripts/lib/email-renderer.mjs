@@ -2,6 +2,7 @@ import { buildEmailServiceFragments } from "./email-service-fragments.mjs";
 import { instanceElementVisible, instanceVisibilityBinding } from "./email-instance-visibility.mjs";
 import { resolveEmissionProfile } from "./email-emission-profile.mjs";
 import { renderContractTree, selectVariantRoot } from "./email-interpreter.mjs";
+import { validateEmailInstanceIdentities } from "./email-model.mjs";
 import {
   measureEmailOutput,
   validateEmbeddedCssBudget,
@@ -432,6 +433,18 @@ export function renderComponent({
   emissionProfile,
   outputBindings, templateRules, previewValues,
 }) {
+  const identityDiagnostics = validateEmailInstanceIdentities({ root: viewportData });
+  if (identityDiagnostics.length > 0) {
+    return {
+      html: "",
+      css: "",
+      assets: [],
+      diagnostics: withComponentContext(
+        identityDiagnostics.map(({ code, path, message }) => ({ code, path, message })),
+        componentId,
+      ),
+    };
+  }
   const accumulator = createAccumulator();
   const roots = {};
 

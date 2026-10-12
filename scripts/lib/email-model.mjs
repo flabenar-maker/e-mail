@@ -585,6 +585,49 @@ function validateInstance(instance, dependencies, errors, path, stack, activeVie
   });
 }
 
+export function validateEmailInstanceIdentities(model) {
+  const errors = [];
+  const firstLocations = new Map();
+  const ancestry = new WeakSet();
+
+  function visit(instance, path) {
+    if (!instance || typeof instance !== "object") return;
+    const id = instance.instance_id;
+    const location = path + "/instance_id";
+    if (typeof id === "string") {
+      const first = firstLocations.get(id);
+      if (first !== undefined) {
+        const message = "Duplicate instance ID " + JSON.stringify(id) + " at " + first + " and " + location + ".";
+        errors.push(
+          diagnostic("EMAIL_MODEL_INSTANCE_DUPLICATE", first, message),
+          diagnostic("EMAIL_MODEL_INSTANCE_DUPLICATE", location, message),
+        );
+      } else {
+        firstLocations.set(id, location);
+      }
+    }
+    if (ancestry.has(instance)) return;
+    ancestry.add(instance);
+    if (Array.isArray(instance.slots)) {
+      instance.slots.forEach((slot, slotIndex) => {
+        if (!Array.isArray(slot?.instances)) return;
+        slot.instances.forEach((child, childIndex) => {
+          visit(child, path + "/slots/" + slotIndex + "/instances/" + childIndex);
+        });
+      });
+    }
+    if (Array.isArray(instance.nested_components)) {
+      instance.nested_components.forEach((nested, index) => {
+        visit(nested?.instance, path + "/nested_components/" + index + "/instance");
+      });
+    }
+    ancestry.delete(instance);
+  }
+
+  visit(model?.root, "/root");
+  return sortDiagnostics(errors);
+}
+
 export function validateEmailModelSemantics(model, dependencies, options = {}) {
   const errors = [];
   if (!model?.root) {
@@ -596,6 +639,8 @@ export function validateEmailModelSemantics(model, dependencies, options = {}) {
       ),
     ];
   }
+  const identityDiagnostics = validateEmailInstanceIdentities(model);
+  if (identityDiagnostics.length > 0) return identityDiagnostics;
   validateInstance(model.root, { ...dependencies, deliveryResearch: options.purpose === "delivery-inventory" }, errors, "/root", []);
   return sortDiagnostics(errors);
 }

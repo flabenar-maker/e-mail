@@ -8,18 +8,19 @@
 - PR #127 исключён как крайне низкоприоритетный. PR #128–133 используются только как источники; их ветки и статусы не изменяются. Merge, установка навыков и Figma writes не входят в задание.
 - Если детализация шага недостаточна, сначала дополнить её здесь, затем писать тесты и реализацию. Изменение поведения за пределами исходного плана не подменять догадкой.
 - Остановка при **5% оставшегося лимита Codex** (usedPercent ≥95): прекратить новые работы, сохранить текущие артефакты и точную точку продолжения, отметить PR, затем выполнить обычное выключение Windows без принудительного закрытия приложений. Лимит общий для аккаунта; проверяется между фазами и перед тяжёлыми запусками.
+- Если весь план завершён раньше порога 5%, пользователь также разрешил выключение после сохранения PR и точки завершения. Специально расходовать остаток лимита не нужно.
 - Изоляция — новая облачная ветка. Локальные exact-SHA snapshots используются только для проверок; staging вне исходников содержит временные публикационные артефакты. Полные тестовые логи остаются локально. Actions/PR Checks не используются.
 - Внешняя приёмка: `not-run`.
 
 ## Текущая точка
 
-**Tasks 1–2 приняты в ветке:** Task 1 на `c0808e1e3d18bfd1824dd34386d22d9c0c1090a7`, Task 2 на `9d1a19c80b70b58da6742378cc5e64d3d8590e3b`. Следующее действие: Task 3 — детализация ниже, затем новые identity regressions и RED до изменения production code.
+**Tasks 1–2 приняты в ветке:** Task 1 на `c0808e1e3d18bfd1824dd34386d22d9c0c1090a7`, Task 2 на `9d1a19c80b70b58da6742378cc5e64d3d8590e3b`. Task 3: published RED подтвердил потерю первого marker и успешную публикацию intake при глобальной коллизии. Минимальный identity guard опубликован для проверки; GREEN/full и приёмка ещё ожидаются.
 
 | Шаг | Состояние |
 | --- | --- |
 | 1. R1, serialized resource paths | Accepted на c0808e1; targeted 26/full 2215 PASS |
 | 2. #130/E13, root-slot projection | Accepted на 9d1a19c; targeted 91/full 2227 PASS |
-| 3. R3, instance identities | Детализирован перед тестами; код не менялся |
+| 3. R3, instance identities | RED подтверждён; минимальный guard ждёт GREEN/full и приёмки |
 | 4. R5, workflow identity presence | Не начат |
 | 5. R2, source/candidate/release binding | Не начат |
 | 6. R6, contained asset bytes | Не начат |
@@ -80,3 +81,4 @@ Baseline и результаты каждого шага записываютс�
 - Task 1 final `c0808e1e3d18bfd1824dd34386d22d9c0c1090a7`: targeted 26 PASS / 0 FAIL; штатный local `repository-full` 2215 PASS / 0 FAIL, exit 0; validator и `generate-docs --check` exit 0; raw 344 файлов / 0 несовпадений. Request `email-remediation-task1-final-20261013`. Независимый reviewer `/root/implementation_review` принял семь exact refs; штатный finalizer `accepted`. Приёмка относится к этому SHA и только Task 1. Baseline full rerun не заявляется.
 - Task 2 RED `efdb4533d443570c4167efad30db292be2b751d6`: четыре targeted suites — 90 tests, 79 PASS / 11 expected FAIL, exit 1. Updated matched-native control на `9053c760202d6ebf6f051a2cb2d2cdd38e99aac6`: visibility suite — 39 tests, 30 PASS / 9 expected FAIL, exit 1; новый negative control PASS. Причина failures — descendant projection и отсутствие доказанного hidden witness, вследствие чего production CLI/handoff останавливаются. Root identity сама сохраняется. Fixture/infra failures нет; оба exact snapshots raw 345 файлов / 0 несовпадений, 135 scripts/data/schemas blobs сохранялись. GREEN и full ещё не заявляются.
 - Task 2 final `9d1a19c80b70b58da6742378cc5e64d3d8590e3b`: targeted 91 PASS / 0 FAIL; штатный local `repository-full` 2227 PASS / 0 FAIL, validator/full/generated-check exit 0; raw после полного прогона 345 файлов / 0 несовпадений. Request `email-remediation-task2-final-20261013`, actual receipt `success`; независимая приёмка девяти exact refs и штатный finalizer `accepted`, workflow handoff `complete`. Приёмка относится к этому SHA и Task 2, historical private replay и external acceptance — `not-run`.
+- Task 3 RED `b96729df3a956d66c8215c68fd4f68481afc61ef`: пять targeted suites, 85 tests, 70 PASS / 15 expected FAIL, exit 1; raw 345/0, production/data/schema не менялись. Реальный direct renderer: FIRST=0, SECOND=2, diagnostics=[]; unique/legacy controls PASS. Prepare-delivery CLI: exit 0 и опубликованные form.html/delivery.json при коллизии root/hidden descendant с разными полными путями. Existing source/path guards PASS; handoff уже блокирует output, но новая ранняя typed diagnostic отсутствует. Missing export ещё не позволил выполнить cycle traversal assertion. Fixture/infra failures нет. Этот RED обосновывает общий helper и его ранний вызов в direct renderer; GREEN/full пока не заявляются.
