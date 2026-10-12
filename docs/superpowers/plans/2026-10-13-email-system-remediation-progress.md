@@ -14,13 +14,13 @@
 
 ## Текущая точка
 
-**Tasks 1–2 приняты в ветке:** Task 1 на `c0808e1e3d18bfd1824dd34386d22d9c0c1090a7`, Task 2 на `9d1a19c80b70b58da6742378cc5e64d3d8590e3b`. Task 3: published RED подтвердил потерю первого marker и успешную публикацию intake при глобальной коллизии. Минимальный identity guard опубликован для проверки; GREEN/full и приёмка ещё ожидаются.
+**Tasks 1–2 приняты в ветке:** Task 1 на `c0808e1e3d18bfd1824dd34386d22d9c0c1090a7`, Task 2 на `9d1a19c80b70b58da6742378cc5e64d3d8590e3b`. Task 3: RED подтвердил обходы, минимальный identity guard прошёл 85 targeted tests. Full выявил один invalid normal fixture; ниже опубликована детализация его узкой коррекции до изменения. Итоговая приёмка Task 3 пока не получена.
 
 | Шаг | Состояние |
 | --- | --- |
 | 1. R1, serialized resource paths | Accepted на c0808e1; targeted 26/full 2215 PASS |
 | 2. #130/E13, root-slot projection | Accepted на 9d1a19c; targeted 91/full 2227 PASS |
-| 3. R3, instance identities | RED подтверждён; минимальный guard ждёт GREEN/full и приёмки |
+| 3. R3, instance identities | Targeted 85 PASS; full выявил один invalid fixture; дополнительная детализация ниже перед его коррекцией |
 | 4. R5, workflow identity presence | Не начат |
 | 5. R2, source/candidate/release binding | Не начат |
 | 6. R6, contained asset bytes | Не начат |
@@ -70,6 +70,13 @@
 6. Test scope: `tests/rendering/email-model.test.mjs` (также реальные direct renderer cases), `email-action-inventory.test.mjs`, shared fixture и зависимое label assertion; source-fidelity/CLI/handoff regression additions только по необходимости. New helper проверяется через динамический module lookup, чтобы отсутствие export не ломало загрузку всего набора вместо actual behavior RED. Inventory получает новый typed diagnostic; реальный prepare CLI/handoff по возможности проверяет отсутствие intake/HTML/ZIP до publish. Если existing source protection уже блокирует, не объявлять её отсутствующей: новый assert касается раннего model diagnostic.
 7. Root публикует reviewed staged tests, delegated exact-SHA RED подтверждает behavior failures, затем минимальная реализация. После targeted model/inventory/direct/source/CLI/handoff GREEN — один штатный local `repository-full` и generated check на final cloud SHA; независимая source/ref приёмка. Следующий Task 4 начинается только после принятого Task 3.
 
+### Task 3 — уточнение fixture после фактического full failure, до его изменения
+
+- Full на `e673c46b33f4257d5dfeb7b1939ee1e332171df0`: 2247 tests, 2246 PASS / 1 FAIL. `validate-system` exit 0; `generate-docs --check` не достигнут из-за test exit 1; raw 345/0. Кандидат не принят.
+- Единственный failure: «Mobile Card/Icon stays fluid as a nested child and asset/Description/outside records are preserved» в `tests/rendering/marketing-card-layout-refresh.test.mjs`. Recursive helper присваивает child `instance_id = node.id`; native `root-step-number` повторяется под пятью отдельными родителями Steps. Общий guard правильно возвращает восемь duplicate diagnostics. Это invalid normal test data; новый production дефект не установлен.
+- Дополнительная разрешённая граница — только этот test file. Перед child recursive call образовать logical ID из текущего `instanceId` + `--` + `node.id`, сохранив physical `element_id = node.id`. Исходные native element IDs, variant bindings, contract/layout, asset/Description/outside assertions и production код сохраняются. Этот fixture приёмочный для геометрии, поэтому все его прежние утверждения должны остаться действующими; отдельные новые duplicate tests не ослабляются.
+- Сначала публикуется это уточнение и новая allowlist, затем delegated routine staging минимальной коррекции. Проверить её статически, опубликовать actual cloud SHA и выполнить targeted model/inventory/label/source/handoff + marketing-card suite. После GREEN и новых immutable bindings выполнить один `repository-full` на новой версии, затем generated check и независимую приёмку. Не использовать failed receipt e673 как успешное доказательство новой версии.
+
 ## Проверки
 
 Baseline и результаты каждого шага записываются после фактических локальных запусков с SHA. Непроверенные коммиты не обозначаются как passing.
@@ -82,3 +89,4 @@ Baseline и результаты каждого шага записываютс�
 - Task 2 RED `efdb4533d443570c4167efad30db292be2b751d6`: четыре targeted suites — 90 tests, 79 PASS / 11 expected FAIL, exit 1. Updated matched-native control на `9053c760202d6ebf6f051a2cb2d2cdd38e99aac6`: visibility suite — 39 tests, 30 PASS / 9 expected FAIL, exit 1; новый negative control PASS. Причина failures — descendant projection и отсутствие доказанного hidden witness, вследствие чего production CLI/handoff останавливаются. Root identity сама сохраняется. Fixture/infra failures нет; оба exact snapshots raw 345 файлов / 0 несовпадений, 135 scripts/data/schemas blobs сохранялись. GREEN и full ещё не заявляются.
 - Task 2 final `9d1a19c80b70b58da6742378cc5e64d3d8590e3b`: targeted 91 PASS / 0 FAIL; штатный local `repository-full` 2227 PASS / 0 FAIL, validator/full/generated-check exit 0; raw после полного прогона 345 файлов / 0 несовпадений. Request `email-remediation-task2-final-20261013`, actual receipt `success`; независимая приёмка девяти exact refs и штатный finalizer `accepted`, workflow handoff `complete`. Приёмка относится к этому SHA и Task 2, historical private replay и external acceptance — `not-run`.
 - Task 3 RED `b96729df3a956d66c8215c68fd4f68481afc61ef`: пять targeted suites, 85 tests, 70 PASS / 15 expected FAIL, exit 1; raw 345/0, production/data/schema не менялись. Реальный direct renderer: FIRST=0, SECOND=2, diagnostics=[]; unique/legacy controls PASS. Prepare-delivery CLI: exit 0 и опубликованные form.html/delivery.json при коллизии root/hidden descendant с разными полными путями. Existing source/path guards PASS; handoff уже блокирует output, но новая ранняя typed diagnostic отсутствует. Missing export ещё не позволил выполнить cycle traversal assertion. Fixture/infra failures нет. Этот RED обосновывает общий helper и его ранний вызов в direct renderer; GREEN/full пока не заявляются.
+- Task 3 candidate `e673c46b33f4257d5dfeb7b1939ee1e332171df0`: targeted 85 PASS / 0 FAIL; full 2246 PASS / 1 FAIL из 2247, invalid repeated native IDs в marketing-card fixture. Validator exit 0, generated check not-run, independent final acceptance pending. Минимальная fixture коррекция сначала детализирована выше; этот коммит не считается принятым.
