@@ -42,7 +42,7 @@ test('six workflow checkpoints are deterministic projections and preserve existi
     for(const name of ['component-registry','typography-registry','asset-registry','naming-reference']){
       assert.equal(first.get(`docs/generated/${name}.md`),await readFile(join(repoRoot,`docs/generated/${name}.md`),'utf8'));
     }
-    for(const name of ['library-maintenance','component-onboarding','figma-description-sync','figma-naming-audit','migration-progress','email-build'])assert.match(first.get(`docs/generated/${name}-checkpoint.md`),/GENERATED FILE/);
+    for(const name of ['library-maintenance','component-onboarding','figma-description-sync','figma-naming-audit','system-progress','email-build'])assert.match(first.get(`docs/generated/${name}-checkpoint.md`),/GENERATED FILE/);
   }finally{await f.cleanup();}
 });
 
@@ -83,12 +83,12 @@ test('checkpoint routing and digest come from actual manifest routing',async()=>
     route.workflow_source_id='workflow-paused';
     profile.source_ids=profile.source_ids.map(id=>id==='workflow-library-maintenance'?'workflow-paused':id);
     profile.generated_bundle.static_source_ids=profile.generated_bundle.static_source_ids.map(id=>id==='workflow-library-maintenance'?'workflow-paused':id);
-    profile.generated_bundle.status='structured-shadow';
-    alternate.structured_workflows.status='partial';
+    profile.generated_bundle.status='structured-paused';
+    alternate.structured_workflows.status='active';
     assert.deepEqual(await validateManifestSemantics(alternate,f.root),[]);
     await writeFixtureFile(f.root,'system/manifest.yaml',JSON.stringify(alternate,null,2)+'\n');
     const after=renderGeneratedDoc({definition:workflowDefinition(alternate),model:await loadGeneratedDocModel({repoRoot:f.root,manifest:alternate})});
-    assert.match(after,/`library-maintenance`[^\n]*`workflow-paused`[^\n]*`structured-shadow`/);
+    assert.match(after,/`library-maintenance`[^\n]*`workflow-paused`[^\n]*`structured-paused`/);
     assert.notEqual(before.match(/source-digest: ([^ ]+)/)[1],after.match(/source-digest: ([^ ]+)/)[1]);
   }finally{await f.cleanup();}
 });

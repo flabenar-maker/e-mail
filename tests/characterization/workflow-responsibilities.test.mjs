@@ -1,8 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createHash } from "node:crypto";
-import { readFile } from "node:fs/promises";
-import { dirname, join } from "node:path";
+import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import {
@@ -12,12 +10,6 @@ import {
 
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 
-function digest(value) {
-  return createHash("sha256")
-    .update(value.replace(/\r\n/gu, "\n"))
-    .digest("hex");
-}
-
 function allStepIds(registry) {
   return new Set(
     registry.workflow.modes.flatMap(({ id }) =>
@@ -25,26 +17,6 @@ function allStepIds(registry) {
     ),
   );
 }
-
-test("structured workflows preserve the archived workflow files byte-for-byte", async () => {
-  const maintenance = await readFile(
-    join(repoRoot, "Legacy/workflows/library-maintenance-checkpoint.md"),
-    "utf8",
-  );
-  const email = await readFile(
-    join(repoRoot, "Legacy/workflows/email-build-checkpoint.md"),
-    "utf8",
-  );
-
-  assert.equal(
-    digest(maintenance),
-    "fdc6b47742a6072e1efb52957b30573cfa55294804e1efe185713d0792587416",
-  );
-  assert.equal(
-    digest(email),
-    "31558913bf66d0530c5111f68b306c1e379f48af19a022168de61da9d92476a7",
-  );
-});
 
 test("maintenance responsibilities have structured step owners", async () => {
   const workflow = await loadWorkflowRegistry({

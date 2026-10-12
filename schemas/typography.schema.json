@@ -25,7 +25,7 @@
           "const": "typography"
         },
         "status": {
-          "enum": ["shadow", "active"]
+          "enum": ["draft", "active"]
         },
         "source": {
           "$ref": "#/$defs/source"

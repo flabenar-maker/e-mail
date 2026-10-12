@@ -97,43 +97,12 @@ function replaceWorkflowSource(manifest, routeId, sourceId) {
   }
 }
 
-async function deactivateMaintenanceRoutes(root, manifest) {
-  manifest.structured_workflows.status = "partial";
-  for (const route of manifest.routes.filter(({ id }) => !id.startsWith("email-"))) {
-    route.workflow_source_id = "workflow-paused";
-    const profile = manifest.bundle_profiles.find(({ id }) => id === route.bundle_profile_id);
-    profile.source_ids = profile.source_ids.map((id) => id === `workflow-${route.id}` ? "workflow-paused" : id);
-    profile.generated_bundle.static_source_ids = [...profile.source_ids];
-    profile.generated_bundle.status = "structured-shadow";
-    await writeStatusFixture(root, `data/workflows/${route.id}.yaml`, (document) => { document.workflow.status = "shadow"; });
-  }
-  await writeStatusFixture(root, "data/foundations/figma-naming.yaml", (document) => { document.foundation.status = "shadow"; });
+async function prepareActiveRoutes(_root, manifest) {
+  assert.equal(manifest.structured_workflows.status, "active");
 }
 
-async function activateEmailRoutesExceptTypography(root, manifest) {
-  await activateEmailRoutes(root, manifest, { includeTypography: false });
-}
-
-async function activateEmailRoutes(root, manifest, { includeTypography = true } = {}) {
-  await deactivateMaintenanceRoutes(root, manifest);
-  for (const routeId of ["email-new-build", "email-continue-fix"]) {
-    replaceWorkflowSource(manifest, routeId, "workflow-email-build");
-    manifest.bundle_profiles.find(({ id }) => id === routeId).generated_bundle.status = "structured-active";
-  }
-  const dependencies = [
-    ["data/workflows/email-build.yaml", "workflow"],
-    ["data/components/shared.yaml", "registry"],
-    ["data/components/marketing.yaml", "registry"],
-    ["data/components/service.yaml", "registry"],
-    ["data/foundations/spacing.yaml", "foundation"],
-    ["data/foundations/assets.yaml", "foundation"],
-    ["data/foundations/rendering.yaml", "foundation"],
-    ["data/renderers/registry.yaml", "registry"],
-  ];
-  if (includeTypography) dependencies.push(["data/foundations/typography.yaml", "foundation"]);
-  await Promise.all(dependencies.map(([path, section]) => writeStatusFixture(root, path, (document) => {
-    document[section].status = "active";
-  })));
+async function prepareActiveRoutesExceptTypography(root, manifest) {
+  await prepareActiveRoutes(root, manifest);
 }
 async function activateAllRoutes(root, manifest) {
   manifest.structured_workflows.status = "active";
@@ -156,7 +125,7 @@ async function activateAllRoutes(root, manifest) {
   for (const profile of manifest.bundle_profiles) {
     profile.generated_bundle.status = "structured-active";
   }
-  await activateEmailRoutes(root, manifest);
+  await prepareActiveRoutes(root, manifest);
   for (const route of manifest.routes.filter(route => !route.id.startsWith("email-"))) {
     route.workflow_source_id = `workflow-${route.id}`;
     const profile = manifest.bundle_profiles.find(({ id }) => id === route.bundle_profile_id);
@@ -199,7 +168,7 @@ test("email routes deliver model assembly material to the workflow steps that co
 
   const fixture = await systemFixture(t);
   const manifest = await loadSystemManifest({ repoRoot: fixture.root });
-  await activateEmailRoutes(fixture.root, manifest);
+  await prepareActiveRoutes(fixture.root, manifest);
   await writeManifest(fixture.root, manifest);
   for (const [routeId, workflowMode, candidates, viewports] of routeRequests) {
     const result = await resolveSkillContext({ repoRoot: fixture.root, routeId, workflowMode, candidates, viewports });
@@ -225,7 +194,7 @@ test("email routes deliver model assembly material to the workflow steps that co
 test("technical and read-only email resolution has no Figma input prerequisite", async (t) => {
   const fixture = await systemFixture(t);
   const manifest = await loadSystemManifest({ repoRoot: fixture.root });
-  await activateEmailRoutes(fixture.root, manifest);
+  await prepareActiveRoutes(fixture.root, manifest);
   await writeManifest(fixture.root, manifest);
   for (const workflowMode of ["continue-fix-technical", "read-only"]) {
     const result = await resolveSkillContext({
@@ -243,15 +212,15 @@ test("technical and read-only email resolution has no Figma input prerequisite",
     );
   }
 });
-test("canonical migration route resolves an active structured context", async () => {
+test("canonical system status route resolves an active structured context", async () => {
   const result = await resolveSkillContext({
     repoRoot,
-    routeId: "migration-progress",
+    routeId: "system-progress",
     workflowMode: "read-only",
   });
 
   assert.equal(result.status, "resolved");
-  assert.equal(result.route.id, "migration-progress");
+  assert.equal(result.route.id, "system-progress");
   assert.equal(result.bundle.mode, "structured-active");
   assert.ok(result.workflow.steps.length > 0);
   assert.deepEqual(result.blockers ?? [], []);
@@ -273,7 +242,7 @@ test("canonical repository activates every structured route", async () => {
       }
       : {
         routeId: route.id,
-        workflowMode: route.id === "migration-progress" ? "read-only" : "read-only",
+        workflowMode: route.id === "system-progress" ? "read-only" : "read-only",
         candidates: bundle.component_selection === "required" ? [{ id: "banner-hero" }] : [],
         viewports: bundle.viewport_selection === "none" ? [] : ["mobile", "desktop"],
         foundationIds: bundle.required_foundation_ids,
@@ -289,13 +258,28 @@ test("canonical repository activates every structured route", async () => {
   }
 });
 
+test("an explicitly paused route returns the typed paused result", async (t) => {
+  const fixture = await systemFixture(t);
+  const manifest = await loadSystemManifest({ repoRoot: fixture.root });
+  const route = manifest.routes.find(({ id }) => id === "library-maintenance");
+  const profile = manifest.bundle_profiles.find(({ id }) => id === route.bundle_profile_id);
+  route.workflow_source_id = "workflow-paused";
+  profile.source_ids = profile.source_ids.map((id) => id === "workflow-library-maintenance" ? "workflow-paused" : id);
+  profile.generated_bundle.static_source_ids = [...profile.source_ids];
+  profile.generated_bundle.status = "structured-paused";
+  await writeManifest(fixture.root, manifest);
+  const result = await resolveSkillContext({ repoRoot: fixture.root, routeId: route.id, workflowMode: "read-only", viewports: ["mobile", "desktop"] });
+  assert.equal(result.status, "paused");
+  assert.ok(result.blockers.some(({ code }) => code === "SKILL_ROUTE_PAUSED"));
+});
+
 test("explicit email activation still blocks when typography status is absent", async (t) => {
   const fixture = await systemFixture(t);
   const manifest = await loadSystemManifest({ repoRoot: fixture.root });
   await writeStatusFixture(fixture.root, "data/foundations/typography.yaml", (document) => {
-    document.foundation.status = "shadow";
+    document.foundation.status = "draft";
   });
-  await activateEmailRoutesExceptTypography(fixture.root, manifest);
+  await prepareActiveRoutesExceptTypography(fixture.root, manifest);
   await writeManifest(fixture.root, manifest);
   const result = await resolveSkillContext({ repoRoot: fixture.root, ...activeEmailRequest("email-new-build") });
   assert.notEqual(result.status, "resolved");
@@ -307,7 +291,7 @@ test("explicit email activation still blocks when typography status is absent", 
 test("new-build preserves complete resolved contracts while declaring model handoff evidence", async (t) => {
   const fixture = await systemFixture(t);
   const manifest = await loadSystemManifest({ repoRoot: fixture.root });
-  await activateEmailRoutes(fixture.root, manifest);
+  await prepareActiveRoutes(fixture.root, manifest);
   await writeManifest(fixture.root, manifest);
   const result = await resolveSkillContext({
     repoRoot: fixture.root,
@@ -356,7 +340,7 @@ test("new-build preserves complete resolved contracts while declaring model hand
 test("design fixes pass instance inputs without requiring conditional asset evidence", async (t) => {
   const fixture = await systemFixture(t);
   const manifest = await loadSystemManifest({ repoRoot: fixture.root });
-  await activateEmailRoutes(fixture.root, manifest);
+  await prepareActiveRoutes(fixture.root, manifest);
   await writeManifest(fixture.root, manifest);
   const result = await resolveSkillContext({
     repoRoot: fixture.root,
@@ -405,102 +389,25 @@ test("fully active topology rejects a route cross-wired to the email workflow", 
   );
 });
 
-test("skill resolution cannot bypass incoherent partial email-cutover topology", async (t) => {
+test("active email routes refuse every inactive dependency status", async (t) => {
   const cases = [
-    ["wrong active route set", (manifest) => {
-      manifest.routes.find(({ id }) => id === "email-continue-fix").workflow_source_id = "workflow-paused";
-    }],
-    ["non-email route active during partial", (manifest) => {
-      manifest.routes.find(({ id }) => id === "library-maintenance").workflow_source_id = "workflow-library-maintenance";
-    }],
-    ["email route bound to wrong workflow", (manifest) => {
-      manifest.routes.find(({ id }) => id === "email-new-build").workflow_source_id = "workflow-library-maintenance";
-    }],
-    ["email route profile mismatch", (manifest) => {
-      manifest.routes.find(({ id }) => id === "email-new-build").bundle_profile_id = "email-continue-fix";
-    }],
-    ...["email-new-build", "email-continue-fix"].flatMap((profileId) => [
-      [`${profileId} retains paused source`, (manifest) => {
-        manifest.bundle_profiles.find(({ id }) => id === profileId).source_ids.push("workflow-paused");
-      }],
-      [`${profileId} retains paused static source`, (manifest) => {
-        manifest.bundle_profiles.find(({ id }) => id === profileId).generated_bundle.static_source_ids.push("workflow-paused");
-      }],
-      [`${profileId} source and static lists differ`, (manifest) => {
-        manifest.bundle_profiles.find(({ id }) => id === profileId).generated_bundle.static_source_ids.pop();
-      }],
-    ]),
-    ["active aggregate with partial topology", (manifest) => {
-      manifest.structured_workflows.status = "active";
-    }],
-    ["active aggregate routes everything to email while maintenance stays shadow", (manifest) => {
-      manifest.structured_workflows.status = "active";
-      for (const route of manifest.routes) route.workflow_source_id = "workflow-email-build";
-      for (const profile of manifest.bundle_profiles) {
-        profile.generated_bundle.status = "structured-active";
-        profile.source_ids = profile.source_ids.filter((id) => id !== "workflow-paused");
-        profile.generated_bundle.static_source_ids = profile.generated_bundle.static_source_ids.filter((id) => id !== "workflow-paused");
-        if (!profile.source_ids.includes("workflow-email-build")) {
-          profile.source_ids.push("workflow-email-build");
-          profile.generated_bundle.static_source_ids.push("workflow-email-build");
-        }
-      }
-    }],
-    ["active aggregate route/profile/workflow association mismatch", (manifest) => {
-      manifest.structured_workflows.status = "active";
-      for (const route of manifest.routes) route.workflow_source_id = "workflow-email-build";
-      for (const profile of manifest.bundle_profiles) {
-        profile.generated_bundle.status = "structured-active";
-        profile.source_ids = profile.source_ids.filter((id) => id !== "workflow-paused");
-        profile.generated_bundle.static_source_ids = profile.generated_bundle.static_source_ids.filter((id) => id !== "workflow-paused");
-        if (!profile.source_ids.includes("workflow-email-build")) {
-          profile.source_ids.push("workflow-email-build");
-          profile.generated_bundle.static_source_ids.push("workflow-email-build");
-        }
-      }
-      manifest.routes.find(({ id }) => id === "email-new-build").workflow_source_id = "workflow-library-maintenance";
-    }],
-  ];
-
-  for (const [name, mutate] of cases) {
-    const fixture = await systemFixture(t);
-    const manifest = await loadSystemManifest({ repoRoot: fixture.root });
-    await activateEmailRoutes(fixture.root, manifest);
-    mutate(manifest);
-    await writeManifest(fixture.root, manifest);
-    for (const routeId of ["email-new-build", "email-continue-fix"]) {
-      const result = await resolveSkillContext({
-        repoRoot: fixture.root,
-        ...activeEmailRequest(routeId),
-      });
-      assert.equal(result.status, "blocked", `${name}/${routeId}`);
-      assert.ok(
-        result.blockers.some(({ code }) => code === "structured-workflow-status-topology-invalid"),
-        `${name}/${routeId}`,
-      );
-    }
-  }
-});
-
-test("active email routes refuse every shadow status dependency", async (t) => {
-  const cases = [
-    ["aggregate", async (root) => { const manifest = await loadSystemManifest({ repoRoot: root }); manifest.structured_workflows.status = "shadow"; await writeManifest(root, manifest); }],
+    ["aggregate", async (root) => { const manifest = await loadSystemManifest({ repoRoot: root }); manifest.structured_workflows.status = "draft"; await writeManifest(root, manifest); }],
     ["aggregate-active-with-paused-routes", async (root) => { const manifest = await loadSystemManifest({ repoRoot: root }); manifest.structured_workflows.status = "active"; await writeManifest(root, manifest); }],
-    ["profile", async (root) => { const manifest = await loadSystemManifest({ repoRoot: root }); for (const profile of manifest.bundle_profiles.filter(({ id }) => id.startsWith("email-"))) profile.generated_bundle.status = "structured-shadow"; await writeManifest(root, manifest); }],
-    ["workflow", (root) => writeStatusFixture(root, "data/workflows/email-build.yaml", (document) => { document.workflow.status = "shadow"; })],
-    ["components-shared", (root) => writeStatusFixture(root, "data/components/shared.yaml", (document) => { document.registry.status = "shadow"; })],
-    ["components-marketing", (root) => writeStatusFixture(root, "data/components/marketing.yaml", (document) => { document.registry.status = "shadow"; })],
-    ["components-service", (root) => writeStatusFixture(root, "data/components/service.yaml", (document) => { document.registry.status = "shadow"; })],
-    ["typography", (root) => writeStatusFixture(root, "data/foundations/typography.yaml", (document) => { document.foundation.status = "shadow"; })],
-    ["spacing", (root) => writeStatusFixture(root, "data/foundations/spacing.yaml", (document) => { document.foundation.status = "shadow"; })],
-    ["assets", (root) => writeStatusFixture(root, "data/foundations/assets.yaml", (document) => { document.foundation.status = "shadow"; })],
-    ["rendering", (root) => writeStatusFixture(root, "data/foundations/rendering.yaml", (document) => { document.foundation.status = "shadow"; })],
-    ["renderer-registry", (root) => writeStatusFixture(root, "data/renderers/registry.yaml", (document) => { document.registry.status = "shadow"; })],
+    ["profile", async (root) => { const manifest = await loadSystemManifest({ repoRoot: root }); for (const profile of manifest.bundle_profiles.filter(({ id }) => id.startsWith("email-"))) profile.generated_bundle.status = "structured-paused"; await writeManifest(root, manifest); }],
+    ["workflow", (root) => writeStatusFixture(root, "data/workflows/email-build.yaml", (document) => { document.workflow.status = "draft"; })],
+    ["components-shared", (root) => writeStatusFixture(root, "data/components/shared.yaml", (document) => { document.registry.status = "draft"; })],
+    ["components-marketing", (root) => writeStatusFixture(root, "data/components/marketing.yaml", (document) => { document.registry.status = "draft"; })],
+    ["components-service", (root) => writeStatusFixture(root, "data/components/service.yaml", (document) => { document.registry.status = "draft"; })],
+    ["typography", (root) => writeStatusFixture(root, "data/foundations/typography.yaml", (document) => { document.foundation.status = "draft"; })],
+    ["spacing", (root) => writeStatusFixture(root, "data/foundations/spacing.yaml", (document) => { document.foundation.status = "draft"; })],
+    ["assets", (root) => writeStatusFixture(root, "data/foundations/assets.yaml", (document) => { document.foundation.status = "draft"; })],
+    ["rendering", (root) => writeStatusFixture(root, "data/foundations/rendering.yaml", (document) => { document.foundation.status = "draft"; })],
+    ["renderer-registry", (root) => writeStatusFixture(root, "data/renderers/registry.yaml", (document) => { document.registry.status = "draft"; })],
   ];
   await Promise.all(cases.map(async ([dependency, mutate]) => {
     const fixture = await systemFixture(t);
     const manifest = await loadSystemManifest({ repoRoot: fixture.root });
-    await activateEmailRoutes(fixture.root, manifest);
+    await prepareActiveRoutes(fixture.root, manifest);
     await writeManifest(fixture.root, manifest);
     await mutate(fixture.root);
     const results = await Promise.all(["email-new-build", "email-continue-fix"].map(async (routeId) => [
@@ -517,7 +424,7 @@ test("active email routes refuse every shadow status dependency", async (t) => {
 test("email workflow resolves every structured mode without changing output artifacts", async (t) => {
   const fixture = await systemFixture(t);
   const manifest = await loadSystemManifest({ repoRoot: fixture.root });
-  await activateEmailRoutes(fixture.root, manifest);
+  await prepareActiveRoutes(fixture.root, manifest);
   await writeManifest(fixture.root, manifest);
   const snapshotBeforeResolution = await fixtureSnapshot(fixture.root);
 
@@ -578,7 +485,7 @@ test("email workflow resolves every structured mode without changing output arti
   assert.deepEqual(
     await fixtureSnapshot(fixture.root),
     snapshotBeforeResolution,
-    "resolving the shadow fixture must not create a production email output",
+    "resolving the inactive fixture must not create a production email output",
   );
 });
 
@@ -705,7 +612,7 @@ test("canonical email and maintenance routes resolve", async () => {
     assert.equal(result.status, "resolved", routeId);
     assert.ok(result.workflow.steps.length > 0, routeId);
   }
-  const maintenance = await resolveSkillContext({ repoRoot, routeId: "migration-progress", workflowMode: "read-only" });
+  const maintenance = await resolveSkillContext({ repoRoot, routeId: "system-progress", workflowMode: "read-only" });
   assert.equal(maintenance.status, "resolved");
   assert.deepEqual(maintenance.blockers ?? [], []);
 });

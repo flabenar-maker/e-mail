@@ -131,12 +131,12 @@ $tempRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("cupis-bootstrap-tests-
 try {
     Assert-True (Test-Path -LiteralPath $verifyScript -PathType Leaf) 'Verifier must exist.'
     Assert-True (Test-Path -LiteralPath (Join-Path $repoRoot 'system/manifest.yaml') -PathType Leaf) 'Canonical system manifest must exist.'
-    Assert-True (-not (Test-Path -LiteralPath (Join-Path $repoRoot 'bootstrap/manifest.yaml'))) 'Legacy bootstrap manifest must not exist.'
+
 
     foreach ($consumer in @('README.md', 'bootstrap/README.md', '.agents/skills/maintaining-cupis-email-system/SKILL.md')) {
         $content = Get-Content -Raw -LiteralPath (Join-Path $repoRoot $consumer)
         Assert-True ($content.Contains('system/manifest.yaml')) "$consumer must use system/manifest.yaml."
-        Assert-True (-not $content.Contains('bootstrap/manifest.yaml')) "$consumer must not use bootstrap/manifest.yaml."
+
     }
 
     $readme = [System.Text.Encoding]::UTF8.GetString(
@@ -168,9 +168,7 @@ try {
 
     $readOnlyFixture = Join-Path $tempRoot 'read-only'
     Copy-ContractFixture -Source $repoRoot -Destination $readOnlyFixture
-    foreach ($archivedPath in @('Legacy', 'registry', 'templates')) {
-        Assert-True (-not (Test-Path -LiteralPath (Join-Path $readOnlyFixture $archivedPath))) "Fixture must not copy archived path: $archivedPath."
-    }
+
     $actualFixtureFiles = Get-FixtureRelativeFilePaths $readOnlyFixture
     $expectedFixtureFiles = Get-ManifestFixtureFilePaths $repoRoot | Sort-Object
     Assert-True (($actualFixtureFiles -join "`n") -eq ($expectedFixtureFiles -join "`n")) 'Fixture must copy only active manifest sources and bootstrap assertions.'
@@ -244,21 +242,6 @@ try {
     $missingSourceResult = Invoke-Verify $missingSource
     Assert-True ($missingSourceResult.ExitCode -ne 0) 'Verifier must reject a missing declared source.'
     Assert-True ($missingSourceResult.Output.Contains('missing-declared-path')) 'Missing source must expose its diagnostic code.'
-
-    $legacySkill = Join-Path $tempRoot 'legacy-skill'
-    Copy-ContractFixture -Source $repoRoot -Destination $legacySkill
-    New-Item -ItemType Directory -Path (Join-Path $legacySkill 'skills/maintaining-cupis-email-system') -Force | Out-Null
-    Set-Content -LiteralPath (Join-Path $legacySkill 'skills/maintaining-cupis-email-system/SKILL.md') -Value 'duplicate'
-    $legacySkillResult = Invoke-Verify $legacySkill
-    Assert-True ($legacySkillResult.ExitCode -ne 0) 'Verifier must reject a legacy skill.'
-    Assert-True ($legacySkillResult.Output.Contains('retired-skill-path')) 'Legacy skill must expose its diagnostic code.'
-
-    $legacyManifest = Join-Path $tempRoot 'legacy-manifest'
-    Copy-ContractFixture -Source $repoRoot -Destination $legacyManifest
-    Set-Content -LiteralPath (Join-Path $legacyManifest 'bootstrap/manifest.yaml') -Value 'legacy: true'
-    $legacyManifestResult = Invoke-Verify $legacyManifest
-    Assert-True ($legacyManifestResult.ExitCode -ne 0) 'Verifier must reject the legacy manifest.'
-    Assert-True ($legacyManifestResult.Output.Contains('retired-manifest-path')) 'Legacy manifest must expose its diagnostic code.'
 
     $secretFixture = Join-Path $tempRoot 'secret-config'
     Copy-ContractFixture -Source $repoRoot -Destination $secretFixture

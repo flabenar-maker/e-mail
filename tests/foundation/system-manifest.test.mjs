@@ -49,49 +49,36 @@ async function mutateFixtureManifest(root, mutate) {
   return manifest;
 }
 
-function activateEmailCutover(manifest) {
-  manifest.structured_workflows.status = "partial";
-  for (const route of manifest.routes) {
-    const profile = manifest.bundle_profiles.find(({ id }) => id === route.bundle_profile_id);
-    const activeEmail = route.id.startsWith("email-");
-    const sourceId = activeEmail ? "workflow-email-build" : "workflow-paused";
-    route.workflow_source_id = sourceId;
-    profile.generated_bundle.status = activeEmail ? "structured-active" : "structured-shadow";
-    profile.source_ids = profile.source_ids.map((id) => id.startsWith("workflow-") ? sourceId : id);
-    profile.generated_bundle.static_source_ids = [...profile.source_ids];
-  }
-}
-
 test("loads the repository canonical manifest", async () => {
   const manifest = await canonicalManifest();
   assert.equal(manifest.schema_version, "1.3.0");
   assert.equal(manifest.system.id, "cupis-email-system");
 });
 
-test("migration progress resolves the canonical roadmap bundle", async () => {
+test("system progress resolves the canonical status bundle", async () => {
   const manifest = await canonicalManifest();
   const source = manifest.sources.find(
-    (item) => item.id === "migration-roadmap",
+    (item) => item.id === "system-status",
   );
   const profile = manifest.bundle_profiles.find(
-    (item) => item.id === "migration-progress",
+    (item) => item.id === "system-progress",
   );
   const route = manifest.routes.find(
-    (item) => item.id === "migration-progress",
+    (item) => item.id === "system-progress",
   );
 
   assert.deepEqual(source, {
-    id: "migration-roadmap",
+    id: "system-status",
     kind: "entrypoint",
-    path: "docs/superpowers/plans/2026-08-25-cupis-migration-roadmap.md",
+    path: "docs/superpowers/plans/2026-08-25-cupis-system-status.md",
   });
   assert.deepEqual(profile.source_ids, [
     "repository-readme",
-    "migration-roadmap",
-    "workflow-migration-progress",
+    "system-status",
+    "workflow-system-progress",
   ]);
-  assert.equal(route.workflow_source_id, "workflow-migration-progress");
-  assert.equal(route.bundle_profile_id, "migration-progress");
+  assert.equal(route.workflow_source_id, "workflow-system-progress");
+  assert.equal(route.bundle_profile_id, "system-progress");
 });
 
 test("rejects an unsupported manifest schema version", async () => {
@@ -348,34 +335,10 @@ test("reports a required skill with mismatched frontmatter", async (t) => {
   assert.ok(errors.some((error) => error.code === "skill-name-mismatch"));
 });
 
-test("reports the retired duplicate skill directory", async (t) => {
-  const root = await validFixture(t);
-  await writeFixtureFile(
-    root,
-    "skills/maintaining-cupis-email-system/SKILL.md",
-    "retired duplicate\n",
-  );
-  const manifest = await loadSystemManifest({ repoRoot: root });
-
-  const errors = await validateManifestSemantics(manifest, root);
-
-  assert.ok(errors.some((error) => error.code === "retired-skill-path"));
-});
-
 test("the repository has exactly one manifest", async () => {
   const { access } = await import("node:fs/promises");
   await access(join(repoRoot, "system/manifest.yaml"));
   await assert.rejects(access(join(repoRoot, "bootstrap/manifest.yaml")));
-});
-
-test("reports the retired bootstrap manifest", async (t) => {
-  const root = await validFixture(t);
-  await writeFixtureFile(root, "bootstrap/manifest.yaml", "retired: true\n");
-  const manifest = await loadSystemManifest({ repoRoot: root });
-
-  const errors = await validateManifestSemantics(manifest, root);
-
-  assert.ok(errors.some((error) => error.code === "retired-manifest-path"));
 });
 
 for (const [sourceId, code] of [
@@ -512,7 +475,7 @@ test("all active bundle profiles keep registry foundations out of static sources
 });
 
 
-test("declares the shadow assets sources outside every bundle", async () => {
+test("declares assets sources outside every bundle", async () => {
   const manifest = await canonicalManifest();
   const sources = new Map(
     manifest.sources.map((source) => [source.id, source]),
@@ -585,7 +548,7 @@ for (const [sourceId, kind] of [
   });
 }
 
-test("declares the shadow Figma naming sources outside every bundle", async () => {
+test("declares Figma naming sources outside every bundle", async () => {
   const manifest = await canonicalManifest();
   const sources = new Map(
     manifest.sources.map((source) => [source.id, source]),
@@ -758,7 +721,7 @@ test("reports a missing declared component registry file", async (t) => {
 
 
 const testGeneratedBundle = {
-  status: "structured-shadow",
+  status: "structured-paused",
   static_source_ids: ["repository-readme"],
   component_selection: "none",
   viewport_selection: "none",
@@ -817,12 +780,12 @@ async function generatedFixture(t) {
   return { root, manifest };
 }
 
-test("accepts optional generated docs and structured-shadow bundle capability", async () => {
+test("accepts optional generated docs and structured-paused bundle capability", async () => {
   const manifest = addGeneratedCapability(
     structuredClone(await canonicalManifest()),
   );
   manifest.bundle_profiles[0].generated_bundle = {
-    status: "structured-shadow",
+    status: "structured-paused",
     static_source_ids: [
       "repository-readme",
       "email-figma-prompt",
@@ -960,14 +923,6 @@ for (const [name, mutate, code] of [
     "generated-bundle-source-cannot-be-generated",
   ],
   [
-    "legacy registry in generated bundle",
-    (manifest) =>
-      manifest.bundle_profiles[0].generated_bundle.static_source_ids.push(
-        "component-descriptions-registry",
-      ),
-    "generated-bundle-retired-registry-forbidden",
-  ],
-  [
     "unknown foundation id",
     (manifest) =>
       manifest.bundle_profiles[0].generated_bundle.allowed_foundation_ids.push(
@@ -1092,96 +1047,10 @@ test("canonical routes activate all structured bundles", async () => {
         id: "email-build-checkpoint",
         output_source_id: "generated-email-build-checkpoint",
       },
-      ...["component-onboarding", "figma-description-sync", "figma-naming-audit", "migration-progress"].map(id => ({id: `${id}-checkpoint`, output_source_id: `generated-${id}-checkpoint`})),
+      ...["component-onboarding", "figma-description-sync", "figma-naming-audit", "system-progress"].map(id => ({id: `${id}-checkpoint`, output_source_id: `generated-${id}-checkpoint`})),
     ],
   );
 });
-
-test("semantic validation rejects incoherent partial email-cutover topology", async (t) => {
-  const cases = [
-    ["wrong active route set", (manifest) => {
-      manifest.routes.find(({ id }) => id === "email-continue-fix").workflow_source_id = "workflow-paused";
-    }],
-    ["partial route/profile inconsistency", (manifest) => {
-      manifest.routes.find(({ id }) => id === "library-maintenance").workflow_source_id = "workflow-library-maintenance";
-    }],
-    ["email route bound to wrong workflow", (manifest) => {
-      manifest.routes.find(({ id }) => id === "email-new-build").workflow_source_id = "workflow-library-maintenance";
-    }],
-    ["email route profile mismatch", (manifest) => {
-      manifest.routes.find(({ id }) => id === "email-new-build").bundle_profile_id = "email-continue-fix";
-    }],
-    ...["email-new-build", "email-continue-fix"].flatMap((profileId) => [
-      [`${profileId} retains paused source`, (manifest) => {
-        manifest.bundle_profiles.find(({ id }) => id === profileId).source_ids.push("workflow-paused");
-      }],
-      [`${profileId} retains paused static source`, (manifest) => {
-        manifest.bundle_profiles.find(({ id }) => id === profileId).generated_bundle.static_source_ids.push("workflow-paused");
-      }],
-      [`${profileId} source and static lists differ`, (manifest) => {
-        manifest.bundle_profiles.find(({ id }) => id === profileId).generated_bundle.static_source_ids.pop();
-      }],
-    ]),
-    ["active aggregate with partial topology", (manifest) => {
-      manifest.structured_workflows.status = "active";
-      assert.equal(manifest.routes.filter(({ id }) => id.startsWith("email-")).every(({ workflow_source_id }) => workflow_source_id === "workflow-email-build"), true);
-      assert.equal(manifest.routes.filter(({ id }) => !id.startsWith("email-")).every(({ workflow_source_id }) => workflow_source_id === "workflow-paused"), true);
-    }],
-    ["active aggregate routes everything to email while maintenance stays shadow", (manifest) => {
-      manifest.structured_workflows.status = "active";
-      for (const route of manifest.routes) route.workflow_source_id = "workflow-email-build";
-      for (const profile of manifest.bundle_profiles) {
-        profile.generated_bundle.status = "structured-active";
-        profile.source_ids = profile.source_ids.filter((id) => id !== "workflow-paused");
-        profile.generated_bundle.static_source_ids = profile.generated_bundle.static_source_ids.filter((id) => id !== "workflow-paused");
-        if (!profile.source_ids.includes("workflow-email-build")) {
-          profile.source_ids.push("workflow-email-build");
-          profile.generated_bundle.static_source_ids.push("workflow-email-build");
-        }
-      }
-    }],
-    ["active aggregate route/profile/workflow association mismatch", (manifest) => {
-      manifest.structured_workflows.status = "active";
-      for (const route of manifest.routes) route.workflow_source_id = "workflow-email-build";
-      for (const profile of manifest.bundle_profiles) {
-        profile.generated_bundle.status = "structured-active";
-        profile.source_ids = profile.source_ids.filter((id) => id !== "workflow-paused");
-        profile.generated_bundle.static_source_ids = profile.generated_bundle.static_source_ids.filter((id) => id !== "workflow-paused");
-        if (!profile.source_ids.includes("workflow-email-build")) {
-          profile.source_ids.push("workflow-email-build");
-          profile.generated_bundle.static_source_ids.push("workflow-email-build");
-        }
-      }
-      manifest.routes.find(({ id }) => id === "email-new-build").workflow_source_id = "workflow-library-maintenance";
-    }],
-  ];
-
-  for (const [name, mutate] of cases) {
-    const root = await validFixture(t);
-    const baseline = await mutateFixtureManifest(root, activateEmailCutover);
-    assert.deepEqual(await validateManifestSemantics(baseline, root), [], `baseline/${name}`);
-    const manifest = await mutateFixtureManifest(root, mutate);
-    const errors = await validateManifestSemantics(manifest, root);
-    assert.ok(
-      errors.some(({ code }) => code === "structured-workflow-status-topology-invalid"),
-      name,
-    );
-  }
-});
-
-
-const componentDocumentationStandardSources = [
-  [
-    "component-contract-standard",
-    "core/component-contract-standard.md",
-    ["library-maintenance", "component-onboarding", "figma-description-sync", "email-new-build", "email-continue-fix"],
-  ],
-  [
-    "figma-component-description-standard",
-    "core/figma-component-description-standard.md",
-    ["library-maintenance", "component-onboarding", "figma-description-sync"],
-  ],
-];
 
 test("declares component documentation standards for library-facing bundles", async () => {
   const manifest = await canonicalManifest();

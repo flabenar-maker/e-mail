@@ -72,7 +72,7 @@ async function snapshotTree(root) {
 test("bundle CLI renders deterministic route-specific Markdown without writing files", async (t) => {
   const fixture = await prepareFixture(t);
   const before = await snapshotTree(fixture.root);
-  const args = ["--route", "migration-progress"];
+  const args = ["--route", "system-progress"];
 
   const first = await runCli(args, fixture.root);
   const second = await runCli(args, fixture.root);
@@ -82,7 +82,7 @@ test("bundle CLI renders deterministic route-specific Markdown without writing f
   assert.equal(first.stdout, second.stdout);
   assert.match(
     first.stdout,
-    /^---\nbundle_schema_version: 1\.0\.0\nmode: structured-active\nroute_id: migration-progress\nbundle_profile_id: migration-progress\ndigest: sha256:[0-9a-f]{64}\n---\n\n# CUPIS resolved context bundle\n/u,
+    /^---\nbundle_schema_version: 1\.0\.0\nmode: structured-active\nroute_id: system-progress\nbundle_profile_id: system-progress\ndigest: sha256:[0-9a-f]{64}\n---\n\n# CUPIS resolved context bundle\n/u,
   );
   assert.match(first.stdout, /## Static sources\n/u);
   assert.match(first.stdout, /### repository-readme\n/u);
@@ -149,27 +149,27 @@ test("bundle CLI reports usage errors with empty stdout", async (t) => {
   const cases = [
     { args: [], code: "CONTEXT_BUNDLE_CLI_ARGUMENTS" },
     {
-      args: ["--route", "migration-progress", "--route", "email-new-build"],
+      args: ["--route", "system-progress", "--route", "email-new-build"],
       code: "CONTEXT_BUNDLE_CLI_ARGUMENTS",
     },
     {
-      args: ["--route", "migration-progress", "--viewport", "mobile", "--viewport", "desktop"],
+      args: ["--route", "system-progress", "--viewport", "mobile", "--viewport", "desktop"],
       code: "CONTEXT_BUNDLE_CLI_ARGUMENTS",
     },
     {
-      args: ["--route", "migration-progress", "--component"],
+      args: ["--route", "system-progress", "--component"],
       code: "CONTEXT_BUNDLE_CLI_ARGUMENTS",
     },
     {
-      args: ["--route", "migration-progress", "--foundation"],
+      args: ["--route", "system-progress", "--foundation"],
       code: "CONTEXT_BUNDLE_CLI_ARGUMENTS",
     },
     {
-      args: ["--route", "migration-progress", "--viewport", "tablet"],
+      args: ["--route", "system-progress", "--viewport", "tablet"],
       code: "CONTEXT_BUNDLE_VIEWPORT_INVALID",
     },
     {
-      args: ["--route", "migration-progress", "--unknown"],
+      args: ["--route", "system-progress", "--unknown"],
       code: "CONTEXT_BUNDLE_CLI_ARGUMENTS",
     },
   ];

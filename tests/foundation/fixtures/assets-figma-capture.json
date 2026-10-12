@@ -3,7 +3,7 @@
   "captured_at": "2026-09-16T00:00:00+03:00",
   "purpose": "Non-normative read-only Figma evidence. It is not an export recipe and cannot replace a concrete email-instance readback.",
   "historical_comparison_sources": [
-    "docs/superpowers/specs/2026-08-24-cupis-structured-email-system-design.md",
+    "core/system-architecture.md",
     "core/asset-export-standard.md"
   ],
   "build_time_gates": [

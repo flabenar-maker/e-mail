@@ -353,6 +353,7 @@ export async function validateManifestSemantics(manifest, repoRoot) {
   const profileById = new Map(
     manifest.bundle_profiles.map((profile) => [profile.id, profile]),
   );
+  const emailRouteIds = new Set(["email-new-build", "email-continue-fix"]);
   const routeTopology = await Promise.all(manifest.routes.map(async (route) => {
     const profile = profileById.get(route.bundle_profile_id);
     const bundle = profile?.generated_bundle;
@@ -366,7 +367,9 @@ export async function validateManifestSemantics(manifest, repoRoot) {
     const source = sourceById.get(route.workflow_source_id);
     const entry = structuredWorkflows.entries.find(({source_id}) => source_id === route.workflow_source_id);
     if (!entry || source?.kind !== "workflow" || bundle.status !== "structured-active" ||
-      profile.source_ids.includes("workflow-paused") || !profile.source_ids.includes(route.workflow_source_id)) return false;
+      profile.source_ids.includes("workflow-paused") || !profile.source_ids.includes(route.workflow_source_id) ||
+      (emailRouteIds.has(route.id) && route.workflow_source_id !== "workflow-email-build") ||
+      (!emailRouteIds.has(route.id) && entry.id !== route.id)) return false;
     try { const document = await readStrictYaml(join(repoRoot,source.path));
       return document.workflow?.id === entry.id && document.workflow?.status === "active";
     } catch { return false; }
