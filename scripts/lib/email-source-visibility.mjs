@@ -17,19 +17,26 @@ function elementChain(root, id, chain = []) {
   return null;
 }
 
+function projectInstanceDescendantNodeId(ownerNodeId, nativeNodeId) {
+  const valid = /^(?:[0-9]+:[0-9]+|I[0-9]+:[0-9]+(?:;[0-9]+:[0-9]+)+)$/u;
+  if (typeof ownerNodeId !== 'string' || typeof nativeNodeId !== 'string' ||
+      !valid.test(ownerNodeId) || !valid.test(nativeNodeId)) return null;
+  return 'I' + ownerNodeId.replace(/^I/u, '') + ';' + nativeNodeId.replace(/^I/u, '');
+}
+
 function expectedNode(element, root, owner) {
   if (element === root) return owner;
   const nodes = new Set((element.facts ?? []).filter(fact =>
     ['figma-literal', 'figma-binding'].includes(fact.provenance?.kind) && fact.provenance.node_id,
   ).map(fact => fact.provenance.node_id));
-  if (nodes.size === 1) return owner + ';' + [...nodes][0];
+  if (nodes.size === 1) return projectInstanceDescendantNodeId(owner, [...nodes][0]);
   const source = rootSources.get(root);
   // The geometry-free Email/Template Content slot has no element facts. Its
   // exact source node is still registered in the foundation evidence link.
   if (nodes.size === 0 && source?.record.id === 'email-template' && element.id === 'content' && element.render_mode === 'slot') {
     const proof = source.record.evidence_links?.foundation_values?.find(link => link.id === source.viewport + '-slot-background');
     if (proof?.source?.variant_node_id === registeredVariantNode(source.record, source.viewport) && proof.source.node_id)
-      return owner + ';' + proof.source.node_id;
+      return projectInstanceDescendantNodeId(owner, proof.source.node_id);
   }
   return null;
 }

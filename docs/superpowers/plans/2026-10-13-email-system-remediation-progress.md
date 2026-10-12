@@ -13,12 +13,12 @@
 
 ## Текущая точка
 
-**Task 1 завершён в ветке на `c0808e1e3d18bfd1824dd34386d22d9c0c1090a7`.** Свежие targeted/full и независимая приёмка успешны. Следующее действие: Task 2 — опубликованная ниже детализация, затем RED и минимальное исправление физических ID. Task 2 production code ещё не менялся.
+**Task 1 завершён в ветке на `c0808e1e3d18bfd1824dd34386d22d9c0c1090a7`. Task 2 — RED подтверждён, минимальная правка реализована и ожидает GREEN.** Следующее действие: targeted visibility/source-fidelity/CLI/handoff, полный локальный gate и независимая приёмка точного cloud SHA. Task 3 ещё не начат.
 
 | Шаг | Состояние |
 | --- | --- |
 | 1. R1, serialized resource paths | Accepted на c0808e1; targeted 26/full 2215 PASS |
-| 2. #130/E13, root-slot projection | Детализирован перед RED; код не менялся |
+| 2. #130/E13, root-slot projection | RED confirmed; private helper ожидает GREEN |
 | 3. R3, instance identities | Не начат |
 | 4. R5, workflow identity presence | Не начат |
 | 5. R2, source/candidate/release binding | Не начат |
@@ -66,3 +66,4 @@ Baseline и результаты каждого шага записываютс�
 - Для последующих локальных запусков Node 24 и bundled Python доступны только через окружение процесса; `CUPIS_SYSTEM_COMMIT` равен exact tested SHA. Machine PATH и настройки компьютера не изменяются. Внешняя приёмка остаётся `not-run`.
 - Preliminary GREEN `a354aeb`: четыре targeted suites, 25 PASS / 0 FAIL. Независимый reviewer затем обнаружил mixed-case entity alias. Регрессионный RED `6913f563140948a2077455b0adaafd5825920669`: resource suite, 8 PASS / 1 expected FAIL, exit 1. Полный запуск preliminary SHA остановлен как `interrupted`, не PASS. Окончательный GREEN/full gate выполняется после этого минимального исправления.
 - Task 1 final `c0808e1e3d18bfd1824dd34386d22d9c0c1090a7`: targeted 26 PASS / 0 FAIL; штатный local `repository-full` 2215 PASS / 0 FAIL, exit 0; validator и `generate-docs --check` exit 0; raw 344 файлов / 0 несовпадений. Request `email-remediation-task1-final-20261013`. Независимый reviewer `/root/implementation_review` принял семь exact refs; штатный finalizer `accepted`. Приёмка относится к этому SHA и только Task 1. Baseline full rerun не заявляется.
+- Task 2 RED `efdb4533d443570c4167efad30db292be2b751d6`: четыре targeted suites — 90 tests, 79 PASS / 11 expected FAIL, exit 1. Updated matched-native control на `9053c760202d6ebf6f051a2cb2d2cdd38e99aac6`: visibility suite — 39 tests, 30 PASS / 9 expected FAIL, exit 1; новый negative control PASS. Причина failures — descendant projection и отсутствие доказанного hidden witness, вследствие чего production CLI/handoff останавливаются. Root identity сама сохраняется. Fixture/infra failures нет; оба exact snapshots raw 345 файлов / 0 несовпадений, 135 scripts/data/schemas blobs сохранялись. GREEN и full ещё не заявляются.
