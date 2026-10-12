@@ -53,6 +53,8 @@
 5. До исправления подтвердить RED положительных literal physical graph cases на exact cloud SHA. Production CLI возвращает 0 только для valid full-email source. Handoff valid source достигает renderer; foreign Content/owner даёт source-evidence mismatch до renderer и без готовых HTML/ZIP. Existing manual-passed/incomplete/subtree guards сохраняются. Test-only fixture может переиспользоваться CLI/handoff, runtime dependencies не добавляются.
 6. После RED изменить только private helper и две конкатенации. Локально targeted visibility/source-fidelity/source-cli/handoff, затем штатный `repository-full` с generate check на итоговом cloud SHA. Проверить source snapshot и allowed diff; независимая приёмка actual artifact refs. Следующий шаг начинается после её завершения.
 
+**Уточнение negative control перед его добавлением:** отказ для malformed native нельзя доказывать одним несовпадающим target. Использовать минимальный synthetic root/group с native `11:2;12:1` (недопустимый compound без `I`) и совпадающим с композицией без проверки literal target `I2021:4164;11:2;12:1`, аналогично Desktop; intermediate parent присутствует. Слепая композиция дала бы совпадение, строгая validation должна дать `EMAIL_SOURCE_VISIBILITY_TARGET_MISMATCH`. Все прочие identity/ancestry/visibility inputs валидны. Это проверяет именно отказ `null`, а не случайную ошибку другого узла; runtime scope сохраняется.
+
 Исторические 26 errors из диагноза #130 не обозначаются свежим replay: исходные private captures этого письма в текущем задании не предоставлены. Проверяемая здесь граница — independent registered/synthetic regression и production CLI/handoff; внешняя визуальная приёмка остаётся `not-run`.
 
 ## Проверки
