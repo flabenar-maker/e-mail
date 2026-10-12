@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/flabenar-maker/e-mail/schemas/manifest.schema.json",
+  "$id": "urn:cupis-email-system:schema:manifest.schema.json",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -19,23 +19,17 @@
   ],
   "properties": {
     "schema_version": {
-      "const": "1.3.0"
+      "const": "1.4.0"
     },
     "system": {
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "id",
-        "repository"
+        "id"
       ],
       "properties": {
         "id": {
           "$ref": "#/$defs/id"
-        },
-        "repository": {
-          "type": "string",
-          "minLength": 1,
-          "pattern": "^[^/\\s]+/[^/\\s]+$"
         }
       }
     },

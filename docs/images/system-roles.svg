@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="890" viewBox="0 0 1000 890" role="img" aria-labelledby="title desc">
+  <title id="title">Как устроена работа системы</title>
+  <desc id="desc">Задача пользователя направляется в навык письма или поддержки. GitHub хранит актуальные правила, Figma — дизайн, локальная папка — выпуск письма. Внешняя команда проверяет импорт и почтовые клиенты.</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#697386"/></marker></defs>
+  <rect width="1000" height="890" rx="24" fill="#f4f6fa"/>
+  <g font-family="Arial, sans-serif" fill="#17233b">
+    <text x="50" y="65" font-size="32" font-weight="700">Задача, навыки и источники</text>
+    <text x="50" y="102" font-size="20" fill="#4c5b71">Система закрепляет выбранный репозиторий и точную версию</text>
+    <rect x="50" y="144" width="900" height="94" rx="16" fill="#1b61d5"/>
+    <text x="500" y="183" text-anchor="middle" fill="#fff" font-size="24" font-weight="700">Ваша задача</text>
+    <text x="500" y="216" text-anchor="middle" fill="#fff" font-size="19">Маршрутизатор выбирает нужный сценарий</text>
+    <g stroke="#697386" stroke-width="3" fill="none" marker-end="url(#arrow)"><path d="M500 238V266H275V291"/><path d="M500 266H725V291"/></g>
+    <rect x="50" y="306" width="430" height="148" rx="16" fill="#fff" stroke="#cbd6e7"/>
+    <text x="78" y="347" font-size="24" font-weight="700">Навык письма</text>
+    <text x="78" y="382" font-size="19">Собрать, исправить или проверить</text>
+    <text x="78" y="413" font-size="19">конкретное письмо</text>
+    <rect x="520" y="306" width="430" height="148" rx="16" fill="#fff" stroke="#cbd6e7"/>
+    <text x="548" y="347" font-size="24" font-weight="700">Навык поддержки</text>
+    <text x="548" y="382" font-size="19">Проверить и изменить библиотеку,</text>
+    <text x="548" y="413" font-size="19">контракты и правила системы</text>
+    <text x="50" y="514" font-size="23" font-weight="700">Что где хранится</text>
+    <rect x="50" y="538" width="285" height="166" rx="16" fill="#fff" stroke="#cbd6e7"/>
+    <text x="74" y="581" font-size="24" font-weight="700">GitHub компании</text>
+    <text x="74" y="621" font-size="19">Актуальные правила,</text>
+    <text x="74" y="652" font-size="19">навыки и изменения</text>
+    <rect x="357" y="538" width="285" height="166" rx="16" fill="#fff" stroke="#cbd6e7"/>
+    <text x="381" y="581" font-size="24" font-weight="700">Figma</text>
+    <text x="381" y="621" font-size="19">Фактический дизайн</text>
+    <text x="381" y="652" font-size="19">Mobile и Desktop</text>
+    <rect x="664" y="538" width="286" height="166" rx="16" fill="#fff" stroke="#cbd6e7"/>
+    <text x="688" y="581" font-size="24" font-weight="700">Локальная папка</text>
+    <text x="688" y="621" font-size="19">Письмо, изображения,</text>
+    <text x="688" y="652" font-size="19">форма, ZIP и отчёты</text>
+    <rect x="50" y="750" width="900" height="95" rx="16" fill="#eaf4ee" stroke="#bdd8c7"/>
+    <text x="77" y="788" font-size="23" font-weight="700">Внешняя приёмка — у ответственной команды</text>
+    <text x="77" y="821" font-size="19">Импорт в Альткрафт, тестовая отправка и реальные почтовые клиенты</text>
+  </g>
+</svg>

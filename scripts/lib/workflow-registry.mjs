@@ -283,7 +283,16 @@ function expectedReadback(before,boundary){
  for(const change of boundary.changes){const node=index.get(change.node_id);if(!node||!exact(pointerValue(node,change.pointer),change.before))throw Error('Stale before');assignPointer(node,change.pointer,change.after);}return expected;
 }
 
-export async function executeMaintenanceWorkflow({context,pinnedSha,inputs={},conditions={},handlers={}}={}){
+function validRepositoryBinding(repository){
+ return typeof repository==='string'&&/^[A-Za-z0-9](?:[A-Za-z0-9-]{0,37}[A-Za-z0-9])?\/[A-Za-z0-9_.-]{1,100}$/u.test(repository)&&!['.','..'].includes(repository.split('/')[1]);
+}
+function boundPullRequest(url,repository){
+ if(typeof url!=='string'||!validRepositoryBinding(repository))return false;
+ const match=/^https:\/\/github\.com\/([^/]+)\/([^/]+)\/pull\/([1-9][0-9]*)$/u.exec(url);
+ return Boolean(match&&`${match[1]}/${match[2]}`.toLowerCase()===repository.toLowerCase());
+}
+
+export async function executeMaintenanceWorkflow({context,pinnedSha,repository,inputs={},conditions={},handlers={}}={}){
  const executed=[];
  const stop=(code,path)=>workflowStop(code,path,executed);
  if(context?.status!=='resolved'||!MAINTENANCE_ROUTES.has(context.route?.id)||context.route.workflow_source_id==='workflow-paused')return stop('maintenance-context-not-resolved','/context');
@@ -298,6 +307,9 @@ export async function executeMaintenanceWorkflow({context,pinnedSha,inputs={},co
   const available=new Set(context.bundle.static_sources.filter(s=>typeof s.content==='string'&&s.content.length).map(s=>s.id));
   if(mode.steps.some(s=>s.source_ids.some(id=>!available.has(id))))return stop('workflow-source-missing','/bundle/static_sources');
  }catch{return stop('workflow-handoff-mismatch','/workflow');}
+ if(mode.id==='write'&&(repository===undefined||repository===''))return stop('repository-binding-missing','/repository');
+ if(repository!==undefined&&!validRepositoryBinding(repository))return stop('repository-binding-invalid','/repository');
+ // Repository and source pin come from the trusted coordinator, not handler output.
  // Capabilities consume this one closed bundle; they cannot mutate later steps' context.
  const bundle=deepFreeze(structuredClone(context.bundle));
  const state=structuredClone(inputs);
@@ -358,7 +370,7 @@ export async function executeMaintenanceWorkflow({context,pinnedSha,inputs={},co
     if(!Array.isArray(state['target-scope']?.node_ids)||!before)return stop('identity-unconfirmed','/target-scope');
    }
    if(typeof handlers[step.id]!=='function')return stop('workflow-handler-missing','/handlers/'+step.id);
-   try{output=await handlers[step.id]({step:deepFreeze(structuredClone(step)),inputs:deepFreeze(structuredClone(state)),bundle,pinned_sha:pinnedSha,route_id:context.route.id});}
+   try{output=await handlers[step.id](deepFreeze({step:deepFreeze(structuredClone(step)),inputs:deepFreeze(structuredClone(state)),bundle,repository,pinned_sha:pinnedSha,route_id:context.route.id}));}
    catch{return stop('workflow-handler-failed','/steps/'+step.id);}
    if(output?.blockers?.length)return stop(output.blockers[0].code??'workflow-handler-blocked','/steps/'+step.id);
   }
@@ -392,10 +404,10 @@ export async function executeMaintenanceWorkflow({context,pinnedSha,inputs={},co
   }
   if(step.id==='publish-review'){
    const pr=output['github-pr'];
-   if(pr?.draft!==true||pr.base!=='main'||pr.head_sha!==state['repository-change']?.cloud_sha||!/^https:\/\/github\.com\/flabenar-maker\/e-mail\/pull\/[1-9][0-9]*$/u.test(pr.url??''))return stop('publication-boundary-invalid','/github-pr');
+   if(pr?.draft!==true||pr.base!=='main'||pr.head_sha!==state['repository-change']?.cloud_sha||!boundPullRequest(pr.url,repository))return stop('publication-boundary-invalid','/github-pr');
   }
   Object.assign(state,structuredClone(output));executed.push(step.id);
  }
  const verification=state['verification-summary'];
- return {status:'complete',executed,outputs:state,handoff:{pinned_sha:pinnedSha,route_id:context.route.id,mode:mode.id,bundle_digest:bundle.digest,cloud_commit:state['repository-change']?.cloud_sha??null,cloud_branch:state['repository-change']?.branch??null,inspected_scope:state['target-scope']??null,changed_paths:state['repository-change']?.paths??[],verification_summary:verification??null,cloud_channel:'github',github_pr:state['github-pr']??null,limitations:verification?.limitations??[]}};
+ return {status:'complete',executed,outputs:state,handoff:{repository:repository??null,pinned_sha:pinnedSha,route_id:context.route.id,mode:mode.id,bundle_digest:bundle.digest,cloud_commit:state['repository-change']?.cloud_sha??null,cloud_branch:state['repository-change']?.branch??null,inspected_scope:state['target-scope']??null,changed_paths:state['repository-change']?.paths??[],verification_summary:verification??null,cloud_channel:'github',github_pr:state['github-pr']??null,limitations:verification?.limitations??[]}};
 }

@@ -205,7 +205,7 @@ test('write publication binds selected repositories and carries immutable reposi
    const e=portableWriteExecution(c,repository),result=await workflows.executeMaintenanceWorkflow(e.options);
    assert.equal(result.status,'complete',repository);assert.equal(result.handoff.repository,repository);assert.equal(result.handoff.pinned_sha,SHA);
    assert.equal(result.handoff.github_pr.url,`https://github.com/${repository.toLowerCase()}/pull/7`);
-   for(const input of e.handlerInputs){assert.equal(input.repository,repository);assert.equal(input.pinnedSha,SHA);assert.ok(Object.isFrozen(input));}
+   for(const input of e.handlerInputs){assert.equal(input.repository,repository);assert.equal(input.pinned_sha,SHA);assert.ok(Object.isFrozen(input));}
   }
  }finally{await f.cleanup();}
 });
