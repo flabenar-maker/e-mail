@@ -5,15 +5,15 @@ const issue=(code,path,message)=>({code,path,message});
 // CSS in a style element is raw text and must not use HTML entity decoding.
 function resourceText(raw, htmlEncoded) {
   let value='';const starts=[],ends=[];
-  const tokens=htmlEncoded ? /&(?:amp|quot|apos|lt|gt|#(?:x[0-9a-f]+|\d+));|[\s\S]/giu : /[\s\S]/gu;
+  const tokens=htmlEncoded ? /&(?:amp|AMP|quot|QUOT|apos|lt|LT|gt|GT|#(?:[xX][0-9a-fA-F]+|\d+));|[\s\S]/gu : /[\s\S]/gu;
   for(const token of raw.matchAll(tokens)) {
     let text=token[0];
     if(htmlEncoded && text.startsWith('&')) {
-      const named={amp:'&',quot:'"',apos:"'",lt:'<',gt:'>'};
-      const name=text.slice(1,-1).toLowerCase();
+      const named={amp:'&',AMP:'&',quot:'"',QUOT:'"',apos:"'",lt:'<',LT:'<',gt:'>',GT:'>'};
+      const name=text.slice(1,-1);
       if(Object.hasOwn(named,name))text=named[name];
       else if(name.startsWith('#')) {
-        const hex=name[1]==='x',point=Number.parseInt(name.slice(hex?2:1),hex?16:10);
+        const hex=name[1]==='x'||name[1]==='X',point=Number.parseInt(name.slice(hex?2:1),hex?16:10);
         text=point>0&&point<=0x10ffff&&!(point>=0xd800&&point<=0xdfff) ? String.fromCodePoint(point) : '\ufffd';
       }
     }
