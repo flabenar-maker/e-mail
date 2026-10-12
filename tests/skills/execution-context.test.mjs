@@ -10,7 +10,7 @@ const api=await import('../../scripts/lib/execution-context.mjs').catch(()=>({})
 const runtime=await import('../../scripts/lib/runtime-capabilities.mjs').catch(()=>({}));
 const repoRoot=dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const digest=value=>createHash('sha256').update(value).digest('hex');
-const caps=()=>({schema_version:'1.0.0',runtime_session_id:'synthetic-test',tool_signature:'synthetic-tool',source:'declared-runtime-tools',max_subagents:3,models:[['gpt-5.6-terra','medium'],['gpt-5.6-sol','medium'],['gpt-6.1-sol','high'],['gpt-6-astra','high']].map(([id,effort])=>({id,efforts:[effort],capabilities:['text','code','vision']}))});
+const caps=()=>({schema_version:'1.0.0',runtime_session_id:'synthetic-test',tool_signature:'synthetic-tool',source:'declared-runtime-tools',max_subagents:3,selected_model:{binding:'inherited',id:null},supported_efforts:['low','medium','high','xhigh'],capabilities:['text','code','vision']});
 async function fixture(t,change={}) {
  assert.equal(typeof api.loadExecutionRequest,'function','verified request loader must exist');
  assert.equal(typeof api.resolveExecutionContext,'function','pure context resolver must exist');
@@ -23,7 +23,7 @@ async function fixture(t,change={}) {
 }
 test('verified compact decision preserves authorization and source refs',async t=>{
  const f=await fixture(t);const request=await api.loadExecutionRequest({request:f.request,repoRoot:f.root});const result=api.resolveExecutionContext({...f,request});
- assert.equal(result.status,'resolved');assert.deepEqual(result.allowed_paths,f.request.allowed_paths);assert.equal(result.source_sha,f.request.source_sha);assert.deepEqual(result.domain_context_ref,f.request.domain_context_ref);assert.equal(result.review.reviewer.model,'gpt-6-astra');assert.equal(Buffer.byteLength(api.renderExecutionDecision(result))<=4096,true);assert.equal(JSON.stringify(result).includes('task_kinds'),false);
+ assert.equal(result.status,'resolved');assert.deepEqual(result.allowed_paths,f.request.allowed_paths);assert.equal(result.source_sha,f.request.source_sha);assert.deepEqual(result.domain_context_ref,f.request.domain_context_ref);assert.deepEqual(result.review.reviewer.selected_model,{binding:'inherited',id:null});assert.equal(result.review.reviewer.effort,'high');assert.deepEqual(result.runtime_identity,{runtime_session_id:'synthetic-test',tool_signature:'synthetic-tool'});assert.equal(Buffer.byteLength(api.renderExecutionDecision(result))<=4096,true);assert.equal(JSON.stringify(result).includes('task_kinds'),false);
 });
 test('paused and blocked domain status never authorize model-driven work',async t=>{
  for(const status of ['paused','blocked']) {const f=await fixture(t,{context:{status,blockers:[{code:'DOMAIN_STOP',path:'/',message:'Stop'}]}});const request=await api.loadExecutionRequest({request:f.request,repoRoot:f.root});const result=api.resolveExecutionContext({...f,request});assert.equal(result.status,'blocked');assert.equal(result.domain_status,status);assert.equal(result.executor,null);}
@@ -41,7 +41,7 @@ test('bad digests, traversal, symlinks and injected domain objects cannot become
 });
 test('runtime injection cannot select a model outside the policy and missing local-only inputs block',async t=>{
  const f=await fixture(t);let request=await api.loadExecutionRequest({request:f.request,repoRoot:f.root});
- assert.equal(api.resolveExecutionContext({...f,request,capabilities:{...caps(),models:[{id:'injected-model',efforts:['high'],capabilities:['text','code']}]}}).status,'blocked');
+ assert.equal(api.resolveExecutionContext({...f,request,capabilities:{...caps(),selected_model:{binding:'inherited',id:'invented'}}}).status,'blocked');
  request=await api.loadExecutionRequest({request:{...f.request,workload_ids:['installed-skills']},repoRoot:f.root});assert.equal(api.resolveExecutionContext({...f,request}).status,'blocked');
 });
 test('overflow produces explicit compact diagnostic without truncating a required decision',async t=>{
@@ -50,7 +50,7 @@ test('overflow produces explicit compact diagnostic without truncating a require
 test('runtime cache reads declarations once per session signature and typed refusals are one-shot',()=>{
  assert.equal(typeof runtime.createRuntimeCapabilityCache,'function','session cache must exist');const cache=runtime.createRuntimeCapabilityCache();let reads=0;const read=()=>{reads++;return caps();};
  const key={runtime_session_id:'synthetic-test',tool_signature:'synthetic-tool'};cache.get({...key,read});cache.get({...key,read});assert.equal(reads,1);
- const candidate={model:'gpt-5.6-terra',effort:'medium'};assert.equal(cache.beginAttempt({...key,...candidate}),true);assert.equal(cache.beginAttempt({...key,...candidate}),false);
+ const candidate={selected_model:{binding:'inherited',id:null},effort:'medium'};assert.equal(cache.beginAttempt({...key,...candidate}),true);assert.equal(cache.beginAttempt({...key,...candidate}),false);
  assert.equal(cache.recordRefusal({...key,...candidate,code:'NETWORK_ERROR'}),false);assert.equal(cache.get({...key,read}).refusals?.length??0,0);
  assert.equal(cache.recordRefusal({...key,...candidate,code:'MODEL_UNAVAILABLE'}),true);assert.equal(cache.get({...key,read}).refusals.length,1);assert.equal(reads,1);
  cache.get({...key,tool_signature:'new-tool',read:()=>({...read(),tool_signature:'new-tool'})});assert.equal(reads,2);
@@ -68,7 +68,7 @@ test('saved profile needs the active pair and exact workload signature and never
 test('initial model selection can precede artifact creation',async t=>{const f=await fixture(t);delete f.request.executor_agent_id;f.request.artifact_refs=[];const request=await api.loadExecutionRequest({request:f.request,repoRoot:f.root});assert.equal(api.resolveExecutionContext({...f,request}).status,'resolved');});
 
 test('successful attempts and network outages release the transient guard, typed refusals stay one-shot',()=>{
- assert.equal(typeof runtime.createRuntimeCapabilityCache,'function');const cache=runtime.createRuntimeCapabilityCache();const identity={runtime_session_id:'synthetic-test',tool_signature:'synthetic-tool'};cache.get({...identity,read:caps});const candidate={...identity,model:'gpt-5.6-terra',effort:'medium'};
+ assert.equal(typeof runtime.createRuntimeCapabilityCache,'function');const cache=runtime.createRuntimeCapabilityCache();const identity={runtime_session_id:'synthetic-test',tool_signature:'synthetic-tool'};cache.get({...identity,read:caps});const candidate={...identity,selected_model:{binding:'inherited',id:null},effort:'medium'};
  assert.equal(typeof cache.finishAttempt,'function','coordinator must be able to finish a successful actual spawn');
  for(const outcome of ['success','network-error']){assert.equal(cache.beginAttempt(candidate),true);assert.equal(cache.finishAttempt({...candidate,outcome}),true);assert.equal(cache.get({...identity,read:caps}).refusals?.length??0,0);}
  assert.equal(cache.beginAttempt(candidate),true);assert.equal(cache.recordRefusal({...candidate,code:'MODEL_UNAVAILABLE'}),true);assert.equal(cache.finishAttempt({...candidate,outcome:'success'}),false);assert.equal(cache.beginAttempt(candidate),false);
@@ -76,4 +76,4 @@ test('successful attempts and network outages release the transient guard, typed
 
 test('consuming workloads preserve verified named inputs and bind the selected input digest',async t=>{const f=await fixture(t);f.request.workload_ids=['installed-skills'];f.request.input_refs={installed_skills_root:await f.ref('input.json',JSON.stringify({root:'explicit-authorized-local-root'}))};const request=await api.loadExecutionRequest({request:f.request,repoRoot:f.root});const result=api.resolveExecutionContext({...f,request});assert.equal(result.status,'resolved');assert.deepEqual(result.input_refs,f.request.input_refs);assert.match(result.verification[0].input_digest,/^[a-f0-9]{64}$/);});
 
-test('mechanical reviewer qualification includes declared same-or-higher permitted tiers',async t=>{const f=await fixture(t,{mode:'read-only',authorization:{operation:'read',allowed_paths:['docs/change.md']},context:{status:'resolved',route:{id:'maintenance'},workflow:{mode:'read-only'}}});Object.assign(f.request,{task_kind:'mechanical-read',operation:'read',mode:'read-only'});const request=await api.loadExecutionRequest({request:f.request,repoRoot:f.root});const decision=api.resolveExecutionContext({...f,request});assert.equal(decision.status,'resolved');assert.ok(decision.review.eligible_reviewers.some(x=>x.model==='gpt-6-astra'&&x.effort==='high'));assert.ok(decision.review.eligible_reviewers.every(x=>x.tier>=decision.executor.tier));});
+test('mechanical reviewer qualification includes declared same-or-higher permitted tiers',async t=>{const f=await fixture(t,{mode:'read-only',authorization:{operation:'read',allowed_paths:['docs/change.md']},context:{status:'resolved',route:{id:'maintenance'},workflow:{mode:'read-only'}}});Object.assign(f.request,{task_kind:'mechanical-read',operation:'read',mode:'read-only'});const request=await api.loadExecutionRequest({request:f.request,repoRoot:f.root});const decision=api.resolveExecutionContext({...f,request});assert.equal(decision.status,'resolved');assert.deepEqual(decision.review.reviewer.selected_model,decision.executor.selected_model);assert.equal(decision.review.reviewer.effort,decision.executor.effort);assert.equal('eligible_reviewers' in decision.review,false);});
