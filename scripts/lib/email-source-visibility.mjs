@@ -48,11 +48,11 @@ function registeredVariantNode(record, viewport, axes = {}) {
 // Raw nodes belong to the same complete capture as the instance/field readings.
 // Own visibility is observed; effective visibility is recomputed through actual
 // parents. Free-text exclusion reasons cannot establish any hidden state.
-export function verifyInstanceVisibilitySource({ model, readings, correspondence, resolvedContracts, entries, mappedInstances }) {
+export function verifyInstanceVisibilitySource({ model, readings, correspondence, resolvedContracts, entries, mappedInstances, selectedTest = false }) {
   const enabled = hasInstanceVisibility(model?.root);
   const diagnostics = [];
   const never = () => false;
-  const failed = () => ({ enabled, diagnostics, isHidden: never, isHiddenTarget: never, modelVisible: new Map() });
+  const failed = () => ({ enabled, diagnostics, isHidden: never, isHiddenTarget: never, isHiddenAssetTarget: never, modelVisible: new Map() });
   if (!enabled) return failed();
   if (!Array.isArray(readings.nodes) || !Array.isArray(correspondence.visibility)) {
     diagnostics.push(issue('EMAIL_SOURCE_VISIBILITY_EVIDENCE_MISSING', '/readings/nodes', 'Instance visibility requires independent complete node and element correspondence readings.'));
@@ -115,7 +115,13 @@ export function verifyInstanceVisibilitySource({ model, readings, correspondence
   const modelRoots = new Map();
   const modelActive = new Map();
   function checkComponentNode(record, node, viewport, axes, path) {
-    if (!record?.figma) return; // Legacy test-only contracts have no Figma identity.
+    if (!record?.figma) {
+      // Synthetic test contracts have no Figma identity; only an explicit
+      // selected-test invocation may use them. Production never infers a mode.
+      if (selectedTest !== true) diagnostics.push(issue('EMAIL_SOURCE_VISIBILITY_IDENTITY_MISSING', path,
+        'Production visibility proof requires registered Figma component identity.'));
+      return;
+    }
     if (record.figma.file_key !== readings.file_key || node?.owner_component_id !== record.figma.node_id) diagnostics.push(issue(
       'EMAIL_SOURCE_VISIBILITY_OWNER_MISMATCH', path, `${viewport} observed instance has the wrong or unproven registered component owner.`,
     ));
@@ -219,20 +225,103 @@ export function verifyInstanceVisibilitySource({ model, readings, correspondence
     return !!element && expectedNode(element, root, owner) === target.node_id &&
       !modelVisible.get(entry.instance)?.[target.viewport]?.has(element.id) && isHidden(target.viewport, target.node_id);
   }
-  // Even an omitted hidden nested INSTANCE must retain its exact contract role
-  // and registered component identity; a wrong sibling cannot prove absence.
-  for (const source of readings.instances) {
-    if (!isHidden(source.viewport, source.node_id) || source.relation?.kind !== 'nested') continue;
-    const parentEntry = entries.find(entry => mappedInstances.get(entry.instance.instance_id)?.nodes?.[source.viewport] === source.parent_node_id);
-    const root = modelRoots.get(parentEntry?.instance)?.[source.viewport];
-    const element = elementChain(root, source.relation.element_id)?.at(-1);
-    if (!element || element.render_mode !== 'nested-component' || expectedNode(element, root, source.parent_node_id) !== source.node_id) {
-      diagnostics.push(issue('EMAIL_SOURCE_VISIBILITY_RELATION_MISMATCH', '/readings/instances', 'Hidden nested source does not match its exact registered position.'));
-      continue;
+  function isHiddenAssetTarget(target) {
+    const entry = byId.get(target.instance_id);
+    if (!entry || !EMAIL_VIEWPORTS.includes(target.viewport)) return false;
+    const record = resolvedContracts.get(entry.instance.component_id);
+    const asset = record?.asset_contracts?.find(item => item.id === target.asset_contract_id);
+    if (!asset || (asset.source_viewport && asset.source_viewport !== target.viewport)) return false;
+    const root = modelRoots.get(entry.instance)?.[target.viewport];
+    const owner = mappedInstances.get(target.instance_id)?.nodes?.[target.viewport];
+    const observed = readings.assets.find(item => item.viewport === target.viewport && item.node_id === target.node_id);
+    if (!observed || observed.owner_node_id !== owner || !isHidden(target.viewport, target.node_id)) return false;
+    function matches(element) {
+      if (!element) return false;
+      if (element.asset_contract_id === target.asset_contract_id && expectedNode(element, root, owner) === target.node_id &&
+          !modelVisible.get(entry.instance)?.[target.viewport]?.has(element.id)) {
+        const sourceChain = ancestry.get(key(target.viewport, target.node_id));
+        let previous = -1;
+        for (const ancestor of elementChain(root, element.id)) {
+          const expected = expectedNode(ancestor, root, owner);
+          const position = sourceChain?.findIndex(node => node.node_id === expected) ?? -1;
+          if (!expected || position <= previous) return false;
+          previous = position;
+        }
+        return true;
+      }
+      return (element.children ?? []).some(matches);
     }
-    const childRecord = resolvedContracts.get(element.component_id);
-    if (!childRecord) diagnostics.push(issue('EMAIL_SOURCE_VISIBILITY_CONTRACT_MISSING', '/readings/instances', 'Hidden nested source component is not registered.'));
-    checkComponentNode(childRecord, nodes.get(key(source.viewport, source.node_id)), source.viewport, {}, '/readings/instances');
+    return matches(root);
   }
-  return { enabled, diagnostics, isHidden, isHiddenTarget, modelVisible };
+
+  // Resolve an omitted source subtree from a retained ancestor and exact
+  // registered roles. No invisible placeholder instances are added to the model.
+  const sourceInstances = new Map(readings.instances.map(source => [key(source.viewport, source.node_id), source]));
+  const contexts = new Map();
+  for (const { instance } of entries) for (const viewport of EMAIL_VIEWPORTS) {
+    const owner = mappedInstances.get(instance.instance_id)?.nodes?.[viewport];
+    if (owner) contexts.set(key(viewport, owner), {
+      record: resolvedContracts.get(instance.component_id), root: modelRoots.get(instance)?.[viewport],
+    });
+  }
+  function observedAxes(record, node, viewport) {
+    const variant = record?.variants?.find(item => item.node_id === node?.main_component_id &&
+      (item.id === viewport || item.axes?.some(axis => axis.name === 'Viewport' && String(axis.value).toLowerCase() === viewport)));
+    return { variant, axes: Object.fromEntries((variant?.axes ?? []).filter(axis => axis.name !== 'Viewport').map(axis => [axis.name, axis.value])) };
+  }
+  function omittedContext(source, stack = []) {
+    if (!source) return null;
+    const id = key(source.viewport, source.node_id);
+    if (contexts.has(id)) return contexts.get(id);
+    const path = '/readings/instances';
+    if (stack.includes(id) || !isHidden(source.viewport, source.node_id)) {
+      diagnostics.push(issue('EMAIL_SOURCE_VISIBILITY_RELATION_MISMATCH', path, 'Omitted source parents must form a proved hidden registered subtree.'));
+      return null;
+    }
+    const parentId = key(source.viewport, source.parent_node_id);
+    const parent = contexts.get(parentId) ?? omittedContext(sourceInstances.get(parentId), [...stack, id]);
+    const positionChain = elementChain(parent?.root, source.relation?.element_id);
+    const position = positionChain?.at(-1);
+    const positionNode = position && expectedNode(position, parent.root, source.parent_node_id);
+    let record;
+    if (source.relation?.kind === 'nested' && position?.render_mode === 'nested-component' && positionNode === source.node_id) {
+      record = resolvedContracts.get(position.component_id);
+    } else if (source.relation?.kind === 'slot' && position?.render_mode === 'slot' && positionNode &&
+               ancestry.get(id)?.some(node => node.node_id === positionNode)) {
+      const node = nodes.get(id);
+      const candidates = [...resolvedContracts.values()].filter(item => item.figma?.file_key === readings.file_key &&
+        item.figma.node_id === node?.owner_component_id && item.variants?.some(variant => variant.node_id === node?.main_component_id));
+      if (candidates.length === 1) record = candidates[0];
+    }
+    if (!record) {
+      diagnostics.push(issue('EMAIL_SOURCE_VISIBILITY_RELATION_MISMATCH', path,
+        'Hidden source does not match its exact registered parent position and component.'));
+      return null;
+    }
+    let previous = -1;
+    for (const ancestor of positionChain) {
+      const expected = expectedNode(ancestor, parent.root, source.parent_node_id);
+      const position = ancestry.get(id)?.findIndex(node => node.node_id === expected) ?? -1;
+      if (!expected || position <= previous) diagnostics.push(issue('EMAIL_SOURCE_VISIBILITY_ANCESTRY_MISMATCH', path,
+        'Hidden source physical ancestry differs from its exact registered parent position.'));
+      previous = position;
+    }
+    const node = nodes.get(id);
+    const { variant, axes } = observedAxes(record, node, source.viewport);
+    checkComponentNode(record, node, source.viewport, axes, path);
+    if (source.variant_id !== (variant?.id ?? source.viewport)) diagnostics.push(issue(
+      'EMAIL_SOURCE_VISIBILITY_VARIANT_MISMATCH', path, 'Hidden source selected variant differs from its registered observed main component.',
+    ));
+    const selected = selectVariantRoot(record, source.viewport, axes);
+    if (!selected.root || selected.diagnostics.length) {
+      diagnostics.push(issue('EMAIL_SOURCE_VISIBILITY_CONTRACT_MISSING', path, 'Hidden source requires the exact selected registered contract.'));
+      return null;
+    }
+    rootSources.set(selected.root, { record, viewport: source.viewport });
+    const context = { record, root: selected.root }; contexts.set(id, context); return context;
+  }
+  for (const source of readings.instances) {
+    if (!contexts.has(key(source.viewport, source.node_id)) && isHidden(source.viewport, source.node_id)) omittedContext(source);
+  }
+  return { enabled, diagnostics, isHidden, isHiddenTarget, isHiddenAssetTarget, modelVisible };
 }

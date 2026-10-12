@@ -114,7 +114,7 @@ function excluded(readings, kind, source) {
  * disputed nodes and run the separate visual gate.
  */
 export function verifyEmailModelSource({
-  model, readings, correspondence, authorizedInputs = [], assetEvidence = [], resolvedContracts = new Map(),
+  model, readings, correspondence, authorizedInputs = [], assetEvidence = [], resolvedContracts = new Map(), selectedTest = false,
 } = {}) {
   const errors = [];
   if (!readings || !correspondence || !model?.root) {
@@ -169,7 +169,12 @@ export function verifyEmailModelSource({
   const sourceFields = uniqueIndex(readings.fields, (item) => key(item.viewport, item.node_id, item.field), "fields", errors);
   const sourceAssets = uniqueIndex(readings.assets, (item) => key(item.viewport, item.node_id), "assets", errors);
   const mappedInstances = uniqueIndex(correspondence.instances ?? [], (item) => item.instance_id, "correspondence/instances", errors);
-  const visibilityProof = verifyInstanceVisibilitySource({ model, readings, correspondence, resolvedContracts, entries, mappedInstances });
+  for (const target of correspondence.instances ?? []) {
+    if (!byId.has(target.instance_id)) errors.push(issue(
+      "EMAIL_SOURCE_INSTANCE_UNBOUND", "/correspondence/instances", "Explicit instance correspondence must identify a declared model instance.",
+    ));
+  }
+  const visibilityProof = verifyInstanceVisibilitySource({ model, readings, correspondence, resolvedContracts, entries, mappedInstances, selectedTest });
   errors.push(...visibilityProof.diagnostics);
   const activeAssets = visibilityProof.enabled ? visibleModelAssets(model, { bySystemId: resolvedContracts }) : null;
   const mappedFields = uniqueIndex(correspondence.fields ?? [], (item) => key(
@@ -309,7 +314,7 @@ export function verifyEmailModelSource({
         if (!record?.asset_contracts?.some(item => item.id === asset.asset_contract_id)) errors.push(issue(
           "EMAIL_SOURCE_ASSET_CONTRACT_MISSING", assetPath, "Hidden asset still requires a registered asset contract identity.",
         ));
-        if (target && !visibilityProof.isHidden(target.viewport, target.node_id)) errors.push(issue(
+        if (target && !visibilityProof.isHiddenAssetTarget(target)) errors.push(issue(
           "EMAIL_SOURCE_VISIBILITY_TARGET_MISMATCH", assetPath, "An inactive asset cannot claim a visible or unproved source node.",
         ));
         continue;
@@ -358,7 +363,12 @@ export function verifyEmailModelSource({
   }
   for (const target of correspondence.assets ?? []) {
     const entry = byId.get(target.instance_id);
-    if (visibilityProof.enabled && visibilityProof.isHidden(target.viewport, target.node_id)) continue;
+    if (visibilityProof.enabled && visibilityProof.isHiddenAssetTarget(target)) continue;
+    if (visibilityProof.enabled && visibilityProof.isHidden(target.viewport, target.node_id)) {
+      errors.push(issue("EMAIL_SOURCE_VISIBILITY_ASSET_TARGET_MISMATCH", "/correspondence/assets",
+        "Hidden asset correspondence must identify the exact registered asset element, concrete owner and source viewport."));
+      continue;
+    }
     if (!entry?.instance.asset_files?.some(({ asset_contract_id }) => asset_contract_id === target.asset_contract_id)) {
       errors.push(issue("EMAIL_SOURCE_ASSET_MISSING", `${entry?.path ?? "/root"}/asset_files`, `${target.instance_id}/${target.asset_contract_id}: asset binding is absent from the model.`));
     }

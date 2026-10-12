@@ -34,7 +34,7 @@ if (!path || process.argv.length > 4 || (process.argv.length === 4 && !selectedT
     const resolvedContracts = usesVisibility || hasInlineRuns || hasAdditionalVariantAxes(input.model?.root) || hasAssetFiles(input.model?.root)
       ? indexComponentRegistries(await loadComponentRegistries({ repoRoot: fileURLToPath(new URL("../", import.meta.url)) })).bySystemId
       : new Map();
-    const diagnostics = verifyEmailModelSource({ ...input, resolvedContracts }).map(({ code, path: fieldPath, message }) =>
+    const diagnostics = verifyEmailModelSource({ ...input, resolvedContracts, selectedTest }).map(({ code, path: fieldPath, message }) =>
       ({ code, path: fieldPath, message }));
     if (!selectedTest) {
       for (const viewport of ["mobile", "desktop"]) {

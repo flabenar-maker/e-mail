@@ -419,6 +419,7 @@ async function verifyNewBuildSource({ workflowMode, sourceEvidence, repoRoot, as
   try {
     await writeFile(proofPath, JSON.stringify({
       ...sourceEvidence,
+      selectedTest: false,
       model,
       assetEvidence,
     }), "utf8");
