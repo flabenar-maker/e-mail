@@ -61,7 +61,7 @@ test("parses route, mode and repeated exact selectors", () => {
 });
 
 test("prints deterministic JSON for an active canonical route", async () => {
-  const args = ["--route", "migration-progress", "--mode", "read-only"];
+  const args = ["--route", "system-progress", "--mode", "read-only"];
   const first = await runCli(args);
   const second = await runCli(args);
 
@@ -78,7 +78,7 @@ test("prints deterministic JSON for an active canonical route", async () => {
 test("invalid arguments return typed JSON and exit one", async () => {
   const invalidViewport = await runCli([
     "--route",
-    "migration-progress",
+    "system-progress",
     "--viewport",
     "tablet",
   ]);

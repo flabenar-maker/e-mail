@@ -374,7 +374,7 @@ function renderSection(record, index, sectionId) {
         `- Render type: ${inlineCode(renderType)}`,
         `- Desktop root: ${inlineCode(record.contracts.desktop.root.id)} — ${inlineCode(record.contracts.desktop.root.render_mode)}`,
         `- Mobile root: ${inlineCode(record.contracts.mobile.root.id)} — ${inlineCode(record.contracts.mobile.root.render_mode)}`,
-        ...(record.figma.verification ? ["- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input."] : []),
+        ...(record.figma.verification ? ["- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use."] : []),
       ];
     }
     case "desktop":

@@ -26,7 +26,7 @@ test("maintenance skill delegates route context to the machine resolver", () => 
 test("paused routes cannot fall back or authorize production operations", () => {
   assert.match(skill, /SKILL_ROUTE_PAUSED/u);
   assert.match(skill, /read-only navigation/iu);
-  assert.match(skill, /explicitly scoped migration implementation plan/iu);
+  assert.match(skill, /explicitly scoped system maintenance plan/iu);
   assert.match(skill, /production library operation/iu);
   assert.match(skill, /Figma write/iu);
   assert.match(skill, /email build/iu);
@@ -36,7 +36,7 @@ test("paused routes cannot fall back or authorize production operations", () => 
 });
 
 test("maintenance safety gates remain explicit", () => {
-  assert.match(skill, /migration-progress/u);
+  assert.match(skill, /system-progress/u);
   assert.match(skill, /impact report/iu);
   assert.match(skill, /read-back/iu);
   assert.match(skill, /separate authorization/iu);

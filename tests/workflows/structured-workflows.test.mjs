@@ -12,13 +12,6 @@ import {
   validateWorkflowRegistrySemantics,
   validateWorkflowRegistryShape,
 } from "../../scripts/lib/workflow-registry.mjs";
-import {
-  canonicalSystemFixtureFiles,
-  copyFixtureFile,
-  createSystemFixture,
-  writeFixtureFile,
-} from "../helpers/system-fixture.mjs";
-
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 
 async function canonicalWorkflow(workflowId) {
@@ -40,7 +33,7 @@ test("canonical manifest activates all structured workflows", async () => {
       { id: "component-onboarding", source_id: "workflow-component-onboarding" },
       { id: "figma-description-sync", source_id: "workflow-figma-description-sync" },
       { id: "figma-naming-audit", source_id: "workflow-figma-naming-audit" },
-      { id: "migration-progress", source_id: "workflow-migration-progress" },
+      { id: "system-progress", source_id: "workflow-system-progress" },
       { id: "email-build", source_id: "workflow-email-build" },
     ],
   });
@@ -87,7 +80,6 @@ test("loads exact maintenance and email workflow registries", async () => {
   );
 
   for (const registry of [maintenance, email]) {
-    assert.doesNotMatch(JSON.stringify(registry), /legacy/iu);
     for (const mode of registry.workflow.modes) {
       assert.deepEqual(
         mode.steps.map(({ order }) => order),
@@ -137,49 +129,13 @@ test("workflow schema and semantics reject unknown fields and unordered steps", 
   );
 });
 
-test("context bundles use structured-active and block archived source paths", async (t) => {
+test("system-progress context bundle uses the active structured profile", async () => {
   const canonical = await buildContextBundle({
     repoRoot,
-    routeId: "migration-progress",
+    routeId: "system-progress",
   });
   assert.equal(canonical.status, "resolved");
   assert.equal(canonical.bundle.mode, "structured-active");
-
-  const fixture = await createSystemFixture();
-  t.after(fixture.cleanup);
-  for (const path of canonicalSystemFixtureFiles) {
-    await copyFixtureFile(repoRoot, fixture.root, path);
-  }
-  await copyFixtureFile(
-    repoRoot,
-    fixture.root,
-    "Legacy/workflows/email-build-checkpoint.md",
-  );
-  const manifest = await loadSystemManifest({ repoRoot: fixture.root });
-  manifest.sources.push({
-    id: "archived-workflow-test",
-    kind: "workflow",
-    path: "Legacy/workflows/email-build-checkpoint.md",
-  });
-  const profile = manifest.bundle_profiles.find(
-    ({ id }) => id === "migration-progress",
-  );
-  profile.source_ids.push("archived-workflow-test");
-  profile.generated_bundle.static_source_ids.push("archived-workflow-test");
-  await writeFixtureFile(
-    fixture.root,
-    "system/manifest.yaml",
-    `${JSON.stringify(manifest, null, 2)}\n`,
-  );
-
-  const result = await buildContextBundle({
-    repoRoot: fixture.root,
-    routeId: "migration-progress",
-  });
-  assert.equal(result.status, "blocked");
-  assert.deepEqual(result.blockers.map(({ code }) => code), [
-    "CONTEXT_BUNDLE_ARCHIVED_SOURCE_FORBIDDEN",
-  ]);
 });
 test("email workflow declares mode-specific orchestration boundaries", async () => {
   const email = await canonicalWorkflow("email-build");

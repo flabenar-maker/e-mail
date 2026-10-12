@@ -14,7 +14,7 @@ Through authenticated gh CLI (GitHub MCP fallback), resolve and pin current `mai
 | Request scope | Outcome and handoff |
 | --- | --- |
 | Create, change or read-only inspect a concrete email | `email` → `building-cupis-emails` |
-| Audit/change the existing library, contracts, instructions, registry or synchronization; ask about migration | `maintenance` → `maintaining-cupis-email-system` |
+| Audit/change the existing library, contracts, instructions, registry or synchronization; ask about system status or next steps | `maintenance` → `maintaining-cupis-email-system` |
 | Design a new block/component | `not-ready`: new-component design is outside the system's scope. Do not substitute component onboarding or email build. |
 | Scope is unknown, or new versus existing email is unclear | `clarify`: ask only for the missing distinction before any write. |
 

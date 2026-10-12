@@ -217,7 +217,7 @@ function renderComponentRegistry(model) {
       );
     } else if (record.figma.verification) {
       lines.push(
-        "- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.",
+        "- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.",
       );
     } else {
       lines.push(

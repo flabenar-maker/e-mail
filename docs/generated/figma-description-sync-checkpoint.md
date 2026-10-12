@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: workflow-checkpoint -->
-<!-- source-digest: sha256:25807a1a0cad50916283ff063bf7dd69355c3cf47c82e6dfd35b56541a8a390d -->
+<!-- source-digest: sha256:8205df3cf66a86980495a7110ceb23fe27015f2f2b9a0821ccedbdf371dc9f9c -->
 <!-- schema-versions: manifest=1.3.0, workflows=1.0.0 -->
 # Workflow checkpoint: `figma-description-sync`
 
@@ -20,7 +20,7 @@ Canonical workflow: [workflow-figma-description-sync](../../data/workflows/figma
 | `figma-description-sync` | `workflow-figma-description-sync` | `structured-active` |
 | `figma-naming-audit` | `workflow-figma-naming-audit` | `structured-active` |
 | `library-maintenance` | `workflow-library-maintenance` | `structured-active` |
-| `migration-progress` | `workflow-migration-progress` | `structured-active` |
+| `system-progress` | `workflow-system-progress` | `structured-active` |
 
 The routing table describes current assignments only; workflow status is not a readiness guarantee.
 

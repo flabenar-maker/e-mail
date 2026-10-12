@@ -1,14 +1,14 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: workflow-checkpoint -->
-<!-- source-digest: sha256:2cdc5f097fdf48c8dfb342678e8f69b9719203dc840d175bc16f3b2e009dbb26 -->
+<!-- source-digest: sha256:69b7152770938e711427029b5746ffc09875400c5bfeaaf662916ece339c37b8 -->
 <!-- schema-versions: manifest=1.3.0, workflows=1.0.0 -->
-# Workflow checkpoint: `migration-progress`
+# Workflow checkpoint: `system-progress`
 
 Status: `active`
 
 This is a generated reading projection of the structured workflow. It does not activate a route, authorize a write, or add a runtime instruction.
 
-Canonical workflow: [workflow-migration-progress](../../data/workflows/migration-progress.yaml)
+Canonical workflow: [workflow-system-progress](../../data/workflows/system-progress.yaml)
 
 ## Current manifest routing
 
@@ -20,14 +20,14 @@ Canonical workflow: [workflow-migration-progress](../../data/workflows/migration
 | `figma-description-sync` | `workflow-figma-description-sync` | `structured-active` |
 | `figma-naming-audit` | `workflow-figma-naming-audit` | `structured-active` |
 | `library-maintenance` | `workflow-library-maintenance` | `structured-active` |
-| `migration-progress` | `workflow-migration-progress` | `structured-active` |
+| `system-progress` | `workflow-system-progress` | `structured-active` |
 
 The routing table describes current assignments only; workflow status is not a readiness guarantee.
 
 ## Workflow sources
 
 - [repository-readme](../../README.md)
-- [migration-roadmap](../superpowers/plans/2026-08-25-cupis-migration-roadmap.md)
+- [system-status](../system-status.md)
 
 ## Mode: `read-only`
 
@@ -63,10 +63,10 @@ Not declared.
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
-### 2. `compare-roadmap-with-cloud-state`
+### 2. `compare-status-with-cloud-state`
 
 - Condition: always
-- Sources: [migration-roadmap](../superpowers/plans/2026-08-25-cupis-migration-roadmap.md), [repository-readme](../../README.md)
+- Sources: [system-status](../system-status.md), [repository-readme](../../README.md)
 - Required inputs: `pinned-sha`, `cloud-state-evidence`
 - Blockers: `source-pin-mismatch`, `cloud-state-unverified`
 - Allowed outputs: `audit-findings`
@@ -76,7 +76,7 @@ Not declared.
 ### 3. `verify-read-only-findings`
 
 - Condition: always
-- Sources: [migration-roadmap](../superpowers/plans/2026-08-25-cupis-migration-roadmap.md)
+- Sources: [system-status](../system-status.md)
 - Required inputs: `audit-findings`
 - Blockers: `fact-unproven`
 - Allowed outputs: `verification-summary`

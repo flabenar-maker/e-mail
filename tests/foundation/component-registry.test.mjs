@@ -34,7 +34,7 @@ function registryEnvelope(library, components = []) {
     registry: {
       id: `components-${library}`,
       library,
-      status: "shadow",
+      status: "draft",
       source: {
         figma_file_key: fileKey,
         roots: [
@@ -214,12 +214,20 @@ test("schema rejects unknown root and nested fields", async () => {
   const schema = await readSchema();
   const document = registryEnvelope("marketing", [validRecord()]);
   document.unexpected = true;
+  document.components[0].unexpected_field = true;
   document.components[0].contracts.mobile.root.unexpected = true;
 
   const errors = validateComponentRegistryShape(document, schema);
   assert.ok(
     errors.some(
       (error) => error.code === "components-schema" && error.path === "/",
+    ),
+  );
+  assert.ok(
+    errors.some(
+      (error) =>
+        error.code === "components-schema" &&
+        error.path === "/components/0",
     ),
   );
   assert.ok(

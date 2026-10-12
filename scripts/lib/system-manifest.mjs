@@ -354,16 +354,16 @@ export async function validateManifestSemantics(manifest, repoRoot) {
     manifest.bundle_profiles.map((profile) => [profile.id, profile]),
   );
   const emailRouteIds = new Set(["email-new-build", "email-continue-fix"]);
-  const activeRoutes = manifest.routes.filter(({workflow_source_id}) => workflow_source_id !== "workflow-paused");
-  const partial = structuredWorkflows.status === "partial";
-  const active = structuredWorkflows.status === "active";
   const routeTopology = await Promise.all(manifest.routes.map(async (route) => {
     const profile = profileById.get(route.bundle_profile_id);
     const bundle = profile?.generated_bundle;
     if (!bundle || route.bundle_profile_id !== route.id ||
       profile.source_ids.length !== bundle.static_source_ids.length ||
       profile.source_ids.some((id,index) => id !== bundle.static_source_ids[index])) return false;
-    if (route.workflow_source_id === "workflow-paused") return bundle.status === "structured-shadow" && profile.source_ids.includes("workflow-paused");
+    if (route.workflow_source_id === "workflow-paused") {
+      return bundle.status === "structured-paused" &&
+        profile.source_ids.includes("workflow-paused");
+    }
     const source = sourceById.get(route.workflow_source_id);
     const entry = structuredWorkflows.entries.find(({source_id}) => source_id === route.workflow_source_id);
     if (!entry || source?.kind !== "workflow" || bundle.status !== "structured-active" ||
@@ -374,16 +374,13 @@ export async function validateManifestSemantics(manifest, repoRoot) {
       return document.workflow?.id === entry.id && document.workflow?.status === "active";
     } catch { return false; }
   }));
-  const topologyInvalid = routeTopology.some(value => !value) ||
-    (partial && (activeRoutes.length === 0 || activeRoutes.length === manifest.routes.length ||
-      [...emailRouteIds].some(id => !activeRoutes.some(route => route.id === id)))) ||
-    (active && activeRoutes.length !== manifest.routes.length) ||
-    (!partial && !active && activeRoutes.length > 0);
+  const topologyInvalid = structuredWorkflows.status !== "active" ||
+    routeTopology.some(value => !value);
   if (topologyInvalid) {
     errors.push(diagnostic(
       "structured-workflow-status-topology-invalid",
       "/structured_workflows/status",
-      "Structured workflow status must match the explicit route and profile cutover topology.",
+      "Structured workflows must be active and every route must match its explicit workflow and profile topology.",
     ));
   }
   const generatedDocs = manifest.generated_docs ?? [];
@@ -451,10 +448,6 @@ export async function validateManifestSemantics(manifest, repoRoot) {
     "assets",
     "figma-naming",
   ]);
-  const retiredRegistryIds = new Set([
-    "component-descriptions-registry",
-    "typography-registry",
-  ]);
   const generatedCapabilityEnabled =
     generatedDocs.length > 0 ||
     manifest.bundle_profiles.some((profile) => profile.generated_bundle);
@@ -493,15 +486,6 @@ export async function validateManifestSemantics(manifest, repoRoot) {
             "generated-bundle-source-cannot-be-generated",
             path,
             `Generated bundle static source cannot itself be generated: ${sourceId}.`,
-          ),
-        );
-      }
-      if (retiredRegistryIds.has(sourceId)) {
-        errors.push(
-          diagnostic(
-            "generated-bundle-retired-registry-forbidden",
-            path,
-            `Retired registry is forbidden in generated bundle: ${sourceId}.`,
           ),
         );
       }
@@ -596,29 +580,6 @@ export async function validateManifestSemantics(manifest, repoRoot) {
   }
   for (const skill of manifest.skills.optional) {
     errors.push(...(await validateSkill(skill, false, repoRoot)));
-  }
-
-  for (const skill of allSkills) {
-    const retiredPath = resolve(repoRoot, "skills", skill.id);
-    if (await exists(retiredPath)) {
-      errors.push(
-        diagnostic(
-          "retired-skill-path",
-          `/skills/${skill.id}`,
-          `Retired skill directory must be removed: skills/${skill.id}.`,
-        ),
-      );
-    }
-  }
-
-  if (await exists(resolve(repoRoot, "bootstrap/manifest.yaml"))) {
-    errors.push(
-      diagnostic(
-        "retired-manifest-path",
-        "/bootstrap/manifest.yaml",
-        "Retired bootstrap manifest must be removed.",
-      ),
-    );
   }
 
   return sortDiagnostics(errors);

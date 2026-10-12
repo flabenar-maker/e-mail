@@ -4,7 +4,7 @@
 - File: `8zka5bHkcrJVK9I9dKjnhC`
 - Read-only roots: `538:17236` Marketing Emails and `538:17235` Service Emails.
 
-This is an observation record, not a naming migration, a mass-rename plan, an export rule, or a normative replacement for `data/foundations/figma-naming.yaml`.
+This is an observation record, not a mass-rename authorization, an export rule, or a normative replacement for `data/foundations/figma-naming.yaml`.
 
 ## What the capture proves
 

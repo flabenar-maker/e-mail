@@ -116,7 +116,7 @@
           "const": "assets"
         },
         "status": {
-          "enum": ["shadow", "active"]
+          "enum": ["draft", "active"]
         }
       }
     },

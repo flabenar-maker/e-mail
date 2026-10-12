@@ -29,19 +29,12 @@ async function activeEmailRouteStatusBlocker({ repoRoot, manifest, route, profil
     ["rendering", "rendering-foundation", (document) => document.foundation?.status],
     ["renderer-registry", "renderer-registry", (document) => document.registry?.status],
   ];
-  const activeRouteCount = manifest.routes.filter(
-    ({ workflow_source_id }) => workflow_source_id !== "workflow-paused",
-  ).length;
-  const pausedRouteCount = manifest.routes.length - activeRouteCount;
-  const aggregateActive =
-    (manifest.structured_workflows.status === "partial" && activeRouteCount > 0 && pausedRouteCount > 0) ||
-    (manifest.structured_workflows.status === "active" && activeRouteCount === manifest.routes.length);
   const profileActive = profile.generated_bundle.status === "structured-active";
-  if (!aggregateActive || !profileActive) {
+  if (!profileActive) {
     return diagnostic(
       "SKILL_ROUTE_STATUS_INACTIVE",
-      !aggregateActive ? "/structured_workflows/status" : "/generated_bundle/status",
-      `Email route ${route.id} requires explicit partial-or-active aggregate and structured-active profile status.`,
+      "/generated_bundle/status",
+      `Email route ${route.id} requires a structured-active profile status.`,
     );
   }
   for (const [name, sourceId, selectStatus] of dependencies) {

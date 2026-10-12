@@ -548,4 +548,4 @@ exceptions: []
 provenance:
   base_commit: 41c05a3816a3263eff765fc07ddae9b047a6dfb7
   registry_blob_sha: be2203aef82db093fca37857f060d552b254c579
-  design_spec_path: docs/superpowers/specs/2026-08-25-cupis-spacing-foundation-design.md
+  design_spec_path: core/spacing-standard.md

@@ -7,9 +7,9 @@
 
 ## Provenance chain
 
-| Foundation rule | Historical comparison source | Live Figma observation |
+| Foundation rule | Current rule source | Live Figma observation |
 | --- | --- | --- |
-| Source boundary, background exclusion and rendered nested graphics | `docs/superpowers/specs/2026-08-24-cupis-structured-email-system-design.md` | `1008:1823`, `911:3991`, `961:37495`, `946:25769` |
+| Source boundary, background exclusion and rendered nested graphics | `core/system-architecture.md` | `1008:1823`, `911:3991`, `961:37495`, `946:25769` |
 | JPEG @2x / PNG @4x profiles and proportional display | `core/asset-export-standard.md` | `230:3689`, `11:1184`, `946:25769`, `260:3969` |
 | Presentation-only neutralization | `core/asset-export-standard.md` | `911:3991` with presentation instance `911:4005` |
 

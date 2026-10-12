@@ -1,6 +1,5 @@
 # CUPIS: машинная политика исполнения навыков — Design
 
-Дата: 11.10.2026. Статус: проект архитектуры по согласованным требованиям пользователя; реализация, установка и приёмка не выполнены. Продолжение P5 Step5, PR116. Source main: bbc495d64cb0f4f486a8a62c8c732cbeb29c3f7b; исходный documentation head PR116: effab8d0f7e461f22fee21d0ea782c6ab126091f.
 
 ## Цель и принятые требования
 
@@ -118,5 +117,3 @@ Workflow имеет contents:read, без deploy/write/production secrets; actio
 Обязательные проверки: однократное повышение; unavailable primary/effort/vision; невозможность ослабить minimum tier через task_kind; независимый reviewer и полное покрытие требований; stale artifact/source receipt; запрещённый collector после первого init; новый workload без аппаратного reinit; unknown hardware; cloud first bring-up; точный SHA; local-only scope; предложение после terminal cloud результата.
 
 Отдельные clean-context сценарии проверяют реальное поведение агентов на фактических результатах, включая уверенный, но неверный отчёт слабого executor. Структурные tests не заменяют это ревью.
-
-Это расширение P5 Step5. 5fix1, 5fix2, P6, Figma mutations, runtime activation в этом docs-only PR и существующие письма вне scope. Адресный план: ../plans/cutover/2026-10-11-cupis-skill-execution-policy.md.

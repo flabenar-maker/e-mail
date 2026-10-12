@@ -225,9 +225,9 @@ test("caller-supplied mappings cannot certify facts absent from the component co
 });
 
 
-test("a migrated registry literal is not direct Figma evidence even if its value matches", () => {
+test("a registry literal is not direct Figma evidence even if its value matches", () => {
   const { record, packet, mappings } = fixture();
-  record.contracts.mobile.root.facts[0].provenance = { kind: "registry-literal", source_path: "legacy.md" };
+  record.contracts.mobile.root.facts[0].provenance = { kind: "registry-literal", source_path: "untrusted.md" };
   const report = auditFigmaContractFacts({ record, live: packet, mappings });
   assert.ok(report.issues.some((issue) => issue.code === "CONTRACT_FACT_NOT_FIGMA_VERIFIED" &&
     issue.contract_path === "/contracts/mobile/root/facts/0/value/value"));

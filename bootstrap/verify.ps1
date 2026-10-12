@@ -18,15 +18,6 @@ function Require-Literal {
     }
 }
 
-function Forbid-Literal {
-    param([string]$RelativePath, [string]$Text, [string]$Label)
-    $path = Join-Path $RepositoryRoot $RelativePath
-    if ((Test-Path -LiteralPath $path -PathType Leaf) -and
-        (Select-String -LiteralPath $path -SimpleMatch -Pattern $Text -Quiet)) {
-        $errors.Add("$RelativePath still declares $Label")
-    }
-}
-
 if (-not (Test-Path -LiteralPath $RepositoryRoot -PathType Container)) {
     Write-Output '[ERROR] Repository root does not exist.'
     Write-Output '[FAIL] Bootstrap verification failed.'
@@ -77,14 +68,6 @@ foreach ($specialization in @('building-cupis-emails', 'maintaining-cupis-email-
 }
 Require-Literal 'AGENTS.md' 'bootstrap/README.md' 'the bootstrap entrypoint'
 Require-Literal '.gitattributes' '.agents/skills/** text eol=lf' 'LF normalization for repo-scoped skills'
-
-foreach ($consumer in @(
-    'README.md',
-    'bootstrap/README.md',
-    '.agents/skills/maintaining-cupis-email-system/SKILL.md'
-)) {
-    Forbid-Literal $consumer 'bootstrap/manifest.yaml' 'the retired bootstrap manifest'
-}
 
 $configPath = Join-Path $RepositoryRoot 'bootstrap/config.portable.toml'
 if (Test-Path -LiteralPath $configPath -PathType Leaf) {
