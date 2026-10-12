@@ -175,7 +175,7 @@ try {
 
     $manifestDrivenSource = Join-Path $tempRoot 'manifest-driven-source'
     Copy-ContractFixture -Source $repoRoot -Destination $manifestDrivenSource
-    $manifestOnlySource = 'docs/superpowers/plans/archive/2026-08-24-cupis-structured-system-foundation.md'
+    $manifestOnlySource = 'package.json'
     $manifestOnlyDestination = Join-Path $manifestDrivenSource $manifestOnlySource
     New-Item -ItemType Directory -Path (Split-Path -Parent $manifestOnlyDestination) -Force | Out-Null
     Copy-Item -LiteralPath (Join-Path $repoRoot $manifestOnlySource) -Destination $manifestOnlyDestination

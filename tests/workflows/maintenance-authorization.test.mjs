@@ -30,7 +30,7 @@ test('naming format admits active canonical status',async()=>{
  assert.equal(n.foundation.status,'active');
  assert.deepEqual(validateFigmaNamingShape(n,s),[]);
 });
-test('active naming candidate cannot consume a shadow naming foundation',async()=>{
+test('active naming candidate cannot consume a draft naming foundation',async()=>{
  const f=await fixture();try{const n=await readStrictYaml(join(f.root,'data/foundations/figma-naming.yaml'));n.foundation.status='draft';await write(f.root,'data/foundations/figma-naming.yaml',n);const c=await activate(f.root,'figma-naming-audit');assert.equal(c.status,'blocked');assert.ok(c.blockers.some(v=>v.code==='SKILL_ROUTE_STATUS_INACTIVE'&&v.path.includes('figma-naming')));}finally{await f.cleanup();}
 });
 const before=[{node_id:'1:2',name:'feature-icon @4x',description:'old',type:'FRAME',layoutMode:'HORIZONTAL',primaryAxisAlignItems:'MIN',counterAxisAlignItems:'CENTER',itemSpacing:8,paddingTop:4,paddingRight:6,paddingBottom:4,paddingLeft:6,width:48,height:48,visible:true,children:[{node_id:'1:3',type:'SLOT',name:'Icon slot',children:[{node_id:'1:4',type:'TEXT',characters:'Icon label',fontName:{family:'Roboto',style:'Regular'},fontSize:14,lineHeightPx:20,children:[]}]}],componentProperties:{State:{type:'VARIANT',value:'Default'},'Show Icon':{type:'BOOLEAN',value:true}},componentPropertyReferences:{visible:'Show Icon'},boundVariables:{paddingTop:'space-4',itemSpacing:'space-8'},variantProperties:{Viewport:'Mobile',Style:'Accent'},exportSettings:[{format:'PNG',constraint:{type:'SCALE',value:2},suffix:'@2x'},{format:'PNG',constraint:{type:'SCALE',value:4},suffix:'@4x'}],fills:[]}];

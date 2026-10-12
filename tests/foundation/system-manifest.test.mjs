@@ -70,7 +70,7 @@ test("system progress resolves the canonical status bundle", async () => {
   assert.deepEqual(source, {
     id: "system-status",
     kind: "entrypoint",
-    path: "docs/superpowers/plans/2026-08-25-cupis-system-status.md",
+    path: "docs/system-status.md",
   });
   assert.deepEqual(profile.source_ids, [
     "repository-readme",

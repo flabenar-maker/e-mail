@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: workflow-checkpoint -->
-<!-- source-digest: sha256:66e52cc4cc9cd29b773e19bc1fe88f02cee0cb9841cbbb1537cfe809af8a22be -->
+<!-- source-digest: sha256:96592ee9ab1b8a0bceae1efa43b556e1b8d08697c42b76e7cb2a8c082ab80e90 -->
 <!-- schema-versions: manifest=1.3.0, workflows=1.0.0 -->
 # Workflow checkpoint: `email-build`
 
@@ -20,7 +20,7 @@ Canonical workflow: [workflow-email-build](../../data/workflows/email-build.yaml
 | `figma-description-sync` | `workflow-figma-description-sync` | `structured-active` |
 | `figma-naming-audit` | `workflow-figma-naming-audit` | `structured-active` |
 | `library-maintenance` | `workflow-library-maintenance` | `structured-active` |
-| `migration-progress` | `workflow-migration-progress` | `structured-active` |
+| `system-progress` | `workflow-system-progress` | `structured-active` |
 
 The routing table describes current assignments only; workflow status is not a readiness guarantee.
 

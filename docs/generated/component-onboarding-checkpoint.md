@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: workflow-checkpoint -->
-<!-- source-digest: sha256:8e8b86eeb2dd953c44cab383252757d4ece0c48eeb462461f69d29f70cdce171 -->
+<!-- source-digest: sha256:c0d077676f67ab333d28aacff37223aeca3b10f813262ffa215a4b8d5c395637 -->
 <!-- schema-versions: manifest=1.3.0, workflows=1.0.0 -->
 # Workflow checkpoint: `component-onboarding`
 
@@ -20,7 +20,7 @@ Canonical workflow: [workflow-component-onboarding](../../data/workflows/compone
 | `figma-description-sync` | `workflow-figma-description-sync` | `structured-active` |
 | `figma-naming-audit` | `workflow-figma-naming-audit` | `structured-active` |
 | `library-maintenance` | `workflow-library-maintenance` | `structured-active` |
-| `migration-progress` | `workflow-migration-progress` | `structured-active` |
+| `system-progress` | `workflow-system-progress` | `structured-active` |
 
 The routing table describes current assignments only; workflow status is not a readiness guarantee.
 

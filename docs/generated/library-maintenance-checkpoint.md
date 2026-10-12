@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: workflow-checkpoint -->
-<!-- source-digest: sha256:4e9fa654c672990086409ab9261f3202d1ebf8cab1b724369e819d3b7e67f10c -->
+<!-- source-digest: sha256:9af5fa0d537846d7bd0f7ce9a003b1af97fea324f27223568430b01c567af0e4 -->
 <!-- schema-versions: manifest=1.3.0, workflows=1.0.0 -->
 # Workflow checkpoint: `library-maintenance`
 
@@ -20,7 +20,7 @@ Canonical workflow: [workflow-library-maintenance](../../data/workflows/library-
 | `figma-description-sync` | `workflow-figma-description-sync` | `structured-active` |
 | `figma-naming-audit` | `workflow-figma-naming-audit` | `structured-active` |
 | `library-maintenance` | `workflow-library-maintenance` | `structured-active` |
-| `migration-progress` | `workflow-migration-progress` | `structured-active` |
+| `system-progress` | `workflow-system-progress` | `structured-active` |
 
 The routing table describes current assignments only; workflow status is not a readiness guarantee.
 

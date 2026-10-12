@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: component-registry -->
-<!-- source-digest: sha256:bec3f94d28cd0525331003ec5a6a4c92225cb8e325d2a3ae0ae350a593433eab -->
+<!-- source-digest: sha256:3f6ce76d0d739127ebb320a4b7c52d15c35b57347a174421ac62aab586f2411d -->
 <!-- schema-versions: components=2.3.0, typography=1.0.0, spacing=1.0.0, assets=1.0.0 -->
 # CUPIS component registry
 
@@ -973,7 +973,7 @@ RENDER: ASSET
 - Render type: `ASSET`
 - Desktop root: `root` — `direct-image`
 - Mobile root: `root` — `direct-image`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -1027,7 +1027,7 @@ RENDER: ASSET
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -1061,7 +1061,7 @@ RENDER: ASSET
 - Render type: `ASSET`
 - Desktop root: `root` — `direct-image`
 - Mobile root: `root` — `direct-image`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -1111,7 +1111,7 @@ RENDER: ASSET
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -1145,7 +1145,7 @@ RENDER: ASSET
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -1230,7 +1230,7 @@ RENDER: ASSET
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -1264,7 +1264,7 @@ RENDER: HTML
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -1857,7 +1857,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -1891,7 +1891,7 @@ RENDER: HYBRID
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -2184,7 +2184,7 @@ RENDER: HYBRID
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -2218,7 +2218,7 @@ RENDER: HYBRID
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -2402,7 +2402,7 @@ RENDER: HYBRID
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -2436,7 +2436,7 @@ RENDER: HYBRID
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -2733,7 +2733,7 @@ RENDER: HYBRID
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -2767,7 +2767,7 @@ RENDER: HYBRID
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -3134,7 +3134,7 @@ RENDER: HYBRID
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -3168,7 +3168,7 @@ RENDER: HTML
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -3583,7 +3583,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -3617,7 +3617,7 @@ RENDER: HTML
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -4094,7 +4094,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -4128,7 +4128,7 @@ RENDER: HTML
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -4567,7 +4567,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -4601,7 +4601,7 @@ RENDER: HTML
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -5688,7 +5688,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -5722,7 +5722,7 @@ RENDER: HYBRID
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -5868,7 +5868,7 @@ RENDER: HYBRID
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -5902,7 +5902,7 @@ RENDER: HYBRID
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -6379,7 +6379,7 @@ RENDER: HYBRID
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -6413,7 +6413,7 @@ RENDER: HTML
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -6511,7 +6511,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -6545,7 +6545,7 @@ RENDER: HTML
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -6631,7 +6631,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -6665,7 +6665,7 @@ RENDER: HTML
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -6916,7 +6916,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -6950,7 +6950,7 @@ RENDER: HYBRID
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -7182,7 +7182,7 @@ RENDER: HYBRID
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -7216,7 +7216,7 @@ RENDER: HYBRID
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -7602,7 +7602,7 @@ RENDER: HYBRID
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -7636,7 +7636,7 @@ RENDER: HYBRID
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -7826,7 +7826,7 @@ RENDER: HYBRID
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -7860,7 +7860,7 @@ RENDER: HTML
 - Render type: `ASSET`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -7961,7 +7961,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -7995,7 +7995,7 @@ RENDER: ASSET
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -8116,7 +8116,7 @@ RENDER: ASSET
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -8150,7 +8150,7 @@ RENDER: HYBRID
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -8418,7 +8418,7 @@ RENDER: HYBRID
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -8452,7 +8452,7 @@ RENDER: HTML
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -8580,7 +8580,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -8614,7 +8614,7 @@ RENDER: HYBRID
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -8802,7 +8802,7 @@ RENDER: HYBRID
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -8836,7 +8836,7 @@ RENDER: HTML
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -9158,7 +9158,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -9183,7 +9183,7 @@ RENDER: HYBRID
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#481:19664` (`component`)
 - Source root: `538:17235`
 - Verified: `2026-09-06`
-- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной миграционной проекцией.
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной HTML-проекцией.
 - Structure fingerprint: `sha256:422aaa33e22aab19999c7a1292d8a8a1d2ada2a1711a43fe13acdc2aeabd37bd`
 - Purpose: Составной графический бейдж банка для использования в сервисных блоках.
 
@@ -9192,7 +9192,7 @@ RENDER: HYBRID
 - Render type: `ASSET`
 - Desktop root: `root` — `direct-image`
 - Mobile root: `root` — `direct-image`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -9242,7 +9242,7 @@ RENDER: HYBRID
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -9267,7 +9267,7 @@ RENDER: ASSET
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#484:20039` (`component`)
 - Source root: `538:17235`
 - Verified: `2026-09-06`
-- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной миграционной проекцией.
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной HTML-проекцией.
 - Structure fingerprint: `sha256:422aaa33e22aab19999c7a1292d8a8a1d2ada2a1711a43fe13acdc2aeabd37bd`
 - Purpose: Универсальный составной графический бейдж с иконкой.
 
@@ -9276,7 +9276,7 @@ RENDER: ASSET
 - Render type: `ASSET`
 - Desktop root: `root` — `direct-image`
 - Mobile root: `root` — `direct-image`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -9326,7 +9326,7 @@ RENDER: ASSET
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -9351,7 +9351,7 @@ RENDER: ASSET
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#481:19665` (`component`)
 - Source root: `538:17235`
 - Verified: `2026-09-06`
-- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной миграционной проекцией.
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной HTML-проекцией.
 - Structure fingerprint: `sha256:422aaa33e22aab19999c7a1292d8a8a1d2ada2a1711a43fe13acdc2aeabd37bd`
 - Purpose: Составной графический бейдж партнёра для использования в сервисных блоках.
 
@@ -9360,7 +9360,7 @@ RENDER: ASSET
 - Render type: `ASSET`
 - Desktop root: `root` — `direct-image`
 - Mobile root: `root` — `direct-image`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -9410,7 +9410,7 @@ RENDER: ASSET
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -9435,7 +9435,7 @@ RENDER: ASSET
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#491:22178` (`component`)
 - Source root: `538:17235`
 - Verified: `2026-09-06`
-- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной миграционной проекцией.
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной HTML-проекцией.
 - Structure fingerprint: `sha256:422aaa33e22aab19999c7a1292d8a8a1d2ada2a1711a43fe13acdc2aeabd37bd`
 - Purpose: Составная графическая иконка отрицательного статуса.
 
@@ -9444,7 +9444,7 @@ RENDER: ASSET
 - Render type: `ASSET`
 - Desktop root: `root` — `direct-image`
 - Mobile root: `root` — `direct-image`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -9494,7 +9494,7 @@ RENDER: ASSET
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -9519,7 +9519,7 @@ RENDER: ASSET
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#491:22074` (`component`)
 - Source root: `538:17235`
 - Verified: `2026-09-06`
-- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной миграционной проекцией.
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной HTML-проекцией.
 - Structure fingerprint: `sha256:422aaa33e22aab19999c7a1292d8a8a1d2ada2a1711a43fe13acdc2aeabd37bd`
 - Purpose: Составная графическая иконка положительного статуса.
 
@@ -9528,7 +9528,7 @@ RENDER: ASSET
 - Render type: `ASSET`
 - Desktop root: `root` — `direct-image`
 - Mobile root: `root` — `direct-image`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -9578,7 +9578,7 @@ RENDER: ASSET
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -9603,7 +9603,7 @@ RENDER: ASSET
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#1084:16996` (`component-set`)
 - Source root: `538:17235`
 - Verified: `2026-09-06`
-- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной миграционной проекцией.
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной HTML-проекцией.
 - Structure fingerprint: `sha256:1cca4ddcec78df7b41644071d3118e82d7795b4f4a7e4c28ea46ef6afb5666cf`
 - Purpose: Живой HTML-бейдж состояния операции.
 
@@ -9612,7 +9612,7 @@ RENDER: ASSET
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -9703,7 +9703,7 @@ RENDER: ASSET
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -9728,7 +9728,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#502:25048` (`component-set`)
 - Source root: `538:17235`
 - Verified: `2026-09-13`
-- Figma source check: `figma-source-recorded` on `2026-09-13`; Mobile и Desktop source nodes сверены непосредственно с Figma; существующие HTML-проекции остаются миграционным черновиком и не являются доказанным build contract.
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Mobile и Desktop source nodes сверены непосредственно с Figma; существующие HTML-проекции остаются непроверенным HTML-деревом и не являются доказанным build contract.
 - Structure fingerprint: `sha256:fcd5e01eac540388fdbf90ce1003e2e7a8833d073c83276cbfc130c10a971079`
 - Purpose: Группа кликабельных строк со ссылками на проверку фискального чека.
 
@@ -9737,7 +9737,7 @@ RENDER: HTML
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -10088,7 +10088,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -10117,7 +10117,7 @@ CRITICAL
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#472:16999` (`component-set`)
 - Source root: `538:17235`
 - Verified: `2026-09-13`
-- Figma source check: `figma-source-recorded` on `2026-09-13`; Mobile и Desktop source nodes сверены непосредственно с Figma; существующие HTML-проекции остаются миграционным черновиком и не являются доказанным build contract.
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Mobile и Desktop source nodes сверены непосредственно с Figma; существующие HTML-проекции остаются непроверенным HTML-деревом и не являются доказанным build contract.
 - Structure fingerprint: `sha256:83cc9a3777560f86d4b8f2857116055235772a3f7980571590220a8f4884639a`
 - Purpose: Контактный блок поддержки с телефонным действием и ссылкой на раздел помощи.
 
@@ -10126,7 +10126,7 @@ CRITICAL
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -10399,7 +10399,7 @@ CRITICAL
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -10427,7 +10427,7 @@ CRITICAL
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#510:16701` (`component-set`)
 - Source root: `538:17235`
 - Verified: `2026-09-13`
-- Figma source check: `figma-source-recorded` on `2026-09-13`; Mobile и Desktop source nodes сверены непосредственно с Figma; существующие HTML-проекции остаются миграционным черновиком и не являются доказанным build contract.
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Mobile и Desktop source nodes сверены непосредственно с Figma; существующие HTML-проекции остаются непроверенным HTML-деревом и не являются доказанным build contract.
 - Structure fingerprint: `sha256:0a9f3fccc21ca769c773281f0afc5bf8aa6f756731c1642fa1a9acc6a7106f93`
 - Purpose: Сервисный блок с инструкцией, нумерованными шагами и управляемыми предупреждениями.
 
@@ -10436,7 +10436,7 @@ CRITICAL
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -12811,7 +12811,7 @@ CRITICAL
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -12839,7 +12839,7 @@ CRITICAL
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#497:26055` (`component-set`)
 - Source root: `538:17235`
 - Verified: `2026-09-13`
-- Figma source check: `figma-source-recorded` on `2026-09-13`; Mobile и Desktop source nodes сверены непосредственно с Figma; существующие HTML-проекции остаются миграционным черновиком и не являются доказанным build contract.
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Mobile и Desktop source nodes сверены непосредственно с Figma; существующие HTML-проекции остаются непроверенным HTML-деревом и не являются доказанным build contract.
 - Structure fingerprint: `sha256:a1e6fa18f8b2f7f709222227f8eea53f772ab48abed4485d5ec1aecd04e77c28`
 - Purpose: Сервисный блок обновления персональных данных со статусом и управляемыми пояснениями.
 
@@ -12848,7 +12848,7 @@ CRITICAL
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -13658,7 +13658,7 @@ CRITICAL
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -13686,7 +13686,7 @@ CRITICAL
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#502:24695` (`component-set`)
 - Source root: `538:17235`
 - Verified: `2026-09-13`
-- Figma source check: `figma-source-recorded` on `2026-09-13`; Mobile и Desktop source nodes сверены непосредственно с Figma; существующие HTML-проекции остаются миграционным черновиком и не являются доказанным build contract.
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Mobile и Desktop source nodes сверены непосредственно с Figma; существующие HTML-проекции остаются непроверенным HTML-деревом и не являются доказанным build contract.
 - Structure fingerprint: `sha256:bbd25b8f3dbe51c1fe6582e6188201b60b63330123364f27ea3f24557d5fe681`
 - Purpose: Сервисный блок со статусом и реквизитами чека.
 
@@ -13695,7 +13695,7 @@ CRITICAL
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -14012,7 +14012,7 @@ CRITICAL
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -14040,7 +14040,7 @@ CRITICAL
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#459:30151` (`component-set`)
 - Source root: `538:17235`
 - Verified: `2026-09-13`
-- Figma source check: `figma-source-recorded` on `2026-09-13`; Mobile и Desktop source nodes сверены непосредственно с Figma; существующие HTML-проекции остаются миграционным черновиком и не являются доказанным build contract.
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Mobile и Desktop source nodes сверены непосредственно с Figma; существующие HTML-проекции остаются непроверенным HTML-деревом и не являются доказанным build contract.
 - Structure fingerprint: `sha256:ff00ea2b989536c132fc0243770ee1e3b669bbafa9bf326c47d1113f7c5212e3`
 - Purpose: Сервисный блок неуспешной операции с партнёром, статусом и поясняющим текстом.
 
@@ -14049,7 +14049,7 @@ CRITICAL
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -14780,7 +14780,7 @@ CRITICAL
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -14805,7 +14805,7 @@ RENDER: HYBRID
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#459:29177` (`component-set`)
 - Source root: `538:17235`
 - Verified: `2026-09-13`
-- Figma source check: `figma-source-recorded` on `2026-09-13`; Mobile и Desktop source nodes сверены непосредственно с Figma; существующие HTML-проекции остаются миграционным черновиком и не являются доказанным build contract.
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Mobile и Desktop source nodes сверены непосредственно с Figma; существующие HTML-проекции остаются непроверенным HTML-деревом и не являются доказанным build contract.
 - Structure fingerprint: `sha256:a715290129fb322fb8b376478397cb5a8489df311c012363ed0fa6df05160d8e`
 - Purpose: Сервисный блок успешной операции с партнёром, суммой, статусом и реквизитами.
 
@@ -14814,7 +14814,7 @@ RENDER: HYBRID
 - Render type: `HYBRID`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -15447,7 +15447,7 @@ RENDER: HYBRID
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -15472,7 +15472,7 @@ RENDER: HYBRID
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#477:21327` (`component-set`)
 - Source root: `538:17235`
 - Verified: `2026-09-06`
-- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной миграционной проекцией.
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной HTML-проекцией.
 - Structure fingerprint: `sha256:704fdedacb635ee26473f02322df3336127dc96125a244f4a356bb132c033e9f`
 - Purpose: Вложенная таблица реквизитов операции.
 
@@ -15481,7 +15481,7 @@ RENDER: HYBRID
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -16251,7 +16251,7 @@ RENDER: HYBRID
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -16276,7 +16276,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#497:26103` (`component-set`)
 - Source root: `538:17235`
 - Verified: `2026-09-06`
-- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной миграционной проекцией.
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной HTML-проекцией.
 - Structure fingerprint: `sha256:fc8ca2877c103ab0c55d68549ddd9ae0c73d6b026b3c8e9acd24d7c127a18ffd`
 - Purpose: Вложенная таблица реквизитов операции без собственного визуального контейнера.
 
@@ -16285,7 +16285,7 @@ RENDER: HTML
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -16643,7 +16643,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -16668,7 +16668,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#502:24640` (`component-set`)
 - Source root: `538:17235`
 - Verified: `2026-09-06`
-- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной миграционной проекцией.
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной HTML-проекцией.
 - Structure fingerprint: `sha256:3fea2963f91e1be0835f755e33c52c0f76e5d1621e072c60e8961d4c6b9993f6`
 - Purpose: Вложенная таблица реквизитов чека.
 
@@ -16677,7 +16677,7 @@ RENDER: HTML
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -17549,7 +17549,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -17574,7 +17574,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#497:25955` (`component-set`)
 - Source root: `538:17235`
 - Verified: `2026-09-13`
-- Figma source check: `figma-source-recorded` on `2026-09-13`; Mobile и Desktop source nodes сверены непосредственно с Figma; существующие HTML-проекции остаются миграционным черновиком и не являются доказанным build contract.
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Mobile и Desktop source nodes сверены непосредственно с Figma; существующие HTML-проекции остаются непроверенным HTML-деревом и не являются доказанным build contract.
 - Structure fingerprint: `sha256:9fa4bdddf80567da242af9cbab1e0b8a79722cfb68e90202f6380e8e1426f116`
 - Purpose: Вложенный предупреждающий блок с реквизитами подозрительной операции.
 
@@ -17583,7 +17583,7 @@ RENDER: HTML
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -17716,7 +17716,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 
@@ -17741,7 +17741,7 @@ RENDER: HTML
 - Figma: `8zka5bHkcrJVK9I9dKjnhC#484:20761` (`component-set`)
 - Source root: `538:17235`
 - Verified: `2026-09-06`
-- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной миграционной проекцией.
+- Figma source check: `figma-source-recorded` on `2026-09-13`; Точные параметры исходных вариантов записаны непосредственно из Figma; существующие Mobile/Desktop HTML-деревья остаются непроверенной HTML-проекцией.
 - Structure fingerprint: `sha256:7c4eb3c7a891ee19421002d0e3c173a8d3d8e88d3c63f79eca96ceaa832f3133`
 - Purpose: Вложенная таблица реквизитов перевода или возврата.
 
@@ -17750,7 +17750,7 @@ RENDER: HTML
 - Render type: `HTML`
 - Desktop root: `root` — `presentation-table`
 - Mobile root: `root` — `presentation-table`
-- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain a migration draft, not a verified build input.
+- The direct Figma source is recorded separately; the Mobile/Desktop HTML trees remain unverified contract projections until independently checked for build use.
 
 ### Desktop
 
@@ -18777,7 +18777,7 @@ RENDER: HTML
 
 ### Output contract classification
 
-- Mobile/Desktop output trees are migration drafts; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
+- Mobile/Desktop output trees are unverified contract projections; direct Figma source variants are recorded in the machine contract and must be mapped before build use.
 
 ### Auxiliary Figma Description
 

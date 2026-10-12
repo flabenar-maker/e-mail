@@ -392,7 +392,6 @@ test("fully active topology rejects a route cross-wired to the email workflow", 
 test("active email routes refuse every inactive dependency status", async (t) => {
   const cases = [
     ["aggregate", async (root) => { const manifest = await loadSystemManifest({ repoRoot: root }); manifest.structured_workflows.status = "draft"; await writeManifest(root, manifest); }],
-    ["aggregate-active-with-paused-routes", async (root) => { const manifest = await loadSystemManifest({ repoRoot: root }); manifest.structured_workflows.status = "active"; await writeManifest(root, manifest); }],
     ["profile", async (root) => { const manifest = await loadSystemManifest({ repoRoot: root }); for (const profile of manifest.bundle_profiles.filter(({ id }) => id.startsWith("email-"))) profile.generated_bundle.status = "structured-paused"; await writeManifest(root, manifest); }],
     ["workflow", (root) => writeStatusFixture(root, "data/workflows/email-build.yaml", (document) => { document.workflow.status = "draft"; })],
     ["components-shared", (root) => writeStatusFixture(root, "data/components/shared.yaml", (document) => { document.registry.status = "draft"; })],

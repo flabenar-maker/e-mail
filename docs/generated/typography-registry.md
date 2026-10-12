@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: typography-registry -->
-<!-- source-digest: sha256:44c0c73a0474f781497b312dc8721a26990aae40f49b59d9add1aac999e23359 -->
+<!-- source-digest: sha256:948588981cb58e3f1529463ac8e62cc0886c6182d475f73f42d3b41e661a4822 -->
 <!-- schema-versions: components=2.3.0, typography=1.0.0 -->
 # CUPIS typography registry
 
