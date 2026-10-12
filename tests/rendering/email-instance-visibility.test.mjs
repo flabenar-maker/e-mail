@@ -396,6 +396,32 @@ test('invalid, empty, ambiguous and unknown native provenance fail closed withou
   assert.ok(verifyEmailModelSource(input).some(x => x.code === 'EMAIL_SOURCE_VISIBILITY_TARGET_MISMATCH'));
 });
 
+test('a matched physical target cannot validate a plain compound native ID', () => {
+  const input = sourceScenario();
+  assert.equal(input.selectedTest, true);
+  for (const viewport of viewports) {
+    input.resolvedContracts.get('block').contracts[viewport].root.children[1].facts[0].provenance.node_id = '11:2;12:1';
+  }
+  // These targets would match blind leading-I composition. Every intermediate
+  // parent exists; rejection must come from invalid native shape, not a typo.
+  const mobileIntermediate = input.readings.nodes.find(n => n.node_id === 'I2021:4164;11:2');
+  const desktopIntermediate = input.readings.nodes.find(n => n.node_id === 'I2021:4163;11:2');
+  mobileIntermediate.visible = true; desktopIntermediate.visible = true;
+  for (const node of input.readings.nodes) {
+    if (node.parent_node_id === 'I2021:4164;11:2') node.parent_node_id = 'I2021:4164;11:2;12:1';
+    if (node.parent_node_id === 'I2021:4163;11:2') node.parent_node_id = 'I2021:4163;11:2;12:1';
+  }
+  input.readings.nodes.push(
+    { viewport: 'mobile', node_id: 'I2021:4164;11:2;12:1', parent_node_id: 'I2021:4164;11:2', visible: false },
+    { viewport: 'desktop', node_id: 'I2021:4163;11:2;12:1', parent_node_id: 'I2021:4163;11:2', visible: false },
+  );
+  input.correspondence.visibility = [
+    { instance_id: 'block', element_id: 'group', viewport: 'mobile', node_id: 'I2021:4164;11:2;12:1' },
+    { instance_id: 'block', element_id: 'group', viewport: 'desktop', node_id: 'I2021:4163;11:2;12:1' },
+  ];
+  assert.ok(verifyEmailModelSource(input).some(x => x.code === 'EMAIL_SOURCE_VISIBILITY_TARGET_MISMATCH'));
+});
+
 async function registeredPhysicalSource() {
   const [shared, marketing] = await Promise.all(['shared', 'marketing'].map(name =>
     readFile(new URL(`../../data/components/${name}.yaml`, import.meta.url), 'utf8').then(YAML.parse)));
