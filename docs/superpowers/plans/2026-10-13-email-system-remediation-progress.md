@@ -13,13 +13,13 @@
 
 ## Текущая точка
 
-**Task 1 завершён в ветке на `c0808e1e3d18bfd1824dd34386d22d9c0c1090a7`. Task 2 — RED подтверждён, минимальная правка реализована и ожидает GREEN.** Следующее действие: targeted visibility/source-fidelity/CLI/handoff, полный локальный gate и независимая приёмка точного cloud SHA. Task 3 ещё не начат.
+**Tasks 1–2 приняты в ветке:** Task 1 на `c0808e1e3d18bfd1824dd34386d22d9c0c1090a7`, Task 2 на `9d1a19c80b70b58da6742378cc5e64d3d8590e3b`. Следующее действие: Task 3 — детализация ниже, затем новые identity regressions и RED до изменения production code.
 
 | Шаг | Состояние |
 | --- | --- |
 | 1. R1, serialized resource paths | Accepted на c0808e1; targeted 26/full 2215 PASS |
-| 2. #130/E13, root-slot projection | RED confirmed; private helper ожидает GREEN |
-| 3. R3, instance identities | Не начат |
+| 2. #130/E13, root-slot projection | Accepted на 9d1a19c; targeted 91/full 2227 PASS |
+| 3. R3, instance identities | Детализирован перед тестами; код не менялся |
 | 4. R5, workflow identity presence | Не начат |
 | 5. R2, source/candidate/release binding | Не начат |
 | 6. R6, contained asset bytes | Не начат |
@@ -57,6 +57,18 @@
 
 Исторические 26 errors из диагноза #130 не обозначаются свежим replay: исходные private captures этого письма в текущем задании не предоставлены. Проверяемая здесь граница — independent registered/synthetic regression и production CLI/handoff; внешняя визуальная приёмка остаётся `not-run`.
 
+## Task 3 — детализация перед изменением
+
+**Граница runtime:** `scripts/lib/email-model.mjs`; условно только доказанный direct public entrypoint `renderComponent()` в `scripts/lib/email-renderer.mjs`. `renderEmailDocument()` уже вызывает этот entrypoint. Source verifier уже отвергает duplicate bare IDs через `uniqueIndex`; inventory уже получает semantic diagnostics перед своей path-index работой. Их production код без доказанного отдельного обхода не меняется. Схема, формат ID, assembly, contracts и output layout сохраняются.
+
+1. Добавить shared export `validateEmailInstanceIdentities(model) -> diagnostics`. Один обход логической модели: root → все `slots[].instances[]` → все `nested_components[].instance`, включая обе стороны hidden/visible. Mobile/Desktop variants одного объекта не являются двумя экземплярами. Не переименовывать пользовательские IDs. Проверяются объявленные строковые `instance_id`; отсутствие/тип/формат продолжают проверять существующие schema/entrypoint guards, самостоятельные component fixtures без ID сохраняют свой существующий API.
+2. Хранить первую JSON location для каждого bare ID, без component/parent префикса. Для последующего совпадения выдавать `EMAIL_MODEL_INSTANCE_DUPLICATE` на обеих `/.../instance_id` locations; message содержит ID и обе точные locations. Первая запись не перезаписывается. Диагностики сортируются существующим способом. Traversal не зависит от registry/visibility/viewports; для циклических прямых JS objects не зацикливаться (ancestry set), без нового schema/cycle diagnostic контракта.
+3. `validateEmailModelSemantics()` сохраняет existing missing-root diagnostic и после root check возвращает identity diagnostics до `validateInstance()`/viewport maps. Direct renderer получает тот же helper до accumulator/maps и возвращает existing-shaped empty HTML/CSS/assets плюс diagnostics с component context только если новый real regression доказывает обход. Этот тест сравнивает два независимых FIRST/SECOND marker siblings с одинаковым ID; старый выход теряет/подменяет первый marker, уникальные IDs сохраняют оба. Не добавлять полный semantic validation в direct renderer.
+4. RED cases: duplicate sibling, root/descendant, разные component IDs, разные parents/slots/nested и hidden ветка с visible duplicate. Assert exact code и обе locations; duplicate ошибки должны предшествовать зависимому contract/visibility исследованию. Positive unique model неизменён, общая Mobile/Desktop instance учитывается один раз, оба markers/порядок сохраняются. Existing source `EMAIL_SOURCE_DUPLICATE` и delivery duplicate-path rejection проверяются как уже работающие защиты.
+5. Коррекция normal test fixtures до GREEN: общий `tests/fixtures/rendering/email-delivery-fixtures.mjs` сейчас повторяет `cta` в двух карточках. Сохранить first-card ID/path `cta`, назначить второй `cta-2`; обновить только точное ожидание `email/card-2/cta` в `tests/rendering/email-action-labels.test.mjs` и выявленные аналогичные зависимые assertions. Это исправление invalid test data; реальные model IDs или ответы пользователя не мигрируются. Новые duplicate regressions создают коллизию явно, отдельно от normal fixture.
+6. Test scope: `tests/rendering/email-model.test.mjs` (также реальные direct renderer cases), `email-action-inventory.test.mjs`, shared fixture и зависимое label assertion; source-fidelity/CLI/handoff regression additions только по необходимости. New helper проверяется через динамический module lookup, чтобы отсутствие export не ломало загрузку всего набора вместо actual behavior RED. Inventory получает новый typed diagnostic; реальный prepare CLI/handoff по возможности проверяет отсутствие intake/HTML/ZIP до publish. Если existing source protection уже блокирует, не объявлять её отсутствующей: новый assert касается раннего model diagnostic.
+7. Root публикует reviewed staged tests, delegated exact-SHA RED подтверждает behavior failures, затем минимальная реализация. После targeted model/inventory/direct/source/CLI/handoff GREEN — один штатный local `repository-full` и generated check на final cloud SHA; независимая source/ref приёмка. Следующий Task 4 начинается только после принятого Task 3.
+
 ## Проверки
 
 Baseline и результаты каждого шага записываются после фактических локальных запусков с SHA. Непроверенные коммиты не обозначаются как passing.
@@ -67,3 +79,4 @@ Baseline и результаты каждого шага записываютс�
 - Preliminary GREEN `a354aeb`: четыре targeted suites, 25 PASS / 0 FAIL. Независимый reviewer затем обнаружил mixed-case entity alias. Регрессионный RED `6913f563140948a2077455b0adaafd5825920669`: resource suite, 8 PASS / 1 expected FAIL, exit 1. Полный запуск preliminary SHA остановлен как `interrupted`, не PASS. Окончательный GREEN/full gate выполняется после этого минимального исправления.
 - Task 1 final `c0808e1e3d18bfd1824dd34386d22d9c0c1090a7`: targeted 26 PASS / 0 FAIL; штатный local `repository-full` 2215 PASS / 0 FAIL, exit 0; validator и `generate-docs --check` exit 0; raw 344 файлов / 0 несовпадений. Request `email-remediation-task1-final-20261013`. Независимый reviewer `/root/implementation_review` принял семь exact refs; штатный finalizer `accepted`. Приёмка относится к этому SHA и только Task 1. Baseline full rerun не заявляется.
 - Task 2 RED `efdb4533d443570c4167efad30db292be2b751d6`: четыре targeted suites — 90 tests, 79 PASS / 11 expected FAIL, exit 1. Updated matched-native control на `9053c760202d6ebf6f051a2cb2d2cdd38e99aac6`: visibility suite — 39 tests, 30 PASS / 9 expected FAIL, exit 1; новый negative control PASS. Причина failures — descendant projection и отсутствие доказанного hidden witness, вследствие чего production CLI/handoff останавливаются. Root identity сама сохраняется. Fixture/infra failures нет; оба exact snapshots raw 345 файлов / 0 несовпадений, 135 scripts/data/schemas blobs сохранялись. GREEN и full ещё не заявляются.
+- Task 2 final `9d1a19c80b70b58da6742378cc5e64d3d8590e3b`: targeted 91 PASS / 0 FAIL; штатный local `repository-full` 2227 PASS / 0 FAIL, validator/full/generated-check exit 0; raw после полного прогона 345 файлов / 0 несовпадений. Request `email-remediation-task2-final-20261013`, actual receipt `success`; независимая приёмка девяти exact refs и штатный finalizer `accepted`, workflow handoff `complete`. Приёмка относится к этому SHA и Task 2, historical private replay и external acceptance — `not-run`.
