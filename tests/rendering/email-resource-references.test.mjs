@@ -73,6 +73,17 @@ test("HTML entities decode once in attributes and stay literal in stylesheet res
   const result = rebasePackageResources({ html: input, assetPaths: ["images/bg&.png", "images/bg&amp;.png"], htmlEntry: "email/html.html", assetRootEntry: "images" });
   assert.deepEqual(result.diagnostics, []);
   assert.equal(result.html, '<td style="background:url(&quot;../images/bg&amp;.png&quot;)"><style>.x{background:url("../images/bg&amp;.png")}</style>');
+  for (const [html, declared, foreign] of [
+    ['<style>.x{background:url("images/bg&amp;.png")}</style>', 'images/bg&amp;.png', 'images/bg&.png'],
+    ['<td style="background:url(&quot;images/bg&amp;.png&quot;)">', 'images/bg&.png', 'images/bg&amp;.png'],
+  ]) {
+    const matching = rebasePackageResources({ html, assetPaths: [declared], htmlEntry: "email/html.html", assetRootEntry: "images" });
+    assert.deepEqual(matching.diagnostics, []);
+    assert.equal(matching.html, html.replace('images/', '../images/'));
+    const wrongContext = rebasePackageResources({ html, assetPaths: [foreign], htmlEntry: "email/html.html", assetRootEntry: "images" });
+    assert.ok(wrongContext.diagnostics.length > 0);
+    assert.equal(wrongContext.html, html);
+  }
   for (const [html, declared] of [['<img src="images/bg&#38;amp;.png">', 'images/bg&amp;.png'], ['<img src="images/bg&amp;#47;.png">', 'images/bg&#47;.png']]) {
     const once = rebasePackageResources({ html, assetPaths: [declared], htmlEntry: "email/html.html", assetRootEntry: "images" });
     assert.deepEqual(once.diagnostics, []);
