@@ -13,11 +13,11 @@
 
 ## Текущая точка
 
-**Task 1 — уточнён; тесты RED подготовлены, подтверждение RED и реализация ещё не выполнены.** Следующее действие: дождаться локальной baseline-проверки, запустить новые resource/Altcraft тесты на точном RED cloud commit, убедиться в ожидаемых failures, затем минимально исправить collector.
+**Task 1 — RED подтверждён; collector исправлен, GREEN ещё не проверен.** Следующее действие: targeted resource/Altcraft/primitive/serializer проверки, затем полный локальный runtime gate и независимая приёмка точного GREEN cloud SHA. Task 2 ещё не начат.
 
 | Шаг | Состояние |
 | --- | --- |
-| 1. R1, serialized resource paths | RED tests prepared |
+| 1. R1, serialized resource paths | RED confirmed; implementation awaiting GREEN |
 | 2. #130/E13, root-slot projection | Не начат |
 | 3. R3, instance identities | Не начат |
 | 4. R5, workflow identity presence | Не начат |
@@ -43,3 +43,7 @@
 ## Проверки
 
 Baseline и результаты каждого шага записываются после фактических локальных запусков с SHA. Непроверенные коммиты не обозначаются как passing.
+
+- Baseline `b8ee255`: полный локальный test-equivalent дал 2202 PASS / 5 FAIL. Все пять failures — окружение: Python отсутствовал в PATH и `CUPIS_SYSTEM_COMMIT` не был установлен. После процессного исправления targeted zip-store/source-delivery rerun: 7 PASS / 0 FAIL. Source/test/config не менялись. Это не повторный успешный полный suite; runtime GREEN ниже ещё ожидается.
+- Task 1 RED `b71c03bcb67571e40ee7e15f31d471d5b7ee889a`: resource/Altcraft suites — 13 tests, 6 PASS / 7 expected FAIL, exit 1; unrelated failures нет. Проверено raw 344 files / 0 mismatches; production/data/schema сохранялись. Failures воспроизводят serialized entity quotes, encoded prefix, raw-style/attribute decoding, silent omission и реальную primitive → serializer → ZIP цепочку.
+- Для последующих локальных запусков Node 24 и bundled Python доступны только через окружение процесса; `CUPIS_SYSTEM_COMMIT` равен exact tested SHA. Machine PATH и настройки компьютера не изменяются. Внешняя приёмка остаётся `not-run`.
