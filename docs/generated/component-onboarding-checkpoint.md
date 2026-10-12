@@ -1,7 +1,7 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: workflow-checkpoint -->
-<!-- source-digest: sha256:c0d077676f67ab333d28aacff37223aeca3b10f813262ffa215a4b8d5c395637 -->
-<!-- schema-versions: manifest=1.3.0, workflows=1.0.0 -->
+<!-- source-digest: sha256:a8da1e5cad619360bcf9ccc44b46018e2397cd291f334a493149b3d4668fda8f -->
+<!-- schema-versions: manifest=1.4.0, workflows=1.0.0 -->
 # Workflow checkpoint: `component-onboarding`
 
 Status: `active`

@@ -73,7 +73,7 @@ test('boolean authorization is not exact authorization and never reaches a write
 test('unproven staged component blocks despite a handler claiming success',async()=>{
  const f=await fixture();try{const c=await activate(f.root,'component-onboarding');assert.equal(c.status,'resolved');
  const calls=[];const handlers=Object.fromEntries(c.workflow.steps.map(s=>[s.id,async()=>{calls.push(s.id);return Object.fromEntries(s.allowed_outputs.map(key=>[key,key==='pinned-sha'?SHA:{}]));}]));
- const result=await workflows.executeMaintenanceWorkflow({context:c,pinnedSha:SHA,inputs:{request:'fixture','target-scope':{file_key:'file',node_ids:['1:2'],repository_paths:['data/components/marketing.yaml']},'approved-ready-component':{node_id:'1:2'},'staged-component-record':{id:'incomplete'},'figma-factual-evidence':{ok:true},'write-authorization':true},handlers});
+ const result=await workflows.executeMaintenanceWorkflow({context:c,pinnedSha:SHA,repository:REPOSITORY,inputs:{request:'fixture','target-scope':{file_key:'file',node_ids:['1:2'],repository_paths:['data/components/marketing.yaml']},'approved-ready-component':{node_id:'1:2'},'staged-component-record':{id:'incomplete'},'figma-factual-evidence':{ok:true},'write-authorization':true},handlers});
  assert.equal(result.status,'blocked');assert.ok(result.blockers.some(b=>b.code==='fact-unproven'));assert.ok(!calls.includes('apply-minimal-repository-change'));
  }finally{await f.cleanup();}
 });

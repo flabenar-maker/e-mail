@@ -1,7 +1,7 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: workflow-checkpoint -->
-<!-- source-digest: sha256:69b7152770938e711427029b5746ffc09875400c5bfeaaf662916ece339c37b8 -->
-<!-- schema-versions: manifest=1.3.0, workflows=1.0.0 -->
+<!-- source-digest: sha256:038254b1963df731a56ddd268a2f5b69755a83db5e11fc2bb765061162844196 -->
+<!-- schema-versions: manifest=1.4.0, workflows=1.0.0 -->
 # Workflow checkpoint: `system-progress`
 
 Status: `active`

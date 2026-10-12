@@ -63,7 +63,7 @@ test('checkpoint preserves every mode and typed stop/input/condition boundary',a
     for(const mode of ['new-build','continue-fix-design','continue-fix-technical','read-only'])assert.ok(email.includes(`## Mode: \`${mode}\``));
     assert.match(email,/`ordered-field-values`/);assert.match(email,/`same-field`/);assert.match(email,/`viewport-role-ambiguous`/);
     assert.match(email,/`asset-resolution-decision-required`/);assert.match(email,/`source-evidence-mismatch`/);
-    assert.match(email,/manifest=1\.3\.0/); assert.match(email,/workflows=1\.0\.0/);
+    assert.match(email,/manifest=1\.4\.0/); assert.match(email,/workflows=1\.0\.0/);
   }finally{await f.cleanup();}
 });
 
