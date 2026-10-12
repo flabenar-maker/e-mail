@@ -8,13 +8,13 @@
 
 **Tech Stack:** Node 24, существующие HTML modules; небольшой deterministic ZIP store writer без внешнего архиватора. Для независимого чтения ZIP в локальной проверке используется доступный bundled Python zipfile, без установки зависимостей.
 
-**Spec:** ../specs/2026-10-11-altcraft-html-release.md
+**Spec:** ../../specs/2026-10-11-altcraft-html-release.md
 
 ## Статус реализации
 
-Код опубликован в draft [PR №119](https://github.com/flabenar-maker/e-mail/pull/119); локальная кодовая приёмка завершена. Реализованы безопасная структурная запись HTML, точный пересчёт ресурсных путей, текстовая версия, полный ZIP с каталогами email/ и images/ и атомарная публикация. В HTML пакета изображения адресуются через ../images/; HTML повторно сериализуется после пересчёта путей. Значения отправителя при наследовании не заменяются пустыми файлами.
+Код реализован; [PR №119](https://github.com/flabenar-maker/e-mail/pull/119) слит, а подробная запись интеграции находится в [общем плане](2026-10-11-altcraft-html-release.md#интеграция-pr119-в-main). Локальная кодовая приёмка завершена. Реализованы безопасная структурная запись HTML, точный пересчёт ресурсных путей, текстовая версия, полный ZIP с каталогами email/ и images/ и атомарная публикация. В HTML пакета изображения адресуются через ../images/; HTML повторно сериализуется после пересчёта путей. Значения отправителя при наследовании не заменяются пустыми файлами.
 
-Исторические source/Figma/install pins сохранены. При следующем запуске выпуск выбирается через system_commit этой версии и зарегистрированные manifest sources; SKILL.md не менялся, поэтому переустановка не требовалась. Это проверенная организация источников, а не новая приёмка установки или discovery. Внешняя проверка импорта, отправки и почтовых клиентов — not-run; слияние PR не выполнено.
+PR119 слит; полные integration pins и результаты собраны в [общей записи интеграции](2026-10-11-altcraft-html-release.md#интеграция-pr119-в-main). Исторические source/Figma/install pins сохраняются; это не новая приёмка установки или discovery. Внешняя проверка импорта, отправки и почтовых клиентов — not-run.
 
 ## Global Constraints
 
@@ -120,7 +120,7 @@ ZIP store method=0, UTF-8 names, CRC32 и фиксированное допус�
 
 ## Локальная приёмка
 
-Локальная приёмка завершена для candidate `37d0c4601bd6888437f36d8bf8acdf319acf2798`: verify из package.json (npm run validate && npm test), выполненный прямыми Node-командами: node scripts/validate-system.mjs и полный набор семи групп из scripts.test — 2175/2175 PASS, 0 FAIL/cancelled/skipped, 465981 ms; точный Git HEAD и изолированный Git-контекст, CUPIS_SYSTEM_COMMIT этого candidate, bundled Python и проверенный same-lock cache; generate-docs --check и bootstrap/verify.ps1 PASS; независимое review production на f837 и отдельная визуальная приёмка на 6e6d связаны проверенной идентичностью исходников. Внешняя приёмка импорта, отправки и почтовых клиентов — not-run. PR119 остаётся draft и не слит.
+Локальная приёмка завершена для candidate `37d0c4601bd6888437f36d8bf8acdf319acf2798`: verify из package.json (npm run validate && npm test), выполненный прямыми Node-командами: node scripts/validate-system.mjs и полный набор семи групп из scripts.test — 2175/2175 PASS, 0 FAIL/cancelled/skipped, 465981 ms; точный Git HEAD и изолированный Git-контекст, CUPIS_SYSTEM_COMMIT этого candidate, bundled Python и проверенный same-lock cache; generate-docs --check и bootstrap/verify.ps1 PASS; независимое review production на f837 и отдельная визуальная приёмка на 6e6d связаны проверенной идентичностью исходников. Внешняя приёмка импорта, отправки и почтовых клиентов — not-run. На момент candidate PR119 был draft и не слит; позднейшая интеграция зафиксирована в текущей общей записи выше.
 
 ## Результат этапа
 
