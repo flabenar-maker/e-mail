@@ -84,9 +84,15 @@ test("HTML entities decode once in attributes and stay literal in stylesheet res
     assert.ok(wrongContext.diagnostics.length > 0);
     assert.equal(wrongContext.html, html);
   }
-  for (const [html, declared] of [['<img src="images/bg&#38;amp;.png">', 'images/bg&amp;.png'], ['<img src="images/bg&amp;#47;.png">', 'images/bg&#47;.png']]) {
+  for (const [html, declared] of [['<img src="images/bg&#38;amp;.png">', 'images/bg&amp;.png']]) {
     const once = rebasePackageResources({ html, assetPaths: [declared], htmlEntry: "email/html.html", assetRootEntry: "images" });
     assert.deepEqual(once.diagnostics, []);
     assert.equal(once.html, html.replace('images/', '../images/'));
   }
+  // The browser leaves the nested numeric spelling literal after one decode;
+  // it must not alias a declared path containing an extra directory separator.
+  const nested = '<img src="images/bg&amp;#47;.png">';
+  const alias = rebasePackageResources({ html: nested, assetPaths: ['images/bg/.png'], htmlEntry: "email/html.html", assetRootEntry: "images" });
+  assert.ok(alias.diagnostics.length > 0);
+  assert.equal(alias.html, nested);
 });
