@@ -78,7 +78,7 @@ async function visualFixture(t){
  }
  const identity={request_id:'visual-task',source_sha:sha,artifact_digest:'d'.repeat(64)};
  const review={schema_version:'1.0.0',...identity,input_digest:workloadInputDigest(inputRefs),executor_agent_id:'executor',reviewer_agent_id:'actual-reviewer',reviewer_model_binding:{binding:'inherited',id:null},runtime_session_id:'actual-session',tool_signature:'actual-tool',reviewer_effort:'high',primary_sources_reviewed:true,verdict:'accepted',reviewed_model:{input:'email_model',...files.email_model},reviewed_images:['reference_manifest','evidence_root'].map(input=>({input,...files[input]})),results:Object.fromEntries(['geometry','layout','spacing','visibility','image','text'].map(x=>[x,'accepted']))};
- const reviewQualification={executor_agent_id:'executor',reviewer_agent_id:'actual-reviewer',selected_model:{binding:'inherited',id:null},runtime_session_id:'actual-session',tool_signature:'actual-tool',effort:'high',capabilities:['text','vision']};
+ const reviewQualification={executor_agent_id:'executor',reviewer_agent_id:'actual-reviewer',selected_model:{binding:'inherited',id:null},runtime_session_id:'actual-session',tool_signature:'actual-tool',effort:'high',supported_efforts:['low','medium','high'],capabilities:['text','vision']};
  const options={inputRefs,inputRoots,referenceRoot:f.root,identity,reviewQualification};
  const save=async()=>{const bytes=JSON.stringify(review);await writeFile(join(f.root,'review.json'),bytes);reviewQualification.review_ref={path:'review.json',digest:hash(bytes)};};await save();
  return {f,options,review,save,files};
@@ -121,3 +121,9 @@ test('root commit message text cannot invent an immutable first parent',async()=
 });
 
 test('visual acceptance preserves inherited model and rejects switched selection or runtime identity',async t=>{const {verifyRealEmailVisual}=await import('../../scripts/verify-real-email-visual.mjs');const f=await visualFixture(t);assert.equal((await verifyRealEmailVisual(f.options)).status,'success');for(const change of [{reviewer_model_binding:{binding:'explicit',id:'other-model'}},{runtime_session_id:'stale-session'},{tool_signature:'stale-tool'}]){const g=await visualFixture(t);Object.assign(g.review,change);await g.save();await assert.rejects(verifyRealEmailVisual(g.options),{code:'VISUAL_REVIEW_INVALID'});}});
+
+test('visual qualification rejects an effort outside the selected model support even with matching receipt',async t=>{
+ const {verifyRealEmailVisual}=await import('../../scripts/verify-real-email-visual.mjs');
+ for(const effort of ['ultra','made-up']){const f=await visualFixture(t);f.options.reviewQualification.effort=effort;f.review.reviewer_effort=effort;await f.save();await assert.rejects(verifyRealEmailVisual(f.options),{code:'VISUAL_REVIEW_INVALID'});}
+ for(const supported_efforts of [undefined,[],['high','low'],['high','high'],['made-up']]){const f=await visualFixture(t);f.options.reviewQualification.supported_efforts=supported_efforts;await assert.rejects(verifyRealEmailVisual(f.options),{code:'VISUAL_REVIEW_INVALID'});}
+});

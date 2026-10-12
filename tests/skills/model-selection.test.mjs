@@ -53,3 +53,14 @@ test('a user selection change invalidates the same-session cached binding and re
  const cache=createRuntimeCapabilityCache(),initial=caps(),key={runtime_session_id:initial.runtime_session_id,tool_signature:initial.tool_signature};cache.get({...key,selected_model:inherited,read:()=>initial});const attempt={...key,selected_model:inherited,effort:'high'};assert.equal(cache.beginAttempt(attempt),true);assert.equal(cache.recordRefusal({...attempt,code:'EFFORT_UNAVAILABLE'}),true);
  const updated=cache.get({...key,selected_model:explicit,read:()=>caps(explicit)});assert.deepEqual(updated.selected_model,explicit);assert.equal(updated.refusals?.length??0,0);assert.equal(cache.beginAttempt(attempt),false);assert.equal(cache.beginAttempt({...attempt,selected_model:explicit}),true);
 });
+
+test('explicit hidden-selection event clears same-binding cache and active/refused attempts',()=>{
+ const cache=createRuntimeCapabilityCache(),runtime=caps(),identity={runtime_session_id:runtime.runtime_session_id,tool_signature:runtime.tool_signature};let reads=0;const read=()=>{reads++;return runtime;};cache.get({...identity,read});
+ const oldAttempt={...identity,selected_model:inherited,effort:'high'};assert.equal(cache.beginAttempt(oldAttempt),true);assert.equal(cache.recordRefusal({...oldAttempt,code:'EFFORT_UNAVAILABLE'}),true);assert.equal(cache.beginAttempt({...oldAttempt,effort:'xhigh'}),true);
+ assert.equal(typeof cache.invalidate,'function','hidden model setting change needs an explicit invalidation hook');assert.equal(cache.invalidate(identity),true);assert.equal(cache.invalidate(identity),false);assert.equal(cache.finishAttempt({...oldAttempt,effort:'xhigh',outcome:'success'}),false);assert.equal(cache.beginAttempt(oldAttempt),false);
+ const fresh=cache.get({...identity,selected_model:inherited,read});assert.equal(reads,2);assert.equal(fresh.refusals?.length??0,0);assert.equal(cache.beginAttempt(oldAttempt),true);
+});
+test('account reset drops all runtime snapshots and in-flight guards without model discovery',()=>{
+ const cache=createRuntimeCapabilityCache();const a=caps(),b={...caps(),runtime_session_id:'other-session',tool_signature:'other-tool'};for(const runtime of [a,b]){cache.get({...runtime,read:()=>runtime});assert.equal(cache.beginAttempt({runtime_session_id:runtime.runtime_session_id,tool_signature:runtime.tool_signature,selected_model:inherited,effort:'high'}),true);}
+ assert.equal(typeof cache.reset,'function');cache.reset();for(const runtime of [a,b]){const attempt={runtime_session_id:runtime.runtime_session_id,tool_signature:runtime.tool_signature,selected_model:inherited,effort:'high'};assert.equal(cache.finishAttempt({...attempt,outcome:'success'}),false);assert.equal(cache.beginAttempt(attempt),false);cache.get({...runtime,read:()=>runtime});assert.equal(cache.beginAttempt(attempt),true);}
+});
