@@ -13,11 +13,16 @@ export function createRuntimeCapabilityCache(){
  const key=x=>JSON.stringify([x.runtime_session_id,x.tool_signature]);
  const attemptKey=x=>JSON.stringify([x.runtime_session_id,x.tool_signature,x.selected_model?.binding,x.selected_model?.id,x.effort]);
  const supportedAttempt=(snapshot,x)=>snapshot&&sameSelectedModel(snapshot.selected_model,x.selected_model)&&snapshot.supported_efforts.includes(x.effort);
+ const invalidate=identity=>{const id=key(identity),removed=snapshots.delete(id);for(const attempt of attempts){const parsed=JSON.parse(attempt);if(parsed[0]===identity.runtime_session_id&&parsed[1]===identity.tool_signature)attempts.delete(attempt);}return removed;};
  return {
+  // Explicit user selection events also invalidate inherited/null, whose ID stays hidden.
+  invalidate,
+  // Account changes discard every snapshot and active attempt before any future delegation.
+  reset(){snapshots.clear();attempts.clear();},
   get({runtime_session_id,tool_signature,selected_model,read}){
    const identity={runtime_session_id,tool_signature},id=key(identity),previous=snapshots.get(id);
    if(selected_model!==undefined&&!validSelectedModel(selected_model))throw Object.assign(new Error('Invalid selected model binding.'),{code:'EXECUTION_RUNTIME_INVALID'});
-   if(previous&&selected_model!==undefined&&!sameSelectedModel(previous.selected_model,selected_model)){snapshots.delete(id);for(const attempt of attempts){const parsed=JSON.parse(attempt);if(parsed[0]===runtime_session_id&&parsed[1]===tool_signature)attempts.delete(attempt);}}
+   if(previous&&selected_model!==undefined&&!sameSelectedModel(previous.selected_model,selected_model)){invalidate(identity);}
    if(!snapshots.has(id)){const value=read();if(!validateRuntimeCapabilities(value)||value.runtime_session_id!==runtime_session_id||value.tool_signature!==tool_signature||(selected_model!==undefined&&!sameSelectedModel(value.selected_model,selected_model)))throw Object.assign(new Error('Invalid actual-runtime snapshot.'),{code:'EXECUTION_RUNTIME_INVALID'});snapshots.set(id,structuredClone(value));}
    return structuredClone(snapshots.get(id));
   },

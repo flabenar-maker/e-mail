@@ -1,4 +1,4 @@
-import {validSelectedModel,sameSelectedModel} from './lib/runtime-capabilities.mjs';
+import {validSelectedModel,sameSelectedModel,validateRuntimeCapabilities} from './lib/runtime-capabilities.mjs';
 import {readFile} from 'node:fs/promises';
 import {resolve} from 'node:path';
 import {pathToFileURL} from 'node:url';
@@ -11,6 +11,8 @@ const identifier=value=>typeof value==='string'&&value.trim()===value&&value.len
 export async function verifyRealEmailVisual({inputRefs,referenceRoot,inputRoots,identity,reviewQualification}={}){
  if(!inputRefs||!referenceRoot||!inputRoots||!identity||!reviewQualification)throw inputFailure('VISUAL_EVIDENCE_MISSING','Bound model, reference/rendered image inventories and qualified independent review are required.');
  const q=reviewQualification;
+ const runtime={schema_version:"1.0.0",source:"declared-runtime-tools",runtime_session_id:q.runtime_session_id,tool_signature:q.tool_signature,selected_model:q.selected_model,supported_efforts:q.supported_efforts,capabilities:q.capabilities,max_subagents:1};
+ if(!validateRuntimeCapabilities(runtime)||!runtime.supported_efforts.includes(q.effort))throw inputFailure("VISUAL_REVIEW_INVALID","Visual reviewer effort must belong to the attested supported efforts of the selected runtime.");
  if(!identifier(identity.request_id)||!/^[a-f0-9]{40}$/u.test(identity.source_sha??'')||!/^[a-f0-9]{64}$/u.test(identity.artifact_digest??''))throw inputFailure('VISUAL_REVIEW_INVALID','Exact request, source and artifact identities are mandatory.');
  if(!identifier(q.executor_agent_id)||!identifier(q.reviewer_agent_id)||q.executor_agent_id===q.reviewer_agent_id||!validSelectedModel(q.selected_model)||!identifier(q.runtime_session_id)||!identifier(q.tool_signature)||!identifier(q.effort)||!Array.isArray(q.capabilities)||new Set(q.capabilities).size!==q.capabilities.length||q.capabilities.some(c=>!identifier(c))||!q.capabilities.includes('vision'))throw inputFailure('VISUAL_REVIEW_INVALID','Coordinator-selected qualification requires distinct actual agent IDs, selected-model binding, runtime identity, supported effort and a capability array including vision.');
  const inventories={};for(const name of ['email_model','reference_manifest','evidence_root']){
