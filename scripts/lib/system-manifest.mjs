@@ -27,7 +27,7 @@ import {
 
 import { validateWorkflowCheckpointDefinition } from "./workflow-checkpoint.mjs";
 
-const SUPPORTED_MANIFEST_VERSION = "1.3.0";
+const SUPPORTED_MANIFEST_VERSION = "1.4.0";
 
 export function validateManifestShape(manifest, schema) {
   return validateDocumentShape({
