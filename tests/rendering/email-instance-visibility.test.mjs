@@ -8,6 +8,7 @@ import { validateEmailModelSemantics, loadEmailModel } from '../../scripts/lib/e
 import { renderComponent } from '../../scripts/lib/email-renderer.mjs';
 import { collectEmailActions } from '../../scripts/lib/email-action-inventory.mjs';
 import { verifyEmailModelSource } from '../../scripts/lib/email-source-fidelity.mjs';
+import { physicalEmailSourceFixture } from '../helpers/email-physical-source-fixture.mjs';
 
 const viewports = ['mobile', 'desktop'];
 const variants = { mobile: 'mobile', desktop: 'desktop' };
@@ -141,20 +142,20 @@ test('all twelve saved hidden positions may omit required descendants under the 
 function sourceScenario() {
   const input = scenario();
   const readings = { capture_id: 'capture', file_key: 'file', captured_at: '2026-10-12T00:00:00Z', complete: true, selection: {}, instances: [], fields: [], assets: [], nodes: [] };
-  const correspondence = { capture_id: 'capture', file_key: 'file', instances: [{ instance_id: 'block', nodes: { mobile: 'm-root', desktop: 'd-root' } }], fields: [], assets: [], visibility: [] };
+  const correspondence = { capture_id: 'capture', file_key: 'file', instances: [{ instance_id: 'block', nodes: { mobile: '2021:4164', desktop: '2021:4163' } }], fields: [], assets: [], visibility: [] };
   for (const viewport of viewports) {
-    const root = viewport === 'mobile' ? 'm-root' : 'd-root';
+    const root = viewport === 'mobile' ? '2021:4164' : '2021:4163';
     readings.selection[viewport] = { root_node_id: root, terminal: true, truncated: false };
     readings.instances.push({ viewport, node_id: root, variant_id: viewport, parent_node_id: null, relation: null, order: 0 });
     readings.nodes.push({ viewport, node_id: root, parent_node_id: null, visible: true });
-    for (const [id, suffix, parent, visible] of [['first', 1, root, true], ['group', 2, root, false], ['link', 3, root + ';11:2', true], ['image', 4, root + ';11:2', true], ['nested', 5, root + ';11:2', true], ['last', 6, root, true]]) readings.nodes.push({ viewport, node_id: root + ';11:' + suffix, parent_node_id: parent, visible });
+    for (const [id, suffix, parent, visible] of [['first', 1, root, true], ['group', 2, root, false], ['link', 3, 'I' + root + ';11:2', true], ['image', 4, 'I' + root + ';11:2', true], ['nested', 5, 'I' + root + ';11:2', true], ['last', 6, root, true]]) readings.nodes.push({ viewport, node_id: 'I' + root + ';11:' + suffix, parent_node_id: parent, visible });
     for (const [id, suffix, value] of [['first', 1, 'FIRST'], ['last', 6, 'LAST'], ['link', 3, 'HIDDEN']]) {
-      readings.fields.push({ viewport, node_id: root + ';11:' + suffix, owner_node_id: root, field: 'characters', value });
-      if (id !== 'link') correspondence.fields.push({ instance_id: 'block', kind: 'content', element_id: id, slot_id: 'text', viewport, node_id: root + ';11:' + suffix, field: 'characters', origin: 'figma' });
+      readings.fields.push({ viewport, node_id: 'I' + root + ';11:' + suffix, owner_node_id: root, field: 'characters', value });
+      if (id !== 'link') correspondence.fields.push({ instance_id: 'block', kind: 'content', element_id: id, slot_id: 'text', viewport, node_id: 'I' + root + ';11:' + suffix, field: 'characters', origin: 'figma' });
     }
-    readings.instances.push({ viewport, node_id: root + ';11:5', parent_node_id: root, variant_id: viewport, relation: { kind: 'nested', element_id: 'nested' }, order: 0 });
-    correspondence.visibility.push({ instance_id: 'block', element_id: 'group', viewport, node_id: root + ';11:2' });
-    readings.assets.push({ viewport, node_id: root + ';11:4', owner_node_id: root, evidence_id: 'hidden-asset' });
+    readings.instances.push({ viewport, node_id: 'I' + root + ';11:5', parent_node_id: root, variant_id: viewport, relation: { kind: 'nested', element_id: 'nested' }, order: 0 });
+    correspondence.visibility.push({ instance_id: 'block', element_id: 'group', viewport, node_id: 'I' + root + ';11:2' });
+    readings.assets.push({ viewport, node_id: 'I' + root + ';11:4', owner_node_id: root, evidence_id: 'hidden-asset' });
   }
   return { model: input.model, readings, correspondence, resolvedContracts: input.componentIndex.bySystemId, selectedTest: true };
 }
@@ -170,10 +171,10 @@ test('unproven instance visibility never passes the source gate', () => {
 
 test('wrong-node mapping, wrong visibility, missing ancestors and cyclic ancestry fail source proof', () => {
   for (const mutate of [
-    i => { i.correspondence.visibility[0].node_id = 'm-root;11:1'; },
-    i => { i.readings.nodes.find(n => n.node_id === 'm-root;11:2').visible = true; },
-    i => { i.readings.nodes.find(n => n.node_id === 'm-root;11:2').parent_node_id = 'missing'; },
-    i => { i.readings.nodes.find(n => n.node_id === 'm-root;11:2').parent_node_id = 'm-root;11:3'; },
+    i => { i.correspondence.visibility[0].node_id = 'I2021:4164;11:1'; },
+    i => { i.readings.nodes.find(n => n.node_id === 'I2021:4164;11:2').visible = true; },
+    i => { i.readings.nodes.find(n => n.node_id === 'I2021:4164;11:2').parent_node_id = 'missing'; },
+    i => { i.readings.nodes.find(n => n.node_id === 'I2021:4164;11:2').parent_node_id = 'I2021:4164;11:3'; },
   ]) {
     const input = sourceScenario(); mutate(input);
     assert.ok(verifyEmailModelSource(input).some(x => /VISIBILITY/u.test(x.code)));
@@ -182,8 +183,8 @@ test('wrong-node mapping, wrong visibility, missing ancestors and cyclic ancestr
 
 test('visible source content cannot be discarded by a hidden exclusion reason', () => {
   const input = sourceScenario();
-  input.readings.fields.push({ viewport: 'mobile', node_id: 'm-root;11:1', owner_node_id: 'm-root', field: 'unrepresented-visible-field', value: 'VISIBLE' });
-  input.readings.exclusions = [{ kind: 'field', viewport: 'mobile', node_id: 'm-root;11:1', field: 'unrepresented-visible-field', reason: 'hidden by instance' }];
+  input.readings.fields.push({ viewport: 'mobile', node_id: 'I2021:4164;11:1', owner_node_id: '2021:4164', field: 'unrepresented-visible-field', value: 'VISIBLE' });
+  input.readings.exclusions = [{ kind: 'field', viewport: 'mobile', node_id: 'I2021:4164;11:1', field: 'unrepresented-visible-field', reason: 'hidden by instance' }];
   assert.ok(verifyEmailModelSource(input).some(x => x.code === 'EMAIL_SOURCE_FIELD_UNREPRESENTED' && x.message.includes('unrepresented-visible-field')));
 });
 
@@ -235,10 +236,10 @@ test('a wrong source component or selected variant cannot prove even a hidden om
     const block = input.resolvedContracts.get('block');
     block.figma = { file_key: 'file', node_id: '100:1' };
     block.variants = [{ id: 'mobile', node_id: '100:2' }, { id: 'desktop', node_id: '100:3' }];
-    for (const node of input.readings.nodes.filter(n => /-root$/u.test(n.node_id))) {
+    for (const node of input.readings.nodes.filter(n => n.parent_node_id === null)) {
       node.owner_component_id = '100:1'; node.main_component_id = node.viewport === 'mobile' ? '100:2' : '100:3';
     }
-    input.readings.nodes.find(n => n.node_id === 'm-root')[wrong] = '999:1';
+    input.readings.nodes.find(n => n.node_id === '2021:4164')[wrong] = '999:1';
     assert.ok(verifyEmailModelSource(input).some(x => /VISIBILITY.*(OWNER|VARIANT)|SOURCE_(OWNER|VARIANT)/u.test(x.code)));
   }
 });
@@ -246,41 +247,41 @@ test('a wrong source component or selected variant cannot prove even a hidden om
 test('a root visibility assertion maps only to the exact source instance root', () => {
   const input = sourceScenario();
   input.model.root.visibility_values = [mask('root')]; input.model.root.content_values = [];
-  input.correspondence.visibility = viewports.map(viewport => ({ instance_id: 'block', element_id: 'root', viewport, node_id: viewport === 'mobile' ? 'm-root;11:2' : 'd-root' }));
-  input.readings.nodes.find(n => n.node_id === 'd-root').visible = false;
+  input.correspondence.visibility = viewports.map(viewport => ({ instance_id: 'block', element_id: 'root', viewport, node_id: viewport === 'mobile' ? 'I2021:4164;11:2' : '2021:4163' }));
+  input.readings.nodes.find(n => n.node_id === '2021:4163').visible = false;
   assert.ok(verifyEmailModelSource(input).some(x => /VISIBILITY/u.test(x.code)));
 });
 
 
 test('an exact hidden asset correspondence needs neither a model file nor an export receipt', () => {
   const input = sourceScenario();
-  input.correspondence.assets = [{ instance_id: 'block', asset_contract_id: 'photo', viewport: 'desktop', node_id: 'd-root;11:4' }];
+  input.correspondence.assets = [{ instance_id: 'block', asset_contract_id: 'photo', viewport: 'desktop', node_id: 'I2021:4163;11:4' }];
   assert.deepEqual(verifyEmailModelSource(input), []);
 });
 
 test('a hidden asset correspondence cannot name an unknown model instance', () => {
   const input = sourceScenario();
-  input.correspondence.assets = [{ instance_id: 'invented', asset_contract_id: 'photo', viewport: 'desktop', node_id: 'd-root;11:4' }];
+  input.correspondence.assets = [{ instance_id: 'invented', asset_contract_id: 'photo', viewport: 'desktop', node_id: 'I2021:4163;11:4' }];
   assert.ok(verifyEmailModelSource(input).some(x => /ASSET|VISIBILITY/u.test(x.code)));
 });
 
 test('a hidden asset correspondence cannot name an unknown registered asset contract', () => {
   const input = sourceScenario();
-  input.correspondence.assets = [{ instance_id: 'block', asset_contract_id: 'invented', viewport: 'desktop', node_id: 'd-root;11:4' }];
+  input.correspondence.assets = [{ instance_id: 'block', asset_contract_id: 'invented', viewport: 'desktop', node_id: 'I2021:4163;11:4' }];
   assert.ok(verifyEmailModelSource(input).some(x => /ASSET|VISIBILITY/u.test(x.code)));
 });
 
 test('a hidden non-image sibling cannot prove an asset binding even within the same owner', () => {
   const input = sourceScenario();
   input.model.root.asset_files = [{ asset_contract_id: 'photo', path: 'images/hidden.png' }];
-  input.correspondence.assets = [{ instance_id: 'block', asset_contract_id: 'photo', viewport: 'desktop', node_id: 'd-root;11:3' }];
+  input.correspondence.assets = [{ instance_id: 'block', asset_contract_id: 'photo', viewport: 'desktop', node_id: 'I2021:4163;11:3' }];
   assert.ok(verifyEmailModelSource(input).some(x => /ASSET|VISIBILITY/u.test(x.code)));
 });
 
 test('a hidden asset still obeys its registered source viewport', () => {
   const input = sourceScenario();
   input.resolvedContracts.get('block').asset_contracts[0].source_viewport = 'desktop';
-  input.correspondence.assets = [{ instance_id: 'block', asset_contract_id: 'photo', viewport: 'mobile', node_id: 'm-root;11:4' }];
+  input.correspondence.assets = [{ instance_id: 'block', asset_contract_id: 'photo', viewport: 'mobile', node_id: 'I2021:4164;11:4' }];
   assert.ok(verifyEmailModelSource(input).some(x => /ASSET|VISIBILITY/u.test(x.code)));
 });
 
@@ -290,9 +291,9 @@ function hiddenChildAssetSource() {
   child.asset_contracts = [{ id: 'photo' }];
   for (const viewport of viewports) child.contracts[viewport].root = element('image', 'direct-image', [], { asset_contract_id: 'photo', content_slots: [{ id: 'alt', type: 'alt-text', required: true }] });
   input.model.root.nested_components = [{ element_id: 'nested', instance: instance('hidden-child', 'child') }];
-  input.correspondence.instances.push({ instance_id: 'hidden-child', nodes: { mobile: 'm-root;11:5', desktop: 'd-root;11:5' } });
+  input.correspondence.instances.push({ instance_id: 'hidden-child', nodes: { mobile: 'I2021:4164;11:5', desktop: 'I2021:4163;11:5' } });
   for (const viewport of viewports) {
-    const node = viewport === 'mobile' ? 'm-root;11:5' : 'd-root;11:5';
+    const node = viewport === 'mobile' ? 'I2021:4164;11:5' : 'I2021:4163;11:5';
     input.readings.assets.push({ viewport, node_id: node, owner_node_id: node, evidence_id: 'hidden-child-image' });
   }
   return input;
@@ -300,20 +301,20 @@ function hiddenChildAssetSource() {
 
 test('a retained fully hidden child may omit its asset file and export receipt with exact correspondence', () => {
   const input = hiddenChildAssetSource();
-  input.correspondence.assets = [{ instance_id: 'hidden-child', asset_contract_id: 'photo', viewport: 'desktop', node_id: 'd-root;11:5' }];
+  input.correspondence.assets = [{ instance_id: 'hidden-child', asset_contract_id: 'photo', viewport: 'desktop', node_id: 'I2021:4163;11:5' }];
   assert.deepEqual(verifyEmailModelSource(input), []);
 });
 
 test('a registered hidden child asset cannot borrow its parent asset node', () => {
   const input = hiddenChildAssetSource();
-  input.correspondence.assets = [{ instance_id: 'hidden-child', asset_contract_id: 'photo', viewport: 'desktop', node_id: 'd-root;11:4' }];
+  input.correspondence.assets = [{ instance_id: 'hidden-child', asset_contract_id: 'photo', viewport: 'desktop', node_id: 'I2021:4163;11:4' }];
   assert.ok(verifyEmailModelSource(input).some(x => /ASSET|VISIBILITY/u.test(x.code)));
 });
 
 test('a hidden asset correspondence still requires its exact observed asset owner', () => {
   const input = hiddenChildAssetSource();
-  input.correspondence.assets = [{ instance_id: 'hidden-child', asset_contract_id: 'photo', viewport: 'desktop', node_id: 'd-root;11:5' }];
-  input.readings.assets.find(a => a.viewport === 'desktop' && a.node_id === 'd-root;11:5').owner_node_id = 'd-root';
+  input.correspondence.assets = [{ instance_id: 'hidden-child', asset_contract_id: 'photo', viewport: 'desktop', node_id: 'I2021:4163;11:5' }];
+  input.readings.assets.find(a => a.viewport === 'desktop' && a.node_id === 'I2021:4163;11:5').owner_node_id = '2021:4163';
   assert.ok(verifyEmailModelSource(input).some(x => /ASSET|VISIBILITY/u.test(x.code)));
 });
 
@@ -322,7 +323,7 @@ function omittedHiddenHierarchySource() {
   const child = input.resolvedContracts.get('child');
   const deep = { id: 'deep', properties: [], figma: { file_key: 'file', node_id: '300:1' }, variants: [{ id: 'mobile', node_id: '300:2' }, { id: 'desktop', node_id: '300:3' }], contracts: {} };
   for (const viewport of viewports) {
-    const prefix = viewport === 'mobile' ? 'm-root' : 'd-root';
+    const prefix = viewport === 'mobile' ? 'I2021:4164' : 'I2021:4163';
     child.contracts[viewport].root = element('child-root', 'presentation-table', [{ ...element('deep-nested', 'nested-component', [], { component_id: 'deep' }), facts: [fact('reference-size', { type: 'dimensions', width: 100, height: 20, unit: 'px' }, '12:1')] }]);
     deep.contracts[viewport] = { root: text('first') };
     input.readings.nodes.push({ viewport, node_id: prefix + ';11:5;12:1', parent_node_id: prefix + ';11:5', visible: true, main_component_id: viewport === 'mobile' ? '300:2' : '300:3', owner_component_id: '300:1' });
@@ -341,8 +342,8 @@ test('fully omitted hidden nested parents need no placeholder model instances fo
 
 test('omitted hidden descendants cannot substitute a wrong nested role or selected component variant', () => {
   for (const mutate of [
-    input => { input.readings.instances.find(i => i.node_id === 'm-root;11:5;12:1').relation.element_id = 'invented'; },
-    input => { input.readings.nodes.find(i => i.node_id === 'm-root;11:5;12:1').main_component_id = '999:1'; },
+    input => { input.readings.instances.find(i => i.node_id === 'I2021:4164;11:5;12:1').relation.element_id = 'invented'; },
+    input => { input.readings.nodes.find(i => i.node_id === 'I2021:4164;11:5;12:1').main_component_id = '999:1'; },
   ]) {
     const input = omittedHiddenHierarchySource(); mutate(input);
     assert.ok(verifyEmailModelSource(input).some(x => /VISIBILITY/u.test(x.code)));
@@ -352,7 +353,7 @@ test('omitted hidden descendants cannot substitute a wrong nested role or select
 test('explicit extra instance correspondence cannot claim a used or hidden source node', () => {
   for (const suffix of ['', ';11:5']) {
     const input = sourceScenario();
-    input.correspondence.instances.push({ instance_id: 'invented', nodes: { mobile: 'm-root' + suffix, desktop: 'd-root' + suffix } });
+    input.correspondence.instances.push({ instance_id: 'invented', nodes: { mobile: suffix ? 'I2021:4164' + suffix : '2021:4164', desktop: suffix ? 'I2021:4163' + suffix : '2021:4163' } });
     assert.ok(verifyEmailModelSource(input).some(x => /SOURCE_(INSTANCE|TARGET|STRUCTURE)|VISIBILITY/u.test(x.code)));
   }
 });
@@ -361,4 +362,107 @@ test('explicit extra instance correspondence cannot claim a used or hidden sourc
 test('production visibility proof rejects contracts without registered Figma identity', () => {
   const input = sourceScenario(); delete input.selectedTest;
   assert.ok(verifyEmailModelSource(input).some(x => /VISIBILITY.*(IDENTITY|OWNER|VARIANT)/u.test(x.code)));
+});
+
+test('literal numeric owners bind provenance descendants with exactly one leading I', () => {
+  const input = sourceScenario();
+  assert.equal(input.readings.selection.mobile.root_node_id, '2021:4164');
+  assert.equal(input.readings.selection.desktop.root_node_id, '2021:4163');
+  assert.equal(input.correspondence.visibility[0].node_id, 'I2021:4164;11:2');
+  assert.equal(input.correspondence.visibility[1].node_id, 'I2021:4163;11:2');
+  assert.deepEqual(verifyEmailModelSource(input), []);
+});
+
+test('literal root visibility binds the numeric owner unchanged', () => {
+  const input = sourceScenario();
+  input.model.root.visibility_values = [mask('root')];
+  input.model.root.content_values = [];
+  input.correspondence.visibility = [
+    { instance_id: 'block', element_id: 'root', viewport: 'mobile', node_id: '2021:4164' },
+    { instance_id: 'block', element_id: 'root', viewport: 'desktop', node_id: '2021:4163' },
+  ];
+  for (const node of input.readings.nodes.filter(n => n.parent_node_id === null)) node.visible = false;
+  assert.deepEqual(verifyEmailModelSource(input), []);
+});
+
+test('invalid, empty, ambiguous and unknown native provenance fail closed without synthetic fallback', () => {
+  for (const native of ['', 'unknown', '11:2;12:1', 'II11:2;12:1', 'I11:2;', ' 11:2']) {
+    const input = sourceScenario();
+    for (const viewport of viewports) input.resolvedContracts.get('block').contracts[viewport].root.children[1].facts[0].provenance.node_id = native;
+    assert.ok(verifyEmailModelSource(input).some(x => x.code === 'EMAIL_SOURCE_VISIBILITY_TARGET_MISMATCH'), JSON.stringify(native));
+  }
+  const input = sourceScenario();
+  for (const viewport of viewports) input.resolvedContracts.get('block').contracts[viewport].root.children[1].facts.push(fact('other-source', {}, '12:1'));
+  assert.ok(verifyEmailModelSource(input).some(x => x.code === 'EMAIL_SOURCE_VISIBILITY_TARGET_MISMATCH'));
+});
+
+async function registeredPhysicalSource() {
+  const [shared, marketing] = await Promise.all(['shared', 'marketing'].map(name =>
+    readFile(new URL(`../../data/components/${name}.yaml`, import.meta.url), 'utf8').then(YAML.parse)));
+  return { ...physicalEmailSourceFixture(), resolvedContracts: new Map([...shared.components, ...marketing.components].map(r => [r.id, r])) };
+}
+
+test('registered Content uses qualified foundation evidence and Count 2 owner/main IDs in both viewports', async () => {
+  const input = await registeredPhysicalSource();
+  assert.equal(Object.hasOwn(input, 'selectedTest'), false);
+  assert.deepEqual(input.correspondence.visibility.map(x => x.node_id), ['I2021:4164;1103:7', 'I2021:4163;1103:8']);
+  assert.deepEqual(verifyEmailModelSource(input), []);
+});
+
+test('registered Content foundation projection retains exact selected variant and evidence qualification', async () => {
+  for (const mutate of [
+    r => { r.evidence_links.foundation_values = r.evidence_links.foundation_values.filter(x => x.id !== 'mobile-slot-background'); },
+    r => { r.evidence_links.foundation_values.find(x => x.id === 'mobile-slot-background').source.variant_node_id = '1102:7'; },
+    r => { r.evidence_links.foundation_values.find(x => x.id === 'mobile-slot-background').source.node_id = 'unknown'; },
+  ]) {
+    const input = await registeredPhysicalSource();
+    mutate(input.resolvedContracts.get('email-template'));
+    assert.ok(verifyEmailModelSource(input).some(x => x.code === 'EMAIL_SOURCE_VISIBILITY_TARGET_MISMATCH'));
+  }
+});
+
+test('literal nested owner and compound native preserve every segment and the complete intermediate graph', async () => {
+  const input = await registeredPhysicalSource(); input.selectedTest = true;
+  const child = input.model.root.slots[0].instances[0];
+  child.component_id = 'compound-child'; delete child.variant_axes;
+  child.visibility_values = [mask('group')];
+  const record = { id: 'compound-child', properties: [], contracts: {} };
+  for (const viewport of viewports) record.contracts[viewport] = { root: {
+    id: 'root', render_mode: 'presentation-table', visibility: { mode: 'always' }, facts: [], children: [
+      { id: 'group', render_mode: 'presentation-table', visibility: { mode: 'always' },
+        facts: [fact('reference-size', {}, 'I1200:1;1200:2')], children: [] },
+    ],
+  } };
+  input.resolvedContracts.set('compound-child', record);
+  input.readings.nodes = input.readings.nodes.filter(n => !n.node_id.includes(';260:'));
+  input.readings.fields = []; input.readings.assets = [];
+  for (const observed of input.readings.instances.filter(n => n.relation)) observed.variant_id = observed.viewport;
+  input.readings.nodes.push(
+    { viewport: 'mobile', node_id: 'I2021:4164;1103:7;1104:1;1200:1', parent_node_id: 'I2021:4164;1103:7;1104:1', visible: true },
+    { viewport: 'mobile', node_id: 'I2021:4164;1103:7;1104:1;1200:1;1200:2', parent_node_id: 'I2021:4164;1103:7;1104:1;1200:1', visible: false },
+    { viewport: 'desktop', node_id: 'I2021:4163;1103:8;1104:2;1200:1', parent_node_id: 'I2021:4163;1103:8;1104:2', visible: true },
+    { viewport: 'desktop', node_id: 'I2021:4163;1103:8;1104:2;1200:1;1200:2', parent_node_id: 'I2021:4163;1103:8;1104:2;1200:1', visible: false },
+  );
+  input.correspondence.visibility.push(
+    { instance_id: 'nps-1', element_id: 'group', viewport: 'mobile', node_id: 'I2021:4164;1103:7;1104:1;1200:1;1200:2' },
+    { instance_id: 'nps-1', element_id: 'group', viewport: 'desktop', node_id: 'I2021:4163;1103:8;1104:2;1200:1;1200:2' },
+  );
+  assert.deepEqual(verifyEmailModelSource(input), []);
+  input.readings.nodes = input.readings.nodes.filter(n => n.node_id !== 'I2021:4164;1103:7;1104:1;1200:1');
+  assert.ok(verifyEmailModelSource(input).some(x => /VISIBILITY.*ANCEST/u.test(x.code)));
+});
+
+test('physical Content cannot substitute a foreign owner, viewport suffix, missing node or repeated target', async () => {
+  for (const mutate of [
+    i => { i.correspondence.visibility[0].node_id = 'I999:1;1103:7'; },
+    i => { i.correspondence.visibility[0].node_id = 'I2021:4164;1103:8'; },
+    i => { i.readings.nodes = i.readings.nodes.filter(n => n.node_id !== 'I2021:4164;1103:7'); },
+    i => { i.readings.nodes.push(structuredClone(i.readings.nodes.find(n => n.node_id === 'I2021:4164;1103:7'))); },
+    i => { i.correspondence.visibility.push(structuredClone(i.correspondence.visibility[0])); },
+    i => { i.readings.nodes.find(n => n.node_id === 'I2021:4164;1103:7;1104:1').parent_node_id = '2021:4164'; },
+    i => { i.readings.nodes.find(n => n.node_id === 'I2021:4164;1103:7;1104:1').main_component_id = '260:3976'; },
+  ]) {
+    const input = await registeredPhysicalSource(); mutate(input);
+    assert.ok(verifyEmailModelSource(input).some(x => /VISIBILITY/u.test(x.code)));
+  }
 });

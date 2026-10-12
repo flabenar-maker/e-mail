@@ -1,3 +1,4 @@
+import { physicalEmailSourceFixture } from '../helpers/email-physical-source-fixture.mjs';
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
@@ -33,6 +34,56 @@ import { loadWorkflowRegistry } from "../../scripts/lib/workflow-registry.mjs";
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const VIEWPORTS = ["mobile", "desktop"];
 let registryIndex;
+
+test('production handoff passes physical Content proof to the ordinary renderer', async (t) => {
+  const root = await mkdtemp(join(tmpdir(), 'cupis-physical-handoff-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const source = physicalEmailSourceFixture();
+  assert.equal(Object.hasOwn(source, 'selectedTest'), false);
+  assert.deepEqual(source.correspondence.visibility.map(x => x.node_id), ['I2021:4164;1103:7', 'I2021:4163;1103:8']);
+  const outputDir = join(root, 'rendered');
+  const result = await executeEmailBuildHandoff({
+    model: source.model, candidates: candidatesFor(source.model), assetEvidence: source.assetEvidence,
+    repoRoot, assetRoot: root, outputDir, sourceEvidence: source,
+    resolution: { workflow: { mode: 'new-build' } },
+  });
+  assert.deepEqual(result.blockers, []); assert.deepEqual(result.sourceDiagnostics, []);
+  assert.equal(result.executed, true);
+  const html = await readFile(join(outputDir, 'email.html'), 'utf8');
+  assert.match(html, /<html\b/u);
+  assert.doesNotMatch(html, /Понравилось это письмо\?/u);
+});
+
+test('production handoff stops foreign Content and owner before renderer or HTML/ZIP creation', async (t) => {
+  const root = await mkdtemp(join(tmpdir(), 'cupis-physical-handoff-invalid-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  let invocations = 0;
+  for (const [index, mutate] of [
+    i => { i.correspondence.visibility[0].node_id = 'I999:1;1103:7'; },
+    i => { i.correspondence.visibility[1].node_id = 'I2021:4163;1103:7'; },
+    i => { i.readings.nodes.find(n => n.node_id === '2021:4164').owner_component_id = '999:1'; },
+    i => { i.readings.nodes.find(n => n.node_id === 'I2021:4163;1103:8;1104:2').owner_component_id = '999:1'; },
+  ].entries()) {
+    const source = physicalEmailSourceFixture(); mutate(source);
+    const outputDir = join(root, `blocked-${index}`);
+    const result = await executeEmailBuildHandoff({
+      model: source.model, candidates: candidatesFor(source.model), assetEvidence: source.assetEvidence,
+      repoRoot, assetRoot: root, outputDir, sourceEvidence: source,
+      resolution: { workflow: { mode: 'new-build' } },
+      rendererRunner: async () => {
+        invocations += 1; await mkdir(outputDir, { recursive: true });
+        await writeFile(join(outputDir, 'email.html'), 'must not be written');
+        await writeFile(join(outputDir, 'altcraft.zip'), 'must not be written');
+      },
+    });
+    assert.equal(result.executed, false);
+    assert.ok(result.blockers.includes('source-evidence-mismatch'));
+    assert.ok(result.sourceDiagnostics.some(x => /VISIBILITY/u.test(x.code)));
+    await assert.rejects(readFile(join(outputDir, 'email.html')), { code: 'ENOENT' });
+    await assert.rejects(readFile(join(outputDir, 'altcraft.zip')), { code: 'ENOENT' });
+  }
+  assert.equal(invocations, 0);
+});
 
 test("delivery handoff bypasses user answers when every visible link is already resolved", async (t) => {
   const root = await mkdtemp(join(tmpdir(), "cupis-link-only-resolved-"));
