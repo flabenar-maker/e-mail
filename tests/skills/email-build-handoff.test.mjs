@@ -34,6 +34,39 @@ const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const VIEWPORTS = ["mobile", "desktop"];
 let registryIndex;
 
+test("delivery handoff bypasses user answers when every visible link is already resolved", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "cupis-link-only-resolved-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const source = await fixture(root, ["email-footer-legal"]);
+  const evidence = sourceEvidenceFor(source.model, source.assetEvidence);
+  let saved;
+  const result = await executeEmailBuildHandoff({ ...source, repoRoot, assetRoot: root, outputDir: join(root, "release"), sourceSha: "a".repeat(40),
+    resolution: { workflow: { mode: "new-build", steps: [{ id: "validate-delivery-answers" }] } }, sourceEvidence: evidence, assetEvidence: evidence.assetEvidence,
+    rendererRunner: async ({ deliveryPath }) => { saved = JSON.parse(await readFile(deliveryPath, "utf8")); }
+  });
+  assert.deepEqual(result.blockers, []); assert.equal(result.executed, true);
+  assert.equal(saved.subject, ""); assert.equal(saved.preheader, "");
+  assert.deepEqual(saved.sender, { mode: "inherit" }); assert.deepEqual(saved.plain_text, { mode: "auto" });
+});
+
+test("delivery handoff keeps the input gate for genuinely missing visible action links", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "cupis-link-only-missing-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const source = await fixture(root, ["banner-secondary"]);
+  for (const instance of everyInstance(source.model.root)) for (const value of instance.content_values ?? []) if (value.value?.type === "url") value.value.value = "";
+  const result = await executeEmailBuildHandoff({ ...source, repoRoot, assetRoot: root, outputDir: join(root, "release"), sourceSha: "a".repeat(40), resolution: { workflow: { mode: "new-build", steps: [{ id: "validate-delivery-answers" }] } }, rendererRunner: async () => { throw new Error("missing links must stay gated"); } });
+  assert.deepEqual(result.blockers, ["delivery-required"]); assert.equal(result.executed, false);
+});
+
+test("delivery workflow declares link-only conditional collection without a second text questionnaire", async () => {
+  const workflow = await loadWorkflowRegistry({ repoRoot, workflowId: "email-build" });
+  for (const mode of workflow.workflow.modes.filter(mode => ["new-build", "continue-fix-design"].includes(mode.id))) {
+    const collection = mode.steps.find(step => step.id === "collect-delivery-answers");
+    assert.equal(collection.condition_id, "missing-user-action-links");
+    assert.ok(mode.steps.find(step => step.id === "prepare-delivery-form").allowed_outputs.includes("delivery-answers"));
+  }
+});
+
 function crc32(bytes) {
   let value = 0xffffffff;
   for (const byte of bytes) {
