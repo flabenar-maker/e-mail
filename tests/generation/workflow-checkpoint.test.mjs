@@ -11,7 +11,7 @@ import {canonicalSystemFixtureFiles, copyFixtureFile, createSystemFixture, write
 const repoRoot=dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const checkpoint=(id, source)=>({id:`${id}-checkpoint`,output_source_id:`generated-${id}-checkpoint`,renderer:'workflow-checkpoint',workflow_source_id:source,input_source_ids:[source,'workflows-schema','manifest-schema','system-manifest']});
 function enableCheckpoints(manifest){
-  const next=structuredClone(manifest); next.schema_version='1.3.0';
+  const next=structuredClone(manifest); next.schema_version='1.4.0';
   if(!next.sources.some(s=>s.id==='system-manifest'))next.sources.push({id:'system-manifest',kind:'entrypoint',path:'system/manifest.yaml'});
   for(const [id,source] of [['library-maintenance','workflow-library-maintenance'],['email-build','workflow-email-build']]){
     if(!next.sources.some(s=>s.id===`generated-${id}-checkpoint`))next.sources.push({id:`generated-${id}-checkpoint`,kind:'generated',path:`docs/generated/${id}-checkpoint.md`});
@@ -63,7 +63,7 @@ test('checkpoint preserves every mode and typed stop/input/condition boundary',a
     for(const mode of ['new-build','continue-fix-design','continue-fix-technical','read-only'])assert.ok(email.includes(`## Mode: \`${mode}\``));
     assert.match(email,/`ordered-field-values`/);assert.match(email,/`same-field`/);assert.match(email,/`viewport-role-ambiguous`/);
     assert.match(email,/`asset-resolution-decision-required`/);assert.match(email,/`source-evidence-mismatch`/);
-    assert.match(email,/manifest=1\.3\.0/); assert.match(email,/workflows=1\.0\.0/);
+    assert.match(email,/manifest=1\.4\.0/); assert.match(email,/workflows=1\.0\.0/);
   }finally{await f.cleanup();}
 });
 

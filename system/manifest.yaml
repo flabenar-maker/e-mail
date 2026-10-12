@@ -1,7 +1,6 @@
-schema_version: 1.3.0
+schema_version: 1.4.0
 system:
   id: cupis-email-system
-  repository: flabenar-maker/e-mail
 entrypoints:
   repository: README.md
   bootstrap: bootstrap/README.md

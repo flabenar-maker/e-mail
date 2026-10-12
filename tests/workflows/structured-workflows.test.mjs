@@ -21,7 +21,7 @@ async function canonicalWorkflow(workflowId) {
 test("canonical manifest activates all structured workflows", async () => {
   const manifest = await loadSystemManifest({ repoRoot });
 
-  assert.equal(manifest.schema_version, "1.3.0");
+  assert.equal(manifest.schema_version, "1.4.0");
   assert.deepEqual(manifest.structured_workflows, {
     status: "active",
     schema_source_id: "workflows-schema",

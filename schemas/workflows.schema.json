@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/flabenar-maker/e-mail/schemas/workflows.schema.json",
+  "$id": "urn:cupis-email-system:schema:workflows.schema.json",
   "title": "CUPIS structured workflow",
   "type": "object",
   "additionalProperties": false,

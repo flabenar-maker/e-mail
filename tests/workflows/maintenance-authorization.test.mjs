@@ -12,6 +12,7 @@ import {loadComponentEvidenceModel} from '../../scripts/lib/component-evidence-i
 import {auditFigmaComponentEvidence} from '../../scripts/lib/figma-component-evidence.mjs';
 const root=dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const SHA='a'.repeat(40);
+const REPOSITORY='example-company/email-system';
 const write=(r,p,v)=>writeFile(join(r,p),JSON.stringify(v,null,2)+'\n');
 async function fixture(){const f=await createSystemFixture();for(const p of canonicalSystemFixtureFiles)await copyFixtureFile(root,f.root,p);return f;}
 async function activate(r,id,{naming=false,mode='write'}={}){
@@ -49,11 +50,11 @@ function execution(c,{rename=false,damage=false,authorize=true,noop=false}={}){
   if(s.id==='verify-figma-readback')return {'figma-readback':structuredClone(nodes)};
   if(s.id==='synchronize-dependents')return {'repository-change':{paths:[],cloud_sha:SHA,branch:'codex/fixture'}};
   if(s.id==='verify-exact-cloud-commit')return {'verification-summary':{pinned_sha:SHA,checks:[{command:'controlled-fixture-check',exit_code:0}],limitations:['controlled fixture, not live mutation']}};
-  if(s.id==='publish-review')return {'github-pr':{url:'https://github.com/flabenar-maker/e-mail/pull/999',head_sha:SHA,base:'main',draft:true}};
+  if(s.id==='publish-review')return {'github-pr':{url:'https://github.com/example-company/email-system/pull/999',head_sha:SHA,base:'main',draft:true}};
   if(s.id==='handoff')return {'handoff-summary':{}};
   throw Error('Unexpected handler '+s.id);
  }]));
- return {nodes,calls,preview,options:{context:c,pinnedSha:SHA,inputs:{request:'fixture','target-scope':{file_key:'file',node_ids:['1:2'],repository_paths:[]},'write-authorization':authorize?structuredClone(preview):true},conditions:{},handlers}};
+ return {nodes,calls,preview,options:{context:c,pinnedSha:SHA,repository:REPOSITORY,inputs:{request:'fixture','target-scope':{file_key:'file',node_ids:['1:2'],repository_paths:[]},'write-authorization':authorize?structuredClone(preview):true},conditions:{},handlers}};
 }
 test('controlled description write preserves every field except the exact authorized description',async()=>{
  const f=await fixture();try{const c=await activate(f.root,'figma-description-sync');assert.equal(c.status,'resolved');const e=execution(c);const result=await workflows.executeMaintenanceWorkflow(e.options);assert.equal(result.status,'complete');assert.equal(e.nodes[0].description,'new precise description');const preserved=structuredClone(e.nodes);preserved[0].description='old';assert.deepEqual(preserved,before);assert.equal(result.handoff.pinned_sha,SHA);assert.equal(result.handoff.github_pr?.draft,true);assert.equal(result.handoff.github_pr?.head_sha,SHA);assert.ok(e.calls.includes('verify-figma-readback'));}finally{await f.cleanup();}
@@ -72,7 +73,7 @@ test('boolean authorization is not exact authorization and never reaches a write
 test('unproven staged component blocks despite a handler claiming success',async()=>{
  const f=await fixture();try{const c=await activate(f.root,'component-onboarding');assert.equal(c.status,'resolved');
  const calls=[];const handlers=Object.fromEntries(c.workflow.steps.map(s=>[s.id,async()=>{calls.push(s.id);return Object.fromEntries(s.allowed_outputs.map(key=>[key,key==='pinned-sha'?SHA:{}]));}]));
- const result=await workflows.executeMaintenanceWorkflow({context:c,pinnedSha:SHA,inputs:{request:'fixture','target-scope':{file_key:'file',node_ids:['1:2'],repository_paths:['data/components/marketing.yaml']},'approved-ready-component':{node_id:'1:2'},'staged-component-record':{id:'incomplete'},'figma-factual-evidence':{ok:true},'write-authorization':true},handlers});
+ const result=await workflows.executeMaintenanceWorkflow({context:c,pinnedSha:SHA,repository:REPOSITORY,inputs:{request:'fixture','target-scope':{file_key:'file',node_ids:['1:2'],repository_paths:['data/components/marketing.yaml']},'approved-ready-component':{node_id:'1:2'},'staged-component-record':{id:'incomplete'},'figma-factual-evidence':{ok:true},'write-authorization':true},handlers});
  assert.equal(result.status,'blocked');assert.ok(result.blockers.some(b=>b.code==='fact-unproven'));assert.ok(!calls.includes('apply-minimal-repository-change'));
  }finally{await f.cleanup();}
 });
@@ -120,7 +121,7 @@ test('tool capabilities receive the actual immutable resolved bundle, not reopen
  const result=await workflows.executeMaintenanceWorkflow(e.options);assert.equal(result.status,'complete');}finally{await f.cleanup();}
 });
 test('non-draft PR response is not accepted as an authorized publication',async()=>{
- const f=await fixture();try{const c=await activate(f.root,'figma-description-sync');const e=execution(c);e.options.handlers['publish-review']=async()=>({'github-pr':{url:'https://github.com/flabenar-maker/e-mail/pull/999',head_sha:SHA,base:'main',draft:false}});const result=await workflows.executeMaintenanceWorkflow(e.options);assert.equal(result.status,'blocked');assert.ok(result.blockers.some(b=>b.code==='publication-boundary-invalid'));}finally{await f.cleanup();}
+ const f=await fixture();try{const c=await activate(f.root,'figma-description-sync');const e=execution(c);e.options.handlers['publish-review']=async()=>({'github-pr':{url:'https://github.com/example-company/email-system/pull/999',head_sha:SHA,base:'main',draft:false}});const result=await workflows.executeMaintenanceWorkflow(e.options);assert.equal(result.status,'blocked');assert.ok(result.blockers.some(b=>b.code==='publication-boundary-invalid'));}finally{await f.cleanup();}
 });
 
 // APPEND ONLY to tests/workflows/maintenance-authorization.test.mjs.
@@ -134,9 +135,9 @@ test('library repository-only write completes with exact local receipt and draft
    if(s.id==='inspect-canonical-sources')return {'audit-findings':{inspected:true}};if(s.id==='preview-exact-change')return {'change-preview':preview};
    if(['apply-minimal-repository-change','synchronize-dependents'].includes(s.id))return {'repository-change':{paths:preview.repository_paths,cloud_sha:SHA,branch:'codex/fixture'}};
    if(s.id==='verify-exact-cloud-commit')return {'verification-summary':{pinned_sha:SHA,checks:[{command:'controlled-fixture-check',exit_code:0}],limitations:['fixture']}};
-   if(s.id==='publish-review')return {'github-pr':{url:'https://github.com/flabenar-maker/e-mail/pull/999',head_sha:SHA,base:'main',draft:true}};if(s.id==='handoff')return {'handoff-summary':{}};throw Error('Unexpected '+s.id);
+   if(s.id==='publish-review')return {'github-pr':{url:'https://github.com/example-company/email-system/pull/999',head_sha:SHA,base:'main',draft:true}};if(s.id==='handoff')return {'handoff-summary':{}};throw Error('Unexpected '+s.id);
   }]));
-  const result=await workflows.executeMaintenanceWorkflow({context:c,pinnedSha:SHA,inputs:{request:'fixture','target-scope':{file_key:'file',node_ids:[],repository_paths:preview.repository_paths},'write-authorization':structuredClone(preview)},handlers});
+  const result=await workflows.executeMaintenanceWorkflow({context:c,pinnedSha:SHA,repository:REPOSITORY,inputs:{request:'fixture','target-scope':{file_key:'file',node_ids:[],repository_paths:preview.repository_paths},'write-authorization':structuredClone(preview)},handlers});
   assert.equal(result.status,'complete');assert.deepEqual(result.handoff.changed_paths,preview.repository_paths);assert.equal(result.handoff.verification_summary.checks[0].exit_code,0);assert.equal(result.handoff.github_pr.draft,true);assert.ok(!calls.includes('inspect-figma-read-only'));
  }finally{await f.cleanup();}
 });
@@ -176,5 +177,67 @@ test('each unexpected native readback diff stops before sync, verification and p
 });
 
 test('controlled historical onboarding write publishes an approved repository-only change without a Figma write',async()=>{
- const f=await fixture();try{const c=await activate(f.root,'component-onboarding');assert.equal(c.status,'resolved');const e=await controlledOnboardingEvidence(),calls=[],preview={pinned_sha:EVIDENCE_SHA,route_id:'component-onboarding',file_key:e.record.figma.file_key,changes:[],repository_paths:['data/components/marketing.yaml']};const handlers=Object.fromEntries(c.workflow.steps.map(s=>[s.id,async()=>{calls.push(s.id);if(s.id==='pin-canonical-state')return {'pinned-sha':EVIDENCE_SHA};if(s.id==='assess-impact')return {'impact-report':{scope:'historical controlled fixture; not fresh current-head evidence'}};if(s.id==='preview-exact-change')return {'change-preview':preview};if(['apply-minimal-repository-change','synchronize-dependents'].includes(s.id))return {'repository-change':{paths:preview.repository_paths,cloud_sha:EVIDENCE_SHA,branch:'codex/fixture'}};if(s.id==='verify-exact-cloud-commit')return {'verification-summary':{pinned_sha:EVIDENCE_SHA,checks:[{command:'controlled-fixture-check',exit_code:0}],limitations:['historical controlled fixture; not fresh current-head evidence']}};if(s.id==='publish-review')return {'github-pr':{url:'https://github.com/flabenar-maker/e-mail/pull/999',head_sha:EVIDENCE_SHA,base:'main',draft:true}};if(s.id==='handoff')return {'handoff-summary':{}};throw Error('Unexpected '+s.id)}]));const inputs=onboardingInputs(e);inputs['target-scope']={...inputs['target-scope'],repository_paths:preview.repository_paths};const result=await workflows.executeMaintenanceWorkflow({context:c,pinnedSha:EVIDENCE_SHA,inputs:{...inputs,'write-authorization':structuredClone(preview)},handlers});assert.equal(result.status,'complete');assert.ok(!calls.includes('apply-authorized-figma-change'));assert.deepEqual(result.handoff.changed_paths,preview.repository_paths);assert.equal(result.handoff.github_pr.draft,true);}finally{await f.cleanup();}
+ const f=await fixture();try{const c=await activate(f.root,'component-onboarding');assert.equal(c.status,'resolved');const e=await controlledOnboardingEvidence(),calls=[],preview={pinned_sha:EVIDENCE_SHA,route_id:'component-onboarding',file_key:e.record.figma.file_key,changes:[],repository_paths:['data/components/marketing.yaml']};const handlers=Object.fromEntries(c.workflow.steps.map(s=>[s.id,async()=>{calls.push(s.id);if(s.id==='pin-canonical-state')return {'pinned-sha':EVIDENCE_SHA};if(s.id==='assess-impact')return {'impact-report':{scope:'historical controlled fixture; not fresh current-head evidence'}};if(s.id==='preview-exact-change')return {'change-preview':preview};if(['apply-minimal-repository-change','synchronize-dependents'].includes(s.id))return {'repository-change':{paths:preview.repository_paths,cloud_sha:EVIDENCE_SHA,branch:'codex/fixture'}};if(s.id==='verify-exact-cloud-commit')return {'verification-summary':{pinned_sha:EVIDENCE_SHA,checks:[{command:'controlled-fixture-check',exit_code:0}],limitations:['historical controlled fixture; not fresh current-head evidence']}};if(s.id==='publish-review')return {'github-pr':{url:'https://github.com/example-company/email-system/pull/999',head_sha:EVIDENCE_SHA,base:'main',draft:true}};if(s.id==='handoff')return {'handoff-summary':{}};throw Error('Unexpected '+s.id)}]));const inputs=onboardingInputs(e);inputs['target-scope']={...inputs['target-scope'],repository_paths:preview.repository_paths};const result=await workflows.executeMaintenanceWorkflow({context:c,pinnedSha:EVIDENCE_SHA,repository:REPOSITORY,inputs:{...inputs,'write-authorization':structuredClone(preview)},handlers});assert.equal(result.status,'complete');assert.ok(!calls.includes('apply-authorized-figma-change'));assert.deepEqual(result.handoff.changed_paths,preview.repository_paths);assert.equal(result.handoff.github_pr.draft,true);}finally{await f.cleanup();}
+});
+
+
+function portableWriteExecution(context,repository,{url=`https://github.com/${typeof repository==='string'?repository.toLowerCase():'invalid'}/pull/7`,head_sha=SHA,base='main',draft=true}={}){
+ const preview={pinned_sha:SHA,route_id:context.route.id,file_key:'file',changes:[],repository_paths:['data/components/marketing.yaml']};
+ const calls=[],handlerInputs=[];
+ const handlers=Object.fromEntries(context.workflow.steps.map(step=>[step.id,async input=>{
+  calls.push(step.id);handlerInputs.push(input);
+  if(step.id==='pin-canonical-state')return {'pinned-sha':SHA};
+  if(step.id==='assess-impact')return {'impact-report':{scope:'fixture'}};
+  if(step.id==='inspect-canonical-sources')return {'audit-findings':{inspected:true}};
+  if(step.id==='preview-exact-change')return {'change-preview':preview};
+  if(['apply-minimal-repository-change','synchronize-dependents'].includes(step.id))return {'repository-change':{paths:preview.repository_paths,cloud_sha:SHA,branch:'codex/fixture'}};
+  if(step.id==='verify-exact-cloud-commit')return {'verification-summary':{pinned_sha:SHA,checks:[{command:'controlled-fixture-check',exit_code:0}],limitations:['fixture']}};
+  if(step.id==='publish-review')return {'github-pr':{url,head_sha,base,draft}};
+  if(step.id==='handoff')return {'handoff-summary':{}};
+  throw Error('Unexpected '+step.id);
+ }]));
+ return {calls,handlerInputs,options:{context,pinnedSha:SHA,repository,inputs:{request:'fixture','target-scope':{file_key:'file',node_ids:[],repository_paths:preview.repository_paths},'write-authorization':structuredClone(preview)},handlers}};
+}
+
+test('write publication binds selected repositories and carries immutable repository and SHA through handlers and handoff',async()=>{
+ const f=await fixture();try{const c=await activate(f.root,'library-maintenance');assert.equal(c.status,'resolved');
+  for(const repository of ['example-company/email-system','Second-Company/Notification-Library']){
+   const e=portableWriteExecution(c,repository),result=await workflows.executeMaintenanceWorkflow(e.options);
+   assert.equal(result.status,'complete',repository);assert.equal(result.handoff.repository,repository);assert.equal(result.handoff.pinned_sha,SHA);
+   assert.equal(result.handoff.github_pr.url,`https://github.com/${repository.toLowerCase()}/pull/7`);
+   for(const input of e.handlerInputs){assert.equal(input.repository,repository);assert.equal(input.pinned_sha,SHA);assert.ok(Object.isFrozen(input));}
+  }
+ }finally{await f.cleanup();}
+});
+
+test('write rejects missing or malformed selected repositories before any handler executes',async()=>{
+ const f=await fixture();try{const c=await activate(f.root,'library-maintenance');
+  for(const repository of [undefined,'','owner','owner/','/repo','owner/repo/extra','owner repo','owner\\repo','https://github.com/owner/repo','owner/%72epo']){
+   const e=portableWriteExecution(c,repository);if(repository===undefined)delete e.options.repository;
+   const result=await workflows.executeMaintenanceWorkflow(e.options);assert.equal(result.status,'blocked',String(repository));assert.equal(e.calls.length,0,String(repository));
+   assert.ok(result.blockers.some(v=>v.code===((repository===undefined||repository==='')?'repository-binding-missing':'repository-binding-invalid')),String(repository));
+  }
+ }finally{await f.cleanup();}
+});
+
+test('publication rejects a repository mismatch and unsafe or noncanonical GitHub PR URLs',async()=>{
+ const f=await fixture();try{const c=await activate(f.root,'library-maintenance'),repository='example-company/email-system';
+  const cases=[
+   ['wrong repository','https://github.com/example-company/other-system/pull/7'],['wrong owner','https://github.com/other-company/email-system/pull/7'],['wrong host','https://gitlab.com/example-company/email-system/pull/7'],['credentials','https://token@github.com/example-company/email-system/pull/7'],['encoded path','https://github.com/example-company/email%2Dsystem/pull/7'],['query','https://github.com/example-company/email-system/pull/7?x=1'],['hash','https://github.com/example-company/email-system/pull/7#proof'],['port','https://github.com:443/example-company/email-system/pull/7'],['dot segment','https://github.com/example-company/./email-system/pull/7'],['zero PR','https://github.com/example-company/email-system/pull/0']
+  ];
+  for(const [label,url] of cases){const e=portableWriteExecution(c,repository,{url}),result=await workflows.executeMaintenanceWorkflow(e.options);assert.equal(result.status,'blocked',label);assert.ok(result.blockers.some(v=>v.code==='publication-boundary-invalid'),label);}
+ }finally{await f.cleanup();}
+});
+
+test('publication rejects a selected-repository write with the wrong SHA, base, or draft state',async()=>{
+ const f=await fixture();try{const c=await activate(f.root,'library-maintenance'),repository='example-company/email-system';
+  for(const [label,publication] of [['wrong SHA',{head_sha:'b'.repeat(40)}],['wrong base',{base:'release'}],['non-draft',{draft:false}]]){const e=portableWriteExecution(c,repository,publication),result=await workflows.executeMaintenanceWorkflow(e.options);assert.equal(result.status,'blocked',label);assert.ok(result.blockers.some(v=>v.code==='publication-boundary-invalid'),label);}
+ }finally{await f.cleanup();}
+});
+
+test('read-only completion remains possible without any selected repository',async()=>{
+ const f=await fixture();try{const c=await activate(f.root,'system-progress',{mode:'read-only'}),calls=[];
+  const handlers=Object.fromEntries(c.workflow.steps.map(step=>[step.id,async()=>{calls.push(step.id);if(step.id==='pin-canonical-state')return {'pinned-sha':SHA};if(step.id==='compare-status-with-cloud-state')return {'audit-findings':{status:'checked'}};if(step.id==='verify-read-only-findings')return {'verification-summary':{limitations:['fixture']}};if(step.id==='handoff')return {'handoff-summary':{}};throw Error('Unexpected '+step.id)}]));
+  const result=await workflows.executeMaintenanceWorkflow({context:c,pinnedSha:SHA,inputs:{request:'status','cloud-state-evidence':{canonical_sha:SHA,tree_sha:'b'.repeat(40),cloud_channel:'github'}},handlers});assert.equal(result.status,'complete');assert.equal(result.handoff.repository,null);assert.ok(calls.length>0);
+ }finally{await f.cleanup();}
 });

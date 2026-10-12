@@ -12,7 +12,7 @@ Act as a thin router over one machine-resolved CUPIS context. GitHub owns persis
 ## Resolve the task context
 
 1. Prefer the authenticated `gh CLI` for cloud GitHub reads and writes. If it is unavailable or unauthenticated, use the GitHub MCP connector. Never expose credentials.
-2. Reuse the pinned cloud SHA supplied by a trusted CUPIS task-router or bootstrap handoff for this task; do not repin `main` during that handoff. For a standalone invocation, pin the current `main` SHA of `flabenar-maker/e-mail`. An explicitly authorized scoped candidate test uses its exact cloud SHA. Read `system/manifest.yaml` at the selected SHA; the specialization and task sources must match it. On mismatch stop rather than silently switching versions. The manifest is the only route catalog.
+2. Reuse the selected repository and pinned cloud SHA supplied by a trusted CUPIS task-router or bootstrap handoff for this task; do not repin `main` during that handoff. For a standalone invocation, resolve the trusted selected repository through bootstrap/README.md#repository-binding and pin its current `main` SHA. An explicitly authorized scoped candidate test uses its exact cloud SHA. Read `system/manifest.yaml` at the selected SHA; the specialization and task sources must match it. On mismatch stop rather than silently switching versions. The manifest is the only route catalog.
 3. Select the route from the request. For system status or next-step questions, select `system-progress` and compare `docs/system-status.md` with actual GitHub state at the pinned SHA before answering.
 4. Materialize a disposable exact-SHA snapshot of the pinned cloud commit. Verify that the snapshot HEAD equals the pinned SHA and prepare verified same-lock dependencies (see execution handoff), then invoke:
 
@@ -21,7 +21,7 @@ Act as a thin router over one machine-resolved CUPIS context. GitHub owns persis
    ```
 
    Use `read-only` mode for audits and answers and `write` mode only for an authorized change. The snapshot exists only to produce the resolver result and run local checks; it is not a persistent working copy or source fallback.
-5. Consume exactly one resolved bundle. When the result is `resolved`, also consume only its `workflow.steps`; do not reopen its sources by path.
+5. Pass the trusted selected `repository` and `pinnedSha` to executeMaintenanceWorkflow; do not derive them from handler outputs. Consume exactly one resolved bundle. When the result is `resolved`, also consume only its `workflow.steps`; do not reopen its sources by path.
 6. A `blocked` result stops the task. Report its typed blockers and do not invent missing rules, components or source paths.
 
 ### Paused routes
