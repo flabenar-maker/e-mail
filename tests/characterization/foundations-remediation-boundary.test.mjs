@@ -162,7 +162,10 @@ test("roadmap records completed Stage 8 and finalized 11A–11B while retaining 
       assert.ok(lines.some((line) => line.startsWith("- [x] ")), `${phase} must contain a checked gate`);
       assert.equal(lines.some((line) => line.startsWith("- [ ] ")), false, `${phase} must not retain an unchecked gate`);
     } else {
-      assert.ok(lines.some((line) => line.startsWith("- [ ] ")), `${phase} must retain an unchecked gate`);
+      const cleanupChecklist = lines.filter((line) => /^- \[[ x]\] /u.test(line)).join("\n");
+      assert.match(cleanupChecklist, /фактических потребителей, подтверждённую замену и решение `remove`\/`preserve`/u);
+      assert.match(cleanupChecklist, /Удалять только доказанно ненужные дубли/u);
+      assert.match(cleanupChecklist, /manifest, workflows, bundles, skills и bootstrap/u);
     }
   }
   assert.match(stage11, /Web-часть 10A отменена/u);
