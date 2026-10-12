@@ -184,5 +184,69 @@ test('visible source content cannot be discarded by a hidden exclusion reason', 
   const input = sourceScenario();
   input.readings.fields.push({ viewport: 'mobile', node_id: 'm-root;11:1', owner_node_id: 'm-root', field: 'unrepresented-visible-field', value: 'VISIBLE' });
   input.readings.exclusions = [{ kind: 'field', viewport: 'mobile', node_id: 'm-root;11:1', field: 'unrepresented-visible-field', reason: 'hidden by instance' }];
-  assert.ok(verifyEmailModelSource(input).some(x => x.code === 'EMAIL_SOURCE_FIELD_UNREPRESENTED'));
+  assert.ok(verifyEmailModelSource(input).some(x => x.code === 'EMAIL_SOURCE_FIELD_UNREPRESENTED' && x.message.includes('unrepresented-visible-field')));
+});
+
+
+test('hidden slots do not require or recursively validate their retained child content', () => {
+  const input = scenario();
+  for (const viewport of viewports) {
+    const group = input.componentIndex.bySystemId.get('block').contracts[viewport].root.children[1];
+    group.render_mode = 'slot'; group.children = [];
+    group.content_slots = [{ id: 'content', type: 'slot', required: true }];
+  }
+  input.model.root.slots = [{ element_id: 'group', instances: [instance('retained', 'child')] }];
+  assert.deepEqual(validateEmailModelSemantics(input.model, input), []);
+  const result = renderComponent({ componentId: 'block', viewportData: input.model.root, ...input });
+  assert.deepEqual(result.diagnostics, []); assert.deepEqual(result.assets, []);
+  assert.doesNotMatch(result.html, /retained/u);
+});
+
+test('a hidden component root produces no HTML or requested property/content/asset work', () => {
+  const input = scenario();
+  input.model.root.visibility_values = [mask('root')]; input.model.root.content_values = [];
+  input.componentIndex.bySystemId.get('block').properties.push({ id: 'show-extra', type: 'boolean' });
+  assert.deepEqual(validateEmailModelSemantics(input.model, input), []);
+  const result = renderComponent({ componentId: 'block', viewportData: input.model.root, ...input });
+  assert.deepEqual(result.diagnostics, []); assert.equal(result.html, ''); assert.deepEqual(result.assets, []);
+});
+
+test('assets retained only inside hidden branches need no export receipt', () => {
+  const input = sourceScenario();
+  input.model.root.asset_files = [{ asset_contract_id: 'photo', path: 'images/hidden.png' }];
+  assert.deepEqual(verifyEmailModelSource(input), []);
+});
+
+test('a shared asset visible only on Desktop remains required once and is absent on Mobile', () => {
+  const input = scenario();
+  input.model.root.visibility_values = [mask('group', 'mobile'), mask('link', 'desktop'), mask('nested', 'desktop')];
+  input.model.root.content_values.push({ element_id: 'image', slot_id: 'alt', scope: 'desktop', value: { type: 'alt-text', purpose: 'informative', value: 'DESKTOP IMAGE' } });
+  assert.ok(validateEmailModelSemantics(input.model, input).some(x => x.code === 'EMAIL_MODEL_REQUIRED_ASSET_MISSING' && x.path.includes('desktop')));
+  input.model.root.asset_files = [{ asset_contract_id: 'photo', path: 'images/desktop.png' }];
+  assert.deepEqual(validateEmailModelSemantics(input.model, input), []);
+  const result = renderComponent({ componentId: 'block', viewportData: input.model.root, ...input });
+  assert.deepEqual(result.diagnostics, []); assert.equal(result.assets.length, 1);
+  assert.equal((result.html.match(/src="images\/desktop.png"/gu) ?? []).length, 1);
+});
+
+test('a wrong source component or selected variant cannot prove even a hidden omission', () => {
+  for (const wrong of ['owner_component_id', 'main_component_id']) {
+    const input = sourceScenario();
+    const block = input.resolvedContracts.get('block');
+    block.figma = { file_key: 'file', node_id: '100:1' };
+    block.variants = [{ id: 'mobile', node_id: '100:2' }, { id: 'desktop', node_id: '100:3' }];
+    for (const node of input.readings.nodes.filter(n => /-root$/u.test(n.node_id))) {
+      node.owner_component_id = '100:1'; node.main_component_id = node.viewport === 'mobile' ? '100:2' : '100:3';
+    }
+    input.readings.nodes.find(n => n.node_id === 'm-root')[wrong] = '999:1';
+    assert.ok(verifyEmailModelSource(input).some(x => /VISIBILITY.*(OWNER|VARIANT)|SOURCE_(OWNER|VARIANT)/u.test(x.code)));
+  }
+});
+
+test('a root visibility assertion maps only to the exact source instance root', () => {
+  const input = sourceScenario();
+  input.model.root.visibility_values = [mask('root')]; input.model.root.content_values = [];
+  input.correspondence.visibility = viewports.map(viewport => ({ instance_id: 'block', element_id: 'root', viewport, node_id: viewport === 'mobile' ? 'm-root;11:2' : 'd-root' }));
+  input.readings.nodes.find(n => n.node_id === 'd-root').visible = false;
+  assert.ok(verifyEmailModelSource(input).some(x => /VISIBILITY/u.test(x.code)));
 });
