@@ -57,6 +57,25 @@ test("repeated resources use their own offsets and style raw text keeps literal 
   assert.deepEqual(result.diagnostics, []);
   assert.equal(result.references.length, 3);
   assert.equal(result.html, '<td style="background:url(&quot;../images/bg.png&quot;),url(&#39;../images/bg.png&#39;)"><style>.x{background:url("../images/bg.png")}</style>');
-  // In a style element, HTML entities are literal CSS characters, not quoting.
-  assert.equal(collectResourceReferences({ html: '<style>.x{background:url(&quot;images/bg.png&quot;)}</style>' }).length, 0);
+  // In a style element, entities are literal URL characters, not quoting.
+  const literal = '<style>.x{background:url(&quot;images/bg.png&quot;)}</style>';
+  const refs = collectResourceReferences({ html: literal });
+  assert.equal(refs.length, 1);
+  assert.equal(refs[0].raw_value, '&quot;images/bg.png&quot;');
+  assert.equal(literal.slice(refs[0].start, refs[0].end), '&quot;images/bg.png&quot;');
+  const rejected = rebasePackageResources({ html: literal, assetPaths, htmlEntry: "email/html.html", assetRootEntry: "images" });
+  assert.ok(rejected.diagnostics.length > 0);
+  assert.equal(rejected.html, literal);
+});
+
+test("HTML entities decode once in attributes and stay literal in stylesheet resource names", () => {
+  const input = '<td style="background:url(&quot;images/bg&amp;.png&quot;)"><style>.x{background:url("images/bg&amp;.png")}</style>';
+  const result = rebasePackageResources({ html: input, assetPaths: ["images/bg&.png", "images/bg&amp;.png"], htmlEntry: "email/html.html", assetRootEntry: "images" });
+  assert.deepEqual(result.diagnostics, []);
+  assert.equal(result.html, '<td style="background:url(&quot;../images/bg&amp;.png&quot;)"><style>.x{background:url("../images/bg&amp;.png")}</style>');
+  for (const [html, declared] of [['<img src="images/bg&#38;amp;.png">', 'images/bg&amp;.png'], ['<img src="images/bg&amp;#47;.png">', 'images/bg&#47;.png']]) {
+    const once = rebasePackageResources({ html, assetPaths: [declared], htmlEntry: "email/html.html", assetRootEntry: "images" });
+    assert.deepEqual(once.diagnostics, []);
+    assert.equal(once.html, html.replace('images/', '../images/'));
+  }
 });
