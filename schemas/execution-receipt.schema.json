@@ -29,13 +29,17 @@
           "type": "string",
           "minLength": 1
         },
-        "reviewer_model": {
-          "type": "string",
-          "minLength": 1
-        },
         "reviewer_effort": {
-          "type": "string",
-          "minLength": 1
+          "enum": [
+            "none",
+            "minimal",
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max",
+            "ultra"
+          ]
         },
         "review_mode": {
           "enum": [
@@ -145,6 +149,51 @@
             "changes-required",
             "blocked"
           ]
+        },
+        "reviewer_model_binding": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "binding": {
+                  "const": "explicit"
+                },
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "binding",
+                "id"
+              ]
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "binding": {
+                  "const": "inherited"
+                },
+                "id": {
+                  "type": "null"
+                }
+              },
+              "required": [
+                "binding",
+                "id"
+              ]
+            }
+          ]
+        },
+        "runtime_session_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tool_signature": {
+          "type": "string",
+          "minLength": 1
         }
       },
       "required": [
@@ -154,14 +203,16 @@
         "artifact_digest",
         "executor_agent_id",
         "reviewer_agent_id",
-        "reviewer_model",
         "reviewer_effort",
         "review_mode",
         "primary_sources_reviewed",
         "reviewed_refs",
         "requirement_results",
         "findings",
-        "verdict"
+        "verdict",
+        "reviewer_model_binding",
+        "runtime_session_id",
+        "tool_signature"
       ]
     },
     "verification": {

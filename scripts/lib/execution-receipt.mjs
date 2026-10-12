@@ -1,3 +1,4 @@
+import {sameSelectedModel} from './runtime-capabilities.mjs';
 import Ajv2020 from 'ajv/dist/2020.js';
 import schema from '../../schemas/execution-receipt.schema.json' with {type:'json'};
 import {isResolvedExecutionDecision,artifactDigest,workloadInputDigest} from './execution-context.mjs';
@@ -12,7 +13,7 @@ export function validateExecutionAcceptance({decision,reviewReceipts,verificatio
  const blockers=[],evidence_refs=[];
  const reject=(code,message)=>blockers.push({code,path:'/',message});
  const finish=()=>({status:blockers.length?'blocked':'accepted',request_id:typeof decision?.request_id==='string'?decision.request_id:null,blockers,evidence_refs,local_offer:null});
- if(!isResolvedExecutionDecision(decision)||!decision.executor_agent_id||!decision.artifact_refs.length){reject('EXECUTION_DECISION_INVALID','Acceptance requires a resolved domain decision bound to the actual executor agent.');return finish();}
+ if(!isResolvedExecutionDecision(decision)||!decision.executor_agent_id||!decision.artifact_refs.length||!sameSelectedModel(decision.executor.selected_model,decision.review.reviewer.selected_model)||decision.executor.effort!==decision.review.reviewer.effort){reject('EXECUTION_DECISION_INVALID','Acceptance requires a resolved domain decision bound to the actual executor agent.');return finish();}
  if(!/^[a-f0-9]{64}$/u.test(expectedArtifactDigest??'')){reject('EXECUTION_ARTIFACT_INVALID','Expected actual artifact digest is required.');return finish();}
  if(artifactDigest(decision.artifact_refs)!==expectedArtifactDigest){reject('EXECUTION_ARTIFACT_MISMATCH','Expected artifact digest must describe the actual decision artifact references.');return finish();}
  for(const workload of decision.verification){
@@ -26,8 +27,8 @@ export function validateExecutionAcceptance({decision,reviewReceipts,verificatio
   if(!reviewValid(receipt)){reject('EXECUTION_RECEIPT_INVALID','Review receipt does not match schema 1.0.0.');continue;}
   if(receipt.request_id!==decision.request_id||receipt.source_sha!==decision.source_sha||receipt.artifact_digest!==expectedArtifactDigest)reject('EXECUTION_REVIEW_IDENTITY_MISMATCH','Review is stale or belongs to a different request, source or artifact.');
   if(receipt.executor_agent_id!==decision.executor_agent_id||receipt.reviewer_agent_id===decision.executor_agent_id)reject('EXECUTION_REVIEW_NOT_INDEPENDENT','Reviewer must be distinct from the actual bound executor.');
-  const qualified=decision.review.mode==='independent-source-check'?(decision.review.eligible_reviewers??[decision.review.reviewer]).filter(role=>role.tier>=decision.executor.tier):[decision.review.reviewer];
-  if(!qualified.some(role=>receipt.reviewer_model===role.model&&receipt.reviewer_effort===role.effort)||receipt.review_mode!==decision.review.mode)reject('EXECUTION_REVIEW_ROLE_MISMATCH','Reviewer model, effort and review mode must match the selected role.');
+  const role=decision.review.reviewer;
+  if(!sameSelectedModel(receipt.reviewer_model_binding,role.selected_model)||receipt.reviewer_effort!==role.effort||receipt.review_mode!==decision.review.mode||receipt.runtime_session_id!==decision.runtime_identity.runtime_session_id||receipt.tool_signature!==decision.runtime_identity.tool_signature)reject('EXECUTION_REVIEW_ROLE_MISMATCH','Reviewer selected-model binding, supported effort, runtime and mode must match the resolved role.');
   const read=new Set(receipt.reviewed_refs.map(key)),results=new Map(receipt.requirement_results.map(x=>[key(x.ref),x.status]));
   if(!receipt.primary_sources_reviewed||requiredRefs.some(ref=>!read.has(key(ref))))reject('EXECUTION_REVIEW_SOURCE_MISSING','Reviewer must inspect complete domain, requirements and actual artifact references.');
   if(results.size!==receipt.requirement_results.length||results.size!==decision.requirement_refs.length||decision.requirement_refs.some(ref=>results.get(key(ref))!=='accepted'))reject('EXECUTION_REVIEW_COVERAGE_MISSING','Every requirement needs an explicit accepted result.');

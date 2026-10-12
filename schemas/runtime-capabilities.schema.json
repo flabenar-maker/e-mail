@@ -22,47 +22,6 @@
       "type": "integer",
       "minimum": 1
     },
-    "models": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "string",
-            "minLength": 1
-          },
-          "efforts": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 1
-            },
-            "minItems": 1,
-            "uniqueItems": true
-          },
-          "capabilities": {
-            "type": "array",
-            "items": {
-              "enum": [
-                "text",
-                "code",
-                "vision"
-              ]
-            },
-            "minItems": 1,
-            "uniqueItems": true
-          }
-        },
-        "required": [
-          "id",
-          "efforts",
-          "capabilities"
-        ]
-      },
-      "minItems": 1,
-      "uniqueItems": true
-    },
     "refusals": {
       "type": "array",
       "items": {
@@ -77,13 +36,17 @@
             "type": "string",
             "minLength": 1
           },
-          "model": {
-            "type": "string",
-            "minLength": 1
-          },
           "effort": {
-            "type": "string",
-            "minLength": 1
+            "enum": [
+              "none",
+              "minimal",
+              "low",
+              "medium",
+              "high",
+              "xhigh",
+              "max",
+              "ultra"
+            ]
           },
           "code": {
             "enum": [
@@ -91,17 +54,120 @@
               "EFFORT_UNAVAILABLE",
               "CAPABILITY_UNAVAILABLE"
             ]
+          },
+          "selected_model": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "binding": {
+                    "const": "explicit"
+                  },
+                  "id": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "binding",
+                  "id"
+                ]
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "binding": {
+                    "const": "inherited"
+                  },
+                  "id": {
+                    "type": "null"
+                  }
+                },
+                "required": [
+                  "binding",
+                  "id"
+                ]
+              }
+            ]
           }
         },
         "required": [
           "runtime_session_id",
           "tool_signature",
-          "model",
           "effort",
-          "code"
+          "code",
+          "selected_model"
         ]
       },
       "minItems": 0,
+      "uniqueItems": true
+    },
+    "selected_model": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "binding": {
+              "const": "explicit"
+            },
+            "id": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "binding",
+            "id"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "binding": {
+              "const": "inherited"
+            },
+            "id": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "binding",
+            "id"
+          ]
+        }
+      ]
+    },
+    "supported_efforts": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "none",
+          "minimal",
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max",
+          "ultra"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "text",
+          "code",
+          "vision"
+        ]
+      },
+      "minItems": 1,
       "uniqueItems": true
     }
   },
@@ -111,6 +177,8 @@
     "tool_signature",
     "source",
     "max_subagents",
-    "models"
+    "selected_model",
+    "supported_efforts",
+    "capabilities"
   ]
 }

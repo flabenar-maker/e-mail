@@ -28,10 +28,8 @@ export function validateExecutionPolicyShape(document, schema) {
 
 function validateReferences(policy) {
   const error = (path, message) => fail("execution-policy-reference", path, message);
-  if (policy.tiers.some((tier, index) => tier.tier !== index + 1)) error("/tiers", "Tiers must be unique and ordered 1 through 4.");
-  const models = policy.tiers.flatMap(tier => tier.candidates.map(candidate => candidate.model));
-  if (new Set(models).size !== models.length) error("/tiers", "A model may belong to only one tier and candidate slot.");
   for (const [kind, rule] of Object.entries(policy.task_kinds)) {
+    if (!policy.effort_order.includes(rule.base_effort)) error("/task_kinds/" + kind, "Unknown base effort.");
     for (const capability of rule.required_capabilities) if (!policy.capability_ids.includes(capability)) error("/task_kinds/" + kind, "Unknown capability: " + capability);
   }
   for (const [operation, values] of Object.entries(policy.operation_capabilities)) for (const value of values) if (!policy.capability_ids.includes(value)) error("/operation_capabilities/" + operation, "Unknown capability: " + value);
