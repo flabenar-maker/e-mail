@@ -125,37 +125,62 @@
           "minItems": 0,
           "uniqueItems": true
         },
-        "base_tier": {
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 4
-        },
-        "target_tier": {
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 4
-        },
         "executor": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "tier": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 4
-            },
-            "model": {
-              "type": "string",
-              "minLength": 1
+            "selected_model": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "binding": {
+                      "const": "explicit"
+                    },
+                    "id": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "binding",
+                    "id"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "binding": {
+                      "const": "inherited"
+                    },
+                    "id": {
+                      "type": "null"
+                    }
+                  },
+                  "required": [
+                    "binding",
+                    "id"
+                  ]
+                }
+              ]
             },
             "effort": {
-              "type": "string",
-              "minLength": 1
+              "enum": [
+                "none",
+                "minimal",
+                "low",
+                "medium",
+                "high",
+                "xhigh",
+                "max",
+                "ultra"
+              ]
             }
           },
           "required": [
-            "tier",
-            "model",
+            "selected_model",
             "effort"
           ]
         },
@@ -185,54 +210,60 @@
               "type": "object",
               "additionalProperties": false,
               "properties": {
-                "tier": {
-                  "type": "integer",
-                  "minimum": 1,
-                  "maximum": 4
-                },
-                "model": {
-                  "type": "string",
-                  "minLength": 1
+                "selected_model": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "binding": {
+                          "const": "explicit"
+                        },
+                        "id": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "binding",
+                        "id"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "binding": {
+                          "const": "inherited"
+                        },
+                        "id": {
+                          "type": "null"
+                        }
+                      },
+                      "required": [
+                        "binding",
+                        "id"
+                      ]
+                    }
+                  ]
                 },
                 "effort": {
-                  "type": "string",
-                  "minLength": 1
+                  "enum": [
+                    "none",
+                    "minimal",
+                    "low",
+                    "medium",
+                    "high",
+                    "xhigh",
+                    "max",
+                    "ultra"
+                  ]
                 }
               },
               "required": [
-                "tier",
-                "model",
+                "selected_model",
                 "effort"
               ]
-            },
-            "eligible_reviewers": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "additionalProperties": false,
-                "properties": {
-                  "tier": {
-                    "type": "integer",
-                    "minimum": 1,
-                    "maximum": 4
-                  },
-                  "model": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "effort": {
-                    "type": "string",
-                    "minLength": 1
-                  }
-                },
-                "required": [
-                  "tier",
-                  "model",
-                  "effort"
-                ]
-              },
-              "minItems": 1,
-              "uniqueItems": true
             }
           },
           "required": [
@@ -351,6 +382,48 @@
               "digest"
             ]
           }
+        },
+        "base_effort": {
+          "enum": [
+            "none",
+            "minimal",
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max",
+            "ultra"
+          ]
+        },
+        "target_effort": {
+          "enum": [
+            "none",
+            "minimal",
+            "low",
+            "medium",
+            "high",
+            "xhigh",
+            "max",
+            "ultra"
+          ]
+        },
+        "runtime_identity": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "runtime_session_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "tool_signature": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "runtime_session_id",
+            "tool_signature"
+          ]
         }
       },
       "required": [
@@ -368,13 +441,14 @@
         "domain_context_ref",
         "requirement_refs",
         "artifact_refs",
-        "base_tier",
-        "target_tier",
         "executor",
         "review",
         "verification",
         "safety_ceiling_reached",
-        "blockers"
+        "blockers",
+        "base_effort",
+        "target_effort",
+        "runtime_identity"
       ]
     },
     {

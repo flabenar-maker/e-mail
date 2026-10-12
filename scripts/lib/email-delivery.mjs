@@ -48,7 +48,6 @@ export function validateDeliveryDocument({ document, inventory, profile, purpose
     if (value.mode === 'explicit' && (!emailAddress(value.address) || /[\r\n]/u.test(value.name))) diagnostics.push(issue('EMAIL_DELIVERY_SENDER_INVALID','/'+name,'Provide a valid address and a single-line name.'));
   }
   if (/[\r\n]/u.test(document.subject)) diagnostics.push(issue('EMAIL_DELIVERY_SUBJECT_INVALID','/subject','The subject must be one line.'));
-  if (purpose === 'final' && !document.subject.trim()) diagnostics.push(issue('EMAIL_DELIVERY_REQUIRED_SUBJECT','/subject','Fill the email subject.'));
   return diagnostics;
 }
 export function projectDeliveryBindings({ model, document, inventory, profile }) {

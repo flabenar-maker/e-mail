@@ -95,6 +95,16 @@
         }
       ]
     },
+    "visibilityValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["element_id", "scope", "value"],
+      "properties": {
+        "element_id": { "$ref": "#/$defs/id" },
+        "scope": { "$ref": "#/$defs/scope" },
+        "value": { "type": "boolean" }
+      }
+    },
     "propertyValue": {
       "type": "object",
       "additionalProperties": false,
@@ -221,6 +231,10 @@
             "mobile": { "$ref": "#/$defs/variantAxisValues" },
             "desktop": { "$ref": "#/$defs/variantAxisValues" }
           }
+        },
+        "visibility_values": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/visibilityValue" }
         },
         "property_values": {
           "type": "array",

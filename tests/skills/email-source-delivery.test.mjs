@@ -153,7 +153,7 @@ test("removing a collected required URL blocks the release before any output is 
   }
 });
 
-test("blank subject remains a labelled incomplete preview and never creates an archive", async (t) => {
+test("blank subject preserves a ready link-only preview and never creates an archive", async (t) => {
   const folder = await mkdtemp(join(tmpdir(), "cupis-source-delivery-preview-"));
   t.after(() => rm(folder, { recursive: true, force: true }));
   const { document } = await releaseInput(folder);
@@ -163,8 +163,8 @@ test("blank subject remains a labelled incomplete preview and never creates an a
   await writeFile(delivery, JSON.stringify(blank));
   await execFileAsync(process.execPath, ["scripts/render-email-preview.mjs", "--model", join(folder, "model.json"), "--delivery", delivery, "--mode", "normal", "--output", preview], { cwd: repoRoot, env: { ...process.env, CUPIS_SYSTEM_COMMIT: sourceSha } });
   const html = await readFile(preview, "utf8");
-  assert.match(html, /<title>Предпросмотр — данные для выпуска неполные<\/title>/u);
-  assert.match(html, /CUPIS preview: readiness=incomplete; purpose=preview/u);
+  assert.match(html, /<title>Предпросмотр<\/title>/u);
+  assert.match(html, /CUPIS preview: readiness=ready; purpose=preview/u);
   await assert.rejects(readFile(join(folder, "preview", "altcraft.zip")), /ENOENT/u);
   const release = join(folder, "release");
   await execFileAsync(process.execPath, ["scripts/render-email.mjs", "--model", join(folder, "model.json"), "--delivery", join(folder, "delivery.json"), "--output", release], { cwd: repoRoot, env: { ...process.env, CUPIS_SYSTEM_COMMIT: sourceSha } });

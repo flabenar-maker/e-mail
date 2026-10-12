@@ -18,8 +18,8 @@ test("canonical strict policy is registered separately from domain bundles",asyn
  const manifest=await readStrictYaml(join(repoRoot,"system/manifest.yaml")); assert.ok(manifest.sources.some(x=>x.id==="execution-policy"));
  for(const bundle of manifest.bundle_profiles) assert.ok(!bundle.generated_bundle.static_source_ids.includes("execution-policy"));
  assert.equal(policy.delegation.max_subagents,3); assert.equal(policy.delegation.fork_turns,"none");
- assert.equal(policy.runtime_capabilities.source,"declared-runtime-tools"); assert.equal(policy.runtime_capabilities.max_candidate_attempts,1);
- assert.deepEqual(policy.tiers.map(x=>x.candidates.map(y=>[y.model,y.effort])),[[["gpt-6-luna","low"],["gpt-5.6-luna","low"]],[["gpt-5.6-terra","medium"],["gpt-5.6-sol","medium"]],[["gpt-6.1-sol","high"]],[["gpt-6-astra","high"]]]);
+ assert.equal(policy.runtime_capabilities.source,"declared-runtime-tools"); assert.equal(policy.runtime_capabilities.max_effort_attempts,1);
+ assert.equal(policy.model_binding,'user-selected');assert.equal('tiers' in policy,false);assert.deepEqual(policy.effort_order,['none','minimal','low','medium','high','xhigh','max','ultra']);assert.equal(policy.safety_steps,1);assert.equal(policy.delegation.model,'preserve-selected');
 });
 test("workloads have argv contracts, explicit portability and conservative fixed thresholds",async()=>{
  const policy=await loader()({repoRoot});

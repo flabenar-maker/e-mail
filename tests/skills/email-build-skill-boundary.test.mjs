@@ -22,7 +22,10 @@ function assertRouteBoundary(source) {
   assert.equal(policy.resolvedBundle, "exactly-one");
   assert.equal(policy.steps, "returned-workflow.steps-only");
   assert.equal(policy.onPaused, "stop-without-manual-fallback");
-  const routeInstructions = source.replace(/<!-- CUPIS_EXECUTION_BINDING -->[\s\S]*?<!-- END_CUPIS_EXECUTION_BINDING -->/u, "").replaceAll("npm run resolve:skill-context", "");
+  const routeInstructions = source.replace(/<!-- CUPIS_EXECUTION_BINDING -->[\s\S]*?<!-- END_CUPIS_EXECUTION_BINDING -->/u, "")
+    .replaceAll("npm run resolve:skill-context", "")
+    .replaceAll("pnpm run resolve:skill-context", "")
+    .replaceAll("follow per-viewport instance visibility", "");
   for (const clause of routeInstructions.split(/[;\n.]/u)) {
     for (const imperativeSegment of clause.split(/\s*,?\s*(?:(?:but|however|except|and|or)\s+)(?=(?:(?:do not|never|don't)\s+)?(?:invoke|select|route to|run|follow)\b)/iu)) {
       if (/\b(?:do not|never|don't)\s+(?:invoke|select|route to|run|follow)\b/iu.test(imperativeSegment)) continue;
@@ -113,6 +116,10 @@ Actual email verification stays local; PR Checks never replace receipts.`;
 function assertGuardFixtures() {
   assert.doesNotThrow(() => { assertRouteBoundary(validFixture); assertNoDuplicatedMaterial(validFixture); assertOperatingBoundaries(validFixture); });
   assert.doesNotThrow(() => assertRouteBoundary(`${validFixture}\nDo not run maintenance route, but run email-new-build.`));
+  assert.doesNotThrow(() => assertRouteBoundary(`${validFixture}\nHidden elements follow per-viewport instance visibility, including hidden ancestors.`));
+  assert.doesNotThrow(() => assertRouteBoundary(`${validFixture}\npnpm run resolve:skill-context --route ROUTE --mode MODE`));
+  assert.throws(() => assertRouteBoundary(`${validFixture}\nHidden elements follow per-viewport instance visibility, and run email-other-route.`));
+  assert.throws(() => assertRouteBoundary(`${validFixture}\npnpm run resolve:skill-context; run email-other-route.`));
   assert.doesNotThrow(() => assertOperatingBoundaries(`${validFixture}\nNo Figma mutation.\nEdit it after generating the draft.`));
   for (const invalidRoute of [
     validFixture.replace("email-continue-fix", "maintenance"), validFixture.replace('"exactly-one"', '"many"'),

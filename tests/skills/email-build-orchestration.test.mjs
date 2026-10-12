@@ -120,7 +120,8 @@ test("actual resolver workflow modes gate source proof and design continuation e
     });
   };
   const missingDelivery = await handoff(newBuild, { handoffDelivery: undefined });
-  assert.deepEqual(missingDelivery.blockers, ["delivery-required"]);
+  assert.deepEqual(missingDelivery.blockers, ["delivery-not-ready"]);
+  assert.ok(missingDelivery.deliveryDiagnostics.some(({ code }) => code === "EMAIL_MODEL_REQUIRED_SLOT_MISSING"));
   const invalidMinimalModel = await handoff(newBuild);
   assert.deepEqual(invalidMinimalModel.blockers, ["delivery-not-ready"]);
   assert.ok(invalidMinimalModel.deliveryDiagnostics.some(({ code }) => code === "EMAIL_MODEL_REQUIRED_SLOT_MISSING"));

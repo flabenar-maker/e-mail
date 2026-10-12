@@ -5,7 +5,7 @@
   <rect width="1000" height="1080" rx="24" fill="#f4f6fa"/>
   <g font-family="Arial, sans-serif" fill="#17233b">
     <text x="50" y="65" font-size="32" font-weight="700">От макета до выпуска письма</text>
-    <text x="50" y="104" font-size="20" fill="#4c5b71">Сначала параметры и ссылки, затем сборка и проверка</text>
+    <text x="50" y="104" font-size="20" fill="#4c5b71">Сначала недостающие ссылки, затем сборка и проверка</text>
     <g stroke="#697386" stroke-width="3" marker-end="url(#arrow)"><path d="M500 268V294"/><path d="M500 410V436"/><path d="M500 552V578"/><path d="M500 694V720"/><path d="M500 836V862"/></g>
     <g>
       <rect x="50" y="150" width="900" height="118" rx="16" fill="#fff" stroke="#cbd6e7"/>
@@ -18,14 +18,14 @@
       <rect x="50" y="294" width="900" height="116" rx="16" fill="#fff" stroke="#cbd6e7"/>
       <circle cx="96" cy="340" r="25" fill="#16375b"/><text x="88" y="349" fill="#fff" font-size="26">2</text>
       <text x="142" y="337" font-size="23" font-weight="700">Codex исследует макеты</text>
-      <text x="142" y="370" font-size="19">Распознаёт блоки и действия, выдаёт единую форму</text>
+      <text x="142" y="370" font-size="19">Читает видимые блоки и действия, готовит форму ссылок</text>
       <text x="870" y="338" text-anchor="end" font-size="16" fill="#16375b">CODEX</text>
     </g>
     <g>
       <rect x="50" y="436" width="900" height="116" rx="16" fill="#fff" stroke="#cbd6e7"/>
       <circle cx="96" cy="482" r="25" fill="#1b61d5"/><text x="88" y="491" fill="#fff" font-size="26">3</text>
       <text x="142" y="479" font-size="23" font-weight="700">Вы заполняете форму</text>
-      <text x="142" y="512" font-size="19">Тема, прехедер, настройки отправителя и ссылки</text>
+      <text x="142" y="512" font-size="19">Только недостающие ссылки видимых действий</text>
       <text x="870" y="480" text-anchor="end" font-size="16" fill="#1b61d5">ПОЛЬЗОВАТЕЛЬ</text>
     </g>
     <g>

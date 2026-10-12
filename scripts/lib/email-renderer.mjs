@@ -1,4 +1,5 @@
 import { buildEmailServiceFragments } from "./email-service-fragments.mjs";
+import { instanceElementVisible, instanceVisibilityBinding } from "./email-instance-visibility.mjs";
 import { resolveEmissionProfile } from "./email-emission-profile.mjs";
 import { renderContractTree, selectVariantRoot } from "./email-interpreter.mjs";
 import {
@@ -136,8 +137,12 @@ function prepareElement({
   prepared.output_origin = {component_id:record.id,instance_path:instancePath,viewport,original_element_id:originalId};
   if (path.endsWith("/root")) prepared.output_block = record.id + " / " + instancePath;
 
-  let visible = prepared.visibility?.mode === "instance" ? prepared.visibility.default_visible : true;
-  if (prepared.visibility?.mode === "property") {
+  const override = instanceVisibilityBinding(instance, originalId, viewport);
+  let visible = instanceElementVisible(element, instance, viewport);
+  if (override && typeof override.value !== "boolean") accumulator.diagnostics.push(diagnostic(
+    "RENDER_INSTANCE_VISIBILITY_INVALID", `${path}/visibility`, "Instance visibility must be boolean.",
+  ));
+  if (prepared.visibility?.mode === "property" && override?.value !== false) {
     const propertyId = prepared.visibility.property_id;
     const value = propertyValue(instance, propertyId, viewport);
     const propertyPath = `${path}/visibility/property_id`;
@@ -153,9 +158,11 @@ function prepareElement({
       const id = scopedId(instancePath, propertyId);
       prepared.visibility.property_id = id;
       accumulator.properties[viewport][id] = value;
-      visible = value;
+      visible = value && override?.value !== false;
     }
   }
+
+  if (override) prepared.visibility = { mode: "instance", default_visible: visible };
 
   for (const slot of visible ? (prepared.content_slots ?? []) : []) {
     let value = contentValue(instance, originalId, slot.id, viewport);
@@ -350,20 +357,6 @@ function prepareInstance({
     return null;
   }
 
-  for (const property of record.properties ?? []) {
-    if (property.type !== "boolean") continue;
-    const value = propertyValue(instance, property.id, viewport);
-    if (typeof value !== "boolean") {
-      accumulator.diagnostics.push(
-        diagnostic(
-          "RENDER_PROPERTY_UNRESOLVED",
-          `${path}/property_values/${property.id}`,
-          `Boolean property ${property.id} is not explicitly resolved for ${viewport}.`,
-        ),
-      );
-    }
-  }
-
   const selection = selectVariantRoot(record, viewport, instance.variant_axes?.[viewport] ?? {});
   for (const item of selection.diagnostics) {
     accumulator.diagnostics.push({ ...item, path: `${path}${item.path}` });
@@ -379,6 +372,22 @@ function prepareInstance({
       ),
     );
     return null;
+  }
+
+  if (instanceElementVisible(root, instance, viewport) || !instanceVisibilityBinding(instance, root.id, viewport)) {
+    for (const property of record.properties ?? []) {
+      if (property.type !== "boolean") continue;
+      const value = propertyValue(instance, property.id, viewport);
+      if (typeof value !== "boolean") {
+        accumulator.diagnostics.push(
+          diagnostic(
+            "RENDER_PROPERTY_UNRESOLVED",
+            `${path}/property_values/${property.id}`,
+            `Boolean property ${property.id} is not explicitly resolved for ${viewport}.`,
+          ),
+        );
+      }
+    }
   }
 
   return prepareElement({
