@@ -1,6 +1,6 @@
 <!-- GENERATED FILE — DO NOT EDIT MANUALLY. -->
 <!-- renderer: workflow-checkpoint -->
-<!-- source-digest: sha256:42068ba64906eda248ad42cdb3468089ada8b90f9ed801f70b4eafcb2a8a65fe -->
+<!-- source-digest: sha256:ce954f43ac82e2bd39d1f2ba9184b7e4f9c74909e7cb17209328fcd225994160 -->
 <!-- schema-versions: manifest=1.4.0, workflows=1.0.0 -->
 # Workflow checkpoint: `email-build`
 
@@ -153,13 +153,13 @@ The routing table describes current assignments only; workflow status is not a r
 - Sources: [email-delivery-profiles](../../data/delivery/profiles.yaml), [email-delivery-schema](../../schemas/email-delivery.schema.json), [email-model-schema](../../schemas/email-model.schema.json)
 - Required inputs: `logical-email-draft`, `resolved-component-contracts`
 - Blockers: `delivery-inventory-invalid`, `delivery-source-stale`
-- Allowed outputs: `delivery-form`, `delivery-draft`
+- Allowed outputs: `delivery-form`, `delivery-draft`, `delivery-answers`
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
 ### 6. `collect-delivery-answers`
 
-- Condition: always
+- Condition: `missing-user-action-links`
 - Sources: [email-delivery-schema](../../schemas/email-delivery.schema.json)
 - Required inputs: `delivery-form`, `delivery-draft`
 - Blockers: `delivery-user-input-missing`
@@ -370,13 +370,13 @@ The routing table describes current assignments only; workflow status is not a r
 - Sources: [email-delivery-profiles](../../data/delivery/profiles.yaml), [email-delivery-schema](../../schemas/email-delivery.schema.json), [email-model-schema](../../schemas/email-model.schema.json)
 - Required inputs: `logical-email-draft`, `resolved-component-contracts`
 - Blockers: `delivery-inventory-invalid`, `delivery-source-stale`
-- Allowed outputs: `delivery-form`, `delivery-draft`
+- Allowed outputs: `delivery-form`, `delivery-draft`, `delivery-answers`
 - Success handoff: `next`
 - Blocked handoff: `stop`
 
 ### 7. `collect-delivery-answers`
 
-- Condition: always
+- Condition: `missing-user-action-links`
 - Sources: [email-delivery-schema](../../schemas/email-delivery.schema.json)
 - Required inputs: `delivery-form`, `delivery-draft`
 - Blockers: `delivery-user-input-missing`
