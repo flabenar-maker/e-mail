@@ -17,7 +17,7 @@ test("identical CTA text is disambiguated by its actual visible card owner text"
   const { fields, diagnostics } = collectEmailActions({ ...labeledCards(), profile });
   assert.deepEqual(diagnostics, []);
   const first = fields.find(field => field.bindings.some(binding => binding.instance_path === "email/card/cta"));
-  const second = fields.find(field => field.bindings.some(binding => binding.instance_path === "email/card-2/cta"));
+  const second = fields.find(field => field.bindings.some(binding => binding.instance_path === "email/card-2/cta-2"));
   assert.equal(first.label, "Подробнее"); assert.equal(second.label, "Подробнее");
   assert.match(first.block_label, /Первый бонус/); assert.match(second.block_label, /Второй бонус/);
 });

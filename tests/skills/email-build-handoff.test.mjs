@@ -35,6 +35,33 @@ const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const VIEWPORTS = ["mobile", "desktop"];
 let registryIndex;
 
+test('real new-build delivery handoff reports early duplicate model locations before renderer or HTML/ZIP', async (t) => {
+  const root = await mkdtemp(join(tmpdir(), 'cupis-identity-handoff-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const source = physicalEmailSourceFixture();
+  source.model.root.slots[0].instances.push(structuredClone(source.model.root.slots[0].instances[0]));
+  const outputDir = join(root, 'blocked'); let invocations = 0;
+  const result = await executeEmailBuildHandoff({
+    repoRoot, model: source.model, candidates: candidatesFor(source.model), assetRoot: root,
+    assetEvidence: [], outputDir, sourceEvidence: source,
+    resolution: { workflow: { mode: 'new-build', steps: [{ id: 'validate-delivery-answers' }] } },
+    rendererRunner: async () => {
+      invocations += 1; await mkdir(outputDir, { recursive: true });
+      await writeFile(join(outputDir, 'email.html'), 'must not be written');
+      await writeFile(join(outputDir, 'altcraft.zip'), 'must not be written');
+    },
+  });
+  assert.equal(result.executed, false); assert.ok(result.blockers.includes('delivery-not-ready'));
+  assert.equal(invocations, 0);
+  await assert.rejects(readFile(join(outputDir, 'email.html')), { code: 'ENOENT' });
+  await assert.rejects(readFile(join(outputDir, 'altcraft.zip')), { code: 'ENOENT' });
+  const locations = ['/root/slots/0/instances/0/instance_id', '/root/slots/0/instances/1/instance_id'];
+  const duplicates = result.deliveryDiagnostics.filter(d => d.code === 'EMAIL_MODEL_INSTANCE_DUPLICATE');
+  assert.equal(duplicates.length, 2);
+  assert.deepEqual(duplicates.map(d => d.path).sort(), [...locations].sort());
+  assert.ok(duplicates.every(d => typeof d.message === 'string' && d.message.includes('nps-1') && locations.every(p => d.message.includes(p))));
+});
+
 test('production handoff passes physical Content proof to the ordinary renderer', async (t) => {
   const root = await mkdtemp(join(tmpdir(), 'cupis-physical-handoff-'));
   t.after(() => rm(root, { recursive: true, force: true }));
