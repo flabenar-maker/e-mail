@@ -96,3 +96,17 @@ test("HTML entities decode once in attributes and stay literal in stylesheet res
   assert.ok(alias.diagnostics.length > 0);
   assert.equal(alias.html, nested);
 });
+
+test("only actual case-sensitive HTML entity names bind declared resources", () => {
+  for (const quote of ["&QUOT;", "&#X27;"]) {
+    const html = `<td style="background:url(${quote}images/bg.png${quote})">`;
+    const valid = rebasePackageResources({ html, assetPaths, htmlEntry: "email/html.html", assetRootEntry: "images" });
+    assert.deepEqual(valid.diagnostics, []);
+    assert.equal(valid.html, html.replace('images/', '../images/'));
+  }
+  for (const html of ['<td style="background:url(&QuOt;images/bg.png&QuOt;)">', '<td style="background:url(&APOS;images/bg.png&APOS;)">', '<img src="images/bg&aMp;.png">']) {
+    const invalid = rebasePackageResources({ html, assetPaths: [...assetPaths, 'images/bg&.png'], htmlEntry: "email/html.html", assetRootEntry: "images" });
+    assert.ok(invalid.diagnostics.length > 0, html);
+    assert.equal(invalid.html, html);
+  }
+});
