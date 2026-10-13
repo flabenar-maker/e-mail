@@ -114,6 +114,11 @@
 
 ## Проверки
 
+**Уточнение после статического review до runtime publication:** returned callback context немедленно копируется в private detached snapshot до asynchronous reads; обе visual проверки используют только эту копию. Исходный returned object повторно сравнивается с private snapshot после gates и непосредственно перед publication; поздняя alias mutation блокирует output. При freeze входов actual captured model/document/final buffers сравниваются с известными подготовленными bytes, а каждый active asset buffer — с SHA256 private receipt, чтобы изменение между early asset validation и capture не стало новым baseline. Physical roots, inventory/model/image/attestation paths visual evidence должны находиться вне candidateDir; это проверяется перед production helper и повторным gate. Существующие R2 ownership и evidence placement requirements уточняются в тех же двух runtime paths; R6 loader/containment rewrite здесь не выполняется.
+
+- Task 5 RED `bd648fe`: 85 tests, 20 PASS / 65 FAIL, exit 1; core missing selected binding фактически создал final HTML/ZIP без review. 64 failures соответствуют отсутствующей защите, один rich fixture имел смешанную причину (old URL source comparison и неверные asset owner/viewport данные). Receipt и snapshot сохранены без изменений.
+- Task 5 corrected RED `73dbf6f`: 12 выбранных случаев, 1 PASS / 11 expected FAIL, exit 1; raw 347/0. Core/foreign binding и unapproved delivery продолжают публиковаться без review; real renderer пишет непосредственно final output. Rich fixture теперь имеет только восемь ожидаемых EMAIL_SOURCE_VALUE_MISMATCH, без asset owner/viewport/duplicate failures. Runtime GREEN/full/actual visual acceptance ещё не заявляются.
+
 Baseline и результаты каждого шага записываются после фактических локальных запусков с SHA. Непроверенные коммиты не обозначаются как passing.
 
 - Baseline `b8ee255`: полный локальный test-equivalent дал 2202 PASS / 5 FAIL. Все пять failures — окружение: Python отсутствовал в PATH и `CUPIS_SYSTEM_COMMIT` не был установлен. После процессного исправления targeted zip-store/source-delivery rerun: 7 PASS / 0 FAIL. Source/test/config не менялись. Это не повторный успешный полный suite; runtime GREEN ниже ещё ожидается.
