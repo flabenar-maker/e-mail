@@ -222,7 +222,12 @@ test('multi-segment canonical model remains schema-valid and binds source visual
   assert.deepEqual(urls, visit(f.prepared.canonicalModel.root).flatMap(instance => instance.content_values ?? []).filter(value => value.value.type === 'url'));
   const html = await readFile(join(f.outputDir, 'email.html'), 'utf8');
   for (const field of inventory.fields.filter(field => !field.managed)) assert.ok(html.includes(document.answers[field.id]), `actual HTML contains final literal answer ${field.id}`);
-  assert.match(html, /text-decoration:/u, 'existing registered inline styling is still rendered');
+  // Literal constants independently pinned to email-footer styled run 37..46 in both contracts.
+  const styled = [...html.matchAll(/<(span|a)\b[^>]*style="([^"]*)"[^>]*>([^<]*)<\/\1>/gu)].filter(match => match[3] === '1cupis.ru');
+  const emittedViewport = run => [...html.slice(0, run.index).matchAll(/<div\b[^>]*class="cupis-[^"]*-(mobile|desktop)"[^>]*>/gu)].at(-1)?.[1];
+  for (const [viewport, fontSize] of [['mobile', '12px'], ['desktop', '14px']]) {
+    assert.ok(styled.some(run => emittedViewport(run) === viewport && run[2].includes('color:#98999C;') && run[2].includes('font-family:Roboto,Arial,sans-serif;') && run[2].includes(`font-size:${fontSize};`) && run[2].includes('font-weight:400;') && run[2].includes('line-height:140%;') && run[2].includes('text-decoration:underline')), `${viewport} exact literal disclaimer run keeps its pinned color, font, size, weight, line height and underline`);
+  }
   const plain = html.replace(/<[^>]+>/gu, '');
   assert.ok(html.includes(literal) || plain.includes(literal), 'actual HTML retains joined literal source text');
 });
