@@ -14,7 +14,7 @@
 
 ## Текущая точка
 
-**Tasks 1–6 приняты в ветке.** Task 6 принят на `5dbbaec6adbe80237c41f0a61579f165f81a2eea`: targeted 157/full 2386 PASS без ошибок и пропусков, validator/generated exit 0, независимый review всех 14 refs, finalizer accepted и workflow complete. Actual visual/publication Task 5 относятся к ограниченному synthetic hidden-content примеру; populated/private email fidelity и external acceptance не проверялись. Task 7: первичные advisories и официальный registry подтверждены; детализация обновления dependency сохраняется до тестов и lock change.
+**Tasks 1–6 приняты в ветке.** Task 6 принят на `5dbbaec6adbe80237c41f0a61579f165f81a2eea`: targeted 157/full 2386 PASS без ошибок и пропусков, validator/generated exit 0, независимый review всех 14 refs, finalizer accepted и workflow complete. Actual visual/publication Task 5 относятся к ограниченному synthetic hidden-content примеру; populated/private email fidelity и external acceptance не проверялись. Task 7: три advisory подтверждены первичными источниками, RED и real old-lock audit сохранены. Кандидат меняет три поля fast-uri на3.1.8; actual npm ci, updated audit, GREEN/full и приёмка ещё ожидаются.
 
 | Шаг | Состояние |
 | --- | --- |
@@ -24,7 +24,7 @@
 | 4. R5, workflow identity presence | Accepted на 5b557800; targeted 49/full 2268 PASS |
 | 5. R2, source/candidate/release binding | Accepted на e306f000; targeted 160/full 2336 PASS; limited actual visual/publication |
 | 6. R6, contained asset bytes | Accepted на 5dbbaec6; targeted 157/full 2386 PASS |
-| 7. R4, fast-uri 3.x | Первичные источники подтверждены; детализация перед тестами и lock update |
+| 7. R4, fast-uri 3.x | RED/audit подтверждены; кандидат3.1.8 ожидает actual npm ci/GREEN/full и приёмку |
 | 8. #132/E04/E05, compact variants | Не начат |
 | 9. #132/E14/E15, centering/labels | Не начат |
 | 10. #128/E08, single compact link form | Не начат |
@@ -171,3 +171,5 @@ Baseline и результаты каждого шага записываютс�
 **Task7 — уточнение свежего audit finding до lock publication:** actual old-lock audit на64aeca через task-owned npm12.2.0 завершился exit1: один affected fast-uri package, три advisories, other vulnerable packages отсутствуют. Кроме двух исходных найден [GHSA-58mr-gqgx-xq4g](https://github.com/advisories/GHSA-58mr-gqgx-xq4g): affected=3.1.6, fixed3.1.7, unclosed authority bracket. Выбранная3.1.8 закрывает и этот range; три lock fields и Ajv/runtime scope сохраняются. До dependency change добавить ONE behavioral case в тот же schema-validation suite: valid IPv6 literal http://[::1]/app имеет absent parse.error и literal serialize roundtrip; malformed http://[not-an-ip даёт непустую parse.error (без привязки к точному тексту ошибки). Вектор подтверждён [официальным patch/test](https://github.com/fastify/fast-uri/commit/e00815236bc94107e44ef1b2f5318a06bac225c0). Detail сначала публикуется, затем тест, затем bounded actual old-lock RED этого одного нового case; предыдущие42test results и audit не переписываются. Не создавать network/SSRF demo или application-exploitability claim. Fresh updated audit отдельно должен показать результат по всем трём advisory IDs.
 
 - Task7 actual old-lock64aeca: three targeted suites42total /40PASS /2expectedURI FAIL /0SKIP, exit1,199.548s; all original/local-ref/validator/context controls PASS, no fixture repairs. Fresh actual npm12.2.0 ls exit0 and audit --omit=dev --json exit1/complete-with-findings; one package/three advisories, no network/TLS failure. Before/after raw349/0, owned processes absent; immutable result6c2d98ad and auditcbb09b7c retained. Original npm-unavailable observation remains historical; isolated CLI subsequently SRI-verified,1942files safely extracted and checked, actual Node24.19/npm12.2 versions exit0; bootstrapd23e257f. npm ci, updated-lock GREEN/full and acceptance have not run yet.
+
+- Task7 third behavioral RED `929ea07031941ea72e4d564934f09d8c385e82ea`: one matchedtest /0PASS /1expectedFAIL /0SKIP, exit1. Valid IPv6 absenterror/literal roundtrip assertions passed before malformed unclosed-bracket parse.error assertion failed under3.1.6. Raw349/0; verifiedsame-lock cache, no npm ci or other suites/audit rerun; owned process complete. Immutable result97f1aedb saved. Three advisories therefore have actual baseline evidence: two original behavioral failures, one additional bracket failure and separate actual audit. Minimal candidate lock SHA2562063f6e91ff10f782d2426bcb78b31173e75ce20340935c2648ea39afb5ac35e independently reviewed: only version/resolved/integrity substitutions, every other byte preserved. Updated dependency installation and GREEN/full remain pending.
