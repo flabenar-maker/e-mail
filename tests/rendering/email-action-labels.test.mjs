@@ -125,3 +125,34 @@ for (const [name, modify] of [
     for (const error of errors) { assert.match(error.path, /notice/u); assert.ok(error.message.length <= 240); assert.doesNotMatch(error.message, /СЕКРЕТНЫЙ ПРЕФИКС|https:\/\//u); }
   });
 }
+
+// Break caught: accepting individually valid ranges that omit part of the original source.
+test('Task10 refinement missing middle original source range refuses typed current mapping', () => {
+  const scenario = inlineDeliveryScenario({ currentRuns: ['До ', '«Поддержка»', ' после'] });
+  for (const viewport of ['mobile', 'desktop']) {
+    scenario.componentIndex.bySystemId.get('notice').contracts[viewport].root.children[0].facts[1].value.items = [
+      { start: 0, end: 2, characters: 'До', text_decoration: 'NONE' },
+      { start: 3, end: 11, characters: '«Помощь»', text_decoration: 'UNDERLINE' },
+      { start: 11, end: 17, characters: ' после', text_decoration: 'NONE' },
+    ];
+  }
+  const result = collectEmailActions(scenario);
+  const errors = result.diagnostics.filter(error => error.code === 'EMAIL_DELIVERY_LABEL_RANGE_AMBIGUOUS');
+  assert.ok(errors.length > 0, 'The missing source space at UTF16 offset 2 must make the typed map ambiguous');
+  assert.ok(errors.every(error => /notice/u.test(error.path) && error.message.length <= 240));
+});
+
+test('Task10 refinement missing trailing original source range refuses typed current mapping', () => {
+  const scenario = inlineDeliveryScenario({ currentRuns: ['До ', '«Поддержка»', ' после'] });
+  for (const viewport of ['mobile', 'desktop']) {
+    scenario.componentIndex.bySystemId.get('notice').contracts[viewport].root.children[0].facts[1].value.items = [
+      { start: 0, end: 3, characters: 'До ', text_decoration: 'NONE' },
+      { start: 3, end: 11, characters: '«Помощь»', text_decoration: 'UNDERLINE' },
+      { start: 11, end: 16, characters: ' посл', text_decoration: 'NONE' },
+    ];
+  }
+  const result = collectEmailActions(scenario);
+  const errors = result.diagnostics.filter(error => error.code === 'EMAIL_DELIVERY_LABEL_RANGE_AMBIGUOUS');
+  assert.ok(errors.length > 0, 'The missing final source character at UTF16 offset 16 must make the typed map ambiguous');
+  assert.ok(errors.every(error => /notice/u.test(error.path) && error.message.length <= 240));
+});

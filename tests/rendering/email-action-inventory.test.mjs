@@ -129,3 +129,20 @@ test('Task10 viewport hints distinguish real split targets but not shared or lon
   const half = pending.find(field => field.id === 'email%2Fcard~card-link~href~~desktop');
   assert.equal(half.viewport_hint, 'Desktop');
 });
+
+// Break caught: sorting Mobile B's index before Desktop-only X instead of inserting X at the common B anchor.
+test('Task10 refinement shifted hidden Mobile X retains Desktop insertion before shared B', () => {
+  const scenario = structuralDeliveryScenario({ shiftedHiddenDesktopAction: true, reverseModelOrder: true });
+  const result = collectEmailActions(scenario);
+  assert.deepEqual(result.diagnostics, []);
+  assert.deepEqual(result.fields.map(field => field.bindings[0].instance_path), [
+    'email/cards/first/first-cta', 'email/cards/desktop-cta', 'email/cards/last/last-cta', 'email/other/other-cta',
+  ]);
+  assert.deepEqual(result.fields.map(field => field.id), [
+    'email%2Fcards%2Ffirst%2Ffirst-cta~button-root~href~~both',
+    'email%2Fcards%2Fdesktop-cta~button-root~href~~desktop',
+    'email%2Fcards%2Flast%2Flast-cta~button-root~href~~both',
+    'email%2Fother%2Fother-cta~button-root~href~~both',
+  ]);
+  assert.deepEqual(result.fields.map(field => field.bindings.map(binding => binding.viewport)), [['mobile', 'desktop'], ['desktop'], ['mobile', 'desktop'], ['mobile', 'desktop']]);
+});

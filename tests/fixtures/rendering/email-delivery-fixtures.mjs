@@ -63,18 +63,19 @@ export function inlineDeliveryScenario({ kind = 'numbered', runs = ['До ', '«
   return { model: { schema_version: '1.1.0', id: 'inline-test', metadata: { language: 'ru', direction: 'ltr' }, root: logicalDeliveryInstance('email', 'email', { nested_components: [{ element_id: 'notice', instance: notice }] }) }, componentIndex, profile: { ...profile, block_labels: { notice: 'Информационный блок' } }, segments };
 }
 
-export function structuralDeliveryScenario({ reverseModelOrder = false, sameHeadings = false, paragraphOnly = false } = {}) {
+export function structuralDeliveryScenario({ reverseModelOrder = false, sameHeadings = false, paragraphOnly = false, shiftedHiddenDesktopAction = false } = {}) {
   const slot = { id: 'middle-slot', semantic_role: 'cards', render_mode: 'slot', visibility: always, facts: [], content_slots: [{ id: 'content', type: 'placeholder', required: true }], children: [] };
   const desktopAction = nested('desktop-action', 'button');
   const blockRoot = root('block-root', [nested('first-card', 'task10-card'), slot, desktopAction, nested('last-card', 'task10-card')]);
   const blockContracts = contract(blockRoot);
+  if (shiftedHiddenDesktopAction) { const elements = new Map(blockContracts.mobile.root.children.map(element => [element.id, element])); blockContracts.mobile.root.children = ['first-card', 'last-card', 'middle-slot', 'desktop-action'].map(id => elements.get(id)); }
   const cardRoot = root('card-root', [task10Text('heading', paragraphOnly ? 'body' : 'heading'), nested('card-cta', 'button')]);
   const makeCard = (id, title, buttonId) => logicalDeliveryInstance(id, 'task10-card', { content_values: [task10Value('heading', paragraphOnly ? 'Короткий абзац' : title)], nested_components: [{ element_id: 'card-cta', instance: cta(buttonId) }] });
   const first = makeCard('first', sameHeadings ? 'Акции' : 'Первый бонус', 'first-cta');
   const middle = makeCard('middle', sameHeadings ? 'Акции' : 'Второй бонус', 'middle-cta');
   const last = makeCard('last', sameHeadings ? 'Акции' : 'Третий бонус', 'last-cta');
   const children = [{ element_id: 'first-card', instance: first }, { element_id: 'desktop-action', instance: cta('desktop-cta') }, { element_id: 'last-card', instance: last }];
-  const cards = logicalDeliveryInstance('cards', 'task10-block', { visibility_values: [{ element_id: 'desktop-action', scope: 'mobile', value: false }], slots: [{ element_id: 'middle-slot', instances: [middle] }], nested_components: reverseModelOrder ? [...children].reverse() : children });
+  const cards = logicalDeliveryInstance('cards', 'task10-block', { visibility_values: [{ element_id: 'desktop-action', scope: 'mobile', value: false }, ...(shiftedHiddenDesktopAction ? [{ element_id: 'middle-slot', scope: 'all', value: false }] : [])], slots: [{ element_id: 'middle-slot', instances: [middle] }], nested_components: reverseModelOrder ? [...children].reverse() : children });
   const other = makeCard('other', 'Акции', 'other-cta');
   const placements = [{ element_id: 'cards', instance: cards }, { element_id: 'other', instance: other }];
   const model = { schema_version: '1.1.0', id: 'structural-test', metadata: { language: 'ru', direction: 'ltr' }, root: logicalDeliveryInstance('email', 'task10-email', { nested_components: reverseModelOrder ? [...placements].reverse() : placements }) };

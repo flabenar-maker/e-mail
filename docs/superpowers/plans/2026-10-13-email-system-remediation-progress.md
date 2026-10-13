@@ -427,3 +427,6 @@ The literal regression is Mobile visible A,B with hidden X declared elsewhere in
 No new schemas/registries/contracts/interpreter/dependencies or gates. No merge/install/Figma writes/Actions/PRChecks. Historical failed/source/review evidence retained; computer stays on. New code corrections are unaccepted until actual fresh focused/CLI/browser/full and typed finalizer/workflow evidence.
 
 Independent detail GO0a5939e0c830797f4cf488471fafa06d3c493b5b1ba2d20a86dea57a85339d53; три новые проверки ещё не подготовлены, runtime кандидат остаётся unpublished/HOLD.
+
+
+Refinement test-FIRST: три дополнительных literal regression cases подготовлены, fixture option ограничен shifted hidden Mobile X и reversed model declarations. Прежние40 cases/original prefixes и held runtime/doc bytes сохранены; syntax3/3 exit0; independent static GO для v2 manifest612e6512fdd926b284e613525b5f2b0b51eeb9bdd740a265602a324339d74ea5. Этот коммит публикует только tests/fixture/progress. Selected-three OLD RED и inventory correction ещё pending.
