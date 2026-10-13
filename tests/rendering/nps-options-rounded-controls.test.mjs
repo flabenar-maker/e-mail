@@ -68,7 +68,7 @@ for(const count of [2,3])test("Task11 NPS Count="+count+" standalone whole-area 
   const result=renderContractTree({component,coverage,content,assets,variantAxes:{Count:String(count)},foundations:{rendering:await readStrictYaml(join(repoRoot,"data/foundations/rendering.yaml"))}});
   assert.deepEqual(result.diagnostics,[]);
   for(const viewport of ["mobile","desktop"]){
-    const branch=result.html.match(new RegExp('<div class="cupis-root-'+viewport+'">([\\s\\S]*?)</div>','u'))?.[1];assert.ok(branch);
+    const branch=result.html.match(new RegExp('<div class="cupis-root-'+viewport+'"[^>]*>([\\s\\S]*?)</div>','u'))?.[1];assert.ok(branch);
     const order=count===2?["good","bad"]:["good","neutral","bad"];
     const links=[...branch.matchAll(/<a\b[^>]*>[\s\S]*?<\/a>/gu)].map(m=>m[0]);assert.equal(links.length,count);
     assert.deepEqual(links.map(a=>a.match(/href="([^"]+)"/u)[1]),order.map(o=>"https://example.test/nps/"+o));
