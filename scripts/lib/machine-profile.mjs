@@ -34,7 +34,7 @@ export async function readExecutionProfile({stateRoot,pairKey}) {
   return {status:'resolved',pair_key:pairKey,profile};
  } catch(error) {
   if(['ENOENT','ENOTDIR'].includes(error.code))return {status:'absent',pair_key:pairKey};
-  return {status:'invalid',pair_key:pairKey,code:['EACCES','EPERM'].includes(error.code)?'PROFILE_STATE_UNWRITABLE':error.code==='PROFILE_PATH_UNSAFE'?error.code:'PROFILE_STATE_INVALID'};
+  return {status:'invalid',pair_key:pairKey,code:['EACCES','EPERM','EBUSY'].includes(error.code)?'PROFILE_STATE_UNWRITABLE':error.code==='PROFILE_PATH_UNSAFE'?error.code:'PROFILE_STATE_INVALID'};
  }
 }
 async function atomicJson(path,value) {
