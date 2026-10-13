@@ -14,3 +14,8 @@ test('active entrypoints use canonical policy and preserve optional cloud readin
 test('finalizer help supplies a complete bounded review receipt without schema lookup',()=>{const help=execFileSync(process.execPath,['scripts/finalize-execution.mjs','--help'],{cwd:root,encoding:'utf8'});assert.ok(Buffer.byteLength(help)<=4096);for(const field of ['review_mode','primary_sources_reviewed','reviewed_refs','requirement_results','findings','verdict','artifact_digest'])assert.ok(help.includes(field),field);assert.ok(help.includes('actual runner/cloud receipts'));});
 
 test('resolver help explains typed refusal refresh without schema lookup',()=>{const help=execFileSync(process.execPath,['scripts/resolve-execution-context.mjs','--help'],{cwd:root,encoding:'utf8'});assert.ok(help.includes('refusals:[{runtime_session_id,tool_signature,selected_model,effort,code}]'));assert.ok(help.includes('MODEL_UNAVAILABLE'));assert.ok(help.includes('EFFORT_UNAVAILABLE'));assert.ok(help.includes('same model'));assert.ok(help.includes('without substitution'));assert.ok(help.includes('Hidden name means inherited binding'));});
+
+test('resolver and runner help expose the frozen concurrency handoff and legacy npm default',()=>{
+ const resolver=execFileSync(process.execPath,['scripts/resolve-execution-context.mjs','--help'],{cwd:root,encoding:'utf8'}),runner=execFileSync(process.execPath,['scripts/run-verification.mjs','--help'],{cwd:root,encoding:'utf8'});
+ assert.ok(Buffer.byteLength(resolver)<=4096);for(const token of ['frozen','--decision','npm test','2'])assert.ok(resolver.includes(token),token);for(const token of ['--decision','--test-concurrency','frozen','runner_lock_root'])assert.ok(runner.includes(token),token);
+});
