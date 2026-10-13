@@ -10,6 +10,10 @@
 
 **Spec:** [Сохраняемый выбор 2/4](../specs/2026-10-13-selectable-test-concurrency-design.md).
 
+## Execution update — isolated extraction (2026-10-14)
+
+The original planning-only scope, PR #134 base, publication checklist and continuation point below are historical. They are superseded solely for the authorized isolated extraction, fresh local verification, independent review and merge of its separate PR by the addendum at the end of this plan. The functional Tasks 1–4 and primary spec remain the authority. Main is pinned to b8ee255bde370a9b932cf36071904be771d86d8e; approved feature bytes come from 7f03aaf9e66afc79ad7321f7d120152b17af6cda..5d345e6852290deaf12906a6a2c73f2078a8bf27. PR #134 remains untouched. Installation and live-profile mutation remain outside scope.
+
 ## Global Constraints
 
 - Этот коммит содержит только spec и plan; будущая реализация не выполняется им автоматически. User scope: planning + independent review + local plan checks on 4.
@@ -122,3 +126,82 @@ Allowed paths ровно два новых файла: эта plan и связа
 ## Точка продолжения
 
 После принятого плана отдельная реализация следует Tasks1→2→3→4; overlapping execution/profile files меняются последовательно. Все proposed interfaces и выбранная база перед первой правкой перепроверяются. Текущая публикация не меняет выбор пользователя в живом профиле и не запускает продолжение Tasks11/12.
+
+---
+
+## Current extraction addendum
+
+# Independent selectable-concurrency extraction
+
+User authorization: «Делай», following the proposed separate PR on main, fresh local concurrency4 verification, independent review and merge only that PR. Existing PR134 remains draft and its source head5d345e6852290deaf12906a6a2c73f2078a8bf27 is preserved. Installation and live-profile mutation remain outside scope.
+
+Canonical repository: flabenar-maker/e-mail. Pin main b8ee255bde370a9b932cf36071904be771d86d8e; approved feature source7f03aaf9e66afc79ad7321f7d120152b17af6cda..5d345e6852290deaf12906a6a2c73f2078a8bf27. Use new cloud branch codex/selectable-test-concurrency-20261014. The existing primary spec/plan remains the functional authority. This addendum supersedes its original planning-only scope and original PR134 base solely for extraction, verification and the separately authorized merge.
+
+Historical scope: the spec's first-commit planning-only text, the plan's two-file publication checklist and original PR134 parent/branch instructions describe the original planning publication. They are not the allowed diff or branch instructions for this extraction. Original Tasks1–4 describe the already implemented feature transferred from5d; no new functionality or duplicate RED/TDD implementation cycle is authorized. Their behavioral and acceptance requirements remain applicable. The user's separate-PR execution/review/merge authorization satisfies the original plan's separate merge-scope requirement for this candidate only; installation and live-profile changes remain excluded.
+
+Impact boundary: exactly37 feature paths from split-feasibility/structural-report.json. No dependency declaration, lock update, email rendering/build/delivery change, Figma change, hardware policy change, account/model change, or original remediation1–12 implementation is added. Of these37paths, all36 baselines match main; only docs/user-guide.md requires preserving main's unrelated text while applying feature-only hunks. The existing plan receives this extraction addendum; all runtime/schema/policy/test/skill bytes remain identical to approved5d feature bytes. Spec remains identical.
+
+Allowed main-to-candidate paths, exactly:
+```text
+.agents/skills/building-cupis-emails/SKILL.md
+.agents/skills/maintaining-cupis-email-system/SKILL.md
+README.md
+bootstrap/README.md
+data/execution/policy.yaml
+docs/superpowers/plans/2026-10-13-selectable-test-concurrency-plan.md
+docs/superpowers/specs/2026-10-13-selectable-test-concurrency-design.md
+docs/user-guide.md
+package.json
+schemas/execution-decision.schema.json
+schemas/execution-policy.schema.json
+schemas/execution-receipt.schema.json
+schemas/machine-profile.schema.json
+scripts/init-execution-profile.mjs
+scripts/lib/cloud-verification.mjs
+scripts/lib/execution-context.mjs
+scripts/lib/execution-docs-check.mjs
+scripts/lib/execution-receipt.mjs
+scripts/lib/machine-profile.mjs
+scripts/lib/verification-concurrency.mjs
+scripts/lib/verification-runner.mjs
+scripts/resolve-execution-context.mjs
+scripts/run-verification.mjs
+scripts/test-system.mjs
+tests/execution-profile.Tests.ps1
+tests/skills/cloud-verification.test.mjs
+tests/skills/execution-context-cli.test.mjs
+tests/skills/execution-context.test.mjs
+tests/skills/execution-policy.test.mjs
+tests/skills/execution-receipt.test.mjs
+tests/skills/execution-skill-boundary.test.mjs
+tests/skills/execution-source-identity.test.mjs
+tests/skills/local-verification-offer.test.mjs
+tests/skills/machine-profile.test.mjs
+tests/skills/test-system-cli.test.mjs
+tests/skills/verification-concurrency.test.mjs
+tests/skills/verification-runner.test.mjs
+```
+
+Task1 — publish the isolated candidate:
+- Independently review this addendum plus primary spec and existing plan before publication.
+- Derive external payloads from canonical cloud Git blobs; never edit source snapshots or local mirror. Preserve raw bytes/modes/EOL and do not copy complete5d guide over main.
+- Create the new branch from exactmain after fresh main/ref equality check. Publish spec/plan(+addendum) in a separate plan commit, then other35feature paths through GitData expected-head/nonforce publication/read-back. Never force-update a ref or update main directly.
+- Verify candidate parentage, exact37-path main diff, untouched blob identities and original PR134 head. Record raw Git blob IDs and SHA256 payload hashes/modes, including byte equality to5d except the two declared prose exceptions. Save complete raw diff and publication/payload audit outside source. Candidate has no quality-success claim until local gates pass.
+
+Task2 — fresh local verification and review:
+- Materialize disposable exact-candidate snapshot and verify tracked raw blobs/GitHEAD. Prepare dependencies from unchanged main lock with npm ci --ignore-scripts; previous5d dependency tree is not same-lock evidence.
+- Resolve maintenance context from manifest at exactcandidate. Paused domain may be used only for this explicit scoped plan; no email/Figma operation. Freeze actual local repository-full decision4 and use implemented public ownedrunner.
+- Delegate all routine tests/regressions to actual inherited-model HIGH executor. Supply existing source/Python inputs only to the test process, truthfully matching candidateHEAD and verified bundledPython. No live hardware collection/profile modification/Actions/PR Checks.
+- Capture full validation, actual fixed Node suite argv4 and generated-docs check; counts and precise monotonic full wall time/UTC. Bound source/dependency hashes, heavy-lock ownership/release and sampled process cleanup; retain failed attempts separately.
+- Obtain actual candidate-specific2→4→2 synthetic selection/frozen receipt evidence and public finalizer acceptance as a mandatory gate. Use the existing bounded synthetic harness; if it cannot produce those actual records, keep the gate pending and report the limitation rather than substituting suite coverage or fabricated receipts. Full regression cases alone do not invent accepted actual roundtrip receipts.
+- Independent reviewer reads original spec/plan, exactcandidate37-path diff/bytes and actual completed records. Actual typed reviewer effort/model/session/agent identity must match frozen decision; distinct from executor. Final source/spec/quality approval and public finalizer acceptance required.
+
+Task3 — PR and merge:
+- Create one draft PR against pinnedmain with scope/validation pending stated honestly; attach it to this chat. Update its description with final exactSHA/result/time after gates pass.
+- Re-read main and PR head; only merge if base remains pinnedmain and head is the exact locally verified/reviewed candidate. If main moved, update candidate in cloud and rerun appropriate exact-result checks before merge; never silently accept an unverified tree.
+- Mark ready and merge through ordinary GitHub PR merge with expected head, no admin/protection bypass and no Actions inspection. Required protection check is reported as a blocker.
+- Read back merged state/main commit and compare merged tree to exact verified candidate tree. Identical tree needs no duplicate full rerun; changed tree requires new local verification. Preserve PR134 source and paused remainder, annotate metadata to point at extracted merged PR. Preserve local evidence and report actual status/time.
+
+Review focus: wrong branch/base; whole guide or lock copied from5d; omitted source-approved helper/schema/runner/receipt guards; fabricated concurrency metadata without actual4execution; wrong same-lock deps or inherited test context; stale head/base or merge tree differing from tested source.
+
+Self-review: functional requirements unchanged and covered by existing Tasks1–4; this addendum specifies extraction and exact-result merge gates only. Tasks1→2 share candidateSHA and37-path artifact; Tasks2→3 share accepted exactSHA/tree, reports and monotonic timing. No contradictory source mutation or profile/Actions authorization. User already chose execution/review/merge; no repeat permission menu.
