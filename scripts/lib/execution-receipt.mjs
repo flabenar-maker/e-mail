@@ -46,6 +46,9 @@ export function validateExecutionAcceptance({decision,reviewReceipts,verificatio
    const expected=decision.verification.find(x=>x.id===result.id);
    if(!expected||ids.has(result.id)){reject('EXECUTION_VERIFICATION_SCOPE_MISMATCH','Receipt contains an unknown or duplicate workload.');continue;}ids.add(result.id);
    if(result.signature!==expected.signature||receipt.target!==expected.target||(expected.portability==='local-only'&&receipt.target!=='local')){reject('EXECUTION_VERIFICATION_SCOPE_MISMATCH','Target and workload signature must match the decision.');continue;}
+   // Frozen mapped local rows compare the actual reported value as well as the effective signature.
+   // A missing legacy field means2 only after the existing request/source/target/signature guards.
+   if(receipt.target==='local'&&['docs-scoped','repository-full','visual-fixtures'].includes(result.id)&&(result.test_concurrency??2)!==expected.limits.concurrency){reject('EXECUTION_VERIFICATION_CONCURRENCY_MISMATCH','Actual local test concurrency must match the frozen workload decision; local4 requires an explicit4 receipt field.');continue;}
    if((expected.portability==='local-only'||expected.input_names?.length)&&(receipt.artifact_digest!==expectedArtifactDigest||result.input_digest!==expected.input_digest)){reject('EXECUTION_VERIFICATION_INPUT_MISMATCH','Consuming verification must bind the actual artifact and named input digest.');continue;}
    if(result.status!=='success'||result.exit_code!==0||!receipt.evidence_refs.length||receipt.conclusion!=='success'){reject('EXECUTION_VERIFICATION_FAILED','Workload requires successful exit and actual evidence references.');continue;}
    covered.add(result.id);
