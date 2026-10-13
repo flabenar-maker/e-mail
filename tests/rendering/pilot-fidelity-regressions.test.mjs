@@ -437,7 +437,7 @@ for(const profile of ["default","altcraft-mobile-base-v1"])for(const count of [2
     }else{
       const carrier=task9Node("root",{children:[task9Node("nested-nps",{render_mode:"nested-component",component_id:"nps-options"})]});
       const record={id:"task11-foreign-carrier",properties:[],asset_contracts:[],contracts:{mobile:{root:carrier},desktop:{root:structuredClone(carrier)}}};
-      deps.componentIndex.bySystemId.set(record.id,record);deps.rendererRegistry.coverage.push({component_id:record.id,mode:"interpreter"});
+      deps.componentIndex={bySystemId:new Map([...deps.componentIndex.bySystemId,[record.id,record]])};deps.rendererRegistry={...deps.rendererRegistry,coverage:[...deps.rendererRegistry.coverage,{component_id:record.id,mode:"interpreter"}]};
       model.root={instance_id:"task11-carrier",component_id:record.id,variants:{mobile:"mobile",desktop:"desktop"},property_values:[],content_values:[],asset_files:[],slots:[],nested_components:[{element_id:"nested-nps",instance:inst}]};
       assert.deepEqual(validateEmailModelSemantics(model,deps),[]);output=renderEmailDocument(model,deps);
     }
