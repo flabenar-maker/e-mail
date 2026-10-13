@@ -1,3 +1,4 @@
+import { createCandidateReviewFixture, emitTestCandidate, selectedDesignEvidence, plainAssetSourceFixture } from '../helpers/email-candidate-review-fixture.mjs';
 import { physicalEmailSourceFixture } from '../helpers/email-physical-source-fixture.mjs';
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -27,6 +28,7 @@ import {
   indexComponentRegistries,
   loadComponentRegistries,
 } from "../../scripts/lib/component-registry.mjs";
+import { selectVariantRoot } from '../../scripts/lib/email-interpreter.mjs';
 import { loadAssetsFoundation } from "../../scripts/lib/assets-foundation.mjs";
 import { loadRendererRegistry } from "../../scripts/lib/renderer-registry.mjs";
 import { loadWorkflowRegistry } from "../../scripts/lib/workflow-registry.mjs";
@@ -34,6 +36,12 @@ import { loadWorkflowRegistry } from "../../scripts/lib/workflow-registry.mjs";
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const VIEWPORTS = ["mobile", "desktop"];
 let registryIndex;
+
+// Formal callback fixtures bind files only; actual visual acceptance is separate.
+async function protectedFixture(root, source, evidence, { sourceSha = process.env.CUPIS_SYSTEM_COMMIT, autoDelivery = false } = {}) {
+  const review = await createCandidateReviewFixture({ root, model: source.model, sourceEvidence: evidence, sourceSha, autoDelivery });
+  return { sourceSha, selectedSourceBinding: review.selectedSourceBinding, candidateReviewQualification: review.candidateReviewQualification, candidateReviewer: review.candidateReviewer, review };
+}
 
 test('real new-build delivery handoff reports early duplicate model locations before renderer or HTML/ZIP', async (t) => {
   const root = await mkdtemp(join(tmpdir(), 'cupis-identity-handoff-'));
@@ -69,9 +77,10 @@ test('production handoff passes physical Content proof to the ordinary renderer'
   assert.equal(Object.hasOwn(source, 'selectedTest'), false);
   assert.deepEqual(source.correspondence.visibility.map(x => x.node_id), ['I2021:4164;1103:7', 'I2021:4163;1103:8']);
   const outputDir = join(root, 'rendered');
+  const bound = await protectedFixture(root, source, source);
   const result = await executeEmailBuildHandoff({
     model: source.model, candidates: candidatesFor(source.model), assetEvidence: source.assetEvidence,
-    repoRoot, assetRoot: root, outputDir, sourceEvidence: source,
+    repoRoot, assetRoot: root, outputDir, sourceEvidence: source, ...bound,
     resolution: { workflow: { mode: 'new-build' } },
   });
   assert.deepEqual(result.blockers, []); assert.deepEqual(result.sourceDiagnostics, []);
@@ -93,9 +102,10 @@ test('production handoff stops foreign Content and owner before renderer or HTML
   ].entries()) {
     const source = physicalEmailSourceFixture(); mutate(source);
     const outputDir = join(root, `blocked-${index}`);
+    const bound = await protectedFixture(root, source, source);
     const result = await executeEmailBuildHandoff({
       model: source.model, candidates: candidatesFor(source.model), assetEvidence: source.assetEvidence,
-      repoRoot, assetRoot: root, outputDir, sourceEvidence: source,
+      repoRoot, assetRoot: root, outputDir, sourceEvidence: source, ...bound,
       resolution: { workflow: { mode: 'new-build' } },
       rendererRunner: async () => {
         invocations += 1; await mkdir(outputDir, { recursive: true });
@@ -117,10 +127,11 @@ test("delivery handoff bypasses user answers when every visible link is already 
   t.after(() => rm(root, { recursive: true, force: true }));
   const source = await fixture(root, ["email-footer-legal"]);
   const evidence = sourceEvidenceFor(source.model, source.assetEvidence);
+  const bound = await protectedFixture(root, source, evidence, { sourceSha: process.env.CUPIS_SYSTEM_COMMIT, autoDelivery: true });
   let saved;
-  const result = await executeEmailBuildHandoff({ ...source, repoRoot, assetRoot: root, outputDir: join(root, "release"), sourceSha: "a".repeat(40),
+  const result = await executeEmailBuildHandoff({ ...source, repoRoot, assetRoot: root, outputDir: join(root, "release"), sourceSha: process.env.CUPIS_SYSTEM_COMMIT, ...bound,
     resolution: { workflow: { mode: "new-build", steps: [{ id: "validate-delivery-answers" }] } }, sourceEvidence: evidence, assetEvidence: evidence.assetEvidence,
-    rendererRunner: async ({ deliveryPath }) => { saved = JSON.parse(await readFile(deliveryPath, "utf8")); }
+    rendererRunner: async (args) => { saved = JSON.parse(await readFile(args.deliveryPath, "utf8")); await emitTestCandidate(args); }
   });
   assert.deepEqual(result.blockers, []); assert.equal(result.executed, true);
   assert.equal(saved.subject, ""); assert.equal(saved.preheader, "");
@@ -439,8 +450,16 @@ async function setHeaderAlphaMode(contractRepo, alphaModeId) {
   await writeFile(path, JSON.stringify(marketing), "utf8");
 }
 
+function registeredInlineRuns(instance, viewport, elementId) {
+  const record = registryIndex.bySystemId.get(instance.component_id);
+  const root = selectVariantRoot(record, viewport, instance.variant_axes?.[viewport] ?? {}).root;
+  const find = node => node.id === elementId ? node : (node.children ?? []).map(find).find(Boolean);
+  const runs = find(root)?.facts?.find(fact => fact.id === 'styled-text-segments')?.value?.items;
+  return Array.isArray(runs) && runs.length ? { inline_runs: structuredClone(runs) } : {};
+}
+
 function sourceValue(value) {
-  if (value?.type === "rich-text") return value.segments.map(({ value: text }) => text).join("");
+  if (value?.type === "rich-text") return value.value ?? value.segments.map(({ value: text }) => text).join("");
   if (value?.type === "alt-text") return { purpose: value.purpose, value: value.value };
   return value?.value;
 }
@@ -463,7 +482,7 @@ function sourceEvidenceFor(model, assetEvidence, { scope = "full-email" } = {}) 
   visit(model.root);
   const capture_id = "capture:source-gate";
   const file_key = "source-gate-file";
-  const nodeId = (viewport, instance) => `source-${viewport}-${instance.instance_id}`;
+  const nodeId = (viewport, instance) => instance === model.root ? (viewport === "mobile" ? "2021:4164" : "2021:4163") : `source-${viewport}-${instance.instance_id}`;
   const readings = { instances: [], fields: [], assets: [] };
   const correspondence = { capture_id, file_key, instances: [], fields: [], assets: [] };
   correspondence.instances = entries.map(({ instance }) => ({
@@ -495,7 +514,7 @@ function sourceEvidenceFor(model, assetEvidence, { scope = "full-email" } = {}) 
       for (const item of instance.content_values ?? []) {
         if (item.scope !== "all" && item.scope !== viewport) continue;
         const field = `content:${item.element_id}:${item.slot_id}`;
-        readings.fields.push({ viewport, node_id, owner_node_id: node_id, field, value: sourceValue(item.value) });
+        readings.fields.push({ viewport, node_id, owner_node_id: node_id, field, value: sourceValue(item.value), ...registeredInlineRuns(instance, viewport, item.element_id) });
         correspondence.fields.push({
           instance_id: instance.instance_id, kind: "content", element_id: item.element_id,
           slot_id: item.slot_id, viewport, node_id, field, origin: "figma",
@@ -796,15 +815,17 @@ test("resolved dual-viewport placement rejects standalone nested-only components
 test("the actual handoff gate prevents renderer invocation for every required blocker", async (t) => {
   const root = await mkdtemp(join(tmpdir(), "cupis-blockers-"));
   t.after(() => rm(root, { recursive: true, force: true }));
-  const source = await fixture(root, ["banner-secondary"]);
+  const source = await plainAssetSourceFixture(root, ["banner-secondary"]);
+  const evidence = source.sourceEvidence;
+  const bound = await protectedFixture(root, source, evidence);
   let invocations = 0;
-  const rendererRunner = async () => { invocations += 1; };
+  const rendererRunner = async (args) => { invocations += 1; await emitTestCandidate(args); };
   const execute = (overrides) => executeEmailBuildHandoff({
     ...source,
     repoRoot,
     assetRoot: root,
     outputDir: join(root, `blocked-${invocations}`),
-    rendererRunner,
+    rendererRunner, sourceEvidence: evidence, ...bound,
     ...overrides,
   });
 
@@ -826,12 +847,8 @@ test("the actual handoff gate prevents renderer invocation for every required bl
   assert.ok((await execute({ model: malformed })).blockers.includes("renderer-diagnostic"));
   const designWithoutVisualProof = await execute({
     resolution: { workflow: { mode: "continue-fix-design" } },
-    continueFixEvidence: {
-      figma_instances: {
-        mobile: { role: "mobile", email_id: "same", file_key: "file", node_id: "1:1" },
-        desktop: { role: "desktop", email_id: "same", file_key: "file", node_id: "1:2" },
-      },
-    },
+    continueFixEvidence: selectedDesignEvidence(bound.selectedSourceBinding),
+    candidateReviewer: undefined,
   });
   assert.ok(designWithoutVisualProof.blockers.includes("visual-regression"));
   assert.equal(invocations, 0);
@@ -849,17 +866,26 @@ test("the actual handoff gate prevents renderer invocation for every required bl
       },
     },
   });
-  assert.equal(verifiedDesign.executed, true);
+  assert.equal(verifiedDesign.executed, false);
+  assert.equal(invocations, 0);
+  const boundDesign = await execute({
+    resolution: { workflow: { mode: "continue-fix-design" } },
+    continueFixEvidence: selectedDesignEvidence(bound.selectedSourceBinding),
+  });
+  assert.deepEqual(boundDesign.blockers, []);
+  assert.equal(boundDesign.executed, true);
   assert.equal(invocations, 1);
+  assert.equal(bound.review.reviewCalls, 1);
 });
 
 test("new-build handoff blocks rendering without full source comparison evidence", async (t) => {
   const root = await mkdtemp(join(tmpdir(), "cupis-source-gate-"));
   t.after(() => rm(root, { recursive: true, force: true }));
   const source = await fixture(root, ["banner-secondary"]);
+  const bound = await protectedFixture(root, source, sourceEvidenceFor(source.model, source.assetEvidence));
   let invocations = 0;
   const result = await executeEmailBuildHandoff({
-    ...source,
+    ...source, ...bound,
     repoRoot,
     assetRoot: root,
     outputDir: join(root, "new-build"),
@@ -875,16 +901,17 @@ test("new-build handoff renders when complete source observations match the mode
   t.after(() => rm(root, { recursive: true, force: true }));
   const source = await fixture(root, ["email-footer-legal"]);
   const evidence = sourceEvidenceFor(source.model, source.assetEvidence);
+  const bound = await protectedFixture(root, source, evidence);
   let invocations = 0;
   const result = await executeEmailBuildHandoff({
-    ...source,
+    ...source, ...bound,
     repoRoot,
     assetRoot: root,
     outputDir: join(root, "new-build"),
     resolution: { workflow: { mode: "new-build" } },
     sourceEvidence: evidence,
     assetEvidence: evidence.assetEvidence,
-    rendererRunner: async () => { invocations += 1; },
+    rendererRunner: async (args) => { invocations += 1; await emitTestCandidate(args); },
   });
   assert.deepEqual(result.blockers, []);
   assert.equal(result.executed, true);
@@ -895,9 +922,10 @@ test("new-build handoff rejects selected-subtree proof and a passed claim withou
   const root = await mkdtemp(join(tmpdir(), "cupis-source-scope-"));
   t.after(() => rm(root, { recursive: true, force: true }));
   const source = await fixture(root, ["email-footer-legal"]);
+  const bound = await protectedFixture(root, source, sourceEvidenceFor(source.model, source.assetEvidence));
   const selectedEvidence = sourceEvidenceFor(source.model, source.assetEvidence, { scope: "selected-subtree" });
   const selected = await executeEmailBuildHandoff({
-    ...source,
+    ...source, ...bound,
     repoRoot,
     assetRoot: root,
     outputDir: join(root, "selected-subtree"),
@@ -910,7 +938,7 @@ test("new-build handoff rejects selected-subtree proof and a passed claim withou
   assert.ok(selected.sourceDiagnostics.some(({ code }) => code === "EMAIL_SOURCE_SCOPE_INCOMPLETE"));
 
   const claimed = await executeEmailBuildHandoff({
-    ...source,
+    ...source, ...bound,
     repoRoot,
     assetRoot: root,
     outputDir: join(root, "claimed-pass"),
