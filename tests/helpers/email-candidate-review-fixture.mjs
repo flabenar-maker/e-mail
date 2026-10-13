@@ -529,11 +529,15 @@ function sourceEvidenceFor(model, assetEvidence, { scope = "full-email" } = {}) 
     }
   }
   for (const entry of entries) {
-    for (const asset of entry.instance.asset_files ?? []) {
-      const viewport = "mobile";
-      const node_id = nodeId(viewport, entry.instance);
+    for (const [assetIndex, asset] of (entry.instance.asset_files ?? []).entries()) {
+      const record = registryIndex.bySystemId.get(entry.instance.component_id);
+      const contract = record.asset_contracts.find(contract => contract.id === asset.asset_contract_id);
+      assert.ok(contract, 'source fixture uses a registered asset contract');
+      const viewport = contract.source_viewport ?? "mobile";
+      const owner_node_id = nodeId(viewport, entry.instance);
+      const node_id = `${owner_node_id.startsWith('I') ? owner_node_id : 'I' + owner_node_id};9100:${assetIndex + 1}`;
       const evidence_id = `export:${entry.instance.instance_id}:${asset.asset_contract_id}`;
-      readings.assets.push({ viewport, node_id, owner_node_id: node_id, evidence_id });
+      readings.assets.push({ viewport, node_id, owner_node_id, evidence_id });
       correspondence.assets.push({
         instance_id: entry.instance.instance_id,
         asset_contract_id: asset.asset_contract_id,
