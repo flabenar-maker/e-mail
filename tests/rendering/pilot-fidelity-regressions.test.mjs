@@ -222,19 +222,19 @@ function task9HrefTables(html, href) {
   while ((at = html.indexOf(token, at + 1)) >= 0) output.push(task9TableStackAt(html, at).at(-1));
   return output;
 }
-async function task9CenterFixture({ mode = "nested", repeated = false, center = true, axis = "vertical", hiddenMobile = false, profile = "default" } = {}) {
+async function task9CenterFixture({ mode = "nested", repeated = false, center = true, axis = "vertical", hiddenMobile = false, profile = "default", identicalLabel = false, nativeLabel = null } = {}) {
   task9BaseContext ??= context(); const { deps: base } = await task9BaseContext;
   const template = base.componentIndex.bySystemId.get("button-primary");
   const coverage = id => ({ component_id: id, mode: "interpreter" });
   const roots = {};
-  for (const [viewport, fontSize] of [["mobile", 14], ["desktop", 16]]) {
-    const label = task9Node("label", { semantic_role: "label", render_mode: "html-text", facts: [task9Fact("font-size", { type: "measure", value: fontSize, unit: "px" })], content_slots: [{ id: "text", type: "plain-text", required: true }] });
+  for (const [viewport, fontSize] of [["mobile", 14], ["desktop", identicalLabel ? 14 : 16]]) {
+    const label = task9Node("label", { semantic_role: "label", render_mode: "html-text", facts: [task9Fact("font-size", { type: "measure", value: fontSize, unit: "px" }), ...(nativeLabel ? [task9Size("reference-size", viewport === "mobile" ? 40 : 46, 22), task9Keyword("text-auto-resize", "width_and_height"), ...(nativeLabel.sizing ? [task9Keyword("horizontal-sizing", nativeLabel.sizing)] : [])] : [])], content_slots: [{ id: "text", type: "plain-text", required: true }] });
     roots[viewport] = task9Node("root", { semantic_role: "button", facts: [task9Size("reference-size", 230, 46), task9Size("email-render-size", 230, 46), task9Keyword("horizontal-sizing", "hug"), task9Keyword("layout-axis", "vertical"), task9Fact("layout-gap", { type: "measure", value: 0, unit: "px" })], content_slots: [{ id: "href", type: "url", required: true }], action: { kind: "whole-element", href_slot: "href", required: true }, children: [label] });
   }
   const button = { ...structuredClone(template), id: "task9-button", properties: [], asset_contracts: [], contracts: { mobile: { root: roots.mobile }, desktop: { root: roots.desktop } } };
   const makeButton = (instanceId, ordinal) => ({ instance_id: instanceId, component_id: button.id, variants: { mobile: "mobile", desktop: "desktop" }, property_values: [], content_values: [
     { element_id: "root", slot_id: "href", scope: "all", value: { type: "url", value: `https://example.test/task9-cta-${ordinal}` } },
-    ...["mobile", "desktop"].map(viewport => ({ element_id: "label", slot_id: "text", scope: viewport, value: { type: "plain-text", value: `${ordinal === 1 ? "FIRST" : "SECOND"} ${viewport} CTA` } })),
+    ...["mobile", "desktop"].map(viewport => ({ element_id: "label", slot_id: "text", scope: viewport, value: { type: "plain-text", value: nativeLabel?.text ?? `${ordinal === 1 ? "FIRST" : "SECOND"} ${identicalLabel ? "shared" : viewport} CTA` } })),
   ], asset_files: [], slots: [] });
   const instances = [makeButton("scoped-first", 1), ...(repeated ? [makeButton("scoped-second", 2)] : [])];
   const carrier = task9Node("content", { render_mode: "slot", content_slots: [{ id: "content", type: "placeholder", required: true }] });
@@ -265,22 +265,25 @@ for (const profile of ["default", "altcraft-mobile-base-v1"]) {
     for (const mode of ["nested", "slot", "bridge"]) {
       const { result } = await task9CenterFixture({ mode, profile });
       const tags = task9HrefTables(result.html, "https://example.test/task9-cta-1");
-      assert.equal(tags.length, 1, mode + " one shared outer table per logical CTA with both viewport children");
+      assert.equal(tags.length, 2, mode + " one native outer table per viewport for differing labels and styles");
       for (const tag of tags) { assert.match(tag, /\swidth="230"/u); assert.equal((tag.match(/\salign="center"/gu) ?? []).length, 1, mode + " exact OUTER drawing table"); assert.match(tag, /(?:^|[";])margin:0 auto(?:;|")/u); }
       assert.match(result.html, /FIRST mobile CTA/u); assert.match(result.html, /FIRST desktop CTA/u);
       if (profile === "altcraft-mobile-base-v1") {
-        assert.equal((result.html.match(/<!-- cupis:block task9-button \/ /gu) ?? []).length, 1);
-        assert.equal((result.html.match(/<!-- cupis:end task9-button \/ /gu) ?? []).length, 1);
+        assert.equal((result.html.match(/<!-- cupis:block task9-button \/ /gu) ?? []).length, 2);
+        assert.equal((result.html.match(/<!-- cupis:end task9-button \/ /gu) ?? []).length, 2);
         assert.match(result.html, /<!--\[if !mso\]><!-->/u); assert.match(result.html, /<!--\[if mso\]>/u);
       }
     }
   });
   test("repeated scoped CTA order and hidden Mobile branch preserve structural markers: " + profile, async () => {
     const repeated = await task9CenterFixture({ repeated: true, profile });
-    for (const ordinal of [1, 2]) { const tags = task9HrefTables(repeated.result.html, `https://example.test/task9-cta-${ordinal}`); assert.equal(tags.length, 1); for (const tag of tags) assert.match(tag, /\salign="center"/u); }
+    for (const ordinal of [1, 2]) { const tags = task9HrefTables(repeated.result.html, `https://example.test/task9-cta-${ordinal}`); assert.equal(tags.length, 2); for (const tag of tags) assert.match(tag, /\salign="center"/u); }
     assert.ok(repeated.result.html.indexOf("FIRST mobile CTA") < repeated.result.html.indexOf("SECOND mobile CTA"));
     assert.ok(repeated.result.html.indexOf("FIRST desktop CTA") < repeated.result.html.indexOf("SECOND desktop CTA"));
-    if (profile === "altcraft-mobile-base-v1") assert.equal((repeated.result.html.match(/<!-- cupis:block task9-button \/ /gu) ?? []).length, 2);
+    if (profile === "altcraft-mobile-base-v1") {
+      assert.equal((repeated.result.html.match(/<!-- cupis:block task9-button \/ /gu) ?? []).length, 4);
+      assert.equal((repeated.result.html.match(/<!-- cupis:end task9-button \/ /gu) ?? []).length, 4);
+    }
     const conditional = await task9CenterFixture({ hiddenMobile: true, profile });
     assert.doesNotMatch(conditional.result.html, /FIRST mobile CTA/u); assert.match(conditional.result.html, /FIRST desktop CTA/u);
     assert.equal(task9HrefTables(conditional.result.html, "https://example.test/task9-cta-1").length, 1);
@@ -316,5 +319,75 @@ test("already-centered native outer table has one align attribute and leaves unr
     assert.equal((outer.match(/\salign=/gu) ?? []).length, 1);
     assert.match(inner, /\swidth="100%"/u);
     assert.doesNotMatch(inner, /\salign=/u);
+  }
+});
+
+for (const profile of ["default", "altcraft-mobile-base-v1"]) {
+  test("public serialized whole-button anchors preserve viewport label and style ownership: " + profile, async () => {
+    const { result } = await task9CenterFixture({ profile });
+    const anchors = actionAnchors(result.html, "https://example.test/task9-cta-1");
+    assert.equal(anchors.length, 2, "differing Mobile/Desktop labels and styles need two native anchors");
+    const mobile = anchors.filter(anchor => anchor.includes("FIRST mobile CTA"));
+    const desktop = anchors.filter(anchor => anchor.includes("FIRST desktop CTA"));
+    assert.equal(mobile.length, 1, "exactly one Mobile label owner");
+    assert.equal(desktop.length, 1, "exactly one Desktop label owner");
+    assert.notEqual(mobile[0], desktop[0], "the viewport labels must own distinct anchors");
+    assert.match(mobile[0], /<span\b[^>]*font-size:14px[^>]*>FIRST mobile CTA<\/span>/u);
+    assert.doesNotMatch(mobile[0], /FIRST desktop CTA|font-size:16px/u);
+    assert.match(desktop[0], /<span\b[^>]*font-size:16px[^>]*>FIRST desktop CTA<\/span>/u);
+    assert.doesNotMatch(desktop[0], /FIRST mobile CTA|font-size:14px/u);
+    for (const anchor of anchors) assert.doesNotMatch(anchor, /<table\b/u);
+  });
+}
+
+test("public serialized identical whole-button labels and styles retain one coalesced native outer", async () => {
+  for (const profile of ["default", "altcraft-mobile-base-v1"]) {
+    const { result } = await task9CenterFixture({ profile, identicalLabel: true });
+    const anchors = actionAnchors(result.html, "https://example.test/task9-cta-1");
+    assert.equal(anchors.length, 1, "identical text and 14px font preserve one native anchor: " + profile);
+    assert.equal((anchors[0].match(/FIRST shared CTA/gu) ?? []).length, 1);
+    assert.match(anchors[0], /<span\b[^>]*font-size:14px[^>]*>FIRST shared CTA<\/span>/u);
+    assert.doesNotMatch(anchors[0], /FIRST mobile CTA|FIRST desktop CTA|font-size:16px|<table\b/u);
+    const tables = task9HrefTables(result.html, "https://example.test/task9-cta-1");
+    assert.equal(tables.length, 1);
+    assert.match(tables[0], /\swidth="230"/u);
+    if (profile === "altcraft-mobile-base-v1") {
+      assert.equal((result.html.match(/<!-- cupis:block task9-button \/ /gu) ?? []).length, 1);
+      assert.equal((result.html.match(/<!-- cupis:end task9-button \/ /gu) ?? []).length, 1);
+    }
+  }
+});
+
+test("public serialized native intrinsic label preserves exact pre and literal double spaces through paragraph conversion", async () => {
+  function nativeSpans(result, text, expectedWhitespace) {
+    const anchors = actionAnchors(result.html, "https://example.test/task9-cta-1");
+    const spans = anchors.flatMap(anchor => [...anchor.matchAll(/<span\b[^>]*>[^<]*<\/span>/gu)]
+      .map(match => match[0]).filter(span => span.endsWith(">" + text + "</span>")));
+    assert.ok(spans.length > 0, "native href retains the literal label text");
+    for (const span of spans) {
+      const style = span.match(/\sstyle="([^"]*)"/u)?.[1];
+      assert.ok(style, "native paragraph-converted label has an emitted style");
+      const whitespace = style.split(";").map(declaration => declaration.trim())
+        .filter(declaration => declaration.startsWith("white-space:"))
+        .map(declaration => declaration.slice("white-space:".length).trim());
+      assert.deepEqual(whitespace, [expectedWhitespace], "native span must retain exactly its own whitespace declaration");
+      assert.ok(span.endsWith(">" + text + "</span>"), "literal text bytes survive paragraph conversion");
+    }
+    assert.equal(spans.length, 2, "both 14px/16px native label styles remain observable after checking whitespace");
+    return spans;
+  }
+  for (const profile of ["default", "altcraft-mobile-base-v1"]) {
+    const intrinsic = await task9CenterFixture({ profile, nativeLabel: { text: "2  шаг" } });
+    nativeSpans(intrinsic.result, "2  шаг", "pre");
+    for (const sizing of ["fixed", "fill"]) {
+      const control = await task9CenterFixture({ profile, nativeLabel: { text: "2  шаг", sizing } });
+      const spans = nativeSpans(control.result, "2  шаг", "nowrap");
+      if (sizing === "fixed") {
+        assert.match(spans.find(span => span.includes("font-size:14px")), /(?:^|[";])width:40px(?:;|")/u);
+        assert.match(spans.find(span => span.includes("font-size:16px")), /(?:^|[";])width:46px(?:;|")/u);
+      }
+    }
+    const ordinary = await task9CenterFixture({ profile, nativeLabel: { text: "2 шаг" } });
+    nativeSpans(ordinary.result, "2 шаг", "nowrap");
   }
 });
