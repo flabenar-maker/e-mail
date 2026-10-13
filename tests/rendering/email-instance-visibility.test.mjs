@@ -492,3 +492,61 @@ test('physical Content cannot substitute a foreign owner, viewport suffix, missi
     assert.ok(verifyEmailModelSource(input).some(x => /VISIBILITY/u.test(x.code)));
   }
 });
+
+
+// Task11 public fixture: literal identities/URLs; registry selection supplies contract facts.
+async function task11PublicFixture(count=3, instanceId="task11-nps", label="first") {
+  const {loadComponentRegistries,indexComponentRegistries}=await import("../../scripts/lib/component-registry.mjs");
+  const {loadRendererRegistry}=await import("../../scripts/lib/renderer-registry.mjs");
+  const {loadRenderingFoundation}=await import("../../scripts/lib/rendering-foundation.mjs");
+  const {fileURLToPath}=await import("node:url"); const {dirname}=await import("node:path");
+  const repo=dirname(dirname(dirname(fileURLToPath(import.meta.url))));
+  const deps={componentIndex:indexComponentRegistries(await loadComponentRegistries({repoRoot:repo})),rendererRegistry:await loadRendererRegistry({repoRoot:repo}),foundations:{rendering:await loadRenderingFoundation({repoRoot:repo})}};
+  const ids={good:"root-content-area-emoji-buttons-good",neutral:"root-content-area-emoji-buttons-neutral",bad:"root-content-area-emoji-buttons-bad"};
+  const icons={good:"happy-face-icon",neutral:"neutral-face-icon",bad:"sad-face-icon"};
+  const order=count===2?["good","bad"]:["good","neutral","bad"];
+  const inst={instance_id:instanceId,component_id:"nps-options",variants:{mobile:"mobile",desktop:"desktop"},variant_axes:{mobile:{Count:String(count)},desktop:{Count:String(count)}},property_values:[],content_values:[],asset_files:[],slots:[]};
+  for(const viewport of ["mobile","desktop"]){
+    inst.content_values.push({element_id:"root-content-area-heading",slot_id:"text",scope:viewport,value:{type:"plain-text",value:"TASK11 "+label}});
+    for(const option of order){
+      inst.content_values.push({element_id:ids[option],slot_id:"href",scope:viewport,value:{type:"url",value:"https://example.test/task11/"+label+"/"+viewport+"/"+option}});
+      inst.content_values.push({element_id:ids[option]+"-"+icons[option],slot_id:"alt",scope:viewport,value:{type:"alt-text",purpose:"informative",value:label+" "+viewport+" "+option}});
+    }
+  }
+  inst.asset_files=order.map(option=>({asset_contract_id:icons[option],path:"images/task11-"+label+"-"+option+".png"}));
+  const model={schema_version:"1.1.0",id:"task11-model",metadata:{language:"ru",direction:"ltr"},root:inst};
+  return {deps,inst,model,ids,icons,order};
+}
+function task11Anchors(html){return [...html.matchAll(/<a\b[^>]*>[\s\S]*?<\/a>/gu)].map(x=>x[0]);}
+function task11OwnAnchor(html,href){const anchors=task11Anchors(html).filter(a=>a.includes('href="'+href+'"'));assert.equal(anchors.length,1,href+" has exactly one native anchor");return anchors[0];}
+function task11AssertWhole(anchor,padding){
+  assert.match(anchor,/display:block/u,"whole option anchor owns its box");
+  for(const [side,value] of Object.entries(padding))assert.ok(anchor.slice(0,anchor.indexOf(">")+1).includes("padding-"+side+":"+value+"px"),"anchor owns "+side+" padding "+value);
+  assert.doesNotMatch(anchor,/<table\b|<a\b[^>]*>[\s\S]*<a\b/u,"no table/nested anchor inside action");
+}
+
+function task11Remove(fixture,ids){fixture.inst.content_values=fixture.inst.content_values.filter(v=>!ids.includes(v.element_id));fixture.inst.asset_files=fixture.inst.asset_files.filter(a=>!ids.some(id=>id.endsWith(a.asset_contract_id)));}
+test("Task11 visible NPS missing own URL still blocks",async()=>{const f=await task11PublicFixture(2);f.inst.content_values=f.inst.content_values.filter(v=>v.element_id!==f.ids.bad||v.slot_id!=="href");assert.ok(validateEmailModelSemantics(f.model,f.deps).some(d=>d.code==="EMAIL_MODEL_REQUIRED_CONTENT_MISSING"));const r=renderComponent({componentId:"nps-options",viewportData:f.inst,...f.deps});assert.ok(r.diagnostics.length>0);});
+for(const count of [2,3])test("Task11 NPS Count="+count+" visible hidden icon retains own whole-area URL",async()=>{
+  const f=await task11PublicFixture(count);const icon=f.ids.good+"-happy-face-icon";f.inst.visibility_values=[mask(icon)];task11Remove(f,[icon]);
+  assert.deepEqual(validateEmailModelSemantics(f.model,f.deps),[]);const r=renderComponent({componentId:"nps-options",viewportData:f.inst,...f.deps});assert.deepEqual(r.diagnostics,[]);
+  for(const viewport of ["mobile","desktop"]){const a=task11OwnAnchor(r.html,"https://example.test/task11/first/"+viewport+"/good");task11AssertWhole(a,{top:6,right:24,bottom:6,left:24});assert.doesNotMatch(a,/<img\b/u);}
+  assert.ok(!r.assets.some(a=>JSON.stringify(a).includes("happy-face-icon")));
+});
+test("Task11 hidden NPS option suppresses URL icon and action inventory",async()=>{
+  const f=await task11PublicFixture(3);f.inst.visibility_values=[mask(f.ids.neutral)];task11Remove(f,[f.ids.neutral,f.ids.neutral+"-neutral-face-icon"]);
+  assert.deepEqual(validateEmailModelSemantics(f.model,f.deps),[]);const r=renderComponent({componentId:"nps-options",viewportData:f.inst,...f.deps});assert.deepEqual(r.diagnostics,[]);assert.doesNotMatch(r.html,/task11\/first\/(?:mobile|desktop)\/neutral|task11-first-neutral/u);
+  const inventory=collectEmailActions({model:f.model,componentIndex:f.deps.componentIndex,profile:{roles:[]}});assert.deepEqual(inventory.diagnostics,[]);assert.ok(!inventory.fields.some(v=>JSON.stringify(v).includes(f.ids.neutral)));
+});
+test("Task11 hidden NPS ancestor suppresses every descendant requirement",async()=>{
+  const f=await task11PublicFixture(3);f.inst.visibility_values=[mask("root-content-area-emoji-buttons")];f.inst.content_values=f.inst.content_values.filter(v=>v.element_id==="root-content-area-heading");f.inst.asset_files=[];
+  assert.deepEqual(validateEmailModelSemantics(f.model,f.deps),[]);const r=renderComponent({componentId:"nps-options",viewportData:f.inst,...f.deps});assert.deepEqual(r.diagnostics,[]);assert.deepEqual(r.assets,[]);assert.doesNotMatch(r.html,/<a\b|<img\b/u);
+  assert.deepEqual(collectEmailActions({model:f.model,componentIndex:f.deps.componentIndex,profile:{roles:[]}}).fields,[]);
+});
+test("Task11 NPS viewport masks retain only native active URL and shared asset requirements",async()=>{
+  const f=await task11PublicFixture(3);f.inst.visibility_values=[mask(f.ids.good,"mobile"),mask(f.ids.bad,"desktop")];f.inst.content_values=f.inst.content_values.filter(v=>!(v.scope==="mobile"&&v.element_id.startsWith(f.ids.good))&&!(v.scope==="desktop"&&v.element_id.startsWith(f.ids.bad)));
+  assert.deepEqual(validateEmailModelSemantics(f.model,f.deps),[]);const r=renderComponent({componentId:"nps-options",viewportData:f.inst,...f.deps});assert.deepEqual(r.diagnostics,[]);
+  assert.doesNotMatch(r.html,/task11\/first\/mobile\/good|task11\/first\/desktop\/bad/u);
+  for(const [viewport,option] of [["desktop","good"],["mobile","bad"],["mobile","neutral"],["desktop","neutral"]])task11AssertWhole(task11OwnAnchor(r.html,"https://example.test/task11/first/"+viewport+"/"+option),{top:6,right:option==="good"?24:23,bottom:6,left:option==="good"?24:23});
+  f.inst.asset_files=f.inst.asset_files.filter(a=>a.asset_contract_id!=="happy-face-icon");assert.ok(validateEmailModelSemantics(f.model,f.deps).some(d=>d.code==="EMAIL_MODEL_REQUIRED_ASSET_MISSING"),"Desktop-only visible asset remains required");
+});
