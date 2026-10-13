@@ -410,3 +410,20 @@ The actual CLI positive input retains two current runs, preserves `«Подде�
 
 
 Task10 test-FIRST: 40 новых случаев в шести suites плюс synthetic fixtures подготовлены, исходные тела семи файлов сохранены побайтно. Семь syntax checks exit0; independent static GO для frozen manifest60dfd1375c37fcd9ea3e2e65b0ae2b27ffc38edd1bfe602f7b63939044c1ca13. Этот коммит публикует только тесты, fixtures и данное уточнение. Functional RED, runtime, browser/full/typed acceptance ещё не выполнены.
+
+
+## Task10 inventory refinement FIRST — complete source mapping and viewport insertion anchors
+
+Independent static review held the unpublished initial inventory candidate f4ee2917179490e43e1c7278bf45d6deacddbea6b34f6a690827b7d38f253b49 on two requirements already in the approved Task10 scope. Initial RED remains exactd3db3399 (62tests/30PASS/32intendedFAIL); initial syntax/review artifacts remain immutable. No runtime candidate has been published or GREEN/full/browser run claimed.
+
+1. Original source mapping must cover the full source string. Require firststart=0, every segment.start=previous.end, finalend=source.length, exact segment.characters=source.slice(start,end), valid positive ordered integer ranges and existing UTF-16 boundaries. Schema-valid current typed runs still map by original segment index, never old offsets into joined changed text. Add literal missing-middle and missing-trailing source-range cases to existing email-action-labels suite; both must produce the existing bounded LABEL_RANGE_AMBIGUOUS diagnostic. Default scalar callers, external schema, target IDs/range.text remain unchanged.
+
+2. Relative order is established by existing action structural identity, not raw indices from different viewport contracts. Collect the ordered action-group key sequence in each actual viewport traversal; retain existing Mobile-first primary order and existing merge proof/ID formats. Insert Desktop-only group keys before their nearest following already represented common key in Desktop order; when no following common key exists, after the preceding represented key. Consecutive inserted Desktop-only keys retain their Desktop order. With no common anchor, retain secondary traversal order after the primary sequence. Common actions retain primary order; a valid single form cannot represent contradictory common-item orders in two versions, so its existing Mobile-first priority remains the deterministic rule. This is presentation ordering only, not URL rebinding or a new validator framework.
+
+The literal regression is Mobile visible A,B with hidden X declared elsewhere in its contract and Desktop visible A,X,B. Shared nested declarations remain valid in both contracts. Expected form order is A,X,B with the exact same action IDs/bindings as before. This refines the existing same-index hidden-X fixture, does not replace it. Root/sections/group ownership and mixed slot/nested insertion controls remain.
+
+3. Independent GO for this refinement precedes test changes. Delegate only the three missing cases and bounded fixture option, preserving all40 prepared tests/original prefix and creating a distinct preparation manifest. Independent test review/syntax -> test/progress-only cloud publication -> ONE focused OLD batch selecting those three new cases on fresh exact snapshot; expected allthree intendedFAIL, no historic62/full/browser rerun. Then root corrects only existing inventory source map/order logic. Other four runtime files/form/user-guide remain exactly at the held reviewed digests. Fresh independent static GO and syntax precede runtime publication; existing full Task10 acceptance sequence remains.
+
+No new schemas/registries/contracts/interpreter/dependencies or gates. No merge/install/Figma writes/Actions/PRChecks. Historical failed/source/review evidence retained; computer stays on. New code corrections are unaccepted until actual fresh focused/CLI/browser/full and typed finalizer/workflow evidence.
+
+Independent detail GO0a5939e0c830797f4cf488471fafa06d3c493b5b1ba2d20a86dea57a85339d53; три новые проверки ещё не подготовлены, runtime кандидат остаётся unpublished/HOLD.
