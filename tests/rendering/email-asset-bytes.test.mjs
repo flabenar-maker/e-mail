@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
 import { mkdir, mkdtemp, readFile, readdir, rename, rm, stat, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { dirname, join } from "node:path";
+import { dirname, join, relative } from "node:path";
 import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
 import { publishEmailAtomically } from "../../scripts/lib/email-output.mjs";
@@ -53,6 +53,12 @@ test("contained helper reads nested ordinary assets and deduplicates the same no
   ] });
   assert.deepEqual(entries.map(({ path, bytes }) => ({ path, bytes })), [{ path: "images/nested/asset.bin", bytes: ORIGINAL }]);
 });
+test("contained helper preserves CWD-relative explicit sourcePath with an explicit trusted root", async (t) => {
+  const f = await ownedFixture(t), read = await loader();
+  const sourcePath = relative(process.cwd(), f.source);
+  const entries = await read({ assetRoot: f.root, assets: [{ path: "images/nested/asset.bin", sourcePath }] });
+  assert.deepEqual(entries, [{ path: "images/nested/asset.bin", bytes: ORIGINAL }]);
+});
 test("contained helper resolves source-less rendered descriptors only from explicit root", async (t) => {
   const f = await ownedFixture(t), read = await loader();
   const entries = await read({ assetRoot: f.root, assets: [{ path: "images/nested/asset.bin" }] });
@@ -99,6 +105,14 @@ for (const kind of ["file", "directory"]) test(`contained helper rejects a ${kin
   await assert.rejects(read({ assetRoot: f.root, assets: [{ path: "images/asset.bin", sourcePath: kind === "file" ? path : join(path, "asset.bin") }] }), assetError);
 });
 
+test("real publisher preserves CWD-relative explicit sourcePath with an explicit trusted root", async (t) => {
+  const f = await ownedFixture(t);
+  await publishEmailAtomically({ outputDir: f.outputDir, html: "<p>CWD-relative source</p>", assetRoot: f.root,
+    assets: [{ path: "images/nested/asset.bin", sourcePath: relative(process.cwd(), f.source) }] });
+  assert.deepEqual(await readdir(f.outputDir), ["email.html", "images"]);
+  assert.equal(await readFile(join(f.outputDir, "email.html"), "utf8"), "<p>CWD-relative source</p>");
+  assert.deepEqual(await readFile(join(f.outputDir, "images", "nested", "asset.bin")), ORIGINAL);
+});
 test("real publisher keeps rootless zero-asset compatibility", async (t) => {
   const f = await ownedFixture(t); await publishEmailAtomically({ outputDir: f.outputDir, html: "<p>rootless</p>" });
   assert.deepEqual(await readdir(f.outputDir), ["email.html", "images"]);
