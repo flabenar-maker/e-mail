@@ -28,7 +28,7 @@ function decision(policy,sha,ids,choice=2,target='local'){
  });
  return {schema_version:'1.0.0',status:'resolved',domain_status:'resolved',request_id:'task3-public',source_sha:sha,policy_digest:policy.policy_digest,route:'maintenance',mode:'write',operation:'write',allowed_paths:[],executor_agent_id:'fixture-executor',domain_context_ref:{path:'domain.json',digest:'d'.repeat(64)},requirement_refs:[{path:'requirement.txt',digest:'e'.repeat(64)}],artifact_refs:[],input_refs:{},base_effort:'medium',target_effort:'high',runtime_identity:{runtime_session_id:'fixture-session',tool_signature:'fixture-tools'},executor:selection,review:{required:true,mode:'independent-agent',distinct_agent_required:true,primary_sources_required:true,all_requirements_required:true,reviewer:selection},verification,safety_ceiling_reached:false,blockers:[]};
 }
-async function fixture(t,{legacy=false,validateExit=0}={}){
+async function fixture(t,{legacy=false,validateExit=0,validateDelay=0}={}){
  const temporary=await mkdtemp(join(tmpdir(),'cupis-task3-public-')),repo=join(temporary,'source');await mkdir(repo);
  t.after(async()=>{const rel=relative(resolve(tmpdir()),resolve(temporary));assert.ok(rel&&!rel.startsWith('..')&&!isAbsolute(rel));await rm(temporary,{recursive:true,force:true});});
  for(const directory of ['scripts/lib','schemas'])await cp(join(root,directory),join(repo,directory),{recursive:true});
@@ -37,10 +37,10 @@ async function fixture(t,{legacy=false,validateExit=0}={}){
  const probeFile=join(temporary,'argv.jsonl'),preload=join(temporary,'probe.mjs');
  // Observe the real process boundary, then delegate unchanged to native spawn.
  await writeFile(preload,"import cp from 'node:child_process';import {syncBuiltinESMExports} from 'node:module';import {appendFileSync} from 'node:fs';const original=cp.spawn;cp.spawn=function(executable,args,options){appendFileSync(process.env.CUPIS_TASK3_PROBE,JSON.stringify({kind:'spawn',executable,args,options:{shell:options.shell,windowsHide:options.windowsHide}})+'\\n');return original.call(this,executable,args,options);};syncBuiltinESMExports();appendFileSync(process.env.CUPIS_TASK3_PROBE,JSON.stringify({kind:'entry',argv:process.argv.slice(1),execArgv:process.execArgv})+'\\n');");
- const probe="import {appendFileSync} from 'node:fs';appendFileSync(process.env.CUPIS_TASK3_PROBE,JSON.stringify({kind:'ran',file:import.meta.url,argv:process.argv.slice(1),execArgv:process.execArgv})+'\\n');\n";
+ const probe="import {appendFileSync} from 'node:fs';appendFileSync(process.env.CUPIS_TASK3_PROBE,JSON.stringify({kind:'ran',pid:process.pid,file:import.meta.url,argv:process.argv.slice(1),execArgv:process.execArgv})+'\\n');\n";
  for(const group of ['foundation','characterization','components','generation','rendering','workflows','skills']){await mkdir(join(repo,'tests',group),{recursive:true});await writeFile(join(repo,'tests',group,'bounded.test.mjs'),probe);}
  for(const file of [...VISUAL,...DOCS])await writeFile(join(repo,file),probe);
- await writeFile(join(repo,'scripts/validate-system.mjs'),probe+`process.exitCode=${validateExit};\n`);
+ await writeFile(join(repo,'scripts/validate-system.mjs'),probe+`await new Promise(resolve=>setTimeout(resolve,${validateDelay}));process.exitCode=${validateExit};\n`);
  await writeFile(join(repo,'scripts/generate-docs.mjs'),probe);
  const pkg=JSON.parse(await readFile(join(root,'package.json'),'utf8'));await writeFile(join(repo,'package.json'),JSON.stringify(pkg));
  if(legacy){const policy=JSON.parse(await readFile(join(repo,'data/execution/policy.yaml'),'utf8'));delete policy.local_test_concurrency;await writeFile(join(repo,'data/execution/policy.yaml'),JSON.stringify(policy));}
@@ -66,7 +66,7 @@ const runnerArgs=(f,id,extra=[])=>['--request-id','task3-public','--source-sha',
 for(const choice of [2,4])for(const [id,files] of [['repository-full',FULL],['docs-scoped',DOCS],['visual-fixtures',VISUAL]])test(`public runner ${id} receives exact${choice} argv and executes bounded real children`,async t=>{
  const f=await fixture(t),file=await f.save(decision(f.policy,f.sha,[id],choice));
  const result=await cli(f,'scripts/run-verification.mjs',runnerArgs(f,id,['--decision',file]));assert.equal(result.exitCode,0,result.stderr+result.stdout);
- const receipt=JSON.parse(result.stdout.trim());assert.equal(receipt.conclusion,'success');assert.equal(receipt.workload_results[0].signature,JSON.parse(await readFile(file,'utf8')).verification[0].signature);
+ const receipt=JSON.parse(result.stdout.trim());assert.equal(receipt.conclusion,'success');assert.equal(receipt.workload_results[0].signature,JSON.parse(await readFile(file,'utf8')).verification[0].signature);assert.equal(receipt.workload_results[0].test_concurrency,choice);
  const records=await f.readProbe(),commands=testSpawns(records);assert.equal(commands.length,1);exactNodeCommand(commands[0],['--test',`--test-concurrency=${choice}`,...files]);assert.ok(records.some(record=>record.kind==='ran'));
  const evidence=JSON.parse(await readFile(join(f.temporary,'evidence',id+'.json'),'utf8'));assert.equal(evidence.signature,receipt.workload_results[0].signature);assert.deepEqual(evidence.limits,{concurrency:choice,timeout_minutes:30,max_heavy_batches:1});
  if(id==='docs-scoped'){const scope=JSON.parse(evidence.records[0].stdout.trim().split('\n')[0]).docs_scope;assert.deepEqual(scope.commands,[{executable:'node',args:['--test',`--test-concurrency=${choice}`,...DOCS]}]);assert.equal(scope.base_sha,f.git('rev-parse','HEAD^'));}
@@ -120,3 +120,14 @@ test('npm aliases route through the fixed wrapper',async()=>{const pkg=JSON.pars
 
 for(const args of [['--test-concurrency','3'],['--test-concurrency','2','--test-concurrency','4'],['tests/skills/bounded.test.mjs'],['--test-concurrency=4']])test('docs public wrapper rejects unbounded argv '+JSON.stringify(args),async t=>{const f=await fixture(t),result=await cli(f,'scripts/lib/execution-docs-check.mjs',args);assert.notEqual(result.exitCode,0);assert.equal(testSpawns(await f.readProbe()).length,0);});
 test('exported system wrapper rejects unknown options and command injection',async()=>{const api=await import('../../scripts/test-system.mjs').catch(()=>({}));assert.equal(typeof api.runSystemTests,'function');await assert.rejects(api.runSystemTests({repoRoot:root,args:['--exec','evil']}),{code:'VERIFICATION_CLI_ARGUMENTS'});});
+
+test('owned heavy lock replacement terminates the real child and preserves the foreign lock',async t=>{
+ const f=await fixture(t,{validateDelay:5000}),pending=cli(f,'scripts/run-verification.mjs',runnerArgs(f,'repository-full'));let entered;
+ const start=Date.now();while(Date.now()-start<5000){entered=(await f.readProbe()).find(record=>record.kind==='ran'&&record.file.endsWith('/scripts/validate-system.mjs'));if(entered)break;await new Promise(resolve=>setTimeout(resolve,25));}
+ assert.ok(entered,'the real owned heavy child must start before lock replacement');
+ const lock=join(f.temporary,'persistent','runner-locks','heavy-batch.lock'),rel=relative(f.temporary,lock);assert.ok(rel&&!rel.startsWith('..')&&!isAbsolute(rel));
+ await rm(lock,{recursive:true});await mkdir(lock);const foreign=join(lock,'foreign-owner');await writeFile(foreign,'preserve this foreign lock\n');
+ const result=await pending;assert.notEqual(result.exitCode,0,result.stderr+result.stdout);const receipt=JSON.parse(result.stdout.trim());assert.notEqual(receipt.conclusion,'success');
+ const evidence=JSON.parse(await readFile(join(f.temporary,'evidence','repository-full.json'),'utf8'));assert.ok(evidence.records.some(record=>record.code==='VERIFICATION_HEAVY_LOCK_LOST'));assert.ok(evidence.records.some(record=>record.termination_confirmed===true));
+ assert.throws(()=>process.kill(entered.pid,0),'the owned child must be terminated before receipt publication');assert.equal(await readFile(foreign,'utf8'),'preserve this foreign lock\n');assert.equal(testSpawns(await f.readProbe()).length,0);
+});
