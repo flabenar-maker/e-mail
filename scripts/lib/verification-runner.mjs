@@ -150,7 +150,10 @@ export function executeVerificationCommand(command,{repoRoot,timeoutMs,signal,co
   };
   const cancel=()=>stop(signal?.reason?.code==='VERIFICATION_TIMED_OUT'?'timed_out':'cancelled');
   if(signal?.aborted){finish(signal.reason?.code==='VERIFICATION_TIMED_OUT'?'timed_out':'cancelled',-1);return;}
-  try{child=spawn(command.executable==='node'?process.execPath:command.executable,command.args,{cwd:repoRoot,shell:false,windowsHide:true,detached:process.platform!=='win32',env:{...process.env,...(contextFile?{CUPIS_VERIFICATION_CONTEXT:contextFile}:{})},stdio:['ignore','pipe','pipe']});}
+  const childEnv={...process.env,...(contextFile?{CUPIS_VERIFICATION_CONTEXT:contextFile}:{})};
+  // Node test workers use this internally; inheriting it into a new driver skips its files.
+  if(command.executable==='node'&&command.args.includes('--test'))delete childEnv.NODE_TEST_CONTEXT;
+  try{child=spawn(command.executable==='node'?process.execPath:command.executable,command.args,{cwd:repoRoot,shell:false,windowsHide:true,detached:process.platform!=='win32',env:childEnv,stdio:['ignore','pipe','pipe']});}
   catch{finish('infrastructure-error',-1);return;}
   child.stdout.on('data',b=>stdout=append(stdout,b.toString()));child.stderr.on('data',b=>stderr=append(stderr,b.toString()));
   child.once('error',()=>finish('infrastructure-error',-1));
@@ -198,7 +201,7 @@ export async function runVerification(options){
   try{await budget.run(()=>runner.checkRuntime(workloads,{signal:budget.signal}));dependencyMode=await budget.run(()=>runner.checkDependencies(repoRoot,{signal:budget.signal}));if(lockGuard)await lockGuard.check();}catch(error){preflightError=error.code??'VERIFICATION_RUNTIME_UNAVAILABLE';stopStatus=terminalStatus(error);}
   if(workloads.some(w=>w.required_inputs.length)){privateRoot=join(output,'.private');await mkdir(privateRoot);}
   for(const workload of workloads){
-   const result={id:workload.id,signature:workloadSignature(workload),status:stopStatus??'success',exit_code:stopStatus?-1:0,...(executionDecision!==undefined&&target==='local'&&MAPPED_IDS.includes(workload.id)?{test_concurrency:workload.limits.concurrency}:{})};const records=[];let contextFile;
+   const result={id:workload.id,signature:workloadSignature(workload),status:stopStatus??'success',exit_code:stopStatus?-1:0,...((executionDecision!==undefined||testConcurrency!==undefined)&&target==='local'&&MAPPED_IDS.includes(workload.id)?{test_concurrency:workload.limits.concurrency}:{})};const records=[];let contextFile;
    if(!stopStatus){
     try{
      if(workload.required_inputs.length){const bound=await budget.run(()=>prepareInputs({workload,inputRefs,inputRoots,referenceRoot,repoRoot,artifactRefs,artifactHash,requestId,sourceSha,reviewQualification,privateRoot,signal:budget.signal}));contextFile=bound.contextFile;result.input_digest=bound.inputDigest;}

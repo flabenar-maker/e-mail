@@ -53,7 +53,8 @@ if(process.argv[1]&&import.meta.url===pathToFileURL(resolve(process.argv[1])).hr
   const args=process.argv.slice(2);let testConcurrency=2;
   if(args.length){if(args.length!==2||args[0]!=='--test-concurrency'||!['2','4'].includes(args[1]))throw fail('VERIFICATION_ARGUMENTS_INVALID','Docs scope is derived from exact source; only --test-concurrency2|4 is accepted.');testConcurrency=Number(args[1]);}
   const scope=await deriveDocsScope({repoRoot:process.cwd(),testConcurrency});process.stdout.write(JSON.stringify({docs_scope:scope})+'\n');
-  const command=scope.commands[0];const child=spawn(process.execPath,command.args,{cwd:process.cwd(),shell:false,windowsHide:true,stdio:'inherit'});
+  const command=scope.commands[0],childEnv={...process.env};delete childEnv.NODE_TEST_CONTEXT;
+  const child=spawn(process.execPath,command.args,{cwd:process.cwd(),shell:false,windowsHide:true,env:childEnv,stdio:'inherit'});
   // The outer verification runner owns this process tree and the shared 30-minute budget.
   const signals=new Map(['SIGINT','SIGTERM'].map(name=>[name,()=>child.kill(name)]));for(const [name,handler] of signals)process.on(name,handler);
   child.once('error',()=>{process.exitCode=1;});child.once('close',(code,signal)=>{for(const [name,handler] of signals)process.removeListener(name,handler);if(signal)process.kill(process.pid,signal);else process.exitCode=Number.isInteger(code)?code:1;});
