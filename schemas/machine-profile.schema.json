@@ -188,6 +188,13 @@
         "timeout_minutes",
         "max_heavy_batches"
       ]
+    },
+    "test_concurrency": {
+      "type": "integer",
+      "enum": [
+        2,
+        4
+      ]
     }
   },
   "required": [

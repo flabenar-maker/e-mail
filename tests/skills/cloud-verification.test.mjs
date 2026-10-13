@@ -67,3 +67,10 @@ test('archive transport rejects an incorrect digest before decoding remote bytes
 for(const dispatch of [true,false])test(`same-second API timestamp is inside fractional request window for ${dispatch?'dispatch':'labeled'}`,async t=>{const f=await resultFixture(t,{dispatch,startedAt:'2026-10-11T12:00:00.250Z'});f.run.created_at='2026-10-11T12:00:00Z';let discovery;const list=f.gh.listRuns;f.gh.listRuns=async input=>{discovery=input;return list(input);};assert.equal((await f.read()).conclusion,'success');if(!dispatch)assert.equal(discovery.created,'2026-10-11T12:00:00.000Z..2026-10-11T12:02:00.000Z');});
 for(const dispatch of [true,false])test(`previous-second run stays excluded for ${dispatch?'dispatch':'labeled'}`,async t=>{const f=await resultFixture(t,{dispatch,startedAt:'2026-10-11T12:00:00.250Z'});f.run.created_at='2026-10-11T11:59:59Z';assert.notEqual((await f.read()).conclusion,'success');assert.equal(f.downloads(),0);});
 test('direct dispatch response ID must equal durable selected ID before artifact access or offer metadata',async t=>{const f=await resultFixture(t);f.run.id=18;let artifacts=0;const list=f.gh.listArtifacts;f.gh.listArtifacts=async input=>{artifacts++;return list(input);};const result=await f.read();assert.equal(result.code,'CLOUD_RUN_IDENTITY_MISMATCH');assert.equal(artifacts,0);assert.equal(f.downloads(),0);assert.equal(result.terminal_receipt,undefined);});
+
+
+test('cloud receipt rows retain their original shape and cannot report local concurrency4',async t=>{
+ const f=await resultFixture(t);const original=Buffer.from(f.files['receipt.json']);
+ assert.equal((await f.read()).conclusion,'success');assert.deepEqual(f.files['receipt.json'],original);
+ f.receipt.workload_results[0].test_concurrency=4;f.files['receipt.json']=Buffer.from(JSON.stringify(f.receipt));assert.equal((await f.read()).status,'blocked');
+});

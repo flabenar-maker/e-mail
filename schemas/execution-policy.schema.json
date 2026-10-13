@@ -935,6 +935,33 @@
     },
     "safety_steps": {
       "const": 1
+    },
+    "local_test_concurrency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allowed",
+        "default",
+        "workload_ids"
+      ],
+      "properties": {
+        "allowed": {
+          "const": [
+            2,
+            4
+          ]
+        },
+        "default": {
+          "const": 2
+        },
+        "workload_ids": {
+          "const": [
+            "docs-scoped",
+            "repository-full",
+            "visual-fixtures"
+          ]
+        }
+      }
     }
   },
   "$schema": "https://json-schema.org/draft/2020-12/schema",

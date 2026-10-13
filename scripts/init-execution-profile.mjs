@@ -3,16 +3,18 @@ import {promisify} from 'node:util';
 import {tmpdir} from 'node:os';
 import {resolve,dirname,join,relative,isAbsolute,sep} from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
-import {initExecutionProfile,readExecutionProfile,updateExecutionProfile,ensureActiveProfileBinding,readActiveProfileBinding,authorizedLocalBindingRoot} from './lib/machine-profile.mjs';
+import {initExecutionProfile,readExecutionProfile,updateExecutionProfile,setExecutionTestConcurrency,ensureActiveProfileBinding,readActiveProfileBinding,authorizedLocalBindingRoot} from './lib/machine-profile.mjs';
 import {loadExecutionPolicy} from './lib/execution-policy.mjs';
 import {SystemValidationError} from './lib/diagnostics.mjs';
 
 const sourceRoot=dirname(dirname(fileURLToPath(import.meta.url)));
 const fail=(code,message)=>new SystemValidationError(code,'/profile',message);
-const usage='Usage: init-execution-profile --action init|read|refresh [--workspace AUTHORIZED_PERSISTENT_DIR | --state-root ABSOLUTE_DIR] [--pair-key TRUSTED_OPAQUE_KEY | --local-binding-root PERMITTED_LOCALAPPDATA_SUBDIR] [--explicit-refresh yes]. State must be outside the source snapshot. Default state: WORKSPACE/.cupis-local/execution. Only explicit init/refresh may collect once. Read never collects. Profile output is local-only baseline data, never current load; do not upload it.';
+const usage='Usage: init-execution-profile --action init|read|refresh|set-concurrency [--workspace AUTHORIZED_PERSISTENT_DIR | --state-root ABSOLUTE_DIR] [--pair-key TRUSTED_OPAQUE_KEY | --local-binding-root PERMITTED_LOCALAPPDATA_SUBDIR] [--test-concurrency 2|4] [--explicit-refresh yes]. State must be outside the source snapshot. Default state: WORKSPACE/.cupis-local/execution. Only explicit init/refresh may collect once. Read and set-concurrency never collect. Init may save a one-time choice; changing an existing choice requires set-concurrency. Read/refresh refuse a choice flag. Profile output is local-only baseline data, never current load; do not upload it.';
 function parseArguments(args) {
- const options={};for(let i=0;i<args.length;i+=2){if(!['--action','--workspace','--state-root','--pair-key','--local-binding-root','--explicit-refresh'].includes(args[i])||!args[i+1]||args[i+1].startsWith('--')||Object.hasOwn(options,args[i]))throw fail('PROFILE_CLI_ARGUMENTS',usage);options[args[i]]=args[i+1];}
- if(!['init','read','refresh'].includes(options['--action'])||(!options['--workspace']&&!options['--state-root'])||Boolean(options['--pair-key'])===Boolean(options['--local-binding-root'])||(options['--explicit-refresh']&&options['--explicit-refresh']!=='yes'))throw fail('PROFILE_CLI_ARGUMENTS',usage);
+ const options={};for(let i=0;i<args.length;i+=2){if(!['--action','--workspace','--state-root','--pair-key','--local-binding-root','--explicit-refresh','--test-concurrency'].includes(args[i])||!args[i+1]||args[i+1].startsWith('--')||Object.hasOwn(options,args[i]))throw fail('PROFILE_CLI_ARGUMENTS',usage);options[args[i]]=args[i+1];}
+ if(!['init','read','refresh','set-concurrency'].includes(options['--action'])||(!options['--workspace']&&!options['--state-root'])||Boolean(options['--pair-key'])===Boolean(options['--local-binding-root'])||(options['--explicit-refresh']&&options['--explicit-refresh']!=='yes'))throw fail('PROFILE_CLI_ARGUMENTS',usage);
+ const choice=options['--test-concurrency'],action=options['--action'];
+ if((choice!==undefined&&!/^(2|4)$/u.test(choice))||(action==='set-concurrency'&&(choice===undefined||options['--explicit-refresh']))||(['read','refresh'].includes(action)&&choice!==undefined))throw fail('PROFILE_CLI_ARGUMENTS',usage);
  return options;
 }
 async function collectMachineProfile() {
@@ -30,13 +32,14 @@ export async function runExecutionProfile(args,{collectOnce=collectMachineProfil
  let pairKey=options['--pair-key'];
  if(!pairKey){
   const bindingRoot=authorizedLocalBindingRoot({bindingRoot:options['--local-binding-root'],localAppData:process.env.LOCALAPPDATA,workspace,stateRoot});
-  const binding=action==='read'?await readActiveProfileBinding({bindingRoot}):await ensureActiveProfileBinding({bindingRoot,stateRoot});
+  const binding=['read','set-concurrency'].includes(action)?await readActiveProfileBinding({bindingRoot}):await ensureActiveProfileBinding({bindingRoot,stateRoot});
   if(binding.status!=='resolved')return binding;pairKey=binding.pair_key;
  }
  const identity={stateRoot,pairKey};
- if(action!=='read'){
+ if(action==='set-concurrency')await setExecutionTestConcurrency({...identity,testConcurrency:Number(options['--test-concurrency']),explicitSelection:true});
+ else if(action!=='read'){
   const policy=await loadExecutionPolicy({repoRoot});
-  if(action==='init')await initExecutionProfile({...identity,collectOnce,policy});
+  if(action==='init')await initExecutionProfile({...identity,collectOnce,policy,...(options['--test-concurrency']?{testConcurrency:Number(options['--test-concurrency'])}:{})});
   else await updateExecutionProfile({...identity,explicitRefreshRequest:true,collectOnce,policy});
  }
  const result=await readExecutionProfile(identity);

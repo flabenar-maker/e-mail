@@ -55,3 +55,46 @@ test('strict receipt schema compiles and requires separate cloud run identities 
 });
 
 test('explicit selected model acceptance binds ID and rejects inherited or switched review',()=>{const f=fixture();const binding={binding:'explicit',id:'user-selected-model'};f.decision.executor.selected_model=binding;f.decision.review.reviewer.selected_model=binding;f.reviewReceipts[0].reviewer_model_binding=binding;assert.equal(run(f).status,'accepted');for(const other of [{binding:'inherited',id:null},{binding:'explicit',id:'other-model'}]){const g=structuredClone(f);g.reviewReceipts[0].reviewer_model_binding=other;assert.equal(run(g).status,'blocked');}});
+
+
+async function localConcurrencyFixture(choice, id='docs-scoped') {
+ const {loadExecutionPolicy}=await import('../../scripts/lib/execution-policy.mjs');
+ const {deriveVerificationWorkload,workloadSignature}=await import('../../scripts/lib/verification-concurrency.mjs');
+ const {fileURLToPath}=await import('node:url');
+ const policy=await loadExecutionPolicy({repoRoot:fileURLToPath(new URL('../..',import.meta.url))});
+ const source=policy.workloads.find(w=>w.id===id);
+ const effective=deriveVerificationWorkload({policy,workload:source,target:'local',testConcurrency:choice});
+ const f=fixture();
+ f.decision.verification=[{id,portability:source.portability,target:'local',signature:workloadSignature(effective),input_names:[],input_digest:null,limits:effective.limits}];
+ f.verificationReceipts=[{schema_version:'1.0.0',request_id:f.decision.request_id,source_sha:f.decision.source_sha,workflow_sha:null,target:'local',workload_results:[{id,signature:f.decision.verification[0].signature,test_concurrency:choice,status:'success',exit_code:0}],conclusion:'success',evidence_refs:[ref('actual-local-evidence.json')]}];
+ return f;
+}
+for(const id of ['docs-scoped','repository-full','visual-fixtures'])for(const choice of [2,4])test(`local ${id} receipt reports and matches frozen concurrency ${choice}`,async()=>{
+ const f=await localConcurrencyFixture(choice,id);assert.equal(run(f).status,'accepted');
+ const changed=structuredClone(f);changed.verificationReceipts[0].workload_results[0].test_concurrency=choice===2?4:2;
+ const result=run(changed);assert.equal(result.status,'blocked');assert.ok(result.blockers.some(b=>b.code==='EXECUTION_VERIFICATION_CONCURRENCY_MISMATCH'));
+});
+test('actual concurrency2 and concurrency4 receipts cannot cross frozen effective signatures',async()=>{
+ const two=await localConcurrencyFixture(2),four=await localConcurrencyFixture(4);
+ for(const [decisionFixture,receiptFixture] of [[two,four],[four,two]])assert.equal(run({...decisionFixture,verificationReceipts:receiptFixture.verificationReceipts}).status,'blocked');
+ const forged=structuredClone(four);forged.verificationReceipts[0].workload_results[0].signature=two.decision.verification[0].signature;
+ assert.equal(run(forged).status,'blocked');
+});
+test('legacy missing mapped concurrency means2 only after matching old identity and signature guards',async()=>{
+ const two=await localConcurrencyFixture(2);delete two.verificationReceipts[0].workload_results[0].test_concurrency;
+ const unchanged=JSON.stringify(two.verificationReceipts[0]);assert.equal(run(two).status,'accepted');assert.equal(JSON.stringify(two.verificationReceipts[0]),unchanged);
+ for(const change of [{request_id:'other'},{source_sha:'f'.repeat(40)},{target:'github-hosted',workflow_sha:'a'.repeat(40),event_sha:'a'.repeat(40),run_id:'17',run_attempt:'1'},{workload_results:[{...two.verificationReceipts[0].workload_results[0],signature:'f'.repeat(64)}]}])assert.equal(run({...two,verificationReceipts:[{...two.verificationReceipts[0],...change}]}).status,'blocked');
+ const four=await localConcurrencyFixture(4);delete four.verificationReceipts[0].workload_results[0].test_concurrency;const result=run(four);assert.equal(result.status,'blocked');assert.ok(result.blockers.some(b=>b.code==='EXECUTION_VERIFICATION_CONCURRENCY_MISMATCH'));
+});
+test('acceptance uses the resolved choice without reading changed profile or rewriting the decision',async()=>{
+ const f=await localConcurrencyFixture(4),before=JSON.stringify(f.decision);const result=api.validateExecutionAcceptance({...f,get profile(){throw new Error('acceptance reread saved preference');}});
+ assert.equal(result.status,'accepted');assert.equal(JSON.stringify(f.decision),before);
+ const changed=structuredClone(f);changed.verificationReceipts[0].workload_results[0].test_concurrency=2;assert.equal(run(changed).status,'blocked');
+});
+test('concurrency fields remain forbidden on cloud rows nonmapped rows and receipt root',async()=>{
+ const f=await localConcurrencyFixture(2),row=f.verificationReceipts[0].workload_results[0];
+ for(const value of [1,3,8,'4',null])assert.equal(run({...f,verificationReceipts:[{...f.verificationReceipts[0],workload_results:[{...row,test_concurrency:value}]}]}).status,'blocked');
+ const rootField=structuredClone(f);rootField.verificationReceipts[0].test_concurrency=2;assert.equal(run(rootField).status,'blocked');
+ const cloud=structuredClone(f);Object.assign(cloud.verificationReceipts[0],{target:'github-hosted',workflow_sha:'a'.repeat(40),event_sha:'a'.repeat(40),run_id:'17',run_attempt:'1'});cloud.decision.verification[0].target='github-hosted';assert.equal(run(cloud).status,'blocked');
+ const nonmapped=structuredClone(f);nonmapped.decision.verification[0].id='windows-bootstrap';nonmapped.verificationReceipts[0].workload_results[0].id='windows-bootstrap';assert.equal(run(nonmapped).status,'blocked');
+});
