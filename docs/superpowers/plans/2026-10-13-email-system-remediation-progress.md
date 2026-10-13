@@ -320,3 +320,10 @@ Independent static review of unpublished interpreter0a305d8f identified two boun
 4. Independent source review and delegated syntax before runtime+progress publication. Then exact-cloud four-suite targeted checks, actual full/generated, qualified candidate visual comparison and independent typed receipt/finalizer/workflow before Task10. OLD84 corpus, previous tests and receipts remain immutable. Center intent and responsive whole-button ownership fixes keep their already approved scope.
 
 Other PRs remain references. Quota stop<=5 saves PR/checkpoint and stops owned processes; completion saves PR/reports. Computer shutdown remains cancelled in both outcomes; keep computer on.
+
+
+## Task9 corrected candidate after OLD boundary controls
+
+ONE exact658ae00ef999a81e2158e7efc02be18191d850e3 OLD control batch passed all4 selected cases: rich-text, multiline, Mobile stretch and horizontal grow, fail0/skip0, exit0. Semantic/renderer and cap/no-pre/width/literal assertions executed. Result5e1e105b0e311169b5db4ba053dfc8ae43f61993e3beae036ba4b60d40383198, summaryf0a234896cd36fddf7099bfceb065b12edfd17d3c682048ce946016307aa6fa2; source349/0,774 cached files/six versions and integrities/30 frozen refs unchanged, owned wrapper/tests gone. No historical batch/full/browser repeated.
+
+The unpublished candidate now restores reference cap assignment in propsFromFacts and removes that cap only for resolved plain single-line intrinsic labels after the rich branch. New pre excludes resolved style.width100%, preserving projected Fill whitespace; rich/multiline caps stay unchanged. Centering, native paragraph-pre preservation and responsive whole-button ownership retain the reviewed scope. The0a305 draft/syntax receipt remain historical; corrected source requires fresh independent static GO and syntax before publication. Targeted/full/visual/typed acceptance remain pending; Task10 cannot start yet. Shutdown remains cancelled, keep computer on.

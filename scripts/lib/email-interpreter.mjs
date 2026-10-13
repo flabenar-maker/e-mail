@@ -91,6 +91,14 @@ function valueWithUnit(value) {
   return undefined;
 }
 
+function isIntrinsicLabel(facts = [], { mode, semanticRole } = {}) {
+  const fact = (id) => facts.find((item) => item.id === id)?.value;
+  const sizing = fact("horizontal-sizing")?.value;
+  return mode === "html-text" && semanticRole === "label" &&
+    fact("text-auto-resize")?.value === "width_and_height" &&
+    (sizing === undefined || sizing === "hug");
+}
+
 function propsFromFacts(facts = [], { viewport, mode, isRoot = false, parentAxis, semanticRole } = {}) {
   const props = { style: {} };
   const fact = (id) => facts.find((item) => item.id === id)?.value;
@@ -339,12 +347,14 @@ function inlineActionParts(childHtml, childNodes, gap) {
     }
     return html.replace(/^<p([^>]*)>([\s\S]*)<\/p>$/u, (_match, attrs, body) => {
       const style = attrs.match(/\sstyle="([^"]*)"/u);
+      const paragraphWhitespace = /(?:^|;)white-space:pre(?:;|$)/u.test(style?.[1] ?? "")
+        ? "" : whitespace;
       const textStyle = Number.isFinite(fixedWidth) || hugText
         ? style?.[1].replace(/(?:^|;)max-width:[^;]*/u, "")
         : style?.[1];
       const nextAttrs = style
-        ? attrs.replace(style[0], ' style="' + textStyle + ';display:inline-block;vertical-align:middle;' + whitespace + column + offset + '"')
-        : attrs + ' style="display:inline-block;vertical-align:middle;' + whitespace + column + offset + '"';
+        ? attrs.replace(style[0], ' style="' + textStyle + ';display:inline-block;vertical-align:middle;' + paragraphWhitespace + column + offset + '"')
+        : attrs + ' style="display:inline-block;vertical-align:middle;' + paragraphWhitespace + column + offset + '"';
       return "<span" + nextAttrs + ">" + body + "</span>";
     });
   });
@@ -380,6 +390,9 @@ function renderShellNative(element, viewport, path, childHtml, context) {
   if (diagnostics.length > 0) return { html: "", diagnostics };
   const factProps = propsFromFacts(element.facts, { viewport, mode: element.render_mode, isRoot: path === "root", parentAxis: context.parentLayoutAxis?.[viewport], semanticRole: element.semantic_role });
   if (element.render_mode === "presentation-table" && element.semantic_role === "social-icons" && factProps.width === "auto") {
+    factProps.align = "center";
+  }
+  if (element.render_mode === "presentation-table" && context.parentCellCentersTable?.[viewport] && factProps.align === undefined) {
     factProps.align = "center";
   }
   if (element.render_mode === "presentation-table" && element.semantic_role === "button-text") {
@@ -475,13 +488,6 @@ function renderShellNative(element, viewport, path, childHtml, context) {
           ? html.replace(/(<img\b[^>]*\sstyle=")([^"]*)"/u,
             (_match, prefix, style) => prefix + style + ';margin:0 auto"')
           : html;
-        const centeredTable = axis === "vertical" && counterAlignment === "center" &&
-          centeredImage.startsWith("<table") &&
-          !/^<table[^>]*\salign=/u.test(centeredImage)
-          ? centeredImage.replace(/^<table\b/u, '<table align="center"')
-            .replace(/(<table[^>]*style=")([^"]*)"/u,
-              (_match, prefix, style) => prefix + style + ';margin:0 auto"')
-          : centeredImage;
         const fillHeight = node?.facts?.some(({ id, value }) =>
           id === "vertical-sizing" && value?.value === "fill");
         const childRadius = nodeProps.style["border-radius"];
@@ -511,7 +517,7 @@ function renderShellNative(element, viewport, path, childHtml, context) {
             ? { bgcolor: nodeProps.style["background-color"] }
             : {}),
           ...(Object.keys(cellStyle).length > 0 ? { style: cellStyle } : {}),
-        }, groupedAction ? centeredTable : wrapAction(element, entry, centeredTable));
+        }, groupedAction ? centeredImage : wrapAction(element, entry, centeredImage));
       };
       const rawRows = axis === "horizontal"
         ? `<tr>${visible.map(cellFor).join(gap > 0
@@ -547,9 +553,16 @@ function renderShellNative(element, viewport, path, childHtml, context) {
           ? { html: "", diagnostics: [diagnostic("RENDER_RICH_TEXT_INVALID", `/contracts/${viewport}/${path}`, rich.error)] }
           : { html: rich.html, diagnostics: [] };
       }
+      const text = emittedSlotText(element,entry,context);
+      const intrinsicPlainLabel = isIntrinsicLabel(element.facts, { mode: element.render_mode, semanticRole: element.semantic_role }) &&
+        typeof text === "string" && !/[\r\n\u2028\u2029]/u.test(text);
+      if (intrinsicPlainLabel) delete factProps.style["max-width"];
+      if (intrinsicPlainLabel && factProps.style.width !== "100%" && / {2,}/u.test(text)) {
+        factProps.style["white-space"] = "pre";
+      }
       return {
         html: renderPrimitive("text", {
-          text: emittedSlotText(element,entry,context),
+          text,
           style: factProps.style,
         }),
         diagnostics: [],
@@ -680,6 +693,15 @@ function layoutAxisFor(element) {
   return ["horizontal", "vertical"].includes(axis) ? axis : undefined;
 }
 
+function childTableCentering(element, viewport, context) {
+  if (["nested-component", "slot"].includes(element?.render_mode)) {
+    return context.parentCellCentersTable?.[viewport] ?? false;
+  }
+  return element?.render_mode === "presentation-table" &&
+    (layoutAxisFor(element) ?? "vertical") === "vertical" &&
+    element.facts?.find(({ id }) => id === "counter-alignment")?.value?.value === "center";
+}
+
 function renderSingle(element, viewport, path, context) {
   if (!element) return { html: "", diagnostics: [] };
   const visibility = visibilityFor(element, viewport, context, path);
@@ -687,6 +709,7 @@ function renderSingle(element, viewport, path, context) {
   const childContext = {
     ...context,
     parentLayoutAxis: { ...context.parentLayoutAxis, [viewport]: layoutAxisFor(element) },
+    parentCellCentersTable: { ...context.parentCellCentersTable, [viewport]: childTableCentering(element, viewport, context) },
     anchorContexts:{...context.anchorContexts,[viewport]:anchorContext(element,viewport,context)},
   };
   const children = (element.children ?? []).map((child, index) =>
@@ -758,11 +781,20 @@ function renderPaired(pair, path, context) {
   const childContext = {
     ...context,
     parentLayoutAxis: { mobile: layoutAxisFor(pair.mobile), desktop: layoutAxisFor(pair.desktop) },
+    parentCellCentersTable: {
+      mobile: childTableCentering(pair.mobile, "mobile", context),
+      desktop: childTableCentering(pair.desktop, "desktop", context),
+    },
     anchorContexts:{mobile:anchorContext(pair.mobile,"mobile",context),desktop:anchorContext(pair.desktop,"desktop",context)},
   };
   const children = pair.children.map((child, index) =>
     renderPaired(child, `${path}-${index}`, childContext),
   );
+  const nativeWholeButton = [pair.mobile, pair.desktop].some((element) =>
+    element.render_mode === "presentation-table" && isWholeButtonAction(element));
+  if (nativeWholeButton && children.some((child) => child.rules.length > 0 || (child.msoRules?.length ?? 0) > 0)) {
+    return renderSplit(pair, path, context);
+  }
   const combinedChildren = children.map(({ html }) => html);
   const mobileShell = renderShell(pair.mobile, "mobile", path.replaceAll("-", "/children/"), combinedChildren, context);
   const desktopShell = renderShell(pair.desktop, "desktop", path.replaceAll("-", "/children/"), combinedChildren, context);
