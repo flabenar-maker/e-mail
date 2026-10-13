@@ -582,6 +582,7 @@ function relationBlocker(mode, inputs) {
   for (const relation of mode.input_relations ?? []) {
     if (!relation.inputs.every((id) => hasValue(inputs[id]))) continue;
     const values = relation.inputs.map((id) => inputs[id][relation.field]);
+    if (values.some((value) => !hasValue(value))) return relation.blocker;
     const invalid = relation.kind === "ordered-field-values"
       ? values.some((value, index) => value !== relation.values[index])
       : new Set(values).size !== 1;

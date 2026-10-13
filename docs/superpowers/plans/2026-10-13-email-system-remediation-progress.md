@@ -14,14 +14,14 @@
 
 ## Текущая точка
 
-**Tasks 1–3 приняты в ветке:** Task 1 на `c0808e1e3d18bfd1824dd34386d22d9c0c1090a7`, Task 2 на `9d1a19c80b70b58da6742378cc5e64d3d8590e3b`, Task 3 на `81052bdc190525ae88f6cf9e714abfad0c156392`. Следующее действие: Task 4 — детализация participating-field presence ниже, затем опубликованные regressions и RED до runtime изменения.
+**Tasks 1–3 приняты в ветке:** Task 1 на `c0808e1e3d18bfd1824dd34386d22d9c0c1090a7`, Task 2 на `9d1a19c80b70b58da6742378cc5e64d3d8590e3b`, Task 3 на `81052bdc190525ae88f6cf9e714abfad0c156392`. Task 4: actual published RED подтвердил equal-missing bypass и созданную папку версии. Минимальная presence проверка опубликована для GREEN/full; этот шаг ещё не принят.
 
 | Шаг | Состояние |
 | --- | --- |
 | 1. R1, serialized resource paths | Accepted на c0808e1; targeted 26/full 2215 PASS |
 | 2. #130/E13, root-slot projection | Accepted на 9d1a19c; targeted 91/full 2227 PASS |
 | 3. R3, instance identities | Accepted на 81052bdc; targeted 114/full 2247 PASS |
-| 4. R5, workflow identity presence | Детализирован перед тестами; runtime не менялся |
+| 4. R5, workflow identity presence | RED 17 PASS/12 expected FAIL; минимальный guard ждёт GREEN/full и приёмки |
 | 5. R2, source/candidate/release binding | Не начат |
 | 6. R6, contained asset bytes | Не начат |
 | 7. R4, fast-uri 3.x | Не начат |
@@ -102,3 +102,4 @@ Baseline и результаты каждого шага записываютс�
 - Task 3 RED `b96729df3a956d66c8215c68fd4f68481afc61ef`: пять targeted suites, 85 tests, 70 PASS / 15 expected FAIL, exit 1; raw 345/0, production/data/schema не менялись. Реальный direct renderer: FIRST=0, SECOND=2, diagnostics=[]; unique/legacy controls PASS. Prepare-delivery CLI: exit 0 и опубликованные form.html/delivery.json при коллизии root/hidden descendant с разными полными путями. Existing source/path guards PASS; handoff уже блокирует output, но новая ранняя typed diagnostic отсутствует. Missing export ещё не позволил выполнить cycle traversal assertion. Fixture/infra failures нет. Этот RED обосновывает общий helper и его ранний вызов в direct renderer; GREEN/full пока не заявляются.
 - Task 3 candidate `e673c46b33f4257d5dfeb7b1939ee1e332171df0`: targeted 85 PASS / 0 FAIL; full 2246 PASS / 1 FAIL из 2247, invalid repeated native IDs в marketing-card fixture. Validator exit 0, generated check not-run, independent final acceptance pending. Минимальная fixture коррекция сначала детализирована выше; этот коммит не считается принятым.
 - Task 3 final `81052bdc190525ae88f6cf9e714abfad0c156392`: targeted шесть suites 114 PASS / 0 FAIL; actual repository-full 2247 PASS / 0 FAIL, validator/generated/runner exit 0; raw 345/0, owned processes отсутствуют. Request email-remediation-task3-repair1-final-20261013; независимый reviewer принял все 13 refs, штатный finalizer accepted и workflow complete. Старый failure e673 сохранён неизменным; новый успех относится только к 81052bdc. External acceptance not-run.
+- Task 4 RED `d29dacd3769c8232654187dbce2e558178d946a9`: orchestration 29 tests, 17 PASS / 12 expected FAIL, exit 1. Десять real-mode equal-missing cases, generic missing-field blocker и реальное version creation не блокировались. Actual resolution new-build/blocker=null/all 10 outputs; createEmailVersion создал relation-identity-intake_1.0 без ошибки. Все восемь прежних сценариев и девять новых compatibility controls PASS; fixture/infra failures нет. Runtime до RED не менялся; итоговый GREEN/full новой версии ещё не заявляется.
