@@ -539,5 +539,17 @@
     "max",
     "ultra"
   ],
-  "safety_steps": 1
+  "safety_steps": 1,
+  "local_test_concurrency": {
+    "allowed": [
+      2,
+      4
+    ],
+    "default": 2,
+    "workload_ids": [
+      "docs-scoped",
+      "repository-full",
+      "visual-fixtures"
+    ]
+  }
 }
