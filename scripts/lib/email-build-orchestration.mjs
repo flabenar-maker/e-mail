@@ -1,8 +1,8 @@
 import { visibleModelAssets, modelAssetKey, hasInstanceVisibility } from "./email-instance-visibility.mjs";
-import { cp, lstat, mkdir, readdir, writeFile, realpath, readFile, rm } from "node:fs/promises";
+import { cp, lstat, mkdir, mkdtemp, readdir, writeFile, realpath, readFile, rm } from "node:fs/promises";
 import { createHash, randomUUID } from "node:crypto";
 import { execFile } from "node:child_process";
-import { promisify } from "node:util";
+import { isDeepStrictEqual, promisify } from "node:util";
 import { isAbsolute, join, relative, resolve } from "node:path";
 import { tmpdir } from "node:os";
 import { inflateSync } from "node:zlib";
@@ -20,6 +20,13 @@ import { prepareEmailDelivery } from "./email-delivery.mjs";
 import { loadEmailDeliveryProfiles, selectDeliveryProfile } from "./email-delivery-profile.mjs";
 import { collectEmailActions } from "./email-action-inventory.mjs";
 import { createDeliveryDraft, missingDeliveryFields } from "./email-delivery-form.mjs";
+import { loadEmailModel } from "./email-model.mjs";
+import { prepareEmailRenderInput } from "../render-email.mjs";
+import { verifyRealEmailVisual } from "../verify-real-email-visual.mjs";
+import { readBoundInventory, inventoryTreePaths } from "./execution-inputs.mjs";
+import { validSelectedModel, validateRuntimeCapabilities } from "./runtime-capabilities.mjs";
+import { publishFileSetAtomically } from "./email-output.mjs";
+import { validateZipEntryPath } from "./zip-store.mjs";
 
 function failure(code) {
   const error = new Error(code);
@@ -401,16 +408,16 @@ export async function prepareEmailBuildHandoff({
   };
 }
 
-async function defaultRendererRunner({ repoRoot, modelPath, outputDir, deliveryPath, sourceSha }) {
+async function defaultRendererRunner({ repoRoot, modelPath, outputDir, deliveryPath, sourceSha }, expectedModelDigest) {
   await execFileAsync(
     process.execPath,
     [join(repoRoot, "scripts", "render-email.mjs"), "--model", modelPath, "--output", outputDir, ...(deliveryPath ? ["--delivery", deliveryPath] : [])],
-    { cwd: repoRoot, env:{...process.env, ...(sourceSha ? {CUPIS_SYSTEM_COMMIT:sourceSha} : {})} },
+    { cwd: repoRoot, env:{...process.env, CUPIS_EXPECTED_EMAIL_MODEL_DIGEST: expectedModelDigest ?? "", ...(sourceSha ? {CUPIS_SYSTEM_COMMIT:sourceSha} : {})} },
   );
 }
 
 async function verifyNewBuildSource({ workflowMode, sourceEvidence, repoRoot, assetRoot, model, assetEvidence }) {
-  if (workflowMode !== "new-build") return { blockers: [], diagnostics: [] };
+  if (!["new-build", "continue-fix-design"].includes(workflowMode)) return { blockers: [], diagnostics: [] };
   if (!sourceEvidence?.readings || !sourceEvidence?.correspondence) {
     return { blockers: ["source-evidence-missing"], diagnostics: [] };
   }
@@ -431,7 +438,7 @@ async function verifyNewBuildSource({ workflowMode, sourceEvidence, repoRoot, as
     const report = JSON.parse(stdout);
     if (report.status === "passed" && report.scope === "full-email" &&
         Array.isArray(report.diagnostics) && report.diagnostics.length === 0) {
-      return { blockers: [], diagnostics: [] };
+      return { blockers: [], diagnostics: [], report };
     }
     return { blockers: ["source-evidence-mismatch"], diagnostics: report.diagnostics ?? [] };
   } catch (error) {
@@ -475,7 +482,238 @@ function continueFixEvidenceBlockers(workflowMode, evidence) {
   return [...blockers].sort();
 }
 
-export async function executeEmailBuildHandoff({
+const bytesDigest = bytes => createHash("sha256").update(bytes).digest("hex");
+const exactKeys = (value, names) => value && typeof value === "object" && !Array.isArray(value) &&
+  Object.keys(value).sort().join(",") === [...names].sort().join(",");
+const identifier = value => typeof value === "string" && value.trim() === value && value.length > 0 && !/[\x00-\x1f]/u.test(value);
+
+function selectedBinding(value) {
+  if (!exactKeys(value, ["email_id", "file_key", "roots", "source_sha", "model_digest"]) ||
+      !exactKeys(value.roots, VIEWPORTS) || !identifier(value.email_id) || !identifier(value.file_key) ||
+      VIEWPORTS.some(viewport => !FIGMA_NODE_ID.test(value.roots[viewport] ?? "")) ||
+      !/^[0-9a-f]{40}$/u.test(value.source_sha ?? "") || !SHA256.test(value.model_digest ?? "")) return null;
+  // Stable serialization order is part of the candidate manifest contract.
+  return { email_id: value.email_id, file_key: value.file_key,
+    roots: { mobile: value.roots.mobile, desktop: value.roots.desktop },
+    source_sha: value.source_sha, model_digest: value.model_digest };
+}
+
+function qualifiedCandidateReviewer(q) {
+  if (!exactKeys(q, ["executor_agent_id", "reviewer_agent_id", "selected_model", "runtime_session_id", "tool_signature", "effort", "supported_efforts", "capabilities"]) ||
+      !identifier(q.executor_agent_id) || !identifier(q.reviewer_agent_id) || q.executor_agent_id === q.reviewer_agent_id ||
+      !validSelectedModel(q.selected_model) || !Array.isArray(q.capabilities) || !q.capabilities.includes("vision")) return false;
+  return validateRuntimeCapabilities({ schema_version: "1.0.0", source: "declared-runtime-tools",
+    runtime_session_id: q.runtime_session_id, tool_signature: q.tool_signature, selected_model: q.selected_model,
+    supported_efforts: q.supported_efforts, capabilities: q.capabilities, max_subagents: 1 }) && q.supported_efforts.includes(q.effort);
+}
+
+function selectionDiagnostics({ binding, canonicalModel, modelBytes, sourceEvidence, sourceSha }) {
+  if (!binding) return [{ code: "EMAIL_SOURCE_SELECTION_INVALID", path: "/selectedSourceBinding", message: "An exact coordinator-selected source binding is required." }];
+  const root = sourceEvidence?.correspondence?.instances?.find(item => item.instance_id === canonicalModel.root.instance_id);
+  const matches = binding.email_id === canonicalModel.id && binding.source_sha === sourceSha &&
+    binding.model_digest === bytesDigest(modelBytes) && binding.file_key === sourceEvidence?.readings?.file_key &&
+    binding.file_key === sourceEvidence?.correspondence?.file_key && VIEWPORTS.every(viewport =>
+      binding.roots[viewport] === sourceEvidence?.readings?.selection?.[viewport]?.root_node_id && binding.roots[viewport] === root?.nodes?.[viewport]);
+  return matches ? [] : [{ code: "EMAIL_SOURCE_SELECTION_MISMATCH", path: "/selectedSourceBinding", message: "Final model and full source evidence must match the selected email, file, roots, source and exact model bytes." }];
+}
+
+function selectedDesignBlockers(mode, evidence, binding) {
+  if (mode !== "continue-fix-design") return [];
+  return binding && VIEWPORTS.every(viewport => {
+    const item = evidence?.figma_instances?.[viewport];
+    return item?.role === viewport && item.email_id === binding.email_id && item.file_key === binding.file_key && item.node_id === binding.roots[viewport];
+  }) ? [] : ["figma-source-missing"];
+}
+
+async function captureFiles(paths) {
+  const entries = new Map();
+  for (const path of new Set(paths)) entries.set(path, await readFile(path));
+  return entries;
+}
+
+async function assertFilesUnchanged(entries) {
+  for (const [path, bytes] of entries) if (!(await readFile(path)).equals(bytes)) throw failure("EMAIL_BUILD_INPUT_CHANGED");
+}
+
+async function captureCandidate(candidateDir) {
+  const info = await lstat(candidateDir);
+  if (!info.isDirectory() || info.isSymbolicLink()) throw failure("EMAIL_CANDIDATE_INVALID");
+  const paths = await inventoryTreePaths(candidateDir);
+  if (!paths.includes("email.html") || new Set(paths.map(path => path.toLowerCase())).size !== paths.length) throw failure("EMAIL_CANDIDATE_INVALID");
+  const entries = [];
+  for (const path of paths) {
+    if (!validateZipEntryPath(path)) throw failure("EMAIL_CANDIDATE_INVALID");
+    const bytes = await readFile(join(candidateDir, ...path.split("/")));
+    if (path === "email.html" && !bytes.length) throw failure("EMAIL_CANDIDATE_INVALID");
+    entries.push({ path, bytes });
+  }
+  return entries;
+}
+
+async function assertEvidenceOutsideCandidate(path, candidateDir) {
+  if (typeof path !== "string" || !isAbsolute(path) || inside(candidateDir, path) ||
+      inside(await realpath(candidateDir), await realpath(path))) throw failure("EMAIL_CANDIDATE_EVIDENCE_INSIDE_OUTPUT");
+}
+
+async function verifySelectedCandidate(context, { binding, identity, qualification, candidateDir }) {
+  if (!context || !isDeepStrictEqual(context.identity, identity)) throw failure("EMAIL_CANDIDATE_REVIEW_MISMATCH");
+  const { review_ref, ...returnedQualification } = context.reviewQualification ?? {};
+  if (!review_ref || !isDeepStrictEqual(returnedQualification, qualification)) throw failure("EMAIL_CANDIDATE_REVIEW_MISMATCH");
+  await assertEvidenceOutsideCandidate(context.referenceRoot, candidateDir);
+  await assertEvidenceOutsideCandidate(resolve(context.referenceRoot, review_ref.path), candidateDir);
+  const inventories = {};
+  for (const kind of ["email_model", "reference_manifest", "evidence_root"]) {
+    await assertEvidenceOutsideCandidate(context.inputRoots?.[kind], candidateDir);
+    await assertEvidenceOutsideCandidate(resolve(context.referenceRoot, context.inputRefs?.[kind]?.path ?? ""), candidateDir);
+    inventories[kind] = await readBoundInventory({ ref: context.inputRefs?.[kind], referenceRoot: context.referenceRoot, root: context.inputRoots?.[kind], kind });
+    for (const file of inventories[kind].inventory.files) {
+      await assertEvidenceOutsideCandidate(resolve(context.inputRoots[kind], file.path), candidateDir);
+    }
+  }
+  const modelFiles = inventories.email_model.inventory.files;
+  if (modelFiles.length !== 1 || modelFiles[0].digest !== binding.model_digest || !exactKeys(context.viewportImageRefs, VIEWPORTS)) throw failure("EMAIL_CANDIDATE_REVIEW_MISMATCH");
+  for (const [name, kind] of [["reference", "reference_manifest"], ["rendered", "evidence_root"]]) {
+    const mapped = VIEWPORTS.map(viewport => context.viewportImageRefs[viewport]?.[name]);
+    if (mapped.some(ref => !inventories[kind].inventory.files.some(file => isDeepStrictEqual(file, ref))) || mapped[0].path === mapped[1].path) throw failure("EMAIL_CANDIDATE_REVIEW_MISMATCH");
+  }
+  return verifyRealEmailVisual(context);
+}
+
+async function executeProtectedEmailBuildHandoff({ outputDir, rendererRunner = defaultRendererRunner, resolution, continueFixEvidence,
+  sourceEvidence, deliveryDocument, sourceSha, selectedSourceBinding, candidateReviewQualification, candidateReviewer, ...input }) {
+  let ownedRoot, modelPath, deliveryPath, handoff;
+  let failureBlocker = "renderer-diagnostic";
+  try {
+    // No callback-reachable object is used as a later comparison baseline.
+    const callerState = { model: input.model, delivery: deliveryDocument, source: sourceEvidence,
+      binding: selectedSourceBinding, qualification: candidateReviewQualification, design: continueFixEvidence,
+      candidates: input.candidates, assets: input.assetEvidence };
+    const baseline = structuredClone(callerState);
+    const assertCallerUnchanged = () => { if (!isDeepStrictEqual(callerState, baseline)) throw failure("EMAIL_BUILD_INPUT_CHANGED"); };
+    const binding = selectedBinding(baseline.binding);
+    const qualification = baseline.qualification;
+    sourceSha ??= process.env.CUPIS_SYSTEM_COMMIT;
+    sourceSha ??= (await execFileAsync("git", ["rev-parse", "HEAD"], { cwd: input.repoRoot })).stdout.trim();
+    if (!/^[0-9a-f]{40}$/u.test(sourceSha ?? "")) throw failure("EMAIL_DELIVERY_SOURCE_UNKNOWN");
+    ownedRoot = await mkdtemp(join(tmpdir(), "cupis-email-candidate-"));
+    modelPath = join(input.assetRoot, `.temporary-email-model-${randomUUID()}.json`);
+    const designBytes = Buffer.from(JSON.stringify(baseline.model), "utf8");
+    await writeFile(modelPath, designBytes);
+    const expectedFiles = new Map([[modelPath, designBytes]]);
+    // Retain the existing loader contract; canonical design bytes stay intact.
+    await loadEmailModel({ modelPath, schemaPath: join(input.repoRoot, "schemas", "email-model.schema.json") });
+    let document = baseline.delivery;
+    const deliveryRequired = resolution?.workflow?.steps?.some(step => step.id === "validate-delivery-answers");
+    if (deliveryRequired && !document) {
+      failureBlocker = "delivery-not-ready";
+      const componentIndex = indexComponentRegistries(await loadComponentRegistries({ repoRoot: input.repoRoot }));
+      const profile = selectDeliveryProfile(await loadEmailDeliveryProfiles({ repoRoot: input.repoRoot, componentIndex }));
+      const inventory = collectEmailActions({ model: baseline.model, componentIndex, profile });
+      if (inventory.diagnostics.length) throw new AggregateError(inventory.diagnostics, "Delivery research is blocked.");
+      document = createDeliveryDraft({ emailId: baseline.model.id, sourceSha, profile, inventory });
+      if (missingDeliveryFields({ inventory, deliveryDraft: document }).length) return { blockers: ["delivery-required"], executed: false };
+    }
+    if (document) {
+      failureBlocker = "delivery-not-ready";
+      deliveryPath = join(input.assetRoot, `.temporary-email-delivery-${randomUUID()}.json`);
+      const documentBytes = Buffer.from(JSON.stringify(document), "utf8");
+      await writeFile(deliveryPath, documentBytes);
+      expectedFiles.set(deliveryPath, documentBytes);
+    }
+    const prepared = await prepareEmailRenderInput({ repoRoot: input.repoRoot, modelPath, deliveryPath, sourceSha });
+    failureBlocker = "renderer-diagnostic";
+    handoff = await prepareEmailBuildHandoff({ ...input, candidates: baseline.candidates, assetEvidence: baseline.assets, model: prepared.canonicalModel });
+    const mode = resolution.workflow.mode;
+    const diagnostics = selectionDiagnostics({ binding, canonicalModel: prepared.canonicalModel, modelBytes: prepared.modelBytes, sourceEvidence: baseline.source, sourceSha });
+    const finalModelPath = join(ownedRoot, "final-model.json");
+    await writeFile(finalModelPath, prepared.modelBytes);
+    expectedFiles.set(finalModelPath, prepared.modelBytes);
+    const protectedFiles = await captureFiles([modelPath, finalModelPath, ...(deliveryPath ? [deliveryPath] : []),
+      ...handoff.assetContracts.map(asset => join(input.assetRoot, ...asset.path.split("/")))]);
+    for (const [path, bytes] of expectedFiles) if (!protectedFiles.get(path)?.equals(bytes)) throw failure("EMAIL_BUILD_INPUT_CHANGED");
+    for (const asset of handoff.assetContracts) {
+      const receipts = (baseline.assets ?? []).filter(item => item.path === asset.path &&
+        item.component_id === asset.component_id && item.asset_contract_id === asset.asset_contract_id);
+      const digest = bytesDigest(protectedFiles.get(join(input.assetRoot, ...asset.path.split("/"))));
+      if (!receipts.length || receipts.some(item => item.sha256 !== digest)) throw failure("EMAIL_BUILD_INPUT_CHANGED");
+    }
+    assertCallerUnchanged();
+    const sourceGate = await verifyNewBuildSource({ workflowMode: mode, sourceEvidence: baseline.source, repoRoot: input.repoRoot,
+      model: prepared.canonicalModel, assetEvidence: baseline.assets });
+    assertCallerUnchanged();
+    await assertFilesUnchanged(protectedFiles);
+    const blockers = [...new Set([...handoff.blockers, ...sourceGate.blockers,
+      ...(diagnostics.length ? [selectedSourceBinding ? "source-evidence-mismatch" : "source-evidence-missing"] : []),
+      ...selectedDesignBlockers(mode, baseline.design, binding),
+      ...(typeof candidateReviewer !== "function" || !qualifiedCandidateReviewer(qualification) ? ["visual-regression"] : []),
+    ])].sort();
+    if (blockers.length) return { ...handoff, blockers, sourceDiagnostics: [...sourceGate.diagnostics, ...diagnostics], executed: false };
+    const reportPath = join(ownedRoot, "source-report.json");
+    const reportBytes = Buffer.from(JSON.stringify(sourceGate.report), "utf8");
+    await writeFile(reportPath, reportBytes);
+    protectedFiles.set(reportPath, reportBytes);
+    assertCallerUnchanged();
+    const candidateDir = join(ownedRoot, "candidate");
+    const rendererArguments = { repoRoot: input.repoRoot, modelPath, outputDir: candidateDir, deliveryPath, sourceSha };
+    if (rendererRunner === defaultRendererRunner) await defaultRendererRunner(rendererArguments, binding.model_digest);
+    else await rendererRunner(rendererArguments);
+    assertCallerUnchanged();
+    await assertFilesUnchanged(protectedFiles);
+    const entries = await captureCandidate(candidateDir);
+    const files = entries.map(({ path, bytes }) => ({ path, digest: bytesDigest(bytes) }));
+    const identity = { request_id: `email-candidate-${randomUUID()}`, source_sha: sourceSha,
+      artifact_digest: bytesDigest(Buffer.from(JSON.stringify({ selectedSourceBinding: binding, files }), "utf8")) };
+    const comparisonPath = join(ownedRoot, "source-comparison.json");
+    const comparisonBytes = Buffer.from(JSON.stringify({ final_model_path: finalModelPath, model_digest: binding.model_digest,
+      source_report: sourceGate.report, selectedSourceBinding: binding, identity, files }), "utf8");
+    await writeFile(comparisonPath, comparisonBytes);
+    protectedFiles.set(comparisonPath, comparisonBytes);
+    const callbackSelection = structuredClone(binding);
+    const callbackRef = { path: comparisonPath, digest: bytesDigest(comparisonBytes) };
+    const originalRef = structuredClone(callbackRef);
+    failureBlocker = "visual-regression";
+    const returnedContext = await candidateReviewer({ candidateDir, selectedSourceBinding: callbackSelection, sourceComparisonRef: callbackRef });
+    const context = structuredClone(returnedContext);
+    const assertReviewUnchanged = () => {
+      if (!isDeepStrictEqual(returnedContext, context)) throw failure("EMAIL_BUILD_INPUT_CHANGED");
+    };
+    assertCallerUnchanged();
+    if (!isDeepStrictEqual(callbackSelection, binding) || !isDeepStrictEqual(callbackRef, originalRef)) throw failure("EMAIL_BUILD_INPUT_CHANGED");
+    const visual = await verifySelectedCandidate(context, { binding, identity, qualification, candidateDir });
+    assertReviewUnchanged();
+    await assertFilesUnchanged(protectedFiles);
+    const current = await captureCandidate(candidateDir);
+    if (current.length !== entries.length || current.some((entry, index) => entry.path !== entries[index].path || !entry.bytes.equals(entries[index].bytes))) throw failure("EMAIL_CANDIDATE_CHANGED");
+    // Re-read all visual inventories immediately before committing checked bytes.
+    await verifySelectedCandidate(context, { binding, identity, qualification, candidateDir });
+    assertReviewUnchanged();
+    await assertFilesUnchanged(protectedFiles);
+    const finalCandidate = await captureCandidate(candidateDir);
+    if (finalCandidate.length !== entries.length || finalCandidate.some((entry, index) => entry.path !== entries[index].path || !entry.bytes.equals(entries[index].bytes))) throw failure("EMAIL_CANDIDATE_CHANGED");
+    assertCallerUnchanged();
+    assertReviewUnchanged();
+    failureBlocker = "renderer-diagnostic";
+    const publication = await publishFileSetAtomically({ outputDir, entries });
+    return { ...handoff, sourceDiagnostics: [], executed: true, sourceReport: sourceGate.report,
+      release: { source_sha: sourceSha, model_digest: binding.model_digest, artifact_digest: identity.artifact_digest, files },
+      visualVerification: visual, publication };
+  } catch (error) {
+    const diagnostics = error instanceof AggregateError ? error.errors.map(({ code, path, message }) => ({ code, path, message }))
+      : [{ code: error.code ?? "EMAIL_BUILD_FAILED", message: error.message }];
+    return { ...handoff, blockers: [failureBlocker], ...(failureBlocker === "delivery-not-ready" ? { deliveryDiagnostics: diagnostics } : { releaseDiagnostics: diagnostics }), executed: false };
+  } finally {
+    if (modelPath) await rm(modelPath, { force: true });
+    if (deliveryPath) await rm(deliveryPath, { force: true });
+    if (ownedRoot) await rm(ownedRoot, { recursive: true, force: true });
+  }
+}
+
+export async function executeEmailBuildHandoff(input) {
+  return ["new-build", "continue-fix-design"].includes(input.resolution?.workflow?.mode)
+    ? executeProtectedEmailBuildHandoff(input) : executeLegacyEmailBuildHandoff(input);
+}
+
+async function executeLegacyEmailBuildHandoff({
   outputDir,
   rendererRunner = defaultRendererRunner,
   resolution,

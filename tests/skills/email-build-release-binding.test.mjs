@@ -7,6 +7,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { executeEmailBuildHandoff } from '../../scripts/lib/email-build-orchestration.mjs';
+import { verifyRealEmailVisual } from '../../scripts/verify-real-email-visual.mjs';
 import { workloadInputDigest } from '../../scripts/lib/execution-context.mjs';
 import { validateDocumentShape } from '../../scripts/lib/schema-validation.mjs';
 import modelSchema from '../../schemas/email-model.schema.json' with { type: 'json' };
@@ -131,6 +132,64 @@ for (const [label, mutate] of [
 ]) {
   test(label, async t => { const f = await physical(t); f.onReview = mutate; await blocked(f, argumentsFor(f), { afterReview: true }); });
 }
+
+for (const [target, mutate] of [
+  ['identity', context => { context.identity.source_sha = 'b'.repeat(40); }],
+  ['qualification', context => { context.reviewQualification.selected_model.binding = 'explicit'; context.reviewQualification.selected_model.id = 'test-late-reviewer-model'; }],
+]) {
+  test(`retained review context ${target} mutation during asynchronous gate prevents publication`, async t => {
+    const f = await physical(t), a = argumentsFor(f);
+    let mutationExecuted = false;
+    a.candidateReviewer = async args => {
+      const context = await f.candidateReviewer(args);
+      setImmediate(() => { mutate(context); mutationExecuted = true; });
+      return context;
+    };
+    const result = await executeEmailBuildHandoff(a);
+    const finalEntries = await readdir(f.outputDir).catch(error => { if (error.code === 'ENOENT') return null; throw error; });
+    const observed = JSON.stringify({ executed: result.executed, blockers: result.blockers, reviewCalls: f.reviewCalls, mutationExecuted, finalEntries });
+    assert.equal(f.reviewCalls, 1, observed);
+    assert.equal(mutationExecuted, true, 'setImmediate body must execute while the asynchronous gate is active: ' + observed);
+    assert.equal(result.executed, false, observed);
+    assert.ok(result.blockers.length > 0, observed);
+    assert.equal(finalEntries, null, observed);
+  });
+}
+
+test('fresh valid review evidence emitted inside candidate before capture cannot be published', async t => {
+  const f = await physical(t), a = argumentsFor(f);
+  const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aazsAAAAASUVORK5CYII=', 'base64');
+  let insideRoot, emitted = false, formalContextValid = false, candidateUnchanged = false;
+  a.rendererRunner = async args => {
+    await f.rendererRunner(args);
+    insideRoot = join(args.outputDir, 'pre-emitted-review');
+    for (const kind of ['email_model', 'reference_manifest', 'evidence_root']) {
+      const root = join(insideRoot, kind); await mkdir(root, { recursive: true });
+      if (kind === 'email_model') await writeFile(join(root, 'model.json'), f.prepared.modelBytes);
+      else for (const viewport of ['mobile', 'desktop']) await writeFile(join(root, `${kind === 'reference_manifest' ? 'reference' : 'rendered'}-${viewport}.png`), png);
+    }
+    emitted = true;
+  };
+  a.candidateReviewer = async args => {
+    const before = (await candidateFiles(args.candidateDir)).map(({ path, digest }) => ({ path, digest }));
+    const context = await f.candidateReviewer(args); // Fresh actual request/artifact and strict receipt; writes only outside candidate.
+    context.inputRoots = Object.fromEntries(['email_model', 'reference_manifest', 'evidence_root'].map(kind => [kind, join(insideRoot, kind)]));
+    const formal = await verifyRealEmailVisual(context);
+    assert.equal(formal.status, 'success'); assert.equal(formal.formal_evidence_only, true);
+    formalContextValid = true;
+    const after = (await candidateFiles(args.candidateDir)).map(({ path, digest }) => ({ path, digest }));
+    assert.deepEqual(after, before, 'review callback must not mutate or add any candidate file after capture');
+    candidateUnchanged = true;
+    return context;
+  };
+  const result = await executeEmailBuildHandoff(a);
+  const finalEntries = await readdir(f.outputDir).catch(error => { if (error.code === 'ENOENT') return null; throw error; });
+  const observed = JSON.stringify({ executed: result.executed, blockers: result.blockers, reviewCalls: f.reviewCalls, emitted, formalContextValid, candidateUnchanged, finalEntries });
+  assert.equal(emitted, true, observed); assert.equal(f.reviewCalls, 1, observed);
+  assert.equal(formalContextValid, true, observed); assert.equal(candidateUnchanged, true, observed);
+  assert.equal(result.executed, false, observed); assert.ok(result.blockers.length > 0, observed);
+  assert.equal(finalEntries, null, observed);
+});
 
 for (const [phase, target] of [['renderer', 'model'], ['renderer', 'model file'], ['renderer', 'delivery'], ['renderer', 'delivery file'], ['renderer', 'asset'], ['reviewer', 'model'], ['reviewer', 'delivery'], ['reviewer', 'asset'], ['reviewer', 'binding alias'], ['reviewer', 'nested binding roots alias'], ['reviewer', 'qualification alias'], ['reviewer', 'nested qualification model alias'], ['reviewer', 'callback selection clone']]) {
   test(`${phase}-time mutation of ${target} cannot become a new baseline`, async t => {
