@@ -146,3 +146,12 @@ test("production schema validator throws when a local fragment reference is unkn
     (error) => error.code !== "remote-schema-reference" && error.message.includes("#/$defs/absent"),
   );
 });
+
+
+test("resolved URI parser rejects an unclosed authority bracket while preserving a valid IPv6 literal", () => {
+  const valid = uri.parse("http://[::1]/app");
+  assert.equal(valid.error, undefined);
+  assert.equal(uri.serialize(valid), "http://[::1]/app");
+  const malformed = uri.parse("http://[not-an-ip");
+  assert.ok(typeof malformed.error === "string" && malformed.error.length > 0, "Malformed authority must have a nonempty parse error.");
+});
