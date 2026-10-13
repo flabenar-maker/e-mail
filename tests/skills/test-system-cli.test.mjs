@@ -133,3 +133,14 @@ test('owned heavy lock replacement terminates the real child and preserves the f
  const evidence=JSON.parse(await readFile(join(f.temporary,'evidence','repository-full.json'),'utf8'));assert.ok(evidence.records.some(record=>record.code==='VERIFICATION_HEAVY_LOCK_LOST'));assert.ok(evidence.records.some(record=>record.termination_confirmed===true));
  assert.throws(()=>process.kill(entered.pid,0),'the owned child must be terminated before receipt publication');assert.equal(await readFile(foreign,'utf8'),'preserve this foreign lock\n');assert.equal(testSpawns(await f.readProbe()).length,0);
 });
+test('public runner explicit2 without decision emits controlled mapped metadata2',async t=>{
+ const f=await fixture(t),result=await cli(f,'scripts/run-verification.mjs',runnerArgs(f,'docs-scoped',['--test-concurrency','2']));assert.equal(result.exitCode,0,result.stderr+result.stdout);const receipt=JSON.parse(result.stdout.trim());assert.equal(receipt.workload_results[0].test_concurrency,2);const records=await f.readProbe(),commands=testSpawns(records);assert.equal(commands.length,1);exactNodeCommand(commands[0],['--test','--test-concurrency=2',...DOCS]);for(const file of DOCS)assert.ok(records.some(record=>record.kind==='ran'&&record.file.endsWith('/'+file)),file);
+});
+for(const entrypoint of ['runner','npm','docs'])test(`public ${entrypoint} inherited Node test context still executes every selected real file`,async t=>{
+ const f=await fixture(t);f.env.NODE_TEST_CONTEXT='child-v8';let program,args,files;
+ if(entrypoint==='runner'){program='scripts/run-verification.mjs';args=runnerArgs(f,'docs-scoped',['--decision',await f.save(decision(f.policy,f.sha,['docs-scoped'],4))]);files=DOCS;}
+ else if(entrypoint==='docs'){program='scripts/lib/execution-docs-check.mjs';args=['--test-concurrency','4'];files=DOCS;}
+ else{program='scripts/test-system.mjs';args=['--decision',await f.save(decision(f.policy,f.sha,['repository-full'],4))];files=['tests/foundation/bounded.test.mjs','tests/characterization/bounded.test.mjs','tests/components/bounded.test.mjs','tests/generation/bounded.test.mjs','tests/rendering/bounded.test.mjs','tests/workflows/bounded.test.mjs','tests/skills/bounded.test.mjs',...VISUAL,...DOCS];}
+ const result=await cli(f,program,args);assert.equal(result.exitCode,0,result.stderr+result.stdout);const records=await f.readProbe();for(const file of files)assert.ok(records.some(record=>record.kind==='ran'&&record.file.endsWith('/'+file)),file);assert.doesNotMatch(result.stderr+result.stdout,/recursiv|skip.*(?:test|file)/iu);
+ const commands=testSpawns(records);assert.equal(commands.length,1);exactNodeCommand(commands[0],['--test','--test-concurrency=4',...(entrypoint==='npm'?FULL:DOCS)]);
+});
