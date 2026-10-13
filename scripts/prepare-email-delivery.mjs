@@ -23,7 +23,7 @@ async function main() {
   const sourceSha = process.env.CUPIS_SYSTEM_COMMIT ?? execFileSync('git', ['rev-parse','HEAD'], {cwd:repoRoot,encoding:'utf8'}).trim();
   if (!/^[0-9a-f]{40}$/u.test(sourceSha)) throw new Error('EMAIL_DELIVERY_SOURCE_UNKNOWN');
   const [model, registries] = await Promise.all([
-    loadEmailModel({ modelPath:resolve(args['--model']),schemaPath:join(repoRoot,'schemas/email-model.schema.json') }),
+    loadEmailModel({ modelPath:resolve(args['--model']),schemaPath:join(repoRoot,'schemas/email-model.schema.json'),preserveRichTextRuns:true }),
     loadComponentRegistries({ repoRoot }),
   ]);
   const componentIndex = indexComponentRegistries(registries);

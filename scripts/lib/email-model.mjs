@@ -26,9 +26,9 @@ function sortDiagnostics(errors) {
   );
 }
 
-function normalizeRichText(value) {
+function normalizeRichText(value, preserveRichTextRuns = false) {
   if (Array.isArray(value)) {
-    return value.map(normalizeRichText);
+    return value.map(child => normalizeRichText(child, preserveRichTextRuns));
   }
   if (!value || typeof value !== "object") {
     return value;
@@ -36,15 +36,15 @@ function normalizeRichText(value) {
   if (value.type === "rich-text" && Array.isArray(value.segments)) {
     return {
       type: "rich-text",
-      value: value.segments.map((segment) => segment.value).join(""),
+      value: preserveRichTextRuns ? value.segments.map(segment => segment.value) : value.segments.map(segment => segment.value).join(""),
     };
   }
   return Object.fromEntries(
-    Object.entries(value).map(([key, child]) => [key, normalizeRichText(child)]),
+    Object.entries(value).map(([key, child]) => [key, normalizeRichText(child, preserveRichTextRuns)]),
   );
 }
 
-export async function loadEmailModel({ modelPath, schemaPath }) {
+export async function loadEmailModel({ modelPath, schemaPath, preserveRichTextRuns = false }) {
   let model;
   let schema;
   try {
@@ -75,7 +75,7 @@ export async function loadEmailModel({ modelPath, schemaPath }) {
   if (errors.length > 0) {
     throw new AggregateError(errors, "Email model validation failed.");
   }
-  return normalizeRichText(model);
+  return normalizeRichText(model, preserveRichTextRuns);
 }
 
 function componentRecord(dependencies, componentId) {

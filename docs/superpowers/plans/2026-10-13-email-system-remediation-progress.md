@@ -430,3 +430,8 @@ Independent detail GO0a5939e0c830797f4cf488471fafa06d3c493b5b1ba2d20a86dea57a853
 
 
 Refinement test-FIRST: три дополнительных literal regression cases подготовлены, fixture option ограничен shifted hidden Mobile X и reversed model declarations. Прежние40 cases/original prefixes и held runtime/doc bytes сохранены; syntax3/3 exit0; independent static GO для v2 manifest612e6512fdd926b284e613525b5f2b0b51eeb9bdd740a265602a324339d74ea5. Этот коммит публикует только tests/fixture/progress. Selected-three OLD RED и inventory correction ещё pending.
+
+
+Task10 runtime candidate: refinement exact1e1a1f3de786083db03eb72fb72b26c34114b2bd selected3 cases:0PASS/3intendedFAIL, no unrelated errors; original62RED retained. Corrected inventory8424ed1d23cf00e4d4ccd1b5bd3d205094fc05886969840d88d069e58848aecf requires contiguous complete source mapping and places Desktop-only action group keys relative to common viewport actions, preserving existing IDs/merge/ranges/hints. Other5reviewed runtime/doc bytes unchanged; syntax5/5 exit0; independent static GO. This commit publishes the compact form, exact current labels/group metadata, opt-in typed-run loader and user guide. Fresh focused/CLI/browser/full and typed acceptance remain pending.
+
+Manual browser visual fixtures use example.test values but are not release documents. Actual registered CLI/browser-download case retains already frozen literal https://1cupis.ru/help-current for successful final rendering; existing EMAIL_DELIVERY_EXAMPLE_URL gate rejects .test hosts and stays unchanged. No supplied URL is opened or requested. Combined reviewed requirements1b8b9443c8bf7e60708022665d85c0262620da85008b9207382acdd94ed81f81.

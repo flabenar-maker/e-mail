@@ -74,6 +74,7 @@ export async function prepareEmailRenderInput({ repoRoot: inputRepoRoot = repoRo
       loadEmailModel({
         modelPath: designPath,
         schemaPath: join(inputRepoRoot, "schemas", "email-model.schema.json"),
+        preserveRichTextRuns: true,
       }),
       loadComponentRegistries({ repoRoot: inputRepoRoot }),
       loadRendererRegistry({ repoRoot: inputRepoRoot }),
@@ -95,7 +96,7 @@ export async function prepareEmailRenderInput({ repoRoot: inputRepoRoot = repoRo
     const modelBytes = Buffer.from(JSON.stringify(canonicalModel), "utf8");
     const canonicalPath = join(preparationRoot, "final.json");
     await writeFile(canonicalPath, modelBytes);
-    const renderModel = await loadEmailModel({ modelPath: canonicalPath, schemaPath: join(inputRepoRoot, "schemas", "email-model.schema.json") });
+    const renderModel = await loadEmailModel({ modelPath: canonicalPath, schemaPath: join(inputRepoRoot, "schemas", "email-model.schema.json"), preserveRichTextRuns: true });
     if (delivery) Object.assign(dependencies, {deliveryProfile:delivery.profile, outputBindings:delivery.outputBindings, deliveryDocument:delivery.document, deliveryInventory:delivery.inventory, designModel:originalModel});
     if (delivery) dependencies.templateRules = planTemplateRules({model:originalModel,inventory:delivery.inventory,profile:delivery.profile});
     const semanticErrors = validateEmailModelSemantics(renderModel, dependencies);
