@@ -70,17 +70,27 @@ function localEligible(observations,workload,policy) {
  if(!['logical_cpus','physical_ram_gib','free_ram_gib','free_temporary_disk_gib'].every(key=>typeof o[key]==='number'&&o[key]>=threshold[key]))return false;
  return r.platforms.includes(o.platform)&&r.architectures.includes(o.architecture)&&r.node_major===o.runtimes.node.major&&r.runtimes.every(name=>o.runtimes[name]?.present===true)&&['concurrency','timeout_minutes','max_heavy_batches'].every(key=>workload.limits[key]<=policy.local_limits[key]);
 }
-async function initialize({stateRoot,pairKey,collectOnce,policy},refresh) {
+function validateTestConcurrency(value) {
+ if(value!==2&&value!==4)throw fail('PROFILE_CONCURRENCY_INVALID','Choose integer test concurrency 2 or 4.');
+}
+function existingSelection(profile,testConcurrency) {
+ if(testConcurrency!==undefined&&(profile.test_concurrency??2)!==testConcurrency)throw fail('PROFILE_SELECTION_CONFLICT','The saved test choice differs; change it with explicit set-concurrency.');
+ return profile;
+}
+async function initialize({stateRoot,pairKey,collectOnce,policy,testConcurrency},refresh) {
+ if(testConcurrency!==undefined)validateTestConcurrency(testConcurrency);
  const path=executionProfilePath({stateRoot,pairKey});
- if(!refresh){const saved=await readExecutionProfile({stateRoot,pairKey});if(saved.status==='resolved')return saved.profile;if(saved.status==='invalid')throw fail(saved.code==='PROFILE_STATE_UNWRITABLE'?'PROFILE_STATE_UNWRITABLE':'PROFILE_STATE_INVALID',saved.code==='PROFILE_STATE_UNWRITABLE'?'Choose an authorized persistent state root that can save the profile.':'Saved profile is invalid; explicit reassessment is required.');}
+ if(!refresh){const saved=await readExecutionProfile({stateRoot,pairKey});if(saved.status==='resolved')return existingSelection(saved.profile,testConcurrency);if(saved.status==='invalid')throw fail(saved.code==='PROFILE_STATE_UNWRITABLE'?'PROFILE_STATE_UNWRITABLE':'PROFILE_STATE_INVALID',saved.code==='PROFILE_STATE_UNWRITABLE'?'Choose an authorized persistent state root that can save the profile.':'Saved profile is invalid; explicit reassessment is required.');}
  if(!policy||!Array.isArray(policy.workloads)||!Array.isArray(policy.hardware_thresholds)||!/^[a-f0-9]{64}$/u.test(policy.policy_digest??'')||policy.local_limits?.concurrency!==2||policy.local_limits?.timeout_minutes!==30||policy.local_limits?.max_heavy_batches!==1)throw fail('PROFILE_POLICY_INVALID','Use the validated execution policy for profile initialization.');
  const directory=dirname(path);await storageReady(directory);
  const lock=join(directory,'init.lock'),started=join(directory,'initialization-started.json');
  try{await mkdir(lock);}catch(error){if(error.code==='EEXIST')throw fail('PROFILE_INITIALIZATION_IN_PROGRESS','Initialization is already active or was interrupted; do not retry collection automatically.');throw fail('PROFILE_STATE_UNWRITABLE','The initialization lock could not be saved.');}
  try {
-  // Check again under the cross-process lock, before sampling anything.
+  // Read the previous preference under the same lock as explicit reassessment.
+  const saved=await readExecutionProfile({stateRoot,pairKey});
+  const preference=refresh?(saved.status==='resolved'?saved.profile.test_concurrency:undefined):testConcurrency;
   if(!refresh){
-   const saved=await readExecutionProfile({stateRoot,pairKey});if(saved.status==='resolved')return saved.profile;if(saved.status==='invalid')throw fail(saved.code==='PROFILE_STATE_UNWRITABLE'?'PROFILE_STATE_UNWRITABLE':'PROFILE_STATE_INVALID',saved.code==='PROFILE_STATE_UNWRITABLE'?'Choose an authorized persistent state root that can save the profile.':'Saved profile is invalid; explicit reassessment is required.');
+   if(saved.status==='resolved')return existingSelection(saved.profile,testConcurrency);if(saved.status==='invalid')throw fail(saved.code==='PROFILE_STATE_UNWRITABLE'?'PROFILE_STATE_UNWRITABLE':'PROFILE_STATE_INVALID',saved.code==='PROFILE_STATE_UNWRITABLE'?'Choose an authorized persistent state root that can save the profile.':'Saved profile is invalid; explicit reassessment is required.');
    try{await lstat(started);throw fail('PROFILE_INITIALIZATION_IN_PROGRESS','A previous initialization did not finish saving; explicit reassessment is required.');}catch(error){if(error.code!=='ENOENT')throw error;}
   }
   // A durable marker prevents automatic resampling after a crash or failed final save.
@@ -88,11 +98,12 @@ async function initialize({stateRoot,pairKey,collectOnce,policy},refresh) {
   let observations=null;
   try{if(typeof collectOnce==='function')observations=sanitizeObservations(await collectOnce());}catch{/* Permission denial and collector timeout become one saved unavailable baseline. */}
   const profile={schema_version:'1.0.0',pair_key:pairKey,initialized_at:new Date().toISOString(),observations_status:observations?'available':'unavailable',observations,baseline_policy_digest:policy.policy_digest,workload_decisions:policy.workloads.map(workload=>({id:workload.id,signature:workloadSignature(workload),target:localEligible(observations,workload,policy)?'local':'github-hosted'})),local_limits:structuredClone(policy.local_limits)};
+  if(preference!==undefined)profile.test_concurrency=preference;
   if(!validProfile(profile,pairKey))throw fail('PROFILE_POLICY_INVALID','The policy cannot produce a valid persisted profile.');
   await atomicJson(path,profile);
   // Success is reported only after the actual persisted file validates.
-  const saved=await readExecutionProfile({stateRoot,pairKey});if(saved.status!=='resolved')throw fail('PROFILE_STATE_UNWRITABLE','The persisted profile could not be verified.');
-  await unlink(started).catch(()=>{});return saved.profile;
+  const persisted=await readExecutionProfile({stateRoot,pairKey});if(persisted.status!=='resolved')throw fail('PROFILE_STATE_UNWRITABLE','The persisted profile could not be verified.');
+  await unlink(started).catch(()=>{});return persisted.profile;
  }catch(error){if(error instanceof SystemValidationError)throw error;throw fail('PROFILE_STATE_UNWRITABLE','Profile initialization could not be saved; no success is claimed.');}
  finally{await rmdir(lock).catch(()=>{});}
 }
@@ -100,6 +111,28 @@ export const initExecutionProfile=options=>initialize(options,false);
 export async function updateExecutionProfile(options) {
  if(options.explicitRefreshRequest!==true)throw fail('PROFILE_REFRESH_REQUIRED','Reassessing the saved baseline requires an explicit user request.');
  return initialize(options,true);
+}
+// This operation has no collector or policy argument and cannot create a pair.
+export async function setExecutionTestConcurrency({stateRoot,pairKey,testConcurrency,explicitSelection}) {
+ if(explicitSelection!==true)throw fail('PROFILE_SELECTION_REQUIRED','Changing the saved test choice requires explicit selection.');
+ validateTestConcurrency(testConcurrency);
+ const path=executionProfilePath({stateRoot,pairKey}),directory=dirname(path);
+ try{await noLinks(directory);if(!(await lstat(directory)).isDirectory())throw fail('PROFILE_STATE_INVALID','Existing profile state must be a directory.');}
+ catch(error){if(error instanceof SystemValidationError)throw error;if(['ENOENT','ENOTDIR'].includes(error.code))throw fail('PROFILE_STATE_ABSENT','Initialize the trusted profile before selecting test concurrency.');throw fail('PROFILE_STATE_UNWRITABLE','The existing profile state could not be accessed.');}
+ const lock=join(directory,'init.lock'),started=join(directory,'initialization-started.json');
+ try{await mkdir(lock);}catch(error){throw fail(error.code==='EEXIST'?'PROFILE_INITIALIZATION_IN_PROGRESS':'PROFILE_STATE_UNWRITABLE','The profile is initializing or its exclusive lock could not be saved.');}
+ try {
+  try{await lstat(started);throw fail('PROFILE_INITIALIZATION_IN_PROGRESS','A previous initialization is unfinished; selection cannot reassess or remove its marker.');}catch(error){if(error.code!=='ENOENT')throw error;}
+  const saved=await readExecutionProfile({stateRoot,pairKey});
+  if(saved.status!=='resolved')throw fail(saved.status==='absent'?'PROFILE_STATE_ABSENT':saved.code,'The existing trusted profile is unavailable or invalid; no selection was saved.');
+  const profile=structuredClone(saved.profile);profile.test_concurrency=testConcurrency;
+  if(!validProfile(profile,pairKey))throw fail('PROFILE_STATE_INVALID','The selected profile did not validate.');
+  await atomicJson(path,profile);
+  const persisted=await readExecutionProfile({stateRoot,pairKey});
+  if(persisted.status!=='resolved'||JSON.stringify(persisted.profile)!==JSON.stringify(profile))throw fail('PROFILE_STATE_UNWRITABLE','The persisted selection could not be verified; no success is claimed.');
+  return persisted.profile;
+ }catch(error){if(error instanceof SystemValidationError)throw error;throw fail('PROFILE_STATE_UNWRITABLE','The preference could not be saved; no success is claimed.');}
+ finally{await rmdir(lock).catch(()=>{});}
 }
 function bindingPath(bindingRoot) {
  if(typeof bindingRoot!=='string'||!isAbsolute(bindingRoot))throw fail('PROFILE_BINDING_INVALID','Use an explicitly authorized absolute nonportable local binding root.');
