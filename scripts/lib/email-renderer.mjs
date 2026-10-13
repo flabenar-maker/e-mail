@@ -167,6 +167,13 @@ function prepareElement({
 
   for (const slot of visible ? (prepared.content_slots ?? []) : []) {
     let value = contentValue(instance, originalId, slot.id, viewport);
+    if (prepared.render_mode === "html-text" && slot.id === "text" && slot.type === "rich-text" && value?.type === "rich-text" && Array.isArray(value.value)) {
+      const styled = prepared.facts?.find(({ id }) => id === "styled-text-segments")?.value?.items;
+      const source = prepared.facts?.find(({ id }) => id === "source-text")?.value?.value;
+      if (Array.isArray(styled) && styled.length > 0 && typeof source === "string" && value.value.length !== styled.length && value.value.every(run => typeof run === "string") && value.value.join("") === source) {
+        value = { ...value, value: source };
+      }
+    }
     if (prepared.render_mode === "slot" && slot.id === "content") {
       const children = slotValue(instance, originalId)?.instances ?? [];
       if (children.length > 0) {

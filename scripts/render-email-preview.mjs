@@ -65,6 +65,7 @@ async function main() {
     loadEmailModel({
       modelPath,
       schemaPath: join(repoRoot, "schemas", "email-model.schema.json"),
+      preserveRichTextRuns: true,
     }),
     loadComponentRegistries({ repoRoot }),
     loadRendererRegistry({ repoRoot }),

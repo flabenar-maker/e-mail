@@ -76,7 +76,11 @@ function currentStyledRuns(element, instance, viewport, ambiguous) {
   const supplied = slot && deliveryBinding(instance, element.id, slot.id, viewport)?.value;
   const runs = supplied?.type === 'rich-text' && Array.isArray(supplied.segments) ? supplied.segments.map(run => run.value) : supplied?.type === 'rich-text' && Array.isArray(supplied.value) ? supplied.value : null;
   if (runs) {
-    if (runs.length !== segments.length || runs.some(run => typeof run !== 'string')) { ambiguous('Current run count or type does not match the original styled segments.'); return null; }
+    if (runs.some(run => typeof run !== 'string')) { ambiguous('Current run count or type does not match the original styled segments.'); return null; }
+    if (runs.length !== segments.length) {
+      if (runs.join('') !== source) { ambiguous('Current run count or type does not match the original styled segments.'); return null; }
+      return segments.map(segment => segment.characters);
+    }
     return runs;
   }
   if (supplied && deliveryText(supplied) !== source) { ambiguous('Current scalar text has no confirmed original range mapping.'); return null; }
