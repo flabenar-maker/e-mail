@@ -1,6 +1,33 @@
 # Email System Remediation Implementation Plan
 
-## Состояние реализации и остановка — 2026-10-13
+## Актуальное состояние — шаг 10 принят, работа приостановлена
+
+Последнее указание пользователя: после завершения пакета 10 безопасно приостановить работу, обновив планы и текущие статусы. **Шаги 1–10 приняты в ветке [PR #134](https://github.com/flabenar-maker/e-mail/pull/134); работа приостановлена.** Шаги 11 и 12 не начаты. Сохранён только read-only preflight их первичных источников; тесты, runtime и визуальные проверки этих шагов не начинались.
+
+| Шаг | Актуальный статус | Принятая runtime/test версия |
+| --- | --- | --- |
+| 1 | Принят в ветке PR #134 | `c0808e1e` |
+| 2 | Принят в ветке PR #134 | `9d1a19c8` |
+| 3 | Принят в ветке PR #134 | `81052bdc` |
+| 4 | Принят в ветке PR #134 | `5b557800` |
+| 5 | Принят в ветке PR #134 | `e306f000` |
+| 6 | Принят в ветке PR #134 | `5dbbaec6` |
+| 7 | Принят в ветке PR #134 | `373934ba` |
+| 8 | Принят в ветке PR #134 | `1e5e49be` |
+| 9 | Принят в ветке PR #134 | `74857314` |
+| 10 | Принят; actual finalizer `accepted`, workflow `complete` | `b766c52f639d45a3e098a00cfce2b80a3131673c` |
+| 11 | Не начат; следующий после отдельного продолжения | — |
+| 12 | Не начат; после принятия 11, только доказанные причины | — |
+
+Шаг 10 на точном `b766c52`: **2485/2485 PASS, 0 FAIL, 0 SKIP**, validator/full/generated exit0; один локальный полный прогон23m44.812s в бюджете30min/concurrency2/max1heavy, без повторов. Full receipt SHA256 `07ee13eb32e7c6cdf7aded35dadbb0c9644e87d7dcea2718e5991a12d1bfb665`; distinct typed review `c74af0cb1c32d6bbdc72a8a87b3e9b2360f0bc2a127bb29f3f8d6af3d0184db2`; finalization `ca094f9bed2d7b8d73f5e6b0308ab18917c10f8bc1ffd04d350bdc73fc8053ca`; workflow `bfeaaab1cf8b7d04c100421c737adb47ff456c438db42b262d8de04253b70bf0`.
+
+Focused69/69; свежая браузерная форма234/234 при реальном200% zoom на1280/360, public footer equivalence28/28, все39 снимков просмотрены. Actual prepare → real browser Blob JSON → final render и normal preview проходят с текущей подписью, адресом и digest; изменённое неоднозначное разбиение блокируется. Actual support model имеет0managed fields; сохранение managed data проверено отдельной synthetic формой. Это локальная браузерная приёмка одинаковых публичных входов, без утверждения fidelity частной Figma или внешних почтовых клиентов.
+
+Исторический full `8028be5e` (2467PASS/14FAIL), все RED/HOLD и доказательства сохранены с первоначальными SHA. Исторический Hero pixel discrepancy остаётся UNKNOWN. [Журнал реализации и детализации FIRST](https://github.com/flabenar-maker/e-mail/blob/7f03aaf9e66afc79ad7321f7d120152b17af6cda/docs/superpowers/plans/2026-10-13-email-system-remediation-progress.md) сохраняет причины, ограничения и промежуточные попытки. Источник плана принятого шага — `e2919e7438e72622ec1085e2faa879bc1ed29412`, main — `b8ee255bde370a9b932cf36071904be771d86d8e`; документное обновление статуса не меняет эти pins и не переименовывает runtime full.
+
+Точка следующего продолжения: **Task 11 NPS whole-button area**, затем Task12 только после его принятия. Сейчас новые работы не выполняются. External acceptance: `not-run`. Actions/PR Checks не используются; merge, установка и Figma writes не выполняются. Компьютер остаётся включённым; остановка при usedPercent≥95 сохраняется. Документные коммиты этой приостановки проверяются отдельно.
+
+## История предыдущей остановки после шага 9 — 2026-10-13
 
 Последнее указание пользователя: после приёмки шага 9 сохранить прогресс во всех активных планах и остановить работу чата. Шаг 9 принят в ветке [PR #134](https://github.com/flabenar-maker/e-mail/pull/134); actual finalizer `accepted`, workflow `complete`. Слияние не выполнялось. Реализация ведётся последовательно в одном PR #134; остальные открытые PR служат источниками, #127 исключён как низкоприоритетный. Этот статус уточняет прежние организационные указания плана и исторические записи ниже.
 
@@ -209,13 +236,15 @@ Task blocks ниже содержат exact existing files/tests и предло
 **Interfaces:** Preserve `collectEmailActions({model,componentIndex,profile})`, `validateDeliveryDocument({document,inventory,profile,purpose,sourceSha?,emailId?})`, `projectDeliveryBindings({model,document,inventory,profile})`. Presentation metadata `{display_group:{id,label},display_context,viewport_hint:'Mobile'|'Desktop'|null}`. `renderDeliveryForm()` adds optional read-only known/managed review; pending controls still only missing links.
 **Prerequisite:** Task 3 before inventory changes; accepted #128 spec reconciled with E08 from #132. No second form PR, extra Figma read or AI presentation generation.
 
-- [ ] Add red exact labels: «Помощь» → current typed run «Поддержка»; shared two nonadjacent underline fragments omit middle text; emoji/newline; ambiguous scalar mapping blocks, never guessed substring. IDs/kinds/ranges/source bindings unchanged; label/group changes invalidate digest, old answers not migrated.
-- [ ] Add red structural groups/repeated heading/card CTA/order/split counterpart hints; HTML-like captions escaped; optional review shows known/managed read-only, zero pending produces no mandatory questionnaire, no known value re-request.
-- [ ] Delegate `node --test tests/rendering/email-action-labels.test.mjs tests/rendering/email-action-inventory.test.mjs tests/rendering/email-delivery-form.test.mjs tests/rendering/email-delivery-reuse.test.mjs`; expected new assertions FAIL.
-- [ ] Add actual `prepare-email-delivery.mjs --model <synthetic> --output <new-intake>` integration: current changed rich-text run remains exact label; downloaded delivery JSON digest equals intake inventory; final `render-email.mjs` uses same binding/digest/run without stale/ambiguous failure. Unit raw-run fixtures alone insufficient because loadEmailModel currently scalarizes segments.
-- [ ] Implement minimum validated loader/intake preservation if integration proves loss; preserve normalization and model schema for all existing callers. Implement deterministic compact template/metadata/optional review; no extra prompts, old answer migration or visibility/required/managed gate weakening.
-- [ ] Delegate green all listed suites and actual CLI path; inspect downloaded JSON IDs/values/digests. Delegate browser visual/keyboard at 360/1280 px and 200% zoom, no horizontal page scroll; split pending half keeps correct hint. No new pixel baseline claimed.
-- [ ] Apply Gate F; `feat: compact link intake with optional filled-link review`.
+- [x] Add red exact labels: «Помощь» → current typed run «Поддержка»; shared two nonadjacent underline fragments omit middle text; emoji/newline; ambiguous scalar mapping blocks, never guessed substring. IDs/kinds/ranges/source bindings unchanged; label/group changes invalidate digest, old answers not migrated.
+- [x] Add red structural groups/repeated heading/card CTA/order/split counterpart hints; HTML-like captions escaped; optional review shows known/managed read-only, zero pending produces no mandatory questionnaire, no known value re-request.
+- [x] Delegate `node --test tests/rendering/email-action-labels.test.mjs tests/rendering/email-action-inventory.test.mjs tests/rendering/email-delivery-form.test.mjs tests/rendering/email-delivery-reuse.test.mjs`; expected new assertions FAIL.
+- [x] Add actual `prepare-email-delivery.mjs --model <synthetic> --output <new-intake>` integration: current changed rich-text run remains exact label; downloaded delivery JSON digest equals intake inventory; final `render-email.mjs` uses same binding/digest/run without stale/ambiguous failure. Unit raw-run fixtures alone insufficient because loadEmailModel currently scalarizes segments.
+- [x] Implement minimum validated loader/intake preservation if integration proves loss; preserve normalization and model schema for all existing callers. Implement deterministic compact template/metadata/optional review; no extra prompts, old answer migration or visibility/required/managed gate weakening.
+- [x] Delegate green all listed suites and actual CLI path; inspect downloaded JSON IDs/values/digests. Delegate browser visual/keyboard at 360/1280 px and 200% zoom, no horizontal page scroll; split pending half keeps correct hint. No new pixel baseline claimed.
+- [x] Apply Gate F; `feat: compact link intake with optional filled-link review`.
+
+**Принятые уточнения FIRST Task10:** actual CLI доказал необходимость opt-in сохранения typed runs в loader/prepare/render. Первый полный прогон затем доказал несовместимость неизменённого source-equal rich-text с иным числом segments и default preview; детализация до ремонта разрешила дополнительно только `scripts/lib/email-renderer.mjs` и `scripts/render-email-preview.mjs`. Narrow adapter требует выбранный html-text rich-text slot, mismatch counts и точное равенство trusted source; matching counts сохраняют supplied identity, изменённый mismatch блокируется. Interpreter/schema/contracts/registries/dependencies не менялись. Окончательная приёмка — точный `b766c52`, 18-пунктовая независимая матрица, strict typed receipts и actual finalizer/workflow; история не переписана.
 
 ### Task 11: #131 — NPS whole-button area
 
