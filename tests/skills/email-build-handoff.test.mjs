@@ -1145,7 +1145,17 @@ for (const [componentId, assetId, positives, negatives] of [
         assert.equal(createHash("sha256").update(await readFile(target)).digest("hex"), receipt.sha256);
       }
       const result = await prepareEmailBuildHandoff({ ...source, repoRoot, assetRoot: root });
-      assert.ok(result.blockers.includes("asset-contract-missing"), path);
+      if (safeInRoot) assert.ok(result.blockers.includes("asset-contract-missing"), path);
+      else {
+        assert.deepEqual(result.blockers, ["renderer-diagnostic"], path);
+        assert.deepEqual(result.assetContracts, []);
+        assert.equal(result.model.root.slots[0].instances[0].asset_files.find(x => x.asset_contract_id === assetId).path,
+          assetId === "hero-image" ? "images/../hero-image@2x.jpg" : "/images/header-logo@4x.png");
+        const { validateEmailModelSemantics } = await import("../../scripts/lib/email-model.mjs");
+        const diagnostics = validateEmailModelSemantics(source.model, { componentIndex: registryIndex, rendererRegistry: source.rendererRegistry });
+        assert.deepEqual(diagnostics.filter(x => x.code === "EMAIL_MODEL_ASSET_PATH_UNSAFE").map(x => [x.code, x.path]),
+          [["EMAIL_MODEL_ASSET_PATH_UNSAFE", "/root/slots/0/instances/0/asset_files/0/path"]]);
+      }
       assert.deepEqual(receipt.mcp_export, owner);
       assert.deepEqual(record.asset_contracts.find(x => x.id === assetId), contract);
       await assert.rejects(readFile(join(root, "email.html")), { code: "ENOENT" });
