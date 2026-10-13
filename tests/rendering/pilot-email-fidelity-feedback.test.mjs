@@ -273,16 +273,17 @@ test("Transaction Success mobile badge table is observably centered", () => {
 );
 
 // Task9 intrinsic labels: literal text/width expectations precede browser geometry evidence.
-async function task9LabelOutput({ text, sizing, role = "label", rich = false, stretch = false }) {
+async function task9LabelOutput({ text, sizing, role = "label", rich = false, stretch = false, parentAxis = "vertical", grow = false }) {
   const roots = {};
   for (const [viewport, width, fontSize] of [["mobile", 40, 14], ["desktop", 46, 16]]) {
     const label = { id: "probe-label", semantic_role: role, render_mode: "html-text", visibility: { mode: "always" }, children: [],
       content_slots: [{ id: "text", type: rich ? "rich-text" : "plain-text", required: true }],
       facts: [dimensions("reference-size", width, 22), keyword("text-auto-resize", "width_and_height"), measure("font-size", fontSize),
         ...(sizing ? [keyword("horizontal-sizing", sizing)] : []), ...(stretch ? [keyword("layout-align", "stretch")] : []),
+        ...(grow ? [{ id: "layout-grow", value: { type: "number", value: 1 } }] : []),
         ...(rich ? [{ id: "source-text", value: { type: "string", value: text } }, { id: "styled-text-segments", value: { type: "segments", items: [{ start: 0, end: text.length, characters: text, font_family: "Arial", font_style: "Regular", font_size_px: fontSize, fills: [{ type: "solid", visible: true, color: "#112233" }], line_height: { value: 20, unit: "PIXELS" }, text_decoration: "NONE" }] } }] : []),
       ] };
-    roots[viewport] = node("label-parent", [keyword("layout-axis", "vertical"), measure("layout-gap", 0)], [label]);
+    roots[viewport] = node("label-parent", [keyword("layout-axis", parentAxis), measure("layout-gap", 0)], [label]);
   }
   const record = { id: "task9-label-probe", properties: [], asset_contracts: [], variants: [{ id: "mobile" }, { id: "desktop" }], contracts: { mobile: { root: roots.mobile }, desktop: { root: roots.desktop } } };
   const value = { type: rich ? "rich-text" : "plain-text", value: text };
@@ -325,15 +326,25 @@ for (const spec of [
   for (const paragraph of paragraphs) assert.doesNotMatch(paragraph, /(?:^|[";])white-space:pre(?:;|")/u);
   if (spec.name === "multiline") for (const paragraph of paragraphs) assert.match(paragraph, />2  шаг<br(?:\s*\/)?>(?:Следующая строка)<\/p>$/u);
   if (spec.rich) for (const paragraph of paragraphs) { assert.match(paragraph, /<span\b[^>]*>2  шаг<\/span>/u); assert.match(paragraph, /color:#112233/u); }
+  if (spec.rich || spec.name === "multiline") { assert.match(paragraphs[0], /max-width:40px/u); assert.match(paragraphs[1], /max-width:46px/u); }
   if (spec.role === "body" || spec.sizing === "fixed") { assert.match(paragraphs[0], /max-width:40px/u); assert.match(paragraphs[1], /max-width:46px/u); }
   if (spec.sizing === "fill") { assert.match(paragraphs[0], /width:100%/u); assert.doesNotMatch(paragraphs[0], /max-width:/u); assert.match(paragraphs[1], /max-width:46px/u); }
 });
 test("Mobile intrinsic label stretch retains its existing width100 priority", async () => {
   const { paragraphs } = await task9LabelOutput({ text: "2  шаг", sizing: "hug", stretch: true });
   assert.match(paragraphs[0], /width:100%/u); assert.doesNotMatch(paragraphs[0], /max-width:/u);
+  assert.doesNotMatch(paragraphs[0], /(?:^|[";])white-space:pre(?:;|")/u);
   assert.ok(paragraphs.every(p => p.endsWith(">2  шаг</p>")));
 });
 test("intrinsic significant spaces preserve normal escaping rather than introducing markup", async () => {
   const { paragraphs } = await task9LabelOutput({ text: '2  шаг & <b>"literal"</b>' });
   for (const paragraph of paragraphs) { assert.match(paragraph, /2  шаг &amp; &lt;b&gt;&quot;literal&quot;&lt;\/b&gt;/u); assert.doesNotMatch(paragraph, /<b>/u); }
+});
+
+test("Mobile intrinsic label horizontal grow retains width100 without pre or a reference cap", async () => {
+  const { paragraphs } = await task9LabelOutput({ text: "2  шаг", sizing: "hug", parentAxis: "horizontal", grow: true });
+  assert.match(paragraphs[0], /width:100%/u);
+  assert.doesNotMatch(paragraphs[0], /max-width:/u);
+  assert.doesNotMatch(paragraphs[0], /(?:^|[";])white-space:pre(?:;|")/u);
+  assert.ok(paragraphs.every(paragraph => paragraph.endsWith(">2  шаг</p>")), "literal double ASCII spaces remain in both branches");
 });
