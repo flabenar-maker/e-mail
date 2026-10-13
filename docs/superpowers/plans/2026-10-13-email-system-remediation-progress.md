@@ -14,14 +14,14 @@
 
 ## Текущая точка
 
-**Tasks 1–2 приняты в ветке:** Task 1 на `c0808e1e3d18bfd1824dd34386d22d9c0c1090a7`, Task 2 на `9d1a19c80b70b58da6742378cc5e64d3d8590e3b`. Task 3: RED подтвердил обходы, минимальный identity guard прошёл 85 targeted tests. Full выявил один invalid normal fixture; ниже опубликована детализация его узкой коррекции до изменения. Итоговая приёмка Task 3 пока не получена.
+**Tasks 1–3 приняты в ветке:** Task 1 на `c0808e1e3d18bfd1824dd34386d22d9c0c1090a7`, Task 2 на `9d1a19c80b70b58da6742378cc5e64d3d8590e3b`, Task 3 на `81052bdc190525ae88f6cf9e714abfad0c156392`. Следующее действие: Task 4 — детализация participating-field presence ниже, затем опубликованные regressions и RED до runtime изменения.
 
 | Шаг | Состояние |
 | --- | --- |
 | 1. R1, serialized resource paths | Accepted на c0808e1; targeted 26/full 2215 PASS |
 | 2. #130/E13, root-slot projection | Accepted на 9d1a19c; targeted 91/full 2227 PASS |
-| 3. R3, instance identities | Targeted 85 PASS; full выявил один invalid fixture; дополнительная детализация ниже перед его коррекцией |
-| 4. R5, workflow identity presence | Не начат |
+| 3. R3, instance identities | Accepted на 81052bdc; targeted 114/full 2247 PASS |
+| 4. R5, workflow identity presence | Детализирован перед тестами; runtime не менялся |
 | 5. R2, source/candidate/release binding | Не начат |
 | 6. R6, contained asset bytes | Не начат |
 | 7. R4, fast-uri 3.x | Не начат |
@@ -77,6 +77,17 @@
 - Дополнительная разрешённая граница — только этот test file. Перед child recursive call образовать logical ID из текущего `instanceId` + `--` + `node.id`, сохранив physical `element_id = node.id`. Исходные native element IDs, variant bindings, contract/layout, asset/Description/outside assertions и production код сохраняются. Этот fixture приёмочный для геометрии, поэтому все его прежние утверждения должны остаться действующими; отдельные новые duplicate tests не ослабляются.
 - Сначала публикуется это уточнение и новая allowlist, затем delegated routine staging минимальной коррекции. Проверить её статически, опубликовать actual cloud SHA и выполнить targeted model/inventory/label/source/handoff + marketing-card suite. После GREEN и новых immutable bindings выполнить один `repository-full` на новой версии, затем generated check и независимую приёмку. Не использовать failed receipt e673 как успешное доказательство новой версии.
 
+## Task 4 — детализация перед изменением
+
+**Граница runtime:** только `relationBlocker()` в `scripts/lib/email-build-orchestration.mjs`. Tests добавляются в `tests/skills/email-build-orchestration.test.mjs`; существующий `email-build-handoff.test.mjs` выполняется для совместимости. `data/workflows/email-build.yaml` прочитан: new-build и continue-fix-design объявляют ordered role relation, затем same-field emailId relation. YAML/schema/mode selection/public APIs не меняются.
+
+1. После existing top-level input presence check и получения `values = relation.inputs.map(...)` проверить каждый participating field тем же `hasValue`. Если хоть один field отсутствует, null или blank string, вернуть **объявленный `relation.blocker`** до ordered/equality сравнения. Existing missing-input blocker и порядок relations имеют приоритет. Не превращать unrelated optional fields в required; не нормализовать значения и не вводить string-only type rule. По существующему `hasValue`, 0 и false являются присутствующими значениями; это сохраняется для generic relation contract.
+2. Для обоих реальных modes проверить same-field emailId: оба отсутствуют, explicit undefined, null, empty, whitespace; один отсутствует при другом valid; одинаковые nonblank IDs проходят; разные nonblank IDs блокируются с empty allowedOutputs. Expected blocker — configured email-instances-mismatch, не новый invented code. Correct Mobile/Desktop order проходит, отсутствующий/blank role и reversed order сохраняют viewport-role-ambiguous и priority перед identity relation.
+3. Generic relation control без relation не требует отсутствующих optional fields. Generic same-field boolean false/numeric zero остаются present, strict comparison сохраняется. Padded matching nonblank strings не trim-normalize; разные padded/ordinary строки продолжают не совпадать. Existing classify/technical/text/link-only modes сохраняют разрешённые outputs и existing required-input checks.
+4. Production output control через реальные `resolveEmailBuildRequest()` → `createEmailVersion()`: корректные roles, обе emailId отсутствуют, реальный temporary output parent. Вызвать создание до assertion, записать observed error/folder entries; на старой версии разрешается version folder, после исправления resolution outputs=[] и existing output contract отвергает создание без новой папки. Не подставлять flat resolution в nested `executeEmailBuildHandoff` API и не объявлять R2 source/release binding исправленным этим шагом.
+5. Root публикует reviewed staged tests; delegated exact-SHA orchestration RED отделяет оба-equal-missing bypass от уже работающих one-missing/ordered controls. Только затем минимальная presence проверка. Delegated targeted orchestration + existing handoff GREEN, один штатный local repository-full и generated check на final candidate SHA. Независимая приёмка и actual finalizer до Task 5.
+6. `emailId` остаётся текущим workflow field. Связь с trusted `email_id` разрабатывается отдельным внутренним adapter в Task 5; глобальный rename и source/candidate/release redesign не входят в этот scope.
+
 ## Проверки
 
 Baseline и результаты каждого шага записываются после фактических локальных запусков с SHA. Непроверенные коммиты не обозначаются как passing.
@@ -90,3 +101,4 @@ Baseline и результаты каждого шага записываютс�
 - Task 2 final `9d1a19c80b70b58da6742378cc5e64d3d8590e3b`: targeted 91 PASS / 0 FAIL; штатный local `repository-full` 2227 PASS / 0 FAIL, validator/full/generated-check exit 0; raw после полного прогона 345 файлов / 0 несовпадений. Request `email-remediation-task2-final-20261013`, actual receipt `success`; независимая приёмка девяти exact refs и штатный finalizer `accepted`, workflow handoff `complete`. Приёмка относится к этому SHA и Task 2, historical private replay и external acceptance — `not-run`.
 - Task 3 RED `b96729df3a956d66c8215c68fd4f68481afc61ef`: пять targeted suites, 85 tests, 70 PASS / 15 expected FAIL, exit 1; raw 345/0, production/data/schema не менялись. Реальный direct renderer: FIRST=0, SECOND=2, diagnostics=[]; unique/legacy controls PASS. Prepare-delivery CLI: exit 0 и опубликованные form.html/delivery.json при коллизии root/hidden descendant с разными полными путями. Existing source/path guards PASS; handoff уже блокирует output, но новая ранняя typed diagnostic отсутствует. Missing export ещё не позволил выполнить cycle traversal assertion. Fixture/infra failures нет. Этот RED обосновывает общий helper и его ранний вызов в direct renderer; GREEN/full пока не заявляются.
 - Task 3 candidate `e673c46b33f4257d5dfeb7b1939ee1e332171df0`: targeted 85 PASS / 0 FAIL; full 2246 PASS / 1 FAIL из 2247, invalid repeated native IDs в marketing-card fixture. Validator exit 0, generated check not-run, independent final acceptance pending. Минимальная fixture коррекция сначала детализирована выше; этот коммит не считается принятым.
+- Task 3 final `81052bdc190525ae88f6cf9e714abfad0c156392`: targeted шесть suites 114 PASS / 0 FAIL; actual repository-full 2247 PASS / 0 FAIL, validator/generated/runner exit 0; raw 345/0, owned processes отсутствуют. Request email-remediation-task3-repair1-final-20261013; независимый reviewer принял все 13 refs, штатный finalizer accepted и workflow complete. Старый failure e673 сохранён неизменным; новый успех относится только к 81052bdc. External acceptance not-run.
