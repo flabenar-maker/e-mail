@@ -271,3 +271,69 @@ test("Transaction Success mobile badge table is observably centered", () => {
 
 }
 );
+
+// Task9 intrinsic labels: literal text/width expectations precede browser geometry evidence.
+async function task9LabelOutput({ text, sizing, role = "label", rich = false, stretch = false }) {
+  const roots = {};
+  for (const [viewport, width, fontSize] of [["mobile", 40, 14], ["desktop", 46, 16]]) {
+    const label = { id: "probe-label", semantic_role: role, render_mode: "html-text", visibility: { mode: "always" }, children: [],
+      content_slots: [{ id: "text", type: rich ? "rich-text" : "plain-text", required: true }],
+      facts: [dimensions("reference-size", width, 22), keyword("text-auto-resize", "width_and_height"), measure("font-size", fontSize),
+        ...(sizing ? [keyword("horizontal-sizing", sizing)] : []), ...(stretch ? [keyword("layout-align", "stretch")] : []),
+        ...(rich ? [{ id: "source-text", value: { type: "string", value: text } }, { id: "styled-text-segments", value: { type: "segments", items: [{ start: 0, end: text.length, characters: text, font_family: "Arial", font_style: "Regular", font_size_px: fontSize, fills: [{ type: "solid", visible: true, color: "#112233" }], line_height: { value: 20, unit: "PIXELS" }, text_decoration: "NONE" }] } }] : []),
+      ] };
+    roots[viewport] = node("label-parent", [keyword("layout-axis", "vertical"), measure("layout-gap", 0)], [label]);
+  }
+  const record = { id: "task9-label-probe", properties: [], asset_contracts: [], variants: [{ id: "mobile" }, { id: "desktop" }], contracts: { mobile: { root: roots.mobile }, desktop: { root: roots.desktop } } };
+  const value = { type: rich ? "rich-text" : "plain-text", value: text };
+  const model = { root: { instance_id: "task9-label", component_id: record.id, variants: { mobile: "mobile", desktop: "desktop" }, content_values: [{ element_id: "probe-label", slot_id: "text", scope: "all", value }], property_values: [], asset_files: [], slots: [] } };
+  const { validateEmailModelSemantics } = await import("../../scripts/lib/email-model.mjs");
+  assert.deepEqual(validateEmailModelSemantics(model, { componentIndex: { bySystemId: new Map([[record.id, record]]) }, rendererRegistry: { coverage: [{ component_id: record.id, mode: "interpreter" }] } }), [], "synthetic label semantic precondition");
+  const result = renderContractTree({ component: record, coverage: { component_id: record.id, mode: "interpreter" }, content: { "probe-label": { text: value } }, foundations: { rendering } });
+  assert.deepEqual(result.diagnostics, []);
+  const paragraphs = [...result.html.matchAll(/<p\b[^>]*>[\s\S]*?<\/p>/gu)].map(x => x[0]);
+  assert.equal(paragraphs.length, 2, "distinct 14px/16px branches remain observable");
+  return { result, paragraphs };
+}
+for (const sizing of [undefined, "hug"]) for (const text of ["2  шаг", "3  шаг"]) {
+  test("intrinsic plain " + (sizing ?? "absent-sizing") + " label preserves literal " + text + " in both serialized branches", async () => {
+    const { paragraphs } = await task9LabelOutput({ text, sizing });
+    for (const paragraph of paragraphs) {
+      assert.ok(paragraph.endsWith(">" + text + "</p>"), "literal double ASCII space text remains unchanged");
+      assert.match(paragraph, /(?:^|[";])white-space:pre(?:;|")/u);
+    }
+  });
+}
+for (const sizing of [undefined, "hug"]) test("long intrinsic " + (sizing ?? "absent-sizing") + " label has no 40px or 46px reference cap", async () => {
+  const text = "Значительно более длинная метка 2  шаг";
+  const { paragraphs } = await task9LabelOutput({ text, sizing });
+  for (const paragraph of paragraphs) {
+    assert.ok(paragraph.endsWith(">" + text + "</p>"));
+    assert.doesNotMatch(paragraph, /max-width:(?:40|46)px/u);
+    assert.doesNotMatch(paragraph, /(?:^|[";])width:(?:40|46)px(?:;|")/u);
+  }
+});
+for (const spec of [
+  { name: "single space", text: "2 шаг" },
+  { name: "multiline", text: "2  шаг\nСледующая строка" },
+  { name: "rich text", text: "2  шаг", rich: true },
+  { name: "ordinary body", text: "2  шаг", role: "body" },
+  { name: "fixed label", text: "2  шаг", sizing: "fixed" },
+  { name: "fill label", text: "2  шаг", sizing: "fill" },
+]) test("significant-space behavior stays local: " + spec.name, async () => {
+  const { paragraphs } = await task9LabelOutput(spec);
+  for (const paragraph of paragraphs) assert.doesNotMatch(paragraph, /(?:^|[";])white-space:pre(?:;|")/u);
+  if (spec.name === "multiline") for (const paragraph of paragraphs) assert.match(paragraph, />2  шаг<br(?:\s*\/)?>(?:Следующая строка)<\/p>$/u);
+  if (spec.rich) for (const paragraph of paragraphs) { assert.match(paragraph, /<span\b[^>]*>2  шаг<\/span>/u); assert.match(paragraph, /color:#112233/u); }
+  if (spec.role === "body" || spec.sizing === "fixed") { assert.match(paragraphs[0], /max-width:40px/u); assert.match(paragraphs[1], /max-width:46px/u); }
+  if (spec.sizing === "fill") { assert.match(paragraphs[0], /width:100%/u); assert.doesNotMatch(paragraphs[0], /max-width:/u); assert.match(paragraphs[1], /max-width:46px/u); }
+});
+test("Mobile intrinsic label stretch retains its existing width100 priority", async () => {
+  const { paragraphs } = await task9LabelOutput({ text: "2  шаг", sizing: "hug", stretch: true });
+  assert.match(paragraphs[0], /width:100%/u); assert.doesNotMatch(paragraphs[0], /max-width:/u);
+  assert.ok(paragraphs.every(p => p.endsWith(">2  шаг</p>")));
+});
+test("intrinsic significant spaces preserve normal escaping rather than introducing markup", async () => {
+  const { paragraphs } = await task9LabelOutput({ text: '2  шаг & <b>"literal"</b>' });
+  for (const paragraph of paragraphs) { assert.match(paragraph, /2  шаг &amp; &lt;b&gt;&quot;literal&quot;&lt;\/b&gt;/u); assert.doesNotMatch(paragraph, /<b>/u); }
+});
