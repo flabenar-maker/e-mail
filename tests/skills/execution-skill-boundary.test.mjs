@@ -19,3 +19,16 @@ test('resolver and runner help expose the frozen concurrency handoff and legacy 
  const resolver=execFileSync(process.execPath,['scripts/resolve-execution-context.mjs','--help'],{cwd:root,encoding:'utf8'}),runner=execFileSync(process.execPath,['scripts/run-verification.mjs','--help'],{cwd:root,encoding:'utf8'});
  assert.ok(Buffer.byteLength(resolver)<=4096);for(const token of ['frozen','--decision','npm test','2'])assert.ok(resolver.includes(token),token);for(const token of ['--decision','--test-concurrency','frozen','runner_lock_root'])assert.ok(runner.includes(token),token);
 });
+
+
+for(const name of ['building-cupis-emails','maintaining-cupis-email-system'])test(name+' passes saved concurrency through the frozen local decision without repeated questions',async()=>{
+ const text=await read('.agents/skills/'+name+'/SKILL.md'),block=text.match(/<!-- CUPIS_EXECUTION_BINDING -->([\s\S]*?)<!-- END_CUPIS_EXECUTION_BINDING -->/u)?.[1];
+ assert.ok(block);assert.ok(block.trim().split('\n').length<=25);
+ for(const token of ['once per new chat','--action read','--profile','--decision','test_concurrency','set-concurrency','explicit user change','actual test concurrency'])assert.ok(block.includes(token),token);
+ assert.match(block,/never init\/collect before tests/u);assert.match(block,/reuse[^\n]*choice/u);assert.match(block,/frozen[^\n]*decision/u);assert.match(block,/legacy[^\n]*2/u);
+});
+test('user and bootstrap docs explain one-time2or4 choice legacy2 and old pinned context refresh',async()=>{
+ for(const path of ['README.md','bootstrap/README.md','docs/user-guide.md']){
+  const text=await read(path);assert.match(text,/test_concurrency/u,path);assert.match(text,/set-concurrency/u,path);assert.match(text,/переключи тесты на\s*[`«]?2/u,path);assert.match(text,/переключи тесты на\s*[`«]?4/u,path);assert.match(text,/legacy[^\n]*2/iu,path);assert.match(text,/pinned[^\n]*source[^\n]*context/iu,path);assert.match(text,/один раз/u,path);
+ }
+});
