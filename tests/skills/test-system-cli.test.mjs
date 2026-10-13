@@ -52,6 +52,8 @@ async function fixture(t,{legacy=false,validateExit=0,validateDelay=0}={}){
  const sha=git('rev-parse','HEAD'),policy=await loadExecutionPolicy({repoRoot:repo}),profileFile=join(temporary,'profile.json');
  await writeFile(profileFile,JSON.stringify({runner_lock_root:join(temporary,'persistent','runner-locks'),test_concurrency:2}));
  const env={...process.env,NODE_OPTIONS:`--import=${pathToFileURL(preload).href}`,CUPIS_TASK3_PROBE:probeFile};
+ // Public CLI probes must start independently of the outer Node test runner.
+ delete env.NODE_TEST_CONTEXT;
  const readProbe=async()=>{try{return (await readFile(probeFile,'utf8')).trim().split('\n').filter(Boolean).map(line=>JSON.parse(line));}catch(error){if(error.code==='ENOENT')return [];throw error;}};
  const save=async value=>{const file=join(temporary,'decision.json');await writeFile(file,JSON.stringify(value));return file;};
  return {temporary,repo,sha,policy,git,profileFile,env,readProbe,save};
