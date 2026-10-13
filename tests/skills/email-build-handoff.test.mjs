@@ -1108,3 +1108,48 @@ test("design fixes stay Figma-gated and technical siblings preserve the complete
   assert.deepEqual(await treeDigest(source.target), before);
   assert.deepEqual(await readdir(next.target), ["email.html", "images"]);
 });
+
+for (const [componentId, assetId, positives, negatives] of [
+  ["banner-hero", "hero-image", ["images/hero-image@2x.jpg", "images/proof-hero-image-7@2x.jpg"], ["images/hero-image.jpg", "images/hero-image@4x.jpg", "images/proof-mobile-hero-image@2x.jpg", "images/../hero-image@2x.jpg"]],
+  ["email-header", "header-logo", ["images/header-logo@4x.png", "images/proof-header-logo-7@4x.png"], ["images/header-logo.png", "images/header-logo@2x.png", "images/header-logo-desktop@4x.png", "/images/header-logo@4x.png"]],
+]) {
+  test("public handoff accepts literal " + assetId + " profile/prefix/numeric filenames and rejects invalid naming", async (t) => {
+    const root = await mkdtemp(join(tmpdir(), "cupis-task8-naming-"));
+    t.after(() => rm(root, { recursive: true, force: true }));
+    const source = await fixture(root, [componentId]);
+    const instance = everyInstance(source.model.root).find(x => x.component_id === componentId);
+    const asset = instance.asset_files.find(x => x.asset_contract_id === assetId);
+    const receipt = source.assetEvidence.find(x => x.instance_id === instance.instance_id && x.asset_contract_id === assetId);
+    const originalBytes = await readFile(join(root, ...asset.path.split("/")));
+    const record = registryIndex.bySystemId.get(componentId);
+    const contract = structuredClone(record.asset_contracts.find(x => x.id === assetId));
+    const owner = structuredClone(receipt.mcp_export);
+    for (const path of positives) {
+      asset.path = path; receipt.path = path;
+      const target = join(root, ...path.split("/")); await mkdir(dirname(target), { recursive: true }); await writeFile(target, originalBytes);
+      const result = await prepareEmailBuildHandoff({ ...source, repoRoot, assetRoot: root });
+      assert.deepEqual(result.blockers, [], path);
+      assert.ok(result.assetContracts.some(x => x.path === path), path);
+      assert.deepEqual(receipt.mcp_export, owner, "renaming preserves exact owner/export evidence");
+      assert.deepEqual(record.asset_contracts.find(x => x.id === assetId), contract, "renaming preserves geometry, alpha, crop and boundary contract");
+      assert.deepEqual(await readFile(target), originalBytes);
+    }
+    for (const path of negatives) {
+      asset.path = path; receipt.path = path;
+      // Safe naming negatives have real matching bytes; unsafe paths are containment controls.
+      const safeInRoot = path.startsWith("images/") && !path.includes("..");
+      if (safeInRoot) {
+        const target = join(root, ...path.split("/"));
+        await mkdir(dirname(target), { recursive: true }); await writeFile(target, originalBytes);
+        assert.deepEqual(await readFile(target), originalBytes);
+        assert.equal(createHash("sha256").update(await readFile(target)).digest("hex"), receipt.sha256);
+      }
+      const result = await prepareEmailBuildHandoff({ ...source, repoRoot, assetRoot: root });
+      assert.ok(result.blockers.includes("asset-contract-missing"), path);
+      assert.deepEqual(receipt.mcp_export, owner);
+      assert.deepEqual(record.asset_contracts.find(x => x.id === assetId), contract);
+      await assert.rejects(readFile(join(root, "email.html")), { code: "ENOENT" });
+      await assert.rejects(readFile(join(root, "altcraft.zip")), { code: "ENOENT" });
+    }
+  });
+}

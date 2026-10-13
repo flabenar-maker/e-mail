@@ -17,3 +17,86 @@ test("delivery schemas are registered as static references without schema bodies
   }
   assert.equal((markdown.match(/Runtime schema is retained in the pinned structured bundle\./gu) ?? []).length, 2);
 });
+
+function task8Element(id, overrides = {}) { return { id, semantic_role: id, render_mode: "presentation-table", visibility: { mode: "always" }, facts: [], children: [], ...overrides }; }
+async function task8VariantReferenceFixture(t) {
+  const fixture = await canonicalFixture(t);
+  const path = "data/components/marketing.yaml";
+  const doc = await readStrictYaml(join(fixture.root, path));
+  const record = doc.components.find(x => x.id === "nps-options");
+  const image = doc.components.find(x => x.id === "banner-hero").asset_contracts[0];
+  record.properties.push(...["mobile-extra-visible", "desktop-extra-visible"].map(id => ({ id, figma_name: id, type: "boolean", default: true })));
+  record.asset_contracts.push(...["mobile-extra-image", "desktop-extra-image"].map(id => ({ ...structuredClone(image), id })));
+  for (const [index, viewport, dependency] of [[0, "mobile", "button-secondary"], [1, "desktop", "button-primary"]]) {
+    record.contracts.variant_contracts[index].root.children.push(task8Element("extra-refs", { children: [
+      task8Element("extra-nested", { render_mode: "nested-component", component_id: dependency }),
+      task8Element("extra-image", { render_mode: "direct-image", asset_contract_id: viewport + "-extra-image", content_slots: [{ id: "alt", type: "alt-text", required: true }] }),
+      task8Element("extra-property", { visibility: { mode: "property", property_id: viewport + "-extra-visible" }, facts: [{ id: "extra-spacing", value: { type: "foundation-reference", foundation_id: "spacing", definition_group: "roles", definition_id: "surface-padding-primary" } }] }),
+    ] }));
+  }
+  await writeFixtureFile(fixture.root, path, JSON.stringify(doc, null, 2) + "\n");
+  return fixture;
+}
+test("variant-only references participate in dependency, property, asset and foundation closure with stable digest", async (t) => {
+  const fixture = await task8VariantReferenceFixture(t);
+  const options = { repoRoot: fixture.root, routeId: "email-new-build", candidates: [{ id: "nps-options" }], viewports: ["mobile", "desktop"] };
+  const first = await buildContextBundle(options); const second = await buildContextBundle(options);
+  assert.equal(first.status, "resolved", JSON.stringify(first.blockers));
+  assert.deepEqual(first, second); assert.equal(first.bundle.digest, second.bundle.digest);
+  assert.deepEqual(first.bundle.components.map(x => x.id), ["button-primary", "button-secondary", "nps-options"]);
+  const record = first.bundle.components.find(x => x.id === "nps-options");
+  assert.deepEqual(record.properties.map(x => x.id), ["mobile-extra-visible", "desktop-extra-visible"]);
+  assert.deepEqual(record.asset_contracts.map(x => x.id), ["happy-face-icon", "neutral-face-icon", "sad-face-icon", "mobile-extra-image", "desktop-extra-image"]);
+  assert.deepEqual(first.bundle.foundation_definitions.filter(x => x.foundation_id === "spacing").map(x => [x.viewport, x.definition_id, x.value.value_px]), [["mobile", "surface-padding-primary", 22], ["desktop", "surface-padding-primary", 32]]);
+  assert.ok(first.bundle.foundation_definitions.some(x => x.foundation_id === "assets" && x.definition_group === "export_profiles" && x.definition_id === "jpeg-2x"));
+  assert.deepEqual(validateBundleClosure(first.bundle), []);
+});
+test("single viewport includes only allowed extra roots and excludes foreign variant-only dependencies", async (t) => {
+  const fixture = await task8VariantReferenceFixture(t);
+  const result = await buildContextBundle({ repoRoot: fixture.root, routeId: "library-maintenance", candidates: [{ id: "nps-options" }], viewports: ["mobile"] });
+  assert.equal(result.status, "resolved", JSON.stringify(result.blockers));
+  assert.deepEqual(result.bundle.components.map(x => x.id), ["button-secondary", "nps-options"]);
+  const record = result.bundle.components.find(x => x.id === "nps-options");
+  assert.deepEqual(Object.keys(record.contracts).sort(), ["mobile", "source_variants", "variant_contracts"]);
+  assert.deepEqual(record.contracts.variant_contracts.map(x => x.variant_node_id), ["260:1346"]);
+  assert.deepEqual(record.contracts.source_variants.map(x => x.variant_node_id), ["15:599", "260:1346"]);
+  assert.deepEqual(record.properties.map(x => x.id), ["mobile-extra-visible"]);
+  assert.equal(record.asset_contracts.some(x => x.id === "desktop-extra-image"), false);
+  assert.deepEqual(result.bundle.foundation_definitions.filter(x => x.foundation_id === "spacing").map(x => x.viewport), ["mobile"]);
+  assert.deepEqual(validateBundleClosure(result.bundle), []);
+});
+test("closure validation reports literal extra-root paths for every missing reference category and ignores metadata as viewport", () => {
+  const record = { id: "fixture", properties: [], asset_contracts: [], contracts: {
+    mobile: { root: task8Element("base") }, desktop: { root: task8Element("base") },
+    source_variants: [{ variant_node_id: "1:2", axes: [{ name: "Viewport", value: "Mobile" }], source_node: { node_id: "1:2" } }],
+    variant_contracts: [{ variant_node_id: "1:2", axes: [{ name: "Viewport", value: "Mobile" }, { name: "Count", value: "2" }], root: task8Element("extra", { children: [
+      task8Element("nested", { render_mode: "nested-component", component_id: "missing-component" }),
+      task8Element("image", { render_mode: "direct-image", asset_contract_id: "missing-image" }),
+      task8Element("visible", { visibility: { mode: "property", property_id: "missing-property" } }),
+    ], facts: [{ id: "space", value: { type: "foundation-reference", foundation_id: "spacing", definition_group: "roles", definition_id: "surface-padding-primary" } },
+      { id: "component-fact", value: { type: "component-reference", component_id: "missing-component" } },
+      { id: "property-fact", value: { type: "property-reference", property_id: "missing-property" } },
+      { id: "asset-fact", value: { type: "asset-reference", asset_contract_id: "missing-image" } }] }) }],
+  } };
+  assert.deepEqual(validateBundleClosure({ components: [record], foundation_definitions: [] }).map(x => [x.code, x.path]), [
+    ["CONTEXT_BUNDLE_COMPONENT_UNRESOLVED", "fixture/contracts/variant_contracts/0/root/children/0/component_id"],
+    ["CONTEXT_BUNDLE_ASSET_UNRESOLVED", "fixture/contracts/variant_contracts/0/root/children/1/asset_contract_id"],
+    ["CONTEXT_BUNDLE_PROPERTY_UNRESOLVED", "fixture/contracts/variant_contracts/0/root/children/2/visibility/property_id"],
+    ["CONTEXT_BUNDLE_FOUNDATION_UNRESOLVED", "fixture/contracts/variant_contracts/0/root/facts/0/value"],
+    ["CONTEXT_BUNDLE_COMPONENT_UNRESOLVED", "fixture/contracts/variant_contracts/0/root/facts/1/value/component_id"],
+    ["CONTEXT_BUNDLE_PROPERTY_UNRESOLVED", "fixture/contracts/variant_contracts/0/root/facts/2/value/property_id"],
+    ["CONTEXT_BUNDLE_ASSET_UNRESOLVED", "fixture/contracts/variant_contracts/0/root/facts/3/value/asset_contract_id"],
+  ]);
+  const closed = structuredClone(record);
+  closed.properties = [{ id: "missing-property" }]; closed.asset_contracts = [];
+  closed.contracts.variant_contracts[0].root.facts = closed.contracts.variant_contracts[0].root.facts.slice(0, 3);
+  closed.contracts.variant_contracts[0].root.children = [closed.contracts.variant_contracts[0].root.children[0], closed.contracts.variant_contracts[0].root.children[2]];
+  assert.deepEqual(validateBundleClosure({ components: [closed, { id: "missing-component", contracts: { mobile: { root: task8Element("root") }, desktop: { root: task8Element("root") } }, properties: [], asset_contracts: [] }], foundation_definitions: [{ foundation_id: "spacing", definition_group: "roles", definition_id: "surface-padding-primary", viewport: "mobile" }] }), []);
+});
+test("ordinary components retain the prior compact contract shape", async () => {
+  const result = await build({ routeId: "email-new-build", candidates: [{ id: "button-primary" }], viewports: ["mobile", "desktop"] });
+  assert.equal(result.status, "resolved");
+  const record = result.bundle.components.find(x => x.id === "button-primary");
+  assert.deepEqual(Object.keys(record.contracts), ["mobile", "desktop"]);
+  assert.equal(JSON.stringify(record.contracts).includes('"provenance"'), false);
+});

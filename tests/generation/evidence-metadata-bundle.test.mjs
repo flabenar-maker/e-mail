@@ -43,3 +43,32 @@ test("canonical non-proof evidence metadata is absent from both email-route comp
   await Promise.all(paths.map((path) => copyFixtureFile(process.cwd(), root.root, path)));
   for (const routeId of Object.keys(before)) { const result = await buildContextBundle({ repoRoot: root.root, routeId, ...options }); assert.equal(result.status, "resolved"); assert.deepEqual(result.bundle.components, before[routeId].components); assert.deepEqual(comparable(result.bundle), comparable(before[routeId])); }
 });
+
+test("compact variant identity retains only root selector node_id and axes without source graph or proof bulk", async (t) => {
+  const root = await fixture(t);
+  const result = await buildContextBundle({ repoRoot: root.root, routeId: "email-new-build", candidates: [{ id: "nps-options" }, { id: "asset-card-image-2x" }], viewports: ["mobile", "desktop"] });
+  assert.equal(result.status, "resolved", JSON.stringify(result.blockers));
+  const nps = result.bundle.components.find(x => x.id === "nps-options");
+  assert.deepEqual(nps.contracts.source_variants.map(x => [x.variant_node_id, x.source_node.node_id]), [["15:599", "15:599"], ["260:3974", "260:3974"], ["260:1346", "260:1346"], ["260:3976", "260:3976"]]);
+  const checkRoot = (node, isBaseRoot = false, expectedNodeId) => {
+    for (const fact of node.facts ?? []) {
+      if (isBaseRoot && fact.id === "reference-size") assert.deepEqual(fact.provenance, { node_id: expectedNodeId });
+      else assert.equal(Object.hasOwn(fact, "provenance"), false, node.id + "/" + fact.id);
+    }
+    for (const child of node.children ?? []) checkRoot(child);
+  };
+  for (const record of result.bundle.components) {
+    for (const key of ["evidence_links", "verification", "figma_description"]) assert.equal(Object.hasOwn(record, key), false, record.id + "/" + key);
+    for (const source of record.contracts.source_variants) {
+      assert.deepEqual(Object.keys(source).sort(), ["axes", "source_node", "variant_node_id"]);
+      assert.deepEqual(Object.keys(source.source_node), ["node_id"]);
+      assert.match(source.source_node.node_id, /^\d+:\d+$/u);
+    }
+    for (const extra of record.contracts.variant_contracts) {
+      assert.deepEqual(Object.keys(extra).sort(), ["axes", "root", "variant_node_id"]);
+      checkRoot(extra.root);
+    }
+    for (const viewport of ["mobile", "desktop"]) checkRoot(record.contracts[viewport].root, true,
+      record.id === "nps-options" ? (viewport === "mobile" ? "15:599" : "260:3974") : "911:3991");
+  }
+});

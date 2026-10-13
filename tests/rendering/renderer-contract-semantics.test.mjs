@@ -250,3 +250,70 @@ test("native Fixed image protection follows email-render-size instead of source 
     assert.doesNotMatch(tag,/min-width:(?:72|288)px/u);
   }
 });
+
+// Task8: literal registered identities are expectations; full/compact parity is secondary.
+async function task8RegisteredRecords() {
+  const root = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
+  const registries = await loadComponentRegistries({ repoRoot: root });
+  const { buildContextBundle } = await import("../../scripts/lib/context-bundle.mjs");
+  const result = await buildContextBundle({ repoRoot: root, routeId: "email-new-build", candidates: [{ id: "nps-options" }, { id: "asset-card-image-2x" }, { id: "button-primary" }], viewports: ["mobile", "desktop"] });
+  assert.equal(result.status, "resolved", JSON.stringify(result.blockers));
+  return { full: new Map(listComponentRecords(registries).map(({record}) => [record.id, record])), compact: new Map(result.bundle.components.map(record => [record.id, record])) };
+}
+function task8TreeIds(root) { return root ? [root.id, ...(root.children ?? []).flatMap(task8TreeIds)] : []; }
+for (const [label, axes, neutral] of [["Count2", { Count: "2" }, false], ["Count3", { Count: 3 }, true], ["default", {}, true]]) {
+  test("registered NPS " + label + " retains literal options in full and compact both-view selectors", async () => {
+    const records = await task8RegisteredRecords();
+    const { selectVariantRoot } = await import("../../scripts/lib/email-interpreter.mjs");
+    const expected = ["root", "root-content-area", "root-content-area-heading", "root-content-area-emoji-buttons", "root-content-area-emoji-buttons-good", "root-content-area-emoji-buttons-good-happy-face-icon", ...(neutral ? ["root-content-area-emoji-buttons-neutral", "root-content-area-emoji-buttons-neutral-neutral-face-icon"] : []), "root-content-area-emoji-buttons-bad", "root-content-area-emoji-buttons-bad-sad-face-icon"];
+    for (const viewport of ["mobile", "desktop"]) {
+      const observations = [];
+      for (const mode of ["full", "compact"]) {
+        const selected = selectVariantRoot(records[mode].get("nps-options"), viewport, axes);
+        assert.deepEqual(selected.diagnostics, [], mode + "/" + viewport);
+        assert.deepEqual(task8TreeIds(selected.root), expected, mode + "/" + viewport);
+        observations.push(selected.root);
+      }
+      assert.deepEqual(task8TreeIds(observations[0]), task8TreeIds(observations[1]));
+    }
+  });
+}
+for (const [label, id, axes] of [["unknown Count", "nps-options", { Count: "999" }], ["unknown axis", "nps-options", { Missing: "2" }], ["no-extras unknown axis", "button-primary", { Missing: "2" }], ["reserved Viewport", "nps-options", { Viewport: "Desktop", Count: "2" }]]) {
+  test("explicit " + label + " blocks full and compact selection and emits no HTML", async () => {
+    const records = await task8RegisteredRecords();
+    const { selectVariantRoot } = await import("../../scripts/lib/email-interpreter.mjs");
+    for (const mode of ["full", "compact"]) {
+      const record = records[mode].get(id);
+      const output = await render({ component: record, coverage: { component_id: id, mode: "interpreter" }, variantAxes: axes });
+      assert.equal(output.html, "", mode + " must reject before emitting HTML");
+      assert.ok(output.diagnostics.length > 0 && output.diagnostics.every(x => x.code === "RENDER_VARIANT_UNRESOLVED"));
+      for (const viewport of ["mobile", "desktop"]) {
+        const selected = selectVariantRoot(record, viewport, axes);
+        assert.equal(selected.root, null, mode + "/" + viewport);
+        assert.deepEqual(selected.diagnostics.map(x => [x.code, x.path]), [["RENDER_VARIANT_UNRESOLVED", `/contracts/${viewport}/variant_contracts`]]);
+      }
+    }
+  });
+}
+test("registered viewport-less card-image Style selects exact shared identity in both views", async () => {
+  const records = await task8RegisteredRecords();
+  const { selectVariantRoot } = await import("../../scripts/lib/email-interpreter.mjs");
+  for (const [style, nodeId] of [["numbered", "911:3991"], ["pLaIn", "911:3990"]]) for (const viewport of ["mobile", "desktop"]) for (const mode of ["full", "compact"]) {
+    const selected = selectVariantRoot(records[mode].get("asset-card-image-2x"), viewport, { Style: style });
+    assert.deepEqual(selected.diagnostics, [], mode + "/" + viewport + "/" + style);
+    if (mode === "full") assert.equal(selected.root?.facts.find(f => f.id === "reference-size")?.provenance?.node_id, nodeId);
+    else if (nodeId === "911:3991") assert.equal(selected.root, records.compact.get("asset-card-image-2x").contracts[viewport].root);
+    else { const extra = records.compact.get("asset-card-image-2x").contracts.variant_contracts.find(x => x.variant_node_id === "911:3990"); assert.ok(extra); assert.equal(selected.root, extra.root); }
+    assert.deepEqual(task8TreeIds(selected.root), ["root"]);
+  }
+});
+test("incomplete and ambiguous exact variant selectors fail closed without guessing", async () => {
+  const root = node({ id: "base" });
+  const registered = component(root, [{ variant_node_id: "1:2", axes: [{ name: "Viewport", value: "Mobile" }, { name: "Style", value: "Accent" }, { name: "Tone", value: "Warm" }], root: node({ id: "accent" }) }]);
+  const { selectVariantRoot } = await import("../../scripts/lib/email-interpreter.mjs");
+  assert.equal(selectVariantRoot(registered, "mobile", { Style: "Accent" }).root, null);
+  registered.contracts.variant_contracts = ["1:2", "1:3"].map((variant_node_id, i) => ({ variant_node_id, axes: [{ name: "Viewport", value: "Mobile" }, { name: "Style", value: "Accent" }], root: node({ id: "accent-" + i }) }));
+  const selected = selectVariantRoot(registered, "mobile", { Style: "Accent" });
+  assert.equal(selected.root, null);
+  assert.deepEqual(selected.diagnostics.map(x => x.code), ["RENDER_VARIANT_UNRESOLVED"]);
+});
