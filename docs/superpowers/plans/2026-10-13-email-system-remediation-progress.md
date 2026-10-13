@@ -460,3 +460,6 @@ No merge, installation, Figma writes, external send/import or power action. Clou
 
 
 Independent substantive detail GO by /root/task10_review for7f3f0609abdd3cae1c145a964add12133d30ed9ff0e06db8c1132d66ea203706. Required extra control: same-count/source-equal shifted boundaries must retain supplied per-index labels and rendering. New regression preparation active; no runtime edits or full rerun. Combined requirementsa79298950a685337534a0f01e1030ccd772544ffaed951818353ca975f0bd125.
+
+
+Compatibility test-FIRST: four appended public regression cases frozen df2a898adb3b14dc27de013a0fb437bfa36fc4588941fe419814e9a36645b111; prior65 cases/all7 byte prefixes preserved, no fixture/runtime edits. Syntax2/2 exit0; independent static TEST GO18c391a077f6097e3d77f0fbabf22fb9a6bae76d45dd1358beac20eecce40e8b. This commit publishes only two tests and progress. Selected4 baseline expects3 intended failures and1 already-working identity guard, pending actual observation. Historical full14FAIL unchanged; no full repeat.

@@ -156,3 +156,57 @@ test('Task10 refinement missing trailing original source range refuses typed cur
   assert.ok(errors.length > 0, 'The missing final source character at UTF16 offset 16 must make the typed map ambiguous');
   assert.ok(errors.every(error => /notice/u.test(error.path) && error.message.length <= 240));
 });
+
+// Compatibility: unchanged joined source permits canonical resegmentation without guessing changed text.
+for (const [name, representation, currentRuns] of [
+  ['typed one run', 'segments', ['До «Помощь» после']],
+  ['internal two runs', 'array', ['До «По', 'мощь» после']],
+]) {
+  test(`Task10 compatibility ${name} recovers original underlined source ranges and digest`, () => {
+    const scenario = inlineDeliveryScenario({ kind: 'output', representation, currentRuns });
+    const original = structuredClone(scenario.model), result = collectEmailActions(scenario);
+    const exact = collectEmailActions(inlineDeliveryScenario({ kind: 'output', currentRuns: ['До ', '«Помощь»', ' после'] }));
+    assert.deepEqual(result.diagnostics, []);
+    assert.deepEqual(result.fields.map(field => [field.id, field.label]), [['email%2Fnotice~notice-text~text~3~both', '«Помощь»']]);
+    assert.deepEqual(result.fields[0].bindings, ['mobile', 'desktop'].map(viewport => ({ instance_path: 'email/notice', component_id: 'notice', viewport, element_id: 'notice-text', slot_id: 'text', kind: 'output-range-link', range: { start: 3, end: 11, text: '«Помощь»', href: '' } })));
+    assert.equal(result.text_bindings[0].value, 'До «Помощь» после');
+    assert.deepEqual(result.text_bindings[0].runs, [
+      { start: 0, end: 3, characters: 'До ', text_decoration: 'NONE' },
+      { start: 3, end: 11, characters: '«Помощь»', text_decoration: 'UNDERLINE' },
+      { start: 11, end: 17, characters: ' после', text_decoration: 'NONE' },
+    ]);
+    assert.equal(result.inventory_digest, exact.inventory_digest);
+    assert.deepEqual(scenario.model, original);
+  });
+}
+
+import { typedSupportDeliveryModel as task10CompatibilitySupport } from '../fixtures/rendering/email-delivery-fixtures.mjs';
+import { loadComponentRegistries as task10CompatibilityRegistries, indexComponentRegistries as task10CompatibilityIndex } from '../../scripts/lib/component-registry.mjs';
+import { loadRendererRegistry as task10CompatibilityRenderers } from '../../scripts/lib/renderer-registry.mjs';
+import { loadRenderingFoundation as task10CompatibilityRendering } from '../../scripts/lib/rendering-foundation.mjs';
+import { renderEmailDocument as task10CompatibilityRenderDocument } from '../../scripts/lib/email-renderer.mjs';
+import { fileURLToPath as task10CompatibilityFilePath } from 'node:url';
+
+// Already-working control: equal aggregate text must never erase a matching-count per-index change.
+test('Task10 compatibility same-count source-equal boundary shift keeps current labels and rendering', async () => {
+  const scenario = inlineDeliveryScenario({ kind: 'output', currentRuns: ['До «', 'Помощь»', ' после'] });
+  const current = collectEmailActions(scenario), exact = collectEmailActions(inlineDeliveryScenario({ kind: 'output' }));
+  assert.deepEqual(current.diagnostics, []);
+  assert.deepEqual(current.fields.map(field => [field.id, field.label]), [['email%2Fnotice~notice-text~text~3~both', 'Помощь»']]);
+  assert.deepEqual(current.fields[0].bindings.map(binding => binding.range), [
+    { start: 3, end: 11, text: '«Помощь»', href: '' }, { start: 3, end: 11, text: '«Помощь»', href: '' },
+  ]);
+  assert.equal(current.text_bindings[0].value, 'До «Помощь» после');
+  assert.notEqual(current.inventory_digest, exact.inventory_digest);
+  const repoRoot = task10CompatibilityFilePath(new URL('../../', import.meta.url));
+  const componentIndex = task10CompatibilityIndex(await task10CompatibilityRegistries({ repoRoot }));
+  const model = task10CompatibilitySupport(), values = model.root.slots[0].instances[0].content_values;
+  values.find(value => value.element_id === 'root-content-area-help-notice-help-text' && value.slot_id === 'text').value = { type: 'rich-text', value: ['Как снизить риски операций без согласия, читайте на нашем сайте в\u00a0разделе «', 'Помощь»'] };
+  values.find(value => value.slot_id === 'help-url').value.value = 'https://1cupis.ru/help-current';
+  const originalBytes = JSON.stringify(model);
+  const rendered = task10CompatibilityRenderDocument(model, { componentIndex, rendererRegistry: await task10CompatibilityRenderers({ repoRoot }), foundations: { rendering: await task10CompatibilityRendering({ repoRoot }) } });
+  assert.deepEqual(rendered.diagnostics, []);
+  assert.match(rendered.html, /<a href="https:\/\/1cupis\.ru\/help-current"[^>]*>Помощь»<\/a>/u);
+  assert.doesNotMatch(rendered.html, /<a href="https:\/\/1cupis\.ru\/help-current"[^>]*>«Помощь»<\/a>/u);
+  assert.equal(JSON.stringify(model), originalBytes);
+});

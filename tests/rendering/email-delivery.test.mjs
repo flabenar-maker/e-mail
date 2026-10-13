@@ -138,3 +138,29 @@ test('Task10 output range projection retains original range text and input typed
     { href: 'https://1cupis.ru/current', kind: 'output-range-link', range: { start: 3, end: 11, text: '«Помощь»', href: '' } },
   ]);
 });
+
+// Compatibility: real preview CLI must consume the same current runs and digest as preparation.
+test('Task10 compatibility actual prepare and normal preview retain current typed runs readiness and model bytes', async t => {
+  const folder = await mkdtemp(join(tmpdir(), 'cupis-task10-preview-')); t.after(() => rm(folder, { recursive: true, force: true }));
+  const model = typedSupportDeliveryModel(), modelBytes = Buffer.from(JSON.stringify(model)), modelPath = join(folder, 'model.json'), intake = join(folder, 'intake');
+  await writeFile(modelPath, modelBytes);
+  const supplied = { ...draft, email_id: model.id, source_sha: task10SourceSha, subject: 'Согласованная тема', preheader: 'Согласованный прехедер', sender: { mode: 'explicit', name: 'ЦУПИС', address: 'info@1cupis.ru' }, answers: {} }, suppliedPath = join(folder, 'metadata.json');
+  await writeFile(suppliedPath, JSON.stringify(supplied));
+  const prepared = task10RunCli('prepare-email-delivery', ['--model', modelPath, '--output', intake, '--delivery', suppliedPath]);
+  assert.equal(prepared.status, 0, prepared.stderr);
+  const initial = JSON.parse(await readFile(join(intake, 'delivery.json'), 'utf8')), dependencies = await task10RegisteredDependencies(), currentInventory = collectEmailActions({ model, ...dependencies });
+  assert.deepEqual(currentInventory.diagnostics, []); assert.equal(initial.inventory_digest, currentInventory.inventory_digest);
+  assert.equal(currentInventory.fields.find(field => field.id === task10HelpId).label, '«Поддержка»');
+  const answered = { ...initial, answers: { ...initial.answers, [task10HelpId]: 'https://1cupis.ru/help-current' } }, deliveryPath = join(folder, 'answered.json');
+  assert.equal(answered.answers['email%2Fnotice~root-content-area-phone-cta-phone-number~href~~both'], 'https://1cupis.ru/phone');
+  assert.deepEqual(validateDeliveryDocument({ document: answered, inventory: currentInventory, profile: dependencies.profile, sourceSha: task10SourceSha, purpose: 'final', emailId: model.id }), []);
+  await writeFile(deliveryPath, JSON.stringify(answered));
+  const previewPath = join(folder, 'preview', 'email.html'), preview = task10RunCli('render-email-preview', ['--model', modelPath, '--delivery', deliveryPath, '--mode', 'normal', '--output', previewPath]);
+  assert.equal(preview.status, 0, preview.stderr);
+  const html = await readFile(previewPath, 'utf8');
+  assert.match(html, /CUPIS preview: readiness=ready; purpose=preview/u);
+  assert.match(html, /<a href="https:\/\/1cupis\.ru\/help-current"[^>]*>«Поддержка»<\/a>/u);
+  assert.doesNotMatch(html, /«Помощь»/u);
+  assert.deepEqual(await readFile(modelPath), modelBytes);
+  assert.deepEqual(JSON.parse(await readFile(deliveryPath, 'utf8')), answered);
+});
