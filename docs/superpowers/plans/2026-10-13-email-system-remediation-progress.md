@@ -14,7 +14,7 @@
 
 ## Текущая точка
 
-**Tasks 1–7 приняты в ветке.** Task 7 accepted на `373934`: real npm ci/audit0, targeted43/full2394PASS, independent review/finalizer/workflow complete. Task5 visual scope остаётся limited synthetic hidden-content; private/populated/external acceptance не проверялись. Task8 test-first `dcbede5` дал64PASS/13FAIL:11intended runtime defects и2новых unsafe expectation mismatches; original evidence сохранён. Сначала уточняется existing semantic blocker для этих controls, затем bounded test correction; runtime ещё не изменён.
+**Tasks 1–7 приняты в ветке.** Task7 accepted на `373934`: real npm ci/audit0, targeted43/full2394PASS, independent review/finalizer/workflow complete. Task5 visual scope limited synthetic hidden-content; private/populated/external acceptance не проверялись. Task8: исходный test-first RED сохранил11intended defects; два unsafe expectations уточнены FIRST и исправлены. Exact `e0176827` narrow controls:2PASS0FAIL0SKIP, raw349/0. Подготовлен минимальный runtime кандидат; targeted GREEN/full и независимая приёмка ещё не выполнялись.
 
 | Шаг | Состояние |
 | --- | --- |
@@ -25,7 +25,7 @@
 | 5. R2, source/candidate/release binding | Accepted на e306f000; targeted 160/full 2336 PASS; limited actual visual/publication |
 | 6. R6, contained asset bytes | Accepted на 5dbbaec6; targeted 157/full 2386 PASS |
 | 7. R4, fast-uri 3.x | Accepted на 373934; actual npm ci/audit0; targeted 43/full 2394 PASS |
-| 8. #132/E04/E05, compact variants | Test-first RED:11 intended failures; unsafe expectation уточняется FIRST до test correction/runtime |
+| 8. #132/E04/E05, compact variants | Runtime кандидат после11intendedRED/2correctedcontrolsPASS; GREEN/full/приёмка pending |
 | 9. #132/E14/E15, centering/labels | Не начат |
 | 10. #128/E08, single compact link form | Не начат |
 | 11. #131, NPS click area | Не начат |
@@ -198,3 +198,10 @@ Baseline и результаты каждого шага записываютс�
 1. На текущем коде `prepareEmailBuildHandoff()` сначала вызывает `validateEmailModelSemantics()`. Небезопасные `images/../hero-image@2x.jpg` и `/images/header-logo@4x.png` дают `EMAIL_MODEL_ASSET_PATH_UNSAFE`; публичный handoff преобразует любые semantic diagnostics в blocker `renderer-diagnostic` и возвращает пустые `assetContracts` до file-backed asset validation. Ожидание `asset-contract-missing` в этих двух новых parameterized tests было ошибочным. Это существующая защита, не runtime defect.
 2. Исправить только appended unsafe expectations в `tests/skills/email-build-handoff.test.mjs`: exact public `renderer-diagnostic`, пустые `assetContracts`, сохранённый входной unsafe path. При доступных existing dependencies можно дополнительно проверить typed semantic code/path; общий blocker не должен заменить safe naming assertions. Safe in-root suffixless/wrong-profile/viewport-tag cases по-прежнему материализуют matching bytes/receipt hash и требуют `asset-contract-missing`. Ни один unsafe path не записывается. Owner, geometry, alpha, crop и boundary controls сохраняются; все bytes/assertions до Task8 append неизменны, 16 новых scenarios не расширяются. Runtime guards и profiles не меняются.
 3. Original `evidence/task8-preparation/manifest.json` (`3f51dd2c315ce7a997f3bf67b528da6024ca512053332069a27df0bd318572d7`) и original RED evidence остаются immutable. Новый preparation manifest сохраняется отдельно в `task8-repair1-preparation`; root публикует reviewed test correction только после этого FIRST уточнения. Затем delegate на exact corrected-cloud snapshot выполняет только два naming cases через test-name pattern: они должны PASS на прежнем runtime. Полный пяти-suite RED повторять не нужно: прежние 11 intended failures уже доказаны. После коррекции и локального подтверждения controls допускается минимальный runtime шаг; final targeted GREEN и repository-full охватят весь набор.
+
+## Task 8 — подготовленный минимальный runtime кандидат
+
+- Detail FIRST `a0be810`, tests FIRST `dcbede5`, unsafe clarification FIRST `d79dac66`, corrected expectations `e0176827` сохранены как отдельные коммиты. Actual narrow old-runtime2controls PASS за43.788s; result `bdc7afcfbfafab94a943c73a32d2cf1141c220f888812fec2815d8a05f0878e6`, summary `7bfa0a5c51651f94db2c9f189cb1b1e1304548cbe3c814887764048493fc482b`, raw349/0, dependencies/old evidence неизменны, owned процессы завершены. Одиннадцать исходных runtime RED не переобозначены passed.
+- Context использует один private runtime reference collector для base/selected extra roots в четырёх местах, сохраняет настоящий extra path и исключает metadata contract keys из viewport loop. Projection сохраняет только selected runtime roots, axes/source IDs и root reference-size node_id при необходимости selector; обычная compact shape и exclusion source/evidence/provenance bulk сохранены.
+- Selector сопоставляет explicit axes даже без extras, оставляет empty default, поддерживает registered viewport-less Style, отвергает unknown/incomplete/reserved/ambiguous selector до HTML. Общий registry и model/asset/profile guards не меняются. Assembly naming исправлен одной строкой по действующему validator.
+- Кандидат ещё не проверен функционально: следующие gates — independent static diff, cloud publication только четырёх allowed paths, delegated five-suite GREEN, fresh exact-SHA resolved acceptance context, ONE repository-full/generated, raw identity, independent frozen review и actual finalizer. До принятия Task9 не начинается.

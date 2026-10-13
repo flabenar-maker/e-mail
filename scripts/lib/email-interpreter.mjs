@@ -804,25 +804,37 @@ function breakpointCss(rules, foundations, diagnostics, emissionProfile) {
 
 
 export function selectVariantRoot(component, viewport, variantAxes = {}) {
+  const unresolved = () => ({ root: null, diagnostics: [diagnostic(
+    "RENDER_VARIANT_UNRESOLVED", `/contracts/${viewport}/variant_contracts`,
+    `No exact ${viewport} variant for ${JSON.stringify(variantAxes)}.`,
+  )] });
+  if (!["mobile", "desktop"].includes(viewport) || variantAxes === null ||
+    typeof variantAxes !== "object" || Array.isArray(variantAxes)) return unresolved();
   const base = component?.contracts?.[viewport]?.root;
-  const extras = component?.contracts?.variant_contracts ?? [];
-  if (Object.keys(variantAxes).length === 0 || extras.length === 0) return { root: base, diagnostics: [] };
-  const sources = component?.contracts?.source_variants ?? [];
-  const sourceFor = (root) => sources.find(({ source_node }) =>
-    source_node?.node_id === root?.facts?.find(({ id }) => id === "reference-size")?.provenance?.node_id);
-  const candidates = [
-    { root: base, axes: sourceFor(base)?.axes ?? [{ name: "Viewport", value: viewport }] },
-    ...extras.map(({ root, axes }) => ({ root, axes })),
-  ];
   const expected = Object.entries(variantAxes).sort(([a], [b]) => a.localeCompare(b));
-  const selected = candidates.find(({ axes }) =>
-    axes.some(({ name, value }) => name === "Viewport" && value.toLowerCase() === viewport) &&
-    expected.every(([name, value]) => axes.some((axis) => axis.name === name && axis.value.toLowerCase() === String(value).toLowerCase())) &&
-    axes.filter(({ name }) => name !== "Viewport").length === expected.length);
-  return selected
-    ? { root: selected.root, diagnostics: [] }
-    : { root: null, diagnostics: [diagnostic("RENDER_VARIANT_UNRESOLVED",
-      `/contracts/${viewport}/variant_contracts`, `No exact ${viewport} variant for ${JSON.stringify(variantAxes)}.`)] };
+  if (expected.length === 0) return { root: base, diagnostics: [] };
+  if (Object.hasOwn(variantAxes, "Viewport")) return unresolved();
+  const sources = component?.contracts?.source_variants ?? [];
+  const nodeId = base?.facts?.find(({ id }) => id === "reference-size")?.provenance?.node_id;
+  const baseSource = typeof nodeId === "string"
+    ? sources.find(({ source_node }) => source_node?.node_id === nodeId) : null;
+  const candidates = [
+    { root: base, axes: baseSource?.axes ?? [{ name: "Viewport", value: viewport }] },
+    ...(component?.contracts?.variant_contracts ?? []).map(({ root, axes }) => ({ root, axes })),
+  ];
+  const selected = candidates.filter(({ root, axes }) => {
+    if (!root || !Array.isArray(axes) || axes.some((axis) =>
+      typeof axis?.name !== "string" || typeof axis?.value !== "string")) return false;
+    const viewportAxes = axes.filter(({ name }) => name === "Viewport");
+    if (viewportAxes.length > 1 || viewportAxes.some(({ value }) =>
+      value.toLowerCase() !== viewport)) return false;
+    const otherAxes = axes.filter(({ name }) => name !== "Viewport");
+    return otherAxes.length === expected.length &&
+      new Set(otherAxes.map(({ name }) => name)).size === otherAxes.length &&
+      expected.every(([name, value]) => otherAxes.some((axis) =>
+        axis.name === name && axis.value.toLowerCase() === String(value).toLowerCase()));
+  });
+  return selected.length === 1 ? { root: selected[0].root, diagnostics: [] } : unresolved();
 }
 
 export function renderContractTree({
