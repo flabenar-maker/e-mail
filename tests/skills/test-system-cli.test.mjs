@@ -144,3 +144,27 @@ for(const entrypoint of ['runner','npm','docs'])test(`public ${entrypoint} inher
  const result=await cli(f,program,args);assert.equal(result.exitCode,0,result.stderr+result.stdout);const records=await f.readProbe();for(const file of files)assert.ok(records.some(record=>record.kind==='ran'&&record.file.endsWith('/'+file)),file);assert.doesNotMatch(result.stderr+result.stdout,/recursiv|skip.*(?:test|file)/iu);
  const commands=testSpawns(records);assert.equal(commands.length,1);exactNodeCommand(commands[0],['--test','--test-concurrency=4',...(entrypoint==='npm'?FULL:DOCS)]);
 });
+
+async function finalizationHook(f,window){
+ const hook=join(f.temporary,'finalization-hook.mjs');
+ await writeFile(hook,`import fs from 'node:fs';import fsp from 'node:fs/promises';import {syncBuiltinESMExports} from 'node:module';import {join,dirname,resolve,relative,isAbsolute} from 'node:path';
+const temporary=resolve(process.env.CUPIS_TASK3_FINALIZATION_ROOT),lock=join(temporary,'persistent','runner-locks','heavy-batch.lock'),window=process.env.CUPIS_TASK3_FINALIZATION_WINDOW;let marker,injected=false;
+const write=fsp.writeFile,unlink=fsp.unlink,clear=globalThis.clearInterval;
+fsp.writeFile=async function(file,...args){const result=await write.call(this,file,...args);if(typeof file==='string'&&dirname(resolve(file))===lock)marker=resolve(file);return result;};
+function replace(){const rel=relative(temporary,resolve(lock));if(!rel||rel.startsWith('..')||isAbsolute(rel))throw new Error('Unsafe test-owned lock target');injected=true;fs.rmSync(lock,{recursive:true});fs.mkdirSync(lock);if(window==='dispose')fs.writeFileSync(join(lock,'foreign-owner'),'preserve the finalization foreign lock\\n');const st=fs.lstatSync(lock);fs.appendFileSync(process.env.CUPIS_TASK3_PROBE,JSON.stringify({kind:'finalization-hook',window,pid:process.pid,foreign_ino:st.ino,foreign_birthtime:st.birthtimeMs})+'\\n');}
+globalThis.clearInterval=function(handle){const result=clear(handle);if(marker&&!injected&&window==='dispose')replace();return result;};
+fsp.unlink=async function(file,...args){if(marker&&!injected&&window==='unlink'&&resolve(String(file))===marker)replace();return await unlink.call(this,file,...args);};
+syncBuiltinESMExports();
+`);
+ f.env.NODE_OPTIONS+=' --import='+pathToFileURL(hook).href;f.env.CUPIS_TASK3_FINALIZATION_ROOT=f.temporary;f.env.CUPIS_TASK3_FINALIZATION_WINDOW=window;
+}
+for(const window of ['dispose','unlink'])test(`public finalization ownership loss at ${window} cannot leave a success receipt or remove a foreign lock`,async t=>{
+ const f=await fixture(t);await finalizationHook(f,window);const result=await cli(f,'scripts/run-verification.mjs',runnerArgs(f,'repository-full'));const records=await f.readProbe(),hook=records.find(record=>record.kind==='finalization-hook');assert.ok(hook,'the deterministic finalization hook must run');
+ // Require actual completed workloads before testing their final publication/release transaction.
+ for(const file of ['tests/foundation/bounded.test.mjs','tests/characterization/bounded.test.mjs','tests/components/bounded.test.mjs','tests/generation/bounded.test.mjs','tests/rendering/bounded.test.mjs','tests/workflows/bounded.test.mjs','tests/skills/bounded.test.mjs',...VISUAL,...DOCS,'scripts/generate-docs.mjs'])assert.ok(records.some(record=>record.kind==='ran'&&record.file.endsWith('/'+file)),file);
+ assert.notEqual(result.exitCode,0,result.stderr+result.stdout);assert.match(result.stderr,/VERIFICATION_HEAVY_LOCK_LOST/u);
+ const receipt=join(f.temporary,'evidence','receipt.json');try{assert.notEqual(JSON.parse(await readFile(receipt,'utf8')).conclusion,'success');}catch(error){if(error.code!=='ENOENT')throw error;}
+ const {lstat}=await import('node:fs/promises');await assert.rejects(lstat(join(f.temporary,'evidence','receipt.pending')),{code:'ENOENT'});assert.equal(JSON.parse(await readFile(join(f.temporary,'evidence','repository-full.json'),'utf8')).request_id,'task3-public');
+ const lock=join(f.temporary,'persistent','runner-locks','heavy-batch.lock'),st=await lstat(lock);assert.ok(st.isDirectory());assert.equal(st.ino,hook.foreign_ino);assert.equal(st.birthtimeMs,hook.foreign_birthtime);if(window==='dispose')assert.equal(await readFile(join(lock,'foreign-owner'),'utf8'),'preserve the finalization foreign lock\n');
+ for(const pid of new Set(records.filter(record=>record.kind==='ran').map(record=>record.pid)))assert.throws(()=>process.kill(pid,0),'owned child must be gone before finalization failure returns');
+});
