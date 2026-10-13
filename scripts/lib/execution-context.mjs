@@ -6,6 +6,8 @@ import requestSchema from '../../schemas/execution-request.schema.json' with {ty
 import decisionSchema from '../../schemas/execution-decision.schema.json' with {type:'json'};
 import {selectEffort} from './model-selection.mjs';
 import {isValidMachineProfile} from './machine-profile-validation.mjs';
+import {workloadSignature,selectLocalTestConcurrency,deriveVerificationWorkload} from './verification-concurrency.mjs';
+export {workloadSignature} from './verification-concurrency.mjs';
 import {validateRuntimeCapabilities} from './runtime-capabilities.mjs';
 import {SystemValidationError} from './diagnostics.mjs';
 const ajv=new Ajv2020({strict:true,allErrors:true});
@@ -17,7 +19,6 @@ const fail=(code,message,path='/')=>new SystemValidationError(code,path,message)
 const blocked=(code,message,extra={})=>({schema_version:'1.0.0',status:'blocked',blockers:[diagnostic(code,'/',message)],...extra});
 const freeze=value=>{if(value&&typeof value==='object'){for(const child of Object.values(value))freeze(child);Object.freeze(value);}return value;};
 const canonical=value=>Array.isArray(value)?value.map(canonical):value&&typeof value==='object'?Object.fromEntries(Object.keys(value).sort().map(k=>[k,canonical(value[k])])):value;
-export const workloadSignature=workload=>hash(JSON.stringify(canonical({id:workload.id,commands:workload.commands,requirements:workload.requirements,limits:workload.limits})));
 export const artifactDigest=refs=>hash(JSON.stringify(canonical([...refs].sort((a,b)=>a.path<b.path?-1:a.path>b.path?1:0))));
 export const workloadInputDigest=inputs=>hash(JSON.stringify(canonical(inputs)));
 export const isResolvedExecutionDecision=decision=>decisionValid(decision)&&decision.status==='resolved';
@@ -78,7 +79,15 @@ export function resolveExecutionContext({request,policy,capabilities,profile}){
   const saved=validProfile?p.workload_decisions.find(x=>x.id===id&&x.signature===signature):null;
   const target=workload.portability==='local-only'?'local':saved?.target==='local'?'local':'github-hosted';
   const input_names=[...workload.required_inputs].sort();const input_digest=input_names.length?workloadInputDigest(Object.fromEntries(input_names.map(name=>[name,request.input_refs[name]]))):null;
-  verification.push({id,portability:workload.portability,target,signature,input_names,input_digest,limits:structuredClone(workload.limits)});
+  try{
+   // Establish base signature trust first; the effective choice is frozen in this decision.
+   const testConcurrency=target==='local'&&validProfile?selectLocalTestConcurrency({policy,profile:p,pairKey:request.profile_pair_key}):2;
+   const effective=deriveVerificationWorkload({policy,workload,target,testConcurrency});
+   verification.push({id,portability:workload.portability,target,signature:workloadSignature(effective),input_names,input_digest,limits:effective.limits});
+  }catch(error){
+   if(['VERIFICATION_CONCURRENCY_INVALID','VERIFICATION_CONCURRENCY_UNSUPPORTED','VERIFICATION_WORKLOAD_MISMATCH'].includes(error.code))return blocked(error.code,'Selected workload concurrency could not be derived from the source policy.');
+   throw error;
+  }
  }
  const result={schema_version:'1.0.0',status:'resolved',domain_status:'resolved',request_id:request.request_id,source_sha:request.source_sha,policy_digest:policy.policy_digest,route:request.route,mode:request.mode,operation:request.operation,allowed_paths:[...request.allowed_paths],executor_agent_id:request.executor_agent_id??null,domain_context_ref:request.domain_context_ref,requirement_refs:request.requirement_refs,artifact_refs:request.artifact_refs,input_refs:request.input_refs??{},base_effort:selected.base_effort,target_effort:selected.target_effort,runtime_identity:{runtime_session_id:capabilities.runtime_session_id,tool_signature:capabilities.tool_signature},executor:selected.executor,review,verification,safety_ceiling_reached:selected.safety_ceiling_reached,blockers:[]};
  return Buffer.byteLength(JSON.stringify(result)+'\n','utf8')<=4096?result:blocked('EXECUTION_CONTEXT_TOO_LARGE','Required execution fields exceed the 4096-byte limit; split the scoped request.');

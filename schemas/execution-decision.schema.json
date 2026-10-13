@@ -307,7 +307,10 @@
                 "properties": {
                   "concurrency": {
                     "type": "integer",
-                    "minimum": 1
+                    "enum": [
+                      2,
+                      4
+                    ]
                   },
                   "timeout_minutes": {
                     "type": "integer",
@@ -350,6 +353,58 @@
               "target",
               "signature",
               "limits"
+            ],
+            "allOf": [
+              {
+                "if": {
+                  "type": "object",
+                  "properties": {
+                    "target": {
+                      "const": "local"
+                    },
+                    "id": {
+                      "enum": [
+                        "docs-scoped",
+                        "repository-full",
+                        "visual-fixtures"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "target",
+                    "id"
+                  ]
+                },
+                "then": {
+                  "type": "object",
+                  "properties": {
+                    "limits": {
+                      "type": "object",
+                      "properties": {
+                        "concurrency": {
+                          "enum": [
+                            2,
+                            4
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "else": {
+                  "type": "object",
+                  "properties": {
+                    "limits": {
+                      "type": "object",
+                      "properties": {
+                        "concurrency": {
+                          "const": 2
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             ]
           },
           "minItems": 0,

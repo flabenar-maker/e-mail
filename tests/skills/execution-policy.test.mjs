@@ -55,3 +55,10 @@ test("schema parse and policy read failures retain typed loader diagnostics",asy
  await writeFile(schemaPath,schema);const policyPath=join(f.root,"data/execution/policy.yaml");await rm(policyPath);await mkdir(policyPath);
  await assert.rejects(load({repoRoot:f.root,manifest:f.manifest}),error=>error.code==="execution-policy-read");
 });
+
+test('local concurrency permission is exact and never rewrites baseline cloud or workload limits',async t=>{
+ const f=await fixture(t),target=join(f.root,'data/execution/policy.yaml');const original=await readStrictYaml(target),load=loader();
+ const policy=await load({repoRoot:f.root,manifest:f.manifest});assert.deepEqual(policy.local_test_concurrency,{allowed:[2,4],default:2,workload_ids:['docs-scoped','repository-full','visual-fixtures']});assert.equal(policy.local_limits.concurrency,2);assert.equal(policy.cloud_limits.concurrency,2);assert.equal(policy.workloads.every(x=>x.limits.concurrency===2),true);
+ for(const change of [{allowed:[2,6],default:2,workload_ids:['docs-scoped','repository-full','visual-fixtures']},{allowed:[2,4],default:4,workload_ids:['docs-scoped','repository-full','visual-fixtures']},{allowed:[2,4],default:2,workload_ids:['docs-scoped','repository-full','windows-bootstrap']},{allowed:[2,4],default:2,workload_ids:['docs-scoped','repository-full','visual-fixtures'],extra:true}]){await writeFile(target,JSON.stringify({...original,local_test_concurrency:change}));await assert.rejects(load({repoRoot:f.root,manifest:f.manifest}),e=>e.code==='execution-policy-schema');}
+ const legacy=structuredClone(original);delete legacy.local_test_concurrency;await writeFile(target,JSON.stringify(legacy));assert.equal((await load({repoRoot:f.root,manifest:f.manifest})).local_limits.concurrency,2);
+});

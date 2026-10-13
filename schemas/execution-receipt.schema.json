@@ -277,6 +277,13 @@
               "input_digest": {
                 "type": "string",
                 "pattern": "^[a-f0-9]{64}$"
+              },
+              "test_concurrency": {
+                "type": "integer",
+                "enum": [
+                  2,
+                  4
+                ]
               }
             },
             "required": [
@@ -284,6 +291,47 @@
               "signature",
               "status",
               "exit_code"
+            ],
+            "allOf": [
+              {
+                "if": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "enum": [
+                        "docs-scoped",
+                        "repository-full",
+                        "visual-fixtures"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id"
+                  ]
+                },
+                "then": {
+                  "type": "object",
+                  "properties": {
+                    "test_concurrency": {
+                      "enum": [
+                        2,
+                        4
+                      ]
+                    }
+                  }
+                },
+                "else": {
+                  "type": "object",
+                  "not": {
+                    "required": [
+                      "test_concurrency"
+                    ],
+                    "properties": {
+                      "test_concurrency": {}
+                    }
+                  }
+                }
+              }
             ]
           },
           "minItems": 0,
@@ -382,6 +430,20 @@
               "run_attempt": {
                 "type": "string",
                 "pattern": "^[0-9]+$"
+              },
+              "workload_results": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "not": {
+                    "required": [
+                      "test_concurrency"
+                    ],
+                    "properties": {
+                      "test_concurrency": {}
+                    }
+                  }
+                }
               }
             }
           },
