@@ -14,7 +14,7 @@
 
 ## Текущая точка
 
-**Tasks 1–5 приняты в ветке.** Task 5 принят на `e306f000ff39ab88296a78cfd2094a8d684eea17`: targeted 160/full 2336 PASS, validator/generated exit 0, независимый review всех 11 refs, finalizer accepted и workflow complete. Actual independent visual и publication проверены на ограниченном synthetic hidden-content примере; populated/private email fidelity и external acceptance не проверялись. Для Task 6 сначала уточняется общий file-backed loader и ownership bytes; runtime ещё не изменён.
+**Tasks 1–5 приняты в ветке.** Task 5 принят на `e306f000ff39ab88296a78cfd2094a8d684eea17`: targeted 160/full 2336 PASS, validator/generated exit 0, независимый review всех 11 refs, finalizer accepted и workflow complete. Actual independent visual и publication проверены на ограниченном synthetic hidden-content примере; populated/private email fidelity и external acceptance не проверялись. Task 6: детализация и тесты опубликованы до runtime; подтверждён RED и подготовлен кандидат общего contained-byte loader. GREEN/full и приёмка Task 6 ещё не получены.
 
 | Шаг | Состояние |
 | --- | --- |
@@ -23,7 +23,7 @@
 | 3. R3, instance identities | Accepted на 81052bdc; targeted 114/full 2247 PASS |
 | 4. R5, workflow identity presence | Accepted на 5b557800; targeted 49/full 2268 PASS |
 | 5. R2, source/candidate/release binding | Accepted на e306f000; targeted 160/full 2336 PASS; limited actual visual/publication |
-| 6. R6, contained asset bytes | Детализация ниже до тестов и runtime |
+| 6. R6, contained asset bytes | RED подтверждён; кандидат runtime ожидает exact-SHA GREEN/full и приёмку |
 | 7. R4, fast-uri 3.x | Не начат |
 | 8. #132/E04/E05, compact variants | Не начат |
 | 9. #132/E14/E15, centering/labels | Не начат |
@@ -150,3 +150,6 @@ Baseline и результаты каждого шага записываютс�
 - Task 3 final `81052bdc190525ae88f6cf9e714abfad0c156392`: targeted шесть suites 114 PASS / 0 FAIL; actual repository-full 2247 PASS / 0 FAIL, validator/generated/runner exit 0; raw 345/0, owned processes отсутствуют. Request email-remediation-task3-repair1-final-20261013; независимый reviewer принял все 13 refs, штатный finalizer accepted и workflow complete. Старый failure e673 сохранён неизменным; новый успех относится только к 81052bdc. External acceptance not-run.
 - Task 4 RED `d29dacd3769c8232654187dbce2e558178d946a9`: orchestration 29 tests, 17 PASS / 12 expected FAIL, exit 1. Десять real-mode equal-missing cases, generic missing-field blocker и реальное version creation не блокировались. Actual resolution new-build/blocker=null/all 10 outputs; createEmailVersion создал relation-identity-intake_1.0 без ошибки. Все восемь прежних сценариев и девять новых compatibility controls PASS; fixture/infra failures нет. Runtime до RED не менялся; итоговый GREEN/full новой версии ещё не заявляется.
 - Task 4 final `5b557800c9a7b456e3fbad99c0a27f282fab2607`: targeted orchestration/handoff 49 PASS; repository-full 2268 PASS, validator/generated/runner exit 0, raw 345/0. Request email-remediation-task4-final-20261013, actual success receipt; independent review всех шести refs, штатный finalizer accepted, workflow complete. Owned processes отсутствуют. Только этот SHA/Task 4 принят; Tasks 5–12 не обозначаются выполненными.
+
+- Task 6 RED `3339ccc920eab4d4c6551bb384bd1a35ab34433f`: actual four targeted suites, 62 tests /27 PASS /35 FAIL /0 SKIP, exit1. 19 failures: planned helper absent;13 actual publisher/CLI behavior gaps;3 existing refusals lack typed asset diagnostics. Windows file-link and directory-junction probes ran without skips. Separate owned synthetic public API probe published outside-root replacement bytes (SHA2563596f59ba602c37d7990ff29a30c84dc0f28f398f1174c2225d6b0ca41a4ae5a). Old assertions PASS; no model/delivery fixture failures; raw348/0; owned processes finished. Immutable result193f1a64 and payload778c60f6 retained locally.
+- Task 6 relative ABI detail FIRST `b21369058e78c6fb8144d874e05558bd9082aef2`, tests FIRST `98f7c1c562eb282ceee9482913f858b14bdfbdca`: narrow actual CWD-relative controls2 /1 PASS /1 expected missing-helper FAIL, exit1. Direct publisher old path semantics and literal original bytes PASS; raw348/0; owned process finished. Runtime candidate now follows these observations. No GREEN/full/acceptance claim yet.

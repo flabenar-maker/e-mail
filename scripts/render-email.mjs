@@ -22,6 +22,7 @@ import {
   validateEmailModelSemantics,
 } from "./lib/email-model.mjs";
 import { publishEmailAtomically, publishFileSetAtomically } from "./lib/email-output.mjs";
+import { readContainedAssetBytes } from "./lib/email-asset-bytes.mjs";
 import { postprocessEmail } from "./lib/email-postprocess.mjs";
 import { renderEmailDocument } from "./lib/email-renderer.mjs";
 import { loadDeliveryDocument } from "./lib/email-delivery-profile.mjs";
@@ -134,7 +135,8 @@ async function main() {
   if (delivery) {
     const structured = serializeEmailHtml({html,protectedFragments:(rendered.protectedFragments??[]).map(fragment=>{const start=html.indexOf(fragment.text);if(start<0)throw new Error("EMAIL_SERVICE_FRAGMENT_MISSING");return {start,end:start+fragment.text.length};})});
     if (structured.diagnostics.length) throw new AggregateError(structured.diagnostics, "HTML serialization failed.");
-    const assetBuffers = new Map(await Promise.all(rendered.assets.map(async asset => [asset.path,await readFile(join(modelFolder,...asset.path.split("/")))])));
+    const assetBuffers = new Map((await readContainedAssetBytes({ assetRoot: modelFolder, assets: rendered.assets }))
+      .map(({ path, bytes }) => [path, bytes]));
     const rebased = rebasePackageResources({html:structured.html,assetPaths:[...assetBuffers.keys()],htmlEntry:delivery.profile.package.html_entry,assetRootEntry:delivery.profile.package.asset_root_entry});
     if (rebased.diagnostics.length) throw new AggregateError(rebased.diagnostics, "Package resources failed.");
     const packageStructured = serializeEmailHtml({html:rebased.html,protectedFragments:(rendered.protectedFragments??[]).map(fragment=>{const start=rebased.html.indexOf(fragment.text);if(start<0)throw new Error("EMAIL_SERVICE_FRAGMENT_MISSING");return {start,end:start+fragment.text.length};})});
@@ -179,6 +181,7 @@ async function main() {
   await publishEmailAtomically({
     outputDir,
     html,
+    assetRoot: modelFolder,
     assets: rendered.assets.map((asset) => ({
       path: asset.path,
       sourcePath: join(modelFolder, ...asset.path.split("/")),

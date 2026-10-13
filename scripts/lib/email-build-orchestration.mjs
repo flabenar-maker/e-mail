@@ -26,6 +26,7 @@ import { verifyRealEmailVisual } from "../verify-real-email-visual.mjs";
 import { readBoundInventory, inventoryTreePaths } from "./execution-inputs.mjs";
 import { validSelectedModel, validateRuntimeCapabilities } from "./runtime-capabilities.mjs";
 import { publishFileSetAtomically } from "./email-output.mjs";
+import { readContainedAssetBytes } from "./email-asset-bytes.mjs";
 import { validateZipEntryPath } from "./zip-store.mjs";
 
 function failure(code) {
@@ -293,11 +294,7 @@ async function validateAssetEvidence({ assetRoot, component, contract, asset, it
   }
 
   try {
-    const physicalRoot = await realpath(assetRoot);
-    const sourcePath = join(assetRoot, ...asset.path.split("/"));
-    const physical = await realpath(sourcePath);
-    if (!inside(physicalRoot, physical)) return false;
-    const bytes = await readFile(physical);
+    const [{ bytes }] = await readContainedAssetBytes({ assetRoot, assets: [{ path: asset.path }] });
     const digest = createHash("sha256").update(bytes).digest("hex");
     if (item.sha256 !== digest) return false;
     if (profile.format === "PNG" && (contract.alpha_mode_id === "opaque" ||

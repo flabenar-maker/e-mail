@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 import { mkdir, writeFile } from "node:fs/promises";
 
 import { formatRendererDiagnostics } from "./lib/diagnostics.mjs";
+import { readContainedAssetBytes } from "./lib/email-asset-bytes.mjs";
 import {
   indexComponentRegistries,
   loadComponentRegistries,
@@ -94,6 +95,7 @@ async function main() {
   if (rendered.diagnostics.length > 0) {
     throw new AggregateError(rendered.diagnostics, "Email rendering failed.");
   }
+  await readContainedAssetBytes({ assetRoot: dirname(modelPath), assets: rendered.assets });
   const html = postprocessEmail({
     html: rendered.html,
     policy: {

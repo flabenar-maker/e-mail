@@ -1,6 +1,5 @@
 import { randomUUID } from "node:crypto";
 import {
-  copyFile,
   mkdir,
   readFile,
   readdir,
@@ -10,10 +9,11 @@ import {
   stat,
   writeFile,
 } from "node:fs/promises";
-import { dirname, isAbsolute, join, posix, resolve, win32 } from "node:path";
+import { dirname, join, resolve } from "node:path";
 
 import { SystemValidationError } from "./diagnostics.mjs";
 import { validateZipEntryPath } from "./zip-store.mjs";
+import { readContainedAssetBytes } from "./email-asset-bytes.mjs";
 
 function fail(code, path, message) {
   throw new SystemValidationError(code, path, message);
@@ -29,59 +29,25 @@ async function exists(path) {
   }
 }
 
-function safeTarget(path) {
-  return (
-    typeof path === "string" &&
-    path.startsWith("images/") &&
-    !path.includes("\\") &&
-    !path.split("/").includes("..") &&
-    !isAbsolute(path) &&
-    !win32.isAbsolute(path) &&
-    posix.normalize(path) === path &&
-    path.length > "images/".length
-  );
-}
-
-async function validateAssets(assets) {
-  const targets = new Map();
-  for (const [index, asset] of (assets ?? []).entries()) {
-    if (!safeTarget(asset.path)) {
-      fail(
-        "EMAIL_OUTPUT_ASSET_PATH_UNSAFE",
-        "/assets/" + index + "/path",
-        "Asset target must be a normalized relative path below images/.",
-      );
-    }
-    const previous = targets.get(asset.path);
-    if (previous && resolve(previous) !== resolve(asset.sourcePath)) {
-      fail(
-        "EMAIL_OUTPUT_ASSET_TARGET_CONFLICT",
-        "/assets/" + index + "/path",
-        "Different source files target " + asset.path + ".",
-      );
-    }
-    targets.set(asset.path, asset.sourcePath);
-    let source;
-    try {
-      source = await stat(asset.sourcePath);
-    } catch {
-      fail(
-        "EMAIL_OUTPUT_ASSET_SOURCE_MISSING",
-        "/assets/" + index + "/sourcePath",
-        "Asset source does not exist.",
-      );
-    }
-    if (!source.isFile()) {
-      fail(
-        "EMAIL_OUTPUT_ASSET_SOURCE_INVALID",
-        "/assets/" + index + "/sourcePath",
-        "Asset source must be a file.",
-      );
+async function validateAssets(assets, assetRoot) {
+  if (Array.isArray(assets)) {
+    for (const [index, asset] of assets.entries()) {
+      if (!validateZipEntryPath(asset.path) || !asset.path.startsWith("images/")) {
+        fail("EMAIL_OUTPUT_ASSET_PATH_UNSAFE", `/assets/${index}/path`, "Asset target must be a safe path below images/.");
+      }
+      if (typeof asset.sourcePath !== "string" || asset.sourcePath.trim() === "") {
+        fail("EMAIL_OUTPUT_ASSET_SOURCE_MISSING", `/assets/${index}/sourcePath`, "Asset source is required.");
+      }
     }
   }
-  return [...targets.entries()]
-    .map(([path, sourcePath]) => ({ path, sourcePath }))
-    .sort((left, right) => left.path.localeCompare(right.path));
+  try {
+    return await readContainedAssetBytes({ assets, assetRoot });
+  } catch (error) {
+    if (error instanceof SystemValidationError && error.code.startsWith("EMAIL_ASSET_")) {
+      fail(error.code.replace(/^EMAIL_ASSET_/u, "EMAIL_OUTPUT_ASSET_"), error.path, error.message);
+    }
+    throw error;
+  }
 }
 
 async function assertOutputAvailable(outputDir) {
@@ -104,7 +70,7 @@ async function assertOutputAvailable(outputDir) {
   return true;
 }
 
-export async function publishEmailAtomically({ outputDir, html, assets = [] }) {
+export async function publishEmailAtomically({ outputDir, html, assets = [], assetRoot }) {
   if (typeof html !== "string" || html.length === 0) {
     fail("EMAIL_OUTPUT_HTML_INVALID", "/html", "Email HTML must be non-empty.");
   }
@@ -115,8 +81,10 @@ export async function publishEmailAtomically({ outputDir, html, assets = [] }) {
     fail("EMAIL_OUTPUT_PATH_UNSAFE", "/outputDir", "Output directory is unsafe.");
   }
 
+  const privateAssets = assets == null ? [] : Array.isArray(assets)
+    ? assets.map(asset => ({ path: asset?.path, sourcePath: asset?.sourcePath })) : assets;
   const finalWasEmpty = await assertOutputAvailable(finalDir);
-  const preparedAssets = await validateAssets(assets);
+  const preparedAssets = await validateAssets(privateAssets, assetRoot);
   await mkdir(parent, { recursive: true });
 
   const stagingDir = join(parent, "." + basename + ".staging-" + randomUUID());
@@ -132,13 +100,17 @@ export async function publishEmailAtomically({ outputDir, html, assets = [] }) {
     for (const asset of preparedAssets) {
       const target = join(stagingDir, ...asset.path.split("/"));
       await mkdir(dirname(target), { recursive: true });
-      await copyFile(asset.sourcePath, target);
+      await writeFile(target, asset.bytes);
+      if (!(await readFile(target)).equals(asset.bytes)) {
+        fail("EMAIL_OUTPUT_VALIDATION_FAILED", "/" + asset.path, "Staged asset bytes differ.");
+      }
     }
 
     if (await readFile(join(stagingDir, "email.html"), "utf8") !== html) {
       fail("EMAIL_OUTPUT_VALIDATION_FAILED", "/email.html", "Staged HTML did not validate.");
     }
     if (finalWasEmpty) await rmdir(finalDir);
+    else if (await exists(finalDir)) fail("EMAIL_OUTPUT_EXISTS", "/outputDir", "Destination appeared during staging.");
     await rename(stagingDir, finalDir);
   } catch (error) {
     if (dirname(stagingDir) === parent && stagingDir.startsWith(expectedPrefix)) {
