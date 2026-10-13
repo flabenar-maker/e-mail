@@ -302,14 +302,19 @@ test("center intent does not escape left/horizontal/drawing boundaries or standa
 test("already-centered native outer table has one align attribute and leaves unrelated inner tables alone", async () => {
   const { model, deps } = await task9CenterFixture({ profile: "altcraft-mobile-base-v1" });
   const record = deps.componentIndex.bySystemId.get("task9-button");
-  for (const viewport of ["mobile", "desktop"]) { const root = record.contracts[viewport].root; root.semantic_role = "social-icons"; root.facts = root.facts.filter(({ id }) => id !== "email-render-size"); delete root.action; root.content_slots = []; }
+  for (const viewport of ["mobile", "desktop"]) { const root = record.contracts[viewport].root; root.semantic_role = "social-icons"; root.facts = root.facts.filter(({ id }) => id !== "email-render-size"); root.facts.push(task9Fact("email-render-padding", { type: "measure", value: 4, unit: "px" })); delete root.action; root.content_slots = []; }
   const instance = model.root.nested_components[0].instance; instance.content_values = instance.content_values.filter(value => value.slot_id !== "href");
   const { validateEmailModelSemantics } = await import("../../scripts/lib/email-model.mjs");
   assert.deepEqual(validateEmailModelSemantics(model, deps), []);
   const result = renderEmailDocument(model, deps); assert.deepEqual(result.diagnostics, []);
   for (const marker of ["FIRST mobile CTA", "FIRST desktop CTA"]) {
-    const stack = task9TableStackAt(result.html, result.html.indexOf(marker)); const tag = stack.at(-1);
-    assert.equal((tag.match(/\salign="center"/gu) ?? []).length, 1);
-    for (const inner of [...result.html.matchAll(/<table\b[^>]*width="100%"[^>]*>/gu)].map(match => match[0])) assert.doesNotMatch(inner, /\salign="center"/u);
+    const stack = task9TableStackAt(result.html, result.html.indexOf(marker));
+    assert.ok(stack.length >= 2, marker + " needs a native outer table and a real inner padding table");
+    const outer = stack.at(-2); const inner = stack.at(-1);
+    assert.ok(outer); assert.ok(inner); assert.notEqual(outer, inner);
+    assert.equal((outer.match(/\salign="center"/gu) ?? []).length, 1);
+    assert.equal((outer.match(/\salign=/gu) ?? []).length, 1);
+    assert.match(inner, /\swidth="100%"/u);
+    assert.doesNotMatch(inner, /\salign=/u);
   }
 });
