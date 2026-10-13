@@ -58,12 +58,18 @@ async function ownHeavyLock(lock){
  const identity=await lstat(lock),token=randomUUID(),marker=join(lock,'owner-'+token+'.json'),body=JSON.stringify({token}),controller=new AbortController();
  await writeFile(marker,body,{flag:'wx'});
  const lose=()=>{if(!controller.signal.aborted)controller.abort(fail('VERIFICATION_HEAVY_LOCK_LOST','The batch lost ownership of its persistent heavy lock.'));};
+ const sameDirectory=current=>current.isDirectory()&&!current.isSymbolicLink()&&current.ino===identity.ino&&current.birthtimeMs===identity.birthtimeMs;
  const owns=async()=>{
-  try{const current=await lstat(lock),owner=await lstat(marker);if(!current.isDirectory()||current.isSymbolicLink()||current.ino!==identity.ino||current.birthtimeMs!==identity.birthtimeMs||!owner.isFile()||owner.isSymbolicLink()||owner.size!==Buffer.byteLength(body)||await readFile(marker,'utf8')!==body)throw new Error();return true;}catch{lose();return false;}
+  try{const current=await lstat(lock),owner=await lstat(marker);if(!sameDirectory(current)||!owner.isFile()||owner.isSymbolicLink()||owner.size!==Buffer.byteLength(body)||await readFile(marker,'utf8')!==body)throw new Error();return true;}catch{lose();return false;}
  };
  let pending=null;const poll=()=>{if(!pending)pending=owns().finally(()=>{pending=null;});};
  const timer=setInterval(poll,100);timer.unref?.();
- return {signal:controller.signal,check:async()=>{if(!await owns())throw controller.signal.reason;controller.signal.throwIfAborted();},dispose:async()=>{clearInterval(timer);if(pending)await pending;},release:async()=>{if(!await owns())return;await unlink(marker).catch(error=>{if(error.code!=='ENOENT')throw error;});try{await rmdir(lock);}catch(error){if(!['ENOENT','ENOTEMPTY','EEXIST'].includes(error.code))throw error;}}};
+ return {signal:controller.signal,check:async()=>{if(!await owns())throw controller.signal.reason;controller.signal.throwIfAborted();},dispose:async()=>{clearInterval(timer);if(pending)await pending;controller.signal.throwIfAborted();},release:async()=>{
+  if(!await owns())throw controller.signal.reason;controller.signal.throwIfAborted();
+  try{await unlink(marker);}catch(error){if(error.code==='ENOENT'){lose();throw controller.signal.reason;}throw error;}
+  try{if(!sameDirectory(await lstat(lock)))throw new Error('directory identity changed');}catch{lose();throw controller.signal.reason;}
+  try{await rmdir(lock);}catch(error){if(['ENOENT','ENOTEMPTY','EEXIST'].includes(error.code)){lose();throw controller.signal.reason;}throw error;}
+ }};
 }
 // Git status applies clean filters and cannot establish raw source identity.
 const SOURCE_LIST_LIMIT=16*1024*1024,DEPENDENCY_JSON_LIMIT=2*1024*1024,ENTRY_LIMIT=100000;
@@ -194,6 +200,7 @@ export async function runVerification(options){
   lock=join(actual,'heavy-batch.lock');try{await mkdir(lock);}catch(error){if(error.code==='EEXIST')throw fail('VERIFICATION_HEAVY_BATCH_ACTIVE','A heavy batch owns the persistent lock; no automatic stale-lock stealing.');throw error;}
   lockGuard=await ownHeavyLock(lock);
  }
+ const receiptPath=join(output,'receipt.json'),temporary=join(output,'receipt.pending');let successfulReceiptWritten=false;
  try{
   // Never overwrite an earlier run's evidence. Runtime/dependency failures are execution failures.
   await mkdir(output,{recursive:false});
@@ -237,15 +244,20 @@ export async function runVerification(options){
   if(!stopStatus)try{budget.check();}catch(error){stopStatus=terminalStatus(error);for(const result of results){result.status=stopStatus;result.exit_code=-1;}}
   if(!stopStatus&&await budget.run(()=>runner.readSourceSha(repoRoot,{signal:budget.signal}))!==sourceSha)throw fail('VERIFICATION_SOURCE_MISMATCH','Source changed during verification.');
   const receipt={schema_version:'1.0.0',request_id:requestId,source_sha:sourceSha,workflow_sha:target==='github-hosted'?cloudIdentity.workflow_sha:null,...(target==='github-hosted'?{event_sha:cloudIdentity.event_sha,run_id:cloudIdentity.run_id,run_attempt:cloudIdentity.run_attempt}:{}),target,workload_results:results,conclusion:stopStatus??'success',evidence_refs:evidence,...(workloads.some(w=>w.required_inputs.length)?{artifact_digest:artifactHash}:{})};
-  const receiptPath=join(output,'receipt.json'),temporary=join(output,'receipt.pending');
   if(receipt.conclusion==='success'){
-   try{if(lockGuard)await lockGuard.check();await budget.run(()=>writeFile(temporary,JSON.stringify(receipt,null,2)+'\n',{flag:'wx',signal:budget.signal}));budget.check();await rename(temporary,receiptPath);budget.check();if(lockGuard)await lockGuard.check();}
+   try{if(lockGuard)await lockGuard.check();await budget.run(()=>writeFile(temporary,JSON.stringify(receipt,null,2)+'\n',{flag:'wx',signal:budget.signal}));budget.check();await rename(temporary,receiptPath);successfulReceiptWritten=true;budget.check();if(lockGuard)await lockGuard.check();}
    catch(error){await rm(temporary,{force:true});await rm(receiptPath,{force:true});throw error;}
   }else await writeFile(receiptPath,JSON.stringify(receipt,null,2)+'\n',{flag:'wx',signal:AbortSignal.timeout(10000)});
   return receipt;
  }finally{
-  if(privateRoot)await rm(privateRoot,{recursive:true,force:true});
-  if(lockGuard){await lockGuard.dispose();if(!keepLock)await lockGuard.release();}
+  try{
+   if(privateRoot)await rm(privateRoot,{recursive:true,force:true});
+   if(lockGuard){await lockGuard.dispose();if(!keepLock)await lockGuard.release();}
+  }catch(error){
+   // This run exclusively created output; retain workload evidence, retract only its success transaction.
+   if(successfulReceiptWritten){await rm(temporary,{force:true});await rm(receiptPath,{force:true});throw error;}
+   if(error.code!=='VERIFICATION_HEAVY_LOCK_LOST')throw error;
+  }
  }
  }finally{budget.dispose();}
 }
