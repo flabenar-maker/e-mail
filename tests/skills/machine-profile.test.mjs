@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {mkdtemp,writeFile,readFile,mkdir,rm,cp} from 'node:fs/promises';
+import {mkdtemp,writeFile,readFile,mkdir,rm,cp,symlink,readdir} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join,dirname} from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
@@ -48,4 +48,70 @@ test('access-denied state is unwritable for init with zero collector calls; inva
   }
  }finally{fs.promises.lstat=realLstat;syncBuiltinESMExports();}
  assert.equal(calls,0);
+});
+
+
+// These tests catch preference writes that recollect, rewrite trust/baselines,
+// create a missing pair, bypass the initialization lock, or report a failed save.
+function selectionApi(){assert.equal(typeof api.setExecutionTestConcurrency,'function','explicit preference setter must exist');return api.setExecutionTestConcurrency;}
+const withoutChoice=profile=>{const copy=structuredClone(profile);delete copy.test_concurrency;return copy;};
+const setChoice=(f,testConcurrency,extra={})=>selectionApi()({...f,testConcurrency,explicitSelection:true,...extra});
+test('legacy missing preference resolves2 without writing the saved profile',async t=>{
+ const f=await fixture(t);await api.initExecutionProfile({...f,collectOnce:async()=>observations()});const path=api.executionProfilePath(f),before=await readFile(path,'utf8');
+ assert.equal(Object.hasOwn(JSON.parse(before),'test_concurrency'),false);const request=await requestFor(f);
+ for(let i=0;i<3;i++){const profile=await api.readExecutionProfile(f);const row=resolveExecutionContext({...f,request,profile,capabilities}).verification[0];assert.equal(row.target,'local');assert.equal(row.limits.concurrency,2);}
+ assert.equal(await readFile(path,'utf8'),before);
+});
+test('persist4 then2 preserves baseline signatures and never invokes an injected collector',async t=>{
+ const f=await fixture(t);let calls=0;const collectOnce=async()=>{calls++;return observations();};const initial=await api.initExecutionProfile({...f,collectOnce});const path=api.executionProfilePath(f),request=await requestFor(f);
+ const bindingRoot=join(f.root,'binding'),binding=await api.ensureActiveProfileBinding({bindingRoot,stateRoot:f.stateRoot}),bindingBytes=await readFile(join(bindingRoot,'active-profile.json'),'utf8');
+ for(const choice of [4,2]){const saved=await setChoice(f,choice,{collectOnce});assert.equal(saved.test_concurrency,choice);assert.deepEqual(withoutChoice(saved),initial);assert.deepEqual(JSON.parse(await readFile(path,'utf8')),saved);const row=resolveExecutionContext({...f,request,profile:await api.readExecutionProfile(f),capabilities}).verification[0];assert.equal(row.target,'local');assert.equal(row.limits.concurrency,choice);}
+ assert.equal(calls,1);assert.equal(await readFile(join(bindingRoot,'active-profile.json'),'utf8'),bindingBytes);assert.equal((await api.readActiveProfileBinding({bindingRoot})).pair_key,binding.pair_key);
+});
+test('setter requires explicit integer2or4 and an existing valid trusted pair',async t=>{
+ const f=await fixture(t);await api.initExecutionProfile({...f,collectOnce:async()=>observations()});const set=selectionApi(),path=api.executionProfilePath(f),before=await readFile(path,'utf8');
+ await assert.rejects(set({...f,testConcurrency:4}),{code:'PROFILE_SELECTION_REQUIRED'});
+ for(const testConcurrency of [0,1,3,6,8,null,'4',NaN,Infinity])await assert.rejects(set({...f,testConcurrency,explicitSelection:true}),{code:'PROFILE_CONCURRENCY_INVALID'});
+ const foreign={...f,pairKey:'other-bound-pair'};await assert.rejects(setChoice(foreign,4),{code:'PROFILE_STATE_ABSENT'});assert.equal(fs.existsSync(dirname(api.executionProfilePath(foreign))),false);
+ const unavailable={...f,stateRoot:join(f.root,'unavailable-state')};await assert.rejects(setChoice(unavailable,4),{code:'PROFILE_STATE_ABSENT'});assert.equal(fs.existsSync(unavailable.stateRoot),false);
+ assert.equal(await readFile(path,'utf8'),before);
+ for(const text of ['{',JSON.stringify({...JSON.parse(before),pair_key:'other-bound-pair'}),JSON.stringify({...JSON.parse(before),local_limits:{concurrency:4,timeout_minutes:30,max_heavy_batches:1}})]){await writeFile(path,text);await assert.rejects(setChoice(f,4),{code:'PROFILE_STATE_INVALID'});assert.equal(await readFile(path,'utf8'),text);}
+});
+test('selection preserves unavailable observations missing runtimes and threshold eligibility',async t=>{
+ const f=await fixture(t);const cases=[{name:'unavailable',value:null,docs:'github-hosted',bootstrap:'github-hosted'},{name:'missing-node',value:{...observations(),runtimes:{node:{present:false,major:null},powershell:{present:true}}},docs:'github-hosted',bootstrap:'github-hosted'},{name:'missing-powershell',value:{...observations(),runtimes:{node:{present:true,major:24},powershell:{present:false}}},docs:'local',bootstrap:'github-hosted'},{name:'below-cpu',value:{...observations(),logical_cpus:7},docs:'github-hosted',bootstrap:'github-hosted'},{name:'below-memory',value:{...observations(),free_ram_gib:7.99},docs:'github-hosted',bootstrap:'github-hosted'},{name:'at-threshold',value:observations(),docs:'local',bootstrap:'local'}];
+ for(const c of cases){const current={...f,pairKey:c.name};const initial=await api.initExecutionProfile({...current,collectOnce:async()=>c.value});await setChoice(current,4);const profile=await api.readExecutionProfile(current);assert.deepEqual(withoutChoice(profile.profile),initial);const request=await requestFor(current,['docs-scoped','windows-bootstrap']);const rows=resolveExecutionContext({...current,request,profile,capabilities}).verification;assert.equal(rows[0].target,c.docs);assert.equal(rows[0].limits.concurrency,c.docs==='local'?4:2);assert.equal(rows[1].target,c.bootstrap);assert.equal(rows[1].limits.concurrency,2);}
+});
+test('unknown workload signature remains cloud2 after either preference toggle',async t=>{
+ const f=await fixture(t);const original=await api.initExecutionProfile({...f,collectOnce:async()=>observations()});const path=api.executionProfilePath(f);original.workload_decisions.find(x=>x.id==='docs-scoped').signature='0'.repeat(64);await writeFile(path,JSON.stringify(original));const request=await requestFor(f);
+ for(const choice of [4,2]){const saved=await setChoice(f,choice);assert.deepEqual(withoutChoice(saved),original);const row=resolveExecutionContext({...f,request,profile:await api.readExecutionProfile(f),capabilities}).verification[0];assert.equal(row.target,'github-hosted');assert.equal(row.limits.concurrency,2);}
+});
+test('init choice persists once repeat init rejects a differing choice and refresh retains4 or legacy absence',async t=>{
+ const f=await fixture(t);let calls=0;const collectOnce=async()=>{calls++;return observations();};const first=await api.initExecutionProfile({...f,testConcurrency:4,collectOnce});assert.equal(first.test_concurrency,4);const path=api.executionProfilePath(f),before=await readFile(path,'utf8');
+ assert.deepEqual(await api.initExecutionProfile({...f,collectOnce}),first);assert.deepEqual(await api.initExecutionProfile({...f,testConcurrency:4,collectOnce}),first);assert.equal(await readFile(path,'utf8'),before);
+ await assert.rejects(api.initExecutionProfile({...f,testConcurrency:2,collectOnce}),{code:'PROFILE_SELECTION_CONFLICT'});assert.equal(await readFile(path,'utf8'),before);assert.equal(calls,1);
+ const refreshed=await api.updateExecutionProfile({...f,explicitRefreshRequest:true,collectOnce:async()=>{calls++;return {...observations(),free_ram_gib:9};}});assert.equal(refreshed.test_concurrency,4);assert.equal(refreshed.observations.free_ram_gib,9);assert.equal(calls,2);assert.deepEqual(refreshed.local_limits,{concurrency:2,timeout_minutes:30,max_heavy_batches:1});
+ const legacy={...f,pairKey:'legacy-refresh'};await api.initExecutionProfile({...legacy,collectOnce:async()=>observations()});const legacyUpdated=await api.updateExecutionProfile({...legacy,explicitRefreshRequest:true,collectOnce:async()=>observations()});assert.equal(Object.hasOwn(legacyUpdated,'test_concurrency'),false);
+ for(const testConcurrency of [3,'4',null])await assert.rejects(api.initExecutionProfile({...f,pairKey:'bad-choice',testConcurrency,collectOnce}),{code:'PROFILE_CONCURRENCY_INVALID'});assert.equal(calls,2);
+});
+test('concurrent setter is bounded and readers see complete old or new profiles during atomic replace',async t=>{
+ const f=await fixture(t);const old=await api.initExecutionProfile({...f,collectOnce:async()=>observations()});selectionApi();const path=api.executionProfilePath(f),realRename=fs.promises.rename;let release,started;const ready=new Promise(r=>{started=r;}),barrier=new Promise(r=>{release=r;});
+ fs.promises.rename=async(from,to)=>{if(to===path){started();await barrier;}return realRename(from,to);};syncBuiltinESMExports();let first;
+ try{first=setChoice(f,4);await ready;await assert.rejects(setChoice(f,2),{code:'PROFILE_INITIALIZATION_IN_PROGRESS'});for(let i=0;i<10;i++)assert.deepEqual((await api.readExecutionProfile(f)).profile,old);release();const saved=await first;assert.equal(saved.test_concurrency,4);assert.deepEqual((await api.readExecutionProfile(f)).profile,saved);}
+ finally{release?.();if(first)await first.catch(()=>{});fs.promises.rename=realRename;syncBuiltinESMExports();}
+ assert.equal(fs.existsSync(join(dirname(path),'init.lock')),false);
+});
+test('denied state or failed atomic replace reports unwritable and preserves profile without temp files',async t=>{
+ const f=await fixture(t);await api.initExecutionProfile({...f,collectOnce:async()=>observations()});selectionApi();const path=api.executionProfilePath(f),before=await readFile(path,'utf8'),realRename=fs.promises.rename,realLstat=fs.promises.lstat;
+ try{fs.promises.rename=async(from,to)=>{if(to===path)throw Object.assign(Error('synthetic locked profile'),{code:'EPERM'});return realRename(from,to);};syncBuiltinESMExports();await assert.rejects(setChoice(f,4),{code:'PROFILE_STATE_UNWRITABLE'});}
+ finally{fs.promises.rename=realRename;syncBuiltinESMExports();}
+ assert.equal(await readFile(path,'utf8'),before);assert.equal((await readdir(dirname(path))).some(name=>name.endsWith('.tmp')||name==='init.lock'),false);
+ try{fs.promises.lstat=async target=>{if(target===path)throw Object.assign(Error('synthetic denied state'),{code:'EACCES'});return realLstat(target);};syncBuiltinESMExports();await assert.rejects(setChoice(f,4),{code:'PROFILE_STATE_UNWRITABLE'});}
+ finally{fs.promises.lstat=realLstat;syncBuiltinESMExports();}
+ assert.equal(await readFile(path,'utf8'),before);
+});
+test('setter rejects symbolic or junction state and preserves an interrupted initialization marker',async t=>{
+ const f=await fixture(t);await api.initExecutionProfile({...f,collectOnce:async()=>observations()});selectionApi();const path=api.executionProfilePath(f),before=await readFile(path,'utf8'),linked=join(f.root,'linked-state');await symlink(f.stateRoot,linked,process.platform==='win32'?'junction':'dir');
+ await assert.rejects(setChoice({...f,stateRoot:linked},4),{code:'PROFILE_PATH_UNSAFE'});assert.equal(await readFile(path,'utf8'),before);
+ const marker=join(dirname(path),'initialization-started.json');await writeFile(marker,'interrupted marker');await assert.rejects(setChoice(f,4),{code:'PROFILE_INITIALIZATION_IN_PROGRESS'});assert.equal(await readFile(marker,'utf8'),'interrupted marker');assert.equal(await readFile(path,'utf8'),before);
+ await rm(marker);await mkdir(join(dirname(path),'init.lock'));await assert.rejects(setChoice(f,4),{code:'PROFILE_INITIALIZATION_IN_PROGRESS'});assert.equal(await readFile(path,'utf8'),before);
 });
