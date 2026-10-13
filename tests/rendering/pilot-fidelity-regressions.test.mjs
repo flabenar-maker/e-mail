@@ -265,22 +265,22 @@ for (const profile of ["default", "altcraft-mobile-base-v1"]) {
     for (const mode of ["nested", "slot", "bridge"]) {
       const { result } = await task9CenterFixture({ mode, profile });
       const tags = task9HrefTables(result.html, "https://example.test/task9-cta-1");
-      assert.equal(tags.length, 2, mode + " one CTA in each viewport");
+      assert.equal(tags.length, 1, mode + " one shared outer table per logical CTA with both viewport children");
       for (const tag of tags) { assert.match(tag, /\swidth="230"/u); assert.equal((tag.match(/\salign="center"/gu) ?? []).length, 1, mode + " exact OUTER drawing table"); assert.match(tag, /(?:^|[";])margin:0 auto(?:;|")/u); }
       assert.match(result.html, /FIRST mobile CTA/u); assert.match(result.html, /FIRST desktop CTA/u);
       if (profile === "altcraft-mobile-base-v1") {
-        assert.equal((result.html.match(/<!-- cupis:block task9-button \/ /gu) ?? []).length, 2);
-        assert.equal((result.html.match(/<!-- cupis:end task9-button \/ /gu) ?? []).length, 2);
+        assert.equal((result.html.match(/<!-- cupis:block task9-button \/ /gu) ?? []).length, 1);
+        assert.equal((result.html.match(/<!-- cupis:end task9-button \/ /gu) ?? []).length, 1);
         assert.match(result.html, /<!--\[if !mso\]><!-->/u); assert.match(result.html, /<!--\[if mso\]>/u);
       }
     }
   });
   test("repeated scoped CTA order and hidden Mobile branch preserve structural markers: " + profile, async () => {
     const repeated = await task9CenterFixture({ repeated: true, profile });
-    for (const ordinal of [1, 2]) { const tags = task9HrefTables(repeated.result.html, `https://example.test/task9-cta-${ordinal}`); assert.equal(tags.length, 2); for (const tag of tags) assert.match(tag, /\salign="center"/u); }
+    for (const ordinal of [1, 2]) { const tags = task9HrefTables(repeated.result.html, `https://example.test/task9-cta-${ordinal}`); assert.equal(tags.length, 1); for (const tag of tags) assert.match(tag, /\salign="center"/u); }
     assert.ok(repeated.result.html.indexOf("FIRST mobile CTA") < repeated.result.html.indexOf("SECOND mobile CTA"));
     assert.ok(repeated.result.html.indexOf("FIRST desktop CTA") < repeated.result.html.indexOf("SECOND desktop CTA"));
-    if (profile === "altcraft-mobile-base-v1") assert.equal((repeated.result.html.match(/<!-- cupis:block task9-button \/ /gu) ?? []).length, 4);
+    if (profile === "altcraft-mobile-base-v1") assert.equal((repeated.result.html.match(/<!-- cupis:block task9-button \/ /gu) ?? []).length, 2);
     const conditional = await task9CenterFixture({ hiddenMobile: true, profile });
     assert.doesNotMatch(conditional.result.html, /FIRST mobile CTA/u); assert.match(conditional.result.html, /FIRST desktop CTA/u);
     assert.equal(task9HrefTables(conditional.result.html, "https://example.test/task9-cta-1").length, 1);
@@ -302,7 +302,7 @@ test("center intent does not escape left/horizontal/drawing boundaries or standa
 test("already-centered native outer table has one align attribute and leaves unrelated inner tables alone", async () => {
   const { model, deps } = await task9CenterFixture({ profile: "altcraft-mobile-base-v1" });
   const record = deps.componentIndex.bySystemId.get("task9-button");
-  for (const viewport of ["mobile", "desktop"]) { const root = record.contracts[viewport].root; root.semantic_role = "social-icons"; delete root.action; root.content_slots = []; }
+  for (const viewport of ["mobile", "desktop"]) { const root = record.contracts[viewport].root; root.semantic_role = "social-icons"; root.facts = root.facts.filter(({ id }) => id !== "email-render-size"); delete root.action; root.content_slots = []; }
   const instance = model.root.nested_components[0].instance; instance.content_values = instance.content_values.filter(value => value.slot_id !== "href");
   const { validateEmailModelSemantics } = await import("../../scripts/lib/email-model.mjs");
   assert.deepEqual(validateEmailModelSemantics(model, deps), []);
