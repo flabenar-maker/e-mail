@@ -42,7 +42,7 @@
 
 ## Delivery intake and output policy
 
-For an Altcraft release, inspect both design instances into a logical model before exporting images. Run `node scripts/prepare-email-delivery.mjs --model <draft.json> --output <new-intake-folder>` and give the user its Russian `form.html`. The local form saves `delivery.json`; it does not send data. Inherit sender and reply settings unless the user explicitly supplies them.
+For an Altcraft release, inspect both design instances into a logical model before exporting images. Run `node scripts/prepare-email-delivery.mjs --model <draft.json> --output <new-intake-folder>` and give the user its Russian `form.html`. The local form saves `delivery.json`; it does not send data. The mailing subject is supplied separately from design body text, stored in `DeliveryDocument.subject`, and emitted unchanged in `email/subject.txt`; a blank subject blocks the final Altcraft release while design-only HTML and preview remain available. Inherit sender and reply settings unless the user explicitly supplies them.
 
 Delivery values belong to the separate strict delivery schema. `data/delivery/profiles.yaml` owns fixed addresses, exact element selectors, and emission/package policy. Component contracts, the design model schema, and Figma remain unchanged. Recompute the visible action inventory and reject stale source SHA, profile version, or inventory digest. Required Footer/support/NPS addresses must be supplied before image export and final release.
 
