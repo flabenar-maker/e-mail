@@ -198,7 +198,7 @@ function assertPending(section) {
 
 function assertScopedEvidence(section) {
   for (const term of [/finding|расхождени/iu, /literal|дословн|буквальн/iu, /direct|прям/iu, /email|письм/iu, /image|изображени/iu, /viewport/iu, /appearance|внешн[а-яё\s]*вид/iu, /digest|хэш/iu]) assert.match(section, term);
-  assert.match(section, /(?:reuse|reus|переиспольз|повторно)[\s\S]{0,250}(?:only|только)[\s\S]{0,250}(?:same|unchanged|совпад|неизмен)/iu);
+  assert.match(section, /(?:reuse|reus|переиспольз|повторно)[^\n.]{0,250}(?:only|только)[^\n.]{0,250}(?:same|unchanged|совпад|неизмен)/iu);
   assert.match(section, /(?:changed|different|new|измен|друг|нов)[\s\S]{0,220}(?:choice|decision|answer|выбор|решени|ответ)/iu);
   assert.match(section, /(?:not|never|не)[\s\S]{0,140}(?:fixed|исправлен)|(?:retained|сохран)[\s\S]{0,160}(?:finding|расхождени)/iu);
 }
