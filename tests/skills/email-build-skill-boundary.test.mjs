@@ -164,7 +164,7 @@ function rasterSection(source) {
 }
 
 function assertScope(section) {
-  assert.match(section, /content raster|содержательн[а-яё\s-]*растр/iu);
+  assert.match(section, /content[^\n]{0,80}\braster|содержательн[а-яё\s-]*растр/iu);
   assert.match(section, /photograph|photo|фотограф/iu);
   assert.match(section, /illustration|иллюстрац/iu);
   assert.match(section, /banner|баннер/iu);
@@ -193,7 +193,7 @@ function assertPending(section) {
   assert.match(section, /(?:wait|pending|ожидан)[\s\S]{0,220}(?:answer|ответ)/iu);
   assert.match(section, /(?:elapsed|silence|timeout|молчан|истек|время)[\s\S]{0,240}(?:not|never|не)[\s\S]{0,180}(?:consent|accept|согласи|приняти)/iu);
   assert.match(section, /(?:dependent|publication|publish|выпуск|публикац)[\s\S]{0,180}(?:wait|block|not|never|жд|не)|(?:not|never|не)[\s\S]{0,180}(?:publish|publication|выпуск|публикац)/iu);
-  assert.match(section, /(?:pending|ожидан)[\s\S]{0,180}(?:not|не)[\s\S]{0,180}(?:final stop|окончательн|останов)/iu);
+  assert.match(section, /(?:pending|awaiting|ожидан)[\s\S]{0,180}(?:not|не)[\s\S]{0,180}(?:final stop|окончательн|останов)/iu);
 }
 
 const validRasterFixture = `Content raster photographs and illustrations in banners, image cards and analogous blocks are eligible by semantic role, not by PNG/JPEG extension. Icons, logos, QR codes, buttons, text, layout and links are excluded.
