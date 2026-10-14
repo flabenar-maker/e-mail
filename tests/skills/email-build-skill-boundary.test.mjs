@@ -269,6 +269,8 @@ test("raster-image repair failure returns the user choice", () => {
 });
 
 
+const userGuide = await readFile(join(repoRoot, "docs/user-guide.md"), "utf8");
+
 test("user guide describes the three raster-image choices", () => {
   for (const label of ["Продолжаем", "Остановись", "Исправь сам"]) assert.ok(userGuide.includes(label), `missing literal user choice: ${label}`);
   assert.match(userGuide, /(?:покаж|показ)[\s\S]{0,250}(?:макет)[\s\S]{0,160}(?:письм|собран)[\s\S]{0,250}(?:затем|после|до вопрос)/iu);
