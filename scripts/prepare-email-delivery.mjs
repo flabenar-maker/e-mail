@@ -11,12 +11,12 @@ import { createDeliveryDraft, renderDeliveryForm } from './lib/email-delivery-fo
 import { formatRendererDiagnostics } from './lib/diagnostics.mjs';
 
 const repoRoot = dirname(dirname(fileURLToPath(import.meta.url)));
-const usage = 'Usage: node scripts/prepare-email-delivery.mjs --model <logical-model.json> --output <new-intake-folder> [--profile <id>] [--delivery <known-delivery.json>]';
+const usage = 'Usage: node scripts/prepare-email-delivery.mjs --model <logical-model.json> --output <new-intake-folder> [--profile <id>] [--delivery <known-delivery.json>] [--subject <mailing-subject>]';
 async function main() {
   const args = {};
   const argv = process.argv.slice(2);
   for (let i = 0; i < argv.length; i += 2) {
-    if (!['--model','--output','--profile','--delivery'].includes(argv[i]) || !argv[i + 1] || Object.hasOwn(args, argv[i])) throw new Error(usage);
+    if (!['--model','--output','--profile','--delivery','--subject'].includes(argv[i]) || !argv[i + 1] || Object.hasOwn(args, argv[i])) throw new Error(usage);
     args[argv[i]] = argv[i + 1];
   }
   if (!args['--model'] || !args['--output']) throw new Error(usage);
@@ -32,7 +32,8 @@ async function main() {
   if (inventory.diagnostics.length) throw new AggregateError(inventory.diagnostics, 'Email research is blocked.');
   const deliveryMetadata = args['--delivery'] ? await loadDeliveryDocument(resolve(args['--delivery'])) : undefined;
   if (deliveryMetadata && deliveryMetadata.email_id !== model.id) throw new Error('EMAIL_DELIVERY_EMAIL_MISMATCH');
-  const deliveryDraft = createDeliveryDraft({ emailId:model.id, inventory, profile, sourceSha, deliveryMetadata });
+  const suppliedMetadata = args['--subject'] === undefined ? deliveryMetadata : { ...deliveryMetadata, subject: args['--subject'] };
+  const deliveryDraft = createDeliveryDraft({ emailId:model.id, inventory, profile, sourceSha, deliveryMetadata: suppliedMetadata });
   const output = resolve(args['--output']);
   const staging = output + '.intake-' + randomUUID();
   await mkdir(dirname(output), {recursive:true});

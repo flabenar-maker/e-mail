@@ -29,6 +29,9 @@ import {
 import { loadAssetsFoundation } from "../../scripts/lib/assets-foundation.mjs";
 import { loadRendererRegistry } from "../../scripts/lib/renderer-registry.mjs";
 import { loadWorkflowRegistry } from "../../scripts/lib/workflow-registry.mjs";
+import { collectEmailActions } from "../../scripts/lib/email-action-inventory.mjs";
+import { createDeliveryDraft } from "../../scripts/lib/email-delivery-form.mjs";
+import { loadEmailDeliveryProfiles, selectDeliveryProfile } from "../../scripts/lib/email-delivery-profile.mjs";
 
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const VIEWPORTS = ["mobile", "desktop"];
@@ -39,13 +42,17 @@ test("delivery handoff bypasses user answers when every visible link is already 
   t.after(() => rm(root, { recursive: true, force: true }));
   const source = await fixture(root, ["email-footer-legal"]);
   const evidence = sourceEvidenceFor(source.model, source.assetEvidence);
+  const componentIndex = indexComponentRegistries(source.registries);
+  const profile = selectDeliveryProfile(await loadEmailDeliveryProfiles({ repoRoot, componentIndex }), "altcraft-mobile-base-v1");
+  const inventory = collectEmailActions({ model: source.model, componentIndex, profile });
+  const deliveryDocument = createDeliveryDraft({ emailId: source.model.id, sourceSha: "a".repeat(40), profile, inventory, deliveryMetadata: { subject: "Отдельная тема" } });
   let saved;
-  const result = await executeEmailBuildHandoff({ ...source, repoRoot, assetRoot: root, outputDir: join(root, "release"), sourceSha: "a".repeat(40),
+  const result = await executeEmailBuildHandoff({ ...source, repoRoot, assetRoot: root, outputDir: join(root, "release"), sourceSha: "a".repeat(40), deliveryDocument,
     resolution: { workflow: { mode: "new-build", steps: [{ id: "validate-delivery-answers" }] } }, sourceEvidence: evidence, assetEvidence: evidence.assetEvidence,
     rendererRunner: async ({ deliveryPath }) => { saved = JSON.parse(await readFile(deliveryPath, "utf8")); }
   });
   assert.deepEqual(result.blockers, []); assert.equal(result.executed, true);
-  assert.equal(saved.subject, ""); assert.equal(saved.preheader, "");
+  assert.equal(saved.subject, "Отдельная тема"); assert.equal(saved.preheader, "");
   assert.deepEqual(saved.sender, { mode: "inherit" }); assert.deepEqual(saved.plain_text, { mode: "auto" });
 });
 
