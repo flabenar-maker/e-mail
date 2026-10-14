@@ -154,3 +154,192 @@ const skill = await readFile(join(repoRoot, ".agents/skills/building-cupis-email
 test("email-build skill obeys the resolver route boundary", () => assertRouteBoundary(skill));
 test("email-build skill does not duplicate canonical material", () => assertNoDuplicatedMaterial(skill));
 test("email-build skill has no contradictory prohibited instructions", () => assertOperatingBoundaries(skill));
+
+// These instruction-boundary guards catch omissions and conflicting permissions.
+// Fresh consuming-agent pressure tests remain the independent behavioral evidence.
+function rasterSection(source) {
+  const match = /^## Content raster visual decisions\s*\n([\s\S]*?)(?=^## |$(?![\s\S]))/mu.exec(source);
+  assert.ok(match, "the scoped content-raster decision section is missing");
+  return match[1];
+}
+
+function assertScope(section) {
+  assert.match(section, /content[^\n]{0,80}\braster|содержательн[а-яё\s-]*растр/iu);
+  assert.match(section, /photograph|photo|фотограф/iu);
+  assert.match(section, /illustration|иллюстрац/iu);
+  assert.match(section, /banner|баннер/iu);
+  assert.match(section, /image cards?|карточк[а-яё\s]*изображен/iu);
+  assert.match(section, /analogous|аналогичн/iu);
+  for (const role of [/icons?|иконк/iu, /logos?|логотип/iu, /QR/iu, /buttons?|кнопк/iu, /text|текст/iu, /layout|компоновк|геометр/iu, /links?|ссылк/iu]) assert.match(section, role);
+  assert.match(section, /role|роль|роли|назначен/iu);
+  assert.match(section, /not[^\n]*(?:extension|PNG|JPEG)|не[^\n]*(?:расширен|формат|PNG|JPEG)/iu);
+  for (const clause of section.split(/[.;\n]/u)) {
+    if (/\b(?:not|never|do not|don't)\b|\bне\b/iu.test(clause)) continue;
+    assert.doesNotMatch(clause, /(?:all|any|every)\s+(?:raster\s+)?(?:images?|image findings?|PNG|JPEG)|все[^\n]*(?:изображен|PNG|JPEG)/iu, "blanket/extension-only image eligibility widens the decision boundary");
+  }
+}
+
+function assertEvidenceOrder(section) {
+  const show = /(?:show|display|показ)[\s\S]{0,200}(?:actual|фактическ)[\s\S]{0,200}(?:reference|макет)[\s\S]{0,100}(?:rendered|письм|собран)/iu.exec(section);
+  assert.ok(show, "show the actual reference/rendered pair, not a promised or invented comparison");
+  const after = section.slice(show.index + show[0].length);
+  assert.match(after, /(?:before|then|затем|до\s+вопрос)[\s\S]{0,160}(?:ask|question|спрос|вопрос)/iu, "actual evidence must precede the question");
+  const labels = ["Продолжаем", "Остановись", "Исправь сам"];
+  let previous = -1;
+  for (const label of labels) { const index = after.indexOf(label); assert.ok(index > previous, `missing or reordered literal choice: ${label}`); previous = index; }
+}
+
+function assertPending(section) {
+  assert.match(section, /(?:wait|pending|ожидан)[\s\S]{0,220}(?:answer|ответ)/iu);
+  assert.match(section, /(?:elapsed|silence|timeout|молчан|истек|время)[\s\S]{0,240}(?:not|never|не)[\s\S]{0,180}(?:consent|accept|согласи|приняти)/iu);
+  assert.match(section, /(?:dependent|publication|publish|выпуск|публикац)[\s\S]{0,180}(?:wait|block|not|never|жд|не)|(?:not|never|не)[\s\S]{0,180}(?:publish|publication|выпуск|публикац)/iu);
+  assert.match(section, /(?:pending|awaiting|ожидан)[\s\S]{0,180}(?:not|не)[\s\S]{0,180}(?:final stop|окончательн|останов)/iu);
+}
+
+function assertScopedEvidence(section) {
+  for (const term of [/finding|расхождени/iu, /literal|дословн|буквальн/iu, /direct|прям/iu, /email|письм/iu, /image|изображени/iu, /viewport/iu, /appearance|внешн[а-яё\s]*вид/iu, /digest|хэш/iu]) assert.match(section, term);
+  assert.match(section, /(?:reuse|reus|переиспольз|повторно)[^\n.]{0,250}(?:only|только)[^\n.]{0,250}(?:same|unchanged|совпад|неизмен)/iu);
+  assert.match(section, /(?:changed|different|new|измен|друг|нов)[\s\S]{0,220}(?:choice|decision|answer|выбор|решени|ответ)/iu);
+  assert.match(section, /(?:not|never|не)[\s\S]{0,140}(?:fixed|исправлен)|(?:retained|сохран)[\s\S]{0,160}(?:finding|расхождени)/iu);
+}
+
+function assertImageOnly(section) {
+  assert.match(section, /image-only|только[\s\S]{0,60}изображени/iu);
+  assert.match(section, /existing|unchanged|действующ|существующ/iu);
+  assert.match(section, /contract|контракт/iu);
+  for (const operation of [/re-export|повторн[а-яё\s]*экспорт/iu, /crop|кадрирован/iu, /scal|масштаб/iu, /process|обработ/iu]) assert.match(section, operation);
+  for (const forbidden of [/HTML/iu, /CSS/iu, /VML/iu, /template|шаблон/iu, /renderer|рендерер/iu, /contract|контракт/iu, /schema|схем/iu, /original Figma|исходн[а-яё\s]*Figma/iu]) assert.match(section, forbidden);
+  assert.match(section, /(?:not|never|не)[^\n]*(?:change|edit|modify|измен|прав)/iu);
+}
+
+function assertRepairReturn(section) {
+  assert.match(section, /(?:infeasible|unavailable|fails?|failed|impossible|невозмож|недоступ|неудач)[\s\S]{0,300}(?:show|display|показ)/iu);
+  assert.match(section, /(?:return|again|вернут|снова)[\s\S]{0,200}(?:choice|choices|вариант|выбор)/iu);
+  assert.match(section, /(?:fresh|new|свеж|нов)[\s\S]{0,180}(?:bytes|digest|байт|хэш)[\s\S]{0,180}(?:render|рендер)[\s\S]{0,180}(?:compar|сравн)/iu);
+  assert.match(section, /(?:not|never|не)[\s\S]{0,180}(?:permanent stop|system change|maintenance|окончательн|систем|библиотек)/iu);
+}
+
+const validRasterFixture = `Content raster photographs and illustrations in banners, image cards and analogous blocks are eligible by semantic role, not by PNG/JPEG extension. Icons, logos, QR codes, buttons, text, layout and links are excluded.
+Show the actual reference/rendered pair before asking the question: Продолжаем / Остановись / Исправь сам.
+Wait for the explicit answer. Silence and elapsed timeout are not consent or acceptance. Dependent publication waits; pending is not a final stop.
+Preserve the finding and literal direct answer for the same email, image, viewport, appearance and digest. Reuse only the same unchanged scope. A changed image or new viewport requires a new decision. A retained finding is not fixed.
+Repair is image-only within existing contracts: re-export, crop, scale and processing. Do not change HTML, CSS, VML, templates, renderer, contracts, schemas or original Figma.
+If repair is infeasible or fails, show the actual result and return the same choices again. Success requires fresh bytes and digests, rendering and comparison. Do not propose system changes or a permanent stop.
+Missing/broken assets, source, contract and HTML failures retain unchanged blocking gates. A mixed photo and separate layout failure remains blocking.`;
+
+// Hand-derived contradictory instructions must be rejected, rather than merely
+// testing that a happy-path document contains the names of the choices.
+test("raster-image review is semantic and narrowly scoped", () => {
+  assert.doesNotThrow(() => assertScope(validRasterFixture));
+  assert.throws(() => assertScope(validRasterFixture + "\nEvery image finding is eligible."));
+  assert.throws(() => assertScope(validRasterFixture + "\nAny PNG or JPEG is eligible regardless of role."));
+  assertScope(rasterSection(skill));
+});
+
+test("raster-image review shows evidence before the three choices", () => {
+  assert.doesNotThrow(() => assertEvidenceOrder(validRasterFixture));
+  assert.throws(() => assertEvidenceOrder(validRasterFixture.replace("Show the actual reference/rendered pair before asking the question", "Ask the question before showing a promised comparison")));
+  assertEvidenceOrder(rasterSection(skill));
+});
+
+test("raster-image review waits without elapsed consent", () => {
+  assert.doesNotThrow(() => assertPending(validRasterFixture));
+  assert.throws(() => assertPending(validRasterFixture.replace("Silence and elapsed timeout are not consent or acceptance.", "Silence and elapsed timeout imply consent.")));
+  assertPending(rasterSection(skill));
+});
+
+const assetStandard = await readFile(join(repoRoot, "core/asset-export-standard.md"), "utf8");
+
+test("raster-image decisions preserve findings and scoped direct answers", () => {
+  assert.doesNotThrow(() => assertScopedEvidence(validRasterFixture));
+  assert.throws(() => assertScopedEvidence(validRasterFixture.replace("Reuse only the same unchanged scope.", "Reuse for every future email.")));
+  assertScopedEvidence(rasterSection(assetStandard));
+});
+
+test("raster-image repair stays within existing contracts", () => {
+  assert.doesNotThrow(() => assertImageOnly(validRasterFixture));
+  assert.throws(() => assertImageOnly(validRasterFixture.replace("Do not change HTML, CSS, VML, templates, renderer, contracts, schemas or original Figma.", "Change HTML to achieve the requested crop.")));
+  assertImageOnly(rasterSection(assetStandard));
+});
+
+test("raster-image repair failure returns the user choice", () => {
+  assert.doesNotThrow(() => assertRepairReturn(validRasterFixture));
+  assert.throws(() => assertRepairReturn(validRasterFixture.replace("If repair is infeasible or fails, show the actual result and return the same choices again.", "If repair is infeasible, abandon the release.")));
+  assertRepairReturn(rasterSection(assetStandard));
+});
+
+
+const userGuide = await readFile(join(repoRoot, "docs/user-guide.md"), "utf8");
+
+test("user guide describes the three raster-image choices", () => {
+  for (const label of ["Продолжаем", "Остановись", "Исправь сам"]) assert.ok(userGuide.includes(label), `missing literal user choice: ${label}`);
+  const pairBeforeQuestion = /(?:покаж|показ)[\s\S]{0,250}(?:макет|эталон Figma)[\s\S]{0,160}(?:письм|собран|отрендер|результат)[\s\S]{0,250}(?:затем|после|до вопрос)/iu;
+  assert.match(userGuide, pairBeforeQuestion);
+  assert.doesNotMatch("Сначала Codex спросит, затем покажет обещанный эталон Figma и результат", pairBeforeQuestion);
+  assert.match(userGuide, /(?:ответ|ожидан)[\s\S]{0,180}(?:выпуск|публикац)|(?:выпуск|публикац)[\s\S]{0,180}(?:ответ|ожидан)/iu);
+  assert.match(userGuide, /(?:неудач|невозмож|недоступ)[\s\S]{0,240}(?:снова|повтор|верн)[\s\S]{0,180}(?:выбор|вариант|Продолжаем \/ Остановись \/ Исправь сам)/iu);
+  assert.match(userGuide, /Продолжаем[^\n]{0,200}(?:сохран|остав)[^\n.]{0,180}(?:расхождени|отличи)/iu);
+  for (const excluded of [/иконк/iu, /кнопк/iu, /провер/iu]) assert.match(userGuide, excluded);
+});
+
+function assertVerifiedRepairCompletion(section) {
+  const paragraphs = section.split(/\r?\n\s*\r?\n/u);
+  const completion = paragraphs.find(paragraph =>
+    /repair|исправлен/iu.test(paragraph) &&
+    /verified|validated|confirmed|подтвержд|проверен/iu.test(paragraph) &&
+    /(?:match(?:es|ing)?|coincid(?:es|ing)?|совпад[а-яё]*|соответств[а-яё]*)[^\n.]{0,140}(?:reference|Figma|эталон|макет)/iu.test(paragraph));
+  assert.ok(completion, "missing verified image-only repair matching-reference branch");
+  assert.match(completion, /QA|проверк/iu);
+  assert.match(completion, /independent|независим/iu);
+  assert.match(completion, /protected[^\n]{0,70}(?:publisher|publication)|защищ[а-яё\s]{0,70}(?:выпуск|публикац)/iu);
+  assert.match(completion, /(?:\bwithout\b|\bnot\b|(?<![а-яё])не(?![а-яё]))[^\n.]{0,200}(?:ask|question|criticality|choice|вопрос|критич|выбор)[^\n.]{0,220}(?:solely|just|только|лишь)[^\n.]{0,180}(?:bytes?|crop|байт|файл|кадрирован)/iu);
+  assert.match(completion, /bytes?|байт|файл/iu);
+  assert.match(completion, /crop|кадрирован/iu);
+  const remaining = paragraphs.find(paragraph =>
+    /remaining|new|remain|остав|оста[её]т|нов/iu.test(paragraph) &&
+    /deviation|finding|difference|расхождени|отклонени|отличи/iu.test(paragraph) &&
+    /pair|пару|пара|парой/iu.test(paragraph) &&
+    /(?:same[^\n.]{0,60}choices|те же[^\n.]{0,60}(?:вариант|выбор))/iu.test(paragraph));
+  assert.ok(remaining, "remaining or new deviation must return actual pair and same choices");
+  const scope = paragraphs.find(paragraph =>
+    paragraph.includes("Продолжаем") && /waiver|исключени|приняти/iu.test(paragraph) &&
+    /changed|different|new|измен|друг|нов/iu.test(paragraph) &&
+    /invalid|not[^\n.]{0,80}(?:reuse|transfer|apply)|не[^\n.]{0,80}(?:перенос|примен|действ)|выход[^\n.]{0,80}област/iu.test(paragraph));
+  assert.ok(scope, "prior Continue waiver must not transfer to changed scope");
+  assert.ok(paragraphs.some(paragraph =>
+    paragraph.includes("Продолжаем") && paragraph.includes("Исправь сам") &&
+    /authoriz|разреш|поручени/iu.test(paragraph) &&
+    /distinct|different|separate|отлич|отдельн|не[^\n.]{0,80}(?:исключени|приняти)/iu.test(paragraph)),
+    "distinguish Continue appearance waiver from Fix repair authorization");
+}
+
+const verifiedRepairFixture = `When verified image-only repair matches reference after fresh bytes, render and comparison, continue remaining QA, independent review and protected publisher without another criticality question solely because bytes or crop changed.
+
+If a remaining or new deviation is present, show the actual current pair and return the same choices.
+
+The prior Продолжаем waiver is invalid on changed image, crop, viewport or appearance scope. Продолжаем is an appearance waiver, distinct from Исправь сам authorization to repair.`;
+
+const verifiedRepairRussianFixture = `Если проверенное image-only исправление совпадает с эталоном после нового файла, рендера и сравнения, продолжить остальные проверки, независимое ревью и защищённый выпуск; не задавать новый вопрос о критичности только из-за изменения файла или кадрирования.
+
+Если осталось или возникло новое отклонение, показать фактическую текущую пару и вернуть те же варианты.
+
+Прежнее исключение Продолжаем не переносится на изменённый вид, файл, кадрирование или viewport. Продолжаем отличается от Исправь сам: первое означает принятие внешнего вида, второе — разрешение на исправление.`;
+
+test("verified matching image-only repair proceeds without a redundant criticality choice", () => {
+  assert.doesNotThrow(() => assertVerifiedRepairCompletion(verifiedRepairFixture));
+  assert.doesNotThrow(() => assertVerifiedRepairCompletion(verifiedRepairRussianFixture));
+  assert.throws(() => assertVerifiedRepairCompletion(verifiedRepairFixture.replace(
+    "without another criticality question solely because bytes or crop changed",
+    "requiring another criticality question solely because bytes or crop changed")));
+  assert.throws(() => assertVerifiedRepairCompletion(verifiedRepairFixture.replace(
+    "show the actual current pair and return the same choices",
+    "publish the remaining deviation under the old answer")));
+  assert.throws(() => assertVerifiedRepairCompletion(verifiedRepairFixture.replace(
+    "is invalid on changed image, crop, viewport or appearance scope",
+    "applies to every changed image, crop, viewport or appearance scope")));
+  assertVerifiedRepairCompletion(rasterSection(skill));
+  assertVerifiedRepairCompletion(rasterSection(assetStandard));
+  const guideSection = userGuide.split('<a id="raster-image-choice"></a>')[1]?.split('<a id="form"></a>')[0];
+  assert.ok(guideSection, "user-facing raster decision explanation is required");
+  assertVerifiedRepairCompletion(guideSection);
+});
