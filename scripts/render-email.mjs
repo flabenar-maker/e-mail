@@ -5,7 +5,6 @@ import { serializeEmailHtml } from "./lib/email-html-serializer.mjs";
 import { rebasePackageResources } from "./lib/email-resource-references.mjs";
 import { buildPlainText } from "./lib/email-plain-text.mjs";
 import { buildAltcraftEntries } from "./lib/email-altcraft-package.mjs";
-import { encodeZipStore } from "./lib/zip-store.mjs";
 import { validateEmbeddedCssBudget, measureEmailOutput } from "./lib/email-metrics.mjs";
 import { execFileSync } from "node:child_process";
 import { dirname, join, resolve } from "node:path";
@@ -20,7 +19,7 @@ import {
   loadEmailModel,
   validateEmailModelSemantics,
 } from "./lib/email-model.mjs";
-import { publishEmailAtomically, publishFileSetAtomically } from "./lib/email-output.mjs";
+import { assertSeparateOutputDirectories, publishEmailAtomically, publishFileSetAtomically } from "./lib/email-output.mjs";
 import { postprocessEmail } from "./lib/email-postprocess.mjs";
 import { renderEmailDocument } from "./lib/email-renderer.mjs";
 import { loadDeliveryDocument } from "./lib/email-delivery-profile.mjs";
@@ -35,13 +34,13 @@ function parseArguments(argv) {
   for (let index = 0; index < argv.length; index += 2) {
     const flag = argv[index];
     const value = argv[index + 1];
-    if (!["--model", "--output", "--delivery"].includes(flag) || !value) {
-      throw new Error("Usage: node scripts/render-email.mjs --model <temp-json> --output <version-folder>");
+    if (!["--model", "--output", "--delivery", "--evidence-output"].includes(flag) || !value || values[flag.slice(2)]) {
+      throw new Error("Usage: node scripts/render-email.mjs --model <temp-json> --output <version-folder> [--delivery <delivery.json> [--evidence-output <separate-folder>]]");
     }
     values[flag.slice(2)] = value;
   }
-  if (!values.model || !values.output || ![4,6].includes(argv.length)) {
-    throw new Error("Usage: node scripts/render-email.mjs --model <temp-json> --output <version-folder>");
+  if (!values.model || !values.output || ![4,6,8].includes(argv.length) || values["evidence-output"] && !values.delivery) {
+    throw new Error("Usage: node scripts/render-email.mjs --model <temp-json> --output <version-folder> [--delivery <delivery.json> [--evidence-output <separate-folder>]]");
   }
   return values;
 }
@@ -65,6 +64,8 @@ async function main() {
   const args = parseArguments(process.argv.slice(2));
   const modelPath = resolve(args.model);
   const outputDir = resolve(args.output);
+  const evidenceDir = args['evidence-output'] ? resolve(args['evidence-output']) : undefined;
+  if(evidenceDir)await assertSeparateOutputDirectories({outputDir,evidenceDir});
   const [originalModel, registries, rendererRegistry, rendering] = await Promise.all([
     loadEmailModel({
       modelPath,
@@ -119,9 +120,9 @@ async function main() {
     const plainText = buildPlainText({model:originalModel,inventory:delivery.inventory,deliveryDocument:delivery.document,profile:delivery.profile,templateRules:dependencies.templateRules});
     const packaged = buildAltcraftEntries({html:packageStructured.html,assetBuffers,deliveryDocument:delivery.document,plainText,profile:delivery.profile});
     if (packaged.diagnostics.length) throw new AggregateError(packaged.diagnostics,"Package construction failed.");
-    const zip = encodeZipStore(packaged.entries);
+    if(evidenceDir) {
     const hash = bytes => createHash("sha256").update(bytes).digest("hex");
-    const report = {schema_version:"1.0.0",source_sha:dependencies.systemCommit,profile_id:delivery.profile.id,profile_version:delivery.profile.version,serializer_version:"1.0.0",package_id:delivery.profile.package.id,readiness:"ready",external_acceptance:"not-run",metrics:measureEmailOutput({html:packageStructured.html,css}),html_sha256:hash(packageStructured.html),archive_sha256:hash(zip),assets:[...assetBuffers].map(([path,bytes])=>({path,sha256:hash(bytes)}))};
+    const report = {schema_version:"1.0.0",source_sha:dependencies.systemCommit,profile_id:delivery.profile.id,profile_version:delivery.profile.version,serializer_version:"1.0.0",package_id:delivery.profile.package.id,readiness:"ready",external_acceptance:"not-run",metrics:measureEmailOutput({html:packageStructured.html,css}),html_sha256:hash(packageStructured.html),assets:[...assetBuffers].map(([path,bytes])=>({path,sha256:hash(bytes)}))};
     const requiredFields=delivery.inventory.fields.filter(field=>field.required);
     report.delivery_metadata={subject:delivery.document.subject.trim()?'provided':'absent',preheader:delivery.document.preheader.trim()?'provided':'absent',sender:delivery.document.sender.mode,reply_to:delivery.document.reply_to.mode,plain_text:delivery.document.plain_text.mode};
     report.link_readiness={status:"ready",inventory_digest:delivery.inventory.inventory_digest,field_count:delivery.inventory.fields.length,required_count:requiredFields.length,resolved_required_count:requiredFields.length};
@@ -142,13 +143,13 @@ async function main() {
     }
     report.preview_files=previews.map(entry=>entry.path);
     report.local_checks.personalization_previews="passed";
-    await publishFileSetAtomically({outputDir,entries:[
+    await publishFileSetAtomically({outputDir,entries:packaged.entries,directories:['images']});
+    await publishFileSetAtomically({outputDir:evidenceDir,directories:['images'],entries:[
       ...previews,
-      {path:"email.html",bytes:Buffer.from(structured.html,"utf8")},
       ...[...assetBuffers].map(([path,bytes])=>({path,bytes})),
-      {path:"altcraft.zip",bytes:zip},
       {path:"release-report.json",bytes:Buffer.from(JSON.stringify(report,null,2)+"\n","utf8")},
     ]});
+    } else await publishFileSetAtomically({outputDir,entries:packaged.entries,directories:['images']});
   } else {
   await publishEmailAtomically({
     outputDir,

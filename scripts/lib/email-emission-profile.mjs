@@ -1,6 +1,6 @@
 export function resolveEmissionProfile({ deliveryProfile, renderingFoundation } = {}) {
   if (!deliveryProfile) return {id:'desktop-default',version:'1.0.0',fallback_viewport:'desktop'};
-  if (deliveryProfile.id !== 'altcraft-mobile-base-v1' || deliveryProfile.version !== '1.0.0') {
+  if (deliveryProfile.id !== 'altcraft-mobile-base-v1' || !['1.0.0','1.0.1'].includes(deliveryProfile.version)) {
     const error=new Error('Unknown emission profile.'); error.code='EMISSION_PROFILE_UNKNOWN'; throw error;
   }
   const emission=deliveryProfile.emission;

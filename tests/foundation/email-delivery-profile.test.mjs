@@ -21,3 +21,8 @@ test("profile schema loader rejects unknown fields", async (t) => {
 });
 
 
+
+test("profile validator accepts the canonical root HTML package policy",()=>{
+  const rootProfile={...profile,version:"1.0.1",package:{...profile.package,id:"altcraft-root-html-v1",html_entry:"email.html",asset_root_entry:"images"}};
+  assert.deepEqual(validateDeliveryProfile(rootProfile),[]);
+});

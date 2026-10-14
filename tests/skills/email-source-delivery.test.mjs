@@ -6,6 +6,7 @@ import { dirname, join } from "node:path";
 import { promisify } from "node:util";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
+import { collectResourceReferences } from "../../scripts/lib/email-resource-references.mjs";
 
 import { collectEmailActions } from "../../scripts/lib/email-action-inventory.mjs";
 import { indexComponentRegistries, loadComponentRegistries } from "../../scripts/lib/component-registry.mjs";
@@ -84,13 +85,16 @@ async function releaseInput(folder, { includeNps = false } = {}) {
     field.managed ? field.value : `https://1cupis.ru/synthetic/${index + 1}`,
   ]));
   await writeFile(join(folder, "delivery.json"), JSON.stringify(document));
-  return { model, profile, inventory, document };
+  return { model, profile, inventory, document, assetPaths:[...new Set(assetPaths)] };
 }
 
-test("CLI builds a self-contained synthetic Altcraft release with managed links, previews, and package resources", async (t) => {
+test("CLI delivers exactly root HTML and byte-identical images with explicit native metadata", async (t) => {
   const folder = await mkdtemp(join(tmpdir(), "cupis-source-delivery-"));
   t.after(() => rm(folder, { recursive: true, force: true }));
-  const { inventory } = await releaseInput(folder);
+  const { inventory, document, assetPaths } = await releaseInput(folder);
+  document.sender={mode:"explicit",name:"ЕДИНЫЙ ЦУПИС",address:"info@1cupis.ru"};
+  document.reply_to={mode:"explicit",name:"Поддержка",address:"help@1cupis.ru"};
+  await writeFile(join(folder,"delivery.json"),JSON.stringify(document));
   assert.equal(inventory.fields.some(({ role }) => String(role).startsWith("nps-")), false);
   const output = join(folder, "release");
   await execFileAsync(process.execPath, ["scripts/render-email.mjs", "--model", join(folder, "model.json"), "--delivery", join(folder, "delivery.json"), "--output", output], {
@@ -98,7 +102,7 @@ test("CLI builds a self-contained synthetic Altcraft release with managed links,
     env: { ...process.env, CUPIS_SYSTEM_COMMIT: sourceSha },
   });
   const files = await readdir(output);
-  for (const name of ["email.html", "altcraft.zip", "release-report.json", "preview-name.html", "preview-empty-name.html", "preview-long-name.html"]) assert.ok(files.includes(name), name);
+  assert.deepEqual(files,["email.html","images"]);
   assert.equal(files.some((name) => /^(from_|replyto_)/u.test(name)), false);
   const html = await readFile(join(output, "email.html"), "utf8");
   assert.match(html, /https:\/\/1cupis\.ru\/\?utm_source=crm&amp;utm_medium=email&amp;utm_campaign=logo/u);
@@ -107,22 +111,12 @@ test("CLI builds a self-contained synthetic Altcraft release with managed links,
   assert.match(html, /\{if lead\._fname\}Здравствуйте,/u);
   assert.match(html, /\u034f\u200c <vk-snippet-end>/u);
   assert.doesNotMatch(html, /(?:src|background)="(?!images\/)/u);
-  const report = JSON.parse(await readFile(join(output, "release-report.json"), "utf8"));
-  assert.equal(report.external_acceptance, "not-run");
-  assert.equal(report.link_readiness.status,"ready");
-  assert.ok(report.link_readiness.required_count>0);
-  assert.equal(report.link_readiness.resolved_required_count,report.link_readiness.required_count);
-  assert.equal(report.local_checks.personalization_previews,"passed");
-  assert.deepEqual(report.preview_files, ["preview-name.html", "preview-empty-name.html", "preview-long-name.html"]);
-  const zip = await readFile(join(output, "altcraft.zip"));
-  const python = process.env.CUPIS_BUNDLED_PYTHON || "python";
-  const zipCheck = await execFileAsync(python, ["-c", "import sys,zipfile; z=zipfile.ZipFile(sys.argv[1]); print('\\n'.join(z.namelist())); assert all(n.startswith(('email/','images/')) for n in z.namelist()); assert 'email/from_email.txt' not in z.namelist(); assert 'email/replyto_email.txt' not in z.namelist()", join(output, "altcraft.zip")]);
-  assert.match(zipCheck.stdout, /email\/html\.html/u);
-  assert.match(zipCheck.stdout, /images\//u);
-  assert.ok(zip.length > 0);
-  const previews = await Promise.all(["preview-name.html", "preview-empty-name.html", "preview-long-name.html"].map((name) => readFile(join(output, name), "utf8")));
-  assert.match(previews[0], /Алексей/u); assert.match(previews[1], /Здравствуйте!/u); assert.match(previews[2], /Александра-Виктория/u);
-  assert.doesNotMatch(html, /Алексей|Александра-Виктория/u);
+  for(const ref of collectResourceReferences({html})){
+    const value=decodeURIComponent(ref.raw_value.replaceAll("&amp;","&"));
+    assert.ok(assetPaths.includes(value),value);
+    assert.deepEqual(await readFile(join(output,...value.split("/"))),png);
+  }
+  assert.doesNotMatch(html,/Алексей|Александра-Виктория/u);
 });
 
 test("registered Count=3 NPS derives three required actions and projects their URLs", async (t) => {
@@ -167,9 +161,46 @@ test("blank subject preserves a ready link-only preview and never creates an arc
   assert.match(html, /CUPIS preview: readiness=ready; purpose=preview/u);
   await assert.rejects(readFile(join(folder, "preview", "altcraft.zip")), /ENOENT/u);
   const release = join(folder, "release");
-  await execFileAsync(process.execPath, ["scripts/render-email.mjs", "--model", join(folder, "model.json"), "--delivery", join(folder, "delivery.json"), "--output", release], { cwd: repoRoot, env: { ...process.env, CUPIS_SYSTEM_COMMIT: sourceSha } });
-  const report = JSON.parse(await readFile(join(release, "release-report.json"), "utf8"));
+  const evidence = join(folder,"evidence");
+  await execFileAsync(process.execPath, ["scripts/render-email.mjs", "--model", join(folder, "model.json"), "--delivery", join(folder, "delivery.json"), "--output", release,"--evidence-output",evidence], { cwd: repoRoot, env: { ...process.env, CUPIS_SYSTEM_COMMIT: sourceSha } });
+  const report = JSON.parse(await readFile(join(evidence, "release-report.json"), "utf8"));
   assert.equal(report.emission_profile.id, "altcraft-mobile-base-v1");
   assert.equal(report.effective_fallback, "mobile");
   assert.equal(report.service_rules_version, "1.0.0");
+});
+
+test("CLI stores requested reports and personalization previews only in separate evidence output",async(t)=>{
+  const folder=await mkdtemp(join(tmpdir(),"cupis-source-evidence-"));t.after(()=>rm(folder,{recursive:true,force:true}));
+  const {assetPaths}=await releaseInput(folder);const output=join(folder,"release"),evidence=join(folder,"evidence");
+  await execFileAsync(process.execPath,["scripts/render-email.mjs","--model",join(folder,"model.json"),"--delivery",join(folder,"delivery.json"),"--output",output,"--evidence-output",evidence],{cwd:repoRoot,env:{...process.env,CUPIS_SYSTEM_COMMIT:sourceSha}});
+  assert.deepEqual(await readdir(output),["email.html","images"]);
+  assert.deepEqual(await readdir(evidence),["images","preview-empty-name.html","preview-long-name.html","preview-name.html","release-report.json"]);
+  const report=JSON.parse(await readFile(join(evidence,"release-report.json"),"utf8"));
+  assert.equal(report.external_acceptance,"not-run");assert.equal(report.source_sha,sourceSha);assert.equal(report.package_id,"altcraft-root-html-v1");
+  assert.equal(report.link_readiness.resolved_required_count,report.link_readiness.required_count);
+  assert.equal(report.local_checks.personalization_previews,"passed");
+  const previews=await Promise.all(["preview-name.html","preview-empty-name.html","preview-long-name.html"].map(name=>readFile(join(evidence,name),"utf8")));
+  assert.match(previews[0],/Алексей/u);assert.match(previews[1],/Здравствуйте!/u);assert.match(previews[2],/Александра-Виктория/u);
+  for(const html of previews)for(const ref of collectResourceReferences({html}))assert.deepEqual(await readFile(join(evidence,...decodeURIComponent(ref.raw_value).split("/"))),png);
+  const releaseHtml=await readFile(join(output,"email.html"),"utf8");
+  const releaseReferences=collectResourceReferences({html:releaseHtml});
+  assert.ok(releaseReferences.length>0);
+  for(const ref of releaseReferences){const value=decodeURIComponent(ref.raw_value.replaceAll("&amp;","&"));assert.ok(assetPaths.includes(value),value);assert.deepEqual(await readFile(join(output,...value.split("/"))),png);}
+});
+test("CLI rejects overlapping delivery and evidence destinations before publishing",async(t)=>{
+  const folder=await mkdtemp(join(tmpdir(),"cupis-source-overlap-"));t.after(()=>rm(folder,{recursive:true,force:true}));await releaseInput(folder);
+  for(const [output,evidence] of [[join(folder,"same"),join(folder,"same")],[join(folder,"parent"),join(folder,"parent","evidence")],[join(folder,"ancestor","release"),join(folder,"ancestor")]]){
+    await assert.rejects(execFileAsync(process.execPath,["scripts/render-email.mjs","--model",join(folder,"model.json"),"--delivery",join(folder,"delivery.json"),"--output",output,"--evidence-output",evidence],{cwd:repoRoot,env:{...process.env,CUPIS_SYSTEM_COMMIT:sourceSha}}),/EMAIL_OUTPUT_OVERLAP/u);
+    await assert.rejects(readdir(output),/ENOENT/u);await assert.rejects(readdir(evidence),/ENOENT/u);
+  }
+});
+test("CLI preserves existing delivery and evidence bytes when either destination is occupied",async(t)=>{
+  const folder=await mkdtemp(join(tmpdir(),"cupis-source-occupied-"));t.after(()=>rm(folder,{recursive:true,force:true}));await releaseInput(folder);
+  for(const occupied of ["release","evidence"]){
+    const base=join(folder,occupied),output=join(base,"release"),evidence=join(base,"evidence"),target=occupied==="release"?output:evidence;
+    await mkdir(target,{recursive:true});await writeFile(join(target,"keep.txt"),"original");
+    await assert.rejects(execFileAsync(process.execPath,["scripts/render-email.mjs","--model",join(folder,"model.json"),"--delivery",join(folder,"delivery.json"),"--output",output,"--evidence-output",evidence],{cwd:repoRoot,env:{...process.env,CUPIS_SYSTEM_COMMIT:sourceSha}}),/EMAIL_OUTPUT_EXISTS/u);
+    assert.deepEqual(await readdir(target),["keep.txt"]);assert.equal(await readFile(join(target,"keep.txt"),"utf8"),"original");
+    await assert.rejects(readdir(occupied==="release"?evidence:output),/ENOENT/u);
+  }
 });

@@ -5,6 +5,40 @@ function decode(value) {
   const entities=value.replaceAll('&amp;','&').replace(/&#(?:x([0-9a-f]+)|(\d+));/giu,(_,hex,decimal)=>String.fromCodePoint(Number.parseInt(hex??decimal,hex?16:10)));
   return decodeURIComponent(entities);
 }
+// HTML entities are decoded by browsers in style attributes, but not in style
+// raw text. Keep a source range for each decoded code unit so replacements touch
+// the resource alone and leave quote entities and every surrounding byte intact.
+function attributeCss(raw) {
+  let text='';const spans=[];
+  const entities=/&(?:amp|quot|apos);|&#(?:x([0-9a-f]+)|(\d+));/giu;
+  let cursor=0;
+  const appendRaw=(start,end)=>{for(let index=start;index<end;index++){text+=raw[index];spans.push({start:index,end:index+1});}};
+  for(const match of raw.matchAll(entities)) {
+    appendRaw(cursor,match.index);
+    let decoded;
+    if(match[1]!==undefined||match[2]!==undefined) {
+      const point=Number.parseInt(match[1]??match[2],match[1]!==undefined?16:10);
+      if(point>0x10ffff||point>=0xd800&&point<=0xdfff){appendRaw(match.index,match.index+match[0].length);cursor=match.index+match[0].length;continue;}
+      decoded=String.fromCodePoint(point);
+    } else decoded={'&amp;':'&','&quot;':'"','&apos;':"'"}[match[0].toLowerCase()];
+    for(const unit of decoded.split('')){text+=unit;spans.push({start:match.index,end:match.index+match[0].length});}
+    cursor=match.index+match[0].length;
+  }
+  appendRaw(cursor,raw.length);return {text,spans};
+}
+function cssReferences(raw,offset,{attribute=false}={}) {
+  const decoded=attribute?attributeCss(raw):null,text=decoded?.text??raw,references=[];
+  const urls=/\burl\(\s*(?:"([^"]*)"|'([^']*)'|([^\s)'";]+))\s*\)/giu;
+  for(const url of text.matchAll(urls)) {
+    const value=url[1]??url[2]??url[3];
+    if(!value)continue;
+    const index=url.index+url[0].indexOf(value);
+    const start=decoded?decoded.spans[index].start:index;
+    const end=decoded?decoded.spans[index+value.length-1].end:index+value.length;
+    references.push({kind:'css-url',raw_value:raw.slice(start,end),start:offset+start,end:offset+end});
+  }
+  return references;
+}
 export function collectResourceReferences({html}) {
   const references=[];
   // Attribute matches stop at the quote, not at '>' within a quoted value.
@@ -17,21 +51,13 @@ export function collectResourceReferences({html}) {
       const valueOffset=attr.index+attr[0].length-raw.length-(attr[2]!==undefined||attr[3]!==undefined?1:0);
       const start=tag.index+valueOffset;
       if(key==='style') {
-        const urls=/\burl\(\s*(?:"([^"]*)"|'([^']*)'|([^\s)'";]+))\s*\)/giu;
-        for(const url of raw.matchAll(urls)) {
-          const value=url[1]??url[2]??url[3];
-          const offset=url.index+url[0].indexOf(value);
-          references.push({kind:'css-url',raw_value:value,start:start+offset,end:start+offset+value.length});
-        }
+        references.push(...cssReferences(raw,start,{attribute:true}));
       } else if(key==='background'||key==='src'&&(name==='img'||['v:fill','v:imagedata'].includes(name))) references.push({kind:key==='background'?'html-background':name==='img'?'img-src':'vml-src',raw_value:raw,start,end:start+raw.length});
     }
   }
   for(const style of html.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style\s*>/giu)) {
     const offset=style.index+style[0].indexOf('>')+1;
-    for(const url of style[1].matchAll(/\burl\(\s*(?:"([^"]*)"|'([^']*)'|([^\s)'";]+))\s*\)/giu)) {
-      const raw=url[1]??url[2]??url[3],start=offset+url.index+url[0].indexOf(raw);
-      references.push({kind:'css-url',raw_value:raw,start,end:start+raw.length});
-    }
+    references.push(...cssReferences(style[1],offset));
   }
   return references.sort((a,b)=>a.start-b.start);
 }
@@ -46,7 +72,7 @@ export function rebasePackageResources({html,assetPaths,htmlEntry,assetRootEntry
       diagnostics.push(issue('EMAIL_RESOURCE_UNDECLARED','/html', 'Resource is unsafe, undeclared, or differs in case: '+path));continue;
     }
     const relative=posix.relative(posix.dirname(htmlEntry),assetRootEntry);
-    replacements.push({...ref,value:relative+'/'+ref.raw_value.slice(ref.raw_value.indexOf('/')+1)});
+    if(relative!==assetRootEntry)replacements.push({...ref,value:relative+'/'+ref.raw_value.slice(ref.raw_value.indexOf('/')+1)});
   }
   if(diagnostics.length)return {html,references,diagnostics};
   let rebased=html;

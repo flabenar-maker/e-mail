@@ -2,7 +2,7 @@ const sourceSha = "8f4648681bd7ac72c5217190f1d523c0cb5f85f4";
 const binding = (viewport, element_id, slot_id, kind = "slot-link") => ({ viewport, element_id, slot_id, kind });
 const both = (element_id, slot_id, kind) => [binding("mobile", element_id, slot_id, kind), binding("desktop", element_id, slot_id, kind)];
 export const profile = {
-  id: "altcraft-mobile-base-v1", version: "1.0.0", label: "Altcraft mobile base",
+  id: "altcraft-mobile-base-v1", version: "1.0.1", label: "Altcraft mobile base",
   roles: [
     { id: "header-logo", label: "Логотип", component_id: "email-header", bindings: [binding("mobile", "root-header-logo-compact", "href", "output-link"), binding("desktop", "root-header-logo", "href", "output-link")], href: "https://1cupis.ru/?utm_source=crm&utm_medium=email&utm_campaign=logo" },
     { id: "store-rustore", label: "RuStore", component_id: "banner-app-download", bindings: both("root-content-area-store-buttons-rustore-button", "href"), href: "https://redirect.appmetrica.yandex.com/serve/461821467231807192" },
@@ -14,7 +14,7 @@ export const profile = {
     { id: "footer-support", label: "Поддержка", component_id: "email-footer", bindings: both("root-footer-body-disclaimer-section-disclaimer-text-02", "link-4-url") },
     ...["good", "neutral", "bad"].map((id) => ({ id: `nps-${id}`, label: `NPS ${id}`, component_id: "nps-options", bindings: both(`root-content-area-emoji-buttons-${id}`, "href") }))
   ],
-  allowed_templates: ["{unsubscribe}"], emission: { fallback_viewport: "mobile", desktop_condition: { viewport_min_px: 660, device_min_px: 660 }, mso_desktop: true, preserve_structural_splits: true }, package: { id: "altcraft-full-v1", html_entry: "email/html.html", asset_root_entry: "images", is_amp: false, is_not_inline: true }, service_rules: { enabled: false }
+  allowed_templates: ["{unsubscribe}"], emission: { fallback_viewport: "mobile", desktop_condition: { viewport_min_px: 660, device_min_px: 660 }, mso_desktop: true, preserve_structural_splits: true }, package: { id: "altcraft-root-html-v1", html_entry: "email.html", asset_root_entry: "images", is_amp: false, is_not_inline: true }, service_rules: { enabled: false }
 };
 export const profileDocument = { schema_version: "1.0.0", profiles: [profile] };
 const always = { mode: "always" };
