@@ -16,7 +16,7 @@ export const profile = {
   ],
   allowed_templates: ["{unsubscribe}"], emission: { fallback_viewport: "mobile", desktop_condition: { viewport_min_px: 660, device_min_px: 660 }, mso_desktop: true, preserve_structural_splits: true }, package: { id: "altcraft-root-html-v1", html_entry: "email.html", asset_root_entry: "images", is_amp: false, is_not_inline: true }, service_rules: { enabled: false }
 };
-export const profileDocument = { schema_version: "1.0.1", profiles: [profile] };
+export const profileDocument = { schema_version: "1.0.0", profiles: [profile] };
 const always = { mode: "always" };
 const root = (id, children = []) => ({ id, semantic_role: id, render_mode: "presentation-table", visibility: always, facts: [], children });
 const link = (id, role = id, visibility = always) => ({ id, semantic_role: role, render_mode: "html-link", visibility, facts: [], content_slots: [{ id: "href", type: "url", required: true }, { id: "text", type: "plain-text", required: true }], children: [] });
