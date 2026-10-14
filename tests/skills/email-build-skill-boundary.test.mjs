@@ -196,10 +196,36 @@ function assertPending(section) {
   assert.match(section, /(?:pending|awaiting|ожидан)[\s\S]{0,180}(?:not|не)[\s\S]{0,180}(?:final stop|окончательн|останов)/iu);
 }
 
+function assertScopedEvidence(section) {
+  for (const term of [/finding|расхождени/iu, /literal|дословн|буквальн/iu, /direct|прям/iu, /email|письм/iu, /image|изображени/iu, /viewport/iu, /appearance|внешн[а-яё\s]*вид/iu, /digest|хэш/iu]) assert.match(section, term);
+  assert.match(section, /(?:reuse|reus|переиспольз|повторно)[\s\S]{0,250}(?:only|только)[\s\S]{0,250}(?:same|unchanged|совпад|неизмен)/iu);
+  assert.match(section, /(?:changed|different|new|измен|друг|нов)[\s\S]{0,220}(?:choice|decision|answer|выбор|решени|ответ)/iu);
+  assert.match(section, /(?:not|never|не)[\s\S]{0,140}(?:fixed|исправлен)|(?:retained|сохран)[\s\S]{0,160}(?:finding|расхождени)/iu);
+}
+
+function assertImageOnly(section) {
+  assert.match(section, /image-only|только[\s\S]{0,60}изображени/iu);
+  assert.match(section, /existing|unchanged|действующ|существующ/iu);
+  assert.match(section, /contract|контракт/iu);
+  for (const operation of [/re-export|повторн[а-яё\s]*экспорт/iu, /crop|кадрирован/iu, /scal|масштаб/iu, /process|обработ/iu]) assert.match(section, operation);
+  for (const forbidden of [/HTML/iu, /CSS/iu, /VML/iu, /template|шаблон/iu, /renderer|рендерер/iu, /contract|контракт/iu, /schema|схем/iu, /original Figma|исходн[а-яё\s]*Figma/iu]) assert.match(section, forbidden);
+  assert.match(section, /(?:not|never|не)[^\n]*(?:change|edit|modify|измен|прав)/iu);
+}
+
+function assertRepairReturn(section) {
+  assert.match(section, /(?:infeasible|unavailable|fails?|failed|impossible|невозмож|недоступ|неудач)[\s\S]{0,300}(?:show|display|показ)/iu);
+  assert.match(section, /(?:return|again|вернут|снова)[\s\S]{0,200}(?:choice|choices|вариант|выбор)/iu);
+  assert.match(section, /(?:fresh|new|свеж|нов)[\s\S]{0,180}(?:bytes|digest|байт|хэш)[\s\S]{0,180}(?:render|рендер)[\s\S]{0,180}(?:compar|сравн)/iu);
+  assert.match(section, /(?:not|never|не)[\s\S]{0,180}(?:permanent stop|system change|maintenance|окончательн|систем|библиотек)/iu);
+}
+
 const validRasterFixture = `Content raster photographs and illustrations in banners, image cards and analogous blocks are eligible by semantic role, not by PNG/JPEG extension. Icons, logos, QR codes, buttons, text, layout and links are excluded.
 Show the actual reference/rendered pair before asking the question: Продолжаем / Остановись / Исправь сам.
 Wait for the explicit answer. Silence and elapsed timeout are not consent or acceptance. Dependent publication waits; pending is not a final stop.
-`;
+Preserve the finding and literal direct answer for the same email, image, viewport, appearance and digest. Reuse only the same unchanged scope. A changed image or new viewport requires a new decision. A retained finding is not fixed.
+Repair is image-only within existing contracts: re-export, crop, scale and processing. Do not change HTML, CSS, VML, templates, renderer, contracts, schemas or original Figma.
+If repair is infeasible or fails, show the actual result and return the same choices again. Success requires fresh bytes and digests, rendering and comparison. Do not propose system changes or a permanent stop.
+Missing/broken assets, source, contract and HTML failures retain unchanged blocking gates. A mixed photo and separate layout failure remains blocking.`;
 
 // Hand-derived contradictory instructions must be rejected, rather than merely
 // testing that a happy-path document contains the names of the choices.
@@ -220,5 +246,25 @@ test("raster-image review waits without elapsed consent", () => {
   assert.doesNotThrow(() => assertPending(validRasterFixture));
   assert.throws(() => assertPending(validRasterFixture.replace("Silence and elapsed timeout are not consent or acceptance.", "Silence and elapsed timeout imply consent.")));
   assertPending(rasterSection(skill));
+});
+
+const assetStandard = await readFile(join(repoRoot, "core/asset-export-standard.md"), "utf8");
+
+test("raster-image decisions preserve findings and scoped direct answers", () => {
+  assert.doesNotThrow(() => assertScopedEvidence(validRasterFixture));
+  assert.throws(() => assertScopedEvidence(validRasterFixture.replace("Reuse only the same unchanged scope.", "Reuse for every future email.")));
+  assertScopedEvidence(rasterSection(assetStandard));
+});
+
+test("raster-image repair stays within existing contracts", () => {
+  assert.doesNotThrow(() => assertImageOnly(validRasterFixture));
+  assert.throws(() => assertImageOnly(validRasterFixture.replace("Do not change HTML, CSS, VML, templates, renderer, contracts, schemas or original Figma.", "Change HTML to achieve the requested crop.")));
+  assertImageOnly(rasterSection(assetStandard));
+});
+
+test("raster-image repair failure returns the user choice", () => {
+  assert.doesNotThrow(() => assertRepairReturn(validRasterFixture));
+  assert.throws(() => assertRepairReturn(validRasterFixture.replace("If repair is infeasible or fails, show the actual result and return the same choices again.", "If repair is infeasible, abandon the release.")));
+  assertRepairReturn(rasterSection(assetStandard));
 });
 
