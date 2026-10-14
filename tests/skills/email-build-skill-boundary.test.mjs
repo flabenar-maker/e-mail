@@ -281,3 +281,65 @@ test("user guide describes the three raster-image choices", () => {
   assert.match(userGuide, /Продолжаем[^\n]{0,200}(?:сохран|остав)[^\n.]{0,180}(?:расхождени|отличи)/iu);
   for (const excluded of [/иконк/iu, /кнопк/iu, /провер/iu]) assert.match(userGuide, excluded);
 });
+
+function assertVerifiedRepairCompletion(section) {
+  const paragraphs = section.split(/\r?\n\s*\r?\n/u);
+  const completion = paragraphs.find(paragraph =>
+    /repair|исправлен/iu.test(paragraph) &&
+    /verified|validated|confirmed|подтвержд|проверен/iu.test(paragraph) &&
+    /(?:match(?:es|ing)?|coincid(?:es|ing)?|совпад[а-яё]*|соответств[а-яё]*)[^\n.]{0,140}(?:reference|Figma|эталон|макет)/iu.test(paragraph));
+  assert.ok(completion, "missing verified image-only repair matching-reference branch");
+  assert.match(completion, /QA|проверк/iu);
+  assert.match(completion, /independent|независим/iu);
+  assert.match(completion, /protected[^\n]{0,70}(?:publisher|publication)|защищ[а-яё\s]{0,70}(?:выпуск|публикац)/iu);
+  assert.match(completion, /(?:\bwithout\b|\bnot\b|(?<![а-яё])не(?![а-яё]))[^\n.]{0,200}(?:ask|question|criticality|choice|вопрос|критич|выбор)[^\n.]{0,220}(?:solely|just|только|лишь)[^\n.]{0,180}(?:bytes?|crop|байт|файл|кадрирован)/iu);
+  assert.match(completion, /bytes?|байт|файл/iu);
+  assert.match(completion, /crop|кадрирован/iu);
+  const remaining = paragraphs.find(paragraph =>
+    /remaining|new|remain|остав|оста[её]т|нов/iu.test(paragraph) &&
+    /deviation|finding|difference|расхождени|отклонени|отличи/iu.test(paragraph) &&
+    /pair|пару|пара|парой/iu.test(paragraph) &&
+    /(?:same[^\n.]{0,60}choices|те же[^\n.]{0,60}(?:вариант|выбор))/iu.test(paragraph));
+  assert.ok(remaining, "remaining or new deviation must return actual pair and same choices");
+  const scope = paragraphs.find(paragraph =>
+    paragraph.includes("Продолжаем") && /waiver|исключени|приняти/iu.test(paragraph) &&
+    /changed|different|new|измен|друг|нов/iu.test(paragraph) &&
+    /invalid|not[^\n.]{0,80}(?:reuse|transfer|apply)|не[^\n.]{0,80}(?:перенос|примен|действ)|выход[^\n.]{0,80}област/iu.test(paragraph));
+  assert.ok(scope, "prior Continue waiver must not transfer to changed scope");
+  assert.ok(paragraphs.some(paragraph =>
+    paragraph.includes("Продолжаем") && paragraph.includes("Исправь сам") &&
+    /authoriz|разреш|поручени/iu.test(paragraph) &&
+    /distinct|different|separate|отлич|отдельн|не[^\n.]{0,80}(?:исключени|приняти)/iu.test(paragraph)),
+    "distinguish Continue appearance waiver from Fix repair authorization");
+}
+
+const verifiedRepairFixture = `When verified image-only repair matches reference after fresh bytes, render and comparison, continue remaining QA, independent review and protected publisher without another criticality question solely because bytes or crop changed.
+
+If a remaining or new deviation is present, show the actual current pair and return the same choices.
+
+The prior Продолжаем waiver is invalid on changed image, crop, viewport or appearance scope. Продолжаем is an appearance waiver, distinct from Исправь сам authorization to repair.`;
+
+const verifiedRepairRussianFixture = `Если проверенное image-only исправление совпадает с эталоном после нового файла, рендера и сравнения, продолжить остальные проверки, независимое ревью и защищённый выпуск; не задавать новый вопрос о критичности только из-за изменения файла или кадрирования.
+
+Если осталось или возникло новое отклонение, показать фактическую текущую пару и вернуть те же варианты.
+
+Прежнее исключение Продолжаем не переносится на изменённый вид, файл, кадрирование или viewport. Продолжаем отличается от Исправь сам: первое означает принятие внешнего вида, второе — разрешение на исправление.`;
+
+test("verified matching image-only repair proceeds without a redundant criticality choice", () => {
+  assert.doesNotThrow(() => assertVerifiedRepairCompletion(verifiedRepairFixture));
+  assert.doesNotThrow(() => assertVerifiedRepairCompletion(verifiedRepairRussianFixture));
+  assert.throws(() => assertVerifiedRepairCompletion(verifiedRepairFixture.replace(
+    "without another criticality question solely because bytes or crop changed",
+    "requiring another criticality question solely because bytes or crop changed")));
+  assert.throws(() => assertVerifiedRepairCompletion(verifiedRepairFixture.replace(
+    "show the actual current pair and return the same choices",
+    "publish the remaining deviation under the old answer")));
+  assert.throws(() => assertVerifiedRepairCompletion(verifiedRepairFixture.replace(
+    "is invalid on changed image, crop, viewport or appearance scope",
+    "applies to every changed image, crop, viewport or appearance scope")));
+  assertVerifiedRepairCompletion(rasterSection(skill));
+  assertVerifiedRepairCompletion(rasterSection(assetStandard));
+  const guideSection = userGuide.split('<a id="raster-image-choice"></a>')[1]?.split('<a id="form"></a>')[0];
+  assert.ok(guideSection, "user-facing raster decision explanation is required");
+  assertVerifiedRepairCompletion(guideSection);
+});
