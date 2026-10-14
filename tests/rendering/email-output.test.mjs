@@ -8,7 +8,7 @@ import { dirname, join, relative } from "node:path";
 import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
 import { postprocessEmail } from "../../scripts/lib/email-postprocess.mjs";
-import { publishEmailAtomically } from "../../scripts/lib/email-output.mjs";
+import { publishEmailAtomically, publishFileSetAtomically } from "../../scripts/lib/email-output.mjs";
 
 const execFileAsync = promisify(execFile);
 const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
@@ -143,4 +143,12 @@ test("CLI renders the raw valid pilot model into the canonical responsive email 
   } finally {
     await rm(folder, { recursive: true, force: true });
   }
+});
+
+test("file-set publisher preserves an explicitly required empty images directory",async(t)=>{
+  const folder=await mkdtemp(join(tmpdir(),"cupis-empty-package-"));t.after(()=>rm(folder,{recursive:true,force:true}));
+  const outputDir=join(folder,"release");
+  await publishFileSetAtomically({outputDir,entries:[{path:"email.html",bytes:Buffer.from("<p>Ready</p>")}],directories:["images"]});
+  assert.deepEqual(await readdir(outputDir),["email.html","images"]);
+  assert.deepEqual(await readdir(join(outputDir,"images")),[]);
 });

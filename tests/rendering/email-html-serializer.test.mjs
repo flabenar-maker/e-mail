@@ -17,9 +17,9 @@ test("serializer is idempotent when protected spans are recomputed for its input
 });
 test("package HTML remains idempotent after resource rebasing", () => {
   const source = '<table><tr><td><img src="images/logo.png" alt="logo"></td></tr></table><style>.hero{background:url(images/hero.png)}</style>';
-  const rebased = rebasePackageResources({ html:source, assetPaths:["images/logo.png", "images/hero.png"], htmlEntry:"email/html.html", assetRootEntry:"images" });
+  const rebased = rebasePackageResources({ html:source, assetPaths:["images/logo.png", "images/hero.png"], htmlEntry:"email.html", assetRootEntry:"images" });
   assert.deepEqual(rebased.diagnostics, []);
-  assert.match(rebased.html, /\.\.\/images\/logo\.png/u);
+  assert.equal(rebased.html, source);
   const first = serializeEmailHtml({ html:rebased.html });
   const second = serializeEmailHtml({ html:first.html });
   assert.deepEqual(first.diagnostics, []);
