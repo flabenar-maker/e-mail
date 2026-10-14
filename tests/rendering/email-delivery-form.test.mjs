@@ -1,6 +1,12 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import vm from "node:vm";
+import { execFile } from "node:child_process";
+import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { dirname, join } from "node:path";
+import { promisify } from "node:util";
+import { fileURLToPath } from "node:url";
 import { createDeliveryDraft, renderDeliveryForm } from "../../scripts/lib/email-delivery-form.mjs";
 import { inventory, draft, profile } from "../fixtures/rendering/email-delivery-fixtures.mjs";
 
@@ -55,4 +61,21 @@ test("form with no missing links contains no editable controls or answer-save pr
   const html = renderDeliveryForm({ inventory: { ...inventory, fields: managedFields }, deliveryDraft: draft });
   assert.doesNotMatch(html, /<input\b|<textarea\b|type="submit"/);
   assert.match(html, /Все ссылки уже заданы/);
+});
+
+const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
+const execFileAsync = promisify(execFile);
+
+test("intake CLI stores the separately supplied mailing subject in delivery.json", async (t) => {
+  const folder = await mkdtemp(join(tmpdir(), "cupis-subject-intake-"));
+  t.after(() => rm(folder, { recursive: true, force: true }));
+  const output = join(folder, "intake");
+  await execFileAsync(process.execPath, [
+    "scripts/prepare-email-delivery.mjs",
+    "--model", join(repoRoot, "tests", "fixtures", "rendering", "pilot-email.json"),
+    "--output", output,
+    "--subject", "Отдельная тема для Альткрафта"
+  ], { cwd: repoRoot, env: { ...process.env, CUPIS_SYSTEM_COMMIT: draft.source_sha } });
+  const document = JSON.parse(await readFile(join(output, "delivery.json"), "utf8"));
+  assert.equal(document.subject, "Отдельная тема для Альткрафта");
 });
