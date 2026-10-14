@@ -3,7 +3,7 @@
   "profiles": [
     {
       "id": "altcraft-mobile-base-v1",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "label": "Выпуск письма для Альткрафта",
       "roles": [
         {
@@ -235,8 +235,8 @@
         "preserve_structural_splits": true
       },
       "package": {
-        "id": "altcraft-full-v1",
-        "html_entry": "email/html.html",
+        "id": "altcraft-root-html-v1",
+        "html_entry": "email.html",
         "asset_root_entry": "images",
         "is_amp": false,
         "is_not_inline": true

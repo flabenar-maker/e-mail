@@ -16,7 +16,7 @@
             "const": "altcraft-mobile-base-v1"
           },
           "version": {
-            "const": "1.0.0"
+            "const": "1.0.1"
           },
           "label": {
             "type": "string",
@@ -139,10 +139,10 @@
             "additionalProperties": false,
             "properties": {
               "id": {
-                "const": "altcraft-full-v1"
+                "const": "altcraft-root-html-v1"
               },
               "html_entry": {
-                "const": "email/html.html"
+                "const": "email.html"
               },
               "asset_root_entry": {
                 "const": "images"

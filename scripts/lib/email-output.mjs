@@ -4,13 +4,14 @@ import {
   mkdir,
   readFile,
   readdir,
+  realpath,
   rename,
   rm,
   rmdir,
   stat,
   writeFile,
 } from "node:fs/promises";
-import { dirname, isAbsolute, join, posix, resolve, win32 } from "node:path";
+import { dirname, isAbsolute, join, posix, relative, resolve, win32 } from "node:path";
 
 import { SystemValidationError } from "./diagnostics.mjs";
 import { validateZipEntryPath } from "./zip-store.mjs";
@@ -104,6 +105,22 @@ async function assertOutputAvailable(outputDir) {
   return true;
 }
 
+async function canonicalDestination(target) {
+  const absolute=resolve(target);let ancestor=absolute;
+  for(;;) {
+    try {return resolve(await realpath(ancestor),relative(ancestor,absolute));}
+    catch(error) {if(error?.code!=='ENOENT'||dirname(ancestor)===ancestor)throw error;ancestor=dirname(ancestor);}
+  }
+}
+
+export async function assertSeparateOutputDirectories({outputDir,evidenceDir}) {
+  const [output,evidence]=await Promise.all([canonicalDestination(outputDir),canonicalDestination(evidenceDir)]);
+  const within=(parent,child)=>{const value=relative(parent,child);return !value||value!=='..'&&!value.startsWith('../')&&!value.startsWith('..\\')&&!isAbsolute(value);};
+  if(within(output,evidence)||within(evidence,output))fail('EMAIL_OUTPUT_OVERLAP','/evidenceDir','Delivery and evidence directories must be separate and cannot contain each other.');
+  // Check both before either is published; publication rechecks each destination.
+  await assertOutputAvailable(resolve(outputDir));await assertOutputAvailable(resolve(evidenceDir));
+}
+
 export async function publishEmailAtomically({ outputDir, html, assets = [] }) {
   if (typeof html !== "string" || html.length === 0) {
     fail("EMAIL_OUTPUT_HTML_INVALID", "/html", "Email HTML must be non-empty.");
@@ -153,12 +170,18 @@ export async function publishEmailAtomically({ outputDir, html, assets = [] }) {
   };
 }
 
-export async function publishFileSetAtomically({outputDir,entries}) {
+export async function publishFileSetAtomically({outputDir,entries,directories=[]}) {
   const targets=new Set(),folded=new Set();
   if(!Array.isArray(entries)||!entries.length)fail('EMAIL_OUTPUT_ENTRIES_INVALID','/entries','At least one file is required.');
   for(const entry of entries) {
     if(!validateZipEntryPath(entry.path)||targets.has(entry.path)||folded.has(entry.path.toLowerCase())||!Buffer.isBuffer(entry.bytes))fail('EMAIL_OUTPUT_ENTRY_INVALID','/entries','Unsafe, duplicate, or incomplete file entry.');
     targets.add(entry.path);folded.add(entry.path.toLowerCase());
+  }
+  const folders=new Set(),folderFolded=new Set();
+  if(!Array.isArray(directories))fail('EMAIL_OUTPUT_DIRECTORY_INVALID','/directories','Directories must be an array of safe relative paths.');
+  for(const directory of directories) {
+    if(!validateZipEntryPath(directory)||folders.has(directory)||folderFolded.has(directory.toLowerCase())||folded.has(directory.toLowerCase())||[...targets].some(file=>directory.toLowerCase().startsWith(file.toLowerCase()+'/')))fail('EMAIL_OUTPUT_DIRECTORY_INVALID','/directories','Unsafe, duplicate, or conflicting directory.');
+    folders.add(directory);folderFolded.add(directory.toLowerCase());
   }
   const finalDir=resolve(outputDir),parent=dirname(finalDir),basename=finalDir.slice(parent.length+1);
   if(!basename)fail('EMAIL_OUTPUT_PATH_UNSAFE','/outputDir','Output directory is unsafe.');
@@ -167,6 +190,7 @@ export async function publishFileSetAtomically({outputDir,entries}) {
   const staging=join(parent,'.'+basename+'.staging-'+randomUUID());
   try {
     await mkdir(staging);
+    for(const directory of folders)await mkdir(join(staging,...directory.split('/')),{recursive:true});
     for(const entry of entries) {
       const target=join(staging,...entry.path.split('/'));
       await mkdir(dirname(target),{recursive:true});await writeFile(target,entry.bytes);
