@@ -268,3 +268,12 @@ test("raster-image repair failure returns the user choice", () => {
   assertRepairReturn(rasterSection(assetStandard));
 });
 
+
+test("user guide describes the three raster-image choices", () => {
+  for (const label of ["Продолжаем", "Остановись", "Исправь сам"]) assert.ok(userGuide.includes(label), `missing literal user choice: ${label}`);
+  assert.match(userGuide, /(?:покаж|показ)[\s\S]{0,250}(?:макет)[\s\S]{0,160}(?:письм|собран)[\s\S]{0,250}(?:затем|после|до вопрос)/iu);
+  assert.match(userGuide, /(?:ответ|ожидан)[\s\S]{0,180}(?:выпуск|публикац)|(?:выпуск|публикац)[\s\S]{0,180}(?:ответ|ожидан)/iu);
+  assert.match(userGuide, /(?:неудач|невозмож|недоступ)[\s\S]{0,240}(?:снова|повтор|верн)[\s\S]{0,180}(?:выбор|вариант)/iu);
+  assert.match(userGuide, /(?:сохран)[\s\S]{0,180}(?:расхождени)/iu);
+  for (const excluded of [/иконк/iu, /кнопк/iu, /провер/iu]) assert.match(userGuide, excluded);
+});
