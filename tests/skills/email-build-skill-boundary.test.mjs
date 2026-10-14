@@ -273,9 +273,11 @@ const userGuide = await readFile(join(repoRoot, "docs/user-guide.md"), "utf8");
 
 test("user guide describes the three raster-image choices", () => {
   for (const label of ["Продолжаем", "Остановись", "Исправь сам"]) assert.ok(userGuide.includes(label), `missing literal user choice: ${label}`);
-  assert.match(userGuide, /(?:покаж|показ)[\s\S]{0,250}(?:макет)[\s\S]{0,160}(?:письм|собран)[\s\S]{0,250}(?:затем|после|до вопрос)/iu);
+  const pairBeforeQuestion = /(?:покаж|показ)[\s\S]{0,250}(?:макет|эталон Figma)[\s\S]{0,160}(?:письм|собран|отрендер|результат)[\s\S]{0,250}(?:затем|после|до вопрос)/iu;
+  assert.match(userGuide, pairBeforeQuestion);
+  assert.doesNotMatch("Сначала Codex спросит, затем покажет обещанный эталон Figma и результат", pairBeforeQuestion);
   assert.match(userGuide, /(?:ответ|ожидан)[\s\S]{0,180}(?:выпуск|публикац)|(?:выпуск|публикац)[\s\S]{0,180}(?:ответ|ожидан)/iu);
-  assert.match(userGuide, /(?:неудач|невозмож|недоступ)[\s\S]{0,240}(?:снова|повтор|верн)[\s\S]{0,180}(?:выбор|вариант)/iu);
-  assert.match(userGuide, /(?:сохран)[\s\S]{0,180}(?:расхождени)/iu);
+  assert.match(userGuide, /(?:неудач|невозмож|недоступ)[\s\S]{0,240}(?:снова|повтор|верн)[\s\S]{0,180}(?:выбор|вариант|Продолжаем \/ Остановись \/ Исправь сам)/iu);
+  assert.match(userGuide, /Продолжаем[^\n]{0,200}(?:сохран|остав)[^\n.]{0,180}(?:расхождени|отличи)/iu);
   for (const excluded of [/иконк/iu, /кнопк/iu, /провер/iu]) assert.match(userGuide, excluded);
 });
