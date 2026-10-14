@@ -41,7 +41,7 @@ function instance(id, options = {}, instanceId = id) {
         result.content_values.push({ element_id: node.id, slot_id: slot.id, scope: viewport, value: { type: slot.type, value: content } });
       }
       if (node.render_mode === "nested-component") {
-        if (!nested.has(node.id)) nested.set(node.id, { element_id: node.id, instance: instance(node.component_id, options, node.id) });
+        if (!nested.has(node.id)) nested.set(node.id, { element_id: node.id, instance: instance(node.component_id, options, `${instanceId}--${node.id}`) });
       }
     }
   }

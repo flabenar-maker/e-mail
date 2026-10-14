@@ -219,6 +219,13 @@ test("duplicate source or correspondence keys cannot be silently overwritten", (
   assert.ok(codes(mapped).includes("EMAIL_SOURCE_DUPLICATE"));
 });
 
+test('existing production source guard rejects duplicate bare model IDs under different parents', () => {
+  const input = scenario();
+  input.model.root.slots[0].instances[1].nested_components[0].instance.instance_id = 'a-child';
+  const diagnostics = verifyEmailModelSource(input);
+  assert.ok(diagnostics.some(d => d.code === 'EMAIL_SOURCE_DUPLICATE' && d.path === '/source/model-instances'));
+});
+
 
 test("missing source node or field identifiers cannot match on both sides", () => {
   const field = scenario();

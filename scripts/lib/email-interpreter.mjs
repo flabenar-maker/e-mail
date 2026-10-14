@@ -91,6 +91,14 @@ function valueWithUnit(value) {
   return undefined;
 }
 
+function isIntrinsicLabel(facts = [], { mode, semanticRole } = {}) {
+  const fact = (id) => facts.find((item) => item.id === id)?.value;
+  const sizing = fact("horizontal-sizing")?.value;
+  return mode === "html-text" && semanticRole === "label" &&
+    fact("text-auto-resize")?.value === "width_and_height" &&
+    (sizing === undefined || sizing === "hug");
+}
+
 function propsFromFacts(facts = [], { viewport, mode, isRoot = false, parentAxis, semanticRole } = {}) {
   const props = { style: {} };
   const fact = (id) => facts.find((item) => item.id === id)?.value;
@@ -303,9 +311,36 @@ function wrapAction(element, entry, html) {
   return renderPrimitive("link", { href, style: { display: "block", color: "inherit" } }, html);
 }
 
-function isWholeButtonAction(element) {
+function isNpsOptionAction(element, context, viewport) {
+  if (element?.render_mode !== "presentation-table" ||
+      element.action?.kind !== "whole-element" || element.action.href_slot !== "href") return false;
+
+  let componentId;
+  let originalId;
+  if (Object.hasOwn(element, "output_origin")) {
+    const origin = element.output_origin;
+    if (!origin || typeof origin !== "object" || Array.isArray(origin) ||
+        Object.keys(origin).sort().join(",") !== "component_id,instance_path,original_element_id,viewport" ||
+        !["mobile", "desktop"].includes(origin.viewport) || origin.viewport !== viewport ||
+        typeof origin.instance_path !== "string" ||
+        !/^[A-Za-z0-9][A-Za-z0-9._:-]*(?:\/[A-Za-z0-9][A-Za-z0-9._:-]*)*$/u.test(origin.instance_path)) return false;
+    componentId = origin.component_id;
+    originalId = origin.original_element_id;
+  } else {
+    componentId = context?.componentId;
+    originalId = element.id;
+  }
+  return componentId === "nps-options" && [
+    "root-content-area-emoji-buttons-good",
+    "root-content-area-emoji-buttons-neutral",
+    "root-content-area-emoji-buttons-bad",
+  ].includes(originalId);
+}
+
+function isWholeButtonAction(element, context, viewport) {
   return element.action?.kind === "whole-element" && (
-    element.semantic_role === "button" || element.semantic_role?.endsWith("-button")
+    element.semantic_role === "button" || element.semantic_role?.endsWith("-button") ||
+    isNpsOptionAction(element, context, viewport)
   );
 }
 
@@ -339,19 +374,72 @@ function inlineActionParts(childHtml, childNodes, gap) {
     }
     return html.replace(/^<p([^>]*)>([\s\S]*)<\/p>$/u, (_match, attrs, body) => {
       const style = attrs.match(/\sstyle="([^"]*)"/u);
+      const paragraphWhitespace = /(?:^|;)white-space:pre(?:;|$)/u.test(style?.[1] ?? "")
+        ? "" : whitespace;
       const textStyle = Number.isFinite(fixedWidth) || hugText
         ? style?.[1].replace(/(?:^|;)max-width:[^;]*/u, "")
         : style?.[1];
       const nextAttrs = style
-        ? attrs.replace(style[0], ' style="' + textStyle + ';display:inline-block;vertical-align:middle;' + whitespace + column + offset + '"')
-        : attrs + ' style="display:inline-block;vertical-align:middle;' + whitespace + column + offset + '"';
+        ? attrs.replace(style[0], ' style="' + textStyle + ';display:inline-block;vertical-align:middle;' + paragraphWhitespace + column + offset + '"')
+        : attrs + ' style="display:inline-block;vertical-align:middle;' + paragraphWhitespace + column + offset + '"';
       return "<span" + nextAttrs + ">" + body + "</span>";
     });
   });
 }
 
-function renderWholeButtonAction(element, entry, childHtml, factProps, gap) {
-  if (!isWholeButtonAction(element)) return null;
+function renderNpsOptionAction(element, entry, childHtml, factProps, viewport) {
+  const visible = childHtml.filter(Boolean);
+  const image = visible.length === 1 ? visible[0].match(/^\s*(<img\b[^>]*>)\s*$/u)?.[1] : undefined;
+  // Non-image labels keep the existing native whole-button conversion.
+  if (visible.length > 0 && !image) return null;
+  const href = actionHref(element, entry);
+  if (!href) return null;
+
+  const padding = Object.fromEntries(
+    Object.entries(factProps.style).filter(([key]) => key === "padding" || key.startsWith("padding-")),
+  );
+  const style = { ...factProps.style };
+  for (const key of Object.keys(padding)) delete style[key];
+  const linkStyle = { display: "block", color: "inherit", "text-align": "center", ...padding };
+  const dimensions = element.facts?.find(({ id }) => id === "reference-size")?.value;
+  const minimumHeight = factProps.height ?? (visible.length === 0 && dimensions?.type === "dimensions"
+    ? dimensions.height : undefined);
+  if (Number.isFinite(minimumHeight) && minimumHeight > 0) {
+    linkStyle["box-sizing"] = "border-box";
+    linkStyle["min-height"] = `${minimumHeight}px`;
+  }
+
+  if (visible.length === 0) {
+    const images = (element.children ?? []).filter((child) => child.render_mode === "direct-image");
+    const native = images.length === 1 ? propsFromFacts(images[0].facts, {
+      viewport, mode: "direct-image", semanticRole: images[0].semantic_role,
+    }) : null;
+    const pixels = (value) => typeof value === "number" ? value
+      : typeof value === "string" && /^\d+(?:\.\d+)?px$/u.test(value) ? Number.parseFloat(value) : undefined;
+    const left = pixels(padding["padding-left"]);
+    const right = pixels(padding["padding-right"]);
+    if (native && !native.fluid && Number.isFinite(native.width) && native.width > 0 &&
+        Number.isFinite(left) && Number.isFinite(right)) {
+      // Reserve the hidden native icon's intrinsic contribution without emitting it.
+      linkStyle["box-sizing"] = "border-box";
+      linkStyle["min-width"] = `${native.width + left + right}px`;
+    }
+  }
+
+  // Keep the native block image and its informative alt/font; no inherited line-box strut.
+  const body = image?.replace(/style="([^"]*)"/u, (_match, imageStyle) =>
+    'style="' + imageStyle + ';margin:0 auto"') ?? "";
+  const link = renderPrimitive("link", { href, style: linkStyle }, body);
+  const cell = renderPrimitive("cell", { style: { "text-align": "center" } }, link);
+  return renderPrimitive("table", { ...factProps, style }, "<tr>" + cell + "</tr>");
+}
+
+function renderWholeButtonAction(element, entry, childHtml, factProps, gap, context, viewport) {
+  if (!isWholeButtonAction(element, context, viewport)) return null;
+  if (isNpsOptionAction(element, context, viewport)) {
+    const npsHtml = renderNpsOptionAction(element, entry, childHtml, factProps, viewport);
+    if (npsHtml !== null) return npsHtml;
+  }
 
   const href = actionHref(element, entry);
   const parts = inlineActionParts(childHtml, element.children, gap);
@@ -382,6 +470,9 @@ function renderShellNative(element, viewport, path, childHtml, context) {
   if (element.render_mode === "presentation-table" && element.semantic_role === "social-icons" && factProps.width === "auto") {
     factProps.align = "center";
   }
+  if (element.render_mode === "presentation-table" && context.parentCellCentersTable?.[viewport] && factProps.align === undefined) {
+    factProps.align = "center";
+  }
   if (element.render_mode === "presentation-table" && element.semantic_role === "button-text") {
     factProps.style["white-space"] = "nowrap";
   }
@@ -398,7 +489,8 @@ function renderShellNative(element, viewport, path, childHtml, context) {
         }, "&nbsp;");
         return { html: renderPrimitive("table", { width: "100%" }, `<tr>${cell}</tr>`), diagnostics: [] };
       }
-      if (children.length === 0 && dimensions?.width > 0 && dimensions?.height > 1 && factProps.style["background-color"]) {
+      if (!isNpsOptionAction(element, context, viewport) && children.length === 0 &&
+          dimensions?.width > 0 && dimensions?.height > 1 && factProps.style["background-color"]) {
         const background = factProps.style["background-color"];
         const radius = factProps.style["border-radius"];
         const cell = renderPrimitive("cell", {
@@ -451,8 +543,8 @@ function renderShellNative(element, viewport, path, childHtml, context) {
           )],
         };
       }
-      if (isWholeButtonAction(element)) {
-        const actionHtml = renderWholeButtonAction(element, entry, childHtml, factProps, gap);
+      if (isWholeButtonAction(element, context, viewport)) {
+        const actionHtml = renderWholeButtonAction(element, entry, childHtml, factProps, gap, context, viewport);
         if (actionHtml) return { html: actionHtml, diagnostics: [] };
       }
 
@@ -475,13 +567,6 @@ function renderShellNative(element, viewport, path, childHtml, context) {
           ? html.replace(/(<img\b[^>]*\sstyle=")([^"]*)"/u,
             (_match, prefix, style) => prefix + style + ';margin:0 auto"')
           : html;
-        const centeredTable = axis === "vertical" && counterAlignment === "center" &&
-          centeredImage.startsWith("<table") &&
-          !/^<table[^>]*\salign=/u.test(centeredImage)
-          ? centeredImage.replace(/^<table\b/u, '<table align="center"')
-            .replace(/(<table[^>]*style=")([^"]*)"/u,
-              (_match, prefix, style) => prefix + style + ';margin:0 auto"')
-          : centeredImage;
         const fillHeight = node?.facts?.some(({ id, value }) =>
           id === "vertical-sizing" && value?.value === "fill");
         const childRadius = nodeProps.style["border-radius"];
@@ -511,7 +596,7 @@ function renderShellNative(element, viewport, path, childHtml, context) {
             ? { bgcolor: nodeProps.style["background-color"] }
             : {}),
           ...(Object.keys(cellStyle).length > 0 ? { style: cellStyle } : {}),
-        }, groupedAction ? centeredTable : wrapAction(element, entry, centeredTable));
+        }, groupedAction ? centeredImage : wrapAction(element, entry, centeredImage));
       };
       const rawRows = axis === "horizontal"
         ? `<tr>${visible.map(cellFor).join(gap > 0
@@ -547,9 +632,16 @@ function renderShellNative(element, viewport, path, childHtml, context) {
           ? { html: "", diagnostics: [diagnostic("RENDER_RICH_TEXT_INVALID", `/contracts/${viewport}/${path}`, rich.error)] }
           : { html: rich.html, diagnostics: [] };
       }
+      const text = emittedSlotText(element,entry,context);
+      const intrinsicPlainLabel = isIntrinsicLabel(element.facts, { mode: element.render_mode, semanticRole: element.semantic_role }) &&
+        typeof text === "string" && !/[\r\n\u2028\u2029]/u.test(text);
+      if (intrinsicPlainLabel) delete factProps.style["max-width"];
+      if (intrinsicPlainLabel && factProps.style.width !== "100%" && / {2,}/u.test(text)) {
+        factProps.style["white-space"] = "pre";
+      }
       return {
         html: renderPrimitive("text", {
-          text: emittedSlotText(element,entry,context),
+          text,
           style: factProps.style,
         }),
         diagnostics: [],
@@ -680,6 +772,15 @@ function layoutAxisFor(element) {
   return ["horizontal", "vertical"].includes(axis) ? axis : undefined;
 }
 
+function childTableCentering(element, viewport, context) {
+  if (["nested-component", "slot"].includes(element?.render_mode)) {
+    return context.parentCellCentersTable?.[viewport] ?? false;
+  }
+  return element?.render_mode === "presentation-table" &&
+    (layoutAxisFor(element) ?? "vertical") === "vertical" &&
+    element.facts?.find(({ id }) => id === "counter-alignment")?.value?.value === "center";
+}
+
 function renderSingle(element, viewport, path, context) {
   if (!element) return { html: "", diagnostics: [] };
   const visibility = visibilityFor(element, viewport, context, path);
@@ -687,6 +788,7 @@ function renderSingle(element, viewport, path, context) {
   const childContext = {
     ...context,
     parentLayoutAxis: { ...context.parentLayoutAxis, [viewport]: layoutAxisFor(element) },
+    parentCellCentersTable: { ...context.parentCellCentersTable, [viewport]: childTableCentering(element, viewport, context) },
     anchorContexts:{...context.anchorContexts,[viewport]:anchorContext(element,viewport,context)},
   };
   const children = (element.children ?? []).map((child, index) =>
@@ -758,11 +860,20 @@ function renderPaired(pair, path, context) {
   const childContext = {
     ...context,
     parentLayoutAxis: { mobile: layoutAxisFor(pair.mobile), desktop: layoutAxisFor(pair.desktop) },
+    parentCellCentersTable: {
+      mobile: childTableCentering(pair.mobile, "mobile", context),
+      desktop: childTableCentering(pair.desktop, "desktop", context),
+    },
     anchorContexts:{mobile:anchorContext(pair.mobile,"mobile",context),desktop:anchorContext(pair.desktop,"desktop",context)},
   };
   const children = pair.children.map((child, index) =>
     renderPaired(child, `${path}-${index}`, childContext),
   );
+  const nativeWholeButton = [[pair.mobile, "mobile"], [pair.desktop, "desktop"]].some(([element, viewport]) =>
+    element.render_mode === "presentation-table" && isWholeButtonAction(element, context, viewport));
+  if (nativeWholeButton && children.some((child) => child.rules.length > 0 || (child.msoRules?.length ?? 0) > 0)) {
+    return renderSplit(pair, path, context);
+  }
   const combinedChildren = children.map(({ html }) => html);
   const mobileShell = renderShell(pair.mobile, "mobile", path.replaceAll("-", "/children/"), combinedChildren, context);
   const desktopShell = renderShell(pair.desktop, "desktop", path.replaceAll("-", "/children/"), combinedChildren, context);
@@ -804,25 +915,37 @@ function breakpointCss(rules, foundations, diagnostics, emissionProfile) {
 
 
 export function selectVariantRoot(component, viewport, variantAxes = {}) {
+  const unresolved = () => ({ root: null, diagnostics: [diagnostic(
+    "RENDER_VARIANT_UNRESOLVED", `/contracts/${viewport}/variant_contracts`,
+    `No exact ${viewport} variant for ${JSON.stringify(variantAxes)}.`,
+  )] });
+  if (!["mobile", "desktop"].includes(viewport) || variantAxes === null ||
+    typeof variantAxes !== "object" || Array.isArray(variantAxes)) return unresolved();
   const base = component?.contracts?.[viewport]?.root;
-  const extras = component?.contracts?.variant_contracts ?? [];
-  if (Object.keys(variantAxes).length === 0 || extras.length === 0) return { root: base, diagnostics: [] };
-  const sources = component?.contracts?.source_variants ?? [];
-  const sourceFor = (root) => sources.find(({ source_node }) =>
-    source_node?.node_id === root?.facts?.find(({ id }) => id === "reference-size")?.provenance?.node_id);
-  const candidates = [
-    { root: base, axes: sourceFor(base)?.axes ?? [{ name: "Viewport", value: viewport }] },
-    ...extras.map(({ root, axes }) => ({ root, axes })),
-  ];
   const expected = Object.entries(variantAxes).sort(([a], [b]) => a.localeCompare(b));
-  const selected = candidates.find(({ axes }) =>
-    axes.some(({ name, value }) => name === "Viewport" && value.toLowerCase() === viewport) &&
-    expected.every(([name, value]) => axes.some((axis) => axis.name === name && axis.value.toLowerCase() === String(value).toLowerCase())) &&
-    axes.filter(({ name }) => name !== "Viewport").length === expected.length);
-  return selected
-    ? { root: selected.root, diagnostics: [] }
-    : { root: null, diagnostics: [diagnostic("RENDER_VARIANT_UNRESOLVED",
-      `/contracts/${viewport}/variant_contracts`, `No exact ${viewport} variant for ${JSON.stringify(variantAxes)}.`)] };
+  if (expected.length === 0) return { root: base, diagnostics: [] };
+  if (Object.hasOwn(variantAxes, "Viewport")) return unresolved();
+  const sources = component?.contracts?.source_variants ?? [];
+  const nodeId = base?.facts?.find(({ id }) => id === "reference-size")?.provenance?.node_id;
+  const baseSource = typeof nodeId === "string"
+    ? sources.find(({ source_node }) => source_node?.node_id === nodeId) : null;
+  const candidates = [
+    { root: base, axes: baseSource?.axes ?? [{ name: "Viewport", value: viewport }] },
+    ...(component?.contracts?.variant_contracts ?? []).map(({ root, axes }) => ({ root, axes })),
+  ];
+  const selected = candidates.filter(({ root, axes }) => {
+    if (!root || !Array.isArray(axes) || axes.some((axis) =>
+      typeof axis?.name !== "string" || typeof axis?.value !== "string")) return false;
+    const viewportAxes = axes.filter(({ name }) => name === "Viewport");
+    if (viewportAxes.length > 1 || viewportAxes.some(({ value }) =>
+      value.toLowerCase() !== viewport)) return false;
+    const otherAxes = axes.filter(({ name }) => name !== "Viewport");
+    return otherAxes.length === expected.length &&
+      new Set(otherAxes.map(({ name }) => name)).size === otherAxes.length &&
+      expected.every(([name, value]) => otherAxes.some((axis) =>
+        axis.name === name && axis.value.toLowerCase() === String(value).toLowerCase()));
+  });
+  return selected.length === 1 ? { root: selected[0].root, diagnostics: [] } : unresolved();
 }
 
 export function renderContractTree({
@@ -874,7 +997,7 @@ export function renderContractTree({
   const result = renderPaired(
     pairViewportTrees({ mobile, desktop }),
     "root",
-    { content, assets, properties, visibility, variantAxes, foundations, emissionProfile, outputBindings, templateRules, previewValues },
+    { componentId: component.id, content, assets, properties, visibility, variantAxes, foundations, emissionProfile, outputBindings, templateRules, previewValues },
   );
   const diagnostics = [...result.diagnostics];
   const css = breakpointCss(result.rules, foundations, diagnostics, emissionProfile);

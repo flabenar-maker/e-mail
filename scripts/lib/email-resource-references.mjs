@@ -1,46 +1,42 @@
 import { posix, win32 } from 'node:path';
 import { validateZipEntryPath } from './zip-store.mjs';
 const issue=(code,path,message)=>({code,path,message});
-function decode(value) {
-  const entities=value.replaceAll('&amp;','&').replace(/&#(?:x([0-9a-f]+)|(\d+));/giu,(_,hex,decimal)=>String.fromCodePoint(Number.parseInt(hex??decimal,hex?16:10)));
-  return decodeURIComponent(entities);
-}
-// HTML entities are decoded by browsers in style attributes, but not in style
-// raw text. Keep a source range for each decoded code unit so replacements touch
-// the resource alone and leave quote entities and every surrounding byte intact.
-function attributeCss(raw) {
-  let text='';const spans=[];
-  const entities=/&(?:amp|quot|apos);|&#(?:x([0-9a-f]+)|(\d+));/giu;
-  let cursor=0;
-  const appendRaw=(start,end)=>{for(let index=start;index<end;index++){text+=raw[index];spans.push({start:index,end:index+1});}};
-  for(const match of raw.matchAll(entities)) {
-    appendRaw(cursor,match.index);
-    let decoded;
-    if(match[1]!==undefined||match[2]!==undefined) {
-      const point=Number.parseInt(match[1]??match[2],match[1]!==undefined?16:10);
-      if(point>0x10ffff||point>=0xd800&&point<=0xdfff){appendRaw(match.index,match.index+match[0].length);cursor=match.index+match[0].length;continue;}
-      decoded=String.fromCodePoint(point);
-    } else decoded={'&amp;':'&','&quot;':'"','&apos;':"'"}[match[0].toLowerCase()];
-    for(const unit of decoded.split('')){text+=unit;spans.push({start:match.index,end:match.index+match[0].length});}
-    cursor=match.index+match[0].length;
+// Decode an attribute exactly once, keeping UTF-16 offsets into its raw HTML.
+// CSS in a style element is raw text and must not use HTML entity decoding.
+function resourceText(raw, htmlEncoded) {
+  let value='';const starts=[],ends=[];
+  const tokens=htmlEncoded ? /&(?:amp|AMP|quot|QUOT|apos|lt|LT|gt|GT|#(?:[xX][0-9a-fA-F]+|\d+));|[\s\S]/gu : /[\s\S]/gu;
+  for(const token of raw.matchAll(tokens)) {
+    let text=token[0];
+    if(htmlEncoded && text.startsWith('&')) {
+      const named={amp:'&',AMP:'&',quot:'"',QUOT:'"',apos:"'",lt:'<',LT:'<',gt:'>',GT:'>'};
+      const name=text.slice(1,-1);
+      if(Object.hasOwn(named,name))text=named[name];
+      else if(name.startsWith('#')) {
+        const hex=name[1]==='x'||name[1]==='X',point=Number.parseInt(name.slice(hex?2:1),hex?16:10);
+        text=point>0&&point<=0x10ffff&&!(point>=0xd800&&point<=0xdfff) ? String.fromCodePoint(point) : '\ufffd';
+      }
+    }
+    value+=text;
+    for(let i=0;i<text.length;i++) {
+      starts.push(token.index);ends.push(token.index+token[0].length);
+    }
   }
-  appendRaw(cursor,raw.length);return {text,spans};
+  return {value,starts,ends};
 }
-function cssReferences(raw,offset,{attribute=false}={}) {
-  const decoded=attribute?attributeCss(raw):null,text=decoded?.text??raw,references=[];
-  const urls=/\burl\(\s*(?:"([^"]*)"|'([^']*)'|([^\s)'";]+))\s*\)/giu;
-  for(const url of text.matchAll(urls)) {
-    const value=url[1]??url[2]??url[3];
-    if(!value)continue;
-    const index=url.index+url[0].indexOf(value);
-    const start=decoded?decoded.spans[index].start:index;
-    const end=decoded?decoded.spans[index+value.length-1].end:index+value.length;
+function cssReferences(raw,offset,htmlEncoded) {
+  const text=resourceText(raw,htmlEncoded),references=[];
+  const urls=/\burl\(\s*(?:"([^"]*)"|'([^']*)'|([^\s)'"(]+))\s*\)/dgiu;
+  for(const url of text.value.matchAll(urls)) {
+    const group=url[1]!==undefined?1:url[2]!==undefined?2:3;
+    const [from,to]=url.indices[group];
+    const start=text.starts[from]??raw.length,end=to>from?text.ends[to-1]:start;
     references.push({kind:'css-url',raw_value:raw.slice(start,end),start:offset+start,end:offset+end});
   }
   return references;
 }
-export function collectResourceReferences({html}) {
-  const references=[];
+function collectReferences({html}) {
+  const references=[],rawCss=new Set();
   // Attribute matches stop at the quote, not at '>' within a quoted value.
   const tags=/<[a-z][a-z0-9:-]*\b(?:[^<>"']|"[^"]*"|'[^']*')*>/giu;
   for(const tag of html.matchAll(tags)) {
@@ -51,28 +47,47 @@ export function collectResourceReferences({html}) {
       const valueOffset=attr.index+attr[0].length-raw.length-(attr[2]!==undefined||attr[3]!==undefined?1:0);
       const start=tag.index+valueOffset;
       if(key==='style') {
-        references.push(...cssReferences(raw,start,{attribute:true}));
+        references.push(...cssReferences(raw,start,true));
       } else if(key==='background'||key==='src'&&(name==='img'||['v:fill','v:imagedata'].includes(name))) references.push({kind:key==='background'?'html-background':name==='img'?'img-src':'vml-src',raw_value:raw,start,end:start+raw.length});
     }
   }
   for(const style of html.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style\s*>/giu)) {
     const offset=style.index+style[0].indexOf('>')+1;
-    references.push(...cssReferences(style[1],offset));
+    for(const ref of cssReferences(style[1],offset,false)) {
+      rawCss.add(ref);references.push(ref);
+    }
   }
-  return references.sort((a,b)=>a.start-b.start);
+  return {references:references.sort((a,b)=>a.start-b.start),rawCss};
+}
+export function collectResourceReferences({html}) {
+  return collectReferences({html}).references;
+}
+function resourceSuffix(raw,text,prefix) {
+  // Stop at the decoded prefix boundary, including entity/percent separators.
+  // Only the prefix changes; the original suffix escaping remains untouched.
+  for(const token of text.value.matchAll(/%[0-9a-f]{2}|[\s\S]/giu)) {
+    const end=token.index+token[0].length;
+    let decoded;
+    try {decoded=decodeURIComponent(text.value.slice(0,end));} catch {continue;}
+    if(decoded===prefix)return raw.slice(text.ends[end-1]);
+    if(decoded.length>=prefix.length)break;
+  }
+  throw new URIError('Resource prefix does not have a raw boundary.');
 }
 export function rebasePackageResources({html,assetPaths,htmlEntry,assetRootEntry}) {
-  const references=collectResourceReferences({html});
+  const {references,rawCss}=collectReferences({html});
   const diagnostics=[];const replacements=[];const declared=new Set(assetPaths);
   if(!validateZipEntryPath(htmlEntry)||!validateZipEntryPath(assetRootEntry)) return {html,references,diagnostics:[issue('EMAIL_RESOURCE_PACKAGE_PATH_INVALID','/profile','Package entry paths are unsafe.')]};
   for(const ref of references) {
-    let path;
-    try {path=decode(ref.raw_value);} catch {diagnostics.push(issue('EMAIL_RESOURCE_ENCODING_INVALID','/html','Invalid resource escaping.'));continue;}
+    let path,text;
+    try {text=resourceText(ref.raw_value,!rawCss.has(ref));path=decodeURIComponent(text.value);} catch {diagnostics.push(issue('EMAIL_RESOURCE_ENCODING_INVALID','/html','Invalid resource escaping.'));continue;}
     if(path.includes('\\')||path.split('/').some(part=>part==='..'||part==='.'||part==='')||posix.isAbsolute(path)||win32.isAbsolute(path)||/^[a-z][a-z0-9+.-]*:/iu.test(path)||!path.startsWith(assetRootEntry+'/')||!declared.has(path)) {
       diagnostics.push(issue('EMAIL_RESOURCE_UNDECLARED','/html', 'Resource is unsafe, undeclared, or differs in case: '+path));continue;
     }
     const relative=posix.relative(posix.dirname(htmlEntry),assetRootEntry);
-    if(relative!==assetRootEntry)replacements.push({...ref,value:relative+'/'+ref.raw_value.slice(ref.raw_value.indexOf('/')+1)});
+    if(relative===assetRootEntry)continue;
+    try {replacements.push({...ref,value:relative+'/'+resourceSuffix(ref.raw_value,text,assetRootEntry+'/')});}
+    catch {diagnostics.push(issue('EMAIL_RESOURCE_ENCODING_INVALID','/html','Invalid resource prefix escaping.'));}
   }
   if(diagnostics.length)return {html,references,diagnostics};
   let rebased=html;

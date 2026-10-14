@@ -279,3 +279,107 @@ test("renderer blocks output at or above the exclusive embedded CSS limit", asyn
     ),
   );
 });
+// Task9 canonical fixture reads registered facts, while CTA text/href expectations are literal.
+function task9CanonicalWalk(instance, visit) {
+  visit(instance);
+  for (const slot of instance.slots ?? []) for (const child of slot.instances ?? []) task9CanonicalWalk(child, visit);
+  for (const nested of instance.nested_components ?? []) task9CanonicalWalk(nested.instance, visit);
+}
+async function task9CanonicalScene({ repeated = false, profile = "default" } = {}) {
+  const { model, dependencies } = await pilot();
+  const { loadAssetsFoundation } = await import("../../scripts/lib/assets-foundation.mjs");
+  const assets = await loadAssetsFoundation({ repoRoot });
+  const build = (componentId, instanceId) => {
+    const record = dependencies.componentIndex.bySystemId.get(componentId); assert.ok(record, componentId);
+    const result = { instance_id: instanceId, component_id: componentId, variants: { mobile: "mobile", desktop: "desktop" }, property_values: (record.properties ?? []).filter(p => p.type === "boolean").map(p => ({ property_id: p.id, scope: "all", value: p.default })), content_values: [], asset_files: [], slots: [] };
+    const nested = new Map(); const assetIds = new Set();
+    for (const viewport of ["mobile", "desktop"]) {
+      const occurrences = new Map();
+      const visit = node => {
+        if (node.visibility?.mode === "instance" && node.visibility.default_visible === false) return;
+        if (node.visibility?.mode === "property" && !result.property_values.find(p => p.property_id === node.visibility.property_id)?.value) return;
+        for (const slot of node.content_slots ?? []) {
+          if (slot.type === "placeholder") continue;
+          const text = node.facts?.find(f => f.id === "source-text")?.value?.value ?? `${instanceId} ${node.id}`;
+          const value = slot.type === "url" ? { type: "url", value: `https://example.test/source-${instanceId}-${node.id}-${slot.id}` }
+            : slot.type === "alt-text" ? { type: "alt-text", purpose: "decorative", value: "" }
+            : { type: slot.type, value: text };
+          result.content_values.push({ element_id: node.id, slot_id: slot.id, scope: viewport, value });
+        }
+        if (["direct-image", "background-image"].includes(node.render_mode)) assetIds.add(node.asset_contract_id);
+        if (node.render_mode === "nested-component") {
+          const ordinal = occurrences.get(node.component_id) ?? 0; occurrences.set(node.component_id, ordinal + 1);
+          const key = node.component_id + "/" + ordinal; const item = nested.get(key) ?? { componentId: node.component_id, ids: {} };
+          item.ids[viewport] = node.id; nested.set(key, item);
+        }
+        for (const child of node.children ?? []) visit(child);
+      };
+      visit(record.contracts[viewport].root);
+    }
+    result.asset_files = [...assetIds].map(id => {
+      const contract = record.asset_contracts.find(c => c.id === id); assert.ok(contract);
+      const exportProfile = assets.export_profiles.find(p => p.id === contract.export_profile_id); assert.ok(exportProfile);
+      return { asset_contract_id: id, path: `images/${id}${exportProfile.contract.suffix}${exportProfile.contract.extension}` };
+    });
+    if (nested.size) result.nested_components = [...nested.values()].map((item, ordinal) => ({
+      ...(item.ids.mobile === item.ids.desktop ? { element_id: item.ids.mobile } : { element_ids: item.ids }),
+      instance: build(item.componentId, `${instanceId}-nested-${ordinal}`),
+    }));
+    return result;
+  };
+  const hero = build("banner-hero", "task9-hero"); const steps = build("block-steps", "task9-steps");
+  const top = [hero, steps, ...(repeated ? [build("banner-hero", "task9-hero-repeat")] : [])];
+  for (const [sceneIndex, scene] of top.entries()) task9CanonicalWalk(scene, instance => {
+    if (!["button-primary", "button-secondary"].includes(instance.component_id)) return;
+    for (const value of instance.content_values) {
+      if (value.slot_id === "href") value.value.value = `https://example.test/task9-canonical-${sceneIndex}`;
+      if (value.element_id === "root-label" && value.slot_id === "text") value.value.value = `${sceneIndex === 0 ? "HERO" : sceneIndex === 1 ? "STEPS" : "REPEAT"} ${value.scope} CTA`;
+    }
+  });
+  model.root.slots.find(slot => slot.element_id === "content").instances = top;
+  const { validateEmailModelSemantics } = await import("../../scripts/lib/email-model.mjs");
+  assert.deepEqual(validateEmailModelSemantics(model, dependencies), [], "canonical Hero/Steps model semantic precondition");
+  if (profile === "altcraft-mobile-base-v1") {
+    const { loadEmailDeliveryProfiles, selectDeliveryProfile } = await import("../../scripts/lib/email-delivery-profile.mjs");
+    dependencies.deliveryProfile = selectDeliveryProfile(await loadEmailDeliveryProfiles({ repoRoot, componentIndex: dependencies.componentIndex }), profile);
+  }
+  const result = renderEmailDocument(model, dependencies);
+  assert.deepEqual(result.diagnostics, []); checkTableNesting(result.html);
+  return { result, model, dependencies };
+}
+function task9CanonicalOuterTag(html, marker) {
+  const at = html.indexOf(marker); assert.ok(at >= 0, marker); const stack = [];
+  for (const match of html.slice(0, at).matchAll(/<\/?table\b[^>]*>/gu)) { if (match[0].startsWith("</")) stack.pop(); else stack.push(match[0]); }
+  assert.ok(stack.length, marker); return stack.at(-1);
+}
+for (const profile of ["default", "altcraft-mobile-base-v1"]) test("canonical Hero Desktop CTA centers its actual outer table while min/Fill Hero and Steps stay unchanged: " + profile, async () => {
+  const { result, dependencies } = await task9CanonicalScene({ profile });
+  const hero = dependencies.componentIndex.bySystemId.get("banner-hero"); const steps = dependencies.componentIndex.bySystemId.get("block-steps");
+  const find = (node, id) => node.id === id ? node : (node.children ?? []).map(child => find(child, id)).find(Boolean);
+  assert.equal(find(hero.contracts.desktop.root, "root-card-content-area").facts.find(f => f.id === "counter-alignment").value.value, "center");
+  for (const viewport of ["mobile", "desktop"]) assert.equal(find(steps.contracts[viewport].root, "root-content-area").facts.find(f => f.id === "counter-alignment").value.value, "min");
+  const desktop = task9CanonicalOuterTag(result.html, "HERO desktop CTA");
+  assert.equal(attribute(desktop, "align"), "center"); assert.match(attribute(desktop, "style") ?? "", /(?:^|;)margin:0 auto(?:;|$)/u);
+  assert.equal((desktop.match(/\salign=/gu) ?? []).length, 1);
+  for (const marker of ["HERO mobile CTA", "STEPS mobile CTA", "STEPS desktop CTA"]) assert.notEqual(attribute(task9CanonicalOuterTag(result.html, marker), "align"), "center", marker + " follows its actual min parent");
+  for (const marker of ["HERO mobile CTA", "STEPS mobile CTA"]) assert.equal(attribute(task9CanonicalOuterTag(result.html, marker), "width"), "100%");
+  for (const ordinal of [0, 1]) assert.match(result.html, new RegExp('href="https://example\\.test/task9-canonical-' + ordinal + '"', "u"));
+  assert.ok(result.assets.some(asset => asset.path === "images/hero-image@2x.jpg"));
+  if (profile === "altcraft-mobile-base-v1") {
+    assert.equal((result.html.match(/<!-- cupis:block button-primary \/ /gu) ?? []).length, 2);
+    assert.equal((result.html.match(/<!-- cupis:block button-secondary \/ /gu) ?? []).length, 2);
+    assert.match(result.html, /<!--\[if mso\]>/u); assert.match(result.html, /<!--\[if !mso\]><!-->/u);
+  }
+});
+test("serialized repeated canonical CTA instances retain live href, scope/order, images and balanced tables", async () => {
+  const { result } = await task9CanonicalScene({ repeated: true, profile: "altcraft-mobile-base-v1" });
+  for (const viewport of ["mobile", "desktop"]) {
+    const positions = ["HERO", "STEPS", "REPEAT"].map(label => result.html.indexOf(label + " " + viewport + " CTA"));
+    assert.ok(positions.every(at => at >= 0)); assert.deepEqual(positions, [...positions].sort((a, b) => a - b));
+  }
+  assert.equal((result.html.match(/<!-- cupis:block button-primary \/ /gu) ?? []).length, 4);
+  assert.equal((result.html.match(/<!-- cupis:end button-primary \/ /gu) ?? []).length, 4);
+  assert.match(result.html, /task9-hero-repeat/u); assert.match(result.html, /href="https:\/\/example\.test\/task9-canonical-2"/u);
+  assert.ok(result.assets.some(asset => asset.path === "images/hero-image@2x.jpg"));
+  assert.doesNotMatch(result.html, /\[object Object\]|\bundefined\b|resolved-slot/u);
+});

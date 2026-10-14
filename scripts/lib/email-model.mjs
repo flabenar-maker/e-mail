@@ -26,9 +26,9 @@ function sortDiagnostics(errors) {
   );
 }
 
-function normalizeRichText(value) {
+function normalizeRichText(value, preserveRichTextRuns = false) {
   if (Array.isArray(value)) {
-    return value.map(normalizeRichText);
+    return value.map(child => normalizeRichText(child, preserveRichTextRuns));
   }
   if (!value || typeof value !== "object") {
     return value;
@@ -36,15 +36,15 @@ function normalizeRichText(value) {
   if (value.type === "rich-text" && Array.isArray(value.segments)) {
     return {
       type: "rich-text",
-      value: value.segments.map((segment) => segment.value).join(""),
+      value: preserveRichTextRuns ? value.segments.map(segment => segment.value) : value.segments.map(segment => segment.value).join(""),
     };
   }
   return Object.fromEntries(
-    Object.entries(value).map(([key, child]) => [key, normalizeRichText(child)]),
+    Object.entries(value).map(([key, child]) => [key, normalizeRichText(child, preserveRichTextRuns)]),
   );
 }
 
-export async function loadEmailModel({ modelPath, schemaPath }) {
+export async function loadEmailModel({ modelPath, schemaPath, preserveRichTextRuns = false }) {
   let model;
   let schema;
   try {
@@ -75,7 +75,7 @@ export async function loadEmailModel({ modelPath, schemaPath }) {
   if (errors.length > 0) {
     throw new AggregateError(errors, "Email model validation failed.");
   }
-  return normalizeRichText(model);
+  return normalizeRichText(model, preserveRichTextRuns);
 }
 
 function componentRecord(dependencies, componentId) {
@@ -585,6 +585,49 @@ function validateInstance(instance, dependencies, errors, path, stack, activeVie
   });
 }
 
+export function validateEmailInstanceIdentities(model) {
+  const errors = [];
+  const firstLocations = new Map();
+  const ancestry = new WeakSet();
+
+  function visit(instance, path) {
+    if (!instance || typeof instance !== "object") return;
+    const id = instance.instance_id;
+    const location = path + "/instance_id";
+    if (typeof id === "string") {
+      const first = firstLocations.get(id);
+      if (first !== undefined) {
+        const message = "Duplicate instance ID " + JSON.stringify(id) + " at " + first + " and " + location + ".";
+        errors.push(
+          diagnostic("EMAIL_MODEL_INSTANCE_DUPLICATE", first, message),
+          diagnostic("EMAIL_MODEL_INSTANCE_DUPLICATE", location, message),
+        );
+      } else {
+        firstLocations.set(id, location);
+      }
+    }
+    if (ancestry.has(instance)) return;
+    ancestry.add(instance);
+    if (Array.isArray(instance.slots)) {
+      instance.slots.forEach((slot, slotIndex) => {
+        if (!Array.isArray(slot?.instances)) return;
+        slot.instances.forEach((child, childIndex) => {
+          visit(child, path + "/slots/" + slotIndex + "/instances/" + childIndex);
+        });
+      });
+    }
+    if (Array.isArray(instance.nested_components)) {
+      instance.nested_components.forEach((nested, index) => {
+        visit(nested?.instance, path + "/nested_components/" + index + "/instance");
+      });
+    }
+    ancestry.delete(instance);
+  }
+
+  visit(model?.root, "/root");
+  return sortDiagnostics(errors);
+}
+
 export function validateEmailModelSemantics(model, dependencies, options = {}) {
   const errors = [];
   if (!model?.root) {
@@ -596,6 +639,8 @@ export function validateEmailModelSemantics(model, dependencies, options = {}) {
       ),
     ];
   }
+  const identityDiagnostics = validateEmailInstanceIdentities(model);
+  if (identityDiagnostics.length > 0) return identityDiagnostics;
   validateInstance(model.root, { ...dependencies, deliveryResearch: options.purpose === "delivery-inventory" }, errors, "/root", []);
   return sortDiagnostics(errors);
 }

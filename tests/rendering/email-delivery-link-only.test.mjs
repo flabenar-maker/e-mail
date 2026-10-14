@@ -28,3 +28,18 @@ test("provided metadata retains its original validation even though it is not re
   assert.ok(errors.some(item => item.code === "EMAIL_DELIVERY_SUBJECT_INVALID"));
   assert.ok(errors.some(item => item.code === "EMAIL_DELIVERY_SENDER_INVALID"));
 });
+
+test('Task10 presentation metadata does not weaken source email profile and unknown-answer gates', () => {
+  const presentation = { ...inventory, fields: inventory.fields.map(field => ({ ...field, display_group: { id: 'email/card', label: 'Карточка' }, display_context: 'Бонус', viewport_hint: null })) };
+  const good = { ...draft, answers: { [inventory.fields[0].id]: 'https://1cupis.ru/action' } };
+  assert.deepEqual(validateDeliveryDocument({ document: good, inventory: presentation, profile, purpose: 'final', sourceSha: draft.source_sha }), []);
+  for (const [change, code] of [
+    [{ source_sha: 'b'.repeat(40) }, 'EMAIL_DELIVERY_SOURCE_STALE'],
+    [{ email_id: 'different-letter' }, 'EMAIL_DELIVERY_EMAIL_MISMATCH'],
+    [{ profile_version: '9.0.0' }, 'EMAIL_DELIVERY_PROFILE_STALE'],
+    [{ answers: { ...good.answers, unknown: 'https://1cupis.ru/unknown' } }, 'EMAIL_DELIVERY_ANSWER_UNKNOWN'],
+  ]) {
+    const errors = validateDeliveryDocument({ document: { ...good, ...change }, inventory: { ...presentation, email_id: draft.email_id }, profile, purpose: 'final', sourceSha: draft.source_sha });
+    assert.ok(errors.some(error => error.code === code), code);
+  }
+});

@@ -27,6 +27,12 @@ During layout, request only missing user action links from the visible concrete 
 
 During email layout, report an error and its immediately known cause briefly; if the cause is unconfirmed, say so without deep diagnosis. Correct only the concrete email within existing rules and authorization; if continuation is impossible, stop and preserve completed work. Never propose, plan or apply system changes, ask approval for them, or invite a maintenance request as part of layout. A later explicit user request to address the cause is a separate task, reclassified by the CUPIS task-router.
 
+## Explain technical decisions clearly
+
+When an already-permitted question or error report needs user attention, name the affected part of the email and explain the practical effect in everyday language, including uncertainty. Describe choices as concrete actions and their consequences. Put any exact values required by the resolved rules after that explanation, with their meaning; avoid unexplained jargon. This guidance adds no questions or permissions and preserves existing stop rules.
+
+For a permitted image-quality choice: «Для главного баннера картинку придётся немного увеличить при подготовке файла. Размер баннера останется как в макете, но картинка может стать менее чёткой. Использовать её сейчас или дождаться более чёткого исходника в Figma?» Options: «Использовать текущую картинку» / «Я заменю картинку в Figma». Include the required size deficit as a secondary detail.
+
 ## Resolve and operate
 
 Reuse the selected repository and pinned cloud SHA supplied by a trusted CUPIS task-router or bootstrap handoff for this task; do not repin main during that handoff. For a standalone invocation, resolve the trusted selected repository through bootstrap/README.md#repository-binding and pin its current main SHA through authenticated gh CLI, or GitHub MCP if CLI is unavailable. An explicitly authorized candidate test uses its exact cloud SHA instead. The specialization and task sources must match the selected SHA; on mismatch stop rather than silently switching versions. Read system/manifest.yaml at that SHA; resolve the selected route, profile and workflow through its source references. Missing sources stop the request.

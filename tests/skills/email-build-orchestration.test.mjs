@@ -318,3 +318,142 @@ test("versioning rejects linked root email and images entries", async (t) => {
   );
 });
 
+
+// Task 4: relations require present participating fields before equality checks.
+const task4NewBuildOutputs = ["version-folder", "email-html", "images-directory", "source-comparison", "verification-summary", "handoff-summary", "delivery-form", "delivery-draft", "altcraft-package", "release-report"];
+const task4DesignOutputs = ["version-folder", "email-html", "images-directory", "verification-summary", "handoff-summary", "delivery-form", "delivery-draft", "altcraft-package", "release-report"];
+const task4TechnicalOutputs = ["version-folder", "email-html", "images-directory", "verification-summary", "handoff-summary"];
+
+function task4Inputs(mode, mobile, desktop) {
+  const base = mode === "new-build"
+    ? { request: true, "email-purpose": "Relation identity intake", "output-parent": true }
+    : { request: true, "source-email-html": true, "source-images-directory": true, "exact-change-scope": true };
+  return { ...base, "mobile-figma-instance": mobile, "desktop-figma-instance": desktop };
+}
+
+const task4EmptyIdentityCases = [
+  ["absent", (role) => ({ role })],
+  ["explicit undefined", (role) => ({ role, emailId: undefined })],
+  ["null", (role) => ({ role, emailId: null })],
+  ["empty string", (role) => ({ role, emailId: "" })],
+  ["whitespace", (role) => ({ role, emailId: " \t\n " })],
+];
+
+for (const mode of ["new-build", "continue-fix-design"]) {
+  for (const [label, makeInstance] of task4EmptyIdentityCases) {
+    test(`${mode} blocks two equal ${label} emailId fields with its declared relation blocker`, async () => {
+      const emailWorkflow = await workflow();
+      const resolution = resolveEmailBuildRequest({ workflow: emailWorkflow, inputs: task4Inputs(mode, makeInstance("mobile"), makeInstance("desktop")) });
+      assert.deepEqual(resolution, { mode, blocker: "email-instances-mismatch", allowedOutputs: [] });
+    });
+  }
+
+  test(`${mode} retains one-absent and different nonblank email identity controls`, async () => {
+    const emailWorkflow = await workflow();
+    for (const [mobile, desktop] of [
+      [{ role: "mobile" }, { role: "desktop", emailId: "email-a" }],
+      [{ role: "mobile", emailId: "email-a" }, { role: "desktop" }],
+      [{ role: "mobile", emailId: "email-a" }, { role: "desktop", emailId: "email-b" }],
+    ]) {
+      const resolution = resolveEmailBuildRequest({ workflow: emailWorkflow, inputs: task4Inputs(mode, mobile, desktop) });
+      assert.deepEqual(resolution, { mode, blocker: "email-instances-mismatch", allowedOutputs: [] });
+    }
+  });
+
+  test(`${mode} preserves ordered role and required-input priority before identity equality`, async () => {
+    const emailWorkflow = await workflow();
+    for (const [mobile, desktop] of [
+      [{}, { role: "desktop" }],
+      [{ role: "mobile" }, {}],
+      [{ role: "" }, { role: "desktop" }],
+      [{ role: "mobile" }, { role: " \t " }],
+      [{ role: "desktop" }, { role: "mobile" }],
+    ]) {
+      const resolution = resolveEmailBuildRequest({ workflow: emailWorkflow, inputs: task4Inputs(mode, mobile, desktop) });
+      assert.deepEqual(resolution, { mode, blocker: "viewport-role-ambiguous", allowedOutputs: [] });
+    }
+    const missingRequest = task4Inputs(mode, { role: "mobile" }, { role: "desktop" });
+    delete missingRequest.request;
+    assert.deepEqual(resolveEmailBuildRequest({ workflow: emailWorkflow, inputs: missingRequest }), { mode, blocker: "request-missing", allowedOutputs: [] });
+    const missingInstance = task4Inputs(mode, { role: "mobile", emailId: "email-a" }, { role: "desktop", emailId: "email-a" });
+    delete missingInstance["desktop-figma-instance"];
+    assert.deepEqual(resolveEmailBuildRequest({ workflow: emailWorkflow, inputs: missingInstance }), { mode, blocker: "figma-source-missing", allowedOutputs: [] });
+  });
+
+  test(`${mode} accepts matching nonblank IDs without trimming equality`, async () => {
+    const emailWorkflow = await workflow();
+    const allowedOutputs = mode === "new-build" ? task4NewBuildOutputs : task4DesignOutputs;
+    for (const emailId of ["email-a", " email-a "]) {
+      const inputs = task4Inputs(mode, { role: "mobile", emailId }, { role: "desktop", emailId });
+      const before = structuredClone(inputs);
+      assert.deepEqual(resolveEmailBuildRequest({ workflow: emailWorkflow, inputs }), { mode, blocker: null, allowedOutputs });
+      assert.deepEqual(inputs, before, "relation matching must not normalize input values");
+    }
+    assert.deepEqual(resolveEmailBuildRequest({ workflow: emailWorkflow, inputs: task4Inputs(mode, { role: "mobile", emailId: " email-a " }, { role: "desktop", emailId: "email-a" }) }), { mode, blocker: "email-instances-mismatch", allowedOutputs: [] });
+  });
+}
+
+function task4GenericWorkflow(relations = []) {
+  return { workflow: { modes: [{
+    id: "generic-relation", required_inputs: ["left", "right"], allowed_outputs: ["audit-findings"],
+    input_relations: relations,
+    input_blockers: [{ input: "left", blocker: "left-missing" }, { input: "right", blocker: "right-missing" }],
+    steps: [{ blockers: ["left-missing", "right-missing", "generic-field-mismatch"] }],
+  }] } };
+}
+
+const task4GenericRelation = { kind: "same-field", inputs: ["left", "right"], field: "optionalField", blocker: "generic-field-mismatch" };
+
+test("generic workflow without a relation does not require absent optional fields", () => {
+  const resolution = resolveEmailBuildRequest({ workflow: task4GenericWorkflow(), inputs: { left: {}, right: {} } });
+  assert.deepEqual(resolution, { mode: "generic-relation", blocker: null, allowedOutputs: ["audit-findings"] });
+});
+
+test("generic relation preserves numeric zero and boolean false as present values with strict equality", () => {
+  const emailWorkflow = task4GenericWorkflow([task4GenericRelation]);
+  for (const value of [0, false]) {
+    assert.deepEqual(resolveEmailBuildRequest({ workflow: emailWorkflow, inputs: { left: { optionalField: value }, right: { optionalField: value } } }), { mode: "generic-relation", blocker: null, allowedOutputs: ["audit-findings"] });
+  }
+  for (const [left, right] of [[0, false], [0, "0"], [false, "false"]]) {
+    assert.deepEqual(resolveEmailBuildRequest({ workflow: emailWorkflow, inputs: { left: { optionalField: left }, right: { optionalField: right } } }), { mode: "generic-relation", blocker: "generic-field-mismatch", allowedOutputs: [] });
+  }
+});
+
+test("generic missing participating fields return the configured relation blocker", () => {
+  const emailWorkflow = task4GenericWorkflow([task4GenericRelation]);
+  for (const fields of [{}, { optionalField: undefined }, { optionalField: null }, { optionalField: "" }, { optionalField: " \t " }]) {
+    assert.deepEqual(resolveEmailBuildRequest({ workflow: emailWorkflow, inputs: { left: { ...fields }, right: { ...fields } } }), { mode: "generic-relation", blocker: "generic-field-mismatch", allowedOutputs: [] });
+  }
+});
+
+test("clarify and technical text or link-only scopes retain existing outputs without optional Figma identities", async () => {
+  const emailWorkflow = await workflow();
+  assert.deepEqual(resolveEmailBuildRequest({ workflow: emailWorkflow, inputs: { request: true } }), { mode: "clarify", blocker: null, allowedOutputs: ["audit-findings", "clarification-request"] });
+  for (const scope of ["technical", "text", "link-only"]) {
+    const inputs = { request: true, "source-email-html": true, "source-images-directory": true, "exact-change-scope": scope };
+    assert.deepEqual(resolveEmailBuildRequest({ workflow: emailWorkflow, inputs }), { mode: "continue-fix-technical", blocker: null, allowedOutputs: task4TechnicalOutputs });
+  }
+});
+
+test("real resolution with both email IDs absent rejects version creation before a folder is made", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "relation-identity-intake-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const emailWorkflow = await workflow();
+  const inputs = task4Inputs("new-build", { role: "mobile" }, { role: "desktop" });
+  inputs["output-parent"] = root;
+  const resolution = resolveEmailBuildRequest({ workflow: emailWorkflow, inputs });
+  let created;
+  let creationError;
+  // Observe the real production output API before any assertion can stop it.
+  try {
+    created = await createEmailVersion({ workflow: emailWorkflow, resolution, workspaceRoot: root, outputParent: root, purpose: "Relation identity intake" });
+  } catch (error) {
+    creationError = { code: error.code, message: error.message };
+  }
+  const entries = await readdir(root);
+  const observed = JSON.stringify({ resolution, creationError: creationError ?? null, createdFolder: created?.folder ?? null, folderEntries: entries });
+  assert.deepEqual(resolution, { mode: "new-build", blocker: "email-instances-mismatch", allowedOutputs: [] }, observed);
+  assert.equal(creationError?.code, "version-path-unsafe", observed);
+  assert.equal(created, undefined, observed);
+  assert.deepEqual(entries, [], observed);
+});

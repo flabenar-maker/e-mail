@@ -1,5 +1,6 @@
 import { planTemplateRules, buildPersonalizationPreview } from "./lib/email-template-rules.mjs";
-import { readFile } from "node:fs/promises";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import { createHash } from "node:crypto";
 import { serializeEmailHtml } from "./lib/email-html-serializer.mjs";
 import { rebasePackageResources } from "./lib/email-resource-references.mjs";
@@ -8,7 +9,7 @@ import { buildAltcraftEntries } from "./lib/email-altcraft-package.mjs";
 import { validateEmbeddedCssBudget, measureEmailOutput } from "./lib/email-metrics.mjs";
 import { execFileSync } from "node:child_process";
 import { dirname, join, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 import { formatRendererDiagnostics } from "./lib/diagnostics.mjs";
 import {
@@ -20,6 +21,7 @@ import {
   validateEmailModelSemantics,
 } from "./lib/email-model.mjs";
 import { assertSeparateOutputDirectories, publishEmailAtomically, publishFileSetAtomically } from "./lib/email-output.mjs";
+import { readContainedAssetBytes } from "./lib/email-asset-bytes.mjs";
 import { postprocessEmail } from "./lib/email-postprocess.mjs";
 import { renderEmailDocument } from "./lib/email-renderer.mjs";
 import { loadDeliveryDocument } from "./lib/email-delivery-profile.mjs";
@@ -45,12 +47,12 @@ function parseArguments(argv) {
   return values;
 }
 
-function resolveSystemCommit() {
+function resolveSystemCommit(inputRepoRoot = repoRoot) {
   const explicit = process.env.CUPIS_SYSTEM_COMMIT;
   if (/^[0-9a-f]{40}$/u.test(explicit ?? "")) return explicit;
   try {
     const value = execFileSync("git", ["rev-parse", "HEAD"], {
-      cwd: repoRoot,
+      cwd: inputRepoRoot,
       encoding: "utf8",
       stdio: ["ignore", "pipe", "ignore"],
     }).trim();
@@ -60,39 +62,65 @@ function resolveSystemCommit() {
   }
 }
 
+export async function prepareEmailRenderInput({ repoRoot: inputRepoRoot = repoRoot, modelPath, deliveryPath, sourceSha } = {}) {
+  const designBytes = await readFile(modelPath);
+  const preparationRoot = await mkdtemp(join(tmpdir(), "cupis-render-model-"));
+  try {
+    // Validate and derive both views from one private copy of the persisted input.
+    const designPath = join(preparationRoot, "design.json");
+    await writeFile(designPath, designBytes);
+    const [originalModel, registries, rendererRegistry, rendering] = await Promise.all([
+      loadEmailModel({
+        modelPath: designPath,
+        schemaPath: join(inputRepoRoot, "schemas", "email-model.schema.json"),
+        preserveRichTextRuns: true,
+      }),
+      loadComponentRegistries({ repoRoot: inputRepoRoot }),
+      loadRendererRegistry({ repoRoot: inputRepoRoot }),
+      loadRenderingFoundation({ repoRoot: inputRepoRoot }),
+    ]);
+    const dependencies = {
+      rendererRegistry,
+      componentIndex: indexComponentRegistries(registries),
+      foundations: { rendering },
+      systemCommit: sourceSha ?? resolveSystemCommit(inputRepoRoot),
+    };
+    const canonicalDesign = JSON.parse(designBytes.toString("utf8"));
+    const delivery = deliveryPath ? await prepareEmailDelivery({
+      repoRoot: inputRepoRoot, model:canonicalDesign, componentIndex:dependencies.componentIndex,
+      document:await loadDeliveryDocument(deliveryPath),
+      purpose:"final", sourceSha:dependencies.systemCommit,
+    }) : undefined;
+    const canonicalModel = delivery?.model ?? canonicalDesign;
+    const modelBytes = Buffer.from(JSON.stringify(canonicalModel), "utf8");
+    const canonicalPath = join(preparationRoot, "final.json");
+    await writeFile(canonicalPath, modelBytes);
+    const renderModel = await loadEmailModel({ modelPath: canonicalPath, schemaPath: join(inputRepoRoot, "schemas", "email-model.schema.json"), preserveRichTextRuns: true });
+    if (delivery) Object.assign(dependencies, {deliveryProfile:delivery.profile, outputBindings:delivery.outputBindings, deliveryDocument:delivery.document, deliveryInventory:delivery.inventory, designModel:originalModel});
+    if (delivery) dependencies.templateRules = planTemplateRules({model:originalModel,inventory:delivery.inventory,profile:delivery.profile});
+    const semanticErrors = validateEmailModelSemantics(renderModel, dependencies);
+    if (semanticErrors.length > 0) {
+      throw new AggregateError(semanticErrors, "Email model semantic validation failed.");
+    }
+    return { canonicalModel, renderModel, modelBytes, originalModel, delivery, dependencies };
+  } finally {
+    await rm(preparationRoot, { recursive: true, force: true });
+  }
+}
+
 async function main() {
   const args = parseArguments(process.argv.slice(2));
   const modelPath = resolve(args.model);
   const outputDir = resolve(args.output);
   const evidenceDir = args['evidence-output'] ? resolve(args['evidence-output']) : undefined;
   if(evidenceDir)await assertSeparateOutputDirectories({outputDir,evidenceDir});
-  const [originalModel, registries, rendererRegistry, rendering] = await Promise.all([
-    loadEmailModel({
-      modelPath,
-      schemaPath: join(repoRoot, "schemas", "email-model.schema.json"),
-    }),
-    loadComponentRegistries({ repoRoot }),
-    loadRendererRegistry({ repoRoot }),
-    loadRenderingFoundation({ repoRoot }),
-  ]);
-  const dependencies = {
-    rendererRegistry,
-    componentIndex: indexComponentRegistries(registries),
-    foundations: { rendering },
-    systemCommit: resolveSystemCommit(),
-  };
-  const delivery = args.delivery ? await prepareEmailDelivery({
-    repoRoot, model:originalModel, componentIndex:dependencies.componentIndex,
-    document:await loadDeliveryDocument(resolve(args.delivery)),
-    purpose:"final", sourceSha:dependencies.systemCommit,
-  }) : undefined;
-  const model = delivery?.model ?? originalModel;
-  if (delivery) Object.assign(dependencies, {deliveryProfile:delivery.profile, outputBindings:delivery.outputBindings, deliveryDocument:delivery.document, deliveryInventory:delivery.inventory, designModel:originalModel});
-  if (delivery) dependencies.templateRules = planTemplateRules({model:originalModel,inventory:delivery.inventory,profile:delivery.profile});
-  const semanticErrors = validateEmailModelSemantics(model, dependencies);
-  if (semanticErrors.length > 0) {
-    throw new AggregateError(semanticErrors, "Email model semantic validation failed.");
+  const prepared = await prepareEmailRenderInput({ modelPath, deliveryPath: args.delivery ? resolve(args.delivery) : undefined });
+  const expectedDigest = process.env.CUPIS_EXPECTED_EMAIL_MODEL_DIGEST;
+  if (expectedDigest && (!/^[0-9a-f]{64}$/u.test(expectedDigest) || createHash("sha256").update(prepared.modelBytes).digest("hex") !== expectedDigest)) {
+    throw new Error("EMAIL_MODEL_INPUT_CHANGED");
   }
+  const { renderModel: model, originalModel, delivery, dependencies } = prepared;
+  const rendering = dependencies.foundations.rendering;
 
   const rendered = renderEmailDocument(model, dependencies);
   if (rendered.diagnostics.length > 0) {
@@ -109,7 +137,8 @@ async function main() {
   if (delivery) {
     const structured = serializeEmailHtml({html,protectedFragments:(rendered.protectedFragments??[]).map(fragment=>{const start=html.indexOf(fragment.text);if(start<0)throw new Error("EMAIL_SERVICE_FRAGMENT_MISSING");return {start,end:start+fragment.text.length};})});
     if (structured.diagnostics.length) throw new AggregateError(structured.diagnostics, "HTML serialization failed.");
-    const assetBuffers = new Map(await Promise.all(rendered.assets.map(async asset => [asset.path,await readFile(join(modelFolder,...asset.path.split("/")))])));
+    const assetBuffers = new Map((await readContainedAssetBytes({ assetRoot: modelFolder, assets: rendered.assets }))
+      .map(({ path, bytes }) => [path, bytes]));
     const rebased = rebasePackageResources({html:structured.html,assetPaths:[...assetBuffers.keys()],htmlEntry:delivery.profile.package.html_entry,assetRootEntry:delivery.profile.package.asset_root_entry});
     if (rebased.diagnostics.length) throw new AggregateError(rebased.diagnostics, "Package resources failed.");
     const packageStructured = serializeEmailHtml({html:rebased.html,protectedFragments:(rendered.protectedFragments??[]).map(fragment=>{const start=rebased.html.indexOf(fragment.text);if(start<0)throw new Error("EMAIL_SERVICE_FRAGMENT_MISSING");return {start,end:start+fragment.text.length};})});
@@ -154,6 +183,7 @@ async function main() {
   await publishEmailAtomically({
     outputDir,
     html,
+    assetRoot: modelFolder,
     assets: rendered.assets.map((asset) => ({
       path: asset.path,
       sourcePath: join(modelFolder, ...asset.path.split("/")),
@@ -163,7 +193,7 @@ async function main() {
   process.stdout.write(outputDir + "\n");
 }
 
-main().catch((error) => {
+if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) main().catch((error) => {
   const errors = error instanceof AggregateError ? error.errors : [error];
   const output = formatRendererDiagnostics(errors);
   if (output) process.stderr.write(output + "\n");

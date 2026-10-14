@@ -33,3 +33,116 @@ test("research purpose preserves malformed model diagnostics beyond absent URLs"
   assert.ok(result.diagnostics.some(({ code }) => /PROPERTY|UNKNOWN/i.test(code)));
 });
 
+test('inventory exposes early duplicate bare identities across distinct card owners', () => {
+  const model = actionModel();
+  model.root.nested_components[1].instance.nested_components[0].instance.instance_id = 'cta';
+  const result = collectEmailActions({ model, componentIndex: actionComponents, profile });
+  const locations = [
+    '/root/nested_components/0/instance/nested_components/0/instance/instance_id',
+    '/root/nested_components/1/instance/nested_components/0/instance/instance_id',
+  ];
+  const duplicates = result.diagnostics.filter(d => d.code === 'EMAIL_MODEL_INSTANCE_DUPLICATE');
+  assert.equal(duplicates.length, 2);
+  assert.deepEqual(duplicates.map(d => d.path).sort(), [...locations].sort());
+  assert.ok(duplicates.every(d => typeof d.message === 'string' && d.message.includes('cta') && locations.every(p => d.message.includes(p))));
+});
+
+test('inventory reports a global bare duplicate even when the second CTA belongs to a hidden card', () => {
+  const model = actionModel({ hiddenSecondCard: true });
+  model.root.nested_components[1].instance.nested_components[0].instance.instance_id = 'cta';
+  const result = collectEmailActions({ model, componentIndex: actionComponents, profile });
+  assert.deepEqual(result.diagnostics.filter(d => d.code === 'EMAIL_MODEL_INSTANCE_DUPLICATE').map(d => d.path).sort(), [
+    '/root/nested_components/0/instance/nested_components/0/instance/instance_id',
+    '/root/nested_components/1/instance/nested_components/0/instance/instance_id',
+  ]);
+});
+
+test('existing delivery path guard continues rejecting duplicate sibling paths', () => {
+  const model = actionModel();
+  model.root.nested_components[1].instance.instance_id = 'card';
+  const result = collectEmailActions({ model, componentIndex: actionComponents, profile });
+  assert.ok(result.diagnostics.some(d => d.code === 'EMAIL_DELIVERY_INSTANCE_DUPLICATE' && d.message.includes('email/card')));
+});
+
+
+import { structuralDeliveryScenario } from '../fixtures/rendering/email-delivery-fixtures.mjs';
+import { missingDeliveryFields } from '../../scripts/lib/email-delivery-form.mjs';
+
+// Break caught: model array ordinals or all-slot-first traversal overriding contract insertion order.
+test('Task10 mixed slot nested descendants follow structural order including desktop-only placement', () => {
+  const expected = ['email/cards/first/first-cta', 'email/cards/middle/middle-cta', 'email/cards/desktop-cta', 'email/cards/last/last-cta', 'email/other/other-cta'];
+  for (const reverseModelOrder of [false, true]) {
+    const result = collectEmailActions(structuralDeliveryScenario({ reverseModelOrder }));
+    assert.deepEqual(result.diagnostics, []);
+    assert.deepEqual(result.fields.map(field => field.bindings[0].instance_path), expected);
+    assert.deepEqual(result.fields.map(field => field.id), [
+      'email%2Fcards%2Ffirst%2Ffirst-cta~button-root~href~~both',
+      'email%2Fcards%2Fmiddle%2Fmiddle-cta~button-root~href~~both',
+      'email%2Fcards%2Fdesktop-cta~button-root~href~~desktop',
+      'email%2Fcards%2Flast%2Flast-cta~button-root~href~~both',
+      'email%2Fother%2Fother-cta~button-root~href~~both',
+    ]);
+  }
+});
+
+test('Task10 root cannot swallow sections and same-caption owners retain different structural group IDs', () => {
+  const result = collectEmailActions(structuralDeliveryScenario({ sameHeadings: true }));
+  assert.deepEqual(result.diagnostics, []);
+  const grouped = result.fields.filter(field => field.bindings[0].instance_path.startsWith('email/cards/'));
+  assert.equal(grouped.length, 4);
+  assert.ok(grouped.every(field => field.display_group?.id === 'email/cards'));
+  assert.ok(grouped.every(field => field.display_group?.label === 'Акции'));
+  const other = result.fields.find(field => field.bindings[0].instance_path === 'email/other/other-cta');
+  assert.deepEqual(other.display_group, { id: 'email/other', label: 'Акции' });
+  assert.notEqual(other.display_group.id, grouped[0].display_group.id);
+});
+
+test('Task10 nested and slot CTA inherit nearest actual heading within their shared section', () => {
+  const result = collectEmailActions(structuralDeliveryScenario());
+  assert.deepEqual(result.diagnostics, []);
+  const field = path => result.fields.find(item => item.bindings[0].instance_path === path);
+  assert.equal(field('email/cards/first/first-cta').label, 'Подробнее');
+  assert.equal(field('email/cards/first/first-cta').display_context, 'Первый бонус');
+  assert.equal(field('email/cards/middle/middle-cta').display_context, 'Второй бонус');
+  assert.equal(field('email/cards/last/last-cta').display_context, 'Третий бонус');
+  assert.deepEqual(field('email/cards/middle/middle-cta').display_group, { id: 'email/cards', label: 'Акции' });
+});
+
+test('Task10 nonheading paragraphs never become invented card context', () => {
+  const result = collectEmailActions(structuralDeliveryScenario({ paragraphOnly: true }));
+  assert.deepEqual(result.diagnostics, []);
+  assert.ok(result.fields.filter(field => field.bindings[0].instance_path.includes('/cards/')).every(field => field.display_context === ''));
+});
+
+test('Task10 viewport hints distinguish real split targets but not shared or lone viewport actions', () => {
+  const shared = collectEmailActions({ model: actionModel(), componentIndex: actionComponents, profile });
+  assert.ok(shared.fields.every(field => field.viewport_hint === null));
+  const split = collectEmailActions({ model: actionModel({ ambiguousViewport: true }), componentIndex: actionComponents, profile });
+  const pair = split.fields.filter(field => field.bindings[0].instance_path === 'email/card' && field.bindings[0].element_id === 'card-link');
+  assert.deepEqual(pair.map(field => [field.id, field.viewport_hint]), [['email%2Fcard~card-link~href~~mobile', 'Mobile'], ['email%2Fcard~card-link~href~~desktop', 'Desktop']]);
+  const loneModel = actionModel();
+  loneModel.root.nested_components[0].instance.nested_components[0].instance.visibility_values = [{ element_id: 'button-root', scope: 'desktop', value: false }];
+  const lone = collectEmailActions({ model: loneModel, componentIndex: actionComponents, profile }).fields.find(field => field.id === 'email%2Fcard%2Fcta~button-root~href~~mobile');
+  assert.ok(lone); assert.equal(lone.viewport_hint, null);
+  const knownMobile = pair.find(field => field.viewport_hint === 'Mobile');
+  const pending = missingDeliveryFields({ inventory: split, deliveryDraft: { answers: { [knownMobile.id]: 'https://1cupis.ru/mobile-known' } } });
+  const half = pending.find(field => field.id === 'email%2Fcard~card-link~href~~desktop');
+  assert.equal(half.viewport_hint, 'Desktop');
+});
+
+// Break caught: sorting Mobile B's index before Desktop-only X instead of inserting X at the common B anchor.
+test('Task10 refinement shifted hidden Mobile X retains Desktop insertion before shared B', () => {
+  const scenario = structuralDeliveryScenario({ shiftedHiddenDesktopAction: true, reverseModelOrder: true });
+  const result = collectEmailActions(scenario);
+  assert.deepEqual(result.diagnostics, []);
+  assert.deepEqual(result.fields.map(field => field.bindings[0].instance_path), [
+    'email/cards/first/first-cta', 'email/cards/desktop-cta', 'email/cards/last/last-cta', 'email/other/other-cta',
+  ]);
+  assert.deepEqual(result.fields.map(field => field.id), [
+    'email%2Fcards%2Ffirst%2Ffirst-cta~button-root~href~~both',
+    'email%2Fcards%2Fdesktop-cta~button-root~href~~desktop',
+    'email%2Fcards%2Flast%2Flast-cta~button-root~href~~both',
+    'email%2Fother%2Fother-cta~button-root~href~~both',
+  ]);
+  assert.deepEqual(result.fields.map(field => field.bindings.map(binding => binding.viewport)), [['mobile', 'desktop'], ['desktop'], ['mobile', 'desktop'], ['mobile', 'desktop']]);
+});

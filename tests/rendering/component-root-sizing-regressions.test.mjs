@@ -132,7 +132,7 @@ for (const [componentId, statusWidth] of [["block-transaction-success", 117], ["
     assert.equal(factValue(status, "primary-alignment"), "center");
     assert.equal(factValue(status, "counter-alignment"), "center");
     const mobile = viewportHtml(await renderActualComponent(componentId), "mobile");
-    assert.match(mobile, /<table\b[^>]*align="center"[^>]*width="100%"[^>]*margin:0 auto/u);
+    assert.match(mobile, /<table\b(?=\s|>)(?=(?:[^<>"']|"[^"]*"|'[^']*')*\salign="center"(?=\s|>))(?=(?:[^<>"']|"[^"]*"|'[^']*')*\swidth="100%"(?=\s|>))(?=(?:[^<>"']|"[^"]*"|'[^']*')*\sstyle="(?:[^"]*;)?margin:0 auto(?:;[^"]*)?"(?=\s|>))(?:[^<>"']|"[^"]*"|'[^']*')*>/u);
     assert.match(mobile, /<img\b[^>]*width="72"[^>]*height="72"/u);
   });
 }

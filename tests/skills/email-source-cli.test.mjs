@@ -1,3 +1,4 @@
+import { physicalEmailSourceFixture } from '../helpers/email-physical-source-fixture.mjs';
 import assert from "node:assert/strict";
 import test from "node:test";
 import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
@@ -8,6 +9,43 @@ import { fileURLToPath } from "node:url";
 
 const command = new URL("../../scripts/verify-email-source.mjs", import.meta.url);
 const workflow = new URL("../../data/workflows/email-build.yaml", import.meta.url);
+
+test('production CLI accepts literal physical Content and registered Count 2 graph without selected-test', async (t) => {
+  const dir = await mkdtemp(join(tmpdir(), 'cupis-physical-source-cli-'));
+  t.after(() => rm(dir, { recursive: true, force: true }));
+  const path = join(dir, 'source.json');
+  const input = physicalEmailSourceFixture();
+  assert.equal(Object.hasOwn(input, 'selectedTest'), false);
+  assert.equal(input.readings.selection.mobile.root_node_id, '2021:4164');
+  assert.equal(input.readings.selection.desktop.root_node_id, '2021:4163');
+  assert.deepEqual(input.correspondence.visibility.map(x => x.node_id), ['I2021:4164;1103:7', 'I2021:4163;1103:8']);
+  await writeFile(path, JSON.stringify(input), 'utf8');
+  const result = spawnSync(process.execPath, [fileURLToPath(command), path], { encoding: 'utf8' });
+  assert.equal(result.status, 0, result.stdout || result.stderr);
+  const report = JSON.parse(result.stdout);
+  assert.equal(report.status, 'passed'); assert.equal(report.scope, 'full-email');
+  assert.deepEqual(report.diagnostics, []);
+});
+
+test('production CLI rejects foreign Content and incorrect registered owners before rendering', async (t) => {
+  const dir = await mkdtemp(join(tmpdir(), 'cupis-physical-source-invalid-'));
+  t.after(() => rm(dir, { recursive: true, force: true }));
+  const path = join(dir, 'source.json');
+  for (const mutate of [
+    i => { i.correspondence.visibility[0].node_id = 'I999:1;1103:7'; },
+    i => { i.correspondence.visibility[1].node_id = 'I2021:4163;1103:7'; },
+    i => { i.readings.nodes.find(n => n.node_id === '2021:4164').owner_component_id = '999:1'; },
+    i => { i.readings.nodes.find(n => n.node_id === 'I2021:4163;1103:8;1104:2').owner_component_id = '999:1'; },
+  ]) {
+    const input = physicalEmailSourceFixture(); mutate(input);
+    await writeFile(path, JSON.stringify(input), 'utf8');
+    const result = spawnSync(process.execPath, [fileURLToPath(command), path], { encoding: 'utf8' });
+    assert.equal(result.status, 1, result.stdout || result.stderr);
+    const report = JSON.parse(result.stdout);
+    assert.equal(report.status, 'failed'); assert.equal(report.scope, 'full-email');
+    assert.ok(report.diagnostics.some(x => /VISIBILITY/u.test(x.code)));
+  }
+});
 
 function minimalInput() {
   const variants = { mobile: "mobile", desktop: "desktop" };

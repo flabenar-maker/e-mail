@@ -1,3 +1,5 @@
+import { createCandidateReviewFixture, emitTestCandidate, selectedDesignEvidence, plainAssetSourceFixture } from '../helpers/email-candidate-review-fixture.mjs';
+import { physicalEmailSourceFixture } from '../helpers/email-physical-source-fixture.mjs';
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
@@ -26,6 +28,7 @@ import {
   indexComponentRegistries,
   loadComponentRegistries,
 } from "../../scripts/lib/component-registry.mjs";
+import { selectVariantRoot } from '../../scripts/lib/email-interpreter.mjs';
 import { loadAssetsFoundation } from "../../scripts/lib/assets-foundation.mjs";
 import { loadRendererRegistry } from "../../scripts/lib/renderer-registry.mjs";
 import { loadWorkflowRegistry } from "../../scripts/lib/workflow-registry.mjs";
@@ -34,15 +37,101 @@ const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const VIEWPORTS = ["mobile", "desktop"];
 let registryIndex;
 
+// Formal callback fixtures bind files only; actual visual acceptance is separate.
+async function protectedFixture(root, source, evidence, { sourceSha = process.env.CUPIS_SYSTEM_COMMIT, autoDelivery = false } = {}) {
+  const review = await createCandidateReviewFixture({ root, model: source.model, sourceEvidence: evidence, sourceSha, autoDelivery });
+  return { sourceSha, selectedSourceBinding: review.selectedSourceBinding, candidateReviewQualification: review.candidateReviewQualification, candidateReviewer: review.candidateReviewer, review };
+}
+
+test('real new-build delivery handoff reports early duplicate model locations before renderer or HTML/ZIP', async (t) => {
+  const root = await mkdtemp(join(tmpdir(), 'cupis-identity-handoff-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const source = physicalEmailSourceFixture();
+  source.model.root.slots[0].instances.push(structuredClone(source.model.root.slots[0].instances[0]));
+  const outputDir = join(root, 'blocked'); let invocations = 0;
+  const result = await executeEmailBuildHandoff({
+    repoRoot, model: source.model, candidates: candidatesFor(source.model), assetRoot: root,
+    assetEvidence: [], outputDir, sourceEvidence: source,
+    resolution: { workflow: { mode: 'new-build', steps: [{ id: 'validate-delivery-answers' }] } },
+    rendererRunner: async () => {
+      invocations += 1; await mkdir(outputDir, { recursive: true });
+      await writeFile(join(outputDir, 'email.html'), 'must not be written');
+      await writeFile(join(outputDir, 'altcraft.zip'), 'must not be written');
+    },
+  });
+  assert.equal(result.executed, false); assert.ok(result.blockers.includes('delivery-not-ready'));
+  assert.equal(invocations, 0);
+  await assert.rejects(readFile(join(outputDir, 'email.html')), { code: 'ENOENT' });
+  await assert.rejects(readFile(join(outputDir, 'altcraft.zip')), { code: 'ENOENT' });
+  const locations = ['/root/slots/0/instances/0/instance_id', '/root/slots/0/instances/1/instance_id'];
+  const duplicates = result.deliveryDiagnostics.filter(d => d.code === 'EMAIL_MODEL_INSTANCE_DUPLICATE');
+  assert.equal(duplicates.length, 2);
+  assert.deepEqual(duplicates.map(d => d.path).sort(), [...locations].sort());
+  assert.ok(duplicates.every(d => typeof d.message === 'string' && d.message.includes('nps-1') && locations.every(p => d.message.includes(p))));
+});
+
+test('production handoff passes physical Content proof to the ordinary renderer', async (t) => {
+  const root = await mkdtemp(join(tmpdir(), 'cupis-physical-handoff-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const source = physicalEmailSourceFixture();
+  assert.equal(Object.hasOwn(source, 'selectedTest'), false);
+  assert.deepEqual(source.correspondence.visibility.map(x => x.node_id), ['I2021:4164;1103:7', 'I2021:4163;1103:8']);
+  const outputDir = join(root, 'rendered');
+  const bound = await protectedFixture(root, source, source);
+  const result = await executeEmailBuildHandoff({
+    model: source.model, candidates: candidatesFor(source.model), assetEvidence: source.assetEvidence,
+    repoRoot, assetRoot: root, outputDir, sourceEvidence: source, ...bound,
+    resolution: { workflow: { mode: 'new-build' } },
+  });
+  assert.deepEqual(result.blockers, []); assert.deepEqual(result.sourceDiagnostics, []);
+  assert.equal(result.executed, true);
+  const html = await readFile(join(outputDir, 'email.html'), 'utf8');
+  assert.match(html, /<html\b/u);
+  assert.doesNotMatch(html, /Понравилось это письмо\?/u);
+});
+
+test('production handoff stops foreign Content and owner before renderer or HTML/ZIP creation', async (t) => {
+  const root = await mkdtemp(join(tmpdir(), 'cupis-physical-handoff-invalid-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  let invocations = 0;
+  for (const [index, mutate] of [
+    i => { i.correspondence.visibility[0].node_id = 'I999:1;1103:7'; },
+    i => { i.correspondence.visibility[1].node_id = 'I2021:4163;1103:7'; },
+    i => { i.readings.nodes.find(n => n.node_id === '2021:4164').owner_component_id = '999:1'; },
+    i => { i.readings.nodes.find(n => n.node_id === 'I2021:4163;1103:8;1104:2').owner_component_id = '999:1'; },
+  ].entries()) {
+    const source = physicalEmailSourceFixture(); mutate(source);
+    const outputDir = join(root, `blocked-${index}`);
+    const bound = await protectedFixture(root, source, source);
+    const result = await executeEmailBuildHandoff({
+      model: source.model, candidates: candidatesFor(source.model), assetEvidence: source.assetEvidence,
+      repoRoot, assetRoot: root, outputDir, sourceEvidence: source, ...bound,
+      resolution: { workflow: { mode: 'new-build' } },
+      rendererRunner: async () => {
+        invocations += 1; await mkdir(outputDir, { recursive: true });
+        await writeFile(join(outputDir, 'email.html'), 'must not be written');
+        await writeFile(join(outputDir, 'altcraft.zip'), 'must not be written');
+      },
+    });
+    assert.equal(result.executed, false);
+    assert.ok(result.blockers.includes('source-evidence-mismatch'));
+    assert.ok(result.sourceDiagnostics.some(x => /VISIBILITY/u.test(x.code)));
+    await assert.rejects(readFile(join(outputDir, 'email.html')), { code: 'ENOENT' });
+    await assert.rejects(readFile(join(outputDir, 'altcraft.zip')), { code: 'ENOENT' });
+  }
+  assert.equal(invocations, 0);
+});
+
 test("delivery handoff bypasses user answers when every visible link is already resolved", async (t) => {
   const root = await mkdtemp(join(tmpdir(), "cupis-link-only-resolved-"));
   t.after(() => rm(root, { recursive: true, force: true }));
   const source = await fixture(root, ["email-footer-legal"]);
   const evidence = sourceEvidenceFor(source.model, source.assetEvidence);
+  const bound = await protectedFixture(root, source, evidence, { sourceSha: process.env.CUPIS_SYSTEM_COMMIT, autoDelivery: true });
   let saved;
-  const result = await executeEmailBuildHandoff({ ...source, repoRoot, assetRoot: root, outputDir: join(root, "release"), sourceSha: "a".repeat(40),
+  const result = await executeEmailBuildHandoff({ ...source, repoRoot, assetRoot: root, outputDir: join(root, "release"), sourceSha: process.env.CUPIS_SYSTEM_COMMIT, ...bound,
     resolution: { workflow: { mode: "new-build", steps: [{ id: "validate-delivery-answers" }] } }, sourceEvidence: evidence, assetEvidence: evidence.assetEvidence,
-    rendererRunner: async ({ deliveryPath }) => { saved = JSON.parse(await readFile(deliveryPath, "utf8")); }
+    rendererRunner: async (args) => { saved = JSON.parse(await readFile(args.deliveryPath, "utf8")); await emitTestCandidate(args); }
   });
   assert.deepEqual(result.blockers, []); assert.equal(result.executed, true);
   assert.equal(saved.subject, ""); assert.equal(saved.preheader, "");
@@ -361,8 +450,16 @@ async function setHeaderAlphaMode(contractRepo, alphaModeId) {
   await writeFile(path, JSON.stringify(marketing), "utf8");
 }
 
+function registeredInlineRuns(instance, viewport, elementId) {
+  const record = registryIndex.bySystemId.get(instance.component_id);
+  const root = selectVariantRoot(record, viewport, instance.variant_axes?.[viewport] ?? {}).root;
+  const find = node => node.id === elementId ? node : (node.children ?? []).map(find).find(Boolean);
+  const runs = find(root)?.facts?.find(fact => fact.id === 'styled-text-segments')?.value?.items;
+  return Array.isArray(runs) && runs.length ? { inline_runs: structuredClone(runs) } : {};
+}
+
 function sourceValue(value) {
-  if (value?.type === "rich-text") return value.segments.map(({ value: text }) => text).join("");
+  if (value?.type === "rich-text") return value.value ?? value.segments.map(({ value: text }) => text).join("");
   if (value?.type === "alt-text") return { purpose: value.purpose, value: value.value };
   return value?.value;
 }
@@ -385,7 +482,7 @@ function sourceEvidenceFor(model, assetEvidence, { scope = "full-email" } = {}) 
   visit(model.root);
   const capture_id = "capture:source-gate";
   const file_key = "source-gate-file";
-  const nodeId = (viewport, instance) => `source-${viewport}-${instance.instance_id}`;
+  const nodeId = (viewport, instance) => instance === model.root ? (viewport === "mobile" ? "2021:4164" : "2021:4163") : `source-${viewport}-${instance.instance_id}`;
   const readings = { instances: [], fields: [], assets: [] };
   const correspondence = { capture_id, file_key, instances: [], fields: [], assets: [] };
   correspondence.instances = entries.map(({ instance }) => ({
@@ -417,7 +514,7 @@ function sourceEvidenceFor(model, assetEvidence, { scope = "full-email" } = {}) 
       for (const item of instance.content_values ?? []) {
         if (item.scope !== "all" && item.scope !== viewport) continue;
         const field = `content:${item.element_id}:${item.slot_id}`;
-        readings.fields.push({ viewport, node_id, owner_node_id: node_id, field, value: sourceValue(item.value) });
+        readings.fields.push({ viewport, node_id, owner_node_id: node_id, field, value: sourceValue(item.value), ...registeredInlineRuns(instance, viewport, item.element_id) });
         correspondence.fields.push({
           instance_id: instance.instance_id, kind: "content", element_id: item.element_id,
           slot_id: item.slot_id, viewport, node_id, field, origin: "figma",
@@ -718,15 +815,17 @@ test("resolved dual-viewport placement rejects standalone nested-only components
 test("the actual handoff gate prevents renderer invocation for every required blocker", async (t) => {
   const root = await mkdtemp(join(tmpdir(), "cupis-blockers-"));
   t.after(() => rm(root, { recursive: true, force: true }));
-  const source = await fixture(root, ["banner-secondary"]);
+  const source = await plainAssetSourceFixture(root, ["banner-secondary"]);
+  const evidence = source.sourceEvidence;
+  const bound = await protectedFixture(root, source, evidence);
   let invocations = 0;
-  const rendererRunner = async () => { invocations += 1; };
+  const rendererRunner = async (args) => { invocations += 1; await emitTestCandidate(args); };
   const execute = (overrides) => executeEmailBuildHandoff({
     ...source,
     repoRoot,
     assetRoot: root,
     outputDir: join(root, `blocked-${invocations}`),
-    rendererRunner,
+    rendererRunner, sourceEvidence: evidence, ...bound,
     ...overrides,
   });
 
@@ -748,12 +847,8 @@ test("the actual handoff gate prevents renderer invocation for every required bl
   assert.ok((await execute({ model: malformed })).blockers.includes("renderer-diagnostic"));
   const designWithoutVisualProof = await execute({
     resolution: { workflow: { mode: "continue-fix-design" } },
-    continueFixEvidence: {
-      figma_instances: {
-        mobile: { role: "mobile", email_id: "same", file_key: "file", node_id: "1:1" },
-        desktop: { role: "desktop", email_id: "same", file_key: "file", node_id: "1:2" },
-      },
-    },
+    continueFixEvidence: selectedDesignEvidence(bound.selectedSourceBinding),
+    candidateReviewer: undefined,
   });
   assert.ok(designWithoutVisualProof.blockers.includes("visual-regression"));
   assert.equal(invocations, 0);
@@ -771,17 +866,26 @@ test("the actual handoff gate prevents renderer invocation for every required bl
       },
     },
   });
-  assert.equal(verifiedDesign.executed, true);
+  assert.equal(verifiedDesign.executed, false);
+  assert.equal(invocations, 0);
+  const boundDesign = await execute({
+    resolution: { workflow: { mode: "continue-fix-design" } },
+    continueFixEvidence: selectedDesignEvidence(bound.selectedSourceBinding),
+  });
+  assert.deepEqual(boundDesign.blockers, []);
+  assert.equal(boundDesign.executed, true);
   assert.equal(invocations, 1);
+  assert.equal(bound.review.reviewCalls, 1);
 });
 
 test("new-build handoff blocks rendering without full source comparison evidence", async (t) => {
   const root = await mkdtemp(join(tmpdir(), "cupis-source-gate-"));
   t.after(() => rm(root, { recursive: true, force: true }));
   const source = await fixture(root, ["banner-secondary"]);
+  const bound = await protectedFixture(root, source, sourceEvidenceFor(source.model, source.assetEvidence));
   let invocations = 0;
   const result = await executeEmailBuildHandoff({
-    ...source,
+    ...source, ...bound,
     repoRoot,
     assetRoot: root,
     outputDir: join(root, "new-build"),
@@ -797,16 +901,17 @@ test("new-build handoff renders when complete source observations match the mode
   t.after(() => rm(root, { recursive: true, force: true }));
   const source = await fixture(root, ["email-footer-legal"]);
   const evidence = sourceEvidenceFor(source.model, source.assetEvidence);
+  const bound = await protectedFixture(root, source, evidence);
   let invocations = 0;
   const result = await executeEmailBuildHandoff({
-    ...source,
+    ...source, ...bound,
     repoRoot,
     assetRoot: root,
     outputDir: join(root, "new-build"),
     resolution: { workflow: { mode: "new-build" } },
     sourceEvidence: evidence,
     assetEvidence: evidence.assetEvidence,
-    rendererRunner: async () => { invocations += 1; },
+    rendererRunner: async (args) => { invocations += 1; await emitTestCandidate(args); },
   });
   assert.deepEqual(result.blockers, []);
   assert.equal(result.executed, true);
@@ -817,9 +922,10 @@ test("new-build handoff rejects selected-subtree proof and a passed claim withou
   const root = await mkdtemp(join(tmpdir(), "cupis-source-scope-"));
   t.after(() => rm(root, { recursive: true, force: true }));
   const source = await fixture(root, ["email-footer-legal"]);
+  const bound = await protectedFixture(root, source, sourceEvidenceFor(source.model, source.assetEvidence));
   const selectedEvidence = sourceEvidenceFor(source.model, source.assetEvidence, { scope: "selected-subtree" });
   const selected = await executeEmailBuildHandoff({
-    ...source,
+    ...source, ...bound,
     repoRoot,
     assetRoot: root,
     outputDir: join(root, "selected-subtree"),
@@ -832,7 +938,7 @@ test("new-build handoff rejects selected-subtree proof and a passed claim withou
   assert.ok(selected.sourceDiagnostics.some(({ code }) => code === "EMAIL_SOURCE_SCOPE_INCOMPLETE"));
 
   const claimed = await executeEmailBuildHandoff({
-    ...source,
+    ...source, ...bound,
     repoRoot,
     assetRoot: root,
     outputDir: join(root, "claimed-pass"),
@@ -1002,3 +1108,58 @@ test("design fixes stay Figma-gated and technical siblings preserve the complete
   assert.deepEqual(await treeDigest(source.target), before);
   assert.deepEqual(await readdir(next.target), ["email.html", "images"]);
 });
+
+for (const [componentId, assetId, positives, negatives] of [
+  ["banner-hero", "hero-image", ["images/hero-image@2x.jpg", "images/proof-hero-image-7@2x.jpg"], ["images/hero-image.jpg", "images/hero-image@4x.jpg", "images/proof-mobile-hero-image@2x.jpg", "images/../hero-image@2x.jpg"]],
+  ["email-header", "header-logo", ["images/header-logo@4x.png", "images/proof-header-logo-7@4x.png"], ["images/header-logo.png", "images/header-logo@2x.png", "images/header-logo-desktop@4x.png", "/images/header-logo@4x.png"]],
+]) {
+  test("public handoff accepts literal " + assetId + " profile/prefix/numeric filenames and rejects invalid naming", async (t) => {
+    const root = await mkdtemp(join(tmpdir(), "cupis-task8-naming-"));
+    t.after(() => rm(root, { recursive: true, force: true }));
+    const source = await fixture(root, [componentId]);
+    const instance = everyInstance(source.model.root).find(x => x.component_id === componentId);
+    const asset = instance.asset_files.find(x => x.asset_contract_id === assetId);
+    const receipt = source.assetEvidence.find(x => x.instance_id === instance.instance_id && x.asset_contract_id === assetId);
+    const originalBytes = await readFile(join(root, ...asset.path.split("/")));
+    const record = registryIndex.bySystemId.get(componentId);
+    const contract = structuredClone(record.asset_contracts.find(x => x.id === assetId));
+    const owner = structuredClone(receipt.mcp_export);
+    for (const path of positives) {
+      asset.path = path; receipt.path = path;
+      const target = join(root, ...path.split("/")); await mkdir(dirname(target), { recursive: true }); await writeFile(target, originalBytes);
+      const result = await prepareEmailBuildHandoff({ ...source, repoRoot, assetRoot: root });
+      assert.deepEqual(result.blockers, [], path);
+      assert.ok(result.assetContracts.some(x => x.path === path), path);
+      assert.deepEqual(receipt.mcp_export, owner, "renaming preserves exact owner/export evidence");
+      assert.deepEqual(record.asset_contracts.find(x => x.id === assetId), contract, "renaming preserves geometry, alpha, crop and boundary contract");
+      assert.deepEqual(await readFile(target), originalBytes);
+    }
+    for (const path of negatives) {
+      asset.path = path; receipt.path = path;
+      // Safe naming negatives have real matching bytes; unsafe paths are containment controls.
+      const safeInRoot = path.startsWith("images/") && !path.includes("..");
+      if (safeInRoot) {
+        const target = join(root, ...path.split("/"));
+        await mkdir(dirname(target), { recursive: true }); await writeFile(target, originalBytes);
+        assert.deepEqual(await readFile(target), originalBytes);
+        assert.equal(createHash("sha256").update(await readFile(target)).digest("hex"), receipt.sha256);
+      }
+      const result = await prepareEmailBuildHandoff({ ...source, repoRoot, assetRoot: root });
+      if (safeInRoot) assert.ok(result.blockers.includes("asset-contract-missing"), path);
+      else {
+        assert.deepEqual(result.blockers, ["renderer-diagnostic"], path);
+        assert.deepEqual(result.assetContracts, []);
+        assert.equal(result.model.root.slots[0].instances[0].asset_files.find(x => x.asset_contract_id === assetId).path,
+          assetId === "hero-image" ? "images/../hero-image@2x.jpg" : "/images/header-logo@4x.png");
+        const { validateEmailModelSemantics } = await import("../../scripts/lib/email-model.mjs");
+        const diagnostics = validateEmailModelSemantics(source.model, { componentIndex: registryIndex, rendererRegistry: source.rendererRegistry });
+        assert.deepEqual(diagnostics.filter(x => x.code === "EMAIL_MODEL_ASSET_PATH_UNSAFE").map(x => [x.code, x.path]),
+          [["EMAIL_MODEL_ASSET_PATH_UNSAFE", "/root/slots/0/instances/0/asset_files/0/path"]]);
+      }
+      assert.deepEqual(receipt.mcp_export, owner);
+      assert.deepEqual(record.asset_contracts.find(x => x.id === assetId), contract);
+      await assert.rejects(readFile(join(root, "email.html")), { code: "ENOENT" });
+      await assert.rejects(readFile(join(root, "altcraft.zip")), { code: "ENOENT" });
+    }
+  });
+}

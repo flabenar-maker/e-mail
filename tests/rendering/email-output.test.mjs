@@ -81,6 +81,7 @@ test("atomic publisher creates only email.html and images", async () => {
       outputDir,
       html: "<!doctype html><p>Ready</p>",
       assets: [{ path: "images/card.jpg", sourcePath: source }],
+      assetRoot: folder,
     });
     assert.deepEqual(await readdir(outputDir), ["email.html", "images"]);
     assert.equal(await readFile(join(outputDir, "email.html"), "utf8"), "<!doctype html><p>Ready</p>");

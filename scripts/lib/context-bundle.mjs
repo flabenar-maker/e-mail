@@ -375,7 +375,7 @@ function collectDependencyClosure(index, rootIds, viewports) {
     }
 
     state.set(id, "visiting");
-    const references = collectComponentReferences(record, { viewports })
+    const references = collectRuntimeComponentReferences(record, { viewports })
       .components.map((item) => ({
         id: item.id,
         path: `${record.id}${item.path}`,
@@ -403,9 +403,43 @@ function relevantVariants(variants, viewports) {
   });
 }
 
+function collectRuntimeComponentReferences(record, { viewports = VIEWPORTS } = {}) {
+  const references = collectComponentReferences(record, { viewports });
+  for (const [index, variant] of (record?.contracts?.variant_contracts ?? []).entries()) {
+    for (const viewport of viewports) {
+      if (relevantVariants([variant], [viewport]).length === 0) continue;
+      const prefix = `/contracts/${viewport}/root`;
+      const extraReferences = collectComponentReferences(
+        { contracts: { [viewport]: { root: variant.root } } },
+        { viewports: [viewport] },
+      );
+      for (const [kind, entries] of Object.entries(extraReferences)) {
+        references[kind].push(...entries.map((reference) => ({
+          ...reference,
+          path: `/contracts/variant_contracts/${index}/root${reference.path.slice(prefix.length)}`,
+        })));
+      }
+    }
+  }
+  return references;
+}
+
+function projectRuntimeContract(contract, viewport, sources, preserveIdentity) {
+  const projected = withoutDesignTimeMetadata(contract);
+  if (!preserveIdentity) return projected;
+  const sourceFact = contract.root?.facts?.find(({ id }) => id === "reference-size");
+  const nodeId = sourceFact?.provenance?.node_id;
+  if (typeof nodeId !== "string" || !sources.some((source) =>
+    source.source_node?.node_id === nodeId &&
+    relevantVariants([source], [viewport]).length > 0)) return projected;
+  const fact = projected.root.facts.find(({ id }) => id === "reference-size");
+  fact.provenance = { node_id: nodeId };
+  return projected;
+}
+
 function referencedIds(record, viewports, key) {
   return new Set(
-    collectComponentReferences(record, { viewports })[key].map(({ id }) => id),
+    collectRuntimeComponentReferences(record, { viewports })[key].map(({ id }) => id),
   );
 }
 
@@ -429,6 +463,28 @@ function withoutDesignTimeMetadata(value) {
 function projectComponent(record, viewports) {
   const propertyIds = referencedIds(record, viewports, "properties");
   const assetIds = referencedIds(record, viewports, "assets");
+  const runtimeVariants = relevantVariants(record.contracts.variant_contracts, viewports);
+  const runtimeSources = relevantVariants(record.contracts.source_variants, viewports);
+  const preserveIdentity = runtimeVariants.length > 0 || runtimeSources.some(({ axes }) =>
+    axes.some(({ name }) => name !== "Viewport"));
+  const contracts = Object.fromEntries(viewports.map((viewport) => [
+    viewport,
+    projectRuntimeContract(record.contracts[viewport], viewport, runtimeSources, preserveIdentity),
+  ]));
+  if (preserveIdentity && runtimeSources.length > 0) {
+    contracts.source_variants = runtimeSources.map(({ variant_node_id, axes, source_node }) => ({
+      variant_node_id,
+      axes: structuredClone(axes),
+      source_node: { node_id: source_node.node_id },
+    }));
+  }
+  if (runtimeVariants.length > 0) {
+    contracts.variant_contracts = runtimeVariants.map(({ variant_node_id, axes, root }) => ({
+      variant_node_id,
+      axes: structuredClone(axes),
+      root: withoutDesignTimeMetadata(root),
+    }));
+  }
   return {
     id: record.id,
     status: record.status,
@@ -441,12 +497,7 @@ function projectComponent(record, viewports) {
     asset_contracts: structuredClone(
       (record.asset_contracts ?? []).filter(({ id }) => assetIds.has(id)),
     ),
-    contracts: Object.fromEntries(
-      viewports.map((viewport) => [
-        viewport,
-        withoutDesignTimeMetadata(record.contracts[viewport]),
-      ]),
-    ),
+    contracts,
     documentation: structuredClone(record.documentation),
     constraints: structuredClone(record.constraints),
   };
@@ -548,7 +599,7 @@ function collectFoundationDefinitions({
   }
 
   for (const component of components) {
-    const references = collectComponentReferences(component, { viewports });
+    const references = collectRuntimeComponentReferences(component, { viewports });
     for (const reference of references.foundations) {
       if (!policy.allowed_foundation_ids.includes(reference.foundationId)) {
         blockers.push(
@@ -614,8 +665,8 @@ export function validateBundleClosure(bundle) {
   );
 
   for (const component of bundle.components) {
-    const viewports = Object.keys(component.contracts);
-    const references = collectComponentReferences(component, { viewports });
+    const viewports = Object.keys(component.contracts).filter((viewport) => VIEWPORTS.includes(viewport));
+    const references = collectRuntimeComponentReferences(component, { viewports });
     const propertyIds = new Set(component.properties.map(({ id }) => id));
     const assetIds = new Set(component.asset_contracts.map(({ id }) => id));
 

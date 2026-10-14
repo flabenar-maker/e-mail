@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { promisify } from "node:util";
@@ -33,7 +33,21 @@ const repoRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 
 test("preview CLI writes normal and no-style views of the same rendered email", async () => {
   const folder = await mkdtemp(join(tmpdir(), "cupis-preview-"));
-  const model = join(repoRoot, "tests", "fixtures", "rendering", "pilot-email.json");
+  const model = join(folder, "model.json");
+  const fixture = JSON.parse(await readFile(join(repoRoot, "tests", "fixtures", "rendering", "pilot-email.json"), "utf8"));
+  const paths = new Set();
+  const visit = (instance) => {
+    for (const asset of instance.asset_files ?? []) paths.add(asset.path);
+    for (const slot of instance.slots ?? []) for (const child of slot.instances ?? []) visit(child);
+    for (const nested of instance.nested_components ?? []) if (nested.instance) visit(nested.instance);
+  };
+  visit(fixture.root);
+  await writeFile(model, JSON.stringify(fixture), "utf8");
+  for (const path of paths) {
+    const target = join(folder, ...path.split("/"));
+    await mkdir(dirname(target), { recursive: true });
+    await writeFile(target, "owned-preview-asset", "utf8");
+  }
   const normalPath = join(folder, "normal.html");
   const noStylePath = join(folder, "no-style.html");
   const script = join(repoRoot, "scripts", "render-email-preview.mjs");
