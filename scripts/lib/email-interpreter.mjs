@@ -311,9 +311,36 @@ function wrapAction(element, entry, html) {
   return renderPrimitive("link", { href, style: { display: "block", color: "inherit" } }, html);
 }
 
-function isWholeButtonAction(element) {
+function isNpsOptionAction(element, context, viewport) {
+  if (element?.render_mode !== "presentation-table" ||
+      element.action?.kind !== "whole-element" || element.action.href_slot !== "href") return false;
+
+  let componentId;
+  let originalId;
+  if (Object.hasOwn(element, "output_origin")) {
+    const origin = element.output_origin;
+    if (!origin || typeof origin !== "object" || Array.isArray(origin) ||
+        Object.keys(origin).sort().join(",") !== "component_id,instance_path,original_element_id,viewport" ||
+        !["mobile", "desktop"].includes(origin.viewport) || origin.viewport !== viewport ||
+        typeof origin.instance_path !== "string" ||
+        !/^[A-Za-z0-9][A-Za-z0-9._:-]*(?:\/[A-Za-z0-9][A-Za-z0-9._:-]*)*$/u.test(origin.instance_path)) return false;
+    componentId = origin.component_id;
+    originalId = origin.original_element_id;
+  } else {
+    componentId = context?.componentId;
+    originalId = element.id;
+  }
+  return componentId === "nps-options" && [
+    "root-content-area-emoji-buttons-good",
+    "root-content-area-emoji-buttons-neutral",
+    "root-content-area-emoji-buttons-bad",
+  ].includes(originalId);
+}
+
+function isWholeButtonAction(element, context, viewport) {
   return element.action?.kind === "whole-element" && (
-    element.semantic_role === "button" || element.semantic_role?.endsWith("-button")
+    element.semantic_role === "button" || element.semantic_role?.endsWith("-button") ||
+    isNpsOptionAction(element, context, viewport)
   );
 }
 
@@ -360,8 +387,59 @@ function inlineActionParts(childHtml, childNodes, gap) {
   });
 }
 
-function renderWholeButtonAction(element, entry, childHtml, factProps, gap) {
-  if (!isWholeButtonAction(element)) return null;
+function renderNpsOptionAction(element, entry, childHtml, factProps, viewport) {
+  const visible = childHtml.filter(Boolean);
+  const image = visible.length === 1 ? visible[0].match(/^\s*(<img\b[^>]*>)\s*$/u)?.[1] : undefined;
+  // Non-image labels keep the existing native whole-button conversion.
+  if (visible.length > 0 && !image) return null;
+  const href = actionHref(element, entry);
+  if (!href) return null;
+
+  const padding = Object.fromEntries(
+    Object.entries(factProps.style).filter(([key]) => key === "padding" || key.startsWith("padding-")),
+  );
+  const style = { ...factProps.style };
+  for (const key of Object.keys(padding)) delete style[key];
+  const linkStyle = { display: "block", color: "inherit", "text-align": "center", ...padding };
+  const dimensions = element.facts?.find(({ id }) => id === "reference-size")?.value;
+  const minimumHeight = factProps.height ?? (visible.length === 0 && dimensions?.type === "dimensions"
+    ? dimensions.height : undefined);
+  if (Number.isFinite(minimumHeight) && minimumHeight > 0) {
+    linkStyle["box-sizing"] = "border-box";
+    linkStyle["min-height"] = `${minimumHeight}px`;
+  }
+
+  if (visible.length === 0) {
+    const images = (element.children ?? []).filter((child) => child.render_mode === "direct-image");
+    const native = images.length === 1 ? propsFromFacts(images[0].facts, {
+      viewport, mode: "direct-image", semanticRole: images[0].semantic_role,
+    }) : null;
+    const pixels = (value) => typeof value === "number" ? value
+      : typeof value === "string" && /^\d+(?:\.\d+)?px$/u.test(value) ? Number.parseFloat(value) : undefined;
+    const left = pixels(padding["padding-left"]);
+    const right = pixels(padding["padding-right"]);
+    if (native && !native.fluid && Number.isFinite(native.width) && native.width > 0 &&
+        Number.isFinite(left) && Number.isFinite(right)) {
+      // Reserve the hidden native icon's intrinsic contribution without emitting it.
+      linkStyle["box-sizing"] = "border-box";
+      linkStyle["min-width"] = `${native.width + left + right}px`;
+    }
+  }
+
+  // Keep the native block image and its informative alt/font; no inherited line-box strut.
+  const body = image?.replace(/style="([^"]*)"/u, (_match, imageStyle) =>
+    'style="' + imageStyle + ';margin:0 auto"') ?? "";
+  const link = renderPrimitive("link", { href, style: linkStyle }, body);
+  const cell = renderPrimitive("cell", { style: { "text-align": "center" } }, link);
+  return renderPrimitive("table", { ...factProps, style }, "<tr>" + cell + "</tr>");
+}
+
+function renderWholeButtonAction(element, entry, childHtml, factProps, gap, context, viewport) {
+  if (!isWholeButtonAction(element, context, viewport)) return null;
+  if (isNpsOptionAction(element, context, viewport)) {
+    const npsHtml = renderNpsOptionAction(element, entry, childHtml, factProps, viewport);
+    if (npsHtml !== null) return npsHtml;
+  }
 
   const href = actionHref(element, entry);
   const parts = inlineActionParts(childHtml, element.children, gap);
@@ -411,7 +489,8 @@ function renderShellNative(element, viewport, path, childHtml, context) {
         }, "&nbsp;");
         return { html: renderPrimitive("table", { width: "100%" }, `<tr>${cell}</tr>`), diagnostics: [] };
       }
-      if (children.length === 0 && dimensions?.width > 0 && dimensions?.height > 1 && factProps.style["background-color"]) {
+      if (!isNpsOptionAction(element, context, viewport) && children.length === 0 &&
+          dimensions?.width > 0 && dimensions?.height > 1 && factProps.style["background-color"]) {
         const background = factProps.style["background-color"];
         const radius = factProps.style["border-radius"];
         const cell = renderPrimitive("cell", {
@@ -464,8 +543,8 @@ function renderShellNative(element, viewport, path, childHtml, context) {
           )],
         };
       }
-      if (isWholeButtonAction(element)) {
-        const actionHtml = renderWholeButtonAction(element, entry, childHtml, factProps, gap);
+      if (isWholeButtonAction(element, context, viewport)) {
+        const actionHtml = renderWholeButtonAction(element, entry, childHtml, factProps, gap, context, viewport);
         if (actionHtml) return { html: actionHtml, diagnostics: [] };
       }
 
@@ -790,8 +869,8 @@ function renderPaired(pair, path, context) {
   const children = pair.children.map((child, index) =>
     renderPaired(child, `${path}-${index}`, childContext),
   );
-  const nativeWholeButton = [pair.mobile, pair.desktop].some((element) =>
-    element.render_mode === "presentation-table" && isWholeButtonAction(element));
+  const nativeWholeButton = [[pair.mobile, "mobile"], [pair.desktop, "desktop"]].some(([element, viewport]) =>
+    element.render_mode === "presentation-table" && isWholeButtonAction(element, context, viewport));
   if (nativeWholeButton && children.some((child) => child.rules.length > 0 || (child.msoRules?.length ?? 0) > 0)) {
     return renderSplit(pair, path, context);
   }
@@ -918,7 +997,7 @@ export function renderContractTree({
   const result = renderPaired(
     pairViewportTrees({ mobile, desktop }),
     "root",
-    { content, assets, properties, visibility, variantAxes, foundations, emissionProfile, outputBindings, templateRules, previewValues },
+    { componentId: component.id, content, assets, properties, visibility, variantAxes, foundations, emissionProfile, outputBindings, templateRules, previewValues },
   );
   const diagnostics = [...result.diagnostics];
   const css = breakpointCss(result.rules, foundations, diagnostics, emissionProfile);
