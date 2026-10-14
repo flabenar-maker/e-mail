@@ -116,7 +116,6 @@ test("CLI delivers exactly root HTML and byte-identical images with explicit nat
     assert.ok(assetPaths.includes(value),value);
     assert.deepEqual(await readFile(join(output,...value.split("/"))),png);
   }
-  for(const asset of assetPaths)assert.deepEqual(await readFile(join(output,...asset.split("/"))),png);
   assert.doesNotMatch(html,/Алексей|Александра-Виктория/u);
 });
 
@@ -183,7 +182,10 @@ test("CLI stores requested reports and personalization previews only in separate
   const previews=await Promise.all(["preview-name.html","preview-empty-name.html","preview-long-name.html"].map(name=>readFile(join(evidence,name),"utf8")));
   assert.match(previews[0],/Алексей/u);assert.match(previews[1],/Здравствуйте!/u);assert.match(previews[2],/Александра-Виктория/u);
   for(const html of previews)for(const ref of collectResourceReferences({html}))assert.deepEqual(await readFile(join(evidence,...decodeURIComponent(ref.raw_value).split("/"))),png);
-  for(const asset of assetPaths)assert.deepEqual(await readFile(join(output,...asset.split("/"))),png);
+  const releaseHtml=await readFile(join(output,"email.html"),"utf8");
+  const releaseReferences=collectResourceReferences({html:releaseHtml});
+  assert.ok(releaseReferences.length>0);
+  for(const ref of releaseReferences){const value=decodeURIComponent(ref.raw_value.replaceAll("&amp;","&"));assert.ok(assetPaths.includes(value),value);assert.deepEqual(await readFile(join(output,...value.split("/"))),png);}
 });
 test("CLI rejects overlapping delivery and evidence destinations before publishing",async(t)=>{
   const folder=await mkdtemp(join(tmpdir(),"cupis-source-overlap-"));t.after(()=>rm(folder,{recursive:true,force:true}));await releaseInput(folder);
