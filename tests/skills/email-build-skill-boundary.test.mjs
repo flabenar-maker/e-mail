@@ -154,3 +154,71 @@ const skill = await readFile(join(repoRoot, ".agents/skills/building-cupis-email
 test("email-build skill obeys the resolver route boundary", () => assertRouteBoundary(skill));
 test("email-build skill does not duplicate canonical material", () => assertNoDuplicatedMaterial(skill));
 test("email-build skill has no contradictory prohibited instructions", () => assertOperatingBoundaries(skill));
+
+// These instruction-boundary guards catch omissions and conflicting permissions.
+// Fresh consuming-agent pressure tests remain the independent behavioral evidence.
+function rasterSection(source) {
+  const match = /^## Content raster visual decisions\s*\n([\s\S]*?)(?=^## |$(?![\s\S]))/mu.exec(source);
+  assert.ok(match, "the scoped content-raster decision section is missing");
+  return match[1];
+}
+
+function assertScope(section) {
+  assert.match(section, /content raster|содержательн[а-яё\s-]*растр/iu);
+  assert.match(section, /photograph|photo|фотограф/iu);
+  assert.match(section, /illustration|иллюстрац/iu);
+  assert.match(section, /banner|баннер/iu);
+  assert.match(section, /image cards?|карточк[а-яё\s]*изображен/iu);
+  assert.match(section, /analogous|аналогичн/iu);
+  for (const role of [/icons?|иконк/iu, /logos?|логотип/iu, /QR/iu, /buttons?|кнопк/iu, /text|текст/iu, /layout|компоновк|геометр/iu, /links?|ссылк/iu]) assert.match(section, role);
+  assert.match(section, /role|роль|роли|назначен/iu);
+  assert.match(section, /not[^\n]*(?:extension|PNG|JPEG)|не[^\n]*(?:расширен|формат|PNG|JPEG)/iu);
+  for (const clause of section.split(/[.;\n]/u)) {
+    if (/\b(?:not|never|do not|don't)\b|\bне\b/iu.test(clause)) continue;
+    assert.doesNotMatch(clause, /(?:all|any|every)\s+(?:raster\s+)?(?:images?|image findings?|PNG|JPEG)|все[^\n]*(?:изображен|PNG|JPEG)/iu, "blanket/extension-only image eligibility widens the decision boundary");
+  }
+}
+
+function assertEvidenceOrder(section) {
+  const show = /(?:show|display|показ)[\s\S]{0,200}(?:actual|фактическ)[\s\S]{0,200}(?:reference|макет)[\s\S]{0,100}(?:rendered|письм|собран)/iu.exec(section);
+  assert.ok(show, "show the actual reference/rendered pair, not a promised or invented comparison");
+  const after = section.slice(show.index + show[0].length);
+  assert.match(after, /(?:before|then|затем|до\s+вопрос)[\s\S]{0,160}(?:ask|question|спрос|вопрос)/iu, "actual evidence must precede the question");
+  const labels = ["Продолжаем", "Остановись", "Исправь сам"];
+  let previous = -1;
+  for (const label of labels) { const index = after.indexOf(label); assert.ok(index > previous, `missing or reordered literal choice: ${label}`); previous = index; }
+}
+
+function assertPending(section) {
+  assert.match(section, /(?:wait|pending|ожидан)[\s\S]{0,220}(?:answer|ответ)/iu);
+  assert.match(section, /(?:elapsed|silence|timeout|молчан|истек|время)[\s\S]{0,240}(?:not|never|не)[\s\S]{0,180}(?:consent|accept|согласи|приняти)/iu);
+  assert.match(section, /(?:dependent|publication|publish|выпуск|публикац)[\s\S]{0,180}(?:wait|block|not|never|жд|не)|(?:not|never|не)[\s\S]{0,180}(?:publish|publication|выпуск|публикац)/iu);
+  assert.match(section, /(?:pending|ожидан)[\s\S]{0,180}(?:not|не)[\s\S]{0,180}(?:final stop|окончательн|останов)/iu);
+}
+
+const validRasterFixture = `Content raster photographs and illustrations in banners, image cards and analogous blocks are eligible by semantic role, not by PNG/JPEG extension. Icons, logos, QR codes, buttons, text, layout and links are excluded.
+Show the actual reference/rendered pair before asking the question: Продолжаем / Остановись / Исправь сам.
+Wait for the explicit answer. Silence and elapsed timeout are not consent or acceptance. Dependent publication waits; pending is not a final stop.
+`;
+
+// Hand-derived contradictory instructions must be rejected, rather than merely
+// testing that a happy-path document contains the names of the choices.
+test("raster-image review is semantic and narrowly scoped", () => {
+  assert.doesNotThrow(() => assertScope(validRasterFixture));
+  assert.throws(() => assertScope(validRasterFixture + "\nEvery image finding is eligible."));
+  assert.throws(() => assertScope(validRasterFixture + "\nAny PNG or JPEG is eligible regardless of role."));
+  assertScope(rasterSection(skill));
+});
+
+test("raster-image review shows evidence before the three choices", () => {
+  assert.doesNotThrow(() => assertEvidenceOrder(validRasterFixture));
+  assert.throws(() => assertEvidenceOrder(validRasterFixture.replace("Show the actual reference/rendered pair before asking the question", "Ask the question before showing a promised comparison")));
+  assertEvidenceOrder(rasterSection(skill));
+});
+
+test("raster-image review waits without elapsed consent", () => {
+  assert.doesNotThrow(() => assertPending(validRasterFixture));
+  assert.throws(() => assertPending(validRasterFixture.replace("Silence and elapsed timeout are not consent or acceptance.", "Silence and elapsed timeout imply consent.")));
+  assertPending(rasterSection(skill));
+});
+
